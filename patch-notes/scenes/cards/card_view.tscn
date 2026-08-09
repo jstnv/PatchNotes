@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://djg8ec026t4s"]
+
+[node name="CardView" type="Control" unique_id=953019992]
+custom_minimum_size = Vector2(240, 336)
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Background" type="TextureRect" parent="." unique_id=1572591626]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Artwork" type="TextureRect" parent="." unique_id=756055389]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CardFrame" type="TextureRect" parent="." unique_id=219183626]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NameFrame" type="TextureRect" parent="." unique_id=1943291920]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CardName" type="Label" parent="." unique_id=431285131]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="PrimaryScore" type="Control" parent="." unique_id=1123723824]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PrimaryScoreValue" type="Label" parent="PrimaryScore" unique_id=1330653148]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="PrimaryScoreType" type="Label" parent="PrimaryScore" unique_id=772407744]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="SecondaryScore" type="Control" parent="." unique_id=1249386862]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SecondaryScoreValue" type="Label" parent="SecondaryScore" unique_id=582046814]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="SecondaryScoreType" type="Label" parent="SecondaryScore" unique_id=809659450]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Renewability" type="TextureRect" parent="." unique_id=1028135752]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ScopeLabel" type="Label" parent="." unique_id=1372594580]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ScopeValue" type="Label" parent="." unique_id=1829129577]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Department" type="Label" parent="." unique_id=582783091]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

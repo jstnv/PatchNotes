@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bjuqd0td2mtbm"]
+
+[ext_resource type="Script" uid="uid://c70m1fbublhjc" path="res://scripts/gameplay.gd" id="1_7biu0"]
+
+[node name="Gameplay" type="Control" unique_id=231917280]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_7biu0")
+
+[node name="HUD" type="Node" parent="." unique_id=1973569733]
+
+[node name="PopupLayer" type="Node" parent="." unique_id=1412154909]
+
+[node name="NotificationLayer" type="Node" parent="." unique_id=2071018861]
+
+[node name="PhaseRoot" type="Node" parent="." unique_id=461672055]
+
+[node name="TransitionLayer" type="Node" parent="." unique_id=1671398202]

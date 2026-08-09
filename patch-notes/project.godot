@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="Patch Notes"
+run/main_scene="uid://bjuqd0td2mtbm"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+CardDatabase="*uid://xkdhybxtvj6a"
 
 [display]
 
