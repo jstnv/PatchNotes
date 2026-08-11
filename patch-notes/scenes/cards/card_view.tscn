@@ -1,87 +1,229 @@
-[gd_scene format=3 uid="uid://djg8ec026t4s"]
+[gd_scene load_steps=4 format=3 uid="uid://nadfcbind1wc"]
 
-[node name="CardView" type="Control" unique_id=953019992]
+[ext_resource type="Script" uid="uid://bapt7ehgl5qgf" path="res://scripts/cards/card_view.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bmt4idb02a5h1" path="res://assets/card_art/Patch Notes Card Art Temp.png" id="2_d56wy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_artwork_fallback"]
+bg_color = Color(0.12, 0.13, 0.16, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.36, 0.38, 0.44, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_selection_outline"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 0.78, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="CardView" type="Control" unique_id=574754771]
 custom_minimum_size = Vector2(240, 336)
 layout_mode = 3
 anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+script = ExtResource("1_script")
 
-[node name="Background" type="TextureRect" parent="." unique_id=1572591626]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Artwork" type="TextureRect" parent="." unique_id=756055389]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="CardFrame" type="TextureRect" parent="." unique_id=219183626]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="NameFrame" type="TextureRect" parent="." unique_id=1943291920]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="CardName" type="Label" parent="." unique_id=431285131]
+[node name="ArtworkFallback" type="Panel" parent="." unique_id=1046934200]
 unique_name_in_owner = true
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_right = 240.0
+offset_bottom = 336.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_artwork_fallback")
 
-[node name="PrimaryScore" type="Control" parent="." unique_id=1123723824]
+[node name="Artwork" type="TextureRect" parent="." unique_id=1585962504]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 336.0
+texture = ExtResource("2_d56wy")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CardFrame" type="TextureRect" parent="." unique_id=136321511]
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 336.0
+mouse_filter = 2
+expand_mode = 1
+
+[node name="NameFrame" type="TextureRect" parent="." unique_id=1965742660]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 12.0
+offset_right = 198.0
+offset_bottom = 46.0
+mouse_filter = 2
+expand_mode = 1
+
+[node name="CardName" type="Label" parent="." unique_id=1642208678]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 50.0
+offset_top = 17.0
+offset_right = 190.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.07, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "Card Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PrimaryScore" type="Control" parent="." unique_id=1817940424]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 10.0
+offset_top = 12.0
+offset_right = 50.0
+offset_bottom = 60.0
 
-[node name="PrimaryScoreValue" type="Label" parent="PrimaryScore" unique_id=1330653148]
+[node name="PrimaryScoreValue" type="Label" parent="PrimaryScore" unique_id=724662659]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 40.0
-offset_bottom = 23.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 0.84, 0.33, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.07, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 23
+text = "+0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="PrimaryScoreType" type="Label" parent="PrimaryScore" unique_id=772407744]
+[node name="PrimaryScoreType" type="Label" parent="PrimaryScore" unique_id=1478726751]
 unique_name_in_owner = true
 layout_mode = 0
+offset_top = 28.0
 offset_right = 40.0
-offset_bottom = 23.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.92, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.07, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 8
+text = "Primary"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="SecondaryScore" type="Control" parent="." unique_id=1249386862]
+[node name="SecondaryScore" type="Control" parent="." unique_id=1064770322]
+unique_name_in_owner = true
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 190.0
+offset_top = 12.0
+offset_right = 230.0
+offset_bottom = 60.0
 
-[node name="SecondaryScoreValue" type="Label" parent="SecondaryScore" unique_id=582046814]
+[node name="SecondaryScoreValue" type="Label" parent="SecondaryScore" unique_id=105119019]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 40.0
-offset_bottom = 23.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.45, 0.85, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.07, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 23
+text = "+0"
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="SecondaryScoreType" type="Label" parent="SecondaryScore" unique_id=809659450]
+[node name="SecondaryScoreType" type="Label" parent="SecondaryScore" unique_id=1112280973]
 unique_name_in_owner = true
 layout_mode = 0
+offset_top = 28.0
 offset_right = 40.0
-offset_bottom = 23.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.92, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.07, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 8
+text = "Secondary"
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="Renewability" type="TextureRect" parent="." unique_id=1028135752]
+[node name="Renewability" type="TextureRect" parent="." unique_id=1711931024]
 unique_name_in_owner = true
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 12.0
+offset_top = 300.0
+offset_right = 36.0
+offset_bottom = 324.0
+expand_mode = 1
+stretch_mode = 5
 
-[node name="ScopeLabel" type="Label" parent="." unique_id=1372594580]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="Scope" type="Control" parent="." unique_id=2069945679]
+anchors_preset = 0
+offset_left = 42.0
+offset_top = 296.0
+offset_right = 84.0
+offset_bottom = 328.0
 
-[node name="ScopeValue" type="Label" parent="." unique_id=1829129577]
+[node name="ScopeLabel" type="Label" parent="Scope" unique_id=1611284814]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_right = 42.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.9, 0.92, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.07, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 9
+text = "SCOPE"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Department" type="Label" parent="." unique_id=582783091]
+[node name="ScopeValue" type="Label" parent="Scope" unique_id=896835676]
+unique_name_in_owner = true
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_top = 11.0
+offset_right = 42.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.07, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 17
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Department" type="Label" parent="." unique_id=1484277100]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 128.0
+offset_top = 304.0
+offset_right = 228.0
+offset_bottom = 328.0
+theme_override_colors/font_color = Color(0.9, 0.92, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.07, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 11
+text = "Department"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="InputButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 336.0
+focus_mode = 0
+flat = true
+
+[node name="SelectionOutline" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 336.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_selection_outline")

@@ -4,8 +4,21 @@
 
 [node name="Gameplay" type="Control" unique_id=231917280]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_7biu0")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.025, 0.03, 0.045, 1)
 
 [node name="HUD" type="Node" parent="." unique_id=1973569733]
 
@@ -13,6 +26,13 @@ script = ExtResource("1_7biu0")
 
 [node name="NotificationLayer" type="Node" parent="." unique_id=2071018861]
 
-[node name="PhaseRoot" type="Node" parent="." unique_id=461672055]
+[node name="PhaseRoot" type="CenterContainer" parent="." unique_id=461672055]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="TransitionLayer" type="Node" parent="." unique_id=1671398202]

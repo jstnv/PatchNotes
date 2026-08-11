@@ -1,16 +1,13 @@
 extends Control
 
-const CARD_VIEW_SCENE := preload("res://scenes/cards/card_view.tscn")
+const DESIGN_PHASE_SCENE := preload("res://scenes/phases/design_phase.tscn")
+const REQUIRED_SCOPE := 30
+
+var project_state: ProjectState
 
 func _ready() -> void:
-	var card := CardDatabase.get_card(&"text")
+	project_state = ProjectState.new(REQUIRED_SCOPE)
 
-	if card == null:
-		push_error("Test card 'text' was not found.")
-		return
-
-	var card_view: CardView = CARD_VIEW_SCENE.instantiate()
-
-	$PhaseRoot.add_child(card_view)
-
-	card_view.set_card(card)	
+	var design_phase := DESIGN_PHASE_SCENE.instantiate()
+	design_phase.call(&"setup", project_state)
+	%PhaseRoot.add_child(design_phase)

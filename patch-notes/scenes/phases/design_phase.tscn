@@ -1,0 +1,79 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/phases/design_phase.gd" id="1_design_phase"]
+
+[node name="DesignPhase" type="Control"]
+custom_minimum_size = Vector2(1008, 463)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_design_phase")
+
+[node name="PhaseLayout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="ProjectStatDisplay" type="HBoxContainer" parent="PhaseLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="GraphicsValue" type="Label" parent="PhaseLayout/ProjectStatDisplay"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Graphics: 0"
+horizontal_alignment = 1
+
+[node name="SoundValue" type="Label" parent="PhaseLayout/ProjectStatDisplay"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sound: 0"
+horizontal_alignment = 1
+
+[node name="TechnologyValue" type="Label" parent="PhaseLayout/ProjectStatDisplay"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Technology: 0"
+horizontal_alignment = 1
+
+[node name="DesignValue" type="Label" parent="PhaseLayout/ProjectStatDisplay"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Design: 0"
+horizontal_alignment = 1
+
+[node name="ScopeValue" type="Label" parent="PhaseLayout/ProjectStatDisplay"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Scope: 0 / 30"
+horizontal_alignment = 1
+
+[node name="CandidateScroll" type="ScrollContainer" parent="PhaseLayout"]
+custom_minimum_size = Vector2(1008, 352)
+layout_mode = 2
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HandContainer" type="HBoxContainer" parent="PhaseLayout/CandidateScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PlayCardButton" type="Button" parent="PhaseLayout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+disabled = true
+text = "Play Hand"
