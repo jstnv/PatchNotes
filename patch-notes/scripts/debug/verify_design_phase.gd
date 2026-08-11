@@ -152,6 +152,7 @@ func _verify_specialization_calculation(design_phase: Node) -> void:
 	_expect(specialized.score_additions[ProjectState.CoreScore.GRAPHICS] == 27, "Primary +2, +3, +5, and +7 round individually to +3, +5, +8, and +11")
 	_expect(specialized.score_additions[ProjectState.CoreScore.TECHNOLOGY] == 14 and specialized.score_additions[ProjectState.CoreScore.SOUND] == 5 and specialized.score_additions[ProjectState.CoreScore.DESIGN] == 8, "Differing valid secondary stats neither invalidate the trigger nor miss per-card rounding")
 	_expect(specialized.scope == 10, "Specialization leaves Scope as the exact unmodified sum")
+	_expect(design_phase.call("_build_specialization_debug_message", specialized.specialization_stat, specialized.score_additions) == "Specialization hit: Graphics Specialization! Added scores: Graphics +27, Sound +5, Technology +14, Design +8", "Specialization debug output identifies the hit and final added scores")
 
 	var reversed_cards := graphics_cards.duplicate()
 	reversed_cards.reverse()

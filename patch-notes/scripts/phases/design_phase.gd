@@ -148,6 +148,8 @@ func _on_play_card_pressed() -> void:
 	var additions: Dictionary[ProjectState.CoreScore, int] = aggregate.score_additions
 	if not _project_state.add_core_scores_and_scope(additions, aggregate.scope):
 		return
+	if not aggregate.specialization_stat.is_empty():
+		print(_build_specialization_debug_message(aggregate.specialization_stat, additions))
 
 	_complete_successful_cycle()
 
@@ -265,6 +267,18 @@ func _adjust_score_contribution(base_score: int, specialized: bool) -> int:
 	if not specialized:
 		return base_score
 	return ceili(base_score * SPECIALIZATION_MULTIPLIER)
+
+
+func _build_specialization_debug_message(specialization_stat: StringName, score_additions: Dictionary[ProjectState.CoreScore, int]) -> String:
+	var added_scores: Array[String] = []
+	for stat: StringName in [&"graphics", &"sound", &"technology", &"design"]:
+		var category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[stat]
+		if score_additions.has(category) and score_additions[category] != 0:
+			added_scores.append("%s +%d" % [str(stat).capitalize(), score_additions[category]])
+	return "Specialization hit: %s Specialization! Added scores: %s" % [
+		str(specialization_stat).capitalize(),
+		", ".join(added_scores),
+	]
 
 
 func _invalid_hand(message: String) -> Dictionary:
