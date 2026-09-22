@@ -1,0 +1,196 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/phases/alpha_phase.gd" id="1_alpha_phase"]
+
+[node name="AlphaPhase" type="Control"]
+custom_minimum_size = Vector2(1008, 463)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_alpha_phase")
+
+[node name="PhaseLayout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="AlphaLabel" type="Label" parent="PhaseLayout"]
+layout_mode = 2
+text = "Alpha Phase"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AlphaBugPressureValue" type="Label" parent="PhaseLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Alpha Bug Pressure: 0.00"
+horizontal_alignment = 1
+
+[node name="PriorityPanel" type="PanelContainer" parent="PhaseLayout"]
+custom_minimum_size = Vector2(1008, 72)
+layout_mode = 2
+
+[node name="PriorityLayout" type="HBoxContainer" parent="PhaseLayout/PriorityPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="GraphicsColumn" type="VBoxContainer" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+custom_minimum_size = Vector2(205, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/GraphicsColumn"]
+layout_mode = 2
+text = "Graphics Priority"
+horizontal_alignment = 1
+
+[node name="GraphicsPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/GraphicsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 5.0
+max_value = 50.0
+step = 5.0
+value = 25.0
+
+[node name="GraphicsPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/GraphicsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "25"
+horizontal_alignment = 1
+
+[node name="SoundColumn" type="VBoxContainer" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+custom_minimum_size = Vector2(205, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/SoundColumn"]
+layout_mode = 2
+text = "Sound Priority"
+horizontal_alignment = 1
+
+[node name="SoundPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/SoundColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 5.0
+max_value = 50.0
+step = 5.0
+value = 25.0
+
+[node name="SoundPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/SoundColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "25"
+horizontal_alignment = 1
+
+[node name="TechnologyColumn" type="VBoxContainer" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+custom_minimum_size = Vector2(205, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/TechnologyColumn"]
+layout_mode = 2
+text = "Technology Priority"
+horizontal_alignment = 1
+
+[node name="TechnologyPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/TechnologyColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 5.0
+max_value = 50.0
+step = 5.0
+value = 25.0
+
+[node name="TechnologyPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/TechnologyColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "25"
+horizontal_alignment = 1
+
+[node name="DesignColumn" type="VBoxContainer" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+custom_minimum_size = Vector2(205, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/DesignColumn"]
+layout_mode = 2
+text = "Design Priority"
+horizontal_alignment = 1
+
+[node name="DesignPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/DesignColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 5.0
+max_value = 50.0
+step = 5.0
+value = 25.0
+
+[node name="DesignPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/DesignColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "25"
+horizontal_alignment = 1
+
+[node name="AvailablePriority" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Available Priority: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CandidateScroll" type="ScrollContainer" parent="PhaseLayout"]
+custom_minimum_size = Vector2(1008, 352)
+layout_mode = 2
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HandContainer" type="HBoxContainer" parent="PhaseLayout/CandidateScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ActionControls" type="HBoxContainer" parent="PhaseLayout"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="BeginAlphaButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+text = "Begin Alpha"
+
+[node name="PlayAlphaHandButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+disabled = true
+text = "Play Alpha Hand"
+
+[node name="HostPlaytestButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+disabled = true
+text = "Host Playtest"
+
+[node name="ProceedToBetaButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+disabled = true
+text = "Proceed to Beta"
+
+[node name="UnderScopeDialog" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "Incomplete Project Scope"
+size = Vector2i(520, 240)
+ok_button_text = "Confirm"
+cancel_button_text = "Cancel"
+
+[connection signal="value_changed" from="PhaseLayout/PriorityPanel/PriorityLayout/GraphicsColumn/GraphicsPriority" to="." method="_on_graphics_priority_value_changed"]
+[connection signal="value_changed" from="PhaseLayout/PriorityPanel/PriorityLayout/SoundColumn/SoundPriority" to="." method="_on_sound_priority_value_changed"]
+[connection signal="value_changed" from="PhaseLayout/PriorityPanel/PriorityLayout/TechnologyColumn/TechnologyPriority" to="." method="_on_technology_priority_value_changed"]
+[connection signal="value_changed" from="PhaseLayout/PriorityPanel/PriorityLayout/DesignColumn/DesignPriority" to="." method="_on_design_priority_value_changed"]

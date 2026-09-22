@@ -1,0 +1,178 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/phases/beta_phase.gd" id="1_beta_phase"]
+
+[node name="BetaPhase" type="Control"]
+custom_minimum_size = Vector2(1008, 500)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_beta_phase")
+
+[node name="PhaseLayout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="BetaLabel" type="Label" parent="PhaseLayout"]
+layout_mode = 2
+text = "Beta Phase"
+horizontal_alignment = 1
+
+[node name="KnownBugsLabel" type="Label" parent="PhaseLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Known Bugs: 0"
+horizontal_alignment = 1
+
+[node name="CompetitorInfoLabel" type="Label" parent="PhaseLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+visible = false
+horizontal_alignment = 1
+
+[node name="ForecastInfoLabel" type="Label" parent="PhaseLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+visible = false
+horizontal_alignment = 1
+
+[node name="ActionFeedbackLabel" type="Label" parent="PhaseLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+visible = false
+horizontal_alignment = 1
+
+[node name="PriorityPanel" type="PanelContainer" parent="PhaseLayout"]
+custom_minimum_size = Vector2(1008, 72)
+layout_mode = 2
+
+[node name="PriorityLayout" type="HBoxContainer" parent="PhaseLayout/PriorityPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="QAColumn" type="VBoxContainer" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+[node name="Label" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/QAColumn"]
+layout_mode = 2
+text = "QA Priority"
+horizontal_alignment = 1
+[node name="QAPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/QAColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 5.0
+max_value = 50.0
+step = 5.0
+value = 35.0
+[node name="QAPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/QAColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "35"
+horizontal_alignment = 1
+
+[node name="MarketingColumn" type="VBoxContainer" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+[node name="Label" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/MarketingColumn"]
+layout_mode = 2
+text = "Marketing Priority"
+horizontal_alignment = 1
+[node name="MarketingPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/MarketingColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 5.0
+max_value = 50.0
+step = 5.0
+value = 35.0
+[node name="MarketingPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/MarketingColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "35"
+horizontal_alignment = 1
+
+[node name="InsiderColumn" type="VBoxContainer" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+[node name="Label" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/InsiderColumn"]
+layout_mode = 2
+text = "Insider Priority"
+horizontal_alignment = 1
+[node name="InsiderPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/InsiderColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 5.0
+max_value = 50.0
+step = 5.0
+value = 30.0
+[node name="InsiderPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/InsiderColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "30"
+horizontal_alignment = 1
+
+[node name="PriorityTotal" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "Priority Total: 100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CandidateScroll" type="ScrollContainer" parent="PhaseLayout"]
+custom_minimum_size = Vector2(1008, 352)
+layout_mode = 2
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HandContainer" type="HBoxContainer" parent="PhaseLayout/CandidateScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ActionControls" type="HBoxContainer" parent="PhaseLayout"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="BeginBetaButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+text = "Begin Beta"
+
+[node name="PlayHandButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+disabled = true
+text = "Play Hand"
+
+[node name="HostPlaytestButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+disabled = true
+text = "Host Playtest ($500)"
+
+[node name="LaunchGameButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+disabled = true
+text = "Launch Game"
+
+[node name="LaunchWarningDialog" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "Launch Warning"
+ok_button_text = "Launch Anyway"
+cancel_button_text = "Cancel"
+
+[connection signal="value_changed" from="PhaseLayout/PriorityPanel/PriorityLayout/QAColumn/QAPriority" to="." method="_on_qa_priority_value_changed"]
+[connection signal="value_changed" from="PhaseLayout/PriorityPanel/PriorityLayout/MarketingColumn/MarketingPriority" to="." method="_on_marketing_priority_value_changed"]
+[connection signal="value_changed" from="PhaseLayout/PriorityPanel/PriorityLayout/InsiderColumn/InsiderPriority" to="." method="_on_insider_priority_value_changed"]

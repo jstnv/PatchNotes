@@ -12,12 +12,14 @@ var _selected: bool = false
 @onready var artwork_fallback: Panel = %ArtworkFallback
 @onready var artwork: TextureRect = %Artwork
 @onready var card_name_label: Label = %CardName
+@onready var primary_score: Control = $PrimaryScore
 @onready var secondary_score: Control = %SecondaryScore
 @onready var primary_score_value: Label = %PrimaryScoreValue
 @onready var primary_score_type: Label = %PrimaryScoreType
 @onready var secondary_score_value: Label = %SecondaryScoreValue
 @onready var secondary_score_type: Label = %SecondaryScoreType
 @onready var scope_value: Label = %ScopeValue
+@onready var scope_display: Control = $Scope
 @onready var renewability_icon: TextureRect = %Renewability
 @onready var department_label: Label = %Department
 @onready var input_button: Button = %InputButton
@@ -54,6 +56,13 @@ func refresh() -> void:
 
 	visible = true
 	card_name_label.text = card_data.card_name
+	if card_data.phase == CardData.PHASE_BETA:
+		_refresh_beta_data()
+		_refresh_renewability()
+		_refresh_artwork()
+		return
+	primary_score.visible = true
+	scope_display.visible = true
 	primary_score_value.text = "+%d" % card_data.primary_value
 	primary_score_type.text = _display_name(card_data.primary_stat)
 
@@ -69,6 +78,20 @@ func refresh() -> void:
 
 	_refresh_renewability()
 	_refresh_artwork()
+
+
+func _refresh_beta_data() -> void:
+	primary_score.visible = true
+	primary_score_value.text = "V%d" % card_data.beta_value
+	primary_score_type.text = _display_name(card_data.beta_category)
+	secondary_score.visible = false
+	scope_display.visible = false
+	var lifecycle := "Renewable" if card_data.renewable else "Finite"
+	if card_data.beta_category == CardData.BETA_CATEGORY_QA:
+		department_label.text = "%s | %s" % [_display_name(card_data.qa_operation), lifecycle]
+	else:
+		department_label.text = lifecycle
+	department_label.visible = true
 
 
 func _refresh_renewability() -> void:
