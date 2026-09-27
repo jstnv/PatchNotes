@@ -1,0 +1,38 @@
+PATCH NOTES — FIRST STUDIO FEATURE ECONOMY V1
+Date: 2026-09-26 (America/Los_Angeles)
+Status: IMPLEMENTED AND VERIFIED
+
+AUTHORITY
+The current Drive To Do List item 8A and Patch Notes — Implementation Discoveries and Locked Rules.txt section 54 supply the locked funding, acquisition, reserve, and play-cost rules. The committed Primitive card ledger supplies IDs and printed values. The user resolved the two open confirmation questions on September 26: below-20-Scope pools are allowed after an explicit warning, and there is no minimum Design or Alpha Feature count. Existing run-calendar, Studio Feature Store, and sales/settlement rules remain authoritative. Repository state and unrelated worktree changes were inspected before editing; no AGENTS.md was present.
+
+FIRST STUDIO AND OWNERSHIP
+Creating a named Studio through the main menu activates this economy in RunState. The run receives $5,500.00 and owns only Text, 4-Color Palette, 8-Bit Sound, Keyboard & Mouse, Controller, and Controls at no acquisition charge. Their printed ledger Scope totals 7. A full-screen first-Studio selection gates first-game setup. Optional Primitive Features cost $300.00 for 1 Scope, $450.00 for 2 Scope, or $600.00 for 3 Scope. Initial optional spending may not exceed $4,000.00, and total owned starting-pool printed Scope may not exceed 23. Initial selection spends exact-cent cash, costs zero cycles, and can commit only once. A selection below 20 Scope presents an explicit confirmation warning and may proceed if accepted. There is no per-phase minimum. Unspent cash remains in RunState for production.
+
+UNCHOSEN FEATURES AND BRANCHES
+Unchosen Primitive Features remain in the Studio Feature Store at the same Scope-based reserve prices. Each later reserve purchase validates ownership and affordability, then spends exact cash and advances one central productive run cycle. Ownership is permanent for the run; the next project's eligible Feature supply is derived from that ownership. A purchased parent immediately unlocks its existing Feature Store child. Feature exhaustion remains independent and finite within each project. Existing later-era Feature Store prices and zero-cycle purchase rules are unchanged. A pending initial selection cannot be bypassed through the Feature Store or next-project path.
+
+PRINTED FEATURE PLAY COST
+For each Primitive Design or Alpha Feature in a successfully resolved four-card hand, cost in cents is 1,000 × (printed primary Core value + printed secondary Core value + 2 × printed Scope). Sum the whole selected hand before production; Core Passes cost zero. The UI shows the selected hand's cost and disables an unaffordable Implement button. The action handler preflights again, so an unaffordable hand preserves cash, Scope, Core Scores, exhaustion, project/run cycles, redraws, and sales. The central productive-action boundary commits the direct production and negative cash delta together, advances one cycle, restores redraws, then settles sales. No cost applies to mere drawing/selection or a failed action. Contracts and later Feature classes are excluded because their play-price rules are not locked.
+
+COMPATIBILITY AND RECONSTRUCTION
+New main-menu named-Studio runs activate the economy. Directly injected legacy RunState fixtures without Studio creation retain their existing all-Primitive, zero-starting-cash behavior, preserving established phase and contract regressions; this is a compatibility boundary, not a second new-game rule. RunState owns cash and Feature ownership, ProjectState snapshots eligible supply when a new project begins, and Studio/phase replacement reuses the same RunState. No save/load migration is implemented; that remains release-critical work.
+
+VERIFICATION
+The focused verify_first_studio_feature_economy.gd suite passed with zero failures. It covers six guaranteed Features and 7 printed Scope, $5,500.00 funding, $450.00 optional and reserve paths, duplicate and cap rejection, under-20 warning and allowed confirmation, no phase minimum, initial zero-cycle selection, one-cycle reserve purchase, parent branch unlock, next-project supply, $50 Text plus $40 Controls printed play charges, free Passes, later-class exclusion, unaffordable Design rollback, and exact successful Design charge. All 36 verify_*.gd suites passed, including existing Design, Alpha, Feature Store, contract, cash, calendar, release, and settlement regressions. Headless Godot editor import/parser and git diff --check passed. The existing Windows root-certificate warning and missing card-art warnings did not fail verification.
+
+DEFERRED
+Employee salaries and courses, monthly bills, publisher funding and revenue terms, Contract or later-Feature play economics, save/load migration, and next-game survival balance remain separate decisions. This milestone does not change the fixed Primitive Contract pool, the one-shot offer, Post Game Review, settlement formulas, or later sales months.
+
+CHANGED FILES FOR THIS MILESTONE
+scripts/run_state.gd
+scripts/gameplay.gd
+scripts/phases/studio_phase.gd
+scripts/phases/design_phase.gd
+scripts/phases/alpha_phase.gd
+scripts/ui/feature_store.gd
+scripts/ui/starter_feature_selection.gd (+ generated UID)
+scripts/debug/verify_first_studio_feature_economy.gd
+scripts/debug/verify_first_game_and_tips.gd
+scripts/debug/verify_main_menu_history.gd
+scripts/debug/verify_primitive_run_initialization.gd
+design-logs/First_Studio_Feature_Economy_v1.txt

@@ -1,0 +1,35 @@
+PATCH NOTES — FIRST STUDIO FEATURE ECONOMY V2: STORE ONBOARDING
+Date: 2026-09-26 (America/Los_Angeles)
+Status: IMPLEMENTED AND VERIFIED
+
+AUTHORITY AND REASON FOR REVISION
+The user found the V1 full-screen Feature-pool selector awkward and reported that it seemed to allow only one selection. The user directed that first-game Features be purchased from the existing Studio Feature Store instead, with an in-game tooltip recommending the store rather than a blocking menu. Section 54 of Patch Notes — Implementation Discoveries and Locked Rules.txt remains the authority for funding, prices, initial caps, reserve timing, and printed play costs. The user's earlier ruling still permits below-20-Scope starts after a warning and imposes no Design/Alpha minimum. This V2 log supersedes only V1's starter-selection presentation and purchase flow; the V1 implementation record remains historical.
+
+IMPLEMENTED FLOW
+After studio naming, the dashboard is usable immediately. A small inline TIP beside the Feature Store button and the button tooltip recommend buying Primitive Features before the first game. The hint shows current printed Scope and initial purchase spending. It is a normal part of the Studio dashboard, not a blocking selection menu. Opening and closing the store cost zero cash and cycles.
+
+The Feature Store lists unowned Primitive Features as first-game starters while the initial purchase window is open. A single click on Purchase Starter Feature buys the selected node; the player can select and buy another node normally. Each purchase spends exact cents immediately, grants permanent RunState ownership, updates the hint and tree, and costs zero cycles. The existing $300/$450/$600 Scope prices, $4,000 combined initial spending cap, and 23 printed Scope cap apply across these sequential purchases. Duplicate, unaffordable, or cap-exceeding attempts leave cash, ownership, calendar, redraws, and store state unchanged. Later-generation store nodes remain visible but cannot be purchased during the starter window; they become available after the first project begins. A purchased Primitive parent reveals its Feature Store branch.
+
+Clicking Produce First Game with fewer than 20 printed Scope shows a warning; dismissing it leaves the starter window open. Accepting it opens Pre-Development without spending or closing that window. Cancelling Pre-Development also leaves purchases available. The starter window closes only after the first project's existing productive-cycle transaction succeeds, so a failed project start does not lock the player out. After that boundary, unchosen Primitive Features remain reserve purchases at the same prices and one cycle each. Initial purchases still have no minimum count by phase.
+
+OWNERSHIP AND PRESERVED RULES
+RunState owns funding, permanent Feature ownership, cumulative initial spending, and the first-project boundary. StudioPhase owns the inline hint and warning presentation; FeatureStore owns browsing and purchase controls. Gameplay keeps the same RunState across phases and snapshots owned Features into the new ProjectState supply. Primitive Design/Alpha play costs, Feature familiarity, contract economics, release history, sales settlement, and later Feature prices are unchanged. The former StarterFeatureSelection screen and its UID were removed.
+
+VERIFICATION
+Focused verification passes for multiple consecutive Store purchases, exact-cent and zero-cycle starter spending, branch unlock, duplicate rejection, combined caps, live hint updates, below-20 warning timing, passive warning dismissal, first-game window closure, subsequent one-cycle reserve purchase, next-project supply, and unchanged printed play-cost checks. The inline hint and first-game button fit at 900×600. The main-menu, first-game/tutorial, Primitive run-initialization, and Feature Store suites pass. All 36 verify_*.gd regressions pass. Headless Godot editor import/parser and git diff --check pass. The pre-existing Windows root-certificate and absent card-art warnings remain non-failing.
+
+CHANGED FILES FOR V2
+scenes/phases/studio_phase.tscn
+scripts/run_state.gd
+scripts/gameplay.gd
+scripts/phases/studio_phase.gd
+scripts/ui/feature_store.gd
+scripts/ui/starter_feature_selection.gd and .uid (removed)
+scripts/debug/verify_first_studio_feature_economy.gd
+scripts/debug/verify_first_game_and_tips.gd
+scripts/debug/verify_main_menu_history.gd
+scripts/debug/verify_primitive_run_initialization.gd
+design-logs/First_Studio_Feature_Economy_v2.txt
+
+DEFERRED
+Save/load migration, employee salaries, publisher funding, Contract play prices, later Feature play prices, and broader economic balance remain separate work. The canonical cumulative Drive authority TXT was not replaced: an earlier automatic approval review rejected whole-file replacement without a revision-safe merge safeguard. This standalone V2 log and the To Do List provide the current implementation record.

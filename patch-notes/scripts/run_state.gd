@@ -9,10 +9,15 @@ signal redraws_changed
 signal features_changed
 signal sales_changed
 signal contracts_changed
+signal publishers_changed
 
 const CENTS_PER_DOLLAR := 100
 const MAX_REDRAWS := 4
 const START_YEAR := 1980
+const FIRST_STUDIO_CASH_CENTS := 550000
+const STARTER_PURCHASE_CAP_CENTS := 400000
+const STARTER_SCOPE_CAP := 23
+const GUARANTEED_PRIMITIVE_IDS: Array[StringName] = [&"text", &"4_color_palette", &"8_bit_sound", &"keyboard_and_mouse", &"controller", &"controls"]
 
 var _cash_cents := 0
 var _cash_initialized := false
@@ -31,18 +36,133 @@ var _productive_cycle_in_progress := false
 var _committing_cycle_cash := false
 var _publishing_cycle := false
 var _primitive_contract: ContractState
+var _unlocked_publishers: Dictionary = {}
+var _pending_publisher_notifications: Array[StringName] = []
 var _seen_tutorial_topics: Dictionary = {}
 var _studio_name := ""
+var _first_studio_economy := false
+var _starter_selection_confirmed := false
+var _starter_purchase_spent_cents := 0
 
 func set_studio_name(value: String) -> bool:
 	var cleaned := value.strip_edges()
-	if not _studio_name.is_empty() or cleaned.is_empty() or cleaned.length() > 80 or _productive_cycle_in_progress or _publishing_cycle:
+	if not _studio_name.is_empty() or cleaned.is_empty() or cleaned.length() > 80 or _productive_cycle_in_progress or _publishing_cycle or not _cash_initialized or _cash_cents != 0 or not _released_games.is_empty():
 		return false
+	var guaranteed: Dictionary = {}
+	for id: StringName in GUARANTEED_PRIMITIVE_IDS:
+		if not _feature_definitions.has(id):
+			return false
+		guaranteed[id] = true
+	_owned_features = guaranteed
+	_cash_cents = FIRST_STUDIO_CASH_CENTS
+	_first_studio_economy = true
 	_studio_name = cleaned
+	cash_changed.emit()
+	features_changed.emit()
 	return true
 
 func get_studio_name() -> String:
 	return _studio_name
+
+
+func uses_first_studio_economy() -> bool:
+	return _first_studio_economy
+
+
+func needs_starter_selection() -> bool:
+	return _first_studio_economy and not _starter_selection_confirmed
+
+
+func get_starter_pool_summary() -> Dictionary:
+	if not _first_studio_economy:
+		return {}
+	var scope := 0
+	var count := 0
+	for id: StringName in _owned_features:
+		if _feature_offers.has(id):
+			continue
+		scope += int(_feature_definitions[id].scope)
+		count += 1
+	return {"scope": scope, "count": count, "spent_cents": _starter_purchase_spent_cents,
+		"purchase_cap_cents": STARTER_PURCHASE_CAP_CENTS, "scope_cap": STARTER_SCOPE_CAP}
+
+
+func get_primitive_reserve_offer(id: StringName) -> Dictionary:
+	if not _first_studio_economy or not _feature_definitions.has(id) or _feature_offers.has(id):
+		return {}
+	var entry: Dictionary = _feature_definitions[id]
+	var scope := int(entry.scope)
+	if scope < 1 or scope > 3:
+		return {}
+	var price := (scope + 1) * 15000
+	var initial := needs_starter_selection()
+	var pool := get_starter_pool_summary() if initial else {}
+	var within_limits := not initial or (int(pool.spent_cents) + price <= STARTER_PURCHASE_CAP_CENTS and int(pool.scope) + scope <= STARTER_SCOPE_CAP)
+	return {"id": id, "name": entry.name, "phase": entry.phase, "scope": scope,
+		"price_cents": price, "owned": owns_feature(id), "affordable": _cash_initialized and _cash_cents >= price,
+		"initial": initial, "within_limits": within_limits, "can_purchase": not owns_feature(id) and within_limits and _cash_initialized and _cash_cents >= price}
+
+
+func purchase_starter_feature(id: StringName) -> bool:
+	if not needs_starter_selection() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle:
+		return false
+	var offer := get_primitive_reserve_offer(id)
+	if offer.is_empty() or not offer.can_purchase:
+		return false
+	_feature_purchase_in_progress = true
+	_owned_features[id] = true
+	_starter_purchase_spent_cents += int(offer.price_cents)
+	spend_cash_cents(offer.price_cents)
+	features_changed.emit()
+	_feature_purchase_in_progress = false
+	return true
+
+
+func finalize_starter_selection() -> bool:
+	if not needs_starter_selection() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle:
+		return false
+	_starter_selection_confirmed = true
+	return true
+
+
+func purchase_primitive_reserve_feature(id: StringName) -> bool:
+	if needs_starter_selection():
+		return false
+	var offer := get_primitive_reserve_offer(id)
+	if offer.is_empty() or offer.owned or not offer.affordable:
+		return false
+	var price: int = offer.price_cents
+	if not can_complete_productive_cycle(-price):
+		return false
+	var commit := func() -> bool:
+		if owns_feature(id):
+			return false
+		_owned_features[id] = true
+		return true
+	return complete_productive_action(commit, -price, _completed_run_cycles)
+
+
+func primitive_feature_hand_cost_cents(cards: Array[CardData]) -> int:
+	if not _first_studio_economy:
+		return 0
+	var total := 0
+	for card: CardData in cards:
+		if card == null:
+			return -1
+		if card.card_type == &"pass":
+			continue
+		if card.card_type != &"feature" or card.phase not in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA] or card.primary_value < 0 or card.secondary_value < 0 or card.scope < 0:
+			return -1
+		if not _feature_definitions.has(card.id):
+			return -1
+		# Later Feature classes have no locked play price in this milestone.
+		if _feature_offers.has(card.id):
+			continue
+		var printed := card.primary_value + card.secondary_value + (2 * card.scope)
+		if printed < 0 or printed > (MAX_SIGNED_INT - total) / 1000:
+			return -1
+		total += printed * 1000
+	return total
 
 ## Presentation-only progress: no calendar, cash or production mutation.
 func visit_tutorial_topic(topic: StringName) -> bool:
@@ -122,7 +242,7 @@ func get_feature_store_offer(id: StringName) -> Dictionary:
 
 
 func purchase_feature(id: StringName) -> bool:
-	if _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle:
+	if needs_starter_selection() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle:
 		return false
 	var offer := get_feature_store_offer(id)
 	if offer.is_empty() or offer.owned or not offer.unlocked or not offer.affordable:
@@ -324,6 +444,7 @@ func register_release(project: ProjectState) -> bool:
 		"theme": project.get_theme_id(), "genre_ratios": project.get_genre_ratios(),
 		"release_title": title, "release_year": year, "release_cycle": _completed_run_cycles,
 		"review": _capture_release_review(project)}
+	_refresh_publisher_unlocks()
 	sales_changed.emit()
 	return true
 
@@ -413,6 +534,89 @@ func get_primitive_contract() -> ContractState:
 	return _primitive_contract
 
 
+func get_completed_contract_count() -> int:
+	# Only the fixed one-shot contract exists. Never count acceptance or a
+	# partially completed contract as a publisher progression outcome.
+	return 1 if _primitive_contract != null and _primitive_contract.is_completed() and _primitive_contract.is_payout_committed() else 0
+
+
+func get_unlocked_publisher_ids() -> Array[StringName]:
+	var ids: Array[StringName] = []
+	ids.assign(_unlocked_publishers.keys())
+	return ids
+
+
+func get_pending_publisher_notifications() -> Array[StringName]:
+	return _pending_publisher_notifications.duplicate()
+
+
+## Presentation-only acknowledgment. Studio consumes these once when a banner
+## is shown; opening or reconstructing a browser never grants an unlock.
+func take_pending_publisher_notifications() -> Array[StringName]:
+	var pending := _pending_publisher_notifications.duplicate()
+	_pending_publisher_notifications.clear()
+	return pending
+
+
+func get_publisher_status(id: StringName) -> Dictionary:
+	for entry: Dictionary in PublisherCatalog.entries():
+		if entry.id != id:
+			continue
+		var released := _released_games.size()
+		var contracts := get_completed_contract_count()
+		var requirement := ""
+		match id:
+			PublisherCatalog.IRONCLAD:
+				requirement = "Release your first game (%d / 1)." % released
+			PublisherCatalog.SIDESTREET:
+				requirement = "Complete one contract (%d / 1)." % contracts
+			PublisherCatalog.CROWN_QUILL:
+				requirement = "Release any game with Final Review 7.0 or higher."
+			PublisherCatalog.NEON_CIRCUIT:
+				requirement = "Release any game with committed Total Awareness 125 or higher."
+			PublisherCatalog.STARWAVE:
+				requirement = "Release at least two games (%d / 2) and complete at least three contracts (%d / 3)." % [released, contracts]
+		return {"id": id, "name": entry.name, "personality": entry.personality,
+			"availability": entry.availability, "unlocked": _unlocked_publishers.has(id),
+			"requirement": requirement}
+	return {}
+
+
+func _refresh_publisher_unlocks() -> bool:
+	var changed := false
+	for entry: Dictionary in PublisherCatalog.entries():
+		var id: StringName = entry.id
+		if _unlocked_publishers.has(id) or not _meets_publisher_requirement(id):
+			continue
+		_unlocked_publishers[id] = true
+		_pending_publisher_notifications.append(id)
+		changed = true
+	if changed:
+		publishers_changed.emit()
+	return changed
+
+
+func _meets_publisher_requirement(id: StringName) -> bool:
+	match id:
+		PublisherCatalog.IRONCLAD:
+			return not _released_games.is_empty()
+		PublisherCatalog.SIDESTREET:
+			return get_completed_contract_count() >= 1
+		PublisherCatalog.CROWN_QUILL:
+			for metadata: Dictionary in _release_metadata.values():
+				var snapshot: Dictionary = metadata.get("review", {})
+				if float(snapshot.get("final_review", -1.0)) >= 7.0:
+					return true
+		PublisherCatalog.NEON_CIRCUIT:
+			for metadata: Dictionary in _release_metadata.values():
+				var snapshot: Dictionary = metadata.get("review", {})
+				if int(snapshot.get("awareness", -1)) >= 125:
+					return true
+		PublisherCatalog.STARWAVE:
+			return _released_games.size() >= 2 and get_completed_contract_count() >= 3
+	return false
+
+
 func can_complete_productive_cycle(direct_cash_delta_cents: int = 0) -> bool:
 	return not _plan_productive_cycle(direct_cash_delta_cents).is_empty()
 
@@ -460,6 +664,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	var cash_before := _cash_cents
 	var redraws_before := _available_redraws
 	var familiarity_before := _familiarity.duplicate()
+	var ownership_before := _owned_features.duplicate()
+	var publishers_before := _unlocked_publishers.duplicate()
 	_productive_cycle_in_progress = true
 	# Publish run notifications only after cash and sales have committed together.
 	var was_blocked := is_blocking_signals()
@@ -478,6 +684,7 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	_released_games = plan.records
 	if plan.payable > 0:
 		add_cash_cents(plan.payable)
+	_refresh_publisher_unlocks()
 	_committing_cycle_cash = false
 	# Reserved ordering: monthly expenses, then report data (both deferred).
 	set_block_signals(was_blocked)
@@ -487,8 +694,10 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 		cash_changed.emit()
 	if _available_redraws != redraws_before:
 		redraws_changed.emit()
-	if _familiarity != familiarity_before:
+	if _familiarity != familiarity_before or _owned_features != ownership_before:
 		features_changed.emit()
+	if _unlocked_publishers != publishers_before:
+		publishers_changed.emit()
 	if not _released_games.is_empty():
 		sales_changed.emit()
 	calendar_changed.emit()

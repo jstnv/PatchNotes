@@ -60,8 +60,7 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(270, 54)
 text = "Publisher List"
-disabled = true
-tooltip_text = "Not available yet."
+tooltip_text = "Browse publisher profiles and unlock requirements."
 
 [node name="Contracts" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Left"]
 layout_mode = 2
@@ -74,6 +73,18 @@ tooltip_text = "Not available yet."
 [node name="Right" type="VBoxContainer" parent="Dashboard/Layout/MenuCenter/Menu"]
 layout_mode = 2
 theme_override_constants/separation = 12
+
+[node name="StoreHint" type="PanelContainer" parent="Dashboard/Layout/MenuCenter/Menu/Right"]
+layout_mode = 2
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(270, 0)
+
+[node name="StoreHintText" type="Label" parent="Dashboard/Layout/MenuCenter/Menu/Right/StoreHint"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+text = "Tip: Visit the Feature Store before your first game."
 
 [node name="FeatureStoreButton" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Right"]
 layout_mode = 2
@@ -95,6 +106,10 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(270, 54)
 text = "Produce Next Game"
 tooltip_text = "Name your next game and choose its genre and theme."
+
+[node name="LowScopeWarning" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "Low starting Scope"
 
 [node name="SummaryPanel" type="PanelContainer" parent="."]
 layout_mode = 1

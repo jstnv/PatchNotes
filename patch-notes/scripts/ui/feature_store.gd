@@ -77,24 +77,40 @@ func _refresh() -> void:
 	if _tree == null:
 		return
 	_cash.text = "Feature Store — Cash: " + CashFormatter.format_exact_cents(_run.get_cash_cents())
+	if _run.needs_starter_selection():
+		var pool := _run.get_starter_pool_summary()
+		_cash.text += "\nFirst-game pool: %d / 23 Scope · %s / $4,000.00 spent · Primitive purchases cost 0 cycles" % [pool.scope, CashFormatter.format_exact_cents(pool.spent_cents)]
 	if _nodes.is_empty():
 		_build_tree()
 	for id: StringName in _nodes:
 		var button: Button = _nodes[id]
 		var offer := _run.get_feature_store_offer(id)
+		var reserve := _run.get_primitive_reserve_offer(id) if offer.is_empty() else {}
 		var status := "Owned"
 		var color := Color("244b3d")
+		if not reserve.is_empty() and not reserve.owned:
+			status = "Starter · 0 cycles" if reserve.initial else "Reserve · 1 cycle"
+			if not reserve.within_limits:
+				status = "Starter limit reached"
+			elif not reserve.affordable:
+				status += " · Need cash"
+			color = Color("244b70") if reserve.can_purchase else Color("674c24")
 		if not offer.is_empty() and not offer.owned:
 			status = "Available" if offer.unlocked else "Locked"
 			color = Color("244b70") if offer.unlocked else Color("343943")
 			if offer.unlocked and not offer.affordable:
 				status = "Available • Need cash"
 				color = Color("674c24")
+			if _run.needs_starter_selection():
+				status = "After first game"
+				color = Color("343943")
 		var card: CardData = get_node("/root/CardDatabase").get_card(id)
 		button.text = card.card_name + "\n" + status
 		if not offer.is_empty():
 			button.text += "\n" + (str(offer.prerequisite) if not offer.unlocked else CashFormatter.format_exact_cents(offer.price_cents))
-		button.tooltip_text = card.card_name + ("\n" + str(offer.prerequisite) if not offer.is_empty() else "\nStarting owned Feature")
+		elif not reserve.is_empty() and not reserve.owned:
+			button.text += "\n" + CashFormatter.format_exact_cents(reserve.price_cents)
+		button.tooltip_text = card.card_name + ("\n" + str(offer.prerequisite) if not offer.is_empty() else ("\nPrimitive starter · 0 cycles" if not reserve.is_empty() and reserve.initial else "\nPrimitive reserve · 1 cycle" if not reserve.is_empty() and not reserve.owned else "\nOwned Primitive Feature"))
 		for style_name: String in ["normal", "hover", "pressed", "focus"]:
 			var style := StyleBoxFlat.new()
 			style.bg_color = color.lightened(0.12) if style_name == "hover" else color
@@ -188,7 +204,15 @@ func _show_details() -> void:
 	var card: CardData = get_node("/root/CardDatabase").get_card(_selected)
 	var offer := _run.get_feature_store_offer(_selected)
 	if offer.is_empty():
-		_details.text = "%s\nOwned • Starting Primitive Feature\n\nFamiliarity: %d project credits\nDirect children receive 10%% per credit, up to 50%%.\n\nCore: +%d %s • Scope %d\nPrerequisite: Starting root\nBase price / discount / final price: N/A\nAffordability: Already owned" % [card.card_name, _run.get_feature_familiarity(_selected), card.primary_value, str(card.primary_stat).capitalize(), card.scope]
+		var reserve := _run.get_primitive_reserve_offer(_selected)
+		if not reserve.is_empty() and not reserve.owned:
+			var timing := "First-game starter · 0 cycles" if reserve.initial else "Studio reserve · 1 calendar cycle"
+			var availability := "Starter purchase or Scope cap reached" if not reserve.within_limits else "Affordable" if reserve.affordable else "Insufficient cash"
+			_details.text = "%s\nPrimitive Feature · %s\n\nPrinted Scope: %d\nPrice: %s\n%s\n%s\n\nPermanent ownership for future projects; each project still exhausts this Feature independently." % [reserve.name, str(reserve.phase).capitalize(), reserve.scope, CashFormatter.format_exact_cents(reserve.price_cents), timing, availability]
+			_buy.text = "Purchase Starter Feature" if reserve.initial else "Purchase Reserve Feature"
+			_buy.disabled = not reserve.can_purchase
+			return
+		_details.text = "%s\nOwned • Primitive Feature\n\nFamiliarity: %d project credits\nDirect children receive 10%% per credit, up to 50%%.\n\nCore: +%d %s • Scope %d\nPrerequisite: Starting root\nBase price / discount / final price: N/A\nAffordability: Already owned" % [card.card_name, _run.get_feature_familiarity(_selected), card.primary_value, str(card.primary_stat).capitalize(), card.scope]
 		if card.secondary_value != 0:
 			_details.text += "\nCore: +%d %s" % [card.secondary_value, str(card.secondary_stat).capitalize()]
 		_buy.text = "Already owned"
@@ -200,10 +224,18 @@ func _show_details() -> void:
 	if card.secondary_value != 0:
 		_details.text += "\nCore: +%d %s" % [card.secondary_value, str(card.secondary_stat).capitalize()]
 	_buy.text = "Already owned" if offer.owned else ("Requires prerequisite" if not offer.unlocked else ("Insufficient cash" if not offer.affordable else "Purchase Feature"))
-	_buy.disabled = offer.owned or not offer.unlocked or not offer.affordable
+	if _run.needs_starter_selection() and not offer.owned:
+		_buy.text = "Available after first game"
+	_buy.disabled = offer.owned or not offer.unlocked or not offer.affordable or _run.needs_starter_selection()
 
 
 func _purchase() -> void:
 	# Failed/stale requests leave the view and selection untouched.
-	_run.purchase_feature(_selected)
+	if not _run.get_primitive_reserve_offer(_selected).is_empty():
+		if _run.needs_starter_selection():
+			_run.purchase_starter_feature(_selected)
+		else:
+			_run.purchase_primitive_reserve_feature(_selected)
+	else:
+		_run.purchase_feature(_selected)
 

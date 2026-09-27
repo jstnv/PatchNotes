@@ -47,7 +47,8 @@ func _run() -> void:
 	input.text = "  North Star  "
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
 	var studio: StudioPhase = game.get("_active_phase")
-	expect(studio != null and run.get_studio_name() == "North Star" and run.get_completed_run_cycles() == 0 and game.project_state == null, "Studio name commits once and enters empty Studio for free")
+	expect(studio != null and run.get_studio_name() == "North Star" and run.get_completed_run_cycles() == 0 and run.get_cash_cents() == 550000 and game.project_state == null, "Studio name commits once, grants initial funding, and enters empty Studio for free")
+	expect(run.finalize_starter_selection(), "History fixture closes the first-game purchase window before released projects")
 	game.get_node("%GameplayHUD").tutorial_overlay.close()
 	await _capture("new-studio")
 	expect(studio.get_node("%PostGameSummaries").disabled and studio.get_node("%StartNextGame").text == "Produce First Game", "Empty Studio offers first game without false release history")

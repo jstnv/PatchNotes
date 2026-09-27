@@ -1,8 +1,8 @@
 class_name PrimitiveReviewCalculator
 extends RefCounted
 
-const PROFILE_ID := &"primitive_b_baseline"
-const STANDARD := 20
+const PROFILE_ID := &"primitive_b_rebalanced_v2"
+const STANDARD := 33
 const RATIO_CAP := 1.25
 const IMBALANCE_COEFFICIENT := 0.50
 const PRODUCTION_SCALE := 8.00
@@ -31,10 +31,12 @@ static func calculate(project_state: ProjectState, variance_roll: Variant) -> Re
 		return null
 	var ratios: Dictionary[ProjectState.CoreScore, float] = {}
 	var ratio_sum := 0.0
+	var core_scores: Array[int] = []
 	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
 		var score := project_state.get_core_score(category)
 		if score < 0:
 			return null
+		core_scores.append(score)
 		var ratio := clampf(float(score) / float(profile.get_standard(category)), 0.0, RATIO_CAP)
 		ratios[category] = ratio
 		ratio_sum += ratio
@@ -49,9 +51,43 @@ static func calculate(project_state: ProjectState, variance_roll: Variant) -> Re
 	var bug_density := float(remaining_bugs) / float(project_state.get_required_scope())
 	var bug_multiplier := clampf(1.0 - bug_density, BUG_MULTIPLIER_FLOOR, 1.0)
 	var variance_modifier := variance_for_roll(variance_roll)
-	var unrounded_review := clampf((production_rating * scope_completion * bug_multiplier) + variance_modifier, 0.0, 10.0)
+	var genre_fit := calculate_genre_fit(project_state, core_scores)
+	if genre_fit.is_empty():
+		return null
+	# Keep the established base clamp, then apply Genre Fit once before the
+	# established one-decimal half-up rounding. Variance is already included.
+	var pre_genre_review := clampf((production_rating * scope_completion * bug_multiplier) + variance_modifier, 0.0, 10.0)
+	var unrounded_review := clampf(pre_genre_review * genre_fit.modifier, 0.0, 10.0)
 	var final_review := round_half_up_one_decimal(unrounded_review)
-	return ReviewResult.new(profile, ratios, average_ratio, core_deviation, production_quality, production_rating, scope_completion, remaining_bugs, bug_density, bug_multiplier, variance_roll, variance_modifier, unrounded_review, final_review)
+	return ReviewResult.new(profile, ratios, average_ratio, core_deviation, production_quality, production_rating, scope_completion, remaining_bugs, bug_density, bug_multiplier, variance_roll, variance_modifier, unrounded_review, final_review, genre_fit.deviation, genre_fit.modifier, pre_genre_review)
+
+
+## Missing legacy identity and zero resolved production use the explicitly
+## approved neutral rule. A malformed saved identity rejects atomically.
+static func calculate_genre_fit(project_state: ProjectState, core_scores: Array[int]) -> Dictionary:
+	if project_state == null or core_scores.size() != 4:
+		return {}
+	var targets := project_state.get_genre_ratios()
+	if not project_state.has_predevelopment_identity():
+		return {"deviation": 0.0, "modifier": 1.0} if project_state.get_genre_id().is_empty() and targets.is_empty() else {}
+	var entry := PrimitivePredevelopment.find_entry("genres", project_state.get_genre_id())
+	if entry.is_empty() or targets.size() != 4:
+		return {}
+	for index in range(4):
+		if targets[index] != int(entry.ratios[index]):
+			return {}
+	var total := 0.0
+	for score: int in core_scores:
+		if score < 0:
+			return {}
+		total += float(score)
+	if total <= 0.0:
+		return {"deviation": 0.0, "modifier": 1.0}
+	var absolute_sum := 0.0
+	for index in range(4):
+		absolute_sum += absf((100.0 * float(core_scores[index]) / total) - float(targets[index]))
+	var deviation := absolute_sum / 2.0
+	return {"deviation": deviation, "modifier": maxf(0.75, 1.0 - 0.01 * maxf(0.0, deviation - 6.0))}
 
 
 static func variance_for_roll(roll: int) -> float:

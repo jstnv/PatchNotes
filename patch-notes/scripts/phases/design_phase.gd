@@ -524,6 +524,13 @@ func _on_play_card_pressed() -> void:
 	var base_hand := _validate_and_calculate_base_action()
 	if not base_hand.valid:
 		return
+	var play_cost := 0
+	if _run_state != null:
+		var selected_cards: Array[CardData] = []
+		selected_cards.assign(base_hand.cards)
+		play_cost = _run_state.primitive_feature_hand_cost_cents(selected_cards)
+		if play_cost < 0 or _run_state.get_cash_cents() < play_cost:
+			return
 	var final_action := _calculate_final_action_production(base_hand)
 
 	var additions: Dictionary[ProjectState.CoreScore, int] = final_action.score_additions
@@ -531,7 +538,7 @@ func _on_play_card_pressed() -> void:
 		if not _project_state.add_core_scores_and_scope(additions, base_hand.scope, base_hand.bug_pressure): return false
 		_complete_successful_cycle()
 		return true
-	if not (_run_state.complete_productive_action(commit) if _run_state != null else commit.call()):
+	if not (_run_state.complete_productive_action(commit, -play_cost) if _run_state != null else commit.call()):
 		return
 	if not final_action.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_action.specialization_stat, additions))
@@ -934,7 +941,19 @@ func _update_play_button() -> void:
 	refresh_workspace()
 	_refresh_redraw_controls()
 	if is_node_ready():
+		play_card_button.text = "Implement"
+		play_card_button.tooltip_text = ""
 		play_card_button.disabled = not _can_play_selected_hand()
+		if _run_state != null and _run_state.uses_first_studio_economy() and _selected_card_views.size() == SELECTED_HAND_SIZE:
+			var cards: Array[CardData] = []
+			for view: CardView in _selected_card_views:
+				cards.append(view.card_data)
+			var cost := _run_state.primitive_feature_hand_cost_cents(cards)
+			if cost >= 0:
+				play_card_button.text = "Implement · " + CashFormatter.format_exact_cents(cost)
+				if _run_state.get_cash_cents() < cost:
+					play_card_button.disabled = true
+					play_card_button.tooltip_text = "Insufficient cash for this hand."
 
 
 func get_workspace() -> PhaseWorkspace:

@@ -1,0 +1,27 @@
+PATCH NOTES — PRIMITIVE REVIEW BALANCE V2
+Date: 2026-09-26
+
+AUTHORITY AND SUPERSESSION
+The user reported a nearly synergy-free run with all Bugs fixed, full Scope, and final Core scores of Graphics 27, Sound 30, Technology 36, Design 36 receiving a 9.5 Review. The user chose a target near 7/10 for that clean run before random variance. This tuning supersedes only the Primitive B Review standard of 20 per Core in Primitive_Review_Calculation_v1.txt and cumulative authority section 12. The original 20-point standard had capped every score above 25 at a normalized ratio of 1.25, removing the Review value of further production and many synergy gains. The Genre Fit v1 worktree changes were preserved.
+
+IMPLEMENTED BALANCE
+New immutable profile ID: primitive_b_rebalanced_v2. Graphics, Sound, Technology, and Design standards are each 33. All other Review operations, including ratio cap 1.25, imbalance coefficient 0.50, Production scale 8, Scope completion, Remaining-Bug penalty, variance, Genre Fit and half-up rounding, are unchanged. No direct synergy-count bonus was added; synergies retain their existing score-output effect and now have more room to matter before the ratio cap. The new 1.25 cap begins at 41.25 Core points per category rather than 25.
+
+REFERENCE OUTCOMES
+With complete Scope, zero remaining Bugs, neutral variance and no Genre modifier: the reported 27/30/36/36 case has Production Rating 7.345804325..., rounded Final Review 7.3. With the existing Action Genre target ratios, its Genre modifier is 0.948372093... and Final Review is 7.0. A 33/33/33/33 run scores 8.0; 42/42/42/42 reaches 10.0. The previously locked 20/20/20/20 reference now scores approximately 4.85 Production Rating. Random variance can shift a result by up to 0.5 before Genre Fit. Other Genres may apply different fit penalties.
+
+OWNERSHIP AND EFFECTS
+New Reviews use the v2 profile. Previously committed ReviewResult instances and released-game history are immutable and are not retroactively recalculated. Review still commits once, is reconstructed without rerolls, and changes neither RunState cash nor calendar. The lowered Review input naturally flows through existing Awareness-independent units and sales calculations; those formulas were not modified.
+
+FILES CHANGED FOR THIS TUNING
+scripts/review/primitive_review_calculator.gd
+scripts/debug/verify_primitive_review.gd
+scripts/debug/verify_primitive_awareness.gd
+scripts/debug/verify_release_menus.gd
+scripts/debug/verify_genre_fit.gd (existing uncommitted Genre Fit verifier, extended)
+
+VERIFICATION
+Focused Primitive Review check passed with the screenshot Core-score fixture and new baseline/cap anchors. Genre Fit check passed, including the screenshot Action Genre fixture. All 34 verify_*.gd suites were run: 33 passed initially; verify_release_menus exposed a stale 20-standard assertion, which was updated. Primitive Review, Genre Fit, and release-menu suites then passed. Headless Godot editor import/parser passed; only the pre-existing Windows root-certificate warning appeared. git diff --check passed. No new gameplay boundary, synergy resolution, Scope, Bug, cash, calendar, or sales logic was added.
+
+FURTHER BALANCE WORK
+This is a targeted calibration against one observed run, not a distributional playtest. Collect outcomes across different Genres, card draws, synergies and Bug strategies before further tuning. The broader Publisher List milestone remains the next To Do item.

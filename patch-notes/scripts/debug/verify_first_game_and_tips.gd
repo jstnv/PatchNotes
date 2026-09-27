@@ -22,15 +22,19 @@ func _run() -> void:
 	var run: RunState = game.run_state
 	var menu: MainMenu = game.get("_active_phase")
 	var hud: GameplayHUD = game.get_node("%GameplayHUD")
-	var before := snapshot(run)
 	expect(game.project_state == null and menu != null and run.get_cash_cents() == 0, "New run waits at main menu without creating a project")
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	var studio_input: LineEdit = menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName")
 	studio_input.text = "First Studio"
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
 	var studio: StudioPhase = game.get("_active_phase")
-	expect(studio != null and run.get_studio_name() == "First Studio" and snapshot(run) == before, "Naming studio enters Studio without charging or creating a game")
+	expect(studio != null and run.get_studio_name() == "First Studio" and run.get_cash_cents() == 550000 and run.get_owned_feature_ids().size() == 6, "Naming studio funds $5,500 and grants six free Primitive Features")
+	expect(studio.get_node("%StoreHint").visible and not studio.get_node("%StartNextGame").disabled, "First Studio offers an inline Store hint without a blocking selection menu")
+	var before := snapshot(run)
+	expect(run.needs_starter_selection() and before[0] == 0 and before[1] == 550000, "Starter purchases remain open until the first project begins")
 	studio.get_node("%StartNextGame").pressed.emit()
+	expect(studio.get_node("%LowScopeWarning").visible and snapshot(run) == before, "Below-20-Scope start shows a warning without mutating the run")
+	studio.get_node("%LowScopeWarning").confirmed.emit()
 	var overlay: PredevelopmentOverlay = studio.get("_predevelopment")
 	expect(hud.tutorial_overlay.visible and hud.tutorial_context == &"predevelopment", "First game setup presents Pre-Development tips")
 	hud.tutorial_overlay.close()
@@ -43,6 +47,8 @@ func _run() -> void:
 	overlay.back_button.pressed.emit()
 	expect(not overlay.visible and game.project_state == null and snapshot(run) == before, "Cancelling setup is free and does not bypass it")
 	studio.get_node("%StartNextGame").pressed.emit()
+	expect(studio.get_node("%LowScopeWarning").visible and run.needs_starter_selection(), "Cancelling setup leaves starter purchases open")
+	studio.get_node("%LowScopeWarning").confirmed.emit()
 	expect(overlay.visible and overlay.name_input.text == "First Game" and snapshot(run) == before, "Reopening preserves draft and costs nothing")
 	for size: Vector2i in [Vector2i(900, 600), Vector2i(1152, 648)]:
 		root.size = size
@@ -55,7 +61,8 @@ func _run() -> void:
 	overlay.begin_button.pressed.emit()
 	var project: ProjectState = game.project_state
 	expect(project != null and project.get_base_name() == "First Game" and project.get_genre_id() == &"role_playing" and project.get_theme_id() == &"mystery", "First project locks chosen identity")
-	expect(run.get_completed_run_cycles() == 1 and project.get_current_cycle() == 0 and run.get_cash_cents() == 0 and run.get_available_redraws() == 4, "Begin costs exactly one run cycle, project zero, no cash, redraw four")
+	expect(run.get_completed_run_cycles() == 1 and project.get_current_cycle() == 0 and run.get_cash_cents() == 550000 and run.get_available_redraws() == 4, "Begin costs exactly one run cycle, project zero, no cash, redraw four")
+	expect(not run.needs_starter_selection(), "Successful first-project commit closes the starter purchase window")
 	expect(project.get_feature_supply_ids() == run.get_owned_feature_ids() and project.has_competitor_snapshot() and project.has_market_forecast_snapshot(), "Fresh project uses owned supply and authoritative snapshots")
 	var design: DesignPhase = game.get("_active_phase")
 	expect(design != null and design.get_workspace().overlay.visible and hud.tutorial_context == &"design" and hud.tutorial_overlay.visible, "Design planning and Design tips follow setup")

@@ -77,7 +77,7 @@ func _run() -> void:
 	root.size = Vector2i(1152, 648)
 	review.get_node("%Categories").current_tab = 1
 	await _settle()
-	check(review.get_node("%GraphicsLabel").text.contains("33 points") and review.get_node("%GraphicsLabel").text.contains("20 standard"), "Core performance uses the actual release scores and standards")
+	check(review.get_node("%GraphicsLabel").text.contains("33 points") and review.get_node("%GraphicsLabel").text.contains("33 standard"), "Core performance uses the actual release scores and rebalanced standard")
 	await _capture("review-core")
 	review.get_node("%Categories").current_tab = 0
 	await _settle()

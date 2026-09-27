@@ -757,6 +757,18 @@ func _update_play_action() -> void:
 	if not is_node_ready():
 		return
 	%PlayAlphaHandButton.disabled = not _can_play_selected_instances()
+	%PlayAlphaHandButton.text = "Implement"
+	%PlayAlphaHandButton.tooltip_text = ""
+	if _run_state != null and _run_state.uses_first_studio_economy() and _selected_card_views.size() == SELECTED_HAND_SIZE:
+		var cards: Array[CardData] = []
+		for view: CardView in _selected_card_views:
+			cards.append(view.card_data)
+		var cost := _run_state.primitive_feature_hand_cost_cents(cards)
+		if cost >= 0:
+			%PlayAlphaHandButton.text = "Implement · " + CashFormatter.format_exact_cents(cost)
+			if _run_state.get_cash_cents() < cost:
+				%PlayAlphaHandButton.disabled = true
+				%PlayAlphaHandButton.tooltip_text = "Insufficient cash for this hand."
 
 
 func _can_play_selected_instances() -> bool:
@@ -777,13 +789,20 @@ func _on_play_alpha_hand_pressed() -> void:
 	var action := _validate_and_calculate_base_action()
 	if not action.valid:
 		return
+	var play_cost := 0
+	if _run_state != null:
+		var selected_cards: Array[CardData] = []
+		selected_cards.assign(action.cards)
+		play_cost = _run_state.primitive_feature_hand_cost_cents(selected_cards)
+		if play_cost < 0 or _run_state.get_cash_cents() < play_cost:
+			return
 	var final_production := _calculate_final_action_production(action)
 	var additions: Dictionary[ProjectState.CoreScore, int] = final_production.score_additions
 	var commit := func() -> bool:
 		if not _project_state.add_alpha_production(additions, action.scope, action.alpha_bug_pressure): return false
 		_complete_successful_action()
 		return true
-	if not (_run_state.complete_productive_action(commit) if _run_state != null else commit.call()):
+	if not (_run_state.complete_productive_action(commit, -play_cost) if _run_state != null else commit.call()):
 		return
 	if not final_production.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_production.specialization_stat, additions))

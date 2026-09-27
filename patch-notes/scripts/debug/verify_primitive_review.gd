@@ -44,23 +44,25 @@ func _review(scores: Array[int], scope: int = 30, hidden: int = 0, known: int = 
 
 
 func _verify_anchors_and_cap() -> void:
-	var baseline := _review([20, 20, 20, 20])
-	_expect(baseline.get_profile_id() == &"primitive_b_baseline" and baseline.get_standards().values() == [20, 20, 20, 20], "Primitive B profile is immutable 20/20/20/20")
+	var baseline := _review([33, 33, 33, 33])
+	_expect(baseline.get_profile_id() == &"primitive_b_rebalanced_v2" and baseline.get_standards().values() == [33, 33, 33, 33], "Rebalanced Primitive profile has immutable 33/33/33/33 standards")
 	_expect(_equal(baseline.get_production_rating(), 8.0) and _equal(baseline.get_final_review(), 8.0), "Exact standards with complete Scope, zero Bugs, and zero variance score 8.0")
-	var exceptional := _review([25, 25, 25, 25])
+	var exceptional := _review([42, 42, 42, 42])
 	_expect(_equal(exceptional.get_production_rating(), 10.0) and _equal(exceptional.get_final_review(), 10.0), "Four capped 1.25 ratios score 10.0")
-	var capped := _review([200, 100, 50, 26])
+	var capped := _review([200, 100, 50, 42])
 	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
 		_expect(_equal(capped.get_normalized_ratio(category), 1.25), "Ratio above 1.25 caps for category %d" % category)
 	var zero := _review([0, 0, 0, 0], 30, 0, 0, 99)
 	_expect(_equal(zero.get_production_rating(), 0.0) and _equal(zero.get_final_review(), 0.5), "Zero production remains bounded after positive variance")
+	var screenshot := _review([27, 30, 36, 36])
+	_expect(screenshot.get_production_rating() > 7.3 and screenshot.get_production_rating() < 7.4 and _equal(screenshot.get_final_review(), 7.3), "Clean full-Scope 27/30/36/36 run is near 7 before Genre Fit")
 
 
 func _verify_imbalance_and_population_deviation() -> void:
 	var balanced := _review([15, 15, 15, 15])
 	var imbalanced := _review([25, 25, 5, 5])
 	_expect(_equal(balanced.get_average_ratio(), imbalanced.get_average_ratio()) and imbalanced.get_production_rating() < balanced.get_production_rating(), "Equal average with greater imbalance lowers Production Rating")
-	_expect(_equal(imbalanced.get_core_deviation(), 0.5), "Core Deviation uses population division by four")
+	_expect(_equal(imbalanced.get_core_deviation(), 10.0 / 33.0), "Core Deviation uses population division by four")
 
 
 func _verify_scope_and_bugs() -> void:

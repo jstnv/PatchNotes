@@ -32,10 +32,12 @@ func _verify_normal_prototype_run() -> void:
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
 	var studio: StudioPhase = gameplay.get("_active_phase")
 	_expect(studio != null and run.get_studio_name() == "Test Studio" and run.get_completed_run_cycles() == 0, "Studio identity commits before the first game without a cycle")
+	_expect(run.get_cash() == 5500 and run.get_owned_feature_ids().size() == 6, "Named first Studio receives funding and six guaranteed Features")
 	_expect(gameplay.call("_begin_next_project", studio, "First Game", &"action", &"fantasy"), "First game uses the shared Pre-Development transaction")
+	_expect(not run.needs_starter_selection(), "First-project commit closes starter purchasing")
 	_expect(run.get_completed_run_cycles() == 1 and gameplay.project_state.get_current_cycle() == 0, "First game costs one run cycle and begins at project zero")
 	var project: ProjectState = gameplay.project_state
-	_expect(run != null and run.is_cash_initialized() and run.get_cash() == 0, "Normal prototype Gameplay creates one RunState initialized to exactly $0")
+	_expect(run != null and run.is_cash_initialized() and run.get_cash() == 5500, "First Studio funding remains available to the initial project")
 	_expect(project.get_assigned_competitor_snapshot_id_for_authority() == &"fast_follower" and project.get_assigned_market_forecast_snapshot_id_for_authority() == &"market_surge", "Controlled rolls assign the exact authoritative snapshots atomically")
 	_expect(project.get_revealed_competitor_snapshot_id().is_empty() and project.get_revealed_market_forecast_snapshot_id().is_empty(), "Both player-facing snapshot queries remain concealed")
 	var baseline := _project_snapshot(project)
@@ -51,7 +53,7 @@ func _verify_normal_prototype_run() -> void:
 	_expect(alpha.call("_finalize_alpha", 0.0, 0.5), "Prototype transition fixture finalizes Alpha")
 	alpha.proceed_to_beta_requested.emit()
 	await process_frame
-	_expect(phase_root.get_child(0) is BetaPhase and gameplay.run_state == run and run.get_cash() == 0, "The exact $0 RunState survives Design, Alpha, and Beta")
+	_expect(phase_root.get_child(0) is BetaPhase and gameplay.run_state == run and run.get_cash() == 5500, "The funded RunState survives Design, Alpha, and Beta")
 	_expect(project.get_assigned_competitor_snapshot_id_for_authority() == &"fast_follower" and project.get_assigned_market_forecast_snapshot_id_for_authority() == &"market_surge", "Phase transitions preserve both exact snapshot identities")
 	_expect(project.get_current_cycle() == baseline[0] and project.get_marketing_output() == baseline[1], "Initialization and transitions add no cycles or Marketing Output")
 	_expect(project.get_hidden_bugs() >= before_finalization[2] and project.get_known_bugs() == before_finalization[3], "Only existing authoritative Alpha finalization affects Bug state")
@@ -61,8 +63,8 @@ func _verify_normal_prototype_run() -> void:
 	await process_frame
 	var views := beta.get_node("%HandContainer").get_children()
 	(views[0] as CardView).input_button.pressed.emit()
-	_expect(run.get_cash() == 0 and project.get_assigned_competitor_snapshot_id_for_authority() == &"fast_follower" and project.get_assigned_market_forecast_snapshot_id_for_authority() == &"market_surge", "Beta dealing and selection award no cash and never reroll snapshots")
-	_expect(run.add_cash(1000) and run.get_cash() == 1000, "The locked future payout boundary changes controlled $0 cash to exactly $1,000")
+	_expect(run.get_cash() == 5500 and project.get_assigned_competitor_snapshot_id_for_authority() == &"fast_follower" and project.get_assigned_market_forecast_snapshot_id_for_authority() == &"market_surge", "Beta dealing and selection award no cash and never reroll snapshots")
+	_expect(run.add_cash(1000) and run.get_cash() == 6500, "A controlled $1,000 payout adds to the preserved first-Studio funding")
 	gameplay.queue_free()
 	await process_frame
 

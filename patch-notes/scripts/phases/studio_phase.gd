@@ -10,6 +10,8 @@ var _project_state: ProjectState
 var _run_state: RunState
 var _snapshot_database: PrimitiveSnapshotDatabase
 var _feature_store: FeatureStore
+var _publisher_browser: PublisherBrowser
+var _publisher_notice: PanelContainer
 var _contract_detail: PanelContainer
 var _predevelopment: PredevelopmentOverlay
 var _review_view: PostGameReview
@@ -19,19 +21,93 @@ var _selected_release_id: StringName
 func _ready() -> void:
 	%StartNextGame.pressed.connect(_open_predevelopment)
 	%FeatureStoreButton.pressed.connect(_open_feature_store)
+	%PublisherList.pressed.connect(_open_publishers)
 	%PostGameSummaries.pressed.connect(open_summary)
 	%CloseSummaryButton.pressed.connect(close_summary)
 	%DetailedReviewButton.pressed.connect(open_detailed_review)
 	%Contracts.pressed.connect(_open_contracts)
 	%GameList.item_selected.connect(_on_game_selected)
+	%LowScopeWarning.confirmed.connect(_show_predevelopment)
 	if _run_state != null:
 		_refresh_game_list()
 		_refresh_summary()
+		_show_pending_publisher_notice()
+		_refresh_starter_hint()
+
+
+func _refresh_starter_hint() -> void:
+	if _run_state == null or not is_node_ready():
+		return
+	%StoreHint.visible = _run_state.needs_starter_selection()
+	if not %StoreHint.visible:
+		return
+	var pool := _run_state.get_starter_pool_summary()
+	%StoreHintText.text = "TIP · Visit the Feature Store to buy Primitive Features for your first game.\nPool: %d / 23 Scope · %s / $4,000 spent. Aim for 20–23 Scope." % [pool.scope, CashFormatter.format_exact_cents(pool.spent_cents)]
+	%FeatureStoreButton.tooltip_text = "Buy first-game Primitive Features here. Starter purchases cost zero cycles."
+
+
+func _open_publishers() -> void:
+	if _run_state == null:
+		return
+	if _publisher_browser == null:
+		_publisher_browser = PublisherBrowser.new()
+		_publisher_browser.name = "PublisherBrowser"
+		add_child(_publisher_browser)
+		_publisher_browser.setup(_run_state)
+		_publisher_browser.closed.connect(func():
+			_publisher_browser.hide()
+			%Dashboard.show()
+			%PublisherList.grab_focus()
+			tutorial_context_changed.emit(&"studio"))
+	%SummaryPanel.hide()
+	%Dashboard.hide()
+	_publisher_browser.open_browser()
+	tutorial_context_changed.emit(&"studio")
+
+
+func _show_pending_publisher_notice() -> void:
+	if _run_state == null or not is_node_ready():
+		return
+	var unlocked := _run_state.take_pending_publisher_notifications()
+	if unlocked.is_empty():
+		return
+	if _publisher_notice == null:
+		_publisher_notice = PanelContainer.new()
+		_publisher_notice.name = "PublisherUnlockNotice"
+		$Dashboard/Layout.add_child(_publisher_notice)
+		$Dashboard/Layout.move_child(_publisher_notice, 1)
+		var row := HBoxContainer.new()
+		_publisher_notice.add_child(row)
+		var message := Label.new()
+		message.name = "PublisherUnlockMessage"
+		message.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		row.add_child(message)
+		var dismiss := Button.new()
+		dismiss.name = "DismissPublisherNotice"
+		dismiss.text = "Dismiss"
+		dismiss.pressed.connect(func(): _publisher_notice.hide())
+		row.add_child(dismiss)
+	var names: Array[String] = []
+	for id: StringName in unlocked:
+		names.append(PublisherCatalog.name_for(id))
+	(_publisher_notice.find_child("PublisherUnlockMessage", true, false) as Label).text = "Publisher unlocked: %s" % ", ".join(names)
+	_publisher_notice.show()
 
 
 func _open_predevelopment() -> void:
 	if _run_state == null:
 		return
+	if _run_state.needs_starter_selection():
+		var pool := _run_state.get_starter_pool_summary()
+		if int(pool.scope) < 20:
+			%LowScopeWarning.dialog_text = "Your pool has %d printed Scope, below the 20–23 target and the 30-Scope B standard. Visit the Feature Store for more Features, or continue with this smaller pool?" % pool.scope
+			%LowScopeWarning.popup_centered()
+			return
+	_show_predevelopment()
+
+
+func _show_predevelopment() -> void:
 	if _predevelopment == null:
 		_predevelopment = PredevelopmentOverlay.new()
 		_predevelopment.name = "Predevelopment"
@@ -137,7 +213,7 @@ func _ensure_contract_detail() -> void:
 	title.add_theme_font_size_override("font_size", 26)
 	layout.add_child(title)
 	var details := Label.new()
-	details.text = "Two production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum payout: $2,400.00\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance is free. The contract cannot be abandoned after acceptance."
+	details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum payout: $2,400.00\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance is free. The contract cannot be abandoned after acceptance."
 	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(details)
@@ -204,6 +280,8 @@ func setup(project_state: ProjectState, run_state: RunState, snapshot_database: 
 		_run_state.calendar_changed.disconnect(_refresh_summary)
 	if _run_state != null and _run_state.sales_changed.is_connected(_refresh_summary):
 		_run_state.sales_changed.disconnect(_refresh_summary)
+	if _run_state != null and _run_state.features_changed.is_connected(_refresh_starter_hint):
+		_run_state.features_changed.disconnect(_refresh_starter_hint)
 	_project_state = project_state
 	_run_state = run_state
 	_snapshot_database = snapshot_database
@@ -212,14 +290,20 @@ func setup(project_state: ProjectState, run_state: RunState, snapshot_database: 
 		return false
 	_run_state.calendar_changed.connect(_refresh_summary)
 	_run_state.sales_changed.connect(_refresh_summary)
+	_run_state.features_changed.connect(_refresh_starter_hint)
 	if project_state != null:
 		_selected_release_id = project_state.get_release_id()
 	_refresh_game_list()
 	_refresh_summary()
 	_refresh_contract_action()
+	%PublisherList.disabled = false
+	%PublisherList.tooltip_text = "Browse publisher profiles and unlock requirements."
+	_show_pending_publisher_notice()
 	%PostGameSummaries.disabled = _run_state.get_released_game_ids().is_empty()
 	%StartNextGame.text = "Produce First Game" if _run_state.get_released_game_ids().is_empty() else "Produce Next Game"
+	%StartNextGame.disabled = false
 	$Dashboard/Layout/Heading/Title.text = "%s — Studio" % _run_state.get_studio_name() if not _run_state.get_studio_name().is_empty() else "Studio Phase"
+	_refresh_starter_hint()
 	return true
 
 func _refresh_game_list() -> void:

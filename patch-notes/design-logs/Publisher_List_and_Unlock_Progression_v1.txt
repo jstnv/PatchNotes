@@ -1,0 +1,28 @@
+PATCH NOTES — PUBLISHER LIST AND UNLOCK PROGRESSION V1
+Date: 2026-09-26
+Status: PARTIAL IMPLEMENTATION / BLOCKED ON STARWAVE CONTRACT HISTORY
+
+AUTHORITY
+The canonical Drive To Do List, Patch Notes — Implementation Discoveries and Locked Rules.txt (particularly section 47), Balanced_Primitive_Contract_v1.txt, Studio/release history logs, repository state and worktree diff were read before editing. The To Do List's ACTIVE implementation handoff authorizes the five-publisher browser and progression. Existing Genre Fit and Review balance worktree changes were preserved, as was .codex-godot-temp. No repository AGENTS.md was found.
+
+IMPLEMENTED SCOPE AND OWNERSHIP
+PublisherCatalog defines the five prototype identities and their presentation copy. RunState owns monotonic publisher unlock IDs and pending one-time notifications. StudioPhase owns the passive presentation banner and browser; neither owns unlock truth. Release thresholds read RunState's immutable release metadata captured from committed ProjectState Review and Awareness results at successful release registration. Contract completion reads the existing authoritative one-shot ContractState only when it is completed and payout-committed. No staged, accepted, partially completed, failed, or repeated callback can count.
+
+Ironclad Interactive unlocks after the first registered release and remains explicitly named as owner of balanced_primitive_contract_v1 in the contract detail. SideStreet Games unlocks after its second successful contract hand commits. Crown & Quill Software unlocks from any released Final Review >= 7.0. Neon Circuit Publishing unlocks from any released Total Awareness >= 125. Starwave Entertainment is visible and states its exact two-release/three-completed-contract condition, plus that additional contracts are not currently available. Its unlock remains unreachable under the fixed one-shot contract system.
+
+UNLOCK AND NOTIFICATION BOUNDARIES
+Unlock evaluation runs only after successful RunState release registration or a successful central productive-cycle commit. Release reconstruction returns from the existing registration path without appending another unlock or notification. RunState's pending notifications are taken once when Studio shows its banner; browsing, selection, closing, banner display, and acknowledgment spend no cash and advance no cycles. RunState ownership survives Studio/Contract phase replacement. The catalog and browser do not grant rewards or change the existing contract payout, settlement, candidate, hand, or payout-once logic.
+
+FILES CHANGED FOR THIS MILESTONE
+scenes/phases/studio_phase.tscn
+scripts/run_state.gd
+scripts/phases/studio_phase.gd
+scripts/publishers/publisher_catalog.gd (+ generated .uid)
+scripts/publishers/publisher_browser.gd (+ generated .uid)
+scripts/debug/verify_publisher_list_progression.gd (+ generated .uid)
+
+VERIFICATION
+Focused publisher verifier passes: first-release availability, five visible identities, personalities and conditions, browser bounds at 1152x648 and 900x600, passive navigation, one-time notification, release reconstruction, Review 6.9/7.0 and Awareness 124/125 boundaries from frozen history, acceptance and partial-completion exclusion, real two-hand SideStreet unlock, repeated callback idempotence, and Starwave's exact unmet count. All 35 verify_*.gd suites passed after the implementation, covering existing contract, Studio, sales, Review, Genre Fit, Pre-Development, Feature Store and finance behavior. A later presentation-copy-only change was followed by another passing focused publisher verifier. Headless Godot editor import/parser and git diff --check passed. The pre-existing Windows root-certificate warning and missing card-art warnings remain non-blocking.
+
+EXACT BLOCKER AND DEFERRED SYSTEMS
+The run can own only one fixed ContractState and one one-shot completed contract. It has no authoritative outcomes for a second or third contract. Therefore Starwave's three-completion positive case and both completion orders cannot be exercised without inventing contract history or implementing additional contract offers, which are outside this handoff. The To Do item remains BLOCKED/PARTIAL, not COMPLETE. Publisher Promotion banking/consumption, differentiated contracts, cash/promotion reward splits, funding, exposure, reputation, prestige, advances, recoupment, exclusivity, publisher control, revenue share and campaigns were not added. A future contract-history authority and real additional offers are required before Starwave can unlock.

@@ -1,0 +1,27 @@
+PATCH NOTES — GENRE FIT REVIEW MODIFIER V1
+Date: 2026-09-26
+
+AUTHORITY AND RULING
+Read the live canonical To Do List, cumulative Patch Notes Implementation Discoveries and Locked Rules, Primitive_Pre_Development_Genres_and_Genre_Fit_v1.txt, current repository, Review implementation, tests and git status. No repository AGENTS.md was found. The locked Genre Fit formula supplies targets, total-variation deviation, six-point grace and 0.75 floor. The user explicitly ruled that missing saved Genre and zero total final Core score each receive a neutral x1.00 modifier. This preserves existing valid legacy and zero-production Reviews. Malformed saved Genre identity or ratios reject before a Review result is created.
+
+IMPLEMENTATION
+Final resolved ProjectState Graphics, Sound, Technology and Design scores are used after all production synergies. The project-saved selected Genre ratios are compared with the authoritative Primitive genre catalog; Theme is ignored. For positive total, actual shares are 100 * score / total. Deviation is half the sum of absolute share differences from the four target percentages. Modifier is max(0.75, 1 - 0.01 * max(0, deviation - 6)). There is no bonus. For absent legacy identity or zero total, deviation is recorded as 0 and modifier as 1.0.
+
+INSERTION AND ROUNDING
+The original production-quality, Scope Completion, Bug Multiplier and variance calculations are unchanged. Their combined value is clamped to 0..10 as the pre-Genre Review. Genre Fit multiplies that clamped, still-unrounded value exactly once. The product is clamped to 0..10 and rounded with the existing one-decimal half-up function. ReviewResult retains pre-Genre value, exact deviation and modifier for verification and future presentation. Manual fixture constructors retain neutral optional defaults. A committed ProjectState ReviewResult remains one-shot and Gameplay reconstruction reuses it; no second multiplication or reroll occurs.
+
+FILES CHANGED (relative to patch-notes)
+scripts/review/primitive_review_calculator.gd
+scripts/review/review_result.gd
+scripts/project_state.gd (updated stale comment only)
+scripts/debug/verify_genre_fit.gd (+ Godot-generated .uid)
+
+VERIFICATION
+Focused Genre Fit verifier: 25 passing assertions covering exact target, deviations 4/6/10/15/20/31/70, modifiers 1.00/1.00/0.96/0.91/0.86/0.75/0.75, base clamp and final rounding, selected Genre, Theme independence, approved neutral cases, malformed saved identity rejection, one-shot result and reconstruction reuse. Existing Design/Alpha production regressions verify the resolved ProjectState scores consumed here.
+All 34 verify_*.gd suites passed, including Review, Awareness, Launch, units, sales, first/next Pre-Development, Studio, tutorial, calendar, redraw, Feature Store, finance and contract. Headless Godot editor import/parser and git diff --check passed. Godot user-data logs generated during verification were restored/removed; .codex-godot-temp and unrelated files were preserved. A Windows certificate-store warning remains non-blocking.
+
+DISCOVERY
+Godot's typed Array[int] of saved ratios did not compare equal to the untyped parsed JSON ratio Array using whole-array equality; validation now compares each of the four integer values. The two initially undefined edge cases were resolved by the user's neutral-modifier ruling before integration.
+
+DEFERRED
+No Theme effects, publisher reward changes, production-priority changes, financial changes, later sales months or content-balance adjustments were added. Full draw-by-draw Genre feasibility simulation and durable save/load remain later work. Publisher List and unlock progression is the next queue item.
