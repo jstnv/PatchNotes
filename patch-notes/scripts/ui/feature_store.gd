@@ -7,9 +7,26 @@ var _scroll: ScrollContainer
 var _nodes: Dictionary = {}
 var _edges: Array = []
 const NODE_SIZE := Vector2(224, 100)
-const STEP := Vector2(300, 124)
+const COLUMN_STEP := 248.0
+const LEVEL_STEP := 160.0
+const LANE_ORDER := [&"Visuals", &"Audio", &"Technology & Tools", &"Gameplay", &"Story & World"]
+# Presentation only. Card definitions, prerequisites, and purchase rules remain in the ledger.
+const LANE_MEMBERS := {
+	&"Visuals": [&"text", &"colored_text", &"sprites", &"animated_sprites", &"4_color_palette", &"8_color_palette", &"scrolling", &"multi_directional_scrolling"],
+	&"Audio": [&"8_bit_sound", &"recorded_sounds", &"8_bit_music", &"16_bit_music", &"sound_effects", &"music"],
+	&"Technology & Tools": [&"keyboard_and_mouse", &"controller", &"menu_system", &"split_screen", &"save_files", &"branching_nodes"],
+	&"Gameplay": [&"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"difficulty_levels"],
+	&"Story & World": [&"simple_story", &"dialogue", &"character_backstories", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets"],
+}
+var _lane_by_id: Dictionary = {}
+var _lane_buttons: Dictionary = {}
+var _lane_scroll: Dictionary = {}
+var _active_lane: StringName = &"Visuals"
+var _gate: Label
+var _lane_heading: Label
 var _details: Label
 var _cash: Label
+var _owned_summary: Label
 var _buy: Button
 var _selected: StringName
 
@@ -33,6 +50,23 @@ func setup(run: RunState) -> void:
 	close.text = "Close Store"
 	close.pressed.connect(hide)
 	header.add_child(close)
+	_owned_summary = Label.new()
+	_owned_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_owned_summary.add_theme_font_size_override("font_size", 14)
+	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Play cost is once per owned Feature in a project; Passes are free. Later Store Features have no defined play price yet."
+	layout.add_child(_owned_summary)
+	var lanes := HBoxContainer.new()
+	lanes.add_theme_constant_override("separation", 8)
+	layout.add_child(lanes)
+	for lane: StringName in LANE_ORDER:
+		var lane_button := Button.new()
+		lane_button.text = str(lane)
+		lane_button.toggle_mode = true
+		lane_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		lane_button.focus_mode = Control.FOCUS_ALL
+		lane_button.pressed.connect(_select_lane.bind(lane))
+		lanes.add_child(lane_button)
+		_lane_buttons[lane] = lane_button
 	var body := HSplitContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(body)
@@ -60,7 +94,7 @@ func setup(run: RunState) -> void:
 	_buy.pressed.connect(_purchase)
 	detail_layout.add_child(_buy)
 	var note := Label.new()
-	note.text = "Owned: green • Available: blue • Need cash: amber • Locked: gray • Selected: white border\nScroll to explore • Opening / closing: $0.00 and 0 cycles • Permanent run ownership"
+	note.text = "Owned: green • Available: blue • Need cash: amber • Locked: gray • Selected: white border\nChoose a lane, then scroll sideways • Roots below, upgrades above ↑ • Browsing: $0.00 and 0 cycles"
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(note)
 	_run.features_changed.connect(_refresh)
@@ -80,6 +114,11 @@ func _refresh() -> void:
 	if _run.needs_starter_selection():
 		var pool := _run.get_starter_pool_summary()
 		_cash.text += "\nFirst-game pool: %d / 23 Scope · %s / $4,000.00 spent · Primitive purchases cost 0 cycles" % [pool.scope, CashFormatter.format_exact_cents(pool.spent_cents)]
+	var owned := _summarize_owned_features()
+	_owned_summary.text = "OWNED POOL  •  Scope %d  •  Core Score %d\n" % [owned.scope, owned.total_score]
+	_owned_summary.text += "G %d · S %d · T %d · D %d  •  Play once: %s" % [owned.graphics, owned.sound, owned.technology, owned.design, CashFormatter.format_exact_cents(owned.known_play_cost_cents)]
+	if owned.unpriced_count > 0:
+		_owned_summary.text += "\n+ %d Store Feature%s with play cost TBD" % [owned.unpriced_count, "" if owned.unpriced_count == 1 else "s"]
 	if _nodes.is_empty():
 		_build_tree()
 	for id: StringName in _nodes:
@@ -110,7 +149,16 @@ func _refresh() -> void:
 			button.text += "\n" + (str(offer.prerequisite) if not offer.unlocked else CashFormatter.format_exact_cents(offer.price_cents))
 		elif not reserve.is_empty() and not reserve.owned:
 			button.text += "\n" + CashFormatter.format_exact_cents(reserve.price_cents)
-		button.tooltip_text = card.card_name + ("\n" + str(offer.prerequisite) if not offer.is_empty() else ("\nPrimitive starter · 0 cycles" if not reserve.is_empty() and reserve.initial else "\nPrimitive reserve · 1 cycle" if not reserve.is_empty() and not reserve.owned else "\nOwned Primitive Feature"))
+		var department := "No department" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize()
+		button.tooltip_text = "%s · %s · %s\nDepartment: %s · Scope %d · +%d %s" % [card.card_name, str(card.phase).capitalize(), str(_lane_by_id[id]), department, card.scope, card.primary_value, str(card.primary_stat).capitalize()]
+		if card.secondary_value != 0:
+			button.tooltip_text += " · +%d %s" % [card.secondary_value, str(card.secondary_stat).capitalize()]
+		if not offer.is_empty():
+			button.tooltip_text += "\nPrerequisite: %s\nBase: %s · Discount: %d%% · Final: %s\n%s" % [offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Owned" if offer.owned else "Affordable" if offer.affordable and offer.unlocked else "Need cash" if offer.unlocked else "Locked"]
+		elif not reserve.is_empty() and not reserve.owned:
+			button.tooltip_text += "\nPrimitive %s · %s" % ["starter" if reserve.initial else "reserve", CashFormatter.format_exact_cents(reserve.price_cents)]
+		else:
+			button.tooltip_text += "\nOwned Primitive Feature"
 		for style_name: String in ["normal", "hover", "pressed", "focus"]:
 			var style := StyleBoxFlat.new()
 			style.bg_color = color.lightened(0.12) if style_name == "hover" else color
@@ -122,73 +170,144 @@ func _refresh() -> void:
 	_show_details()
 
 
+func _summarize_owned_features() -> Dictionary:
+	var scores := {&"graphics": 0, &"sound": 0, &"technology": 0, &"design": 0}
+	var scope := 0
+	var unpriced_count := 0
+	var priced_cards: Array[CardData] = []
+	var database := get_node("/root/CardDatabase")
+	for id: StringName in _run.get_owned_feature_ids():
+		var card: CardData = database.get_card(id)
+		if card == null or card.card_type != &"feature":
+			continue
+		scope += card.scope
+		scores[card.primary_stat] += card.primary_value
+		if not card.secondary_stat.is_empty():
+			scores[card.secondary_stat] += card.secondary_value
+		if _run.get_feature_store_offer(id).is_empty():
+			priced_cards.append(card)
+		else:
+			unpriced_count += 1
+	var cost := _run.primitive_feature_hand_cost_cents(priced_cards)
+	return {"scope": scope, "total_score": scores[&"graphics"] + scores[&"sound"] + scores[&"technology"] + scores[&"design"],
+		"graphics": scores[&"graphics"], "sound": scores[&"sound"], "technology": scores[&"technology"], "design": scores[&"design"],
+		"known_play_cost_cents": cost, "unpriced_count": unpriced_count}
+
+
 func _build_tree() -> void:
 	var entries := FeatureStoreCatalog.starting_features() + FeatureStoreCatalog.entries()
 	var children: Dictionary = {}
-	var roots: Array = []
+	for lane: StringName in LANE_ORDER:
+		for id: StringName in LANE_MEMBERS[lane]:
+			assert(not _lane_by_id.has(id), "Feature appears in two Store lanes: " + str(id))
+			_lane_by_id[id] = lane
 	for entry: Dictionary in entries:
 		var id := StringName(entry.id)
+		assert(_lane_by_id.has(id), "Feature missing Store lane: " + str(id))
 		var parent := StringName(entry.get("purchase_parent", ""))
 		if int(entry.get("gameplay_features_required", 0)) > 0:
 			parent = &"gameplay_gate"
-		if parent.is_empty():
-			roots.append(id)
-		else:
+		if not parent.is_empty():
 			if not children.has(parent): children[parent] = []
 			children[parent].append(id)
 			_edges.append([parent, id])
 		var button := Button.new()
 		button.size = NODE_SIZE
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		button.focus_mode = Control.FOCUS_ALL
 		button.add_theme_font_size_override("font_size", 16)
 		button.add_theme_color_override("font_color", Color.WHITE)
 		button.pressed.connect(_select_node.bind(id))
 		_tree.add_child(button)
 		_nodes[id] = button
-	var row := 0
-	for id: StringName in roots:
-		if children.has(id):
-			row = _place_branch(id, 0, row, children)
-	var gate := Label.new()
-	gate.name = "GameplayGate"
-	gate.text = "OWN ANY 3 DISTINCT\nGAMEPLAY FEATURES\nOwnership gate • no discount"
-	gate.position = Vector2(16, 44 + row * STEP.y)
-	gate.size = NODE_SIZE
-	gate.add_theme_font_size_override("font_size", 14)
-	_tree.add_child(gate)
-	for id: StringName in children.get(&"gameplay_gate", []):
-		row = _place_branch(id, 1, row, children)
-	for id: StringName in roots:
-		if not children.has(id):
-			row = _place_branch(id, 0, row, children)
-	_tree.custom_minimum_size.y = 60 + row * STEP.y
-	for depth in range(2):
-		var heading := Label.new()
-		heading.text = "ROOT FEATURES" if depth == 0 else "PREREQUISITE UPGRADES →"
-		heading.position = Vector2(16 + depth * STEP.x, 8)
-		_tree.add_child(heading)
+	assert(_nodes.size() == _lane_by_id.size(), "Store lane map does not match ledger")
+	_gate = Label.new()
+	_gate.name = "GameplayGate"
+	_gate.text = "OWN ANY 3 DISTINCT\nGAMEPLAY FEATURES\nOwnership gate • no discount"
+	_gate.size = NODE_SIZE
+	_gate.add_theme_font_size_override("font_size", 14)
+	_tree.add_child(_gate)
+	_lane_heading = Label.new()
+	_lane_heading.position = Vector2(16, 8)
+	_tree.add_child(_lane_heading)
+	_layout_lane(children)
 
 
-func _place_branch(id: StringName, depth: int, row: int, children: Dictionary) -> int:
-	_nodes[id].position = Vector2(16 + depth * STEP.x, 44 + row * STEP.y)
-	_tree.custom_minimum_size.x = maxf(_tree.custom_minimum_size.x, 32 + depth * STEP.x + NODE_SIZE.x)
-	var next_row := row
+func _layout_lane(children: Dictionary) -> void:
+	var lane_ids: Array = LANE_MEMBERS[_active_lane]
+	var roots: Array[StringName] = []
+	for id: StringName in lane_ids:
+		var is_child := false
+		for edge: Array in _edges:
+			if edge[1] == id:
+				is_child = true
+				break
+		if not is_child:
+			roots.append(id)
+	if _active_lane == &"Gameplay":
+		roots.append(&"gameplay_gate")
+	var max_depth := 0
+	for root_id: StringName in roots:
+		max_depth = maxi(max_depth, _branch_depth(root_id, children))
+	var baseline := 64.0 + max_depth * LEVEL_STEP
+	for i in range(roots.size()):
+		var x := 16.0 + i * COLUMN_STEP
+		_place_upward_branch(roots[i], x, baseline, 0, children)
+	_tree.custom_minimum_size = Vector2(32 + roots.size() * COLUMN_STEP, baseline + NODE_SIZE.y + 24)
+	_lane_heading.text = str(_active_lane).to_upper() + "  •  UPGRADES ↑  •  ROOT FEATURES BELOW"
+	_gate.visible = _active_lane == &"Gameplay"
+	for id: StringName in _nodes:
+		_nodes[id].visible = _lane_by_id[id] == _active_lane
+	for lane: StringName in LANE_ORDER:
+		_lane_buttons[lane].button_pressed = lane == _active_lane
+	_tree.queue_redraw()
+
+
+func _branch_depth(id: StringName, children: Dictionary) -> int:
+	var depth := 0
 	for child: StringName in children.get(id, []):
-		next_row = _place_branch(child, depth + 1, next_row, children)
-	return maxi(row + 1, next_row)
+		depth = maxi(depth, 1 + _branch_depth(child, children))
+	return depth
+
+
+func _place_upward_branch(id: StringName, x: float, baseline: float, depth: int, children: Dictionary) -> void:
+	var node: Control = _gate if id == &"gameplay_gate" else _nodes[id]
+	var y := baseline - depth * LEVEL_STEP
+	node.position = Vector2(x, y)
+	for child: StringName in children.get(id, []):
+		_place_upward_branch(child, x, baseline, depth + 1, children)
+
+
+func _select_lane(lane: StringName) -> void:
+	if lane == _active_lane:
+		_lane_buttons[lane].button_pressed = true
+		return
+	_lane_scroll[_active_lane] = Vector2i(_scroll.scroll_horizontal, _scroll.scroll_vertical)
+	_active_lane = lane
+	_selected = &""
+	var children: Dictionary = {}
+	for edge: Array in _edges:
+		if not children.has(edge[0]): children[edge[0]] = []
+		children[edge[0]].append(edge[1])
+	_layout_lane(children)
+	var offset: Vector2i = _lane_scroll.get(lane, Vector2i.ZERO)
+	_scroll.scroll_horizontal = offset.x
+	_scroll.scroll_vertical = offset.y
+	_show_details()
 
 
 func _draw_connections() -> void:
 	for edge: Array in _edges:
-		var parent: Control = _tree.get_node("GameplayGate") if edge[0] == &"gameplay_gate" else _nodes[edge[0]]
+		if _lane_by_id[edge[1]] != _active_lane:
+			continue
+		var parent: Control = _gate if edge[0] == &"gameplay_gate" else _nodes[edge[0]]
 		var child: Control = _nodes[edge[1]]
-		var start := parent.position + Vector2(NODE_SIZE.x, NODE_SIZE.y / 2)
-		var end := child.position + Vector2(0, NODE_SIZE.y / 2)
-		var middle := (start.x + end.x) / 2
+		var start := parent.position + Vector2(NODE_SIZE.x / 2, 0)
+		var end := child.position + Vector2(NODE_SIZE.x / 2, NODE_SIZE.y)
 		var offer := _run.get_feature_store_offer(edge[1])
 		var color := Color("7ed6be") if offer.unlocked else Color("8993a5")
-		_tree.draw_polyline(PackedVector2Array([start, Vector2(middle, start.y), Vector2(middle, end.y), end]), color, 3, true)
-		_tree.draw_colored_polygon(PackedVector2Array([end, end + Vector2(-8, -5), end + Vector2(-8, 5)]), color)
+		_tree.draw_line(start, end, color, 3, true)
+		_tree.draw_colored_polygon(PackedVector2Array([end, end + Vector2(-6, 9), end + Vector2(6, 9)]), color)
 
 
 func _select_node(id: StringName) -> void:
@@ -208,17 +327,17 @@ func _show_details() -> void:
 		if not reserve.is_empty() and not reserve.owned:
 			var timing := "First-game starter · 0 cycles" if reserve.initial else "Studio reserve · 1 calendar cycle"
 			var availability := "Starter purchase or Scope cap reached" if not reserve.within_limits else "Affordable" if reserve.affordable else "Insufficient cash"
-			_details.text = "%s\nPrimitive Feature · %s\n\nPrinted Scope: %d\nPrice: %s\n%s\n%s\n\nPermanent ownership for future projects; each project still exhausts this Feature independently." % [reserve.name, str(reserve.phase).capitalize(), reserve.scope, CashFormatter.format_exact_cents(reserve.price_cents), timing, availability]
+			_details.text = "%s\nPrimitive Feature · %s\nDepartment: %s\n\nPrinted Scope: %d\nPrice: %s\n%s\n%s\n\nPermanent ownership for future projects; each project still exhausts this Feature independently." % [reserve.name, str(reserve.phase).capitalize(), "None" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize(), reserve.scope, CashFormatter.format_exact_cents(reserve.price_cents), timing, availability]
 			_buy.text = "Purchase Starter Feature" if reserve.initial else "Purchase Reserve Feature"
 			_buy.disabled = not reserve.can_purchase
 			return
-		_details.text = "%s\nOwned • Primitive Feature\n\nFamiliarity: %d project credits\nDirect children receive 10%% per credit, up to 50%%.\n\nCore: +%d %s • Scope %d\nPrerequisite: Starting root\nBase price / discount / final price: N/A\nAffordability: Already owned" % [card.card_name, _run.get_feature_familiarity(_selected), card.primary_value, str(card.primary_stat).capitalize(), card.scope]
+		_details.text = "%s\nOwned • Primitive Feature · %s\nDepartment: %s\n\nFamiliarity: %d project credits\nDirect children receive 10%% per credit, up to 50%%.\n\nCore: +%d %s • Scope %d\nPrerequisite: Starting root\nBase price / discount / final price: N/A\nAffordability: Already owned" % [card.card_name, str(card.phase).capitalize(), "None" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize(), _run.get_feature_familiarity(_selected), card.primary_value, str(card.primary_stat).capitalize(), card.scope]
 		if card.secondary_value != 0:
 			_details.text += "\nCore: +%d %s" % [card.secondary_value, str(card.secondary_stat).capitalize()]
 		_buy.text = "Already owned"
 		return
 	var status := "Owned" if offer.owned else ("Purchasable" if offer.unlocked else "Locked")
-	_details.text = "%s\n%s\n\nPrerequisite: %s\nBase price: %s\nFamiliarity discount: %d%%\nFinal price: %s\n%s\n\nPrinted effect: +%d %s • Scope %d\nFinite once per project." % [offer.name, status, offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Affordable" if offer.affordable else "Insufficient cash", card.primary_value, str(card.primary_stat).capitalize(), card.scope]
+	_details.text = "%s\n%s · %s\nDepartment: %s\n\nPrerequisite: %s\nBase price: %s\nFamiliarity discount: %d%%\nFinal price: %s\n%s\n\nPrinted effect: +%d %s • Scope %d\nFinite once per project." % [offer.name, status, str(card.phase).capitalize(), "None" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize(), offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Affordable" if offer.affordable else "Insufficient cash", card.primary_value, str(card.primary_stat).capitalize(), card.scope]
 	if _selected == &"difficulty_levels":
 		_details.text += "\nNo familiarity discount for this prerequisite."
 	if card.secondary_value != 0:

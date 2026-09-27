@@ -29,11 +29,14 @@ func _ready() -> void:
 	name_input = LineEdit.new()
 	name_input.name = "GameName"
 	name_input.placeholder_text = "Enter a game name"
+	name_input.tooltip_text = "Give this game a name. You can edit it until development begins."
 	layout.add_child(name_input)
 	_add_label(layout, "Genre", 16)
 	genre_input = _add_options(layout, "genres")
+	genre_input.tooltip_text = "Genre affects Review through the game's final Core Scores."
 	_add_label(layout, "Theme", 16)
 	theme_input = _add_options(layout, "themes")
+	theme_input.tooltip_text = "Choose a Theme for this game's identity. Themes have no gameplay effect yet."
 	_add_label(layout, "Begin Development: 1 calendar cycle • New project starts at cycle 0 • No cash required\nEditing or cancelling: 0 cycles • Themes have no gameplay effects yet", 16)
 	error_label = _add_label(layout, "", 16)
 	error_label.add_theme_color_override("font_color", Color("ffc779"))
@@ -42,6 +45,7 @@ func _ready() -> void:
 	begin_button = Button.new()
 	begin_button.name = "BeginDevelopment"
 	begin_button.text = "Begin Development"
+	begin_button.tooltip_text = "Locks this game's name, Genre and Theme and advances one calendar cycle."
 	begin_button.custom_minimum_size = Vector2(240, 44)
 	begin_button.pressed.connect(_confirm)
 	actions.add_child(begin_button)
@@ -49,6 +53,7 @@ func _ready() -> void:
 	back_button = back
 	back.name = "CancelPredevelopment"
 	back.text = "Back to Studio"
+	back.tooltip_text = "Return to Studio without spending cash or advancing time."
 	back.custom_minimum_size = Vector2(180, 44)
 	back.pressed.connect(func(): cancelled.emit())
 	actions.add_child(back)

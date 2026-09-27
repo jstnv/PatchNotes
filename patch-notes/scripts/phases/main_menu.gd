@@ -2,6 +2,7 @@ class_name MainMenu
 extends Control
 
 signal studio_created(name: String)
+signal tutorial_requested
 
 var _name_input: LineEdit
 var _error: Label
@@ -29,6 +30,13 @@ func _ready() -> void:
 	start.text = "Start Game"
 	start.custom_minimum_size.y = 52
 	layout.add_child(start)
+	var tutorial := Button.new()
+	tutorial.name = "HowToPlay"
+	tutorial.text = "How to Play"
+	tutorial.tooltip_text = "Open the optional tutorial reference."
+	tutorial.custom_minimum_size.y = 44
+	tutorial.pressed.connect(func(): tutorial_requested.emit())
+	layout.add_child(tutorial)
 	_setup = VBoxContainer.new()
 	_setup.name = "StudioSetup"
 	_setup.add_theme_constant_override("separation", 12)
@@ -40,6 +48,7 @@ func _ready() -> void:
 	_name_input.name = "StudioName"
 	_name_input.placeholder_text = "Studio name"
 	_name_input.max_length = 80
+	_name_input.tooltip_text = "Name your studio. You can start producing games after entering Studio."
 	_setup.add_child(_name_input)
 	_error = Label.new()
 	_error.name = "ErrorLabel"

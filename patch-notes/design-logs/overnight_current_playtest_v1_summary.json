@@ -1,0 +1,1437 @@
+{
+  "seed_rule": "270927000 + pair_index * 97; pair_index = case // 2, identical across three policies and paired Beta routes",
+  "all_first_game_runs": 330,
+  "standard_first_game_runs": 300,
+  "below_20_opt_in_runs": 30,
+  "completed_second_games": 180,
+  "distinct_two_game_seeds_per_policy": 30,
+  "by_policy_standard": {
+    "cautious": {
+      "n": 100,
+      "completed_first_games": 100,
+      "completed_second_games": 60,
+      "review": {
+        "n": 100,
+        "p10": 0.6,
+        "median": 1.0,
+        "p90": 1.6,
+        "mean": 1.03
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 100,
+        "p10": 12,
+        "median": 15.0,
+        "p90": 18,
+        "mean": 15.08
+      },
+      "average_cores": [
+        9.78,
+        14.52,
+        16.24,
+        11.62
+      ],
+      "remaining_bugs": {
+        "n": 100,
+        "p10": 0,
+        "median": 3.0,
+        "p90": 6,
+        "mean": 3.13
+      },
+      "genre_fit": {
+        "n": 100,
+        "p10": 0.75,
+        "median": 0.830875591615957,
+        "p90": 0.939310344827586,
+        "mean": 0.836
+      },
+      "awareness": {
+        "n": 100,
+        "p10": 100,
+        "median": 103.0,
+        "p90": 105,
+        "mean": 103
+      },
+      "month_1_units": {
+        "n": 100,
+        "p10": 64,
+        "median": 99.0,
+        "p90": 169,
+        "mean": 110.75
+      },
+      "cash_before_game_2_cents": {
+        "n": 100,
+        "p10": 171472,
+        "median": 275847.5,
+        "p90": 385046,
+        "mean": 279863.33
+      },
+      "contract_total_payout_cents": {
+        "n": 100,
+        "p10": 156666,
+        "median": 187916.5,
+        "p90": 206666,
+        "mean": 184416.3
+      },
+      "game_2_review": {
+        "n": 60,
+        "p10": 0.5,
+        "median": 0.95,
+        "p90": 1.4,
+        "mean": 0.98
+      },
+      "game_2_scope": {
+        "n": 60,
+        "p10": 12,
+        "median": 17.5,
+        "p90": 20,
+        "mean": 17.067
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 432,
+        "balanced operations": 41,
+        "QA specialization": 6,
+        "balanced production": 12,
+        "sound specialization": 6,
+        "Marketing specialization": 1,
+        "design specialization": 2
+      },
+      "store_upgrades_bought": 100,
+      "reserve_features_bought": 100
+    },
+    "ordinary": {
+      "n": 100,
+      "completed_first_games": 100,
+      "completed_second_games": 60,
+      "review": {
+        "n": 100,
+        "p10": 1.9,
+        "median": 2.6,
+        "p90": 3.3,
+        "mean": 2.593
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 100,
+        "p10": 20,
+        "median": 21.0,
+        "p90": 23,
+        "mean": 21.16
+      },
+      "average_cores": [
+        18.34,
+        31.78,
+        23.72,
+        19.78
+      ],
+      "remaining_bugs": {
+        "n": 100,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 4,
+        "mean": 1.44
+      },
+      "genre_fit": {
+        "n": 100,
+        "p10": 0.75,
+        "median": 0.8339583333333335,
+        "p90": 0.957826086956522,
+        "mean": 0.832
+      },
+      "awareness": {
+        "n": 100,
+        "p10": 102,
+        "median": 109.0,
+        "p90": 124,
+        "mean": 110.91
+      },
+      "month_1_units": {
+        "n": 100,
+        "p10": 188,
+        "median": 283.0,
+        "p90": 385,
+        "mean": 289.1
+      },
+      "cash_before_game_2_cents": {
+        "n": 100,
+        "p10": 251335,
+        "median": 358320.5,
+        "p90": 516378,
+        "mean": 367416.84
+      },
+      "contract_total_payout_cents": {
+        "n": 100,
+        "p10": 194166,
+        "median": 215000.0,
+        "p90": 235833,
+        "mean": 214249.64
+      },
+      "game_2_review": {
+        "n": 60,
+        "p10": 1.9,
+        "median": 2.5,
+        "p90": 3.4,
+        "mean": 2.597
+      },
+      "game_2_scope": {
+        "n": 60,
+        "p10": 22,
+        "median": 24.0,
+        "p90": 26,
+        "mean": 24.067
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 773,
+        "sound specialization": 86,
+        "QA specialization": 91,
+        "Marketing specialization": 69,
+        "balanced operations": 23,
+        "graphics specialization": 16,
+        "balanced production": 22,
+        "design specialization": 14,
+        "technology specialization": 6
+      },
+      "store_upgrades_bought": 100,
+      "reserve_features_bought": 100
+    },
+    "optimizer": {
+      "n": 100,
+      "completed_first_games": 100,
+      "completed_second_games": 60,
+      "review": {
+        "n": 100,
+        "p10": 2.6,
+        "median": 3.6,
+        "p90": 4.9,
+        "mean": 3.728
+      },
+      "below_5_pct": 91.0,
+      "at_least_5_pct": 9.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 100,
+        "p10": 20,
+        "median": 21.0,
+        "p90": 23,
+        "mean": 21.44
+      },
+      "average_cores": [
+        29.28,
+        41.82,
+        32.4,
+        27.3
+      ],
+      "remaining_bugs": {
+        "n": 100,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 3,
+        "mean": 0.72
+      },
+      "genre_fit": {
+        "n": 100,
+        "p10": 0.75,
+        "median": 0.819488759557229,
+        "p90": 0.947022900763359,
+        "mean": 0.838
+      },
+      "awareness": {
+        "n": 100,
+        "p10": 103,
+        "median": 114.0,
+        "p90": 136,
+        "mean": 117.17
+      },
+      "month_1_units": {
+        "n": 100,
+        "p10": 280,
+        "median": 401.5,
+        "p90": 564,
+        "mean": 421.15
+      },
+      "cash_before_game_2_cents": {
+        "n": 100,
+        "p10": 309309,
+        "median": 442711.0,
+        "p90": 613046,
+        "mean": 459077.71
+      },
+      "contract_total_payout_cents": {
+        "n": 100,
+        "p10": 185833,
+        "median": 215000.0,
+        "p90": 235833,
+        "mean": 210707.98
+      },
+      "game_2_review": {
+        "n": 60,
+        "p10": 2.9,
+        "median": 3.95,
+        "p90": 4.8,
+        "mean": 3.905
+      },
+      "game_2_scope": {
+        "n": 60,
+        "p10": 23,
+        "median": 24.5,
+        "p90": 26,
+        "mean": 24.433
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 1149,
+        "sound specialization": 92,
+        "design specialization": 42,
+        "QA specialization": 145,
+        "balanced operations": 42,
+        "Marketing specialization": 108,
+        "graphics specialization": 66,
+        "balanced production": 14,
+        "technology specialization": 42
+      },
+      "store_upgrades_bought": 100,
+      "reserve_features_bought": 100
+    }
+  },
+  "by_policy_below_20": {
+    "cautious": {
+      "n": 10,
+      "completed_first_games": 10,
+      "completed_second_games": 0,
+      "review": {
+        "n": 10,
+        "p10": 0.3,
+        "median": 0.5,
+        "p90": 0.7,
+        "mean": 0.49
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 10,
+        "p10": 10,
+        "median": 13.0,
+        "p90": 14,
+        "mean": 12.4
+      },
+      "average_cores": [
+        9.2,
+        15,
+        17,
+        4.6
+      ],
+      "remaining_bugs": {
+        "n": 10,
+        "p10": 0,
+        "median": 1.0,
+        "p90": 3,
+        "mean": 1.4
+      },
+      "genre_fit": {
+        "n": 10,
+        "p10": 0.75,
+        "median": 0.764081632653061,
+        "p90": 0.9,
+        "mean": 0.798
+      },
+      "awareness": {
+        "n": 10,
+        "p10": 100,
+        "median": 104.0,
+        "p90": 106,
+        "mean": 103.5
+      },
+      "month_1_units": {
+        "n": 10,
+        "p10": 37,
+        "median": 58.5,
+        "p90": 69,
+        "mean": 55.7
+      },
+      "cash_before_game_2_cents": {
+        "n": 10,
+        "p10": 194040,
+        "median": 212555.5,
+        "p90": 329990,
+        "mean": 235350.2
+      },
+      "contract_total_payout_cents": {
+        "n": 10,
+        "p10": 144166,
+        "median": 177500.0,
+        "p90": 198333,
+        "mean": 174999.6
+      },
+      "game_2_review": {
+        "n": 0
+      },
+      "game_2_scope": {
+        "n": 0
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 47,
+        "balanced operations": 2,
+        "Marketing specialization": 1
+      },
+      "store_upgrades_bought": 10,
+      "reserve_features_bought": 10
+    },
+    "ordinary": {
+      "n": 10,
+      "completed_first_games": 10,
+      "completed_second_games": 0,
+      "review": {
+        "n": 10,
+        "p10": 1.2,
+        "median": 1.55,
+        "p90": 1.7,
+        "mean": 1.51
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 10,
+        "p10": 18,
+        "median": 19.0,
+        "p90": 19,
+        "mean": 18.8
+      },
+      "average_cores": [
+        14.2,
+        42.4,
+        22.8,
+        8.6
+      ],
+      "remaining_bugs": {
+        "n": 10,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 3,
+        "mean": 1
+      },
+      "genre_fit": {
+        "n": 10,
+        "p10": 0.75,
+        "median": 0.75,
+        "p90": 0.75,
+        "mean": 0.75
+      },
+      "awareness": {
+        "n": 10,
+        "p10": 100,
+        "median": 112.0,
+        "p90": 124,
+        "mean": 112.6
+      },
+      "month_1_units": {
+        "n": 10,
+        "p10": 124,
+        "median": 190.5,
+        "p90": 222,
+        "mean": 181.4
+      },
+      "cash_before_game_2_cents": {
+        "n": 10,
+        "p10": 257358,
+        "median": 288908.5,
+        "p90": 310374,
+        "mean": 289035.4
+      },
+      "contract_total_payout_cents": {
+        "n": 10,
+        "p10": 173333,
+        "median": 181666.0,
+        "p90": 215000,
+        "mean": 189583
+      },
+      "game_2_review": {
+        "n": 0
+      },
+      "game_2_scope": {
+        "n": 0
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 75,
+        "QA specialization": 10,
+        "Marketing specialization": 11,
+        "sound specialization": 12,
+        "balanced operations": 2
+      },
+      "store_upgrades_bought": 10,
+      "reserve_features_bought": 10
+    },
+    "optimizer": {
+      "n": 10,
+      "completed_first_games": 10,
+      "completed_second_games": 0,
+      "review": {
+        "n": 10,
+        "p10": 2.0,
+        "median": 2.5,
+        "p90": 2.6,
+        "mean": 2.43
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 10,
+        "p10": 19,
+        "median": 19.0,
+        "p90": 19,
+        "mean": 19
+      },
+      "average_cores": [
+        22.6,
+        51.6,
+        28.2,
+        18.4
+      ],
+      "remaining_bugs": {
+        "n": 10,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.3
+      },
+      "genre_fit": {
+        "n": 10,
+        "p10": 0.75,
+        "median": 0.75,
+        "p90": 0.785,
+        "mean": 0.757
+      },
+      "awareness": {
+        "n": 10,
+        "p10": 102,
+        "median": 119.0,
+        "p90": 135,
+        "mean": 119.4
+      },
+      "month_1_units": {
+        "n": 10,
+        "p10": 196,
+        "median": 313.0,
+        "p90": 408,
+        "mean": 302.9
+      },
+      "cash_before_game_2_cents": {
+        "n": 10,
+        "p10": 311903,
+        "median": 378213.5,
+        "p90": 429897,
+        "mean": 372367.1
+      },
+      "contract_total_payout_cents": {
+        "n": 10,
+        "p10": 173333,
+        "median": 181666.0,
+        "p90": 210833,
+        "mean": 188749.6
+      },
+      "game_2_review": {
+        "n": 0
+      },
+      "game_2_scope": {
+        "n": 0
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 121,
+        "design specialization": 4,
+        "sound specialization": 8,
+        "QA specialization": 15,
+        "balanced operations": 5,
+        "Marketing specialization": 15,
+        "graphics specialization": 2
+      },
+      "store_upgrades_bought": 10,
+      "reserve_features_bought": 10
+    }
+  },
+  "by_policy_sound": {
+    "cautious": {
+      "n": 52,
+      "completed_first_games": 52,
+      "completed_second_games": 24,
+      "review": {
+        "n": 52,
+        "p10": 0.6,
+        "median": 0.9,
+        "p90": 1.6,
+        "mean": 1.013
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 52,
+        "p10": 11,
+        "median": 14.0,
+        "p90": 17,
+        "mean": 14.192
+      },
+      "average_cores": [
+        8,
+        16.92,
+        15.62,
+        10.04
+      ],
+      "remaining_bugs": {
+        "n": 52,
+        "p10": 0,
+        "median": 3.0,
+        "p90": 4,
+        "mean": 2.673
+      },
+      "genre_fit": {
+        "n": 52,
+        "p10": 0.75,
+        "median": 0.8244717534849595,
+        "p90": 0.904444444444444,
+        "mean": 0.822
+      },
+      "awareness": {
+        "n": 52,
+        "p10": 100,
+        "median": 103.0,
+        "p90": 105,
+        "mean": 103.077
+      },
+      "month_1_units": {
+        "n": 52,
+        "p10": 64,
+        "median": 93.0,
+        "p90": 155,
+        "mean": 106.519
+      },
+      "cash_before_game_2_cents": {
+        "n": 52,
+        "p10": 163780,
+        "median": 236624.0,
+        "p90": 331972,
+        "mean": 250244.462
+      },
+      "contract_total_payout_cents": {
+        "n": 52,
+        "p10": 160833,
+        "median": 194166.0,
+        "p90": 206666,
+        "mean": 188717.577
+      },
+      "game_2_review": {
+        "n": 24,
+        "p10": 0.5,
+        "median": 0.8,
+        "p90": 1.0,
+        "mean": 0.758
+      },
+      "game_2_scope": {
+        "n": 24,
+        "p10": 12,
+        "median": 18.0,
+        "p90": 20,
+        "mean": 16.917
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 225,
+        "balanced operations": 21,
+        "QA specialization": 3,
+        "balanced production": 6,
+        "sound specialization": 4,
+        "Marketing specialization": 1
+      },
+      "store_upgrades_bought": 52,
+      "reserve_features_bought": 52
+    },
+    "ordinary": {
+      "n": 52,
+      "completed_first_games": 52,
+      "completed_second_games": 24,
+      "review": {
+        "n": 52,
+        "p10": 1.8,
+        "median": 2.3,
+        "p90": 3.0,
+        "mean": 2.331
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 52,
+        "p10": 20,
+        "median": 21.0,
+        "p90": 22,
+        "mean": 20.962
+      },
+      "average_cores": [
+        14.5,
+        44.04,
+        20.77,
+        15.85
+      ],
+      "remaining_bugs": {
+        "n": 52,
+        "p10": 0,
+        "median": 0.5,
+        "p90": 4,
+        "mean": 1.423
+      },
+      "genre_fit": {
+        "n": 52,
+        "p10": 0.75,
+        "median": 0.7518750000000001,
+        "p90": 0.837083333333333,
+        "mean": 0.78
+      },
+      "awareness": {
+        "n": 52,
+        "p10": 100,
+        "median": 108.5,
+        "p90": 123,
+        "mean": 110.846
+      },
+      "month_1_units": {
+        "n": 52,
+        "p10": 162,
+        "median": 253.5,
+        "p90": 322,
+        "mean": 255.577
+      },
+      "cash_before_game_2_cents": {
+        "n": 52,
+        "p10": 228339,
+        "median": 296724.0,
+        "p90": 377263,
+        "mean": 303070.308
+      },
+      "contract_total_payout_cents": {
+        "n": 52,
+        "p10": 194166,
+        "median": 217083.0,
+        "p90": 223333,
+        "mean": 213076.577
+      },
+      "game_2_review": {
+        "n": 24,
+        "p10": 1.8,
+        "median": 2.4,
+        "p90": 2.8,
+        "mean": 2.329
+      },
+      "game_2_scope": {
+        "n": 24,
+        "p10": 22,
+        "median": 24.5,
+        "p90": 26,
+        "mean": 24.167
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 382,
+        "sound specialization": 82,
+        "QA specialization": 49,
+        "Marketing specialization": 39,
+        "balanced operations": 8,
+        "graphics specialization": 2,
+        "balanced production": 8,
+        "design specialization": 2
+      },
+      "store_upgrades_bought": 52,
+      "reserve_features_bought": 52
+    },
+    "optimizer": {
+      "n": 52,
+      "completed_first_games": 52,
+      "completed_second_games": 24,
+      "review": {
+        "n": 52,
+        "p10": 2.4,
+        "median": 3.25,
+        "p90": 4.3,
+        "mean": 3.304
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 52,
+        "p10": 20,
+        "median": 21.0,
+        "p90": 23,
+        "mean": 21.385
+      },
+      "average_cores": [
+        22.54,
+        57.04,
+        28.69,
+        21.77
+      ],
+      "remaining_bugs": {
+        "n": 52,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 3,
+        "mean": 0.731
+      },
+      "genre_fit": {
+        "n": 52,
+        "p10": 0.75,
+        "median": 0.7585714285714285,
+        "p90": 0.840656934306569,
+        "mean": 0.786
+      },
+      "awareness": {
+        "n": 52,
+        "p10": 104,
+        "median": 114.0,
+        "p90": 135,
+        "mean": 117
+      },
+      "month_1_units": {
+        "n": 52,
+        "p10": 256,
+        "median": 370.0,
+        "p90": 469,
+        "mean": 368.596
+      },
+      "cash_before_game_2_cents": {
+        "n": 52,
+        "p10": 273305,
+        "median": 392298.0,
+        "p90": 452193,
+        "mean": 381133.481
+      },
+      "contract_total_payout_cents": {
+        "n": 52,
+        "p10": 181666,
+        "median": 215000.0,
+        "p90": 223333,
+        "mean": 209951.577
+      },
+      "game_2_review": {
+        "n": 24,
+        "p10": 2.6,
+        "median": 3.35,
+        "p90": 4.7,
+        "mean": 3.533
+      },
+      "game_2_scope": {
+        "n": 24,
+        "p10": 23,
+        "median": 25.0,
+        "p90": 26,
+        "mean": 24.667
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 612,
+        "sound specialization": 76,
+        "design specialization": 8,
+        "QA specialization": 76,
+        "balanced operations": 18,
+        "Marketing specialization": 56,
+        "graphics specialization": 18,
+        "balanced production": 6,
+        "technology specialization": 14
+      },
+      "store_upgrades_bought": 52,
+      "reserve_features_bought": 52
+    }
+  },
+  "by_policy_mixed": {
+    "cautious": {
+      "n": 48,
+      "completed_first_games": 48,
+      "completed_second_games": 6,
+      "review": {
+        "n": 48,
+        "p10": 0.6,
+        "median": 1.1,
+        "p90": 1.4,
+        "mean": 1.048
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 48,
+        "p10": 14,
+        "median": 15.0,
+        "p90": 18,
+        "mean": 16.042
+      },
+      "average_cores": [
+        11.71,
+        11.92,
+        16.92,
+        13.33
+      ],
+      "remaining_bugs": {
+        "n": 48,
+        "p10": 1,
+        "median": 4.0,
+        "p90": 6,
+        "mean": 3.625
+      },
+      "genre_fit": {
+        "n": 48,
+        "p10": 0.75,
+        "median": 0.8526767676767675,
+        "p90": 0.955454545454545,
+        "mean": 0.85
+      },
+      "awareness": {
+        "n": 48,
+        "p10": 100,
+        "median": 103.0,
+        "p90": 105,
+        "mean": 102.917
+      },
+      "month_1_units": {
+        "n": 48,
+        "p10": 64,
+        "median": 106.0,
+        "p90": 182,
+        "mean": 115.333
+      },
+      "cash_before_game_2_cents": {
+        "n": 48,
+        "p10": 217610,
+        "median": 307429.0,
+        "p90": 412934,
+        "mean": 311950.438
+      },
+      "contract_total_payout_cents": {
+        "n": 48,
+        "p10": 152500,
+        "median": 179583.0,
+        "p90": 202500,
+        "mean": 179756.583
+      },
+      "game_2_review": {
+        "n": 6,
+        "p10": 0.4,
+        "median": 0.9,
+        "p90": 1.3,
+        "mean": 0.867
+      },
+      "game_2_scope": {
+        "n": 6,
+        "p10": 10,
+        "median": 17.0,
+        "p90": 17,
+        "mean": 14.667
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 207,
+        "balanced production": 6,
+        "balanced operations": 20,
+        "QA specialization": 3,
+        "sound specialization": 2,
+        "design specialization": 2
+      },
+      "store_upgrades_bought": 48,
+      "reserve_features_bought": 48
+    },
+    "ordinary": {
+      "n": 48,
+      "completed_first_games": 48,
+      "completed_second_games": 6,
+      "review": {
+        "n": 48,
+        "p10": 2.0,
+        "median": 3.0,
+        "p90": 3.6,
+        "mean": 2.877
+      },
+      "below_5_pct": 100.0,
+      "at_least_5_pct": 0.0,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 48,
+        "p10": 20,
+        "median": 21.0,
+        "p90": 23,
+        "mean": 21.375
+      },
+      "average_cores": [
+        22.5,
+        18.5,
+        26.92,
+        24.04
+      ],
+      "remaining_bugs": {
+        "n": 48,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 4,
+        "mean": 1.458
+      },
+      "genre_fit": {
+        "n": 48,
+        "p10": 0.81,
+        "median": 0.8837244182786654,
+        "p90": 0.97,
+        "mean": 0.889
+      },
+      "awareness": {
+        "n": 48,
+        "p10": 102,
+        "median": 109.5,
+        "p90": 124,
+        "mean": 110.979
+      },
+      "month_1_units": {
+        "n": 48,
+        "p10": 224,
+        "median": 325.0,
+        "p90": 449,
+        "mean": 325.417
+      },
+      "cash_before_game_2_cents": {
+        "n": 48,
+        "p10": 336728,
+        "median": 417596.0,
+        "p90": 535360,
+        "mean": 437125.583
+      },
+      "contract_total_payout_cents": {
+        "n": 48,
+        "p10": 194166,
+        "median": 215000.0,
+        "p90": 235833,
+        "mean": 215520.458
+      },
+      "game_2_review": {
+        "n": 6,
+        "p10": 1.9,
+        "median": 2.7,
+        "p90": 3.4,
+        "mean": 2.75
+      },
+      "game_2_scope": {
+        "n": 6,
+        "p10": 21,
+        "median": 24.0,
+        "p90": 25,
+        "mean": 23.333
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 391,
+        "QA specialization": 42,
+        "Marketing specialization": 30,
+        "graphics specialization": 14,
+        "balanced operations": 15,
+        "balanced production": 14,
+        "design specialization": 12,
+        "sound specialization": 4,
+        "technology specialization": 6
+      },
+      "store_upgrades_bought": 48,
+      "reserve_features_bought": 48
+    },
+    "optimizer": {
+      "n": 48,
+      "completed_first_games": 48,
+      "completed_second_games": 6,
+      "review": {
+        "n": 48,
+        "p10": 3.0,
+        "median": 4.1,
+        "p90": 5.7,
+        "mean": 4.188
+      },
+      "below_5_pct": 81.25,
+      "at_least_5_pct": 18.75,
+      "at_least_7_pct": 0.0,
+      "scope": {
+        "n": 48,
+        "p10": 20,
+        "median": 21.5,
+        "p90": 23,
+        "mean": 21.5
+      },
+      "average_cores": [
+        36.58,
+        25.33,
+        36.42,
+        33.29
+      ],
+      "remaining_bugs": {
+        "n": 48,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 3,
+        "mean": 0.708
+      },
+      "genre_fit": {
+        "n": 48,
+        "p10": 0.758148148148148,
+        "median": 0.9194155844155845,
+        "p90": 0.979148936170213,
+        "mean": 0.895
+      },
+      "awareness": {
+        "n": 48,
+        "p10": 103,
+        "median": 115.0,
+        "p90": 135,
+        "mean": 117.354
+      },
+      "month_1_units": {
+        "n": 48,
+        "p10": 346,
+        "median": 462.5,
+        "p90": 617,
+        "mean": 478.083
+      },
+      "cash_before_game_2_cents": {
+        "n": 48,
+        "p10": 425779,
+        "median": 527692.5,
+        "p90": 657521,
+        "mean": 543517.292
+      },
+      "contract_total_payout_cents": {
+        "n": 48,
+        "p10": 185833,
+        "median": 212916.5,
+        "p90": 235833,
+        "mean": 211527.417
+      },
+      "game_2_review": {
+        "n": 6,
+        "p10": 3.2,
+        "median": 3.7,
+        "p90": 4.4,
+        "mean": 3.767
+      },
+      "game_2_scope": {
+        "n": 6,
+        "p10": 22,
+        "median": 24.0,
+        "p90": 25,
+        "mean": 23.667
+      },
+      "blockers": {},
+      "synergies_game_1": {
+        "none": 537,
+        "design specialization": 34,
+        "graphics specialization": 48,
+        "QA specialization": 69,
+        "balanced operations": 24,
+        "Marketing specialization": 52,
+        "technology specialization": 28,
+        "balanced production": 8,
+        "sound specialization": 16
+      },
+      "store_upgrades_bought": 48,
+      "reserve_features_bought": 48
+    }
+  },
+  "qa_marketing_paired": {
+    "cautious": {
+      "review_marketing_minus_qa": {
+        "n": 50,
+        "p10": -0.10000000000000009,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": -0.024
+      },
+      "bugs_marketing_minus_qa": {
+        "n": 50,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 3,
+        "mean": 0.7
+      },
+      "awareness_marketing_minus_qa": {
+        "n": 50,
+        "p10": 0,
+        "median": 1.0,
+        "p90": 4,
+        "mean": 1.6
+      },
+      "units_marketing_minus_qa": {
+        "n": 50,
+        "p10": -11,
+        "median": 0.0,
+        "p90": 1,
+        "mean": -2.1
+      },
+      "cash_g2_marketing_minus_qa_cents": {
+        "n": 50,
+        "p10": -7692,
+        "median": 0.0,
+        "p90": 699,
+        "mean": -1468.58
+      },
+      "n": 50
+    },
+    "ordinary": {
+      "review_marketing_minus_qa": {
+        "n": 50,
+        "p10": -0.5,
+        "median": -0.20000000000000018,
+        "p90": 0.0,
+        "mean": -0.242
+      },
+      "bugs_marketing_minus_qa": {
+        "n": 50,
+        "p10": 0,
+        "median": 2.0,
+        "p90": 5,
+        "mean": 2.64
+      },
+      "awareness_marketing_minus_qa": {
+        "n": 50,
+        "p10": 6,
+        "median": 15.0,
+        "p90": 24,
+        "mean": 14.7
+      },
+      "units_marketing_minus_qa": {
+        "n": 50,
+        "p10": -38,
+        "median": -11.0,
+        "p90": 9,
+        "mean": -13.88
+      },
+      "cash_g2_marketing_minus_qa_cents": {
+        "n": 50,
+        "p10": -26574,
+        "median": -7692.0,
+        "p90": 6293,
+        "mean": -9706.36
+      },
+      "n": 50
+    },
+    "optimizer": {
+      "review_marketing_minus_qa": {
+        "n": 50,
+        "p10": -0.6000000000000001,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": -0.188
+      },
+      "bugs_marketing_minus_qa": {
+        "n": 50,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 4,
+        "mean": 1.44
+      },
+      "awareness_marketing_minus_qa": {
+        "n": 50,
+        "p10": 13,
+        "median": 22.0,
+        "p90": 31,
+        "mean": 22.3
+      },
+      "units_marketing_minus_qa": {
+        "n": 50,
+        "p10": -36,
+        "median": 13.5,
+        "p90": 34,
+        "mean": 8.22
+      },
+      "cash_g2_marketing_minus_qa_cents": {
+        "n": 50,
+        "p10": -37762,
+        "median": 9440.5,
+        "p90": 26573,
+        "mean": 1748.14
+      },
+      "n": 50
+    }
+  },
+  "review_counterfactuals_standard": {
+    "first_game_scope_standard_23": {
+      "n": 300,
+      "p10": 0.2999999999999998,
+      "median": 0.7000000000000002,
+      "p90": 1.2999999999999998,
+      "mean": 0.724
+    },
+    "first_game_core_standard_30": {
+      "n": 300,
+      "p10": 0.09999999999999987,
+      "median": 0.20000000000000018,
+      "p90": 0.3000000000000007,
+      "mean": 0.213
+    },
+    "first_game_core_standard_28": {
+      "n": 300,
+      "p10": 0.10000000000000009,
+      "median": 0.3999999999999999,
+      "p90": 0.6000000000000005,
+      "mean": 0.37
+    },
+    "all_bugs_fixed": {
+      "n": 300,
+      "p10": 0.0,
+      "median": 0.0,
+      "p90": 0.30000000000000004,
+      "mean": 0.114
+    }
+  },
+  "review_counterfactuals_combined": {
+    "scope_23_core_30": {
+      "n": 300,
+      "p10": 1.2,
+      "median": 3.4,
+      "p90": 5.8,
+      "mean": 3.447
+    },
+    "scope_23_core_28": {
+      "n": 300,
+      "p10": 1.3,
+      "median": 3.6,
+      "p90": 6.1,
+      "mean": 3.651
+    }
+  },
+  "monthly_sales_arithmetic": {
+    "sales_checkpoints": 4080,
+    "failures": []
+  },
+  "cash_calendar_arithmetic": {
+    "action_checkpoints": 9640,
+    "failures": []
+  },
+  "publisher_unlock_counts_after_2": {
+    "ironclad": 180,
+    "sidestreet": 180,
+    "crown_quill": 0,
+    "neon_circuit": 36,
+    "starwave": 0
+  },
+  "supplementary_matched_cases": {
+    "ordinary_mixed_minus_sound": {
+      "n": 30,
+      "review": {
+        "n": 30,
+        "p10": 0.10000000000000009,
+        "median": 0.5,
+        "p90": 1.2999999999999998,
+        "mean": 0.643
+      },
+      "units": {
+        "n": 30,
+        "p10": 14,
+        "median": 55.5,
+        "p90": 140,
+        "mean": 70
+      },
+      "cores_sound": [
+        14.07,
+        42.8,
+        21.47,
+        16
+      ],
+      "cores_mixed": [
+        22.8,
+        18.27,
+        26,
+        24.4
+      ]
+    },
+    "optimizer_twenty_twenty_minus_six_six_hands": {
+      "n": 20,
+      "review": {
+        "n": 20,
+        "p10": 0.5999999999999996,
+        "median": 1.8499999999999996,
+        "p90": 2.6999999999999997,
+        "mean": 1.865
+      },
+      "cycles": {
+        "n": 20,
+        "p10": 28,
+        "median": 28.0,
+        "p90": 28,
+        "mean": 28
+      },
+      "cash_at_release_cents": {
+        "n": 20,
+        "p10": -4000,
+        "median": 0.0,
+        "p90": 0,
+        "mean": -400
+      },
+      "stress_review": {
+        "n": 20,
+        "p10": 4.7,
+        "median": 5.35,
+        "p90": 5.8,
+        "mean": 5.325
+      },
+      "stress_at_least_7_pct": 0.0
+    },
+    "older_model_hand_budgets_in_current_godot": {
+      "ordinary": {
+        "n": 30,
+        "old_budget_review": {
+          "n": 30,
+          "p10": 1.2,
+          "median": 1.7000000000000002,
+          "p90": 2.1,
+          "mean": 1.667
+        },
+        "current_budget_review": {
+          "n": 30,
+          "p10": 1.9,
+          "median": 2.4,
+          "p90": 3.0,
+          "mean": 2.44
+        },
+        "current_minus_old_budget_review": {
+          "n": 30,
+          "p10": 0.3999999999999999,
+          "median": 0.75,
+          "p90": 1.1,
+          "mean": 0.773
+        }
+      },
+      "optimizer": {
+        "n": 30,
+        "old_budget_review": {
+          "n": 30,
+          "p10": 1.7,
+          "median": 2.45,
+          "p90": 3.0,
+          "mean": 2.473
+        },
+        "current_budget_review": {
+          "n": 30,
+          "p10": 2.3,
+          "median": 3.55,
+          "p90": 4.6,
+          "mean": 3.537
+        },
+        "current_minus_old_budget_review": {
+          "n": 30,
+          "p10": 0.5000000000000002,
+          "median": 0.95,
+          "p90": 2.1999999999999997,
+          "mean": 1.063
+        }
+      }
+    }
+  }
+}

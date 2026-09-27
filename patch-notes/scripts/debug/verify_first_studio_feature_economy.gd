@@ -53,14 +53,20 @@ func _run() -> void:
 	studio.get_node("%FeatureStoreButton").pressed.emit()
 	var store: FeatureStore = studio.get("_feature_store")
 	check(store != null and store.visible, "Feature Store opens during first-game starter purchasing")
+	var owned_summary: Label = store.get("_owned_summary")
+	check(owned_summary.text.contains("Scope 7") and owned_summary.text.contains("Core Score 18") and owned_summary.text.contains("G 5 · S 5 · T 7 · D 1") and owned_summary.text.contains("$320.00") and not owned_summary.text.contains("TBD"), "Owned-pool indicator totals the six ledger starters and their exact priced play cost")
 	store.call("_select_node", &"sprites")
 	(store.get("_buy") as Button).pressed.emit()
 	store.call("_select_node", &"scrolling")
 	(store.get("_buy") as Button).pressed.emit()
 	check(run.owns_feature(&"sprites") and run.owns_feature(&"scrolling") and run.get_cash_cents() == 460000 and run.get_completed_run_cycles() == 0 and run.get_starter_pool_summary().scope == 11, "Store buys multiple starter Features one click each for exact cash and zero cycles")
+	check(owned_summary.text.contains("Scope 11") and owned_summary.text.contains("Core Score 32") and owned_summary.text.contains("G 12 · S 5 · T 14 · D 1") and owned_summary.text.contains("$540.00"), "Indicator refreshes from owned cards after sequential starter purchases")
+	root.size = Vector2i(900, 600)
+	await process_frame
+	await process_frame
+	check(owned_summary.get_global_rect().end.x <= store.get_global_rect().end.x and owned_summary.get_global_rect().end.y < (store.get("_scroll") as ScrollContainer).get_global_rect().position.y, "Owned-pool indicator fits within the scaled Store canvas above the browser")
 	check(studio.get_node("%StoreHintText").text.contains("11 / 23 Scope"), "Inline Store hint updates after purchases")
 	store.hide()
-	root.size = Vector2i(900, 600)
 	await process_frame
 	await process_frame
 	check(studio.get_node("%StoreHint").get_global_rect().end.x <= 900 and studio.get_node("%StartNextGame").get_global_rect().end.y <= 600, "Inline hint and first-game action fit the 900×600 Studio scene")
@@ -74,7 +80,9 @@ func _run() -> void:
 	var reserve := run.get_primitive_reserve_offer(&"sprites")
 	check(reserve.owned and not reserve.initial, "Purchased starter remains owned after the first game boundary")
 	check(run.purchase_primitive_reserve_feature(&"enemies") and run.owns_feature(&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Later Studio reserve purchase spends exact cents and one productive cycle")
+	check(owned_summary.text.contains("Scope 13") and owned_summary.text.contains("Core Score 37") and owned_summary.text.contains("G 14 · S 5 · T 17 · D 1") and owned_summary.text.contains("$630.00"), "Indicator refreshes after a reserve purchase")
 	check(not run.purchase_primitive_reserve_feature(&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Duplicate reserve purchase changes nothing")
+	check(run.purchase_feature(&"colored_text") and owned_summary.text.contains("Scope 14") and owned_summary.text.contains("Core Score 39") and owned_summary.text.contains("G 16 · S 5 · T 17 · D 1") and owned_summary.text.contains("$630.00") and owned_summary.text.contains("1 Store Feature with play cost TBD"), "Owned later Feature contributes printed Scope and Core while its undefined play cost stays explicit")
 	var project := PrimitivePredevelopment.prepare_project("Economy Game", &"action", &"fantasy", run)
 	check(project.get_feature_supply_ids().has(&"enemies") and project.get_feature_supply_ids().has(&"scrolling"), "Next project snapshots store-purchased starter and reserve Features")
 	var cards: Array[CardData] = [database.get_card(&"text"), database.get_card(&"controls"), database.get_card(&"graphics_pass")]

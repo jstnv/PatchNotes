@@ -23,6 +23,10 @@ func _run() -> void:
 	var menu: MainMenu = game.get("_active_phase")
 	var hud: GameplayHUD = game.get_node("%GameplayHUD")
 	expect(game.project_state == null and menu != null and run.get_cash_cents() == 0, "New run waits at main menu without creating a project")
+	var menu_before := snapshot(run)
+	menu.get_node("CenterContainer/MenuLayout/HowToPlay").pressed.emit()
+	expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == &"main_menu" and snapshot(run) == menu_before, "Main-menu How to Play opens the separate tutorial for free")
+	hud.tutorial_overlay.close()
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	var studio_input: LineEdit = menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName")
 	studio_input.text = "First Studio"
@@ -36,8 +40,11 @@ func _run() -> void:
 	expect(studio.get_node("%LowScopeWarning").visible and snapshot(run) == before, "Below-20-Scope start shows a warning without mutating the run")
 	studio.get_node("%LowScopeWarning").confirmed.emit()
 	var overlay: PredevelopmentOverlay = studio.get("_predevelopment")
-	expect(hud.tutorial_overlay.visible and hud.tutorial_context == &"predevelopment", "First game setup presents Pre-Development tips")
-	hud.tutorial_overlay.close()
+	expect(hud.tutorial_context == &"predevelopment" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "First game setup presents nonblocking Pre-Development guidance")
+	hud.contextual_tip.dismiss()
+	hud.tip_button.pressed.emit()
+	expect(hud.contextual_tip.panel.visible and not hud.tutorial_overlay.visible and snapshot(run) == before, "Tip button manually replays setup guidance for free")
+	hud.contextual_tip.dismiss()
 	overlay.name_input.text = "   "
 	overlay.begin_button.pressed.emit()
 	expect(game.project_state == null and snapshot(run) == before and not overlay.error_label.text.is_empty(), "Missing name rejects without project or time mutation")
@@ -65,32 +72,34 @@ func _run() -> void:
 	expect(not run.needs_starter_selection(), "Successful first-project commit closes the starter purchase window")
 	expect(project.get_feature_supply_ids() == run.get_owned_feature_ids() and project.has_competitor_snapshot() and project.has_market_forecast_snapshot(), "Fresh project uses owned supply and authoritative snapshots")
 	var design: DesignPhase = game.get("_active_phase")
-	expect(design != null and design.get_workspace().overlay.visible and hud.tutorial_context == &"design" and hud.tutorial_overlay.visible, "Design planning and Design tips follow setup")
+	expect(design != null and design.get_workspace().overlay.visible and hud.tutorial_context == &"design" and not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Design planning uses its own inline help without a hidden toast")
 	var current := snapshot(run)
 	expect(not game.call("_begin_next_project", studio, "Duplicate", &"action", &"fantasy") and snapshot(run) == current, "Stale setup callback cannot charge twice")
-	hud.tutorial_overlay.close()
+	hud.contextual_tip.dismiss()
 	hud.set_phase(design)
-	expect(not hud.tutorial_overlay.visible, "Repeat phase entry does not repeat tips")
+	expect(not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible, "Repeat phase entry does not repeat tips")
 	hud.show_tutorial()
-	expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == &"design", "Tutorial button reopens current phase guidance")
+	expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == &"design", "Tutorial button opens current phase reference menu")
 	if "--capture" in OS.get_cmdline_user_args():
 		await process_frame
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://design-logs/design-phase-tips.png")
 	for topic: StringName in [&"alpha", &"beta", &"review", &"contract", &"feature_store"]:
 		hud.set_tutorial_context(topic)
-		expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == topic, "First visit shows relevant " + str(topic) + " tips")
-		for i in range(hud.tutorial_overlay.pages.size()): hud.tutorial_overlay.next_page()
+		expect(not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "First visit shows nonblocking " + str(topic) + " guidance")
+		hud.contextual_tip.dismiss()
 		hud.set_tutorial_context(topic)
-		expect(not hud.tutorial_overlay.visible and snapshot(run) == current, "Repeat " + str(topic) + " visit is quiet and free")
+		expect(not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible and snapshot(run) == current, "Repeat " + str(topic) + " visit is quiet and free")
 		hud.show_tutorial()
-		expect(hud.tutorial_overlay.topic == topic and snapshot(run) == current, "Manual " + str(topic) + " replay is relevant and free")
+		expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == topic and snapshot(run) == current, "Manual " + str(topic) + " reference is relevant and free")
+		hud.tutorial_overlay.close()
 	var rebuilt: Control = load("res://scenes/gameplay.tscn").instantiate()
 	rebuilt.project_state = project
 	rebuilt.run_state = run
 	root.add_child(rebuilt)
 	await process_frame
-	expect(rebuilt.get("_active_phase") is DesignPhase and not rebuilt.get_node("%GameplayHUD").tutorial_overlay.visible and snapshot(run) == current, "Reconstruction retains project and seen tips without charging")
+	var rebuilt_hud: GameplayHUD = rebuilt.get_node("%GameplayHUD")
+	expect(rebuilt.get("_active_phase") is DesignPhase and not rebuilt_hud.tutorial_overlay.visible and not rebuilt_hud.contextual_tip.panel.visible and snapshot(run) == current, "Reconstruction retains project and seen tips without charging")
 	rebuilt.queue_free()
 	game.queue_free()
 	await process_frame

@@ -26,10 +26,9 @@ func _run() -> void:
 	var footer := hud.footer
 	for title: String in ["Design", "Alpha", "Beta"]:
 		var phase: Control = game.get("_active_phase")
-		check(hud.tutorial_context == StringName(title.to_lower()), title + ": real transition selects relevant tips")
+		check(hud.tutorial_context == StringName(title.to_lower()), title + ": real transition selects relevant guidance")
 		if title != "Design":
-			check(hud.tutorial_overlay.visible, title + ": first phase visit automatically presents its tips")
-			hud.tutorial_overlay.close()
+			check(not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, title + ": priority dialog shows its own help without a hidden toast")
 		check(phase.get("_project_state") == project and phase.get("_run_state") == run, title + ": authoritative identities persist")
 		check(hud.get_node("PersistentHeader") == header and hud.footer == footer, title + ": persistent regions are not rebuilt")
 		check(phase.get_workspace().phase_title.text.begins_with(title), title + ": phase panel updates")
@@ -44,8 +43,11 @@ func _run() -> void:
 		if title == "Design":
 			check(not hud.change_priorities.disabled, "Initial Design priorities are editable before Begin")
 			verify_initial_design_priorities(phase, project, run)
+			verify_design_guidance(hud, phase as DesignPhase, project, run)
 		else:
 			verify_initial_phase_priorities(phase, project, run, title)
+			if title == "Beta":
+				check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Find and prepare", "Beta guides testing after its first draw even though Launch is already enabled")
 		await process_frame
 		check(not hud.change_priorities.disabled, title + ": active phase can edit priorities")
 		await verify_overlay(phase, project, run, title)
@@ -76,17 +78,22 @@ func _run() -> void:
 func verify_tutorial(hud: GameplayHUD, project: ProjectState, run: RunState, design: DesignPhase) -> void:
 	var before := state_snapshot(project, run)
 	var tutorial := hud.tutorial_overlay
-	check(tutorial.visible and tutorial.topic == &"design", "Design entry presents only Design tips")
+	check(not tutorial.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Design entry shows priority-dialog help without opening a tutorial menu or hidden toast")
+	check(hud.contextual_tip.layer < design.get_workspace().overlay.layer and hud.contextual_tip.panel.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Inline tip stays beneath the priority modal and lets card input pass through")
+	check(hud.contextual_tip.panel.offset_top > hud.synergy_notification.banner.offset_bottom, "Inline tip sits below synergy notifications")
+	check(hud.contextual_tip.timer.wait_time == 8.0 and hud.contextual_tip.timer.one_shot, "Inline tip has a bounded lifetime")
+	hud.tutorial_button.pressed.emit()
+	check(tutorial.visible and tutorial.topic == &"design", "Tutorial button opens the separate Design reference menu")
 	check(tutorial.pages.size() == 3, "Design has three relevant tips")
 	tutorial.next_page()
 	check(tutorial.page_index == 1 and not tutorial.back_button.disabled, "Next tip enables Back")
 	tutorial.previous_page()
 	check(tutorial.page_index == 0, "Back returns to first Design tip")
 	for index in range(tutorial.pages.size()): tutorial.next_page()
-	check(not tutorial.visible and design.get_workspace().overlay.visible, "Closing tips reveals priority planning")
-	check(state_snapshot(project, run) == before, "Tips mutate no gameplay state")
+	check(not tutorial.visible and design.get_workspace().overlay.visible, "Closing the tutorial menu reveals priority planning")
+	check(state_snapshot(project, run) == before, "Inline and manual guidance mutate no gameplay state")
 	hud.tutorial_button.pressed.emit()
-	check(tutorial.visible and tutorial.topic == &"design", "Tutorial button reopens current phase tips")
+	check(tutorial.visible and tutorial.topic == &"design", "Tutorial button reopens current phase reference")
 	tutorial.close()
 
 func verify_initial_design_priorities(phase: Control, project: ProjectState, run: RunState) -> void:
@@ -110,6 +117,22 @@ func verify_initial_phase_priorities(phase: Control, project: ProjectState, run:
 	check(not overlay.commit_button.disabled, title + ": valid default allocation can begin immediately")
 	check(overlay.commit_draft() and not overlay.visible, title + ": initialization immediately starts the phase")
 	check(state_snapshot(project, run) == before and phase.get_node("%HandContainer").get_child_count() > 0, title + ": initialization deals the first pool without cycle or redraw cost")
+
+func verify_design_guidance(hud: GameplayHUD, phase: DesignPhase, project: ProjectState, run: RunState) -> void:
+	var before := state_snapshot(project, run)
+	check(not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Select four cards", "After initial Design priorities, guidance moves to card selection")
+	var views := phase.get_node("%HandContainer").get_children()
+	for index in range(4): views[index].card_pressed.emit(views[index])
+	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Four cards selected", "Exactly four selected candidates show the ready-hand tip")
+	check(state_snapshot(project, run) == before, "Selecting cards for guidance changes no cash, cycles, redraws or project values")
+	hud.contextual_tip.dismiss()
+	hud.set_tutorial_context(&"design")
+	check(not hud.contextual_tip.panel.visible and not hud.tutorial_overlay.visible and state_snapshot(project, run) == before, "Repeating the same Design context does not replay seen guidance")
+	hud.tip_button.pressed.emit()
+	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Four cards selected" and state_snapshot(project, run) == before, "Tip button replays the current ready-hand suggestion for free")
+	hud.contextual_tip.dismiss()
+	for index in range(4): views[index].card_pressed.emit(views[index])
+	check(phase.get_selected_candidate_views().is_empty() and state_snapshot(project, run) == before, "Clearing the preview hand preserves state for subsequent gameplay checks")
 
 func verify_overlay(phase: Control, project: ProjectState, run: RunState, title: String) -> void:
 	var names: Array = ["QAPriority", "MarketingPriority", "InsiderPriority"] if title == "Beta" else ["GraphicsPriority", "SoundPriority", "TechnologyPriority", "DesignPriority"]

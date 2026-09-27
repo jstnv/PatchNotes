@@ -28,6 +28,9 @@ func _ready() -> void:
 	%Contracts.pressed.connect(_open_contracts)
 	%GameList.item_selected.connect(_on_game_selected)
 	%LowScopeWarning.confirmed.connect(_show_predevelopment)
+	%PostGameSummaries.tooltip_text = "Browse every released game, its category Reviews, and earned versus projected sales. Opening is free."
+	%FeatureStoreButton.tooltip_text = "Browse owned Features, prices and prerequisites. Opening the Store costs no cycles."
+	%StartNextGame.tooltip_text = "Name the next game and choose its Genre and Theme. Opening setup is free."
 	if _run_state != null:
 		_refresh_game_list()
 		_refresh_summary()
@@ -213,7 +216,7 @@ func _ensure_contract_detail() -> void:
 	title.add_theme_font_size_override("font_size", 26)
 	layout.add_child(title)
 	var details := Label.new()
-	details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum payout: $2,400.00\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance is free. The contract cannot be abandoned after acceptance."
+	details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed $400.00 immediately; the earned remainder pays after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance."
 	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(details)

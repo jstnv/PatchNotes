@@ -66,15 +66,17 @@ func _verify_formula() -> void:
 	var half := _scores(6)
 	var perfect := _scores(12)
 	var over := _scores(200)
-	expect(ContractState.calculate_completion(0, zero) == {"numerator": 0, "payout_cents": 0}, "Zero completion pays zero cents")
-	expect(ContractState.calculate_completion(6, half) == {"numerator": 48, "payout_cents": 120000}, "Half completion pays exactly 120000 cents")
-	expect(ContractState.calculate_completion(12, perfect) == {"numerator": 96, "payout_cents": 240000}, "Perfect completion pays exactly 240000 cents")
-	expect(ContractState.calculate_completion(999, over) == {"numerator": 96, "payout_cents": 240000}, "Scope and Core overproduction cap before payout")
+	expect(ContractState.calculate_completion(0, zero) == {"numerator": 0, "remainder_cents": 0, "payout_cents": 40000}, "Zero completion retains exactly the 40000-cent guarantee")
+	expect(ContractState.calculate_completion(6, half) == {"numerator": 48, "remainder_cents": 100000, "payout_cents": 140000}, "Half completion pays 100000 more cents, 140000 total")
+	expect(ContractState.calculate_completion(12, perfect) == {"numerator": 96, "remainder_cents": 200000, "payout_cents": 240000}, "Perfect completion remains capped at 240000 total cents")
+	expect(ContractState.calculate_completion(999, over) == {"numerator": 96, "remainder_cents": 200000, "payout_cents": 240000}, "Scope and Core overproduction cap before payout")
+	expect(ContractState.calculate_completion(1, zero) == {"numerator": 4, "remainder_cents": 8333, "payout_cents": 48333}, "Remainder floors to exact cents before adding guarantee")
 	expect(ContractState.calculate_completion(-1, perfect).is_empty(), "Invalid completion input rejects")
 	var specialization_state := ContractState.new([&"sprites", &"enemies", &"levels", &"maps"])
 	var specialization_cards: Array[CardData] = [database.get_card(&"sprites"), database.get_card(&"enemies"), database.get_card(&"levels"), database.get_card(&"maps")]
 	var specialized := specialization_state.plan_hand(specialization_cards)
 	expect(specialized.specialization_stat == &"graphics" and specialized.score_additions[ProjectState.CoreScore.GRAPHICS] == 45 and specialized.score_additions[ProjectState.CoreScore.TECHNOLOGY] == 15 and specialized.score_additions[ProjectState.CoreScore.DESIGN] == 6 and specialized.scope_addition == 8, "Contract primary-Core Specialization multiplies primary and secondary scores by 1.50 while Scope stays printed")
+	expect(not specialization_state.commit_hand(specialization_cards, 0), "Detached ContractState cannot commit a hand before the RunState-owned upfront transfer")
 
 
 func _verify_offer_and_navigation() -> void:
@@ -94,14 +96,18 @@ func _verify_offer_and_navigation() -> void:
 	(detail.find_child("CloseContractDetailButton", true, false) as Button).pressed.emit()
 	expect(run_snapshot(run, project) == before and studio.get_node("%Dashboard").visible, "Closing contract details returns to Studio for free")
 	var accepted: Array[ContractState] = []
+	var cash_observations: Array = []
+	run.cash_changed.connect(func(): cash_observations.append([run.get_primitive_contract(), run.get_cash_cents(), run.accept_primitive_contract()]))
 	studio.contract_requested.connect(func(_source: StudioPhase, state: ContractState): accepted.append(state))
 	studio.get_node("%Contracts").pressed.emit()
 	(detail.find_child("AcceptContractButton", true, false) as Button).pressed.emit()
 	expect(accepted.size() == 1 and accepted[0] == run.get_primitive_contract(), "Acceptance creates and publishes one authoritative ContractState")
 	var state := accepted[0]
 	expect(state != project and state.get_scope() == 0 and state.get_successful_hand_count() == 0 and state.get_priority_distribution() == _priorities(25, 25, 25, 25), "ContractState is separate and starts at locked values")
-	expect(state.get_eligible_feature_ids().size() == 27 and run_snapshot(run, project) == before and project_snapshot(project) == frozen, "Acceptance is zero-cost and snapshots 27 Primitive Features")
-	expect(not run.is_primitive_contract_offer_available() and run.accept_primitive_contract() == null, "Accepted offer cannot be accepted twice")
+	expect(state.is_upfront_committed() and state.get_eligible_feature_ids().size() == 27 and run.get_cash_cents() == before[0] + 40000 and run.get_completed_run_cycles() == before[1] and run.get_available_redraws() == before[2] and run.get_released_game_sales(project.get_release_id()) == before[3] and project_snapshot(project) == frozen, "Acceptance atomically pays exact 40000 cents without cycle, redraw, sales or ProjectState mutation")
+	expect(cash_observations.size() == 1 and cash_observations[0][0] == state and cash_observations[0][1] == before[0] + 40000 and cash_observations[0][2] == null, "Cash observers see accepted ownership and cannot reenter for a second guarantee")
+	var after_acceptance := run_snapshot(run, project)
+	expect(not run.is_primitive_contract_offer_available() and run.accept_primitive_contract() == null and run_snapshot(run, project) == after_acceptance, "Accepted offer cannot pay twice")
 	studio.queue_free()
 	await process_frame
 
@@ -173,24 +179,26 @@ func _verify_two_hand_completion() -> void:
 	expect(not phase.call("_play_selected_hand") and run_snapshot(run, project) == rejected_before and state.get_successful_hand_count() == 0, "Incomplete hand rejects without run or contract mutation")
 	_select_first(phase, 4)
 	expect(phase.call("_play_selected_hand"), "First contract hand succeeds")
+	expect(run.get_cash_cents() == ContractState.GUARANTEED_UPFRONT_CENTS and run.get_released_game_sales(project.get_release_id()).earned_cycles == 1, "First hand advances and earns sales without another Contract payment or early settlement")
 	expect(state.get_successful_hand_count() == 1 and state.is_feature_exhausted(&"text") and not state.is_feature_exhausted(&"graphics_pass"), "Features exhaust locally while Passes remain renewable")
 	expect(not _card_ids(phase.get_candidate_cards()).has(&"text") and run.get_completed_run_cycles() == 1, "Second draw excludes exhausted Feature and first hand advances once")
 	var reconstructed := load("res://scenes/phases/contract_phase.tscn").instantiate() as ContractPhase
 	reconstructed.setup(state, run)
 	root.add_child(reconstructed)
 	await process_frame
-	expect(reconstructed.get_contract_state() == state and state.get_successful_hand_count() == 1 and reconstructed.get_candidate_cards().size() == 7, "Phase reconstruction reuses ContractState and rebuilds only phase-local candidates")
+	expect(reconstructed.get_contract_state() == state and state.get_successful_hand_count() == 1 and reconstructed.get_candidate_cards().size() == 7 and run.get_cash_cents() == ContractState.GUARANTEED_UPFRONT_CENTS, "Phase reconstruction reuses ContractState and cannot repay the guarantee")
 	reconstructed.queue_free()
 	_select_first(phase, 4)
 	var selected := phase.call("_selected_cards") as Array[CardData]
 	var plan := state.plan_hand(selected)
-	var expected_payout: int = plan.payout_cents
+	var expected_remainder: int = plan.remainder_cents
+	var expected_total: int = plan.payout_cents
 	expect(phase.call("_play_selected_hand"), "Second hand completes the contract")
 	var result := state.get_result()
-	expect(state.is_completed() and state.is_payout_committed() and state.get_successful_hand_count() == 2 and result.get_payout_cents() == expected_payout, "Second hand commits one immutable result and payout guard")
+	expect(state.is_completed() and state.is_payout_committed() and state.get_successful_hand_count() == 2 and result.get_payout_cents() == expected_total and result.get_completion_payment_cents() == expected_remainder and result.get_upfront_cents() == 40000, "Second hand commits one immutable result with separately recorded guarantee and remainder")
 	var completion_text: String = phase.get("_completion_stats").text
-	expect(completion_text.contains("Final Scope") and completion_text.contains("Graphics") and completion_text.contains("Sound") and completion_text.contains("Technology") and completion_text.contains("Design") and completion_text.contains("Completion") and completion_text.contains("Exact Payout"), "Completion view shows Scope, every Core Score, percentage and exact payout")
-	expect(run.get_completed_run_cycles() == 2 and run.get_cash_cents() == expected_payout + 525174 and run.get_released_game_sales(project.get_release_id()).settled_cents == 525174, "Completing hand pays contract before the shared boundary settles earned sales")
+	expect(completion_text.contains("Final Scope") and completion_text.contains("Graphics") and completion_text.contains("Sound") and completion_text.contains("Technology") and completion_text.contains("Design") and completion_text.contains("Completion") and completion_text.contains("Guaranteed Upfront") and completion_text.contains("Completion Payment") and completion_text.contains("Total Payout"), "Completion view shows Scope, Core, percentage and all exact-cent reward parts")
+	expect(run.get_completed_run_cycles() == 2 and run.get_cash_cents() == expected_total + 525174 and run.get_released_game_sales(project.get_release_id()).settled_cents == 525174, "Completion remainder pays before the shared boundary settles earned sales")
 	expect(project_snapshot(project) == frozen, "Contract never mutates frozen ProjectState")
 	var completed_snapshot := run_snapshot(run, project)
 	expect(not phase.call("_play_selected_hand") and run_snapshot(run, project) == completed_snapshot, "Repeated completion callback cannot repay or advance")
@@ -210,11 +218,20 @@ func _verify_two_hand_completion() -> void:
 
 func _verify_overflow_rollback() -> void:
 	var project := release(0)
-	var run := new_run(RunState.MAX_SIGNED_INT - 1)
+	var run := new_run(RunState.MAX_SIGNED_INT - ContractState.GUARANTEED_UPFRONT_CENTS + 1)
 	var studio := load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
 	root.add_child(studio)
 	studio.setup(project, run, snapshots)
+	var acceptance_before := run_snapshot(run, project)
+	expect(run.accept_primitive_contract() == null and run.get_primitive_contract() == null and run_snapshot(run, project) == acceptance_before, "Upfront overflow rejects acceptance without ownership, cash, cycle, redraw or sales mutation")
+	studio.queue_free()
+	await process_frame
+	run = new_run(RunState.MAX_SIGNED_INT - ContractState.GUARANTEED_UPFRONT_CENTS - 1)
+	studio = load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
+	root.add_child(studio)
+	studio.setup(project, run, snapshots)
 	var state := run.accept_primitive_contract()
+	expect(state != null and run.get_cash_cents() == RunState.MAX_SIGNED_INT - 1, "Accepted guarantee can leave cash one cent below signed limit")
 	var phase := load("res://scenes/phases/contract_phase.tscn").instantiate() as ContractPhase
 	phase.setup(state, run)
 	root.add_child(phase)

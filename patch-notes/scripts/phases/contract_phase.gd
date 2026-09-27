@@ -2,6 +2,7 @@ class_name ContractPhase
 extends Control
 
 signal completion_dismissed(source: ContractPhase)
+signal guidance_changed
 
 const CARD_VIEW_SCENE := preload("res://scenes/cards/card_view.tscn")
 const CANDIDATE_COUNT := 7
@@ -85,12 +86,14 @@ func _build_ui() -> void:
 		input.min_value = PriorityAllocation.MIN_PRIORITY
 		input.max_value = PriorityAllocation.MAX_PRIORITY
 		input.step = PriorityAllocation.PRIORITY_STEP
+		input.tooltip_text = "Weight future %s contract draws. All four priorities must total 100." % _category_name(category)
 		input.value_changed.connect(func(value: float): _priority_draft[category] = int(value); _refresh_actions())
 		box.add_child(input)
 		_priority_inputs[category] = input
 		priority_row.add_child(box)
 	_commit_button = Button.new()
 	_commit_button.text = "Commit Priorities (1 cycle)"
+	_commit_button.tooltip_text = "A valid changed allocation costs one cycle and affects later draws, not the current hand."
 	_commit_button.pressed.connect(func(): commit_priority_distribution())
 	priority_row.add_child(_commit_button)
 	var pool_title := Label.new()
@@ -108,9 +111,11 @@ func _build_ui() -> void:
 	layout.add_child(actions)
 	_play_button = Button.new()
 	_play_button.text = "Play Contract Hand"
+	_play_button.tooltip_text = "Play exactly four selected cards. A successful hand advances one cycle."
 	_play_button.pressed.connect(_play_selected_hand)
 	actions.add_child(_play_button)
 	_redraw_button = Button.new()
+	_redraw_button.tooltip_text = "Replace selected candidates using the shared redraw budget; no cycle cost."
 	_redraw_button.pressed.connect(func(): redraw_selected_cards())
 	actions.add_child(_redraw_button)
 	_feedback_label = Label.new()
@@ -242,8 +247,8 @@ func _play_selected_hand() -> bool:
 	var plan := _state.plan_hand(cards)
 	if plan.is_empty():
 		return false
-	var payout: int = plan.payout_cents
-	if not _run.can_complete_productive_cycle(payout):
+	var remainder: int = plan.remainder_cents
+	if not _run.can_complete_productive_cycle(remainder):
 		return false
 	var next_cards: Array[CardData] = []
 	if not plan.completing:
@@ -253,8 +258,8 @@ func _play_selected_hand() -> bool:
 		if next_cards.is_empty():
 			return false
 	var expected_cycle := _run.get_completed_run_cycles()
-	var commit := func() -> bool: return _state.commit_hand(cards, payout)
-	if not _run.complete_productive_action(commit, payout, expected_cycle):
+	var commit := func() -> bool: return _state.commit_hand(cards, remainder)
+	if not _run.complete_productive_action(commit, remainder, expected_cycle):
 		return false
 	if _state.is_completed():
 		_show_completion()
@@ -350,13 +355,14 @@ func _on_card_pressed(view: CardView) -> void:
 func _show_completion() -> void:
 	var result := _state.get_result()
 	if result == null: return
-	_completion_stats.text = "Final Scope: %d / %d\nGraphics: %s / 6\nSound: %s / 6\nTechnology: %s / 6\nDesign: %s / 6\nCompletion: %.1f%%\nExact Payout: %s" % [
+	_completion_stats.text = "Final Scope: %d / %d\nGraphics: %s / 6\nSound: %s / 6\nTechnology: %s / 6\nDesign: %s / 6\nCompletion: %.1f%%\nGuaranteed Upfront: %s\nCompletion Payment: %s\nTotal Payout: %s" % [
 		result.get_scope(), ContractState.EXPECTED_SCOPE,
 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS)),
 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.SOUND)),
 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY)),
 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.DESIGN)),
-		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_payout_cents())]
+		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_upfront_cents()),
+		CashFormatter.format_exact_cents(result.get_completion_payment_cents()), CashFormatter.format_exact_cents(result.get_payout_cents())]
 	_completion_panel.show()
 	(_completion_panel.find_child("DismissCompletionButton", true, false) as Button).grab_focus()
 
@@ -377,6 +383,7 @@ func _refresh_actions() -> void:
 	_redraw_button.text = "Redraw Selected (%d/4)" % _run.get_available_redraws()
 	_redraw_button.disabled = _state.is_completed() or _selected_views.is_empty() or not _run.can_consume_redraw(_selected_views.size())
 	_commit_button.disabled = not _state.can_commit_priorities(_priority_draft) or not _run.can_complete_productive_cycle()
+	guidance_changed.emit()
 
 
 func _selected_cards() -> Array[CardData]:

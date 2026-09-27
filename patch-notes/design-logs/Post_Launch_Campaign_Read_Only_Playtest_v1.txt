@@ -1,0 +1,129 @@
+PATCH NOTES — POST-LAUNCH SALES AND CAMPAIGN READ-ONLY PLAYTEST V1
+Date: 2026-09-27 (America/Los_Angeles)
+Status: SIMULATION COMPLETE / MONTH 2+ AND CAMPAIGN NUMBERS NOT LOCKED
+Source commit: b07a658; unrelated dirty worktree changes preserved.
+Seed 260927; 150 samples per 7 starter-Scope targets × 3 policies × 2 half-month alignments = 6,300 paired paths per synthetic Review cohort.
+Code: analysis/post_launch_campaign_playtest_v1.py and analysis/render_post_launch_campaign_playtest_v1.py; tests: analysis/test_post_launch_campaign_playtest_v1.py.
+Summary: design-logs/post_launch_campaign_playtest_v1_summary.json; per-path data: design-logs/post_launch_campaign_playtest_v1_results.json.gz.
+
+AUTHORITY AND SCOPE
+Read the current Drive To Do List campaign handoff, Patch Notes — Implementation Discoveries and Locked Rules.txt (especially section 45), the current Godot Awareness, sales, RunState and market ledgers, Fanbase_Playtest_Data_v1, Publisher_Cash_and_Payroll_Playtest_Data_v1, and the current repository/diff. No AGENTS.md was found. No gameplay, frozen ProjectState, released-game history, Studio UI, Contract, calendar, or .codex-godot-temp was edited.
+
+EXACT MODEL AND ASSUMPTIONS
+Locked Month 1 units = floor(500 × Review tenths × (200 + launch Awareness) × market basis points / (70 × 200 × 10000)). Cumulative net entitlement = floor(cumulative units × 999 cents × 70 / 100). Month 1 remains two release-age productive cycles. A second-half launch initially settles only the first earned half. Settlement at a run-month boundary follows earning in that action; one-shot Contract payout is a direct effect before cycle completion.
+Candidate Month 2+ units = floor(500 × Review tenths × active Awareness basis points × market basis points / (70 × 200 × 10000 × 10000)). This deliberately omits Month 1's +200 baseline: carrying that baseline forever prevents most zero-unit months. Month 2 organic Awareness = 50% of launch; subsequent retention = 0.25 + 0.055 × Final Review. Awareness floors to four decimal places monthly. Units never feed decay. Market demand is the unchanged release forecast, with no fan gain/loss or monthly reroll.
+Trial campaign costs exactly 10,000 cents before its productive cycle and adds 10% of launch Awareness divided by (1 + prior accepted campaigns on that release) for one release-age month. At most one campaign per release-month is modeled. Launch Awareness is an interpretation of the ambiguous boost reference, not a ruling. Current-Awareness sensitivity appears below. No Review or fan-growth effect is modeled. An unaffordable attempt spends nothing and gives no boost; the paired control uses the same productive neutral slot to keep calendar and Game 2 actions identical.
+The prior 6,300-path sampler supplies actual roster acquisition/play costs, Contract results, Game 2 cycles/play costs, market weights, and half-month alignment. Reviews 2.0, 7.0, 9.0 are synthetic anchors replacing its low-Review launch outputs, not human play predictions. Each release starts at 100 organic Awareness unless explicitly named otherwise. Game 2 enters later as a second overlapping release using its sampled Review and Awareness. Matched launch pair: Review 4/Awareness 325 and Review 7/Awareness 100 both project 750 Month 1 units at neutral market.
+Finance is the prior candidate, not runtime: $75 bill plus $100 salary/staff at each month boundary, after settlement; zero hiring fee; same one-shot Ironclad payout; lean $450 reserve and sampled Game 2 play spend; optional $1,700 Store node is cost-only. Negative cash after hypothetical expenses or non-campaign purchases is retained only as an insolvency diagnostic, not an accepted gameplay action. Campaign affordability itself is checked. Month-boundary cash below is after settlement and expense, indexed from the first release rather than absolute year/month.
+
+CONCLUSIONS
+At neutral market, first zero-sale month is 6 for Review 2, 13 for Review 7, and 20 for Review 9. A first 10%-of-launch campaign there revives all three. It sells 7/$48.95 net and loses $51.05 on Review 2; 25/$174.82 net and gains $74.82 on Review 7; 32/$223.77 net and gains $123.77 on Review 9. Cumulative-cent flooring can move a marginal comparison by one cent.
+Minimum first dormant-month boost for a $100 break-even at neutral market: Review 2 needs 20.17% of launch Awareness, Review 7 needs 5.67%, Review 9 needs 4.42%. With one prior campaign the required unsaturated headline boosts are 40.33%, 11.33%, 8.84%; with two prior they are 60.49%, 16.99%, 13.26%. These exclude the value of the productive cycle.
+One Month 2 campaign changes Month 24 cash by paired p10/median/p90: weak -$58.05/-$51.05/-$37.06, typical $60.84/$74.82/$130.77, strong $102.80/$123.78/$193.71. Campaigning every release-age month has a median paired loss of weak -$1,846.16, typical -$1,677.63, strong -$1,481.82. Thus no indefinite profitable repeat loop exists for one title under diminishing boosts, but profitable repeats after the first occurred in 0.0% weak, 10.7% typical, and 90.3% strong sampled paths. The high-Awareness/Review-4 pair had three profitable campaigns at the median; releases or same-month stacking without bounds were not tested.
+The matched 750-unit launch pair diverges: Review 4/Awareness 325 reaches zero around month 10; Review 7/Awareness 100 around month 13. Yet high launch Awareness generates more lifetime revenue under this trial: Month 24 no-campaign median cash $8,061.31 versus $7,375.22. Good reviews buy longevity, but the trial does not ensure higher lifetime earnings than a very large initial Awareness advantage.
+At Review 7's dormant month, boosting current decayed Awareness by 10% adds zero units; even 20% adds only one ($6.99). Launch-Awareness boosts of 5%, 10%, 20% yield 13, 25, 50 units and roughly -$9.10, +$74.82, +$249.65 after a $100 cost. At $200 the 10% case loses $25.18. ±5 percentage-point retention shifts and $50/$100/$200 campaign costs are in the raw summary. The boost reference is a decisive open rule.
+
+ALL 24 MONTH-BOUNDARY CASH MEDIANS — ONE EMPLOYEE
+All columns use 6,300 identical sampled release/action contexts. The matched no-campaign arm has a neutral productive campaign slot. The no-slot arm moves Game 2 one cycle earlier and probes timing, not a matched financial control. Separate median columns cannot be subtracted to recover a median paired gain.
+
+WEAK REVIEW 2.0; Month 1 units p10/median/p90 192/214/278; first zero-sale month p10/median/p90 6/6/6
+Boundary | Matched no campaign | One Month 2 campaign | Monthly repeat | No slot / Game 2 earlier
+ 1 |    $3,892.69 |    $3,892.69 |    $3,892.69 |    $3,892.69
+ 2 |    $4,285.38 |    $4,223.11 |    $4,223.11 |    $3,699.95
+ 3 |    $3,150.17 |    $3,102.16 |    $3,541.15 |    $3,150.17
+ 4 |    $3,020.23 |    $2,972.09 |    $2,813.07 |    $3,020.23
+ 5 |    $2,924.85 |    $2,874.67 |    $2,567.02 |    $3,060.17
+ 6 |    $2,978.32 |    $2,931.50 |    $2,309.01 |    $3,153.21
+ 7 |    $3,271.04 |    $3,221.39 |    $2,041.01 |    $3,474.67
+ 8 |    $3,361.35 |    $3,311.08 |    $1,973.10 |    $3,481.72
+ 9 |    $3,626.91 |    $3,578.51 |    $1,815.69 |    $3,893.22
+10 |    $3,803.03 |    $3,753.83 |    $1,568.41 |    $3,864.42
+11 |    $3,726.47 |    $3,676.45 |    $1,716.69 |    $3,753.30
+12 |    $3,592.31 |    $3,542.74 |    $1,703.53 |    $3,598.27
+13 |    $3,425.75 |    $3,379.60 |    $1,478.88 |    $3,429.14
+14 |    $3,258.41 |    $3,207.26 |    $1,215.04 |    $3,258.44
+15 |    $3,084.39 |    $3,034.20 |    $1,417.11 |    $3,085.30
+16 |    $2,910.30 |    $2,859.56 |    $1,525.58 |    $2,910.30
+17 |    $2,735.30 |    $2,684.56 |    $1,338.34 |    $2,735.30
+18 |    $2,560.30 |    $2,509.56 |    $1,104.63 |    $2,560.30
+19 |    $2,385.30 |    $2,334.56 |      $839.63 |    $2,385.30
+20 |    $2,210.30 |    $2,159.56 |      $566.40 |    $2,210.30
+21 |    $2,035.30 |    $1,984.56 |      $291.96 |    $2,035.30
+22 |    $1,860.30 |    $1,809.56 |       $16.96 |    $1,860.30
+23 |    $1,685.30 |    $1,634.56 |     -$167.25 |    $1,685.30
+24 |    $1,510.30 |    $1,459.56 |     -$342.25 |    $1,510.30
+Month 24 matched control cash p10/median/p90: -$69.59/$1,510.30/$3,530.83; one campaign: -$124.00/$1,459.56/$3,481.52.
+First shortfall rates matched control / one campaign / monthly repeat: 11.3% / 12.4% / 71.1%.
+
+TYPICAL REVIEW 7.0; Month 1 units p10/median/p90 675/750/975; first zero-sale month p10/median/p90 13/13/14
+Boundary | Matched no campaign | One Month 2 campaign | Monthly repeat | No slot / Game 2 earlier
+ 1 |    $7,177.37 |    $7,177.37 |    $7,177.37 |    $7,177.37
+ 2 |    $8,718.31 |    $8,754.29 |    $8,754.29 |    $8,081.86
+ 3 |    $8,135.65 |    $8,211.42 |    $8,621.70 |    $8,135.65
+ 4 |    $8,377.50 |    $8,455.79 |    $8,387.75 |    $8,377.50
+ 5 |    $8,521.30 |    $8,601.86 |    $8,419.83 |    $8,657.86
+ 6 |    $8,734.60 |    $8,815.84 |    $8,345.75 |    $8,880.79
+ 7 |    $9,028.27 |    $9,112.25 |    $8,210.09 |    $9,177.64
+ 8 |    $9,114.54 |    $9,197.25 |    $8,229.81 |    $9,285.92
+ 9 |    $9,515.84 |    $9,597.81 |    $8,128.76 |    $9,711.43
+10 |    $9,646.08 |    $9,720.22 |    $7,929.30 |    $9,703.76
+11 |    $9,577.98 |    $9,657.85 |    $8,003.52 |    $9,602.11
+12 |    $9,447.49 |    $9,526.73 |    $7,937.64 |    $9,460.36
+13 |    $9,293.09 |    $9,368.41 |    $7,726.48 |    $9,298.06
+14 |    $9,123.23 |    $9,200.78 |    $7,481.13 |    $9,125.22
+15 |    $8,950.22 |    $9,026.41 |    $7,685.10 |    $8,950.22
+16 |    $8,775.22 |    $8,851.41 |    $7,702.14 |    $8,775.22
+17 |    $8,600.22 |    $8,676.41 |    $7,525.99 |    $8,600.22
+18 |    $8,425.22 |    $8,501.41 |    $7,290.49 |    $8,425.22
+19 |    $8,250.22 |    $8,326.41 |    $7,033.90 |    $8,250.22
+20 |    $8,075.22 |    $8,151.41 |    $6,772.93 |    $8,075.22
+21 |    $7,900.22 |    $7,976.41 |    $6,504.93 |    $7,900.22
+22 |    $7,725.22 |    $7,801.41 |    $6,236.92 |    $7,725.22
+23 |    $7,550.22 |    $7,626.41 |    $5,968.27 |    $7,550.22
+24 |    $7,375.22 |    $7,451.41 |    $5,696.66 |    $7,375.22
+Month 24 matched control cash p10/median/p90: $5,128.51/$7,375.22/$9,861.16; one campaign: $5,184.88/$7,451.41/$9,963.65.
+First shortfall rates matched control / one campaign / monthly repeat: 0.0% / 0.0% / 0.0%.
+
+STRONG REVIEW 9.0; Month 1 units p10/median/p90 867/964/1253; first zero-sale month p10/median/p90 19/20/21
+Boundary | Matched no campaign | One Month 2 campaign | Monthly repeat | No slot / Game 2 earlier
+ 1 |    $8,157.09 |    $8,157.09 |    $8,157.09 |    $8,157.09
+ 2 |   $10,481.14 |   $10,547.52 |   $10,547.52 |    $9,824.95
+ 3 |   $10,162.94 |   $10,296.61 |   $10,722.69 |   $10,162.94
+ 4 |   $10,699.64 |   $10,828.45 |   $10,800.27 |   $10,699.64
+ 5 |   $11,111.61 |   $11,245.37 |   $11,109.01 |   $11,262.99
+ 6 |   $11,541.43 |   $11,675.19 |   $11,271.56 |   $11,649.23
+ 7 |   $11,948.30 |   $12,072.63 |   $11,326.82 |   $12,070.11
+ 8 |   $12,141.34 |   $12,265.85 |   $11,497.96 |   $12,277.01
+ 9 |   $12,607.99 |   $12,732.21 |   $11,496.27 |   $12,820.12
+10 |   $12,867.88 |   $12,991.34 |   $11,383.30 |   $12,931.01
+11 |   $12,892.37 |   $13,017.78 |   $11,442.65 |   $12,916.02
+12 |   $12,820.17 |   $12,946.93 |   $11,416.76 |   $12,827.92
+13 |   $12,701.59 |   $12,826.74 |   $11,247.53 |   $12,701.59
+14 |   $12,560.81 |   $12,686.31 |   $11,036.79 |   $12,563.05
+15 |   $12,411.44 |   $12,536.73 |   $11,264.73 |   $12,411.44
+16 |   $12,255.01 |   $12,382.71 |   $11,329.17 |   $12,255.01
+17 |   $12,089.41 |   $12,214.70 |   $11,192.79 |   $12,089.41
+18 |   $11,921.41 |   $12,046.69 |   $10,977.81 |   $11,921.41
+19 |   $11,752.28 |   $11,878.33 |   $10,736.05 |   $11,752.28
+20 |   $11,581.97 |   $11,708.05 |   $10,476.76 |   $11,581.97
+21 |   $11,406.97 |   $11,533.05 |   $10,215.74 |   $11,406.97
+22 |   $11,231.97 |   $11,358.05 |    $9,953.19 |   $11,231.97
+23 |   $11,056.97 |   $11,183.05 |    $9,687.54 |   $11,056.97
+24 |   $10,881.97 |   $11,008.05 |    $9,419.54 |   $10,881.97
+Month 24 matched control cash p10/median/p90: $8,174.38/$10,881.97/$14,035.05; one campaign: $8,273.55/$11,008.05/$14,210.61.
+First shortfall rates matched control / one campaign / monthly repeat: 0.0% / 0.0% / 0.0%.
+
+ALIGNMENT, STAFF, STORE, AND OPPORTUNITY COST
+weak: first-half/second-half release n=3150/3150; Month 1 cash medians $4,505.76/$1,738.84; one-campaign Month 24 medians $1,480.34/$1,434.95.
+  Stratified n=1,050 per sensitivity (25 per Scope/policy/alignment cell), first shortfall % control→campaign: staff0_node0 0.0→0.0, staff1_node0 11.6→12.8, staff2_node0 71.6→71.8, staff1_node1 60.8→62.1.
+typical: first-half/second-half release n=3150/3150; Month 1 cash medians $8,482.96/$3,687.00; one-campaign Month 24 medians $7,491.06/$7,406.88.
+  Stratified n=1,050 per sensitivity (25 per Scope/policy/alignment cell), first shortfall % control→campaign: staff0_node0 0.0→0.0, staff1_node0 0.0→0.0, staff2_node0 0.0→0.0, staff1_node1 0.0→0.0.
+strong: first-half/second-half release n=3150/3150; Month 1 cash medians $10,033.24/$4,484.11; one-campaign Month 24 medians $11,066.02/$10,970.29.
+  Stratified n=1,050 per sensitivity (25 per Scope/policy/alignment cell), first shortfall % control→campaign: staff0_node0 0.0→0.0, staff1_node0 0.0→0.0, staff2_node0 0.0→0.0, staff1_node1 0.0→0.0.
+The paired control and campaign have the same productive cycle count, and the raw first-sample boundaries show monthly earned versus settled cents, expenses, campaign spend, Awareness and units. The campaign still displaces one potentially useful action. Omitting the neutral slot launches Game 2 one cycle earlier; no-slot cash at every boundary appears above. Moving purchase/play costs earlier can temporarily lower this accelerated cash despite earlier Game 2 sales. The monetary value of the displaced player action is not specified, so isolated campaign gains are upper bounds on strategic value.
+Good reviews keep positive sales longer (roughly 19–21 months at Review 9), yet the modeled strong-review Studio remains cash-rich even with two staff and an optional $1,700 purchase. Weak Review plus one or two staff produces material shortfall warnings after sales fade. This depends on synthetic Reviews and unimplemented $75/$100 finance values; it is not a prediction of actual player survival.
+
+LIMITS, OPEN RULES, AND VERIFICATION
+Runtime has no Month 2+ calculator, campaign record, mutable later-month sales history, expenses/payroll, or idle productive UI action. Same-month campaign stacking, launch-vs-current Awareness reference, monthly market volatility, fanbase effects, price changes, tax, publisher promotion, reputation, and additional Store card effects remain undefined. The model is a Python policy port, not Godot PRNG replay; Review 7 and 9 are synthetic and above the prior sampler's first-game range. A negative modeled expense balance is an insolvency warning, not a valid RunState state.
+Verification: five focused Python tests passed (locked Month 1 anchors/matched launch, second-half earned-only settlement, exact paired cash delta, dormant revival/saturation, unaffordable campaign rejection). With isolated APPDATA/LOCALAPPDATA, Godot 4.7.1 headless passed verify_primitive_units_sold, verify_primitive_month_one_sales_revenue, and verify_sales_earning_and_settlement (exit 0 each). Existing root-certificate and missing-artwork warnings appeared. git diff --check passed; it reported only line-ending conversion warnings on unrelated pre-existing changes. No candidate boost, decay, price, or finance number is locked by this analysis.
+Decision before implementation: specify the Month 2+ demand equation and market evolution, campaign boost reference and same-month stacking, cash/expense failure semantics, and productive-action opportunity rule; then calibrate using real play traces.

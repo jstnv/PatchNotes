@@ -165,11 +165,16 @@ func primitive_feature_hand_cost_cents(cards: Array[CardData]) -> int:
 	return total
 
 ## Presentation-only progress: no calendar, cash or production mutation.
-func visit_tutorial_topic(topic: StringName) -> bool:
-	if _seen_tutorial_topics.has(topic):
+func visit_guidance_tip(key: StringName) -> bool:
+	if key == &"" or _seen_tutorial_topics.has(key):
 		return false
-	_seen_tutorial_topics[topic] = true
+	_seen_tutorial_topics[key] = true
 	return true
+
+
+## Preserve the existing presentation API for callers that track topic visits.
+func visit_tutorial_topic(topic: StringName) -> bool:
+	return visit_guidance_tip(topic)
 
 
 func _init() -> void:
@@ -520,12 +525,26 @@ func is_primitive_contract_offer_available() -> bool:
 func accept_primitive_contract() -> ContractState:
 	if not is_primitive_contract_offer_available():
 		return null
+	if not _cash_initialized or _cash_cents > MAX_SIGNED_INT - ContractState.GUARANTEED_UPFRONT_CENTS:
+		return null
 	var ids: Array[StringName] = []
 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
 		var id := StringName(entry.id)
 		if owns_feature(id) and StringName(entry.phase) in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA]:
 			ids.append(id)
-	_primitive_contract = ContractState.new(ids)
+	var accepted := ContractState.new(ids)
+	if not accepted.commit_upfront():
+		return null
+	# Block observers until both ownership and the exact-cent guarantee commit.
+	var was_blocked := is_blocking_signals()
+	set_block_signals(true)
+	_primitive_contract = accepted
+	if not add_cash_cents(ContractState.GUARANTEED_UPFRONT_CENTS):
+		_primitive_contract = null
+		set_block_signals(was_blocked)
+		return null
+	set_block_signals(was_blocked)
+	cash_changed.emit()
 	contracts_changed.emit()
 	return _primitive_contract
 

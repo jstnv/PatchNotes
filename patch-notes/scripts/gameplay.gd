@@ -36,6 +36,7 @@ func _ready() -> void:
 		if run_state.get_studio_name().is_empty():
 			var main_menu := MainMenu.new()
 			main_menu.studio_created.connect(_on_studio_created.bind(main_menu))
+			main_menu.tutorial_requested.connect(%GameplayHUD.show_tutorial)
 			%PhaseRoot.add_child(main_menu)
 			_active_phase = main_menu
 			%GameplayHUD.set_phase(main_menu)

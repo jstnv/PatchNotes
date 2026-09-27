@@ -11,6 +11,7 @@ const BETA_PRIORITY_ALLOCATION_SCRIPT := preload("res://scripts/phases/beta_prio
 const CANDIDATE_POOL_SIZE := 7
 const SELECTED_HAND_SIZE := 4
 const QA_SPECIALIZATION_MULTIPLIER := 1.5
+const MARKETING_SPECIALIZATION_MULTIPLIER := 1.5
 const BALANCED_OPERATIONS_MULTIPLIER := 1.25
 const HOST_PLAYTEST_COST := 500
 const HOST_PLAYTEST_COST_CENTS := 50000
@@ -664,7 +665,8 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
 	var hidden := _project_state.get_hidden_bugs()
 	var known := _project_state.get_known_bugs()
 	var qa_specialization := _qualifies_for_qa_specialization(selected_cards)
-	var balanced_operations := not qa_specialization and _qualifies_for_balanced_operations(selected_cards)
+	var marketing_specialization := _qualifies_for_marketing_specialization(selected_cards)
+	var balanced_operations := not qa_specialization and not marketing_specialization and _qualifies_for_balanced_operations(selected_cards)
 	var search_requests: Array[int] = []
 	for card: CardData in groups.search:
 		var final_value: float = card.beta_value * QA_SPECIALIZATION_MULTIPLIER if qa_specialization else card.beta_value
@@ -686,7 +688,9 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
 	var marketing_gain := 0
 	for card: CardData in groups.marketing:
 		marketing_gain += card.beta_value
-	if balanced_operations:
+	if marketing_specialization:
+		marketing_gain = int(floor(marketing_gain * MARKETING_SPECIALIZATION_MULTIPLIER))
+	elif balanced_operations:
 		marketing_gain = int(ceil(marketing_gain * BALANCED_OPERATIONS_MULTIPLIER))
 	if marketing_gain > ProjectState.MAX_SIGNED_INT - _project_state.get_marketing_output():
 		return _invalid_play("Marketing Output would overflow.")
@@ -752,7 +756,7 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
 		view.card_pressed.connect(_on_card_pressed)
 
 		next_views.append(view)
-	return {&"valid": true, &"qa_specialization": qa_specialization, &"balanced_operations": balanced_operations, &"corrective_score_additions": corrective_score_additions, &"search_requests": search_requests, &"debug_requests": debug_requests, &"marketing_gain": marketing_gain, &"cash_gain": cash_gain, &"cash_gain_cents": cash_gain_cents, &"reveal_competitor": competitor_revealed and not _project_state.is_competitor_snapshot_revealed(), &"reveal_forecast": forecast_revealed and not _project_state.is_market_forecast_snapshot_revealed(), &"rival_attempted": rival_attempted, &"rival_gained": rival_gained, &"forecast_attempted": forecast_attempted, &"forecast_gained": forecast_gained, &"finite_ids": finite_ids, &"next_cards": replacement.cards, &"next_views": next_views, &"injected_corrective_count": replacement.injected_count, &"consumed_pending_ids": replacement.consumed_pending_ids}
+	return {&"valid": true, &"qa_specialization": qa_specialization, &"marketing_specialization": marketing_specialization, &"balanced_operations": balanced_operations, &"corrective_score_additions": corrective_score_additions, &"search_requests": search_requests, &"debug_requests": debug_requests, &"marketing_gain": marketing_gain, &"cash_gain": cash_gain, &"cash_gain_cents": cash_gain_cents, &"reveal_competitor": competitor_revealed and not _project_state.is_competitor_snapshot_revealed(), &"reveal_forecast": forecast_revealed and not _project_state.is_market_forecast_snapshot_revealed(), &"rival_attempted": rival_attempted, &"rival_gained": rival_gained, &"forecast_attempted": forecast_attempted, &"forecast_gained": forecast_gained, &"finite_ids": finite_ids, &"next_cards": replacement.cards, &"next_views": next_views, &"injected_corrective_count": replacement.injected_count, &"consumed_pending_ids": replacement.consumed_pending_ids}
 
 
 func _qualifies_for_qa_specialization(cards: Array[CardData]) -> bool:
@@ -760,6 +764,15 @@ func _qualifies_for_qa_specialization(cards: Array[CardData]) -> bool:
 		return false
 	for card: CardData in cards:
 		if card == null or card.beta_category != CardData.BETA_CATEGORY_QA:
+			return false
+	return true
+
+
+func _qualifies_for_marketing_specialization(cards: Array[CardData]) -> bool:
+	if cards.size() < 2:
+		return false
+	for card: CardData in cards:
+		if card == null or card.beta_category != CardData.BETA_CATEGORY_MARKETING:
 			return false
 	return true
 
@@ -875,9 +888,12 @@ func _show_action_feedback(result: Dictionary, discovered: int, fixed: int) -> v
 	var parts: Array[String] = []
 	if result.qa_specialization:
 		_workspace.show_synergy("QA Specialization!", "Card Value ×1.50")
+	elif result.marketing_specialization:
+		_workspace.show_synergy("Marketing Specialization!", "Card Value ×1.50")
 	elif result.balanced_operations:
 		_workspace.show_synergy("Balanced Operations!", "Output ×1.25")
 	if result.qa_specialization: parts.append("QA Specialization! Card Value ×1.50")
+	elif result.marketing_specialization: parts.append("Marketing Specialization! Card Value ×1.50")
 	elif result.balanced_operations: parts.append("Balanced Operations! Output ×1.25")
 	if not result.corrective_score_additions.is_empty():
 		parts.append("Corrective Pass gains: %s" % _format_score_additions(result.corrective_score_additions))

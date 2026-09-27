@@ -1,0 +1,26 @@
+PATCH NOTES — BETA MARKETING SPECIALIZATION v1
+Date: 2026-09-26
+Status: IMPLEMENTED AND VERIFIED
+
+Issue
+Four selected Marketing cards resolved at their printed base values and displayed no synergy. This matched the previous implementation boundary, which had deferred Marketing Specialization, but not the locked Formula Bible design or the player's intended all-Marketing hand behavior.
+
+Authority
+Formula Bible/1. Synergy Formulas.docx defines Specialization when at least two played cards share a Beta category, with Card Value ×1.5. Formula Bible/2. Beta Formulas.docx specifies all-Marketing qualification and Marketing Output = floor(sum of final Marketing Card Values). The existing Beta_Balanced_Operations_v1.txt still governs mixed QA/Marketing/Insider hands. Earlier standalone logs that call Marketing Specialization deferred are superseded for this one mechanic only.
+
+Implementation
+The four selected current Beta candidate instances must all have Marketing category. Drawing or selecting alone changes no state. On a successful play, sum their printed Marketing Card Values, multiply by 1.5, floor the aggregate once, and add the resulting integer to ProjectState Marketing Output through the existing authoritative commit. This uses the existing single productive-cycle boundary, finite-card exhaustion, seven-card replacement pool, and preflight rollback. All-Marketing is structurally exclusive with QA Specialization and Balanced Operations. The player sees a Marketing Specialization ×1.50 banner and exact Marketing Output gain in action feedback. No cash, Review, or other Beta category rule changes.
+
+Examples
+Sign Flippers 1 + Posters 1 + Press Release 2 + Press Interview 3 = base 7; floor(7 × 1.5) = 10 Marketing Output. Three Sign Flippers plus Press Release = base 5; floor(5 × 1.5) = 7. Three Marketing plus Debug is not specialized and retains base Marketing Output.
+
+Verification
+Focused Godot Marketing Specialization suite passed: passive selection, exact output and aggregate floor, renewable duplicates, finite exhaustion, banner/feedback, one productive cycle, off-category cancellation, and overflow rollback. Existing Beta base-hand, Balanced Operations, QA Specialization, Beta finalization/Launch, Marketing/Insider state, Host Playtest, Awareness, units sold, and release-menu regressions passed (9 existing suites). Godot headless editor import/parsing and git diff --check passed. Godot's non-blocking Windows root-certificate-store warning persisted. Validation user-data used isolated TEMP APPDATA/LOCALAPPDATA; .codex-godot-temp was untouched.
+
+Files
+res://scripts/phases/beta_phase.gd
+res://scripts/debug/verify_beta_marketing_specialization.gd
+res://scripts/debug/verify_beta_base_hand_resolution.gd
+
+Boundary
+Insider Specialization remains unimplemented. The existing frozen Review, Awareness, sales, Studio, and contract formulas and other unrelated worktree content were not edited.

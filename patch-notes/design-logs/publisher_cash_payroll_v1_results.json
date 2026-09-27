@@ -1,0 +1,1065 @@
+{
+  "seed": 260927,
+  "per_cell": 150,
+  "n": 6300,
+  "approximations": "Python PRNG/policy model; Game 1 play cost charged up-front as liquidity bound; modeled no-fee zero-cycle hiring; monthly expenses after settlement by default; no new publisher offers; optional Store node modeled only as $1700/cycle cash stress.",
+  "first_game_review": {
+    "p10": 0.4,
+    "median": 1.3,
+    "p90": 3.1,
+    "mean": 1.52
+  },
+  "first_game_scope": {
+    "p10": 7,
+    "median": 16.0,
+    "p90": 21,
+    "mean": 15.1
+  },
+  "first_game_core_mean": {
+    "graphics": 15.02,
+    "sound": 14.88,
+    "technology": 18.88,
+    "design": 15.48
+  },
+  "first_game_bugs": {
+    "p10": 0,
+    "median": 1.0,
+    "p90": 5,
+    "mean": 1.87
+  },
+  "first_game_genre_fit": {
+    "p10": 0.7561538461538462,
+    "median": 0.8860869565217391,
+    "p90": 0.98,
+    "mean": 0.88
+  },
+  "acquisition_dollars": {
+    "p10": 0,
+    "median": 3300.0,
+    "p90": 3900,
+    "mean": 2702.95
+  },
+  "game1_play_dollars": {
+    "p10": 320,
+    "median": 740.0,
+    "p90": 990,
+    "mean": 695.78
+  },
+  "studio_cash_cents": {
+    "p10": 34000,
+    "median": 117000.0,
+    "p90": 473000,
+    "mean": 178876.98
+  },
+  "month1_units": {
+    "p10": 42,
+    "median": 143.0,
+    "p90": 344,
+    "mean": 169.89
+  },
+  "contract_completion_pct": {
+    "p10": 56.25,
+    "median": 79.17,
+    "p90": 97.92,
+    "mean": 77.25
+  },
+  "marketing_specialization": {
+    "hands": 845,
+    "runs_with_specialization": 765,
+    "total_extra_marketing": 2374,
+    "total_extra_units": 1656,
+    "changed_unit_projection_runs": 692
+  },
+  "ironclad_payout_cents": {
+    "p10": 135000,
+    "median": 190000.0,
+    "p90": 235000,
+    "mean": 185407.94
+  },
+  "contract_full_settlement_pct": 51.0,
+  "contract_half_only_settlement_pct": 49.0,
+  "by_policy": {
+    "conservative": {
+      "n": 2100,
+      "review": {
+        "p10": 0.2,
+        "median": 0.7,
+        "p90": 1.2,
+        "mean": 0.72
+      },
+      "contract_pct": {
+        "p10": 47.92,
+        "median": 64.58,
+        "p90": 83.33,
+        "mean": 65.42
+      },
+      "shortfall_pct": 0.1
+    },
+    "ordinary": {
+      "n": 2100,
+      "review": {
+        "p10": 0.5,
+        "median": 1.5,
+        "p90": 2.2,
+        "mean": 1.41
+      },
+      "contract_pct": {
+        "p10": 64.58,
+        "median": 85.42,
+        "p90": 100.0,
+        "mean": 83.24
+      },
+      "shortfall_pct": 0.0
+    },
+    "optimized": {
+      "n": 2100,
+      "review": {
+        "p10": 0.8,
+        "median": 2.7,
+        "p90": 3.6,
+        "mean": 2.44
+      },
+      "contract_pct": {
+        "p10": 62.5,
+        "median": 85.42,
+        "p90": 100.0,
+        "mean": 83.1
+      },
+      "shortfall_pct": 0.0
+    }
+  },
+  "by_target": {
+    "7": {
+      "n": 900,
+      "review": {
+        "p10": 0.0,
+        "median": 0.5,
+        "p90": 0.9,
+        "mean": 0.48
+      },
+      "starting_cash_dollars": {
+        "p10": 5500,
+        "median": 5500.0,
+        "p90": 5500,
+        "mean": 5500
+      },
+      "shortfall_pct": 0.0,
+      "optional_node_shortfall_pct": 0.0
+    },
+    "13": {
+      "n": 900,
+      "review": {
+        "p10": 0.3,
+        "median": 0.9,
+        "p90": 1.7,
+        "mean": 0.98
+      },
+      "starting_cash_dollars": {
+        "p10": 3850,
+        "median": 4000.0,
+        "p90": 4150,
+        "mean": 3967
+      },
+      "shortfall_pct": 0.0,
+      "optional_node_shortfall_pct": 0.0
+    },
+    "19": {
+      "n": 900,
+      "review": {
+        "p10": 0.6,
+        "median": 1.5,
+        "p90": 2.7,
+        "mean": 1.58
+      },
+      "starting_cash_dollars": {
+        "p10": 2350,
+        "median": 2500.0,
+        "p90": 2650,
+        "mean": 2489.67
+      },
+      "shortfall_pct": 0.0,
+      "optional_node_shortfall_pct": 44.2
+    },
+    "20": {
+      "n": 900,
+      "review": {
+        "p10": 0.6,
+        "median": 1.6,
+        "p90": 3.0,
+        "mean": 1.73
+      },
+      "starting_cash_dollars": {
+        "p10": 2050,
+        "median": 2200.0,
+        "p90": 2350,
+        "mean": 2243.83
+      },
+      "shortfall_pct": 0.0,
+      "optional_node_shortfall_pct": 63.0
+    },
+    "21": {
+      "n": 900,
+      "review": {
+        "p10": 0.6,
+        "median": 1.7,
+        "p90": 3.2,
+        "mean": 1.82
+      },
+      "starting_cash_dollars": {
+        "p10": 1750,
+        "median": 2050.0,
+        "p90": 2200,
+        "mean": 1982.33
+      },
+      "shortfall_pct": 0.2,
+      "optional_node_shortfall_pct": 75.7
+    },
+    "22": {
+      "n": 900,
+      "review": {
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.97
+      },
+      "starting_cash_dollars": {
+        "p10": 1600,
+        "median": 1750.0,
+        "p90": 1900,
+        "mean": 1761.5
+      },
+      "shortfall_pct": 0.3,
+      "optional_node_shortfall_pct": 82.2
+    },
+    "23": {
+      "n": 900,
+      "review": {
+        "p10": 0.8,
+        "median": 1.9,
+        "p90": 3.7,
+        "mean": 2.11
+      },
+      "starting_cash_dollars": {
+        "p10": 1600,
+        "median": 1600.0,
+        "p90": 1750,
+        "mean": 1635
+      },
+      "shortfall_pct": 0.0,
+      "optional_node_shortfall_pct": 86.4
+    }
+  },
+  "by_review": {
+    "0.0-0.7": {
+      "n": 1631,
+      "shortfall_pct": 0.2,
+      "min_cash_cents": {
+        "p10": 83566,
+        "median": 316447,
+        "p90": 469181,
+        "mean": 292654.96
+      }
+    },
+    "0.8-1.7": {
+      "n": 2437,
+      "shortfall_pct": 0.0,
+      "min_cash_cents": {
+        "p10": 56000,
+        "median": 125125,
+        "p90": 328500,
+        "mean": 167287.99
+      }
+    },
+    "1.8-3.0": {
+      "n": 1601,
+      "shortfall_pct": 0.1,
+      "min_cash_cents": {
+        "p10": 29000,
+        "median": 78000,
+        "p90": 133000,
+        "mean": 85964.13
+      }
+    },
+    "3.1-5.0": {
+      "n": 631,
+      "shortfall_pct": 0.0,
+      "min_cash_cents": {
+        "p10": 9000,
+        "median": 31000,
+        "p90": 95000,
+        "mean": 40809.83
+      }
+    },
+    "5.1-10.0": {
+      "n": 0,
+      "shortfall_pct": null,
+      "min_cash_cents": null
+    }
+  },
+  "by_start_cash_decile": {
+    "1": {
+      "cash_range": [
+        1600,
+        1600
+      ],
+      "n": 630,
+      "shortfall_pct": 0.6
+    },
+    "2": {
+      "cash_range": [
+        1600,
+        1750
+      ],
+      "n": 630,
+      "shortfall_pct": 0.2
+    },
+    "3": {
+      "cash_range": [
+        1750,
+        1900
+      ],
+      "n": 630,
+      "shortfall_pct": 0.0
+    },
+    "4": {
+      "cash_range": [
+        1900,
+        2050
+      ],
+      "n": 630,
+      "shortfall_pct": 0.0
+    },
+    "5": {
+      "cash_range": [
+        2050,
+        2200
+      ],
+      "n": 630,
+      "shortfall_pct": 0.0
+    },
+    "6": {
+      "cash_range": [
+        2200,
+        2350
+      ],
+      "n": 630,
+      "shortfall_pct": 0.0
+    },
+    "7": {
+      "cash_range": [
+        2350,
+        2650
+      ],
+      "n": 630,
+      "shortfall_pct": 0.0
+    },
+    "8": {
+      "cash_range": [
+        2650,
+        4000
+      ],
+      "n": 630,
+      "shortfall_pct": 0.0
+    },
+    "9": {
+      "cash_range": [
+        4000,
+        5500
+      ],
+      "n": 630,
+      "shortfall_pct": 0.0
+    },
+    "10": {
+      "cash_range": [
+        5500,
+        5500
+      ],
+      "n": 630,
+      "shortfall_pct": 0.0
+    }
+  },
+  "scenarios": {
+    "staff0_courses0_node0": {
+      "n": 6300,
+      "shortfall_pct": 0.0,
+      "min_cash_cents": {
+        "p10": 34000,
+        "median": 117000.0,
+        "p90": 473000,
+        "mean": 178625.99
+      },
+      "earliest_failure": null,
+      "failure_stages": {}
+    },
+    "staff0_courses0_node1": {
+      "n": 6300,
+      "shortfall_pct": 7.7,
+      "min_cash_cents": {
+        "p10": 7999,
+        "median": 78000.0,
+        "p90": 351440,
+        "mean": 124246.67
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 8,
+        "shortfall_cents": 25427
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 267,
+        "Game 2 Feature play": 216,
+        "Optional Store node": 2,
+        "Optional Store node monthly expense": 1
+      }
+    },
+    "staff0_courses1_node0": {
+      "n": 6300,
+      "shortfall_pct": 0.0,
+      "min_cash_cents": {
+        "p10": 34000,
+        "median": 117000.0,
+        "p90": 473000,
+        "mean": 178625.99
+      },
+      "earliest_failure": null,
+      "failure_stages": {}
+    },
+    "staff0_courses1_node1": {
+      "n": 6300,
+      "shortfall_pct": 7.7,
+      "min_cash_cents": {
+        "p10": 7999,
+        "median": 78000.0,
+        "p90": 351440,
+        "mean": 124246.67
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 8,
+        "shortfall_cents": 25427
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 267,
+        "Game 2 Feature play": 216,
+        "Optional Store node": 2,
+        "Optional Store node monthly expense": 1
+      }
+    },
+    "staff0_courses2_node0": {
+      "n": 6300,
+      "shortfall_pct": 0.0,
+      "min_cash_cents": {
+        "p10": 34000,
+        "median": 117000.0,
+        "p90": 473000,
+        "mean": 178625.99
+      },
+      "earliest_failure": null,
+      "failure_stages": {}
+    },
+    "staff0_courses2_node1": {
+      "n": 6300,
+      "shortfall_pct": 7.7,
+      "min_cash_cents": {
+        "p10": 7999,
+        "median": 78000.0,
+        "p90": 351440,
+        "mean": 124246.67
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 8,
+        "shortfall_cents": 25427
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 267,
+        "Game 2 Feature play": 216,
+        "Optional Store node": 2,
+        "Optional Store node monthly expense": 1
+      }
+    },
+    "staff1_courses0_node0": {
+      "n": 6300,
+      "shortfall_pct": 0.0,
+      "min_cash_cents": {
+        "p10": 34000,
+        "median": 116500.0,
+        "p90": 468000,
+        "mean": 175693.65
+      },
+      "earliest_failure": null,
+      "failure_stages": {}
+    },
+    "staff1_courses0_node1": {
+      "n": 6300,
+      "shortfall_pct": 27.6,
+      "min_cash_cents": {
+        "p10": -44847,
+        "median": 38454.0,
+        "p90": 288877,
+        "mean": 78060.69
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 8,
+        "shortfall_cents": 45427
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 1282,
+        "Game 2 Feature play": 445,
+        "Optional Store node monthly expense": 4,
+        "Optional Store node": 6
+      }
+    },
+    "staff1_courses1_node0": {
+      "n": 6300,
+      "shortfall_pct": 0.0,
+      "min_cash_cents": {
+        "p10": 34000,
+        "median": 115000.0,
+        "p90": 444493,
+        "mean": 172178.43
+      },
+      "earliest_failure": {
+        "stage": "Game 2 monthly expense",
+        "cycle": 14,
+        "shortfall_cents": 7927
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 2
+      }
+    },
+    "staff1_courses1_node1": {
+      "n": 6300,
+      "shortfall_pct": 39.3,
+      "min_cash_cents": {
+        "p10": -67508,
+        "median": 20372.0,
+        "p90": 266353,
+        "mean": 57224.11
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 9,
+        "shortfall_cents": 47927
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 1856,
+        "Game 2 Feature play": 587,
+        "Optional Store node monthly expense": 21,
+        "Optional Store node": 13
+      }
+    },
+    "staff1_courses2_node0": {
+      "n": 6300,
+      "shortfall_pct": 0.1,
+      "min_cash_cents": {
+        "p10": 33000,
+        "median": 112000.0,
+        "p90": 421335,
+        "mean": 166409.63
+      },
+      "earliest_failure": {
+        "stage": "Game 2 monthly expense",
+        "cycle": 14,
+        "shortfall_cents": 15427
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 5
+      }
+    },
+    "staff1_courses2_node1": {
+      "n": 6300,
+      "shortfall_pct": 50.2,
+      "min_cash_cents": {
+        "p10": -88882,
+        "median": -705.0,
+        "p90": 239500,
+        "mean": 34409.4
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 10,
+        "shortfall_cents": 9315
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 2287,
+        "Game 2 Feature play": 805,
+        "Optional Store node": 38,
+        "Optional Store node monthly expense": 34
+      }
+    },
+    "staff2_courses0_node0": {
+      "n": 6300,
+      "shortfall_pct": 0.3,
+      "min_cash_cents": {
+        "p10": 32000,
+        "median": 111000.0,
+        "p90": 406527,
+        "mean": 162759.13
+      },
+      "earliest_failure": {
+        "stage": "Game 2 monthly expense",
+        "cycle": 12,
+        "shortfall_cents": 20427
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 18
+      }
+    },
+    "staff2_courses0_node1": {
+      "n": 6300,
+      "shortfall_pct": 56.2,
+      "min_cash_cents": {
+        "p10": -103406,
+        "median": -15990.5,
+        "p90": 222293,
+        "mean": 20330.04
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 8,
+        "shortfall_cents": 4315
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 2782,
+        "Game 2 Feature play": 710,
+        "Optional Store node": 24,
+        "Optional Store node monthly expense": 27
+      }
+    },
+    "staff2_courses1_node0": {
+      "n": 6300,
+      "shortfall_pct": 4.0,
+      "min_cash_cents": {
+        "p10": 14000,
+        "median": 90440.0,
+        "p90": 347629,
+        "mean": 135063.44
+      },
+      "earliest_failure": {
+        "stage": "Game 2 Feature play",
+        "cycle": 10,
+        "shortfall_cents": 427
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 248,
+        "Game 2 Feature play": 1
+      }
+    },
+    "staff2_courses1_node1": {
+      "n": 6300,
+      "shortfall_pct": 69.8,
+      "min_cash_cents": {
+        "p10": -159581,
+        "median": -73060.0,
+        "p90": 162632,
+        "mean": -36303.35
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 10,
+        "shortfall_cents": 10434
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 2905,
+        "Game 2 Feature play": 1259,
+        "Optional Store node monthly expense": 94,
+        "Optional Store node": 139
+      }
+    },
+    "staff2_courses2_node0": {
+      "n": 6300,
+      "shortfall_pct": 23.2,
+      "min_cash_cents": {
+        "p10": -34357,
+        "median": 49431.5,
+        "p90": 285790,
+        "mean": 87335.14
+      },
+      "earliest_failure": {
+        "stage": "Game 2 Feature play",
+        "cycle": 12,
+        "shortfall_cents": 40427
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 1460,
+        "Game 2 Feature play": 4
+      }
+    },
+    "staff2_courses2_node1": {
+      "n": 6300,
+      "shortfall_pct": 78.7,
+      "min_cash_cents": {
+        "p10": -221672,
+        "median": -133983.5,
+        "p90": 99000,
+        "mean": -98354.47
+      },
+      "earliest_failure": {
+        "stage": "Optional Store node",
+        "cycle": 12,
+        "shortfall_cents": 18147
+      },
+      "failure_stages": {
+        "Game 2 monthly expense": 2474,
+        "Game 2 Feature play": 1712,
+        "Optional Store node": 496,
+        "Optional Store node monthly expense": 275
+      }
+    }
+  },
+  "baseline_cash_by_calendar_cycle": {
+    "0": {
+      "n": 3150,
+      "minimum_cents": 51000,
+      "p10_cents": 71000,
+      "median_cents": 148000.0
+    },
+    "1": {
+      "n": 6300,
+      "minimum_cents": 51000,
+      "p10_cents": 71000,
+      "median_cents": 147000.0
+    },
+    "2": {
+      "n": 6300,
+      "minimum_cents": 43500,
+      "p10_cents": 63500,
+      "median_cents": 139500.0
+    },
+    "3": {
+      "n": 6300,
+      "minimum_cents": 43500,
+      "p10_cents": 63500,
+      "median_cents": 139500.0
+    },
+    "4": {
+      "n": 6300,
+      "minimum_cents": 36000,
+      "p10_cents": 56000,
+      "median_cents": 132000.0
+    },
+    "5": {
+      "n": 6300,
+      "minimum_cents": 36000,
+      "p10_cents": 56000,
+      "median_cents": 132000.0
+    },
+    "6": {
+      "n": 6300,
+      "minimum_cents": 28500,
+      "p10_cents": 48500,
+      "median_cents": 128304.0
+    },
+    "7": {
+      "n": 6300,
+      "minimum_cents": 28500,
+      "p10_cents": 48500,
+      "median_cents": 141500.0
+    },
+    "8": {
+      "n": 6300,
+      "minimum_cents": 21000,
+      "p10_cents": 41000,
+      "median_cents": 264746.0
+    },
+    "9": {
+      "n": 6300,
+      "minimum_cents": 21000,
+      "p10_cents": 41000,
+      "median_cents": 233670.5
+    },
+    "10": {
+      "n": 6300,
+      "minimum_cents": 13500,
+      "p10_cents": 56500,
+      "median_cents": 243693.5
+    },
+    "11": {
+      "n": 6300,
+      "minimum_cents": 13500,
+      "p10_cents": 56500,
+      "median_cents": 295959.5
+    },
+    "12": {
+      "n": 6300,
+      "minimum_cents": 6000,
+      "p10_cents": 48000,
+      "median_cents": 283000.0
+    },
+    "13": {
+      "n": 6300,
+      "minimum_cents": 6000,
+      "p10_cents": 48000,
+      "median_cents": 233779.5
+    },
+    "14": {
+      "n": 6300,
+      "minimum_cents": -15427,
+      "p10_cents": 122440,
+      "median_cents": 244667.5
+    },
+    "15": {
+      "n": 6300,
+      "minimum_cents": -15427,
+      "p10_cents": 131066,
+      "median_cents": 321396.5
+    },
+    "16": {
+      "n": 5250,
+      "minimum_cents": -1630,
+      "p10_cents": 131657,
+      "median_cents": 359573.0
+    },
+    "17": {
+      "n": 4200,
+      "minimum_cents": 55716,
+      "p10_cents": 175562,
+      "median_cents": 341873.0
+    },
+    "18": {
+      "n": 4200,
+      "minimum_cents": 33216,
+      "p10_cents": 152608,
+      "median_cents": 284527.5
+    },
+    "19": {
+      "n": 4200,
+      "minimum_cents": 33216,
+      "p10_cents": 152608,
+      "median_cents": 284527.5
+    },
+    "20": {
+      "n": 4200,
+      "minimum_cents": 10716,
+      "p10_cents": 130108,
+      "median_cents": 262027.5
+    },
+    "21": {
+      "n": 4200,
+      "minimum_cents": 10716,
+      "p10_cents": 130108,
+      "median_cents": 262027.5
+    },
+    "22": {
+      "n": 3150,
+      "minimum_cents": -11784,
+      "p10_cents": 124727,
+      "median_cents": 256863.0
+    },
+    "23": {
+      "n": 2100,
+      "minimum_cents": 69429,
+      "p10_cents": 189915,
+      "median_cents": 280861.5
+    },
+    "24": {
+      "n": 2100,
+      "minimum_cents": 46929,
+      "p10_cents": 167415,
+      "median_cents": 258361.5
+    },
+    "25": {
+      "n": 2100,
+      "minimum_cents": 46929,
+      "p10_cents": 167415,
+      "median_cents": 258361.5
+    },
+    "26": {
+      "n": 2100,
+      "minimum_cents": 24429,
+      "p10_cents": 144915,
+      "median_cents": 235861.5
+    },
+    "27": {
+      "n": 2100,
+      "minimum_cents": 24429,
+      "p10_cents": 144915,
+      "median_cents": 235861.5
+    },
+    "28": {
+      "n": 2100,
+      "minimum_cents": 1929,
+      "p10_cents": 122415,
+      "median_cents": 213361.5
+    },
+    "29": {
+      "n": 2100,
+      "minimum_cents": 1929,
+      "p10_cents": 122415,
+      "median_cents": 213361.5
+    },
+    "30": {
+      "n": 1050,
+      "minimum_cents": -1525,
+      "p10_cents": 99118,
+      "median_cents": 188961.0
+    }
+  },
+  "sensitivity": {
+    "bill50_salary75_expense_after_settlement1": 0.0,
+    "bill50_salary75_expense_after_settlement0": 0.0,
+    "bill75_salary100_expense_after_settlement1": 0.1,
+    "bill75_salary100_expense_after_settlement0": 2.2,
+    "bill100_salary150_expense_after_settlement1": 6.3,
+    "bill100_salary150_expense_after_settlement0": 9.0,
+    "bill_from_first_game_0": 0.0,
+    "bill_from_first_game_1": 0.1
+  },
+  "hypothetical_publisher_caps": {
+    "Ironclad": {
+      "optional_node_0": {
+        "shortfall_pct": 0.1,
+        "minimum_cash_cents": {
+          "p10": 33000,
+          "median": 112000.0,
+          "p90": 421335,
+          "mean": 166409.63
+        }
+      },
+      "optional_node_1": {
+        "shortfall_pct": 50.2,
+        "minimum_cash_cents": {
+          "p10": -88882,
+          "median": -705.0,
+          "p90": 239500,
+          "mean": 34409.4
+        }
+      }
+    },
+    "SideStreet": {
+      "optional_node_0": {
+        "shortfall_pct": 0.3,
+        "minimum_cash_cents": {
+          "p10": 31000,
+          "median": 108000.0,
+          "p90": 408423,
+          "mean": 160828.56
+        }
+      },
+      "optional_node_1": {
+        "shortfall_pct": 58.2,
+        "minimum_cash_cents": {
+          "p10": -108028,
+          "median": -20978.0,
+          "p90": 225500,
+          "mean": 16373.33
+        }
+      }
+    },
+    "Crown & Quill": {
+      "optional_node_0": {
+        "shortfall_pct": 0.8,
+        "minimum_cash_cents": {
+          "p10": 27902,
+          "median": 102000.0,
+          "p90": 394000,
+          "mean": 153237.48
+        }
+      },
+      "optional_node_1": {
+        "shortfall_pct": 63.9,
+        "minimum_cash_cents": {
+          "p10": -126931,
+          "median": -41060.0,
+          "p90": 211307,
+          "mean": -1910.07
+        }
+      }
+    },
+    "Neon Circuit": {
+      "optional_node_0": {
+        "shortfall_pct": 3.5,
+        "minimum_cash_cents": {
+          "p10": 14751,
+          "median": 88103.5,
+          "p90": 372543,
+          "mean": 137627.88
+        }
+      },
+      "optional_node_1": {
+        "shortfall_pct": 69.1,
+        "minimum_cash_cents": {
+          "p10": -155368,
+          "median": -71589.0,
+          "p90": 190386,
+          "mean": -29547.03
+        }
+      }
+    },
+    "Starwave": {
+      "optional_node_0": {
+        "shortfall_pct": 0.8,
+        "minimum_cash_cents": {
+          "p10": 27902,
+          "median": 102000.0,
+          "p90": 394000,
+          "mean": 153237.48
+        }
+      },
+      "optional_node_1": {
+        "shortfall_pct": 63.9,
+        "minimum_cash_cents": {
+          "p10": -126931,
+          "median": -41060.0,
+          "p90": 211307,
+          "mean": -1910.07
+        }
+      }
+    }
+  },
+  "publisher_offer_status": {
+    "Ironclad": "playable one-shot cash-only offer",
+    "SideStreet": "unlockable, no separate playable offer",
+    "Crown & Quill": "Review>=7 unlock; no separate offer",
+    "Neon Circuit": "Awareness>=125 unlock; no separate offer",
+    "Starwave": "unreachable under one-shot ContractState"
+  },
+  "review_ge7_pct": 0.0,
+  "awareness_ge125_pct": 0.2,
+  "sample_trace": {
+    "target": 7,
+    "policy": "conservative",
+    "alignment": 0,
+    "acquisition": 0,
+    "initial_cash": 5500,
+    "game1_play_spend": 220,
+    "game1_hands": 4,
+    "game1_cycles": 5,
+    "game2_cycles": 5,
+    "game2_play_spend": 320,
+    "reserve_id": "menu_system",
+    "scores": {
+      "graphics": 10,
+      "sound": 7,
+      "technology": 10,
+      "design": 9
+    },
+    "scope": 5,
+    "bugs": 0,
+    "marketing": 0,
+    "review": 0.3,
+    "fit": 0.8377777777777777,
+    "units": 24,
+    "old_units": 24,
+    "old_marketing": 0,
+    "marketing_special_hands": 0,
+    "market_bp": 7500,
+    "contract": {
+      "scope": 4,
+      "core_half": {
+        "graphics": 6,
+        "sound": 8,
+        "technology": 18,
+        "design": 6
+      },
+      "redraws": 0,
+      "numerator": 48,
+      "completion_pct": 50.0,
+      "payout_cents": 120000
+    },
+    "synergies": 0,
+    "redraws": 0
+  }
+}

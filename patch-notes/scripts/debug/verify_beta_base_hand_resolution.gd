@@ -121,8 +121,8 @@ func _verify_qa_order_and_clamping() -> void:
 func _verify_marketing_and_payout() -> void:
 	var marketing := await _make_beta([&"sign_flippers", &"posters", &"press_release", &"press_interview"])
 	var old_view: CardView = marketing.beta.get("_selected_card_views")[0]
-	_expect(marketing.beta.play_selected_hand(), "All four Marketing definitions resolve at printed base values")
-	_expect(marketing.state.get_marketing_output() == 7 and marketing.state.get_current_cycle() == 1, "Marketing contributes exactly 1 + 1 + 2 + 3 once")
+	_expect(marketing.beta.play_selected_hand(), "All four Marketing definitions resolve with Marketing Specialization")
+	_expect(marketing.state.get_marketing_output() == 10 and marketing.state.get_current_cycle() == 1, "Marketing contributes floor((1 + 1 + 2 + 3) × 1.5) once")
 	_expect(marketing.state.is_beta_card_exhausted(&"press_interview") and marketing.state.get_exhausted_beta_card_ids().size() == 1, "Only finite Press Interview exhausts")
 	var after := _snapshot(marketing.state, marketing.run, marketing.beta)
 	old_view.card_pressed.emit(old_view)

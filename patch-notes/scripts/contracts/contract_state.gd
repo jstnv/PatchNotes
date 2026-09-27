@@ -6,6 +6,8 @@ const REQUIRED_HANDS := 2
 const EXPECTED_SCOPE := 12
 const EXPECTED_CORE_HALF_UNITS := 12
 const PUBLISHER_INVESTMENT_CENTS := 240000
+const GUARANTEED_UPFRONT_CENTS := 40000
+const COMPLETION_BUDGET_CENTS := PUBLISHER_INVESTMENT_CENTS - GUARANTEED_UPFRONT_CENTS
 const COMPLETION_DENOMINATOR := 96
 const CORE_BY_STAT := {
 	&"graphics": ProjectState.CoreScore.GRAPHICS,
@@ -22,6 +24,7 @@ var _successful_hands := 0
 var _exhausted_feature_ids: Dictionary = {}
 var _priorities: Dictionary = {}
 var _result: ContractResult
+var _upfront_committed := false
 var _payout_committed := false
 
 
@@ -86,6 +89,18 @@ func is_payout_committed() -> bool:
 	return _payout_committed
 
 
+func is_upfront_committed() -> bool:
+	return _upfront_committed
+
+
+## RunState calls this only while atomically accepting the one-shot offer.
+func commit_upfront() -> bool:
+	if _upfront_committed or _successful_hands != 0 or is_completed():
+		return false
+	_upfront_committed = true
+	return true
+
+
 func can_commit_priorities(distribution: Dictionary) -> bool:
 	return not is_completed() and PriorityAllocation.is_valid_distribution(distribution) and distribution != _priorities
 
@@ -136,13 +151,15 @@ func plan_hand(cards: Array[CardData]) -> Dictionary:
 		projected_scores[category] += addition
 	var completing := _successful_hands + 1 == REQUIRED_HANDS
 	var numerator := 0
-	var payout := 0
+	var remainder := 0
+	var total_payout := 0
 	if completing:
 		var completion := calculate_completion(_scope + scope_addition, projected_scores)
 		if completion.is_empty():
 			return {}
 		numerator = completion.numerator
-		payout = completion.payout_cents
+		remainder = completion.remainder_cents
+		total_payout = completion.payout_cents
 	return {
 		"expected_hand_count": _successful_hands,
 		"scope_addition": scope_addition,
@@ -151,13 +168,16 @@ func plan_hand(cards: Array[CardData]) -> Dictionary:
 		"specialization_stat": specialization_stat,
 		"completing": completing,
 		"completion_numerator": numerator,
-		"payout_cents": payout,
+		"remainder_cents": remainder,
+		"payout_cents": total_payout,
 	}
 
 
-func commit_hand(cards: Array[CardData], expected_payout_cents: int) -> bool:
+func commit_hand(cards: Array[CardData], expected_remainder_cents: int) -> bool:
+	if not _upfront_committed:
+		return false
 	var plan := plan_hand(cards)
-	if plan.is_empty() or plan.expected_hand_count != _successful_hands or plan.payout_cents != expected_payout_cents:
+	if plan.is_empty() or plan.expected_hand_count != _successful_hands or plan.remainder_cents != expected_remainder_cents:
 		return false
 	_scope += plan.scope_addition
 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
@@ -166,7 +186,7 @@ func commit_hand(cards: Array[CardData], expected_payout_cents: int) -> bool:
 		_exhausted_feature_ids[id] = true
 	_successful_hands += 1
 	if plan.completing:
-		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents)
+		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents, plan.remainder_cents)
 		_payout_committed = true
 	return true
 
@@ -181,7 +201,8 @@ static func calculate_completion(scope: Variant, core_half_units: Dictionary) ->
 		numerator += mini(int(core_half_units[category]), EXPECTED_CORE_HALF_UNITS)
 	if numerator < 0 or numerator > COMPLETION_DENOMINATOR:
 		return {}
-	return {"numerator": numerator, "payout_cents": (PUBLISHER_INVESTMENT_CENTS * numerator) / COMPLETION_DENOMINATOR}
+	var remainder := (COMPLETION_BUDGET_CENTS * numerator) / COMPLETION_DENOMINATOR
+	return {"numerator": numerator, "remainder_cents": remainder, "payout_cents": GUARANTEED_UPFRONT_CENTS + remainder}
 
 
 func _is_valid_card(card: CardData) -> bool:

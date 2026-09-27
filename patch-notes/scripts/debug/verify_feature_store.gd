@@ -132,31 +132,59 @@ func _verify_tree_ui() -> void:
 	var nodes: Dictionary = store.get("_nodes")
 	var edges: Array = store.get("_edges")
 	expect(nodes.size() == 38 and edges.size() == 10, "Full ledger has 38 nodes and nine parent edges plus Gameplay gate")
+	var lane_by_id: Dictionary = store.get("_lane_by_id")
+	var lane_buttons: Dictionary = store.get("_lane_buttons")
+	expect(lane_by_id.size() == nodes.size() and lane_buttons.size() == 5, "Every ledger Feature appears once across five browsable lanes")
 	for entry: Dictionary in FeatureStoreCatalog.entries():
 		var parent := StringName(entry.purchase_parent)
 		if not parent.is_empty():
-			expect(edges.has([parent, StringName(entry.id)]) and nodes[parent].position.x < nodes[StringName(entry.id)].position.x, "Correct connector and depth: " + entry.name)
-	expect(nodes[&"save_files"].position.x == nodes[&"text"].position.x, "Save Files is a new root")
+			store.call("_select_lane", lane_by_id[StringName(entry.id)])
+			expect(edges.has([parent, StringName(entry.id)]) and lane_by_id[parent] == lane_by_id[StringName(entry.id)] and nodes[parent].position.y > nodes[StringName(entry.id)].position.y, "Correct upward connector: " + entry.name)
+	store.call("_select_lane", &"Technology & Tools")
+	expect(nodes[&"save_files"].position.y > nodes[&"branching_nodes"].position.y and edges.has([&"save_files", &"branching_nodes"]), "Save Files is an independent root below its child")
+	store.call("_select_lane", &"Gameplay")
+	var tree: Control = store.get("_tree")
+	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and tree.get_node("GameplayGate").position.y > nodes[&"difficulty_levels"].position.y, "Difficulty retains distinct Gameplay ownership gate")
+	expect(lane_buttons[&"Gameplay"].focus_mode == Control.FOCUS_ALL and nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL, "Lane and node navigation are keyboard/controller focusable")
 	expect(nodes[&"colored_text"].text.contains("Need cash") and nodes[&"branching_nodes"].text.contains("Locked"), "Unaffordable and locked node states are distinct")
+	store.call("_select_lane", &"Visuals")
 	store.call("_select_node", &"colored_text")
 	expect(store.get("_buy").disabled, "One-cent-short UI disables purchase")
 	run.record_resolved_feature(ProjectState.new(30), &"text", &"design")
 	expect(store.get("_details").text.contains("10%") and store.get("_details").text.contains("$585.00") and not store.get("_buy").disabled, "Live familiarity discount refreshes details and affordability")
 	run.add_cash(10000)
+	store.call("_select_lane", &"Technology & Tools")
 	store.call("_select_node", &"save_files")
 	store.get("_buy").pressed.emit()
 	expect(nodes[&"save_files"].text.contains("Owned") and nodes[&"branching_nodes"].text.contains("Available"), "Purchase updates root and reveals available child")
 	var scroll: ScrollContainer = store.get("_scroll")
-	scroll.scroll_vertical = 600
+	scroll.scroll_horizontal = 200
+	await process_frame
+	var saved_scroll := scroll.scroll_horizontal
+	store.call("_select_lane", &"Audio")
+	store.call("_select_lane", &"Technology & Tools")
+	expect(scroll.scroll_horizontal == saved_scroll, "Lane navigation restores its horizontal position")
+	store.call("_select_node", &"save_files")
 	var before := run.get_cash_cents()
 	store.hide()
 	studio.get_node("%FeatureStoreButton").pressed.emit()
-	expect(store.get("_selected") == &"save_files" and scroll.scroll_vertical == 600 and run.get_cash_cents() == before and run.get_completed_run_cycles() == 0, "Reopening preserves selection, scroll, cash and cycles")
+	expect(store.get("_selected") == &"save_files" and scroll.scroll_horizontal == saved_scroll and run.get_cash_cents() == before and run.get_completed_run_cycles() == 0, "Reopening preserves selection, scroll, cash and cycles")
 	if "--capture-store" in OS.get_cmdline_user_args():
-		scroll.scroll_vertical = 0
+		store.call("_select_lane", &"Visuals")
+		scroll.scroll_horizontal = 0
 		store.call("_select_node", &"colored_text")
 		await process_frame
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://design-logs/feature-store-tree.png")
+	if "--capture-lanes" in OS.get_cmdline_user_args():
+		for dimensions: Vector2i in [Vector2i(1152, 648), Vector2i(900, 600)]:
+			root.size = dimensions
+			store.call("_select_lane", &"Visuals")
+			scroll.scroll_horizontal = 0
+			store.call("_select_node", &"colored_text")
+			await process_frame
+			await process_frame
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png("res://design-logs/feature-store-upward-%d.png" % dimensions.x)
 	studio.queue_free()
 	await process_frame

@@ -1,0 +1,15 @@
+PATCH NOTES — FEATURE STORE OWNED-POOL INDICATOR v1
+Date: 2026-09-26
+Status: IMPLEMENTED AND VERIFIED
+
+Request and authority
+The player asked for a compact Feature Store indicator showing total owned Scope, total printed Core score across all categories, and the cost to play all owned cards. The current card ledger, RunState ownership, first-Studio economy, and Feature Store were checked before editing. Primitive Design/Alpha Feature play costs remain $10 × (printed primary + secondary Core points + twice printed Scope), once per Feature played. Passes are free. Later Feature Store cards have no locked play price; the UI must not fabricate one.
+
+Implementation
+The Store now displays an owned-pool summary below its cash header: summed printed Scope, summed printed Core score and G/S/T/D breakdown, and the exact cost to play every owned priced Primitive Feature once under the current RunState rule. Purchased later Store Features contribute their printed Scope and Core scores, but the indicator separately counts them as play-cost TBD. This is a live read-only calculation from RunState owned IDs and CardDatabase definitions. Existing features_changed and cash_changed signals refresh it after starter, reserve, and later-Feature purchases. Browsing and opening remain passive.
+
+Ledger examples
+The six guaranteed starters show 7 Scope, 18 printed Core points (G 5, S 5, T 7, D 1), and $320.00 to play once each. Adding Sprites and Scrolling shows 11 Scope, 32 points, and $540.00. Adding Enemies shows 13 Scope, 37 points, and $630.00. Adding Colored Text then shows 14 Scope, 39 points, and $630.00 plus one Store Feature whose play cost is TBD.
+
+Verification and files
+Focused first-Studio economy assertions passed for initial totals, live starter/reserve/later-purchase updates, and position within the Store's scaled 900×600 canvas. Feature Store, release menus, and main-menu/history regressions passed. Headless Godot editor import/parser and git diff --check passed. Existing missing-card-art and Windows certificate-store warnings remain non-failing. Changed files: scripts/ui/feature_store.gd; scripts/debug/verify_first_studio_feature_economy.gd; this log. No card effects, ownership, purchase, cash, calendar, release, or Contract rules changed.

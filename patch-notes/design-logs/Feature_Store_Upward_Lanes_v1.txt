@@ -1,0 +1,35 @@
+Patch Notes — Feature Store Upward Lanes v1
+Date: 2026-09-26
+Status: Implemented Store presentation only
+
+Authority and scope
+- Current To Do List: "FEATURE POOL ORGANIZATION AND UPWARD TREE — READY FOR IMPLEMENTATION" handoff.
+- Patch Notes — Implementation Discoveries and Locked Rules.txt, current Drive authority.
+- Existing Core Feature Ledger, FeatureStoreCatalog, CardDatabase, RunState and Studio Feature Store.
+- No card definition, purchase prerequisite, cost, familiarity, ownership, exhaustion, or productive-cycle rule changed.
+
+Complete ledger-to-lane map (each of the 38 Feature IDs appears once)
+Visuals (8): Text -> Colored Text; Sprites -> Animated Sprites; 4-Color Palette -> 8-Color Palette; Scrolling -> Multi-Directional Scrolling.
+Audio (6): 8-Bit Sound -> Recorded Sounds; 8-Bit Music -> 16-Bit Music; Sound Effects; Music.
+Technology & Tools (6): Keyboard & Mouse; Controller; Menu System; Split Screen; Save Files -> Branching Nodes.
+Gameplay (10): Score System -> High Scores; Local Leaderboards; Lives System; Controls; Enemies -> Scripted AI; Power-Ups; General Combat; Difficulty Levels (own three distinct Gameplay Features gate).
+Story & World (8): Simple Story; Dialogue; Character Backstories; Multiple Endings; Levels; Maps; Exploration; Secrets.
+
+Presentation decisions
+- Five focusable lane buttons switch the visible tree without changing the run. Nodes retain the existing owned, available, needs-cash and locked states. Details and tooltips show actual ledger phase, Scope, Core values, prerequisites and prices.
+- Every branch places its root below its direct child, with an upward arrow. The three-Gameplay ownership gate is a label below Difficulty Levels, not a new card or discount parent.
+- Independent roots are side by side within a lane and the tree scrolls horizontally. Lane buttons make wide forests navigable at 1152x648 and 900x600. Selecting a different lane clears detail selection; purchase and reopening preserve the selected node and current lane/scroll. A lane's horizontal/vertical offset is restored on return.
+- Visual theme remains the existing Studio palette. Existing owned-pool totals remain visible above the lane navigation.
+
+Ambiguities and future branch candidates (not implemented)
+- Branching Nodes is placed with its Save Files parent under Technology & Tools, although its name suggests Story. Scripted AI stays with Enemies under Gameplay, although AI also sounds technical. Scrolling is grouped with Visuals, although it could be classified as an engine tool. These keep direct parent/child relationships legible.
+- Unbranched roots: Sound Effects, Music, Keyboard & Mouse, Controller, Menu System, Split Screen, Local Leaderboards, Lives System, Controls, Power-Ups, General Combat, Simple Story, Dialogue, Character Backstories, Multiple Endings, Levels, Maps, Exploration, Secrets.
+- Candidate future branches for a separate design and balance pass: input customization from Controls; adaptive soundtrack from Music; hidden routes from Secrets; local multiplayer support from Split Screen. Names are proposals only: no effects, values, prices, prerequisites or unlocks have been defined or added.
+- Balance simulation is required before any candidate is locked or made purchasable. QA Analyst reward design remains a separate read-only To Do analysis.
+
+Verification
+- Godot 4.7.1 editor import and parsing completed.
+- verify_feature_store.gd: all focused checks passed, including 38 unique nodes, 10 authoritative connectors, direct-parent upward placement, Difficulty gate, focusability, purchase unlock, discounted affordability, lane scroll restoration, selection on reopening, zero-cost browsing and Design/Alpha familiarity integration.
+- Captures: design-logs/feature-store-upward-1152.png and feature-store-upward-900.png; both inspected for layout, connector direction, legible states, lane navigation and detail panel.
+- verify_first_studio_feature_economy.gd, verify_release_menus.gd and verify_main_menu_history.gd each exited 0 with zero failures.
+- git diff --check passed (no whitespace errors; only existing line-ending notices).

@@ -1,0 +1,29 @@
+PATCH NOTES — CONTEXTUAL TUTORIAL GUIDANCE v1
+2026-09-27
+Status: implemented first in-game guidance milestone; broader tutorial/onboarding remains open.
+
+Request and sources
+-------------------
+The player requested in-game tooltips and suggestions throughout gameplay, while retaining the tutorial menu as a separate optional reference. I inspected the live repository, worktree, tutorial overlay, GameplayHUD, MainMenu, Studio, phases, RunState, card view, and relevant regression scripts before editing. No AGENTS.md was present. Existing unrelated Feature Store, Beta, analysis, and design-log worktree changes and .codex-godot-temp were preserved.
+
+Behavior
+--------
+- A first visit to a relevant step displays a small eight-second contextual tip. It can be dismissed. It does not dim the screen, take focus, spend cash, use redraws, or advance the calendar. The panel lets clicks pass through except for its close button.
+- Tips respond to setup, first Studio Feature Store onboarding, Store branches, review browsing, Contract offer and hands, Design/Alpha/Beta selection and progress, Beta Known Bugs, four-Marketing specialization, and when to launch after testing. Beta permits launching immediately, so the initial tip guides bug search and hand selection rather than claiming the game is ready. The Contract hand view signals guidance changes when its selection or state changes.
+- The priority planning dialog already explains its constraints; no toast is shown behind that dialog. When planning closes, selection guidance appears.
+- Seen tip keys are stored in presentation-only RunState progress so reopening a screen or reconstructing the current phase does not auto-repeat the same tip. The footer Tip button can replay the current tip at any time.
+- The existing multi-page Tutorial overlay remains available manually from the in-game footer. A new How to Play button on the Main Menu opens a separate three-page overview. Context changes no longer automatically open this blocking overlay.
+- Card hover text now explains printed Scope/Core or Beta value and finite/renewable behavior. Pre-Development fields and Studio/Contract actions also explain their immediate purpose and cash/cycle boundary.
+- Existing Tutorial text was corrected to distinguish zero-cycle Feature Store branch and starter purchases from later one-cycle Primitive reserve purchases.
+
+Integration boundaries
+----------------------
+This is presentation-only guidance. It does not add an employee, campaign, fanbase, Promotion, save/load, accessibility settings, or gameplay rule. The broader tutorial still needs content review and playtesting, including which suggestions are useful after repeat projects and any future option to mute them. The Store retains its existing permanent first-game inline hint.
+
+Verification
+------------
+- Godot 4.7.1 headless editor import/parsing exited 0.
+- Focused verifiers passed with zero failures: verify_first_game_and_tips.gd, verify_gameplay_hud_overlay.gd, verify_release_menus.gd, and verify_main_menu_history.gd. They cover manual Main Menu/phase tutorial access, nonblocking and one-time hints, dynamic Design selection tips, reconstruction, 900x600 setup bounds, and unchanged cash/calendar/redraw state.
+- Adjacent verifiers passed with zero failures: verify_predevelopment.gd, verify_balanced_primitive_contract.gd, and verify_feature_store.gd.
+- git diff --check passed. Existing Windows root-certificate, missing-card-artwork, and line-ending warnings appeared; no relevant test failure.
+- A headless screenshot capture script did not complete because its frame draw await did not advance in headless mode; no visual screenshot is claimed. Layout is bounded in code and the existing 900x600 UI checks passed, but interactive visual review remains useful.

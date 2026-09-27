@@ -1,0 +1,29 @@
+PATCH NOTES — FIRST-GAME REVIEW CALIBRATION v1
+Date: 2026-09-27
+Repository HEAD at investigation: b07a6584a5ae5021d86c8df9cafe3d8ef0c85075
+Status: READ-ONLY ANALYSIS COMPLETE; NO GAMEPLAY BALANCE CHANGE OR NEW NUMBER LOCK
+
+Authority and scope
+- Drive To Do List, FIRST-GAME REVIEW CALIBRATION — READY (READ-ONLY ANALYSIS); cumulative Implementation Discoveries and Locked Rules; Primitive_Review_Balance_v2.txt; Genre_Fit_Review_Modifier_v1.txt; First_Studio_Feature_Economy_v2.txt; Fanbase_Playtest_Data_v1.txt; current card and predevelopment ledgers and Godot source.
+- No human playtest was performed. The policies below are automated choices, not measured player skill.
+- The exact Godot Review still uses B-standard 33 for each Core, 30 required Scope, resolved Bugs, discrete variance, and Genre Fit. The first-game Store supplies $5,500, six free starters (7 printed Scope), a $4,000 starter purchase cap, and opt-in below the 20–23 printed-Scope target.
+
+Reproducible raw data
+- Godot: patch-notes/analysis/first_game_review_godot_traces_v1.gd, seed base 26092700. Run Godot 4.7.1 with --headless --path patch-notes --script res://analysis/first_game_review_godot_traces_v1.gd. Output: patch-notes/design-logs/first_game_review_godot_traces_v1.json.
+- 45 actual Godot paths: target starter Scope 19 (explicit low-Scope opt-in) and 20–23; 3 different legal purchase rosters and Genres per target; conservative, ordinary, optimized policies. All 45 bought Features within the $4,000 cap and completed live Design, Alpha, Beta, and Review actions without harness failure. Per-action JSON records candidate cards, redraws, selected cards, printed Core/Scope, resolved state after commitment, synergy, cash, Bugs discovered/fixed/remaining, and cycle. Final rows record Review components and exact cash.
+- Paired Python policy model: patch-notes/analysis/first_game_review_calibration_v1.py. Run bundled Python with -B and arguments 260927 250. Outputs: patch-notes/design-logs/first_game_review_calibration_v1_summary.json and first_game_review_calibration_v1_raw.json.gz. 3,000 independent standard-roster paths (4 starter targets x 3 policies x 250) and 750 below-20 opt-in paths (Scope 19). This reuses the earlier policy model and adds current Beta Marketing specialization for a paired comparison on the same pre-Beta states, draws, Genres, and Review variance. Python draw/choice/bug ports are approximations; Godot and Python random generators and hand policies are not identical. Do not interpret Python output as exact engine frequency or human performance.
+
+Observed Review and model reconciliation
+- Godot standard starter pools: all 36 Reviews below 5.0; conservative median 0.6 (range 0.2–0.8), ordinary median 1.5 (1.1–2.1), optimized median 2.45 (1.6–3.0). The highest was 3.0. Across the 36, average finished Scope ranged by policy from 15.5 to 21.2; average Core score from 13.3 to 21.3. The 9 opt-in low-Scope paths also stayed below 5.0. This is a small, policy-sensitive sample, not a population estimate.
+- In the 3,000-path model, p10/median/p90 Reviews were 0.7/1.8/3.3; 100.0% below 5.0, 0.0% exactly 5.0, 0.0% above 5.0. Earlier Fanbase_Playtest_Data_v1 reported 0.7/1.7/3.3 and 100% below 5.0. The new seed and current Beta do not reverse that finding. Below-20 opt-in model paths: 0.6/1.5/2.8, also 100% below 5.0.
+- All 45 Godot final Reviews and their production rating, Scope completion, Genre Fit and Genre deviation exactly matched the Python Review calculation when given the same resolved Godot scores, Scope, remaining Bugs, Genre, and variance roll. This establishes Review formula parity, not full draw-engine parity.
+- Paired old/current Beta policy comparison across 3,750 model paths: 391 Marketing outputs changed due to Marketing specialization; zero remaining-Bug differences and zero Review differences. Marketing affects launch reach and sales but does not directly raise Review. This is a genuine first-game balance concern under these policy budgets, not a Review regression caused by later Beta work.
+- Counterfactual mean Review gain across the 3,000 standard model paths, holding other resolved inputs fixed: set all Core scores to at least 33, +2.164; grant full Scope, +1.083; remove Genre Fit penalty, +0.209; fix all remaining Bugs, +0.121. These are diagnostic sensitivities, not proposed buffs. Low production scores and incomplete Scope dominate these paths. Correct Beta QA cannot compensate for them by itself.
+- Legal-action scope is important: these policies intentionally play 2–3 Design hands and 2–4 Alpha hands, with 0–4 Beta hands. Longer or more skilful paths could reach higher scores. The result does not prove a mathematical first-game ceiling or how humans will play.
+
+Recommendation and remaining evidence
+- Do not adjust Review or fanbase yet. First collect a small human playtest record for each release: purchased starter Features and Scope/spend; Genre; Design/Alpha/Beta hands and redraws; printed and resolved Core scores and Scope; Bugs generated/discovered/fixed/remaining; synergies; cash; variance; Genre Fit; final Review. Include at least one deliberate full-Scope/high-Core path and one normal first-time playthrough. Compare those against this raw trace distribution before choosing a new balance target.
+- If follow-up confirms frequent low Reviews, test changes to first-game supply or reachable Core/Scope progression before altering the locked 5.0 fan-neutral threshold. Any proposed value remains unapproved until separately locked.
+
+Verification
+- Godot trace harness: 45 cases, 0 failures. Paired model: 3,750 paths, 0 exact Review-component mismatches against Godot traces. All 37 verify_*.gd suites exited 0. Headless editor import/parsing exited 0. git diff --check exited 0. Existing missing-artwork and Windows root-certificate warnings did not fail these checks.

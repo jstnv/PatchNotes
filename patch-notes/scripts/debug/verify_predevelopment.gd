@@ -106,6 +106,8 @@ func _verify_flow() -> void:
 	run.consume_redraw(4)
 	var owned := run.get_owned_feature_ids()
 	var contract := run.accept_primitive_contract()
+	expect(contract != null and run.get_cash_cents() == cash_before + ContractState.GUARANTEED_UPFRONT_CENTS, "Accepting Ironclad credits its guarantee without advancing time")
+	cash_before = run.get_cash_cents()
 	studio.get_node("%StartNextGame").pressed.emit()
 	var overlay: PredevelopmentOverlay = studio.get("_predevelopment")
 	await _settle()
@@ -134,7 +136,7 @@ func _verify_flow() -> void:
 	overlay.begin_button.pressed.emit()
 	expect(game.project_state == old and overlay.visible and run.get_cash_cents() == cash_before and run.get_released_game_sales(id) == sales_before, "Calendar overflow rejects confirmation without replacing project or spending cash")
 	run.set("_completed_run_cycles", calendar_before)
-	expect(cash_before == 0 and not overlay.begin_button.disabled, "Begin Development is available at zero cash")
+	expect(cash_before == ContractState.GUARANTEED_UPFRONT_CENTS and not overlay.begin_button.disabled, "Begin Development remains available with the accepted Contract guarantee")
 	overlay.begin_button.pressed.emit()
 	var fresh: ProjectState = game.project_state
 	expect(fresh != old and fresh.get_base_name() == "Doom" and fresh.get_genre_id() == &"puzzle" and fresh.get_theme_id() == &"mystery", "Confirmation creates a fresh named project with selected choices")

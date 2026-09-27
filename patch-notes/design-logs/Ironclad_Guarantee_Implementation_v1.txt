@@ -1,0 +1,26 @@
+PATCH NOTES — IRONCLAD GUARANTEE IMPLEMENTATION v1
+Date: 2026-09-27
+Repository HEAD at implementation: b07a6584a5ae5021d86c8df9cafe3d8ef0c85075
+Status: $400 GUARANTEE IMPLEMENTED AND VERIFIED
+
+Authority
+- Drive To Do List, IRONCLAD GUARANTEED CONTRACT BONUS — $400 LOCKED; IMPLEMENTATION READY.
+- Ironclad_Guarantee_Lock_and_SideStreet_Offer_Design_v1.txt in Drive New Data Logs. Its later explicit user-approved ruling supersedes cumulative Implementation Discoveries and Locked Rules section 47 only where that older section says all Ironclad cash scales with completion.
+- Existing fixed Primitive Contract authority still owns eligible cards, two hands, finite Features, renewable Passes, priority/redraw rules, frozen ProjectState, and the shared productive-cycle/settlement boundary. No SideStreet, staff expense, or company-trait candidate was implemented here.
+
+Rule and state ownership
+- Accepting the one-shot Ironclad offer creates the authoritative RunState-owned ContractState and credits exactly 40,000 cents through RunState cash. Acceptance advances zero cycles, consumes zero redraws, and does not touch ProjectState or released-game sales. The ContractState has a committed-upfront guard. A second acceptance cannot create ownership or pay again.
+- ContractState completion numerator remains 4 x min(Final Scope, 12) + sum over four Cores of min(Final Core Score x 2, 12), denominator 96. Completion remainder = floor(200,000 x numerator / 96) cents. Total reward = 40,000 + remainder cents. At numerator 0/48/96, total is 40,000/140,000/240,000 cents. At numerator 4, remainder is exactly 8,333 cents and total 48,333 cents. Overproduction is capped before payment. The $400 is inside the fixed 240,000-cent Publisher Investment, never added on top.
+- Hand one commits no additional Contract cash. Hand two credits only the computed remainder via RunState.complete_productive_action, before its one shared productive-cycle/calendar/earned-sales settlement boundary. ContractResult records immutable upfront, completion payment and total for the completion view. All existing two-hand card, priority, and redraw mechanics remain unchanged.
+- Acceptance preflights signed-cent overflow before creating ownership. During the acceptance transaction, RunState blocks observer signals until ownership and exact cash both commit, then emits cash and Contract notifications. An unexpected cash failure removes the new ContractState; callers see no accepted offer. Completion still uses the existing central preflight and commit boundary: failed or overflowing actions preserve cash, cycle, sales, redraws, and ContractState. Repeated callbacks and phase reconstruction reuse the paid state/result and cannot pay either portion twice.
+
+Files changed for this rule
+- patch-notes/scripts/contracts/contract_state.gd; contract_result.gd; scripts/run_state.gd; scripts/phases/contract_phase.gd; studio_phase.gd; scripts/debug/verify_balanced_primitive_contract.gd; verify_predevelopment.gd.
+- Other pre-existing worktree edits in some of these files, including tutorial guidance, were preserved.
+
+Verification observed
+- Focused Contract suite: zero/half/full and exact-floor examples; upfront once-only and reentrant observer; detached/unpaid hand rejection; two hands; finite Feature and renewable Pass; free navigation/acceptance/dismissal; reconstruction; payout before settlement; acceptance and completion overflow rollback; repeated callback idempotence; frozen ProjectState and released-game sales preservation. Exit 0, zero failures.
+- verify_predevelopment, verify_publisher_list_progression, verify_release_menus, verify_sales_earning_and_settlement and the remaining verify_*.gd suites: all 37 suites exited 0. Headless Godot 4.7.1 editor import/parsing exited 0; affected Studio and Contract scenes were instantiated by the focused and related suites. git diff --check exited 0.
+
+Deferred
+- SideStreet repeatable offers, contracts beyond the one-shot Ironclad, Publisher Connections completion bonus, employee hiring/payroll/monthly bills, and later-month sales remain separate unapproved or unimplemented systems. Contract plays still do not grant Store familiarity under the existing milestone boundary. This log does not decide that open rule.

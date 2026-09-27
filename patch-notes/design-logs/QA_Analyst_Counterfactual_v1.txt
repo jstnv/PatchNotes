@@ -1,0 +1,39 @@
+Patch Notes — QA Analyst Counterfactual v1
+Date: 2026-09-26
+Status: Read-only balance analysis; reward values and employee rules remain unlocked
+
+Sources and reproducibility
+- To Do List, "QA ANALYST COUNTERFACTUAL — READY FOR READ-ONLY ANALYSIS; REWARDS NOT LOCKED"; current cumulative authority; live card ledger, Beta resolver, Review, Genre Fit and Month 1 sales calculators; Beta_Marketing_Specialization_v1.txt; Fanbase_Playtest_Data_v1.txt; Publisher_Cash_and_Payroll_Playtest_Data_v1.txt.
+- Run analysis/qa_analyst_counterfactual_v1.py with bundled Python, seed 260926, 250 sampled projects per cohort. Raw paired rows and all strata: design-logs/qa_analyst_counterfactual_v1_results.json.gz. The code contains assertions for zero-Bug safety, all-Marketing ×1.50 output, the later-Debug boundary and one-use reward.
+- Cohorts: first-game legal 20–23 purchased Scope under the $4,000 cap; below-20 explicit opt-in (7/10/13/16/19 printed Scope); expanded later-game supply containing all 27 Primitive Features. There are 250 base projects per cohort, each replayed at two QA priority profiles, two Beta action budgets, three action policies and four perk states: 36,000 case rows total. For each fixed candidate/action transcript, no employee, Search +1, qualifying later Debug +1, and both share the same sampled project, Beta draws, selected actions, Genre, market, and Review variance.
+- QA-low priorities are QA/Marketing/Insider 20/50/30. QA-high are 50/35/15. Action budgets are 2 or 4 productive Beta hands. Four Marketing cards in one hand receive the current ×1.50 Specialization; balanced and QA specialization use the current Beta resolver rules.
+
+Trial mechanics (not locked)
+- Search perk: once per project, the first successfully committed Search whose ordinary result leaves Hidden Bugs moves one additional Hidden Bug to Known. It cannot create a Bug.
+- Debug challenge: two productive Searches and a Debug in a later hand. The later Debug receives at most one extra Known Bug fix if ordinary Debug leaves Known Bugs. It never fixes Hidden Bugs and never triggers twice.
+- All comparisons use the locked one-decimal Review and Month 1 units formulas. Net revenue uses floor(units × 999 cents × 70 / 100). Marketing Output enters Awareness linearly in the current Month 1 formula. There is no employee cost, course, salary or hiring assumption.
+
+Paired fixed-action effect, pooled across priorities, budgets and action policies (3,000 paired cases per cohort per perk)
+- Legal 20–23: both perks add 0.676 useful discoveries and 0.119 useful fixes per case; remaining Bugs average 1.998 versus 2.315 without perks. Mean Review gain is 0.014 points; 86.4% are unchanged at one decimal. Mean Month 1 gain is 1.593 units and 1,114.217 cents of 70%-share net revenue. No sample crossed 5.0 or 7.0 upward.
+- Below-20 opt-in: both add 0.365 discoveries and 0.036 fixes; remaining Bugs 1.077 versus 1.13. Mean Review gain 0.004; 96.2% unchanged. Mean gain 0.426 units and 297.668 net cents. No 5.0/7.0 threshold crossing.
+- Expanded Primitive supply: both add 0.793 discoveries and 0.207 fixes; remaining Bugs 4.296 versus 4.465. Mean Review gain 0.043; 71.6% unchanged. Mean gain 4.808 units and 3,362.458 net cents. 1.3% cross 5.0 upward; none cross 7.0.
+- Search alone produces most of the modeled effect. The Debug-only reward is useful in 11.9% of legal first-game cases, 3.6% of below-20 cases and 20.7% of expanded cases when both rewards are offered. Challenge completion is broader: 21.1%, 7.9% and 28.9%, respectively, because a later Debug may have no extra Known Bug to fix.
+- The first-Search bonus prevented a second Search from being productive in 263/3,000 legal first-game cases, 282/3,000 below-20 cases and 81/3,000 expanded cases. This lowers challenge completion in the combined-perk path and must be addressed before locking a challenge/reward pair.
+
+Availability and budget strata
+- Initial Hidden Bugs 0: 24 legal first-game cases, 156 below-20; neither reward has an effect. At 1–2 Hidden Bugs, the extra Debug reward is useful in 0% of all three cohorts. At 3–4, useful Debug shares are 5.6% legal, 3.2% below-20, 4.0% expanded; at 5+, 19.3%, 16.9%, 22.7%. Full counts and one-decimal Review histograms are in the raw summary.
+- Legal first-game QA-low / 2-hand fixed-action cases: combined reward has 0.012 mean Review gain, 88.4% unchanged; challenge completion 1.6%, useful Debug fix 1.2%. QA-high / 4-hand QA-first cases: challenge completion 48.4%, but only 17.6% obtain an extra fix and 94.0% still have unchanged one-decimal Review. Priority/action budget strongly changes opportunity, so pooled reward percentages alone are not a balance target.
+
+QA-versus-Marketing action choices
+- The QA-first and Marketing-first choice policies each spend the same 2 or 4 productive Beta cycles. They use the same sampled pre-Beta project, Review roll and market snapshot, but finite-card exhaustion makes their later candidate paths diverge. The comparison is a modeled action-policy sensitivity, not a prediction of human skill or a strictly fixed-draw causal estimate.
+- Legal first-game, QA-low, 4 hands: QA-first yields 8.38 less Marketing Output/Awareness than Marketing-first, but 1.78 fewer remaining Bugs, 0.13 higher Review, 9.66 more Month 1 units and 6,752.44 more net cents on average. At QA-high, 4 hands, the modeled QA-first advantage narrows to 0.07 Review and 3.12 units while giving up 6.54 Marketing Output.
+- Expanded Primitive supply, QA-high, 4 hands: QA-first gives up 9.46 Marketing Output/Awareness, fixes enough more Bugs for 0.50 higher Review and averages 43.78 more units. These are model results under the stated choice heuristic, not a proposed reward magnitude.
+
+Boundaries and recommendation
+- The reused production model ports current ledger weights, finite Feature/renewable Pass draws, priority weighting, Scope/Core synergies, Bug pressure, Genre Fit, Review variance and Month 1 sales. It approximates player choices with conservative/ordinary/optimized policies and omits UI timing, redraw decisions during Beta, insight utility, corrective Pass injection, contract plays, and concurrent releases. Store-era Features are excluded from the expanded cohort because their project play costs are still undefined. These gaps can change reward opportunity and policy ranking.
+- The actual employee system is absent. No employee was created; no gameplay, Review, sales or authority formula was changed. Hiring price, salary, course cost, perk magnitude and permanence remain design decisions. A human playtest or a more exact Godot draw replay should precede any lock. In particular, consider a challenge that does not punish a permanent Search bonus for finding the last Hidden Bug.
+
+Verification addendum — 2026-09-27
+- Re-ran the full read-only batch at seed 260926 and 250 samples per cohort. Its decompressed SHA-256 remained 4261d94f1f25c522551d1d6e5a8ba1a5902f7c7025a7aa0d0f2db02c96ffd33a, with 36,000 case rows and 9,000 complete four-case groups.
+- analysis/test_qa_analyst_counterfactual_v1.py passed all five focused tests: first-qualifying Search and one-use cap; later-hand Debug and Known-only fix; first-Search/second-Search challenge interaction; all-Marketing ×1.50 output; and saved-pair integrity, nonnegative Bugs, exact 999-cent price/70%-share revenue arithmetic.
+- Independent raw-data audit found identical candidate draws, selected actions, and Marketing Output within each four-perk group; one-decimal Review and unit/net deltas recomputed exactly. Five relevant Godot regressions exited 0: verify_beta_base_hand_resolution, verify_beta_marketing_specialization, verify_primitive_review, verify_primitive_units_sold, and verify_primitive_month_one_sales_revenue. These test live rules used as anchors; they do not prove the Python policy sampler matches every Godot draw or player decision.

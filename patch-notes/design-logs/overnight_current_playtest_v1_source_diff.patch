@@ -1,0 +1,1470 @@
+diff --git a/patch-notes/scripts/cards/card_view.gd b/patch-notes/scripts/cards/card_view.gd
+index 5f486d5..e409cab 100644
+--- a/patch-notes/scripts/cards/card_view.gd
++++ b/patch-notes/scripts/cards/card_view.gd
+@@ -67,6 +67,7 @@ func refresh() -> void:
+ 	if card_data.phase == CardData.PHASE_BETA:
+ 		_refresh_beta_data()
+ 		_refresh_renewability()
++		_refresh_card_tooltip()
+ 		_refresh_artwork()
+ 		return
+ 	primary_score.visible = true
+@@ -85,6 +86,7 @@ func refresh() -> void:
+ 	department_label.visible = not card_data.department.is_empty()
+ 
+ 	_refresh_renewability()
++	_refresh_card_tooltip()
+ 	_refresh_artwork()
+ 
+ 
+@@ -108,6 +110,18 @@ func _refresh_renewability() -> void:
+ 	renewability_icon.tooltip_text = "Renewable" if card_data.renewable else "Nonrenewable"
+ 
+ 
++func _refresh_card_tooltip() -> void:
++	var lifecycle := "Renewable: may return in later draws." if card_data.renewable else "Finite: exhausts after a successful play in this project."
++	var detail := ""
++	if card_data.phase == CardData.PHASE_BETA:
++		detail = "%s card · printed value %d." % [_display_name(card_data.beta_category), card_data.beta_value]
++	else:
++		detail = "%s · %d Scope · +%d %s" % ["Feature" if card_data.card_type == &"feature" else "Pass", card_data.scope, card_data.primary_value, _display_name(card_data.primary_stat)]
++		if not card_data.secondary_stat.is_empty():
++			detail += " · +%d %s" % [card_data.secondary_value, _display_name(card_data.secondary_stat)]
++	input_button.tooltip_text = "%s\n%s\n%s\nSelect cards to build a four-card hand." % [card_data.card_name, detail, lifecycle]
++
++
+ func _refresh_artwork() -> void:
+ 	artwork.texture = null
+ 	artwork_fallback.visible = true
+diff --git a/patch-notes/scripts/contracts/contract_result.gd b/patch-notes/scripts/contracts/contract_result.gd
+index 4c18dbb..abe501b 100644
+--- a/patch-notes/scripts/contracts/contract_result.gd
++++ b/patch-notes/scripts/contracts/contract_result.gd
+@@ -5,13 +5,15 @@ var _scope: int
+ var _core_half_units: Dictionary
+ var _completion_numerator: int
+ var _payout_cents: int
++var _remainder_cents: int
+ 
+ 
+-func _init(scope: int, core_half_units: Dictionary, completion_numerator: int, payout_cents: int) -> void:
++func _init(scope: int, core_half_units: Dictionary, completion_numerator: int, payout_cents: int, remainder_cents: int) -> void:
+ 	_scope = scope
+ 	_core_half_units = core_half_units.duplicate()
+ 	_completion_numerator = completion_numerator
+ 	_payout_cents = payout_cents
++	_remainder_cents = remainder_cents
+ 
+ 
+ func get_scope() -> int:
+@@ -30,5 +32,13 @@ func get_payout_cents() -> int:
+ 	return _payout_cents
+ 
+ 
++func get_upfront_cents() -> int:
++	return ContractState.GUARANTEED_UPFRONT_CENTS
++
++
++func get_completion_payment_cents() -> int:
++	return _remainder_cents
++
++
+ func get_completion_percent() -> float:
+ 	return float(_completion_numerator) * 100.0 / float(ContractState.COMPLETION_DENOMINATOR)
+diff --git a/patch-notes/scripts/contracts/contract_state.gd b/patch-notes/scripts/contracts/contract_state.gd
+index 73d4298..62495c1 100644
+--- a/patch-notes/scripts/contracts/contract_state.gd
++++ b/patch-notes/scripts/contracts/contract_state.gd
+@@ -6,6 +6,8 @@ const REQUIRED_HANDS := 2
+ const EXPECTED_SCOPE := 12
+ const EXPECTED_CORE_HALF_UNITS := 12
+ const PUBLISHER_INVESTMENT_CENTS := 240000
++const GUARANTEED_UPFRONT_CENTS := 40000
++const COMPLETION_BUDGET_CENTS := PUBLISHER_INVESTMENT_CENTS - GUARANTEED_UPFRONT_CENTS
+ const COMPLETION_DENOMINATOR := 96
+ const CORE_BY_STAT := {
+ 	&"graphics": ProjectState.CoreScore.GRAPHICS,
+@@ -22,6 +24,7 @@ var _successful_hands := 0
+ var _exhausted_feature_ids: Dictionary = {}
+ var _priorities: Dictionary = {}
+ var _result: ContractResult
++var _upfront_committed := false
+ var _payout_committed := false
+ 
+ 
+@@ -86,6 +89,18 @@ func is_payout_committed() -> bool:
+ 	return _payout_committed
+ 
+ 
++func is_upfront_committed() -> bool:
++	return _upfront_committed
++
++
++## RunState calls this only while atomically accepting the one-shot offer.
++func commit_upfront() -> bool:
++	if _upfront_committed or _successful_hands != 0 or is_completed():
++		return false
++	_upfront_committed = true
++	return true
++
++
+ func can_commit_priorities(distribution: Dictionary) -> bool:
+ 	return not is_completed() and PriorityAllocation.is_valid_distribution(distribution) and distribution != _priorities
+ 
+@@ -136,13 +151,15 @@ func plan_hand(cards: Array[CardData]) -> Dictionary:
+ 		projected_scores[category] += addition
+ 	var completing := _successful_hands + 1 == REQUIRED_HANDS
+ 	var numerator := 0
+-	var payout := 0
++	var remainder := 0
++	var total_payout := 0
+ 	if completing:
+ 		var completion := calculate_completion(_scope + scope_addition, projected_scores)
+ 		if completion.is_empty():
+ 			return {}
+ 		numerator = completion.numerator
+-		payout = completion.payout_cents
++		remainder = completion.remainder_cents
++		total_payout = completion.payout_cents
+ 	return {
+ 		"expected_hand_count": _successful_hands,
+ 		"scope_addition": scope_addition,
+@@ -151,13 +168,16 @@ func plan_hand(cards: Array[CardData]) -> Dictionary:
+ 		"specialization_stat": specialization_stat,
+ 		"completing": completing,
+ 		"completion_numerator": numerator,
+-		"payout_cents": payout,
++		"remainder_cents": remainder,
++		"payout_cents": total_payout,
+ 	}
+ 
+ 
+-func commit_hand(cards: Array[CardData], expected_payout_cents: int) -> bool:
++func commit_hand(cards: Array[CardData], expected_remainder_cents: int) -> bool:
++	if not _upfront_committed:
++		return false
+ 	var plan := plan_hand(cards)
+-	if plan.is_empty() or plan.expected_hand_count != _successful_hands or plan.payout_cents != expected_payout_cents:
++	if plan.is_empty() or plan.expected_hand_count != _successful_hands or plan.remainder_cents != expected_remainder_cents:
+ 		return false
+ 	_scope += plan.scope_addition
+ 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
+@@ -166,7 +186,7 @@ func commit_hand(cards: Array[CardData], expected_payout_cents: int) -> bool:
+ 		_exhausted_feature_ids[id] = true
+ 	_successful_hands += 1
+ 	if plan.completing:
+-		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents)
++		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents, plan.remainder_cents)
+ 		_payout_committed = true
+ 	return true
+ 
+@@ -181,7 +201,8 @@ static func calculate_completion(scope: Variant, core_half_units: Dictionary) ->
+ 		numerator += mini(int(core_half_units[category]), EXPECTED_CORE_HALF_UNITS)
+ 	if numerator < 0 or numerator > COMPLETION_DENOMINATOR:
+ 		return {}
+-	return {"numerator": numerator, "payout_cents": (PUBLISHER_INVESTMENT_CENTS * numerator) / COMPLETION_DENOMINATOR}
++	var remainder := (COMPLETION_BUDGET_CENTS * numerator) / COMPLETION_DENOMINATOR
++	return {"numerator": numerator, "remainder_cents": remainder, "payout_cents": GUARANTEED_UPFRONT_CENTS + remainder}
+ 
+ 
+ func _is_valid_card(card: CardData) -> bool:
+diff --git a/patch-notes/scripts/debug/verify_balanced_primitive_contract.gd b/patch-notes/scripts/debug/verify_balanced_primitive_contract.gd
+index 33a936d..147ce56 100644
+--- a/patch-notes/scripts/debug/verify_balanced_primitive_contract.gd
++++ b/patch-notes/scripts/debug/verify_balanced_primitive_contract.gd
+@@ -66,15 +66,17 @@ func _verify_formula() -> void:
+ 	var half := _scores(6)
+ 	var perfect := _scores(12)
+ 	var over := _scores(200)
+-	expect(ContractState.calculate_completion(0, zero) == {"numerator": 0, "payout_cents": 0}, "Zero completion pays zero cents")
+-	expect(ContractState.calculate_completion(6, half) == {"numerator": 48, "payout_cents": 120000}, "Half completion pays exactly 120000 cents")
+-	expect(ContractState.calculate_completion(12, perfect) == {"numerator": 96, "payout_cents": 240000}, "Perfect completion pays exactly 240000 cents")
+-	expect(ContractState.calculate_completion(999, over) == {"numerator": 96, "payout_cents": 240000}, "Scope and Core overproduction cap before payout")
++	expect(ContractState.calculate_completion(0, zero) == {"numerator": 0, "remainder_cents": 0, "payout_cents": 40000}, "Zero completion retains exactly the 40000-cent guarantee")
++	expect(ContractState.calculate_completion(6, half) == {"numerator": 48, "remainder_cents": 100000, "payout_cents": 140000}, "Half completion pays 100000 more cents, 140000 total")
++	expect(ContractState.calculate_completion(12, perfect) == {"numerator": 96, "remainder_cents": 200000, "payout_cents": 240000}, "Perfect completion remains capped at 240000 total cents")
++	expect(ContractState.calculate_completion(999, over) == {"numerator": 96, "remainder_cents": 200000, "payout_cents": 240000}, "Scope and Core overproduction cap before payout")
++	expect(ContractState.calculate_completion(1, zero) == {"numerator": 4, "remainder_cents": 8333, "payout_cents": 48333}, "Remainder floors to exact cents before adding guarantee")
+ 	expect(ContractState.calculate_completion(-1, perfect).is_empty(), "Invalid completion input rejects")
+ 	var specialization_state := ContractState.new([&"sprites", &"enemies", &"levels", &"maps"])
+ 	var specialization_cards: Array[CardData] = [database.get_card(&"sprites"), database.get_card(&"enemies"), database.get_card(&"levels"), database.get_card(&"maps")]
+ 	var specialized := specialization_state.plan_hand(specialization_cards)
+ 	expect(specialized.specialization_stat == &"graphics" and specialized.score_additions[ProjectState.CoreScore.GRAPHICS] == 45 and specialized.score_additions[ProjectState.CoreScore.TECHNOLOGY] == 15 and specialized.score_additions[ProjectState.CoreScore.DESIGN] == 6 and specialized.scope_addition == 8, "Contract primary-Core Specialization multiplies primary and secondary scores by 1.50 while Scope stays printed")
++	expect(not specialization_state.commit_hand(specialization_cards, 0), "Detached ContractState cannot commit a hand before the RunState-owned upfront transfer")
+ 
+ 
+ func _verify_offer_and_navigation() -> void:
+@@ -94,14 +96,18 @@ func _verify_offer_and_navigation() -> void:
+ 	(detail.find_child("CloseContractDetailButton", true, false) as Button).pressed.emit()
+ 	expect(run_snapshot(run, project) == before and studio.get_node("%Dashboard").visible, "Closing contract details returns to Studio for free")
+ 	var accepted: Array[ContractState] = []
++	var cash_observations: Array = []
++	run.cash_changed.connect(func(): cash_observations.append([run.get_primitive_contract(), run.get_cash_cents(), run.accept_primitive_contract()]))
+ 	studio.contract_requested.connect(func(_source: StudioPhase, state: ContractState): accepted.append(state))
+ 	studio.get_node("%Contracts").pressed.emit()
+ 	(detail.find_child("AcceptContractButton", true, false) as Button).pressed.emit()
+ 	expect(accepted.size() == 1 and accepted[0] == run.get_primitive_contract(), "Acceptance creates and publishes one authoritative ContractState")
+ 	var state := accepted[0]
+ 	expect(state != project and state.get_scope() == 0 and state.get_successful_hand_count() == 0 and state.get_priority_distribution() == _priorities(25, 25, 25, 25), "ContractState is separate and starts at locked values")
+-	expect(state.get_eligible_feature_ids().size() == 27 and run_snapshot(run, project) == before and project_snapshot(project) == frozen, "Acceptance is zero-cost and snapshots 27 Primitive Features")
+-	expect(not run.is_primitive_contract_offer_available() and run.accept_primitive_contract() == null, "Accepted offer cannot be accepted twice")
++	expect(state.is_upfront_committed() and state.get_eligible_feature_ids().size() == 27 and run.get_cash_cents() == before[0] + 40000 and run.get_completed_run_cycles() == before[1] and run.get_available_redraws() == before[2] and run.get_released_game_sales(project.get_release_id()) == before[3] and project_snapshot(project) == frozen, "Acceptance atomically pays exact 40000 cents without cycle, redraw, sales or ProjectState mutation")
++	expect(cash_observations.size() == 1 and cash_observations[0][0] == state and cash_observations[0][1] == before[0] + 40000 and cash_observations[0][2] == null, "Cash observers see accepted ownership and cannot reenter for a second guarantee")
++	var after_acceptance := run_snapshot(run, project)
++	expect(not run.is_primitive_contract_offer_available() and run.accept_primitive_contract() == null and run_snapshot(run, project) == after_acceptance, "Accepted offer cannot pay twice")
+ 	studio.queue_free()
+ 	await process_frame
+ 
+@@ -173,24 +179,26 @@ func _verify_two_hand_completion() -> void:
+ 	expect(not phase.call("_play_selected_hand") and run_snapshot(run, project) == rejected_before and state.get_successful_hand_count() == 0, "Incomplete hand rejects without run or contract mutation")
+ 	_select_first(phase, 4)
+ 	expect(phase.call("_play_selected_hand"), "First contract hand succeeds")
++	expect(run.get_cash_cents() == ContractState.GUARANTEED_UPFRONT_CENTS and run.get_released_game_sales(project.get_release_id()).earned_cycles == 1, "First hand advances and earns sales without another Contract payment or early settlement")
+ 	expect(state.get_successful_hand_count() == 1 and state.is_feature_exhausted(&"text") and not state.is_feature_exhausted(&"graphics_pass"), "Features exhaust locally while Passes remain renewable")
+ 	expect(not _card_ids(phase.get_candidate_cards()).has(&"text") and run.get_completed_run_cycles() == 1, "Second draw excludes exhausted Feature and first hand advances once")
+ 	var reconstructed := load("res://scenes/phases/contract_phase.tscn").instantiate() as ContractPhase
+ 	reconstructed.setup(state, run)
+ 	root.add_child(reconstructed)
+ 	await process_frame
+-	expect(reconstructed.get_contract_state() == state and state.get_successful_hand_count() == 1 and reconstructed.get_candidate_cards().size() == 7, "Phase reconstruction reuses ContractState and rebuilds only phase-local candidates")
++	expect(reconstructed.get_contract_state() == state and state.get_successful_hand_count() == 1 and reconstructed.get_candidate_cards().size() == 7 and run.get_cash_cents() == ContractState.GUARANTEED_UPFRONT_CENTS, "Phase reconstruction reuses ContractState and cannot repay the guarantee")
+ 	reconstructed.queue_free()
+ 	_select_first(phase, 4)
+ 	var selected := phase.call("_selected_cards") as Array[CardData]
+ 	var plan := state.plan_hand(selected)
+-	var expected_payout: int = plan.payout_cents
++	var expected_remainder: int = plan.remainder_cents
++	var expected_total: int = plan.payout_cents
+ 	expect(phase.call("_play_selected_hand"), "Second hand completes the contract")
+ 	var result := state.get_result()
+-	expect(state.is_completed() and state.is_payout_committed() and state.get_successful_hand_count() == 2 and result.get_payout_cents() == expected_payout, "Second hand commits one immutable result and payout guard")
++	expect(state.is_completed() and state.is_payout_committed() and state.get_successful_hand_count() == 2 and result.get_payout_cents() == expected_total and result.get_completion_payment_cents() == expected_remainder and result.get_upfront_cents() == 40000, "Second hand commits one immutable result with separately recorded guarantee and remainder")
+ 	var completion_text: String = phase.get("_completion_stats").text
+-	expect(completion_text.contains("Final Scope") and completion_text.contains("Graphics") and completion_text.contains("Sound") and completion_text.contains("Technology") and completion_text.contains("Design") and completion_text.contains("Completion") and completion_text.contains("Exact Payout"), "Completion view shows Scope, every Core Score, percentage and exact payout")
+-	expect(run.get_completed_run_cycles() == 2 and run.get_cash_cents() == expected_payout + 525174 and run.get_released_game_sales(project.get_release_id()).settled_cents == 525174, "Completing hand pays contract before the shared boundary settles earned sales")
++	expect(completion_text.contains("Final Scope") and completion_text.contains("Graphics") and completion_text.contains("Sound") and completion_text.contains("Technology") and completion_text.contains("Design") and completion_text.contains("Completion") and completion_text.contains("Guaranteed Upfront") and completion_text.contains("Completion Payment") and completion_text.contains("Total Payout"), "Completion view shows Scope, Core, percentage and all exact-cent reward parts")
++	expect(run.get_completed_run_cycles() == 2 and run.get_cash_cents() == expected_total + 525174 and run.get_released_game_sales(project.get_release_id()).settled_cents == 525174, "Completion remainder pays before the shared boundary settles earned sales")
+ 	expect(project_snapshot(project) == frozen, "Contract never mutates frozen ProjectState")
+ 	var completed_snapshot := run_snapshot(run, project)
+ 	expect(not phase.call("_play_selected_hand") and run_snapshot(run, project) == completed_snapshot, "Repeated completion callback cannot repay or advance")
+@@ -210,11 +218,20 @@ func _verify_two_hand_completion() -> void:
+ 
+ func _verify_overflow_rollback() -> void:
+ 	var project := release(0)
+-	var run := new_run(RunState.MAX_SIGNED_INT - 1)
++	var run := new_run(RunState.MAX_SIGNED_INT - ContractState.GUARANTEED_UPFRONT_CENTS + 1)
+ 	var studio := load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
+ 	root.add_child(studio)
+ 	studio.setup(project, run, snapshots)
++	var acceptance_before := run_snapshot(run, project)
++	expect(run.accept_primitive_contract() == null and run.get_primitive_contract() == null and run_snapshot(run, project) == acceptance_before, "Upfront overflow rejects acceptance without ownership, cash, cycle, redraw or sales mutation")
++	studio.queue_free()
++	await process_frame
++	run = new_run(RunState.MAX_SIGNED_INT - ContractState.GUARANTEED_UPFRONT_CENTS - 1)
++	studio = load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
++	root.add_child(studio)
++	studio.setup(project, run, snapshots)
+ 	var state := run.accept_primitive_contract()
++	expect(state != null and run.get_cash_cents() == RunState.MAX_SIGNED_INT - 1, "Accepted guarantee can leave cash one cent below signed limit")
+ 	var phase := load("res://scenes/phases/contract_phase.tscn").instantiate() as ContractPhase
+ 	phase.setup(state, run)
+ 	root.add_child(phase)
+diff --git a/patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd b/patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd
+index dee867f..4f100ba 100644
+--- a/patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd
++++ b/patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd
+@@ -121,8 +121,8 @@ func _verify_qa_order_and_clamping() -> void:
+ func _verify_marketing_and_payout() -> void:
+ 	var marketing := await _make_beta([&"sign_flippers", &"posters", &"press_release", &"press_interview"])
+ 	var old_view: CardView = marketing.beta.get("_selected_card_views")[0]
+-	_expect(marketing.beta.play_selected_hand(), "All four Marketing definitions resolve at printed base values")
+-	_expect(marketing.state.get_marketing_output() == 7 and marketing.state.get_current_cycle() == 1, "Marketing contributes exactly 1 + 1 + 2 + 3 once")
++	_expect(marketing.beta.play_selected_hand(), "All four Marketing definitions resolve with Marketing Specialization")
++	_expect(marketing.state.get_marketing_output() == 10 and marketing.state.get_current_cycle() == 1, "Marketing contributes floor((1 + 1 + 2 + 3) × 1.5) once")
+ 	_expect(marketing.state.is_beta_card_exhausted(&"press_interview") and marketing.state.get_exhausted_beta_card_ids().size() == 1, "Only finite Press Interview exhausts")
+ 	var after := _snapshot(marketing.state, marketing.run, marketing.beta)
+ 	old_view.card_pressed.emit(old_view)
+diff --git a/patch-notes/scripts/debug/verify_feature_store.gd b/patch-notes/scripts/debug/verify_feature_store.gd
+index 1c1c96a..4980fc3 100644
+--- a/patch-notes/scripts/debug/verify_feature_store.gd
++++ b/patch-notes/scripts/debug/verify_feature_store.gd
+@@ -132,31 +132,59 @@ func _verify_tree_ui() -> void:
+ 	var nodes: Dictionary = store.get("_nodes")
+ 	var edges: Array = store.get("_edges")
+ 	expect(nodes.size() == 38 and edges.size() == 10, "Full ledger has 38 nodes and nine parent edges plus Gameplay gate")
++	var lane_by_id: Dictionary = store.get("_lane_by_id")
++	var lane_buttons: Dictionary = store.get("_lane_buttons")
++	expect(lane_by_id.size() == nodes.size() and lane_buttons.size() == 5, "Every ledger Feature appears once across five browsable lanes")
+ 	for entry: Dictionary in FeatureStoreCatalog.entries():
+ 		var parent := StringName(entry.purchase_parent)
+ 		if not parent.is_empty():
+-			expect(edges.has([parent, StringName(entry.id)]) and nodes[parent].position.x < nodes[StringName(entry.id)].position.x, "Correct connector and depth: " + entry.name)
+-	expect(nodes[&"save_files"].position.x == nodes[&"text"].position.x, "Save Files is a new root")
++			store.call("_select_lane", lane_by_id[StringName(entry.id)])
++			expect(edges.has([parent, StringName(entry.id)]) and lane_by_id[parent] == lane_by_id[StringName(entry.id)] and nodes[parent].position.y > nodes[StringName(entry.id)].position.y, "Correct upward connector: " + entry.name)
++	store.call("_select_lane", &"Technology & Tools")
++	expect(nodes[&"save_files"].position.y > nodes[&"branching_nodes"].position.y and edges.has([&"save_files", &"branching_nodes"]), "Save Files is an independent root below its child")
++	store.call("_select_lane", &"Gameplay")
++	var tree: Control = store.get("_tree")
++	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and tree.get_node("GameplayGate").position.y > nodes[&"difficulty_levels"].position.y, "Difficulty retains distinct Gameplay ownership gate")
++	expect(lane_buttons[&"Gameplay"].focus_mode == Control.FOCUS_ALL and nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL, "Lane and node navigation are keyboard/controller focusable")
+ 	expect(nodes[&"colored_text"].text.contains("Need cash") and nodes[&"branching_nodes"].text.contains("Locked"), "Unaffordable and locked node states are distinct")
++	store.call("_select_lane", &"Visuals")
+ 	store.call("_select_node", &"colored_text")
+ 	expect(store.get("_buy").disabled, "One-cent-short UI disables purchase")
+ 	run.record_resolved_feature(ProjectState.new(30), &"text", &"design")
+ 	expect(store.get("_details").text.contains("10%") and store.get("_details").text.contains("$585.00") and not store.get("_buy").disabled, "Live familiarity discount refreshes details and affordability")
+ 	run.add_cash(10000)
++	store.call("_select_lane", &"Technology & Tools")
+ 	store.call("_select_node", &"save_files")
+ 	store.get("_buy").pressed.emit()
+ 	expect(nodes[&"save_files"].text.contains("Owned") and nodes[&"branching_nodes"].text.contains("Available"), "Purchase updates root and reveals available child")
+ 	var scroll: ScrollContainer = store.get("_scroll")
+-	scroll.scroll_vertical = 600
++	scroll.scroll_horizontal = 200
++	await process_frame
++	var saved_scroll := scroll.scroll_horizontal
++	store.call("_select_lane", &"Audio")
++	store.call("_select_lane", &"Technology & Tools")
++	expect(scroll.scroll_horizontal == saved_scroll, "Lane navigation restores its horizontal position")
++	store.call("_select_node", &"save_files")
+ 	var before := run.get_cash_cents()
+ 	store.hide()
+ 	studio.get_node("%FeatureStoreButton").pressed.emit()
+-	expect(store.get("_selected") == &"save_files" and scroll.scroll_vertical == 600 and run.get_cash_cents() == before and run.get_completed_run_cycles() == 0, "Reopening preserves selection, scroll, cash and cycles")
++	expect(store.get("_selected") == &"save_files" and scroll.scroll_horizontal == saved_scroll and run.get_cash_cents() == before and run.get_completed_run_cycles() == 0, "Reopening preserves selection, scroll, cash and cycles")
+ 	if "--capture-store" in OS.get_cmdline_user_args():
+-		scroll.scroll_vertical = 0
++		store.call("_select_lane", &"Visuals")
++		scroll.scroll_horizontal = 0
+ 		store.call("_select_node", &"colored_text")
+ 		await process_frame
+ 		await RenderingServer.frame_post_draw
+ 		root.get_texture().get_image().save_png("res://design-logs/feature-store-tree.png")
++	if "--capture-lanes" in OS.get_cmdline_user_args():
++		for dimensions: Vector2i in [Vector2i(1152, 648), Vector2i(900, 600)]:
++			root.size = dimensions
++			store.call("_select_lane", &"Visuals")
++			scroll.scroll_horizontal = 0
++			store.call("_select_node", &"colored_text")
++			await process_frame
++			await process_frame
++			await RenderingServer.frame_post_draw
++			root.get_texture().get_image().save_png("res://design-logs/feature-store-upward-%d.png" % dimensions.x)
+ 	studio.queue_free()
+ 	await process_frame
+diff --git a/patch-notes/scripts/debug/verify_first_game_and_tips.gd b/patch-notes/scripts/debug/verify_first_game_and_tips.gd
+index bc57c13..8ed85e0 100644
+--- a/patch-notes/scripts/debug/verify_first_game_and_tips.gd
++++ b/patch-notes/scripts/debug/verify_first_game_and_tips.gd
+@@ -23,6 +23,10 @@ func _run() -> void:
+ 	var menu: MainMenu = game.get("_active_phase")
+ 	var hud: GameplayHUD = game.get_node("%GameplayHUD")
+ 	expect(game.project_state == null and menu != null and run.get_cash_cents() == 0, "New run waits at main menu without creating a project")
++	var menu_before := snapshot(run)
++	menu.get_node("CenterContainer/MenuLayout/HowToPlay").pressed.emit()
++	expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == &"main_menu" and snapshot(run) == menu_before, "Main-menu How to Play opens the separate tutorial for free")
++	hud.tutorial_overlay.close()
+ 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
+ 	var studio_input: LineEdit = menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName")
+ 	studio_input.text = "First Studio"
+@@ -36,8 +40,11 @@ func _run() -> void:
+ 	expect(studio.get_node("%LowScopeWarning").visible and snapshot(run) == before, "Below-20-Scope start shows a warning without mutating the run")
+ 	studio.get_node("%LowScopeWarning").confirmed.emit()
+ 	var overlay: PredevelopmentOverlay = studio.get("_predevelopment")
+-	expect(hud.tutorial_overlay.visible and hud.tutorial_context == &"predevelopment", "First game setup presents Pre-Development tips")
+-	hud.tutorial_overlay.close()
++	expect(hud.tutorial_context == &"predevelopment" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "First game setup presents nonblocking Pre-Development guidance")
++	hud.contextual_tip.dismiss()
++	hud.tip_button.pressed.emit()
++	expect(hud.contextual_tip.panel.visible and not hud.tutorial_overlay.visible and snapshot(run) == before, "Tip button manually replays setup guidance for free")
++	hud.contextual_tip.dismiss()
+ 	overlay.name_input.text = "   "
+ 	overlay.begin_button.pressed.emit()
+ 	expect(game.project_state == null and snapshot(run) == before and not overlay.error_label.text.is_empty(), "Missing name rejects without project or time mutation")
+@@ -65,32 +72,34 @@ func _run() -> void:
+ 	expect(not run.needs_starter_selection(), "Successful first-project commit closes the starter purchase window")
+ 	expect(project.get_feature_supply_ids() == run.get_owned_feature_ids() and project.has_competitor_snapshot() and project.has_market_forecast_snapshot(), "Fresh project uses owned supply and authoritative snapshots")
+ 	var design: DesignPhase = game.get("_active_phase")
+-	expect(design != null and design.get_workspace().overlay.visible and hud.tutorial_context == &"design" and hud.tutorial_overlay.visible, "Design planning and Design tips follow setup")
++	expect(design != null and design.get_workspace().overlay.visible and hud.tutorial_context == &"design" and not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Design planning uses its own inline help without a hidden toast")
+ 	var current := snapshot(run)
+ 	expect(not game.call("_begin_next_project", studio, "Duplicate", &"action", &"fantasy") and snapshot(run) == current, "Stale setup callback cannot charge twice")
+-	hud.tutorial_overlay.close()
++	hud.contextual_tip.dismiss()
+ 	hud.set_phase(design)
+-	expect(not hud.tutorial_overlay.visible, "Repeat phase entry does not repeat tips")
++	expect(not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible, "Repeat phase entry does not repeat tips")
+ 	hud.show_tutorial()
+-	expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == &"design", "Tutorial button reopens current phase guidance")
++	expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == &"design", "Tutorial button opens current phase reference menu")
+ 	if "--capture" in OS.get_cmdline_user_args():
+ 		await process_frame
+ 		await RenderingServer.frame_post_draw
+ 		root.get_texture().get_image().save_png("res://design-logs/design-phase-tips.png")
+ 	for topic: StringName in [&"alpha", &"beta", &"review", &"contract", &"feature_store"]:
+ 		hud.set_tutorial_context(topic)
+-		expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == topic, "First visit shows relevant " + str(topic) + " tips")
+-		for i in range(hud.tutorial_overlay.pages.size()): hud.tutorial_overlay.next_page()
++		expect(not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "First visit shows nonblocking " + str(topic) + " guidance")
++		hud.contextual_tip.dismiss()
+ 		hud.set_tutorial_context(topic)
+-		expect(not hud.tutorial_overlay.visible and snapshot(run) == current, "Repeat " + str(topic) + " visit is quiet and free")
++		expect(not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible and snapshot(run) == current, "Repeat " + str(topic) + " visit is quiet and free")
+ 		hud.show_tutorial()
+-		expect(hud.tutorial_overlay.topic == topic and snapshot(run) == current, "Manual " + str(topic) + " replay is relevant and free")
++		expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == topic and snapshot(run) == current, "Manual " + str(topic) + " reference is relevant and free")
++		hud.tutorial_overlay.close()
+ 	var rebuilt: Control = load("res://scenes/gameplay.tscn").instantiate()
+ 	rebuilt.project_state = project
+ 	rebuilt.run_state = run
+ 	root.add_child(rebuilt)
+ 	await process_frame
+-	expect(rebuilt.get("_active_phase") is DesignPhase and not rebuilt.get_node("%GameplayHUD").tutorial_overlay.visible and snapshot(run) == current, "Reconstruction retains project and seen tips without charging")
++	var rebuilt_hud: GameplayHUD = rebuilt.get_node("%GameplayHUD")
++	expect(rebuilt.get("_active_phase") is DesignPhase and not rebuilt_hud.tutorial_overlay.visible and not rebuilt_hud.contextual_tip.panel.visible and snapshot(run) == current, "Reconstruction retains project and seen tips without charging")
+ 	rebuilt.queue_free()
+ 	game.queue_free()
+ 	await process_frame
+diff --git a/patch-notes/scripts/debug/verify_first_studio_feature_economy.gd b/patch-notes/scripts/debug/verify_first_studio_feature_economy.gd
+index 1ff9f22..0c910a4 100644
+--- a/patch-notes/scripts/debug/verify_first_studio_feature_economy.gd
++++ b/patch-notes/scripts/debug/verify_first_studio_feature_economy.gd
+@@ -53,14 +53,20 @@ func _run() -> void:
+ 	studio.get_node("%FeatureStoreButton").pressed.emit()
+ 	var store: FeatureStore = studio.get("_feature_store")
+ 	check(store != null and store.visible, "Feature Store opens during first-game starter purchasing")
++	var owned_summary: Label = store.get("_owned_summary")
++	check(owned_summary.text.contains("Scope 7") and owned_summary.text.contains("Core Score 18") and owned_summary.text.contains("G 5 · S 5 · T 7 · D 1") and owned_summary.text.contains("$320.00") and not owned_summary.text.contains("TBD"), "Owned-pool indicator totals the six ledger starters and their exact priced play cost")
+ 	store.call("_select_node", &"sprites")
+ 	(store.get("_buy") as Button).pressed.emit()
+ 	store.call("_select_node", &"scrolling")
+ 	(store.get("_buy") as Button).pressed.emit()
+ 	check(run.owns_feature(&"sprites") and run.owns_feature(&"scrolling") and run.get_cash_cents() == 460000 and run.get_completed_run_cycles() == 0 and run.get_starter_pool_summary().scope == 11, "Store buys multiple starter Features one click each for exact cash and zero cycles")
++	check(owned_summary.text.contains("Scope 11") and owned_summary.text.contains("Core Score 32") and owned_summary.text.contains("G 12 · S 5 · T 14 · D 1") and owned_summary.text.contains("$540.00"), "Indicator refreshes from owned cards after sequential starter purchases")
++	root.size = Vector2i(900, 600)
++	await process_frame
++	await process_frame
++	check(owned_summary.get_global_rect().end.x <= store.get_global_rect().end.x and owned_summary.get_global_rect().end.y < (store.get("_scroll") as ScrollContainer).get_global_rect().position.y, "Owned-pool indicator fits within the scaled Store canvas above the browser")
+ 	check(studio.get_node("%StoreHintText").text.contains("11 / 23 Scope"), "Inline Store hint updates after purchases")
+ 	store.hide()
+-	root.size = Vector2i(900, 600)
+ 	await process_frame
+ 	await process_frame
+ 	check(studio.get_node("%StoreHint").get_global_rect().end.x <= 900 and studio.get_node("%StartNextGame").get_global_rect().end.y <= 600, "Inline hint and first-game action fit the 900×600 Studio scene")
+@@ -74,7 +80,9 @@ func _run() -> void:
+ 	var reserve := run.get_primitive_reserve_offer(&"sprites")
+ 	check(reserve.owned and not reserve.initial, "Purchased starter remains owned after the first game boundary")
+ 	check(run.purchase_primitive_reserve_feature(&"enemies") and run.owns_feature(&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Later Studio reserve purchase spends exact cents and one productive cycle")
++	check(owned_summary.text.contains("Scope 13") and owned_summary.text.contains("Core Score 37") and owned_summary.text.contains("G 14 · S 5 · T 17 · D 1") and owned_summary.text.contains("$630.00"), "Indicator refreshes after a reserve purchase")
+ 	check(not run.purchase_primitive_reserve_feature(&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Duplicate reserve purchase changes nothing")
++	check(run.purchase_feature(&"colored_text") and owned_summary.text.contains("Scope 14") and owned_summary.text.contains("Core Score 39") and owned_summary.text.contains("G 16 · S 5 · T 17 · D 1") and owned_summary.text.contains("$630.00") and owned_summary.text.contains("1 Store Feature with play cost TBD"), "Owned later Feature contributes printed Scope and Core while its undefined play cost stays explicit")
+ 	var project := PrimitivePredevelopment.prepare_project("Economy Game", &"action", &"fantasy", run)
+ 	check(project.get_feature_supply_ids().has(&"enemies") and project.get_feature_supply_ids().has(&"scrolling"), "Next project snapshots store-purchased starter and reserve Features")
+ 	var cards: Array[CardData] = [database.get_card(&"text"), database.get_card(&"controls"), database.get_card(&"graphics_pass")]
+diff --git a/patch-notes/scripts/debug/verify_gameplay_hud_overlay.gd b/patch-notes/scripts/debug/verify_gameplay_hud_overlay.gd
+index 31ed715..3a773a0 100644
+--- a/patch-notes/scripts/debug/verify_gameplay_hud_overlay.gd
++++ b/patch-notes/scripts/debug/verify_gameplay_hud_overlay.gd
+@@ -26,10 +26,9 @@ func _run() -> void:
+ 	var footer := hud.footer
+ 	for title: String in ["Design", "Alpha", "Beta"]:
+ 		var phase: Control = game.get("_active_phase")
+-		check(hud.tutorial_context == StringName(title.to_lower()), title + ": real transition selects relevant tips")
++		check(hud.tutorial_context == StringName(title.to_lower()), title + ": real transition selects relevant guidance")
+ 		if title != "Design":
+-			check(hud.tutorial_overlay.visible, title + ": first phase visit automatically presents its tips")
+-			hud.tutorial_overlay.close()
++			check(not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, title + ": priority dialog shows its own help without a hidden toast")
+ 		check(phase.get("_project_state") == project and phase.get("_run_state") == run, title + ": authoritative identities persist")
+ 		check(hud.get_node("PersistentHeader") == header and hud.footer == footer, title + ": persistent regions are not rebuilt")
+ 		check(phase.get_workspace().phase_title.text.begins_with(title), title + ": phase panel updates")
+@@ -44,8 +43,11 @@ func _run() -> void:
+ 		if title == "Design":
+ 			check(not hud.change_priorities.disabled, "Initial Design priorities are editable before Begin")
+ 			verify_initial_design_priorities(phase, project, run)
++			verify_design_guidance(hud, phase as DesignPhase, project, run)
+ 		else:
+ 			verify_initial_phase_priorities(phase, project, run, title)
++			if title == "Beta":
++				check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Find and prepare", "Beta guides testing after its first draw even though Launch is already enabled")
+ 		await process_frame
+ 		check(not hud.change_priorities.disabled, title + ": active phase can edit priorities")
+ 		await verify_overlay(phase, project, run, title)
+@@ -76,17 +78,22 @@ func _run() -> void:
+ func verify_tutorial(hud: GameplayHUD, project: ProjectState, run: RunState, design: DesignPhase) -> void:
+ 	var before := state_snapshot(project, run)
+ 	var tutorial := hud.tutorial_overlay
+-	check(tutorial.visible and tutorial.topic == &"design", "Design entry presents only Design tips")
++	check(not tutorial.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Design entry shows priority-dialog help without opening a tutorial menu or hidden toast")
++	check(hud.contextual_tip.layer < design.get_workspace().overlay.layer and hud.contextual_tip.panel.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Inline tip stays beneath the priority modal and lets card input pass through")
++	check(hud.contextual_tip.panel.offset_top > hud.synergy_notification.banner.offset_bottom, "Inline tip sits below synergy notifications")
++	check(hud.contextual_tip.timer.wait_time == 8.0 and hud.contextual_tip.timer.one_shot, "Inline tip has a bounded lifetime")
++	hud.tutorial_button.pressed.emit()
++	check(tutorial.visible and tutorial.topic == &"design", "Tutorial button opens the separate Design reference menu")
+ 	check(tutorial.pages.size() == 3, "Design has three relevant tips")
+ 	tutorial.next_page()
+ 	check(tutorial.page_index == 1 and not tutorial.back_button.disabled, "Next tip enables Back")
+ 	tutorial.previous_page()
+ 	check(tutorial.page_index == 0, "Back returns to first Design tip")
+ 	for index in range(tutorial.pages.size()): tutorial.next_page()
+-	check(not tutorial.visible and design.get_workspace().overlay.visible, "Closing tips reveals priority planning")
+-	check(state_snapshot(project, run) == before, "Tips mutate no gameplay state")
++	check(not tutorial.visible and design.get_workspace().overlay.visible, "Closing the tutorial menu reveals priority planning")
++	check(state_snapshot(project, run) == before, "Inline and manual guidance mutate no gameplay state")
+ 	hud.tutorial_button.pressed.emit()
+-	check(tutorial.visible and tutorial.topic == &"design", "Tutorial button reopens current phase tips")
++	check(tutorial.visible and tutorial.topic == &"design", "Tutorial button reopens current phase reference")
+ 	tutorial.close()
+ 
+ func verify_initial_design_priorities(phase: Control, project: ProjectState, run: RunState) -> void:
+@@ -111,6 +118,22 @@ func verify_initial_phase_priorities(phase: Control, project: ProjectState, run:
+ 	check(overlay.commit_draft() and not overlay.visible, title + ": initialization immediately starts the phase")
+ 	check(state_snapshot(project, run) == before and phase.get_node("%HandContainer").get_child_count() > 0, title + ": initialization deals the first pool without cycle or redraw cost")
+ 
++func verify_design_guidance(hud: GameplayHUD, phase: DesignPhase, project: ProjectState, run: RunState) -> void:
++	var before := state_snapshot(project, run)
++	check(not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Select four cards", "After initial Design priorities, guidance moves to card selection")
++	var views := phase.get_node("%HandContainer").get_children()
++	for index in range(4): views[index].card_pressed.emit(views[index])
++	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Four cards selected", "Exactly four selected candidates show the ready-hand tip")
++	check(state_snapshot(project, run) == before, "Selecting cards for guidance changes no cash, cycles, redraws or project values")
++	hud.contextual_tip.dismiss()
++	hud.set_tutorial_context(&"design")
++	check(not hud.contextual_tip.panel.visible and not hud.tutorial_overlay.visible and state_snapshot(project, run) == before, "Repeating the same Design context does not replay seen guidance")
++	hud.tip_button.pressed.emit()
++	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Four cards selected" and state_snapshot(project, run) == before, "Tip button replays the current ready-hand suggestion for free")
++	hud.contextual_tip.dismiss()
++	for index in range(4): views[index].card_pressed.emit(views[index])
++	check(phase.get_selected_candidate_views().is_empty() and state_snapshot(project, run) == before, "Clearing the preview hand preserves state for subsequent gameplay checks")
++
+ func verify_overlay(phase: Control, project: ProjectState, run: RunState, title: String) -> void:
+ 	var names: Array = ["QAPriority", "MarketingPriority", "InsiderPriority"] if title == "Beta" else ["GraphicsPriority", "SoundPriority", "TechnologyPriority", "DesignPriority"]
+ 	var views := phase.get_node("%HandContainer").get_children()
+diff --git a/patch-notes/scripts/debug/verify_predevelopment.gd b/patch-notes/scripts/debug/verify_predevelopment.gd
+index 511cda1..9c6b489 100644
+--- a/patch-notes/scripts/debug/verify_predevelopment.gd
++++ b/patch-notes/scripts/debug/verify_predevelopment.gd
+@@ -106,6 +106,8 @@ func _verify_flow() -> void:
+ 	run.consume_redraw(4)
+ 	var owned := run.get_owned_feature_ids()
+ 	var contract := run.accept_primitive_contract()
++	expect(contract != null and run.get_cash_cents() == cash_before + ContractState.GUARANTEED_UPFRONT_CENTS, "Accepting Ironclad credits its guarantee without advancing time")
++	cash_before = run.get_cash_cents()
+ 	studio.get_node("%StartNextGame").pressed.emit()
+ 	var overlay: PredevelopmentOverlay = studio.get("_predevelopment")
+ 	await _settle()
+@@ -134,7 +136,7 @@ func _verify_flow() -> void:
+ 	overlay.begin_button.pressed.emit()
+ 	expect(game.project_state == old and overlay.visible and run.get_cash_cents() == cash_before and run.get_released_game_sales(id) == sales_before, "Calendar overflow rejects confirmation without replacing project or spending cash")
+ 	run.set("_completed_run_cycles", calendar_before)
+-	expect(cash_before == 0 and not overlay.begin_button.disabled, "Begin Development is available at zero cash")
++	expect(cash_before == ContractState.GUARANTEED_UPFRONT_CENTS and not overlay.begin_button.disabled, "Begin Development remains available with the accepted Contract guarantee")
+ 	overlay.begin_button.pressed.emit()
+ 	var fresh: ProjectState = game.project_state
+ 	expect(fresh != old and fresh.get_base_name() == "Doom" and fresh.get_genre_id() == &"puzzle" and fresh.get_theme_id() == &"mystery", "Confirmation creates a fresh named project with selected choices")
+diff --git a/patch-notes/scripts/debug/verify_release_menus.gd b/patch-notes/scripts/debug/verify_release_menus.gd
+index f26acca..9ee16b0 100644
+--- a/patch-notes/scripts/debug/verify_release_menus.gd
++++ b/patch-notes/scripts/debug/verify_release_menus.gd
+@@ -54,16 +54,16 @@ func _run() -> void:
+ 	check(beta.request_launch(), "Launch enters Studio through the real phase transition")
+ 	await _settle()
+ 	var studio: StudioPhase = game.get("_active_phase")
+-	check(hud.tutorial_context == &"studio" and hud.tutorial_overlay.visible, "Automatic Studio entry presents Studio tips")
+-	hud.tutorial_overlay.close()
++	check(hud.tutorial_context == &"studio" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Automatic Studio entry presents nonblocking guidance")
++	hud.contextual_tip.dismiss()
+ 	check(studio != null and launch_before == [run.get_cash_cents(), run.get_completed_run_cycles(), state.get_current_cycle()], "Launch automatically enters Studio at zero cash and cycle cost")
+ 	var sales_before := run.get_released_game_sales(state.get_release_id())
+ 	studio.open_summary()
+ 	studio.get_node("%DetailedReviewButton").pressed.emit()
+ 	await _settle()
+ 	var review: PostGameReview = studio.get("_review_view")
+-	check(hud.tutorial_context == &"review" and hud.tutorial_overlay.visible, "Opening Detailed Review selects Review tips")
+-	hud.tutorial_overlay.close()
++	check(hud.tutorial_context == &"review" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Opening Detailed Review selects inline Review guidance")
++	hud.contextual_tip.dismiss()
+ 	check(review != null and review.get_node("%Categories").get_tab_count() == 5, "Review offers five performance categories")
+ 	var before := [run.get_cash_cents(), run.get_completed_run_cycles(), state.get_current_cycle(), state.get_review_result()]
+ 	for window_size in [Vector2i(1152, 648), Vector2i(900, 600)]:
+@@ -99,19 +99,19 @@ func _run() -> void:
+ 	studio.get_node("%FeatureStoreButton").pressed.emit()
+ 	await _settle()
+ 	var store: FeatureStore = studio.get("_feature_store")
+-	check(hud.tutorial_context == &"feature_store" and hud.tutorial_overlay.visible, "Feature Store entry presents tree guidance")
+-	hud.tutorial_overlay.close()
++	check(hud.tutorial_context == &"feature_store" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Feature Store entry presents inline tree guidance")
++	hud.contextual_tip.dismiss()
+ 	check(studio.get_global_rect().encloses(store.get_global_rect()), "Feature Store fits inside the Studio workspace")
+ 	await _capture("store")
+ 	store.hide()
+-	check(hud.tutorial_context == &"studio" and not hud.tutorial_overlay.visible, "Returning to Studio restores its context without repeated tips")
++	check(hud.tutorial_context == &"studio" and not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible, "Returning to Studio restores its context without repeated guidance")
+ 	studio.get_node("%StartNextGame").pressed.emit()
+-	check(hud.tutorial_context == &"predevelopment", "Next-game setup selects Pre-Development guidance")
+-	hud.tutorial_overlay.close()
++	check(hud.tutorial_context == &"predevelopment" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Next-game setup selects inline Pre-Development guidance")
++	hud.contextual_tip.dismiss()
+ 	(studio.get("_predevelopment") as PredevelopmentOverlay).cancelled.emit()
+ 	studio.get_node("%Contracts").pressed.emit()
+-	check(hud.tutorial_context == &"contract" and hud.tutorial_overlay.visible, "Contract offer presents Contract tips")
+-	hud.tutorial_overlay.close()
++	check(hud.tutorial_context == &"contract" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Contract offer presents inline guidance")
++	hud.contextual_tip.dismiss()
+ 	studio.call("_close_contract_detail")
+ 	check(studio.get_node("%Dashboard").visible, "Closing Feature Store restores the dashboard")
+ 	check(before == [run.get_cash_cents(), run.get_completed_run_cycles(), state.get_current_cycle(), state.get_review_result()] and sales_before == run.get_released_game_sales(state.get_release_id()), "Detailed Review and Studio browsing preserve finance, sales history and release results")
+diff --git a/patch-notes/scripts/gameplay.gd b/patch-notes/scripts/gameplay.gd
+index a284a29..6ee0d78 100644
+--- a/patch-notes/scripts/gameplay.gd
++++ b/patch-notes/scripts/gameplay.gd
+@@ -36,6 +36,7 @@ func _ready() -> void:
+ 		if run_state.get_studio_name().is_empty():
+ 			var main_menu := MainMenu.new()
+ 			main_menu.studio_created.connect(_on_studio_created.bind(main_menu))
++			main_menu.tutorial_requested.connect(%GameplayHUD.show_tutorial)
+ 			%PhaseRoot.add_child(main_menu)
+ 			_active_phase = main_menu
+ 			%GameplayHUD.set_phase(main_menu)
+diff --git a/patch-notes/scripts/phases/beta_phase.gd b/patch-notes/scripts/phases/beta_phase.gd
+index 64a7d5e..f100f68 100644
+--- a/patch-notes/scripts/phases/beta_phase.gd
++++ b/patch-notes/scripts/phases/beta_phase.gd
+@@ -11,6 +11,7 @@ const BETA_PRIORITY_ALLOCATION_SCRIPT := preload("res://scripts/phases/beta_prio
+ const CANDIDATE_POOL_SIZE := 7
+ const SELECTED_HAND_SIZE := 4
+ const QA_SPECIALIZATION_MULTIPLIER := 1.5
++const MARKETING_SPECIALIZATION_MULTIPLIER := 1.5
+ const BALANCED_OPERATIONS_MULTIPLIER := 1.25
+ const HOST_PLAYTEST_COST := 500
+ const HOST_PLAYTEST_COST_CENTS := 50000
+@@ -664,7 +665,8 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
+ 	var hidden := _project_state.get_hidden_bugs()
+ 	var known := _project_state.get_known_bugs()
+ 	var qa_specialization := _qualifies_for_qa_specialization(selected_cards)
+-	var balanced_operations := not qa_specialization and _qualifies_for_balanced_operations(selected_cards)
++	var marketing_specialization := _qualifies_for_marketing_specialization(selected_cards)
++	var balanced_operations := not qa_specialization and not marketing_specialization and _qualifies_for_balanced_operations(selected_cards)
+ 	var search_requests: Array[int] = []
+ 	for card: CardData in groups.search:
+ 		var final_value: float = card.beta_value * QA_SPECIALIZATION_MULTIPLIER if qa_specialization else card.beta_value
+@@ -686,7 +688,9 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
+ 	var marketing_gain := 0
+ 	for card: CardData in groups.marketing:
+ 		marketing_gain += card.beta_value
+-	if balanced_operations:
++	if marketing_specialization:
++		marketing_gain = int(floor(marketing_gain * MARKETING_SPECIALIZATION_MULTIPLIER))
++	elif balanced_operations:
+ 		marketing_gain = int(ceil(marketing_gain * BALANCED_OPERATIONS_MULTIPLIER))
+ 	if marketing_gain > ProjectState.MAX_SIGNED_INT - _project_state.get_marketing_output():
+ 		return _invalid_play("Marketing Output would overflow.")
+@@ -752,7 +756,7 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
+ 		view.card_pressed.connect(_on_card_pressed)
+ 
+ 		next_views.append(view)
+-	return {&"valid": true, &"qa_specialization": qa_specialization, &"balanced_operations": balanced_operations, &"corrective_score_additions": corrective_score_additions, &"search_requests": search_requests, &"debug_requests": debug_requests, &"marketing_gain": marketing_gain, &"cash_gain": cash_gain, &"cash_gain_cents": cash_gain_cents, &"reveal_competitor": competitor_revealed and not _project_state.is_competitor_snapshot_revealed(), &"reveal_forecast": forecast_revealed and not _project_state.is_market_forecast_snapshot_revealed(), &"rival_attempted": rival_attempted, &"rival_gained": rival_gained, &"forecast_attempted": forecast_attempted, &"forecast_gained": forecast_gained, &"finite_ids": finite_ids, &"next_cards": replacement.cards, &"next_views": next_views, &"injected_corrective_count": replacement.injected_count, &"consumed_pending_ids": replacement.consumed_pending_ids}
++	return {&"valid": true, &"qa_specialization": qa_specialization, &"marketing_specialization": marketing_specialization, &"balanced_operations": balanced_operations, &"corrective_score_additions": corrective_score_additions, &"search_requests": search_requests, &"debug_requests": debug_requests, &"marketing_gain": marketing_gain, &"cash_gain": cash_gain, &"cash_gain_cents": cash_gain_cents, &"reveal_competitor": competitor_revealed and not _project_state.is_competitor_snapshot_revealed(), &"reveal_forecast": forecast_revealed and not _project_state.is_market_forecast_snapshot_revealed(), &"rival_attempted": rival_attempted, &"rival_gained": rival_gained, &"forecast_attempted": forecast_attempted, &"forecast_gained": forecast_gained, &"finite_ids": finite_ids, &"next_cards": replacement.cards, &"next_views": next_views, &"injected_corrective_count": replacement.injected_count, &"consumed_pending_ids": replacement.consumed_pending_ids}
+ 
+ 
+ func _qualifies_for_qa_specialization(cards: Array[CardData]) -> bool:
+@@ -764,6 +768,15 @@ func _qualifies_for_qa_specialization(cards: Array[CardData]) -> bool:
+ 	return true
+ 
+ 
++func _qualifies_for_marketing_specialization(cards: Array[CardData]) -> bool:
++	if cards.size() < 2:
++		return false
++	for card: CardData in cards:
++		if card == null or card.beta_category != CardData.BETA_CATEGORY_MARKETING:
++			return false
++	return true
++
++
+ func _qualifies_for_balanced_operations(cards: Array[CardData]) -> bool:
+ 	if cards.size() != SELECTED_HAND_SIZE:
+ 		return false
+@@ -875,9 +888,12 @@ func _show_action_feedback(result: Dictionary, discovered: int, fixed: int) -> v
+ 	var parts: Array[String] = []
+ 	if result.qa_specialization:
+ 		_workspace.show_synergy("QA Specialization!", "Card Value ×1.50")
++	elif result.marketing_specialization:
++		_workspace.show_synergy("Marketing Specialization!", "Card Value ×1.50")
+ 	elif result.balanced_operations:
+ 		_workspace.show_synergy("Balanced Operations!", "Output ×1.25")
+ 	if result.qa_specialization: parts.append("QA Specialization! Card Value ×1.50")
++	elif result.marketing_specialization: parts.append("Marketing Specialization! Card Value ×1.50")
+ 	elif result.balanced_operations: parts.append("Balanced Operations! Output ×1.25")
+ 	if not result.corrective_score_additions.is_empty():
+ 		parts.append("Corrective Pass gains: %s" % _format_score_additions(result.corrective_score_additions))
+diff --git a/patch-notes/scripts/phases/contract_phase.gd b/patch-notes/scripts/phases/contract_phase.gd
+index 23d29c2..8fd9766 100644
+--- a/patch-notes/scripts/phases/contract_phase.gd
++++ b/patch-notes/scripts/phases/contract_phase.gd
+@@ -2,6 +2,7 @@ class_name ContractPhase
+ extends Control
+ 
+ signal completion_dismissed(source: ContractPhase)
++signal guidance_changed
+ 
+ const CARD_VIEW_SCENE := preload("res://scenes/cards/card_view.tscn")
+ const CANDIDATE_COUNT := 7
+@@ -85,12 +86,14 @@ func _build_ui() -> void:
+ 		input.min_value = PriorityAllocation.MIN_PRIORITY
+ 		input.max_value = PriorityAllocation.MAX_PRIORITY
+ 		input.step = PriorityAllocation.PRIORITY_STEP
++		input.tooltip_text = "Weight future %s contract draws. All four priorities must total 100." % _category_name(category)
+ 		input.value_changed.connect(func(value: float): _priority_draft[category] = int(value); _refresh_actions())
+ 		box.add_child(input)
+ 		_priority_inputs[category] = input
+ 		priority_row.add_child(box)
+ 	_commit_button = Button.new()
+ 	_commit_button.text = "Commit Priorities (1 cycle)"
++	_commit_button.tooltip_text = "A valid changed allocation costs one cycle and affects later draws, not the current hand."
+ 	_commit_button.pressed.connect(func(): commit_priority_distribution())
+ 	priority_row.add_child(_commit_button)
+ 	var pool_title := Label.new()
+@@ -108,9 +111,11 @@ func _build_ui() -> void:
+ 	layout.add_child(actions)
+ 	_play_button = Button.new()
+ 	_play_button.text = "Play Contract Hand"
++	_play_button.tooltip_text = "Play exactly four selected cards. A successful hand advances one cycle."
+ 	_play_button.pressed.connect(_play_selected_hand)
+ 	actions.add_child(_play_button)
+ 	_redraw_button = Button.new()
++	_redraw_button.tooltip_text = "Replace selected candidates using the shared redraw budget; no cycle cost."
+ 	_redraw_button.pressed.connect(func(): redraw_selected_cards())
+ 	actions.add_child(_redraw_button)
+ 	_feedback_label = Label.new()
+@@ -242,8 +247,8 @@ func _play_selected_hand() -> bool:
+ 	var plan := _state.plan_hand(cards)
+ 	if plan.is_empty():
+ 		return false
+-	var payout: int = plan.payout_cents
+-	if not _run.can_complete_productive_cycle(payout):
++	var remainder: int = plan.remainder_cents
++	if not _run.can_complete_productive_cycle(remainder):
+ 		return false
+ 	var next_cards: Array[CardData] = []
+ 	if not plan.completing:
+@@ -253,8 +258,8 @@ func _play_selected_hand() -> bool:
+ 		if next_cards.is_empty():
+ 			return false
+ 	var expected_cycle := _run.get_completed_run_cycles()
+-	var commit := func() -> bool: return _state.commit_hand(cards, payout)
+-	if not _run.complete_productive_action(commit, payout, expected_cycle):
++	var commit := func() -> bool: return _state.commit_hand(cards, remainder)
++	if not _run.complete_productive_action(commit, remainder, expected_cycle):
+ 		return false
+ 	if _state.is_completed():
+ 		_show_completion()
+@@ -350,13 +355,14 @@ func _on_card_pressed(view: CardView) -> void:
+ func _show_completion() -> void:
+ 	var result := _state.get_result()
+ 	if result == null: return
+-	_completion_stats.text = "Final Scope: %d / %d\nGraphics: %s / 6\nSound: %s / 6\nTechnology: %s / 6\nDesign: %s / 6\nCompletion: %.1f%%\nExact Payout: %s" % [
++	_completion_stats.text = "Final Scope: %d / %d\nGraphics: %s / 6\nSound: %s / 6\nTechnology: %s / 6\nDesign: %s / 6\nCompletion: %.1f%%\nGuaranteed Upfront: %s\nCompletion Payment: %s\nTotal Payout: %s" % [
+ 		result.get_scope(), ContractState.EXPECTED_SCOPE,
+ 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS)),
+ 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.SOUND)),
+ 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY)),
+ 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.DESIGN)),
+-		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_payout_cents())]
++		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_upfront_cents()),
++		CashFormatter.format_exact_cents(result.get_completion_payment_cents()), CashFormatter.format_exact_cents(result.get_payout_cents())]
+ 	_completion_panel.show()
+ 	(_completion_panel.find_child("DismissCompletionButton", true, false) as Button).grab_focus()
+ 
+@@ -377,6 +383,7 @@ func _refresh_actions() -> void:
+ 	_redraw_button.text = "Redraw Selected (%d/4)" % _run.get_available_redraws()
+ 	_redraw_button.disabled = _state.is_completed() or _selected_views.is_empty() or not _run.can_consume_redraw(_selected_views.size())
+ 	_commit_button.disabled = not _state.can_commit_priorities(_priority_draft) or not _run.can_complete_productive_cycle()
++	guidance_changed.emit()
+ 
+ 
+ func _selected_cards() -> Array[CardData]:
+diff --git a/patch-notes/scripts/phases/main_menu.gd b/patch-notes/scripts/phases/main_menu.gd
+index a40f3ab..a42c686 100644
+--- a/patch-notes/scripts/phases/main_menu.gd
++++ b/patch-notes/scripts/phases/main_menu.gd
+@@ -2,6 +2,7 @@ class_name MainMenu
+ extends Control
+ 
+ signal studio_created(name: String)
++signal tutorial_requested
+ 
+ var _name_input: LineEdit
+ var _error: Label
+@@ -29,6 +30,13 @@ func _ready() -> void:
+ 	start.text = "Start Game"
+ 	start.custom_minimum_size.y = 52
+ 	layout.add_child(start)
++	var tutorial := Button.new()
++	tutorial.name = "HowToPlay"
++	tutorial.text = "How to Play"
++	tutorial.tooltip_text = "Open the optional tutorial reference."
++	tutorial.custom_minimum_size.y = 44
++	tutorial.pressed.connect(func(): tutorial_requested.emit())
++	layout.add_child(tutorial)
+ 	_setup = VBoxContainer.new()
+ 	_setup.name = "StudioSetup"
+ 	_setup.add_theme_constant_override("separation", 12)
+@@ -40,6 +48,7 @@ func _ready() -> void:
+ 	_name_input.name = "StudioName"
+ 	_name_input.placeholder_text = "Studio name"
+ 	_name_input.max_length = 80
++	_name_input.tooltip_text = "Name your studio. You can start producing games after entering Studio."
+ 	_setup.add_child(_name_input)
+ 	_error = Label.new()
+ 	_error.name = "ErrorLabel"
+diff --git a/patch-notes/scripts/phases/studio_phase.gd b/patch-notes/scripts/phases/studio_phase.gd
+index e3ce0a2..35ae943 100644
+--- a/patch-notes/scripts/phases/studio_phase.gd
++++ b/patch-notes/scripts/phases/studio_phase.gd
+@@ -28,6 +28,9 @@ func _ready() -> void:
+ 	%Contracts.pressed.connect(_open_contracts)
+ 	%GameList.item_selected.connect(_on_game_selected)
+ 	%LowScopeWarning.confirmed.connect(_show_predevelopment)
++	%PostGameSummaries.tooltip_text = "Browse every released game, its category Reviews, and earned versus projected sales. Opening is free."
++	%FeatureStoreButton.tooltip_text = "Browse owned Features, prices and prerequisites. Opening the Store costs no cycles."
++	%StartNextGame.tooltip_text = "Name the next game and choose its Genre and Theme. Opening setup is free."
+ 	if _run_state != null:
+ 		_refresh_game_list()
+ 		_refresh_summary()
+@@ -213,7 +216,7 @@ func _ensure_contract_detail() -> void:
+ 	title.add_theme_font_size_override("font_size", 26)
+ 	layout.add_child(title)
+ 	var details := Label.new()
+-	details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum payout: $2,400.00\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance is free. The contract cannot be abandoned after acceptance."
++	details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed $400.00 immediately; the earned remainder pays after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance."
+ 	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ 	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ 	layout.add_child(details)
+diff --git a/patch-notes/scripts/run_state.gd b/patch-notes/scripts/run_state.gd
+index 29a54bc..a4d5cf8 100644
+--- a/patch-notes/scripts/run_state.gd
++++ b/patch-notes/scripts/run_state.gd
+@@ -165,13 +165,18 @@ func primitive_feature_hand_cost_cents(cards: Array[CardData]) -> int:
+ 	return total
+ 
+ ## Presentation-only progress: no calendar, cash or production mutation.
+-func visit_tutorial_topic(topic: StringName) -> bool:
+-	if _seen_tutorial_topics.has(topic):
++func visit_guidance_tip(key: StringName) -> bool:
++	if key == &"" or _seen_tutorial_topics.has(key):
+ 		return false
+-	_seen_tutorial_topics[topic] = true
++	_seen_tutorial_topics[key] = true
+ 	return true
+ 
+ 
++## Preserve the existing presentation API for callers that track topic visits.
++func visit_tutorial_topic(topic: StringName) -> bool:
++	return visit_guidance_tip(topic)
++
++
+ func _init() -> void:
+ 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
+ 		var id := StringName(entry.id)
+@@ -520,12 +525,26 @@ func is_primitive_contract_offer_available() -> bool:
+ func accept_primitive_contract() -> ContractState:
+ 	if not is_primitive_contract_offer_available():
+ 		return null
++	if not _cash_initialized or _cash_cents > MAX_SIGNED_INT - ContractState.GUARANTEED_UPFRONT_CENTS:
++		return null
+ 	var ids: Array[StringName] = []
+ 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
+ 		var id := StringName(entry.id)
+ 		if owns_feature(id) and StringName(entry.phase) in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA]:
+ 			ids.append(id)
+-	_primitive_contract = ContractState.new(ids)
++	var accepted := ContractState.new(ids)
++	if not accepted.commit_upfront():
++		return null
++	# Block observers until both ownership and the exact-cent guarantee commit.
++	var was_blocked := is_blocking_signals()
++	set_block_signals(true)
++	_primitive_contract = accepted
++	if not add_cash_cents(ContractState.GUARANTEED_UPFRONT_CENTS):
++		_primitive_contract = null
++		set_block_signals(was_blocked)
++		return null
++	set_block_signals(was_blocked)
++	cash_changed.emit()
+ 	contracts_changed.emit()
+ 	return _primitive_contract
+ 
+diff --git a/patch-notes/scripts/ui/feature_store.gd b/patch-notes/scripts/ui/feature_store.gd
+index ba61a18..a5a5035 100644
+--- a/patch-notes/scripts/ui/feature_store.gd
++++ b/patch-notes/scripts/ui/feature_store.gd
+@@ -7,9 +7,26 @@ var _scroll: ScrollContainer
+ var _nodes: Dictionary = {}
+ var _edges: Array = []
+ const NODE_SIZE := Vector2(224, 100)
+-const STEP := Vector2(300, 124)
++const COLUMN_STEP := 248.0
++const LEVEL_STEP := 160.0
++const LANE_ORDER := [&"Visuals", &"Audio", &"Technology & Tools", &"Gameplay", &"Story & World"]
++# Presentation only. Card definitions, prerequisites, and purchase rules remain in the ledger.
++const LANE_MEMBERS := {
++	&"Visuals": [&"text", &"colored_text", &"sprites", &"animated_sprites", &"4_color_palette", &"8_color_palette", &"scrolling", &"multi_directional_scrolling"],
++	&"Audio": [&"8_bit_sound", &"recorded_sounds", &"8_bit_music", &"16_bit_music", &"sound_effects", &"music"],
++	&"Technology & Tools": [&"keyboard_and_mouse", &"controller", &"menu_system", &"split_screen", &"save_files", &"branching_nodes"],
++	&"Gameplay": [&"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"difficulty_levels"],
++	&"Story & World": [&"simple_story", &"dialogue", &"character_backstories", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets"],
++}
++var _lane_by_id: Dictionary = {}
++var _lane_buttons: Dictionary = {}
++var _lane_scroll: Dictionary = {}
++var _active_lane: StringName = &"Visuals"
++var _gate: Label
++var _lane_heading: Label
+ var _details: Label
+ var _cash: Label
++var _owned_summary: Label
+ var _buy: Button
+ var _selected: StringName
+ 
+@@ -33,6 +50,23 @@ func setup(run: RunState) -> void:
+ 	close.text = "Close Store"
+ 	close.pressed.connect(hide)
+ 	header.add_child(close)
++	_owned_summary = Label.new()
++	_owned_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
++	_owned_summary.add_theme_font_size_override("font_size", 14)
++	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Play cost is once per owned Feature in a project; Passes are free. Later Store Features have no defined play price yet."
++	layout.add_child(_owned_summary)
++	var lanes := HBoxContainer.new()
++	lanes.add_theme_constant_override("separation", 8)
++	layout.add_child(lanes)
++	for lane: StringName in LANE_ORDER:
++		var lane_button := Button.new()
++		lane_button.text = str(lane)
++		lane_button.toggle_mode = true
++		lane_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++		lane_button.focus_mode = Control.FOCUS_ALL
++		lane_button.pressed.connect(_select_lane.bind(lane))
++		lanes.add_child(lane_button)
++		_lane_buttons[lane] = lane_button
+ 	var body := HSplitContainer.new()
+ 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ 	layout.add_child(body)
+@@ -60,7 +94,7 @@ func setup(run: RunState) -> void:
+ 	_buy.pressed.connect(_purchase)
+ 	detail_layout.add_child(_buy)
+ 	var note := Label.new()
+-	note.text = "Owned: green • Available: blue • Need cash: amber • Locked: gray • Selected: white border\nScroll to explore • Opening / closing: $0.00 and 0 cycles • Permanent run ownership"
++	note.text = "Owned: green • Available: blue • Need cash: amber • Locked: gray • Selected: white border\nChoose a lane, then scroll sideways • Roots below, upgrades above ↑ • Browsing: $0.00 and 0 cycles"
+ 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ 	layout.add_child(note)
+ 	_run.features_changed.connect(_refresh)
+@@ -80,6 +114,11 @@ func _refresh() -> void:
+ 	if _run.needs_starter_selection():
+ 		var pool := _run.get_starter_pool_summary()
+ 		_cash.text += "\nFirst-game pool: %d / 23 Scope · %s / $4,000.00 spent · Primitive purchases cost 0 cycles" % [pool.scope, CashFormatter.format_exact_cents(pool.spent_cents)]
++	var owned := _summarize_owned_features()
++	_owned_summary.text = "OWNED POOL  •  Scope %d  •  Core Score %d\n" % [owned.scope, owned.total_score]
++	_owned_summary.text += "G %d · S %d · T %d · D %d  •  Play once: %s" % [owned.graphics, owned.sound, owned.technology, owned.design, CashFormatter.format_exact_cents(owned.known_play_cost_cents)]
++	if owned.unpriced_count > 0:
++		_owned_summary.text += "\n+ %d Store Feature%s with play cost TBD" % [owned.unpriced_count, "" if owned.unpriced_count == 1 else "s"]
+ 	if _nodes.is_empty():
+ 		_build_tree()
+ 	for id: StringName in _nodes:
+@@ -110,7 +149,16 @@ func _refresh() -> void:
+ 			button.text += "\n" + (str(offer.prerequisite) if not offer.unlocked else CashFormatter.format_exact_cents(offer.price_cents))
+ 		elif not reserve.is_empty() and not reserve.owned:
+ 			button.text += "\n" + CashFormatter.format_exact_cents(reserve.price_cents)
+-		button.tooltip_text = card.card_name + ("\n" + str(offer.prerequisite) if not offer.is_empty() else ("\nPrimitive starter · 0 cycles" if not reserve.is_empty() and reserve.initial else "\nPrimitive reserve · 1 cycle" if not reserve.is_empty() and not reserve.owned else "\nOwned Primitive Feature"))
++		var department := "No department" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize()
++		button.tooltip_text = "%s · %s · %s\nDepartment: %s · Scope %d · +%d %s" % [card.card_name, str(card.phase).capitalize(), str(_lane_by_id[id]), department, card.scope, card.primary_value, str(card.primary_stat).capitalize()]
++		if card.secondary_value != 0:
++			button.tooltip_text += " · +%d %s" % [card.secondary_value, str(card.secondary_stat).capitalize()]
++		if not offer.is_empty():
++			button.tooltip_text += "\nPrerequisite: %s\nBase: %s · Discount: %d%% · Final: %s\n%s" % [offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Owned" if offer.owned else "Affordable" if offer.affordable and offer.unlocked else "Need cash" if offer.unlocked else "Locked"]
++		elif not reserve.is_empty() and not reserve.owned:
++			button.tooltip_text += "\nPrimitive %s · %s" % ["starter" if reserve.initial else "reserve", CashFormatter.format_exact_cents(reserve.price_cents)]
++		else:
++			button.tooltip_text += "\nOwned Primitive Feature"
+ 		for style_name: String in ["normal", "hover", "pressed", "focus"]:
+ 			var style := StyleBoxFlat.new()
+ 			style.bg_color = color.lightened(0.12) if style_name == "hover" else color
+@@ -122,73 +170,144 @@ func _refresh() -> void:
+ 	_show_details()
+ 
+ 
++func _summarize_owned_features() -> Dictionary:
++	var scores := {&"graphics": 0, &"sound": 0, &"technology": 0, &"design": 0}
++	var scope := 0
++	var unpriced_count := 0
++	var priced_cards: Array[CardData] = []
++	var database := get_node("/root/CardDatabase")
++	for id: StringName in _run.get_owned_feature_ids():
++		var card: CardData = database.get_card(id)
++		if card == null or card.card_type != &"feature":
++			continue
++		scope += card.scope
++		scores[card.primary_stat] += card.primary_value
++		if not card.secondary_stat.is_empty():
++			scores[card.secondary_stat] += card.secondary_value
++		if _run.get_feature_store_offer(id).is_empty():
++			priced_cards.append(card)
++		else:
++			unpriced_count += 1
++	var cost := _run.primitive_feature_hand_cost_cents(priced_cards)
++	return {"scope": scope, "total_score": scores[&"graphics"] + scores[&"sound"] + scores[&"technology"] + scores[&"design"],
++		"graphics": scores[&"graphics"], "sound": scores[&"sound"], "technology": scores[&"technology"], "design": scores[&"design"],
++		"known_play_cost_cents": cost, "unpriced_count": unpriced_count}
++
++
+ func _build_tree() -> void:
+ 	var entries := FeatureStoreCatalog.starting_features() + FeatureStoreCatalog.entries()
+ 	var children: Dictionary = {}
+-	var roots: Array = []
++	for lane: StringName in LANE_ORDER:
++		for id: StringName in LANE_MEMBERS[lane]:
++			assert(not _lane_by_id.has(id), "Feature appears in two Store lanes: " + str(id))
++			_lane_by_id[id] = lane
+ 	for entry: Dictionary in entries:
+ 		var id := StringName(entry.id)
++		assert(_lane_by_id.has(id), "Feature missing Store lane: " + str(id))
+ 		var parent := StringName(entry.get("purchase_parent", ""))
+ 		if int(entry.get("gameplay_features_required", 0)) > 0:
+ 			parent = &"gameplay_gate"
+-		if parent.is_empty():
+-			roots.append(id)
+-		else:
++		if not parent.is_empty():
+ 			if not children.has(parent): children[parent] = []
+ 			children[parent].append(id)
+ 			_edges.append([parent, id])
+ 		var button := Button.new()
+ 		button.size = NODE_SIZE
+ 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
++		button.focus_mode = Control.FOCUS_ALL
+ 		button.add_theme_font_size_override("font_size", 16)
+ 		button.add_theme_color_override("font_color", Color.WHITE)
+ 		button.pressed.connect(_select_node.bind(id))
+ 		_tree.add_child(button)
+ 		_nodes[id] = button
+-	var row := 0
+-	for id: StringName in roots:
+-		if children.has(id):
+-			row = _place_branch(id, 0, row, children)
+-	var gate := Label.new()
+-	gate.name = "GameplayGate"
+-	gate.text = "OWN ANY 3 DISTINCT\nGAMEPLAY FEATURES\nOwnership gate • no discount"
+-	gate.position = Vector2(16, 44 + row * STEP.y)
+-	gate.size = NODE_SIZE
+-	gate.add_theme_font_size_override("font_size", 14)
+-	_tree.add_child(gate)
+-	for id: StringName in children.get(&"gameplay_gate", []):
+-		row = _place_branch(id, 1, row, children)
+-	for id: StringName in roots:
+-		if not children.has(id):
+-			row = _place_branch(id, 0, row, children)
+-	_tree.custom_minimum_size.y = 60 + row * STEP.y
+-	for depth in range(2):
+-		var heading := Label.new()
+-		heading.text = "ROOT FEATURES" if depth == 0 else "PREREQUISITE UPGRADES →"
+-		heading.position = Vector2(16 + depth * STEP.x, 8)
+-		_tree.add_child(heading)
+-
+-
+-func _place_branch(id: StringName, depth: int, row: int, children: Dictionary) -> int:
+-	_nodes[id].position = Vector2(16 + depth * STEP.x, 44 + row * STEP.y)
+-	_tree.custom_minimum_size.x = maxf(_tree.custom_minimum_size.x, 32 + depth * STEP.x + NODE_SIZE.x)
+-	var next_row := row
++	assert(_nodes.size() == _lane_by_id.size(), "Store lane map does not match ledger")
++	_gate = Label.new()
++	_gate.name = "GameplayGate"
++	_gate.text = "OWN ANY 3 DISTINCT\nGAMEPLAY FEATURES\nOwnership gate • no discount"
++	_gate.size = NODE_SIZE
++	_gate.add_theme_font_size_override("font_size", 14)
++	_tree.add_child(_gate)
++	_lane_heading = Label.new()
++	_lane_heading.position = Vector2(16, 8)
++	_tree.add_child(_lane_heading)
++	_layout_lane(children)
++
++
++func _layout_lane(children: Dictionary) -> void:
++	var lane_ids: Array = LANE_MEMBERS[_active_lane]
++	var roots: Array[StringName] = []
++	for id: StringName in lane_ids:
++		var is_child := false
++		for edge: Array in _edges:
++			if edge[1] == id:
++				is_child = true
++				break
++		if not is_child:
++			roots.append(id)
++	if _active_lane == &"Gameplay":
++		roots.append(&"gameplay_gate")
++	var max_depth := 0
++	for root_id: StringName in roots:
++		max_depth = maxi(max_depth, _branch_depth(root_id, children))
++	var baseline := 64.0 + max_depth * LEVEL_STEP
++	for i in range(roots.size()):
++		var x := 16.0 + i * COLUMN_STEP
++		_place_upward_branch(roots[i], x, baseline, 0, children)
++	_tree.custom_minimum_size = Vector2(32 + roots.size() * COLUMN_STEP, baseline + NODE_SIZE.y + 24)
++	_lane_heading.text = str(_active_lane).to_upper() + "  •  UPGRADES ↑  •  ROOT FEATURES BELOW"
++	_gate.visible = _active_lane == &"Gameplay"
++	for id: StringName in _nodes:
++		_nodes[id].visible = _lane_by_id[id] == _active_lane
++	for lane: StringName in LANE_ORDER:
++		_lane_buttons[lane].button_pressed = lane == _active_lane
++	_tree.queue_redraw()
++
++
++func _branch_depth(id: StringName, children: Dictionary) -> int:
++	var depth := 0
++	for child: StringName in children.get(id, []):
++		depth = maxi(depth, 1 + _branch_depth(child, children))
++	return depth
++
++
++func _place_upward_branch(id: StringName, x: float, baseline: float, depth: int, children: Dictionary) -> void:
++	var node: Control = _gate if id == &"gameplay_gate" else _nodes[id]
++	var y := baseline - depth * LEVEL_STEP
++	node.position = Vector2(x, y)
+ 	for child: StringName in children.get(id, []):
+-		next_row = _place_branch(child, depth + 1, next_row, children)
+-	return maxi(row + 1, next_row)
++		_place_upward_branch(child, x, baseline, depth + 1, children)
++
++
++func _select_lane(lane: StringName) -> void:
++	if lane == _active_lane:
++		_lane_buttons[lane].button_pressed = true
++		return
++	_lane_scroll[_active_lane] = Vector2i(_scroll.scroll_horizontal, _scroll.scroll_vertical)
++	_active_lane = lane
++	_selected = &""
++	var children: Dictionary = {}
++	for edge: Array in _edges:
++		if not children.has(edge[0]): children[edge[0]] = []
++		children[edge[0]].append(edge[1])
++	_layout_lane(children)
++	var offset: Vector2i = _lane_scroll.get(lane, Vector2i.ZERO)
++	_scroll.scroll_horizontal = offset.x
++	_scroll.scroll_vertical = offset.y
++	_show_details()
+ 
+ 
+ func _draw_connections() -> void:
+ 	for edge: Array in _edges:
+-		var parent: Control = _tree.get_node("GameplayGate") if edge[0] == &"gameplay_gate" else _nodes[edge[0]]
++		if _lane_by_id[edge[1]] != _active_lane:
++			continue
++		var parent: Control = _gate if edge[0] == &"gameplay_gate" else _nodes[edge[0]]
+ 		var child: Control = _nodes[edge[1]]
+-		var start := parent.position + Vector2(NODE_SIZE.x, NODE_SIZE.y / 2)
+-		var end := child.position + Vector2(0, NODE_SIZE.y / 2)
+-		var middle := (start.x + end.x) / 2
++		var start := parent.position + Vector2(NODE_SIZE.x / 2, 0)
++		var end := child.position + Vector2(NODE_SIZE.x / 2, NODE_SIZE.y)
+ 		var offer := _run.get_feature_store_offer(edge[1])
+ 		var color := Color("7ed6be") if offer.unlocked else Color("8993a5")
+-		_tree.draw_polyline(PackedVector2Array([start, Vector2(middle, start.y), Vector2(middle, end.y), end]), color, 3, true)
+-		_tree.draw_colored_polygon(PackedVector2Array([end, end + Vector2(-8, -5), end + Vector2(-8, 5)]), color)
++		_tree.draw_line(start, end, color, 3, true)
++		_tree.draw_colored_polygon(PackedVector2Array([end, end + Vector2(-6, 9), end + Vector2(6, 9)]), color)
+ 
+ 
+ func _select_node(id: StringName) -> void:
+@@ -208,17 +327,17 @@ func _show_details() -> void:
+ 		if not reserve.is_empty() and not reserve.owned:
+ 			var timing := "First-game starter · 0 cycles" if reserve.initial else "Studio reserve · 1 calendar cycle"
+ 			var availability := "Starter purchase or Scope cap reached" if not reserve.within_limits else "Affordable" if reserve.affordable else "Insufficient cash"
+-			_details.text = "%s\nPrimitive Feature · %s\n\nPrinted Scope: %d\nPrice: %s\n%s\n%s\n\nPermanent ownership for future projects; each project still exhausts this Feature independently." % [reserve.name, str(reserve.phase).capitalize(), reserve.scope, CashFormatter.format_exact_cents(reserve.price_cents), timing, availability]
++			_details.text = "%s\nPrimitive Feature · %s\nDepartment: %s\n\nPrinted Scope: %d\nPrice: %s\n%s\n%s\n\nPermanent ownership for future projects; each project still exhausts this Feature independently." % [reserve.name, str(reserve.phase).capitalize(), "None" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize(), reserve.scope, CashFormatter.format_exact_cents(reserve.price_cents), timing, availability]
+ 			_buy.text = "Purchase Starter Feature" if reserve.initial else "Purchase Reserve Feature"
+ 			_buy.disabled = not reserve.can_purchase
+ 			return
+-		_details.text = "%s\nOwned • Primitive Feature\n\nFamiliarity: %d project credits\nDirect children receive 10%% per credit, up to 50%%.\n\nCore: +%d %s • Scope %d\nPrerequisite: Starting root\nBase price / discount / final price: N/A\nAffordability: Already owned" % [card.card_name, _run.get_feature_familiarity(_selected), card.primary_value, str(card.primary_stat).capitalize(), card.scope]
++		_details.text = "%s\nOwned • Primitive Feature · %s\nDepartment: %s\n\nFamiliarity: %d project credits\nDirect children receive 10%% per credit, up to 50%%.\n\nCore: +%d %s • Scope %d\nPrerequisite: Starting root\nBase price / discount / final price: N/A\nAffordability: Already owned" % [card.card_name, str(card.phase).capitalize(), "None" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize(), _run.get_feature_familiarity(_selected), card.primary_value, str(card.primary_stat).capitalize(), card.scope]
+ 		if card.secondary_value != 0:
+ 			_details.text += "\nCore: +%d %s" % [card.secondary_value, str(card.secondary_stat).capitalize()]
+ 		_buy.text = "Already owned"
+ 		return
+ 	var status := "Owned" if offer.owned else ("Purchasable" if offer.unlocked else "Locked")
+-	_details.text = "%s\n%s\n\nPrerequisite: %s\nBase price: %s\nFamiliarity discount: %d%%\nFinal price: %s\n%s\n\nPrinted effect: +%d %s • Scope %d\nFinite once per project." % [offer.name, status, offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Affordable" if offer.affordable else "Insufficient cash", card.primary_value, str(card.primary_stat).capitalize(), card.scope]
++	_details.text = "%s\n%s · %s\nDepartment: %s\n\nPrerequisite: %s\nBase price: %s\nFamiliarity discount: %d%%\nFinal price: %s\n%s\n\nPrinted effect: +%d %s • Scope %d\nFinite once per project." % [offer.name, status, str(card.phase).capitalize(), "None" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize(), offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Affordable" if offer.affordable else "Insufficient cash", card.primary_value, str(card.primary_stat).capitalize(), card.scope]
+ 	if _selected == &"difficulty_levels":
+ 		_details.text += "\nNo familiarity discount for this prerequisite."
+ 	if card.secondary_value != 0:
+diff --git a/patch-notes/scripts/ui/gameplay_hud.gd b/patch-notes/scripts/ui/gameplay_hud.gd
+index 7046e4b..816be88 100644
+--- a/patch-notes/scripts/ui/gameplay_hud.gd
++++ b/patch-notes/scripts/ui/gameplay_hud.gd
+@@ -11,7 +11,11 @@ var change_priorities: Button
+ var synergy_notification: SynergyNotification
+ var tutorial_overlay: TutorialOverlay
+ var tutorial_button: Button
++var contextual_tip: ContextualTip
++var tip_button: Button
+ var tutorial_context: StringName = &"predevelopment"
++var _guidance_ready := false
++var _current_tip_key := ""
+ 
+ func _ready() -> void:
+ 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+@@ -50,7 +54,14 @@ func _ready() -> void:
+ 	footer_panel.add_child(footer_row)
+ 	footer = Label.new()
+ 	footer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	footer.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+ 	footer_row.add_child(footer)
++	tip_button = Button.new()
++	tip_button.name = "TipButton"
++	tip_button.text = "Tip"
++	tip_button.custom_minimum_size.x = 56
++	tip_button.pressed.connect(show_current_tip)
++	footer_row.add_child(tip_button)
+ 	tutorial_button = Button.new()
+ 	tutorial_button.name = "TutorialButton"
+ 	tutorial_button.text = "Tutorial"
+@@ -63,6 +74,9 @@ func _ready() -> void:
+ 	tutorial_overlay = TutorialOverlay.new()
+ 	tutorial_overlay.name = "TutorialOverlay"
+ 	add_child(tutorial_overlay)
++	contextual_tip = ContextualTip.new()
++	contextual_tip.name = "ContextualTip"
++	add_child(contextual_tip)
+ 
+ func setup(project_state: ProjectState, run_state: RunState) -> void:
+ 	if project != null:
+@@ -71,6 +85,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
+ 	if run != null:
+ 		if run.cash_changed.is_connected(refresh): run.cash_changed.disconnect(refresh)
+ 		if run.calendar_changed.is_connected(refresh): run.calendar_changed.disconnect(refresh)
++		if run.features_changed.is_connected(refresh): run.features_changed.disconnect(refresh)
+ 	project = project_state
+ 	run = run_state
+ 	if project != null:
+@@ -78,19 +93,27 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
+ 		project.cycle_changed.connect(refresh)
+ 	run.cash_changed.connect(refresh)
+ 	run.calendar_changed.connect(refresh)
++	run.features_changed.connect(refresh)
+ 	refresh()
+ 
+ func set_phase(controller: Control) -> void:
++	_guidance_ready = false
++	if contextual_tip != null: contextual_tip.dismiss()
+ 	if is_instance_valid(phase) and phase.has_signal("tutorial_context_changed") and phase.tutorial_context_changed.is_connected(set_tutorial_context):
+ 		phase.tutorial_context_changed.disconnect(set_tutorial_context)
+ 	if is_instance_valid(phase) and phase.has_method("get_workspace"):
+ 		var old_workspace: PhaseWorkspace = phase.get_workspace()
+ 		if old_workspace.presentation_changed.is_connected(refresh):
+ 			old_workspace.presentation_changed.disconnect(refresh)
++		if old_workspace.overlay.closed.is_connected(_refresh_guidance):
++			old_workspace.overlay.closed.disconnect(_refresh_guidance)
++	if is_instance_valid(phase) and phase.has_signal("guidance_changed") and phase.guidance_changed.is_connected(_refresh_guidance):
++		phase.guidance_changed.disconnect(_refresh_guidance)
+ 	phase = controller
+ 	var release_menu := phase is StudioPhase or phase is PostGameReview or phase is ContractPhase or phase is FirstProjectSetup or phase is MainMenu
+ 	get_node("PersistentFooter").visible = not (phase is MainMenu)
+ 	get_node("PersistentHeader").visible = not release_menu
++	if phase is MainMenu: contextual_tip.dismiss()
+ 	var phase_root := get_parent().get_node_or_null("%PhaseRoot") as Control
+ 	if phase_root != null:
+ 		phase_root.offset_top = 12.0 if release_menu else 88.0
+@@ -98,6 +121,9 @@ func set_phase(controller: Control) -> void:
+ 	if phase.has_method("get_workspace"):
+ 		phase.get_workspace().use_synergy_presenter(synergy_notification)
+ 		phase.get_workspace().presentation_changed.connect(refresh)
++		phase.get_workspace().overlay.closed.connect(_refresh_guidance)
++	if phase.has_signal("guidance_changed"):
++		phase.guidance_changed.connect(_refresh_guidance)
+ 	refresh()
+ 	if phase.has_method("is_initial_priority_planning") and phase.is_initial_priority_planning():
+ 		phase.open_priority_overlay()
+@@ -117,17 +143,104 @@ func set_phase(controller: Control) -> void:
+ func set_tutorial_context(context: StringName) -> void:
+ 	tutorial_context = context
+ 	tutorial_overlay.close()
+-	if context != &"main_menu" and run != null and run.visit_tutorial_topic(context):
+-		tutorial_overlay.open(context)
++	contextual_tip.dismiss()
++	_guidance_ready = true
++	_refresh_guidance()
+ 
+ func show_tutorial() -> void:
++	contextual_tip.dismiss()
+ 	tutorial_overlay.open(tutorial_context)
+ 
++
++func show_current_tip() -> void:
++	var tip := _guidance_for_current_state()
++	if tip.is_empty(): return
++	contextual_tip.show_tip(tip.title, tip.body)
++
++
++func _refresh_guidance() -> void:
++	if not _guidance_ready or run == null or contextual_tip == null: return
++	var tip := _guidance_for_current_state()
++	if tip.is_empty():
++		tip_button.disabled = true
++		tip_button.tooltip_text = "No tip for this screen."
++		contextual_tip.dismiss()
++		return
++	tip_button.disabled = false
++	tip_button.tooltip_text = "%s\n%s" % [tip.title, tip.body]
++	if _current_tip_key == tip.key: return
++	_current_tip_key = tip.key
++	contextual_tip.dismiss()
++	if run.visit_guidance_tip(StringName(tip.key)):
++		contextual_tip.show_tip(tip.title, tip.body)
++
++
++func _guidance_for_current_state() -> Dictionary:
++	match tutorial_context:
++		&"main_menu":
++			return {}
++		&"predevelopment":
++			return {"key": "predevelopment_setup", "title": "Plan your game", "body": "Name the game and choose a Genre and Theme. Editing is free; Begin Development advances one cycle."}
++		&"studio":
++			if run != null and run.needs_starter_selection():
++				return {"key": "studio_first_store", "title": "Build your first pool", "body": "Visit the Feature Store before your first game. Starter purchases use cash but no cycles; the Studio hint tracks your Scope."}
++			return {"key": "studio_between_games", "title": "Choose your next step", "body": "Browse release summaries, the Feature Store or Contracts for free. Produce Next Game starts a fresh project with your owned Features."}
++		&"feature_store":
++			if run != null and run.needs_starter_selection():
++				return {"key": "store_starter", "title": "Compare starter Features", "body": "Select a node to see its price and Scope. Starter purchases cost zero cycles; you can return to Studio at any time."}
++			return {"key": "store_branches", "title": "Follow the branches", "body": "Select a node for its prerequisite, discount and final price. Owned Features stay available for future projects."}
++		&"review":
++			return {"key": "review_categories", "title": "Explore your release", "body": "Open each category for the frozen Review and sales results. Browsing or returning to Studio costs nothing."}
++		&"contract":
++			if phase is ContractPhase:
++				var state: ContractState = phase.get_contract_state()
++				if state != null and state.is_completed(): return {}
++				if state != null and state.get_successful_hand_count() > 0:
++					return {"key": "contract_final_hand", "title": "One hand left", "body": "Choose four cards for the final hand. The contract pays once after two successful hands."}
++				if phase.get_selected_candidate_views().size() == 4:
++					return {"key": "contract_ready", "title": "Contract hand ready", "body": "Play four cards to advance one cycle. Contract Features are finite; Passes can return in later draws."}
++				return {"key": "contract_choose", "title": "Build a contract hand", "body": "Select four of seven cards. Priorities weight future draws; redraws come from your shared run budget."}
++			return {"key": "contract_offer", "title": "Inspect the offer", "body": "Review its targets and reward before accepting. Opening details and accepting cost no cycles or cash."}
++		&"design", &"alpha", &"beta":
++			return _production_guidance()
++	return {}
++
++
++func _production_guidance() -> Dictionary:
++	if not is_instance_valid(phase) or not phase.has_method("get_workspace"):
++		return {"key": String(tutorial_context) + "_overview", "title": "Build your game", "body": "Set priorities and select four cards per hand. Open Tutorial for the full phase reference."}
++	var workspace: PhaseWorkspace = phase.get_workspace()
++	var name := String(tutorial_context)
++	if (tutorial_context == &"design" and not (phase is DesignPhase)) or (tutorial_context == &"alpha" and not (phase is AlphaPhase)) or (tutorial_context == &"beta" and not (phase is BetaPhase)):
++		return {"key": name + "_overview", "title": name.capitalize() + " guidance", "body": "Set priorities and select four cards per hand. Open Tutorial for the full phase reference."}
++	if workspace.overlay.visible:
++		return {} # PriorityOverlay already presents its own help above the game.
++	var selected: Array[CardView] = phase.get_selected_candidate_views()
++	if selected.size() == 4:
++		if tutorial_context == &"beta":
++			var marketing := true
++			for view: CardView in selected:
++				if view.card_data.beta_category != CardData.BETA_CATEGORY_MARKETING: marketing = false
++			if marketing:
++				return {"key": "beta_marketing", "title": "Marketing Specialization", "body": "Four Marketing cards in one hand multiply their combined printed Marketing value by 1.5."}
++		return {"key": name + "_ready", "title": "Four cards selected", "body": "Play the hand to advance one cycle. Selected Features exhaust for this project; Passes can return."}
++	if tutorial_context == &"beta":
++		if project != null and project.get_known_bugs() > 0:
++			return {"key": "beta_fix", "title": "Fix Known Bugs", "body": "Debug works on Known Bugs. Search for Bugs first if you need to reveal Hidden Bugs. Launch when you are satisfied with testing and marketing."}
++		return {"key": "beta_search", "title": "Find and prepare", "body": "Search for Bugs reveals Hidden Bugs; Debug fixes Known Bugs. Select four cards for each hand, then launch when you are satisfied."}
++	if project != null and project.get_current_scope() > 0:
++		var body := "Keep building Scope and Core Scores. Redraw selected cards without advancing a cycle; successful hands restore one redraw."
++		if tutorial_context == &"design": body += " Proceed to Alpha when you are ready."
++		if tutorial_context == &"alpha": body += " Check Bug Pressure before moving to Beta."
++		return {"key": name + "_progress", "title": "Watch the project", "body": body}
++	return {"key": name + "_choose", "title": "Select four cards", "body": "Choose from seven candidates. Features are finite within the project; Passes are renewable. Redraws cost no cycles."}
++
+ func refresh() -> void:
+ 	if run == null: return
+ 	if project == null:
+ 		change_priorities.disabled = true
+ 		_refresh_footer()
++		_refresh_guidance()
+ 		return
+ 	for index in range(4):
+ 		stats[index + 1].text = ["Graphics", "Sound", "Technology", "Design"][index] + "\n" + str(project.get_core_score(index))
+@@ -139,6 +252,7 @@ func refresh() -> void:
+ 	change_priorities.disabled = not is_instance_valid(phase) or not phase.has_method("can_edit_priorities") or not phase.can_edit_priorities()
+ 	change_priorities.tooltip_text = "Begin the phase to edit priorities." if change_priorities.disabled else "Stage a new allocation for future draws."
+ 	_refresh_footer()
++	_refresh_guidance()
+ 
+ func _refresh_footer() -> void:
+ 	var cents := run.get_cash_cents()
+diff --git a/patch-notes/scripts/ui/predevelopment_overlay.gd b/patch-notes/scripts/ui/predevelopment_overlay.gd
+index 5ca1de5..7055fd3 100644
+--- a/patch-notes/scripts/ui/predevelopment_overlay.gd
++++ b/patch-notes/scripts/ui/predevelopment_overlay.gd
+@@ -29,11 +29,14 @@ func _ready() -> void:
+ 	name_input = LineEdit.new()
+ 	name_input.name = "GameName"
+ 	name_input.placeholder_text = "Enter a game name"
++	name_input.tooltip_text = "Give this game a name. You can edit it until development begins."
+ 	layout.add_child(name_input)
+ 	_add_label(layout, "Genre", 16)
+ 	genre_input = _add_options(layout, "genres")
++	genre_input.tooltip_text = "Genre affects Review through the game's final Core Scores."
+ 	_add_label(layout, "Theme", 16)
+ 	theme_input = _add_options(layout, "themes")
++	theme_input.tooltip_text = "Choose a Theme for this game's identity. Themes have no gameplay effect yet."
+ 	_add_label(layout, "Begin Development: 1 calendar cycle • New project starts at cycle 0 • No cash required\nEditing or cancelling: 0 cycles • Themes have no gameplay effects yet", 16)
+ 	error_label = _add_label(layout, "", 16)
+ 	error_label.add_theme_color_override("font_color", Color("ffc779"))
+@@ -42,6 +45,7 @@ func _ready() -> void:
+ 	begin_button = Button.new()
+ 	begin_button.name = "BeginDevelopment"
+ 	begin_button.text = "Begin Development"
++	begin_button.tooltip_text = "Locks this game's name, Genre and Theme and advances one calendar cycle."
+ 	begin_button.custom_minimum_size = Vector2(240, 44)
+ 	begin_button.pressed.connect(_confirm)
+ 	actions.add_child(begin_button)
+@@ -49,6 +53,7 @@ func _ready() -> void:
+ 	back_button = back
+ 	back.name = "CancelPredevelopment"
+ 	back.text = "Back to Studio"
++	back.tooltip_text = "Return to Studio without spending cash or advancing time."
+ 	back.custom_minimum_size = Vector2(180, 44)
+ 	back.pressed.connect(func(): cancelled.emit())
+ 	actions.add_child(back)
+diff --git a/patch-notes/scripts/ui/tutorial_overlay.gd b/patch-notes/scripts/ui/tutorial_overlay.gd
+index 9db3d77..84c8ae0 100644
+--- a/patch-notes/scripts/ui/tutorial_overlay.gd
++++ b/patch-notes/scripts/ui/tutorial_overlay.gd
+@@ -4,6 +4,11 @@ extends CanvasLayer
+ signal closed
+ 
+ const TOPICS := {
++	&"main_menu": [
++		{"title": "Create Your Studio", "body": "Choose Start Game, name your studio, then enter Studio. Visit the Feature Store to build your first Feature pool before producing a game."},
++		{"title": "Produce a Game", "body": "Name the game and choose a Genre and Theme. During Design, Alpha and Beta, set priorities, select four cards per hand and decide when to move to the next phase."},
++		{"title": "After Release", "body": "Studio keeps your owned Features and released-game history. Browse reviews, sales, the Feature Store and available Contracts. The footer Tutorial button opens detailed help for your current screen."},
++	],
+ 	&"predevelopment": [
+ 		{"title": "Name Your Game", "body": "Choose a required game name, Genre and Theme. These choices stay with the project. Themes have no gameplay effects yet."},
+ 		{"title": "Begin Development", "body": "Editing and cancelling are free. Begin Development needs no cash and advances the run calendar by one cycle. Your new project starts at cycle 0 with four redraws."},
+@@ -23,7 +28,7 @@ const TOPICS := {
+ 	],
+ 	&"studio": [
+ 		{"title": "Studio: Between Games", "body": "Produce your first game, then return to browse release summaries, the Feature Store and available Contracts. Browsing costs no cycles or cash."},
+-		{"title": "Studio: Productive Time", "body": "Purchases and productive actions use the shared run calendar. Historical sales earn and settle through that boundary. Produce Next Game preserves your run progression and creates a fresh project."},
++		{"title": "Studio: Productive Time", "body": "Productive actions use the shared run calendar, where historical sales earn and settle. Feature Store branch purchases cost no cycles; later Primitive reserve purchases take one. Produce Next Game creates a fresh project while preserving the run."},
+ 	],
+ 	&"review": [
+ 		{"title": "Review: Inspect Your Release", "body": "Use the five tabs to inspect the frozen release results. Back to Summary returns to Studio for free; viewing results never rerolls or pays them again."},
+@@ -34,7 +39,7 @@ const TOPICS := {
+ 	],
+ 	&"feature_store": [
+ 		{"title": "Feature Store: Follow the Tree", "body": "Select a node to inspect its prerequisites, price and familiarity discount. Owned Features carry into future projects; playing prerequisite Features can reduce a child's price."},
+-		{"title": "Feature Store: Purchase Carefully", "body": "Opening and closing are free. A successful purchase costs its displayed cash price and one productive cycle. Locked nodes require their prerequisites; unaffordable nodes need more cash."},
++		{"title": "Feature Store: Purchase Carefully", "body": "Opening, browsing and branch purchases cost zero cycles. Starter Primitive purchases are also free of cycles; later Primitive reserve purchases take one. Every purchase spends its displayed cash price. Locked nodes require prerequisites."},
+ 	],
+ }
+ 

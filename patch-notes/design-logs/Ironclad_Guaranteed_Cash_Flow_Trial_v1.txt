@@ -1,0 +1,81 @@
+PATCH NOTES — IRONCLAD GUARANTEED CASH-FLOW TRIAL v1
+2026-09-27 — READ-ONLY ANALYSIS; NO NUMERICAL RULE APPROVED
+
+Sources and authority
+---------------------
+- Live Patch Notes To Do List, section "IRONCLAD GUARANTEED CONTRACT BONUS — READ-ONLY CASH-FLOW RERUN; NOT LOCKED", read 2026-09-27.
+- Canonical "Patch Notes — Implementation Discoveries and Locked Rules.txt", especially sections 45 and 47, read 2026-09-27.
+- Publisher_Cash_and_Payroll_Prototype_v1.txt and Publisher_Cash_and_Payroll_Playtest_Data_v1.txt.
+- Current runtime ContractState and RunState/Sales regressions, observed through Godot 4.7.1.
+- Source repository HEAD b07a658 and existing publisher_cash_payroll_v1.py sample_run; seed 260927, 150 paths per cell: 7 starter Scope targets x 3 play policies x 2 initial half-month alignments = 6,300 paired paths. The source simulation file and unrelated gameplay worktree changes were already present; only the new trial code and data were added here.
+
+Question and model
+------------------
+The trial compares guaranteed amounts of $0, $250, $400, and $600 paid at Ironclad Contract acceptance. Each uses the SAME sampled starter acquisition, Game 1, Review, Month 1 units, Contract numerator, reserve, and lean Game 2. No new game rules or state were implemented. The $2,400 total cash cap is unchanged:
+
+  upfront_cents = B
+  completion_cents = floor((240000 - B) * numerator / 96)
+  total_cents = upfront_cents + completion_cents
+  B in {0, 25000, 40000, 60000}; numerator in [0, 96].
+
+At numerator 0, the trial pays $0/$250/$400/$600. At numerator 48 it pays $1,200/$1,325/$1,400/$1,500. At numerator 96 all pay $2,400. This changes the completion incentive: the full 0-to-96 increase is $2,400/$2,150/$2,000/$1,800 respectively. This is a candidate, not the locked runtime payout.
+
+The main cash timeline charges all sampled Game 1 Feature play at the beginning of that production as a conservative liquidity bound; advances each sampled Game 1 productive cycle; releases Game 1 with zero immediate sales; hires 0/1/2 staff before Contract acceptance at $0 and one productive cycle each; accepts Contract for zero cycles; applies upfront cash immediately; runs exactly two successful Contract hands; pays the completion remainder as the second hand's direct effect before its productive-cycle boundary; takes 0 or 2 one-cycle, $0 courses per staff after Contract; purchases the $450 Scope-2 reserve and optionally a $1,700 Store node at one cycle each; then advances sampled lean Game 2 production. One completed course raises payroll $25/month in this prototype. The candidate bill is $75/month and base salary $100/month per staff.
+
+Every successful postrelease productive cycle earns Month 1 sales until its two-cycle cap. At each beginning-of-month cycle boundary, exact-cent earned-but-unsettled Game 1 sales, bill, and payroll are ONE net transaction. Sales can fund that same boundary's expense. No projected or unearned sale is spendable. No Game 2 or later-month sales are modeled. A negative cash outcome records the first shortfall; the rest of that trace is a counterfactual comparison, not a claim that gameplay would allow the failed action. Main timing has the first bill from Game 1 and newly hired staff/course raises effective at the boundary crossed by their successful action. Delayed alternatives are below.
+
+Paired results
+--------------
+Shortfall incidence through the lean Game 2 path, percent of 6,300 runs. Columns are guaranteed dollars at Contract acceptance:
+
+  Staff / courses each / optional $1,700 node     $0      $250    $400    $600
+  0 / 0 / no                                    0.00%    0.00%   0.00%   0.00%
+  0 / 0 / yes                                   7.71%    6.22%   5.51%   4.54%
+  1 / 0 / no                                    0.00%    0.00%   0.00%   0.00%
+  1 / 0 / yes                                  32.08%   30.02%  28.81%  26.71%
+  1 / 2 / no                                    0.10%    0.06%   0.06%   0.00%
+  1 / 2 / yes                                  53.73%   52.30%  51.44%  50.13%
+  2 / 2 / no                                   34.48%   32.30%  30.81%  28.84%
+  2 / 2 / yes                                  81.37%   80.37%  79.75%  78.90%
+
+The provisional $400 gives a 2.29-percentage-point reduction for one staff/two courses plus the optional node, but still leaves a shortfall in 51.44% of runs. With two staff/two courses and no node the reduction is 3.67 points, to 30.81%. It is not a liquidity fix for those heavier paths. The first shortfall for one staff/two courses plus the optional node is most often at a Game 2 month boundary (2,332 cases at $0; 2,372 at $400), then Game 2 Feature play (942; 821). The median amount of the first shortfall among failing cases is $131.68 at $0 and $123.74 at $400.
+
+Across the identical Contract completions, total payout p10/median/p90 is $1,350/$1,900/$2,350 at $0 and $1,525/$1,983.33/$2,358.33 at $400. The Contract numerator p10/median/p90 is 54/76/94 out of 96. The sampled Review p10/median/p90 is 0.4/1.3/3.1. These low Reviews reflect the prior publisher model, not a new Review balance ruling.
+
+For the one-staff/two-course lean path, the median cash snapshots at $0 versus $400 guaranteed are: before acceptance $1,449.665 in both; after upfront $1,449.665 versus $1,849.665; after Contract hand 1 $2,032.55 versus $2,432.55; after hand 2 $4,486.01 versus $4,540.06; end of the sampled Game 2 path $1,717.95 versus $1,779.09. A median may be half a cent because it averages two whole-cent observations; every simulated individual balance remains whole cents. Medians are per-checkpoint across paired but independently ranked paths; their differences are not an individual run's cash delta. The full raw result includes each paired path and every month-boundary line item.
+
+Month-boundary examples for that same lean path (cash AFTER the exact-cent net transaction; cycle -> n / p10 / median, in dollars):
+
+  $0:   2 -> 6300 / 635.00 / 1395.00; 4 -> 6300 / 560.00 / 1320.00;
+        6 -> 6300 / 485.00 / 1283.04; 8 -> 6300 / 410.00 / 1470.00;
+       10 -> 6300 / 565.00 / 2584.00; 12 -> 6300 / 490.00 / 2970.00;
+       14 -> 6300 / 1255.13 / 3038.735; 16 -> 6300 / 1110.66 / 3145.905.
+  $400: 2 -> 6300 / 635.00 / 1395.00; 4 -> 6300 / 560.00 / 1320.00;
+        6 -> 6300 / 485.00 / 1283.04; 8 -> 6300 / 410.00 / 1676.395;
+       10 -> 6300 / 565.00 / 2804.405; 12 -> 6300 / 490.00 / 2994.385;
+       14 -> 6300 / 1332.56 / 3210.22; 16 -> 6300 / 1224.45 / 3258.46.
+
+Later boundary cycles 18–32 have different n because play policies take different numbers of cycles; full p10/median/p90 and all exact cash line items are in the summary and compressed raw data. The guarantee starts to affect the aggregate on the boundaries after acceptance. Hiring before acceptance may already settle Month 1 sales, which explains identical preacceptance snapshots across bonus choices.
+
+The optional-node, one-staff/two-course shortfall by first-game Review band at $0 -> $400 is: 0–0.7: 33.23% -> 32.00% (n=1,631); 0.8–1.7: 60.48% -> 57.49% (n=2,437); 1.8–3.0: 64.27% -> 62.02% (n=1,601); 3.1–5.0: 53.88% -> 51.51% (n=631). This nonmonotonicity is confounded by starter spend and policy. By lowest initial-cash decile it is 97.30% -> 96.51%; decile 5 is 72.54% -> 68.73%; decile 10 is 0% -> 0%. The JSON summary also gives every exact starter-spend group, Scope target, Contract completion band, and initial-cash decile for both node choices and all four bonuses; no group should be read as a causal effect of Review or completion.
+
+Timing sensitivity and unresolved rules
+---------------------------------------
+For one staff/two courses without the optional node, main first-bill/same-hire/same-raise timing has shortfall 0.10% at $0 and 0.06% at $400. If the first bill begins only after release, it is 0.03% and 0.00%. If payroll begins at the NEXT boundary after hiring, 0.05% and 0.02%. If course raises begin at the NEXT boundary, 0.08% and 0.03%. With delayed bill, hire payroll, and course raises together, 0.02% and 0.00%. These variants are trial assumptions, not decided timing rules.
+
+The first bill/payroll month, hiring action fee and cycle, whether a hire on a boundary joins that very payroll, course raise effective month, and insufficient-cash rollback remain unresolved. The one-cycle/$0 hiring and course assumptions are specifically trial inputs. The eventual implementation must preflight an exact-cent net monthly transaction atomically with the central productive-cycle boundary and preserve state on insufficient cash or overflow. This analysis records the first hypothetical shortfall but cannot prove a runtime rollback rule that does not yet exist.
+
+Authority conflict and decision
+-------------------------------
+Canonical section 47 currently says all Ironclad cash scales continuously with exact completion. Any nonzero guaranteed amount pays cash at ZERO completion and therefore conflicts with that lock. The trial does not silently amend section 47. A design decision must explicitly replace or qualify that rule before implementation. The $400 candidate is not approved by this trial: it improves earlier liquidity modestly but reduces completion-dependent cash by $400 at full completion and leaves the difficult paths largely unaffordable. The total cap remains $2,400 in every candidate.
+
+Verification and artifacts
+--------------------------
+- test_ironclad_guarantee_cashflow_v1.py: 4 focused tests passed (exact reward/cap, zero-cycle acceptance/payout placement, one-cycle hire with net boundary, shortfall and delayed payroll).
+- Python compile passed.
+- Godot 4.7.1 headless: verify_balanced_primitive_contract.gd, verify_sales_earning_and_settlement.gd, and verify_primitive_month_one_sales_revenue.gd exited 0 with passing assertions. Existing missing-artwork and Windows certificate warnings appeared; no relevant failure.
+- git diff --check passed; only pre-existing line-ending warnings from unrelated modified files.
+- Reproduce: ironclad_guarantee_cashflow_v1.py 260927 150.
+- Machine-readable summary: ironclad_guarantee_cashflow_v1_summary.json.
+- Exact paired path and month-boundary data: ironclad_guarantee_cashflow_v1_results.json.gz (JSON Lines compressed).
+- Deferred: actual expenses/payroll/hiring/course implementation, insufficient-cash rule, later-month sales, publisher offer variants, and any numeric guarantee approval.

@@ -67,6 +67,7 @@ func refresh() -> void:
 	if card_data.phase == CardData.PHASE_BETA:
 		_refresh_beta_data()
 		_refresh_renewability()
+		_refresh_card_tooltip()
 		_refresh_artwork()
 		return
 	primary_score.visible = true
@@ -85,6 +86,7 @@ func refresh() -> void:
 	department_label.visible = not card_data.department.is_empty()
 
 	_refresh_renewability()
+	_refresh_card_tooltip()
 	_refresh_artwork()
 
 
@@ -106,6 +108,18 @@ func _refresh_renewability() -> void:
 	var icon_texture := renewable_texture if card_data.renewable else nonrenewable_texture
 	renewability_icon.texture = icon_texture
 	renewability_icon.tooltip_text = "Renewable" if card_data.renewable else "Nonrenewable"
+
+
+func _refresh_card_tooltip() -> void:
+	var lifecycle := "Renewable: may return in later draws." if card_data.renewable else "Finite: exhausts after a successful play in this project."
+	var detail := ""
+	if card_data.phase == CardData.PHASE_BETA:
+		detail = "%s card · printed value %d." % [_display_name(card_data.beta_category), card_data.beta_value]
+	else:
+		detail = "%s · %d Scope · +%d %s" % ["Feature" if card_data.card_type == &"feature" else "Pass", card_data.scope, card_data.primary_value, _display_name(card_data.primary_stat)]
+		if not card_data.secondary_stat.is_empty():
+			detail += " · +%d %s" % [card_data.secondary_value, _display_name(card_data.secondary_stat)]
+	input_button.tooltip_text = "%s\n%s\n%s\nSelect cards to build a four-card hand." % [card_data.card_name, detail, lifecycle]
 
 
 func _refresh_artwork() -> void:

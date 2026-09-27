@@ -4,6 +4,11 @@ extends CanvasLayer
 signal closed
 
 const TOPICS := {
+	&"main_menu": [
+		{"title": "Create Your Studio", "body": "Choose Start Game, name your studio, then enter Studio. Visit the Feature Store to build your first Feature pool before producing a game."},
+		{"title": "Produce a Game", "body": "Name the game and choose a Genre and Theme. During Design, Alpha and Beta, set priorities, select four cards per hand and decide when to move to the next phase."},
+		{"title": "After Release", "body": "Studio keeps your owned Features and released-game history. Browse reviews, sales, the Feature Store and available Contracts. The footer Tutorial button opens detailed help for your current screen."},
+	],
 	&"predevelopment": [
 		{"title": "Name Your Game", "body": "Choose a required game name, Genre and Theme. These choices stay with the project. Themes have no gameplay effects yet."},
 		{"title": "Begin Development", "body": "Editing and cancelling are free. Begin Development needs no cash and advances the run calendar by one cycle. Your new project starts at cycle 0 with four redraws."},
@@ -23,7 +28,7 @@ const TOPICS := {
 	],
 	&"studio": [
 		{"title": "Studio: Between Games", "body": "Produce your first game, then return to browse release summaries, the Feature Store and available Contracts. Browsing costs no cycles or cash."},
-		{"title": "Studio: Productive Time", "body": "Purchases and productive actions use the shared run calendar. Historical sales earn and settle through that boundary. Produce Next Game preserves your run progression and creates a fresh project."},
+		{"title": "Studio: Productive Time", "body": "Productive actions use the shared run calendar, where historical sales earn and settle. Feature Store branch purchases cost no cycles; later Primitive reserve purchases take one. Produce Next Game creates a fresh project while preserving the run."},
 	],
 	&"review": [
 		{"title": "Review: Inspect Your Release", "body": "Use the five tabs to inspect the frozen release results. Back to Summary returns to Studio for free; viewing results never rerolls or pays them again."},
@@ -34,7 +39,7 @@ const TOPICS := {
 	],
 	&"feature_store": [
 		{"title": "Feature Store: Follow the Tree", "body": "Select a node to inspect its prerequisites, price and familiarity discount. Owned Features carry into future projects; playing prerequisite Features can reduce a child's price."},
-		{"title": "Feature Store: Purchase Carefully", "body": "Opening and closing are free. A successful purchase costs its displayed cash price and one productive cycle. Locked nodes require their prerequisites; unaffordable nodes need more cash."},
+		{"title": "Feature Store: Purchase Carefully", "body": "Opening, browsing and branch purchases cost zero cycles. Starter Primitive purchases are also free of cycles; later Primitive reserve purchases take one. Every purchase spends its displayed cash price. Locked nodes require prerequisites."},
 	],
 }
 
