@@ -1,0 +1,207 @@
+class_name ContractState
+extends RefCounted
+
+const CONTRACT_ID := &"balanced_primitive_contract_v1"
+const REQUIRED_HANDS := 2
+const EXPECTED_SCOPE := 12
+const EXPECTED_CORE_HALF_UNITS := 12
+const PUBLISHER_INVESTMENT_CENTS := 240000
+const COMPLETION_DENOMINATOR := 96
+const CORE_BY_STAT := {
+	&"graphics": ProjectState.CoreScore.GRAPHICS,
+	&"sound": ProjectState.CoreScore.SOUND,
+	&"technology": ProjectState.CoreScore.TECHNOLOGY,
+	&"design": ProjectState.CoreScore.DESIGN,
+}
+const PASS_IDS: Array[StringName] = [&"graphics_pass", &"sound_pass", &"technology_pass", &"design_pass"]
+
+var _eligible_feature_ids: Dictionary = {}
+var _scope := 0
+var _core_half_units: Dictionary = {}
+var _successful_hands := 0
+var _exhausted_feature_ids: Dictionary = {}
+var _priorities: Dictionary = {}
+var _result: ContractResult
+var _payout_committed := false
+
+
+func _init(eligible_feature_ids: Array[StringName] = []) -> void:
+	for id in eligible_feature_ids:
+		if not id.is_empty():
+			_eligible_feature_ids[id] = true
+	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
+		_core_half_units[category] = 0
+		_priorities[category] = PriorityAllocation.INITIAL_PRIORITY
+
+
+func get_contract_id() -> StringName:
+	return CONTRACT_ID
+
+
+func get_scope() -> int:
+	return _scope
+
+
+func get_core_score_half_units(category: ProjectState.CoreScore) -> int:
+	return _core_half_units.get(category, 0)
+
+
+func get_successful_hand_count() -> int:
+	return _successful_hands
+
+
+func get_priority_distribution() -> Dictionary:
+	return _priorities.duplicate()
+
+
+func get_eligible_feature_ids() -> Array[StringName]:
+	var result: Array[StringName] = []
+	result.assign(_eligible_feature_ids.keys())
+	return result
+
+
+func get_exhausted_feature_ids() -> Array[StringName]:
+	var result: Array[StringName] = []
+	result.assign(_exhausted_feature_ids.keys())
+	return result
+
+
+func is_feature_eligible(id: StringName) -> bool:
+	return _eligible_feature_ids.has(id)
+
+
+func is_feature_exhausted(id: StringName) -> bool:
+	return _exhausted_feature_ids.has(id)
+
+
+func is_completed() -> bool:
+	return _result != null
+
+
+func get_result() -> ContractResult:
+	return _result
+
+
+func is_payout_committed() -> bool:
+	return _payout_committed
+
+
+func can_commit_priorities(distribution: Dictionary) -> bool:
+	return not is_completed() and PriorityAllocation.is_valid_distribution(distribution) and distribution != _priorities
+
+
+func commit_priorities(distribution: Dictionary) -> bool:
+	if not can_commit_priorities(distribution):
+		return false
+	_priorities = distribution.duplicate()
+	return true
+
+
+func plan_hand(cards: Array[CardData]) -> Dictionary:
+	if is_completed() or _successful_hands >= REQUIRED_HANDS or cards.size() != 4:
+		return {}
+	var seen_features: Dictionary = {}
+	var specialization_stat := cards[0].primary_stat if not cards.is_empty() else StringName()
+	if not CORE_BY_STAT.has(specialization_stat):
+		return {}
+	for card in cards:
+		if not _is_valid_card(card):
+			return {}
+		if card.primary_stat != specialization_stat:
+			specialization_stat = &""
+		if card.card_type == &"feature":
+			if seen_features.has(card.id):
+				return {}
+			seen_features[card.id] = true
+	var score_additions: Dictionary = {}
+	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
+		score_additions[category] = 0
+	var scope_addition := 0
+	for card in cards:
+		if card.scope > RunState.MAX_SIGNED_INT - scope_addition:
+			return {}
+		scope_addition += card.scope
+		var multiplier := 3 if not specialization_stat.is_empty() else 2
+		if not _add_score(score_additions, card.primary_stat, card.primary_value, multiplier):
+			return {}
+		if not card.secondary_stat.is_empty() and not _add_score(score_additions, card.secondary_stat, card.secondary_value, multiplier):
+			return {}
+	if scope_addition > RunState.MAX_SIGNED_INT - _scope:
+		return {}
+	var projected_scores := _core_half_units.duplicate()
+	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
+		var addition: int = score_additions[category]
+		if addition > RunState.MAX_SIGNED_INT - int(projected_scores[category]):
+			return {}
+		projected_scores[category] += addition
+	var completing := _successful_hands + 1 == REQUIRED_HANDS
+	var numerator := 0
+	var payout := 0
+	if completing:
+		var completion := calculate_completion(_scope + scope_addition, projected_scores)
+		if completion.is_empty():
+			return {}
+		numerator = completion.numerator
+		payout = completion.payout_cents
+	return {
+		"expected_hand_count": _successful_hands,
+		"scope_addition": scope_addition,
+		"score_additions": score_additions,
+		"exhausted_ids": seen_features.keys(),
+		"specialization_stat": specialization_stat,
+		"completing": completing,
+		"completion_numerator": numerator,
+		"payout_cents": payout,
+	}
+
+
+func commit_hand(cards: Array[CardData], expected_payout_cents: int) -> bool:
+	var plan := plan_hand(cards)
+	if plan.is_empty() or plan.expected_hand_count != _successful_hands or plan.payout_cents != expected_payout_cents:
+		return false
+	_scope += plan.scope_addition
+	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
+		_core_half_units[category] += plan.score_additions[category]
+	for id: StringName in plan.exhausted_ids:
+		_exhausted_feature_ids[id] = true
+	_successful_hands += 1
+	if plan.completing:
+		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents)
+		_payout_committed = true
+	return true
+
+
+static func calculate_completion(scope: Variant, core_half_units: Dictionary) -> Dictionary:
+	if typeof(scope) != TYPE_INT or scope < 0 or core_half_units.size() != PriorityAllocation.CORE_CATEGORIES.size():
+		return {}
+	var numerator := 4 * mini(int(scope), EXPECTED_SCOPE)
+	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
+		if not core_half_units.has(category) or typeof(core_half_units[category]) != TYPE_INT or core_half_units[category] < 0:
+			return {}
+		numerator += mini(int(core_half_units[category]), EXPECTED_CORE_HALF_UNITS)
+	if numerator < 0 or numerator > COMPLETION_DENOMINATOR:
+		return {}
+	return {"numerator": numerator, "payout_cents": (PUBLISHER_INVESTMENT_CENTS * numerator) / COMPLETION_DENOMINATOR}
+
+
+func _is_valid_card(card: CardData) -> bool:
+	if card == null or card.primary_value < 0 or card.scope < 0 or not CORE_BY_STAT.has(card.primary_stat):
+		return false
+	if card.secondary_stat.is_empty() != (card.secondary_value == 0):
+		return false
+	if not card.secondary_stat.is_empty() and (not CORE_BY_STAT.has(card.secondary_stat) or card.secondary_value < 0):
+		return false
+	if card.card_type == &"feature":
+		return is_feature_eligible(card.id) and not is_feature_exhausted(card.id) and not card.renewable and card.phase in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA]
+	return card.card_type == &"pass" and card.renewable and card.id in PASS_IDS
+
+
+func _add_score(additions: Dictionary, stat: StringName, value: int, multiplier: int) -> bool:
+	if value < 0 or value > RunState.MAX_SIGNED_INT / multiplier:
+		return false
+	var category: ProjectState.CoreScore = CORE_BY_STAT[stat]
+	var amount := value * multiplier
+	if amount > RunState.MAX_SIGNED_INT - int(additions[category]):
+		return false
+	additions[category] += amount
+	return true

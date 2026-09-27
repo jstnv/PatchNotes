@@ -75,6 +75,7 @@ func _verify_one_shot_isolation_and_ui() -> void:
 	var database := PrimitiveSnapshotDatabase.new()
 	database.load_ledgers()
 	state.commit_launch_market_context_result(PrimitiveLaunchMarketContextCalculator.calculate(state, database))
+	state.commit_units_sold_result(PrimitiveUnitsSoldCalculator.calculate(state))
 	_expect(not state.commit_awareness_result(PrimitiveAwarenessCalculator.calculate(state)) and state.get_awareness_result() == result, "Repeated Awareness requests cannot apply Marketing twice or replace the result")
 	_expect(state.get_review_result() == review and _equal(review.get_final_review(), 7.2), "Awareness commit preserves the exact ReviewResult")
 	_expect(before == [state.get_marketing_output(), state.get_hidden_bugs(), state.get_known_bugs(), state.get_remaining_bugs(), state.get_current_cycle(), state.get_assigned_competitor_snapshot_id_for_authority(), state.get_assigned_market_forecast_snapshot_id_for_authority(), state.is_competitor_snapshot_revealed(), state.is_market_forecast_snapshot_revealed(), run.get_cash()], "Awareness costs zero cycles/cash and preserves all frozen inputs and snapshots")
@@ -85,8 +86,8 @@ func _verify_one_shot_isolation_and_ui() -> void:
 	await process_frame
 	_expect(launch.setup(state, run, database), "LaunchPhase reads committed Review, Awareness, and launch-context results")
 	var visible := _visible_text(launch)
-	_expect(visible.contains("Awareness: 125") and visible.contains("Launch Marketing: 25") and visible.contains("Review: 7.2") and visible.contains("Sales and release results pending"), "Launch UI displays Awareness, Marketing input, Review, and pending release status")
-	_expect(not visible.contains("Hidden") and not visible.contains("Remaining") and not visible.contains("Reckless") and not visible.contains("Market Boom") and not visible.contains("Revenue") and not visible.contains("Units"), "Launch UI conceals Bugs, snapshots, and deferred release results")
+	_expect(visible.contains("Awareness: 125") and visible.contains("Launch Marketing: 25") and visible.contains("Review: 7.2") and visible.contains("Revenue and remaining release results pending"), "Launch UI displays Awareness, Marketing input, Review, and pending release status")
+	_expect(not visible.contains("Hidden") and not visible.contains("Remaining Bugs") and not visible.contains("Reckless") and not visible.contains("Market Boom") and not visible.contains("$") and not visible.contains("Fans"), "Launch UI conceals Bugs, snapshots, cash revenue, and deferred fan results")
 	var reconstructed := LAUNCH_SCENE.instantiate() as LaunchPhase
 	root.add_child(reconstructed)
 	await process_frame

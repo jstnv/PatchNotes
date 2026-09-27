@@ -1,0 +1,107 @@
+FIRST-GAME PRE-DEVELOPMENT AND PROGRESSIVE PHASE TIPS V1
+Date: 2026-09-26
+
+AUTHORITY / SCOPE
+Read current repository, cumulative Drive authority through section 50 and the
+Drive To Do List before implementation. No repository AGENTS.md was found; the
+previously inspected ancestor/design-folder instruction locations remain applicable.
+The user's explicit request enables first-game Pre-Development and replaces the
+upfront tutorial walkthrough with tips introduced as phases are reached.
+This supersedes section 50's first-game direct-Design limitation. Existing locked
+Pre-Development economy, rosters and identity rules are reused unchanged.
+
+IMPLEMENTATION
+A new run opens FirstProjectSetup with the existing PredevelopmentOverlay.
+No ProjectState or market snapshots are created until valid confirmation.
+Game Name is required; Genre and Theme use the locked catalog. Cancel returns to a
+Set Up First Game button and preserves draft fields. Reopening/editing/cancellation,
+missing-name rejection, tip browsing and dismissal cost zero cycles and zero cash.
+Begin Development uses the same guarded transaction as Studio's Produce Next Game:
+one run calendar cycle, zero cash charge, new project cycle 0, owned Feature supply
+from the existing CardDatabase/Feature Store boundary, concealed authoritative
+snapshots, exactly four redraws and direct entry to Design priority planning.
+Design/Alpha/Beta priority prephases remain unchanged. No additional prephase
+economy, Game Size selection or publisher system was invented.
+Injected existing projects still reconstruct directly into Design without recharging.
+
+Tutorial content is now grouped by Pre-Development, Design, Alpha, Beta, Studio,
+Detailed Review, Contracts and Feature Store. A group's tips automatically appear
+on its first visit in a run. Next/Back/Close Tips and Escape are free.
+The existing Tutorial button reopens tips for the current screen at page one.
+RunState retains presentation-only seen-topic IDs across projects/reconstruction;
+no finance, calendar, card, priority, sales or project results are changed by tips.
+Studio navigation signals update context when opening/closing nested screens.
+The existing HUD arrangement is preserved, including its bottom cash/date display.
+First-game setup hides project header values until a project exists.
+
+DISCOVERIES / CORRECTIONS
+PhaseHost centers normal development scenes at minimum size. The new setup needed
+the same bounded full-workspace treatment as Studio; the initial layout test caught
+this and PhaseHost now recognizes FirstProjectSetup.
+HUD previously required non-null ProjectState. It now renders the run footer while
+first-game setup is pending and binds project signals after confirmation.
+Existing Design/transition/Store/Contract tests assumed immediate unnamed startup.
+Their fixtures now explicitly inject an existing ProjectState; dedicated startup
+tests and the normal initialization test exercise the actual new first-game flow.
+Legacy screenshot helpers also explicitly seed existing projects; the tutorial
+capture now advances through the three current Design tips.
+
+FILES CREATED (relative to patch-notes)
+scripts/phases/first_project_setup.gd (+ generated .uid)
+scripts/debug/verify_first_game_and_tips.gd (+ generated .uid)
+design-logs/first-game-setup.png
+design-logs/design-phase-tips.png
+design-logs/First_Game_and_Progressive_Tips_v1.txt
+
+FILES MODIFIED (relative to patch-notes)
+scripts/gameplay.gd
+scripts/run_state.gd
+scripts/ui/predevelopment_overlay.gd
+scripts/ui/tutorial_overlay.gd
+scripts/ui/gameplay_hud.gd
+scripts/ui/phase_host.gd
+scripts/phases/studio_phase.gd
+scripts/debug/verify_gameplay_hud_overlay.gd
+scripts/debug/verify_release_menus.gd
+scripts/debug/verify_primitive_run_initialization.gd
+scripts/debug/verify_feature_store.gd
+scripts/debug/verify_predevelopment.gd
+scripts/debug/verify_balanced_primitive_contract.gd
+scripts/debug/verify_design_phase.gd
+scripts/debug/verify_gameplay_transition.gd
+scripts/debug/verify_run_finance_and_beta_insider_state.gd
+scripts/debug/capture_gameplay_hud.gd
+scripts/debug/capture_shared_redraw.gd
+scripts/debug/capture_planning_synergy.gd
+External: New Data Logs/First_Game_and_Progressive_Tips_v1.txt
+External cumulative mirror: New Data Logs/Implementation Discoveries and Locked Rules.txt
+Drive cumulative authority: 1kmlzNwRbckS9OxucMd5WPYNOF2Dx6QT1
+
+VERIFICATION
+All 32 verify_*.gd suites pass with Godot 4.7.1, covering the previous 31 suites
+listed in section 50 plus verify_first_game_and_tips.
+New focused checks cover actual new-run entry, required name, no premature project,
+cancel/reopen draft continuity, locked identity, one run cycle/project zero, zero
+cash, redraw four, owned supply, snapshots, Design planning, stale callback rejection,
+phase tips, free manual replay, no repeated automatic tips, and reconstruction.
+Existing HUD tests verify actual Design/Alpha/Beta transitions select their tips.
+Release-menu tests verify Studio, Detailed Review, Feature Store, next-game setup,
+Contract offer and return navigation context without time/cash/results mutation.
+Normal run-initialization verification now begins through first-game setup.
+All other existing economy, Feature Store, contract, phase, launch, sales, calendar,
+review, awareness, redraw and priority regressions remain passing.
+
+Compatibility-rendered first-game/tip verification passes. First-game setup bounds
+pass at 900x600 and 1152x648. Both saved screenshots were visually inspected.
+Headless editor import/parser and git diff --check pass.
+Expected Windows certificate-store, placeholder-art and CRLF notices remain.
+No commits, resets, destructive cleanup or unrelated worktree changes were made.
+
+DEFERRED / LIMITS
+Publisher List/progression and Employees/Courses remain unimplemented. No tips imply
+those unavailable systems exist. Genre Fit Review effects, Theme effects, later
+finance/release systems and durable save serialization remain deferred.
+Seen-topic persistence is within the existing in-memory RunState, not a new disk
+save system. Final artwork and further copy polish remain optional future work.
+The Drive To Do List itself was not edited; its first-game and progressive-tutorial
+items can now be marked complete.

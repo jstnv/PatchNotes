@@ -3,6 +3,13 @@ extends RefCounted
 
 const MAX_SIGNED_INT: int = 9223372036854775807
 
+# Allocated once per project, retained through phase/release reconstruction.
+# Future save files must serialize this identity along with project state.
+var _release_id := StringName("release_" + Crypto.new().generate_random_bytes(16).hex_encode())
+
+func get_release_id() -> StringName:
+	return _release_id
+
 signal values_changed
 signal cycle_changed
 
@@ -26,6 +33,7 @@ var _has_design_bug_finalization := false
 var _was_perfect_production := false
 var _hidden_bugs := 0
 var _known_bugs := 0
+var _fixed_bugs := 0
 var _marketing_output: int = 0
 var _competitor_snapshot_id: StringName
 var _competitor_snapshot_revealed := false
@@ -39,11 +47,38 @@ var _has_beta_finalization := false
 var _review_result: ReviewResult
 var _awareness_result: AwarenessResult
 var _launch_market_context_result: LaunchMarketContextResult
+var _units_sold_result: UnitsSoldResult
+var _month_one_sales_revenue_result: MonthOneSalesRevenueResult
 var _alpha_hidden_bugs_generated := 0
 var _implemented_alpha_feature_ids: Array[StringName] = []
 var _unimplemented_alpha_feature_ids: Array[StringName] = []
 var _required_scope: int
 var _current_cycle: int = 0
+var _base_name := ""
+var _genre_id: StringName
+var _theme_id: StringName
+var _genre_ratios: Array[int] = []
+var _feature_supply_ids: Array[StringName] = []
+
+
+func configure_predevelopment(base_name: String, genre: StringName, theme: StringName, feature_ids: Array[StringName]) -> bool:
+	if has_predevelopment_identity() or _current_cycle != 0 or _current_scope != 0 or _has_design_bug_finalization or not PrimitivePredevelopment.validation_error(base_name, genre, theme).is_empty():
+		return false
+	_base_name = base_name.strip_edges()
+	_genre_id = genre
+	_theme_id = theme
+	_genre_ratios.assign(PrimitivePredevelopment.find_entry("genres", genre).ratios)
+	_feature_supply_ids.assign(feature_ids)
+	return true
+
+
+func has_predevelopment_identity() -> bool: return not _base_name.is_empty()
+func get_base_name() -> String: return _base_name
+func get_genre_id() -> StringName: return _genre_id
+func get_theme_id() -> StringName: return _theme_id
+## Graphics / Sound / Technology / Design. Data only; no new Review formula.
+func get_genre_ratios() -> Array[int]: return _genre_ratios.duplicate()
+func get_feature_supply_ids() -> Array[StringName]: return _feature_supply_ids.duplicate()
 
 
 func _init(required_scope: int) -> void:
@@ -190,6 +225,10 @@ func get_hidden_bugs() -> int:
 
 func get_known_bugs() -> int:
 	return _known_bugs
+
+
+func get_fixed_bugs() -> int:
+	return _fixed_bugs
 
 
 func get_remaining_bugs() -> int:
@@ -400,7 +439,11 @@ func fix_known_bugs(requested_amount: Variant) -> int:
 	var actual_fixed := mini(requested_amount, _known_bugs)
 	if actual_fixed == 0:
 		return 0
+	if actual_fixed > MAX_SIGNED_INT - _fixed_bugs:
+		push_warning("Fixed Bug count overflowed.")
+		return -1
 	_known_bugs -= actual_fixed
+	_fixed_bugs += actual_fixed
 	values_changed.emit()
 	return actual_fixed
 
@@ -580,11 +623,89 @@ func commit_launch_market_context_result(result: LaunchMarketContextResult) -> b
 	return true
 
 
+func has_units_sold_result() -> bool:
+	return _units_sold_result != null
+
+
+func get_units_sold_result() -> UnitsSoldResult:
+	return _units_sold_result
+
+
+func commit_units_sold_result(result: UnitsSoldResult) -> bool:
+	if not _has_beta_finalization or _review_result == null or _awareness_result == null or _launch_market_context_result == null or _units_sold_result != null or result == null:
+		return false
+	var expected := PrimitiveUnitsSoldCalculator.calculate(self)
+	if expected == null:
+		return false
+	var review_tenths := int(round(_review_result.get_final_review() * 10.0))
+	var expected_awareness_numerator := _awareness_result.get_awareness_scale() + _awareness_result.get_total_awareness()
+	if (
+		result.get_formula_id() != &"primitive_units_sold_v1"
+		or result.get_sales_period() != &"month_1"
+		or result.get_base_monthly_demand() != 500
+		or result.get_final_review_tenths() != review_tenths
+		or result.get_quality_baseline_tenths() != 70
+		or result.get_total_awareness() != _awareness_result.get_total_awareness()
+		or result.get_awareness_scale() != _awareness_result.get_awareness_scale()
+		or result.get_awareness_numerator() != expected_awareness_numerator
+		or result.get_launch_decay_basis_points() != 10000
+		or result.get_market_demand_basis_points() != _launch_market_context_result.get_forecast_multiplier_basis_points()
+		or result.get_exact_numerator() != expected.get_exact_numerator()
+		or result.get_exact_denominator() != expected.get_exact_denominator()
+		or not is_finite(result.get_pre_rounding_units())
+		or result.get_pre_rounding_units() != expected.get_pre_rounding_units()
+		or result.get_final_units_sold() != expected.get_final_units_sold()
+	):
+		return false
+	_units_sold_result = result
+	values_changed.emit()
+	return true
+
+
+func has_month_one_sales_revenue_result() -> bool:
+	return _month_one_sales_revenue_result != null
+
+
+func get_month_one_sales_revenue_result() -> MonthOneSalesRevenueResult:
+	return _month_one_sales_revenue_result
+
+
+func commit_month_one_sales_revenue_result(result: MonthOneSalesRevenueResult) -> bool:
+	if _units_sold_result == null or _month_one_sales_revenue_result != null or result == null:
+		return false
+	var expected := PrimitiveMonthOneSalesRevenueCalculator.calculate(self)
+	if expected == null or not _sales_revenue_results_match(result, expected):
+		return false
+	_month_one_sales_revenue_result = result
+	values_changed.emit()
+	return true
+
+
+func _sales_revenue_results_match(result: MonthOneSalesRevenueResult, expected: MonthOneSalesRevenueResult) -> bool:
+	return (
+		result.get_formula_id() == expected.get_formula_id()
+		and result.get_total_month_one_units() == expected.get_total_month_one_units()
+		and result.get_sales_cycle_count() == expected.get_sales_cycle_count()
+		and result.get_price_cents() == expected.get_price_cents()
+		and result.get_platform_retention_percent() == expected.get_platform_retention_percent()
+		and result.get_cycle_units() == expected.get_cycle_units()
+		and result.get_cumulative_units() == expected.get_cumulative_units()
+		and result.get_cumulative_gross_cents() == expected.get_cumulative_gross_cents()
+		and result.get_cumulative_net_entitlement_cents() == expected.get_cumulative_net_entitlement_cents()
+		and result.get_projected_month_one_gross_cents() == expected.get_projected_month_one_gross_cents()
+		and result.get_projected_month_one_net_cents() == expected.get_projected_month_one_net_cents()
+		and result.get_earned_sales_cycle_count() == 0
+		and result.get_cumulative_earned_units() == 0
+		and result.get_net_cents_previously_settled() == 0
+		and result.get_newly_payable_cents() == 0
+	)
+
+
 ## Freezes the existing authoritative project fields as future Launch/Review inputs.
 func finalize_beta() -> bool:
 	if _has_beta_finalization or not _has_alpha_finalization:
 		return false
-	if _required_scope < 0 or _current_scope < 0 or _hidden_bugs < 0 or _known_bugs < 0 or _marketing_output < 0 or _current_cycle < 0:
+	if _required_scope < 0 or _current_scope < 0 or _hidden_bugs < 0 or _known_bugs < 0 or _fixed_bugs < 0 or _marketing_output < 0 or _current_cycle < 0:
 		return false
 	if not has_competitor_snapshot() or not has_market_forecast_snapshot():
 		return false

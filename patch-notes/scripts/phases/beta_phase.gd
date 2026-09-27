@@ -1,6 +1,8 @@
 class_name BetaPhase
 extends Control
 
+var _workspace: PhaseWorkspace
+
 signal priorities_changed
 signal launch_requested
 
@@ -11,6 +13,8 @@ const SELECTED_HAND_SIZE := 4
 const QA_SPECIALIZATION_MULTIPLIER := 1.5
 const BALANCED_OPERATIONS_MULTIPLIER := 1.25
 const HOST_PLAYTEST_COST := 500
+const HOST_PLAYTEST_COST_CENTS := 50000
+const PLAYTEST_RIVAL_PAYOUT_CENTS := 100000
 const CORE_SCORE_BY_STAT := {
 	&"graphics": ProjectState.CoreScore.GRAPHICS,
 	&"sound": ProjectState.CoreScore.SOUND,
@@ -48,11 +52,13 @@ var _launch_authorized := false
 
 
 func _ready() -> void:
+	%RedrawButton.pressed.connect(_on_redraw_pressed)
 	_deal_rng.randomize()
 	_insight_rng.randomize()
 	_priority_draft = _priority_allocation.get_distribution()
 	_priority_allocation.allocation_changed.connect(_on_committed_priorities_changed)
 	%BeginBetaButton.pressed.connect(_on_begin_beta_pressed)
+	%CommitPrioritiesButton.pressed.connect(_on_commit_priorities_pressed)
 	%PlayHandButton.pressed.connect(_on_play_hand_pressed)
 	%HostPlaytestButton.pressed.connect(_on_host_playtest_pressed)
 	%LaunchGameButton.pressed.connect(_on_launch_game_pressed)
@@ -65,6 +71,11 @@ func _ready() -> void:
 	_update_play_action()
 	_update_host_playtest_action()
 	_update_launch_action()
+
+	_workspace = PhaseWorkspace.new()
+	add_child(_workspace)
+	_workspace.configure(self, "Beta")
+	_workspace.bind_states(_project_state, _run_state)
 
 
 func setup(project_state: ProjectState, run_state: RunState = null, snapshot_database: PrimitiveSnapshotDatabase = null) -> bool:
@@ -86,12 +97,16 @@ func setup(project_state: ProjectState, run_state: RunState = null, snapshot_dat
 		_project_state.values_changed.connect(_refresh_insider_information)
 	if _run_state != null and not _run_state.cash_changed.is_connected(_update_host_playtest_action):
 		_run_state.cash_changed.connect(_update_host_playtest_action)
+	if _run_state != null and not _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
+		_run_state.redraws_changed.connect(_refresh_redraw_controls)
 	_refresh_known_bugs()
 	_refresh_insider_information()
 	_update_begin_action()
 	_update_play_action()
 	_update_host_playtest_action()
 	_update_launch_action()
+	_refresh_redraw_controls()
+	if _workspace != null: _workspace.bind_states(_project_state, _run_state)
 	return true
 
 
@@ -102,17 +117,43 @@ func _exit_tree() -> void:
 		_project_state.values_changed.disconnect(_refresh_insider_information)
 	if _run_state != null and _run_state.cash_changed.is_connected(_update_host_playtest_action):
 		_run_state.cash_changed.disconnect(_update_host_playtest_action)
+	if _run_state != null and _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
+		_run_state.redraws_changed.disconnect(_refresh_redraw_controls)
 
 
 func set_priority_distribution(distribution: Dictionary) -> bool:
 	if _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_distribution(distribution):
 		return false
-	if not _priority_allocation.set_distribution(distribution):
-		return false
+	if _phase_state == PhaseState.ACTIVE_DEVELOPMENT:
+		if _run_state != null:
+			return commit_priority_distribution(distribution)
+		if not _priority_allocation.set_distribution(distribution): return false
+		_priority_draft = _priority_allocation.get_distribution()
+		_sync_priority_controls()
+		return true
+	if not _priority_allocation.set_distribution(distribution): return false
 	_priority_draft = _priority_allocation.get_distribution()
 	_sync_priority_controls()
 	_update_begin_action()
 	return true
+
+
+func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
+	if not is_inside_tree(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+	var commit := func() -> bool:
+		if not _priority_allocation.set_distribution(distribution): return false
+		_priority_draft = _priority_allocation.get_distribution()
+		_project_state.advance_cycle()
+		return true
+	if not _run_state.complete_productive_action(commit): return false
+	_sync_priority_controls()
+	_refresh_redraw_controls()
+	return true
+
+
+func _on_commit_priorities_pressed() -> void:
+	commit_priority_distribution()
 
 
 func get_priority(category: StringName) -> int:
@@ -145,6 +186,7 @@ func authorize_launch() -> bool:
 
 
 func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float] = []) -> bool:
+	if is_gameplay_input_blocked(): return false
 	if _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization():
 		return false
 	if not BetaPriorityAllocation.is_valid_distribution(_priority_draft):
@@ -175,6 +217,7 @@ func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float
 			return false
 		view.set_card(card)
 		view.card_pressed.connect(_on_card_pressed)
+
 		prepared_views.append(view)
 	if not _priority_allocation.set_distribution(committed_snapshot):
 		for prepared: CardView in prepared_views:
@@ -185,13 +228,109 @@ func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float
 	_candidate_views.assign(prepared_views)
 	for view: CardView in _candidate_views:
 		%HandContainer.add_child(view)
+	_refresh_redraw_controls()
+	_refresh_redraw_controls()
 	_phase_state = PhaseState.ACTIVE_DEVELOPMENT
+	refresh_workspace()
 	%BeginBetaButton.visible = false
 	%BeginBetaButton.disabled = true
 	_update_play_action()
 	_update_host_playtest_action()
 	_update_launch_action()
+	_refresh_redraw_controls()
 	return true
+
+
+func _can_redraw_selection() -> bool:
+	if is_gameplay_input_blocked(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _run_state == null or _transaction_in_progress or _launch_confirmation_pending or not _run_state.can_consume_redraw(_selected_card_views.size()):
+		return false
+	var seen: Array[CardView] = []
+	for view: CardView in _selected_card_views:
+		if not _is_current_candidate_view(view) or view.card_data == null or seen.has(view) or _injected_corrective_views.has(view):
+			return false
+		seen.append(view)
+	return true
+
+
+func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
+	if not _can_redraw_selection(): return false
+	var count := _selected_card_views.size()
+	if not controlled_rolls.is_empty() and controlled_rolls.size() != count: return false
+	for roll: float in controlled_rolls:
+		if not is_finite(roll) or roll < 0.0 or roll >= 1.0: return false
+	var rng_state := _deal_rng.state
+	var plan := _plan_selected_redraw(controlled_rolls)
+	if not plan.valid:
+		_deal_rng.state = rng_state
+		return false
+	# Prepare every view before changing the pool, lifecycle, selection, or budget.
+	var prepared: Array[CardView] = []
+	for card: CardData in plan.cards:
+		var replacement_view := _instantiate_card_view()
+		if replacement_view == null:
+			for view: CardView in prepared: view.free()
+			_deal_rng.state = rng_state
+			return false
+		replacement_view.set_card(card)
+		replacement_view.card_pressed.connect(_on_card_pressed)
+		prepared.append(replacement_view)
+	var selected := _selected_card_views.duplicate()
+	for index in range(count):
+		var old_view: CardView = selected[index]
+		var slot := old_view.get_index()
+		var replacement: CardData = plan.cards[index]
+
+		_candidate_cards[slot] = replacement
+		_candidate_views[slot] = prepared[index]
+		%HandContainer.remove_child(old_view)
+		old_view.queue_free()
+		%HandContainer.add_child(prepared[index])
+		%HandContainer.move_child(prepared[index], slot)
+	_selected_card_views.clear()
+	# One budget notification, after the complete pool and selection are committed.
+	_run_state.consume_redraw(count)
+	_update_play_action()
+	_refresh_redraw_controls()
+	return true
+
+
+func _on_redraw_pressed() -> void:
+	redraw_selected_cards()
+
+
+func _refresh_redraw_controls() -> void:
+	if not is_node_ready(): return
+	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
+	%RedrawButton.disabled = not _can_redraw_selection()
+	if not %RedrawButton.disabled:
+		var rolls: Array[float] = []
+		rolls.resize(_selected_card_views.size())
+		rolls.fill(0.5)
+		%RedrawButton.disabled = not _plan_selected_redraw(rolls).valid
+
+
+func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
+	var cards: Array[CardData] = []
+	var failed := {&"valid": false, &"cards": cards, &"failed_features": []}
+	var database := get_node_or_null("/root/CardDatabase")
+	if database == null or _project_state == null: return failed
+	var definitions: Array[CardData] = []
+	definitions.assign(database.call(&"get_cards_by_phase", CardData.PHASE_BETA))
+	var reserved := _project_state.get_exhausted_beta_card_ids()
+	for current: CardData in _candidate_cards:
+		if not current.renewable and not reserved.has(current.id): reserved.append(current.id)
+	for index in range(_selected_card_views.size()):
+		var excluded := reserved.duplicate()
+		excluded.append(_selected_card_views[index].card_data.id)
+		var rolls: Array[float] = []
+		if not controlled_rolls.is_empty(): rolls.append(controlled_rolls[index])
+		var deal := _build_candidate_definitions(definitions, get_priority_distribution(), rolls, rolls, excluded, 1)
+		if not deal.valid: return failed
+		var replacement: CardData = deal.cards[0]
+		cards.append(replacement)
+		if not replacement.renewable: reserved.append(replacement.id)
+	return {&"valid": true, &"cards": cards, &"failed_features": []}
 
 
 func _on_begin_beta_pressed() -> void:
@@ -247,6 +386,7 @@ func _on_launch_canceled() -> void:
 
 
 func _can_launch() -> bool:
+	if is_gameplay_input_blocked(): return false
 	return (
 		not _transaction_in_progress
 		and not _launch_confirmation_pending
@@ -365,14 +505,16 @@ func host_playtest() -> bool:
 	_update_play_action()
 	_update_host_playtest_action()
 	_update_launch_action()
-	if not _run_state.spend_cash(HOST_PLAYTEST_COST):
+	var commit := func() -> bool:
+		_project_state.advance_cycle()
+		_pending_corrective_pass_ids.assign(pass_ids)
+		return true
+	if not _run_state.complete_productive_action(commit, -HOST_PLAYTEST_COST_CENTS):
 		_transaction_in_progress = false
 		_update_play_action()
 		_update_host_playtest_action()
 		_update_launch_action()
 		return false
-	_project_state.advance_cycle()
-	_pending_corrective_pass_ids.assign(pass_ids)
 	var names := _format_pass_names(pass_ids)
 	%ActionFeedbackLabel.text = "Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: %s" % names
 	%ActionFeedbackLabel.visible = true
@@ -399,30 +541,36 @@ func play_selected_hand(insight_rolls: Array[int] = [], replacement_category_rol
 	_update_play_action()
 	_update_host_playtest_action()
 	_update_launch_action()
-	if not preflight.corrective_score_additions.is_empty():
-		_project_state.add_core_scores_and_scope(preflight.corrective_score_additions, 0)
-	var discovered := 0
-	for requested: int in preflight.search_requests:
-		discovered += _project_state.discover_bugs(requested)
-	var fixed := 0
-	for requested: int in preflight.debug_requests:
-		fixed += _project_state.fix_known_bugs(requested)
-	if preflight.marketing_gain > 0:
-		_project_state.add_marketing_output(preflight.marketing_gain)
-	if preflight.cash_gain > 0:
-		_run_state.add_cash(preflight.cash_gain)
-	if preflight.reveal_competitor:
-		_project_state.reveal_competitor_snapshot()
-	if preflight.reveal_forecast:
-		_project_state.reveal_market_forecast_snapshot()
-	_project_state.exhaust_beta_cards(preflight.finite_ids)
-	_project_state.advance_cycle()
+	var resolved := [0, 0]
+	var commit := func() -> bool:
+		if not preflight.corrective_score_additions.is_empty():
+			_project_state.add_core_scores_and_scope(preflight.corrective_score_additions, 0)
+		for requested: int in preflight.search_requests:
+			resolved[0] += _project_state.discover_bugs(requested)
+		for requested: int in preflight.debug_requests:
+			resolved[1] += _project_state.fix_known_bugs(requested)
+		if preflight.marketing_gain > 0:
+			_project_state.add_marketing_output(preflight.marketing_gain)
+		if preflight.reveal_competitor:
+			_project_state.reveal_competitor_snapshot()
+		if preflight.reveal_forecast:
+			_project_state.reveal_market_forecast_snapshot()
+		_project_state.exhaust_beta_cards(preflight.finite_ids)
+		_project_state.advance_cycle()
+		return true
+	if not _run_state.complete_productive_action(commit, preflight.cash_gain_cents):
+		for view: CardView in preflight.next_views: view.free()
+		_deal_rng.state = deal_rng_state
+		_insight_rng.state = insight_rng_state
+		_transaction_in_progress = false
+		_update_all_actions()
+		return false
 	_publish_replacement_pool(preflight.next_cards, preflight.next_views, preflight.injected_corrective_count)
 	if not preflight.consumed_pending_ids.is_empty():
 		_pending_corrective_pass_ids.clear()
 	_refresh_known_bugs()
 	_refresh_insider_information()
-	_show_action_feedback(preflight, discovered, fixed)
+	_show_action_feedback(preflight, resolved[0], resolved[1])
 	_transaction_in_progress = false
 	_update_play_action()
 	_update_host_playtest_action()
@@ -431,6 +579,7 @@ func play_selected_hand(insight_rolls: Array[int] = [], replacement_category_rol
 
 
 func _can_attempt_play() -> bool:
+	if is_gameplay_input_blocked(): return false
 	if _launch_confirmation_pending or _transaction_in_progress or _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or _snapshot_database == null:
 		return false
 	if not _project_state.has_alpha_finalization() or not _run_state.is_cash_initialized() or _selected_card_views.size() != SELECTED_HAND_SIZE or not _has_valid_active_pool():
@@ -444,16 +593,18 @@ func _can_attempt_play() -> bool:
 
 
 func _can_host_playtest() -> bool:
+	if is_gameplay_input_blocked(): return false
 	return (
 		not _launch_confirmation_pending
 		and not _transaction_in_progress
 		and _phase_state == PhaseState.ACTIVE_DEVELOPMENT
 		and _project_state != null
+		and _run_state != null
 		and _project_state.has_alpha_finalization()
 		and _project_state.can_advance_cycle()
-		and _run_state != null
+		and _run_state.can_complete_productive_cycle(-HOST_PLAYTEST_COST_CENTS)
 		and _run_state.is_cash_initialized()
-		and _run_state.get_cash() >= HOST_PLAYTEST_COST
+		and _run_state.get_cash_cents() >= HOST_PLAYTEST_COST_CENTS
 		and _pending_corrective_pass_ids.is_empty()
 		and _has_valid_active_pool()
 	)
@@ -540,7 +691,8 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
 	if marketing_gain > ProjectState.MAX_SIGNED_INT - _project_state.get_marketing_output():
 		return _invalid_play("Marketing Output would overflow.")
 	var cash_gain: int = groups.playtest.size() * 1000
-	if cash_gain > RunState.MAX_SIGNED_INT - _run_state.get_cash():
+	var cash_gain_cents: int = groups.playtest.size() * PLAYTEST_RIVAL_PAYOUT_CENTS
+	if cash_gain_cents > RunState.MAX_SIGNED_INT - _run_state.get_cash_cents():
 		return _invalid_play("Run cash would overflow.")
 	var cursor := [0]
 	var competitor_revealed := _project_state.is_competitor_snapshot_revealed()
@@ -582,6 +734,8 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
 	projected_exhausted.append_array(finite_ids)
 	if not _project_state.can_advance_cycle():
 		return _invalid_play("The project cycle cannot advance safely.")
+	if not _run_state.can_complete_productive_cycle(cash_gain_cents):
+		return _invalid_play("The run calendar cannot advance safely.")
 	var definitions: Array[CardData] = []
 	definitions.assign(card_database.call(&"get_cards_by_phase", CardData.PHASE_BETA))
 	var replacement := _build_replacement_candidate_definitions(definitions, get_priority_distribution(), replacement_category_rolls, replacement_definition_rolls, projected_exhausted)
@@ -596,8 +750,9 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
 			return _invalid_play("A complete replacement CardView pool could not be prepared.")
 		view.set_card(card)
 		view.card_pressed.connect(_on_card_pressed)
+
 		next_views.append(view)
-	return {&"valid": true, &"qa_specialization": qa_specialization, &"balanced_operations": balanced_operations, &"corrective_score_additions": corrective_score_additions, &"search_requests": search_requests, &"debug_requests": debug_requests, &"marketing_gain": marketing_gain, &"cash_gain": cash_gain, &"reveal_competitor": competitor_revealed and not _project_state.is_competitor_snapshot_revealed(), &"reveal_forecast": forecast_revealed and not _project_state.is_market_forecast_snapshot_revealed(), &"rival_attempted": rival_attempted, &"rival_gained": rival_gained, &"forecast_attempted": forecast_attempted, &"forecast_gained": forecast_gained, &"finite_ids": finite_ids, &"next_cards": replacement.cards, &"next_views": next_views, &"injected_corrective_count": replacement.injected_count, &"consumed_pending_ids": replacement.consumed_pending_ids}
+	return {&"valid": true, &"qa_specialization": qa_specialization, &"balanced_operations": balanced_operations, &"corrective_score_additions": corrective_score_additions, &"search_requests": search_requests, &"debug_requests": debug_requests, &"marketing_gain": marketing_gain, &"cash_gain": cash_gain, &"cash_gain_cents": cash_gain_cents, &"reveal_competitor": competitor_revealed and not _project_state.is_competitor_snapshot_revealed(), &"reveal_forecast": forecast_revealed and not _project_state.is_market_forecast_snapshot_revealed(), &"rival_attempted": rival_attempted, &"rival_gained": rival_gained, &"forecast_attempted": forecast_attempted, &"forecast_gained": forecast_gained, &"finite_ids": finite_ids, &"next_cards": replacement.cards, &"next_views": next_views, &"injected_corrective_count": replacement.injected_count, &"consumed_pending_ids": replacement.consumed_pending_ids}
 
 
 func _qualifies_for_qa_specialization(cards: Array[CardData]) -> bool:
@@ -713,10 +868,15 @@ func _publish_replacement_pool(cards: Array, views: Array, injected_corrective_c
 		_injected_corrective_views.append(_candidate_views[index])
 	for view: CardView in _candidate_views:
 		%HandContainer.add_child(view)
+	_refresh_redraw_controls()
 
 
 func _show_action_feedback(result: Dictionary, discovered: int, fixed: int) -> void:
 	var parts: Array[String] = []
+	if result.qa_specialization:
+		_workspace.show_synergy("QA Specialization!", "Card Value ×1.50")
+	elif result.balanced_operations:
+		_workspace.show_synergy("Balanced Operations!", "Output ×1.25")
 	if result.qa_specialization: parts.append("QA Specialization! Card Value ×1.50")
 	elif result.balanced_operations: parts.append("Balanced Operations! Output ×1.25")
 	if not result.corrective_score_additions.is_empty():
@@ -856,6 +1016,7 @@ func _get_source_validation_error(definitions: Array[CardData]) -> String:
 
 
 func _on_card_pressed(card_view: CardView) -> void:
+	if is_gameplay_input_blocked(): return
 	if _launch_confirmation_pending or _transaction_in_progress or _phase_state != PhaseState.ACTIVE_DEVELOPMENT or not _is_current_candidate_view(card_view):
 		return
 	if _selected_card_views.has(card_view):
@@ -881,7 +1042,8 @@ func _refresh_known_bugs() -> void:
 	if not is_node_ready():
 		return
 	var known_bugs := 0 if _project_state == null else _project_state.get_known_bugs()
-	%KnownBugsLabel.text = "Known Bugs: %d" % known_bugs
+	var fixed_bugs := 0 if _project_state == null else _project_state.get_fixed_bugs()
+	%KnownBugsLabel.text = "Known Bugs: %d | Fixed Bugs: %d" % [known_bugs, fixed_bugs]
 
 
 func _refresh_insider_information() -> void:
@@ -906,6 +1068,8 @@ func _refresh_insider_information() -> void:
 
 
 func _update_play_action() -> void:
+	refresh_workspace()
+	_refresh_redraw_controls()
 	if is_node_ready():
 		%PlayHandButton.disabled = not _can_attempt_play()
 
@@ -952,8 +1116,6 @@ func _update_priority_draft(category: StringName, value: float) -> void:
 		_sync_priority_controls()
 		return
 	_priority_draft[category] = int(value)
-	if BetaPriorityAllocation.is_valid_distribution(_priority_draft):
-		_priority_allocation.set_distribution(_priority_draft)
 	_sync_priority_controls(false)
 	_update_begin_action()
 
@@ -978,6 +1140,7 @@ func _sync_priority_controls(reset_draft: bool = true) -> void:
 	for value: int in _priority_draft.values():
 		total += value
 	%PriorityTotal.text = "Priority Total: %d / 100" % total
+	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_distribution(_priority_draft) or (_phase_state != PhaseState.PLANNING and _priority_draft == get_priority_distribution()) or _transaction_in_progress or _launch_confirmation_pending
 	_syncing_priority_controls = false
 
 
@@ -985,3 +1148,44 @@ func _update_begin_action() -> void:
 	if not is_node_ready():
 		return
 	%BeginBetaButton.disabled = _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization() or not BetaPriorityAllocation.is_valid_distribution(_priority_draft)
+
+
+func get_workspace() -> PhaseWorkspace:
+	return _workspace
+
+
+func refresh_workspace() -> void:
+	if _workspace != null: _workspace.refresh()
+
+
+func is_gameplay_input_blocked() -> bool:
+	return not is_inside_tree() or (_workspace != null and _workspace.overlay != null and _workspace.overlay.visible)
+
+
+func can_edit_priorities() -> bool:
+	return is_inside_tree() and _phase_state == PhaseState.ACTIVE_DEVELOPMENT and not _launch_confirmation_pending and not _transaction_in_progress
+
+
+func is_initial_priority_planning() -> bool:
+	return _phase_state == PhaseState.PLANNING
+
+
+func can_initialize_priorities() -> bool:
+	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and _project_state.has_alpha_finalization() and not _launch_confirmation_pending and not _transaction_in_progress and BetaPriorityAllocation.is_valid_distribution(_priority_draft)
+
+
+func open_priority_overlay() -> bool:
+	return _workspace != null and _workspace.overlay.open()
+
+
+func reset_priority_draft() -> void:
+	_priority_draft = get_priority_distribution()
+	_sync_priority_controls()
+
+
+func refresh_overlay_actions() -> void:
+	_update_all_actions()
+
+
+func get_launch_readiness_text() -> String:
+	return "Launch available" if _can_launch() else "Launch unavailable"

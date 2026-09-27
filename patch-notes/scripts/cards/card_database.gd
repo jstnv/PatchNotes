@@ -13,6 +13,7 @@ const PRIMITIVE_BETA_SPECS := {
 }
 
 var _cards: Dictionary = {}
+var _store_cards: Dictionary = {}
 
 func _ready() -> void:
 	load_cards("res://data/card_ledger.json")
@@ -61,6 +62,11 @@ func load_cards(path: String) -> void:
 		_cards[card.id] = card
 
 	print("Loaded %d cards." % _cards.size())
+	_store_cards.clear()
+	for entry: Dictionary in FeatureStoreCatalog.entries():
+		if validate_card_definition(entry).is_empty() and not _cards.has(StringName(entry.id)):
+			var card := _create_card(entry)
+			_store_cards[card.id] = card
 
 
 func _create_card(entry: Dictionary) -> CardData:
@@ -181,6 +187,8 @@ func _is_nonnegative_integral_number(value: Variant) -> bool:
 	return false
 
 func get_card(id: StringName) -> CardData:
+	if _store_cards.has(id):
+		return _store_cards[id]
 	if not _cards.has(id):
 		push_warning("Card not found: %s" % id)
 		return null
@@ -253,3 +261,28 @@ func get_beta_cards_by_category(category: StringName) -> Array[CardData]:
 	
 func get_card_count() -> int:
 	return _cards.size()
+
+
+## Studio ownership query; legacy Primitive queries stay fixed.
+func get_owned_features_for_phase(run: RunState, phase: StringName) -> Array[CardData]:
+	var result: Array[CardData] = []
+	if run == null:
+		return result
+	for id: StringName in run.get_owned_feature_ids():
+		var card := get_card(id)
+		if card != null and card.phase == phase:
+			result.append(card)
+	return result
+
+
+## New projects retain their creation-time supply through all phases. A later
+## Studio purchase never changes a project that has already begun development.
+func get_project_features_for_phase(project: ProjectState, phase: StringName) -> Array[CardData]:
+	if project == null or not project.has_predevelopment_identity():
+		return get_cards_by_phase_and_types(phase, [&"feature"] as Array[StringName])
+	var result: Array[CardData] = []
+	for id: StringName in project.get_feature_supply_ids():
+		var card := get_card(id)
+		if card != null and card.card_type == &"feature" and card.phase == phase:
+			result.append(card)
+	return result

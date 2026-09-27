@@ -24,7 +24,7 @@ func _initialize() -> void:
 
 func _verify_cash_api() -> void:
 	var uninitialized := RunState.new()
-	_expect(not uninitialized.is_cash_initialized() and uninitialized.get_cash() == -1, "Run cash begins explicitly uninitialized because no starting amount is locked")
+	_expect(not uninitialized.is_cash_initialized() and uninitialized.get_cash() == -1 and uninitialized.get_cash_cents() == -1, "Run cash begins explicitly uninitialized")
 	_expect(not uninitialized.add_cash(1000), "Income rejects before the new-run boundary initializes cash")
 	for invalid: Variant in [-1, 1.0, 0.5, "1", NAN, INF, -INF, null, true, [], {}]:
 		var rejected := RunState.new()
@@ -32,9 +32,9 @@ func _verify_cash_api() -> void:
 	var state := RunState.new()
 	var emissions := [0]
 	state.cash_changed.connect(func() -> void: emissions[0] += 1)
-	_expect(state.initialize_cash(2500) and state.get_cash() == 2500 and emissions[0] == 1, "Controlled whole-dollar initialization commits once")
+	_expect(state.initialize_cash(2500) and state.get_cash() == 2500 and state.get_cash_cents() == 250000 and emissions[0] == 1, "Controlled whole-dollar initialization commits exact cents once")
 	_expect(not state.initialize_cash(10) and state.get_cash() == 2500 and emissions[0] == 1, "Cash cannot be initialized twice")
-	_expect(state.add_cash(1000) and state.get_cash() == 3500 and emissions[0] == 2, "Future Playtest Rival Games payout boundary adds exactly $1,000 and emits once")
+	_expect(state.add_cash(1000) and state.get_cash() == 3500 and state.get_cash_cents() == 350000 and emissions[0] == 2, "Playtest Rival Games adds exactly $1,000.00 and emits once")
 	_expect(state.add_cash(0) and state.get_cash() == 3500 and emissions[0] == 2, "Zero cash addition is a signal-free successful no-op")
 	for invalid: Variant in [-1, 1.0, 0.5, "1", NAN, INF, -INF, null, true, [], {}]:
 		var before := state.get_cash()
@@ -42,10 +42,10 @@ func _verify_cash_api() -> void:
 		_expect(not state.add_cash(invalid), "Malformed cash addition rejects: %s" % [invalid])
 		_expect(state.get_cash() == before and emissions[0] == signals_before, "Rejected cash addition preserves state and signals")
 	var overflow := RunState.new()
-	_expect(overflow.initialize_cash(RunState.MAX_SIGNED_INT), "Cash accepts the largest representable controlled initial value")
+	_expect(overflow.initialize_cash_cents(RunState.MAX_SIGNED_INT), "Cash accepts the largest representable exact-cent initial value")
 	var overflow_signals := [0]
 	overflow.cash_changed.connect(func() -> void: overflow_signals[0] += 1)
-	_expect(not overflow.add_cash(1) and overflow.get_cash() == RunState.MAX_SIGNED_INT and overflow_signals[0] == 0, "Cash overflow rejects atomically")
+	_expect(not overflow.add_cash_cents(1) and overflow.get_cash_cents() == RunState.MAX_SIGNED_INT and overflow_signals[0] == 0, "Cash-cent overflow rejects atomically")
 
 
 func _verify_snapshot_apis() -> void:
@@ -110,14 +110,17 @@ func _verify_gameplay_ownership() -> void:
 	var shared_run := RunState.new()
 	shared_run.initialize_cash(1200)
 	var gameplay := GAMEPLAY_SCENE.instantiate()
+	gameplay.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	gameplay.run_state = shared_run
 	root.add_child(gameplay)
 	await process_frame
 	await process_frame
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design := phase_root.get_child(0) as DesignPhase
+	design.get_workspace().overlay.cancel()
 	(design.get_node("%ProceedToAlphaButton") as Button).pressed.emit()
 	var alpha := phase_root.get_child(0) as AlphaPhase
+	alpha.get_workspace().overlay.cancel()
 	_expect(alpha.begin_alpha([0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65]), "Run-state transition fixture begins Alpha")
 	gameplay.project_state.add_scope(30)
 	_expect(alpha.call("_finalize_alpha", 0.0, 0.5), "Run-state transition fixture finalizes Alpha")

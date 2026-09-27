@@ -84,7 +84,7 @@ func _verify_planning_and_begin() -> void:
 	_expect(beta.setup(state), "Beta accepts the finalized shared ProjectState")
 	_expect(beta.get("_phase_state") == BetaPhase.PhaseState.PLANNING, "Beta enters Planning")
 	_expect((beta.get_node("%HandContainer") as Container).get_child_count() == 0 and beta.get_selected_candidate_count() == 0, "Planning shows no candidates and has no selection")
-	_expect((beta.get_node("%KnownBugsLabel") as Label).text == "Known Bugs: 2", "Planning displays Known Bugs")
+	_expect((beta.get_node("%KnownBugsLabel") as Label).text == "Known Bugs: 2 | Fixed Bugs: 0", "Planning displays authoritative public Bug counts")
 	_expect(_conceals_bug_state(beta), "Planning conceals Hidden and Remaining Bugs and pressure")
 	var foreign := CARD_VIEW_SCENE.instantiate() as CardView
 	beta.call("_on_card_pressed", foreign)

@@ -89,6 +89,7 @@ func _verify_trigger() -> void:
 func _verify_search_only() -> void:
 	var fixture := await _make_beta([&"search_for_bugs", &"search_for_bugs", &"search_for_bugs", &"search_for_bugs"], 20)
 	_expect(fixture.beta.play_selected_hand(), "Four Search instances resolve a specialized hand")
+	_expect(fixture.beta.get_workspace().synergy_notification.banner.visible and fixture.beta.get_workspace().synergy_notification.title_label.text == "QA Specialization!", "QA specialization displays an in-game notification")
 	_expect(fixture.state.get_hidden_bugs() == 1 and fixture.state.get_known_bugs() == 19, "Specialized Search applies V 1.5 per card, floors each formula, sequences, and clamps")
 	_expect(fixture.beta.get_node("%ActionFeedbackLabel").text.contains("QA Specialization! Card Value ×1.50"), "Qualifying feedback names QA Specialization and its exact value modifier")
 	_expect(fixture.state.get_current_cycle() == 1 and fixture.beta.get("_candidate_cards").size() == 7, "Specialization adds no cycle and preserves seven-card replacement")

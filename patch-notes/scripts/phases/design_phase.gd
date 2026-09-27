@@ -1,6 +1,8 @@
 class_name DesignPhase
 extends Control
 
+var _workspace: PhaseWorkspace
+
 signal proceed_to_alpha_requested
 signal priorities_changed
 
@@ -23,6 +25,7 @@ const CORE_SCORE_BY_STAT := {
 }
 
 var _project_state: ProjectState
+var _run_state: RunState
 var _available_features: Array[CardData] = []
 var _pass_definitions: Array[CardData] = []
 var _candidate_cards: Array[CardData] = []
@@ -35,6 +38,7 @@ enum PhaseState { PLANNING, ACTIVE_DEVELOPMENT }
 
 var _phase_state := PhaseState.PLANNING
 var _priority_allocation := PRIORITY_ALLOCATION_SCRIPT.new()
+var _priority_draft: Dictionary[ProjectState.CoreScore, int] = {}
 var _syncing_priority_controls := false
 
 @onready var graphics_value: Label = %GraphicsValue
@@ -49,33 +53,82 @@ var _syncing_priority_controls := false
 
 
 func _ready() -> void:
+	%RedrawButton.pressed.connect(_on_redraw_pressed)
 	_finalization_rng.randomize()
 	_deal_rng.randomize()
 	_priority_allocation.allocation_changed.connect(_on_priority_allocation_changed)
+	_priority_draft = _priority_allocation.get_priority_distribution()
 	play_card_button.pressed.connect(_on_play_card_pressed)
 	proceed_to_alpha_button.pressed.connect(_on_proceed_to_alpha_pressed)
 	%BeginDesignButton.pressed.connect(_on_begin_design_pressed)
+	%CommitPrioritiesButton.pressed.connect(_on_commit_priorities_pressed)
 	_update_play_button()
 	_refresh_display()
 	_sync_priority_controls()
 
+	_workspace = PhaseWorkspace.new()
+	add_child(_workspace)
+	_workspace.configure(self, "Design")
+	_workspace.bind_states(_project_state, _run_state)
 
-func setup(project_state: ProjectState) -> void:
+
+func setup(project_state: ProjectState, run_state: RunState = null) -> void:
 	if _project_state != null and _project_state.values_changed.is_connected(_refresh_display):
 		_project_state.values_changed.disconnect(_refresh_display)
 
 	_project_state = project_state
+	_run_state = run_state
+	if _run_state != null and not _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
+		_run_state.redraws_changed.connect(_refresh_redraw_controls)
 	if _project_state != null:
 		_project_state.values_changed.connect(_refresh_display)
 
 	if is_node_ready():
 		_refresh_display()
+		_refresh_redraw_controls()
+	if _workspace != null: _workspace.bind_states(_project_state, _run_state)
 
 
 ## Phase-local planning only. Candidate dealing intentionally does not consume
 ## this distribution until the separately approved weighted-draw milestone.
 func set_priority(category: int, requested_value: Variant) -> bool:
-	return _priority_allocation.set_priority(category, requested_value)
+	if _phase_state == PhaseState.PLANNING:
+		var changed := _priority_allocation.set_priority(category, requested_value)
+		_priority_draft = _priority_allocation.get_priority_distribution()
+		_sync_priority_controls()
+		return changed
+	if not _priority_draft.has(category) or (typeof(requested_value) != TYPE_INT and typeof(requested_value) != TYPE_FLOAT):
+		return false
+	var value := int(requested_value)
+	if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
+		return false
+	_priority_draft[category] = value
+	_sync_priority_controls()
+	return true
+
+
+func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
+	if not is_inside_tree(): return false
+	if _phase_state == PhaseState.PLANNING and not _finalization_requested:
+		if distribution == get_priority_distribution(): return false
+		return set_priority_distribution(distribution)
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested or _project_state == null or _run_state == null:
+		return false
+	if not PriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle():
+		return false
+	var commit := func() -> bool:
+		if not _priority_allocation.set_distribution(distribution): return false
+		_priority_draft = _priority_allocation.get_priority_distribution()
+		_project_state.advance_cycle()
+		return true
+	if not _run_state.complete_productive_action(commit):
+		return false
+	_sync_priority_controls()
+	return true
+
+
+func _on_commit_priorities_pressed() -> void:
+	commit_priority_distribution()
 
 
 func get_priority(category: int) -> int:
@@ -90,13 +143,23 @@ func get_available_priority() -> int:
 	return _priority_allocation.get_available_priority()
 
 
+func set_priority_distribution(distribution: Dictionary) -> bool:
+	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_distribution(distribution): return false
+	if not _priority_allocation.set_distribution(distribution): return false
+	_priority_draft = _priority_allocation.get_priority_distribution()
+	_sync_priority_controls()
+	return true
+
+
 func begin_design() -> bool:
+	if is_gameplay_input_blocked(): return false
 	if _phase_state != PhaseState.PLANNING or _finalization_requested:
 		return false
-	if not _initialize_design_lifecycle():
+	if not PriorityAllocation.is_valid_distribution(_priority_draft) or not _priority_allocation.set_distribution(_priority_draft) or not _initialize_design_lifecycle():
 		push_warning("Could not begin Design because the initial weighted candidate pool could not be dealt.")
 		return false
 	_phase_state = PhaseState.ACTIVE_DEVELOPMENT
+	refresh_workspace()
 	%BeginDesignButton.disabled = true
 	%BeginDesignButton.visible = false
 	_update_play_button()
@@ -131,22 +194,30 @@ func _on_design_priority_value_changed(value: float) -> void:
 func _on_priority_slider_changed(category: ProjectState.CoreScore, value: float) -> void:
 	if _syncing_priority_controls:
 		return
-	set_priority(category, int(value))
+	if _phase_state == PhaseState.PLANNING and (_workspace == null or not _workspace.overlay.visible):
+		set_priority(category, int(value))
+	else:
+		_priority_draft[category] = int(value)
+		_sync_priority_controls()
 
 
 func _sync_priority_controls() -> void:
 	if not is_node_ready():
 		return
 	_syncing_priority_controls = true
-	%GraphicsPriority.value = get_priority(ProjectState.CoreScore.GRAPHICS)
-	%SoundPriority.value = get_priority(ProjectState.CoreScore.SOUND)
-	%TechnologyPriority.value = get_priority(ProjectState.CoreScore.TECHNOLOGY)
-	%DesignPriority.value = get_priority(ProjectState.CoreScore.DESIGN)
-	%GraphicsPriorityValue.text = str(get_priority(ProjectState.CoreScore.GRAPHICS))
-	%SoundPriorityValue.text = str(get_priority(ProjectState.CoreScore.SOUND))
-	%TechnologyPriorityValue.text = str(get_priority(ProjectState.CoreScore.TECHNOLOGY))
-	%DesignPriorityValue.text = str(get_priority(ProjectState.CoreScore.DESIGN))
-	%DesignAvailablePriority.text = "Available Priority: %d" % get_available_priority()
+	var values := _priority_draft if not _priority_draft.is_empty() else get_priority_distribution()
+	%GraphicsPriority.value = values[ProjectState.CoreScore.GRAPHICS]
+	%SoundPriority.value = values[ProjectState.CoreScore.SOUND]
+	%TechnologyPriority.value = values[ProjectState.CoreScore.TECHNOLOGY]
+	%DesignPriority.value = values[ProjectState.CoreScore.DESIGN]
+	%GraphicsPriorityValue.text = str(values[ProjectState.CoreScore.GRAPHICS])
+	%SoundPriorityValue.text = str(values[ProjectState.CoreScore.SOUND])
+	%TechnologyPriorityValue.text = str(values[ProjectState.CoreScore.TECHNOLOGY])
+	%DesignPriorityValue.text = str(values[ProjectState.CoreScore.DESIGN])
+	var total := 0
+	for amount: int in values.values(): total += amount
+	%DesignAvailablePriority.text = "Available Priority: %d" % (PriorityAllocation.MAX_TOTAL_PRIORITY - total)
+	%CommitPrioritiesButton.disabled = _finalization_requested or not PriorityAllocation.is_valid_distribution(values) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
 	_syncing_priority_controls = false
 
 
@@ -171,13 +242,9 @@ func _initialize_design_lifecycle() -> bool:
 	_pass_definitions.clear()
 	_exhausted_card_ids.clear()
 	var card_database := get_node("/root/CardDatabase")
-	var eligible_types: Array[StringName] = [&"feature", &"pass"]
 	var definitions: Array[CardData] = []
-	definitions.assign(card_database.call(
-		&"get_cards_by_phase_and_types",
-		CardData.PHASE_DESIGN,
-		eligible_types,
-	))
+	definitions.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_DESIGN))
+	definitions.append_array(card_database.get_cards_by_phase_and_types(CardData.PHASE_DESIGN, [&"pass"] as Array[StringName]))
 	for card in definitions:
 		if card.card_type == &"feature" and not card.renewable:
 			_available_features.append(card)
@@ -204,8 +271,116 @@ func _deal_next_candidate_pool(controlled_rolls: Array[float] = []) -> bool:
 		var card_view: CardView = CARD_VIEW_SCENE.instantiate()
 		card_view.set_card(card)
 		card_view.card_pressed.connect(_on_card_pressed)
+
 		hand_container.add_child(card_view)
+	_refresh_redraw_controls()
 	return true
+
+
+func _can_redraw_selection() -> bool:
+	if is_gameplay_input_blocked(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _run_state == null or _finalization_requested or not _run_state.can_consume_redraw(_selected_card_views.size()):
+		return false
+	var seen: Array[CardView] = []
+	for view: CardView in _selected_card_views:
+		if not _is_current_candidate_view(view) or view.card_data == null or seen.has(view) or view.card_data.card_type not in [&"feature", &"pass"]:
+			return false
+		seen.append(view)
+	return true
+
+
+func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
+	if not _can_redraw_selection(): return false
+	var count := _selected_card_views.size()
+	if not controlled_rolls.is_empty() and controlled_rolls.size() != count: return false
+	for roll: float in controlled_rolls:
+		if not is_finite(roll) or roll < 0.0 or roll >= 1.0: return false
+	var rng_state := _deal_rng.state
+	var plan := _plan_selected_redraw(controlled_rolls)
+	if not plan.valid:
+		_deal_rng.state = rng_state
+		if not plan.failed_features.is_empty():
+			%RedrawFeedbackLabel.text = "No more Feature cards"
+			for view: CardView in plan.failed_features: view.shake_no()
+		return false
+	# Prepare every view before changing the pool, lifecycle, selection, or budget.
+	var prepared: Array[CardView] = []
+	for card: CardData in plan.cards:
+		var replacement_view := CARD_VIEW_SCENE.instantiate() as CardView
+		if replacement_view == null:
+			for view: CardView in prepared: view.free()
+			_deal_rng.state = rng_state
+			return false
+		replacement_view.set_card(card)
+		replacement_view.card_pressed.connect(_on_card_pressed)
+		prepared.append(replacement_view)
+	var selected := _selected_card_views.duplicate()
+	for index in range(count):
+		var old_view: CardView = selected[index]
+		var slot := old_view.get_index()
+		var replacement: CardData = plan.cards[index]
+		if old_view.card_data.card_type == &"feature":
+			_available_features.erase(replacement)
+			_return_feature_to_available(old_view.card_data)
+		_candidate_cards[slot] = replacement
+
+		%HandContainer.remove_child(old_view)
+		old_view.queue_free()
+		%HandContainer.add_child(prepared[index])
+		%HandContainer.move_child(prepared[index], slot)
+	_selected_card_views.clear()
+	%RedrawFeedbackLabel.text = ""
+	# One budget notification, after the complete pool and selection are committed.
+	_run_state.consume_redraw(count)
+	_update_play_button()
+	_refresh_redraw_controls()
+	return true
+
+
+func _on_redraw_pressed() -> void:
+	redraw_selected_cards()
+
+
+func _refresh_redraw_controls() -> void:
+	if not is_node_ready(): return
+	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
+	%RedrawButton.disabled = not _can_redraw_selection()
+	if not %RedrawButton.disabled:
+		var rolls: Array[float] = []
+		rolls.resize(_selected_card_views.size())
+		rolls.fill(0.5)
+		%RedrawButton.disabled = not _plan_selected_redraw(rolls).valid
+
+
+func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
+	var cards: Array[CardData] = []
+	var reserved: Array[StringName] = []
+	var failed_features: Array[CardView] = []
+	var valid := true
+	for index in range(_selected_card_views.size()):
+		var view := _selected_card_views[index]
+		var old_card := view.card_data
+		var entries: Array[Dictionary] = []
+		var source := _available_features if old_card.card_type == &"feature" else _pass_definitions
+		for card: CardData in source:
+			if card.id == old_card.id or reserved.has(card.id): continue
+			if card.card_type == &"feature":
+				var already_visible := false
+				for current: CardData in _candidate_cards:
+					if current.id == card.id: already_visible = true
+				if already_visible: continue
+			var weight := _calculate_candidate_weight(card, get_priority_distribution())
+			if weight > 0.0: entries.append({&"card": card, &"weight": weight})
+		entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+		var roll := controlled_rolls[index] if not controlled_rolls.is_empty() else _deal_rng.randf()
+		var replacement := _select_weighted_entry(entries, roll)
+		if replacement == null:
+			valid = false
+			if old_card.card_type == &"feature": failed_features.append(view)
+		else:
+			cards.append(replacement)
+			if not replacement.renewable: reserved.append(replacement.id)
+	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}
 
 
 func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = []) -> Dictionary:
@@ -313,6 +488,7 @@ func _clear_candidate_pool() -> void:
 
 
 func _on_card_pressed(card_view: CardView) -> void:
+	if is_gameplay_input_blocked(): return
 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested:
 		return
 	if not _is_current_candidate_view(card_view):
@@ -351,17 +527,27 @@ func _on_play_card_pressed() -> void:
 	var final_action := _calculate_final_action_production(base_hand)
 
 	var additions: Dictionary[ProjectState.CoreScore, int] = final_action.score_additions
-	if not _project_state.add_core_scores_and_scope(additions, base_hand.scope, base_hand.bug_pressure):
+	var commit := func() -> bool:
+		if not _project_state.add_core_scores_and_scope(additions, base_hand.scope, base_hand.bug_pressure): return false
+		_complete_successful_cycle()
+		return true
+	if not (_run_state.complete_productive_action(commit) if _run_state != null else commit.call()):
 		return
 	if not final_action.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_action.specialization_stat, additions))
 	elif final_action.balanced_production:
 		print("Balanced Production!")
 
-	_complete_successful_cycle()
+	if not _deal_next_candidate_pool():
+		push_warning("The Design hand resolved, but the next weighted candidate pool could not be dealt.")
+	if not final_action.specialization_stat.is_empty():
+		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production ×1.50")
+	elif final_action.balanced_production:
+		_workspace.show_synergy("Balanced Production!", "Production ×1.20")
 
 
 func _on_proceed_to_alpha_pressed() -> void:
+	if is_gameplay_input_blocked(): return
 	if _finalization_requested:
 		return
 	var finalization := _calculate_design_finalization(
@@ -386,6 +572,7 @@ func _on_proceed_to_alpha_pressed() -> void:
 	_update_play_button()
 	if finalization.perfect_production:
 		print("Perfect Production!")
+		_workspace.show_synergy("Perfect Production!", "Finalization Bug Pressure ×0.80")
 	print("Final Hidden Bugs: %d" % finalization.hidden_bugs)
 	proceed_to_alpha_requested.emit()
 
@@ -393,11 +580,7 @@ func _on_proceed_to_alpha_pressed() -> void:
 func _build_design_feature_history() -> Dictionary:
 	var card_database := get_node("/root/CardDatabase")
 	var definitions: Array[CardData] = []
-	definitions.assign(card_database.call(
-		&"get_cards_by_phase_and_types",
-		CardData.PHASE_DESIGN,
-		[&"feature"] as Array[StringName],
-	))
+	definitions.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_DESIGN))
 	var eligible_ids: Dictionary[StringName, bool] = {}
 	for card in definitions:
 		if (
@@ -525,6 +708,8 @@ func _complete_successful_cycle() -> void:
 		var card := card_view.card_data
 		if card.card_type == &"feature" and not card.renewable:
 			_exhausted_card_ids[card.id] = true
+			if _run_state != null:
+				_run_state.record_resolved_feature(_project_state, card.id, CardData.PHASE_DESIGN)
 
 	for card in _candidate_cards:
 		if card.card_type == &"feature" and not _exhausted_card_ids.has(card.id):
@@ -532,8 +717,6 @@ func _complete_successful_cycle() -> void:
 
 	_clear_candidate_pool()
 	_project_state.advance_cycle()
-	if not _deal_next_candidate_pool():
-		push_warning("The Design hand resolved, but the next weighted candidate pool could not be dealt.")
 
 
 func _return_feature_to_available(card: CardData) -> void:
@@ -543,7 +726,8 @@ func _return_feature_to_available(card: CardData) -> void:
 
 
 func _can_play_selected_hand() -> bool:
-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested or _project_state == null or _selected_card_views.size() != SELECTED_HAND_SIZE:
+	if is_gameplay_input_blocked(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested or _project_state == null or not _project_state.can_advance_cycle() or (_run_state != null and not _run_state.can_advance_calendar_cycle()) or _selected_card_views.size() != SELECTED_HAND_SIZE:
 		return false
 	var seen_views: Dictionary[int, bool] = {}
 	for card_view in _selected_card_views:
@@ -747,5 +931,48 @@ func _invalid_base_hand(message: String) -> Dictionary:
 
 
 func _update_play_button() -> void:
+	refresh_workspace()
+	_refresh_redraw_controls()
 	if is_node_ready():
 		play_card_button.disabled = not _can_play_selected_hand()
+
+
+func get_workspace() -> PhaseWorkspace:
+	return _workspace
+
+
+func refresh_workspace() -> void:
+	if _workspace != null: _workspace.refresh()
+
+
+func is_gameplay_input_blocked() -> bool:
+	return not is_inside_tree() or (_workspace != null and _workspace.overlay != null and _workspace.overlay.visible)
+
+
+func can_edit_priorities() -> bool:
+	return is_inside_tree() and not _finalization_requested
+
+
+func is_initial_priority_planning() -> bool:
+	return _phase_state == PhaseState.PLANNING
+
+
+func can_initialize_priorities() -> bool:
+	return is_inside_tree() and _phase_state == PhaseState.PLANNING and not _finalization_requested and PriorityAllocation.is_valid_distribution(_priority_draft)
+
+
+func open_priority_overlay() -> bool:
+	return _workspace != null and _workspace.overlay.open()
+
+
+func reset_priority_draft() -> void:
+	_priority_draft = get_priority_distribution()
+	_sync_priority_controls()
+
+
+func get_selected_candidate_views() -> Array[CardView]:
+	return _selected_card_views.duplicate()
+
+
+func refresh_overlay_actions() -> void:
+	_update_play_button()

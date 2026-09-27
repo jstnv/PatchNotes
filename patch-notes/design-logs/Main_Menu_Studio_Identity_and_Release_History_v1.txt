@@ -1,0 +1,26 @@
+PATCH NOTES — MAIN MENU, STUDIO IDENTITY, AND RELEASE HISTORY V1
+Date: 2026-09-26
+
+AUTHORITY
+User request: add a Start Game main menu, define a studio name before entering Studio, defer studio specialties, and make Post Game Summaries browse all released games with category reviews and gross results. Read the live Drive To Do List and cumulative Implementation Discoveries and Locked Rules, then inspected current repository, worktree, startup, Studio, Review, RunState, ProjectState, release ledger, sales calculator, and New Data Logs. This explicit request supersedes the earlier first-run direct Pre-Development entry only. The existing automatic post-launch Studio entry and productive-cycle rules remain.
+
+IMPLEMENTED FLOW
+New runs show Patch Notes / Start Game. Start Game opens a required Studio-name form. Whitespace-only names reject; accepted names are trimmed and stored once in RunState. Naming and navigation spend no cash or cycles and create no ProjectState. The named run enters an empty Studio dashboard. Produce First Game opens the existing Game Name / Genre / Theme setup; a valid Begin Development uses the existing one-cycle boundary and creates a project at cycle zero with four redraws. Existing Studio reconstruction opens directly when a RunState has a studio name and no active ProjectState. Existing injected projects still reconstruct into Design for compatibility. Studio specialties remain deferred.
+
+RELEASE HISTORY AND OWNERSHIP
+RunState captures immutable review, Core Scores and standards, Scope, remaining Bugs, Awareness, launch Marketing, projected Month 1 units, projected gross, projected net, and revealed launch market facts at registration. Mutable earned units, earned gross, net entitlement, and settled net continue to derive from each released game's existing sales record. Gross uses the locked 999-cent unit price; no new revenue formula or settlement path was added. Public metadata queries return deep copies. Post Game Summaries lists every released game and shows the selected game's frozen performance and live sales. Detailed Review has the same five categories for historical games, including their own Core scores, gross projection, earned gross, and net figures. Browsing changes no finance, calendar, redraw, or release data.
+
+FILES CHANGED (relative to patch-notes)
+Created scripts/phases/main_menu.gd and generated .uid.
+Created scripts/debug/verify_main_menu_history.gd and generated .uid.
+Modified scripts/gameplay.gd, scripts/run_state.gd, scripts/phases/studio_phase.gd, scripts/phases/post_game_review.gd, scenes/phases/studio_phase.tscn, scripts/ui/gameplay_hud.gd, scripts/ui/phase_host.gd, scripts/ui/tutorial_overlay.gd, scripts/debug/verify_first_game_and_tips.gd, and scripts/debug/verify_primitive_run_initialization.gd.
+Created visually inspected captures design-logs/main-menu.png, design-logs/new-studio.png, and design-logs/game-history.png.
+Other dirty worktree files and .codex-godot-temp were preserved.
+
+VERIFICATION
+Focused new verifier passed 16 assertions: startup, invalid/valid studio name, zero-cost Studio entry, empty Studio controls, two independent releases, immutable review/gross snapshot, game selection, historical detailed category review, passive browsing, actual earned gross after a productive sales cycle, defensive copies, and reconstruction.
+All 33 repository verify_*.gd suites passed. Compatibility rendered capture passed. Editor import/parser exited 0. git diff --check exited 0 with pre-existing Windows line-ending warnings. A local certificate-store warning remained non-blocking.
+Main menu, empty Studio, and game-history images were visually inspected.
+
+DEFERRED
+Studio specialties, publisher and employee systems, Genre Fit, later sales months, expenses, save/load serialization, and final presentation art remain separate milestones. Historical review/sales history persists for the in-memory run; durable disk save/load is not implemented. No new financial or contract rule was inferred.

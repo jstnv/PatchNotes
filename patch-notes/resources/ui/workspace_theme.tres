@@ -1,0 +1,130 @@
+[gd_resource type="Theme" load_steps=10 format=3]
+
+[sub_resource type="StyleBoxFlat" id="panel"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.085, 0.085, 0.105, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.23, 0.16, 0.19, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="normal"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.19, 0.13, 0.15, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.65, 0.43, 0.23, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="hover"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.31, 0.21, 0.17, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.96, 0.74, 0.35, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="pressed"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.43, 0.29, 0.16, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(1, 0.8, 0.4, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="disabled"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.09, 0.085, 0.095, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.19, 0.18, 0.2, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="focus"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.47, 0.83, 0.86, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxEmpty" id="card_clear"]
+
+[sub_resource type="StyleBoxFlat" id="card_hover"]
+bg_color = Color(0.96, 0.74, 0.35, 0.08)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.96, 0.74, 0.35, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="card_pressed"]
+bg_color = Color(0.96, 0.74, 0.35, 0.14)
+
+[resource]
+default_font_size = 14
+Label/colors/font_color = Color(0.94, 0.9, 0.8, 1)
+Button/colors/font_color = Color(0.97, 0.9, 0.74, 1)
+Button/colors/font_disabled_color = Color(0.42, 0.4, 0.4, 1)
+PanelContainer/styles/panel = SubResource("panel")
+Button/styles/normal = SubResource("normal")
+Button/styles/hover = SubResource("hover")
+Button/styles/pressed = SubResource("pressed")
+Button/styles/disabled = SubResource("disabled")
+Button/styles/focus = SubResource("focus")
+CardInput/base_type = &"Button"
+CardInput/styles/normal = SubResource("card_clear")
+CardInput/styles/disabled = SubResource("card_clear")
+CardInput/styles/hover = SubResource("card_hover")
+CardInput/styles/pressed = SubResource("card_pressed")
+CardInput/styles/focus = SubResource("focus")
+VSlider/styles/grabber_area = SubResource("pressed")
+VSlider/styles/grabber_area_highlight = SubResource("hover")

@@ -75,3 +75,31 @@ func get_total_allocated_priority() -> int:
 
 func get_available_priority() -> int:
 	return MAX_TOTAL_PRIORITY - get_total_allocated_priority()
+
+
+static func is_valid_distribution(distribution: Dictionary) -> bool:
+	if distribution.size() != CORE_CATEGORIES.size():
+		return false
+	var total := 0
+	for category: ProjectState.CoreScore in CORE_CATEGORIES:
+		if not distribution.has(category) or typeof(distribution[category]) != TYPE_INT:
+			return false
+		var value: int = distribution[category]
+		if value < MIN_PRIORITY or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
+			return false
+		total += value
+	return total == MAX_TOTAL_PRIORITY
+
+
+func set_distribution(distribution: Dictionary) -> bool:
+	if not is_valid_distribution(distribution):
+		return false
+	var changed := false
+	for category: ProjectState.CoreScore in CORE_CATEGORIES:
+		changed = changed or _priorities[category] != distribution[category]
+	if not changed:
+		return true
+	for category: ProjectState.CoreScore in CORE_CATEGORIES:
+		_priorities[category] = distribution[category]
+	allocation_changed.emit()
+	return true

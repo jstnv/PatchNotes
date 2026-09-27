@@ -97,12 +97,22 @@ func _verify_availability_and_empty_qa() -> void:
 	beta.queue_free()
 	await process_frame
 
+	var mixed := await _make_beta([&"search_for_bugs", &"debug", &"sign_flippers", &"posters"], 1)
+	_expect(mixed.beta.play_selected_hand(), "One Search and one Debug resolve sequentially in a mixed hand")
+	_expect(mixed.state.get_hidden_bugs() == 0 and mixed.state.get_known_bugs() == 0 and mixed.state.get_fixed_bugs() == 1 and mixed.state.get_remaining_bugs() == 0, "Debug fixes the Bug found by Search even when the visible Known count returns to zero")
+	_expect(mixed.beta.get_node("%KnownBugsLabel").text == "Known Bugs: 0 | Fixed Bugs: 1", "Mixed-hand UI exposes successful fixing when Known Bugs has no net change")
+	mixed.beta.queue_free()
+	await process_frame
+
 
 func _verify_qa_order_and_clamping() -> void:
 	var fixture := await _make_beta([&"search_for_bugs", &"search_for_bugs", &"debug", &"debug"], 10)
 	var beta: BetaPhase = fixture.beta
 	_expect(beta.play_selected_hand(), "Multiple renewable QA instances resolve as one base hand")
 	_expect(fixture.state.get_hidden_bugs() == 3 and fixture.state.get_known_bugs() == 3 and fixture.state.get_remaining_bugs() == 6, "QA Specialization changes Final Card Value before sequential Search, then Debug fixes four")
+	_expect(fixture.state.get_fixed_bugs() == 4, "Mixed Search and Debug records all four Bugs fixed after discovery")
+	_expect(beta.get_node("%KnownBugsLabel").text == "Known Bugs: 3 | Fixed Bugs: 4", "Mixed Search and Debug refreshes both visible Beta Bug values")
+	_expect(beta.get_node("%ActionFeedbackLabel").text.contains("Bugs discovered: 7") and beta.get_node("%ActionFeedbackLabel").text.contains("Known Bugs fixed: 4"), "Mixed hand feedback reports both actual operations")
 	_expect(fixture.state.get_exhausted_beta_card_ids().is_empty(), "Renewable QA definitions do not exhaust")
 	beta.queue_free()
 	await process_frame
@@ -212,7 +222,8 @@ func _verify_atomic_failures() -> void:
 	cycle_overflow.beta.queue_free()
 	await process_frame
 
-	var cash_overflow := await _make_beta([&"playtest_rival_games", &"sign_flippers", &"posters", &"debug"], 0, RunState.MAX_SIGNED_INT)
+	var cash_overflow := await _make_beta([&"playtest_rival_games", &"sign_flippers", &"posters", &"debug"], 0, 0)
+	cash_overflow.run.set("_cash_cents", RunState.MAX_SIGNED_INT - 99999)
 	before = _snapshot(cash_overflow.state, cash_overflow.run, cash_overflow.beta)
 	_expect(not cash_overflow.beta.play_selected_hand([0] as Array[int]) and _snapshot(cash_overflow.state, cash_overflow.run, cash_overflow.beta) == before, "Cash overflow rejects with complete state, pool, selection, and cycle preservation")
 	cash_overflow.beta.queue_free()
@@ -232,7 +243,7 @@ func _snapshot(state: ProjectState, run: RunState, beta: BetaPhase) -> Array:
 	for card: CardData in beta.get("_candidate_cards"): ids.append(card.id)
 	var selected: Array[int] = []
 	for view: CardView in beta.get("_selected_card_views"): selected.append(view.get_instance_id())
-	return [state.get_hidden_bugs(), state.get_known_bugs(), state.get_remaining_bugs(), state.get_marketing_output(), state.get_current_cycle(), state.get_exhausted_beta_card_ids(), state.is_competitor_snapshot_revealed(), state.is_market_forecast_snapshot_revealed(), run.get_cash(), ids, selected, beta.get_priority_distribution()]
+	return [state.get_hidden_bugs(), state.get_known_bugs(), state.get_remaining_bugs(), state.get_marketing_output(), state.get_current_cycle(), state.get_exhausted_beta_card_ids(), state.is_competitor_snapshot_revealed(), state.is_market_forecast_snapshot_revealed(), run.get_cash(), run.get_cash_cents(), ids, selected, beta.get_priority_distribution()]
 
 
 func _expect(condition: bool, description: String) -> void:

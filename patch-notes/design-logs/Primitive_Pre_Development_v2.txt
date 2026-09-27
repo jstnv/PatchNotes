@@ -1,0 +1,154 @@
+PRIMITIVE PRE-DEVELOPMENT V2 — IMPLEMENTATION RECORD
+Date: 2026-09-26
+
+AUTHORITY AND CONFLICT RESOLUTION
+Read current repository, applicable instruction locations, cumulative authority
+log, and Primitive_Pre_Development_Genres_and_Genre_Fit_v1.txt before editing:
+https://drive.google.com/file/d/1KbsmlbvuMsLxa81tDVj6kXPgaN9zzwPr/view
+No applicable AGENTS.md was found in the repository, its inspected ancestors,
+or the external design/log directories.
+The latest explicit request and locked record supersede the earlier v1 report
+and prior manual-review-flow clarification in these specific respects:
+- Begin Development advances the run calendar once; the fresh project starts at 0.
+- The ten locked Themes replace the provisional four-theme roster.
+- Duplicate release titles resolve at launch and never rename earlier releases.
+- Launch results enter Studio automatically, at zero cash and cycle cost.
+Historical authority entries remain intact; this record states current behavior.
+The previously approved configurable prototype origin remains 1980 (24 cycles/year).
+No unresolved authority conflict required invented gameplay behavior.
+
+IMPLEMENTED BEHAVIOR
+Studio offers Produce Next Game with Game Name, Genre and Theme.
+Opening, editing, cancelling, reopening and invalid confirmation are free.
+Whitespace-only names and invalid catalog selections are rejected without state
+mutation. Valid setup needs no cash reserve. Stale duplicate callbacks are rejected.
+Preparation and existing financial-boundary checks precede the one run-cycle commit.
+The action can earn/settle existing historical sales through the existing boundary;
+it has no purchase charge. Integer-overflow rejection remains atomic.
+New project cycle is 0; the first completed Design hand advances it to 1.
+
+Genre ratios are permanent copied identity data, in Graphics/Sound/Technology/Design:
+Action 30/20/30/20; Adventure 25/20/15/40; Role-Playing 15/20/30/35;
+Strategy 15/10/40/35; Simulation 15/15/45/25; Puzzle 15/10/30/45;
+Sports 25/25/30/20; Racing 30/25/35/10.
+Themes: Fantasy, Science Fiction, Horror, Crime, War, Historical, Contemporary,
+Western, Post-Apocalyptic, Mystery. Themes are identity data only.
+No Theme cards, compatibility, market modifiers, Review effects or Genre Fit
+calculation were introduced. Existing Review arithmetic is unchanged.
+
+A new ProjectState resets core scores, accumulated Scope, Bugs, bug pressure,
+Awareness, production priorities, implemented/exhausted Feature history, finalization
+results and phase-local selections/candidates. Existing required Scope remains 30.
+New concealed market snapshots are assigned through existing initialization.
+Design redraws refresh to exactly 4; the HUD binds the new project without redesign.
+Eligible Feature supply is copied from RunState ownership and filtered through the
+authoritative CardDatabase phase boundary; no second starting roster was added.
+The project supply is fixed at creation. Design and Alpha use the existing shared
+project-supply path. Later purchases belong to future projects.
+
+The same RunState is retained: exact-cent cash, advanced calendar, Feature ownership,
+familiarity, prerequisite-play credits, release metadata and historical sales.
+Existing multi-release earning/settlement remains unchanged.
+Employees, courses and publisher relationships have no implemented runtime fields
+in this repository; no parallel placeholder progression systems were invented.
+Retaining the same RunState preserves other existing explicitly run-owned fields.
+
+Duplicate base names are accepted before release. ProjectState stores base identity;
+RunState release metadata and sales records separately store base_name, release_title
+and actual release_year. The first released name is plain; later occurrences append
+the actual launch year, including projects created in an earlier year. Titles remain
+permanent after later releases and reconstruction. Same-year duplicates may have
+identical display titles; stable project IDs distinguish their records.
+Repeated registration of the same identity is idempotent; conflicting identity
+under an existing ID is rejected.
+
+Launch commits existing results and enters Studio directly at zero cost.
+The existing five-tab review is accessible from Summary > Detailed Review and
+returns to Summary freely. It no longer gates Studio entry. Studio Feature Store,
+summary, contract navigation and normal HUD remain integrated.
+
+FILES CHANGED FOR V2 (repository-relative)
+patch-notes/data/primitive_predevelopment.json
+patch-notes/scripts/ui/predevelopment_overlay.gd
+patch-notes/scripts/gameplay.gd
+patch-notes/scripts/run_state.gd
+patch-notes/scripts/phases/studio_phase.gd
+patch-notes/scenes/phases/studio_phase.tscn
+patch-notes/scripts/debug/verify_predevelopment.gd
+patch-notes/scripts/debug/verify_release_menus.gd
+patch-notes/scripts/debug/verify_beta_finalization_and_launch.gd
+patch-notes/design-logs/predevelopment.png
+patch-notes/design-logs/Primitive_Pre_Development_v2.txt
+External standalone: New Data Logs/Primitive_Pre_Development_v2.txt
+External cumulative mirror: New Data Logs/Implementation Discoveries and Locked Rules.txt
+Drive cumulative authority: 1kmlzNwRbckS9OxucMd5WPYNOF2Dx6QT1
+
+RETAINED V1 IMPLEMENTATION DEPENDENCIES
+scripts/primitive_predevelopment.gd; scripts/project_state.gd;
+scripts/cards/card_database.gd; scripts/phases/design_phase.gd;
+scripts/phases/alpha_phase.gd; scripts/ui/predevelopment_overlay.gd;
+scripts/debug/verify_sales_earning_and_settlement.gd.
+These existing changes were inspected and retained; unrelated dirty worktree changes
+were not reverted, committed or cleaned up. Feature tree files remain documented in
+Studio_Feature_Technology_Tree_v2.txt.
+
+VERIFICATION
+All 31 repository verify_*.gd suites pass with Godot 4.7.1 headless:
+verify_alpha_finalization
+verify_alpha_phase
+verify_atomic_selected_redraw
+verify_balanced_primitive_contract
+verify_beta_balanced_operations
+verify_beta_base_hand_resolution
+verify_beta_card_data
+verify_beta_finalization_and_launch
+verify_beta_host_playtest
+verify_beta_marketing_insider_state
+verify_beta_planning
+verify_beta_qa_specialization
+verify_beta_qa_state
+verify_design_phase
+verify_exact_cent_run_state
+verify_feature_store
+verify_gameplay_hud_overlay
+verify_gameplay_transition
+verify_predevelopment
+verify_primitive_awareness
+verify_primitive_launch_market_context
+verify_primitive_month_one_sales_revenue
+verify_primitive_review
+verify_primitive_run_initialization
+verify_primitive_snapshot_ledgers
+verify_primitive_units_sold
+verify_release_menus
+verify_run_calendar_and_studio_entry
+verify_run_finance_and_beta_insider_state
+verify_sales_earning_and_settlement
+verify_shared_redraw_and_priority_adjustment
+
+Focused Pre-Development verification reports 147 passing assertions, including all
+80 genre/theme combinations; exact ratios; missing-name/no-mutation behavior; free
+overlay interaction; zero-cash success; one run cycle/project zero; redraw 4;
+fresh state and eligible owned Features; old-project immutability; run cash,
+familiarity, prerequisites and history continuity; actual launch-year title
+resolution; immutable first/later titles; reconstruction/idempotence; stale callbacks;
+overflow atomicity; and Design transition/first completed hand.
+
+Pre-Development and release-menu suites also pass with compatibility rendering.
+Overlay/review bounds are checked at 1152x648 and 900x600. Rendered Pre-Development,
+Studio Summary and optional review were visually inspected.
+Headless editor import/parser verification and git diff --check pass.
+No SCRIPT ERROR or FAIL assertions remain. Existing Windows certificate-store,
+placeholder-art and Git line-ending notices are non-blocking environment warnings.
+Temporary APPDATA/LOCALAPPDATA isolate Godot verification data.
+
+DEFERRED SYSTEMS AND LIMITS
+Genre Fit influence on Review is the next milestone; identity ratios are ready.
+Theme effects/cards, compatibility, market modifiers and Review effects are deferred.
+Same-year duplicate disambiguation beyond the year is explicitly deferred.
+Durable save-file serialization/migration is not implemented by this milestone;
+reconstruction tests cover the current in-memory shared-state boundary.
+Employees/course and publisher runtime progression remain future systems.
+The initial unnamed prototype startup remains its existing direct Design flow;
+this milestone implements subsequent projects from Studio.
+Placeholder visuals remain; no final artwork or normal HUD redesign was attempted.

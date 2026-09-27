@@ -1,4 +1,4 @@
-## Separately invoked Alpha priority-allocation verification.
+	## Separately invoked Alpha priority-allocation verification.
 ## Run with: godot --headless --path . --script res://scripts/debug/verify_alpha_phase.gd
 extends SceneTree
 
@@ -59,11 +59,11 @@ func _initialize() -> void:
 	_expect(alpha.find_children("*Hidden*").is_empty(), "Alpha UI does not expose concealed Hidden Bugs")
 	_expect(alpha.get("_candidate_cards").is_empty() and alpha.get_node("%HandContainer").get_child_count() == 0, "Alpha Planning creates no candidates or CardViews")
 	_expect(alpha.get_node("%BeginAlphaButton").visible and not alpha.get_node("%BeginAlphaButton").disabled, "Begin Alpha is visible and usable in Planning")
-	_expect(alpha.get_node("%PlayAlphaHandButton").text == "Play Alpha Hand" and alpha.get_node("%PlayAlphaHandButton").disabled, "Alpha resolution placeholder is visibly disabled")
+	_expect(alpha.get_node("%PlayAlphaHandButton").text == "Implement" and alpha.get_node("%PlayAlphaHandButton").disabled, "Alpha resolution placeholder is visibly disabled")
 	_expect(alpha.get_node("%HostPlaytestButton").text == "Host Playtest" and alpha.get_node("%HostPlaytestButton").disabled, "Host Playtest is visible but unavailable during Planning")
 	_expect(_values(alpha) == [25, 25, 25, 25] and alpha.get_available_priority() == 0, "Alpha initializes independently at 25 / 25 / 25 / 25")
 	_verify_controls(alpha)
-	(alpha.get_node("%SoundPriority") as HSlider).value = 15.0
+	(alpha.get_node("%SoundPriority") as VSlider).value = 15.0
 	_expect(_values(alpha) == [25, 15, 25, 25] and alpha.get_available_priority() == 10, "Lowering changes only Sound and frees allocation")
 	_expect(priority_emissions[0] == 1, "One slider adjustment emits exactly once")
 	_expect(alpha.set_priority(ProjectState.CoreScore.GRAPHICS, 35), "Raising Graphics can spend available allocation")
@@ -354,6 +354,7 @@ func _verify_alpha_specialization_resolution() -> void:
 	_expect(state.get_core_score(ProjectState.CoreScore.DESIGN) == 14 and state.get_core_score(ProjectState.CoreScore.TECHNOLOGY) == 3, "Resolved same-primary Feature hand commits specialized primary and secondary totals")
 	_expect(state.get_current_scope() == 5 and _approximately_equal(state.get_accumulated_alpha_bug_pressure(), 16.0 / 18.0), "Specialization changes neither Scope nor Alpha Bug Pressure")
 	_expect(state.get_accumulated_bug_pressure() == 0.0 and state.get_hidden_bugs() == 0, "Alpha Specialization changes neither Design pressure nor Hidden Bugs")
+	_expect(alpha.get_workspace().synergy_notification.banner.visible and alpha.get_workspace().synergy_notification.title_label.text == "Design Specialization!", "Successful Alpha specialization displays an in-game notification")
 	_expect(alpha.get("_exhausted_feature_ids").size() == 4 and not alpha.get("_available_features").any(func(card: CardData) -> bool: return card.id in [&"simple_story", &"dialogue", &"character_backstories", &"multiple_endings"]), "Specialized Features exhaust through the existing lifecycle")
 	_expect(state.get_current_cycle() == 1 and value_emissions[0] == 1 and cycle_emissions[0] == 1, "Specialized action commits atomically and advances exactly one cycle")
 	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_selected_candidate_count() == 0, "Specialized action preserves seven-card replacement and selection clearing")
@@ -704,9 +705,9 @@ func _instance_ids(views: Array) -> Array[int]:
 
 func _verify_controls(alpha: AlphaPhase) -> void:
 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
-		var slider := alpha.get_node("%%%s" % node_name) as HSlider
+		var slider := alpha.get_node("%%%s" % node_name) as VSlider
 		_expect(slider != null and slider.min_value == 5.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 5-50 bounds in five-point steps" % node_name)
-	var panel := alpha.get_node("PhaseLayout/PriorityPanel") as PanelContainer
+	var panel := alpha.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
 	_expect(panel.size.x <= 1008.0 and panel.size.y <= 463.0, "Corrected Alpha allocation panel fits the established phase bounds")
 	_verify_distribution(alpha, "Initial Alpha allocation uses the complete budget")
 	_verify_control_values(alpha)

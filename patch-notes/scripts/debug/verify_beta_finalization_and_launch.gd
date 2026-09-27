@@ -131,13 +131,17 @@ func _verify_gameplay_transition() -> void:
 	_expect(beta.request_launch(), "Authoritative Gameplay Beta finalizes")
 	await process_frame
 	var active: Control = gameplay.get("_active_phase")
-	_expect(active is LaunchPhase and gameplay.get_node("%PhaseRoot").get_child_count() == 1, "Gameplay replaces Beta with exactly one Launch placeholder")
-	_expect((active as LaunchPhase).get_project_state() == state and (active as LaunchPhase).get_run_state() == run and run.get_cash() == 4321, "Launch preserves the exact ProjectState, RunState, and cash")
+	_expect(active is StudioPhase and gameplay.get_node("%PhaseRoot").get_child_count() == 1, "Gameplay automatically enters Studio after launch results")
+	_expect((active as StudioPhase).get_project_state() == state and (active as StudioPhase).get_run_state() == run and run.get_cash() == 4321, "Automatic Studio entry preserves the exact ProjectState, RunState, and cash")
 	_expect(state.has_review_result() and state.get_review_result().get_variance_roll() == 50, "Gameplay commits exactly the controlled one-shot Review result before Launch presentation")
 	_expect(state.has_awareness_result() and state.get_awareness_result().get_marketing_output_used() == state.get_marketing_output(), "Gameplay commits Awareness exactly once from frozen Marketing Output")
 	_expect(state.has_launch_market_context_result() and state.get_launch_market_context_result().get_player_launch_cycle() == state.get_current_cycle(), "Gameplay commits launch market context exactly once from frozen state")
-	var text := (active.get_node("Layout/Status") as Label).text + (active.get_node("%ReviewLabel") as Label).text
-	_expect(not text.contains("Hidden") and not text.contains("Remaining") and not text.contains("Fast Follower") and not text.contains("Market Surge") and text.contains("release results pending") and text.contains("Review:"), "Launch placeholder displays Review while revealing no concealed content")
+	_expect(state.has_units_sold_result() and state.get_units_sold_result().get_sales_period() == &"month_1", "Gameplay commits Month 1 units sold exactly once from prior launch results")
+	_expect(state.has_month_one_sales_revenue_result() and state.get_month_one_sales_revenue_result().get_earned_sales_cycle_count() == 0, "Gameplay commits the projected Month 1 sales/revenue foundation without earning sales at Launch")
+	_expect(not active.get_node("%SummaryPanel").visible and active.get_node_or_null("%ContinueButton") == null, "Studio needs no continuation confirmation and starts with release stats hidden")
+	active.open_summary()
+	var text := (active.get_node("%ReviewLabel") as Label).text + (active.get_node("%EarnedLabel") as Label).text
+	_expect(not text.contains("Hidden") and not text.contains("Remaining") and text.contains("Final Review:") and text.contains("Earned: 0"), "Post Game Summaries opens the committed results")
 	gameplay.queue_free()
 	await process_frame
 

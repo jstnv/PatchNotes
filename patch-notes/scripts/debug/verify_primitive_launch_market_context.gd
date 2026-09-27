@@ -88,6 +88,7 @@ func _verify_visibility_and_reconstruction() -> void:
 	run.initialize_cash(4321)
 	var concealed := _launch_state(&"reckless_upstart", &"market_boom", 8)
 	concealed.commit_launch_market_context_result(PrimitiveLaunchMarketContextCalculator.calculate(concealed, _database))
+	concealed.commit_units_sold_result(PrimitiveUnitsSoldCalculator.calculate(concealed))
 	var concealed_launch := LAUNCH_SCENE.instantiate() as LaunchPhase
 	root.add_child(concealed_launch)
 	await process_frame
@@ -96,13 +97,14 @@ func _verify_visibility_and_reconstruction() -> void:
 	_expect(not concealed_text.contains("Reckless") and not concealed_text.contains("Market Boom") and not concealed_text.contains("1.30") and not concealed_text.contains("Cycle 10"), "Concealed launch UI exposes no snapshot content")
 	var revealed := _launch_state(&"fast_follower", &"market_surge", 14, true, true)
 	revealed.commit_launch_market_context_result(PrimitiveLaunchMarketContextCalculator.calculate(revealed, _database))
+	revealed.commit_units_sold_result(PrimitiveUnitsSoldCalculator.calculate(revealed))
 	var revealed_launch := LAUNCH_SCENE.instantiate() as LaunchPhase
 	root.add_child(revealed_launch)
 	await process_frame
 	_expect(revealed_launch.setup(revealed, run, _database), "Revealed launch context displays through immutable ledgers")
 	var revealed_text := _visible_text(revealed_launch)
 	_expect(revealed_text.contains("Market Surge") and revealed_text.contains("×1.15") and revealed_text.contains("Fast Follower") and revealed_text.contains("Cycle 12"), "Previously revealed facts display with exact market multiplier and rival target")
-	_expect(revealed_text.contains("Review:") and revealed_text.contains("Awareness:") and revealed_text.contains("Sales and release results pending"), "Existing Review, Awareness, and pending-sales presentation remains")
+	_expect(revealed_text.contains("Review:") and revealed_text.contains("Awareness:") and revealed_text.contains("Revenue and remaining release results pending"), "Existing Review, Awareness, and pending-release presentation remains")
 	var reconstructed := LAUNCH_SCENE.instantiate() as LaunchPhase
 	root.add_child(reconstructed)
 	await process_frame

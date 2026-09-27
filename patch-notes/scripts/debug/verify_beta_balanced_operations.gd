@@ -101,6 +101,7 @@ func _verify_compositions() -> void:
 func _verify_two_qa_distribution() -> void:
 	var fixture := await _make_beta([&"search_for_bugs", &"debug", &"sign_flippers", &"playtest_rival_games"], 10)
 	_expect(fixture.beta.play_selected_hand([12] as Array[int]), "Balanced 2/1/1 hand resolves at the Playtest success boundary")
+	_expect(fixture.beta.get_workspace().synergy_notification.banner.visible and fixture.beta.get_workspace().synergy_notification.title_label.text == "Balanced Operations!", "Balanced Beta action displays an in-game notification")
 	_expect(fixture.state.get_hidden_bugs() == 6 and fixture.state.get_known_bugs() == 1 and fixture.state.get_remaining_bugs() == 7, "Base Search 3 becomes ceil(3.75)=4, then base Debug 2 becomes ceil(2.5)=3")
 	_expect(fixture.state.get_marketing_output() == 2, "Aggregate Marketing 1 becomes ceil(1.25)=2")
 	_expect(fixture.run.get_cash() == 1000 and fixture.state.is_competitor_snapshot_revealed(), "Fixed payout remains $1,000 and balanced Playtest chance succeeds through roll 12")
@@ -156,6 +157,7 @@ func _verify_atomicity() -> void:
 	var fixture := await _make_beta([&"search_for_bugs", &"debug", &"sign_flippers", &"playtest_rival_games"], 10)
 	var before := [fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_marketing_output(), fixture.state.get_current_cycle(), fixture.run.get_cash(), fixture.beta.get_selected_candidate_count()]
 	_expect(not fixture.beta.play_selected_hand([12] as Array[int], [0.1] as Array[float], [0.1] as Array[float]), "Forced replacement failure rejects a qualifying Balanced hand")
+	_expect(not fixture.beta.get_workspace().synergy_notification.banner.visible, "Rejected action never displays a synergy notification")
 	_expect([fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_marketing_output(), fixture.state.get_current_cycle(), fixture.run.get_cash(), fixture.beta.get_selected_candidate_count()] == before, "Rejected Balanced hand preserves all observed state and selection")
 	fixture.beta.queue_free()
 	await process_frame

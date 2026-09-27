@@ -7,7 +7,7 @@ var _snapshot_database: PrimitiveSnapshotDatabase
 
 
 func setup(project_state: ProjectState, run_state: RunState, snapshot_database: PrimitiveSnapshotDatabase) -> bool:
-	if project_state == null or run_state == null or snapshot_database == null or not project_state.has_beta_finalization() or not project_state.is_launch_ready() or not project_state.has_review_result() or not project_state.has_awareness_result() or not project_state.has_launch_market_context_result() or not run_state.is_cash_initialized():
+	if project_state == null or run_state == null or snapshot_database == null or not project_state.has_beta_finalization() or not project_state.is_launch_ready() or not project_state.has_review_result() or not project_state.has_awareness_result() or not project_state.has_launch_market_context_result() or not project_state.has_units_sold_result() or not run_state.is_cash_initialized():
 		return false
 	_project_state = project_state
 	_run_state = run_state
@@ -26,6 +26,7 @@ func _refresh_review() -> void:
 	var awareness := _project_state.get_awareness_result()
 	%AwarenessLabel.text = "Awareness: %d" % awareness.get_total_awareness()
 	%LaunchMarketingLabel.text = "Launch Marketing: %d" % awareness.get_launch_marketing()
+	%UnitsSoldLabel.text = "Month 1 Units Sold: %d" % _project_state.get_units_sold_result().get_final_units_sold()
 	var context := _project_state.get_launch_market_context_result()
 	%MarketContextLabel.visible = context.was_forecast_revealed_at_launch()
 	if %MarketContextLabel.visible:

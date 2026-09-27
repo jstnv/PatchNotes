@@ -48,7 +48,7 @@ layout_mode = 2
 text = "Graphics Priority"
 horizontal_alignment = 1
 
-[node name="GraphicsPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/GraphicsColumn"]
+[node name="GraphicsPriority" type="VSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/GraphicsColumn"]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 5.0
@@ -71,7 +71,7 @@ layout_mode = 2
 text = "Sound Priority"
 horizontal_alignment = 1
 
-[node name="SoundPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/SoundColumn"]
+[node name="SoundPriority" type="VSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/SoundColumn"]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 5.0
@@ -94,7 +94,7 @@ layout_mode = 2
 text = "Technology Priority"
 horizontal_alignment = 1
 
-[node name="TechnologyPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/TechnologyColumn"]
+[node name="TechnologyPriority" type="VSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/TechnologyColumn"]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 5.0
@@ -117,7 +117,7 @@ layout_mode = 2
 text = "Design Priority"
 horizontal_alignment = 1
 
-[node name="DesignPriority" type="HSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/DesignColumn"]
+[node name="DesignPriority" type="VSlider" parent="PhaseLayout/PriorityPanel/PriorityLayout/DesignColumn"]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 5.0
@@ -151,10 +151,33 @@ layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
+[node name="RedrawControls" type="HBoxContainer" parent="PhaseLayout"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="RedrawButton" type="Button" parent="PhaseLayout/RedrawControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+disabled = true
+text = "Redraw"
+tooltip_text = "Redraw selected cards. Costs one redraw per card and zero cycles."
+
+[node name="RedrawFeedbackLabel" type="Label" parent="PhaseLayout/RedrawControls"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="ActionControls" type="HBoxContainer" parent="PhaseLayout"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 16
+
+[node name="CommitPrioritiesButton" type="Button" parent="PhaseLayout/ActionControls"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Commit Priorities"
 
 [node name="BeginAlphaButton" type="Button" parent="PhaseLayout/ActionControls"]
 unique_name_in_owner = true
@@ -167,7 +190,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 40)
 layout_mode = 2
 disabled = true
-text = "Play Alpha Hand"
+text = "Implement"
 
 [node name="HostPlaytestButton" type="Button" parent="PhaseLayout/ActionControls"]
 unique_name_in_owner = true

@@ -1,6 +1,8 @@
 class_name AlphaPhase
 extends Control
 
+var _workspace: PhaseWorkspace
+
 signal priorities_changed
 signal proceed_to_beta_requested
 
@@ -28,8 +30,10 @@ const CORE_SCORE_BY_STAT := {
 enum PhaseState { PLANNING, ACTIVE_DEVELOPMENT, FINALIZED }
 
 var _project_state: ProjectState
+var _run_state: RunState
 var _phase_state := PhaseState.PLANNING
 var _priority_allocation := PRIORITY_ALLOCATION_SCRIPT.new()
+var _priority_draft: Dictionary[ProjectState.CoreScore, int] = {}
 var _syncing_priority_controls := false
 var _available_features: Array[CardData] = []
 var _pass_definitions: Array[CardData] = []
@@ -43,10 +47,13 @@ var _scope_warning_pending := false
 
 
 func _ready() -> void:
+	%RedrawButton.pressed.connect(_on_redraw_pressed)
 	_deal_rng.randomize()
 	_finalization_rng.randomize()
 	_priority_allocation.allocation_changed.connect(_on_priority_allocation_changed)
+	_priority_draft = _priority_allocation.get_priority_distribution()
 	%BeginAlphaButton.pressed.connect(_on_begin_alpha_pressed)
+	%CommitPrioritiesButton.pressed.connect(_on_commit_priorities_pressed)
 	%PlayAlphaHandButton.pressed.connect(_on_play_alpha_hand_pressed)
 	%HostPlaytestButton.pressed.connect(_on_host_playtest_pressed)
 	%ProceedToBetaButton.pressed.connect(_on_proceed_to_beta_pressed)
@@ -58,22 +65,59 @@ func _ready() -> void:
 	_update_host_playtest_action()
 	_update_proceed_action()
 
+	_workspace = PhaseWorkspace.new()
+	add_child(_workspace)
+	_workspace.configure(self, "Alpha")
+	_workspace.bind_states(_project_state, _run_state)
 
-func setup(project_state: ProjectState) -> void:
+
+func setup(project_state: ProjectState, run_state: RunState = null) -> void:
 	if _project_state != null and _project_state.values_changed.is_connected(_refresh_alpha_bug_pressure):
 		_project_state.values_changed.disconnect(_refresh_alpha_bug_pressure)
 	_project_state = project_state
+	_run_state = run_state
+	if _run_state != null and not _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
+		_run_state.redraws_changed.connect(_refresh_redraw_controls)
 	if _project_state != null and not _project_state.values_changed.is_connected(_refresh_alpha_bug_pressure):
 		_project_state.values_changed.connect(_refresh_alpha_bug_pressure)
 	_refresh_alpha_bug_pressure()
 	_update_host_playtest_action()
 	_update_proceed_action()
+	_refresh_redraw_controls()
+	if _workspace != null: _workspace.bind_states(_project_state, _run_state)
 
 
 func set_priority(category: int, requested_value: Variant) -> bool:
 	if _phase_state == PhaseState.FINALIZED:
 		return false
-	return _priority_allocation.set_priority(category, requested_value)
+	if _phase_state == PhaseState.PLANNING:
+		var accepted := _priority_allocation.set_priority(category, requested_value)
+		_priority_draft = _priority_allocation.get_priority_distribution()
+		_sync_priority_controls()
+		return accepted
+	if not _priority_draft.has(category) or (typeof(requested_value) != TYPE_INT and typeof(requested_value) != TYPE_FLOAT): return false
+	var value := int(requested_value)
+	if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0: return false
+	_priority_draft[category] = value
+	_sync_priority_controls()
+	return true
+
+
+func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
+	if not is_inside_tree(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or not PriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+	var commit := func() -> bool:
+		if not _priority_allocation.set_distribution(distribution): return false
+		_priority_draft = _priority_allocation.get_priority_distribution()
+		_project_state.advance_cycle()
+		return true
+	if not _run_state.complete_productive_action(commit): return false
+	_sync_priority_controls()
+	return true
+
+
+func _on_commit_priorities_pressed() -> void:
+	commit_priority_distribution()
 
 
 func get_priority(category: int) -> int:
@@ -88,6 +132,14 @@ func get_available_priority() -> int:
 	return _priority_allocation.get_available_priority()
 
 
+func set_priority_distribution(distribution: Dictionary) -> bool:
+	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_distribution(distribution): return false
+	if not _priority_allocation.set_distribution(distribution): return false
+	_priority_draft = _priority_allocation.get_priority_distribution()
+	_sync_priority_controls()
+	return true
+
+
 func get_selected_candidate_count() -> int:
 	return _selected_card_views.size()
 
@@ -97,14 +149,16 @@ func get_pending_playtest_categories() -> Array[ProjectState.CoreScore]:
 
 
 func begin_alpha(controlled_rolls: Array[float] = []) -> bool:
+	if is_gameplay_input_blocked(): return false
 	if _phase_state != PhaseState.PLANNING:
 		return false
-	if not _load_source_definitions():
+	if not PriorityAllocation.is_valid_distribution(_priority_draft) or not _priority_allocation.set_distribution(_priority_draft) or not _load_source_definitions():
 		return false
 	if not _deal_next_candidate_pool(controlled_rolls):
 		push_warning("Could not begin Alpha because its weighted candidate pool is invalid.")
 		return false
 	_phase_state = PhaseState.ACTIVE_DEVELOPMENT
+	refresh_workspace()
 	%BeginAlphaButton.visible = false
 	%BeginAlphaButton.disabled = true
 	_update_host_playtest_action()
@@ -122,8 +176,11 @@ func host_playtest() -> bool:
 	var corrective_categories := _select_corrective_categories()
 	if corrective_categories.size() != 2 or corrective_categories[0] == corrective_categories[1]:
 		return false
-	_pending_playtest_categories.assign(corrective_categories)
-	_project_state.advance_cycle()
+	var commit := func() -> bool:
+		_pending_playtest_categories.assign(corrective_categories)
+		_project_state.advance_cycle()
+		return true
+	if not (_run_state.complete_productive_action(commit) if _run_state != null else commit.call()): return false
 	print("Host Playtest complete! One cycle advanced. Corrective Passes queued: %s" % _format_corrective_pass_names(_pending_playtest_categories))
 	_update_host_playtest_action()
 	return true
@@ -168,9 +225,12 @@ func _on_under_scope_canceled() -> void:
 
 
 func _can_proceed_to_beta() -> bool:
+	if is_gameplay_input_blocked(): return false
 	return (
 		_phase_state == PhaseState.ACTIVE_DEVELOPMENT
 		and _project_state != null
+		and _project_state.can_advance_cycle()
+		and (_run_state == null or _run_state.can_advance_calendar_cycle())
 		and not _project_state.has_alpha_finalization()
 		and _has_valid_active_candidate_pool()
 		and _build_alpha_feature_history(false).valid
@@ -190,11 +250,7 @@ func _build_alpha_feature_history(report_errors: bool = true) -> Dictionary:
 			push_warning("Cannot finalize Alpha Feature history without CardDatabase.")
 		return {&"valid": false}
 	var definitions: Array[CardData] = []
-	definitions.assign(card_database.call(
-		&"get_cards_by_phase_and_types",
-		CardData.PHASE_ALPHA,
-		[&"feature"] as Array[StringName],
-	))
+	definitions.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_ALPHA))
 	var eligible_ids: Dictionary[StringName, bool] = {}
 	for card: CardData in definitions:
 		if (
@@ -325,10 +381,13 @@ func _retire_alpha() -> void:
 
 
 func _can_host_playtest() -> bool:
+	if is_gameplay_input_blocked(): return false
 	return (
 		_phase_state == PhaseState.ACTIVE_DEVELOPMENT
 		and _project_state != null
 		and _pending_playtest_categories.is_empty()
+		and _project_state.can_advance_cycle()
+		and (_run_state == null or _run_state.can_complete_productive_cycle())
 		and _has_valid_active_candidate_pool()
 	)
 
@@ -393,7 +452,7 @@ func _load_source_definitions() -> bool:
 		push_warning("Alpha cannot load candidates without CardDatabase.")
 		return false
 	var features: Array[CardData] = []
-	features.assign(card_database.call(&"get_cards_by_phase_and_types", CardData.PHASE_ALPHA, [&"feature"] as Array[StringName]))
+	features.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_ALPHA))
 	var passes: Array[CardData] = []
 	passes.assign(card_database.call(&"get_cards_by_phase_and_types", CardData.PHASE_DESIGN, [&"pass"] as Array[StringName]))
 	_available_features = features
@@ -419,6 +478,7 @@ func _deal_next_candidate_pool(controlled_rolls: Array[float] = []) -> bool:
 		var card_view := CARD_VIEW_SCENE.instantiate() as CardView
 		card_view.set_card(card)
 		card_view.card_pressed.connect(_on_card_pressed)
+
 		%HandContainer.add_child(card_view)
 	if had_pending_playtest:
 		var injected_categories := _pending_playtest_categories.duplicate()
@@ -426,7 +486,112 @@ func _deal_next_candidate_pool(controlled_rolls: Array[float] = []) -> bool:
 		print("Host Playtest corrective Passes injected and consumed: %s" % _format_corrective_pass_names(injected_categories))
 	_update_host_playtest_action()
 	_update_proceed_action()
+	_refresh_redraw_controls()
 	return true
+
+
+func _can_redraw_selection() -> bool:
+	if is_gameplay_input_blocked(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _run_state == null or not _run_state.can_consume_redraw(_selected_card_views.size()):
+		return false
+	var seen: Array[CardView] = []
+	for view: CardView in _selected_card_views:
+		if not _is_current_candidate_view(view) or view.card_data == null or seen.has(view) or view.card_data.card_type not in [&"feature", &"pass"]:
+			return false
+		seen.append(view)
+	return true
+
+
+func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
+	if not _can_redraw_selection(): return false
+	var count := _selected_card_views.size()
+	if not controlled_rolls.is_empty() and controlled_rolls.size() != count: return false
+	for roll: float in controlled_rolls:
+		if not is_finite(roll) or roll < 0.0 or roll >= 1.0: return false
+	var rng_state := _deal_rng.state
+	var plan := _plan_selected_redraw(controlled_rolls)
+	if not plan.valid:
+		_deal_rng.state = rng_state
+		if not plan.failed_features.is_empty():
+			%RedrawFeedbackLabel.text = "No more Feature cards"
+			for view: CardView in plan.failed_features: view.shake_no()
+		return false
+	# Prepare every view before changing the pool, lifecycle, selection, or budget.
+	var prepared: Array[CardView] = []
+	for card: CardData in plan.cards:
+		var replacement_view := CARD_VIEW_SCENE.instantiate() as CardView
+		if replacement_view == null:
+			for view: CardView in prepared: view.free()
+			_deal_rng.state = rng_state
+			return false
+		replacement_view.set_card(card)
+		replacement_view.card_pressed.connect(_on_card_pressed)
+		prepared.append(replacement_view)
+	var selected := _selected_card_views.duplicate()
+	for index in range(count):
+		var old_view: CardView = selected[index]
+		var slot := old_view.get_index()
+		var replacement: CardData = plan.cards[index]
+
+		_candidate_cards[slot] = replacement
+
+		%HandContainer.remove_child(old_view)
+		old_view.queue_free()
+		%HandContainer.add_child(prepared[index])
+		%HandContainer.move_child(prepared[index], slot)
+	_selected_card_views.clear()
+	%RedrawFeedbackLabel.text = ""
+	# One budget notification, after the complete pool and selection are committed.
+	_run_state.consume_redraw(count)
+	_update_play_action()
+	_refresh_redraw_controls()
+	return true
+
+
+func _on_redraw_pressed() -> void:
+	redraw_selected_cards()
+
+
+func _refresh_redraw_controls() -> void:
+	if not is_node_ready(): return
+	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
+	%RedrawButton.disabled = not _can_redraw_selection()
+	if not %RedrawButton.disabled:
+		var rolls: Array[float] = []
+		rolls.resize(_selected_card_views.size())
+		rolls.fill(0.5)
+		%RedrawButton.disabled = not _plan_selected_redraw(rolls).valid
+
+
+func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
+	var cards: Array[CardData] = []
+	var reserved: Array[StringName] = []
+	var failed_features: Array[CardView] = []
+	var valid := true
+	for index in range(_selected_card_views.size()):
+		var view := _selected_card_views[index]
+		var old_card := view.card_data
+		var entries: Array[Dictionary] = []
+		var source := _available_features if old_card.card_type == &"feature" else _pass_definitions
+		for card: CardData in source:
+			if card.id == old_card.id or reserved.has(card.id): continue
+			if card.card_type == &"feature":
+				var already_visible := false
+				for current: CardData in _candidate_cards:
+					if current.id == card.id: already_visible = true
+				if already_visible: continue
+			var weight := _calculate_candidate_weight(card, get_priority_distribution())
+			if weight > 0.0: entries.append({&"card": card, &"weight": weight})
+		entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+		var roll := controlled_rolls[index] if not controlled_rolls.is_empty() else _deal_rng.randf()
+		var replacement := _select_weighted_entry(entries, roll)
+		if replacement == null:
+			valid = false
+			if old_card.card_type == &"feature": failed_features.append(view)
+		else:
+			cards.append(replacement)
+			if not replacement.renewable: reserved.append(replacement.id)
+	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}
 
 
 func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = []) -> Dictionary:
@@ -568,6 +733,7 @@ func _get_printed_score_validation_error(card: CardData) -> String:
 
 
 func _on_card_pressed(card_view: CardView) -> void:
+	if is_gameplay_input_blocked(): return
 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or not _is_current_candidate_view(card_view):
 		return
 	if _selected_card_views.has(card_view):
@@ -586,13 +752,16 @@ func _is_current_candidate_view(card_view: CardView) -> bool:
 
 
 func _update_play_action() -> void:
+	refresh_workspace()
+	_refresh_redraw_controls()
 	if not is_node_ready():
 		return
 	%PlayAlphaHandButton.disabled = not _can_play_selected_instances()
 
 
 func _can_play_selected_instances() -> bool:
-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _selected_card_views.size() != SELECTED_HAND_SIZE:
+	if is_gameplay_input_blocked(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or not _project_state.can_advance_cycle() or (_run_state != null and not _run_state.can_advance_calendar_cycle()) or _selected_card_views.size() != SELECTED_HAND_SIZE:
 		return false
 	var seen: Dictionary[int, bool] = {}
 	for card_view: CardView in _selected_card_views:
@@ -610,13 +779,22 @@ func _on_play_alpha_hand_pressed() -> void:
 		return
 	var final_production := _calculate_final_action_production(action)
 	var additions: Dictionary[ProjectState.CoreScore, int] = final_production.score_additions
-	if not _project_state.add_alpha_production(additions, action.scope, action.alpha_bug_pressure):
+	var commit := func() -> bool:
+		if not _project_state.add_alpha_production(additions, action.scope, action.alpha_bug_pressure): return false
+		_complete_successful_action()
+		return true
+	if not (_run_state.complete_productive_action(commit) if _run_state != null else commit.call()):
 		return
 	if not final_production.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_production.specialization_stat, additions))
 	elif final_production.balanced_production:
 		print(_build_balanced_production_debug_message(additions))
-	_complete_successful_action()
+	if not _deal_next_candidate_pool():
+		push_warning("The Alpha hand resolved, but the next weighted candidate pool could not be dealt.")
+	if not final_production.specialization_stat.is_empty():
+		_workspace.show_synergy("%s Specialization!" % str(final_production.specialization_stat).capitalize(), "Production ×1.50")
+	elif final_production.balanced_production:
+		_workspace.show_synergy("Balanced Production!", "Production ×1.20")
 
 
 func _validate_and_calculate_base_action() -> Dictionary:
@@ -768,11 +946,11 @@ func _complete_successful_action() -> void:
 		var card := card_view.card_data
 		if card.card_type == &"feature":
 			_exhausted_feature_ids[card.id] = true
+			if _run_state != null:
+				_run_state.record_resolved_feature(_project_state, card.id, CardData.PHASE_ALPHA)
 			_available_features.erase(card)
 	_clear_candidate_pool()
 	_project_state.advance_cycle()
-	if not _deal_next_candidate_pool():
-		push_warning("The Alpha hand resolved, but the next weighted candidate pool could not be dealt.")
 
 
 func _clear_candidate_pool() -> void:
@@ -819,20 +997,70 @@ func _on_design_priority_value_changed(value: float) -> void:
 func _on_priority_slider_changed(category: ProjectState.CoreScore, value: float) -> void:
 	if _syncing_priority_controls:
 		return
-	set_priority(category, value)
+	if _phase_state == PhaseState.PLANNING and (_workspace == null or not _workspace.overlay.visible): set_priority(category, value)
+	else:
+		_priority_draft[category] = int(value)
+		_sync_priority_controls()
 
 
 func _sync_priority_controls() -> void:
 	if not is_node_ready():
 		return
 	_syncing_priority_controls = true
-	%GraphicsPriority.value = get_priority(ProjectState.CoreScore.GRAPHICS)
-	%SoundPriority.value = get_priority(ProjectState.CoreScore.SOUND)
-	%TechnologyPriority.value = get_priority(ProjectState.CoreScore.TECHNOLOGY)
-	%DesignPriority.value = get_priority(ProjectState.CoreScore.DESIGN)
-	%GraphicsPriorityValue.text = str(get_priority(ProjectState.CoreScore.GRAPHICS))
-	%SoundPriorityValue.text = str(get_priority(ProjectState.CoreScore.SOUND))
-	%TechnologyPriorityValue.text = str(get_priority(ProjectState.CoreScore.TECHNOLOGY))
-	%DesignPriorityValue.text = str(get_priority(ProjectState.CoreScore.DESIGN))
-	%AvailablePriority.text = "Available Priority: %d" % get_available_priority()
+	var values := _priority_draft if not _priority_draft.is_empty() else get_priority_distribution()
+	%GraphicsPriority.value = values[ProjectState.CoreScore.GRAPHICS]
+	%SoundPriority.value = values[ProjectState.CoreScore.SOUND]
+	%TechnologyPriority.value = values[ProjectState.CoreScore.TECHNOLOGY]
+	%DesignPriority.value = values[ProjectState.CoreScore.DESIGN]
+	%GraphicsPriorityValue.text = str(values[ProjectState.CoreScore.GRAPHICS])
+	%SoundPriorityValue.text = str(values[ProjectState.CoreScore.SOUND])
+	%TechnologyPriorityValue.text = str(values[ProjectState.CoreScore.TECHNOLOGY])
+	%DesignPriorityValue.text = str(values[ProjectState.CoreScore.DESIGN])
+	var total := 0
+	for amount: int in values.values(): total += amount
+	%AvailablePriority.text = "Available Priority: %d" % (PriorityAllocation.MAX_TOTAL_PRIORITY - total)
+	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not PriorityAllocation.is_valid_distribution(values) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
 	_syncing_priority_controls = false
+
+
+func get_workspace() -> PhaseWorkspace:
+	return _workspace
+
+
+func refresh_workspace() -> void:
+	if _workspace != null: _workspace.refresh()
+
+
+func is_gameplay_input_blocked() -> bool:
+	return not is_inside_tree() or (_workspace != null and _workspace.overlay != null and _workspace.overlay.visible)
+
+
+func can_edit_priorities() -> bool:
+	return is_inside_tree() and _phase_state == PhaseState.ACTIVE_DEVELOPMENT and not _scope_warning_pending
+
+
+func is_initial_priority_planning() -> bool:
+	return _phase_state == PhaseState.PLANNING
+
+
+func can_initialize_priorities() -> bool:
+	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and not _scope_warning_pending and PriorityAllocation.is_valid_distribution(_priority_draft)
+
+
+func open_priority_overlay() -> bool:
+	return _workspace != null and _workspace.overlay.open()
+
+
+func reset_priority_draft() -> void:
+	_priority_draft = get_priority_distribution()
+	_sync_priority_controls()
+
+
+func get_selected_candidate_views() -> Array[CardView]:
+	return _selected_card_views.duplicate()
+
+
+func refresh_overlay_actions() -> void:
+	_update_play_action()
+	_update_host_playtest_action()
+	_update_proceed_action()

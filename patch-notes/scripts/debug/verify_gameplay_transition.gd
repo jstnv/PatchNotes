@@ -25,11 +25,13 @@ func _initialize() -> void:
 
 func _verify_successful_transition(database: Node, scope: int, selection_count: int) -> void:
 	var gameplay := GAMEPLAY_SCENE.instantiate()
+	gameplay.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	root.add_child(gameplay)
 	await process_frame
 	await process_frame
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design_phase := phase_root.get_child(0)
+	_dismiss_initial_priority_menu(design_phase)
 	_expect(design_phase is DesignPhase and phase_root.get_child_count() == 1, "Gameplay starts with Design as its only active phase")
 	_expect(gameplay.get("_active_phase") == design_phase, "Gameplay tracks the startup Design phase")
 
@@ -69,7 +71,7 @@ func _verify_successful_transition(database: Node, scope: int, selection_count: 
 	_expect(gameplay.get("_active_phase") == alpha_phase and alpha_phase.get("_project_state") == gameplay.project_state, "Alpha receives Gameplay's existing ProjectState instance")
 	_expect(alpha_phase.get_node("PhaseLayout/AlphaLabel").text == "Alpha Phase", "Alpha priority phase visibly identifies itself")
 	_expect(alpha_phase.get_priority_distribution().values().reduce(func(total: int, value: int) -> int: return total + value, 0) == 100 and alpha_phase.get_available_priority() == 0, "Transitioned Alpha initializes its independent 25 / 25 / 25 / 25 allocation")
-	_expect(alpha_phase.get_node("%GraphicsPriority") is HSlider and alpha_phase.get_node("%AvailablePriority").text == "Available Priority: 0", "Corrected Alpha allocation controls appear after the real transition")
+	_expect(alpha_phase.get_node("%GraphicsPriority") is VSlider and alpha_phase.get_node("%AvailablePriority").text == "Available Priority: 0", "Corrected Alpha allocation controls appear after the real transition")
 	_expect(alpha_phase.get("_phase_state") == AlphaPhase.PhaseState.PLANNING and alpha_phase.get("_candidate_cards").is_empty(), "Transitioned Alpha begins in Planning with zero candidates")
 	_expect(alpha_phase.get_node("%BeginAlphaButton").visible and alpha_phase.get_node("%PlayAlphaHandButton").disabled, "Transitioned Alpha exposes Begin Alpha and no resolution action")
 	_expect(design_phase.get_parent() == null, "Finalized Design is removed from PhaseRoot")
@@ -92,11 +94,13 @@ func _verify_successful_transition(database: Node, scope: int, selection_count: 
 
 func _verify_failed_instantiation() -> void:
 	var gameplay := GAMEPLAY_SCENE.instantiate()
+	gameplay.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	root.add_child(gameplay)
 	await process_frame
 	await process_frame
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design_phase := phase_root.get_child(0)
+	_dismiss_initial_priority_menu(design_phase)
 	var transition_callable := Callable(gameplay, "_on_design_proceed_to_alpha_requested").bind(design_phase)
 	design_phase.proceed_to_alpha_requested.disconnect(transition_callable)
 	(design_phase.get_node("%ProceedToAlphaButton") as Button).pressed.emit()
@@ -114,13 +118,16 @@ func _verify_failed_instantiation() -> void:
 
 func _verify_alpha_to_beta_transition() -> void:
 	var gameplay := GAMEPLAY_SCENE.instantiate()
+	gameplay.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	root.add_child(gameplay)
 	await process_frame
 	await process_frame
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design_phase := phase_root.get_child(0) as DesignPhase
+	_dismiss_initial_priority_menu(design_phase)
 	(design_phase.get_node("%ProceedToAlphaButton") as Button).pressed.emit()
 	var alpha_phase := phase_root.get_child(0) as AlphaPhase
+	alpha_phase.get_workspace().overlay.cancel()
 	_expect(alpha_phase != null and alpha_phase.begin_alpha([0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65]), "Alpha-to-Beta fixture enters Active Alpha through Gameplay")
 	gameplay.project_state.add_scope(30)
 	var state_identity: ProjectState = gameplay.project_state
@@ -137,20 +144,23 @@ func _verify_alpha_to_beta_transition() -> void:
 	_expect(state_identity.get_known_bugs() == 0 and state_identity.get_remaining_bugs() == state_identity.get_hidden_bugs(), "Beta entry preserves all unresolved Bugs as Hidden and initializes Known Bugs at zero")
 	_expect([state_identity.get_implemented_design_feature_ids(), state_identity.get_unimplemented_design_feature_ids()] == design_history_before, "Design history survives the Alpha-to-Beta replacement unchanged")
 	_expect(state_identity.get_current_cycle() == cycles_before, "Alpha finalization and Beta replacement consume zero cycles")
-	_expect(beta_phase.get_node("PhaseLayout/BetaLabel").text == "Beta Phase" and beta_phase.get_node("%KnownBugsLabel").text == "Known Bugs: 0", "Beta active shell displays Known Bugs without Hidden or Remaining Bug disclosure")
+	_expect(beta_phase.get_node("PhaseLayout/BetaLabel").text == "Beta Phase" and beta_phase.get_node("%KnownBugsLabel").text == "Known Bugs: 0 | Fixed Bugs: 0", "Beta active shell displays public Bug counts without Hidden or Remaining Bug disclosure")
 	gameplay.queue_free()
 	await process_frame
 
 
 func _verify_failed_beta_instantiation() -> void:
 	var gameplay := GAMEPLAY_SCENE.instantiate()
+	gameplay.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	root.add_child(gameplay)
 	await process_frame
 	await process_frame
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design_phase := phase_root.get_child(0) as DesignPhase
+	_dismiss_initial_priority_menu(design_phase)
 	(design_phase.get_node("%ProceedToAlphaButton") as Button).pressed.emit()
 	var alpha_phase := phase_root.get_child(0) as AlphaPhase
+	alpha_phase.get_workspace().overlay.cancel()
 	alpha_phase.proceed_to_beta_requested.disconnect(Callable(gameplay, "_on_alpha_proceed_to_beta_requested").bind(alpha_phase))
 	_expect(alpha_phase.begin_alpha([0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65]), "Failed-Beta fixture enters valid Active Alpha")
 	_expect(alpha_phase.call("_finalize_alpha", 0.0, 0.5), "Failed-Beta fixture finalizes Alpha authoritatively")
@@ -184,6 +194,11 @@ func _state_snapshot(project_state: ProjectState) -> Array:
 		project_state.get_implemented_alpha_feature_ids(),
 		project_state.get_unimplemented_alpha_feature_ids(),
 	]
+
+
+func _dismiss_initial_priority_menu(design_phase: DesignPhase) -> void:
+	if design_phase != null and design_phase.get_workspace().overlay.visible:
+		design_phase.get_workspace().overlay.cancel()
 
 
 func _expect(condition: bool, description: String) -> void:

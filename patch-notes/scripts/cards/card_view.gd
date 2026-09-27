@@ -49,6 +49,14 @@ func is_selected() -> bool:
 	return _selected
 
 
+func shake_no() -> void:
+	var original_x := position.x
+	var tween := create_tween()
+	tween.tween_property(self, "position:x", original_x - 8.0, 0.05)
+	tween.tween_property(self, "position:x", original_x + 8.0, 0.08)
+	tween.tween_property(self, "position:x", original_x, 0.05)
+
+
 func refresh() -> void:
 	if card_data == null:
 		visible = false

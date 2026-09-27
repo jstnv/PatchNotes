@@ -27,6 +27,7 @@ func _initialize() -> void:
 	_verify_project_state_bug_pressure_transactions()
 	_verify_project_state_design_finalization()
 	var gameplay := GAMEPLAY_SCENE.instantiate()
+	gameplay.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	root.add_child(gameplay)
 	await process_frame
 	await process_frame
@@ -98,18 +99,15 @@ func _verify_initial_state(design_phase: Node, project_state: ProjectState) -> v
 	_expect(design_phase.get("_candidate_cards").is_empty(), "Planning deals no candidates")
 	_expect(design_phase.get_node("%HandContainer").get_child_count() == 0, "Planning creates no CardViews")
 	_expect(design_phase.get_node("%BeginDesignButton").visible and not design_phase.get_node("%BeginDesignButton").disabled, "Begin Design is visible and available in Planning")
-	_expect(design_phase.get_node("%PlayCardButton").text == "Play Hand", "Play control names the complete hand action")
+	_expect(design_phase.get_node("%PlayCardButton").text == "Implement", "Play control names the complete hand action")
 	_expect(design_phase.get_node("%PlayCardButton").disabled, "Play Hand is disabled in Planning")
 	_expect(design_phase.get_node("%ProceedToAlphaButton").text == "Proceed to Alpha" and not design_phase.get_node("%ProceedToAlphaButton").disabled, "Proceed to Alpha is visible and initially interactable")
-	var stat_labels := design_phase.get_node("PhaseLayout/ProjectStatDisplay").get_children()
-	_expect(stat_labels.size() == 6, "Project stat row contains all six prototype values")
-	for index in range(1, stat_labels.size()):
-		var previous := stat_labels[index - 1] as Label
-		var current := stat_labels[index] as Label
-		_expect(previous.get_rect().intersection(current.get_rect()).get_area() == 0.0, "Project stat label %d does not overlap its neighbor" % (index + 1))
+	_expect(not design_phase.get_node("PhaseLayout/ProjectStatDisplay").is_visible_in_tree(), "Old phase stat row is superseded by the persistent shell header")
 
 
 func _verify_design_priorities(design_phase: DesignPhase, project_state: ProjectState, database: Node) -> void:
+	if design_phase.get_workspace().overlay.visible:
+		design_phase.get_workspace().overlay.cancel()
 	var categories: Array[ProjectState.CoreScore] = [
 		ProjectState.CoreScore.GRAPHICS,
 		ProjectState.CoreScore.SOUND,
@@ -127,7 +125,7 @@ func _verify_design_priorities(design_phase: DesignPhase, project_state: Project
 
 	_expect(_priority_values(design_phase) == [25, 25, 25, 25], "Design priorities initialize at 25 / 25 / 25 / 25")
 	_verify_priority_controls(design_phase, categories)
-	(design_phase.get_node("%SoundPriority") as HSlider).value = 15.0
+	(design_phase.get_node("%SoundPriority") as VSlider).value = 15.0
 	_expect(_priority_values(design_phase) == [25, 15, 25, 25] and design_phase.get_available_priority() == 10, "Lowering Sound changes only Sound and frees ten priority")
 	_expect(priority_emissions[0] == 1, "One Design slider adjustment emits priorities_changed exactly once")
 	var comparison_alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
@@ -172,6 +170,15 @@ func _verify_design_priorities(design_phase: DesignPhase, project_state: Project
 	_expect(_project_state_snapshot(project_state) == state_before, "Priority changes preserve every authoritative project value")
 	_expect(project_value_emissions[0] == 0 and project_cycle_emissions[0] == 0, "Priority changes emit no ProjectState signal and advance no cycle")
 	_verify_weighted_dealing(design_phase, project_state, database)
+	# The shared priority-commit milestone locks phase activation to an exact
+	# 100-point distribution. Restore a valid planning allocation after the
+	# normalization fuzz coverage above.
+	_expect(design_phase.set_priority_distribution({
+		ProjectState.CoreScore.GRAPHICS: 25,
+		ProjectState.CoreScore.SOUND: 25,
+		ProjectState.CoreScore.TECHNOLOGY: 25,
+		ProjectState.CoreScore.DESIGN: 25,
+	}), "Design planning distribution restores 25 / 25 / 25 / 25 before Begin")
 	var priorities_before_begin := design_phase.get_priority_distribution()
 	_expect(design_phase.begin_design(), "Begin Design succeeds once from Planning")
 	await process_frame
@@ -196,7 +203,7 @@ func _verify_design_priorities(design_phase: DesignPhase, project_state: Project
 	(views[0] as CardView).input_button.pressed.emit()
 	for index in range(views.size()):
 		_expect((views[index] as CardView).size == Vector2(240, 336), "Active candidate %d retains 240x336 bounds" % (index + 1))
-	var candidate_scroll := design_phase.get_node("PhaseLayout/CandidateScroll") as ScrollContainer
+	var candidate_scroll := design_phase.get_node("Workspace/Regions/CandidateScroll") as ScrollContainer
 	_expect(candidate_scroll.get_h_scroll_bar().max_value > candidate_scroll.size.x, "Active seven-card pool remains horizontally accessible")
 	_expect(design_phase.get_node("%ProceedToAlphaButton").visible and design_phase.get_node("%PlayCardButton").visible, "Active Play Hand and Proceed controls remain accessible")
 
@@ -327,22 +334,13 @@ func _card_ids(cards: Array) -> Array[StringName]:
 
 func _verify_priority_controls(phase: DesignPhase, categories: Array[ProjectState.CoreScore]) -> void:
 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
-		var slider := phase.get_node("%%%s" % node_name) as HSlider
+		var slider := phase.get_node("%%%s" % node_name) as VSlider
 		_expect(slider != null and slider.min_value == 5.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 5-50 bounds in five-point steps" % node_name)
-	var priority_panel := phase.get_node("PhaseLayout/PriorityPanel") as PanelContainer
-	var priority_columns := phase.get_node("PhaseLayout/PriorityPanel/PriorityLayout").get_children()
+	var priority_panel := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
+	var priority_columns := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel/PriorityLayout").get_children()
 	_expect(priority_panel.size.x <= 1008.0 and priority_panel.size.y >= 72.0, "Compact Design priority panel fits the established phase width")
-	for index in range(1, priority_columns.size()):
-		var previous := priority_columns[index - 1] as Control
-		var current := priority_columns[index] as Control
-		_expect(previous.get_rect().intersection(current.get_rect()).get_area() == 0.0, "Design priority column %d does not overlap its neighbor" % (index + 1))
-	var phase_layout := phase.get_node("PhaseLayout")
-	var project_stats := phase_layout.get_node("ProjectStatDisplay") as Control
-	var candidate_scroll := phase_layout.get_node("CandidateScroll") as Control
-	var action_controls := phase_layout.get_node("ActionControls") as Control
-	_expect(project_stats.get_rect().intersection(priority_panel.get_rect()).get_area() == 0.0, "Project totals remain visually separate from priority allocations")
-	_expect(priority_panel.get_rect().intersection(candidate_scroll.get_rect()).get_area() == 0.0, "Priority controls do not overlap candidate cards or scrollbar")
-	_expect(candidate_scroll.get_rect().intersection(action_controls.get_rect()).get_area() == 0.0, "Candidate scroller does not overlap Play or Proceed controls")
+	_expect(priority_columns.size() == 4 and not priority_panel.is_visible_in_tree(), "Four vertical priority controls remain inside the closed modal")
+	_expect(not phase.get_node("PhaseLayout").visible, "Legacy horizontal HUD is not exposed")
 	_verify_priority_distribution(phase, categories, "Initial Design priority allocation uses the complete budget")
 	_verify_priority_control_values(phase)
 
@@ -627,6 +625,7 @@ func _verify_specialized_success(design_phase: Node) -> void:
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 102.0 / 18.0), "Specialization accumulates Bug Pressure from printed values without its production multiplier")
 	_expect(emissions[0] == 1, "Specialized hand emits values_changed exactly once")
 	_expect(project_state.get_current_cycle() == 1, "Specialization adds no extra cycles")
+	_expect(design_phase.get_workspace().synergy_notification.banner.visible and design_phase.get_workspace().synergy_notification.title_label.text == "Graphics Specialization!", "Successful Design specialization displays an in-game notification")
 	for card in cards:
 		_expect(design_phase.get("_exhausted_card_ids").has(card.id), "Successful specialized Feature exhausts once: %s" % card.id)
 
@@ -722,6 +721,7 @@ func _verify_balanced_success(design_phase: Node) -> void:
 	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: 0.83", "Successful Feature action refreshes the Bug Pressure label through values_changed")
 	_expect(emissions[0] == 1, "Balanced success commits through one values_changed emission")
 	_expect(project_state.get_current_cycle() == 1, "Balanced success advances exactly one cycle")
+	_expect(design_phase.get_workspace().synergy_notification.title_label.text == "Balanced Production!", "Balanced Design action displays its synergy")
 	for card in cards:
 		_expect(design_phase.get("_exhausted_card_ids").has(card.id), "Balanced success preserves Feature exhaustion: %s" % card.id)
 	_expect(design_phase.get("_selected_card_views").is_empty() and design_phase.get_node("%HandContainer").get_child_count() == 7, "Balanced success clears selection and replaces the candidate pool")

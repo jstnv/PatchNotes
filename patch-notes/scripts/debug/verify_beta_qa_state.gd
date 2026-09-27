@@ -25,7 +25,7 @@ func _verify_beta_entry_and_zero_state() -> void:
 	_expect(beta.setup(state), "Beta accepts the exact authoritatively Alpha-finalized ProjectState")
 	_expect(_state_snapshot(state) == before and state.get_current_cycle() == 0, "Loading Beta mutates no Bug state and consumes zero cycles")
 	_expect(state.get_hidden_bugs() == 0 and state.get_known_bugs() == 0 and state.get_remaining_bugs() == 0, "Zero-Bug project enters Beta with zero Hidden, Known, and Remaining Bugs")
-	_expect((beta.get_node("%KnownBugsLabel") as Label).text == "Known Bugs: 0", "Beta initially displays authoritative Known Bugs as zero")
+	_expect((beta.get_node("%KnownBugsLabel") as Label).text == "Known Bugs: 0 | Fixed Bugs: 0", "Beta initially displays authoritative Known and Fixed Bugs as zero")
 	beta.queue_free()
 	await process_frame
 
@@ -61,9 +61,11 @@ func _verify_fixing() -> void:
 	state.values_changed.connect(func() -> void: emissions[0] += 1)
 	_expect(state.fix_known_bugs(2) == 2, "Partial fixing reports two Known Bugs removed")
 	_expect(state.get_hidden_bugs() == 2 and state.get_known_bugs() == 3 and state.get_remaining_bugs() == 5, "Partial fixing leaves Hidden unchanged and reduces Remaining by two")
+	_expect(state.get_fixed_bugs() == 2, "Partial fixing records the cumulative actual amount")
 	_expect(emissions[0] == 1, "One successful nonzero fixing transaction emits exactly once")
 	_expect(state.fix_known_bugs(99) == 3, "Fixing clamps and reports the three available Known Bugs")
 	_expect(state.get_hidden_bugs() == 2 and state.get_known_bugs() == 0 and state.get_remaining_bugs() == 2, "Clamped fixing discards excess strength and protects Hidden Bugs")
+	_expect(state.get_fixed_bugs() == 5, "Cumulative Fixed Bugs includes the clamped actual amount")
 
 	var hidden_only := _make_finalized_state(2, 2)
 	var hidden_snapshot := _state_snapshot(hidden_only)
@@ -100,8 +102,8 @@ func _verify_beta_persistence_and_concealment() -> void:
 	await process_frame
 	_expect(beta.setup(state), "First Beta shell loads finalized QA state")
 	var label := beta.get_node("%KnownBugsLabel") as Label
-	_expect(state.discover_bugs(4) == 4 and label.text == "Known Bugs: 4", "Successful discovery refreshes the Beta Known Bug display synchronously")
-	_expect(state.fix_known_bugs(1) == 1 and label.text == "Known Bugs: 3", "Successful fixing refreshes the Beta Known Bug display synchronously")
+	_expect(state.discover_bugs(4) == 4 and label.text == "Known Bugs: 4 | Fixed Bugs: 0", "Successful discovery refreshes the Beta Bug display synchronously")
+	_expect(state.fix_known_bugs(1) == 1 and label.text == "Known Bugs: 3 | Fixed Bugs: 1", "Successful fixing refreshes Known and Fixed Bugs synchronously")
 	var persistent_snapshot := _state_snapshot(state)
 	beta.queue_free()
 	await process_frame
@@ -110,14 +112,14 @@ func _verify_beta_persistence_and_concealment() -> void:
 	root.add_child(reconstructed)
 	await process_frame
 	_expect(reconstructed.setup(state), "Reconstructed Beta shell accepts the same finalized ProjectState")
-	_expect(_state_snapshot(state) == persistent_snapshot and (reconstructed.get_node("%KnownBugsLabel") as Label).text == "Known Bugs: 3", "Beta reconstruction preserves Hidden and Known Bugs instead of resetting them")
+	_expect(_state_snapshot(state) == persistent_snapshot and (reconstructed.get_node("%KnownBugsLabel") as Label).text == "Known Bugs: 3 | Fixed Bugs: 1", "Beta reconstruction preserves Hidden, Known, and Fixed Bugs instead of resetting them")
 	var visible_text := ""
 	for node: Node in _descendants(reconstructed):
 		if node is Label:
 			visible_text += " " + (node as Label).text.to_lower()
 	var concealed_terms := ["hidden", "remaining", "pressure", "generated", "total bugs"]
 	_expect(concealed_terms.all(func(term: String) -> bool: return term not in visible_text), "Normal Beta UI conceals Hidden, Remaining, pressure, contribution, and generated totals")
-	_expect("known bugs: 3" in visible_text and "beta phase" in visible_text, "Beta shell displays only its phase identity and authoritative Known Bugs")
+	_expect("known bugs: 3" in visible_text and "fixed bugs: 1" in visible_text and "beta phase" in visible_text, "Beta shell displays its phase identity and authoritative public Bug counts")
 	reconstructed.queue_free()
 	await process_frame
 
@@ -131,7 +133,7 @@ func _make_finalized_state(design_hidden: int, alpha_hidden: int) -> ProjectStat
 
 func _state_snapshot(state: ProjectState) -> Array:
 	return [
-		state.get_hidden_bugs(), state.get_known_bugs(), state.get_remaining_bugs(),
+		state.get_hidden_bugs(), state.get_known_bugs(), state.get_fixed_bugs(), state.get_remaining_bugs(),
 		state.get_alpha_hidden_bugs_generated(), state.has_design_bug_finalization(), state.has_alpha_finalization(),
 		state.get_current_cycle(), state.get_current_scope(), state.get_required_scope(),
 		state.get_accumulated_bug_pressure(), state.get_accumulated_alpha_bug_pressure(),

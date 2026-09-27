@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://c70m1fbublhjc" path="res://scripts/gameplay.gd" id="1_7biu0"]
 
+[ext_resource type="Script" path="res://scripts/ui/gameplay_hud.gd" id="2_hud"]
+[ext_resource type="Script" path="res://scripts/ui/phase_host.gd" id="3_host"]
+
 [node name="Gameplay" type="Control" unique_id=231917280]
 layout_mode = 3
 anchors_preset = 15
@@ -18,20 +21,32 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.025, 0.03, 0.045, 1)
+color = Color(0.07, 0.027, 0.04, 1)
 
-[node name="HUD" type="Node" parent="." unique_id=1973569733]
-
-[node name="PopupLayer" type="Node" parent="." unique_id=1412154909]
-
-[node name="NotificationLayer" type="Node" parent="." unique_id=2071018861]
-
-[node name="PhaseRoot" type="CenterContainer" parent="." unique_id=461672055]
+[node name="GameplayHUD" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_hud")
+
+[node name="PopupLayer" type="Node" parent="." unique_id=1412154909]
+
+[node name="NotificationLayer" type="Node" parent="." unique_id=2071018861]
+
+[node name="PhaseRoot" type="Container" parent="." unique_id=461672055]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 88.0
+offset_bottom = -52.0
+script = ExtResource("3_host")
 grow_horizontal = 2
 grow_vertical = 2
 

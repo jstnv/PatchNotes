@@ -25,6 +25,15 @@ func _verify_normal_prototype_run() -> void:
 	await process_frame
 	await process_frame
 	var run: RunState = gameplay.run_state
+	_expect(gameplay.project_state == null and gameplay.get("_active_phase") is MainMenu, "Normal startup waits at main menu")
+	var menu: MainMenu = gameplay.get("_active_phase")
+	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
+	(menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName") as LineEdit).text = "Test Studio"
+	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	var studio: StudioPhase = gameplay.get("_active_phase")
+	_expect(studio != null and run.get_studio_name() == "Test Studio" and run.get_completed_run_cycles() == 0, "Studio identity commits before the first game without a cycle")
+	_expect(gameplay.call("_begin_next_project", studio, "First Game", &"action", &"fantasy"), "First game uses the shared Pre-Development transaction")
+	_expect(run.get_completed_run_cycles() == 1 and gameplay.project_state.get_current_cycle() == 0, "First game costs one run cycle and begins at project zero")
 	var project: ProjectState = gameplay.project_state
 	_expect(run != null and run.is_cash_initialized() and run.get_cash() == 0, "Normal prototype Gameplay creates one RunState initialized to exactly $0")
 	_expect(project.get_assigned_competitor_snapshot_id_for_authority() == &"fast_follower" and project.get_assigned_market_forecast_snapshot_id_for_authority() == &"market_surge", "Controlled rolls assign the exact authoritative snapshots atomically")
@@ -32,8 +41,10 @@ func _verify_normal_prototype_run() -> void:
 	var baseline := _project_snapshot(project)
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design := phase_root.get_child(0) as DesignPhase
+	design.get_workspace().overlay.cancel()
 	(design.get_node("%ProceedToAlphaButton") as Button).pressed.emit()
 	var alpha := phase_root.get_child(0) as AlphaPhase
+	alpha.get_workspace().overlay.cancel()
 	_expect(alpha.begin_alpha([0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65]), "Prototype transition fixture begins Alpha")
 	project.add_scope(30)
 	var before_finalization := _project_snapshot(project)
@@ -45,6 +56,7 @@ func _verify_normal_prototype_run() -> void:
 	_expect(project.get_current_cycle() == baseline[0] and project.get_marketing_output() == baseline[1], "Initialization and transitions add no cycles or Marketing Output")
 	_expect(project.get_hidden_bugs() >= before_finalization[2] and project.get_known_bugs() == before_finalization[3], "Only existing authoritative Alpha finalization affects Bug state")
 	var beta := phase_root.get_child(0) as BetaPhase
+	beta.get_workspace().overlay.cancel()
 	_expect(beta.begin_beta([0.05, 0.40, 0.80, 0.80, 0.40, 0.05, 0.80], [0.1, 0.1, 0.1, 0.5, 0.5, 0.8, 0.8]), "Beta dealing remains available without finance or snapshot effects")
 	await process_frame
 	var views := beta.get_node("%HandContainer").get_children()

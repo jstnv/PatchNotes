@@ -1,0 +1,234 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/phases/studio_phase.gd" id="1"]
+[ext_resource type="Theme" path="res://resources/ui/workspace_theme.tres" id="2"]
+
+[node name="StudioPhase" type="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+theme = ExtResource("2")
+
+[node name="Dashboard" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+unique_name_in_owner = true
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Layout" type="VBoxContainer" parent="Dashboard"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Heading" type="PanelContainer" parent="Dashboard/Layout"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Dashboard/Layout/Heading"]
+layout_mode = 2
+text = "Studio Phase"
+theme_override_font_sizes/font_size = 28
+
+[node name="MenuCenter" type="CenterContainer" parent="Dashboard/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Menu" type="HBoxContainer" parent="Dashboard/Layout/MenuCenter"]
+layout_mode = 2
+theme_override_constants/separation = 80
+
+[node name="Left" type="VBoxContainer" parent="Dashboard/Layout/MenuCenter/Menu"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PostGameSummaries" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Left"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 54)
+text = "Post Game Summaries"
+
+[node name="PublisherList" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Left"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 54)
+text = "Publisher List"
+disabled = true
+tooltip_text = "Not available yet."
+
+[node name="Contracts" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Left"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 54)
+text = "Contracts"
+disabled = true
+tooltip_text = "Not available yet."
+
+[node name="Right" type="VBoxContainer" parent="Dashboard/Layout/MenuCenter/Menu"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="FeatureStoreButton" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Right"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 54)
+text = "Feature Store"
+
+[node name="Employees" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Right"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 54)
+text = "Employees"
+disabled = true
+tooltip_text = "Not available yet."
+
+[node name="StartNextGame" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Right"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 54)
+text = "Produce Next Game"
+tooltip_text = "Name your next game and choose its genre and theme."
+
+[node name="SummaryPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+unique_name_in_owner = true
+visible = false
+
+[node name="Margin" type="MarginContainer" parent="SummaryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="Layout" type="VBoxContainer" parent="SummaryPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Header" type="HBoxContainer" parent="SummaryPanel/Margin/Layout"]
+layout_mode = 2
+
+[node name="GameList" type="ItemList" parent="SummaryPanel/Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 112)
+select_mode = 0
+
+[node name="SummaryTitle" type="Label" parent="SummaryPanel/Margin/Layout/Header"]
+unique_name_in_owner = true
+autowrap_mode = 3
+layout_mode = 2
+text = "Post Game Summary"
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+
+[node name="DetailedReviewButton" type="Button" parent="SummaryPanel/Margin/Layout/Header"]
+layout_mode = 2
+unique_name_in_owner = true
+text = "Detailed Review"
+custom_minimum_size = Vector2(160, 44)
+
+[node name="CloseSummaryButton" type="Button" parent="SummaryPanel/Margin/Layout/Header"]
+layout_mode = 2
+unique_name_in_owner = true
+text = "Back to Studio"
+custom_minimum_size = Vector2(160, 44)
+
+[node name="Scroll" type="ScrollContainer" parent="SummaryPanel/Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Stats" type="VBoxContainer" parent="SummaryPanel/Margin/Layout/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Performance" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+text = "Performance"
+theme_override_font_sizes/font_size = 21
+
+[node name="CalendarLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="ReviewLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="AwarenessLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="Month1Forecast" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+text = "Month 1 Forecast"
+theme_override_font_sizes/font_size = 21
+
+[node name="ProjectedUnitsLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="ProjectedRevenueLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="Sales&Revenue" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+text = "Sales & Revenue"
+theme_override_font_sizes/font_size = 21
+
+[node name="EarnedLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="EntitledLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="SettledLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="UnpaidLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="ExhaustionLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="MarketLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+visible = false
+
+[node name="RivalLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+visible = false

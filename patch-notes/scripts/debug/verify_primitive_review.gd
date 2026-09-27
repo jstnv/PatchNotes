@@ -101,6 +101,7 @@ func _verify_one_shot_exclusions_and_ui() -> void:
 	var database := PrimitiveSnapshotDatabase.new()
 	database.load_ledgers()
 	state.commit_launch_market_context_result(PrimitiveLaunchMarketContextCalculator.calculate(state, database))
+	state.commit_units_sold_result(PrimitiveUnitsSoldCalculator.calculate(state))
 	_expect(not state.commit_review_result(PrimitiveReviewCalculator.calculate(state, 0)) and state.get_review_result() == result and result.get_variance_roll() == 70, "Repeated requests cannot reroll or overwrite Review")
 	_expect(before == [state.get_core_score(ProjectState.CoreScore.GRAPHICS), state.get_current_scope(), state.get_hidden_bugs(), state.get_known_bugs(), state.get_marketing_output(), state.get_current_cycle(), state.get_assigned_competitor_snapshot_id_for_authority(), state.get_assigned_market_forecast_snapshot_id_for_authority(), run.get_cash()], "Review costs zero cash/cycles and preserves every frozen launch input")
 	var comparison := PrimitiveReviewCalculator.calculate(_state([20, 20, 20, 20], 30, 2, 1, 30, 0, 0, &"obsessive_polisher", &"market_crash", true), 70)
@@ -111,7 +112,7 @@ func _verify_one_shot_exclusions_and_ui() -> void:
 	_expect(launch.setup(state, run, database), "LaunchPhase reads the committed Review result")
 	var visible := (launch.get_node("%ReviewLabel") as Label).text + (launch.get_node("%ProductionRatingLabel") as Label).text + (launch.get_node("%ScopeCompletionLabel") as Label).text + (launch.get_node("%BugMultiplierLabel") as Label).text + (launch.get_node("%VarianceLabel") as Label).text + (launch.get_node("Layout/Status") as Label).text
 	_expect(visible.contains("Review:") and visible.contains("Production Rating") and visible.contains("Scope Completion") and visible.contains("Bug Multiplier") and visible.contains("+0.25") and visible.contains("release results pending"), "Launch UI displays the permitted Review breakdown")
-	_expect(not visible.contains("Hidden") and not visible.contains("Remaining") and not visible.contains("Reckless") and not visible.contains("Market Boom") and not visible.contains("Revenue"), "Launch UI conceals Bugs, snapshots, and deferred release systems")
+	_expect(not visible.contains("Hidden") and not visible.contains("Remaining Bugs") and not visible.contains("Reckless") and not visible.contains("Market Boom") and not visible.contains("$"), "Launch UI conceals Bugs, snapshots, and cash results")
 	var reconstruction := LAUNCH_SCENE.instantiate() as LaunchPhase
 	root.add_child(reconstruction)
 	await process_frame
