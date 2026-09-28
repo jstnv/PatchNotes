@@ -41,7 +41,7 @@ func _verify_studio_summary(revealed: bool) -> void:
 	await process_frame
 	var text := _visible_text(studio)
 	_expect(text.contains("Month 2, Second Half") and text.contains("Projected Month 1 Units: 750") and text.contains("Projected Month 1 Net: $5244.75"), "Studio displays calendar and exact projected release totals")
-	_expect(text.contains("Earned: 0 / 2 sales cycles, 0 units") and text.contains("Settled Revenue: $0.00"), "Studio clearly distinguishes projected from earned and settled values")
+	_expect(text.contains("Earned: 0 / 2 Month 1 cycles · Lifetime 0 units") and text.contains("Settled Revenue: $0.00"), "Studio clearly distinguishes projected from earned and settled values")
 	_expect(before == [run.get_completed_run_cycles(), run.get_cash_cents(), state.get_current_cycle()], "Studio entry costs zero calendar/project cycles and zero cash")
 	_expect(studio.get_project_state() == state and studio.get_run_state() == run, "Studio preserves exact ProjectState and RunState identities")
 	if revealed:

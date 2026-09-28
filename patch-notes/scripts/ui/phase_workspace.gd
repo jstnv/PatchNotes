@@ -213,6 +213,8 @@ func _beta_synergy_tip(selected: Array[CardView]) -> Dictionary:
 	if selected.is_empty(): return overview
 	var counts := {CardData.BETA_CATEGORY_QA: 0, CardData.BETA_CATEGORY_MARKETING: 0, CardData.BETA_CATEGORY_INSIDER: 0}
 	for view: CardView in selected:
+		if view.card_data == null or not counts.has(view.card_data.beta_category):
+			return {"label": "Synergy: none", "title": "Corrective Pass selected", "body": "A Host Playtest corrective Pass can still add Core score when played, but a hand containing one does not qualify for QA, Marketing or Balanced Operations synergy."}
 		counts[view.card_data.beta_category] += 1
 	if selected.size() < 4:
 		if counts[CardData.BETA_CATEGORY_QA] == selected.size():

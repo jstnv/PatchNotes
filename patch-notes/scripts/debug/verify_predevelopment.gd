@@ -85,7 +85,7 @@ func _verify_flow() -> void:
 	run.initialize_cash_cents(220001)
 	run.purchase_feature(&"save_files")
 	run.spend_cash_cents(1)
-	for i in range(23): run.advance_calendar_cycle()
+	for i in range(22): run.advance_calendar_cycle() # Store node purchase already spent the first cycle.
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 	game.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	game.run_state = run
@@ -181,15 +181,18 @@ func _verify_flow() -> void:
 	var third_overlay: PredevelopmentOverlay = second_studio.get("_predevelopment")
 	third_overlay.name_input.text = "Third Game"
 	var cents_before := run.get_cash_cents()
+	var first_settled_before: int = run.get_released_game_sales(id).settled_cents
+	var second_settled_before: int = run.get_released_game_sales(fresh.get_release_id()).settled_cents
 	third_overlay.begin_button.pressed.emit()
-	expect(game.project_state.get_base_name() == "Third Game" and run.get_completed_run_cycles() == 25 and run.get_cash_cents() == cents_before and run.get_released_game_ids().size() == 2, "Another project begins with both sales records retained and no cash cost off the settlement boundary")
+	var settled_delta: int = int(run.get_released_game_sales(id).settled_cents) - first_settled_before + int(run.get_released_game_sales(fresh.get_release_id()).settled_cents) - second_settled_before
+	expect(game.project_state.get_base_name() == "Third Game" and run.get_completed_run_cycles() == 26 and run.get_cash_cents() == cents_before + settled_delta and run.get_released_game_ids().size() == 2, "Another project begins with both sales records retained and same-boundary settlement")
 	var third_design: DesignPhase = game.get("_active_phase")
 	third_design.get_workspace().overlay.cancel()
 	third_design.begin_design()
 	var views := third_design.get_node("%HandContainer").get_children()
 	for i in range(4): views[i].input_button.pressed.emit()
 	third_design.get_node("%PlayCardButton").pressed.emit()
-	expect(game.project_state.get_current_cycle() == 1 and run.get_completed_run_cycles() == 26, "First Design hand advances project zero to one and run calendar once")
+	expect(game.project_state.get_current_cycle() == 1 and run.get_completed_run_cycles() == 27, "First Design hand advances project zero to one and run calendar once")
 	game.queue_free()
 	await _settle()
 

@@ -25,9 +25,9 @@ func setup_release_snapshot(metadata: Dictionary, sales: Dictionary) -> bool:
 	%CyclesLabel.text = "Development Time: %d cycles · Remaining Bugs: %d" % [data.development_cycles, data.remaining_bugs]
 	%MarketingDetailLabel.text = %AwarenessLabel.text
 	%LaunchMarketingLabel.text = "Launch Marketing: %d" % data.launch_marketing
-	%SalesUnitsLabel.text = "Projected Month 1 Units: %d · Earned: %d" % [data.projected_units, sales.earned_units]
+	%SalesUnitsLabel.text = "Projected Month 1 Units: %d · Lifetime earned: %d" % [data.projected_units, sales.earned_units]
 	%SalesNetLabel.text = "Projected Gross: %s · Projected Net: %s\nEarned Gross: %s · Earned Net: %s · Paid: %s" % [CashFormatter.format_exact_cents(data.projected_gross_cents), CashFormatter.format_exact_cents(data.projected_net_cents), CashFormatter.format_exact_cents(sales.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS), CashFormatter.format_exact_cents(sales.entitlement_cents), CashFormatter.format_exact_cents(sales.settled_cents)]
-	%SalesNoteLabel.text = "Month 1 gross is before the platform share. Earned net settles at the calendar-month boundary."
+	%SalesNoteLabel.text = "Month 1 gross is before the platform share. Later sales continue by release age; earned net settles at calendar-month boundaries."
 	return true
 
 

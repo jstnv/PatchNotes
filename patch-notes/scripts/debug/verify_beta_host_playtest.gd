@@ -169,6 +169,7 @@ func _verify_corrective_pass_resolution() -> void:
 	var views: Array[CardView] = fixture.beta.get("_candidate_views")
 	for index in range(4):
 		fixture.beta.call("_on_card_pressed", views[index])
+	_expect(fixture.beta.get_workspace().get("_synergy_help_title") == "Corrective Pass selected", "Beta tooltip explains that corrective Passes do not grant synergy")
 	var sound_before: int = fixture.state.get_core_score(ProjectState.CoreScore.SOUND)
 	var technology_before: int = fixture.state.get_core_score(ProjectState.CoreScore.TECHNOLOGY)
 	_expect(fixture.beta.play_selected_hand(), "Two corrective Passes can resolve with two ordinary Beta cards")

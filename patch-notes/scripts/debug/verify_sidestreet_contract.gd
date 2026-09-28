@@ -209,11 +209,13 @@ func _verify_sales_boundary() -> void:
 	var frozen_revenue := second.get_month_one_sales_revenue_result()
 	var offer := run.get_next_sidestreet_offer()
 	var cash_before := run.get_cash_cents()
+	var first_settled_before: int = run.get_released_game_sales(first.get_release_id()).settled_cents
 	var side := await complete_contract(run, run.accept_sidestreet_offer(offer.offer_id))
 	var payout: int = side.plan.payout_cents
 	var sales := run.get_released_game_sales(second.get_release_id())
+	var first_settled_after: int = run.get_released_game_sales(first.get_release_id()).settled_cents
 	check(run.get_completed_run_cycles() == 4 and sales.earned_cycles == 2 and sales.settled_cents > 0, "SideStreet second hand reaches normal Month 1 settlement")
-	check(run.get_cash_cents() == cash_before + payout + sales.settled_cents, "Contract payout and earned sales settle exactly once at the shared boundary")
+	check(run.get_cash_cents() == cash_before + payout + sales.settled_cents + first_settled_after - first_settled_before, "Contract payout and every release's earned sales settle exactly once at the shared boundary")
 	check(second.get_review_result() == frozen_review and second.get_month_one_sales_revenue_result() == frozen_revenue, "Contract leaves second ProjectState review and forecast frozen")
 	(side.phase as ContractPhase).queue_free()
 	await process_frame

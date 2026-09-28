@@ -236,6 +236,40 @@ layout_mode = 2
 unique_name_in_owner = true
 autowrap_mode = 3
 
+[node name="LaterSalesHeading" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+text = "Post-Launch Sales & Campaign"
+theme_override_font_sizes/font_size = 21
+
+[node name="CurrentAgeLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="OrganicAwarenessLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="LaterProjectedUnitsLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="CampaignStatusLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="CampaignButton" type="Button" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 44)
+size_flags_horizontal = 0
+text = "Run Campaign · $100 · 1 cycle"
+disabled = true
+tooltip_text = "Target this released game for a one-month Awareness boost. One productive cycle; only at the first sales cycle of Month 2 or later."
+
 [node name="MarketLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
 layout_mode = 2
 unique_name_in_owner = true

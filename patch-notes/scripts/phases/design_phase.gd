@@ -319,8 +319,9 @@ func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
 		var old_view: CardView = selected[index]
 		var slot := old_view.get_index()
 		var replacement: CardData = plan.cards[index]
-		if old_view.card_data.card_type == &"feature":
+		if replacement.card_type == &"feature":
 			_available_features.erase(replacement)
+		if old_view.card_data.card_type == &"feature":
 			_return_feature_to_available(old_view.card_data)
 		_candidate_cards[slot] = replacement
 
@@ -360,20 +361,35 @@ func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
 	for index in range(_selected_card_views.size()):
 		var view := _selected_card_views[index]
 		var old_card := view.card_data
-		var entries: Array[Dictionary] = []
-		var source := _available_features if old_card.card_type == &"feature" else _pass_definitions
-		for card: CardData in source:
+		var feature_entries: Array[Dictionary] = []
+		var pass_entries: Array[Dictionary] = []
+		for card: CardData in _available_features:
 			if card.id == old_card.id or reserved.has(card.id): continue
-			if card.card_type == &"feature":
-				var already_visible := false
-				for current: CardData in _candidate_cards:
-					if current.id == card.id: already_visible = true
-				if already_visible: continue
+			var already_visible := false
+			for current: CardData in _candidate_cards:
+				if current.id == card.id: already_visible = true
+			if already_visible: continue
 			var weight := _calculate_candidate_weight(card, get_priority_distribution())
-			if weight > 0.0: entries.append({&"card": card, &"weight": weight})
-		entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+			if weight > 0.0: feature_entries.append({&"card": card, &"weight": weight})
+		for card: CardData in _pass_definitions:
+			if card.id == old_card.id: continue
+			var weight := _calculate_candidate_weight(card, get_priority_distribution())
+			if weight > 0.0: pass_entries.append({&"card": card, &"weight": weight})
+		feature_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+		pass_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
 		var roll := controlled_rolls[index] if not controlled_rolls.is_empty() else _deal_rng.randf()
-		var replacement := _select_weighted_entry(entries, roll)
+		var entries: Array[Dictionary] = []
+		var weighted_roll := roll
+		if not feature_entries.is_empty() and not pass_entries.is_empty():
+			# Split one uniform roll by class, then use its remaining range for
+			# priority-weighted selection within that class.
+			entries = feature_entries if roll < 0.5 else pass_entries
+			weighted_roll = roll * 2.0 if roll < 0.5 else (roll - 0.5) * 2.0
+		elif not feature_entries.is_empty():
+			entries = feature_entries
+		else:
+			entries = pass_entries
+		var replacement := _select_weighted_entry(entries, weighted_roll)
 		if replacement == null:
 			valid = false
 			if old_card.card_type == &"feature": failed_features.append(view)

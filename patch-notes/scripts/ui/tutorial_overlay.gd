@@ -28,7 +28,7 @@ const TOPICS := {
 	],
 	&"studio": [
 		{"title": "Studio: Between Games", "body": "Produce your first game, then return to browse release summaries, the Feature Store and available Contracts. Browsing costs no cycles or cash."},
-		{"title": "Studio: Productive Time", "body": "Productive actions use the shared run calendar, where historical sales earn and settle. Feature Store branch purchases cost no cycles; later Primitive reserve purchases take one. Produce Next Game creates a fresh project while preserving the run."},
+		{"title": "Studio: Productive Time", "body": "Productive actions use the shared run calendar, where historical sales earn and settle. Later Feature Store branch and Primitive reserve purchases each take one cycle. Produce Next Game creates a fresh project while preserving the run."},
 	],
 	&"review": [
 		{"title": "Review: Inspect Your Release", "body": "Use the five tabs to inspect the frozen release results. Back to Summary returns to Studio for free; viewing results never rerolls or pays them again."},
@@ -39,7 +39,7 @@ const TOPICS := {
 	],
 	&"feature_store": [
 		{"title": "Feature Store: Follow the Tree", "body": "Select a node to inspect its prerequisites, price and familiarity discount. Owned Features carry into future projects; playing prerequisite Features can reduce a child's price."},
-		{"title": "Feature Store: Purchase Carefully", "body": "Opening, browsing and branch purchases cost zero cycles. Starter Primitive purchases are also free of cycles; later Primitive reserve purchases take one. Every purchase spends its displayed cash price. Locked nodes require prerequisites."},
+		{"title": "Feature Store: Purchase Carefully", "body": "Opening and browsing cost zero cycles. Starter Primitive purchases also take no cycles; later branch and Primitive reserve purchases each take one. Every purchase spends its displayed cash price. Locked nodes require prerequisites."},
 	],
 }
 

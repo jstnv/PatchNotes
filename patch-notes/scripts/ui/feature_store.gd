@@ -154,7 +154,7 @@ func _refresh() -> void:
 		if card.secondary_value != 0:
 			button.tooltip_text += " · +%d %s" % [card.secondary_value, str(card.secondary_stat).capitalize()]
 		if not offer.is_empty():
-			button.tooltip_text += "\nPrerequisite: %s\nBase: %s · Discount: %d%% · Final: %s\n%s" % [offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Owned" if offer.owned else "Affordable" if offer.affordable and offer.unlocked else "Need cash" if offer.unlocked else "Locked"]
+			button.tooltip_text += "\nPrerequisite: %s\nBase: %s · Discount: %d%% · Final: %s\nPurchase: 1 productive cycle · %s" % [offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Owned" if offer.owned else "Affordable" if offer.affordable and offer.unlocked else "Need cash" if offer.unlocked else "Locked"]
 		elif not reserve.is_empty() and not reserve.owned:
 			button.tooltip_text += "\nPrimitive %s · %s" % ["starter" if reserve.initial else "reserve", CashFormatter.format_exact_cents(reserve.price_cents)]
 		else:
@@ -337,12 +337,12 @@ func _show_details() -> void:
 		_buy.text = "Already owned"
 		return
 	var status := "Owned" if offer.owned else ("Purchasable" if offer.unlocked else "Locked")
-	_details.text = "%s\n%s · %s\nDepartment: %s\n\nPrerequisite: %s\nBase price: %s\nFamiliarity discount: %d%%\nFinal price: %s\n%s\n\nPrinted effect: +%d %s • Scope %d\nFinite once per project." % [offer.name, status, str(card.phase).capitalize(), "None" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize(), offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Affordable" if offer.affordable else "Insufficient cash", card.primary_value, str(card.primary_stat).capitalize(), card.scope]
+	_details.text = "%s\n%s · %s\nDepartment: %s\n\nPrerequisite: %s\nBase price: %s\nFamiliarity discount: %d%%\nFinal price: %s\nPurchase time: 1 productive cycle\n%s\n\nPrinted effect: +%d %s • Scope %d\nFinite once per project." % [offer.name, status, str(card.phase).capitalize(), "None" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize(), offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Affordable" if offer.affordable else "Insufficient cash", card.primary_value, str(card.primary_stat).capitalize(), card.scope]
 	if _selected == &"difficulty_levels":
 		_details.text += "\nNo familiarity discount for this prerequisite."
 	if card.secondary_value != 0:
 		_details.text += "\nCore: +%d %s" % [card.secondary_value, str(card.secondary_stat).capitalize()]
-	_buy.text = "Already owned" if offer.owned else ("Requires prerequisite" if not offer.unlocked else ("Insufficient cash" if not offer.affordable else "Purchase Feature"))
+	_buy.text = "Already owned" if offer.owned else ("Requires prerequisite" if not offer.unlocked else ("Insufficient cash" if not offer.affordable else "Purchase Feature · 1 cycle"))
 	if _run.needs_starter_selection() and not offer.owned:
 		_buy.text = "Available after first game"
 	_buy.disabled = offer.owned or not offer.unlocked or not offer.affordable or _run.needs_starter_selection()

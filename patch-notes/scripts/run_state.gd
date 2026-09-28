@@ -15,6 +15,7 @@ const CENTS_PER_DOLLAR := 100
 const MAX_REDRAWS := 4
 const START_YEAR := 1980
 const FIRST_STUDIO_CASH_CENTS := 550000
+const POST_LAUNCH_CAMPAIGN_COST_CENTS := 10000
 const STARTER_PURCHASE_CAP_CENTS := 400000
 const STARTER_SCOPE_CAP := 23
 const GUARANTEED_PRIMITIVE_IDS: Array[StringName] = [&"text", &"4_color_palette", &"8_bit_sound", &"keyboard_and_mouse", &"controller", &"controls"]
@@ -256,13 +257,15 @@ func purchase_feature(id: StringName) -> bool:
 	var offer := get_feature_store_offer(id)
 	if offer.is_empty() or offer.owned or not offer.unlocked or not offer.affordable:
 		return false
-	_feature_purchase_in_progress = true
-	# Preflight is complete. Cash observers see the ownership and cash together.
-	_owned_features[id] = true
-	spend_cash_cents(offer.price_cents)
-	features_changed.emit()
-	_feature_purchase_in_progress = false
-	return true
+	var price: int = offer.price_cents
+	if not can_complete_productive_cycle(-price):
+		return false
+	var commit := func() -> bool:
+		if owns_feature(id):
+			return false
+		_owned_features[id] = true
+		return true
+	return complete_productive_action(commit, -price, _completed_run_cycles)
 
 
 ## The new-run boundary supplies the locked starting amount explicitly. The
@@ -426,12 +429,23 @@ func can_register_release(project: ProjectState) -> bool:
 	var checked := PrimitiveMonthOneSalesRevenueCalculator.calculate_for_total_units(projection.get_total_month_one_units())
 	if id.is_empty() or checked == null or checked.get_projected_month_one_net_cents() != projection.get_projected_month_one_net_cents():
 		return false
+	var expected_record := _create_release_sales_record(project)
+	if expected_record.is_empty():
+		return false
 	if _released_games.has(id):
 		if not ReleasedGameSales.is_valid(_released_games[id]) or _released_games[id].total_units != projection.get_total_month_one_units() or not _release_metadata.has(id):
 			return false
 		var metadata: Dictionary = _release_metadata[id]
-		return metadata.base_name == project.get_base_name() and metadata.genre == project.get_genre_id() and metadata.theme == project.get_theme_id() and metadata.genre_ratios == project.get_genre_ratios()
+		return metadata.base_name == project.get_base_name() and metadata.genre == project.get_genre_id() and metadata.theme == project.get_theme_id() and metadata.genre_ratios == project.get_genre_ratios() and _released_games[id].get("review_tenths", -1) == expected_record.get("review_tenths", -1) and _released_games[id].get("launch_awareness", -1) == expected_record.get("launch_awareness", -1) and _released_games[id].get("market_bp", -1) == expected_record.get("market_bp", -1)
 	return true
+
+
+func _create_release_sales_record(project: ProjectState) -> Dictionary:
+	if project == null or project.get_review_result() == null or project.get_awareness_result() == null or project.get_launch_market_context_result() == null:
+		return {}
+	return ReleasedGameSales.create(project.get_release_id(), project.get_month_one_sales_revenue_result().get_total_month_one_units(),
+		roundi(project.get_review_result().get_final_review() * 10.0), project.get_awareness_result().get_total_awareness(),
+		project.get_launch_market_context_result().get_forecast_multiplier_basis_points())
 
 
 func register_release(project: ProjectState) -> bool:
@@ -444,7 +458,7 @@ func register_release(project: ProjectState) -> bool:
 		return true
 	var year := get_current_year()
 	var title := _resolve_release_title(project.get_base_name(), year)
-	var record := ReleasedGameSales.create(id, project.get_month_one_sales_revenue_result().get_total_month_one_units())
+	var record := _create_release_sales_record(project)
 	record.base_name = project.get_base_name()
 	record.release_title = title
 	record.release_year = year
@@ -484,6 +498,23 @@ func _capture_release_review(project: ProjectState) -> Dictionary:
 
 func get_released_game_sales(release_id: StringName) -> Dictionary:
 	return _released_games.get(release_id, {}).duplicate(true)
+
+
+## An offer is anchored to the current release-age cycle, not the calendar month.
+func get_post_launch_campaign_offer(release_id: StringName) -> Dictionary:
+	if not _released_games.has(release_id):
+		return {}
+	var record: Dictionary = _released_games[release_id]
+	var eligible := ReleasedGameSales.can_campaign(record)
+	return {"release_id": release_id, "price_cents": POST_LAUNCH_CAMPAIGN_COST_CENTS,
+		"eligible": eligible, "affordable": _cash_initialized and _cash_cents >= POST_LAUNCH_CAMPAIGN_COST_CENTS,
+		"can_purchase": eligible and can_complete_productive_cycle(-POST_LAUNCH_CAMPAIGN_COST_CENTS, release_id)}
+
+
+func purchase_post_launch_campaign(release_id: StringName, expected_cycle: int) -> bool:
+	if expected_cycle != _completed_run_cycles or get_post_launch_campaign_offer(release_id).get("can_purchase", false) != true:
+		return false
+	return complete_productive_action(Callable(), -POST_LAUNCH_CAMPAIGN_COST_CENTS, expected_cycle, release_id)
 
 
 func get_release_metadata(release_id: StringName) -> Dictionary:
@@ -744,12 +775,14 @@ func _meets_publisher_requirement(id: StringName) -> bool:
 	return false
 
 
-func can_complete_productive_cycle(direct_cash_delta_cents: int = 0) -> bool:
-	return not _plan_productive_cycle(direct_cash_delta_cents).is_empty()
+func can_complete_productive_cycle(direct_cash_delta_cents: int = 0, campaign_release_id: StringName = &"") -> bool:
+	return not _plan_productive_cycle(direct_cash_delta_cents, campaign_release_id).is_empty()
 
 
-func _plan_productive_cycle(direct_cash_delta_cents: int) -> Dictionary:
+func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: StringName = &"") -> Dictionary:
 	if _productive_cycle_in_progress or _feature_purchase_in_progress or _pending_contract_completion != null or _completed_run_cycles < 0 or _completed_run_cycles == MAX_SIGNED_INT or _available_redraws < 0 or _available_redraws > MAX_REDRAWS:
+		return {}
+	if not campaign_release_id.is_empty() and (direct_cash_delta_cents != -POST_LAUNCH_CAMPAIGN_COST_CENTS or not _released_games.has(campaign_release_id) or not ReleasedGameSales.can_campaign(_released_games[campaign_release_id])):
 		return {}
 	if direct_cash_delta_cents != 0 and not _cash_initialized:
 		return {}
@@ -761,7 +794,7 @@ func _plan_productive_cycle(direct_cash_delta_cents: int) -> Dictionary:
 	for id: StringName in _released_games:
 		if not _cash_initialized or not _released_games[id] is Dictionary or _released_games[id].get("release_id") != id:
 			return {}
-		var next := ReleasedGameSales.next_cycle(_released_games[id], _completed_run_cycles + 1, will_next_cycle_cross_month_boundary())
+		var next := ReleasedGameSales.next_cycle(_released_games[id], _completed_run_cycles + 1, will_next_cycle_cross_month_boundary(), id == campaign_release_id)
 		if next.is_empty():
 			return {}
 		var release_payable: int = next.settled_cents - _released_games[id].settled_cents
@@ -780,12 +813,12 @@ func _plan_productive_cycle(direct_cash_delta_cents: int) -> Dictionary:
 ## BEFORE that callback. expected_cycle lets delayed callers reject replays.
 ## All release records preflight together; settlement sums checked integer cents.
 ## No awaits, expenses or reports are defined here.
-func complete_productive_action(direct_effects: Callable = Callable(), direct_cash_delta_cents: int = 0, expected_cycle: int = -1) -> bool:
+func complete_productive_action(direct_effects: Callable = Callable(), direct_cash_delta_cents: int = 0, expected_cycle: int = -1, campaign_release_id: StringName = &"") -> bool:
 	if _publishing_cycle:
 		return false
 	if expected_cycle != -1 and expected_cycle != _completed_run_cycles:
 		return false
-	var plan := _plan_productive_cycle(direct_cash_delta_cents)
+	var plan := _plan_productive_cycle(direct_cash_delta_cents, campaign_release_id)
 	if plan.is_empty():
 		return false
 	var cash_before := _cash_cents

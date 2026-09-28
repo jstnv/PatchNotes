@@ -27,6 +27,7 @@ func _ready() -> void:
 	%CloseSummaryButton.pressed.connect(close_summary)
 	%DetailedReviewButton.pressed.connect(open_detailed_review)
 	%Contracts.pressed.connect(_open_contracts)
+	%CampaignButton.pressed.connect(_purchase_selected_campaign)
 	%GameList.item_selected.connect(_on_game_selected)
 	%LowScopeWarning.confirmed.connect(_show_predevelopment)
 	%PostGameSummaries.tooltip_text = "Browse every released game, its category Reviews, and earned versus projected sales. Opening is free."
@@ -349,6 +350,16 @@ func _on_game_selected(index: int) -> void:
 	_refresh_summary()
 
 
+func _purchase_selected_campaign() -> void:
+	if _run_state == null or _selected_release_id.is_empty():
+		return
+	var expected_cycle := _run_state.get_completed_run_cycles()
+	if not _run_state.purchase_post_launch_campaign(_selected_release_id, expected_cycle):
+		%CampaignStatusLabel.text = "Campaign unavailable. Check its timing and cash before trying again."
+		return
+	_refresh_summary()
+
+
 func _refresh_contract_action() -> void:
 	var state := _run_state.get_active_contract()
 	if state != null:
@@ -381,11 +392,31 @@ func _refresh_summary() -> void:
 	%AwarenessLabel.text = "Awareness: %d · Graphics %d · Sound %d · Technology %d · Design %d" % [snapshot.awareness, snapshot.cores[0], snapshot.cores[1], snapshot.cores[2], snapshot.cores[3]]
 	%ProjectedUnitsLabel.text = "Projected Month 1 Units: %d" % snapshot.projected_units
 	%ProjectedRevenueLabel.text = "Projected Month 1 Gross: %s · Projected Month 1 Net: %s" % [CashFormatter.format_exact_cents(snapshot.projected_gross_cents), CashFormatter.format_exact_cents(snapshot.projected_net_cents)]
-	%EarnedLabel.text = "Earned: %d / 2 sales cycles, %d units · Gross: %s" % [earned.earned_cycles, earned.earned_units, CashFormatter.format_exact_cents(earned.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS)]
+	%EarnedLabel.text = "Earned: %d / 2 Month 1 cycles · Lifetime %d units · Gross: %s" % [earned.earned_cycles, earned.earned_units, CashFormatter.format_exact_cents(earned.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS)]
 	%EntitledLabel.text = "Earned Net Entitlement: %s" % CashFormatter.format_exact_cents(earned.entitlement_cents)
 	%SettledLabel.text = "Settled Revenue: %s" % CashFormatter.format_exact_cents(earned.settled_cents)
 	%UnpaidLabel.text = "Currently Unpaid: %s" % CashFormatter.format_exact_cents(earned.entitlement_cents - earned.settled_cents)
-	%ExhaustionLabel.text = "Month 1 sales exhausted (2/2 cycles)" if earned.exhausted else "Month 1 sales remaining: %d cycles" % (2 - earned.earned_cycles)
+	%ExhaustionLabel.text = "Month 1 sales complete (2/2 cycles); later sales continue" if earned.exhausted else "Month 1 sales remaining: %d cycles" % (2 - earned.earned_cycles)
+	var later := ReleasedGameSales.get_projection(earned)
+	var offer := _run_state.get_post_launch_campaign_offer(_selected_release_id)
+	%CurrentAgeLabel.text = "Next sales: release-age Month %d, cycle %d of 2" % [later.get("next_age_month", 1), later.get("next_age_cycle", 1)]
+	if int(later.get("next_age_month", 1)) == 1:
+		%OrganicAwarenessLabel.text = "Organic Awareness begins in release-age Month 2."
+		%LaterProjectedUnitsLabel.text = "Month 1 forecast: %d units across two earning cycles" % int(later.get("projected_month_units", 0))
+	else:
+		%OrganicAwarenessLabel.text = "Organic Awareness: %.4f" % (float(later.get("organic_awareness_scaled", 0)) / 10000.0)
+		%LaterProjectedUnitsLabel.text = "Projected units this release-age month: %d organic" % int(later.get("projected_month_units", 0))
+		if offer.get("eligible", false):
+			%LaterProjectedUnitsLabel.text += " · %d with campaign" % int(later.get("campaign_projected_month_units", 0))
+	%CampaignButton.disabled = not offer.get("can_purchase", false)
+	if not offer.get("eligible", false):
+		%CampaignStatusLabel.text = "Campaigns open only at the first sales cycle of this game's Month 2 or later."
+	elif not offer.get("affordable", false):
+		%CampaignStatusLabel.text = "Need $100.00 cash before the next sales cycle."
+	elif not offer.get("can_purchase", false):
+		%CampaignStatusLabel.text = "Campaign unavailable while the next sales/settlement transaction cannot complete."
+	else:
+		%CampaignStatusLabel.text = "One release-age month only · $100.00 · one productive cycle · no stacking."
 	%MarketLabel.visible = not StringName(snapshot.get("forecast_id", &"")).is_empty()
 	if %MarketLabel.visible:
 		var forecast := _snapshot_database.get_forecast(snapshot.forecast_id)

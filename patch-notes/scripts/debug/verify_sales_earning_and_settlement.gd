@@ -68,10 +68,10 @@ func _verify_oracle() -> void:
 	expect(record.earned_cycles == 2 and record.earned_units == 751 and record.entitlement_cents == 525174 and record.settled_cents == 262237 and run.get_cash_cents() == 262238, "Non-boundary second cycle earns but pays nothing")
 	run.complete_productive_action()
 	record = run.get_released_game_sales(id)
-	expect(record.settled_cents == 525174 and run.get_cash_cents() == 525175 and signals[0] == 2, "Following boundary pays remaining 262937 cents once")
+	expect(record.settled_cents == record.entitlement_cents and record.settled_cents > 525174 and run.get_cash_cents() == 1 + record.settled_cents and signals[0] == 2, "Following boundary settles remaining Month 1 and first-half later sales exactly once")
 	for i in range(4): run.complete_productive_action()
 	record = run.get_released_game_sales(id)
-	expect(record.exhausted and record.earned_cycles == 2 and record.earned_units == 751 and run.get_cash_cents() == 525175 and signals[0] == 2, "Exhaustion prevents later earning; zero payable emits no cash signal")
+	expect(record.exhausted and record.earned_cycles == 2 and record.earned_units > 751 and run.get_cash_cents() > 525175 and signals[0] > 2, "Month 1 completes after two cycles while later release-age months continue earning")
 	expect(project.get_month_one_sales_revenue_result().get_net_cents_previously_settled() == 0 and project.get_current_cycle() == 0, "Released ProjectState stays frozen")
 	for units in [750, 751, 1, 0]:
 		var p := release(units)
@@ -153,7 +153,7 @@ func _verify_studio() -> void:
 	store.hide()
 	expect(snapshot(run, p) == before, "Feature Store browsing stays zero-cycle")
 	run.complete_productive_action()
-	expect(studio.get_node("%SettledLabel").text.contains("$5251.74") and studio.get_node("%UnpaidLabel").text.contains("$0.00") and studio.get_node("%ExhaustionLabel").text.contains("exhausted"), "Live summary updates at settlement and exhaustion")
+	expect(studio.get_node("%SettledLabel").text.contains("$5251.74") and studio.get_node("%UnpaidLabel").text.contains("$0.00") and studio.get_node("%ExhaustionLabel").text.contains("Month 1 sales complete"), "Live summary updates at settlement and Month 1 completion")
 	studio.queue_free()
 	await process_frame
 

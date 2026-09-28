@@ -22,7 +22,7 @@ func _verify() -> void:
 	var signals := [0, 0]
 	run.cash_changed.connect(func(): signals[0] += 1)
 	run.features_changed.connect(func(): signals[1] += 1)
-	expect(run.purchase_feature(&"save_files") and run.get_cash_cents() == 780001, "Purchase spends exact cents preserving remainder")
+	expect(run.purchase_feature(&"save_files") and run.get_cash_cents() == 780001 and run.get_completed_run_cycles() == 1, "Purchase spends exact cents and one cycle, preserving remainder")
 	expect(run.get_feature_store_offer(&"branching_nodes").unlocked, "Ownership unlocks child without playing parent")
 	var before := run.get_cash_cents()
 	expect(not run.purchase_feature(&"save_files") and not run.purchase_feature(&"unknown") and run.get_cash_cents() == before and signals == [1, 1], "Duplicate and unknown requests are signal-free no-ops")
@@ -38,7 +38,7 @@ func _verify() -> void:
 		run.record_resolved_feature(ProjectState.new(30), &"text", &"design")
 	expect(run.get_feature_familiarity(&"text") == 7 and run.get_feature_store_offer(&"colored_text").price_cents == 32500, "Seven projects retain credits but discount caps at 50 percent")
 	before = run.get_cash_cents()
-	expect(run.purchase_feature(&"colored_text") and run.get_cash_cents() == before - 32500, "Purchase uses current discounted price")
+	expect(run.purchase_feature(&"colored_text") and run.get_cash_cents() == before - 32500 and run.get_completed_run_cycles() == 2, "Purchase uses current discounted price and one cycle")
 	expect(run.get_feature_store_offer(&"save_files").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").unlocked, "Roots and three-Gameplay ownership gate have no discount")
 	var eligible: Array = db.get_owned_features_for_phase(run, &"design")
 	expect(eligible.size() == 15 and db.get_card(&"colored_text").primary_value == 2 and db.get_card(&"save_files").scope == 2, "Narrow supply API includes purchased authentic ledger definitions")
@@ -62,7 +62,7 @@ func _verify() -> void:
 	expect(detail.text == view_before, "Rejected UI purchase preserves visible state")
 	store.hide()
 	store.open_store()
-	expect(run.get_completed_run_cycles() == 0 and run.get_available_redraws() == 4, "Purchasing and browsing cost zero cycles/redraws")
+	expect(run.get_completed_run_cycles() == 3 and run.get_available_redraws() == 4, "Three purchases cost one cycle each; browsing and rejection cost none")
 	store.queue_free()
 	await process_frame
 	await _verify_tree_ui()
@@ -168,7 +168,7 @@ func _verify_tree_ui() -> void:
 	var before := run.get_cash_cents()
 	store.hide()
 	studio.get_node("%FeatureStoreButton").pressed.emit()
-	expect(store.get("_selected") == &"save_files" and scroll.scroll_horizontal == saved_scroll and run.get_cash_cents() == before and run.get_completed_run_cycles() == 0, "Reopening preserves selection, scroll, cash and cycles")
+	expect(store.get("_selected") == &"save_files" and scroll.scroll_horizontal == saved_scroll and run.get_cash_cents() == before and run.get_completed_run_cycles() == 1, "Reopening preserves selection, scroll, cash and cycles")
 	if "--capture-store" in OS.get_cmdline_user_args():
 		store.call("_select_lane", &"Visuals")
 		scroll.scroll_horizontal = 0
