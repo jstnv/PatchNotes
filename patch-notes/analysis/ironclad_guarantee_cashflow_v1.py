@@ -33,7 +33,10 @@ def describe(values):
 
 
 def run_path(row, bonus_cents, staff, courses_per_staff, optional_node=False,
-             bill_from_start=True, hire_boundary="same", raise_boundary="same"):
+             bill_from_start=True, hire_boundary="same", raise_boundary="same",
+             monthly_extra_cents=0, optional_node_cost_cents=170000,
+             store_cycle=1, hire_before_game1=False, contract_bonus_cents=0,
+             studio_hire_cycle=True):
     """Hypothetical direct effects -> cycle -> earned sales -> net month boundary.
 
     All Game 1/2 play fees are charged before their modeled hands, a deliberate
@@ -47,9 +50,9 @@ def run_path(row, bonus_cents, staff, courses_per_staff, optional_node=False,
     failure = None
     boundaries = []
     checkpoints = {}
-    hired = 0
+    hired = staff if hire_before_game1 else 0
     completed_courses = 0
-    payroll_staff = 0
+    payroll_staff = staff if hire_before_game1 else 0
     payroll_courses = 0
     released = False
     sales_cycles = 0
@@ -78,13 +81,14 @@ def run_path(row, bonus_cents, staff, courses_per_staff, optional_node=False,
             prior = cash
             sales = earned - settled
             bill = 7500 if bill_from_start or released else 0
-            payroll = (payroll_staff * 10000 + payroll_courses * 2500) if released else 0
-            cash += sales - bill - payroll  # One exact-cent net transaction.
+            payroll = (payroll_staff * 10000 + payroll_courses * 2500) if released or hire_before_game1 else 0
+            cash += sales - bill - payroll - monthly_extra_cents  # One exact-cent net transaction.
             settled = earned
             boundaries.append({"cycle": cycle, "month": cycle // 2 + 1,
                                "stage": label, "before_cents": prior,
                                "sales_cents": sales, "bill_cents": bill,
-                               "payroll_cents": payroll, "after_cents": cash})
+                               "payroll_cents": payroll, "extra_cents": monthly_extra_cents,
+                               "after_cents": cash})
             record(label + " month boundary")
             if hire_boundary == "next":
                 payroll_staff = hired
@@ -100,18 +104,20 @@ def run_path(row, bonus_cents, staff, courses_per_staff, optional_node=False,
 
     # One productive cycle per hire; the hiring-cycle boundary can affect both
     # first sales settlement and first payroll. Same-boundary is the main case.
-    for _ in range(staff):
-        hired += 1
-        if hire_boundary == "same":
-            payroll_staff = hired
-        tick("Hire")
+    if not hire_before_game1:
+        for _ in range(staff):
+            hired += 1
+            if hire_boundary == "same":
+                payroll_staff = hired
+            if studio_hire_cycle:
+                tick("Hire")
     checkpoints["before_acceptance_cents"] = cash
     upfront, remainder = reward(row["contract"]["numerator"], bonus_cents)
     cash += upfront  # Acceptance itself never advances a cycle.
     checkpoints["after_upfront_cents"] = cash
     tick("Contract hand 1")
     checkpoints["after_hand_1_cents"] = cash
-    cash += remainder  # Completion direct effect precedes its cycle boundary.
+    cash += remainder + contract_bonus_cents  # Completion direct effect precedes its cycle boundary.
     tick("Contract hand 2")
     checkpoints["after_hand_2_cents"] = cash
 
@@ -127,8 +133,9 @@ def run_path(row, bonus_cents, staff, courses_per_staff, optional_node=False,
         charge(45000, "Reserve Feature purchase")
         tick("Reserve Feature purchase")
     if optional_node:
-        charge(170000, "Optional Store node")
-        tick("Optional Store node")
+        charge(optional_node_cost_cents, "Optional Store node")
+        if store_cycle:
+            tick("Optional Store node")
     charge(row["game2_play_spend"] * 100, "Game 2 Feature play")
     for _ in range(row["game2_cycles"]):
         tick("Game 2")
@@ -136,7 +143,7 @@ def run_path(row, bonus_cents, staff, courses_per_staff, optional_node=False,
     return {"minimum_cents": minimum, "first_shortfall": failure,
             "boundaries": boundaries, "checkpoints": checkpoints,
             "upfront_cents": upfront, "remainder_cents": remainder,
-            "total_reward_cents": upfront + remainder,
+            "total_reward_cents": upfront + remainder + contract_bonus_cents,
             "sales_earned_cents": earned, "sales_settled_cents": settled}
 
 

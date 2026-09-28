@@ -36,6 +36,10 @@ var _productive_cycle_in_progress := false
 var _committing_cycle_cash := false
 var _publishing_cycle := false
 var _primitive_contract: ContractState
+var _ironclad_completion_committed := false
+var _sidestreet_entitlements: Dictionary = {}
+var _sidestreet_results: Dictionary = {}
+var _pending_contract_completion: ContractState
 var _unlocked_publishers: Dictionary = {}
 var _pending_publisher_notifications: Array[StringName] = []
 var _seen_tutorial_topics: Dictionary = {}
@@ -449,6 +453,7 @@ func register_release(project: ProjectState) -> bool:
 		"theme": project.get_theme_id(), "genre_ratios": project.get_genre_ratios(),
 		"release_title": title, "release_year": year, "release_cycle": _completed_run_cycles,
 		"review": _capture_release_review(project)}
+	_sidestreet_entitlements[id] = {"offer_id": StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID, id]), "state": null}
 	_refresh_publisher_unlocks()
 	sales_changed.emit()
 	return true
@@ -519,7 +524,7 @@ func _resolve_release_title(base_name: String, release_year: int) -> String:
 
 
 func is_primitive_contract_offer_available() -> bool:
-	return not _released_games.is_empty() and _primitive_contract == null and not _productive_cycle_in_progress and not _publishing_cycle
+	return not _released_games.is_empty() and _primitive_contract == null and get_active_contract() == null and not _productive_cycle_in_progress and not _publishing_cycle
 
 
 func accept_primitive_contract() -> ContractState:
@@ -527,12 +532,7 @@ func accept_primitive_contract() -> ContractState:
 		return null
 	if not _cash_initialized or _cash_cents > MAX_SIGNED_INT - ContractState.GUARANTEED_UPFRONT_CENTS:
 		return null
-	var ids: Array[StringName] = []
-	for entry: Dictionary in FeatureStoreCatalog.starting_features():
-		var id := StringName(entry.id)
-		if owns_feature(id) and StringName(entry.phase) in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA]:
-			ids.append(id)
-	var accepted := ContractState.new(ids)
+	var accepted := ContractState.new(_primitive_contract_eligible_ids())
 	if not accepted.commit_upfront():
 		return null
 	# Block observers until both ownership and the exact-cent guarantee commit.
@@ -553,10 +553,118 @@ func get_primitive_contract() -> ContractState:
 	return _primitive_contract
 
 
+func get_active_contract() -> ContractState:
+	if _primitive_contract != null and not _primitive_contract.is_completed():
+		return _primitive_contract
+	for release_id: StringName in _sidestreet_entitlements:
+		var state: ContractState = _sidestreet_entitlements[release_id].state
+		if state != null and not state.is_completed():
+			return state
+	return null
+
+
+func owns_contract_state(state: ContractState) -> bool:
+	if state == null:
+		return false
+	if _primitive_contract == state:
+		return true
+	for entitlement: Dictionary in _sidestreet_entitlements.values():
+		if entitlement.state == state:
+			return true
+	return false
+
+
+func get_next_sidestreet_offer() -> Dictionary:
+	if not _unlocked_publishers.has(PublisherCatalog.SIDESTREET):
+		return {}
+	for release_id: StringName in _sidestreet_entitlements:
+		var entitlement: Dictionary = _sidestreet_entitlements[release_id]
+		if entitlement.state == null:
+			return {"offer_id": entitlement.offer_id, "release_id": release_id}
+	return {}
+
+
+func get_sidestreet_offer_ids() -> Array[StringName]:
+	var result: Array[StringName] = []
+	for entitlement: Dictionary in _sidestreet_entitlements.values():
+		result.append(entitlement.offer_id)
+	return result
+
+
+func get_sidestreet_completion_history() -> Dictionary:
+	return _sidestreet_results.duplicate(true)
+
+
+func is_sidestreet_offer_available() -> bool:
+	return get_active_contract() == null and not get_next_sidestreet_offer().is_empty() and not _productive_cycle_in_progress and not _publishing_cycle
+
+
+func accept_sidestreet_offer(offer_id: StringName) -> ContractState:
+	if not is_sidestreet_offer_available() or offer_id.is_empty():
+		return null
+	var next := get_next_sidestreet_offer()
+	if next.offer_id != offer_id:
+		return null
+	var release_id: StringName = next.release_id
+	var accepted := ContractState.new(_primitive_contract_eligible_ids(), ContractState.SIDESTREET_CONTRACT_ID, offer_id, release_id)
+	if not accepted.commit_upfront():
+		return null
+	var entitlement: Dictionary = _sidestreet_entitlements[release_id]
+	entitlement.state = accepted
+	_sidestreet_entitlements[release_id] = entitlement
+	contracts_changed.emit()
+	return accepted
+
+
+func _primitive_contract_eligible_ids() -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for entry: Dictionary in FeatureStoreCatalog.starting_features():
+		var id := StringName(entry.id)
+		if owns_feature(id) and StringName(entry.phase) in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA]:
+			ids.append(id)
+	return ids
+
+
+## Called only as the direct-effects callback of the central productive cycle.
+func commit_contract_hand(state: ContractState, cards: Array[CardData], expected_payment_cents: int) -> bool:
+	if not _productive_cycle_in_progress or get_active_contract() != state or not owns_contract_state(state):
+		return false
+	var plan := state.plan_hand(cards)
+	if plan.is_empty() or plan.remainder_cents != expected_payment_cents:
+		return false
+	if state.get_contract_id() == ContractState.SIDESTREET_CONTRACT_ID and plan.completing:
+		if _sidestreet_results.has(state.get_offer_id()) or not _sidestreet_entitlements.has(state.get_source_release_id()):
+			return false
+		var entitlement: Dictionary = _sidestreet_entitlements[state.get_source_release_id()]
+		if entitlement.offer_id != state.get_offer_id() or entitlement.state != state:
+			return false
+	if not state.commit_hand(cards, expected_payment_cents):
+		return false
+	if state.is_completed():
+		_pending_contract_completion = state
+	return true
+
+
+func _record_paid_contract_completion() -> void:
+	var state := _pending_contract_completion
+	if state == null:
+		return
+	_pending_contract_completion = null
+	if state == _primitive_contract:
+		_ironclad_completion_committed = true
+		return
+	var result := state.get_result()
+	var cores: Dictionary = {}
+	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
+		cores[category] = result.get_core_score_half_units(category)
+	_sidestreet_results[state.get_offer_id()] = {"offer_id": state.get_offer_id(), "release_id": state.get_source_release_id(),
+		"scope": result.get_scope(), "core_half_units": cores, "completion_numerator": result.get_completion_numerator(),
+		"payout_cents": result.get_payout_cents()}
+
+
 func get_completed_contract_count() -> int:
-	# Only the fixed one-shot contract exists. Never count acceptance or a
-	# partially completed contract as a publisher progression outcome.
-	return 1 if _primitive_contract != null and _primitive_contract.is_completed() and _primitive_contract.is_payout_committed() else 0
+	var ironclad := 1 if _ironclad_completion_committed else 0
+	return ironclad + _sidestreet_results.size()
 
 
 func get_unlocked_publisher_ids() -> Array[StringName]:
@@ -641,7 +749,7 @@ func can_complete_productive_cycle(direct_cash_delta_cents: int = 0) -> bool:
 
 
 func _plan_productive_cycle(direct_cash_delta_cents: int) -> Dictionary:
-	if _productive_cycle_in_progress or _feature_purchase_in_progress or _completed_run_cycles < 0 or _completed_run_cycles == MAX_SIGNED_INT or _available_redraws < 0 or _available_redraws > MAX_REDRAWS:
+	if _productive_cycle_in_progress or _feature_purchase_in_progress or _pending_contract_completion != null or _completed_run_cycles < 0 or _completed_run_cycles == MAX_SIGNED_INT or _available_redraws < 0 or _available_redraws > MAX_REDRAWS:
 		return {}
 	if direct_cash_delta_cents != 0 and not _cash_initialized:
 		return {}
@@ -685,11 +793,13 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	var familiarity_before := _familiarity.duplicate()
 	var ownership_before := _owned_features.duplicate()
 	var publishers_before := _unlocked_publishers.duplicate()
+	var completed_contracts_before := get_completed_contract_count()
 	_productive_cycle_in_progress = true
 	# Publish run notifications only after cash and sales have committed together.
 	var was_blocked := is_blocking_signals()
 	set_block_signals(true)
 	if direct_effects.is_valid() and not direct_effects.call():
+		_pending_contract_completion = null
 		set_block_signals(was_blocked)
 		_productive_cycle_in_progress = false
 		return false
@@ -698,6 +808,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 		add_cash_cents(direct_cash_delta_cents)
 	elif direct_cash_delta_cents < 0:
 		spend_cash_cents(-direct_cash_delta_cents)
+	# Cash is now committed; only then publish a distinct completion record.
+	_record_paid_contract_completion()
 	_completed_run_cycles += 1
 	_available_redraws = mini(MAX_REDRAWS, _available_redraws + 1)
 	_released_games = plan.records
@@ -717,6 +829,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 		features_changed.emit()
 	if _unlocked_publishers != publishers_before:
 		publishers_changed.emit()
+	if get_completed_contract_count() != completed_contracts_before:
+		contracts_changed.emit()
 	if not _released_games.is_empty():
 		sales_changed.emit()
 	calendar_changed.emit()

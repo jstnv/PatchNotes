@@ -1,0 +1,88 @@
+{
+  "policies": {
+    "cautious": {
+      "first_games": 110,
+      "two_game_runs": 30,
+      "deferred_ironclad_two_game_runs": 15,
+      "legal_scope_20_23": 100,
+      "below_20_opt_in": 10,
+      "review_p10": 0.5,
+      "review_median": 0.95,
+      "review_p90": 1.510000000000001,
+      "review_below_5_share": 1.0,
+      "review_at_least_7_share": 0.0,
+      "ironclad_payout_median_cents": 185833.0,
+      "sidestreet_1_payout_median_cents": 80000.0,
+      "sidestreet_2_payout_median_cents": 92500.0,
+      "cash_before_game_2_median_cents": 169902.5,
+      "starwave_unlocks": 30,
+      "cash_parity_failures": 0,
+      "exact_payout_failures": 0
+    },
+    "ordinary": {
+      "first_games": 110,
+      "two_game_runs": 30,
+      "deferred_ironclad_two_game_runs": 15,
+      "legal_scope_20_23": 100,
+      "below_20_opt_in": 10,
+      "review_p10": 1.69,
+      "review_median": 2.4,
+      "review_p90": 3.3,
+      "review_below_5_share": 1.0,
+      "review_at_least_7_share": 0.0,
+      "ironclad_payout_median_cents": 215000.0,
+      "sidestreet_1_payout_median_cents": 105000.0,
+      "sidestreet_2_payout_median_cents": 102500.0,
+      "cash_before_game_2_median_cents": 194778.5,
+      "starwave_unlocks": 30,
+      "cash_parity_failures": 0,
+      "exact_payout_failures": 0
+    },
+    "optimizer": {
+      "first_games": 110,
+      "two_game_runs": 30,
+      "deferred_ironclad_two_game_runs": 15,
+      "legal_scope_20_23": 100,
+      "below_20_opt_in": 10,
+      "review_p10": 2.4,
+      "review_median": 3.5,
+      "review_p90": 4.9,
+      "review_below_5_share": 0.9181818181818182,
+      "review_at_least_7_share": 0.0,
+      "ironclad_payout_median_cents": 210833.0,
+      "sidestreet_1_payout_median_cents": 103750.0,
+      "sidestreet_2_payout_median_cents": 97500.0,
+      "cash_before_game_2_median_cents": 283014.0,
+      "starwave_unlocks": 30,
+      "cash_parity_failures": 0,
+      "exact_payout_failures": 0
+    }
+  },
+  "totals": {
+    "first_games": 330,
+    "two_game_runs": 90,
+    "failures": 0
+  },
+  "long_run": {
+    "cautious_19_scope": {
+      "six_release_runs": 5,
+      "game_3_to_6_releases": 20,
+      "positive_marginal_cash": 20,
+      "median_marginal_cash_cents": 76142.5,
+      "minimum_marginal_cash_cents": 47237,
+      "maximum_marginal_cash_cents": 223133,
+      "median_marginal_cycles": 8.0,
+      "release_or_contract_blockers": 0
+    },
+    "ordinary_20_23_scope": {
+      "six_release_runs": 5,
+      "game_3_to_6_releases": 20,
+      "positive_marginal_cash": 20,
+      "median_marginal_cash_cents": 185716.5,
+      "minimum_marginal_cash_cents": 131279,
+      "maximum_marginal_cash_cents": 266751,
+      "median_marginal_cycles": 17.0,
+      "release_or_contract_blockers": 0
+    }
+  }
+}

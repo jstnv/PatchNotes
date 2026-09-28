@@ -2,6 +2,15 @@ class_name PhaseWorkspace
 extends Control
 
 signal presentation_changed
+signal synergy_help_requested(title: String, body: String)
+
+const CORE_BY_STAT := {
+	&"graphics": ProjectState.CoreScore.GRAPHICS,
+	&"sound": ProjectState.CoreScore.SOUND,
+	&"technology": ProjectState.CoreScore.TECHNOLOGY,
+	&"design": ProjectState.CoreScore.DESIGN,
+}
+
 var phase: Control
 var phase_name: String
 var played_hand: Label
@@ -11,6 +20,9 @@ var overlay: PriorityOverlay
 var project: ProjectState
 var run: RunState
 var synergy_notification: SynergyNotification
+var synergy_help_button: Button
+var _synergy_help_title := ""
+var _synergy_help_body := ""
 
 func label(text: String, parent: Node, node_name: String = "") -> Label:
 	var result := Label.new()
@@ -39,6 +51,12 @@ func configure(controller: Control, title: String) -> void:
 	played_hand = label("Select up to four cards from the backlog.", selected_row, "SelectionSummary")
 	played_hand.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	played_hand.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	synergy_help_button = Button.new()
+	synergy_help_button.name = "SynergyHelpButton"
+	synergy_help_button.text = "Synergy ?"
+	synergy_help_button.custom_minimum_size.x = 164
+	synergy_help_button.pressed.connect(func(): synergy_help_requested.emit(_synergy_help_title, _synergy_help_body))
+	selected_row.add_child(synergy_help_button)
 	var pool_title := label("Backlog / Draw Pool", layout, "BacklogTitle")
 	pool_title.add_theme_color_override("font_color", Color("#79d4da"))
 	var scroll := phase.get_node("PhaseLayout/CandidateScroll") as ScrollContainer
@@ -127,6 +145,11 @@ func refresh() -> void:
 		entries.append("%d · %s" % [view.get_index() + 1, view.card_data.card_name])
 	played_hand.text = "Select up to four cards from the backlog." if entries.is_empty() else "   /   ".join(entries)
 	played_hand.tooltip_text = played_hand.text
+	var synergy_tip := _synergy_tip()
+	_synergy_help_title = synergy_tip.title
+	_synergy_help_body = synergy_tip.body
+	synergy_help_button.text = synergy_tip.label
+	synergy_help_button.tooltip_text = "%s\n%s" % [_synergy_help_title, _synergy_help_body]
 	for control: Label in get_node("Regions/Feedback").get_children():
 		control.tooltip_text = control.text
 	phase_title.text = phase_name + " · " + ("Prepare to launch" if phase_name == "Beta" else "Build Scope")
@@ -135,3 +158,72 @@ func refresh() -> void:
 		if phase_name == "Beta":
 			progress.text += " · " + phase.get_launch_readiness_text()
 	presentation_changed.emit()
+
+
+func _synergy_tip() -> Dictionary:
+	var selected: Array[CardView] = phase.get_selected_candidate_views()
+	if phase_name == "Beta":
+		return _beta_synergy_tip(selected)
+	var overview := {"label": "Synergy ?", "title": "What is a synergy?", "body": "A synergy is a bonus for a four-card hand. Core means Graphics, Sound, Technology or Design; the first score on each card is its primary Core label. Match all four primary labels for ×1.5 hand Core gains, or use a Feature and close projected scores for ×1.2. Only one bonus applies."}
+	if selected.is_empty(): return overview
+	var first_stat: StringName = selected[0].card_data.primary_stat
+	var all_same := true
+	for view: CardView in selected:
+		if view.card_data.primary_stat != first_stat:
+			all_same = false
+	if selected.size() < 4:
+		if all_same:
+			var stat_name := str(first_stat).capitalize()
+			return {"label": "Synergy: %d/4 %s" % [selected.size(), stat_name], "title": "Build a %s combo" % stat_name, "body": "%d selected cards share %s as their primary Core label. Choose %d more with that primary label for Specialization: ×1.5 to this hand's Core gains. Passes count too." % [selected.size(), stat_name, 4 - selected.size()]}
+		return {"label": "Synergy: mixed", "title": "Look for a combo", "body": "These primary Core labels differ. Match all four for Specialization, or use at least one Feature and keep the projected four Core scores close for Balanced Production."}
+	var final_production := get_selected_production_synergy()
+	if not final_production.is_empty():
+		if not String(final_production.get("specialization_stat", &"")).is_empty():
+			var stat_name := str(final_production.specialization_stat).capitalize()
+			return {"label": "%s ×1.5" % stat_name, "title": "%s Specialization ready" % stat_name, "body": "All four cards share %s as their primary Core label. Playing this hand multiplies its Core gains by 1.5, rounded by category. Printed Scope and Bug Pressure do not multiply." % stat_name}
+		if final_production.get("balanced_production", false):
+			return {"label": "Balanced ×1.2", "title": "Balanced Production ready", "body": "This hand includes a Feature and leaves all four projected Core scores within 20% of their average. Playing it multiplies this hand's Core gains by 1.2, rounded by category. Scope does not multiply."}
+	return {"label": "Synergy: none", "title": "No synergy on this hand", "body": "The hand can still play normally. Four matching primary Core labels give Specialization; a Feature plus close projected Core scores can give Balanced Production. Only one bonus applies."}
+
+
+func get_selected_production_synergy() -> Dictionary:
+	if phase_name == "Beta": return {}
+	var selected: Array[CardView] = phase.get_selected_candidate_views()
+	if selected.size() != 4: return {}
+	var cards: Array[CardData] = []
+	var score_additions: Dictionary[ProjectState.CoreScore, int] = {}
+	var has_feature := false
+	for view: CardView in selected:
+		var card: CardData = view.card_data
+		if card == null or not CORE_BY_STAT.has(card.primary_stat): return {}
+		cards.append(card)
+		var primary: ProjectState.CoreScore = CORE_BY_STAT[card.primary_stat]
+		score_additions[primary] = score_additions.get(primary, 0) + card.primary_value
+		if not card.secondary_stat.is_empty():
+			if not CORE_BY_STAT.has(card.secondary_stat): return {}
+			var secondary: ProjectState.CoreScore = CORE_BY_STAT[card.secondary_stat]
+			score_additions[secondary] = score_additions.get(secondary, 0) + card.secondary_value
+		has_feature = has_feature or card.card_type == &"feature"
+	var base := {"cards": cards, "score_additions": score_additions, "has_feature": has_feature}
+	return phase.call("_calculate_final_action_production", base)
+
+
+func _beta_synergy_tip(selected: Array[CardView]) -> Dictionary:
+	var overview := {"label": "Synergy ?", "title": "What is a Beta synergy?", "body": "Four QA cards boost Search and Debug card values ×1.5. Four Marketing cards boost their combined Marketing Output ×1.5. A 2/1/1 mix of QA, Marketing and Insider boosts qualifying outputs ×1.25. Only one bonus applies."}
+	if selected.is_empty(): return overview
+	var counts := {CardData.BETA_CATEGORY_QA: 0, CardData.BETA_CATEGORY_MARKETING: 0, CardData.BETA_CATEGORY_INSIDER: 0}
+	for view: CardView in selected:
+		counts[view.card_data.beta_category] += 1
+	if selected.size() < 4:
+		if counts[CardData.BETA_CATEGORY_QA] == selected.size():
+			return {"label": "Synergy: %d/4 QA" % selected.size(), "title": "Build a QA combo", "body": "Add %d more QA cards for QA Specialization. Search and Debug card values get ×1.5 before their bug formulas and caps." % (4 - selected.size())}
+		if counts[CardData.BETA_CATEGORY_MARKETING] == selected.size():
+			return {"label": "Synergy: %d/4 Marketing" % selected.size(), "title": "Build a Marketing combo", "body": "Add %d more Marketing cards for Marketing Specialization. Their combined printed values get ×1.5, rounded down, as Marketing Output." % (4 - selected.size())}
+		return {"label": "Synergy: mixed", "title": "Look for a Beta combo", "body": "Four QA or four Marketing cards specialize. A hand with two cards of one category and one each of the other two earns Balanced Operations instead."}
+	if counts[CardData.BETA_CATEGORY_QA] == 4:
+		return {"label": "QA ×1.5", "title": "QA Specialization ready", "body": "All four cards are QA. Search and Debug card values get ×1.5 before the bug formulas and available-bug caps. Playing this hand advances one cycle."}
+	if counts[CardData.BETA_CATEGORY_MARKETING] == 4:
+		return {"label": "Marketing ×1.5", "title": "Marketing Specialization ready", "body": "All four cards are Marketing. Their printed values are added, multiplied by 1.5, then rounded down to Marketing Output. Playing this hand advances one cycle."}
+	if counts[CardData.BETA_CATEGORY_QA] >= 1 and counts[CardData.BETA_CATEGORY_MARKETING] >= 1 and counts[CardData.BETA_CATEGORY_INSIDER] >= 1:
+		return {"label": "Balanced ×1.25", "title": "Balanced Operations ready", "body": "This 2/1/1 mix of QA, Marketing and Insider gives ×1.25 to qualifying QA and Marketing output and Insider insight chances. It does not multiply cash rewards."}
+	return {"label": "Synergy: none", "title": "No Beta synergy on this hand", "body": "The hand can still play normally. Try four QA, four Marketing, or a 2/1/1 mix of QA, Marketing and Insider for a bonus."}

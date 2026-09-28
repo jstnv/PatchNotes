@@ -50,7 +50,7 @@ func _run() -> void:
 				check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Find and prepare", "Beta guides testing after its first draw even though Launch is already enabled")
 		await process_frame
 		check(not hud.change_priorities.disabled, title + ": active phase can edit priorities")
-		await verify_overlay(phase, project, run, title)
+		await verify_overlay(hud, phase, project, run, title)
 		if title != "Beta":
 			var stale_snapshot := state_snapshot(project, run)
 			if title == "Design":
@@ -120,21 +120,37 @@ func verify_initial_phase_priorities(phase: Control, project: ProjectState, run:
 
 func verify_design_guidance(hud: GameplayHUD, phase: DesignPhase, project: ProjectState, run: RunState) -> void:
 	var before := state_snapshot(project, run)
+	var workspace := phase.get_workspace()
+	check(workspace.synergy_help_button.text == "Synergy ?" and workspace.synergy_help_button.tooltip_text.contains("four-card hand"), "Unselected Design hand explains the meaning of synergy in place")
+	check(workspace.synergy_help_button.get_global_rect().end.x <= root.size.x - 16, "Visible synergy help fits the production workspace")
 	check(not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Select four cards", "After initial Design priorities, guidance moves to card selection")
 	var views := phase.get_node("%HandContainer").get_children()
-	for index in range(4): views[index].card_pressed.emit(views[index])
-	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Four cards selected", "Exactly four selected candidates show the ready-hand tip")
+	views[0].card_pressed.emit(views[0])
+	check(workspace.synergy_help_button.text.begins_with("Synergy: 1/4") and views[0].input_button.tooltip_text.contains("Specialization"), "First selection connects the card's primary label to a matching-card synergy")
+	for index in range(1, 4): views[index].card_pressed.emit(views[index])
+	check(hud.contextual_tip.panel.visible and not workspace.synergy_help_button.tooltip_text.is_empty(), "Exactly four selected candidates show contextual synergy guidance")
+	var original_cards: Array[CardData] = []
+	var graphics_pass: CardData = root.get_node("CardDatabase").call("get_card", &"graphics_pass")
+	for index in range(4):
+		original_cards.append(views[index].card_data)
+		views[index].set_card(graphics_pass)
+	workspace.refresh()
+	check(workspace.synergy_help_button.text == "Graphics ×1.5" and hud._guidance_for_current_state().title == "Specialization ready", "Four matching primary labels preview the real Design Specialization before play")
+	workspace.synergy_help_button.pressed.emit()
+	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Graphics Specialization ready" and state_snapshot(project, run) == before, "Opening in-game synergy help is passive")
+	for index in range(4): views[index].set_card(original_cards[index])
+	workspace.refresh()
 	check(state_snapshot(project, run) == before, "Selecting cards for guidance changes no cash, cycles, redraws or project values")
 	hud.contextual_tip.dismiss()
 	hud.set_tutorial_context(&"design")
 	check(not hud.contextual_tip.panel.visible and not hud.tutorial_overlay.visible and state_snapshot(project, run) == before, "Repeating the same Design context does not replay seen guidance")
 	hud.tip_button.pressed.emit()
-	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Four cards selected" and state_snapshot(project, run) == before, "Tip button replays the current ready-hand suggestion for free")
+	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == hud._guidance_for_current_state().title and state_snapshot(project, run) == before, "Tip button replays the current ready-hand suggestion for free")
 	hud.contextual_tip.dismiss()
 	for index in range(4): views[index].card_pressed.emit(views[index])
 	check(phase.get_selected_candidate_views().is_empty() and state_snapshot(project, run) == before, "Clearing the preview hand preserves state for subsequent gameplay checks")
 
-func verify_overlay(phase: Control, project: ProjectState, run: RunState, title: String) -> void:
+func verify_overlay(hud: GameplayHUD, phase: Control, project: ProjectState, run: RunState, title: String) -> void:
 	var names: Array = ["QAPriority", "MarketingPriority", "InsiderPriority"] if title == "Beta" else ["GraphicsPriority", "SoundPriority", "TechnologyPriority", "DesignPriority"]
 	var views := phase.get_node("%HandContainer").get_children()
 	for index in range(4): views[index].card_pressed.emit(views[index])
@@ -144,6 +160,7 @@ func verify_overlay(phase: Control, project: ProjectState, run: RunState, title:
 	check(phase.get_selected_candidate_views().size() == 3, title + ": deselection removes association")
 	views[0].card_pressed.emit(views[0])
 	selection = phase.get_selected_candidate_views()
+	if title == "Beta": verify_beta_synergy_help(hud, phase, project, run, selection)
 	var cards: Array = phase.get("_candidate_cards").duplicate()
 	run.consume_redraw(2)
 	var before := state_snapshot(project, run)
@@ -207,3 +224,26 @@ func verify_overlay(phase: Control, project: ProjectState, run: RunState, title:
 	escape.pressed = true
 	overlay._input(escape)
 	check(not overlay.visible and first.value == phase.get_priority_distribution().values()[0], title + ": normal close behaves as Cancel")
+
+
+func verify_beta_synergy_help(hud: GameplayHUD, phase: Control, project: ProjectState, run: RunState, selected: Array[CardView]) -> void:
+	var before := state_snapshot(project, run)
+	var workspace: PhaseWorkspace = phase.get_workspace()
+	var original_cards: Array[CardData] = []
+	for view: CardView in selected: original_cards.append(view.card_data)
+	var database := root.get_node("CardDatabase")
+	var patterns := [
+		{"ids": [&"debug", &"debug", &"search_for_bugs", &"search_for_bugs"], "label": "QA ×1.5"},
+		{"ids": [&"sign_flippers", &"posters", &"press_release", &"press_interview"], "label": "Marketing ×1.5"},
+		{"ids": [&"debug", &"search_for_bugs", &"posters", &"study_competition"], "label": "Balanced ×1.25"},
+		{"ids": [&"sign_flippers", &"posters", &"press_release", &"debug"], "label": "Synergy: none"},
+	]
+	for pattern: Dictionary in patterns:
+		for index in range(4): selected[index].set_card(database.call("get_card", pattern.ids[index]))
+		workspace.refresh()
+		check(workspace.synergy_help_button.text == pattern.label, "Beta in-game help recognizes the %s selected pattern" % pattern.label)
+		check(state_snapshot(project, run) == before, "Beta synergy preview leaves gameplay state unchanged")
+	workspace.synergy_help_button.pressed.emit()
+	check(hud.contextual_tip.panel.visible and state_snapshot(project, run) == before, "Beta synergy help button opens a passive in-game tip")
+	for index in range(4): selected[index].set_card(original_cards[index])
+	workspace.refresh()

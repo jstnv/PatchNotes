@@ -208,7 +208,7 @@ func _verify_two_hand_completion() -> void:
 	expect(dismissed[0] == 1 and run_snapshot(run, project) == completed_snapshot, "Completion dismissal is passive")
 	var return_studio := load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
 	root.add_child(return_studio)
-	expect(return_studio.setup(project, run, snapshots) and return_studio.get_node("%Contracts").disabled, "Studio re-entry preserves completion and removes the one-shot offer")
+	expect(return_studio.setup(project, run, snapshots) and not run.is_primitive_contract_offer_available() and run.is_sidestreet_offer_available() and not return_studio.get_node("%Contracts").disabled, "Studio re-entry preserves Ironclad completion and exposes the newly unlocked release-linked SideStreet offer")
 	expect(run_snapshot(run, project) == completed_snapshot and project_snapshot(project) == frozen, "Studio reconstruction preserves cash, calendar, redraws, sales and frozen project")
 	return_studio.queue_free()
 	phase.queue_free()
@@ -273,7 +273,15 @@ func _verify_gameplay_transition() -> void:
 	await process_frame
 	var active: Control = game.get("_active_phase")
 	expect(active is ContractPhase and game.get("active_contract_state") == run.get_primitive_contract(), "Gameplay retains accepted ContractState and enters ContractPhase")
+	var hud := game.get_node("%GameplayHUD") as GameplayHUD
+	expect(hud.tip_button.tooltip_text.contains("×1.5") and hud.tip_button.tooltip_text.contains("primary Core"), "Contract entry teaches the matching-primary synergy in the in-game Tip")
 	_select_first(active as ContractPhase, 4)
+	var selected_cards: Array[CardData] = []
+	for view: CardView in (active as ContractPhase).get_selected_candidate_views(): selected_cards.append(view.card_data)
+	var preview := run.get_primitive_contract().plan_hand(selected_cards)
+	var expected_title := "Contract Specialization ready" if not String(preview.get("specialization_stat", &"")).is_empty() else "Contract hand ready"
+	var preview_before := run_snapshot(run, project)
+	expect(hud._guidance_for_current_state().title == expected_title and run_snapshot(run, project) == preview_before, "Contract in-game Tip previews the selected synergy without changing run state")
 	(active as ContractPhase).call("_play_selected_hand")
 	_select_first(active as ContractPhase, 4)
 	(active as ContractPhase).call("_play_selected_hand")

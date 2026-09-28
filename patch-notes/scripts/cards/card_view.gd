@@ -113,13 +113,19 @@ func _refresh_renewability() -> void:
 func _refresh_card_tooltip() -> void:
 	var lifecycle := "Renewable: may return in later draws." if card_data.renewable else "Finite: exhausts after a successful play in this project."
 	var detail := ""
+	var synergy := ""
 	if card_data.phase == CardData.PHASE_BETA:
 		detail = "%s card · printed value %d." % [_display_name(card_data.beta_category), card_data.beta_value]
+		match card_data.beta_category:
+			CardData.BETA_CATEGORY_QA: synergy = "Synergy: four QA cards trigger QA Specialization, strengthening Search and Debug."
+			CardData.BETA_CATEGORY_MARKETING: synergy = "Synergy: four Marketing cards trigger Marketing Specialization, boosting combined Marketing Output."
+			CardData.BETA_CATEGORY_INSIDER: synergy = "Synergy: a 2/1/1 QA, Marketing and Insider mix earns Balanced Operations."
 	else:
 		detail = "%s · %d Scope · +%d %s" % ["Feature" if card_data.card_type == &"feature" else "Pass", card_data.scope, card_data.primary_value, _display_name(card_data.primary_stat)]
 		if not card_data.secondary_stat.is_empty():
 			detail += " · +%d %s" % [card_data.secondary_value, _display_name(card_data.secondary_stat)]
-	input_button.tooltip_text = "%s\n%s\n%s\nSelect cards to build a four-card hand." % [card_data.card_name, detail, lifecycle]
+		synergy = "Synergy: the first score is primary. Four cards with primary %s trigger Specialization; secondary scores do not decide the match." % _display_name(card_data.primary_stat)
+	input_button.tooltip_text = "%s\n%s\n%s\n%s\nSelect cards to build a four-card hand." % [card_data.card_name, detail, lifecycle, synergy]
 
 
 func _refresh_artwork() -> void:

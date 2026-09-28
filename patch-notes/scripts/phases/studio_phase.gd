@@ -13,6 +13,7 @@ var _feature_store: FeatureStore
 var _publisher_browser: PublisherBrowser
 var _publisher_notice: PanelContainer
 var _contract_detail: PanelContainer
+var _selected_contract_offer_id: StringName
 var _predevelopment: PredevelopmentOverlay
 var _review_view: PostGameReview
 var _selected_release_id: StringName
@@ -181,13 +182,19 @@ func open_detailed_review() -> void:
 func _open_contracts() -> void:
 	if _run_state == null:
 		return
-	var active := _run_state.get_primitive_contract()
-	if active != null and not active.is_completed():
+	var active := _run_state.get_active_contract()
+	if active != null:
 		contract_requested.emit(self, active)
 		return
-	if not _run_state.is_primitive_contract_offer_available():
+	_selected_contract_offer_id = &""
+	if _run_state.is_primitive_contract_offer_available():
+		_selected_contract_offer_id = ContractState.CONTRACT_ID
+	elif _run_state.is_sidestreet_offer_available():
+		_selected_contract_offer_id = _run_state.get_next_sidestreet_offer().offer_id
+	if _selected_contract_offer_id.is_empty():
 		return
 	_ensure_contract_detail()
+	_configure_contract_detail()
 	%SummaryPanel.hide()
 	%Dashboard.hide()
 	_contract_detail.show()
@@ -212,10 +219,12 @@ func _ensure_contract_detail() -> void:
 	layout.add_theme_constant_override("separation", 14)
 	margin.add_child(layout)
 	var title := Label.new()
+	title.name = "ContractDetailTitle"
 	title.text = "Balanced Primitive Contract"
 	title.add_theme_font_size_override("font_size", 26)
 	layout.add_child(title)
 	var details := Label.new()
+	details.name = "ContractDetailText"
 	details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed $400.00 immediately; the earned remainder pays after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance."
 	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -238,6 +247,18 @@ func _ensure_contract_detail() -> void:
 	actions.add_child(back)
 
 
+func _configure_contract_detail() -> void:
+	var title := _contract_detail.find_child("ContractDetailTitle", true, false) as Label
+	var details := _contract_detail.find_child("ContractDetailText", true, false) as Label
+	if _selected_contract_offer_id == ContractState.CONTRACT_ID:
+		title.text = "Balanced Primitive Contract"
+		details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed $400.00 immediately; the earned remainder pays after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance."
+	else:
+		var offer := _run_state.get_next_sidestreet_offer()
+		title.text = "SideStreet Cash Contract"
+		details.text = "Publisher: SideStreet Games\nOffer for: %s\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nMaximum payout: $1,200.00, paid only after hand two according to completion.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cash or cycles. The contract cannot be abandoned after acceptance." % _run_state.get_released_game_display_name(offer.release_id)
+
+
 func _close_contract_detail() -> void:
 	if _contract_detail != null:
 		_contract_detail.hide()
@@ -247,7 +268,7 @@ func _close_contract_detail() -> void:
 
 
 func _accept_contract() -> void:
-	var state := _run_state.accept_primitive_contract()
+	var state: ContractState = _run_state.accept_primitive_contract() if _selected_contract_offer_id == ContractState.CONTRACT_ID else _run_state.accept_sidestreet_offer(_selected_contract_offer_id)
 	if state == null:
 		return
 	_contract_detail.hide()
@@ -329,19 +350,23 @@ func _on_game_selected(index: int) -> void:
 
 
 func _refresh_contract_action() -> void:
-	var state := _run_state.get_primitive_contract()
-	if state == null:
-		%Contracts.disabled = not _run_state.is_primitive_contract_offer_available()
-		%Contracts.text = "Contracts"
-		%Contracts.tooltip_text = "Review the fixed Primitive contract offer." if not %Contracts.disabled else "Available after the first game enters Studio."
-	elif state.is_completed():
-		%Contracts.disabled = true
-		%Contracts.text = "Contract Completed"
-		%Contracts.tooltip_text = "The one-shot Primitive contract is complete."
-	else:
+	var state := _run_state.get_active_contract()
+	if state != null:
 		%Contracts.disabled = false
 		%Contracts.text = "Resume Contract"
-		%Contracts.tooltip_text = "Return to the active Primitive contract."
+		%Contracts.tooltip_text = "Return to the active contract."
+	elif _run_state.is_primitive_contract_offer_available():
+		%Contracts.disabled = false
+		%Contracts.text = "Contracts"
+		%Contracts.tooltip_text = "Review the fixed Ironclad Primitive contract offer."
+	elif _run_state.is_sidestreet_offer_available():
+		%Contracts.disabled = false
+		%Contracts.text = "SideStreet Offer"
+		%Contracts.tooltip_text = "Review the next cash-only offer linked to a released game."
+	else:
+		%Contracts.disabled = true
+		%Contracts.text = "Contract Completed" if _run_state.get_completed_contract_count() > 0 else "Contracts"
+		%Contracts.tooltip_text = "No pending Contract offer." if _run_state.get_completed_contract_count() > 0 else "Available after the first game enters Studio."
 
 
 func _refresh_summary() -> void:

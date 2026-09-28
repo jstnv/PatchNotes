@@ -1,0 +1,84 @@
+{
+  "sample_counts": {
+    "legal_first_game": 30,
+    "below_20_opt_in": 15,
+    "expanded_game_2": 15
+  },
+  "fixed_input_checks": {
+    "release_sales_and_review": 60,
+    "seven_draw_four_play_exact_cost_and_cash": 660,
+    "contract_exact_payout": 120,
+    "second_release_offer": 15,
+    "later_store_zero_cycle": 30
+  },
+  "groups": {
+    "legal_first_game": {
+      "release_cycle_parities": [
+        0,
+        1
+      ],
+      "qa_mode_counts": {
+        "qa": 15,
+        "marketing": 15
+      },
+      "policies": {
+        "cautious": 10,
+        "ordinary": 10,
+        "optimizer": 10
+      },
+      "review_min": 0.7,
+      "review_median": 2.3,
+      "review_max": 4.7,
+      "awareness_median": 104.0,
+      "month_1_units_median": 242.5,
+      "cash_at_release_median_cents": 116000.0
+    },
+    "below_20_opt_in": {
+      "release_cycle_parities": [
+        0,
+        1
+      ],
+      "qa_mode_counts": {
+        "qa": 9,
+        "marketing": 6
+      },
+      "policies": {
+        "cautious": 5,
+        "ordinary": 5,
+        "optimizer": 5
+      },
+      "review_min": 0.3,
+      "review_median": 1.7,
+      "review_max": 2.9,
+      "awareness_median": 106,
+      "month_1_units_median": 209,
+      "cash_at_release_median_cents": 162000
+    },
+    "expanded_game_2": {
+      "release_cycle_parities": [
+        1
+      ],
+      "qa_mode_counts": {
+        "qa": 9,
+        "marketing": 6
+      },
+      "policies": {
+        "cautious": 5,
+        "ordinary": 5,
+        "optimizer": 5
+      },
+      "review_min": 0.7,
+      "review_median": 2.2,
+      "review_max": 3.5,
+      "awareness_median": 104,
+      "month_1_units_median": 249,
+      "cash_at_release_median_cents": 321839
+    }
+  },
+  "limits": [
+    "No employees, course raises, bills, payroll, or proposed rewards are in these live traces.",
+    "The archived employee Python paths do not share these actual draws and commits; this is fixed-input arithmetic parity, not PRNG-identical model parity.",
+    "The sampled policy does not reproduce the player's above-9 later-game Review; do not infer a human ceiling.",
+    "The current later Store node costs zero cycles; the queued design rule says one cycle."
+  ]
+}

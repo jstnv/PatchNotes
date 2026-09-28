@@ -16,15 +16,15 @@ const TOPICS := {
 	&"design": [
 		{"title": "Design: Set Priorities", "body": "Allocate exactly 100 priority points in 5-point steps, keeping each category between 5 and 50. Priorities weight future draws. Begin Design is free; changing priorities afterward costs one cycle."},
 		{"title": "Design: Build a Hand", "body": "Select exactly four candidate cards, then Implement. A successful hand advances one cycle. Features exhaust after use; Passes are renewable. Watch your Scope and Core Scores."},
-		{"title": "Design: Redraw and Synergy", "body": "Select candidates to replace and use Redraw. Each selected card costs one shared redraw, with no cycle cost. Successful production restores one redraw. Matching or balanced hands can trigger synergies."},
+		{"title": "Design: Redraw and Synergy", "body": "Redraw selected cards for one shared redraw each and no cycle; successful production restores one. Four cards sharing a primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature gains Balanced Production (+20% hand Core gains) when all four projected Core scores are within 20% of their average. Neither bonus raises Scope."},
 	],
 	&"alpha": [
 		{"title": "Alpha: Expand and Test", "body": "Set Alpha priorities, then build four-card hands to expand your game. Host Playtests help you evaluate the project. Features are finite, Passes are renewable, and productive actions advance time."},
-		{"title": "Alpha: Prepare for Beta", "body": "Watch Scope, Core Scores and Bug Pressure as you produce. Finalize Alpha through its existing phase controls before moving into Beta."},
+		{"title": "Alpha: Synergy and Beta", "body": "Four cards, including Passes, with the same primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature gains Balanced Production (+20% hand Core gains) if all four projected Core scores are within 20% of their average. Neither boosts Scope or Bug Pressure. Check those values before moving to Beta."},
 	],
 	&"beta": [
-		{"title": "Beta: Find and Fix Bugs", "body": "Set Beta priorities and choose four-card hands. Search for Bugs reveals Hidden Bugs; Debug fixes Known Bugs. The HUD shows Known and Fixed totals."},
-		{"title": "Beta: Prepare to Launch", "body": "Balance testing, fixes and marketing before finalizing Beta. Launch freezes the release results and enters Studio automatically at no navigation cost."},
+		{"title": "Beta: Focused Hands", "body": "Set priorities and choose four-card hands. Search reveals Hidden Bugs; Debug fixes Known Bugs. Four QA cards trigger QA Specialization: each card's value is multiplied by 1.50 before its bug formula. Four Marketing cards trigger Marketing Specialization: the summed printed Marketing value is multiplied by 1.50, then rounded down once."},
+		{"title": "Beta: Balance and Launch", "body": "A hand with a 2/1/1 mix of QA, Marketing and Insider cards triggers Balanced Operations. It boosts eligible bug work, Marketing and insight chances by 25%, but not cash. Synergy bonuses do not stack. Launch freezes the release results and enters Studio for free."},
 	],
 	&"studio": [
 		{"title": "Studio: Between Games", "body": "Produce your first game, then return to browse release summaries, the Feature Store and available Contracts. Browsing costs no cycles or cash."},
@@ -34,7 +34,7 @@ const TOPICS := {
 		{"title": "Review: Inspect Your Release", "body": "Use the five tabs to inspect the frozen release results. Back to Summary returns to Studio for free; viewing results never rerolls or pays them again."},
 	],
 	&"contract": [
-		{"title": "Contracts: Two Production Hands", "body": "The fixed Primitive Contract has two four-card hands. Set priorities, use eligible finite Features and renewable Passes, and aim for its displayed targets."},
+		{"title": "Contracts: Two Production Hands", "body": "The fixed Primitive Contract has two four-card hands. Four cards sharing a primary Core stat trigger Contract Specialization: primary and secondary Core gains are multiplied by 1.50 while Scope stays printed. There is no Balanced Production bonus here. Eligible Design and Alpha Features are finite; Core Passes renew."},
 		{"title": "Contracts: Shared Resources", "body": "Contracts share your run calendar and redraw budget. Acceptance is free, but an accepted contract cannot be abandoned. Completion pays the cash reward once."},
 	],
 	&"feature_store": [

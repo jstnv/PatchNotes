@@ -2,6 +2,8 @@ class_name ContractState
 extends RefCounted
 
 const CONTRACT_ID := &"balanced_primitive_contract_v1"
+const SIDESTREET_CONTRACT_ID := &"sidestreet_cash_contract_v1"
+const SIDESTREET_INVESTMENT_CENTS := 120000
 const REQUIRED_HANDS := 2
 const EXPECTED_SCOPE := 12
 const EXPECTED_CORE_HALF_UNITS := 12
@@ -26,9 +28,15 @@ var _priorities: Dictionary = {}
 var _result: ContractResult
 var _upfront_committed := false
 var _payout_committed := false
+var _contract_id: StringName = CONTRACT_ID
+var _offer_id: StringName = CONTRACT_ID
+var _source_release_id: StringName
 
 
-func _init(eligible_feature_ids: Array[StringName] = []) -> void:
+func _init(eligible_feature_ids: Array[StringName] = [], contract_id: StringName = CONTRACT_ID, offer_id: StringName = CONTRACT_ID, source_release_id: StringName = &"") -> void:
+	_contract_id = contract_id
+	_offer_id = offer_id
+	_source_release_id = source_release_id
 	for id in eligible_feature_ids:
 		if not id.is_empty():
 			_eligible_feature_ids[id] = true
@@ -38,7 +46,15 @@ func _init(eligible_feature_ids: Array[StringName] = []) -> void:
 
 
 func get_contract_id() -> StringName:
-	return CONTRACT_ID
+	return _contract_id
+
+
+func get_offer_id() -> StringName:
+	return _offer_id
+
+
+func get_source_release_id() -> StringName:
+	return _source_release_id
 
 
 func get_scope() -> int:
@@ -154,7 +170,7 @@ func plan_hand(cards: Array[CardData]) -> Dictionary:
 	var remainder := 0
 	var total_payout := 0
 	if completing:
-		var completion := calculate_completion(_scope + scope_addition, projected_scores)
+		var completion := calculate_sidestreet_completion(_scope + scope_addition, projected_scores) if _contract_id == SIDESTREET_CONTRACT_ID else calculate_completion(_scope + scope_addition, projected_scores)
 		if completion.is_empty():
 			return {}
 		numerator = completion.numerator
@@ -186,12 +202,20 @@ func commit_hand(cards: Array[CardData], expected_remainder_cents: int) -> bool:
 		_exhausted_feature_ids[id] = true
 	_successful_hands += 1
 	if plan.completing:
-		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents, plan.remainder_cents)
+		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents, plan.remainder_cents, 0 if _contract_id == SIDESTREET_CONTRACT_ID else GUARANTEED_UPFRONT_CENTS)
 		_payout_committed = true
 	return true
 
 
 static func calculate_completion(scope: Variant, core_half_units: Dictionary) -> Dictionary:
+	return _calculate_completion_for_budget(scope, core_half_units, COMPLETION_BUDGET_CENTS, GUARANTEED_UPFRONT_CENTS)
+
+
+static func calculate_sidestreet_completion(scope: Variant, core_half_units: Dictionary) -> Dictionary:
+	return _calculate_completion_for_budget(scope, core_half_units, SIDESTREET_INVESTMENT_CENTS, 0)
+
+
+static func _calculate_completion_for_budget(scope: Variant, core_half_units: Dictionary, budget_cents: int, upfront_cents: int) -> Dictionary:
 	if typeof(scope) != TYPE_INT or scope < 0 or core_half_units.size() != PriorityAllocation.CORE_CATEGORIES.size():
 		return {}
 	var numerator := 4 * mini(int(scope), EXPECTED_SCOPE)
@@ -201,8 +225,8 @@ static func calculate_completion(scope: Variant, core_half_units: Dictionary) ->
 		numerator += mini(int(core_half_units[category]), EXPECTED_CORE_HALF_UNITS)
 	if numerator < 0 or numerator > COMPLETION_DENOMINATOR:
 		return {}
-	var remainder := (COMPLETION_BUDGET_CENTS * numerator) / COMPLETION_DENOMINATOR
-	return {"numerator": numerator, "remainder_cents": remainder, "payout_cents": GUARANTEED_UPFRONT_CENTS + remainder}
+	var remainder := (budget_cents * numerator) / COMPLETION_DENOMINATOR
+	return {"numerator": numerator, "remainder_cents": remainder, "payout_cents": upfront_cents + remainder}
 
 
 func _is_valid_card(card: CardData) -> bool:

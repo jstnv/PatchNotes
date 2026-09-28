@@ -1,0 +1,19 @@
+PATCH NOTES — DESIGN/ALPHA REDRAW CLASS PARITY READ-ONLY TRIAL v1
+2026-09-27 | Source revision ba616515ed1b039fd0da7cf03f73288fd7ccd8e4
+Status: simulated only. The current Design/Alpha same-type redraw code was not changed.
+
+Authority and method
+Read current To Do List redraw-class request, cumulative authority, shared redraw/priority log, current Godot Design/Alpha draw and redraw code, card ledger, Review/Beta Marketing/sales rules, and repository state. Replayed 600 paired legal 20–23 purchased-Scope first-game paths (200 each cautious, ordinary and optimizer; Sound-focused and mixed subsets) with the same starter roster and seeded draws. Current arm preserves Feature-to-Feature and Pass-to-Pass redraw. Candidate arm chooses Feature or Pass at equal weight when both legal classes exist, then selects a legal definition under existing weighting; if only one class remains, it falls back to that class. Initial draws, Beta, Contract, finite Feature exhaustion, renewable Passes, four-redraw cap, +1 per productive cycle, zero-cycle redraw, and one-card replacement remain unchanged in the simulation. It is a Python policy model, not human play or exact Godot PRNG parity.
+
+Measured redraw behavior
+Current: 5,201 attempts, 5,198 success, three rejected, 31 Feature-to-Feature and 5,167 Pass-to-Pass; no class changes. Where both classes were available, a Feature was the result only 1.20% of the time because almost all selected old cards were Passes. Parity: 5,200 attempts and success, 1,098 Pass-to-Feature, 32 Feature-to-Pass, 28 Feature-to-Feature and 4,042 Pass-to-Pass. Given both legal classes, Feature result was 50.47%; 1,434 redraws exercised the one-class fallback. Candidate selection excludes the immediately replaced definition and still reserves visible finite Features. No cash or calendar blocker appeared in either arm.
+
+Gameplay outcome
+Cautious policy never redraws and is unchanged. Ordinary policy gains mean +0.065 Review, +0.28 Scope and +7.245 Month 1 units from parity; median Review difference is +0.1, with wide p10/p90 -0.6/+0.7. Optimizer policy loses mean 0.10 Review and 11.825 units; median Review difference is -0.1, with p10/p90 -1.0/+0.7. Mean Sound Feature plays change by only +0.02 in ordinary and zero in optimizer, including Sound-focused cohorts. Synergy counts and Feature-play costs shift modestly but neither strategy consistently improves. Equal class odds reduce Pass-only redraw outcomes, yet do not by themselves prove relief from the Sound-specialization meta. The ordinary policy's additional Scope has a cost; changes are not free score.
+
+Decision and validation
+This run supports the class-parity UI intent and a clear one-class fallback, but not a balance claim that parity fixes Sound access or Review. If the player wants the requested feel change implemented, retain one-card replacement, no immediate same-definition repeat, finite exhaustion, shared redraw accounting, and unchanged initial/Beta/Contract draws; then verify current and proposed distributions in live Godot under scarce Sound supply. A separate design decision should address whether a Pass fishing pattern is desirable. No gameplay rule was locked by this analysis.
+
+Reproduce and inspect
+Run: python -B patch-notes/analysis/redraw_class_parity_trial_v1.py
+Seed 27092753. Summary: patch-notes/design-logs/redraw_class_parity_trial_v1_summary.json. Paired raw draws, class transitions, actions, Review, Scope, costs, units and failures: redraw_class_parity_trial_v1_raw.json.gz. Existing Godot verify_atomic_selected_redraw and verify_shared_redraw_and_priority_adjustment passed, as did 14 Python regressions, editor import with writable temp config, and git diff --check. No gameplay or .codex-godot-temp changes.

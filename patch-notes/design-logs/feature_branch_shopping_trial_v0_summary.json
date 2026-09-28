@@ -1,0 +1,820 @@
+{
+  "source_revision": "ba616515ed1b039fd0da7cf03f73288fd7ccd8e4",
+  "sample_source": "sidestreet_repeatable_cash_trial_v1_raw.json.gz: 6,300 identical sampled first-game paths",
+  "candidate_cards": {
+    "background_music": {
+      "name": "Background Music",
+      "parents": [
+        "music"
+      ],
+      "price_cents": 95000,
+      "scope": 1,
+      "core": {
+        "sound": 3
+      }
+    },
+    "sub_areas": {
+      "name": "Sub-Areas",
+      "parents": [
+        "levels"
+      ],
+      "price_cents": 170000,
+      "scope": 2,
+      "core": {
+        "graphics": 3,
+        "design": 2
+      }
+    },
+    "boss_battles": {
+      "name": "Boss Battles",
+      "parents": [
+        "enemies"
+      ],
+      "price_cents": 280000,
+      "scope": 3,
+      "core": {
+        "graphics": 3,
+        "sound": 3,
+        "technology": 3
+      }
+    },
+    "character_classes": {
+      "name": "Character Classes",
+      "parents": [
+        "general_combat",
+        "save_files"
+      ],
+      "price_cents": 170000,
+      "scope": 2,
+      "core": {
+        "technology": 2,
+        "design": 3
+      }
+    }
+  },
+  "summary": {
+    "current_store|staff0|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 100.0,
+      "affordable_all_pct": 100.0,
+      "affordable_given_eligible_pct": 100.0,
+      "blockers": {},
+      "shopping_cost_cents": {
+        "n": 6300,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0
+      },
+      "cash_after_shopping_cents": {
+        "n": 6300,
+        "p10": 319414,
+        "median": 423648.0,
+        "p90": 652996
+      }
+    },
+    "current_store|staff0|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 100.0,
+      "affordable_all_pct": 100.0,
+      "affordable_given_eligible_pct": 100.0,
+      "blockers": {},
+      "shopping_cost_cents": {
+        "n": 6300,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0
+      },
+      "cash_after_shopping_cents": {
+        "n": 6300,
+        "p10": 319414,
+        "median": 423648.0,
+        "p90": 652996
+      }
+    },
+    "current_store|staff1|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 100.0,
+      "affordable_all_pct": 100.0,
+      "affordable_given_eligible_pct": 100.0,
+      "blockers": {},
+      "shopping_cost_cents": {
+        "n": 6300,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0
+      },
+      "cash_after_shopping_cents": {
+        "n": 6300,
+        "p10": 309414,
+        "median": 413648.0,
+        "p90": 642996
+      }
+    },
+    "current_store|staff1|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 100.0,
+      "affordable_all_pct": 100.0,
+      "affordable_given_eligible_pct": 100.0,
+      "blockers": {},
+      "shopping_cost_cents": {
+        "n": 6300,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0
+      },
+      "cash_after_shopping_cents": {
+        "n": 6300,
+        "p10": 309414,
+        "median": 413648.0,
+        "p90": 642996
+      }
+    },
+    "pair_background_music_sub_areas|staff0|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 52.89,
+      "affordable_all_pct": 47.9,
+      "affordable_given_eligible_pct": 90.58,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2968,
+        "sub_areas": 314
+      },
+      "shopping_cost_cents": {
+        "n": 3332,
+        "p10": 265000,
+        "median": 310000.0,
+        "p90": 310000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3332,
+        "p10": 1783,
+        "median": 89852.5,
+        "p90": 233566
+      }
+    },
+    "pair_background_music_sub_areas|staff0|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 52.89,
+      "affordable_all_pct": 46.81,
+      "affordable_given_eligible_pct": 88.51,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2968,
+        "sub_areas": 328,
+        "sub_areas_boundary": 55
+      },
+      "shopping_cost_cents": {
+        "n": 3332,
+        "p10": 265000,
+        "median": 310000.0,
+        "p90": 310000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3332,
+        "p10": -5717,
+        "median": 82352.5,
+        "p90": 226066
+      }
+    },
+    "pair_background_music_sub_areas|staff1|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 52.89,
+      "affordable_all_pct": 45.0,
+      "affordable_given_eligible_pct": 85.08,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2968,
+        "sub_areas": 497
+      },
+      "shopping_cost_cents": {
+        "n": 3332,
+        "p10": 265000,
+        "median": 310000.0,
+        "p90": 310000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3332,
+        "p10": -16202,
+        "median": 76725.0,
+        "p90": 220935
+      }
+    },
+    "pair_background_music_sub_areas|staff1|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 52.89,
+      "affordable_all_pct": 41.38,
+      "affordable_given_eligible_pct": 78.24,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2968,
+        "sub_areas": 575,
+        "sub_areas_boundary": 150
+      },
+      "shopping_cost_cents": {
+        "n": 3332,
+        "p10": 265000,
+        "median": 310000.0,
+        "p90": 310000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3332,
+        "p10": -33702,
+        "median": 59225.0,
+        "p90": 203435
+      }
+    },
+    "pair_background_music_boss_battles|staff0|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.4,
+      "affordable_all_pct": 22.54,
+      "affordable_given_eligible_pct": 42.21,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2936,
+        "boss_battles": 1944
+      },
+      "shopping_cost_cents": {
+        "n": 3364,
+        "p10": 375000,
+        "median": 420000.0,
+        "p90": 420000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3364,
+        "p10": -105094,
+        "median": -18964.0,
+        "p90": 122288
+      }
+    },
+    "pair_background_music_boss_battles|staff0|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.4,
+      "affordable_all_pct": 20.81,
+      "affordable_given_eligible_pct": 38.97,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2936,
+        "boss_battles": 2014,
+        "boss_battles_boundary": 39
+      },
+      "shopping_cost_cents": {
+        "n": 3364,
+        "p10": 375000,
+        "median": 420000.0,
+        "p90": 420000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3364,
+        "p10": -112594,
+        "median": -26464.0,
+        "p90": 114788
+      }
+    },
+    "pair_background_music_boss_battles|staff1|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.4,
+      "affordable_all_pct": 19.9,
+      "affordable_given_eligible_pct": 37.28,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2936,
+        "boss_battles": 2110
+      },
+      "shopping_cost_cents": {
+        "n": 3364,
+        "p10": 375000,
+        "median": 420000.0,
+        "p90": 420000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3364,
+        "p10": -122688,
+        "median": -32424.0,
+        "p90": 110430
+      }
+    },
+    "pair_background_music_boss_battles|staff1|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.4,
+      "affordable_all_pct": 17.1,
+      "affordable_given_eligible_pct": 32.02,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2936,
+        "boss_battles": 2239,
+        "boss_battles_boundary": 48
+      },
+      "shopping_cost_cents": {
+        "n": 3364,
+        "p10": 375000,
+        "median": 420000.0,
+        "p90": 420000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3364,
+        "p10": -140188,
+        "median": -49924.0,
+        "p90": 92930
+      }
+    },
+    "pair_background_music_character_classes|staff0|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.3,
+      "affordable_all_pct": 6.56,
+      "affordable_given_eligible_pct": 12.3,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2942,
+        "character_classes": 1918,
+        "background_music": 988,
+        "save_files": 39
+      },
+      "shopping_cost_cents": {
+        "n": 3358,
+        "p10": 485000,
+        "median": 530000.0,
+        "p90": 530000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3358,
+        "p10": -218927,
+        "median": -130188.5,
+        "p90": 11055
+      }
+    },
+    "pair_background_music_character_classes|staff0|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.3,
+      "affordable_all_pct": 5.22,
+      "affordable_given_eligible_pct": 9.8,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2942,
+        "character_classes": 1835,
+        "character_classes_boundary": 34,
+        "background_music": 1030,
+        "background_music_boundary": 86,
+        "save_files": 39,
+        "save_files_boundary": 5
+      },
+      "shopping_cost_cents": {
+        "n": 3358,
+        "p10": 485000,
+        "median": 530000.0,
+        "p90": 530000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3358,
+        "p10": -227577,
+        "median": -141149.0,
+        "p90": -1080
+      }
+    },
+    "pair_background_music_character_classes|staff1|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.3,
+      "affordable_all_pct": 5.24,
+      "affordable_given_eligible_pct": 9.83,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2942,
+        "character_classes": 1738,
+        "background_music": 1177,
+        "save_files": 113
+      },
+      "shopping_cost_cents": {
+        "n": 3358,
+        "p10": 485000,
+        "median": 530000.0,
+        "p90": 530000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3358,
+        "p10": -235951,
+        "median": -144621.5,
+        "p90": -1721
+      }
+    },
+    "pair_background_music_character_classes|staff1|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.3,
+      "affordable_all_pct": 3.08,
+      "affordable_given_eligible_pct": 5.78,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2942,
+        "character_classes": 1588,
+        "character_classes_boundary": 36,
+        "background_music": 1272,
+        "background_music_boundary": 132,
+        "save_files": 113,
+        "save_files_boundary": 23
+      },
+      "shopping_cost_cents": {
+        "n": 3358,
+        "p10": 485000,
+        "median": 530000.0,
+        "p90": 530000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3358,
+        "p10": -257577,
+        "median": -169566.0,
+        "p90": -28861
+      }
+    },
+    "pair_sub_areas_boss_battles|staff0|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.62,
+      "affordable_all_pct": 11.02,
+      "affordable_given_eligible_pct": 20.54,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2922,
+        "boss_battles": 2683,
+        "sub_areas": 1
+      },
+      "shopping_cost_cents": {
+        "n": 3378,
+        "p10": 450000,
+        "median": 495000.0,
+        "p90": 495000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3378,
+        "p10": -181419,
+        "median": -96860.5,
+        "p90": 46286
+      }
+    },
+    "pair_sub_areas_boss_battles|staff0|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.62,
+      "affordable_all_pct": 10.1,
+      "affordable_given_eligible_pct": 18.83,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2922,
+        "boss_battles": 2725,
+        "boss_battles_boundary": 16,
+        "sub_areas": 1
+      },
+      "shopping_cost_cents": {
+        "n": 3378,
+        "p10": 450000,
+        "median": 495000.0,
+        "p90": 495000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3378,
+        "p10": -188919,
+        "median": -104360.5,
+        "p90": 38786
+      }
+    },
+    "pair_sub_areas_boss_battles|staff1|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.62,
+      "affordable_all_pct": 9.4,
+      "affordable_given_eligible_pct": 17.53,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2922,
+        "boss_battles": 2782,
+        "sub_areas": 4
+      },
+      "shopping_cost_cents": {
+        "n": 3378,
+        "p10": 450000,
+        "median": 495000.0,
+        "p90": 495000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3378,
+        "p10": -199814,
+        "median": -109676.0,
+        "p90": 32840
+      }
+    },
+    "pair_sub_areas_boss_battles|staff1|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.62,
+      "affordable_all_pct": 7.08,
+      "affordable_given_eligible_pct": 13.2,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2922,
+        "boss_battles": 2860,
+        "boss_battles_boundary": 67,
+        "sub_areas": 4,
+        "sub_areas_boundary": 1
+      },
+      "shopping_cost_cents": {
+        "n": 3378,
+        "p10": 450000,
+        "median": 495000.0,
+        "p90": 495000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3378,
+        "p10": -217314,
+        "median": -127176.0,
+        "p90": 15340
+      }
+    },
+    "pair_sub_areas_character_classes|staff0|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.24,
+      "affordable_all_pct": 1.3,
+      "affordable_given_eligible_pct": 2.44,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2946,
+        "character_classes": 1113,
+        "sub_areas": 2121,
+        "save_files": 38
+      },
+      "shopping_cost_cents": {
+        "n": 3354,
+        "p10": 560000,
+        "median": 605000.0,
+        "p90": 605000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3354,
+        "p10": -291415,
+        "median": -205246.0,
+        "p90": -66721
+      }
+    },
+    "pair_sub_areas_character_classes|staff0|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.24,
+      "affordable_all_pct": 0.95,
+      "affordable_given_eligible_pct": 1.79,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2946,
+        "character_classes": 1046,
+        "character_classes_boundary": 6,
+        "sub_areas": 2164,
+        "sub_areas_boundary": 31,
+        "save_files": 38,
+        "save_files_boundary": 9
+      },
+      "shopping_cost_cents": {
+        "n": 3354,
+        "p10": 560000,
+        "median": 605000.0,
+        "p90": 605000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3354,
+        "p10": -300765,
+        "median": -216088.0,
+        "p90": -78388
+      }
+    },
+    "pair_sub_areas_character_classes|staff1|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.24,
+      "affordable_all_pct": 0.97,
+      "affordable_given_eligible_pct": 1.82,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2946,
+        "character_classes": 1022,
+        "sub_areas": 2162,
+        "save_files": 109
+      },
+      "shopping_cost_cents": {
+        "n": 3354,
+        "p10": 560000,
+        "median": 605000.0,
+        "p90": 605000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3354,
+        "p10": -309488,
+        "median": -218248.0,
+        "p90": -77860
+      }
+    },
+    "pair_sub_areas_character_classes|staff1|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 53.24,
+      "affordable_all_pct": 0.35,
+      "affordable_given_eligible_pct": 0.66,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2946,
+        "character_classes": 881,
+        "sub_areas_boundary": 52,
+        "sub_areas": 2246,
+        "character_classes_boundary": 14,
+        "save_files": 109,
+        "save_files_boundary": 30
+      },
+      "shopping_cost_cents": {
+        "n": 3354,
+        "p10": 560000,
+        "median": 605000.0,
+        "p90": 605000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3354,
+        "p10": -330717,
+        "median": -244722.0,
+        "p90": -107123
+      }
+    },
+    "pair_boss_battles_character_classes|staff0|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 54.38,
+      "affordable_all_pct": 0.02,
+      "affordable_given_eligible_pct": 0.03,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2874,
+        "boss_battles": 3087,
+        "character_classes": 296,
+        "save_files": 42
+      },
+      "shopping_cost_cents": {
+        "n": 3426,
+        "p10": 670000,
+        "median": 715000.0,
+        "p90": 715000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3426,
+        "p10": -399315,
+        "median": -314801.0,
+        "p90": -177160
+      }
+    },
+    "pair_boss_battles_character_classes|staff0|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 54.38,
+      "affordable_all_pct": 0.0,
+      "affordable_given_eligible_pct": 0.0,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2874,
+        "boss_battles": 3101,
+        "boss_battles_boundary": 19,
+        "character_classes": 257,
+        "character_classes_boundary": 1,
+        "save_files": 42,
+        "save_files_boundary": 6
+      },
+      "shopping_cost_cents": {
+        "n": 3426,
+        "p10": 670000,
+        "median": 715000.0,
+        "p90": 715000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3426,
+        "p10": -409938,
+        "median": -326024.0,
+        "p90": -190097
+      }
+    },
+    "pair_boss_battles_character_classes|staff1|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 54.38,
+      "affordable_all_pct": 0.02,
+      "affordable_given_eligible_pct": 0.03,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2874,
+        "boss_battles": 3083,
+        "character_classes": 235,
+        "save_files": 107
+      },
+      "shopping_cost_cents": {
+        "n": 3426,
+        "p10": 670000,
+        "median": 715000.0,
+        "p90": 715000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3426,
+        "p10": -415793,
+        "median": -328545.5,
+        "p90": -189335
+      }
+    },
+    "pair_boss_battles_character_classes|staff1|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 54.38,
+      "affordable_all_pct": 0.0,
+      "affordable_given_eligible_pct": 0.0,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 2874,
+        "boss_battles": 3103,
+        "character_classes": 163,
+        "boss_battles_boundary": 30,
+        "save_files": 107,
+        "save_files_boundary": 23
+      },
+      "shopping_cost_cents": {
+        "n": 3426,
+        "p10": 670000,
+        "median": 715000.0,
+        "p90": 715000
+      },
+      "cash_after_shopping_cents": {
+        "n": 3426,
+        "p10": -439902,
+        "median": -354636.5,
+        "p90": -216438
+      }
+    },
+    "four_card_pilot|staff0|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 13.62,
+      "affordable_all_pct": 0.0,
+      "affordable_given_eligible_pct": 0.0,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 5442,
+        "boss_battles": 76,
+        "sub_areas": 464,
+        "background_music": 307,
+        "save_files": 11
+      },
+      "shopping_cost_cents": {
+        "n": 858,
+        "p10": 935000,
+        "median": 980000.0,
+        "p90": 980000
+      },
+      "cash_after_shopping_cents": {
+        "n": 858,
+        "p10": -680080,
+        "median": -598539.5,
+        "p90": -455545
+      }
+    },
+    "four_card_pilot|staff0|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 13.62,
+      "affordable_all_pct": 0.0,
+      "affordable_given_eligible_pct": 0.0,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 5442,
+        "sub_areas": 434,
+        "boss_battles": 61,
+        "background_music_boundary": 30,
+        "background_music": 313,
+        "sub_areas_boundary": 7,
+        "save_files": 11,
+        "save_files_boundary": 2
+      },
+      "shopping_cost_cents": {
+        "n": 858,
+        "p10": 935000,
+        "median": 980000.0,
+        "p90": 980000
+      },
+      "cash_after_shopping_cents": {
+        "n": 858,
+        "p10": -696056,
+        "median": -615199.5,
+        "p90": -477224
+      }
+    },
+    "four_card_pilot|staff1|store_cycle0": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 13.62,
+      "affordable_all_pct": 0.0,
+      "affordable_given_eligible_pct": 0.0,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 5442,
+        "sub_areas": 395,
+        "background_music": 358,
+        "boss_battles": 63,
+        "save_files": 42
+      },
+      "shopping_cost_cents": {
+        "n": 858,
+        "p10": 935000,
+        "median": 980000.0,
+        "p90": 980000
+      },
+      "cash_after_shopping_cents": {
+        "n": 858,
+        "p10": -698829,
+        "median": -613629.0,
+        "p90": -465545
+      }
+    },
+    "four_card_pilot|staff1|store_cycle1": {
+      "n": 6300,
+      "prerequisite_eligible_pct": 13.62,
+      "affordable_all_pct": 0.0,
+      "affordable_given_eligible_pct": 0.0,
+      "blockers": {
+        "more_than_one_missing_primitive_parent": 5442,
+        "sub_areas": 344,
+        "background_music": 369,
+        "background_music_boundary": 41,
+        "sub_areas_boundary": 7,
+        "boss_battles": 40,
+        "save_files": 42,
+        "save_files_boundary": 15
+      },
+      "shopping_cost_cents": {
+        "n": 858,
+        "p10": 935000,
+        "median": 980000.0,
+        "p90": 980000
+      },
+      "cash_after_shopping_cents": {
+        "n": 858,
+        "p10": -736056,
+        "median": -654850.0,
+        "p90": -515668
+      }
+    }
+  },
+  "limitations": "Unapproved candidate prices/effects from To Do List. No later card definitions exist in code, no Branching Dialogue specification found, later Feature-play prices TBD. Single Primitive reserve allowed in this bound; prerequisites beyond that are gated. No draw, Scope, Review or Game 2 settlement is claimed. Store purchase cycle 0 is current runtime; 1 is conflicting To Do candidate. No familiarity discount applied (upper-cost bound). One-shot Ironclad $400 advance plus completion-dependent remainder is included."
+}

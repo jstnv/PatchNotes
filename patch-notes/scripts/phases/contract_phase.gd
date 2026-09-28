@@ -27,10 +27,11 @@ var _commit_button: Button
 var _priority_inputs: Dictionary = {}
 var _completion_panel: PanelContainer
 var _completion_stats: Label
+var _title: Label
 
 
 func setup(state: ContractState, run: RunState, category_rolls: Array[float] = [], definition_rolls: Array[float] = []) -> bool:
-	if state == null or run == null or run.get_primitive_contract() != state:
+	if state == null or run == null or not run.owns_contract_state(state):
 		return false
 	if not category_rolls.is_empty() and category_rolls.size() != CANDIDATE_COUNT:
 		return false
@@ -64,10 +65,10 @@ func _build_ui() -> void:
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
-	var title := Label.new()
-	title.text = "Balanced Primitive Contract"
-	title.add_theme_font_size_override("font_size", 25)
-	layout.add_child(title)
+	_title = Label.new()
+	_title.text = "Balanced Primitive Contract"
+	_title.add_theme_font_size_override("font_size", 25)
+	layout.add_child(_title)
 	_status_label = Label.new()
 	layout.add_child(_status_label)
 	_scores_label = Label.new()
@@ -149,6 +150,7 @@ func _build_completion_panel() -> void:
 
 
 func _initialize_presentation() -> void:
+	_title.text = "SideStreet Cash Contract" if _state.get_contract_id() == ContractState.SIDESTREET_CONTRACT_ID else "Balanced Primitive Contract"
 	_priority_draft = _state.get_priority_distribution()
 	_sync_priority_inputs()
 	if _state.is_completed():
@@ -258,7 +260,7 @@ func _play_selected_hand() -> bool:
 		if next_cards.is_empty():
 			return false
 	var expected_cycle := _run.get_completed_run_cycles()
-	var commit := func() -> bool: return _state.commit_hand(cards, remainder)
+	var commit := func() -> bool: return _run.commit_contract_hand(_state, cards, remainder)
 	if not _run.complete_productive_action(commit, remainder, expected_cycle):
 		return false
 	if _state.is_completed():

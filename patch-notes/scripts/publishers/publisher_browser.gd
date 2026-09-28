@@ -100,6 +100,14 @@ func _on_selected(index: int) -> void:
 			availability = "Balanced Primitive Contract completed." if contract.is_completed() else "Balanced Primitive Contract in progress. Resume it from Contracts."
 		else:
 			availability = "Balanced Primitive Contract available from Contracts."
+	elif _selected_id == PublisherCatalog.SIDESTREET and status.unlocked:
+		var active := _run.get_active_contract()
+		if active != null and active.get_contract_id() == ContractState.SIDESTREET_CONTRACT_ID:
+			availability = "SideStreet Contract in progress. Resume it from Contracts."
+		elif _run.is_sidestreet_offer_available():
+			availability = "%d release-linked offer(s) exist. The next offer is available from Contracts." % (_run.get_sidestreet_offer_ids().size() - _run.get_sidestreet_completion_history().size())
+		else:
+			availability = "No pending SideStreet offer. Each new release creates one."
 	_details.text = "%s\n\n%s\n\nPrerequisite: %s\n\n%s\n\n%s" % [
 		status.name, "Unlocked" if status.unlocked else "Locked", status.requirement,
 		status.personality, availability]

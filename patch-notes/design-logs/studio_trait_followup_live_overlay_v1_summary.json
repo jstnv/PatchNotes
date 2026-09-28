@@ -1,0 +1,4628 @@
+{
+  "source_revision": "ba616515ed1b039fd0da7cf03f73288fd7ccd8e4",
+  "source_files": "sidestreet_acceptance_stress_v1_{cautious,ordinary,optimizer}_final.json.gz",
+  "live_two_game_paths": 90,
+  "scenario_count": 75,
+  "raw_rows": 6750,
+  "tests": {
+    "baseline_parity": 90,
+    "loan_96_cap": 90,
+    "repeat_due_idempotence": 90,
+    "awareness_floor": 90,
+    "creation_builds_valid": 24,
+    "once_only_conversion_probes": 2
+  },
+  "summary": {
+    "loan|pay500|refund1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 417922,
+        "median": 648572.0,
+        "p90": 952560,
+        "min": 247483,
+        "max": 1018149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 48000,
+      "cash_only_refund_cents": 5000,
+      "break_even_paid_month": 11,
+      "paired_mean_final_cash_delta_cents": -3977.78,
+      "paired_positive_cash_count": 30
+    },
+    "loan|pay500|refund2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 422922,
+        "median": 653572.0,
+        "p90": 957560,
+        "min": 252483,
+        "max": 1023149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 48000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 21,
+      "paired_mean_final_cash_delta_cents": 1022.22,
+      "paired_positive_cash_count": 60
+    },
+    "loan|pay500|refund3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 422922,
+        "median": 653572.0,
+        "p90": 957560,
+        "min": 252483,
+        "max": 1023149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 48000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 21,
+      "paired_mean_final_cash_delta_cents": 1022.22,
+      "paired_positive_cash_count": 60
+    },
+    "loan|pay1000|refund1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 413422,
+        "median": 639072.0,
+        "p90": 939560,
+        "min": 242983,
+        "max": 1005149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 96000,
+      "cash_only_refund_cents": 5000,
+      "break_even_paid_month": 6,
+      "paired_mean_final_cash_delta_cents": -12955.56,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay1000|refund2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 418422,
+        "median": 644072.0,
+        "p90": 944560,
+        "min": 247983,
+        "max": 1010149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 96000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 11,
+      "paired_mean_final_cash_delta_cents": -7955.56,
+      "paired_positive_cash_count": 30
+    },
+    "loan|pay1000|refund3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 418422,
+        "median": 644072.0,
+        "p90": 944560,
+        "min": 247983,
+        "max": 1010149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 96000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 11,
+      "paired_mean_final_cash_delta_cents": -7955.56,
+      "paired_positive_cash_count": 30
+    },
+    "loan|pay1500|refund1": {
+      "n": 90,
+      "first_infeasible_pct": 1.11,
+      "first_failure": {
+        "alpha2": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 408922,
+        "median": 629572.0,
+        "p90": 926560,
+        "min": 238483,
+        "max": 992149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 144000,
+      "cash_only_refund_cents": 5000,
+      "break_even_paid_month": 4,
+      "paired_mean_final_cash_delta_cents": -21933.33,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay1500|refund2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 413922,
+        "median": 634572.0,
+        "p90": 931560,
+        "min": 243483,
+        "max": 997149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 144000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 7,
+      "paired_mean_final_cash_delta_cents": -16933.33,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay1500|refund3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 413922,
+        "median": 634572.0,
+        "p90": 931560,
+        "min": 243483,
+        "max": 997149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 144000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 7,
+      "paired_mean_final_cash_delta_cents": -16933.33,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay2000|refund1": {
+      "n": 90,
+      "first_infeasible_pct": 3.33,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 404422,
+        "median": 620072.0,
+        "p90": 913560,
+        "min": 233983,
+        "max": 979149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 192000,
+      "cash_only_refund_cents": 5000,
+      "break_even_paid_month": 3,
+      "paired_mean_final_cash_delta_cents": -30911.11,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay2000|refund2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 409422,
+        "median": 625072.0,
+        "p90": 918560,
+        "min": 238983,
+        "max": 984149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 192000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 6,
+      "paired_mean_final_cash_delta_cents": -25911.11,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay2000|refund3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 409422,
+        "median": 625072.0,
+        "p90": 918560,
+        "min": 238983,
+        "max": 984149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 192000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 6,
+      "paired_mean_final_cash_delta_cents": -25911.11,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay2500|refund1": {
+      "n": 90,
+      "first_infeasible_pct": 4.44,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 2,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 399922,
+        "median": 612367.0,
+        "p90": 900560,
+        "min": 229483,
+        "max": 966149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 240000,
+      "cash_only_refund_cents": 5000,
+      "break_even_paid_month": 3,
+      "paired_mean_final_cash_delta_cents": -39888.89,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay2500|refund2": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "first_failure": {
+        "alpha2": 1,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 404922,
+        "median": 617367.0,
+        "p90": 905560,
+        "min": 234483,
+        "max": 971149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 240000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 5,
+      "paired_mean_final_cash_delta_cents": -34888.89,
+      "paired_positive_cash_count": 0
+    },
+    "loan|pay2500|refund3": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "first_failure": {
+        "alpha2": 1,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 404922,
+        "median": 617367.0,
+        "p90": 905560,
+        "min": 234483,
+        "max": 971149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "total_96_due_cents": 240000,
+      "cash_only_refund_cents": 10000,
+      "break_even_paid_month": 5,
+      "paired_mean_final_cash_delta_cents": -34888.89,
+      "paired_positive_cash_count": 0
+    },
+    "unknown|refund1|loss10|releases1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 420324,
+        "median": 652477.5,
+        "p90": 956469,
+        "min": 249885,
+        "max": 1023457
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -15,
+        "median": -8.0,
+        "p90": -3,
+        "min": -17,
+        "max": -2
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -897.43,
+      "paired_positive_cash_count": 39
+    },
+    "unknown|refund1|loss10|releases2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 420324,
+        "median": 646883.0,
+        "p90": 949476,
+        "min": 248486,
+        "max": 1011569
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -15,
+        "median": -8.0,
+        "p90": -3,
+        "min": -17,
+        "max": -2
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -16,
+        "median": -8.0,
+        "p90": -2,
+        "min": -19,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -6398.58,
+      "paired_positive_cash_count": 23
+    },
+    "unknown|refund1|loss10|releases3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 420324,
+        "median": 646883.0,
+        "p90": 949476,
+        "min": 248486,
+        "max": 1011569
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -15,
+        "median": -8.0,
+        "p90": -3,
+        "min": -17,
+        "max": -2
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -16,
+        "median": -8.0,
+        "p90": -2,
+        "min": -19,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -6398.58,
+      "paired_positive_cash_count": 23
+    },
+    "unknown|refund1|loss15|releases1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 419625,
+        "median": 649680.5,
+        "p90": 952273,
+        "min": 249186,
+        "max": 1019261
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -22,
+        "median": -12.5,
+        "p90": -4,
+        "min": -26,
+        "max": -3
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -3780.04,
+      "paired_positive_cash_count": 24
+    },
+    "unknown|refund1|loss15|releases2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 418926,
+        "median": 641638.5,
+        "p90": 941783,
+        "min": 247787,
+        "max": 1001778
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -22,
+        "median": -12.5,
+        "p90": -4,
+        "min": -26,
+        "max": -3
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -23,
+        "median": -12.0,
+        "p90": -3,
+        "min": -29,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -11985.18,
+      "paired_positive_cash_count": 12
+    },
+    "unknown|refund1|loss15|releases3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 418926,
+        "median": 641638.5,
+        "p90": 941783,
+        "min": 247787,
+        "max": 1001778
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -22,
+        "median": -12.5,
+        "p90": -4,
+        "min": -26,
+        "max": -3
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -23,
+        "median": -12.0,
+        "p90": -3,
+        "min": -29,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -11985.18,
+      "paired_positive_cash_count": 12
+    },
+    "unknown|refund1|loss20|releases1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 418226,
+        "median": 646533.5,
+        "p90": 948077,
+        "min": 247788,
+        "max": 1015065
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -29,
+        "median": -16.5,
+        "p90": -6,
+        "min": -34,
+        "max": -4
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -6670.51,
+      "paired_positive_cash_count": 18
+    },
+    "unknown|refund1|loss20|releases2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 417527,
+        "median": 636044.0,
+        "p90": 934091,
+        "min": 245690,
+        "max": 991289
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -29,
+        "median": -16.5,
+        "p90": -6,
+        "min": -34,
+        "max": -4
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -31,
+        "median": -16.0,
+        "p90": -5,
+        "min": -38,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -17626.18,
+      "paired_positive_cash_count": 4
+    },
+    "unknown|refund1|loss20|releases3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 417527,
+        "median": 636044.0,
+        "p90": 934091,
+        "min": 245690,
+        "max": 991289
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -29,
+        "median": -16.5,
+        "p90": -6,
+        "min": -34,
+        "max": -4
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -31,
+        "median": -16.0,
+        "p90": -5,
+        "min": -38,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -17626.18,
+      "paired_positive_cash_count": 4
+    },
+    "lease|refund1|rent1000": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 413422,
+        "median": 639072.0,
+        "p90": 939560,
+        "min": 242983,
+        "max": 1005149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -12955.56,
+      "paired_positive_cash_count": 0
+    },
+    "lease|refund1|rent1500": {
+      "n": 90,
+      "first_infeasible_pct": 1.11,
+      "first_failure": {
+        "alpha2": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 408922,
+        "median": 629572.0,
+        "p90": 926560,
+        "min": 238483,
+        "max": 992149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -21933.33,
+      "paired_positive_cash_count": 0
+    },
+    "lease|refund1|rent2000": {
+      "n": 90,
+      "first_infeasible_pct": 3.33,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 404422,
+        "median": 620072.0,
+        "p90": 913560,
+        "min": 233983,
+        "max": 979149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -30911.11,
+      "paired_positive_cash_count": 0
+    },
+    "unknown|refund2|loss10|releases1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 425324,
+        "median": 657477.5,
+        "p90": 961469,
+        "min": 254885,
+        "max": 1028457
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -15,
+        "median": -8.0,
+        "p90": -3,
+        "min": -17,
+        "max": -2
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 4102.57,
+      "paired_positive_cash_count": 80
+    },
+    "unknown|refund2|loss10|releases2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 425324,
+        "median": 651883.0,
+        "p90": 954476,
+        "min": 253486,
+        "max": 1016569
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -15,
+        "median": -8.0,
+        "p90": -3,
+        "min": -17,
+        "max": -2
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -16,
+        "median": -8.0,
+        "p90": -2,
+        "min": -19,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -1398.58,
+      "paired_positive_cash_count": 36
+    },
+    "unknown|refund2|loss10|releases3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 425324,
+        "median": 651883.0,
+        "p90": 954476,
+        "min": 253486,
+        "max": 1016569
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -15,
+        "median": -8.0,
+        "p90": -3,
+        "min": -17,
+        "max": -2
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -16,
+        "median": -8.0,
+        "p90": -2,
+        "min": -19,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -1398.58,
+      "paired_positive_cash_count": 36
+    },
+    "unknown|refund2|loss15|releases1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 424625,
+        "median": 654680.5,
+        "p90": 957273,
+        "min": 254186,
+        "max": 1024261
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -22,
+        "median": -12.5,
+        "p90": -4,
+        "min": -26,
+        "max": -3
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 1219.96,
+      "paired_positive_cash_count": 57
+    },
+    "unknown|refund2|loss15|releases2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 423926,
+        "median": 646638.5,
+        "p90": 946783,
+        "min": 252787,
+        "max": 1006778
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -22,
+        "median": -12.5,
+        "p90": -4,
+        "min": -26,
+        "max": -3
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -23,
+        "median": -12.0,
+        "p90": -3,
+        "min": -29,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -6985.18,
+      "paired_positive_cash_count": 28
+    },
+    "unknown|refund2|loss15|releases3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 423926,
+        "median": 646638.5,
+        "p90": 946783,
+        "min": 252787,
+        "max": 1006778
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -22,
+        "median": -12.5,
+        "p90": -4,
+        "min": -26,
+        "max": -3
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -23,
+        "median": -12.0,
+        "p90": -3,
+        "min": -29,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -6985.18,
+      "paired_positive_cash_count": 28
+    },
+    "unknown|refund2|loss20|releases1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 423226,
+        "median": 651533.5,
+        "p90": 953077,
+        "min": 252788,
+        "max": 1020065
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -29,
+        "median": -16.5,
+        "p90": -6,
+        "min": -34,
+        "max": -4
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -1670.51,
+      "paired_positive_cash_count": 39
+    },
+    "unknown|refund2|loss20|releases2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 422527,
+        "median": 641044.0,
+        "p90": 939091,
+        "min": 250690,
+        "max": 996289
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -29,
+        "median": -16.5,
+        "p90": -6,
+        "min": -34,
+        "max": -4
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -31,
+        "median": -16.0,
+        "p90": -5,
+        "min": -38,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -12626.18,
+      "paired_positive_cash_count": 24
+    },
+    "unknown|refund2|loss20|releases3": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 422527,
+        "median": 641044.0,
+        "p90": 939091,
+        "min": 250690,
+        "max": 996289
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -29,
+        "median": -16.5,
+        "p90": -6,
+        "min": -34,
+        "max": -4
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -31,
+        "median": -16.0,
+        "p90": -5,
+        "min": -38,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -12626.18,
+      "paired_positive_cash_count": 24
+    },
+    "lease|refund2|rent1000": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 418422,
+        "median": 644072.0,
+        "p90": 944560,
+        "min": 247983,
+        "max": 1010149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -7955.56,
+      "paired_positive_cash_count": 30
+    },
+    "lease|refund2|rent1500": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 413922,
+        "median": 634572.0,
+        "p90": 931560,
+        "min": 243483,
+        "max": 997149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -16933.33,
+      "paired_positive_cash_count": 0
+    },
+    "lease|refund2|rent2000": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 409422,
+        "median": 625072.0,
+        "p90": 918560,
+        "min": 238983,
+        "max": 984149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -25911.11,
+      "paired_positive_cash_count": 0
+    },
+    "lean|10|cap10000|points2": {
+      "n": 90,
+      "first_infeasible_pct": 1.11,
+      "first_failure": {
+        "store_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 418822,
+        "median": 662872.0,
+        "p90": 969160,
+        "min": 251083,
+        "max": 1036149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 7422.22,
+      "paired_positive_cash_count": 89
+    },
+    "lean|15|cap15000|points3": {
+      "n": 90,
+      "first_infeasible_pct": 1.11,
+      "first_failure": {
+        "store_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 419522,
+        "median": 667772.0,
+        "p90": 973460,
+        "min": 253133,
+        "max": 1041149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 11133.33,
+      "paired_positive_cash_count": 89
+    },
+    "resourceful|10000|points1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 422422,
+        "median": 653831.5,
+        "p90": 955560,
+        "min": 251983,
+        "max": 1021149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 1666.67,
+      "paired_positive_cash_count": 60
+    },
+    "resourceful_skipped|10000|points1": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 412422,
+        "median": 648072.0,
+        "p90": 955560,
+        "min": 241983,
+        "max": 1021149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -5000,
+      "paired_positive_cash_count": 0
+    },
+    "resourceful|10000|points2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 417422,
+        "median": 648831.5,
+        "p90": 950560,
+        "min": 246983,
+        "max": 1016149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -3333.33,
+      "paired_positive_cash_count": 0
+    },
+    "resourceful_skipped|10000|points2": {
+      "n": 90,
+      "first_infeasible_pct": 4.44,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 2,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 407422,
+        "median": 643072.0,
+        "p90": 950560,
+        "min": 236983,
+        "max": 1016149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -10000,
+      "paired_positive_cash_count": 0
+    },
+    "resourceful|15000|points1": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 427422,
+        "median": 658831.5,
+        "p90": 955560,
+        "min": 256983,
+        "max": 1021972
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 5000,
+      "paired_positive_cash_count": 60
+    },
+    "resourceful_skipped|15000|points1": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 412422,
+        "median": 648072.0,
+        "p90": 955560,
+        "min": 241983,
+        "max": 1021149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -5000,
+      "paired_positive_cash_count": 0
+    },
+    "resourceful|15000|points2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 422422,
+        "median": 653831.5,
+        "p90": 950560,
+        "min": 251983,
+        "max": 1016972
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 0,
+      "paired_positive_cash_count": 60
+    },
+    "resourceful_skipped|15000|points2": {
+      "n": 90,
+      "first_infeasible_pct": 4.44,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 2,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 407422,
+        "median": 643072.0,
+        "p90": 950560,
+        "min": 236983,
+        "max": 1016149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -10000,
+      "paired_positive_cash_count": 0
+    },
+    "buzz|10|points1": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 415219,
+        "median": 658854.5,
+        "p90": 971644,
+        "min": 244780,
+        "max": 1041428
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 3,
+        "median": 8.0,
+        "p90": 14,
+        "min": 2,
+        "max": 17
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 2,
+        "median": 8.0,
+        "p90": 15,
+        "min": 0,
+        "max": 19
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 6297.74,
+      "paired_positive_cash_count": 66
+    },
+    "buzz|10|points2": {
+      "n": 90,
+      "first_infeasible_pct": 3.33,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 410219,
+        "median": 653854.5,
+        "p90": 966644,
+        "min": 239780,
+        "max": 1036428
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 3,
+        "median": 8.0,
+        "p90": 14,
+        "min": 2,
+        "max": 17
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 2,
+        "median": 8.0,
+        "p90": 15,
+        "min": 0,
+        "max": 19
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 1297.74,
+      "paired_positive_cash_count": 53
+    },
+    "buzz|10|points3": {
+      "n": 90,
+      "first_infeasible_pct": 5.56,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 3
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 405219,
+        "median": 648854.5,
+        "p90": 961644,
+        "min": 234780,
+        "max": 1031428
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 3,
+        "median": 8.0,
+        "p90": 14,
+        "min": 2,
+        "max": 17
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 2,
+        "median": 8.0,
+        "p90": 15,
+        "min": 0,
+        "max": 19
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -3702.26,
+      "paired_positive_cash_count": 27
+    },
+    "buzz|15|points1": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 415918,
+        "median": 665147.5,
+        "p90": 979336,
+        "min": 245480,
+        "max": 1051219
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 4,
+        "median": 12.0,
+        "p90": 21,
+        "min": 3,
+        "max": 25
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 3,
+        "median": 12.0,
+        "p90": 22,
+        "min": 0,
+        "max": 28
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 11907.57,
+      "paired_positive_cash_count": 79
+    },
+    "buzz|15|points2": {
+      "n": 90,
+      "first_infeasible_pct": 3.33,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 410918,
+        "median": 660147.5,
+        "p90": 974336,
+        "min": 240480,
+        "max": 1046219
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 4,
+        "median": 12.0,
+        "p90": 21,
+        "min": 3,
+        "max": 25
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 3,
+        "median": 12.0,
+        "p90": 22,
+        "min": 0,
+        "max": 28
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 6907.57,
+      "paired_positive_cash_count": 62
+    },
+    "buzz|15|points3": {
+      "n": 90,
+      "first_infeasible_pct": 5.56,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 3
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 405918,
+        "median": 655147.5,
+        "p90": 969336,
+        "min": 235480,
+        "max": 1041219
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 4,
+        "median": 12.0,
+        "p90": 21,
+        "min": 3,
+        "max": 25
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 3,
+        "median": 12.0,
+        "p90": 22,
+        "min": 0,
+        "max": 28
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 1907.57,
+      "paired_positive_cash_count": 54
+    },
+    "family|15000": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 432422,
+        "median": 668072.0,
+        "p90": 975560,
+        "min": 261983,
+        "max": 1041149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 15000,
+      "paired_positive_cash_count": 90
+    },
+    "family|30000": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 447422,
+        "median": 683072.0,
+        "p90": 990560,
+        "min": 276983,
+        "max": 1056149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 30000,
+      "paired_positive_cash_count": 90
+    },
+    "family|45000": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 462422,
+        "median": 698072.0,
+        "p90": 1005560,
+        "min": 291983,
+        "max": 1071149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 45000,
+      "paired_positive_cash_count": 90
+    },
+    "cult|100": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 427213,
+        "median": 697433.0,
+        "p90": 1019301,
+        "min": 256074,
+        "max": 1099575
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 10,
+        "median": 30.0,
+        "p90": 53,
+        "min": 8,
+        "max": 62
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 7,
+        "median": 30.0,
+        "p90": 54,
+        "min": 0,
+        "max": 70
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 41826,
+      "paired_positive_cash_count": 90
+    },
+    "cult|200": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 433506,
+        "median": 727487.5,
+        "p90": 1056881,
+        "min": 263067,
+        "max": 1145729
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 17,
+        "median": 48.5,
+        "p90": 86,
+        "min": 12,
+        "max": 101
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 12,
+        "median": 48.0,
+        "p90": 87,
+        "min": 0,
+        "max": 114
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 67917.62,
+      "paired_positive_cash_count": 90
+    },
+    "cult|300": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 437003,
+        "median": 745669.0,
+        "p90": 1083455,
+        "min": 266564,
+        "max": 1175799
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 21,
+        "median": 60.5,
+        "p90": 108,
+        "min": 16,
+        "max": 126
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 15,
+        "median": 60.0,
+        "p90": 108,
+        "min": 0,
+        "max": 143
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 84918.44,
+      "paired_positive_cash_count": 90
+    },
+    "publisher|5|acceptance": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 425672,
+        "median": 663717.5,
+        "p90": 972143,
+        "min": 256691,
+        "max": 1038149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 10453.39,
+      "paired_positive_cash_count": 90
+    },
+    "publisher|5|completion": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 425672,
+        "median": 663717.5,
+        "p90": 972143,
+        "min": 256691,
+        "max": 1038149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 10453.39,
+      "paired_positive_cash_count": 90
+    },
+    "publisher|10|acceptance": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 433922,
+        "median": 674363.0,
+        "p90": 983726,
+        "min": 266399,
+        "max": 1050149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 20907.02,
+      "paired_positive_cash_count": 90
+    },
+    "publisher|10|completion": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 433922,
+        "median": 674363.0,
+        "p90": 983726,
+        "min": 266399,
+        "max": 1050149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 20907.02,
+      "paired_positive_cash_count": 90
+    },
+    "publisher|15|acceptance": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 442172,
+        "median": 685008.5,
+        "p90": 995309,
+        "min": 276107,
+        "max": 1062149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 31360.41,
+      "paired_positive_cash_count": 90
+    },
+    "publisher|15|completion": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 442172,
+        "median": 685008.5,
+        "p90": 995309,
+        "min": 276107,
+        "max": 1062149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 31360.41,
+      "paired_positive_cash_count": 90
+    },
+    "family300+loan25_refund2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 434922,
+        "median": 647367.0,
+        "p90": 935560,
+        "min": 264483,
+        "max": 1001149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -4888.89,
+      "paired_positive_cash_count": 30
+    },
+    "family300+unknown15_refund2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 453926,
+        "median": 676638.5,
+        "p90": 976783,
+        "min": 282787,
+        "max": 1036778
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": -22,
+        "median": -12.5,
+        "p90": -4,
+        "min": -26,
+        "max": -3
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": -23,
+        "median": -12.0,
+        "p90": -3,
+        "min": -29,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 23014.82,
+      "paired_positive_cash_count": 90
+    },
+    "cult200+buzz10": {
+      "n": 90,
+      "first_infeasible_pct": 5.56,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 3
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 420604,
+        "median": 724375.5,
+        "p90": 1059364,
+        "min": 250864,
+        "max": 1151009
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 20,
+        "median": 56.5,
+        "p90": 100,
+        "min": 15,
+        "max": 118
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 14,
+        "median": 56.0,
+        "p90": 101,
+        "min": 0,
+        "max": 133
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 64246.23,
+      "paired_positive_cash_count": 90
+    },
+    "cult200+unknown15_refund2": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 438611,
+        "median": 718272.0,
+        "p90": 1041888,
+        "min": 268871,
+        "max": 1125659
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 13,
+        "median": 36.5,
+        "p90": 64,
+        "min": 9,
+        "max": 76
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 9,
+        "median": 36.0,
+        "p90": 65,
+        "min": 0,
+        "max": 86
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 60885.79,
+      "paired_positive_cash_count": 90
+    },
+    "publisher15+loan25_refund2": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "first_failure": {
+        "alpha2": 1,
+        "reserve_purchase": 1
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 429672,
+        "median": 647508.5,
+        "p90": 940309,
+        "min": 263607,
+        "max": 1007149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": -3528.48,
+      "paired_positive_cash_count": 30
+    },
+    "specialty10+buzz10": {
+      "n": 90,
+      "first_infeasible_pct": 5.56,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 3
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 408016,
+        "median": 661092.5,
+        "p90": 977028,
+        "min": 237577,
+        "max": 1051008
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 6,
+        "median": 16.0,
+        "p90": 28,
+        "min": 4,
+        "max": 34
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 4,
+        "median": 16.0,
+        "p90": 29,
+        "min": 0,
+        "max": 38
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 7579.63,
+      "paired_positive_cash_count": 60
+    },
+    "cult200+specialty10+buzz10": {
+      "n": 90,
+      "first_infeasible_pct": 5.56,
+      "first_failure": {
+        "store_purchase": 1,
+        "alpha2": 1,
+        "reserve_purchase": 3
+      },
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 423401,
+        "median": 736613.5,
+        "p90": 1077546,
+        "min": 253661,
+        "max": 1170589
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 23,
+        "median": 64.5,
+        "p90": 115,
+        "min": 17,
+        "max": 135
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 16,
+        "median": 64.0,
+        "p90": 115,
+        "min": 0,
+        "max": 152
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 75582.68,
+      "paired_positive_cash_count": 90
+    },
+    "baseline": {
+      "n": 90,
+      "first_infeasible_pct": 0.0,
+      "first_failure": {},
+      "final_cash_cents": {
+        "n": 90,
+        "p10": 417422,
+        "median": 653072.0,
+        "p90": 960560,
+        "min": 246983,
+        "max": 1026149
+      },
+      "delta_game1_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "delta_game2_units": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      },
+      "due_months": {
+        "n": 90,
+        "p10": 9,
+        "median": 19.0,
+        "p90": 26,
+        "min": 7,
+        "max": 26
+      },
+      "paired_mean_final_cash_delta_cents": 0,
+      "paired_positive_cash_count": 0
+    }
+  },
+  "expense_sensitivity": {
+    "pay500|staff0|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 31.11,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 342025,
+        "median": 531389.5,
+        "p90": 771786,
+        "min": 184983,
+        "max": 828149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 303525,
+        "median": 490389.5,
+        "p90": 736786,
+        "min": 141483,
+        "max": 793149
+      }
+    },
+    "pay500|staff0|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 377922,
+        "median": 567307.0,
+        "p90": 840664,
+        "min": 207483,
+        "max": 903149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 334422,
+        "median": 526780.0,
+        "p90": 802560,
+        "min": 163983,
+        "max": 868149
+      }
+    },
+    "pay500|staff0|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 31.11,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 342025,
+        "median": 531389.5,
+        "p90": 771786,
+        "min": 184983,
+        "max": 828149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 303525,
+        "median": 490389.5,
+        "p90": 736786,
+        "min": 141483,
+        "max": 793149
+      }
+    },
+    "pay500|staff0|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 377922,
+        "median": 567307.0,
+        "p90": 840664,
+        "min": 207483,
+        "max": 903149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 334422,
+        "median": 526780.0,
+        "p90": 802560,
+        "min": 163983,
+        "max": 868149
+      }
+    },
+    "pay500|staff0|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 31.11,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 342025,
+        "median": 531389.5,
+        "p90": 771786,
+        "min": 184983,
+        "max": 828149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 303525,
+        "median": 490389.5,
+        "p90": 736786,
+        "min": 141483,
+        "max": 793149
+      }
+    },
+    "pay500|staff0|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 377922,
+        "median": 567307.0,
+        "p90": 840664,
+        "min": 207483,
+        "max": 903149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 334422,
+        "median": 526780.0,
+        "p90": 802560,
+        "min": 163983,
+        "max": 868149
+      }
+    },
+    "pay500|staff1|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 42.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 249091,
+        "median": 424509.0,
+        "p90": 619845,
+        "min": 124983,
+        "max": 668164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 205591,
+        "median": 383759.5,
+        "p90": 584845,
+        "min": 81483,
+        "max": 633149
+      }
+    },
+    "pay500|staff1|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 22.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 274525,
+        "median": 485716.0,
+        "p90": 686786,
+        "min": 147483,
+        "max": 743149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 236025,
+        "median": 449219.0,
+        "p90": 651786,
+        "min": 103983,
+        "max": 708149
+      }
+    },
+    "pay500|staff1|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 47.78,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 234091,
+        "median": 400088.5,
+        "p90": 579845,
+        "min": 109983,
+        "max": 638164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 190591,
+        "median": 357563.5,
+        "p90": 544845,
+        "min": 66483,
+        "max": 599664
+      }
+    },
+    "pay500|staff1|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 24.44,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 259108,
+        "median": 449695.0,
+        "p90": 650081,
+        "min": 132483,
+        "max": 703149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 215608,
+        "median": 410716.0,
+        "p90": 611786,
+        "min": 88983,
+        "max": 668149
+      }
+    },
+    "pay500|staff1|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 56.67,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 217280,
+        "median": 371974.0,
+        "p90": 539845,
+        "min": 94983,
+        "max": 608164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 173902,
+        "median": 335346.0,
+        "p90": 504845,
+        "min": 51483,
+        "max": 569664
+      }
+    },
+    "pay500|staff1|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 31.11,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 241591,
+        "median": 417009.0,
+        "p90": 614845,
+        "min": 117483,
+        "max": 663149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 198091,
+        "median": 377509.5,
+        "p90": 579845,
+        "min": 73983,
+        "max": 628149
+      }
+    },
+    "pay500|staff2|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 67.78,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 164766,
+        "median": 319183.0,
+        "p90": 468576,
+        "min": 26374,
+        "max": 548164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 125627,
+        "median": 280257.0,
+        "p90": 433576,
+        "min": -8626,
+        "max": 509664
+      }
+    },
+    "pay500|staff2|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 47.78,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 209780,
+        "median": 365724.0,
+        "p90": 534845,
+        "min": 87483,
+        "max": 600664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 166402,
+        "median": 329127.0,
+        "p90": 499845,
+        "min": 43983,
+        "max": 562164
+      }
+    },
+    "pay500|staff2|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 76.67,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 104541,
+        "median": 262083.0,
+        "p90": 397650,
+        "min": -53626,
+        "max": 488164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 61041,
+        "median": 221083.0,
+        "p90": 359150,
+        "min": -88626,
+        "max": 449664
+      }
+    },
+    "pay500|staff2|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 65.56,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 157266,
+        "median": 312950.0,
+        "p90": 463576,
+        "min": 21374,
+        "max": 540664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 118127,
+        "median": 276200.0,
+        "p90": 428576,
+        "min": -13626,
+        "max": 502164
+      }
+    },
+    "pay500|staff2|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 83.33,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 44766,
+        "median": 205569.0,
+        "p90": 348149,
+        "min": -133626,
+        "max": 428164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 6266,
+        "median": 168819.0,
+        "p90": 308405,
+        "min": -168626,
+        "max": 389664
+      }
+    },
+    "pay500|staff2|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 74.44,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 97041,
+        "median": 254583.0,
+        "p90": 390150,
+        "min": -58626,
+        "max": 480664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 53541,
+        "median": 213953.0,
+        "p90": 351650,
+        "min": -93626,
+        "max": 442164
+      }
+    },
+    "pay1500|staff0|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 33.33,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 320374,
+        "median": 521926.5,
+        "p90": 745786,
+        "min": 175983,
+        "max": 802149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 207525,
+        "median": 394389.5,
+        "p90": 640786,
+        "min": 45483,
+        "max": 697149
+      }
+    },
+    "pay1500|staff0|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 368922,
+        "median": 556917.0,
+        "p90": 820786,
+        "min": 198483,
+        "max": 877149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 238422,
+        "median": 430780.0,
+        "p90": 706560,
+        "min": 67983,
+        "max": 772149
+      }
+    },
+    "pay1500|staff0|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 33.33,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 320374,
+        "median": 521926.5,
+        "p90": 745786,
+        "min": 175983,
+        "max": 802149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 207525,
+        "median": 394389.5,
+        "p90": 640786,
+        "min": 45483,
+        "max": 697149
+      }
+    },
+    "pay1500|staff0|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 368922,
+        "median": 556917.0,
+        "p90": 820786,
+        "min": 198483,
+        "max": 877149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 238422,
+        "median": 430780.0,
+        "p90": 706560,
+        "min": 67983,
+        "max": 772149
+      }
+    },
+    "pay1500|staff0|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 33.33,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 320374,
+        "median": 521926.5,
+        "p90": 745786,
+        "min": 175983,
+        "max": 802149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 207525,
+        "median": 394389.5,
+        "p90": 640786,
+        "min": 45483,
+        "max": 697149
+      }
+    },
+    "pay1500|staff0|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 2.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 368922,
+        "median": 556917.0,
+        "p90": 820786,
+        "min": 198483,
+        "max": 877149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 238422,
+        "median": 430780.0,
+        "p90": 706560,
+        "min": 67983,
+        "max": 772149
+      }
+    },
+    "pay1500|staff1|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 45.56,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 240091,
+        "median": 406813.5,
+        "p90": 593845,
+        "min": 115983,
+        "max": 649164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 109591,
+        "median": 287759.5,
+        "p90": 488845,
+        "min": -14517,
+        "max": 537149
+      }
+    },
+    "pay1500|staff1|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 23.33,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 265108,
+        "median": 459716.0,
+        "p90": 660786,
+        "min": 138483,
+        "max": 717149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 140025,
+        "median": 353219.0,
+        "p90": 555786,
+        "min": 7983,
+        "max": 612149
+      }
+    },
+    "pay1500|staff1|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 56.67,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 223402,
+        "median": 384346.0,
+        "p90": 553845,
+        "min": 100983,
+        "max": 619164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 94591,
+        "median": 261563.5,
+        "p90": 448845,
+        "min": -29517,
+        "max": 503664
+      }
+    },
+    "pay1500|staff1|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 30.0,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 247591,
+        "median": 426759.5,
+        "p90": 628845,
+        "min": 123483,
+        "max": 677149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 119608,
+        "median": 314716.0,
+        "p90": 515786,
+        "min": -7017,
+        "max": 572149
+      }
+    },
+    "pay1500|staff1|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 60.0,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 198280,
+        "median": 355050.0,
+        "p90": 519695,
+        "min": 80374,
+        "max": 589164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 77902,
+        "median": 239346.0,
+        "p90": 408845,
+        "min": -44517,
+        "max": 473664
+      }
+    },
+    "pay1500|staff1|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 34.44,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 232591,
+        "median": 400563.5,
+        "p90": 588845,
+        "min": 108483,
+        "max": 641664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 102091,
+        "median": 281509.5,
+        "p90": 483845,
+        "min": -22017,
+        "max": 532149
+      }
+    },
+    "pay1500|staff2|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 70.0,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 139004,
+        "median": 304104.0,
+        "p90": 442576,
+        "min": 374,
+        "max": 529164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 29627,
+        "median": 184257.0,
+        "p90": 337576,
+        "min": -104626,
+        "max": 413664
+      }
+    },
+    "pay1500|staff2|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 54.44,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 190780,
+        "median": 348224.0,
+        "p90": 512195,
+        "min": 75374,
+        "max": 581664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 70402,
+        "median": 233127.0,
+        "p90": 403845,
+        "min": -52017,
+        "max": 466164
+      }
+    },
+    "pay1500|staff2|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 77.78,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 85766,
+        "median": 244621.0,
+        "p90": 386058,
+        "min": -79626,
+        "max": 469164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -34959,
+        "median": 125083.0,
+        "p90": 263150,
+        "min": -184626,
+        "max": 353664
+      }
+    },
+    "pay1500|staff2|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 68.89,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 134004,
+        "median": 297596.5,
+        "p90": 437576,
+        "min": -4626,
+        "max": 521664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 22127,
+        "median": 180200.0,
+        "p90": 332576,
+        "min": -109626,
+        "max": 406164
+      }
+    },
+    "pay1500|staff2|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 83.33,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 30255,
+        "median": 189741.0,
+        "p90": 322149,
+        "min": -159626,
+        "max": 409164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -89734,
+        "median": 72819.0,
+        "p90": 212405,
+        "min": -264626,
+        "max": 293664
+      }
+    },
+    "pay1500|staff2|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 76.67,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 78266,
+        "median": 238371.0,
+        "p90": 378558,
+        "min": -84626,
+        "max": 461664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -42459,
+        "median": 117953.0,
+        "p90": 255650,
+        "min": -189626,
+        "max": 346164
+      }
+    },
+    "pay2500|staff0|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 38.89,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 304025,
+        "median": 512926.5,
+        "p90": 719786,
+        "min": 166983,
+        "max": 776149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 111525,
+        "median": 298389.5,
+        "p90": 544786,
+        "min": -50517,
+        "max": 601149
+      }
+    },
+    "pay2500|staff0|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 6.67,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 356525,
+        "median": 542808.0,
+        "p90": 794786,
+        "min": 189483,
+        "max": 851149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 142422,
+        "median": 334780.0,
+        "p90": 610560,
+        "min": -28017,
+        "max": 676149
+      }
+    },
+    "pay2500|staff0|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 38.89,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 304025,
+        "median": 512926.5,
+        "p90": 719786,
+        "min": 166983,
+        "max": 776149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 111525,
+        "median": 298389.5,
+        "p90": 544786,
+        "min": -50517,
+        "max": 601149
+      }
+    },
+    "pay2500|staff0|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 6.67,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 356525,
+        "median": 542808.0,
+        "p90": 794786,
+        "min": 189483,
+        "max": 851149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 142422,
+        "median": 334780.0,
+        "p90": 610560,
+        "min": -28017,
+        "max": 676149
+      }
+    },
+    "pay2500|staff0|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 38.89,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 304025,
+        "median": 512926.5,
+        "p90": 719786,
+        "min": 166983,
+        "max": 776149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 111525,
+        "median": 298389.5,
+        "p90": 544786,
+        "min": -50517,
+        "max": 601149
+      }
+    },
+    "pay2500|staff0|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 6.67,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 356525,
+        "median": 542808.0,
+        "p90": 794786,
+        "min": 189483,
+        "max": 851149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 142422,
+        "median": 334780.0,
+        "p90": 610560,
+        "min": -28017,
+        "max": 676149
+      }
+    },
+    "pay2500|staff1|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 55.56,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 231091,
+        "median": 394627.0,
+        "p90": 567845,
+        "min": 106983,
+        "max": 630164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 13591,
+        "median": 191759.5,
+        "p90": 392845,
+        "min": -110517,
+        "max": 441149
+      }
+    },
+    "pay2500|staff1|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 30.0,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 253591,
+        "median": 438989.5,
+        "p90": 641581,
+        "min": 129483,
+        "max": 691149
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 44025,
+        "median": 257219.0,
+        "p90": 459786,
+        "min": -88017,
+        "max": 516149
+      }
+    },
+    "pay2500|staff1|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 60.0,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 209280,
+        "median": 364474.0,
+        "p90": 530695,
+        "min": 91983,
+        "max": 600164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -1409,
+        "median": 165563.5,
+        "p90": 352845,
+        "min": -125517,
+        "max": 407664
+      }
+    },
+    "pay2500|staff1|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 34.44,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 238591,
+        "median": 412382.0,
+        "p90": 602845,
+        "min": 114483,
+        "max": 652664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 23608,
+        "median": 218716.0,
+        "p90": 419786,
+        "min": -103017,
+        "max": 476149
+      }
+    },
+    "pay2500|staff1|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 65.56,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 181127,
+        "median": 341291.0,
+        "p90": 496576,
+        "min": 54374,
+        "max": 570164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -18098,
+        "median": 143346.0,
+        "p90": 312845,
+        "min": -140517,
+        "max": 377664
+      }
+    },
+    "pay2500|staff1|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 38.89,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 223591,
+        "median": 388377.0,
+        "p90": 562845,
+        "min": 99483,
+        "max": 622664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": 6091,
+        "median": 185509.5,
+        "p90": 387845,
+        "min": -118017,
+        "max": 436149
+      }
+    },
+    "pay2500|staff2|courses0|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 75.56,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 119280,
+        "median": 281612.0,
+        "p90": 419650,
+        "min": -25626,
+        "max": 510164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -66373,
+        "median": 88257.0,
+        "p90": 241576,
+        "min": -200626,
+        "max": 317664
+      }
+    },
+    "pay2500|staff2|courses0|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 62.22,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 173627,
+        "median": 334734.0,
+        "p90": 491576,
+        "min": 49374,
+        "max": 562664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -25598,
+        "median": 137127.0,
+        "p90": 307845,
+        "min": -148017,
+        "max": 370164
+      }
+    },
+    "pay2500|staff2|courses1|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 80.0,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 66766,
+        "median": 230555.5,
+        "p90": 363905,
+        "min": -105626,
+        "max": 450164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -130959,
+        "median": 29083.0,
+        "p90": 167150,
+        "min": -280626,
+        "max": 257664
+      }
+    },
+    "pay2500|staff2|courses1|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 71.11,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 111780,
+        "median": 275362.0,
+        "p90": 414605,
+        "min": -30626,
+        "max": 502664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -73873,
+        "median": 84200.0,
+        "p90": 236576,
+        "min": -205626,
+        "max": 310164
+      }
+    },
+    "pay2500|staff2|courses2|billcreation": {
+      "n": 90,
+      "first_infeasible_pct": 85.56,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 21255,
+        "median": 171759.0,
+        "p90": 306948,
+        "min": -185626,
+        "max": 390164
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -185734,
+        "median": -23181.0,
+        "p90": 116405,
+        "min": -360626,
+        "max": 197664
+      }
+    },
+    "pay2500|staff2|courses2|billpost_release": {
+      "n": 90,
+      "first_infeasible_pct": 77.78,
+      "cash_end_cents": {
+        "n": 90,
+        "p10": 59266,
+        "median": 223055.5,
+        "p90": 356972,
+        "min": -110626,
+        "max": 442664
+      },
+      "no_future_sales_loan_only_end_cents": {
+        "n": 90,
+        "p10": -138459,
+        "median": 21953.0,
+        "p90": 159650,
+        "min": -285626,
+        "max": 250164
+      }
+    }
+  },
+  "creation_budget_conversion": {
+    "rate2500|cap20000": {
+      "builds": 24,
+      "cash_cents": {
+        "n": 24,
+        "p10": 0,
+        "median": 5000.0,
+        "p90": 10000,
+        "min": 0,
+        "max": 15000
+      },
+      "max_cash_cents": 15000
+    },
+    "rate2500|cap30000": {
+      "builds": 24,
+      "cash_cents": {
+        "n": 24,
+        "p10": 0,
+        "median": 5000.0,
+        "p90": 10000,
+        "min": 0,
+        "max": 15000
+      },
+      "max_cash_cents": 15000
+    },
+    "rate5000|cap20000": {
+      "builds": 24,
+      "cash_cents": {
+        "n": 24,
+        "p10": 0,
+        "median": 10000.0,
+        "p90": 20000,
+        "min": 0,
+        "max": 20000
+      },
+      "max_cash_cents": 20000
+    },
+    "rate5000|cap30000": {
+      "builds": 24,
+      "cash_cents": {
+        "n": 24,
+        "p10": 0,
+        "median": 10000.0,
+        "p90": 20000,
+        "min": 0,
+        "max": 30000
+      },
+      "max_cash_cents": 30000
+    },
+    "rate7500|cap20000": {
+      "builds": 24,
+      "cash_cents": {
+        "n": 24,
+        "p10": 0,
+        "median": 15000.0,
+        "p90": 20000,
+        "min": 0,
+        "max": 20000
+      },
+      "max_cash_cents": 20000
+    },
+    "rate7500|cap30000": {
+      "builds": 24,
+      "cash_cents": {
+        "n": 24,
+        "p10": 0,
+        "median": 15000.0,
+        "p90": 30000,
+        "min": 0,
+        "max": 30000
+      },
+      "max_cash_cents": 30000
+    }
+  },
+  "publisher_ironclad_over_2400_count": {
+    "5": 14,
+    "10": 38,
+    "15": 51
+  },
+  "cult_fan_evolution_sensitivity": {
+    "fans100|loss0.0": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 100,
+        "median": 100.0,
+        "p90": 100,
+        "min": 100,
+        "max": 100
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 37,
+        "median": 37.0,
+        "p90": 37,
+        "min": 37,
+        "max": 37
+      }
+    },
+    "fans100|loss0.15": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 37,
+        "median": 60.0,
+        "p90": 84,
+        "min": 33,
+        "max": 96
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 16,
+        "median": 25.0,
+        "p90": 32,
+        "min": 14,
+        "max": 36
+      }
+    },
+    "fans100|loss0.3": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 0,
+        "median": 19.0,
+        "p90": 67,
+        "min": 0,
+        "max": 92
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 0,
+        "median": 8.0,
+        "p90": 27,
+        "min": 0,
+        "max": 35
+      }
+    },
+    "fans200|loss0.0": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 200,
+        "median": 200.0,
+        "p90": 200,
+        "min": 200,
+        "max": 200
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 60,
+        "median": 60.0,
+        "p90": 60,
+        "min": 60,
+        "max": 60
+      }
+    },
+    "fans200|loss0.15": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 74,
+        "median": 119.0,
+        "p90": 167,
+        "min": 65,
+        "max": 192
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 29,
+        "median": 42.0,
+        "p90": 53,
+        "min": 26,
+        "max": 58
+      }
+    },
+    "fans200|loss0.3": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 0,
+        "median": 38.0,
+        "p90": 134,
+        "min": 0,
+        "max": 183
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 0,
+        "median": 16.0,
+        "p90": 46,
+        "min": 0,
+        "max": 56
+      }
+    },
+    "fans300|loss0.0": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 300,
+        "median": 300.0,
+        "p90": 300,
+        "min": 300,
+        "max": 300
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 75,
+        "median": 75.0,
+        "p90": 75,
+        "min": 75,
+        "max": 75
+      }
+    },
+    "fans300|loss0.15": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 111,
+        "median": 179.0,
+        "p90": 251,
+        "min": 98,
+        "max": 287
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 40,
+        "median": 56.0,
+        "p90": 68,
+        "min": 36,
+        "max": 73
+      }
+    },
+    "fans300|loss0.3": {
+      "remaining_fans": {
+        "n": 90,
+        "p10": 0,
+        "median": 57.0,
+        "p90": 201,
+        "min": 0,
+        "max": 274
+      },
+      "game2_awareness_points": {
+        "n": 90,
+        "p10": 0,
+        "median": 23.0,
+        "p90": 60,
+        "min": 0,
+        "max": 71
+      }
+    }
+  },
+  "synthetic_later_review_sensitivity": {
+    "review50|baseline": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 488,
+        "median": 549.5,
+        "p90": 681,
+        "min": 401,
+        "max": 733
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "review50|buzz10": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 504,
+        "median": 566.5,
+        "p90": 702,
+        "min": 415,
+        "max": 756
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 11188,
+        "median": 12587.0,
+        "p90": 14685,
+        "min": 9091,
+        "max": 16084
+      }
+    },
+    "review50|unknown15": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 464,
+        "median": 524.0,
+        "p90": 650,
+        "min": 381,
+        "max": 698
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": -21679,
+        "median": -18881.0,
+        "p90": -16783,
+        "min": -24476,
+        "max": -13986
+      }
+    },
+    "review50|cult200": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 585,
+        "median": 655.5,
+        "p90": 805,
+        "min": 482,
+        "max": 872
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 67132,
+        "median": 74825.0,
+        "p90": 86713,
+        "min": 55944,
+        "max": 97902
+      }
+    },
+    "review70|baseline": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 684,
+        "median": 769.5,
+        "p90": 954,
+        "min": 562,
+        "max": 1027
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "review70|buzz10": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 706,
+        "median": 793.5,
+        "p90": 983,
+        "min": 581,
+        "max": 1059
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 15385,
+        "median": 17483.0,
+        "p90": 20280,
+        "min": 12587,
+        "max": 23077
+      }
+    },
+    "review70|unknown15": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 650,
+        "median": 734.0,
+        "p90": 911,
+        "min": 534,
+        "max": 978
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": -30769,
+        "median": -26573.0,
+        "p90": -23776,
+        "min": -34266,
+        "max": -19580
+      }
+    },
+    "review70|cult200": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 819,
+        "median": 918.5,
+        "p90": 1127,
+        "min": 675,
+        "max": 1222
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 94405,
+        "median": 104895.0,
+        "p90": 120979,
+        "min": 78321,
+        "max": 136364
+      }
+    },
+    "review91|baseline": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 889,
+        "median": 1000.5,
+        "p90": 1240,
+        "min": 731,
+        "max": 1335
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "review91|buzz10": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 918,
+        "median": 1031.5,
+        "p90": 1278,
+        "min": 755,
+        "max": 1377
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 20280,
+        "median": 23077.0,
+        "p90": 26574,
+        "min": 16783,
+        "max": 29371
+      }
+    },
+    "review91|unknown15": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 845,
+        "median": 954.0,
+        "p90": 1184,
+        "min": 694,
+        "max": 1271
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": -39161,
+        "median": -34266.0,
+        "p90": -30769,
+        "min": -44756,
+        "max": -25874
+      }
+    },
+    "review91|cult200": {
+      "n": 90,
+      "game2_month1_units": {
+        "n": 90,
+        "p10": 1064,
+        "median": 1194.0,
+        "p90": 1465,
+        "min": 877,
+        "max": 1588
+      },
+      "cash_delta_from_awareness_cents": {
+        "n": 90,
+        "p10": 122378,
+        "median": 136363.0,
+        "p90": 157343,
+        "min": 102097,
+        "max": 177622
+      }
+    }
+  },
+  "limitations": [
+    "Trait effects are shadow changes over fixed Godot action routes, not implemented traits",
+    "Unchanged path may become infeasible after expense; negative modeled cash identifies first failure, not a playable state",
+    "Only live Month-1 sales included; no Month-2+ or fan evolution credited",
+    "Salary/bill/course timing is provisional; all raises modeled from first post-release month as an upper expense bound",
+    "Store node purchases cost zero cycles in live source; one-cycle rule must be tested separately",
+    "Changing Awareness does not rerun decisions or snapshot RNG; Review held fixed",
+    "Student Loan 96-month tail has no future sales, bill or payroll in its isolated bound"
+  ]
+}

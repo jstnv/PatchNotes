@@ -1,0 +1,3881 @@
+{
+  "seed": 26092763,
+  "source_revision": "ba616515ed1b039fd0da7cf03f73288fd7ccd8e4",
+  "n": 600,
+  "notes": "Fixed-action Python port, not Godot PRNG/human play. Production and QA use recorded legal hands; perk affordability does not create a new hand in the fixed pair. Candidate salary $100 and bill $75 per month; $25 course raise, zero tuition, one cycle. Hiring is zero cash/zero cycle at Studio or before first Pre-Development, with payroll only while hired. First-game payroll only in explicit prehire sensitivity. Ironclad $400 upfront plus completion-dependent remainder, one offer. Game 2 cash horizon ends at release, before its sales. Expanded all-owned cohort has no unowned Scope-2 reserve and is excluded from cash scenarios.",
+  "summary": {
+    "legal|none": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.925
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 2.0,
+        "p90": 3.9,
+        "mean": 2.209
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 60.5,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 40.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 193805,
+          "median": 256117.0,
+          "p90": 342654,
+          "mean": 263304.38
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 193805,
+          "median": 256117.0,
+          "p90": 342654,
+          "mean": 263304.38
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 193805,
+          "median": 256117.0,
+          "p90": 342654,
+          "mean": 263304.38
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 4.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 9
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 23095,
+          "median": 81435.5,
+          "p90": 167496,
+          "mean": 89554.38
+        }
+      }
+    },
+    "legal|production": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.925
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 2.0,
+        "p90": 3.9,
+        "mean": 2.209
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 60.5,
+      "production_awarded_pct": 60.5,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 20.0,
+        "p90": 55,
+        "mean": 20.1
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 62.0,
+        "p90": 80,
+        "mean": 43.96
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 89.5,
+        "p90": 125,
+        "mean": 64.06
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 89.5,
+        "p90": 135,
+        "mean": 61.065
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 40.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 152060,
+          "median": 217366.5,
+          "p90": 288866,
+          "mean": 219216.88
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 134560,
+          "median": 193970.0,
+          "p90": 262702,
+          "mean": 197566.88
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 107235,
+          "median": 172985.5,
+          "p90": 244783,
+          "mean": 174679.38
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 57.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 105,
+          "Game 2 Feature play": 10
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -71840,
+          "median": -10479.5,
+          "p90": 61018,
+          "mean": -6570.62
+        }
+      }
+    },
+    "legal|qa": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.926
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 2.1,
+        "p90": 3.9,
+        "mean": 2.212
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.002
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.195
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 60.5,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 40.5,
+      "qa_awarded_pct": 40.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.075
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 147046,
+          "median": 202496.0,
+          "p90": 282311,
+          "mean": 206840.74
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 124519,
+          "median": 182945.0,
+          "p90": 252751,
+          "mean": 185190.74
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 97830,
+          "median": 159984.5,
+          "p90": 234783,
+          "mean": 162303.24
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 65.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 108,
+          "Game 2 Feature play": 23
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -81905,
+          "median": -22515.5,
+          "p90": 50158,
+          "mean": -18946.76
+        }
+      }
+    },
+    "legal|contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.925
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 2.0,
+        "p90": 3.9,
+        "mean": 2.209
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 60.5,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 40.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 147046,
+          "median": 202496.0,
+          "p90": 282311,
+          "mean": 206704.38
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 124519,
+          "median": 181827.0,
+          "p90": 252311,
+          "mean": 185054.38
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 97830,
+          "median": 159984.5,
+          "p90": 232591,
+          "mean": 162166.88
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 65.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 108,
+          "Game 2 Feature play": 23
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -81905,
+          "median": -23173.0,
+          "p90": 47751,
+          "mean": -19083.12
+        }
+      }
+    },
+    "legal|production+qa": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.926
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 2.1,
+        "p90": 3.9,
+        "mean": 2.212
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.002
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.195
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 60.5,
+      "production_awarded_pct": 60.5,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 20.0,
+        "p90": 55,
+        "mean": 20.1
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 62.0,
+        "p90": 80,
+        "mean": 43.96
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 89.5,
+        "p90": 125,
+        "mean": 64.06
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 89.5,
+        "p90": 135,
+        "mean": 61.065
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 40.5,
+      "qa_awarded_pct": 40.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.075
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 90353,
+          "median": 159498.5,
+          "p90": 234358,
+          "mean": 162753.24
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 2.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 4
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 27830,
+          "median": 106778.0,
+          "p90": 180950,
+          "mean": 108215.74
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 20.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 41
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -32731,
+          "median": 49053.0,
+          "p90": 120062,
+          "mean": 48678.24
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 100.0,
+        "first_shortfall_stage": {
+          "Game 2 Feature play": 81,
+          "Game 2 month boundary": 113,
+          "Optional Store node": 3,
+          "Optional Store node month boundary": 3
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -217203,
+          "median": -138451.0,
+          "p90": -68142,
+          "mean": -140071.76
+        }
+      }
+    },
+    "legal|production+contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.925
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 2.0,
+        "p90": 3.9,
+        "mean": 2.209
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 60.5,
+      "production_awarded_pct": 60.5,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 20.0,
+        "p90": 55,
+        "mean": 20.1
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 62.0,
+        "p90": 80,
+        "mean": 43.96
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 89.5,
+        "p90": 125,
+        "mean": 64.06
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 89.5,
+        "p90": 135,
+        "mean": 61.065
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 40.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 90353,
+          "median": 159498.5,
+          "p90": 234358,
+          "mean": 162616.88
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 2.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 4
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 27830,
+          "median": 106017.5,
+          "p90": 180950,
+          "mean": 108079.38
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 20.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 41
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -32731,
+          "median": 49053.0,
+          "p90": 120062,
+          "mean": 48541.88
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 100.0,
+        "first_shortfall_stage": {
+          "Game 2 Feature play": 81,
+          "Game 2 month boundary": 113,
+          "Optional Store node": 3,
+          "Optional Store node month boundary": 3
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -217203,
+          "median": -139991.5,
+          "p90": -68142,
+          "mean": -140208.12
+        }
+      }
+    },
+    "legal|qa+contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.926
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 2.1,
+        "p90": 3.9,
+        "mean": 2.212
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.002
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.195
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 60.5,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 40.5,
+      "qa_awarded_pct": 40.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.075
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 83856,
+          "median": 148163.5,
+          "p90": 221965,
+          "mean": 150240.74
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 3.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 7
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 22360,
+          "median": 93675.0,
+          "p90": 164139,
+          "mean": 95703.24
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 24.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 48
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -42174,
+          "median": 36930.0,
+          "p90": 105646,
+          "mean": 36165.74
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 100.0,
+        "first_shortfall_stage": {
+          "Game 2 Feature play": 93,
+          "Game 2 month boundary": 95,
+          "Optional Store node": 6,
+          "Optional Store node month boundary": 6
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 26000,
+          "median": 76000.0,
+          "p90": 120500,
+          "mean": 74127.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -227203,
+          "median": -155672.0,
+          "p90": -82342,
+          "mean": -152584.26
+        }
+      }
+    },
+    "legal|combined": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.8,
+        "p90": 3.4,
+        "mean": 1.926
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 2.1,
+        "p90": 3.9,
+        "mean": 2.212
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.002
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.195
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 60.5,
+      "production_awarded_pct": 60.5,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 20.0,
+        "p90": 55,
+        "mean": 20.1
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 62.0,
+        "p90": 80,
+        "mean": 43.96
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 89.5,
+        "p90": 125,
+        "mean": 64.06
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 89.5,
+        "p90": 135,
+        "mean": 61.065
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 40.5,
+      "qa_awarded_pct": 40.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.075
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 4.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 9
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 27269,
+          "median": 106612.5,
+          "p90": 179405,
+          "mean": 106153.24
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 44.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 88
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -80644,
+          "median": 6907.0,
+          "p90": 84513,
+          "mean": 7465.74
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 95.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 185,
+          "Game 2 Feature play": 6
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -195917,
+          "median": -97760.5,
+          "p90": -13924,
+          "mean": -102459.26
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 100.0,
+        "first_shortfall_stage": {
+          "Optional Store node": 84,
+          "Game 2 Feature play": 69,
+          "Optional Store node month boundary": 24,
+          "Game 2 month boundary": 23
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 28000,
+          "median": 84250.0,
+          "p90": 132500,
+          "mean": 80533.5
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -396392,
+          "median": -296211.5,
+          "p90": -210887,
+          "mean": -298709.26
+        }
+      }
+    },
+    "below_20|none": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.8,
+        "p90": 2.2,
+        "mean": 0.987
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.3,
+        "median": 1.0,
+        "p90": 2.5,
+        "mean": 1.222
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 68.0,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 22.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 292980,
+          "median": 449040.5,
+          "p90": 576793,
+          "mean": 442994.605
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 292980,
+          "median": 449040.5,
+          "p90": 576793,
+          "mean": 442994.605
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 292980,
+          "median": 449040.5,
+          "p90": 576793,
+          "mean": 442994.605
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 121580,
+          "median": 273521.5,
+          "p90": 404378,
+          "mean": 269244.605
+        }
+      }
+    },
+    "below_20|production": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.8,
+        "p90": 2.2,
+        "mean": 0.987
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.3,
+        "median": 1.0,
+        "p90": 2.5,
+        "mean": 1.222
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 68.0,
+      "production_awarded_pct": 68.0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 20.0,
+        "p90": 45,
+        "mean": 18.85
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 16.0,
+        "p90": 78,
+        "mean": 27.25
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 41.0,
+        "p90": 100,
+        "mean": 46.1
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 33.0,
+        "p90": 105,
+        "mean": 43.565
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 22.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 241680,
+          "median": 395254.0,
+          "p90": 536065,
+          "mean": 395411.105
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 214978,
+          "median": 373902.0,
+          "p90": 520118,
+          "mean": 373773.605
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 195028,
+          "median": 343741.5,
+          "p90": 501004,
+          "mean": 350873.605
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 6.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 12
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 9295,
+          "median": 169937.0,
+          "p90": 320118,
+          "mean": 169623.605
+        }
+      }
+    },
+    "below_20|qa": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.8,
+        "p90": 2.2,
+        "mean": 0.988
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.3,
+        "median": 1.0,
+        "p90": 2.5,
+        "mean": 1.226
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.001
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.1
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 68.0,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 22.5,
+      "qa_awarded_pct": 22.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.02
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.01
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 227161,
+          "median": 386299.5,
+          "p90": 531500,
+          "mean": 386514.54
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 206349,
+          "median": 369772.0,
+          "p90": 512518,
+          "mean": 364877.04
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 181978,
+          "median": 336229.0,
+          "p90": 494000,
+          "mean": 341977.04
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 10.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 20
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -438,
+          "median": 163415.0,
+          "p90": 312518,
+          "mean": 160727.04
+        }
+      }
+    },
+    "below_20|contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.8,
+        "p90": 2.2,
+        "mean": 0.987
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.3,
+        "median": 1.0,
+        "p90": 2.5,
+        "mean": 1.222
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 68.0,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 22.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 224478,
+          "median": 386299.5,
+          "p90": 531500,
+          "mean": 386444.605
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 201274,
+          "median": 369772.0,
+          "p90": 512518,
+          "mean": 364807.105
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 181978,
+          "median": 336229.0,
+          "p90": 494000,
+          "mean": 341907.105
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 11.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 22
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -4105,
+          "median": 163415.0,
+          "p90": 312518,
+          "mean": 160657.105
+        }
+      }
+    },
+    "below_20|production+qa": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.8,
+        "p90": 2.2,
+        "mean": 0.988
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.3,
+        "median": 1.0,
+        "p90": 2.5,
+        "mean": 1.226
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.001
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.1
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 68.0,
+      "production_awarded_pct": 68.0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 20.0,
+        "p90": 45,
+        "mean": 18.85
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 16.0,
+        "p90": 78,
+        "mean": 27.25
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 41.0,
+        "p90": 100,
+        "mean": 46.1
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 33.0,
+        "p90": 105,
+        "mean": 43.565
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 22.5,
+      "qa_awarded_pct": 22.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.02
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.01
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 180534,
+          "median": 332310.5,
+          "p90": 493902,
+          "mean": 338931.04
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 125795,
+          "median": 277320.0,
+          "p90": 445500,
+          "mean": 284393.54
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 2.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 4
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 63088,
+          "median": 223768.5,
+          "p90": 393000,
+          "mean": 224856.04
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 40.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 73,
+          "Game 2 Feature play": 7
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -133354,
+          "median": 31234.0,
+          "p90": 205823,
+          "mean": 36106.04
+        }
+      }
+    },
+    "below_20|production+contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.8,
+        "p90": 2.2,
+        "mean": 0.987
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.3,
+        "median": 1.0,
+        "p90": 2.5,
+        "mean": 1.222
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 68.0,
+      "production_awarded_pct": 68.0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 20.0,
+        "p90": 45,
+        "mean": 18.85
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 16.0,
+        "p90": 78,
+        "mean": 27.25
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 41.0,
+        "p90": 100,
+        "mean": 46.1
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 33.0,
+        "p90": 105,
+        "mean": 43.565
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 22.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 180534,
+          "median": 332310.5,
+          "p90": 493902,
+          "mean": 338861.105
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 125795,
+          "median": 277320.0,
+          "p90": 445500,
+          "mean": 284323.605
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 2.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 4
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 63088,
+          "median": 223768.5,
+          "p90": 393000,
+          "mean": 224786.105
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 40.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 73,
+          "Game 2 Feature play": 7
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -133354,
+          "median": 31234.0,
+          "p90": 205823,
+          "mean": 36036.105
+        }
+      }
+    },
+    "below_20|qa+contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.8,
+        "p90": 2.2,
+        "mean": 0.988
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.3,
+        "median": 1.0,
+        "p90": 2.5,
+        "mean": 1.226
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.001
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.1
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 68.0,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 22.5,
+      "qa_awarded_pct": 22.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.02
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.01
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 166311,
+          "median": 322164.5,
+          "p90": 488765,
+          "mean": 329964.54
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 113811,
+          "median": 267835.0,
+          "p90": 437102,
+          "mean": 275427.04
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 2.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 5
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 56311,
+          "median": 209664.5,
+          "p90": 381500,
+          "mean": 215889.54
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 42.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 75,
+          "Game 2 Feature play": 9
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 121000,
+          "median": 315000.0,
+          "p90": 503000,
+          "mean": 322240
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -143154,
+          "median": 19104.0,
+          "p90": 198923,
+          "mean": 27139.54
+        }
+      }
+    },
+    "below_20|combined": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.8,
+        "p90": 2.2,
+        "mean": 0.988
+      },
+      "review2": {
+        "n": 200,
+        "p10": 0.3,
+        "median": 1.0,
+        "p90": 2.5,
+        "mean": 1.226
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.001
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.1
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 68.0,
+      "production_awarded_pct": 68.0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 20.0,
+        "p90": 45,
+        "mean": 18.85
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 16.0,
+        "p90": 78,
+        "mean": 27.25
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 41.0,
+        "p90": 100,
+        "mean": 46.1
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 33.0,
+        "p90": 105,
+        "mean": 43.565
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 22.5,
+      "qa_awarded_pct": 22.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.02
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.01
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "finance_courses0_node0": {
+        "shortfall_pct": 0.0,
+        "first_shortfall_stage": {},
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 121680,
+          "median": 279221.0,
+          "p90": 453000,
+          "mean": 282381.04
+        }
+      },
+      "finance_courses1_node0": {
+        "shortfall_pct": 8.5,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 17
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": 9794,
+          "median": 181123.0,
+          "p90": 368118,
+          "mean": 183706.04
+        }
+      },
+      "finance_courses2_node0": {
+        "shortfall_pct": 30.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 60
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -109412,
+          "median": 65903.0,
+          "p90": 265500,
+          "mean": 73768.54
+        }
+      },
+      "finance_courses2_node1": {
+        "shortfall_pct": 81.0,
+        "first_shortfall_stage": {
+          "Game 2 month boundary": 110,
+          "Game 2 Feature play": 41,
+          "Optional Store node": 4,
+          "Optional Store node month boundary": 7
+        },
+        "studio_cash_cents": {
+          "n": 200,
+          "p10": 128000,
+          "median": 320350.0,
+          "p90": 506800,
+          "mean": 326850
+        },
+        "game2_release_cash_cents": {
+          "n": 200,
+          "p10": -307482,
+          "median": -125870.5,
+          "p90": 73118,
+          "mean": -122481.46
+        }
+      }
+    },
+    "expanded|none": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.45,
+        "p90": 5.8,
+        "mean": 3.494
+      },
+      "review2": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.4,
+        "p90": 5.8,
+        "mean": 3.448
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 37.0,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 43.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|production": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.45,
+        "p90": 5.8,
+        "mean": 3.494
+      },
+      "review2": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.4,
+        "p90": 5.8,
+        "mean": 3.448
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 37.0,
+      "production_awarded_pct": 37.0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 55,
+        "mean": 14.825
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 80,
+        "mean": 29.47
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 135,
+        "mean": 44.295
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 135,
+        "mean": 46.05
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 43.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|qa": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.5,
+        "p90": 5.8,
+        "mean": 3.517
+      },
+      "review2": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.5,
+        "p90": 5.8,
+        "mean": 3.465
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.10000000000000009,
+        "mean": 0.022
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 11,
+        "mean": 2.4
+      },
+      "cross5_up_pct": 0.5,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 37.0,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 43.5,
+      "qa_awarded_pct": 43.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 1,
+        "mean": 0.21
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.06
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.45,
+        "p90": 5.8,
+        "mean": 3.494
+      },
+      "review2": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.4,
+        "p90": 5.8,
+        "mean": 3.448
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 37.0,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 43.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|production+qa": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.5,
+        "p90": 5.8,
+        "mean": 3.517
+      },
+      "review2": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.5,
+        "p90": 5.8,
+        "mean": 3.465
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.10000000000000009,
+        "mean": 0.022
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 11,
+        "mean": 2.4
+      },
+      "cross5_up_pct": 0.5,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 37.0,
+      "production_awarded_pct": 37.0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 55,
+        "mean": 14.825
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 80,
+        "mean": 29.47
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 135,
+        "mean": 44.295
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 135,
+        "mean": 46.05
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 43.5,
+      "qa_awarded_pct": 43.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 1,
+        "mean": 0.21
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.06
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|production+contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.45,
+        "p90": 5.8,
+        "mean": 3.494
+      },
+      "review2": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.4,
+        "p90": 5.8,
+        "mean": 3.448
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "mean": 0.0
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "cross5_up_pct": 0.0,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 37.0,
+      "production_awarded_pct": 37.0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 55,
+        "mean": 14.825
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 80,
+        "mean": 29.47
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 135,
+        "mean": 44.295
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 135,
+        "mean": 46.05
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 43.5,
+      "qa_awarded_pct": 0,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|qa+contracts": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.5,
+        "p90": 5.8,
+        "mean": 3.517
+      },
+      "review2": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.5,
+        "p90": 5.8,
+        "mean": 3.465
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.10000000000000009,
+        "mean": 0.022
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 11,
+        "mean": 2.4
+      },
+      "cross5_up_pct": 0.5,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 37.0,
+      "production_awarded_pct": 0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 43.5,
+      "qa_awarded_pct": 43.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 1,
+        "mean": 0.21
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.06
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|combined": {
+      "n": 200,
+      "review1": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.5,
+        "p90": 5.8,
+        "mean": 3.517
+      },
+      "review2": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.5,
+        "p90": 5.8,
+        "mean": 3.465
+      },
+      "review_delta": {
+        "n": 200,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.10000000000000009,
+        "mean": 0.022
+      },
+      "units_delta": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 11,
+        "mean": 2.4
+      },
+      "cross5_up_pct": 0.5,
+      "cross7_up_pct": 0.0,
+      "production_challenge_opportunity_pct": 37.0,
+      "production_awarded_pct": 37.0,
+      "production_permanent_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 55,
+        "mean": 14.825
+      },
+      "production_temporary_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 80,
+        "mean": 29.47
+      },
+      "production_savings_game1_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 135,
+        "mean": 44.295
+      },
+      "production_savings_game2_dollars": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 135,
+        "mean": 46.05
+      },
+      "production_gross_net_affordability_opportunities": 0,
+      "qa_challenge_opportunity_pct": 43.5,
+      "qa_awarded_pct": 43.5,
+      "qa_extra_fixes": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 1,
+        "mean": 0.21
+      },
+      "qa_extra_found": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.06
+      },
+      "contract_challenge_opportunity_pct": 0.0,
+      "contract_extra_restored": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "contract_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    }
+  },
+  "sensitivity": {
+    "production_cap40_rate10": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 29.0,
+        "p90": 93,
+        "mean": 37.288
+      }
+    },
+    "production_cap40_rate20": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 38.0,
+        "p90": 120,
+        "mean": 49.218
+      }
+    },
+    "production_cap40_rate30": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 45.5,
+        "p90": 120,
+        "mean": 52.942
+      }
+    },
+    "production_cap60_rate10": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 29.0,
+        "p90": 100,
+        "mean": 39.555
+      }
+    },
+    "production_cap60_rate20": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 38.0,
+        "p90": 125,
+        "mean": 51.485
+      }
+    },
+    "production_cap60_rate30": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 46.0,
+        "p90": 125,
+        "mean": 55.208
+      }
+    },
+    "production_cap80_rate10": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 29.0,
+        "p90": 104,
+        "mean": 40.48
+      }
+    },
+    "production_cap80_rate20": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 38.0,
+        "p90": 125,
+        "mean": 52.41
+      }
+    },
+    "production_cap80_rate30": {
+      "challenge_pct": 55.17,
+      "savings_dollars": {
+        "n": 600,
+        "p10": 0,
+        "median": 46.0,
+        "p90": 125,
+        "mean": 56.133
+      }
+    },
+    "legal|deliberate_restore0": {
+      "n": 200,
+      "challenge_pct": 12.5,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 194166,
+        "median": 223333.0,
+        "p90": 240000,
+        "mean": 220937.225
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "legal|deliberate_restore1": {
+      "n": 200,
+      "challenge_pct": 12.5,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 1,
+        "mean": 0.125
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 194166,
+        "median": 223333.0,
+        "p90": 240000,
+        "mean": 220895.56
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": -41.665
+      }
+    },
+    "legal|deliberate_restore2": {
+      "n": 200,
+      "challenge_pct": 12.5,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 2,
+        "mean": 0.25
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 194166,
+        "median": 223333.0,
+        "p90": 240000,
+        "mean": 220937.225
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "below_20|deliberate_restore0": {
+      "n": 200,
+      "challenge_pct": 34.0,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 156666,
+        "median": 194166.0,
+        "p90": 231666,
+        "mean": 191916.32
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "below_20|deliberate_restore1": {
+      "n": 200,
+      "challenge_pct": 34.0,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 1,
+        "mean": 0.34
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 156666,
+        "median": 194166.0,
+        "p90": 231666,
+        "mean": 191791.335
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": -124.985
+      }
+    },
+    "below_20|deliberate_restore2": {
+      "n": 200,
+      "challenge_pct": 34.0,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 2,
+        "mean": 0.68
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 156666,
+        "median": 194166.0,
+        "p90": 231666,
+        "mean": 191833.005
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": -83.315
+      }
+    },
+    "expanded|deliberate_restore0": {
+      "n": 200,
+      "challenge_pct": 1.5,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 215000,
+        "median": 231666.0,
+        "p90": 240000,
+        "mean": 229426.87
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|deliberate_restore1": {
+      "n": 200,
+      "challenge_pct": 1.5,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.015
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 215000,
+        "median": 231666.0,
+        "p90": 240000,
+        "mean": 229426.87
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "expanded|deliberate_restore2": {
+      "n": 200,
+      "challenge_pct": 1.5,
+      "actual_extra_redraws": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0.03
+      },
+      "payout_cents": {
+        "n": 200,
+        "p10": 215000,
+        "median": 231666.0,
+        "p90": 240000,
+        "mean": 229426.87
+      },
+      "paired_payout_delta_cents": {
+        "n": 200,
+        "p10": 0,
+        "median": 0.0,
+        "p90": 0,
+        "mean": 0
+      }
+    },
+    "legal|qa_policy_negative_controls": {
+      "new_one_search_challenge_pct": 40.5,
+      "old_two_search_challenge_pct": 8.0,
+      "marketing_first_challenge_pct": 9.5,
+      "marketing_first_extra_fixes_total": 10,
+      "marketing_first_review": {
+        "n": 200,
+        "p10": 0.7,
+        "median": 1.6,
+        "p90": 2.9,
+        "mean": 1.734
+      }
+    },
+    "below_20|qa_policy_negative_controls": {
+      "new_one_search_challenge_pct": 22.5,
+      "old_two_search_challenge_pct": 2.5,
+      "marketing_first_challenge_pct": 15.5,
+      "marketing_first_extra_fixes_total": 8,
+      "marketing_first_review": {
+        "n": 200,
+        "p10": 0.2,
+        "median": 0.75,
+        "p90": 2.0,
+        "mean": 0.924
+      }
+    },
+    "expanded|qa_policy_negative_controls": {
+      "new_one_search_challenge_pct": 43.5,
+      "old_two_search_challenge_pct": 18.0,
+      "marketing_first_challenge_pct": 9.0,
+      "marketing_first_extra_fixes_total": 12,
+      "marketing_first_review": {
+        "n": 200,
+        "p10": 1.2,
+        "median": 3.1,
+        "p90": 4.4,
+        "mean": 2.919
+      }
+    }
+  },
+  "fixed_action_checks": {
+    "one_search_later_debug": true,
+    "zero_hidden_no_challenge": true,
+    "old_two_search_negative_control": true
+  }
+}

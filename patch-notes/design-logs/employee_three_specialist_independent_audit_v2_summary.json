@@ -1,0 +1,59 @@
+{
+  "status": "independent raw aggregation; finance timing sensitivity reuses archived model",
+  "cohort_counts": {
+    "legal": 200,
+    "below_20": 200,
+    "expanded": 200
+  },
+  "source_sha256": {
+    "employee_three_specialist_trial_v1_raw.json.gz": "ba9ec8e187ca234d6b64d0fc26bee2f1a72da7a681b119e9a2323256f0eb68b3",
+    "employee_three_specialist_trial_v1_summary.json": "a3ad15020296f1d2448bbb4b9b702d35943855a8cd06ea010c249ae6b8d3baad",
+    "card_ledger.json": "0f093b0ba907043120c3e6e529511322e6e0b99358adf6d69c80d5c174cfc83c"
+  },
+  "production_legal_opportunities": 121,
+  "production_legal_savings_mean_dollars": 64.06,
+  "qa_legal_challenges": 81,
+  "qa_legal_extra_fixes": 15,
+  "qa_legal_extra_found": 0,
+  "qa_legal_remaining_bug_delta_mean": -0.03,
+  "qa_legal_review_delta_mean": 0.0015000000000000013,
+  "contract_ordinary_legal_opportunities": 0,
+  "contract_deliberate_legal_opportunities": 25,
+  "contract_deliberate_payout_delta_mean_cents": 0,
+  "optional_node_two_course_shortfall_pct": {
+    "none": 4.5,
+    "production": 57.5,
+    "qa": 65.5,
+    "contracts": 65.5,
+    "combined": 100.0
+  },
+  "checked_monthly_boundaries": 215900,
+  "checked_ironclad_payouts": 20000,
+  "timing_sensitivity_model_only": {
+    "none": {
+      "archived_same_bill_one_cycle_store_shortfall_pct": 4.5,
+      "next_bill_raise_one_cycle_store_shortfall_pct": 4.5,
+      "same_bill_zero_cycle_store_shortfall_pct": 3.5
+    },
+    "production": {
+      "archived_same_bill_one_cycle_store_shortfall_pct": 57.5,
+      "next_bill_raise_one_cycle_store_shortfall_pct": 53.5,
+      "same_bill_zero_cycle_store_shortfall_pct": 48.5
+    },
+    "qa": {
+      "archived_same_bill_one_cycle_store_shortfall_pct": 65.5,
+      "next_bill_raise_one_cycle_store_shortfall_pct": 61.0,
+      "same_bill_zero_cycle_store_shortfall_pct": 58.5
+    },
+    "contracts": {
+      "archived_same_bill_one_cycle_store_shortfall_pct": 65.5,
+      "next_bill_raise_one_cycle_store_shortfall_pct": 61.0,
+      "same_bill_zero_cycle_store_shortfall_pct": 59.0
+    },
+    "combined": {
+      "archived_same_bill_one_cycle_store_shortfall_pct": 100.0,
+      "next_bill_raise_one_cycle_store_shortfall_pct": 100.0,
+      "same_bill_zero_cycle_store_shortfall_pct": 100.0
+    }
+  }
+}

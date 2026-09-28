@@ -38,9 +38,10 @@ def month_one_units(review_tenths: int, awareness: int, market_bp: int) -> int:
 
 @lru_cache(maxsize=None)
 def organic_awareness_bp(launch_awareness: int, review_tenths: int,
-                         month: int, retention_shift_bp: int = 0) -> int:
+                         month: int, retention_shift_bp: int = 0,
+                         discovery_carryover_bp: int = 0) -> int:
     assert month >= 2
-    value = launch_awareness * 5_000  # Month 2 = half launch, in 1/10,000 points.
+    value = launch_awareness * 5_000 + 200 * discovery_carryover_bp
     retention_bp = 2_500 + 55 * review_tenths + retention_shift_bp
     assert 0 <= retention_bp <= 10_000
     for _ in range(2, month):
@@ -51,7 +52,9 @@ def organic_awareness_bp(launch_awareness: int, review_tenths: int,
 @lru_cache(maxsize=None)
 def later_units(review_tenths: int, launch_awareness: int, market_bp: int,
                 month: int, prior_campaigns: int = -1, boost_bp: int = 1_000,
-                boost_reference: str = "launch", retention_shift_bp: int = 0) -> tuple[int, int, int]:
+                boost_reference: str = "launch", retention_shift_bp: int = 0,
+                discovery_carryover_bp: int = 0,
+                boost_mode: str = "percent") -> tuple[int, int, int]:
     """Return units, organic Awareness basis points, active Awareness basis points.
 
     Unlike locked Month 1, the candidate later-month curve uses current Awareness
@@ -59,20 +62,25 @@ def later_units(review_tenths: int, launch_awareness: int, market_bp: int,
     an interpretation of existing gameplay. Fractional Awareness is floored to 4dp.
     """
     organic = organic_awareness_bp(launch_awareness, review_tenths, month,
-                                   retention_shift_bp)
+                                   retention_shift_bp, discovery_carryover_bp)
     active = organic
     if prior_campaigns >= 0:
-        reference = launch_awareness * 10_000 if boost_reference == "launch" else organic
-        active += reference * boost_bp // (10_000 * (prior_campaigns + 1))
+        if boost_mode == "fixed10":
+            active += 100_000 // (prior_campaigns + 1)
+        else:
+            assert boost_mode == "percent"
+            reference = launch_awareness * 10_000 if boost_reference == "launch" else organic
+            active += reference * boost_bp // (10_000 * (prior_campaigns + 1))
     units = 500 * review_tenths * active * market_bp // (70 * 200 * 10_000 * 10_000)
     return units, organic, active
 
 
 @lru_cache(maxsize=None)
 def first_dormant_month(review_tenths: int, awareness: int, market_bp: int,
-                        limit: int = 120) -> int | None:
+                        limit: int = 120, discovery_carryover_bp: int = 0) -> int | None:
     for month in range(2, limit + 1):
-        if later_units(review_tenths, awareness, market_bp, month)[0] == 0:
+        if later_units(review_tenths, awareness, market_bp, month,
+                       discovery_carryover_bp=discovery_carryover_bp)[0] == 0:
             return month
     return None
 
@@ -95,14 +103,17 @@ def simulate(row: dict, review_tenths: int, launch_awareness: int,
              campaign_policy: str, employees: int = 1, optional_node: bool = False,
              boost_bp: int = 1_000, campaign_cents: int = CAMPAIGN_CENTS,
              boost_reference: str = "launch", retention_shift_bp: int = 0,
-             insert_matched_slots: bool = True) -> dict:
+             insert_matched_slots: bool = True,
+             discovery_carryover_bp: int = 0,
+             boost_mode: str = "percent",
+             ironclad_guarantee: bool = False) -> dict:
     """Run a matched action calendar, with campaign slots as neutral actions in control.
 
     Unaffordable campaigns fall back to neutral actions. Other hypothetical expenses
     continue below zero solely to measure the first shortfall, never as gameplay.
     """
     cycle = row["alignment"]
-    cash = studio_cash_at_release(row)
+    cash = studio_cash_at_release(row) + (40_000 if ironclad_guarantee else 0)
     min_cash = cash
     first_shortfall = None
     initial = release(review_tenths, launch_awareness, row["market_bp"])
@@ -124,7 +135,8 @@ def simulate(row: dict, review_tenths: int, launch_awareness: int,
             slot_months.update(range(2, HORIZON_BOUNDARIES + 2))
         elif campaign_policy == "dormant":
             dormant = first_dormant_month(review_tenths, launch_awareness,
-                                          row["market_bp"])
+                                          row["market_bp"],
+                                          discovery_carryover_bp=discovery_carryover_bp)
             if dormant:
                 slot_months.add(dormant)
         # Control arms receive the same slots supplied by the caller's policy.
@@ -135,7 +147,8 @@ def simulate(row: dict, review_tenths: int, launch_awareness: int,
         reserved_slots = set(range(2, HORIZON_BOUNDARIES + 2))
     elif campaign_policy == "none_dormant":
         dormant = first_dormant_month(review_tenths, launch_awareness,
-                                      row["market_bp"])
+                                      row["market_bp"],
+                                      discovery_carryover_bp=discovery_carryover_bp)
         reserved_slots = {dormant} if dormant else set()
 
     def mark_shortfall(stage: str):
@@ -170,7 +183,8 @@ def simulate(row: dict, review_tenths: int, launch_awareness: int,
                 # The matched non-campaign productive action supplies this cycle.
                 pass
         elif action == "contract_2":
-            cash += row["contract"]["payout_cents"]
+            cash += (200_000 * row["contract"]["numerator"] // 96
+                     if ironclad_guarantee else row["contract"]["payout_cents"])
         elif action == "reserve":
             cash -= 45_000
         elif action == "store_node":
@@ -194,7 +208,8 @@ def simulate(row: dict, review_tenths: int, launch_awareness: int,
                 units, organic_bp, active_bp = later_units(
                     game["review_tenths"], game["awareness"], game["market_bp"],
                     m, game["campaign_months"].get(m, -1), boost_bp,
-                    boost_reference, retention_shift_bp)
+                    boost_reference, retention_shift_bp,
+                    discovery_carryover_bp, boost_mode)
             current_month_units = units * k // 2
             previous_month_units = units * (k - 1) // 2
             game["earned_units"] += current_month_units - previous_month_units

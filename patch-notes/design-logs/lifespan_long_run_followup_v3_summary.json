@@ -1,0 +1,550 @@
+{
+  "source_revision": "ba616515ed1b039fd0da7cf03f73288fd7ccd8e4",
+  "source": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes\\design-logs\\overnight_current_playtest_v1_raw_traces.zip",
+  "paired_godot_two_release_rows": 90,
+  "scenario_rows": 810,
+  "carryover": {
+    "0": {
+      "n": 90,
+      "control_end_cash_cents": {
+        "n": 90,
+        "p10": 305173,
+        "median": 679530.5,
+        "p90": 993892,
+        "min": 210431,
+        "max": 1404959
+      },
+      "control_total_units": {
+        "n": 90,
+        "p10": 254,
+        "median": 799.0,
+        "p90": 1283,
+        "min": 144,
+        "max": 1904
+      },
+      "game1_first_zero_age_month": {
+        "n": 90,
+        "p10": 5,
+        "median": 7.0,
+        "p90": 9,
+        "min": 4,
+        "max": 11
+      },
+      "game2_first_zero_age_month": {
+        "n": 90,
+        "p10": 5,
+        "median": 7.0,
+        "p90": 9,
+        "min": 4,
+        "max": 12
+      },
+      "campaign_end_cash_delta_cents": {
+        "n": 90,
+        "p10": -7902,
+        "median": -3706.5,
+        "p90": 1189,
+        "min": -8602,
+        "max": 6783
+      },
+      "campaign_profitable_pct": 14.444444444444445,
+      "first_negative_count": 0
+    },
+    "1500": {
+      "n": 90,
+      "control_end_cash_cents": {
+        "n": 90,
+        "p10": 328249,
+        "median": 755953.0,
+        "p90": 1105082,
+        "min": 223718,
+        "max": 1596566
+      },
+      "control_total_units": {
+        "n": 90,
+        "p10": 284,
+        "median": 903.5,
+        "p90": 1441,
+        "min": 162,
+        "max": 2178
+      },
+      "game1_first_zero_age_month": {
+        "n": 90,
+        "p10": 5,
+        "median": 7.0,
+        "p90": 9,
+        "min": 5,
+        "max": 12
+      },
+      "game2_first_zero_age_month": {
+        "n": 90,
+        "p10": 5,
+        "median": 7.0,
+        "p90": 10,
+        "min": 5,
+        "max": 12
+      },
+      "campaign_end_cash_delta_cents": {
+        "n": 90,
+        "p10": -7902,
+        "median": -3356.5,
+        "p90": 1189,
+        "min": -8602,
+        "max": 6783
+      },
+      "campaign_profitable_pct": 15.555555555555555,
+      "first_negative_count": 0
+    },
+    "3000": {
+      "n": 90,
+      "control_end_cash_cents": {
+        "n": 90,
+        "p10": 351325,
+        "median": 827981.0,
+        "p90": 1216269,
+        "min": 239802,
+        "max": 1790272
+      },
+      "control_total_units": {
+        "n": 90,
+        "p10": 314,
+        "median": 1008.5,
+        "p90": 1603,
+        "min": 176,
+        "max": 2455
+      },
+      "game1_first_zero_age_month": {
+        "n": 90,
+        "p10": 6,
+        "median": 7.0,
+        "p90": 10,
+        "min": 5,
+        "max": 13
+      },
+      "game2_first_zero_age_month": {
+        "n": 90,
+        "p10": 6,
+        "median": 8.0,
+        "p90": 10,
+        "min": 5,
+        "max": 13
+      },
+      "campaign_end_cash_delta_cents": {
+        "n": 90,
+        "p10": -7902,
+        "median": -3706.0,
+        "p90": 1188,
+        "min": -8602,
+        "max": 6783
+      },
+      "campaign_profitable_pct": 14.444444444444445,
+      "first_negative_count": 0
+    }
+  },
+  "campaign_cost_sensitivity_15pct": {
+    "5000": {
+      "n": 90,
+      "delta_cents": {
+        "n": 90,
+        "p10": -2902,
+        "median": 1643.5,
+        "p90": 6189,
+        "min": -3602,
+        "max": 11783
+      },
+      "profitable_pct": 60.0
+    },
+    "10000": {
+      "n": 90,
+      "delta_cents": {
+        "n": 90,
+        "p10": -7902,
+        "median": -3356.5,
+        "p90": 1189,
+        "min": -8602,
+        "max": 6783
+      },
+      "profitable_pct": 15.56
+    },
+    "20000": {
+      "n": 90,
+      "delta_cents": {
+        "n": 90,
+        "p10": -17902,
+        "median": -13356.5,
+        "p90": -8811,
+        "min": -18602,
+        "max": -3217
+      },
+      "profitable_pct": 0.0
+    }
+  },
+  "opportunity_bounds": {
+    "game2_first_boundary_delay_cents": {
+      "n": 90,
+      "p10": 33566,
+      "median": 102447.0,
+      "p90": 185314,
+      "min": 19580,
+      "max": 255245
+    },
+    "game2_full_month1_net_cents": {
+      "n": 90,
+      "p10": 67132,
+      "median": 204195.0,
+      "p90": 369929,
+      "min": 39160,
+      "max": 510489
+    },
+    "store_success_count": 90,
+    "store_current_cycle_cost": 0,
+    "ironclad_paid_payout_cents": {
+      "n": 90,
+      "p10": 165000,
+      "median": 210833.0,
+      "p90": 240000,
+      "min": 156666,
+      "max": 240000
+    },
+    "campaign_100_dominates_ironclad_count": 0
+  },
+  "robustness": {
+    "review1|awareness25|carry0": {
+      "first_zero_age_month": 2,
+      "dormant_revival_units": 0,
+      "first_campaign_delta_cents": -10000,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -230000,
+      "same_month_second_attempt_last_wins_units": 0,
+      "same_month_additive_awareness_points": 15
+    },
+    "review1|awareness25|carry1500": {
+      "first_zero_age_month": 3,
+      "dormant_revival_units": 0,
+      "first_campaign_delta_cents": -10000,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -230000,
+      "same_month_second_attempt_last_wins_units": 1,
+      "same_month_additive_awareness_points": 15
+    },
+    "review1|awareness25|carry3000": {
+      "first_zero_age_month": 3,
+      "dormant_revival_units": 1,
+      "first_campaign_delta_cents": -10000,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -230000,
+      "same_month_second_attempt_last_wins_units": 2,
+      "same_month_additive_awareness_points": 15
+    },
+    "review1|awareness100|carry0": {
+      "first_zero_age_month": 3,
+      "dormant_revival_units": 0,
+      "first_campaign_delta_cents": -9301,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -229301,
+      "same_month_second_attempt_last_wins_units": 1,
+      "same_month_additive_awareness_points": 15
+    },
+    "review1|awareness100|carry1500": {
+      "first_zero_age_month": 3,
+      "dormant_revival_units": 1,
+      "first_campaign_delta_cents": -9301,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -229301,
+      "same_month_second_attempt_last_wins_units": 3,
+      "same_month_additive_awareness_points": 15
+    },
+    "review1|awareness100|carry3000": {
+      "first_zero_age_month": 4,
+      "dormant_revival_units": 0,
+      "first_campaign_delta_cents": -9300,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -229300,
+      "same_month_second_attempt_last_wins_units": 4,
+      "same_month_additive_awareness_points": 15
+    },
+    "review1|awareness325|carry0": {
+      "first_zero_age_month": 4,
+      "dormant_revival_units": 0,
+      "first_campaign_delta_cents": -9301,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -229301,
+      "same_month_second_attempt_last_wins_units": 5,
+      "same_month_additive_awareness_points": 15
+    },
+    "review1|awareness325|carry1500": {
+      "first_zero_age_month": 4,
+      "dormant_revival_units": 0,
+      "first_campaign_delta_cents": -9300,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -229300,
+      "same_month_second_attempt_last_wins_units": 7,
+      "same_month_additive_awareness_points": 15
+    },
+    "review1|awareness325|carry3000": {
+      "first_zero_age_month": 4,
+      "dormant_revival_units": 0,
+      "first_campaign_delta_cents": -9301,
+      "repeat_profitable_count": 0,
+      "repeat_total_delta_cents": -229301,
+      "same_month_second_attempt_last_wins_units": 8,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness25|carry0": {
+      "first_zero_age_month": 7,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2588,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -188745,
+      "same_month_second_attempt_last_wins_units": 31,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness25|carry1500": {
+      "first_zero_age_month": 9,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2587,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -186649,
+      "same_month_second_attempt_last_wins_units": 84,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness25|carry3000": {
+      "first_zero_age_month": 10,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2588,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -187347,
+      "same_month_second_attempt_last_wins_units": 138,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness100|carry0": {
+      "first_zero_age_month": 9,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2588,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -186645,
+      "same_month_second_attempt_last_wins_units": 98,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness100|carry1500": {
+      "first_zero_age_month": 10,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2588,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -188046,
+      "same_month_second_attempt_last_wins_units": 151,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness100|carry3000": {
+      "first_zero_age_month": 11,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2588,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -188744,
+      "same_month_second_attempt_last_wins_units": 205,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness325|carry0": {
+      "first_zero_age_month": 11,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2587,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -188045,
+      "same_month_second_attempt_last_wins_units": 299,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness325|carry1500": {
+      "first_zero_age_month": 12,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2588,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -188045,
+      "same_month_second_attempt_last_wins_units": 352,
+      "same_month_additive_awareness_points": 15
+    },
+    "review50|awareness325|carry3000": {
+      "first_zero_age_month": 12,
+      "dormant_revival_units": 18,
+      "first_campaign_delta_cents": 2587,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -189444,
+      "same_month_second_attempt_last_wins_units": 406,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness25|carry0": {
+      "first_zero_age_month": 10,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7482,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -167767,
+      "same_month_second_attempt_last_wins_units": 43,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness25|carry1500": {
+      "first_zero_age_month": 13,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7483,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -165670,
+      "same_month_second_attempt_last_wins_units": 118,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness25|carry3000": {
+      "first_zero_age_month": 14,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7482,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -167066,
+      "same_month_second_attempt_last_wins_units": 193,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness100|carry0": {
+      "first_zero_age_month": 13,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7483,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -167766,
+      "same_month_second_attempt_last_wins_units": 137,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness100|carry1500": {
+      "first_zero_age_month": 14,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7482,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -167767,
+      "same_month_second_attempt_last_wins_units": 212,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness100|carry3000": {
+      "first_zero_age_month": 15,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7483,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -164971,
+      "same_month_second_attempt_last_wins_units": 287,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness325|carry0": {
+      "first_zero_age_month": 16,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7483,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -163569,
+      "same_month_second_attempt_last_wins_units": 418,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness325|carry1500": {
+      "first_zero_age_month": 16,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7482,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -166369,
+      "same_month_second_attempt_last_wins_units": 493,
+      "same_month_additive_awareness_points": 15
+    },
+    "review70|awareness325|carry3000": {
+      "first_zero_age_month": 16,
+      "dormant_revival_units": 25,
+      "first_campaign_delta_cents": 7483,
+      "repeat_profitable_count": 1,
+      "repeat_total_delta_cents": -165666,
+      "same_month_second_attempt_last_wins_units": 568,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness25|carry0": {
+      "first_zero_age_month": 15,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 13076,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -146791,
+      "same_month_second_attempt_last_wins_units": 56,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness25|carry1500": {
+      "first_zero_age_month": 20,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 12378,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -146087,
+      "same_month_second_attempt_last_wins_units": 154,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness25|carry3000": {
+      "first_zero_age_month": 22,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 13077,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -143988,
+      "same_month_second_attempt_last_wins_units": 251,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness100|carry0": {
+      "first_zero_age_month": 20,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 13077,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -143290,
+      "same_month_second_attempt_last_wins_units": 178,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness100|carry1500": {
+      "first_zero_age_month": 22,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 12377,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -146085,
+      "same_month_second_attempt_last_wins_units": 276,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness100|carry3000": {
+      "first_zero_age_month": 23,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 13077,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -145387,
+      "same_month_second_attempt_last_wins_units": 373,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness325|carry0": {
+      "first_zero_age_month": 24,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 12378,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -145385,
+      "same_month_second_attempt_last_wins_units": 544,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness325|carry1500": {
+      "first_zero_age_month": 25,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 13077,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -143986,
+      "same_month_second_attempt_last_wins_units": 641,
+      "same_month_additive_awareness_points": 15
+    },
+    "review91|awareness325|carry3000": {
+      "first_zero_age_month": 25,
+      "dormant_revival_units": 33,
+      "first_campaign_delta_cents": 12378,
+      "repeat_profitable_count": 2,
+      "repeat_total_delta_cents": -147484,
+      "same_month_second_attempt_last_wins_units": 739,
+      "same_month_additive_awareness_points": 15
+    }
+  },
+  "checks": {
+    "market_scenarios": 270,
+    "review_monotonic_comparisons": 12420,
+    "stacking_scenarios": 270,
+    "month1_parity": 180,
+    "robustness_scenarios": 36
+  },
+  "limitations": [
+    "Month 2+ and campaigns are proposed, not implemented",
+    "Actions and Game-2 launch date remain fixed after source traces",
+    "Market is inferred uniquely from actual Month-1 units among five live ledger values",
+    "No human post-first-game 9+ action trace; high-Review checks are synthetic",
+    "Bills, payroll, fanbase, and campaign one-cycle opportunity cost excluded from A cash; bounded separately"
+  ]
+}

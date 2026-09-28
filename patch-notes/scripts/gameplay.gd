@@ -264,7 +264,7 @@ func _replace_beta_with_launch(source_beta_phase: Control, launch_scene: PackedS
 
 
 func _on_contract_requested(source_studio: StudioPhase, state: ContractState) -> void:
-	if _transition_in_progress or source_studio != _active_phase or state == null or state != run_state.get_primitive_contract() or state.is_completed():
+	if _transition_in_progress or source_studio != _active_phase or state == null or not run_state.owns_contract_state(state) or state.is_completed():
 		return
 	_transition_in_progress = true
 	var contract_phase := CONTRACT_PHASE_SCENE.instantiate() as ContractPhase

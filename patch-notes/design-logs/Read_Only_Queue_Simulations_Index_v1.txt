@@ -1,0 +1,16 @@
+PATCH NOTES — READ-ONLY QUEUE SIMULATIONS INDEX v1
+2026-09-27 | Repository source ba616515ed1b039fd0da7cf03f73288fd7ccd8e4
+
+This batch executes the outstanding simulation-only handoffs in the current Drive To Do List. It changes analysis harnesses and writes data/log artifacts only. It does not implement, approve, or lock a candidate gameplay value. Automated policy results are not human playtest evidence.
+
+Findings files:
+1. Employee_Three_Specialist_Read_Only_Trial_v1.txt — 600 paired Production/QA/Contracts employee paths, Game 2 finance, training opportunity and reward sensitivity.
+2. SideStreet_Repeatable_Cash_Read_Only_Trial_v1.txt — 6,300 paired paths for $800/$1,200/$1,600 cash-only caps, distinct release-linked offers and order/cash stress.
+3. Post_Launch_Carryover_and_Campaign_Read_Only_Followup_v2.txt — exact 0/15/30% discovery carryover, fixed +10 versus V1 percent campaign, 420 matched full-calendar paths per scenario and standalone 24-month marginal cases.
+4. Studio_Point_Budget_Secondary_Traits_Read_Only_v0.txt — all 24 legal proposed secondary-trait builds across 840 paired paths; early cash and 96-due loan bound.
+5. Design_Alpha_Redraw_Class_Parity_Read_Only_v1.txt — 600 paired first-game current-vs-parity redraw paths.
+6. Feature_Branch_Pilot_Shopping_Read_Only_v0.txt — 6,300-path Store shopping feasibility bound for all proposed two-card pairs and the four-card pilot.
+
+Important nonresults: SideStreet and later-month sales do not exist in current gameplay. Employee rewards, payroll, bills, points, secondary traits and campaigns remain candidates. Branching Dialogue lacks a usable definition; the proposed Boss Battles needs a three-Core card representation; Store purchase timing conflicts across current runtime and queue. The branch trial therefore cannot make a faithful Game 2 draw/Review claim. No simulated shortfall is treated as permitted negative gameplay cash.
+
+Reproduction is via the six named analysis scripts plus post_launch_campaign_calendar_followup_v2.py, with seeds and exact assumptions in their respective logs and summary JSON. Compressed raw traces accompany every summary. Relevant verification: 14 Python unit regressions pass; five affected Godot suites pass; Godot 4.7.1 editor import completes with APPDATA/LOCALAPPDATA redirected to a writable temp directory; git diff --check passes. Existing missing artwork and root-certificate warnings were observed. No unrelated worktree state or .codex-godot-temp was altered.

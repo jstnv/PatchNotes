@@ -107,6 +107,8 @@ func set_phase(controller: Control) -> void:
 			old_workspace.presentation_changed.disconnect(refresh)
 		if old_workspace.overlay.closed.is_connected(_refresh_guidance):
 			old_workspace.overlay.closed.disconnect(_refresh_guidance)
+		if old_workspace.synergy_help_requested.is_connected(_show_synergy_help):
+			old_workspace.synergy_help_requested.disconnect(_show_synergy_help)
 	if is_instance_valid(phase) and phase.has_signal("guidance_changed") and phase.guidance_changed.is_connected(_refresh_guidance):
 		phase.guidance_changed.disconnect(_refresh_guidance)
 	phase = controller
@@ -122,6 +124,7 @@ func set_phase(controller: Control) -> void:
 		phase.get_workspace().use_synergy_presenter(synergy_notification)
 		phase.get_workspace().presentation_changed.connect(refresh)
 		phase.get_workspace().overlay.closed.connect(_refresh_guidance)
+		phase.get_workspace().synergy_help_requested.connect(_show_synergy_help)
 	if phase.has_signal("guidance_changed"):
 		phase.guidance_changed.connect(_refresh_guidance)
 	refresh()
@@ -156,6 +159,10 @@ func show_current_tip() -> void:
 	var tip := _guidance_for_current_state()
 	if tip.is_empty(): return
 	contextual_tip.show_tip(tip.title, tip.body)
+
+
+func _show_synergy_help(title: String, body: String) -> void:
+	contextual_tip.show_tip(title, body)
 
 
 func _refresh_guidance() -> void:
@@ -195,11 +202,16 @@ func _guidance_for_current_state() -> Dictionary:
 			if phase is ContractPhase:
 				var state: ContractState = phase.get_contract_state()
 				if state != null and state.is_completed(): return {}
-				if state != null and state.get_successful_hand_count() > 0:
-					return {"key": "contract_final_hand", "title": "One hand left", "body": "Choose four cards for the final hand. The contract pays once after two successful hands."}
 				if phase.get_selected_candidate_views().size() == 4:
+					var cards: Array[CardData] = []
+					for view: CardView in phase.get_selected_candidate_views(): cards.append(view.card_data)
+					var plan: Dictionary = state.plan_hand(cards) if state != null else {}
+					if not String(plan.get("specialization_stat", &"")).is_empty():
+						return {"key": "contract_specialization", "title": "Contract Specialization ready", "body": "All four cards share a primary Core label. This contract hand earns ×1.5 Core gains; printed Scope stays the same. Playing it advances one cycle."}
 					return {"key": "contract_ready", "title": "Contract hand ready", "body": "Play four cards to advance one cycle. Contract Features are finite; Passes can return in later draws."}
-				return {"key": "contract_choose", "title": "Build a contract hand", "body": "Select four of seven cards. Priorities weight future draws; redraws come from your shared run budget."}
+				if state != null and state.get_successful_hand_count() > 0:
+					return {"key": "contract_final_hand", "title": "One hand left", "body": "Choose four cards for the final hand. Match all four primary Core labels for ×1.5 Core gains. The contract pays after two successful hands."}
+			return {"key": "contract_choose", "title": "Build a contract hand", "body": "Select four of seven cards. Matching all four primary Core labels gives a ×1.5 Core synergy. Priorities weight later draws; redraws use the shared budget."}
 			return {"key": "contract_offer", "title": "Inspect the offer", "body": "Review its targets and reward before accepting. Opening details and accepting cost no cycles or cash."}
 		&"design", &"alpha", &"beta":
 			return _production_guidance()
@@ -218,22 +230,39 @@ func _production_guidance() -> Dictionary:
 	var selected: Array[CardView] = phase.get_selected_candidate_views()
 	if selected.size() == 4:
 		if tutorial_context == &"beta":
+			var qa := true
 			var marketing := true
+			var categories := {CardData.BETA_CATEGORY_QA: 0, CardData.BETA_CATEGORY_MARKETING: 0, CardData.BETA_CATEGORY_INSIDER: 0}
 			for view: CardView in selected:
+				categories[view.card_data.beta_category] += 1
+				if view.card_data.beta_category != CardData.BETA_CATEGORY_QA: qa = false
 				if view.card_data.beta_category != CardData.BETA_CATEGORY_MARKETING: marketing = false
+			if qa:
+				return {"key": "beta_qa", "title": "QA Specialization", "body": "Four QA cards in one hand multiply Search and Debug card values by 1.5 before their bug formulas and caps."}
 			if marketing:
-				return {"key": "beta_marketing", "title": "Marketing Specialization", "body": "Four Marketing cards in one hand multiply their combined printed Marketing value by 1.5."}
+				return {"key": "beta_marketing", "title": "Marketing Specialization", "body": "Four Marketing cards multiply their combined printed value by 1.5, rounded down to Marketing Output."}
+			if categories[CardData.BETA_CATEGORY_QA] >= 1 and categories[CardData.BETA_CATEGORY_MARKETING] >= 1 and categories[CardData.BETA_CATEGORY_INSIDER] >= 1:
+				return {"key": "beta_balanced", "title": "Balanced Operations", "body": "A 2/1/1 QA, Marketing and Insider mix boosts qualifying output and insight chances by 1.25. It does not multiply cash."}
+		else:
+			var final_production: Dictionary = workspace.get_selected_production_synergy()
+			if not final_production.is_empty():
+				if not String(final_production.get("specialization_stat", &"")).is_empty():
+					return {"key": name + "_specialization", "title": "Specialization ready", "body": "All four cards share a primary Core label. This hand earns ×1.5 Core gains, rounded by category; Scope stays printed."}
+				if final_production.get("balanced_production", false):
+					return {"key": name + "_balanced", "title": "Balanced Production ready", "body": "A Feature and close projected Core scores give ×1.2 to this hand's Core gains. Scope stays printed."}
 		return {"key": name + "_ready", "title": "Four cards selected", "body": "Play the hand to advance one cycle. Selected Features exhaust for this project; Passes can return."}
 	if tutorial_context == &"beta":
 		if project != null and project.get_known_bugs() > 0:
-			return {"key": "beta_fix", "title": "Fix Known Bugs", "body": "Debug works on Known Bugs. Search for Bugs first if you need to reveal Hidden Bugs. Launch when you are satisfied with testing and marketing."}
-		return {"key": "beta_search", "title": "Find and prepare", "body": "Search for Bugs reveals Hidden Bugs; Debug fixes Known Bugs. Select four cards for each hand, then launch when you are satisfied."}
+			return {"key": "beta_fix", "title": "Fix Known Bugs", "body": "Debug fixes Known Bugs; Search reveals Hidden Bugs first. Four matching QA or Marketing cards make a stronger hand. Use Synergy ? for the exact patterns."}
+		return {"key": "beta_search", "title": "Find and prepare", "body": "Search reveals Hidden Bugs; Debug fixes Known Bugs. Four matching QA or Marketing cards make a stronger hand. Use Synergy ? for the exact patterns."}
 	if project != null and project.get_current_scope() > 0:
 		var body := "Keep building Scope and Core Scores. Redraw selected cards without advancing a cycle; successful hands restore one redraw."
 		if tutorial_context == &"design": body += " Proceed to Alpha when you are ready."
-		if tutorial_context == &"alpha": body += " Check Bug Pressure before moving to Beta."
+		if tutorial_context == &"alpha": body += " Match four primary Core labels for a ×1.5 synergy; use Synergy ? for the other pattern."
 		return {"key": name + "_progress", "title": "Watch the project", "body": body}
-	return {"key": name + "_choose", "title": "Select four cards", "body": "Choose from seven candidates. Features are finite within the project; Passes are renewable. Redraws cost no cycles."}
+	if tutorial_context == &"design":
+		return {"key": "design_choose", "title": "Select four cards", "body": "Choose four cards. A synergy is a bonus for a matching hand. The first score on each card is its primary Core label; match all four for ×1.5 Core gains. Use Synergy ? for other combos."}
+	return {"key": name + "_choose", "title": "Select four cards", "body": "Choose four cards. Matching all four primary Core labels gives ×1.5 Core gains; the Synergy ? button explains other bonuses. Features exhaust; Passes return."}
 
 func refresh() -> void:
 	if run == null: return
