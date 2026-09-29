@@ -1,0 +1,1909 @@
+{
+  "revision": "606f011d0bfdaca27dc662062ec6498a5942627a",
+  "parity": {
+    "total_sales_snapshot_checks": 2444,
+    "sources": {
+      "current_six_cautious": {
+        "sales_snapshots": 498,
+        "current_head": true,
+        "reviews": [
+          0.9,
+          0.8,
+          0.8,
+          0.9,
+          1.0,
+          1.0
+        ]
+      },
+      "current_six_ordinary": {
+        "sales_snapshots": 782,
+        "current_head": true,
+        "reviews": [
+          2.5,
+          2.0,
+          1.6,
+          2.1,
+          2.0,
+          2.6
+        ]
+      },
+      "current_six_optimizer": {
+        "sales_snapshots": 992,
+        "current_head": true,
+        "reviews": [
+          3.4,
+          2.5,
+          2.6,
+          3.1,
+          3.3,
+          3.2
+        ]
+      },
+      "current_same_seed_3_4_2_5_campaign": {
+        "sales_snapshots": 79,
+        "current_head": true,
+        "reviews": [
+          3.4,
+          2.5
+        ]
+      },
+      "historical_4_8_5_7_campaign": {
+        "sales_snapshots": 93,
+        "current_head": false,
+        "reviews": [
+          4.8,
+          5.7
+        ]
+      }
+    }
+  },
+  "current_route_grid": {
+    "current_six_cautious": {
+      "linear|once": {
+        "fans_end": 2,
+        "gained": 0,
+        "lost": 298,
+        "net_sales_cents": 513982
+      },
+      "linear|monthly_unique": {
+        "fans_end": 2,
+        "gained": 0,
+        "lost": 298,
+        "net_sales_cents": 513982
+      },
+      "sqrt|once": {
+        "fans_end": 2,
+        "gained": 0,
+        "lost": 298,
+        "net_sales_cents": 513982
+      },
+      "sqrt|monthly_unique": {
+        "fans_end": 2,
+        "gained": 0,
+        "lost": 298,
+        "net_sales_cents": 513982
+      }
+    },
+    "current_six_ordinary": {
+      "linear|once": {
+        "fans_end": 11,
+        "gained": 0,
+        "lost": 289,
+        "net_sales_cents": 1469227
+      },
+      "linear|monthly_unique": {
+        "fans_end": 11,
+        "gained": 0,
+        "lost": 289,
+        "net_sales_cents": 1469227
+      },
+      "sqrt|once": {
+        "fans_end": 11,
+        "gained": 0,
+        "lost": 289,
+        "net_sales_cents": 1469227
+      },
+      "sqrt|monthly_unique": {
+        "fans_end": 11,
+        "gained": 0,
+        "lost": 289,
+        "net_sales_cents": 1469227
+      }
+    },
+    "current_six_optimizer": {
+      "linear|once": {
+        "fans_end": 37,
+        "gained": 0,
+        "lost": 263,
+        "net_sales_cents": 2374120
+      },
+      "linear|monthly_unique": {
+        "fans_end": 37,
+        "gained": 0,
+        "lost": 263,
+        "net_sales_cents": 2374120
+      },
+      "sqrt|once": {
+        "fans_end": 37,
+        "gained": 0,
+        "lost": 263,
+        "net_sales_cents": 2374120
+      },
+      "sqrt|monthly_unique": {
+        "fans_end": 37,
+        "gained": 0,
+        "lost": 263,
+        "net_sales_cents": 2374120
+      }
+    },
+    "current_same_seed_3_4_2_5_campaign": {
+      "linear|once": {
+        "fans_end": 143,
+        "gained": 0,
+        "lost": 157,
+        "net_sales_cents": 726572
+      },
+      "linear|monthly_unique": {
+        "fans_end": 143,
+        "gained": 0,
+        "lost": 157,
+        "net_sales_cents": 726572
+      },
+      "sqrt|once": {
+        "fans_end": 143,
+        "gained": 0,
+        "lost": 157,
+        "net_sales_cents": 726572
+      },
+      "sqrt|monthly_unique": {
+        "fans_end": 143,
+        "gained": 0,
+        "lost": 157,
+        "net_sales_cents": 726572
+      }
+    }
+  },
+  "historical_route": {
+    "historical_4_8_5_7_campaign": {
+      "linear|once": {
+        "fans_end": 315,
+        "gained": 24,
+        "lost": 9,
+        "net_sales_cents": 1313284
+      },
+      "linear|monthly_unique": {
+        "fans_end": 315,
+        "gained": 24,
+        "lost": 9,
+        "net_sales_cents": 1313284
+      },
+      "sqrt|once": {
+        "fans_end": 331,
+        "gained": 40,
+        "lost": 9,
+        "net_sales_cents": 1313284
+      },
+      "sqrt|monthly_unique": {
+        "fans_end": 331,
+        "gained": 40,
+        "lost": 9,
+        "net_sales_cents": 1313284
+      }
+    }
+  },
+  "synthetic_review": {
+    "review5.0|fans0|linear|return0": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 958740
+    },
+    "review5.0|fans0|linear|return1500": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 958740
+    },
+    "review5.0|fans0|linear|return3000": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 958740
+    },
+    "review5.0|fans0|sqrt|return0": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 958740
+    },
+    "review5.0|fans0|sqrt|return1500": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 958740
+    },
+    "review5.0|fans0|sqrt|return3000": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 958740
+    },
+    "review5.0|fans300|linear|return0": {
+      "fans_end": 291,
+      "gained": 0,
+      "lost": 9,
+      "net_sales_cents": 1235662
+    },
+    "review5.0|fans300|linear|return1500": {
+      "fans_end": 291,
+      "gained": 0,
+      "lost": 9,
+      "net_sales_cents": 1235662
+    },
+    "review5.0|fans300|linear|return3000": {
+      "fans_end": 291,
+      "gained": 0,
+      "lost": 9,
+      "net_sales_cents": 1235662
+    },
+    "review5.0|fans300|sqrt|return0": {
+      "fans_end": 291,
+      "gained": 0,
+      "lost": 9,
+      "net_sales_cents": 1235662
+    },
+    "review5.0|fans300|sqrt|return1500": {
+      "fans_end": 291,
+      "gained": 0,
+      "lost": 9,
+      "net_sales_cents": 1235662
+    },
+    "review5.0|fans300|sqrt|return3000": {
+      "fans_end": 291,
+      "gained": 0,
+      "lost": 9,
+      "net_sales_cents": 1235662
+    },
+    "review5.0|fans1000|linear|return0": {
+      "fans_end": 970,
+      "gained": 0,
+      "lost": 30,
+      "net_sales_cents": 1388110
+    },
+    "review5.0|fans1000|linear|return1500": {
+      "fans_end": 970,
+      "gained": 0,
+      "lost": 30,
+      "net_sales_cents": 1388110
+    },
+    "review5.0|fans1000|linear|return3000": {
+      "fans_end": 970,
+      "gained": 0,
+      "lost": 30,
+      "net_sales_cents": 1388110
+    },
+    "review5.0|fans1000|sqrt|return0": {
+      "fans_end": 970,
+      "gained": 0,
+      "lost": 30,
+      "net_sales_cents": 1388110
+    },
+    "review5.0|fans1000|sqrt|return1500": {
+      "fans_end": 970,
+      "gained": 0,
+      "lost": 30,
+      "net_sales_cents": 1388110
+    },
+    "review5.0|fans1000|sqrt|return3000": {
+      "fans_end": 970,
+      "gained": 0,
+      "lost": 30,
+      "net_sales_cents": 1388110
+    },
+    "review5.1|fans0|linear|return0": {
+      "fans_end": 2,
+      "gained": 2,
+      "lost": 0,
+      "net_sales_cents": 967831
+    },
+    "review5.1|fans0|linear|return1500": {
+      "fans_end": 2,
+      "gained": 2,
+      "lost": 0,
+      "net_sales_cents": 967831
+    },
+    "review5.1|fans0|linear|return3000": {
+      "fans_end": 2,
+      "gained": 2,
+      "lost": 0,
+      "net_sales_cents": 967831
+    },
+    "review5.1|fans0|sqrt|return0": {
+      "fans_end": 11,
+      "gained": 11,
+      "lost": 0,
+      "net_sales_cents": 967831
+    },
+    "review5.1|fans0|sqrt|return1500": {
+      "fans_end": 11,
+      "gained": 11,
+      "lost": 0,
+      "net_sales_cents": 967831
+    },
+    "review5.1|fans0|sqrt|return3000": {
+      "fans_end": 11,
+      "gained": 11,
+      "lost": 0,
+      "net_sales_cents": 967831
+    },
+    "review5.1|fans300|linear|return0": {
+      "fans_end": 294,
+      "gained": 3,
+      "lost": 9,
+      "net_sales_cents": 1246851
+    },
+    "review5.1|fans300|linear|return1500": {
+      "fans_end": 294,
+      "gained": 3,
+      "lost": 9,
+      "net_sales_cents": 1246851
+    },
+    "review5.1|fans300|linear|return3000": {
+      "fans_end": 293,
+      "gained": 2,
+      "lost": 9,
+      "net_sales_cents": 1246851
+    },
+    "review5.1|fans300|sqrt|return0": {
+      "fans_end": 305,
+      "gained": 14,
+      "lost": 9,
+      "net_sales_cents": 1246851
+    },
+    "review5.1|fans300|sqrt|return1500": {
+      "fans_end": 304,
+      "gained": 13,
+      "lost": 9,
+      "net_sales_cents": 1246851
+    },
+    "review5.1|fans300|sqrt|return3000": {
+      "fans_end": 303,
+      "gained": 12,
+      "lost": 9,
+      "net_sales_cents": 1246851
+    },
+    "review5.1|fans1000|linear|return0": {
+      "fans_end": 973,
+      "gained": 3,
+      "lost": 30,
+      "net_sales_cents": 1400697
+    },
+    "review5.1|fans1000|linear|return1500": {
+      "fans_end": 973,
+      "gained": 3,
+      "lost": 30,
+      "net_sales_cents": 1400697
+    },
+    "review5.1|fans1000|linear|return3000": {
+      "fans_end": 972,
+      "gained": 2,
+      "lost": 30,
+      "net_sales_cents": 1400697
+    },
+    "review5.1|fans1000|sqrt|return0": {
+      "fans_end": 986,
+      "gained": 16,
+      "lost": 30,
+      "net_sales_cents": 1400697
+    },
+    "review5.1|fans1000|sqrt|return1500": {
+      "fans_end": 983,
+      "gained": 13,
+      "lost": 30,
+      "net_sales_cents": 1400697
+    },
+    "review5.1|fans1000|sqrt|return3000": {
+      "fans_end": 980,
+      "gained": 10,
+      "lost": 30,
+      "net_sales_cents": 1400697
+    },
+    "review7.0|fans0|linear|return0": {
+      "fans_end": 70,
+      "gained": 70,
+      "lost": 0,
+      "net_sales_cents": 1134963
+    },
+    "review7.0|fans0|linear|return1500": {
+      "fans_end": 70,
+      "gained": 70,
+      "lost": 0,
+      "net_sales_cents": 1134963
+    },
+    "review7.0|fans0|linear|return3000": {
+      "fans_end": 70,
+      "gained": 70,
+      "lost": 0,
+      "net_sales_cents": 1134963
+    },
+    "review7.0|fans0|sqrt|return0": {
+      "fans_end": 70,
+      "gained": 70,
+      "lost": 0,
+      "net_sales_cents": 1134963
+    },
+    "review7.0|fans0|sqrt|return1500": {
+      "fans_end": 70,
+      "gained": 70,
+      "lost": 0,
+      "net_sales_cents": 1134963
+    },
+    "review7.0|fans0|sqrt|return3000": {
+      "fans_end": 70,
+      "gained": 70,
+      "lost": 0,
+      "net_sales_cents": 1134963
+    },
+    "review7.0|fans300|linear|return0": {
+      "fans_end": 379,
+      "gained": 88,
+      "lost": 9,
+      "net_sales_cents": 1458039
+    },
+    "review7.0|fans300|linear|return1500": {
+      "fans_end": 376,
+      "gained": 85,
+      "lost": 9,
+      "net_sales_cents": 1458039
+    },
+    "review7.0|fans300|linear|return3000": {
+      "fans_end": 373,
+      "gained": 82,
+      "lost": 9,
+      "net_sales_cents": 1458039
+    },
+    "review7.0|fans300|sqrt|return0": {
+      "fans_end": 379,
+      "gained": 88,
+      "lost": 9,
+      "net_sales_cents": 1458039
+    },
+    "review7.0|fans300|sqrt|return1500": {
+      "fans_end": 376,
+      "gained": 85,
+      "lost": 9,
+      "net_sales_cents": 1458039
+    },
+    "review7.0|fans300|sqrt|return3000": {
+      "fans_end": 373,
+      "gained": 82,
+      "lost": 9,
+      "net_sales_cents": 1458039
+    },
+    "review7.0|fans1000|linear|return0": {
+      "fans_end": 1069,
+      "gained": 99,
+      "lost": 30,
+      "net_sales_cents": 1636362
+    },
+    "review7.0|fans1000|linear|return1500": {
+      "fans_end": 1057,
+      "gained": 87,
+      "lost": 30,
+      "net_sales_cents": 1636362
+    },
+    "review7.0|fans1000|linear|return3000": {
+      "fans_end": 1045,
+      "gained": 75,
+      "lost": 30,
+      "net_sales_cents": 1636362
+    },
+    "review7.0|fans1000|sqrt|return0": {
+      "fans_end": 1069,
+      "gained": 99,
+      "lost": 30,
+      "net_sales_cents": 1636362
+    },
+    "review7.0|fans1000|sqrt|return1500": {
+      "fans_end": 1057,
+      "gained": 87,
+      "lost": 30,
+      "net_sales_cents": 1636362
+    },
+    "review7.0|fans1000|sqrt|return3000": {
+      "fans_end": 1045,
+      "gained": 75,
+      "lost": 30,
+      "net_sales_cents": 1636362
+    },
+    "review9.1|fans0|linear|return0": {
+      "fans_end": 137,
+      "gained": 137,
+      "lost": 0,
+      "net_sales_cents": 1320278
+    },
+    "review9.1|fans0|linear|return1500": {
+      "fans_end": 137,
+      "gained": 137,
+      "lost": 0,
+      "net_sales_cents": 1320278
+    },
+    "review9.1|fans0|linear|return3000": {
+      "fans_end": 137,
+      "gained": 137,
+      "lost": 0,
+      "net_sales_cents": 1320278
+    },
+    "review9.1|fans0|sqrt|return0": {
+      "fans_end": 131,
+      "gained": 131,
+      "lost": 0,
+      "net_sales_cents": 1320278
+    },
+    "review9.1|fans0|sqrt|return1500": {
+      "fans_end": 131,
+      "gained": 131,
+      "lost": 0,
+      "net_sales_cents": 1320278
+    },
+    "review9.1|fans0|sqrt|return3000": {
+      "fans_end": 131,
+      "gained": 131,
+      "lost": 0,
+      "net_sales_cents": 1320278
+    },
+    "review9.1|fans300|linear|return0": {
+      "fans_end": 464,
+      "gained": 173,
+      "lost": 9,
+      "net_sales_cents": 1691605
+    },
+    "review9.1|fans300|linear|return1500": {
+      "fans_end": 459,
+      "gained": 168,
+      "lost": 9,
+      "net_sales_cents": 1691605
+    },
+    "review9.1|fans300|linear|return3000": {
+      "fans_end": 454,
+      "gained": 163,
+      "lost": 9,
+      "net_sales_cents": 1691605
+    },
+    "review9.1|fans300|sqrt|return0": {
+      "fans_end": 456,
+      "gained": 165,
+      "lost": 9,
+      "net_sales_cents": 1691605
+    },
+    "review9.1|fans300|sqrt|return1500": {
+      "fans_end": 451,
+      "gained": 160,
+      "lost": 9,
+      "net_sales_cents": 1691605
+    },
+    "review9.1|fans300|sqrt|return3000": {
+      "fans_end": 446,
+      "gained": 155,
+      "lost": 9,
+      "net_sales_cents": 1691605
+    },
+    "review9.1|fans1000|linear|return0": {
+      "fans_end": 1163,
+      "gained": 193,
+      "lost": 30,
+      "net_sales_cents": 1896501
+    },
+    "review9.1|fans1000|linear|return1500": {
+      "fans_end": 1146,
+      "gained": 176,
+      "lost": 30,
+      "net_sales_cents": 1896501
+    },
+    "review9.1|fans1000|linear|return3000": {
+      "fans_end": 1128,
+      "gained": 158,
+      "lost": 30,
+      "net_sales_cents": 1896501
+    },
+    "review9.1|fans1000|sqrt|return0": {
+      "fans_end": 1154,
+      "gained": 184,
+      "lost": 30,
+      "net_sales_cents": 1896501
+    },
+    "review9.1|fans1000|sqrt|return1500": {
+      "fans_end": 1138,
+      "gained": 168,
+      "lost": 30,
+      "net_sales_cents": 1896501
+    },
+    "review9.1|fans1000|sqrt|return3000": {
+      "fans_end": 1121,
+      "gained": 151,
+      "lost": 30,
+      "net_sales_cents": 1896501
+    }
+  },
+  "compounding": {
+    "n6|actual_low|fans0|linear|return0": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 2142653
+    },
+    "n6|actual_low|fans0|linear|return3000": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 2142653
+    },
+    "n6|actual_low|fans0|sqrt|return0": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 2142653
+    },
+    "n6|actual_low|fans0|sqrt|return3000": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 2142653
+    },
+    "n6|actual_low|fans300|linear|return0": {
+      "fans_end": 37,
+      "gained": 0,
+      "lost": 263,
+      "net_sales_cents": 2523770
+    },
+    "n6|actual_low|fans300|linear|return3000": {
+      "fans_end": 37,
+      "gained": 0,
+      "lost": 263,
+      "net_sales_cents": 2523770
+    },
+    "n6|actual_low|fans300|sqrt|return0": {
+      "fans_end": 37,
+      "gained": 0,
+      "lost": 263,
+      "net_sales_cents": 2523770
+    },
+    "n6|actual_low|fans300|sqrt|return3000": {
+      "fans_end": 37,
+      "gained": 0,
+      "lost": 263,
+      "net_sales_cents": 2523770
+    },
+    "n6|actual_low|fans1000|linear|return0": {
+      "fans_end": 119,
+      "gained": 0,
+      "lost": 881,
+      "net_sales_cents": 2863631
+    },
+    "n6|actual_low|fans1000|linear|return3000": {
+      "fans_end": 119,
+      "gained": 0,
+      "lost": 881,
+      "net_sales_cents": 2863631
+    },
+    "n6|actual_low|fans1000|sqrt|return0": {
+      "fans_end": 119,
+      "gained": 0,
+      "lost": 881,
+      "net_sales_cents": 2863631
+    },
+    "n6|actual_low|fans1000|sqrt|return3000": {
+      "fans_end": 119,
+      "gained": 0,
+      "lost": 881,
+      "net_sales_cents": 2863631
+    },
+    "n6|actual_low|fans10000|linear|return0": {
+      "fans_end": 7396,
+      "gained": 0,
+      "lost": 2604,
+      "net_sales_cents": 3430764
+    },
+    "n6|actual_low|fans10000|linear|return3000": {
+      "fans_end": 7396,
+      "gained": 0,
+      "lost": 2604,
+      "net_sales_cents": 3430764
+    },
+    "n6|actual_low|fans10000|sqrt|return0": {
+      "fans_end": 7396,
+      "gained": 0,
+      "lost": 2604,
+      "net_sales_cents": 3430764
+    },
+    "n6|actual_low|fans10000|sqrt|return3000": {
+      "fans_end": 7396,
+      "gained": 0,
+      "lost": 2604,
+      "net_sales_cents": 3430764
+    },
+    "n6|mixed_5_1_7_9_1|fans0|linear|return0": {
+      "fans_end": 564,
+      "gained": 574,
+      "lost": 10,
+      "net_sales_cents": 6498592
+    },
+    "n6|mixed_5_1_7_9_1|fans0|linear|return3000": {
+      "fans_end": 550,
+      "gained": 560,
+      "lost": 10,
+      "net_sales_cents": 6494397
+    },
+    "n6|mixed_5_1_7_9_1|fans0|sqrt|return0": {
+      "fans_end": 588,
+      "gained": 598,
+      "lost": 10,
+      "net_sales_cents": 6558033
+    },
+    "n6|mixed_5_1_7_9_1|fans0|sqrt|return3000": {
+      "fans_end": 571,
+      "gained": 581,
+      "lost": 10,
+      "net_sales_cents": 6551040
+    },
+    "n6|mixed_5_1_7_9_1|fans300|linear|return0": {
+      "fans_end": 961,
+      "gained": 682,
+      "lost": 21,
+      "net_sales_cents": 7582506
+    },
+    "n6|mixed_5_1_7_9_1|fans300|linear|return3000": {
+      "fans_end": 919,
+      "gained": 640,
+      "lost": 21,
+      "net_sales_cents": 7569919
+    },
+    "n6|mixed_5_1_7_9_1|fans300|sqrt|return0": {
+      "fans_end": 983,
+      "gained": 705,
+      "lost": 22,
+      "net_sales_cents": 7608382
+    },
+    "n6|mixed_5_1_7_9_1|fans300|sqrt|return3000": {
+      "fans_end": 934,
+      "gained": 655,
+      "lost": 21,
+      "net_sales_cents": 7579011
+    },
+    "n6|mixed_5_1_7_9_1|fans1000|linear|return0": {
+      "fans_end": 1702,
+      "gained": 746,
+      "lost": 44,
+      "net_sales_cents": 8232856
+    },
+    "n6|mixed_5_1_7_9_1|fans1000|linear|return3000": {
+      "fans_end": 1600,
+      "gained": 642,
+      "lost": 42,
+      "net_sales_cents": 8216073
+    },
+    "n6|mixed_5_1_7_9_1|fans1000|sqrt|return0": {
+      "fans_end": 1723,
+      "gained": 767,
+      "lost": 44,
+      "net_sales_cents": 8232856
+    },
+    "n6|mixed_5_1_7_9_1|fans1000|sqrt|return3000": {
+      "fans_end": 1611,
+      "gained": 653,
+      "lost": 42,
+      "net_sales_cents": 8216073
+    },
+    "n6|mixed_5_1_7_9_1|fans10000|linear|return0": {
+      "fans_end": 10757,
+      "gained": 804,
+      "lost": 47,
+      "net_sales_cents": 8823065
+    },
+    "n6|mixed_5_1_7_9_1|fans10000|linear|return3000": {
+      "fans_end": 10009,
+      "gained": 56,
+      "lost": 47,
+      "net_sales_cents": 8823065
+    },
+    "n6|mixed_5_1_7_9_1|fans10000|sqrt|return0": {
+      "fans_end": 10779,
+      "gained": 826,
+      "lost": 47,
+      "net_sales_cents": 8823065
+    },
+    "n6|mixed_5_1_7_9_1|fans10000|sqrt|return3000": {
+      "fans_end": 10006,
+      "gained": 53,
+      "lost": 47,
+      "net_sales_cents": 8823065
+    },
+    "n6|strong_9_1|fans0|linear|return0": {
+      "fans_end": 2218,
+      "gained": 2218,
+      "lost": 0,
+      "net_sales_cents": 12946837
+    },
+    "n6|strong_9_1|fans0|linear|return3000": {
+      "fans_end": 2061,
+      "gained": 2061,
+      "lost": 0,
+      "net_sales_cents": 12913970
+    },
+    "n6|strong_9_1|fans0|sqrt|return0": {
+      "fans_end": 2109,
+      "gained": 2109,
+      "lost": 0,
+      "net_sales_cents": 12898586
+    },
+    "n6|strong_9_1|fans0|sqrt|return3000": {
+      "fans_end": 1969,
+      "gained": 1969,
+      "lost": 0,
+      "net_sales_cents": 12877608
+    },
+    "n6|strong_9_1|fans300|linear|return0": {
+      "fans_end": 2699,
+      "gained": 2399,
+      "lost": 0,
+      "net_sales_cents": 13993691
+    },
+    "n6|strong_9_1|fans300|linear|return3000": {
+      "fans_end": 2459,
+      "gained": 2159,
+      "lost": 0,
+      "net_sales_cents": 13954529
+    },
+    "n6|strong_9_1|fans300|sqrt|return0": {
+      "fans_end": 2583,
+      "gained": 2283,
+      "lost": 0,
+      "net_sales_cents": 13954529
+    },
+    "n6|strong_9_1|fans300|sqrt|return3000": {
+      "fans_end": 2363,
+      "gained": 2063,
+      "lost": 0,
+      "net_sales_cents": 13918166
+    },
+    "n6|strong_9_1|fans1000|linear|return0": {
+      "fans_end": 3511,
+      "gained": 2511,
+      "lost": 0,
+      "net_sales_cents": 14653129
+    },
+    "n6|strong_9_1|fans1000|linear|return3000": {
+      "fans_end": 3120,
+      "gained": 2120,
+      "lost": 0,
+      "net_sales_cents": 14609774
+    },
+    "n6|strong_9_1|fans1000|sqrt|return0": {
+      "fans_end": 3396,
+      "gained": 2396,
+      "lost": 0,
+      "net_sales_cents": 14644738
+    },
+    "n6|strong_9_1|fans1000|sqrt|return3000": {
+      "fans_end": 3030,
+      "gained": 2030,
+      "lost": 0,
+      "net_sales_cents": 14609774
+    },
+    "n6|strong_9_1|fans10000|linear|return0": {
+      "fans_end": 12646,
+      "gained": 2646,
+      "lost": 0,
+      "net_sales_cents": 15436346
+    },
+    "n6|strong_9_1|fans10000|linear|return3000": {
+      "fans_end": 10465,
+      "gained": 465,
+      "lost": 0,
+      "net_sales_cents": 15411171
+    },
+    "n6|strong_9_1|fans10000|sqrt|return0": {
+      "fans_end": 12526,
+      "gained": 2526,
+      "lost": 0,
+      "net_sales_cents": 15436346
+    },
+    "n6|strong_9_1|fans10000|sqrt|return3000": {
+      "fans_end": 10443,
+      "gained": 443,
+      "lost": 0,
+      "net_sales_cents": 15411171
+    },
+    "n9|actual_low|fans0|linear|return0": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 3047546
+    },
+    "n9|actual_low|fans0|linear|return3000": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 3047546
+    },
+    "n9|actual_low|fans0|sqrt|return0": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 3047546
+    },
+    "n9|actual_low|fans0|sqrt|return3000": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 3047546
+    },
+    "n9|actual_low|fans300|linear|return0": {
+      "fans_end": 13,
+      "gained": 0,
+      "lost": 287,
+      "net_sales_cents": 3476215
+    },
+    "n9|actual_low|fans300|linear|return3000": {
+      "fans_end": 13,
+      "gained": 0,
+      "lost": 287,
+      "net_sales_cents": 3476215
+    },
+    "n9|actual_low|fans300|sqrt|return0": {
+      "fans_end": 13,
+      "gained": 0,
+      "lost": 287,
+      "net_sales_cents": 3476215
+    },
+    "n9|actual_low|fans300|sqrt|return3000": {
+      "fans_end": 13,
+      "gained": 0,
+      "lost": 287,
+      "net_sales_cents": 3476215
+    },
+    "n9|actual_low|fans1000|linear|return0": {
+      "fans_end": 37,
+      "gained": 0,
+      "lost": 963,
+      "net_sales_cents": 3895797
+    },
+    "n9|actual_low|fans1000|linear|return3000": {
+      "fans_end": 37,
+      "gained": 0,
+      "lost": 963,
+      "net_sales_cents": 3895797
+    },
+    "n9|actual_low|fans1000|sqrt|return0": {
+      "fans_end": 37,
+      "gained": 0,
+      "lost": 963,
+      "net_sales_cents": 3895797
+    },
+    "n9|actual_low|fans1000|sqrt|return3000": {
+      "fans_end": 37,
+      "gained": 0,
+      "lost": 963,
+      "net_sales_cents": 3895797
+    },
+    "n9|actual_low|fans10000|linear|return0": {
+      "fans_end": 6086,
+      "gained": 0,
+      "lost": 3914,
+      "net_sales_cents": 4876915
+    },
+    "n9|actual_low|fans10000|linear|return3000": {
+      "fans_end": 6086,
+      "gained": 0,
+      "lost": 3914,
+      "net_sales_cents": 4876915
+    },
+    "n9|actual_low|fans10000|sqrt|return0": {
+      "fans_end": 6086,
+      "gained": 0,
+      "lost": 3914,
+      "net_sales_cents": 4876915
+    },
+    "n9|actual_low|fans10000|sqrt|return3000": {
+      "fans_end": 6086,
+      "gained": 0,
+      "lost": 3914,
+      "net_sales_cents": 4876915
+    },
+    "n9|mixed_5_1_7_9_1|fans0|linear|return0": {
+      "fans_end": 872,
+      "gained": 906,
+      "lost": 34,
+      "net_sales_cents": 10148937
+    },
+    "n9|mixed_5_1_7_9_1|fans0|linear|return3000": {
+      "fans_end": 838,
+      "gained": 871,
+      "lost": 33,
+      "net_sales_cents": 10130055
+    },
+    "n9|mixed_5_1_7_9_1|fans0|sqrt|return0": {
+      "fans_end": 898,
+      "gained": 933,
+      "lost": 35,
+      "net_sales_cents": 10213972
+    },
+    "n9|mixed_5_1_7_9_1|fans0|sqrt|return3000": {
+      "fans_end": 859,
+      "gained": 893,
+      "lost": 34,
+      "net_sales_cents": 10196489
+    },
+    "n9|mixed_5_1_7_9_1|fans300|linear|return0": {
+      "fans_end": 1273,
+      "gained": 1031,
+      "lost": 58,
+      "net_sales_cents": 11382501
+    },
+    "n9|mixed_5_1_7_9_1|fans300|linear|return3000": {
+      "fans_end": 1198,
+      "gained": 954,
+      "lost": 56,
+      "net_sales_cents": 11356628
+    },
+    "n9|mixed_5_1_7_9_1|fans300|sqrt|return0": {
+      "fans_end": 1298,
+      "gained": 1057,
+      "lost": 59,
+      "net_sales_cents": 11414670
+    },
+    "n9|mixed_5_1_7_9_1|fans300|sqrt|return3000": {
+      "fans_end": 1214,
+      "gained": 970,
+      "lost": 56,
+      "net_sales_cents": 11372014
+    },
+    "n9|mixed_5_1_7_9_1|fans1000|linear|return0": {
+      "fans_end": 2028,
+      "gained": 1111,
+      "lost": 83,
+      "net_sales_cents": 12165718
+    },
+    "n9|mixed_5_1_7_9_1|fans1000|linear|return3000": {
+      "fans_end": 1866,
+      "gained": 947,
+      "lost": 81,
+      "net_sales_cents": 12134949
+    },
+    "n9|mixed_5_1_7_9_1|fans1000|sqrt|return0": {
+      "fans_end": 2052,
+      "gained": 1135,
+      "lost": 83,
+      "net_sales_cents": 12165718
+    },
+    "n9|mixed_5_1_7_9_1|fans1000|sqrt|return3000": {
+      "fans_end": 1873,
+      "gained": 954,
+      "lost": 81,
+      "net_sales_cents": 12134949
+    },
+    "n9|mixed_5_1_7_9_1|fans10000|linear|return0": {
+      "fans_end": 11099,
+      "gained": 1187,
+      "lost": 88,
+      "net_sales_cents": 12948235
+    },
+    "n9|mixed_5_1_7_9_1|fans10000|linear|return3000": {
+      "fans_end": 9986,
+      "gained": 74,
+      "lost": 88,
+      "net_sales_cents": 12943340
+    },
+    "n9|mixed_5_1_7_9_1|fans10000|sqrt|return0": {
+      "fans_end": 11124,
+      "gained": 1212,
+      "lost": 88,
+      "net_sales_cents": 12948235
+    },
+    "n9|mixed_5_1_7_9_1|fans10000|sqrt|return3000": {
+      "fans_end": 9982,
+      "gained": 70,
+      "lost": 88,
+      "net_sales_cents": 12943340
+    },
+    "n9|strong_9_1|fans0|linear|return0": {
+      "fans_end": 3393,
+      "gained": 3393,
+      "lost": 0,
+      "net_sales_cents": 19795779
+    },
+    "n9|strong_9_1|fans0|linear|return3000": {
+      "fans_end": 2984,
+      "gained": 2984,
+      "lost": 0,
+      "net_sales_cents": 19733543
+    },
+    "n9|strong_9_1|fans0|sqrt|return0": {
+      "fans_end": 3227,
+      "gained": 3227,
+      "lost": 0,
+      "net_sales_cents": 19734942
+    },
+    "n9|strong_9_1|fans0|sqrt|return3000": {
+      "fans_end": 2855,
+      "gained": 2855,
+      "lost": 0,
+      "net_sales_cents": 19676201
+    },
+    "n9|strong_9_1|fans300|linear|return0": {
+      "fans_end": 3879,
+      "gained": 3579,
+      "lost": 0,
+      "net_sales_cents": 20885991
+    },
+    "n9|strong_9_1|fans300|linear|return3000": {
+      "fans_end": 3347,
+      "gained": 3047,
+      "lost": 0,
+      "net_sales_cents": 20821653
+    },
+    "n9|strong_9_1|fans300|sqrt|return0": {
+      "fans_end": 3707,
+      "gained": 3407,
+      "lost": 0,
+      "net_sales_cents": 20832842
+    },
+    "n9|strong_9_1|fans300|sqrt|return3000": {
+      "fans_end": 3219,
+      "gained": 2919,
+      "lost": 0,
+      "net_sales_cents": 20772702
+    },
+    "n9|strong_9_1|fans1000|linear|return0": {
+      "fans_end": 4704,
+      "gained": 3704,
+      "lost": 0,
+      "net_sales_cents": 21609764
+    },
+    "n9|strong_9_1|fans1000|linear|return3000": {
+      "fans_end": 3949,
+      "gained": 2949,
+      "lost": 0,
+      "net_sales_cents": 21532843
+    },
+    "n9|strong_9_1|fans1000|sqrt|return0": {
+      "fans_end": 4532,
+      "gained": 3532,
+      "lost": 0,
+      "net_sales_cents": 21588086
+    },
+    "n9|strong_9_1|fans1000|sqrt|return3000": {
+      "fans_end": 3831,
+      "gained": 2831,
+      "lost": 0,
+      "net_sales_cents": 21532843
+    },
+    "n9|strong_9_1|fans10000|linear|return0": {
+      "fans_end": 13862,
+      "gained": 3862,
+      "lost": 0,
+      "net_sales_cents": 22535637
+    },
+    "n9|strong_9_1|fans10000|linear|return3000": {
+      "fans_end": 10551,
+      "gained": 551,
+      "lost": 0,
+      "net_sales_cents": 22491582
+    },
+    "n9|strong_9_1|fans10000|sqrt|return0": {
+      "fans_end": 13687,
+      "gained": 3687,
+      "lost": 0,
+      "net_sales_cents": 22535637
+    },
+    "n9|strong_9_1|fans10000|sqrt|return3000": {
+      "fans_end": 10528,
+      "gained": 528,
+      "lost": 0,
+      "net_sales_cents": 22491582
+    },
+    "n20|actual_low|fans0|linear|return0": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 7049636
+    },
+    "n20|actual_low|fans0|linear|return3000": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 7049636
+    },
+    "n20|actual_low|fans0|sqrt|return0": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 7049636
+    },
+    "n20|actual_low|fans0|sqrt|return3000": {
+      "fans_end": 0,
+      "gained": 0,
+      "lost": 0,
+      "net_sales_cents": 7049636
+    },
+    "n20|actual_low|fans300|linear|return0": {
+      "fans_end": 2,
+      "gained": 0,
+      "lost": 298,
+      "net_sales_cents": 7513968
+    },
+    "n20|actual_low|fans300|linear|return3000": {
+      "fans_end": 2,
+      "gained": 0,
+      "lost": 298,
+      "net_sales_cents": 7513968
+    },
+    "n20|actual_low|fans300|sqrt|return0": {
+      "fans_end": 2,
+      "gained": 0,
+      "lost": 298,
+      "net_sales_cents": 7513968
+    },
+    "n20|actual_low|fans300|sqrt|return3000": {
+      "fans_end": 2,
+      "gained": 0,
+      "lost": 298,
+      "net_sales_cents": 7513968
+    },
+    "n20|actual_low|fans1000|linear|return0": {
+      "fans_end": 2,
+      "gained": 0,
+      "lost": 998,
+      "net_sales_cents": 7994389
+    },
+    "n20|actual_low|fans1000|linear|return3000": {
+      "fans_end": 2,
+      "gained": 0,
+      "lost": 998,
+      "net_sales_cents": 7994389
+    },
+    "n20|actual_low|fans1000|sqrt|return0": {
+      "fans_end": 2,
+      "gained": 0,
+      "lost": 998,
+      "net_sales_cents": 7994389
+    },
+    "n20|actual_low|fans1000|sqrt|return3000": {
+      "fans_end": 2,
+      "gained": 0,
+      "lost": 998,
+      "net_sales_cents": 7994389
+    },
+    "n20|actual_low|fans10000|linear|return0": {
+      "fans_end": 1460,
+      "gained": 0,
+      "lost": 8540,
+      "net_sales_cents": 11178304
+    },
+    "n20|actual_low|fans10000|linear|return3000": {
+      "fans_end": 1460,
+      "gained": 0,
+      "lost": 8540,
+      "net_sales_cents": 11178304
+    },
+    "n20|actual_low|fans10000|sqrt|return0": {
+      "fans_end": 1460,
+      "gained": 0,
+      "lost": 8540,
+      "net_sales_cents": 11178304
+    },
+    "n20|actual_low|fans10000|sqrt|return3000": {
+      "fans_end": 1460,
+      "gained": 0,
+      "lost": 8540,
+      "net_sales_cents": 11178304
+    },
+    "n20|mixed_5_1_7_9_1|fans0|linear|return0": {
+      "fans_end": 2492,
+      "gained": 2653,
+      "lost": 161,
+      "net_sales_cents": 26730036
+    },
+    "n20|mixed_5_1_7_9_1|fans0|linear|return3000": {
+      "fans_end": 2195,
+      "gained": 2352,
+      "lost": 157,
+      "net_sales_cents": 26624440
+    },
+    "n20|mixed_5_1_7_9_1|fans0|sqrt|return0": {
+      "fans_end": 2505,
+      "gained": 2667,
+      "lost": 162,
+      "net_sales_cents": 26811154
+    },
+    "n20|mixed_5_1_7_9_1|fans0|sqrt|return3000": {
+      "fans_end": 2195,
+      "gained": 2353,
+      "lost": 158,
+      "net_sales_cents": 26714650
+    },
+    "n20|mixed_5_1_7_9_1|fans300|linear|return0": {
+      "fans_end": 2918,
+      "gained": 2807,
+      "lost": 189,
+      "net_sales_cents": 28205555
+    },
+    "n20|mixed_5_1_7_9_1|fans300|linear|return3000": {
+      "fans_end": 2512,
+      "gained": 2399,
+      "lost": 187,
+      "net_sales_cents": 28084579
+    },
+    "n20|mixed_5_1_7_9_1|fans300|sqrt|return0": {
+      "fans_end": 2928,
+      "gained": 2818,
+      "lost": 190,
+      "net_sales_cents": 28237724
+    },
+    "n20|mixed_5_1_7_9_1|fans300|sqrt|return3000": {
+      "fans_end": 2504,
+      "gained": 2391,
+      "lost": 187,
+      "net_sales_cents": 28106259
+    },
+    "n20|mixed_5_1_7_9_1|fans1000|linear|return0": {
+      "fans_end": 3702,
+      "gained": 2917,
+      "lost": 215,
+      "net_sales_cents": 29237723
+    },
+    "n20|mixed_5_1_7_9_1|fans1000|linear|return3000": {
+      "fans_end": 3097,
+      "gained": 2310,
+      "lost": 213,
+      "net_sales_cents": 29125838
+    },
+    "n20|mixed_5_1_7_9_1|fans1000|sqrt|return0": {
+      "fans_end": 3708,
+      "gained": 2923,
+      "lost": 215,
+      "net_sales_cents": 29237723
+    },
+    "n20|mixed_5_1_7_9_1|fans1000|sqrt|return3000": {
+      "fans_end": 3077,
+      "gained": 2290,
+      "lost": 213,
+      "net_sales_cents": 29123740
+    },
+    "n20|mixed_5_1_7_9_1|fans10000|linear|return0": {
+      "fans_end": 12829,
+      "gained": 3053,
+      "lost": 224,
+      "net_sales_cents": 30568491
+    },
+    "n20|mixed_5_1_7_9_1|fans10000|linear|return3000": {
+      "fans_end": 10041,
+      "gained": 265,
+      "lost": 224,
+      "net_sales_cents": 30516745
+    },
+    "n20|mixed_5_1_7_9_1|fans10000|sqrt|return0": {
+      "fans_end": 12837,
+      "gained": 3061,
+      "lost": 224,
+      "net_sales_cents": 30568491
+    },
+    "n20|mixed_5_1_7_9_1|fans10000|sqrt|return3000": {
+      "fans_end": 10029,
+      "gained": 253,
+      "lost": 224,
+      "net_sales_cents": 30516745
+    },
+    "n20|strong_9_1|fans0|linear|return0": {
+      "fans_end": 8233,
+      "gained": 8233,
+      "lost": 0,
+      "net_sales_cents": 48032108
+    },
+    "n20|strong_9_1|fans0|linear|return3000": {
+      "fans_end": 6048,
+      "gained": 6048,
+      "lost": 0,
+      "net_sales_cents": 47835608
+    },
+    "n20|strong_9_1|fans0|sqrt|return0": {
+      "fans_end": 7839,
+      "gained": 7839,
+      "lost": 0,
+      "net_sales_cents": 47934907
+    },
+    "n20|strong_9_1|fans0|sqrt|return3000": {
+      "fans_end": 5841,
+      "gained": 5841,
+      "lost": 0,
+      "net_sales_cents": 47754491
+    },
+    "n20|strong_9_1|fans300|linear|return0": {
+      "fans_end": 8728,
+      "gained": 8428,
+      "lost": 0,
+      "net_sales_cents": 49185257
+    },
+    "n20|strong_9_1|fans300|linear|return3000": {
+      "fans_end": 6300,
+      "gained": 6000,
+      "lost": 0,
+      "net_sales_cents": 48982460
+    },
+    "n20|strong_9_1|fans300|sqrt|return0": {
+      "fans_end": 8332,
+      "gained": 8032,
+      "lost": 0,
+      "net_sales_cents": 49099940
+    },
+    "n20|strong_9_1|fans300|sqrt|return3000": {
+      "fans_end": 6094,
+      "gained": 5794,
+      "lost": 0,
+      "net_sales_cents": 48913928
+    },
+    "n20|strong_9_1|fans1000|linear|return0": {
+      "fans_end": 9568,
+      "gained": 8568,
+      "lost": 0,
+      "net_sales_cents": 49980361
+    },
+    "n20|strong_9_1|fans1000|linear|return3000": {
+      "fans_end": 6712,
+      "gained": 5712,
+      "lost": 0,
+      "net_sales_cents": 49758682
+    },
+    "n20|strong_9_1|fans1000|sqrt|return0": {
+      "fans_end": 9172,
+      "gained": 8172,
+      "lost": 0,
+      "net_sales_cents": 49951689
+    },
+    "n20|strong_9_1|fans1000|sqrt|return3000": {
+      "fans_end": 6522,
+      "gained": 5522,
+      "lost": 0,
+      "net_sales_cents": 49739103
+    },
+    "n20|strong_9_1|fans10000|linear|return0": {
+      "fans_end": 18780,
+      "gained": 8780,
+      "lost": 0,
+      "net_sales_cents": 51218122
+    },
+    "n20|strong_9_1|fans10000|linear|return3000": {
+      "fans_end": 11188,
+      "gained": 1188,
+      "lost": 0,
+      "net_sales_cents": 51054486
+    },
+    "n20|strong_9_1|fans10000|sqrt|return0": {
+      "fans_end": 18378,
+      "gained": 8378,
+      "lost": 0,
+      "net_sales_cents": 51210429
+    },
+    "n20|strong_9_1|fans10000|sqrt|return3000": {
+      "fans_end": 11142,
+      "gained": 1142,
+      "lost": 0,
+      "net_sales_cents": 51046095
+    }
+  },
+  "audience_bounds": {
+    "shared": {
+      "fans_end": 1333,
+      "gained": 333,
+      "net_sales_cents": 2730066,
+      "first_active_months": [
+        {
+          "calendar_month": 11,
+          "cycle": 22,
+          "fans_before": 1000,
+          "fans_gained": 130,
+          "fans_lost": 0,
+          "fans_after": 1130,
+          "earned_units": 1639,
+          "earned_net_cents": 1146152,
+          "settled_cash_cents": 1146152,
+          "releases": [
+            {
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "review": 7.0,
+              "launch_awareness": 109,
+              "fan_awareness": 115,
+              "market_bp": 9000,
+              "earned_units": 954,
+              "returning_buyers": 300,
+              "new_buyer_units": 654,
+              "earned_net_cents": 667132,
+              "settled_net_cents": 667132,
+              "gain": 52,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 681,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            },
+            {
+              "release_id": "release_c51a472934a769382a2eac846316edeb",
+              "review": 9.1,
+              "launch_awareness": 107,
+              "fan_awareness": 115,
+              "market_bp": 10000,
+              "earned_units": 685,
+              "returning_buyers": 0,
+              "new_buyer_units": 685,
+              "earned_net_cents": 479020,
+              "settled_net_cents": 479020,
+              "gain": 78,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 376,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            }
+          ]
+        },
+        {
+          "calendar_month": 12,
+          "cycle": 24,
+          "fans_before": 1130,
+          "fans_gained": 95,
+          "fans_lost": 0,
+          "fans_after": 1225,
+          "earned_units": 1234,
+          "earned_net_cents": 862936,
+          "settled_cash_cents": 862936,
+          "releases": [
+            {
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "review": 7.0,
+              "launch_awareness": 109,
+              "fan_awareness": 115,
+              "market_bp": 9000,
+              "earned_units": 319,
+              "returning_buyers": 0,
+              "new_buyer_units": 319,
+              "earned_net_cents": 223076,
+              "settled_net_cents": 223076,
+              "gain": 25,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 909,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            },
+            {
+              "release_id": "release_c51a472934a769382a2eac846316edeb",
+              "review": 9.1,
+              "launch_awareness": 107,
+              "fan_awareness": 115,
+              "market_bp": 10000,
+              "earned_units": 915,
+              "returning_buyers": 300,
+              "new_buyer_units": 615,
+              "earned_net_cents": 639860,
+              "settled_net_cents": 639860,
+              "gain": 70,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 878,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            }
+          ]
+        },
+        {
+          "calendar_month": 13,
+          "cycle": 26,
+          "fans_before": 1225,
+          "fans_gained": 63,
+          "fans_lost": 0,
+          "fans_after": 1288,
+          "earned_units": 602,
+          "earned_net_cents": 420979,
+          "settled_cash_cents": 420979,
+          "releases": [
+            {
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "review": 7.0,
+              "launch_awareness": 109,
+              "fan_awareness": 115,
+              "market_bp": 9000,
+              "earned_units": 202,
+              "returning_buyers": 0,
+              "new_buyer_units": 202,
+              "earned_net_cents": 141259,
+              "settled_net_cents": 141259,
+              "gain": 17,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 1028,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            },
+            {
+              "release_id": "release_c51a472934a769382a2eac846316edeb",
+              "review": 9.1,
+              "launch_awareness": 107,
+              "fan_awareness": 115,
+              "market_bp": 10000,
+              "earned_units": 400,
+              "returning_buyers": 0,
+              "new_buyer_units": 400,
+              "earned_net_cents": 279720,
+              "settled_net_cents": 279720,
+              "gain": 46,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 1070,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            }
+          ]
+        }
+      ]
+    },
+    "distinct": {
+      "fans_end": 1333,
+      "gained": 333,
+      "net_sales_cents": 2730066,
+      "first_active_months": [
+        {
+          "calendar_month": 11,
+          "cycle": 22,
+          "fans_before": 1000,
+          "fans_gained": 96,
+          "fans_lost": 0,
+          "fans_after": 1096,
+          "earned_units": 1639,
+          "earned_net_cents": 1146152,
+          "settled_cash_cents": 1146152,
+          "releases": [
+            {
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "review": 7.0,
+              "launch_awareness": 109,
+              "fan_awareness": 115,
+              "market_bp": 9000,
+              "earned_units": 954,
+              "returning_buyers": 300,
+              "new_buyer_units": 654,
+              "earned_net_cents": 667132,
+              "settled_net_cents": 667132,
+              "gain": 52,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 681,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            },
+            {
+              "release_id": "release_c51a472934a769382a2eac846316edeb",
+              "review": 9.1,
+              "launch_awareness": 107,
+              "fan_awareness": 115,
+              "market_bp": 10000,
+              "earned_units": 685,
+              "returning_buyers": 300,
+              "new_buyer_units": 385,
+              "earned_net_cents": 479020,
+              "settled_net_cents": 479020,
+              "gain": 44,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 376,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            }
+          ]
+        },
+        {
+          "calendar_month": 12,
+          "cycle": 24,
+          "fans_before": 1096,
+          "fans_gained": 129,
+          "fans_lost": 0,
+          "fans_after": 1225,
+          "earned_units": 1234,
+          "earned_net_cents": 862936,
+          "settled_cash_cents": 862936,
+          "releases": [
+            {
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "review": 7.0,
+              "launch_awareness": 109,
+              "fan_awareness": 115,
+              "market_bp": 9000,
+              "earned_units": 319,
+              "returning_buyers": 0,
+              "new_buyer_units": 319,
+              "earned_net_cents": 223076,
+              "settled_net_cents": 223076,
+              "gain": 25,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 909,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            },
+            {
+              "release_id": "release_c51a472934a769382a2eac846316edeb",
+              "review": 9.1,
+              "launch_awareness": 107,
+              "fan_awareness": 115,
+              "market_bp": 10000,
+              "earned_units": 915,
+              "returning_buyers": 0,
+              "new_buyer_units": 915,
+              "earned_net_cents": 639860,
+              "settled_net_cents": 639860,
+              "gain": 104,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 878,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            }
+          ]
+        },
+        {
+          "calendar_month": 13,
+          "cycle": 26,
+          "fans_before": 1225,
+          "fans_gained": 63,
+          "fans_lost": 0,
+          "fans_after": 1288,
+          "earned_units": 602,
+          "earned_net_cents": 420979,
+          "settled_cash_cents": 420979,
+          "releases": [
+            {
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "review": 7.0,
+              "launch_awareness": 109,
+              "fan_awareness": 115,
+              "market_bp": 9000,
+              "earned_units": 202,
+              "returning_buyers": 0,
+              "new_buyer_units": 202,
+              "earned_net_cents": 141259,
+              "settled_net_cents": 141259,
+              "gain": 17,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 1028,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            },
+            {
+              "release_id": "release_c51a472934a769382a2eac846316edeb",
+              "review": 9.1,
+              "launch_awareness": 107,
+              "fan_awareness": 115,
+              "market_bp": 10000,
+              "earned_units": 400,
+              "returning_buyers": 0,
+              "new_buyer_units": 400,
+              "earned_net_cents": 279720,
+              "settled_net_cents": 279720,
+              "gain": 46,
+              "loss_raw": 0,
+              "neutral_cumulative_reach": 1070,
+              "unique_exposure_seen": 0,
+              "campaign_count": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "calendar_alignment": {
+    "0": {
+      "fans_end": 341,
+      "net_sales_cents": 1453144,
+      "first_game_month1_boundary": [
+        {
+          "calendar_month": 15,
+          "cycle": 30,
+          "fans_before": 300,
+          "fans_gained": 0,
+          "fans_lost": 9,
+          "fans_after": 291,
+          "earned_units": 592,
+          "earned_net_cents": 413985,
+          "settled_cash_cents": 413985,
+          "releases": [
+            {
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "review": 4.8,
+              "launch_awareness": 109,
+              "fan_awareness": 75,
+              "market_bp": 9000,
+              "earned_units": 592,
+              "returning_buyers": 45,
+              "new_buyer_units": 547,
+              "earned_net_cents": 413985,
+              "settled_net_cents": 413985,
+              "gain": 0,
+              "loss_raw": 9,
+              "neutral_cumulative_reach": 617,
+              "unique_exposure_seen": 300,
+              "campaign_count": 0
+            }
+          ]
+        }
+      ]
+    },
+    "1": {
+      "fans_end": 338,
+      "net_sales_cents": 1405592,
+      "first_game_month1_boundary": [
+        {
+          "calendar_month": 15,
+          "cycle": 30,
+          "fans_before": 300,
+          "fans_gained": 0,
+          "fans_lost": 9,
+          "fans_after": 291,
+          "earned_units": 296,
+          "earned_net_cents": 206992,
+          "settled_cash_cents": 206992,
+          "releases": [
+            {
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "review": 4.8,
+              "launch_awareness": 109,
+              "fan_awareness": 75,
+              "market_bp": 9000,
+              "earned_units": 296,
+              "returning_buyers": 45,
+              "new_buyer_units": 251,
+              "earned_net_cents": 206992,
+              "settled_net_cents": 206992,
+              "gain": 0,
+              "loss_raw": 9,
+              "neutral_cumulative_reach": 308,
+              "unique_exposure_seen": 300,
+              "campaign_count": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "dormant_revival": {
+    "source": "historical_4_8_5_7_campaign, game_1 frozen inputs",
+    "first_zero_age_month": 10,
+    "revival_age_month": 11,
+    "incremental_units": 15,
+    "incremental_net_cents": 10489,
+    "margin_after_100_cents": 489,
+    "fan_rule_note": "Review 4.8 recruits zero fans under either gain curve; any monthly loss uses review-neutral unique reach."
+  },
+  "exact_five_single_release": {
+    "0": {
+      "fans_end": 0,
+      "earned_units": 854,
+      "net_sales_cents": 597202
+    },
+    "50": {
+      "fans_end": 50,
+      "earned_units": 929,
+      "net_sales_cents": 649649
+    },
+    "300": {
+      "fans_end": 300,
+      "earned_units": 1127,
+      "net_sales_cents": 788111
+    },
+    "1000": {
+      "fans_end": 1000,
+      "earned_units": 1272,
+      "net_sales_cents": 889509
+    },
+    "10000": {
+      "fans_end": 10000,
+      "earned_units": 1381,
+      "net_sales_cents": 965733
+    }
+  },
+  "counts": {
+    "current_live_routes": 4,
+    "historical_frozen_route": 1,
+    "actual_route_shadow_scenarios": 600,
+    "synthetic_review_cases": 72,
+    "synthetic_compounding_cases": 144
+  }
+}

@@ -1,0 +1,6564 @@
+{
+  "count": 1,
+  "failures": 0,
+  "policy": "optimizer",
+  "rows": [
+    {
+      "actions": [
+        {
+          "after": {
+            "cash_cents": 205000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 1,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 0,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 205000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "game": "Game One",
+          "genre": "action",
+          "phase": "predevelopment"
+        },
+        {
+          "after": {
+            "cash_cents": 179000,
+            "cores": [
+              10,
+              0,
+              6,
+              0
+            ],
+            "cycle": 2,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 1,
+            "redraws": 3,
+            "sales": [],
+            "scope": 5
+          },
+          "before": {
+            "cash_cents": 205000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 1,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 0,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "cost_cents": 26000,
+          "draw": [
+            "4_color_palette",
+            "controller",
+            "sprites",
+            "8_bit_music",
+            "keyboard_and_mouse",
+            "sound_pass",
+            "text"
+          ],
+          "final_draw": [
+            "4_color_palette",
+            "controller",
+            "sprites",
+            "8_bit_music",
+            "keyboard_and_mouse",
+            "design_pass",
+            "text"
+          ],
+          "game": 1,
+          "phase": "design",
+          "printed_core": {
+            "design": 0,
+            "graphics": 10,
+            "sound": 0,
+            "technology": 6
+          },
+          "printed_scope": 5,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 5,
+              "success": true,
+              "to": "technology_pass"
+            },
+            {
+              "from": "technology_pass",
+              "slot": 5,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "controller",
+            "sprites",
+            "keyboard_and_mouse",
+            "text"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 179000,
+            "cores": [
+              10,
+              0,
+              6,
+              0
+            ],
+            "cycle": 3,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 2,
+            "redraws": 4,
+            "sales": [],
+            "scope": 5
+          },
+          "before": {
+            "cash_cents": 179000,
+            "cores": [
+              10,
+              0,
+              6,
+              0
+            ],
+            "cycle": 2,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 1,
+            "redraws": 3,
+            "sales": [],
+            "scope": 5
+          },
+          "game": 1,
+          "phase": "design_priority",
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 158000,
+            "cores": [
+              12,
+              7,
+              6,
+              2
+            ],
+            "cycle": 4,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 3,
+            "redraws": 3,
+            "sales": [],
+            "scope": 10
+          },
+          "before": {
+            "cash_cents": 179000,
+            "cores": [
+              10,
+              0,
+              6,
+              0
+            ],
+            "cycle": 3,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 2,
+            "redraws": 4,
+            "sales": [],
+            "scope": 5
+          },
+          "cost_cents": 21000,
+          "draw": [
+            "sound_pass",
+            "8_bit_sound",
+            "graphics_pass",
+            "graphics_pass",
+            "4_color_palette",
+            "sound_pass",
+            "8_bit_music"
+          ],
+          "final_draw": [
+            "lives_system",
+            "8_bit_sound",
+            "sound_pass",
+            "graphics_pass",
+            "4_color_palette",
+            "sound_pass",
+            "8_bit_music"
+          ],
+          "game": 1,
+          "phase": "design",
+          "printed_core": {
+            "design": 2,
+            "graphics": 2,
+            "sound": 7,
+            "technology": 0
+          },
+          "printed_scope": 5,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "lives_system"
+            },
+            {
+              "from": "graphics_pass",
+              "slot": 2,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "lives_system",
+            "8_bit_sound",
+            "4_color_palette",
+            "8_bit_music"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 158000,
+            "cores": [
+              24,
+              7,
+              6,
+              2
+            ],
+            "cycle": 5,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 4,
+            "redraws": 2,
+            "sales": [],
+            "scope": 10
+          },
+          "before": {
+            "cash_cents": 158000,
+            "cores": [
+              12,
+              7,
+              6,
+              2
+            ],
+            "cycle": 4,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 3,
+            "redraws": 3,
+            "sales": [],
+            "scope": 10
+          },
+          "cost_cents": 0,
+          "draw": [
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "sound_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "sound_pass",
+            "graphics_pass"
+          ],
+          "game": 1,
+          "phase": "design",
+          "printed_core": {
+            "design": 0,
+            "graphics": 8,
+            "sound": 0,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            },
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            }
+          ],
+          "selected": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "synergy": "graphics specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 158000,
+            "cores": [
+              24,
+              7,
+              12,
+              4
+            ],
+            "cycle": 6,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 5,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "before": {
+            "cash_cents": 158000,
+            "cores": [
+              24,
+              7,
+              6,
+              2
+            ],
+            "cycle": 5,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 4,
+            "redraws": 2,
+            "sales": [],
+            "scope": 10
+          },
+          "cost_cents": 0,
+          "draw": [
+            "sound_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass",
+            "graphics_pass"
+          ],
+          "game": 1,
+          "phase": "design",
+          "printed_core": {
+            "design": 2,
+            "graphics": 0,
+            "sound": 0,
+            "technology": 6
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            },
+            {
+              "from": "graphics_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "technology_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 158000,
+            "cores": [
+              28,
+              9,
+              14,
+              4
+            ],
+            "cycle": 7,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 6,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "before": {
+            "cash_cents": 158000,
+            "cores": [
+              24,
+              7,
+              12,
+              4
+            ],
+            "cycle": 6,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 5,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "cost_cents": 0,
+          "draw": [
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "final_draw": [
+            "sound_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "game": 1,
+          "phase": "design",
+          "printed_core": {
+            "design": 0,
+            "graphics": 4,
+            "sound": 2,
+            "technology": 2
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "sound_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 158000,
+            "cores": [
+              30,
+              9,
+              18,
+              6
+            ],
+            "cycle": 8,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 7,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "before": {
+            "cash_cents": 158000,
+            "cores": [
+              28,
+              9,
+              14,
+              4
+            ],
+            "cycle": 7,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 6,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "cost_cents": 0,
+          "draw": [
+            "design_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "sound_pass",
+            "technology_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "sound_pass",
+            "technology_pass"
+          ],
+          "game": 1,
+          "phase": "design",
+          "printed_core": {
+            "design": 2,
+            "graphics": 2,
+            "sound": 0,
+            "technology": 4
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "technology_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 158000,
+            "cores": [
+              30,
+              9,
+              30,
+              6
+            ],
+            "cycle": 9,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 8,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "before": {
+            "cash_cents": 158000,
+            "cores": [
+              30,
+              9,
+              18,
+              6
+            ],
+            "cycle": 8,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 7,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "cost_cents": 0,
+          "draw": [
+            "design_pass",
+            "sound_pass",
+            "technology_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "sound_pass",
+            "technology_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "game": 1,
+          "phase": "design",
+          "printed_core": {
+            "design": 0,
+            "graphics": 0,
+            "sound": 0,
+            "technology": 8
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "technology_pass",
+            "technology_pass",
+            "technology_pass",
+            "technology_pass"
+          ],
+          "synergy": "technology specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 158000,
+            "cores": [
+              42,
+              9,
+              30,
+              6
+            ],
+            "cycle": 10,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 9,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "before": {
+            "cash_cents": 158000,
+            "cores": [
+              30,
+              9,
+              30,
+              6
+            ],
+            "cycle": 9,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 8,
+            "redraws": 1,
+            "sales": [],
+            "scope": 10
+          },
+          "cost_cents": 0,
+          "draw": [
+            "technology_pass",
+            "design_pass",
+            "graphics_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "sound_pass",
+            "design_pass",
+            "graphics_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "game": 1,
+          "phase": "design",
+          "printed_core": {
+            "design": 0,
+            "graphics": 8,
+            "sound": 0,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "synergy": "graphics specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 132000,
+            "cores": [
+              45,
+              10,
+              33,
+              13
+            ],
+            "cycle": 11,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 10,
+            "redraws": 3,
+            "sales": [],
+            "scope": 16
+          },
+          "before": {
+            "cash_cents": 158000,
+            "cores": [
+              42,
+              9,
+              30,
+              6
+            ],
+            "cycle": 10,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 9,
+            "redraws": 4,
+            "sales": [],
+            "scope": 10
+          },
+          "cost_cents": 26000,
+          "draw": [
+            "multiple_endings",
+            "levels",
+            "secrets",
+            "controls",
+            "design_pass",
+            "exploration",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "multiple_endings",
+            "levels",
+            "secrets",
+            "controls",
+            "design_pass",
+            "exploration",
+            "graphics_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 7,
+            "graphics": 3,
+            "sound": 1,
+            "technology": 3
+          },
+          "printed_scope": 6,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 4,
+              "success": true,
+              "to": "sound_pass"
+            },
+            {
+              "from": "sound_pass",
+              "slot": 4,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "multiple_endings",
+            "levels",
+            "secrets",
+            "controls"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 132000,
+            "cores": [
+              45,
+              10,
+              33,
+              13
+            ],
+            "cycle": 12,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 11,
+            "redraws": 4,
+            "sales": [],
+            "scope": 16
+          },
+          "before": {
+            "cash_cents": 132000,
+            "cores": [
+              45,
+              10,
+              33,
+              13
+            ],
+            "cycle": 11,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 10,
+            "redraws": 3,
+            "sales": [],
+            "scope": 16
+          },
+          "game": 1,
+          "phase": "alpha_priority",
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              46,
+              12,
+              34,
+              17
+            ],
+            "cycle": 13,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 12,
+            "redraws": 3,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 132000,
+            "cores": [
+              45,
+              10,
+              33,
+              13
+            ],
+            "cycle": 12,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 11,
+            "redraws": 4,
+            "sales": [],
+            "scope": 16
+          },
+          "cost_cents": 16000,
+          "draw": [
+            "character_backstories",
+            "design_pass",
+            "exploration",
+            "power_ups",
+            "sound_pass",
+            "sound_pass",
+            "dialogue"
+          ],
+          "final_draw": [
+            "character_backstories",
+            "design_pass",
+            "exploration",
+            "power_ups",
+            "sound_pass",
+            "sound_pass",
+            "dialogue"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 4,
+            "graphics": 1,
+            "sound": 2,
+            "technology": 1
+          },
+          "printed_scope": 4,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 1,
+              "success": true,
+              "to": "sound_pass"
+            },
+            {
+              "from": "sound_pass",
+              "slot": 1,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "character_backstories",
+            "exploration",
+            "power_ups",
+            "dialogue"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              48,
+              16,
+              36,
+              17
+            ],
+            "cycle": 14,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 13,
+            "redraws": 2,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              46,
+              12,
+              34,
+              17
+            ],
+            "cycle": 13,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 12,
+            "redraws": 3,
+            "sales": [],
+            "scope": 20
+          },
+          "cost_cents": 0,
+          "draw": [
+            "graphics_pass",
+            "technology_pass",
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "final_draw": [
+            "sound_pass",
+            "technology_pass",
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 0,
+            "graphics": 2,
+            "sound": 4,
+            "technology": 2
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "graphics_pass",
+              "slot": 0,
+              "success": true,
+              "to": "design_pass"
+            },
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "sound_pass",
+            "technology_pass",
+            "sound_pass",
+            "graphics_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              50,
+              16,
+              40,
+              19
+            ],
+            "cycle": 15,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 14,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              48,
+              16,
+              36,
+              17
+            ],
+            "cycle": 14,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 13,
+            "redraws": 2,
+            "sales": [],
+            "scope": 20
+          },
+          "cost_cents": 0,
+          "draw": [
+            "sound_pass",
+            "design_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass",
+            "design_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 2,
+            "sound": 0,
+            "technology": 4
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            },
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            }
+          ],
+          "selected": [
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "technology_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              54,
+              16,
+              42,
+              21
+            ],
+            "cycle": 16,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 15,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              50,
+              16,
+              40,
+              19
+            ],
+            "cycle": 15,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 14,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "cost_cents": 0,
+          "draw": [
+            "sound_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "technology_pass",
+            "sound_pass",
+            "sound_pass"
+          ],
+          "final_draw": [
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "technology_pass",
+            "sound_pass",
+            "sound_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 4,
+            "sound": 0,
+            "technology": 2
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              54,
+              16,
+              42,
+              33
+            ],
+            "cycle": 17,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 16,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              54,
+              16,
+              42,
+              21
+            ],
+            "cycle": 16,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 15,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "cost_cents": 0,
+          "draw": [
+            "technology_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "sound_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "sound_pass",
+            "graphics_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 8,
+            "graphics": 0,
+            "sound": 0,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            }
+          ],
+          "selected": [
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass"
+          ],
+          "synergy": "design specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              54,
+              16,
+              48,
+              35
+            ],
+            "cycle": 18,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 17,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              54,
+              16,
+              42,
+              33
+            ],
+            "cycle": 17,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 16,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "cost_cents": 0,
+          "draw": [
+            "sound_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 0,
+            "sound": 0,
+            "technology": 6
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "technology_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              66,
+              16,
+              48,
+              35
+            ],
+            "cycle": 19,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 18,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              54,
+              16,
+              48,
+              35
+            ],
+            "cycle": 18,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 17,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "cost_cents": 0,
+          "draw": [
+            "sound_pass",
+            "technology_pass",
+            "technology_pass",
+            "graphics_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "graphics_pass",
+            "technology_pass",
+            "technology_pass",
+            "graphics_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 0,
+            "graphics": 8,
+            "sound": 0,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            }
+          ],
+          "selected": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "synergy": "graphics specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              66,
+              18,
+              52,
+              37
+            ],
+            "cycle": 20,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 19,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              66,
+              16,
+              48,
+              35
+            ],
+            "cycle": 19,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 18,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "cost_cents": 0,
+          "draw": [
+            "graphics_pass",
+            "sound_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "sound_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 0,
+            "sound": 2,
+            "technology": 4
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "graphics_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "technology_pass",
+            "sound_pass",
+            "design_pass",
+            "technology_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 21,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 20,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              66,
+              18,
+              52,
+              37
+            ],
+            "cycle": 20,
+            "fixed_bugs": 0,
+            "hidden_bugs": 1,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 19,
+            "redraws": 1,
+            "sales": [],
+            "scope": 20
+          },
+          "cost_cents": 0,
+          "draw": [
+            "technology_pass",
+            "design_pass",
+            "design_pass",
+            "sound_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "sound_pass",
+            "technology_pass",
+            "technology_pass",
+            "design_pass"
+          ],
+          "game": 1,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 4,
+            "graphics": 2,
+            "sound": 2,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            }
+          ],
+          "selected": [
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "sound_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 22,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 21,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 21,
+            "fixed_bugs": 0,
+            "hidden_bugs": 4,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 20,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "categories": [
+            "qa",
+            "qa",
+            "qa",
+            "qa"
+          ],
+          "draw": [
+            "debug",
+            "study_competition",
+            "debug",
+            "posters",
+            "press_release",
+            "press_release",
+            "search_for_bugs"
+          ],
+          "final_draw": [
+            "debug",
+            "study_competition",
+            "debug",
+            "search_for_bugs",
+            "press_release",
+            "press_release",
+            "search_for_bugs"
+          ],
+          "game": 1,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "posters",
+              "slot": 3,
+              "success": true,
+              "to": "search_for_bugs"
+            }
+          ],
+          "selected": [
+            "debug",
+            "debug",
+            "search_for_bugs",
+            "search_for_bugs"
+          ],
+          "success": true,
+          "synergy": "QA specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 23,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 22,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 22,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 21,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "game": 1,
+          "phase": "beta_priority",
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 24,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 23,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 23,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 22,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "categories": [
+            "qa",
+            "qa",
+            "qa",
+            "qa"
+          ],
+          "draw": [
+            "search_for_bugs",
+            "debug",
+            "press_interview",
+            "search_for_bugs",
+            "predict_market_trends",
+            "posters",
+            "debug"
+          ],
+          "final_draw": [
+            "search_for_bugs",
+            "debug",
+            "press_interview",
+            "search_for_bugs",
+            "predict_market_trends",
+            "search_for_bugs",
+            "debug"
+          ],
+          "game": 1,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "posters",
+              "slot": 5,
+              "success": true,
+              "to": "search_for_bugs"
+            }
+          ],
+          "selected": [
+            "search_for_bugs",
+            "debug",
+            "search_for_bugs",
+            "debug"
+          ],
+          "success": true,
+          "synergy": "QA specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 25,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 24,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 24,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 23,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "categories": [
+            "qa",
+            "qa",
+            "qa",
+            "qa"
+          ],
+          "draw": [
+            "debug",
+            "press_interview",
+            "debug",
+            "playtest_rival_games",
+            "debug",
+            "sign_flippers",
+            "sign_flippers"
+          ],
+          "final_draw": [
+            "debug",
+            "press_interview",
+            "debug",
+            "search_for_bugs",
+            "debug",
+            "sign_flippers",
+            "sign_flippers"
+          ],
+          "game": 1,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "playtest_rival_games",
+              "slot": 3,
+              "success": true,
+              "to": "search_for_bugs"
+            }
+          ],
+          "selected": [
+            "debug",
+            "debug",
+            "search_for_bugs",
+            "debug"
+          ],
+          "success": true,
+          "synergy": "QA specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 26,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 5,
+            "project_cycle": 25,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 25,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 24,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "categories": [
+            "qa",
+            "marketing",
+            "marketing",
+            "insider"
+          ],
+          "draw": [
+            "debug",
+            "posters",
+            "sign_flippers",
+            "press_release",
+            "sign_flippers",
+            "predict_market_trends",
+            "posters"
+          ],
+          "final_draw": [
+            "debug",
+            "press_release",
+            "sign_flippers",
+            "press_release",
+            "sign_flippers",
+            "predict_market_trends",
+            "posters"
+          ],
+          "game": 1,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "posters",
+              "slot": 1,
+              "success": true,
+              "to": "press_release"
+            }
+          ],
+          "selected": [
+            "debug",
+            "press_release",
+            "press_release",
+            "predict_market_trends"
+          ],
+          "success": true,
+          "synergy": "balanced operations"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 27,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 26,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 26,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 5,
+            "project_cycle": 25,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "categories": [
+            "insider",
+            "qa",
+            "qa",
+            "marketing"
+          ],
+          "draw": [
+            "study_competition",
+            "sign_flippers",
+            "debug",
+            "playtest_rival_games",
+            "posters",
+            "press_release",
+            "press_interview"
+          ],
+          "final_draw": [
+            "study_competition",
+            "search_for_bugs",
+            "debug",
+            "playtest_rival_games",
+            "posters",
+            "press_release",
+            "press_interview"
+          ],
+          "game": 1,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "sign_flippers",
+              "slot": 1,
+              "success": true,
+              "to": "search_for_bugs"
+            }
+          ],
+          "selected": [
+            "study_competition",
+            "search_for_bugs",
+            "debug",
+            "press_interview"
+          ],
+          "success": true,
+          "synergy": "balanced operations"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 28,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 27,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 26,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "categories": [
+            "qa",
+            "qa",
+            "qa",
+            "qa"
+          ],
+          "draw": [
+            "posters",
+            "playtest_rival_games",
+            "debug",
+            "debug",
+            "sign_flippers",
+            "debug",
+            "search_for_bugs"
+          ],
+          "final_draw": [
+            "debug",
+            "playtest_rival_games",
+            "debug",
+            "debug",
+            "sign_flippers",
+            "debug",
+            "search_for_bugs"
+          ],
+          "game": 1,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "posters",
+              "slot": 0,
+              "success": true,
+              "to": "debug"
+            }
+          ],
+          "selected": [
+            "debug",
+            "debug",
+            "debug",
+            "debug"
+          ],
+          "success": true,
+          "synergy": "QA specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 28,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 0,
+                "earned_units": 0,
+                "entitlement_cents": 0,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 0,
+                "total_earned_cycles": 0
+              }
+            ],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 116000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 28,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [],
+            "scope": 20
+          },
+          "game": 1,
+          "phase": "launch",
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 156000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 29,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 1,
+                "earned_units": 238,
+                "entitlement_cents": 166433,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 0,
+                "total_earned_cycles": 1
+              }
+            ],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 156000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 28,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 0,
+                "earned_units": 0,
+                "entitlement_cents": 0,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 0,
+                "total_earned_cycles": 0
+              }
+            ],
+            "scope": 20
+          },
+          "hand": 1,
+          "phase": "contract_hand",
+          "selected": [
+            "keyboard_and_mouse",
+            "controller",
+            "8_bit_sound",
+            "levels"
+          ]
+        },
+        {
+          "after": {
+            "cash_cents": 638866,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 31,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 541,
+                "entitlement_cents": 378321,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 332866,
+                "total_earned_cycles": 3
+              }
+            ],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 488866,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 30,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 476,
+                "entitlement_cents": 332866,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 332866,
+                "total_earned_cycles": 2
+              }
+            ],
+            "scope": 20
+          },
+          "hand": 2,
+          "phase": "contract_hand",
+          "selected": [
+            "4_color_palette",
+            "exploration",
+            "graphics_pass",
+            "graphics_pass"
+          ]
+        },
+        {
+          "after": {
+            "cash_cents": 688128,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 34,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 0,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 673,
+                "entitlement_cents": 470628,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 470628,
+                "total_earned_cycles": 6
+              }
+            ],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 641275,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 33,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 639,
+                "entitlement_cents": 446852,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 423775,
+                "total_earned_cycles": 5
+              }
+            ],
+            "scope": 20
+          },
+          "game": "Game Two",
+          "genre": "adventure",
+          "phase": "predevelopment"
+        },
+        {
+          "after": {
+            "cash_cents": 669128,
+            "cores": [
+              5,
+              5,
+              3,
+              0
+            ],
+            "cycle": 35,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 1,
+            "redraws": 3,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 690,
+                "entitlement_cents": 482517,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 470628,
+                "total_earned_cycles": 7
+              }
+            ],
+            "scope": 5
+          },
+          "before": {
+            "cash_cents": 688128,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 34,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 0,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 673,
+                "entitlement_cents": 470628,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 470628,
+                "total_earned_cycles": 6
+              }
+            ],
+            "scope": 0
+          },
+          "cost_cents": 19000,
+          "draw": [
+            "design_pass",
+            "controller",
+            "technology_pass",
+            "design_pass",
+            "colored_text",
+            "text",
+            "8_bit_music"
+          ],
+          "final_draw": [
+            "8_bit_sound",
+            "controller",
+            "technology_pass",
+            "design_pass",
+            "colored_text",
+            "text",
+            "8_bit_music"
+          ],
+          "game": 2,
+          "phase": "design",
+          "printed_core": {
+            "design": 0,
+            "graphics": 5,
+            "sound": 5,
+            "technology": 3
+          },
+          "printed_scope": 5,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            },
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "8_bit_sound"
+            }
+          ],
+          "selected": [
+            "8_bit_sound",
+            "controller",
+            "colored_text",
+            "text"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 692905,
+            "cores": [
+              5,
+              5,
+              3,
+              0
+            ],
+            "cycle": 36,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 2,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 707,
+                "entitlement_cents": 494405,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 494405,
+                "total_earned_cycles": 8
+              }
+            ],
+            "scope": 5
+          },
+          "before": {
+            "cash_cents": 669128,
+            "cores": [
+              5,
+              5,
+              3,
+              0
+            ],
+            "cycle": 35,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 1,
+            "redraws": 3,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 690,
+                "entitlement_cents": 482517,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 470628,
+                "total_earned_cycles": 7
+              }
+            ],
+            "scope": 5
+          },
+          "game": 2,
+          "phase": "design_priority",
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 668905,
+            "cores": [
+              14,
+              7,
+              6,
+              0
+            ],
+            "cycle": 37,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 3,
+            "redraws": 3,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 715,
+                "entitlement_cents": 499999,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 494405,
+                "total_earned_cycles": 9
+              }
+            ],
+            "scope": 10
+          },
+          "before": {
+            "cash_cents": 692905,
+            "cores": [
+              5,
+              5,
+              3,
+              0
+            ],
+            "cycle": 36,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 2,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 707,
+                "entitlement_cents": 494405,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 494405,
+                "total_earned_cycles": 8
+              }
+            ],
+            "scope": 5
+          },
+          "cost_cents": 24000,
+          "draw": [
+            "sprites",
+            "8_bit_music",
+            "4_color_palette",
+            "sound_pass",
+            "lives_system",
+            "graphics_pass",
+            "keyboard_and_mouse"
+          ],
+          "final_draw": [
+            "sprites",
+            "8_bit_music",
+            "4_color_palette",
+            "design_pass",
+            "lives_system",
+            "graphics_pass",
+            "keyboard_and_mouse"
+          ],
+          "game": 2,
+          "phase": "design",
+          "printed_core": {
+            "design": 0,
+            "graphics": 9,
+            "sound": 2,
+            "technology": 3
+          },
+          "printed_scope": 5,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 3,
+              "success": true,
+              "to": "technology_pass"
+            },
+            {
+              "from": "technology_pass",
+              "slot": 3,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "sprites",
+            "8_bit_music",
+            "4_color_palette",
+            "keyboard_and_mouse"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 676793,
+            "cores": [
+              14,
+              7,
+              12,
+              2
+            ],
+            "cycle": 38,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 4,
+            "redraws": 2,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 724,
+                "entitlement_cents": 506293,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 506293,
+                "total_earned_cycles": 10
+              }
+            ],
+            "scope": 11
+          },
+          "before": {
+            "cash_cents": 668905,
+            "cores": [
+              14,
+              7,
+              6,
+              0
+            ],
+            "cycle": 37,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 3,
+            "redraws": 3,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 715,
+                "entitlement_cents": 499999,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 494405,
+                "total_earned_cycles": 9
+              }
+            ],
+            "scope": 10
+          },
+          "cost_cents": 4000,
+          "draw": [
+            "technology_pass",
+            "technology_pass",
+            "lives_system",
+            "technology_pass",
+            "design_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "technology_pass",
+            "lives_system",
+            "technology_pass",
+            "design_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "game": 2,
+          "phase": "design",
+          "printed_core": {
+            "design": 2,
+            "graphics": 0,
+            "sound": 0,
+            "technology": 6
+          },
+          "printed_scope": 1,
+          "redraws": [
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            },
+            {
+              "from": "graphics_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "technology_pass",
+            "technology_pass",
+            "lives_system",
+            "technology_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 676793,
+            "cores": [
+              14,
+              7,
+              12,
+              14
+            ],
+            "cycle": 39,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 5,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 728,
+                "entitlement_cents": 509090,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 506293,
+                "total_earned_cycles": 11
+              }
+            ],
+            "scope": 11
+          },
+          "before": {
+            "cash_cents": 676793,
+            "cores": [
+              14,
+              7,
+              12,
+              2
+            ],
+            "cycle": 38,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 4,
+            "redraws": 2,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 724,
+                "entitlement_cents": 506293,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 506293,
+                "total_earned_cycles": 10
+              }
+            ],
+            "scope": 11
+          },
+          "cost_cents": 0,
+          "draw": [
+            "sound_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "sound_pass",
+            "technology_pass",
+            "design_pass",
+            "technology_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass"
+          ],
+          "game": 2,
+          "phase": "design",
+          "printed_core": {
+            "design": 8,
+            "graphics": 0,
+            "sound": 0,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            },
+            {
+              "from": "graphics_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass"
+          ],
+          "synergy": "design specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 683086,
+            "cores": [
+              18,
+              9,
+              14,
+              14
+            ],
+            "cycle": 40,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 6,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 733,
+                "entitlement_cents": 512586,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 512586,
+                "total_earned_cycles": 12
+              }
+            ],
+            "scope": 11
+          },
+          "before": {
+            "cash_cents": 676793,
+            "cores": [
+              14,
+              7,
+              12,
+              14
+            ],
+            "cycle": 39,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 5,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 728,
+                "entitlement_cents": 509090,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 506293,
+                "total_earned_cycles": 11
+              }
+            ],
+            "scope": 11
+          },
+          "cost_cents": 0,
+          "draw": [
+            "design_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "sound_pass",
+            "design_pass",
+            "technology_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "sound_pass",
+            "design_pass",
+            "technology_pass",
+            "design_pass"
+          ],
+          "game": 2,
+          "phase": "design",
+          "printed_core": {
+            "design": 0,
+            "graphics": 4,
+            "sound": 2,
+            "technology": 2
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "technology_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "sound_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 683086,
+            "cores": [
+              18,
+              15,
+              14,
+              16
+            ],
+            "cycle": 41,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 7,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 735,
+                "entitlement_cents": 513985,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 512586,
+                "total_earned_cycles": 13
+              }
+            ],
+            "scope": 11
+          },
+          "before": {
+            "cash_cents": 683086,
+            "cores": [
+              18,
+              9,
+              14,
+              14
+            ],
+            "cycle": 40,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 6,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 733,
+                "entitlement_cents": 512586,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 512586,
+                "total_earned_cycles": 12
+              }
+            ],
+            "scope": 11
+          },
+          "cost_cents": 0,
+          "draw": [
+            "design_pass",
+            "sound_pass",
+            "design_pass",
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "sound_pass",
+            "sound_pass",
+            "design_pass",
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "game": 2,
+          "phase": "design",
+          "printed_core": {
+            "design": 2,
+            "graphics": 0,
+            "sound": 6,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "sound_pass",
+            "sound_pass",
+            "design_pass",
+            "sound_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 685884,
+            "cores": [
+              20,
+              17,
+              14,
+              20
+            ],
+            "cycle": 42,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 8,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 737,
+                "entitlement_cents": 515384,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 515384,
+                "total_earned_cycles": 14
+              }
+            ],
+            "scope": 11
+          },
+          "before": {
+            "cash_cents": 683086,
+            "cores": [
+              18,
+              15,
+              14,
+              16
+            ],
+            "cycle": 41,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 7,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 735,
+                "entitlement_cents": 513985,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 512586,
+                "total_earned_cycles": 13
+              }
+            ],
+            "scope": 11
+          },
+          "cost_cents": 0,
+          "draw": [
+            "technology_pass",
+            "sound_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "sound_pass"
+          ],
+          "final_draw": [
+            "design_pass",
+            "sound_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "sound_pass"
+          ],
+          "game": 2,
+          "phase": "design",
+          "printed_core": {
+            "design": 4,
+            "graphics": 2,
+            "sound": 2,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "design_pass",
+            "sound_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 685884,
+            "cores": [
+              20,
+              17,
+              14,
+              32
+            ],
+            "cycle": 43,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 9,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 738,
+                "entitlement_cents": 516083,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 515384,
+                "total_earned_cycles": 15
+              }
+            ],
+            "scope": 11
+          },
+          "before": {
+            "cash_cents": 685884,
+            "cores": [
+              20,
+              17,
+              14,
+              20
+            ],
+            "cycle": 42,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 8,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 737,
+                "entitlement_cents": 515384,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 515384,
+                "total_earned_cycles": 14
+              }
+            ],
+            "scope": 11
+          },
+          "cost_cents": 0,
+          "draw": [
+            "graphics_pass",
+            "design_pass",
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "design_pass",
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "graphics_pass"
+          ],
+          "game": 2,
+          "phase": "design",
+          "printed_core": {
+            "design": 8,
+            "graphics": 0,
+            "sound": 0,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "graphics_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass"
+          ],
+          "synergy": "design specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 660282,
+            "cores": [
+              23,
+              19,
+              17,
+              39
+            ],
+            "cycle": 44,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 10,
+            "redraws": 3,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 739,
+                "entitlement_cents": 516782,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 516782,
+                "total_earned_cycles": 16
+              }
+            ],
+            "scope": 17
+          },
+          "before": {
+            "cash_cents": 685884,
+            "cores": [
+              20,
+              17,
+              14,
+              32
+            ],
+            "cycle": 43,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 9,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 738,
+                "entitlement_cents": 516083,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 515384,
+                "total_earned_cycles": 15
+              }
+            ],
+            "scope": 11
+          },
+          "cost_cents": 27000,
+          "draw": [
+            "character_backstories",
+            "graphics_pass",
+            "multiple_endings",
+            "graphics_pass",
+            "secrets",
+            "power_ups",
+            "controls"
+          ],
+          "final_draw": [
+            "character_backstories",
+            "sound_effects",
+            "multiple_endings",
+            "levels",
+            "secrets",
+            "power_ups",
+            "controls"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 7,
+            "graphics": 3,
+            "sound": 2,
+            "technology": 3
+          },
+          "printed_scope": 6,
+          "redraws": [
+            {
+              "from": "graphics_pass",
+              "slot": 1,
+              "success": true,
+              "to": "sound_effects"
+            },
+            {
+              "from": "graphics_pass",
+              "slot": 3,
+              "success": true,
+              "to": "levels"
+            }
+          ],
+          "selected": [
+            "character_backstories",
+            "sound_effects",
+            "multiple_endings",
+            "levels"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 660282,
+            "cores": [
+              23,
+              19,
+              17,
+              39
+            ],
+            "cycle": 45,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 11,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 739,
+                "entitlement_cents": 516782,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 516782,
+                "total_earned_cycles": 17
+              }
+            ],
+            "scope": 17
+          },
+          "before": {
+            "cash_cents": 660282,
+            "cores": [
+              23,
+              19,
+              17,
+              39
+            ],
+            "cycle": 44,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 10,
+            "redraws": 3,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 739,
+                "entitlement_cents": 516782,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 516782,
+                "total_earned_cycles": 16
+              }
+            ],
+            "scope": 17
+          },
+          "game": 2,
+          "phase": "alpha_priority",
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 652982,
+            "cores": [
+              24,
+              23,
+              19,
+              40
+            ],
+            "cycle": 46,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 12,
+            "redraws": 3,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 18
+              }
+            ],
+            "scope": 19
+          },
+          "before": {
+            "cash_cents": 660282,
+            "cores": [
+              23,
+              19,
+              17,
+              39
+            ],
+            "cycle": 45,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 11,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 739,
+                "entitlement_cents": 516782,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 516782,
+                "total_earned_cycles": 17
+              }
+            ],
+            "scope": 17
+          },
+          "cost_cents": 8000,
+          "draw": [
+            "exploration",
+            "sound_pass",
+            "technology_pass",
+            "secrets",
+            "technology_pass",
+            "sound_pass",
+            "technology_pass"
+          ],
+          "final_draw": [
+            "exploration",
+            "sound_pass",
+            "technology_pass",
+            "secrets",
+            "technology_pass",
+            "sound_pass",
+            "technology_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 1,
+            "graphics": 1,
+            "sound": 4,
+            "technology": 2
+          },
+          "printed_scope": 2,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 1,
+              "success": true,
+              "to": "graphics_pass"
+            },
+            {
+              "from": "graphics_pass",
+              "slot": 1,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "exploration",
+            "sound_pass",
+            "technology_pass",
+            "secrets"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              26,
+              24,
+              21,
+              43
+            ],
+            "cycle": 47,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 13,
+            "redraws": 2,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 19
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 652982,
+            "cores": [
+              24,
+              23,
+              19,
+              40
+            ],
+            "cycle": 46,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 12,
+            "redraws": 3,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 18
+              }
+            ],
+            "scope": 19
+          },
+          "cost_cents": 12000,
+          "draw": [
+            "dialogue",
+            "design_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass"
+          ],
+          "final_draw": [
+            "dialogue",
+            "power_ups",
+            "controls",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 3,
+            "graphics": 2,
+            "sound": 1,
+            "technology": 2
+          },
+          "printed_scope": 3,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 1,
+              "success": true,
+              "to": "power_ups"
+            },
+            {
+              "from": "graphics_pass",
+              "slot": 2,
+              "success": true,
+              "to": "controls"
+            }
+          ],
+          "selected": [
+            "dialogue",
+            "power_ups",
+            "controls",
+            "graphics_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              28,
+              28,
+              21,
+              45
+            ],
+            "cycle": 48,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 14,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 20
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              26,
+              24,
+              21,
+              43
+            ],
+            "cycle": 47,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 13,
+            "redraws": 2,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 19
+              }
+            ],
+            "scope": 22
+          },
+          "cost_cents": 0,
+          "draw": [
+            "design_pass",
+            "sound_pass",
+            "design_pass",
+            "graphics_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "sound_pass",
+            "sound_pass",
+            "design_pass",
+            "graphics_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 2,
+            "sound": 4,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "graphics_pass"
+            },
+            {
+              "from": "graphics_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "sound_pass",
+            "sound_pass",
+            "design_pass",
+            "graphics_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              32,
+              30,
+              21,
+              47
+            ],
+            "cycle": 49,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 15,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 21
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              28,
+              28,
+              21,
+              45
+            ],
+            "cycle": 48,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 14,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 20
+              }
+            ],
+            "scope": 22
+          },
+          "cost_cents": 0,
+          "draw": [
+            "sound_pass",
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "technology_pass",
+            "technology_pass"
+          ],
+          "final_draw": [
+            "design_pass",
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "technology_pass",
+            "technology_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 4,
+            "sound": 2,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "sound_pass",
+              "slot": 0,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "design_pass",
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              34,
+              32,
+              21,
+              51
+            ],
+            "cycle": 50,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 16,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 22
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              32,
+              30,
+              21,
+              47
+            ],
+            "cycle": 49,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 15,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 21
+              }
+            ],
+            "scope": 22
+          },
+          "cost_cents": 0,
+          "draw": [
+            "technology_pass",
+            "graphics_pass",
+            "design_pass",
+            "sound_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "design_pass",
+            "graphics_pass",
+            "design_pass",
+            "sound_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 4,
+            "graphics": 2,
+            "sound": 2,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "design_pass",
+            "graphics_pass",
+            "design_pass",
+            "sound_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              38,
+              34,
+              21,
+              53
+            ],
+            "cycle": 51,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 17,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 23
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              34,
+              32,
+              21,
+              51
+            ],
+            "cycle": 50,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 16,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 22
+              }
+            ],
+            "scope": 22
+          },
+          "cost_cents": 0,
+          "draw": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "technology_pass"
+          ],
+          "final_draw": [
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "technology_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 4,
+            "sound": 2,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "graphics_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "sound_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              40,
+              34,
+              25,
+              55
+            ],
+            "cycle": 52,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 18,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 24
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              38,
+              34,
+              21,
+              53
+            ],
+            "cycle": 51,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 17,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 23
+              }
+            ],
+            "scope": 22
+          },
+          "cost_cents": 0,
+          "draw": [
+            "design_pass",
+            "graphics_pass",
+            "technology_pass",
+            "design_pass",
+            "sound_pass",
+            "design_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "technology_pass",
+            "graphics_pass",
+            "technology_pass",
+            "design_pass",
+            "sound_pass",
+            "design_pass",
+            "design_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 2,
+            "sound": 0,
+            "technology": 4
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "technology_pass"
+            }
+          ],
+          "selected": [
+            "technology_pass",
+            "graphics_pass",
+            "technology_pass",
+            "design_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              57
+            ],
+            "cycle": 53,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 19,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 25
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              40,
+              34,
+              25,
+              55
+            ],
+            "cycle": 52,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 18,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 24
+              }
+            ],
+            "scope": 22
+          },
+          "cost_cents": 0,
+          "draw": [
+            "design_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "sound_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 2,
+            "graphics": 2,
+            "sound": 2,
+            "technology": 2
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "design_pass",
+              "slot": 0,
+              "success": true,
+              "to": "sound_pass"
+            }
+          ],
+          "selected": [
+            "sound_pass",
+            "technology_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 54,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 20,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 26
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              57
+            ],
+            "cycle": 53,
+            "fixed_bugs": 0,
+            "hidden_bugs": 2,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 19,
+            "redraws": 1,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 25
+              }
+            ],
+            "scope": 22
+          },
+          "cost_cents": 0,
+          "draw": [
+            "technology_pass",
+            "design_pass",
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "final_draw": [
+            "design_pass",
+            "design_pass",
+            "graphics_pass",
+            "design_pass",
+            "design_pass",
+            "graphics_pass",
+            "design_pass"
+          ],
+          "game": 2,
+          "phase": "alpha",
+          "printed_core": {
+            "design": 8,
+            "graphics": 0,
+            "sound": 0,
+            "technology": 0
+          },
+          "printed_scope": 0,
+          "redraws": [
+            {
+              "from": "technology_pass",
+              "slot": 0,
+              "success": true,
+              "to": "design_pass"
+            }
+          ],
+          "selected": [
+            "design_pass",
+            "design_pass",
+            "design_pass",
+            "design_pass"
+          ],
+          "synergy": "design specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 55,
+            "fixed_bugs": 2,
+            "hidden_bugs": 2,
+            "known_bugs": 2,
+            "marketing": 3,
+            "project_cycle": 21,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 27
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 54,
+            "fixed_bugs": 0,
+            "hidden_bugs": 6,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": 20,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 26
+              }
+            ],
+            "scope": 22
+          },
+          "categories": [
+            "qa",
+            "marketing",
+            "qa",
+            "qa"
+          ],
+          "draw": [
+            "predict_market_trends",
+            "playtest_rival_games",
+            "search_for_bugs",
+            "press_interview",
+            "debug",
+            "study_competition",
+            "search_for_bugs"
+          ],
+          "final_draw": [
+            "predict_market_trends",
+            "press_release",
+            "search_for_bugs",
+            "press_interview",
+            "debug",
+            "study_competition",
+            "search_for_bugs"
+          ],
+          "game": 2,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "playtest_rival_games",
+              "slot": 1,
+              "success": true,
+              "to": "press_release"
+            }
+          ],
+          "selected": [
+            "search_for_bugs",
+            "press_interview",
+            "debug",
+            "search_for_bugs"
+          ],
+          "success": true,
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 56,
+            "fixed_bugs": 2,
+            "hidden_bugs": 2,
+            "known_bugs": 2,
+            "marketing": 3,
+            "project_cycle": 22,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 28
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 55,
+            "fixed_bugs": 2,
+            "hidden_bugs": 2,
+            "known_bugs": 2,
+            "marketing": 3,
+            "project_cycle": 21,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 27
+              }
+            ],
+            "scope": 22
+          },
+          "game": 2,
+          "phase": "beta_priority",
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 57,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 5,
+            "project_cycle": 23,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 29
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 56,
+            "fixed_bugs": 2,
+            "hidden_bugs": 2,
+            "known_bugs": 2,
+            "marketing": 3,
+            "project_cycle": 22,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 28
+              }
+            ],
+            "scope": 22
+          },
+          "categories": [
+            "qa",
+            "qa",
+            "marketing",
+            "qa"
+          ],
+          "draw": [
+            "study_competition",
+            "debug",
+            "debug",
+            "posters",
+            "press_release",
+            "search_for_bugs",
+            "sign_flippers"
+          ],
+          "final_draw": [
+            "study_competition",
+            "debug",
+            "debug",
+            "press_release",
+            "press_release",
+            "search_for_bugs",
+            "sign_flippers"
+          ],
+          "game": 2,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "posters",
+              "slot": 3,
+              "success": true,
+              "to": "press_release"
+            }
+          ],
+          "selected": [
+            "debug",
+            "debug",
+            "press_release",
+            "search_for_bugs"
+          ],
+          "success": true,
+          "synergy": "none"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 58,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 5,
+            "project_cycle": 24,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 30
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 57,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 5,
+            "project_cycle": 23,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 29
+              }
+            ],
+            "scope": 22
+          },
+          "categories": [
+            "qa",
+            "qa",
+            "qa",
+            "qa"
+          ],
+          "draw": [
+            "playtest_rival_games",
+            "debug",
+            "debug",
+            "sign_flippers",
+            "study_competition",
+            "sign_flippers",
+            "debug"
+          ],
+          "final_draw": [
+            "debug",
+            "debug",
+            "debug",
+            "sign_flippers",
+            "study_competition",
+            "sign_flippers",
+            "debug"
+          ],
+          "game": 2,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "playtest_rival_games",
+              "slot": 0,
+              "success": true,
+              "to": "debug"
+            }
+          ],
+          "selected": [
+            "debug",
+            "debug",
+            "debug",
+            "debug"
+          ],
+          "success": true,
+          "synergy": "QA specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 59,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 5,
+            "project_cycle": 25,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 31
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 58,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 5,
+            "project_cycle": 24,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 30
+              }
+            ],
+            "scope": 22
+          },
+          "categories": [
+            "qa",
+            "qa",
+            "qa",
+            "qa"
+          ],
+          "draw": [
+            "press_release",
+            "search_for_bugs",
+            "debug",
+            "posters",
+            "debug",
+            "debug",
+            "debug"
+          ],
+          "final_draw": [
+            "press_release",
+            "search_for_bugs",
+            "debug",
+            "sign_flippers",
+            "debug",
+            "debug",
+            "debug"
+          ],
+          "game": 2,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "posters",
+              "slot": 3,
+              "success": true,
+              "to": "sign_flippers"
+            }
+          ],
+          "selected": [
+            "debug",
+            "debug",
+            "debug",
+            "debug"
+          ],
+          "success": true,
+          "synergy": "QA specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 60,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 26,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 32
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 59,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 5,
+            "project_cycle": 25,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 31
+              }
+            ],
+            "scope": 22
+          },
+          "categories": [
+            "marketing",
+            "qa",
+            "qa",
+            "insider"
+          ],
+          "draw": [
+            "sign_flippers",
+            "search_for_bugs",
+            "debug",
+            "posters",
+            "playtest_rival_games",
+            "predict_market_trends",
+            "study_competition"
+          ],
+          "final_draw": [
+            "posters",
+            "search_for_bugs",
+            "debug",
+            "posters",
+            "playtest_rival_games",
+            "predict_market_trends",
+            "study_competition"
+          ],
+          "game": 2,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "sign_flippers",
+              "slot": 0,
+              "success": true,
+              "to": "posters"
+            }
+          ],
+          "selected": [
+            "posters",
+            "search_for_bugs",
+            "debug",
+            "predict_market_trends"
+          ],
+          "success": true,
+          "synergy": "balanced operations"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 61,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 33
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 60,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 26,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 32
+              }
+            ],
+            "scope": 22
+          },
+          "categories": [
+            "qa",
+            "qa",
+            "qa",
+            "qa"
+          ],
+          "draw": [
+            "debug",
+            "study_competition",
+            "playtest_rival_games",
+            "debug",
+            "debug",
+            "debug",
+            "press_release"
+          ],
+          "final_draw": [
+            "debug",
+            "study_competition",
+            "debug",
+            "debug",
+            "debug",
+            "debug",
+            "press_release"
+          ],
+          "game": 2,
+          "phase": "beta",
+          "redraws": [
+            {
+              "from": "playtest_rival_games",
+              "slot": 2,
+              "success": true,
+              "to": "debug"
+            }
+          ],
+          "selected": [
+            "debug",
+            "debug",
+            "debug",
+            "debug"
+          ],
+          "success": true,
+          "synergy": "QA specialization"
+        },
+        {
+          "after": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 61,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 33
+              },
+              {
+                "campaign_count": 0,
+                "earned_cycles": 0,
+                "earned_units": 0,
+                "entitlement_cents": 0,
+                "release_id": "release_c51a472934a769382a2eac846316edeb",
+                "settled_cents": 0,
+                "total_earned_cycles": 0
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 61,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 33
+              }
+            ],
+            "scope": 22
+          },
+          "game": 2,
+          "phase": "launch",
+          "success": true
+        }
+      ],
+      "after_passive_summary": {
+        "cash_cents": 116000,
+        "cores": [
+          68,
+          20,
+          52,
+          41
+        ],
+        "cycle": 28,
+        "fixed_bugs": 4,
+        "hidden_bugs": 0,
+        "known_bugs": 0,
+        "marketing": 9,
+        "project_cycle": 27,
+        "redraws": 4,
+        "sales": [
+          {
+            "campaign_count": 0,
+            "earned_cycles": 0,
+            "earned_units": 0,
+            "entitlement_cents": 0,
+            "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+            "settled_cents": 0,
+            "total_earned_cycles": 0
+          }
+        ],
+        "scope": 20
+      },
+      "after_release_1": {
+        "cash_cents": 116000,
+        "cores": [
+          68,
+          20,
+          52,
+          41
+        ],
+        "cycle": 28,
+        "fixed_bugs": 4,
+        "hidden_bugs": 0,
+        "known_bugs": 0,
+        "marketing": 9,
+        "project_cycle": 27,
+        "redraws": 4,
+        "sales": [
+          {
+            "campaign_count": 0,
+            "earned_cycles": 0,
+            "earned_units": 0,
+            "entitlement_cents": 0,
+            "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+            "settled_cents": 0,
+            "total_earned_cycles": 0
+          }
+        ],
+        "scope": 20
+      },
+      "after_release_2": {
+        "cash_cents": 640982,
+        "cores": [
+          42,
+          36,
+          27,
+          69
+        ],
+        "cycle": 61,
+        "fixed_bugs": 6,
+        "hidden_bugs": 0,
+        "known_bugs": 0,
+        "marketing": 7,
+        "project_cycle": 27,
+        "redraws": 4,
+        "sales": [
+          {
+            "campaign_count": 0,
+            "earned_cycles": 2,
+            "earned_units": 740,
+            "entitlement_cents": 517482,
+            "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+            "settled_cents": 517482,
+            "total_earned_cycles": 33
+          },
+          {
+            "campaign_count": 0,
+            "earned_cycles": 0,
+            "earned_units": 0,
+            "entitlement_cents": 0,
+            "release_id": "release_c51a472934a769382a2eac846316edeb",
+            "settled_cents": 0,
+            "total_earned_cycles": 0
+          }
+        ],
+        "scope": 22
+      },
+      "beta_mode": "qa",
+      "blockers": [],
+      "case": 0,
+      "cash_before_game_2_cents": 641275,
+      "contract": {
+        "after_accept": {
+          "cash_cents": 156000,
+          "cores": [
+            68,
+            20,
+            52,
+            41
+          ],
+          "cycle": 28,
+          "fixed_bugs": 4,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 9,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 0,
+              "earned_units": 0,
+              "entitlement_cents": 0,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 0,
+              "total_earned_cycles": 0
+            }
+          ],
+          "scope": 20
+        },
+        "after_dismiss": {
+          "cash_cents": 638866,
+          "cores": [
+            68,
+            20,
+            52,
+            41
+          ],
+          "cycle": 31,
+          "fixed_bugs": 4,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 9,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 2,
+              "earned_units": 541,
+              "entitlement_cents": 378321,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 332866,
+              "total_earned_cycles": 3
+            }
+          ],
+          "scope": 20
+        },
+        "before": {
+          "cash_cents": 116000,
+          "cores": [
+            68,
+            20,
+            52,
+            41
+          ],
+          "cycle": 28,
+          "fixed_bugs": 4,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 9,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 0,
+              "earned_units": 0,
+              "entitlement_cents": 0,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 0,
+              "total_earned_cycles": 0
+            }
+          ],
+          "scope": 20
+        },
+        "completion": {
+          "numerator": 72,
+          "payout_cents": 190000,
+          "remainder_cents": 150000,
+          "scope": 8,
+          "upfront_cents": 40000
+        },
+        "dismiss_passive": true,
+        "hands": [
+          {
+            "after": {
+              "cash_cents": 156000,
+              "cores": [
+                68,
+                20,
+                52,
+                41
+              ],
+              "cycle": 29,
+              "fixed_bugs": 4,
+              "hidden_bugs": 0,
+              "known_bugs": 0,
+              "marketing": 9,
+              "project_cycle": 27,
+              "redraws": 4,
+              "sales": [
+                {
+                  "campaign_count": 0,
+                  "earned_cycles": 1,
+                  "earned_units": 238,
+                  "entitlement_cents": 166433,
+                  "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                  "settled_cents": 0,
+                  "total_earned_cycles": 1
+                }
+              ],
+              "scope": 20
+            },
+            "before": {
+              "cash_cents": 156000,
+              "cores": [
+                68,
+                20,
+                52,
+                41
+              ],
+              "cycle": 28,
+              "fixed_bugs": 4,
+              "hidden_bugs": 0,
+              "known_bugs": 0,
+              "marketing": 9,
+              "project_cycle": 27,
+              "redraws": 4,
+              "sales": [
+                {
+                  "campaign_count": 0,
+                  "earned_cycles": 0,
+                  "earned_units": 0,
+                  "entitlement_cents": 0,
+                  "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                  "settled_cents": 0,
+                  "total_earned_cycles": 0
+                }
+              ],
+              "scope": 20
+            },
+            "draw": [
+              "keyboard_and_mouse",
+              "controller",
+              "graphics_pass",
+              "8_bit_sound",
+              "levels",
+              "8_bit_music",
+              "secrets"
+            ],
+            "planned_remainder_cents": 0,
+            "printed_core": {
+              "design": 2,
+              "graphics": 3,
+              "sound": 5,
+              "technology": 6
+            },
+            "printed_scope": 6,
+            "redraws": [
+              {
+                "from": "graphics_pass",
+                "slot": 2,
+                "success": true,
+                "to": "sound_pass"
+              }
+            ],
+            "selected": [
+              "keyboard_and_mouse",
+              "controller",
+              "8_bit_sound",
+              "levels"
+            ],
+            "success": true,
+            "synergy": ""
+          },
+          {
+            "after": {
+              "cash_cents": 638866,
+              "cores": [
+                68,
+                20,
+                52,
+                41
+              ],
+              "cycle": 31,
+              "fixed_bugs": 4,
+              "hidden_bugs": 0,
+              "known_bugs": 0,
+              "marketing": 9,
+              "project_cycle": 27,
+              "redraws": 4,
+              "sales": [
+                {
+                  "campaign_count": 0,
+                  "earned_cycles": 2,
+                  "earned_units": 541,
+                  "entitlement_cents": 378321,
+                  "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                  "settled_cents": 332866,
+                  "total_earned_cycles": 3
+                }
+              ],
+              "scope": 20
+            },
+            "before": {
+              "cash_cents": 488866,
+              "cores": [
+                68,
+                20,
+                52,
+                41
+              ],
+              "cycle": 30,
+              "fixed_bugs": 4,
+              "hidden_bugs": 0,
+              "known_bugs": 0,
+              "marketing": 9,
+              "project_cycle": 27,
+              "redraws": 4,
+              "sales": [
+                {
+                  "campaign_count": 0,
+                  "earned_cycles": 2,
+                  "earned_units": 476,
+                  "entitlement_cents": 332866,
+                  "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                  "settled_cents": 332866,
+                  "total_earned_cycles": 2
+                }
+              ],
+              "scope": 20
+            },
+            "draw": [
+              "controls",
+              "4_color_palette",
+              "character_backstories",
+              "exploration",
+              "technology_pass",
+              "graphics_pass",
+              "technology_pass"
+            ],
+            "planned_remainder_cents": 150000,
+            "printed_core": {
+              "design": 0,
+              "graphics": 7,
+              "sound": 1,
+              "technology": 0
+            },
+            "printed_scope": 2,
+            "redraws": [
+              {
+                "from": "technology_pass",
+                "slot": 4,
+                "success": true,
+                "to": "graphics_pass"
+              }
+            ],
+            "selected": [
+              "4_color_palette",
+              "exploration",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "success": true,
+            "synergy": "graphics"
+          }
+        ],
+        "offer_once": true,
+        "priority_commit": {
+          "after": {
+            "cash_cents": 488866,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 30,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 476,
+                "entitlement_cents": 332866,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 332866,
+                "total_earned_cycles": 2
+              }
+            ],
+            "scope": 20
+          },
+          "before": {
+            "cash_cents": 156000,
+            "cores": [
+              68,
+              20,
+              52,
+              41
+            ],
+            "cycle": 29,
+            "fixed_bugs": 4,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 9,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 1,
+                "earned_units": 238,
+                "entitlement_cents": 166433,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 0,
+                "total_earned_cycles": 1
+              }
+            ],
+            "scope": 20
+          },
+          "success": true
+        }
+      },
+      "errors": [],
+      "game_1": {
+        "awareness": 109,
+        "bug_multiplier": 1.0,
+        "cash_cents": 116000,
+        "cores": [
+          68,
+          20,
+          52,
+          41
+        ],
+        "cycle": 28,
+        "final_review": 4.8,
+        "fixed_bugs": 4,
+        "forecast_bp": 9000,
+        "forecast_id": "market_slump",
+        "genre": "action",
+        "genre_deviation": 10.2209944751381,
+        "genre_fit": 0.957790055248619,
+        "hidden_bugs": 0,
+        "known_bugs": 0,
+        "marketing": 9,
+        "month_1_units": 476,
+        "pre_genre_review": 5.05729262513864,
+        "production_rating": 7.58593893770796,
+        "projected_gross_cents": 475524,
+        "projected_net_cents": 332866,
+        "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+        "released": true,
+        "scope": 20,
+        "scope_completion": 0.666666666666667,
+        "variance_modifier": 0.0,
+        "variance_roll": 61
+      },
+      "game_2": {
+        "awareness": 107,
+        "bug_multiplier": 1.0,
+        "cash_cents": 640982,
+        "cores": [
+          42,
+          36,
+          27,
+          69
+        ],
+        "cycle": 61,
+        "final_review": 5.7,
+        "fixed_bugs": 6,
+        "forecast_bp": 10000,
+        "forecast_id": "stable_market",
+        "genre": "adventure",
+        "genre_deviation": 1.20689655172414,
+        "genre_fit": 1.0,
+        "hidden_bugs": 0,
+        "known_bugs": 0,
+        "marketing": 7,
+        "month_1_units": 624,
+        "pre_genre_review": 5.69919417679133,
+        "production_rating": 8.11253751380636,
+        "projected_gross_cents": 623376,
+        "projected_net_cents": 436363,
+        "release_id": "release_c51a472934a769382a2eac846316edeb",
+        "released": true,
+        "scope": 22,
+        "scope_completion": 0.733333333333333,
+        "variance_modifier": -0.25,
+        "variance_roll": 16
+      },
+      "game_2_campaign": {
+        "after": {
+          "cash_cents": 763778,
+          "cores": [
+            42,
+            36,
+            27,
+            69
+          ],
+          "cycle": 64,
+          "fixed_bugs": 6,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 7,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 2,
+              "earned_units": 740,
+              "entitlement_cents": 517482,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 517482,
+              "total_earned_cycles": 36
+            },
+            {
+              "campaign_count": 1,
+              "earned_cycles": 2,
+              "earned_units": 719,
+              "entitlement_cents": 502796,
+              "release_id": "release_c51a472934a769382a2eac846316edeb",
+              "settled_cents": 502796,
+              "total_earned_cycles": 3
+            }
+          ],
+          "scope": 22
+        },
+        "before": {
+          "cash_cents": 489163,
+          "cores": [
+            42,
+            36,
+            27,
+            69
+          ],
+          "cycle": 63,
+          "fixed_bugs": 6,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 7,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 2,
+              "earned_units": 740,
+              "entitlement_cents": 517482,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 517482,
+              "total_earned_cycles": 35
+            },
+            {
+              "campaign_count": 0,
+              "earned_cycles": 2,
+              "earned_units": 624,
+              "entitlement_cents": 436363,
+              "release_id": "release_c51a472934a769382a2eac846316edeb",
+              "settled_cents": 218181,
+              "total_earned_cycles": 2
+            }
+          ],
+          "scope": 22
+        },
+        "offer": {
+          "affordable": true,
+          "can_purchase": true,
+          "eligible": true,
+          "price_cents": 10000,
+          "release_id": "release_c51a472934a769382a2eac846316edeb"
+        },
+        "projection": {
+          "active_awareness_scaled": 835000,
+          "campaign_boost_scaled": 100000,
+          "campaign_count": 0,
+          "campaign_projected_month_units": 190,
+          "can_campaign": true,
+          "later_enabled": true,
+          "next_age_cycle": 1,
+          "next_age_month": 2,
+          "organic_awareness_scaled": 835000,
+          "projected_month_units": 169,
+          "total_earned_cycles": 2
+        }
+      },
+      "genre_1": "action",
+      "pair": 0,
+      "policy": "optimizer",
+      "post_game_2_store": [
+        {
+          "after": {
+            "cash_cents": 639163,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 62,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 34
+              },
+              {
+                "campaign_count": 0,
+                "earned_cycles": 1,
+                "earned_units": 312,
+                "entitlement_cents": 218181,
+                "release_id": "release_c51a472934a769382a2eac846316edeb",
+                "settled_cents": 218181,
+                "total_earned_cycles": 1
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 640982,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 61,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 33
+              },
+              {
+                "campaign_count": 0,
+                "earned_cycles": 0,
+                "earned_units": 0,
+                "entitlement_cents": 0,
+                "release_id": "release_c51a472934a769382a2eac846316edeb",
+                "settled_cents": 0,
+                "total_earned_cycles": 0
+              }
+            ],
+            "scope": 22
+          },
+          "id": "save_files",
+          "offer": {
+            "affordable": true,
+            "base_price_cents": 220000,
+            "discount_percent": 0,
+            "id": "save_files",
+            "name": "Save Files",
+            "owned": false,
+            "parent": "",
+            "prerequisite": "New root",
+            "price_cents": 220000,
+            "unlocked": true
+          },
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 489163,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 63,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 35
+              },
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 624,
+                "entitlement_cents": 436363,
+                "release_id": "release_c51a472934a769382a2eac846316edeb",
+                "settled_cents": 218181,
+                "total_earned_cycles": 2
+              }
+            ],
+            "scope": 22
+          },
+          "before": {
+            "cash_cents": 639163,
+            "cores": [
+              42,
+              36,
+              27,
+              69
+            ],
+            "cycle": 62,
+            "fixed_bugs": 6,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 7,
+            "project_cycle": 27,
+            "redraws": 4,
+            "sales": [
+              {
+                "campaign_count": 0,
+                "earned_cycles": 2,
+                "earned_units": 740,
+                "entitlement_cents": 517482,
+                "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+                "settled_cents": 517482,
+                "total_earned_cycles": 34
+              },
+              {
+                "campaign_count": 0,
+                "earned_cycles": 1,
+                "earned_units": 312,
+                "entitlement_cents": 218181,
+                "release_id": "release_c51a472934a769382a2eac846316edeb",
+                "settled_cents": 218181,
+                "total_earned_cycles": 1
+              }
+            ],
+            "scope": 22
+          },
+          "id": "branching_nodes",
+          "offer": {
+            "affordable": true,
+            "base_price_cents": 150000,
+            "discount_percent": 0,
+            "id": "branching_nodes",
+            "name": "Branching Nodes",
+            "owned": false,
+            "parent": "save_files",
+            "prerequisite": "Own Save Files",
+            "price_cents": 150000,
+            "unlocked": true
+          },
+          "success": true
+        }
+      ],
+      "production_focus": "mixed",
+      "publishers_after_1": {
+        "crown_quill": {
+          "availability": "Publisher profile only; no offer is implemented yet.",
+          "unlocked": false
+        },
+        "ironclad": {
+          "availability": "Owns the existing cash-only Balanced Primitive Contract.",
+          "unlocked": true
+        },
+        "neon_circuit": {
+          "availability": "Publisher profile only; no offer is implemented yet.",
+          "unlocked": false
+        },
+        "sidestreet": {
+          "availability": "One $1,200 maximum cash-only offer per distinct released game, available after Ironclad completes.",
+          "unlocked": false
+        },
+        "starwave": {
+          "availability": "Unlocks after two distinct releases and three distinct completed contracts. No Starwave offer is implemented yet.",
+          "unlocked": false
+        }
+      },
+      "publishers_after_2": {
+        "crown_quill": {
+          "availability": "Publisher profile only; no offer is implemented yet.",
+          "unlocked": false
+        },
+        "ironclad": {
+          "availability": "Owns the existing cash-only Balanced Primitive Contract.",
+          "unlocked": true
+        },
+        "neon_circuit": {
+          "availability": "Publisher profile only; no offer is implemented yet.",
+          "unlocked": false
+        },
+        "sidestreet": {
+          "availability": "One $1,200 maximum cash-only offer per distinct released game, available after Ironclad completes.",
+          "unlocked": true
+        },
+        "starwave": {
+          "availability": "Unlocks after two distinct releases and three distinct completed contracts. No Starwave offer is implemented yet.",
+          "unlocked": false
+        }
+      },
+      "publishers_after_contract": {
+        "crown_quill": {
+          "availability": "Publisher profile only; no offer is implemented yet.",
+          "unlocked": false
+        },
+        "ironclad": {
+          "availability": "Owns the existing cash-only Balanced Primitive Contract.",
+          "unlocked": true
+        },
+        "neon_circuit": {
+          "availability": "Publisher profile only; no offer is implemented yet.",
+          "unlocked": false
+        },
+        "sidestreet": {
+          "availability": "One $1,200 maximum cash-only offer per distinct released game, available after Ironclad completes.",
+          "unlocked": true
+        },
+        "starwave": {
+          "availability": "Unlocks after two distinct releases and three distinct completed contracts. No Starwave offer is implemented yet.",
+          "unlocked": false
+        }
+      },
+      "reserve_purchase": {
+        "after": {
+          "cash_cents": 641275,
+          "cores": [
+            68,
+            20,
+            52,
+            41
+          ],
+          "cycle": 33,
+          "fixed_bugs": 4,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 9,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 2,
+              "earned_units": 639,
+              "entitlement_cents": 446852,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 423775,
+              "total_earned_cycles": 5
+            }
+          ],
+          "scope": 20
+        },
+        "before": {
+          "cash_cents": 671275,
+          "cores": [
+            68,
+            20,
+            52,
+            41
+          ],
+          "cycle": 32,
+          "fixed_bugs": 4,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 9,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 2,
+              "earned_units": 606,
+              "entitlement_cents": 423775,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 423775,
+              "total_earned_cycles": 4
+            }
+          ],
+          "scope": 20
+        },
+        "id": "sound_effects",
+        "offer": {
+          "affordable": true,
+          "can_purchase": true,
+          "id": "sound_effects",
+          "initial": false,
+          "name": "Sound Effects",
+          "owned": false,
+          "phase": "alpha",
+          "price_cents": 30000,
+          "scope": 1,
+          "within_limits": true
+        },
+        "success": true
+      },
+      "sales_before_game_2": [
+        {
+          "campaign_count": 0,
+          "earned_cycles": 2,
+          "earned_units": 639,
+          "entitlement_cents": 446852,
+          "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+          "settled_cents": 423775,
+          "total_earned_cycles": 5
+        }
+      ],
+      "seed": 270927000,
+      "starter_purchases": [
+        {
+          "after": {
+            "cash_cents": 520000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 550000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "8_bit_music",
+          "price_cents": 30000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 490000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 520000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "character_backstories",
+          "price_cents": 30000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 460000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 490000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "dialogue",
+          "price_cents": 30000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 430000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 460000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "exploration",
+          "price_cents": 30000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 385000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 430000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "levels",
+          "price_cents": 45000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 355000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 385000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "lives_system",
+          "price_cents": 30000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 310000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 355000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "multiple_endings",
+          "price_cents": 45000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 280000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 310000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "power_ups",
+          "price_cents": 30000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 250000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 280000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "secrets",
+          "price_cents": 30000,
+          "success": true
+        },
+        {
+          "after": {
+            "cash_cents": 205000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "before": {
+            "cash_cents": 250000,
+            "cores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "cycle": 0,
+            "fixed_bugs": 0,
+            "hidden_bugs": 0,
+            "known_bugs": 0,
+            "marketing": 0,
+            "project_cycle": -1,
+            "redraws": 4,
+            "sales": [],
+            "scope": 0
+          },
+          "id": "sprites",
+          "price_cents": 45000,
+          "success": true
+        }
+      ],
+      "starter_roster": [
+        "8_bit_music",
+        "character_backstories",
+        "dialogue",
+        "exploration",
+        "levels",
+        "lives_system",
+        "multiple_endings",
+        "power_ups",
+        "secrets",
+        "sprites"
+      ],
+      "starter_summary": {
+        "count": 16,
+        "purchase_cap_cents": 400000,
+        "scope": 20,
+        "scope_cap": 23,
+        "spent_cents": 345000
+      },
+      "starter_target": 20,
+      "store_purchase": {
+        "after": {
+          "cash_cents": 671275,
+          "cores": [
+            68,
+            20,
+            52,
+            41
+          ],
+          "cycle": 32,
+          "fixed_bugs": 4,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 9,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 2,
+              "earned_units": 606,
+              "entitlement_cents": 423775,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 423775,
+              "total_earned_cycles": 4
+            }
+          ],
+          "scope": 20
+        },
+        "before": {
+          "cash_cents": 638866,
+          "cores": [
+            68,
+            20,
+            52,
+            41
+          ],
+          "cycle": 31,
+          "fixed_bugs": 4,
+          "hidden_bugs": 0,
+          "known_bugs": 0,
+          "marketing": 9,
+          "project_cycle": 27,
+          "redraws": 4,
+          "sales": [
+            {
+              "campaign_count": 0,
+              "earned_cycles": 2,
+              "earned_units": 541,
+              "entitlement_cents": 378321,
+              "release_id": "release_5abdbb8e716b899426bfd50b86b4f47e",
+              "settled_cents": 332866,
+              "total_earned_cycles": 3
+            }
+          ],
+          "scope": 20
+        },
+        "id": "colored_text",
+        "offer": {
+          "affordable": true,
+          "base_price_cents": 65000,
+          "discount_percent": 10,
+          "id": "colored_text",
+          "name": "Colored Text",
+          "owned": false,
+          "parent": "text",
+          "prerequisite": "Own Text",
+          "price_cents": 58500,
+          "unlocked": true
+        },
+        "success": true
+      },
+      "valid": true
+    }
+  ],
+  "start": 0
+}

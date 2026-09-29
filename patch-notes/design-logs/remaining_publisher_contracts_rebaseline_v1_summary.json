@@ -1,0 +1,399 @@
+{
+  "revision": "606f011d0bfdaca27dc662062ec6498a5942627a",
+  "live_two_game_routes": 90,
+  "sales_snapshot_parity_checks": 9090,
+  "policies": {
+    "cautious": 30,
+    "ordinary": 30,
+    "optimizer": 30
+  },
+  "unlock_counts": {
+    "crown": 0,
+    "neon": 16,
+    "starwave": 90
+  },
+  "release_alignments": {
+    "(0, 0)": 40,
+    "(0, 1)": 20,
+    "(1, 0)": 18,
+    "(1, 1)": 12
+  },
+  "offers": {
+    "crown": {
+      "completion_pct": {
+        "n": 0
+      },
+      "full_count": 0,
+      "cash_cents": {
+        "n": 0
+      },
+      "promotion_points": {
+        "n": 0
+      },
+      "old47_promotion_points": {
+        "n": 0
+      },
+      "scope": {
+        "n": 0
+      }
+    },
+    "neon": {
+      "completion_pct": {
+        "n": 16,
+        "min": 33.3333,
+        "p10": 43.75,
+        "median": 93.75,
+        "p90": 95.8333,
+        "max": 97.9167
+      },
+      "full_count": 0,
+      "cash_cents": {
+        "n": 16,
+        "min": 52000,
+        "p10": 68250,
+        "median": 146250.0,
+        "p90": 149500,
+        "max": 152750
+      },
+      "promotion_points": {
+        "n": 16,
+        "min": 6,
+        "p10": 8,
+        "median": 18.0,
+        "p90": 19,
+        "max": 19
+      },
+      "old47_promotion_points": {
+        "n": 16,
+        "min": 16,
+        "p10": 21,
+        "median": 45.0,
+        "p90": 46,
+        "max": 47
+      },
+      "scope": {
+        "n": 16,
+        "min": 4,
+        "p10": 8,
+        "median": 9.0,
+        "p90": 11,
+        "max": 11
+      }
+    },
+    "starwave": {
+      "completion_pct": {
+        "n": 90,
+        "min": 55.3571,
+        "p10": 66.0714,
+        "median": 83.9286,
+        "p90": 94.6429,
+        "max": 100.0
+      },
+      "full_count": 4,
+      "cash_cents": {
+        "n": 90,
+        "min": 124000,
+        "p10": 148000,
+        "median": 188000.0,
+        "p90": 212000,
+        "max": 224000
+      },
+      "promotion_points": {
+        "n": 90,
+        "min": 7,
+        "p10": 9,
+        "median": 11.0,
+        "p90": 13,
+        "max": 14
+      },
+      "old47_promotion_points": {
+        "n": 90,
+        "min": 14,
+        "p10": 17,
+        "median": 22.0,
+        "p90": 25,
+        "max": 27
+      },
+      "scope": {
+        "n": 90,
+        "min": 5,
+        "p10": 7,
+        "median": 11.0,
+        "p90": 14,
+        "max": 16
+      }
+    }
+  },
+  "sidestreet_withheld": {
+    "blocked": 0,
+    "before_game2_cash_cents": {
+      "n": 90,
+      "min": 0,
+      "p10": 50000,
+      "median": 248416.0,
+      "p90": 521962,
+      "max": 730465
+    },
+    "first_block_examples": []
+  },
+  "side_cycle_bound": {
+    "n": 45,
+    "min": 3497,
+    "p10": 12587,
+    "median": 49650,
+    "p90": 85314,
+    "max": 137062
+  },
+  "hypothetical_expense_shortfalls": 30,
+  "priority_commits_candidate": 76,
+  "candidate_redraws": 212,
+  "neon_frozen_focus_counts": {
+    "sound": 6,
+    "graphics": 3,
+    "design": 6,
+    "technology": 1
+  },
+  "synthetic_crown": {
+    "completion_pct": {
+      "n": 90,
+      "min": 39.5833,
+      "p10": 47.9167,
+      "median": 66.6667,
+      "p90": 77.0833,
+      "max": 95.8333
+    },
+    "full_count": 0,
+    "cash_cents": {
+      "n": 90,
+      "min": 76000,
+      "p10": 92000,
+      "median": 128000.0,
+      "p90": 148000,
+      "max": 184000
+    },
+    "promotion_points": {
+      "n": 90,
+      "min": 4,
+      "p10": 5,
+      "median": 8.0,
+      "p90": 9,
+      "max": 11
+    }
+  },
+  "synthetic_stacking": {
+    "crown,neon,starwave": {
+      "promotion_points": {
+        "n": 90,
+        "min": 18,
+        "p10": 23,
+        "median": 30.0,
+        "p90": 39,
+        "max": 40
+      },
+      "cash_cents": {
+        "n": 90,
+        "min": 263000,
+        "p10": 323500,
+        "median": 400250.0,
+        "p90": 495000,
+        "max": 509250
+      },
+      "month1_unit_delta": {
+        "n": 90,
+        "min": 2,
+        "p10": 5,
+        "median": 24.0,
+        "p90": 56,
+        "max": 93
+      }
+    },
+    "neon,crown,starwave": {
+      "promotion_points": {
+        "n": 90,
+        "min": 18,
+        "p10": 23,
+        "median": 30.0,
+        "p90": 39,
+        "max": 40
+      },
+      "cash_cents": {
+        "n": 90,
+        "min": 263000,
+        "p10": 323500,
+        "median": 400250.0,
+        "p90": 495000,
+        "max": 509250
+      },
+      "month1_unit_delta": {
+        "n": 90,
+        "min": 2,
+        "p10": 5,
+        "median": 24.0,
+        "p90": 56,
+        "max": 93
+      }
+    }
+  },
+  "orders": {
+    "starwave": {
+      "n": 74,
+      "cash_cents": {
+        "n": 74,
+        "min": 124000,
+        "p10": 148000,
+        "median": 184000.0,
+        "p90": 208000,
+        "max": 224000
+      },
+      "promotion_points": {
+        "n": 74,
+        "min": 7,
+        "p10": 9,
+        "median": 11.0,
+        "p90": 13,
+        "max": 14
+      },
+      "next_game_month1_unit_delta": {
+        "n": 74,
+        "min": 1,
+        "p10": 2,
+        "median": 8.0,
+        "p90": 17,
+        "max": 30
+      },
+      "next_game_month3_net_delta_cents": {
+        "n": 74,
+        "min": 699,
+        "p10": 2098,
+        "median": 9091.0,
+        "p90": 20979,
+        "max": 37063
+      },
+      "synthetic_9_1_month1_unit_delta": {
+        "n": 74,
+        "min": 21,
+        "p10": 26,
+        "median": 35.0,
+        "p90": 45,
+        "max": 59
+      },
+      "synthetic_9_1_month3_net_delta_cents": {
+        "n": 74,
+        "min": 27273,
+        "p10": 33566,
+        "median": 45803.5,
+        "p90": 58741,
+        "max": 77623
+      }
+    },
+    "neon,starwave": {
+      "n": 16,
+      "cash_cents": {
+        "n": 16,
+        "min": 240250,
+        "p10": 244000,
+        "median": 341875.0,
+        "p90": 366250,
+        "max": 376750
+      },
+      "promotion_points": {
+        "n": 16,
+        "min": 18,
+        "p10": 18,
+        "median": 29.5,
+        "p90": 32,
+        "max": 33
+      },
+      "next_game_month1_unit_delta": {
+        "n": 16,
+        "min": 13,
+        "p10": 20,
+        "median": 27.5,
+        "p90": 52,
+        "max": 60
+      },
+      "next_game_month3_net_delta_cents": {
+        "n": 16,
+        "min": 16084,
+        "p10": 23777,
+        "median": 32517.5,
+        "p90": 63636,
+        "max": 74125
+      },
+      "synthetic_9_1_month1_unit_delta": {
+        "n": 16,
+        "min": 52,
+        "p10": 58,
+        "median": 91.0,
+        "p90": 107,
+        "max": 112
+      },
+      "synthetic_9_1_month3_net_delta_cents": {
+        "n": 16,
+        "min": 69231,
+        "p10": 76223,
+        "median": 119230.5,
+        "p90": 139860,
+        "max": 146853
+      }
+    },
+    "starwave,neon": {
+      "n": 16,
+      "cash_cents": {
+        "n": 16,
+        "min": 240250,
+        "p10": 244000,
+        "median": 341875.0,
+        "p90": 366250,
+        "max": 376750
+      },
+      "promotion_points": {
+        "n": 16,
+        "min": 18,
+        "p10": 18,
+        "median": 29.5,
+        "p90": 32,
+        "max": 33
+      },
+      "next_game_month1_unit_delta": {
+        "n": 16,
+        "min": 13,
+        "p10": 20,
+        "median": 27.5,
+        "p90": 52,
+        "max": 60
+      },
+      "next_game_month3_net_delta_cents": {
+        "n": 16,
+        "min": 16084,
+        "p10": 23777,
+        "median": 32517.5,
+        "p90": 63636,
+        "max": 74125
+      },
+      "synthetic_9_1_month1_unit_delta": {
+        "n": 16,
+        "min": 52,
+        "p10": 58,
+        "median": 91.0,
+        "p90": 107,
+        "max": 112
+      },
+      "synthetic_9_1_month3_net_delta_cents": {
+        "n": 16,
+        "min": 69231,
+        "p10": 76223,
+        "median": 119230.5,
+        "p90": 139860,
+        "max": 146853
+      }
+    }
+  },
+  "zero_reward_completion_formula": {
+    "numerator": 0,
+    "denominator": 112,
+    "cash_cents": 0,
+    "promotion_points": 0,
+    "note": "Pure formula/commit-history boundary; not reachable by three legal four-card hands in tested pools."
+  }
+}

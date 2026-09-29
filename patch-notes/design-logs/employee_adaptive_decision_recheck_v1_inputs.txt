@@ -1,0 +1,18 @@
+Patch Notes Task 16 reproducibility manifest
+HEAD 606f011d0bfdaca27dc662062ec6498a5942627a, branch main, 2026-09-28.
+Godot C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe
+Python C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe
+Working directory C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\patch-notes
+The per-arm JSON traces and source scripts are in the companion ZIP.
+
+For each policy ordinary,synergy and each reward normal,optional,auto,decline,refill,planning_challenge,planning_voucher,planning_burst,planning_both:
+  godot --headless --path . --script res://analysis/employee_adaptive_decision_capture_v1.gd -- --policy=POLICY --reward=REWARD --count=16 --two-game-count=16 --tag=task16_current
+For each policy ordinary,synergy and each Production reward normal,optional,auto,decline,refill:
+  godot --headless --path . --script res://analysis/employee_adaptive_decision_capture_v1.gd -- --policy=POLICY --reward=REWARD --start=16 --count=32 --two-game-count=48 --tag=task16_current
+For each policy ordinary,synergy and each reward normal,auto,planning_both:
+  godot --headless --path . --script res://analysis/employee_adaptive_decision_capture_v1.gd -- --policy=POLICY --reward=REWARD --count=4 --two-game-count=4 --long-run=1 --max-game=3 --tag=task16_game3
+Then:
+  python -B analysis/employee_adaptive_decision_recheck_v1.py
+
+Godot profile isolation used APPDATA and LOCALAPPDATA under %TEMP%\patchnotes-task16-20260928.
+All trial effects are confined to the isolated analysis harness, not gameplay source.
