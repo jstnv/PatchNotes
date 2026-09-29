@@ -48,6 +48,22 @@ var _studio_name := ""
 var _first_studio_economy := false
 var _starter_selection_confirmed := false
 var _starter_purchase_spent_cents := 0
+var _first_tutorial_project_id: StringName
+var _first_game_tutorial: FirstGameTutorial
+
+
+## Arm only at the successful first-project creation boundary, never on a view.
+func begin_first_game_tutorial(project: ProjectState) -> bool:
+	if not needs_starter_selection() or project == null or not project.has_predevelopment_identity() or project.get_current_cycle() != 0 or not _released_games.is_empty() or _first_game_tutorial != null:
+		return false
+	_first_tutorial_project_id = project.get_release_id()
+	_first_game_tutorial = FirstGameTutorial.new()
+	return true
+
+
+func get_first_game_tutorial(project: ProjectState) -> FirstGameTutorial:
+	if project == null or project.get_release_id() != _first_tutorial_project_id: return null
+	return _first_game_tutorial
 
 func set_studio_name(value: String) -> bool:
 	var cleaned := value.strip_edges()

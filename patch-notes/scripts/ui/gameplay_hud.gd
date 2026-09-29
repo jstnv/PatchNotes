@@ -37,6 +37,16 @@ func _ready() -> void:
 		item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(item)
 		stats.append(item)
+	for index in range(4):
+		stats[index + 1].mouse_filter = Control.MOUSE_FILTER_PASS
+		stats[index + 1].tooltip_text = [
+			"Graphics measures visual quality. Cards add Graphics points.\nHigher Core scores improve production quality at Review.",
+			"Sound measures audio quality. Cards add Sound points.\nHigher Core scores improve production quality at Review.",
+			"Technology measures the quality of your technical systems.\nCards add Technology points. Higher Core scores improve\nproduction quality at Review.",
+			"Design measures gameplay quality. Cards add Design points.\nHigher Core scores improve production quality at Review.",
+		][index]
+	stats[5].mouse_filter = Control.MOUSE_FILTER_PASS
+	stats[5].tooltip_text = "Scope measures how much game you have built.\nFeature cards add their printed Scope. Core scores measure quality.\nSynergies increase Core gains without increasing Scope."
 	change_priorities = Button.new()
 	change_priorities.name = "ChangePrioritiesButton"
 	change_priorities.text = "Change Priorities"
@@ -274,6 +284,7 @@ func refresh() -> void:
 	for index in range(4):
 		stats[index + 1].text = ["Graphics", "Sound", "Technology", "Design"][index] + "\n" + str(project.get_core_score(index))
 	stats[5].text = "Scope\n%d / %d" % [project.get_current_scope(), project.get_required_scope()]
+	stats[5].tooltip_text = "Scope measures how much game you have built: %d of the %d target.\nFeature cards add their printed Scope. Reaching the target completes\nScope for Review; Core quality is judged separately.\nSynergies do not increase Scope." % [project.get_current_scope(), project.get_required_scope()]
 	if is_instance_valid(phase) and (phase is BetaPhase or phase is StudioPhase or phase is PostGameReview or phase is ContractPhase):
 		stats[6].text = "Known / Fixed\n%d / %d" % [project.get_known_bugs(), project.get_fixed_bugs()]
 	else:

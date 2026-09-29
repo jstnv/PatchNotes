@@ -273,7 +273,10 @@ func _deal_next_candidate_pool(controlled_rolls: Array[float] = []) -> bool:
 		card_view.card_pressed.connect(_on_card_pressed)
 
 		hand_container.add_child(card_view)
+	if deal.has("tutorial_stat"):
+		_get_first_game_tutorial().record_deal(deal.tutorial_stat)
 	_refresh_redraw_controls()
+	refresh_workspace()
 	return true
 
 
@@ -331,6 +334,8 @@ func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
 		%HandContainer.move_child(prepared[index], slot)
 	_selected_card_views.clear()
 	%RedrawFeedbackLabel.text = ""
+	if plan.get("guided_redraw", false):
+		_get_first_game_tutorial().record_successful_redraw()
 	# One budget notification, after the complete pool and selection are committed.
 	_run_state.consume_redraw(count)
 	_update_play_button()
@@ -354,6 +359,11 @@ func _refresh_redraw_controls() -> void:
 
 
 func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
+	var tutorial := _get_first_game_tutorial()
+	if tutorial != null:
+		var guided_card := tutorial.guaranteed_redraw(_candidate_cards, _selected_card_views, _pass_definitions)
+		if guided_card != null:
+			return {&"valid": true, &"cards": [guided_card] as Array[CardData], &"failed_features": [] as Array[CardView], &"guided_redraw": true}
 	var cards: Array[CardData] = []
 	var reserved: Array[StringName] = []
 	var failed_features: Array[CardView] = []
@@ -408,6 +418,13 @@ func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, contro
 	for roll: float in controlled_rolls:
 		if not is_finite(roll) or roll < 0.0 or roll >= 1.0:
 			return {&"valid": false, &"error": "Weighted deal rolls must be finite values in [0, 1)."}
+	var tutorial := _get_first_game_tutorial()
+	if tutorial != null and tutorial.needs_scripted_deal():
+		var costs: Dictionary = {}
+		for card: CardData in _available_features:
+			costs[card.id] = _run_state.primitive_feature_hand_cost_cents([card] as Array[CardData])
+		var guided := tutorial.plan_deal(_available_features, _pass_definitions, priority_snapshot, _run_state.get_cash_cents(), costs, _deal_rng)
+		return guided if not guided.is_empty() else {&"valid": false, &"error": "Could not prepare the first-game guided pool."}
 
 	var remaining_features: Array[CardData] = _available_features.duplicate()
 	var selected_cards: Array[CardData] = []
@@ -739,6 +756,8 @@ func _complete_successful_cycle() -> void:
 			_return_feature_to_available(card)
 
 	_clear_candidate_pool()
+	var tutorial := _get_first_game_tutorial()
+	if tutorial != null: tutorial.record_successful_hand()
 	_project_state.advance_cycle()
 
 

@@ -14,8 +14,8 @@ const TOPICS := {
 		{"title": "Begin Development", "body": "Editing and cancelling are free. Begin Development needs no cash and advances the run calendar by one cycle. Your new project starts at cycle 0 with four redraws."},
 	],
 	&"design": [
-		{"title": "Design: Set Priorities", "body": "Allocate exactly 100 priority points in 5-point steps, keeping each category between 5 and 50. Priorities weight future draws. Begin Design is free; changing priorities afterward costs one cycle."},
-		{"title": "Design: Build a Hand", "body": "Select exactly four candidate cards, then Implement. A successful hand advances one cycle. Features exhaust after use; Passes are renewable. Watch your Scope and Core Scores."},
+		{"title": "Design: Quality and Scope", "body": "Your four Core scores measure quality: Graphics for visuals, Sound for audio, Technology for technical systems, and Design for gameplay. Cards build these scores toward Review. Scope measures how much game you have built. Feature cards add their printed Scope toward the HUD target. A complete game still needs strong Core scores. Hover over a HUD score for a reminder."},
+		{"title": "Design: Priorities and Hands", "body": "Allocate 100 priority points in 5-point steps, with each category from 5 to 50. Higher priorities favor that category in future draws and redraws; they do not add scores. Begin Design is free. Later priority changes cost one cycle. Select exactly four cards, then Implement: a successful hand costs one cycle. Features exhaust for this project; Passes can return."},
 		{"title": "Design: Redraw and Synergy", "body": "Redraw selected cards for one shared redraw each and no cycle; successful production restores one. Four cards sharing a primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature gains Balanced Production (+20% hand Core gains) when all four projected Core scores are within 20% of their average. Neither bonus raises Scope."},
 	],
 	&"alpha": [

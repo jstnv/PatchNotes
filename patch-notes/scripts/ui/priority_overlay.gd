@@ -35,26 +35,30 @@ func configure(controller: Control, priority_panel: Control, commit: Button) -> 
 	shade.add_child(dialog)
 	var content := VBoxContainer.new()
 	content.name = "Content"
-	content.add_theme_constant_override("separation", 12)
+	content.add_theme_constant_override("separation", 8)
 	dialog.add_child(content)
 	title_label = Label.new()
 	title_label.text = "Change Priorities"
 	title_label.add_theme_font_size_override("font_size", 24)
 	content.add_child(title_label)
 	help = Label.new()
+	help.name = "PriorityHelp"
+	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	help.custom_minimum_size.x = 580
+	help.add_theme_font_size_override("font_size", 14)
 	help.text = "Future draws only · total 100 · 5-point steps\nCommit a changed allocation: 1 cycle. Cancel: free."
 	content.add_child(help)
 	priority_panel.reparent(content)
-	priority_panel.custom_minimum_size = Vector2(580, 270)
+	priority_panel.custom_minimum_size = Vector2(580, 184)
 	priority_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	priority_panel.show()
 	var columns := priority_panel.get_child(0)
 	for column in columns.get_children():
 		if column is VBoxContainer:
-			column.custom_minimum_size = Vector2(112, 250)
+			column.custom_minimum_size = Vector2(112, 168)
 			for child in column.get_children():
 				if child is VSlider:
-					child.custom_minimum_size = Vector2(32, 182)
+					child.custom_minimum_size = Vector2(32, 122)
 					child.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 					child.size_flags_vertical = Control.SIZE_EXPAND_FILL
 				elif child is Label:
@@ -88,7 +92,7 @@ func open() -> bool:
 	shade.color = Color("#080409") if initial_setup else Color(0.015, 0.01, 0.015, 0.82)
 	shade.offset_bottom = -INITIAL_FOOTER_REVEAL if initial_setup else 0.0
 	title_label.text = "Initialize Priorities" if initial_setup else "Change Priorities"
-	help.text = ("Set the initial %s allocation · total 100 · 5-point steps\nBeginning the phase is free." % phase_name) if initial_setup else "Future draws only · total 100 · 5-point steps\nCommit a changed allocation: 1 cycle. Cancel: free."
+	help.text = _help_text(phase_name)
 	commit_button.text = "Begin " + phase_name if initial_setup else "Commit Priorities"
 	cancel_button.visible = not initial_setup
 	previous_focus = phase.get_viewport().gui_get_focus_owner()
@@ -101,6 +105,13 @@ func open() -> bool:
 	else:
 		cancel_button.grab_focus()
 	return true
+
+func _help_text(phase_name: String) -> String:
+	if initial_setup and phase_name in ["Design", "Alpha"]:
+		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTechnology (technical systems), and Design (gameplay).\nScope is how much game you build. Aim for the Scope target in the HUD.\nPriorities weight future cards, not scores. Total 100 · 5–50 · steps of 5.\nBegin %s is free." % phase_name
+	if initial_setup:
+		return "Higher priorities make that category more likely in future draws and redraws.\nSet the initial %s allocation · total 100 · 5-point steps.\nBeginning the phase is free." % phase_name
+	return "Higher priorities make that category more likely in future draws and redraws.\nThe current pool and your scores stay the same. Total 100 · 5-point steps.\nCommit a changed allocation: 1 cycle and one redraw restored (up to 4). Cancel: free."
 
 func cancel() -> void:
 	if not visible: return

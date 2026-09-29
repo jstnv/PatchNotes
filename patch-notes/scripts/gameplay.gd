@@ -337,6 +337,7 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 		_transition_in_progress = false
 		return false
 	if run_state.needs_starter_selection():
+		run_state.begin_first_game_tutorial(next)
 		run_state.finalize_starter_selection()
 	project_state = next
 	_controlled_review_roll = -1
