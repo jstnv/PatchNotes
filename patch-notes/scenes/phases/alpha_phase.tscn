@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/phases/alpha_phase.gd" id="1_alpha_phase"]
+
+[ext_resource type="Script" path="res://scripts/ui/card_fan.gd" id="fan_script"]
 
 [node name="AlphaPhase" type="Control"]
 custom_minimum_size = Vector2(1008, 463)
@@ -145,11 +147,11 @@ layout_mode = 2
 horizontal_scroll_mode = 2
 vertical_scroll_mode = 0
 
-[node name="HandContainer" type="HBoxContainer" parent="PhaseLayout/CandidateScroll"]
+[node name="HandContainer" type="Container" parent="PhaseLayout/CandidateScroll"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 16
-alignment = 1
+
+script = ExtResource("fan_script")
 
 [node name="RedrawControls" type="HBoxContainer" parent="PhaseLayout"]
 layout_mode = 2

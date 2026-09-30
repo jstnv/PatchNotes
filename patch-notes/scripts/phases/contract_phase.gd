@@ -17,7 +17,9 @@ var _rng := RandomNumberGenerator.new()
 var _initial_category_rolls: Array[float] = []
 var _initial_definition_rolls: Array[float] = []
 
-var _candidate_row: HBoxContainer
+var _candidate_row: CardFan
+var hand_motion: HandPresentation
+var _presented_scores: Dictionary = {}
 var _status_label: Label
 var _scores_label: Label
 var _feedback_label: Label
@@ -102,27 +104,64 @@ func _build_ui() -> void:
 	layout.add_child(pool_title)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	layout.add_child(scroll)
-	_candidate_row = HBoxContainer.new()
-	_candidate_row.add_theme_constant_override("separation", 8)
+	_candidate_row = CardFan.new()
+	_candidate_row.custom_minimum_size.y = 280
 	scroll.add_child(_candidate_row)
 	var actions := HBoxContainer.new()
 	layout.add_child(actions)
 	_play_button = Button.new()
 	_play_button.text = "Play Contract Hand"
 	_play_button.tooltip_text = "Play exactly four selected cards. A successful hand advances one cycle."
-	_play_button.pressed.connect(_play_selected_hand)
+	_play_button.pressed.connect(_present_action.bind("play", _play_selected_hand))
 	actions.add_child(_play_button)
 	_redraw_button = Button.new()
 	_redraw_button.tooltip_text = "Replace selected candidates using the shared redraw budget; no cycle cost."
-	_redraw_button.pressed.connect(func(): redraw_selected_cards())
+	_redraw_button.pressed.connect(_present_action.bind("redraw", redraw_selected_cards))
 	actions.add_child(_redraw_button)
 	_feedback_label = Label.new()
 	_feedback_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	actions.add_child(_feedback_label)
 	_build_completion_panel()
+	hand_motion = HandPresentation.new()
+	add_child(hand_motion)
+
+func _present_action(kind: String, action: Callable) -> void:
+	if hand_motion.busy: return
+	if hand_motion.play(kind, _candidate_row, _selected_views, action, _score_snapshot, _display_scores, _restore_scores):
+		if _state.is_completed(): _completion_panel.hide()
+
+func _score_snapshot() -> Dictionary:
+	var values := {&"scope": _state.get_scope(), "_cycle": _run.get_completed_run_cycles(), "_redraws": _run.get_available_redraws()}
+	for i in range(4): values[HandPresentation.CORE[i]] = _state.get_core_score_half_units(i)
+	return values
+
+func _display_scores(values: Dictionary, deltas: Dictionary) -> void:
+	_presented_scores = values.duplicate()
+	_refresh_all()
+	var parts: Array[String] = []
+	for key: StringName in deltas:
+		if deltas[key] == 0: continue
+		parts.append("+%s %s" % [str(deltas[key]) if key == &"scope" else _format_half(deltas[key]), str(key).capitalize()])
+	if parts.is_empty(): return
+	var pulse := Label.new()
+	pulse.text = " · ".join(parts)
+	pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pulse.z_index = 200
+	pulse.add_theme_color_override("font_color", Color("f5ce69"))
+	add_child(pulse)
+	pulse.global_position = _scores_label.global_position + Vector2(0, 20)
+	var tween := pulse.create_tween().set_parallel()
+	tween.tween_property(pulse, "position:y", pulse.position.y - 16.0, 0.55)
+	tween.tween_property(pulse, "modulate:a", 0.0, 0.55)
+	tween.chain().tween_callback(pulse.queue_free)
+
+func _restore_scores() -> void:
+	_presented_scores.clear()
+	_refresh_all()
+	if _state.is_completed(): _show_completion()
 
 
 func _build_completion_panel() -> void:
@@ -373,9 +412,9 @@ func _refresh_all() -> void:
 	if _state == null: return
 	_status_label.text = "Hand %d / %d · Date: %s · Redraws: %d / 4" % [_state.get_successful_hand_count(), ContractState.REQUIRED_HANDS, _run.get_calendar_label(), _run.get_available_redraws()]
 	_scores_label.text = "Scope %d / 12 · Graphics %s · Sound %s · Technology %s · Design %s" % [
-		_state.get_scope(), _format_half(_state.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS)),
-		_format_half(_state.get_core_score_half_units(ProjectState.CoreScore.SOUND)), _format_half(_state.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY)),
-		_format_half(_state.get_core_score_half_units(ProjectState.CoreScore.DESIGN))]
+		_presented_scores.get(&"scope", _state.get_scope()), _format_half(_presented_scores.get(&"graphics", _state.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS))),
+		_format_half(_presented_scores.get(&"sound", _state.get_core_score_half_units(ProjectState.CoreScore.SOUND))), _format_half(_presented_scores.get(&"technology", _state.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY))),
+		_format_half(_presented_scores.get(&"design", _state.get_core_score_half_units(ProjectState.CoreScore.DESIGN)))]
 	_refresh_actions()
 
 

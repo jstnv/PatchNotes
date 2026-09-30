@@ -63,7 +63,7 @@ func _verify_planning_and_immediate_launch() -> void:
 	_expect(state.get_hidden_bugs() == 3 and state.get_remaining_bugs() == 3 and state.get_marketing_output() == 1, "Final launch inputs remain authoritative and unconverted")
 	_expect(not beta.request_launch() and emissions[0] == 1, "Repeated Launch cannot finalize or emit twice")
 	_expect(not state.add_scope(1) and not state.add_marketing_output(1) and state.discover_bugs(1) == -1 and not state.advance_cycle(), "Post-Beta project mutation is frozen")
-	_expect((beta.get_node("%HandContainer") as HBoxContainer).get_child_count() == 0 and beta.get("_phase_state") == BetaPhase.PhaseState.FINALIZED, "Beta retirement removes candidates without resolving them")
+	_expect((beta.get_node("%HandContainer") as Container).get_child_count() == 0 and beta.get("_phase_state") == BetaPhase.PhaseState.FINALIZED, "Beta retirement removes candidates without resolving them")
 	beta.queue_free()
 	await process_frame
 
@@ -128,11 +128,14 @@ func _verify_gameplay_transition() -> void:
 	gameplay.get_node("%PhaseRoot").add_child(beta)
 	gameplay.set("_active_phase", beta)
 	beta.begin_beta([0.05, 0.15, 0.40, 0.50, 0.80, 0.85, 0.90], [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
+	_expect(run.consume_redraw(4), "Launch fixture spends its Beta redraw bank")
+	var run_cycles_before := run.get_completed_run_cycles()
 	_expect(beta.request_launch(), "Authoritative Gameplay Beta finalizes")
 	await process_frame
 	var active: Control = gameplay.get("_active_phase")
 	_expect(active is StudioPhase and gameplay.get_node("%PhaseRoot").get_child_count() == 1, "Gameplay automatically enters Studio after launch results")
 	_expect((active as StudioPhase).get_project_state() == state and (active as StudioPhase).get_run_state() == run and run.get_cash() == 4321, "Automatic Studio entry preserves the exact ProjectState, RunState, and cash")
+	_expect(run.get_available_redraws() == 4 and run.get_completed_run_cycles() == run_cycles_before, "Successful Studio entry refills redraws without advancing time")
 	_expect(state.has_review_result() and state.get_review_result().get_variance_roll() == 50, "Gameplay commits exactly the controlled one-shot Review result before Launch presentation")
 	_expect(state.has_awareness_result() and state.get_awareness_result().get_marketing_output_used() == state.get_marketing_output(), "Gameplay commits Awareness exactly once from frozen Marketing Output")
 	_expect(state.has_launch_market_context_result() and state.get_launch_market_context_result().get_player_launch_cycle() == state.get_current_cycle(), "Gameplay commits launch market context exactly once from frozen state")

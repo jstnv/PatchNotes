@@ -35,6 +35,7 @@ func _ready() -> void:
 	title_label = Label.new()
 	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_label.add_theme_color_override("font_color", Color("#f5bd59"))
 	heading.add_child(title_label)
 	dismiss_button = Button.new()

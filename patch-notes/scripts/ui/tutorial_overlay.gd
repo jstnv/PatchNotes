@@ -5,7 +5,7 @@ signal closed
 
 const TOPICS := {
 	&"main_menu": [
-		{"title": "Create Your Studio", "body": "Choose Start Game, name your studio, then enter Studio. Visit the Feature Store to build your first Feature pool before producing a game."},
+		{"title": "Create Your Studio", "body": "Choose Start Game, name your studio and choose one permanent Genre specialty. Preview its free starting Features, then enter Studio. The Store offers optional additions; each game can use any Genre."},
 		{"title": "Produce a Game", "body": "Name the game and choose a Genre and Theme. During Design, Alpha and Beta, set priorities, select four cards per hand and decide when to move to the next phase."},
 		{"title": "After Release", "body": "Studio keeps your owned Features and released-game history. Browse reviews, sales, the Feature Store and available Contracts. The footer Tutorial button opens detailed help for your current screen."},
 	],
@@ -27,7 +27,7 @@ const TOPICS := {
 		{"title": "Beta: Balance and Launch", "body": "A hand with a 2/1/1 mix of QA, Marketing and Insider cards triggers Balanced Operations. It boosts eligible bug work, Marketing and insight chances by 25%, but not cash. Synergy bonuses do not stack. Launch freezes the release results and enters Studio for free."},
 	],
 	&"studio": [
-		{"title": "Studio: Between Games", "body": "Produce your first game, then return to browse release summaries, the Feature Store and available Contracts. Browsing costs no cycles or cash."},
+		{"title": "Studio: Between Games", "body": "Entering Studio refills your redraws to four, including after a release or completed Contract. Browse release summaries, the Feature Store and available Contracts. Browsing costs no cycles or cash."},
 		{"title": "Studio: Productive Time", "body": "Productive actions use the shared run calendar, where historical sales earn and settle. Later Feature Store branch and Primitive reserve purchases each take one cycle. Produce Next Game creates a fresh project while preserving the run."},
 	],
 	&"review": [

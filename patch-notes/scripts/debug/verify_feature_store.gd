@@ -49,7 +49,7 @@ func _verify() -> void:
 	store.set("_selected", &"branching_nodes")
 	store.call("_show_details")
 	var detail: Label = store.get("_details")
-	expect(detail.text.contains("Own Save Files") and detail.text.contains("$1500.00"), "Branch detail shows prerequisite and exact price")
+	expect(detail.text.contains("Own Save Files") and store._map.price.text.contains("$1500.00"), "Branch detail shows prerequisite and exact price")
 	if "--capture-store" in OS.get_cmdline_user_args():
 		store.call("_refresh")
 		await process_frame
@@ -139,36 +139,59 @@ func _verify_tree_ui() -> void:
 		var parent := StringName(entry.purchase_parent)
 		if not parent.is_empty():
 			store.call("_select_lane", lane_by_id[StringName(entry.id)])
-			expect(edges.has([parent, StringName(entry.id)]) and lane_by_id[parent] == lane_by_id[StringName(entry.id)] and nodes[parent].position.y > nodes[StringName(entry.id)].position.y, "Correct upward connector: " + entry.name)
+			expect(edges.has([parent, StringName(entry.id)]) and lane_by_id[parent] == lane_by_id[StringName(entry.id)] and (nodes[parent].position + store.NODE_SIZE / 2.0).distance_to(store._map.center) < (nodes[StringName(entry.id)].position + store.NODE_SIZE / 2.0).distance_to(store._map.center), "Correct outward connector: " + entry.name)
 	store.call("_select_lane", &"Technology & Tools")
-	expect(nodes[&"save_files"].position.y > nodes[&"branching_nodes"].position.y and edges.has([&"save_files", &"branching_nodes"]), "Save Files is an independent root below its child")
+	expect((nodes[&"save_files"].position + store.NODE_SIZE / 2.0).distance_to(store._map.center) < (nodes[&"branching_nodes"].position + store.NODE_SIZE / 2.0).distance_to(store._map.center) and edges.has([&"save_files", &"branching_nodes"]), "Save Files is an independent root with an outward child")
 	store.call("_select_lane", &"Gameplay")
 	var tree: Control = store.get("_tree")
-	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and tree.get_node("GameplayGate").position.y > nodes[&"difficulty_levels"].position.y, "Difficulty retains distinct Gameplay ownership gate")
+	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and tree.get_node("GameplayGate").get_rect().get_center().distance_to(store._map.center) < nodes[&"difficulty_levels"].get_rect().get_center().distance_to(store._map.center), "Difficulty retains distinct Gameplay ownership gate")
 	expect(lane_buttons[&"Gameplay"].focus_mode == Control.FOCUS_ALL and nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL, "Lane and node navigation are keyboard/controller focusable")
 	expect(nodes[&"colored_text"].text.contains("Need cash") and nodes[&"branching_nodes"].text.contains("Locked"), "Unaffordable and locked node states are distinct")
 	store.call("_select_lane", &"Visuals")
 	store.call("_select_node", &"colored_text")
 	expect(store.get("_buy").disabled, "One-cent-short UI disables purchase")
 	run.record_resolved_feature(ProjectState.new(30), &"text", &"design")
-	expect(store.get("_details").text.contains("10%") and store.get("_details").text.contains("$585.00") and not store.get("_buy").disabled, "Live familiarity discount refreshes details and affordability")
+	expect(store._map.price.text.contains("10%") and store._map.price.text.contains("[s]$650.00[/s]") and store._map.price.text.contains("$585.00") and not store.get("_buy").disabled, "Live familiarity discount refreshes details and affordability")
 	run.add_cash(10000)
 	store.call("_select_lane", &"Technology & Tools")
 	store.call("_select_node", &"save_files")
 	store.get("_buy").pressed.emit()
 	expect(nodes[&"save_files"].text.contains("Owned") and nodes[&"branching_nodes"].text.contains("Available"), "Purchase updates root and reveals available child")
+	expect(not nodes[&"save_files"].text.contains("$") and not nodes[&"save_files"].tooltip_text.contains("$") and not store.get("_details").text.contains("price"), "Owned node, tooltip and detail hide acquisition prices immediately")
+	expect(store._map.price.text.is_empty(), "Owned popup has no acquisition price")
+	expect(not nodes[&"branching_nodes"].text.contains("$") and nodes[&"branching_nodes"].tooltip_text.contains("Base:"), "Map stays price-free; unowned tooltip retains its quote")
 	var scroll: ScrollContainer = store.get("_scroll")
 	scroll.scroll_horizontal = 200
 	await process_frame
 	var saved_scroll := scroll.scroll_horizontal
 	store.call("_select_lane", &"Audio")
 	store.call("_select_lane", &"Technology & Tools")
-	expect(scroll.scroll_horizontal == saved_scroll, "Lane navigation restores its horizontal position")
+	expect(nodes.values().all(func(node: Button): return node.visible and node.size.x == node.size.y), "All square nodes remain visible across navigation")
 	store.call("_select_node", &"save_files")
 	var before := run.get_cash_cents()
 	store.hide()
 	studio.get_node("%FeatureStoreButton").pressed.emit()
-	expect(store.get("_selected") == &"save_files" and scroll.scroll_horizontal == saved_scroll and run.get_cash_cents() == before and run.get_completed_run_cycles() == 1, "Reopening preserves selection, scroll, cash and cycles")
+	expect(store.get("_selected") == &"" and not store._map.popup.visible and run.get_cash_cents() == before and run.get_completed_run_cycles() == 1, "Reopening dismisses old popup and preserves cash and cycles")
+	expect(not store.get("_cash").text.contains("Cash:"), "Store header omits duplicate cash balance")
+	store._map.fit_map()
+	await process_frame
+	await process_frame
+	expect(store._map.bounds.x * store._map.zoom <= scroll.size.x and store._map.bounds.y * store._map.zoom <= scroll.size.y, "Show all fits the complete map")
+	store.call("_select_node", &"colored_text")
+	await process_frame
+	await process_frame
+	expect(store._map.popup.visible and store.get("_details").text.contains("2 Graphics · 1 Scope"), "Node popup spells out printed score categories and Scope")
+	expect(store.get_global_rect().encloses(store._map.popup.get_global_rect()), "Popup stays within Store bounds: %s / %s" % [store.get_global_rect(), store._map.popup.get_global_rect()])
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	click.position = store.global_position + Vector2(2, 2)
+	store._map._input(click)
+	expect(not store._map.popup.visible and store.get("_selected") == &"", "Outside click dismisses popup")
+	store.call("_select_node", &"text")
+	store.call("_select_node", &"colored_text")
+	expect(store.get("_selected") == &"colored_text" and store._map.popup.visible, "Another node replaces the single popup")
+	expect(run.get_cash_cents() == before and run.get_completed_run_cycles() == 1, "Map zoom, browsing and dismissals are passive")
 	if "--capture-store" in OS.get_cmdline_user_args():
 		store.call("_select_lane", &"Visuals")
 		scroll.scroll_horizontal = 0
@@ -185,6 +208,11 @@ func _verify_tree_ui() -> void:
 			await process_frame
 			await process_frame
 			await RenderingServer.frame_post_draw
-			root.get_texture().get_image().save_png("res://design-logs/feature-store-upward-%d.png" % dimensions.x)
+			root.get_texture().get_image().save_png("res://design-logs/feature-node-map-v1/detail-%d.png" % dimensions.x)
+			store._map.fit_map()
+			await process_frame
+			await process_frame
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png("res://design-logs/feature-node-map-v1/whole-map-%d.png" % dimensions.x)
 	studio.queue_free()
 	await process_frame

@@ -2,6 +2,7 @@ class_name CardView
 extends Control
 
 signal card_pressed(card_view: CardView)
+signal selection_changed
 
 @export var renewable_texture: Texture2D
 @export var nonrenewable_texture: Texture2D
@@ -40,9 +41,11 @@ func set_card(card: CardData) -> void:
 
 
 func set_selected(selected: bool) -> void:
+	if _selected == selected: return
 	_selected = selected
 	if is_node_ready():
 		selection_outline.visible = _selected
+	selection_changed.emit()
 
 
 func is_selected() -> bool:

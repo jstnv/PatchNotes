@@ -47,7 +47,7 @@ func _refresh_starter_hint() -> void:
 	if not %StoreHint.visible:
 		return
 	var pool := _run_state.get_starter_pool_summary()
-	%StoreHintText.text = "TIP · Visit the Feature Store to buy Primitive Features for your first game.\nPool: %d / 23 Scope · %s / $4,000 spent. Aim for 20–23 Scope." % [pool.scope, CashFormatter.format_exact_cents(pool.spent_cents)]
+	%StoreHintText.text = "TIP · Your specialty provides %d owned Scope. Visit the Feature Store for optional additions.\nA B game needs 30 played Scope; ownership alone does not complete it." % pool.scope
 	%FeatureStoreButton.tooltip_text = "Buy first-game Primitive Features here. Starter purchases cost zero cycles."
 
 
@@ -106,7 +106,7 @@ func _open_predevelopment() -> void:
 	if _run_state.needs_starter_selection():
 		var pool := _run_state.get_starter_pool_summary()
 		if int(pool.scope) < 20:
-			%LowScopeWarning.dialog_text = "Your pool has %d printed Scope, below the 20–23 target and the 30-Scope B standard. Visit the Feature Store for more Features, or continue with this smaller pool?" % pool.scope
+			%LowScopeWarning.dialog_text = "Your pool has %d printed Scope, below the 30-Scope B standard. Visit the Feature Store for more Features, or continue with this smaller pool?" % pool.scope
 			%LowScopeWarning.popup_centered()
 			return
 	_show_predevelopment()
@@ -327,7 +327,6 @@ func setup(project_state: ProjectState, run_state: RunState, snapshot_database: 
 	%PostGameSummaries.disabled = _run_state.get_released_game_ids().is_empty()
 	%StartNextGame.text = "Produce First Game" if _run_state.get_released_game_ids().is_empty() else "Produce Next Game"
 	%StartNextGame.disabled = false
-	$Dashboard/Layout/Heading/Title.text = "%s — Studio" % _run_state.get_studio_name() if not _run_state.get_studio_name().is_empty() else "Studio Phase"
 	_refresh_starter_hint()
 	return true
 
@@ -381,7 +380,10 @@ func _refresh_contract_action() -> void:
 
 
 func _refresh_summary() -> void:
-	if _run_state == null or _selected_release_id.is_empty() or not is_node_ready(): return
+	if _run_state == null or not is_node_ready(): return
+	var studio_title := "%s — Studio" % _run_state.get_studio_name() if not _run_state.get_studio_name().is_empty() else "Studio Phase"
+	$Dashboard/Layout/Heading/Title.text = "%s · %d" % [studio_title, _run_state.get_current_year()]
+	if _selected_release_id.is_empty(): return
 	var metadata := _run_state.get_release_metadata(_selected_release_id)
 	var snapshot: Dictionary = metadata.get("review", {})
 	if snapshot.is_empty(): return

@@ -17,8 +17,9 @@ func check(ok: bool, label: String) -> void:
 		push_error("FAIL: " + label)
 
 
-func release(total_units: int = 0) -> ProjectState:
-	var project := ProjectState.new(30)
+func release(total_units: int = 0, scope: int = 30, required_scope: int = 30) -> ProjectState:
+	var project := ProjectState.new(required_scope)
+	project.add_scope(scope) # Qualified by default; under-Scope cases have their own verifier.
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
 	project.finalize_design_bugs(false, 0, [], [])
 	project.finalize_alpha(0, [], [])

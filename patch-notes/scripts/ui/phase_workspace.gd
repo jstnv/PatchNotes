@@ -3,6 +3,7 @@ extends Control
 
 signal presentation_changed
 signal synergy_help_requested(title: String, body: String)
+signal score_display_changed(values: Dictionary, deltas: Dictionary)
 
 const CORE_BY_STAT := {
 	&"graphics": ProjectState.CoreScore.GRAPHICS,
@@ -14,6 +15,7 @@ const CORE_BY_STAT := {
 var phase: Control
 var phase_name: String
 var played_hand: Label
+var backlog_title: Label
 var phase_title: Label
 var progress: Label
 var overlay: PriorityOverlay
@@ -23,6 +25,8 @@ var synergy_notification: SynergyNotification
 var synergy_help_button: Button
 var _synergy_help_title := ""
 var _synergy_help_body := ""
+var hand_motion: HandPresentation
+var _presented_values: Dictionary = {}
 
 func label(text: String, parent: Node, node_name: String = "") -> Label:
 	var result := Label.new()
@@ -58,11 +62,15 @@ func configure(controller: Control, title: String) -> void:
 	synergy_help_button.pressed.connect(func(): synergy_help_requested.emit(_synergy_help_title, _synergy_help_body))
 	selected_row.add_child(synergy_help_button)
 	var pool_title := label("Backlog / Draw Pool", layout, "BacklogTitle")
+	backlog_title = pool_title
+	backlog_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pool_title.add_theme_color_override("font_color", Color("#79d4da"))
 	var scroll := phase.get_node("PhaseLayout/CandidateScroll") as ScrollContainer
 	scroll.reparent(layout)
 	scroll.custom_minimum_size = Vector2(0, 352)
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var bottom := HBoxContainer.new()
 	bottom.name = "ContextAndPhase"
 	bottom.add_theme_constant_override("separation", 12)
@@ -112,6 +120,31 @@ func configure(controller: Control, title: String) -> void:
 	phase.add_child(synergy_notification)
 	phase.get_node("PhaseLayout").hide()
 	phase.custom_minimum_size = Vector2(1008, 480)
+	hand_motion = HandPresentation.new()
+	phase.add_child(hand_motion)
+	hand_motion.busy_changed.connect(refresh)
+	var play := phase.get_node("%" + play_name) as Button
+	var play_action: Callable = play.pressed.get_connections()[0].callable
+	play.pressed.disconnect(play_action)
+	play.pressed.connect(_present_action.bind("play", play_action))
+	var redraw := phase.get_node("%RedrawButton") as Button
+	for connection in redraw.pressed.get_connections(): redraw.pressed.disconnect(connection.callable)
+	redraw.pressed.connect(_present_action.bind("redraw", Callable(phase, "redraw_selected_cards")))
+
+func _present_action(kind: String, action: Callable) -> void:
+	if hand_motion.busy: return
+	hand_motion.play(kind, phase.get_node("%HandContainer"), phase.get_selected_candidate_views(), action,
+		func(): return HandPresentation.project_snapshot(project, run), _update_presented_scores, _restore_presented_scores)
+
+func _update_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
+	_presented_values = values.duplicate()
+	score_display_changed.emit(values, deltas)
+	refresh()
+
+func _restore_presented_scores() -> void:
+	_presented_values.clear()
+	score_display_changed.emit({}, {})
+	refresh()
 
 func move_control(node_name: String, destination: Node) -> void:
 	var control := phase.get_node("%" + node_name) as Control
@@ -128,6 +161,7 @@ func use_synergy_presenter(presenter: SynergyNotification) -> void:
 	synergy_notification = presenter
 
 func bind_states(project_state: ProjectState, run_state: RunState) -> void:
+	if project != project_state and hand_motion != null and hand_motion.busy: hand_motion.cancel()
 	if project != null and project != project_state:
 		if project.values_changed.is_connected(refresh): project.values_changed.disconnect(refresh)
 		if project.cycle_changed.is_connected(refresh): project.cycle_changed.disconnect(refresh)
@@ -144,7 +178,13 @@ func refresh() -> void:
 	for view: CardView in phase.get_selected_candidate_views():
 		entries.append("%d · %s" % [view.get_index() + 1, view.card_data.card_name])
 	played_hand.text = "Select up to four cards from the backlog." if entries.is_empty() else "   /   ".join(entries)
+	if hand_motion != null and hand_motion.busy:
+		played_hand.text = "Redrawing selected cards…" if hand_motion.action_kind == "redraw" else "Resolving hand, left to right…"
+	synergy_help_button.disabled = hand_motion != null and hand_motion.busy
 	played_hand.tooltip_text = played_hand.text
+	var guided: Dictionary = phase.get_first_game_guidance() if phase.has_method("get_first_game_guidance") else {}
+	backlog_title.text = guided.get("hint", "Backlog / Draw Pool")
+	backlog_title.tooltip_text = guided.get("body", "")
 	var synergy_tip := _synergy_tip()
 	_synergy_help_title = synergy_tip.title
 	_synergy_help_body = synergy_tip.body
@@ -154,7 +194,9 @@ func refresh() -> void:
 		control.tooltip_text = control.text
 	phase_title.text = phase_name + " · " + ("Prepare to launch" if phase_name == "Beta" else "Build Scope")
 	if project != null:
-		progress.text = ("Known: %d · Fixed: %d" % [project.get_known_bugs(), project.get_fixed_bugs()]) if phase_name == "Beta" else ("Scope: %d / %d" % [project.get_current_scope(), project.get_required_scope()])
+		var fixed: int = _presented_values.get(&"fixed", project.get_fixed_bugs())
+		var known: int = maxi(0, int(_presented_values.get(&"discovered", project.get_known_bugs() + project.get_fixed_bugs())) - fixed)
+		progress.text = ("Known: %d · Fixed: %d" % [known, fixed]) if phase_name == "Beta" else ("Scope: %d / %d" % [_presented_values.get(&"scope", project.get_current_scope()), project.get_required_scope()])
 		if phase_name == "Beta":
 			progress.text += " · " + phase.get_launch_readiness_text()
 	presentation_changed.emit()

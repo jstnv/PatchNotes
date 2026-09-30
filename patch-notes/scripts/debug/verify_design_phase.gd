@@ -204,7 +204,7 @@ func _verify_design_priorities(design_phase: DesignPhase, project_state: Project
 	for index in range(views.size()):
 		_expect((views[index] as CardView).size == Vector2(240, 336), "Active candidate %d retains 240x336 bounds" % (index + 1))
 	var candidate_scroll := design_phase.get_node("Workspace/Regions/CandidateScroll") as ScrollContainer
-	_expect(candidate_scroll.get_h_scroll_bar().max_value > candidate_scroll.size.x, "Active seven-card pool remains horizontally accessible")
+	_expect(design_phase.get_node("%HandContainer") is CardFan and candidate_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED, "Seven-card pool uses the shared fan without horizontal scrolling")
 	_expect(design_phase.get_node("%ProceedToAlphaButton").visible and design_phase.get_node("%PlayCardButton").visible, "Active Play Hand and Proceed controls remain accessible")
 
 
@@ -621,6 +621,7 @@ func _verify_specialized_success(design_phase: Node) -> void:
 	var emissions := [0]
 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_values(project_state) == [26, 5, 14, 8, 10], "Specialized hand commits its aggregate-then-nearest-rounded production")
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 102.0 / 18.0), "Specialization accumulates Bug Pressure from printed values without its production multiplier")
 	_expect(emissions[0] == 1, "Specialized hand emits values_changed exactly once")
@@ -716,6 +717,7 @@ func _verify_balanced_success(design_phase: Node) -> void:
 	var emissions := [0]
 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_values(project_state) == [9, 9, 9, 8, 4], "Balanced success adds only adjusted current production and unmodified Scope")
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 15.0 / 18.0), "Balanced success accumulates fractional Bug Pressure from unadjusted printed values")
 	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: 0.83", "Successful Feature action refreshes the Bug Pressure label through values_changed")
@@ -748,6 +750,7 @@ func _verify_balanced_pass_success(design_phase: Node, database: Node) -> void:
 	var emissions := [0]
 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_values(project_state) == [2, 2, 2, 2, 1], "Pass-assisted Balanced action commits adjusted production and normal Feature Scope")
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 2.0 / 18.0), "Feature-plus-Pass action accumulates only the Feature's fractional Bug Pressure")
 	_expect(
@@ -780,6 +783,7 @@ func _verify_two_action_bug_pressure_accumulation(design_phase: Node, database: 
 	_set_exact_candidates(design_phase, first_hand)
 	_select_first(design_phase, 4)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	var first_pressure := project_state.get_accumulated_bug_pressure()
 	_expect(_approximately_equal(first_pressure, 2.0 / 18.0), "First successful action retains fractional Bug Pressure across its redeal and cycle advancement")
 	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: 0.11", "First successful Feature action displays its fractional Bug Pressure")
@@ -788,6 +792,7 @@ func _verify_two_action_bug_pressure_accumulation(design_phase: Node, database: 
 	_set_exact_candidates(design_phase, second_hand)
 	_select_first(design_phase, 4)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 5.0 / 18.0), "Two successful actions accumulate fractional Feature Bug Pressure correctly")
 	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: 0.28", "Multiple Feature actions display their accumulated Bug Pressure")
 	_expect(project_state.get_current_cycle() == 2, "Two Bug Pressure-producing actions still advance exactly two cycles")
@@ -813,6 +818,7 @@ func _verify_atomic_failure(design_phase: Node, project_state: ProjectState, dat
 	var cycle_before := project_state.get_current_cycle()
 	var old_views := design_phase.get_node("%HandContainer").get_children()
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_values(project_state) == before, "Malformed specialized hand applies no base score, bonus, or Scope")
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), bug_pressure_before), "Malformed hand adds no Bug Pressure")
 	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: %.2f" % bug_pressure_before, "Malformed hand leaves the Bug Pressure display unchanged")
@@ -835,6 +841,7 @@ func _verify_atomic_success(design_phase: Node, project_state: ProjectState, dat
 	var emissions := [0]
 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_values(project_state) == [7, 0, 4, 5, 4], "Four cards aggregate primary, secondary, repeated score, and Scope correctly")
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 5.0 / 3.0), "Successful mixed action atomically accumulates every selected Feature's fractional Bug Pressure")
 	_expect(emissions[0] == 1, "Complete hand commits through one values_changed emission")
@@ -849,6 +856,7 @@ func _verify_atomic_success(design_phase: Node, project_state: ProjectState, dat
 	_expect(design_phase.get_node("%HandContainer").get_child_count() == 7, "Successful play deals seven new candidates")
 	(old_views[0] as CardView).card_pressed.emit(old_views[0])
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(project_state.get_current_cycle() == 1 and _values(project_state) == [7, 0, 4, 5, 4], "Stale activation cannot replay the previous hand")
 
 
@@ -867,6 +875,7 @@ func _verify_post_hand_deal_failure(design_phase: Node, restore_state: ProjectSt
 	passes.assign(database.call(&"get_cards_by_phase_and_types", CardData.PHASE_DESIGN, [&"pass"] as Array[StringName]))
 	design_phase.set("_pass_definitions", passes.slice(0, 3))
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_values(project_state) == [4, 2, 2, 0, 1] and project_state.get_current_cycle() == 1, "Post-hand deal failure preserves the committed scores, Scope, and one cycle")
 	_expect(design_phase.get("_exhausted_card_ids").has(feature.id), "Post-hand deal failure preserves committed Feature exhaustion")
 	_expect(design_phase.get("_candidate_cards").is_empty() and design_phase.get_node("%HandContainer").get_child_count() == 0, "Post-hand deal failure leaves a safe empty pool rather than a partial pool")
@@ -878,6 +887,9 @@ func _verify_pass_only_hand(design_phase: Node, project_state: ProjectState, dat
 	var graphics_pass: CardData = database.call(&"get_card", &"graphics_pass")
 	var cards: Array[CardData] = [graphics_pass, graphics_pass, graphics_pass, graphics_pass, graphics_pass, graphics_pass, graphics_pass]
 	_set_exact_candidates(design_phase, cards)
+	# This fixture expects an exhausted Feature supply; do not inherit undealt
+	# Features from the preceding mixed-hand fixture's randomized replacement.
+	(design_phase.get("_available_features") as Array).clear()
 	_select_first(design_phase, 4)
 	var scope_before := project_state.get_current_scope()
 	var bug_pressure_before := project_state.get_accumulated_bug_pressure()
@@ -885,6 +897,7 @@ func _verify_pass_only_hand(design_phase: Node, project_state: ProjectState, dat
 	var base_hand: Dictionary = design_phase.call("_validate_and_calculate_base_action")
 	_expect(base_hand.valid and not base_hand.has_feature, "Pass-only base result reports no Feature presence")
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(project_state.get_core_score(ProjectState.CoreScore.GRAPHICS) == 19, "Four matching +2 Pass instances trigger Specialization and contribute +12")
 	_expect(project_state.get_current_scope() == scope_before, "Pass-only hand adds 0 Scope")
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), bug_pressure_before), "Duplicate Pass-only hand adds exactly 0.0 Bug Pressure and preserves prior accumulation")
@@ -1058,6 +1071,7 @@ func _verify_design_finalization(design_phase: Node, database: Node) -> void:
 	_set_exact_candidates(design_phase, overshoot_passes)
 	_select_first(design_phase, 4)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(overshoot_state.get_current_scope() == 32 and overshoot_state.get_current_cycle() == 1, "A complete hand remains playable above Required Scope without clamping overshoot")
 
 	var cards: Array[CardData] = [

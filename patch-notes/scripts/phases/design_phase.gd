@@ -47,7 +47,7 @@ var _syncing_priority_controls := false
 @onready var design_value: Label = %DesignValue
 @onready var scope_value: Label = %ScopeValue
 @onready var bug_pressure_value: Label = %BugPressureValue
-@onready var hand_container: HBoxContainer = %HandContainer
+@onready var hand_container: Container = %HandContainer
 @onready var play_card_button: Button = %PlayCardButton
 @onready var proceed_to_alpha_button: Button = %ProceedToAlphaButton
 
@@ -993,6 +993,47 @@ func _update_play_button() -> void:
 
 func get_workspace() -> PhaseWorkspace:
 	return _workspace
+
+
+func _get_first_game_tutorial() -> FirstGameTutorial:
+	return _run_state.get_first_game_tutorial(_project_state) if _run_state != null else null
+
+
+## This is current-pool guidance, not a promise about an ordinary future roll.
+func get_first_game_guidance() -> Dictionary:
+	var tutorial := _get_first_game_tutorial()
+	if tutorial == null or tutorial.stage == FirstGameTutorial.Stage.COMPLETE or _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested:
+		return {}
+	var stat := tutorial.first_stat if tutorial.stage == FirstGameTutorial.Stage.FIRST_HAND else tutorial.second_stat
+	if stat.is_empty(): return {}
+	var matching: Array[String] = []
+	var other_slots: Array[int] = []
+	for index in range(_candidate_cards.size()):
+		if _candidate_cards[index].primary_stat == stat:
+			matching.append(str(index + 1))
+		else:
+			other_slots.append(index)
+	var core := str(stat).capitalize()
+	var selected_match := _selected_card_views.size() == 4
+	for view: CardView in _selected_card_views:
+		if view.card_data.primary_stat != stat: selected_match = false
+	if matching.size() >= 4:
+		var first := tutorial.stage == FirstGameTutorial.Stage.FIRST_HAND
+		return {"key": "first_game_" + ("first" if first else "redraw") + ("_implement" if selected_match else "_find"),
+			"title": ("Implement your %s synergy" if selected_match else "%s Specialization is playable") % core,
+			"hint": "First game · " + ("Press Implement for %s Specialization." % core if selected_match else "Find four %s primary labels, then Implement. Selected cards lift out of the fan." % core),
+			"body": "At least four cards share %s as their primary Core (the first score). Look across the fan to find them. Choose any four matching cards and press Implement for ×1.5 hand Core gains. Printed Scope stays the same; Passes add no Scope. Playing still uses one cycle and the shown Feature cost." % core}
+	if tutorial.stage == FirstGameTutorial.Stage.REDRAW_HAND and matching.size() == 3 and not other_slots.is_empty():
+		if _run_state.get_available_redraws() == 0:
+			return {"key": "first_game_redraw_empty", "title": "No redraws left", "hint": "First game · Play a hand to restore one redraw.", "body": "This pool is one %s card short of Specialization. Your redraw bank is empty. You can play any affordable four-card hand normally; a successful hand restores one redraw." % core}
+		var ready := _selected_card_views.size() == 1 and _selected_card_views[0].card_data.primary_stat != stat
+		var wrong_selection := not ready and not _selected_card_views.is_empty()
+		var selection_help := "Click selected cards again to deselect them. " if wrong_selection else ""
+		return {"key": "first_game_redraw_now" if ready else "first_game_redraw_wrong" if wrong_selection else "first_game_redraw_select",
+			"title": "Redraw your selected card" if ready else "One card away from %s Specialization" % core,
+			"hint": "First game · " + ("Press Redraw for the fourth %s card." % core if ready else "Keep three %s cards. Select only one other card and Redraw." % core),
+			"body": selection_help + "Keep the three %s cards unselected for now. Select only one card with a different primary label, then Redraw. This tutorial guarantees a %s Pass: one redraw, zero cash or cycles. Then find all four %s cards in the fan and Implement. Later redraws use normal chance." % [core, core, core]}
+	return {"key": "first_game_pool_changed", "title": "Your pool has changed", "hint": "First game · Find four matching primary labels, or play another hand.", "body": "Your choices changed the guided pattern. You can still find a Specialization by matching four primary Core labels, or play any affordable four cards normally. The guided opening ends after your second successful Design hand."}
 
 
 func refresh_workspace() -> void:

@@ -16,9 +16,10 @@ func check(ok: bool, message: String) -> void:
 		push_error(message)
 
 
-func fixture(seed_value: int, priorities: Array[int], enroll := true) -> Dictionary:
+func fixture(seed_value: int, priorities: Array[int], enroll := true, empty_cash := false) -> Dictionary:
 	var run := RunState.new()
-	check(run.initialize_cash(0) and run.set_studio_name("Tutorial verification"), "Fixture initializes legal first Studio")
+	check(run.initialize_cash(0) and run.set_studio_name("Tutorial verification", &"action"), "Fixture initializes legal first Studio")
+	if empty_cash: check(run.spend_cash_cents(run.get_cash_cents()), "Fixture legally spends starting cash before lesson")
 	var project := PrimitivePredevelopment.prepare_project("Lesson game", &"action", &"fantasy", run)
 	if enroll:
 		check(run.begin_first_game_tutorial(project), "First project enrolls once")
@@ -100,6 +101,7 @@ func _run() -> void:
 	root.size = Vector2i(1152, 648)
 	await verify_real_flow()
 	verify_priority_matrix()
+	verify_reconstruction_and_zero_cash()
 	verify_play_redraw_and_failures()
 	verify_ignored_lesson()
 	print("First-game scripted tutorial verification: %d failures; %d seeded deal routes" % [failures, checked_routes])
@@ -111,8 +113,7 @@ func verify_real_flow() -> void:
 	root.add_child(game)
 	await process_frame
 	var run: RunState = game.run_state
-	check(run.initialize_cash(0) == false, "Existing Gameplay cash initialization stays guarded")
-	check(run.set_studio_name("Flow studio"), "Real run names studio")
+	check(run.set_studio_name("Flow studio", &"action"), "Real run names studio")
 	game.call("_enter_initial_studio")
 	var studio: Control = game.get("_active_phase")
 	var before := [run.get_completed_run_cycles(), run.get_cash_cents(), run.get_available_redraws()]
@@ -148,6 +149,8 @@ func verify_priority_matrix() -> void:
 			var production: Dictionary = f.phase.get_workspace().get_selected_production_synergy()
 			check(production.get("specialization_stat", &"") == STATS[target], "Promised first combo uses real central specialization calculation")
 			check(not (f.phase.get_node("%PlayCardButton") as Button).disabled, "Promised first combo is affordable and playable")
+			if target == 3:
+				check(f.phase.get_selected_candidate_views().all(func(view: CardView): return view.card_data.card_type == &"pass" or f.run.owns_feature(view.card_data.id)), "Design lesson uses only owned Features or renewable Passes")
 			check_legal_pool(f, "First deal")
 			dispose(f)
 			checked_routes += 1
@@ -172,6 +175,30 @@ func verify_priority_matrix() -> void:
 	check(all_seen.size() == 4, "Seeded four-way tie exercises all Core categories")
 
 
+func verify_reconstruction_and_zero_cash() -> void:
+	var zero := fixture(606, [40, 20, 20, 20], true, true)
+	select_stat(zero.phase, &"graphics")
+	check(zero.phase.get_selected_candidate_views().size() == 4 and zero.phase.get_selected_candidate_views().all(func(view: CardView): return view.card_data.card_type == &"pass"), "Zero cash still offers four matching legal Passes, without a free Feature")
+	check(not (zero.phase.get_node("%PlayCardButton") as Button).disabled, "Pass-only zero-cash specialization can play")
+	check_legal_pool(zero, "Zero-cash deal")
+	dispose(zero)
+	var f := fixture(808, [20, 40, 20, 20])
+	var claimed := tutorial_snapshot(f.tutorial)
+	var rebuilt := DESIGN_SCENE.instantiate() as DesignPhase
+	rebuilt.setup(f.project, f.run)
+	root.add_child(rebuilt)
+	(rebuilt.get("_deal_rng") as RandomNumberGenerator).seed = 303
+	check(rebuilt.set_priority_distribution({0: 20, 1: 40, 2: 20, 3: 20}) and rebuilt.begin_design(), "Design scene can reconstruct with existing tutorial state")
+	var ordinary := fixture(303, [20, 40, 20, 20], false)
+	check(f.run.get_first_game_tutorial(f.project) == f.tutorial and tutorial_snapshot(f.tutorial) == claimed, "Reconstruction retains identical tutorial authority and claimed-deal flags")
+	check(cards(rebuilt) == cards(ordinary.phase), "Reconstruction does not reissue claimed first scripted pool; uses same seeded ordinary draw")
+	# This intentionally tests tutorial progress only. Existing Design reconstruction
+	# does not serialize active candidate pools or phase-local Feature exhaustion.
+	rebuilt.free()
+	dispose(ordinary)
+	dispose(f)
+
+
 func verify_play_redraw_and_failures() -> void:
 	var f := fixture(4242, [20, 40, 20, 20])
 	var phase: DesignPhase = f.phase
@@ -191,6 +218,12 @@ func verify_play_redraw_and_failures() -> void:
 	phase.call("_on_play_card_pressed")
 	check(snapshot(f) == failed_before, "Overflow hand rejects without advancing tutorial or production")
 	run.set("_completed_run_cycles", saved_cycles)
+	var saved_cash := run.get_cash_cents()
+	run.set("_cash_cents", 0)
+	failed_before = snapshot(f)
+	phase.call("_on_play_card_pressed")
+	check(snapshot(f) == failed_before, "Unaffordable scripted Feature hand rejects without spending its lesson")
+	run.set("_cash_cents", saved_cash)
 	var selected_cards: Array[CardData] = []
 	for view: CardView in phase.get_selected_candidate_views(): selected_cards.append(view.card_data)
 	var expected_cost := run.primitive_feature_hand_cost_cents(selected_cards)
@@ -211,6 +244,25 @@ func verify_play_redraw_and_failures() -> void:
 	for stat: StringName in STATS:
 		check(count_stat(phase, stat) < 4, "Second lesson contains no pre-complete specialization")
 	check_legal_pool(f, "Second deal")
+	var second_before := snapshot(f)
+	var changed_priorities := {0: 25, 1: 25, 2: 25, 3: 25}
+	check(phase.commit_priority_distribution(changed_priorities), "Normal changed priorities remain available during guided lesson")
+	check(cards(phase) == second_before.cards and tutorial_snapshot(tutorial) == second_before.tutorial, "Priority commit preserves current pool and pending lesson target")
+	check(run.get_completed_run_cycles() == second_before.cycles + 1 and project.get_current_cycle() == second_before.project_cycle + 1 and run.get_cash_cents() == second_before.cash, "Priority change keeps its ordinary single-cycle cost")
+	select_stat(phase, second_stat)
+	var selected_target: CardView = phase.get_selected_candidate_views()[0]
+	phase.call("_clear_selection")
+	selected_target.card_pressed.emit(selected_target)
+	before = snapshot(f)
+	var wrong_plan: Dictionary = phase.call("_plan_selected_redraw", [0.5] as Array[float])
+	check(not wrong_plan.get("guided_redraw", false) and snapshot(f) == before, "Selecting an existing matching card does not consume or force the guarantee")
+	phase.call("_clear_selection")
+	for view: CardView in phase.get_node("%HandContainer").get_children():
+		if view.card_data.primary_stat != second_stat and phase.get_selected_candidate_views().size() < 2:
+			view.card_pressed.emit(view)
+	before = snapshot(f)
+	var multi_plan: Dictionary = phase.call("_plan_selected_redraw", [0.5, 0.5] as Array[float])
+	check(not multi_plan.get("guided_redraw", false) and snapshot(f) == before, "Two-card redraw preview remains ordinary and does not consume the single-card lesson")
 	var selected := select_nonmatching(phase, second_stat)
 	check(selected != null, "Second lesson has a legal nonmatching redraw slot")
 	var slot := selected.get_index()
@@ -242,6 +294,13 @@ func verify_play_redraw_and_failures() -> void:
 	phase.call("_on_play_card_pressed")
 	check(snapshot(f) == before, "Repeated Play callback without four selections cannot replay tutorial effects")
 	check(not run.begin_first_game_tutorial(project) and run.get_first_game_tutorial(project) == tutorial and tutorial.get("stage") == 3, "Completed lesson cannot re-enroll")
+	for card: CardData in cards(phase):
+		if card.card_type == &"feature": phase.call("_return_feature_to_available", card)
+	phase.call("_clear_candidate_pool")
+	var rolls: Array[float] = [0.01, 0.15, 0.29, 0.43, 0.57, 0.71, 0.85]
+	var ordinary_plan: Dictionary = phase.call("_build_weighted_candidate_definitions", phase.get_priority_distribution(), rolls)
+	check(ordinary_plan.valid and phase.call("_deal_next_candidate_pool", rolls), "Post-lesson controlled normal deal succeeds")
+	check(cards(phase) == ordinary_plan.cards and tutorial.get("stage") == 3, "Completed lesson cannot override ordinary weighted candidate results")
 	dispose(f)
 
 

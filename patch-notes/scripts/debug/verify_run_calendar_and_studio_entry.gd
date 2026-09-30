@@ -16,13 +16,13 @@ func _initialize() -> void:
 
 func _verify_calendar() -> void:
 	var run := RunState.new()
-	_expect(run.get_completed_run_cycles() == 0 and run.get_current_month() == 1 and run.get_current_half() == 1 and run.get_calendar_label() == "Month 1, First Half", "New run begins at Month 1 first half with zero completed cycles")
+	_expect(run.get_completed_run_cycles() == 0 and run.get_current_month() == 1 and run.get_current_half() == 1 and run.get_calendar_label() == "1980 · Month 1, First Half", "New run begins at Month 1 first half with zero completed cycles")
 	var signals := [0]
 	run.calendar_changed.connect(func() -> void: signals[0] += 1)
 	_expect(not run.will_next_cycle_cross_month_boundary() and run.advance_calendar_cycle(), "First successful run cycle advances once without crossing a month")
-	_expect(run.get_completed_run_cycles() == 1 and run.get_calendar_label() == "Month 1, Second Half" and signals[0] == 1, "One cycle reaches Month 1 second half")
+	_expect(run.get_completed_run_cycles() == 1 and run.get_calendar_label() == "1980 · Month 1, Second Half" and signals[0] == 1, "One cycle reaches Month 1 second half")
 	_expect(run.will_next_cycle_cross_month_boundary() and run.advance_calendar_cycle(), "Second successful cycle reports and crosses the month boundary")
-	_expect(run.get_completed_run_cycles() == 2 and run.get_calendar_label() == "Month 2, First Half" and signals[0] == 2, "Two cycles reach Month 2 first half")
+	_expect(run.get_completed_run_cycles() == 2 and run.get_calendar_label() == "1980 · Month 2, First Half" and signals[0] == 2, "Two cycles reach Month 2 first half")
 	run.set("_completed_run_cycles", RunState.MAX_SIGNED_INT)
 	_expect(not run.can_advance_calendar_cycle() and not run.advance_calendar_cycle() and run.get_completed_run_cycles() == RunState.MAX_SIGNED_INT and signals[0] == 2, "Calendar overflow rejects without mutation or signal")
 

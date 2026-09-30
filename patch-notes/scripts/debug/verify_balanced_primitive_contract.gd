@@ -19,6 +19,7 @@ func expect(ok: bool, message: String) -> void:
 
 func release(total: int) -> ProjectState:
 	var project := ProjectState.new(30)
+	project.add_scope(30) # This fixture expects a qualified SideStreet offer after Ironclad.
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
 	project.finalize_design_bugs(false, 0, [], [])
 	project.finalize_alpha(0, [], [])
@@ -267,12 +268,14 @@ func _verify_gameplay_transition() -> void:
 	game.get_node("%PhaseRoot").add_child(studio)
 	game.set("_active_phase", studio)
 	game.get_node("%GameplayHUD").set_phase(studio)
+	expect(run.consume_redraw(2), "Contract navigation fixture starts with two available redraws")
 	var passive_before := run_snapshot(run, project)
 	studio.get_node("%Contracts").pressed.emit()
 	(studio.get_node("ContractDetail").find_child("AcceptContractButton", true, false) as Button).pressed.emit()
 	await process_frame
 	var active: Control = game.get("_active_phase")
 	expect(active is ContractPhase and game.get("active_contract_state") == run.get_primitive_contract(), "Gameplay retains accepted ContractState and enters ContractPhase")
+	expect(run.get_available_redraws() == 2, "Contract entry itself does not grant another redraw refill")
 	var hud := game.get_node("%GameplayHUD") as GameplayHUD
 	expect(hud.tip_button.tooltip_text.contains("×1.5") and hud.tip_button.tooltip_text.contains("primary Core"), "Contract entry teaches the matching-primary synergy in the in-game Tip")
 	_select_first(active as ContractPhase, 4)
@@ -283,14 +286,18 @@ func _verify_gameplay_transition() -> void:
 	var preview_before := run_snapshot(run, project)
 	expect(hud._guidance_for_current_state().title == expected_title and run_snapshot(run, project) == preview_before, "Contract in-game Tip previews the selected synergy without changing run state")
 	(active as ContractPhase).call("_play_selected_hand")
+	_select_first(active as ContractPhase, 3)
+	expect((active as ContractPhase).redraw_selected_cards(), "Contract consumes three redraws between its two successful hands")
 	_select_first(active as ContractPhase, 4)
 	(active as ContractPhase).call("_play_selected_hand")
 	var completed_before_dismiss := run_snapshot(run, project)
+	expect(run.get_available_redraws() == 1, "Completed Contract retains only the productive hand's single restored redraw")
 	((active as ContractPhase).get("_completion_panel").find_child("DismissCompletionButton", true, false) as Button).pressed.emit()
 	await process_frame
 	active = game.get("_active_phase")
 	expect(active is StudioPhase and (active as StudioPhase).get_project_state() == project and (active as StudioPhase).get_run_state() == run, "Completion dismissal returns through Gameplay to the same Studio dashboard state")
-	expect(run_snapshot(run, project) == completed_before_dismiss and passive_before[1] + 2 == run.get_completed_run_cycles(), "Gameplay navigation is passive and exactly two hands advance exactly two cycles")
+	completed_before_dismiss[2] = RunState.MAX_REDRAWS
+	expect(run_snapshot(run, project) == completed_before_dismiss and passive_before[1] + 2 == run.get_completed_run_cycles(), "Returning to Studio only refills redraws; cash, sales and the two-hand cycle count remain unchanged")
 	game.queue_free()
 	await process_frame
 

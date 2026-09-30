@@ -246,12 +246,14 @@ func _verify_weighted_alpha_boundary(alpha: AlphaPhase, state: ProjectState, sta
 	malformed_card.primary_value = -1
 	_expect(not alpha.host_playtest() and state.get_current_cycle() == 0 and alpha.get_pending_playtest_categories().is_empty(), "Malformed active Alpha pool rejects Host Playtest without spending a cycle or queuing corrective Passes")
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	malformed_card.primary_value = printed_primary
 	_expect(_state_snapshot(state) == state_before and value_emissions[0] == 0 and cycle_emissions[0] == 0, "Malformed Alpha card resolves no scores, Scope, pressure, signal, or cycle")
 	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_selected_candidate_count() == 4 and not (alpha.get_node("%PlayAlphaHandButton") as Button).disabled, "Malformed resolution preserves the pool, four selections, and enabled action")
 
 	var old_views := views.duplicate()
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(state.get_core_score(ProjectState.CoreScore.DESIGN) == 7 and state.get_core_score(ProjectState.CoreScore.TECHNOLOGY) == 1, "Alpha hand aggregates repeated printed primary and secondary production without synergy")
 	_expect(state.get_core_score(ProjectState.CoreScore.GRAPHICS) == 0 and state.get_core_score(ProjectState.CoreScore.SOUND) == 0, "Unproduced Core Scores remain unchanged")
 	_expect(state.get_current_scope() == 2, "Alpha Scope equals the exact printed Scope sum")
@@ -269,6 +271,7 @@ func _verify_weighted_alpha_boundary(alpha: AlphaPhase, state: ProjectState, sta
 	var after_first_action := _state_snapshot(state)
 	(old_views[0] as CardView).card_pressed.emit(old_views[0])
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_state_snapshot(state) == after_first_action, "Stale CardView and repeated Play activation cannot resolve again")
 
 	alpha.call("_clear_candidate_pool")
@@ -281,6 +284,7 @@ func _verify_weighted_alpha_boundary(alpha: AlphaPhase, state: ProjectState, sta
 	var pressure_before_passes := state.get_accumulated_alpha_bug_pressure()
 	var pressure_text_before: String = alpha.get_node("%AlphaBugPressureValue").text
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(state.get_core_score(ProjectState.CoreScore.DESIGN) == 19, "Four matching Passes specialize their aggregated printed +8 to +12")
 	_expect(state.get_current_scope() == 2 and _approximately_equal(state.get_accumulated_alpha_bug_pressure(), pressure_before_passes), "Pass-only Alpha hand adds zero Scope and exactly 0.0 pressure")
 	_expect(alpha.get_node("%AlphaBugPressureValue").text == pressure_text_before, "Pass-only action leaves Alpha pressure display unchanged")
@@ -351,6 +355,7 @@ func _verify_alpha_specialization_resolution() -> void:
 	state.values_changed.connect(func() -> void: value_emissions[0] += 1)
 	state.cycle_changed.connect(func() -> void: cycle_emissions[0] += 1)
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(state.get_core_score(ProjectState.CoreScore.DESIGN) == 14 and state.get_core_score(ProjectState.CoreScore.TECHNOLOGY) == 3, "Resolved same-primary Feature hand commits specialized primary and secondary totals")
 	_expect(state.get_current_scope() == 5 and _approximately_equal(state.get_accumulated_alpha_bug_pressure(), 16.0 / 18.0), "Specialization changes neither Scope nor Alpha Bug Pressure")
 	_expect(state.get_accumulated_bug_pressure() == 0.0 and state.get_hidden_bugs() == 0, "Alpha Specialization changes neither Design pressure nor Hidden Bugs")
@@ -492,6 +497,7 @@ func _verify_alpha_balanced_production_resolution() -> void:
 	state.values_changed.connect(func() -> void: values_emitted[0] += 1)
 	state.cycle_changed.connect(func() -> void: cycles_emitted[0] += 1)
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	for category: ProjectState.CoreScore in CATEGORIES:
 		_expect(state.get_core_score(category) == historical_scores[category] + expected_additions[category], "Alpha Balanced commits the expected final %s aggregate" % ProjectState.CoreScore.keys()[category].capitalize())
 	_expect(state.get_current_scope() == base_action.scope, "Alpha Balanced leaves printed Scope unchanged")
@@ -505,6 +511,7 @@ func _verify_alpha_balanced_production_resolution() -> void:
 	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_node("%HandContainer").get_child_count() == 7 and alpha.get_selected_candidate_count() == 0, "Alpha Balanced preserves seven weighted replacements and clears selection")
 	var after_success := _state_snapshot(state)
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_state_snapshot(state) == after_success, "Repeated Alpha Balanced resolution is stale-safe and changes nothing")
 
 	alpha.queue_free()
@@ -563,6 +570,7 @@ func _verify_host_playtest() -> void:
 	(views[0] as CardView).card_pressed.emit(views[0])
 	var incomplete_state := _state_snapshot(state)
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(_state_snapshot(state) == incomplete_state and alpha.get_pending_playtest_categories() == [design, sound], "Incomplete Alpha production does not consume a pending Playtest")
 	(views[0] as CardView).card_pressed.emit(views[0])
 
@@ -580,6 +588,7 @@ func _verify_host_playtest() -> void:
 
 	var production_cycle_before := state.get_current_cycle()
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(state.get_current_cycle() == production_cycle_before + 1, "The successful production hand advances one additional cycle while injection advances none")
 	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_node("%HandContainer").get_child_count() == 7, "The corrective replacement publishes exactly seven candidates")
 	_expect(alpha.get("_candidate_cards")[0] == design_pass and alpha.get("_candidate_cards")[1] == sound_pass, "The first two replacement candidates match the queued corrective order")
@@ -632,6 +641,7 @@ func _verify_host_playtest_replacement_failure() -> void:
 	_expect(alpha.host_playtest() and alpha.get_pending_playtest_categories() == [ProjectState.CoreScore.GRAPHICS, ProjectState.CoreScore.SOUND], "Equal score and priority ties queue Graphics then Sound through fixed Core order")
 	alpha.set("_pass_definitions", passes.slice(0, 3))
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(state.get_current_cycle() == 2 and state.get_current_scope() > 0 and state.get_accumulated_alpha_bug_pressure() > 0.0, "Failed corrective replacement preserves committed production plus Playtest and production cycles")
 	_expect(alpha.get("_exhausted_feature_ids").size() == 4, "Failed corrective replacement preserves committed Feature exhaustion")
 	_expect(alpha.get("_candidate_cards").is_empty() and alpha.get_node("%HandContainer").get_child_count() == 0, "Failed corrective replacement publishes no partial pool")
@@ -679,6 +689,7 @@ func _verify_post_hand_redeal_failure() -> void:
 		view.card_pressed.emit(view)
 	alpha.set("_pass_definitions", passes.slice(0, 3))
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(state.get_current_cycle() == 1 and state.get_current_scope() > 0 and state.get_accumulated_alpha_bug_pressure() > 0.0, "Post-hand redeal failure preserves committed Alpha production and one cycle")
 	_expect(alpha.get("_exhausted_feature_ids").size() == 4, "Post-hand redeal failure preserves committed Feature exhaustion")
 	_expect(alpha.get("_candidate_cards").is_empty() and alpha.get_node("%HandContainer").get_child_count() == 0, "Post-hand redeal failure leaves a safe empty pool without rollback")

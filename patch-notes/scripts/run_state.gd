@@ -16,9 +16,7 @@ const MAX_REDRAWS := 4
 const START_YEAR := 1980
 const FIRST_STUDIO_CASH_CENTS := 550000
 const POST_LAUNCH_CAMPAIGN_COST_CENTS := 10000
-const STARTER_PURCHASE_CAP_CENTS := 400000
-const STARTER_SCOPE_CAP := 23
-const GUARANTEED_PRIMITIVE_IDS: Array[StringName] = [&"text", &"4_color_palette", &"8_bit_sound", &"keyboard_and_mouse", &"controller", &"controls"]
+const GUARANTEED_PRIMITIVE_IDS = StudioSpecialties.COMMON_IDS
 
 var _cash_cents := 0
 var _cash_initialized := false
@@ -45,9 +43,9 @@ var _unlocked_publishers: Dictionary = {}
 var _pending_publisher_notifications: Array[StringName] = []
 var _seen_tutorial_topics: Dictionary = {}
 var _studio_name := ""
+var _studio_specialty: StringName = &""
 var _first_studio_economy := false
 var _starter_selection_confirmed := false
-var _starter_purchase_spent_cents := 0
 var _first_tutorial_project_id: StringName
 var _first_game_tutorial: FirstGameTutorial
 
@@ -65,12 +63,14 @@ func get_first_game_tutorial(project: ProjectState) -> FirstGameTutorial:
 	if project == null or project.get_release_id() != _first_tutorial_project_id: return null
 	return _first_game_tutorial
 
-func set_studio_name(value: String) -> bool:
+func set_studio_name(value: String, specialty: StringName = &"") -> bool:
 	var cleaned := value.strip_edges()
-	if not _studio_name.is_empty() or cleaned.is_empty() or cleaned.length() > 80 or _productive_cycle_in_progress or _publishing_cycle or not _cash_initialized or _cash_cents != 0 or not _released_games.is_empty():
+	if not _studio_name.is_empty() or not _studio_specialty.is_empty() or cleaned.is_empty() or cleaned.length() > 80 or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle or not _cash_initialized or _cash_cents != 0 or _completed_run_cycles != 0 or not _released_games.is_empty():
 		return false
+	var preview := StudioSpecialties.preview(specialty)
+	if preview.is_empty(): return false
 	var guaranteed: Dictionary = {}
-	for id: StringName in GUARANTEED_PRIMITIVE_IDS:
+	for id: StringName in preview.ids:
 		if not _feature_definitions.has(id):
 			return false
 		guaranteed[id] = true
@@ -78,12 +78,16 @@ func set_studio_name(value: String) -> bool:
 	_cash_cents = FIRST_STUDIO_CASH_CENTS
 	_first_studio_economy = true
 	_studio_name = cleaned
+	_studio_specialty = specialty
 	cash_changed.emit()
 	features_changed.emit()
 	return true
 
 func get_studio_name() -> String:
 	return _studio_name
+
+func get_studio_specialty() -> StringName:
+	return _studio_specialty
 
 
 func uses_first_studio_economy() -> bool:
@@ -104,8 +108,7 @@ func get_starter_pool_summary() -> Dictionary:
 			continue
 		scope += int(_feature_definitions[id].scope)
 		count += 1
-	return {"scope": scope, "count": count, "spent_cents": _starter_purchase_spent_cents,
-		"purchase_cap_cents": STARTER_PURCHASE_CAP_CENTS, "scope_cap": STARTER_SCOPE_CAP}
+	return {"scope": scope, "count": count}
 
 
 func get_primitive_reserve_offer(id: StringName) -> Dictionary:
@@ -117,11 +120,9 @@ func get_primitive_reserve_offer(id: StringName) -> Dictionary:
 		return {}
 	var price := (scope + 1) * 15000
 	var initial := needs_starter_selection()
-	var pool := get_starter_pool_summary() if initial else {}
-	var within_limits := not initial or (int(pool.spent_cents) + price <= STARTER_PURCHASE_CAP_CENTS and int(pool.scope) + scope <= STARTER_SCOPE_CAP)
 	return {"id": id, "name": entry.name, "phase": entry.phase, "scope": scope,
 		"price_cents": price, "owned": owns_feature(id), "affordable": _cash_initialized and _cash_cents >= price,
-		"initial": initial, "within_limits": within_limits, "can_purchase": not owns_feature(id) and within_limits and _cash_initialized and _cash_cents >= price}
+		"initial": initial, "can_purchase": not owns_feature(id) and _cash_initialized and _cash_cents >= price}
 
 
 func purchase_starter_feature(id: StringName) -> bool:
@@ -132,7 +133,6 @@ func purchase_starter_feature(id: StringName) -> bool:
 		return false
 	_feature_purchase_in_progress = true
 	_owned_features[id] = true
-	_starter_purchase_spent_cents += int(offer.price_cents)
 	spend_cash_cents(offer.price_cents)
 	features_changed.emit()
 	_feature_purchase_in_progress = false
@@ -421,7 +421,8 @@ func get_current_half() -> int:
 
 
 func get_calendar_label() -> String:
-	return "Month %d, First Half" % get_current_month() if get_current_half() == 1 else "Month %d, Second Half" % get_current_month()
+	var half_label := "First Half" if get_current_half() == 1 else "Second Half"
+	return "%d · Month %d, %s" % [get_current_year(), get_current_month(), half_label]
 
 
 func can_advance_calendar_cycle() -> bool:
@@ -483,7 +484,10 @@ func register_release(project: ProjectState) -> bool:
 		"theme": project.get_theme_id(), "genre_ratios": project.get_genre_ratios(),
 		"release_title": title, "release_year": year, "release_cycle": _completed_run_cycles,
 		"review": _capture_release_review(project)}
-	_sidestreet_entitlements[id] = {"offer_id": StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID, id]), "state": null}
+	# Qualification is captured only on the first committed registration. Existing
+	# entitlements (including legacy under-Scope offers) are never re-evaluated.
+	if project.get_current_scope() >= project.get_required_scope():
+		_sidestreet_entitlements[id] = {"offer_id": StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID, id]), "state": null}
 	_refresh_publisher_unlocks()
 	sales_changed.emit()
 	return true

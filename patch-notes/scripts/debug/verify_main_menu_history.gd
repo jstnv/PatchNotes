@@ -42,9 +42,11 @@ func _run() -> void:
 	await _capture("main-menu")
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	var input: LineEdit = menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName")
+	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
 	expect(run.get_studio_name().is_empty() and run.get_completed_run_cycles() == 0, "Blank studio name rejects for free")
 	input.text = "  North Star  "
+	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
 	var studio: StudioPhase = game.get("_active_phase")
 	expect(studio != null and run.get_studio_name() == "North Star" and run.get_completed_run_cycles() == 0 and run.get_cash_cents() == 550000 and game.project_state == null, "Studio name commits once, grants initial funding, and enters empty Studio for free")
@@ -52,6 +54,7 @@ func _run() -> void:
 	game.get_node("%GameplayHUD").tutorial_overlay.close()
 	await _capture("new-studio")
 	expect(studio.get_node("%PostGameSummaries").disabled and studio.get_node("%StartNextGame").text == "Produce First Game", "Empty Studio offers first game without false release history")
+	expect(run.consume_redraw(), "Passive Studio navigation fixture uses a partial redraw bank")
 	var prior := [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws()]
 	studio.get_node("%FeatureStoreButton").pressed.emit()
 	(studio.get("_feature_store") as FeatureStore).hide()

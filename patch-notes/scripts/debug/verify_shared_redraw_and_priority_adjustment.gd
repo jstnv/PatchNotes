@@ -38,7 +38,7 @@ func _run() -> void:
 	await process_frame
 	_check(phase.begin_design(), "Design must begin for redraw verification.")
 	await process_frame
-	var hand := phase.get_node("%HandContainer") as HBoxContainer
+	var hand := phase.get_node("%HandContainer") as Container
 	_check(hand.get_child_count() == 7, "Design must expose seven candidates.")
 	var target := hand.get_child(0) as CardView
 	var old_id := target.card_data.id

@@ -38,7 +38,7 @@ func _snapshot(run: RunState, project: ProjectState) -> Array:
 func _run() -> void:
 	snapshots.load_ledgers()
 	var run := RunState.new()
-	check(run.initialize_cash_cents(0) and run.set_studio_name("Cycle Store"), "Named Studio receives authoritative $5,500")
+	check(run.initialize_cash_cents(0) and run.set_studio_name("Cycle Store", &"adventure"), "Named Studio receives authoritative $5,500")
 	check(run.purchase_starter_feature(&"sprites") and run.get_cash_cents() == 505000 and run.get_completed_run_cycles() == 0, "First-game starter purchase remains zero-cycle")
 	check(run.finalize_starter_selection() and run.complete_productive_action(), "Starter window closes and controlled clock reaches second half")
 	var project := _released_project(751)
@@ -64,7 +64,7 @@ func _run() -> void:
 	var poor_before := [poor.get_cash_cents(), poor.get_completed_run_cycles(), poor.get_available_redraws(), poor.get_owned_feature_ids()]
 	check(not poor.purchase_feature(&"colored_text") and poor_before == [poor.get_cash_cents(), poor.get_completed_run_cycles(), poor.get_available_redraws(), poor.get_owned_feature_ids()], "Unaffordable purchase rolls back")
 	var overflowing := RunState.new()
-	check(overflowing.initialize_cash_cents(0) and overflowing.set_studio_name("Overflow Store") and overflowing.finalize_starter_selection() and overflowing.complete_productive_action(), "Overflow fixture reaches second-half release alignment")
+	check(overflowing.initialize_cash_cents(0) and overflowing.set_studio_name("Overflow Store", &"adventure") and overflowing.finalize_starter_selection() and overflowing.complete_productive_action(), "Overflow fixture reaches second-half release alignment")
 	var overflow_project := _released_project(751)
 	check(overflowing.register_release(overflow_project), "Overflow fixture registers a paying release")
 	overflowing.set("_cash_cents", RunState.MAX_SIGNED_INT - 100)

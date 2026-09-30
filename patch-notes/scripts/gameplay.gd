@@ -50,11 +50,11 @@ func _ready() -> void:
 	_active_phase = design_phase
 	%GameplayHUD.set_phase(design_phase)
 
-func _on_studio_created(name: String, source: MainMenu) -> void:
+func _on_studio_created(name: String, specialty: StringName, source: MainMenu) -> void:
 	if _transition_in_progress or source != _active_phase or source.get_parent() != %PhaseRoot:
 		return
-	if not run_state.set_studio_name(name):
-		source.show_error("Enter a valid studio name.")
+	if not run_state.set_studio_name(name, specialty):
+		source.show_error("Enter a valid studio name and choose a Genre specialty.")
 		return
 	_enter_initial_studio()
 
@@ -72,6 +72,7 @@ func _enter_initial_studio() -> void:
 	if previous != null:
 		%PhaseRoot.remove_child(previous)
 		previous.queue_free()
+	run_state.refresh_redraws()
 
 
 ## Verifier/new-project injection boundary. Controlled rolls use the locked
@@ -259,6 +260,7 @@ func _replace_beta_with_launch(source_beta_phase: Control, launch_scene: PackedS
 	%GameplayHUD.set_phase(studio_phase)
 	%PhaseRoot.remove_child(source_beta_phase)
 	source_beta_phase.queue_free()
+	run_state.refresh_redraws()
 	_transition_in_progress = false
 	return true
 
@@ -298,6 +300,7 @@ func _on_contract_completion_dismissed(source_contract: ContractPhase) -> void:
 	%GameplayHUD.set_phase(studio_phase)
 	%PhaseRoot.remove_child(source_contract)
 	source_contract.queue_free()
+	run_state.refresh_redraws()
 	_transition_in_progress = false
 
 

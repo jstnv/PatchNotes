@@ -16,6 +16,8 @@ var tip_button: Button
 var tutorial_context: StringName = &"predevelopment"
 var _guidance_ready := false
 var _current_tip_key := ""
+var _presented_scores: Dictionary = {}
+var _score_pulses: Array[Label] = []
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -107,6 +109,10 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 	refresh()
 
 func set_phase(controller: Control) -> void:
+	_presented_scores.clear()
+	for pulse in _score_pulses:
+		if is_instance_valid(pulse): pulse.queue_free()
+	_score_pulses.clear()
 	_guidance_ready = false
 	if contextual_tip != null: contextual_tip.dismiss()
 	if is_instance_valid(phase) and phase.has_signal("tutorial_context_changed") and phase.tutorial_context_changed.is_connected(set_tutorial_context):
@@ -119,6 +125,8 @@ func set_phase(controller: Control) -> void:
 			old_workspace.overlay.closed.disconnect(_refresh_guidance)
 		if old_workspace.synergy_help_requested.is_connected(_show_synergy_help):
 			old_workspace.synergy_help_requested.disconnect(_show_synergy_help)
+		if old_workspace.score_display_changed.is_connected(_show_presented_scores):
+			old_workspace.score_display_changed.disconnect(_show_presented_scores)
 	if is_instance_valid(phase) and phase.has_signal("guidance_changed") and phase.guidance_changed.is_connected(_refresh_guidance):
 		phase.guidance_changed.disconnect(_refresh_guidance)
 	phase = controller
@@ -135,6 +143,7 @@ func set_phase(controller: Control) -> void:
 		phase.get_workspace().presentation_changed.connect(refresh)
 		phase.get_workspace().overlay.closed.connect(_refresh_guidance)
 		phase.get_workspace().synergy_help_requested.connect(_show_synergy_help)
+		phase.get_workspace().score_display_changed.connect(_show_presented_scores)
 	if phase.has_signal("guidance_changed"):
 		phase.guidance_changed.connect(_refresh_guidance)
 	refresh()
@@ -200,7 +209,7 @@ func _guidance_for_current_state() -> Dictionary:
 			return {"key": "predevelopment_setup", "title": "Plan your game", "body": "Name the game and choose a Genre and Theme. Editing is free; Begin Development advances one cycle."}
 		&"studio":
 			if run != null and run.needs_starter_selection():
-				return {"key": "studio_first_store", "title": "Build your first pool", "body": "Visit the Feature Store before your first game. Starter purchases use cash but no cycles; the Studio hint tracks your Scope."}
+				return {"key": "studio_first_store", "title": "Explore your starting pool", "body": "Your specialty granted your first Features. Visit the Store for optional additions: initial Primitive purchases cost cash and zero cycles. A B game needs 30 played Scope."}
 			return {"key": "studio_between_games", "title": "Choose your next step", "body": "Browse release summaries, the Feature Store or Contracts for free. Produce Next Game starts a fresh project with your owned Features."}
 		&"feature_store":
 			if run != null and run.needs_starter_selection():
@@ -237,6 +246,9 @@ func _production_guidance() -> Dictionary:
 		return {"key": name + "_overview", "title": name.capitalize() + " guidance", "body": "Set priorities and select four cards per hand. Open Tutorial for the full phase reference."}
 	if workspace.overlay.visible:
 		return {} # PriorityOverlay already presents its own help above the game.
+	if phase is DesignPhase:
+		var guided: Dictionary = phase.get_first_game_guidance()
+		if not guided.is_empty(): return guided
 	var selected: Array[CardView] = phase.get_selected_candidate_views()
 	if selected.size() == 4:
 		if tutorial_context == &"beta":
@@ -282,17 +294,51 @@ func refresh() -> void:
 		_refresh_guidance()
 		return
 	for index in range(4):
-		stats[index + 1].text = ["Graphics", "Sound", "Technology", "Design"][index] + "\n" + str(project.get_core_score(index))
-	stats[5].text = "Scope\n%d / %d" % [project.get_current_scope(), project.get_required_scope()]
+		stats[index + 1].text = ["Graphics", "Sound", "Technology", "Design"][index] + "\n" + str(_presented_scores.get(HandPresentation.CORE[index], project.get_core_score(index)))
+	stats[0].text = "Marketing\n%d" % _presented_scores.get(&"marketing", project.get_marketing_output()) if phase is BetaPhase else "Employees\n—"
+	stats[5].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", project.get_current_scope()), project.get_required_scope()]
 	stats[5].tooltip_text = "Scope measures how much game you have built: %d of the %d target.\nFeature cards add their printed Scope. Reaching the target completes\nScope for Review; Core quality is judged separately.\nSynergies do not increase Scope." % [project.get_current_scope(), project.get_required_scope()]
 	if is_instance_valid(phase) and (phase is BetaPhase or phase is StudioPhase or phase is PostGameReview or phase is ContractPhase):
-		stats[6].text = "Known / Fixed\n%d / %d" % [project.get_known_bugs(), project.get_fixed_bugs()]
+		var fixed: int = _presented_scores.get(&"fixed", project.get_fixed_bugs())
+		var known: int = maxi(0, int(_presented_scores.get(&"discovered", project.get_known_bugs() + project.get_fixed_bugs())) - fixed)
+		stats[6].text = "Known / Fixed\n%d / %d" % [known, fixed]
 	else:
 		stats[6].text = "Bug Pressure\n%.2f" % (project.get_accumulated_alpha_bug_pressure() if is_instance_valid(phase) and phase is AlphaPhase else project.get_accumulated_bug_pressure())
 	change_priorities.disabled = not is_instance_valid(phase) or not phase.has_method("can_edit_priorities") or not phase.can_edit_priorities()
+	if is_instance_valid(phase) and phase.has_method("get_workspace") and phase.get_workspace().hand_motion != null and phase.get_workspace().hand_motion.busy: change_priorities.disabled = true
 	change_priorities.tooltip_text = "Begin the phase to edit priorities." if change_priorities.disabled else "Stage a new allocation for future draws."
 	_refresh_footer()
 	_refresh_guidance()
+
+func _show_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
+	_presented_scores = values.duplicate()
+	refresh()
+	for key: StringName in deltas:
+		var amount: int = deltas[key]
+		if amount == 0: continue
+		var index := HandPresentation.CORE.find(key) + 1
+		var caption := "+%d" % amount
+		if key == &"scope": index = 5
+		elif key == &"marketing": index = 0
+		elif key == &"fixed":
+			index = 6
+			caption += " fixed"
+		elif key == &"discovered":
+			index = 6
+			caption += " found"
+		var pulse := Label.new()
+		pulse.text = caption
+		pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		pulse.add_theme_color_override("font_color", Color("f5ce69"))
+		pulse.add_theme_font_size_override("font_size", 18)
+		pulse.z_index = 200
+		add_child(pulse)
+		pulse.global_position = stats[index].global_position + Vector2(0, 38 if key != &"fixed" else 54)
+		_score_pulses.append(pulse)
+		var tween := pulse.create_tween().set_parallel()
+		tween.tween_property(pulse, "position:y", pulse.position.y - 18.0, 0.55)
+		tween.tween_property(pulse, "modulate:a", 0.0, 0.55).set_delay(0.16)
+		tween.chain().tween_callback(func(): _score_pulses.erase(pulse); pulse.queue_free())
 
 func _refresh_footer() -> void:
 	var cents := run.get_cash_cents()
