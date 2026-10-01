@@ -47,13 +47,16 @@ func _run() -> void:
 		else:
 			verify_initial_phase_priorities(phase, project, run, title)
 			if title == "Beta":
-				check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Find and prepare", "Beta guides testing after its first draw even though Launch is already enabled")
+				var pool_tip: Dictionary = phase.get_workspace().get_pool_specialization_guidance()
+				check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == pool_tip.get("title", "Find and prepare"), "Beta guides testing or the available named synergy after its first draw")
 		await process_frame
 		check(not hud.change_priorities.disabled, title + ": active phase can edit priorities")
 		await verify_overlay(hud, phase, project, run, title)
 		if title != "Beta":
 			var stale_snapshot := state_snapshot(project, run)
 			if title == "Design":
+				# The HUD fixture has completed a finite Feature before release.
+				phase.get("_exhausted_card_ids")[&"text"] = true
 				phase.get_node("%ProceedToAlphaButton").pressed.emit()
 				check(hud.synergy_notification.banner.visible and hud.synergy_notification.title_label.text == "Perfect Production!", "Perfect Production notification survives the phase transition")
 				check(hud.synergy_notification.banner.mouse_filter == Control.MOUSE_FILTER_IGNORE and hud.synergy_notification.timer.wait_time == 4.0, "Notification is nonblocking and expires after four seconds")
@@ -123,7 +126,8 @@ func verify_design_guidance(hud: GameplayHUD, phase: DesignPhase, project: Proje
 	var workspace := phase.get_workspace()
 	check(workspace.synergy_help_button.text == "Synergy ?" and workspace.synergy_help_button.tooltip_text.contains("four-card hand"), "Unselected Design hand explains the meaning of synergy in place")
 	check(workspace.synergy_help_button.get_global_rect().end.x <= root.size.x - 16, "Visible synergy help fits the production workspace")
-	check(not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Select four cards", "After initial Design priorities, guidance moves to card selection")
+	var pool_guidance := workspace.get_pool_specialization_guidance()
+	check(not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == pool_guidance.get("title", "Select four cards"), "After initial Design priorities, guidance names an available category or explains card selection")
 	var views := phase.get_node("%HandContainer").get_children()
 	views[0].card_pressed.emit(views[0])
 	check(workspace.synergy_help_button.text.begins_with("Synergy: 1/4") and views[0].input_button.tooltip_text.contains("Specialization"), "First selection connects the card's primary label to a matching-card synergy")
@@ -135,7 +139,7 @@ func verify_design_guidance(hud: GameplayHUD, phase: DesignPhase, project: Proje
 		original_cards.append(views[index].card_data)
 		views[index].set_card(graphics_pass)
 	workspace.refresh()
-	check(workspace.synergy_help_button.text == "Graphics ×1.5" and hud._guidance_for_current_state().title == "Specialization ready", "Four matching primary labels preview the real Design Specialization before play")
+	check(workspace.synergy_help_button.text == "Graphics ×1.5" and hud._guidance_for_current_state().title == "Graphics Specialization ready", "Four matching primary labels preview the named Design Specialization before play")
 	workspace.synergy_help_button.pressed.emit()
 	check(hud.contextual_tip.panel.visible and hud.contextual_tip.title_label.text == "Graphics Specialization ready" and state_snapshot(project, run) == before, "Opening in-game synergy help is passive")
 	for index in range(4): views[index].set_card(original_cards[index])

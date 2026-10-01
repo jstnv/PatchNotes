@@ -38,7 +38,7 @@ func _run() -> void:
 	var run: RunState = game.run_state
 	var scores: Dictionary[ProjectState.CoreScore, int] = {0: 33, 1: 34, 2: 39, 3: 39}
 	state.add_core_scores_and_scope(scores, 38)
-	state.finalize_design_bugs(false, 0, [], [])
+	state.finalize_design_bugs(false, 0, [&"text"], [])
 	state.finalize_alpha(0, [], [])
 	state.add_marketing_output(50)
 	var beta: BetaPhase = load("res://scenes/phases/beta_phase.tscn").instantiate()

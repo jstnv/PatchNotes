@@ -387,6 +387,8 @@ func _on_launch_canceled() -> void:
 
 
 func _can_launch() -> bool:
+	if _project_state == null or not _project_state.has_launch_feature_work():
+		return false
 	if is_gameplay_input_blocked(): return false
 	return (
 		not _transaction_in_progress
@@ -1204,4 +1206,6 @@ func refresh_overlay_actions() -> void:
 
 
 func get_launch_readiness_text() -> String:
+	if _project_state != null and not _project_state.has_launch_feature_work():
+		return "Release requires a played Feature with positive Scope"
 	return "Launch available" if _can_launch() else "Launch unavailable"

@@ -5,6 +5,7 @@ var traces: Array = []
 var capture := false
 
 func _initialize() -> void:
+	DirAccess.make_dir_recursive_absolute("res://design-logs/card-motion-v2")
 	capture = "--capture" in OS.get_cmdline_user_args()
 	_verify.call_deferred()
 
@@ -18,7 +19,7 @@ func settle(seconds := 0.22) -> void:
 func shot(name: String) -> void:
 	if not capture: return
 	await RenderingServer.frame_post_draw
-	root.get_texture().get_image().save_png("res://design-logs/card-motion-v1/%s.png" % name)
+	root.get_texture().get_image().save_png("res://design-logs/card-motion-v2/%s.png" % name)
 
 func click(point: Vector2) -> void:
 	for pressed in [true, false]:
@@ -58,7 +59,7 @@ func _verify() -> void:
 		await _store(dimensions.x)
 	await _paid_hand()
 	await _contract()
-	var out := FileAccess.open("res://design-logs/card-motion-v1/animation-traces.json", FileAccess.WRITE)
+	var out := FileAccess.open("res://design-logs/card-motion-v2/animation-traces.json", FileAccess.WRITE)
 	out.store_string(JSON.stringify(traces, "\t"))
 	print("Card motion verification: %d failures" % failures)
 	quit(failures)
@@ -91,6 +92,10 @@ func _production(width: int) -> void:
 	hud.contextual_tip.dismiss()
 	await shot("selected-fan-%d" % width)
 	var motion: HandPresentation = phase.get_workspace().hand_motion
+	var notification: SynergyNotification = phase.get_workspace().synergy_notification
+	motion.card_step.connect(func(index: int, event: String):
+		if event == "score": expect(not notification.banner.visible, "Specialization header stays hidden during base scoring")
+		if event == "bonus" and index == 0: expect(notification.banner.visible, "Specialization header appears with the first bonus"))
 	var project: ProjectState = game.project_state
 	var run: RunState = game.run_state
 	var cycle := run.get_completed_run_cycles()
@@ -106,16 +111,28 @@ func _production(width: int) -> void:
 	expect(motion._ghosts.size() == 7 and motion._hand.size() == 4 and motion._ghosts[4].scale.x < 0.4 and motion._ghosts[4].position.y > 160, "Unselected candidates shrink and lower while the selected hand centers")
 	await shot("centered-hand-%d" % width)
 	await settle(0.14)
-	expect(hud.stats[1].text == "Graphics\n3" and not hud._score_pulses.is_empty(), "First bounce updates the scoreboard and exposes a +3 indicator")
+	expect(hud.stats[1].text == "Graphics\n2" and not hud._score_pulses.is_empty(), "First bounce updates the scoreboard and exposes a +2 base indicator")
 	await shot("score-bounce-%d" % width)
 	if motion.busy: await motion.finished
 	var order: Array = []
 	for event in motion.trace:
-		if event.index >= 0: order.append([event.index, event.event])
+		if event.index >= 0 and event.event in ["rise", "score", "grounded"]: order.append([event.index, event.event])
 	var expected: Array = []
 	for i in range(4):
 		for event in ["rise", "score", "grounded"]: expected.append([i, event])
 	expect(order == expected, "Cards bounce left to right only after the previous card lands, independent of click order")
+	var bonuses: Array = []
+	var deals: Array = []
+	for event in motion.trace:
+		if event.event == "bonus": bonuses.append(event.index)
+		if event.event == "deal": deals.append(event)
+	expect(bonuses == [0, 1, 2, 3], "Specialization bonuses reveal once per card, left to right")
+	var staggered := true
+	for i in range(1, deals.size()):
+		# Tween callbacks are frame-quantized; require distinct arrivals rather
+		# than a fixed wall-clock interval on a slow rendering frame.
+		staggered = staggered and deals[i].msec > deals[i - 1].msec
+	expect(not deals.is_empty() and staggered, "New cards join the fan one at a time")
 	expect(hud.stats[1].text == "Graphics\n12" and _snapshot(project, run) == committed and fan.visible, "Playback totals exactly match native resolution and makes no extra state changes")
 	traces.append({"phase": "Design", "width": width, "seed": 240930, "order": motion.trace.duplicate(true), "state": committed})
 	# Redraw one renewable Pass, preserving the remaining candidate instances.
@@ -136,6 +153,7 @@ func _production(width: int) -> void:
 	await shot("redraw-exit-%d" % width)
 	if motion.busy: await motion.finished
 	expect(fan.visible and fan.get_child(1) == views[1] and project.get_core_score(0) == 12, "Redraw returns to the fan without altering unaffected cards or scores")
+	expect(fan.ordered_cards()[0] == views[1] and fan.ordered_cards()[-1] == fan.get_child(0), "Retained cards lead; replacement follows, without changing authoritative slots")
 	# Invalid hand must leave gameplay and visible candidates untouched.
 	fan.get_child(0).input_button.pressed.emit()
 	var before := _snapshot(project, run)
@@ -143,7 +161,7 @@ func _production(width: int) -> void:
 	expect(not motion.busy and _snapshot(project, run) == before and fan.visible and fan.get_child(0).is_selected(), "Rejected hand starts no animation and preserves selection and state")
 	phase.get_node("%HandContainer").get_child(0).input_button.pressed.emit()
 	# Continue via the native phase transitions; Alpha gets the same fan/presenter.
-	project.finalize_design_bugs(false, 8, [], [])
+	project.finalize_design_bugs(false, 8, [&"text"], [])
 	expect(game.call("_replace_design_with_alpha", phase, load("res://scenes/phases/alpha_phase.tscn")), "Native Design-to-Alpha transition succeeds with the new workspace")
 	phase = game.get("_active_phase")
 	phase.get_workspace().overlay.commit_draft()
@@ -279,7 +297,7 @@ func _contract() -> void:
 	var released := ProjectState.new(30)
 	released.add_scope(30)
 	released.initialize_snapshots(&"fast_follower", &"stable_market")
-	released.finalize_design_bugs(false, 0, [], [])
+	released.finalize_design_bugs(false, 0, [&"text"], [])
 	released.finalize_alpha(0, [], [])
 	released.finalize_beta()
 	released.commit_review_result(ReviewResult.new(PrimitiveReviewCalculator.get_baseline_profile(), {}, 0.0, 0.0, 0.0, 7.0, 1.0, 0, 0.0, 1.0, 50, 0.0, 7.0, 7.0))

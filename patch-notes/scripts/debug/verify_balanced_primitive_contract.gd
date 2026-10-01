@@ -21,7 +21,7 @@ func release(total: int) -> ProjectState:
 	var project := ProjectState.new(30)
 	project.add_scope(30) # This fixture expects a qualified SideStreet offer after Ironclad.
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
-	project.finalize_design_bugs(false, 0, [], [])
+	project.finalize_design_bugs(false, 0, [&"text"], [])
 	project.finalize_alpha(0, [], [])
 	project.finalize_beta()
 	project.commit_review_result(ReviewResult.new(PrimitiveReviewCalculator.get_baseline_profile(), {}, 0.0, 0.0, 0.0, 7.0, 1.0, 0, 0.0, 1.0, 50, 0.0, 7.0, 7.0))

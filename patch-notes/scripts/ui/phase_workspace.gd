@@ -23,6 +23,7 @@ var project: ProjectState
 var run: RunState
 var synergy_notification: SynergyNotification
 var synergy_help_button: Button
+var organize_button: Button
 var _synergy_help_title := ""
 var _synergy_help_body := ""
 var hand_motion: HandPresentation
@@ -62,6 +63,15 @@ func configure(controller: Control, title: String) -> void:
 	synergy_help_button.pressed.connect(func(): synergy_help_requested.emit(_synergy_help_title, _synergy_help_body))
 	selected_row.add_child(synergy_help_button)
 	var pool_title := label("Backlog / Draw Pool", layout, "BacklogTitle")
+	pool_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	organize_button = Button.new()
+	organize_button.name = "OrganizePoolButton"
+	organize_button.text = "Sort by Category"
+	organize_button.tooltip_text = "Alternate category (Graphics, Sound, Tech, Design) and Scope (highest first). The button names the next sort. No cash, cycle or redraw cost."
+	organize_button.pressed.connect(func():
+		if hand_motion != null and hand_motion.busy: return
+		organize_button.text = phase.get_node("%HandContainer").cycle_organization()
+		refresh())
 	backlog_title = pool_title
 	backlog_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pool_title.add_theme_color_override("font_color", Color("#79d4da"))
@@ -82,6 +92,7 @@ func configure(controller: Control, title: String) -> void:
 	var play_name: String = {"Design": "PlayCardButton", "Alpha": "PlayAlphaHandButton", "Beta": "PlayHandButton"}[title]
 	move_control(play_name, actions)
 	move_control("RedrawButton", actions)
+	actions.add_child(organize_button)
 	if title != "Design": move_control("HostPlaytestButton", actions)
 	var phase_panel := PanelContainer.new()
 	phase_panel.name = "PhasePanel"
@@ -152,6 +163,10 @@ func move_control(node_name: String, destination: Node) -> void:
 	control.custom_minimum_size = Vector2(0, 30)
 
 func show_synergy(title: String, detail: String) -> void:
+	if hand_motion != null and hand_motion.capturing and "Specialization" in title:
+		synergy_notification.banner.hide()
+		hand_motion.note_specialization(func(): synergy_notification.show_message(title, detail))
+		return
 	synergy_notification.show_message(title, detail)
 
 func use_synergy_presenter(presenter: SynergyNotification) -> void:
@@ -176,11 +191,12 @@ func refresh() -> void:
 	if not is_instance_valid(phase) or not phase.is_inside_tree(): return
 	var entries: Array[String] = []
 	for view: CardView in phase.get_selected_candidate_views():
-		entries.append("%d · %s" % [view.get_index() + 1, view.card_data.card_name])
+		entries.append("%d · %s" % [phase.get_node("%HandContainer").ordered_cards().find(view) + 1, view.card_data.card_name])
 	played_hand.text = "Select up to four cards from the backlog." if entries.is_empty() else "   /   ".join(entries)
 	if hand_motion != null and hand_motion.busy:
 		played_hand.text = "Redrawing selected cards…" if hand_motion.action_kind == "redraw" else "Resolving hand, left to right…"
 	synergy_help_button.disabled = hand_motion != null and hand_motion.busy
+	organize_button.disabled = hand_motion != null and hand_motion.busy
 	played_hand.tooltip_text = played_hand.text
 	var guided: Dictionary = phase.get_first_game_guidance() if phase.has_method("get_first_game_guidance") else {}
 	backlog_title.text = guided.get("hint", "Backlog / Draw Pool")
@@ -199,6 +215,8 @@ func refresh() -> void:
 		progress.text = ("Known: %d · Fixed: %d" % [known, fixed]) if phase_name == "Beta" else ("Scope: %d / %d" % [_presented_values.get(&"scope", project.get_current_scope()), project.get_required_scope()])
 		if phase_name == "Beta":
 			progress.text += " · " + phase.get_launch_readiness_text()
+		elif phase_name == "Alpha" and not phase.call("_has_launch_feature_work"):
+			progress.text += " · Play a Feature with Scope before Beta (Passes alone are not enough)."
 	presentation_changed.emit()
 
 
@@ -227,6 +245,21 @@ func _synergy_tip() -> Dictionary:
 			return {"label": "Balanced ×1.2", "title": "Balanced Production ready", "body": "This hand includes a Feature and leaves all four projected Core scores within 20% of their average. Playing it multiplies this hand's Core gains by 1.2, rounded by category. Scope does not multiply."}
 	return {"label": "Synergy: none", "title": "No synergy on this hand", "body": "The hand can still play normally. Four matching primary Core labels give Specialization; a Feature plus close projected Core scores can give Balanced Production. Only one bonus applies."}
 
+
+func get_pool_specialization_guidance() -> Dictionary:
+	var counts := {}
+	for view in phase.get_node("%HandContainer").ordered_cards():
+		var card: CardData = view.card_data
+		var category: StringName = card.beta_category if phase_name == "Beta" else card.primary_stat
+		counts[category] = counts.get(category, 0) + 1
+	var categories: Array = [CardData.BETA_CATEGORY_QA, CardData.BETA_CATEGORY_MARKETING] if phase_name == "Beta" else CORE_BY_STAT.keys()
+	for category in categories:
+		if counts.get(category, 0) < 4: continue
+		var caption := "QA" if category == CardData.BETA_CATEGORY_QA else str(category).capitalize()
+		return {"key": phase_name.to_lower() + "_pool_" + str(category),
+			"title": "%s Specialization is available" % caption,
+			"body": "Your pool contains %d %s cards. Select four %s cards for %s Specialization; deselect other categories first. %s Playing still uses the normal cost and one cycle." % [counts[category], caption, caption, caption, "Match the primary Core label (the first score), including Passes. Core gains get ×1.5; printed Scope stays the same." if phase_name != "Beta" else "QA boosts Search/Debug card values ×1.5 before caps; Marketing boosts combined printed output ×1.5."]}
+	return {}
 
 func get_selected_production_synergy() -> Dictionary:
 	if phase_name == "Beta": return {}

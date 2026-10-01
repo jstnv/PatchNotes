@@ -22,6 +22,16 @@ var _tween: Tween
 var _update: Callable
 var _restore: Callable
 var _prior_focus: Control
+var _sources: Array = []
+var _specialization := false
+var _bonus_timeline: Array[Dictionary] = []
+var capturing := false
+var _specialization_header: Callable
+
+func note_specialization(header: Callable) -> void:
+	if capturing:
+		_specialization = true
+		_specialization_header = header
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -41,8 +51,10 @@ func play(kind: String, fan: Control, selected: Array, action: Callable, snapsho
 	_update = update
 	_restore = restore
 	trace.clear()
+	_specialization = false
+	_sources = fan.ordered_cards() if fan is CardFan else fan.get_children()
 	# Capture the old pool before the authoritative action replaces/frees it.
-	for source: CardView in fan.get_children():
+	for source: CardView in _sources:
 		var ghost: CardView = CARD_SCENE.instantiate()
 		ghost.set_card(source.card_data)
 		add_child(ghost)
@@ -61,7 +73,9 @@ func play(kind: String, fan: Control, selected: Array, action: Callable, snapsho
 	# Hold the old scoreboard before project/run signals publish the committed totals.
 	display_values = before.duplicate()
 	if _update.is_valid(): _update.call(display_values, {})
+	capturing = true
 	action.call()
+	capturing = false
 	var after: Dictionary = snapshot.call()
 	var accepted: bool = after.get("_redraws") != before.get("_redraws") if kind == "redraw" else after.get("_cycle") != before.get("_cycle")
 	if not accepted:
@@ -74,6 +88,16 @@ func play(kind: String, fan: Control, selected: Array, action: Callable, snapsho
 	grab_focus()
 	fan.hide()
 	_timeline = build_timeline(_cards, before, after)
+	_bonus_timeline.clear()
+	for i in range(_cards.size()):
+		var bonus := {}
+		for key in _timeline[i]:
+			# Only split uncapped production/Marketing gains. QA has ordered,
+			# capped effects, so its resolved contribution stays in the first pass.
+			var extra: int = maxi(0, int(_timeline[i][key]) - _weight(_cards[i], key)) if _specialization and (key in CORE or key == &"marketing") else 0
+			bonus[key] = extra
+			_timeline[i][key] -= extra
+		_bonus_timeline.append(bonus)
 	busy_changed.emit()
 	_animate(kind)
 	return true
@@ -117,6 +141,7 @@ func _animate(kind: String) -> void:
 	_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).set_parallel()
 	var center := size / 2.0
 	var scale_value := minf(0.68, (size.x - 70.0) / (_hand.size() * 258.0))
+	var remaining := _ghosts.filter(func(card): return card not in _hand)
 	for ghost in _ghosts:
 		if ghost in _hand:
 			var index := _hand.find(ghost)
@@ -126,9 +151,11 @@ func _animate(kind: String) -> void:
 			_tween.tween_property(ghost, "scale", Vector2.ONE * scale_value, 0.30)
 			_tween.tween_property(ghost, "rotation", 0.0, 0.30)
 		else:
-			_tween.tween_property(ghost, "position:y", size.y - 115.0 - ghost.size.y / 2.0, 0.30)
+			var offset: float = remaining.find(ghost) - (remaining.size() - 1) / 2.0
+			_tween.tween_property(ghost, "position", Vector2(size.x / 2.0 + offset * 58.0, size.y - 85.0 + offset * offset * 3.0) - ghost.size / 2.0, 0.30)
+			_tween.tween_property(ghost, "rotation", offset * deg_to_rad(7.0), 0.30)
 			_tween.tween_property(ghost, "scale", Vector2.ONE * 0.34, 0.30)
-			_tween.tween_property(ghost, "modulate:a", 0.30, 0.30)
+			_tween.tween_property(ghost, "modulate:a", 0.65, 0.30)
 	_tween.chain().tween_callback(func(): _record(-1, "centered"))
 	if kind == "redraw":
 		_tween.chain()
@@ -142,10 +169,75 @@ func _animate(kind: String) -> void:
 			_tween.chain().tween_callback(_score_card.bind(i))
 			_tween.chain().tween_property(ghost, "position:y", 28.0, 0.19).as_relative().set_ease(Tween.EASE_IN)
 			_tween.chain().tween_callback(_record.bind(i, "grounded"))
+		if _specialization:
+			for i in range(_hand.size()):
+				_tween.chain().tween_callback(_score_bonus.bind(i))
+				_tween.chain().tween_interval(0.24)
 		_tween.chain().tween_interval(0.18)
 		_tween.chain()
 		for ghost in _hand: _tween.parallel().tween_property(ghost, "modulate:a", 0.0, 0.16)
-	_tween.chain().tween_callback(_clear)
+	_tween.chain().tween_callback(_return_fan)
+
+func _return_fan() -> void:
+	if not is_instance_valid(_fan):
+		_clear()
+		return
+	if _fan is CardFan: _fan.retain_order(_sources)
+	var targets: Array = _fan.ordered_cards() if _fan is CardFan else _fan.get_children()
+	_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	var retained: Array = []
+	for source in targets:
+		var old_index := _sources.find(source)
+		var ghost: CardView
+		var is_new := old_index < 0
+		if not is_new:
+			ghost = _ghosts[old_index]
+			retained.append(ghost)
+		else:
+			ghost = CARD_SCENE.instantiate()
+			ghost.set_card(source.card_data)
+			add_child(ghost)
+			ghost.size = CardFan.CARD_SIZE
+			ghost.pivot_offset = ghost.size / 2.0
+			ghost.position = Vector2(size.x + 80, size.y) - ghost.size / 2.0
+			ghost.scale = Vector2.ONE * 0.34
+			ghost.modulate.a = 0.0
+			_ghosts.append(ghost)
+		var target: Vector2 = get_global_transform().affine_inverse() * source.get_global_transform() * (source.size / 2.0) - ghost.size / 2.0
+		ghost.z_index = targets.find(source)
+		if is_new: _tween.chain().tween_callback(_record.bind(targets.find(source), "deal"))
+		else: _tween.parallel()
+		_tween.tween_property(ghost, "position", target, 0.22)
+		_tween.parallel().tween_property(ghost, "rotation", source.get_global_transform().get_rotation() - get_global_transform().get_rotation(), 0.22)
+		_tween.parallel().tween_property(ghost, "scale", source.get_global_transform().get_scale() / get_global_transform().get_scale(), 0.22)
+		_tween.parallel().tween_property(ghost, "modulate:a", 1.0, 0.22)
+	for ghost in _ghosts:
+		if ghost not in retained and ghost not in _hand and ghost.get_index() < _sources.size():
+			_tween.parallel().tween_property(ghost, "modulate:a", 0.0, 0.18)
+	_tween.chain().tween_callback(func(): _record(-1, "fan_restored"); _clear())
+
+func _score_bonus(index: int) -> void:
+	if index == 0 and _specialization_header.is_valid():
+		_specialization_header.call()
+		_specialization_header = Callable()
+	var deltas := _bonus_timeline[index]
+	var parts: Array[String] = []
+	for key in deltas:
+		display_values[key] += deltas[key]
+		if deltas[key] > 0: parts.append("+%d %s" % [deltas[key], str(key).capitalize()])
+	if _update.is_valid(): _update.call(display_values.duplicate(), deltas)
+	if not parts.is_empty():
+		var label := Label.new()
+		label.text = "\n".join(parts)
+		label.add_theme_color_override("font_color", Color("#f5bd59"))
+		label.add_theme_font_size_override("font_size", 24)
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_hand[index].add_child(label)
+		label.position = Vector2(8, 90)
+		var pop := label.create_tween().set_parallel()
+		pop.tween_property(label, "position:y", 65.0, 0.22)
+		pop.tween_property(label, "modulate:a", 0.0, 0.6).set_delay(0.4)
+	_record(index, "bonus")
 
 func _record(index: int, event: String) -> void:
 	trace.append({"index": index, "event": event, "msec": Time.get_ticks_msec()})
@@ -177,6 +269,9 @@ func _clear() -> void:
 	_hand.clear()
 	_cards.clear()
 	_timeline.clear()
+	_bonus_timeline.clear()
+	_specialization_header = Callable()
+	_sources.clear()
 	if is_instance_valid(_fan): _fan.show()
 	hide()
 	if _restore.is_valid(): _restore.call()

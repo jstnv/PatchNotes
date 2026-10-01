@@ -21,7 +21,7 @@ func release(total_units: int = 0, scope: int = 30, required_scope: int = 30) ->
 	var project := ProjectState.new(required_scope)
 	project.add_scope(scope) # Qualified by default; under-Scope cases have their own verifier.
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
-	project.finalize_design_bugs(false, 0, [], [])
+	project.finalize_design_bugs(false, 0, [&"text"], [])
 	project.finalize_alpha(0, [], [])
 	project.finalize_beta()
 	project.commit_review_result(ReviewResult.new(PrimitiveReviewCalculator.get_baseline_profile(), {}, 0.0, 0.0, 0.0, 7.0, 1.0, 0, 0.0, 1.0, 50, 0.0, 7.0, 7.0))

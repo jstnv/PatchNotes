@@ -5,6 +5,7 @@ var banner: PanelContainer
 var title_label: Label
 var detail_label: Label
 var timer: Timer
+var _popup: Tween
 
 func _ready() -> void:
 	layer = 10
@@ -41,4 +42,11 @@ func show_message(title: String, detail: String) -> void:
 	title_label.text = title
 	detail_label.text = detail
 	banner.show()
+	if _popup != null and _popup.is_valid(): _popup.kill()
+	banner.pivot_offset = banner.size / 2.0
+	banner.scale = Vector2.ONE * 0.8
+	banner.modulate.a = 0.0
+	_popup = create_tween().set_parallel()
+	_popup.tween_property(banner, "scale", Vector2.ONE, 0.28).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_popup.tween_property(banner, "modulate:a", 1.0, 0.18)
 	timer.start()

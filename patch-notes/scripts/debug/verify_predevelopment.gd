@@ -200,7 +200,7 @@ func _finish_project(project: ProjectState) -> void:
 	var snapshots := PrimitiveSnapshotDatabase.new()
 	snapshots.load_ledgers()
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
-	project.finalize_design_bugs(false, 0, [], [])
+	project.finalize_design_bugs(false, 0, [&"text"], [])
 	project.finalize_alpha(0, [], [])
 	project.finalize_beta()
 	project.commit_review_result(PrimitiveReviewCalculator.calculate(project, 50))

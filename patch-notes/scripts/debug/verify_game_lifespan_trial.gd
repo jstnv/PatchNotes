@@ -19,7 +19,7 @@ func check(ok: bool, label: String) -> void:
 func _released_project(review: float, units: int) -> ProjectState:
 	var project := ProjectState.new(30)
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
-	project.finalize_design_bugs(false, 0, [], [])
+	project.finalize_design_bugs(false, 0, [&"text"], [])
 	project.finalize_alpha(0, [], [])
 	project.finalize_beta()
 	project.commit_review_result(ReviewResult.new(PrimitiveReviewCalculator.get_baseline_profile(), {}, 0.0, 0.0, 0.0, review, 1.0, 0, 0.0, 1.0, 50, 0.0, review, review))

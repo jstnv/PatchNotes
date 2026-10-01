@@ -269,10 +269,13 @@ func _production_guidance() -> Dictionary:
 			var final_production: Dictionary = workspace.get_selected_production_synergy()
 			if not final_production.is_empty():
 				if not String(final_production.get("specialization_stat", &"")).is_empty():
-					return {"key": name + "_specialization", "title": "Specialization ready", "body": "All four cards share a primary Core label. This hand earns ×1.5 Core gains, rounded by category; Scope stays printed."}
+					var category := str(final_production.specialization_stat).capitalize()
+					return {"key": name + "_specialization_" + str(final_production.specialization_stat), "title": "%s Specialization ready" % category, "body": "All four cards share %s as their primary Core label. This hand earns ×1.5 Core gains, rounded by category; Scope stays printed." % category}
 				if final_production.get("balanced_production", false):
 					return {"key": name + "_balanced", "title": "Balanced Production ready", "body": "A Feature and close projected Core scores give ×1.2 to this hand's Core gains. Scope stays printed."}
 		return {"key": name + "_ready", "title": "Four cards selected", "body": "Play the hand to advance one cycle. Selected Features exhaust for this project; Passes can return."}
+	var available := workspace.get_pool_specialization_guidance()
+	if not available.is_empty(): return available
 	if tutorial_context == &"beta":
 		if project != null and project.get_known_bugs() > 0:
 			return {"key": "beta_fix", "title": "Fix Known Bugs", "body": "Debug fixes Known Bugs; Search reveals Hidden Bugs first. Four matching QA or Marketing cards make a stronger hand. Use Synergy ? for the exact patterns."}

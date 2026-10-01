@@ -22,7 +22,7 @@ func make_state(scores: Array, genre: StringName = &"action", theme: StringName 
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
 	for index in range(4): project.add_core_score(index, scores[index])
 	project.add_scope(30)
-	project.finalize_design_bugs(false, 0, [], [])
+	project.finalize_design_bugs(false, 0, [&"text"], [])
 	project.finalize_alpha(0, [], [])
 	project.finalize_beta()
 	return project

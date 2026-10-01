@@ -63,7 +63,7 @@ func _launch_fixture(revealed: bool) -> Dictionary:
 	database.load_ledgers()
 	var state := ProjectState.new(30)
 	state.initialize_snapshots(&"fast_follower", &"stable_market")
-	state.finalize_design_bugs(false, 0, [], [])
+	state.finalize_design_bugs(false, 0, [&"text"], [])
 	state.finalize_alpha(0, [], [])
 	if revealed:
 		state.reveal_competitor_snapshot()

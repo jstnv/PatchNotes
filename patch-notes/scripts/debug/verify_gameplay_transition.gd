@@ -125,6 +125,8 @@ func _verify_alpha_to_beta_transition() -> void:
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design_phase := phase_root.get_child(0) as DesignPhase
 	_dismiss_initial_priority_menu(design_phase)
+	# Valid prior Feature work for this isolated transition fixture.
+	design_phase.get("_exhausted_card_ids")[&"text"] = true
 	(design_phase.get_node("%ProceedToAlphaButton") as Button).pressed.emit()
 	var alpha_phase := phase_root.get_child(0) as AlphaPhase
 	alpha_phase.get_workspace().overlay.cancel()
@@ -158,6 +160,8 @@ func _verify_failed_beta_instantiation() -> void:
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design_phase := phase_root.get_child(0) as DesignPhase
 	_dismiss_initial_priority_menu(design_phase)
+	# Valid prior Feature work for this isolated transition fixture.
+	design_phase.get("_exhausted_card_ids")[&"text"] = true
 	(design_phase.get_node("%ProceedToAlphaButton") as Button).pressed.emit()
 	var alpha_phase := phase_root.get_child(0) as AlphaPhase
 	alpha_phase.get_workspace().overlay.cancel()

@@ -24,7 +24,7 @@ func _launch_state(marketing_output: int, competitor: StringName = &"fast_follow
 		state.add_core_score(category, 20)
 	state.add_scope(30)
 	state.add_marketing_output(marketing_output)
-	state.finalize_design_bugs(false, 3, [], [])
+	state.finalize_design_bugs(false, 3, [&"text"], [])
 	state.finalize_alpha(0, [], [])
 	if reveal:
 		state.reveal_competitor_snapshot()
@@ -52,7 +52,7 @@ func _verify_preflight_and_atomicity() -> void:
 	_expect(PrimitiveAwarenessCalculator.calculate(unfinished) == null and not unfinished.has_awareness_result(), "Missing Beta finalization rejects without partial state")
 	var missing_review := ProjectState.new(30)
 	missing_review.initialize_snapshots(&"fast_follower", &"market_surge")
-	missing_review.finalize_design_bugs(false, 0, [], [])
+	missing_review.finalize_design_bugs(false, 0, [&"text"], [])
 	missing_review.finalize_alpha(0, [], [])
 	missing_review.finalize_beta()
 	_expect(PrimitiveAwarenessCalculator.calculate(missing_review) == null, "Missing Review result rejects Awareness")

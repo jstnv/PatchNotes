@@ -626,7 +626,7 @@ func _verify_specialized_success(design_phase: Node) -> void:
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 102.0 / 18.0), "Specialization accumulates Bug Pressure from printed values without its production multiplier")
 	_expect(emissions[0] == 1, "Specialized hand emits values_changed exactly once")
 	_expect(project_state.get_current_cycle() == 1, "Specialization adds no extra cycles")
-	_expect(design_phase.get_workspace().synergy_notification.banner.visible and design_phase.get_workspace().synergy_notification.title_label.text == "Graphics Specialization!", "Successful Design specialization displays an in-game notification")
+	_expect(not design_phase.get_workspace().hand_motion.busy and not design_phase.get_workspace().synergy_notification.banner.visible and not design_phase.get_workspace().hand_motion._specialization_header.is_valid(), "Cancelling playback clears the delayed specialization header")
 	for card in cards:
 		_expect(design_phase.get("_exhausted_card_ids").has(card.id), "Successful specialized Feature exhausts once: %s" % card.id)
 

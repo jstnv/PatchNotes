@@ -4,6 +4,55 @@ extends Container
 const CARD_SIZE := Vector2(240, 336)
 var _tweens: Dictionary = {}
 var _pressed: CardView
+var _visual_order: Array[CardView] = []
+var _scope_sort_next := false
+
+func cycle_organization() -> String:
+	if _scope_sort_next:
+		organize_by_scope()
+	else:
+		organize_by_primary()
+	_scope_sort_next = not _scope_sort_next
+	return "Sort by Scope" if _scope_sort_next else "Sort by Category"
+
+func organize_by_scope() -> void:
+	var cards := ordered_cards()
+	var scopes: Array[int] = []
+	for card in cards:
+		if card.card_data.scope not in scopes: scopes.append(card.card_data.scope)
+	scopes.sort()
+	scopes.reverse()
+	_visual_order.clear()
+	for amount in scopes:
+		for card in cards:
+			if card.card_data.scope == amount: _visual_order.append(card)
+	arrange()
+
+func organize_by_primary() -> void:
+	# Stable visual grouping only: authoritative candidate slots stay untouched.
+	var cards := ordered_cards()
+	_visual_order.clear()
+	for category in [&"graphics", &"sound", &"technology", &"design"]:
+		for card in cards:
+			if card.card_data.primary_stat == category: _visual_order.append(card)
+	for card in cards:
+		if card not in _visual_order: _visual_order.append(card)
+	arrange()
+
+func ordered_cards() -> Array[CardView]:
+	var result: Array[CardView] = []
+	for card in _visual_order:
+		if is_instance_valid(card) and card.get_parent() == self: result.append(card)
+	for card in get_children():
+		if card is CardView and card not in result: result.append(card)
+	return result
+
+func retain_order(previous: Array) -> void:
+	_visual_order.clear()
+	for card in previous:
+		if is_instance_valid(card) and card.get_parent() == self: _visual_order.append(card)
+	_visual_order = ordered_cards()
+	arrange(true)
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -28,7 +77,8 @@ func _ignore_pointer(node: Node) -> void:
 
 func card_at(point: Vector2) -> CardView:
 	# Control GUI input ignores CanvasItem z_index; route hits using visual order.
-	var cards := get_children()
+	# Godot can attach its tooltip PopupPanel here; only cards participate.
+	var cards := ordered_cards()
 	cards.sort_custom(func(a: CardView, b: CardView): return a.z_index > b.z_index)
 	for card: CardView in cards:
 		if Rect2(Vector2.ZERO, card.size).has_point(card.get_transform().affine_inverse() * point): return card
@@ -51,12 +101,13 @@ func _gui_input(event: InputEvent) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_SORT_CHILDREN and is_inside_tree(): arrange()
 
-func arrange() -> void:
-	var count := get_child_count()
+func arrange(immediate := false) -> void:
+	var cards := ordered_cards()
+	var count := cards.size()
 	var factor := clampf((size.y - 100.0) / CARD_SIZE.y, 0.45, 0.76)
 	var spacing := minf(124.0, (size.x - CARD_SIZE.x * factor - 70.0) / maxf(1, count - 1))
 	for i in range(count):
-		var card := get_child(i) as CardView
+		var card := cards[i]
 		if card == null: continue
 		var offset := i - (count - 1) / 2.0
 		var spread := offset / maxf(1.0, (count - 1) / 2.0)
@@ -68,7 +119,7 @@ func arrange() -> void:
 		card.pivot_offset = CARD_SIZE / 2.0
 		card.z_index = i + (20 if card.is_selected() else 0)
 		if _tweens.has(card): _tweens[card].kill()
-		if not card.has_meta("fan_placed"):
+		if immediate or not card.has_meta("fan_placed"):
 			card.position = target
 			card.rotation = angle
 			card.scale = Vector2.ONE * factor

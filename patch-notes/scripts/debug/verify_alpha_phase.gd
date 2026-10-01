@@ -359,7 +359,7 @@ func _verify_alpha_specialization_resolution() -> void:
 	_expect(state.get_core_score(ProjectState.CoreScore.DESIGN) == 14 and state.get_core_score(ProjectState.CoreScore.TECHNOLOGY) == 3, "Resolved same-primary Feature hand commits specialized primary and secondary totals")
 	_expect(state.get_current_scope() == 5 and _approximately_equal(state.get_accumulated_alpha_bug_pressure(), 16.0 / 18.0), "Specialization changes neither Scope nor Alpha Bug Pressure")
 	_expect(state.get_accumulated_bug_pressure() == 0.0 and state.get_hidden_bugs() == 0, "Alpha Specialization changes neither Design pressure nor Hidden Bugs")
-	_expect(alpha.get_workspace().synergy_notification.banner.visible and alpha.get_workspace().synergy_notification.title_label.text == "Design Specialization!", "Successful Alpha specialization displays an in-game notification")
+	_expect(not alpha.get_workspace().hand_motion.busy and not alpha.get_workspace().synergy_notification.banner.visible and not alpha.get_workspace().hand_motion._specialization_header.is_valid(), "Cancelling playback clears the delayed specialization header")
 	_expect(alpha.get("_exhausted_feature_ids").size() == 4 and not alpha.get("_available_features").any(func(card: CardData) -> bool: return card.id in [&"simple_story", &"dialogue", &"character_backstories", &"multiple_endings"]), "Specialized Features exhaust through the existing lifecycle")
 	_expect(state.get_current_cycle() == 1 and value_emissions[0] == 1 and cycle_emissions[0] == 1, "Specialized action commits atomically and advances exactly one cycle")
 	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_selected_candidate_count() == 0, "Specialized action preserves seven-card replacement and selection clearing")

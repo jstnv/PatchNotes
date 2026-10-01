@@ -26,7 +26,7 @@ func _launch_state(final_review: float, marketing_output: int, forecast_id: Stri
 	state.initialize_snapshots(competitor_id, forecast_id)
 	state.add_scope(30)
 	state.add_marketing_output(marketing_output)
-	state.finalize_design_bugs(false, 0, [], [])
+	state.finalize_design_bugs(false, 0, [&"text"], [])
 	state.finalize_alpha(0, [], [])
 	if reveal_forecast:
 		state.reveal_market_forecast_snapshot()

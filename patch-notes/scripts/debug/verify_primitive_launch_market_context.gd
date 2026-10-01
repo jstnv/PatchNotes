@@ -27,7 +27,7 @@ func _launch_state(competitor_id: StringName, forecast_id: StringName, cycles: i
 		state.add_core_score(category, 20)
 	state.add_scope(30)
 	state.add_marketing_output(25)
-	state.finalize_design_bugs(false, 2, [], [])
+	state.finalize_design_bugs(false, 2, [&"text"], [])
 	state.finalize_alpha(0, [], [])
 	if reveal_competitor:
 		state.reveal_competitor_snapshot()

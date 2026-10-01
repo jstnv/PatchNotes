@@ -217,6 +217,8 @@ func _on_under_scope_confirmed() -> void:
 	if not _scope_warning_pending:
 		return
 	_scope_warning_pending = false
+	if not _can_proceed_to_beta():
+		return
 	_finalize_alpha(_finalization_rng.randf(), _finalization_rng.randf())
 
 
@@ -234,13 +236,22 @@ func _can_proceed_to_beta() -> bool:
 		and not _project_state.has_alpha_finalization()
 		and _has_valid_active_candidate_pool()
 		and _build_alpha_feature_history(false).valid
+		and _has_launch_feature_work()
 	)
+
+
+func _has_launch_feature_work() -> bool:
+	if _project_state == null:
+		return false
+	var history := _build_alpha_feature_history(false)
+	return history.valid and _project_state.has_launch_feature_work(history.implemented_ids)
 
 
 func _update_proceed_action() -> void:
 	if not is_node_ready():
 		return
 	%ProceedToBetaButton.disabled = not _can_proceed_to_beta() or _scope_warning_pending
+	%ProceedToBetaButton.tooltip_text = "" if _has_launch_feature_work() else "Play at least one Feature with positive Scope before Beta. Passes alone cannot make a releasable game."
 
 
 func _build_alpha_feature_history(report_errors: bool = true) -> Dictionary:

@@ -118,6 +118,8 @@ func _verify_gameplay_ownership() -> void:
 	var phase_root := gameplay.get_node("%PhaseRoot")
 	var design := phase_root.get_child(0) as DesignPhase
 	design.get_workspace().overlay.cancel()
+	# Completed Feature history for this isolated ownership/transition fixture.
+	design.get("_exhausted_card_ids")[&"text"] = true
 	(design.get_node("%ProceedToAlphaButton") as Button).pressed.emit()
 	var alpha := phase_root.get_child(0) as AlphaPhase
 	alpha.get_workspace().overlay.cancel()

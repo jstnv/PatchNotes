@@ -53,7 +53,7 @@ func _verify_project_ownership() -> void:
 func _state_with_units(total_units: int) -> ProjectState:
 	var state := ProjectState.new(30)
 	state.initialize_snapshots(&"fast_follower", &"stable_market")
-	state.finalize_design_bugs(false, 0, [], [])
+	state.finalize_design_bugs(false, 0, [&"text"], [])
 	state.finalize_alpha(0, [], [])
 	state.finalize_beta()
 	var units := UnitsSoldResult.new(&"primitive_units_sold_v1", &"month_1", 500, 70, 70, 100, 200, 300, 10000, 10000, total_units, 1, float(total_units), total_units)

@@ -127,6 +127,15 @@ func _build_ui() -> void:
 	_build_completion_panel()
 	hand_motion = HandPresentation.new()
 	add_child(hand_motion)
+	var organize := Button.new()
+	organize.name = "OrganizePoolButton"
+	organize.text = "Sort by Category"
+	organize.tooltip_text = "Alternate category (Graphics, Sound, Tech, Design) and Scope (highest first). The button names the next sort. No cash, cycle or redraw cost."
+	organize.pressed.connect(func():
+		if not hand_motion.busy: organize.text = _candidate_row.cycle_organization())
+	hand_motion.busy_changed.connect(func(): organize.disabled = hand_motion.busy)
+	actions.add_child(organize)
+	actions.move_child(organize, _redraw_button.get_index() + 1)
 
 func _present_action(kind: String, action: Callable) -> void:
 	if hand_motion.busy: return

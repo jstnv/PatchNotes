@@ -26,7 +26,7 @@ func _state(scores: Array[int], scope: int = 30, hidden: int = 0, known: int = 0
 		state.add_core_score(category, scores[category])
 	state.add_scope(scope)
 	state.add_marketing_output(marketing)
-	state.finalize_design_bugs(false, hidden + known, [], [])
+	state.finalize_design_bugs(false, hidden + known, [&"text"], [])
 	if known > 0:
 		state.discover_bugs(known)
 	state.finalize_alpha(0, [], [])

@@ -554,7 +554,23 @@ func has_beta_finalization() -> bool:
 
 
 func is_launch_ready() -> bool:
-	return _has_beta_finalization
+	return _has_beta_finalization and has_launch_feature_work()
+
+
+## Phase histories contain successfully resolved finite Features, never selections.
+## Alpha supplies its committed history before freezing it so an empty project stays playable.
+func has_launch_feature_work(pending_alpha_ids: Array[StringName] = []) -> bool:
+	var definitions := FeatureStoreCatalog.starting_features()
+	definitions.append_array(FeatureStoreCatalog.entries())
+	for entry: Dictionary in definitions:
+		if entry.get("type") != "feature" or entry.get("renewable", false) or int(entry.get("scope", 0)) <= 0:
+			continue
+		var id := StringName(entry.get("id", ""))
+		if entry.get("phase") == "design" and id in _implemented_design_feature_ids:
+			return true
+		if entry.get("phase") == "alpha" and (id in _implemented_alpha_feature_ids or id in pending_alpha_ids):
+			return true
+	return false
 
 
 func has_review_result() -> bool:
@@ -703,7 +719,7 @@ func _sales_revenue_results_match(result: MonthOneSalesRevenueResult, expected: 
 
 ## Freezes the existing authoritative project fields as future Launch/Review inputs.
 func finalize_beta() -> bool:
-	if _has_beta_finalization or not _has_alpha_finalization:
+	if _has_beta_finalization or not _has_alpha_finalization or not has_launch_feature_work():
 		return false
 	if _required_scope < 0 or _current_scope < 0 or _hidden_bugs < 0 or _known_bugs < 0 or _fixed_bugs < 0 or _marketing_output < 0 or _current_cycle < 0:
 		return false
