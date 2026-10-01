@@ -1,0 +1,591 @@
+{
+  "character_development": {
+    "id": "character_development",
+    "name": "Character Development",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "story",
+    "primary_stat": "design",
+    "primary_value": 5,
+    "secondary_stat": "",
+    "secondary_value": 0,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "character_backstories",
+    "parents": [
+      "character_backstories",
+      "save_files"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "branching_story": {
+    "id": "branching_story",
+    "name": "Branching Story",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "story",
+    "primary_stat": "technology",
+    "primary_value": 3,
+    "secondary_stat": "design",
+    "secondary_value": 6,
+    "scope": 3,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "multiple_endings",
+    "parents": [
+      "multiple_endings",
+      "branching_nodes"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      2200,
+      2800,
+      3400
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "branching_dialogue": {
+    "id": "branching_dialogue",
+    "name": "Branching Dialogue",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "story",
+    "primary_stat": "technology",
+    "primary_value": 2,
+    "secondary_stat": "design",
+    "secondary_value": 3,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "dialogue",
+    "parents": [
+      "dialogue",
+      "branching_nodes"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "turn_based_combat": {
+    "id": "turn_based_combat",
+    "name": "Turn-Based Combat",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "gameplay",
+    "primary_stat": "design",
+    "primary_value": 5,
+    "secondary_stat": "",
+    "secondary_value": 0,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "general_combat",
+    "parents": [
+      "general_combat"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "character_classes": {
+    "id": "character_classes",
+    "name": "Character Classes",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "gameplay",
+    "primary_stat": "technology",
+    "primary_value": 2,
+    "secondary_stat": "design",
+    "secondary_value": 3,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "general_combat",
+    "parents": [
+      "general_combat",
+      "save_files"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "boss_battles": {
+    "id": "boss_battles",
+    "name": "Boss Battles",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "gameplay",
+    "primary_stat": "graphics",
+    "primary_value": 3,
+    "secondary_stat": "sound",
+    "secondary_value": 3,
+    "scope": 3,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "enemies",
+    "parents": [
+      "enemies"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      2200,
+      2800,
+      3400
+    ],
+    "unsupported_tertiary": true,
+    "source_status": "ledger_authored"
+  },
+  "multiple_levels": {
+    "id": "multiple_levels",
+    "name": "Multiple Levels",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "world_design",
+    "primary_stat": "graphics",
+    "primary_value": 3,
+    "secondary_stat": "technology",
+    "secondary_value": 2,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "levels",
+    "parents": [
+      "levels",
+      "save_files"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "sub_areas": {
+    "id": "sub_areas",
+    "name": "Sub-Areas",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "world_design",
+    "primary_stat": "graphics",
+    "primary_value": 3,
+    "secondary_stat": "design",
+    "secondary_value": 2,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "levels",
+    "parents": [
+      "levels"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "branching_paths": {
+    "id": "branching_paths",
+    "name": "Branching Paths",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "world_design",
+    "primary_stat": "technology",
+    "primary_value": 4,
+    "secondary_stat": "design",
+    "secondary_value": 5,
+    "scope": 3,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "maps",
+    "parents": [
+      "maps",
+      "branching_nodes"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      2200,
+      2800,
+      3400
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "background_music": {
+    "id": "background_music",
+    "name": "Background Music",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "audio",
+    "primary_stat": "sound",
+    "primary_value": 3,
+    "secondary_stat": "",
+    "secondary_value": 0,
+    "scope": 1,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "music",
+    "parents": [
+      "music"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      650,
+      950,
+      1250
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "recorded_instruments": {
+    "id": "recorded_instruments",
+    "name": "Recorded Instruments",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "audio",
+    "primary_stat": "sound",
+    "primary_value": 7,
+    "secondary_stat": "",
+    "secondary_value": 0,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "music",
+    "parents": [
+      "music",
+      "recorded_sounds"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1600,
+      1900,
+      2200
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "recorded_sound_effects": {
+    "id": "recorded_sound_effects",
+    "name": "Recorded Sound Effects",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "audio",
+    "primary_stat": "sound",
+    "primary_value": 5,
+    "secondary_stat": "technology",
+    "secondary_value": 2,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "sound_effects",
+    "parents": [
+      "sound_effects",
+      "recorded_sounds"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1600,
+      1900,
+      2200
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "ambient_sound": {
+    "id": "ambient_sound",
+    "name": "Ambient Sound",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "audio",
+    "primary_stat": "sound",
+    "primary_value": 5,
+    "secondary_stat": "design",
+    "secondary_value": 2,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "recorded_sound_effects",
+    "parents": [
+      "recorded_sound_effects"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1600,
+      1900,
+      2200
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "ledger_authored"
+  },
+  "tile_based_backgrounds": {
+    "id": "tile_based_backgrounds",
+    "name": "Tile-Based Backgrounds",
+    "type": "feature",
+    "phase": "design",
+    "department": "",
+    "primary_stat": "graphics",
+    "primary_value": 3,
+    "secondary_stat": "technology",
+    "secondary_value": 2,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "text",
+    "parents": [
+      "text"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [
+      "character-tile graphics"
+    ],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "candidate"
+  },
+  "color_cycling": {
+    "id": "color_cycling",
+    "name": "Color Cycling",
+    "type": "feature",
+    "phase": "design",
+    "department": "",
+    "primary_stat": "graphics",
+    "primary_value": 2,
+    "secondary_stat": "technology",
+    "secondary_value": 1,
+    "scope": 1,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "8_color_palette",
+    "parents": [
+      "8_color_palette"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [
+      "programmable palette"
+    ],
+    "price_bands": [
+      650,
+      950,
+      1250
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "candidate"
+  },
+  "parallax_scrolling": {
+    "id": "parallax_scrolling",
+    "name": "Parallax Scrolling",
+    "type": "feature",
+    "phase": "design",
+    "department": "",
+    "primary_stat": "graphics",
+    "primary_value": 3,
+    "secondary_stat": "technology",
+    "secondary_value": 3,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "scrolling",
+    "parents": [
+      "scrolling"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [
+      "layered scrolling"
+    ],
+    "price_bands": [
+      1600,
+      1900,
+      2200
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "candidate"
+  },
+  "custom_key_bindings": {
+    "id": "custom_key_bindings",
+    "name": "Custom Key Bindings",
+    "type": "feature",
+    "phase": "design",
+    "department": "",
+    "primary_stat": "technology",
+    "primary_value": 2,
+    "secondary_stat": "design",
+    "secondary_value": 1,
+    "scope": 1,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "keyboard_and_mouse",
+    "parents": [
+      "keyboard_and_mouse"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [
+      "remappable keyboard"
+    ],
+    "price_bands": [
+      650,
+      950,
+      1250
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "candidate"
+  },
+  "inventory_system": {
+    "id": "inventory_system",
+    "name": "Inventory System",
+    "type": "feature",
+    "phase": "design",
+    "department": "",
+    "primary_stat": "technology",
+    "primary_value": 3,
+    "secondary_stat": "design",
+    "secondary_value": 2,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "menu_system",
+    "parents": [
+      "menu_system"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "candidate"
+  },
+  "procedural_maps": {
+    "id": "procedural_maps",
+    "name": "Procedural Maps",
+    "type": "feature",
+    "phase": "design",
+    "department": "",
+    "primary_stat": "technology",
+    "primary_value": 3,
+    "secondary_stat": "design",
+    "secondary_value": 3,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "maps",
+    "parents": [
+      "maps"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [],
+    "price_bands": [
+      1600,
+      1900,
+      2200
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "candidate"
+  },
+  "sprite_collision_events": {
+    "id": "sprite_collision_events",
+    "name": "Sprite Collision Events",
+    "type": "feature",
+    "phase": "design",
+    "department": "",
+    "primary_stat": "technology",
+    "primary_value": 4,
+    "secondary_stat": "design",
+    "secondary_value": 2,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "sprites",
+    "parents": [
+      "sprites",
+      "controls"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [
+      "sprite collision support"
+    ],
+    "price_bands": [
+      1600,
+      1900,
+      2200
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "candidate"
+  },
+  "local_co_op": {
+    "id": "local_co_op",
+    "name": "Local Co-op",
+    "type": "feature",
+    "phase": "alpha",
+    "department": "gameplay",
+    "primary_stat": "design",
+    "primary_value": 3,
+    "secondary_stat": "technology",
+    "secondary_value": 2,
+    "scope": 2,
+    "renewable": false,
+    "artwork": "",
+    "purchase_parent": "controls",
+    "parents": [
+      "controls",
+      "controller"
+    ],
+    "gameplay_features_required": 0,
+    "direct_tags": [
+      "simultaneous player inputs"
+    ],
+    "price_bands": [
+      1400,
+      1700,
+      2000
+    ],
+    "unsupported_tertiary": false,
+    "source_status": "candidate"
+  }
+}
