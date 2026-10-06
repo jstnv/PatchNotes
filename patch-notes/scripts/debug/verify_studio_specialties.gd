@@ -94,7 +94,7 @@ func _verify_ui() -> void:
 	check(game.call("_begin_next_project", studio, "Puzzle Game", &"puzzle", &"fantasy") and game.project_state.get_genre_id() == &"puzzle" and run.get_studio_specialty() == &"action", "Successful nonmatching first game commits independent Genre")
 	check(not run.needs_starter_selection() and run.get_completed_run_cycles() == 1 and run.get_cash_cents() == 550000, "First-project boundary closes initial window with usual cost")
 	var offer := run.get_primitive_reserve_offer(&"simple_story")
-	check(not offer.initial and run.purchase_primitive_reserve_feature(&"simple_story") and run.get_cash_cents() == 520000 and run.get_completed_run_cycles() == 2, "Unowned Primitive becomes existing one-cycle reserve purchase")
+	check(not offer.initial and run.purchase_primitive_reserve_feature(&"simple_story") and run.get_cash_cents() == 470000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
 	check(not game.project_state.get_feature_supply_ids().has(&"simple_story") and PrimitivePredevelopment.prepare_project("Next", &"racing", &"fantasy", run).get_feature_supply_ids().has(&"simple_story"), "New ownership feeds next supply without changing current frozen supply")
 	game.queue_free()
 	await process_frame

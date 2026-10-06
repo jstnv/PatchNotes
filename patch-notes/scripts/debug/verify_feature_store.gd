@@ -139,12 +139,12 @@ func _verify_tree_ui() -> void:
 		var parent := StringName(entry.purchase_parent)
 		if not parent.is_empty():
 			store.call("_select_lane", lane_by_id[StringName(entry.id)])
-			expect(edges.has([parent, StringName(entry.id)]) and lane_by_id[parent] == lane_by_id[StringName(entry.id)] and (nodes[parent].position + store.NODE_SIZE / 2.0).distance_to(store._map.center) < (nodes[StringName(entry.id)].position + store.NODE_SIZE / 2.0).distance_to(store._map.center), "Correct outward connector: " + entry.name)
+			expect(edges.has([parent, StringName(entry.id)]) and lane_by_id[parent] == lane_by_id[StringName(entry.id)] and _child_is_outward(store, nodes[parent], nodes[StringName(entry.id)], lane_by_id[parent]), "Correct outward category connector: " + entry.name)
 	store.call("_select_lane", &"Technology & Tools")
-	expect((nodes[&"save_files"].position + store.NODE_SIZE / 2.0).distance_to(store._map.center) < (nodes[&"branching_nodes"].position + store.NODE_SIZE / 2.0).distance_to(store._map.center) and edges.has([&"save_files", &"branching_nodes"]), "Save Files is an independent root with an outward child")
+	expect(_child_is_outward(store, nodes[&"save_files"], nodes[&"branching_nodes"], &"Technology & Tools") and edges.has([&"save_files", &"branching_nodes"]) and not edges.any(func(edge: Array): return edge[1] == &"save_files"), "Save Files is an independent root with an upward child")
 	store.call("_select_lane", &"Gameplay")
 	var tree: Control = store.get("_tree")
-	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and tree.get_node("GameplayGate").get_rect().get_center().distance_to(store._map.center) < nodes[&"difficulty_levels"].get_rect().get_center().distance_to(store._map.center), "Difficulty retains distinct Gameplay ownership gate")
+	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and _child_is_outward(store, tree.get_node("GameplayGate"), nodes[&"difficulty_levels"], &"Gameplay"), "Difficulty retains distinct Gameplay ownership gate inward of its node")
 	expect(lane_buttons[&"Gameplay"].focus_mode == Control.FOCUS_ALL and nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL, "Lane and node navigation are keyboard/controller focusable")
 	expect(nodes[&"colored_text"].text.contains("Need cash") and nodes[&"branching_nodes"].text.contains("Locked"), "Unaffordable and locked node states are distinct")
 	store.call("_select_lane", &"Visuals")
@@ -216,3 +216,11 @@ func _verify_tree_ui() -> void:
 			root.get_texture().get_image().save_png("res://design-logs/feature-node-map-v1/whole-map-%d.png" % dimensions.x)
 	studio.queue_free()
 	await process_frame
+
+func _child_is_outward(store: FeatureStore, parent: Control, child: Control, lane: StringName) -> bool:
+	var parent_rect := parent.get_rect() if parent == store._gate else store._map.node_footprint(parent)
+	var child_rect := store._map.node_footprint(child)
+	var direction: Vector2 = store._map.CATEGORY_DIRECTIONS[lane]
+	if direction == Vector2.LEFT: return child_rect.end.x < parent_rect.position.x
+	if direction == Vector2.RIGHT: return child_rect.position.x > parent_rect.end.x
+	return direction == Vector2.UP and child_rect.end.y < parent_rect.position.y

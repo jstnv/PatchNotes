@@ -33,6 +33,7 @@ var _title: Label
 var _score_values: Array[Label] = []
 var _change_priorities: Button
 var _priority_modal: CanvasLayer
+var _priority_chart: PriorityInfluenceChart
 var _completion_modal: CanvasLayer
 
 
@@ -97,26 +98,32 @@ func _build_ui() -> void:
 	_scores_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_scores_label.hide()
 	layout.add_child(_scores_label)
-	var priority_row := HBoxContainer.new()
+	var priority_row := VBoxContainer.new()
 	priority_row.add_theme_constant_override("separation", 10)
+	priority_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	priority_row.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_priority_modal = CanvasLayer.new()
 	_priority_modal.layer = 20
 	add_child(_priority_modal)
-	var priority_content := _modal_content(_priority_modal, Vector2(700, 250))
+	var priority_content := _modal_content(_priority_modal, Vector2(640, 380))
 	var priority_title := Label.new()
 	priority_title.text = "Change Priorities"
 	priority_title.add_theme_font_size_override("font_size", 24)
 	priority_content.add_child(priority_title)
 	var help := Label.new()
-	help.text = "Future draws only · total 100 · 5·50 in steps of 5
-Changed priorities cost 1 cycle. Cancel is free."
+	help.text = "Future draws only · total 100 · 5–50 in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
 	priority_content.add_child(help)
-	priority_content.add_child(priority_row)
+	var priority_body := HBoxContainer.new()
+	priority_body.add_theme_constant_override("separation", 24)
+	priority_content.add_child(priority_body)
+	priority_body.add_child(priority_row)
 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
-		var box := VBoxContainer.new()
+		var box := HBoxContainer.new()
 		box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var label := Label.new()
-		label.text = _category_name(category)
+		label.text = PriorityInfluenceChart.CORE_NAMES[category]
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.add_theme_color_override("font_color", PriorityInfluenceChart.CORE_COLORS[category])
 		box.add_child(label)
 		var input := SpinBox.new()
 		input.min_value = PriorityAllocation.MIN_PRIORITY
@@ -127,6 +134,9 @@ Changed priorities cost 1 cycle. Cancel is free."
 		box.add_child(input)
 		_priority_inputs[category] = input
 		priority_row.add_child(box)
+	_priority_chart = PriorityInfluenceChart.new()
+	priority_body.add_child(_priority_chart)
+	_priority_chart.bind_controls(_priority_inputs.values(), PriorityInfluenceChart.CORE_NAMES, PriorityInfluenceChart.CORE_COLORS)
 	_commit_button = Button.new()
 	_commit_button.text = "Commit Priorities (1 cycle)"
 	_commit_button.tooltip_text = "A valid changed allocation costs one cycle and affects later draws, not the current hand."
@@ -329,7 +339,7 @@ func commit_priority_distribution(distribution: Dictionary = _priority_draft) ->
 		return false
 	var expected_cycle := _run.get_completed_run_cycles()
 	var commit := func() -> bool: return _state.commit_priorities(distribution)
-	if not _run.complete_productive_action(commit, 0, expected_cycle):
+	if not _run.complete_productive_action(commit, 0, expected_cycle, &"", &"priority_change", _state.get_offer_id()):
 		return false
 	_priority_draft = _state.get_priority_distribution()
 	_sync_priority_inputs()
@@ -384,6 +394,7 @@ func _play_selected_hand() -> bool:
 		return false
 	var remainder: int = plan.remainder_cents
 	if not _run.can_complete_productive_cycle(remainder):
+		_feedback_label.text = _run.get_financial_block_reason()
 		return false
 	var next_cards: Array[CardData] = []
 	if not plan.completing:
@@ -394,7 +405,7 @@ func _play_selected_hand() -> bool:
 			return false
 	var expected_cycle := _run.get_completed_run_cycles()
 	var commit := func() -> bool: return _run.commit_contract_hand(_state, cards, remainder)
-	if not _run.complete_productive_action(commit, remainder, expected_cycle):
+	if not _run.complete_productive_action(commit, remainder, expected_cycle, &"", &"publisher_receipt" if remainder > 0 else &"contract_hand", _state.get_offer_id()):
 		return false
 	if _state.is_completed():
 		_show_completion()
@@ -525,7 +536,9 @@ func _refresh_actions() -> void:
 	if _state == null: return
 	var animating := hand_motion != null and hand_motion.busy
 	_change_priorities.disabled = animating or not can_edit_priorities()
-	_play_button.disabled = animating or _state.is_completed() or _selected_views.size() != HAND_SIZE or _state.plan_hand(_selected_cards()).is_empty()
+	var plan := _state.plan_hand(_selected_cards()) if _selected_views.size() == HAND_SIZE else {}
+	_play_button.disabled = animating or _state.is_completed() or plan.is_empty() or not _run.can_complete_productive_cycle(int(plan.get("remainder_cents", 0)))
+	_play_button.tooltip_text = _run.get_financial_block_reason() if _play_button.disabled else ""
 	_redraw_button.text = "Redraw Selected (%d/4)" % _run.get_available_redraws()
 	_redraw_button.disabled = animating or _state.is_completed() or _selected_views.is_empty() or not _run.can_consume_redraw(_selected_views.size())
 	_commit_button.disabled = not _state.can_commit_priorities(_priority_draft) or not _run.can_complete_productive_cycle()
@@ -541,6 +554,7 @@ func _selected_cards() -> Array[CardData]:
 func _sync_priority_inputs() -> void:
 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
 		(_priority_inputs[category] as SpinBox).set_value_no_signal(_priority_draft[category])
+	_priority_chart.refresh_from_controls()
 
 
 func _format_half(half_units: int) -> String:

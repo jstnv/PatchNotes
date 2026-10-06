@@ -10,6 +10,7 @@ signal features_changed
 signal sales_changed
 signal contracts_changed
 signal publishers_changed
+signal finance_changed
 
 const CENTS_PER_DOLLAR := 100
 const MAX_REDRAWS := 4
@@ -48,6 +49,7 @@ var _first_studio_economy := false
 var _starter_selection_confirmed := false
 var _first_tutorial_project_id: StringName
 var _first_game_tutorial: FirstGameTutorial
+var _studio_finance: Dictionary = {}
 
 
 ## Arm only at the successful first-project creation boundary, never on a view.
@@ -79,9 +81,30 @@ func set_studio_name(value: String, specialty: StringName = &"") -> bool:
 	_first_studio_economy = true
 	_studio_name = cleaned
 	_studio_specialty = specialty
+	_studio_finance = StudioFinanceLedger.create(_cash_cents)
 	cash_changed.emit()
 	features_changed.emit()
+	finance_changed.emit()
 	return true
+
+
+## Historical expenses are available only for studios created with this ledger.
+func get_studio_finance_report() -> Dictionary:
+	return StudioFinanceLedger.report(_studio_finance, _completed_run_cycles, _cash_cents)
+
+
+func get_studio_finance_snapshot() -> Dictionary:
+	return _studio_finance.duplicate(true)
+
+
+func get_financial_block_reason() -> String:
+	if not _first_studio_economy: return ""
+	if _studio_finance.get("cash_cents", -1) != _cash_cents or _studio_finance.get("last_cycle", -1) != _completed_run_cycles:
+		return "Financial history is unavailable; production cannot be committed safely."
+	var unpaid := StudioFinanceLedger.get_unpaid(_studio_finance)
+	if unpaid < 0: return "Financial history is unavailable; production cannot be committed safely."
+	if unpaid == 0: return ""
+	return "Unpaid rent: %s. Further production must clear all overdue rent. You can still launch, browse Finances, or use an available income action that clears the balance." % CashFormatter.format_exact_cents(unpaid)
 
 func get_studio_name() -> String:
 	return _studio_name
@@ -132,8 +155,16 @@ func purchase_starter_feature(id: StringName) -> bool:
 	if offer.is_empty() or not offer.can_purchase:
 		return false
 	_feature_purchase_in_progress = true
+	var was_blocked := is_blocking_signals()
+	set_block_signals(true)
+	if not spend_cash_cents(offer.price_cents, &"store", id):
+		set_block_signals(was_blocked)
+		_feature_purchase_in_progress = false
+		return false
 	_owned_features[id] = true
-	spend_cash_cents(offer.price_cents)
+	set_block_signals(was_blocked)
+	cash_changed.emit()
+	finance_changed.emit()
 	features_changed.emit()
 	_feature_purchase_in_progress = false
 	return true
@@ -160,7 +191,7 @@ func purchase_primitive_reserve_feature(id: StringName) -> bool:
 			return false
 		_owned_features[id] = true
 		return true
-	return complete_productive_action(commit, -price, _completed_run_cycles)
+	return complete_productive_action(commit, -price, _completed_run_cycles, &"", &"store", id)
 
 
 func primitive_feature_hand_cost_cents(cards: Array[CardData]) -> int:
@@ -281,7 +312,7 @@ func purchase_feature(id: StringName) -> bool:
 			return false
 		_owned_features[id] = true
 		return true
-	return complete_productive_action(commit, -price, _completed_run_cycles)
+	return complete_productive_action(commit, -price, _completed_run_cycles, &"", &"store", id)
 
 
 ## The new-run boundary supplies the locked starting amount explicitly. The
@@ -331,7 +362,7 @@ func add_cash(amount: Variant) -> bool:
 	return add_cash_cents(amount * CENTS_PER_DOLLAR)
 
 
-func add_cash_cents(amount_cents: Variant) -> bool:
+func add_cash_cents(amount_cents: Variant, kind: StringName = &"other_income", source_id: StringName = &"") -> bool:
 	if _publishing_cycle or (_productive_cycle_in_progress and not _committing_cycle_cash):
 		return false
 	if not _cash_initialized:
@@ -345,7 +376,14 @@ func add_cash_cents(amount_cents: Variant) -> bool:
 	if amount_cents > MAX_SIGNED_INT - _cash_cents:
 		push_warning("Cash overflowed.")
 		return false
-	_cash_cents += amount_cents
+	if _first_studio_economy and not _committing_cycle_cash:
+		var plan := StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles, _cash_cents, amount_cents, kind, 0, 0, false, source_id)
+		if plan.is_empty(): return false
+		_cash_cents = plan.cash_cents
+		_studio_finance = plan.ledger
+		finance_changed.emit()
+	else:
+		_cash_cents += amount_cents
 	cash_changed.emit()
 	return true
 
@@ -358,7 +396,7 @@ func spend_cash(amount: Variant) -> bool:
 	return spend_cash_cents(amount * CENTS_PER_DOLLAR)
 
 
-func spend_cash_cents(amount_cents: Variant) -> bool:
+func spend_cash_cents(amount_cents: Variant, kind: StringName = &"other_expense", source_id: StringName = &"") -> bool:
 	if _publishing_cycle or (_productive_cycle_in_progress and not _committing_cycle_cash):
 		return false
 	if not _cash_initialized:
@@ -372,7 +410,14 @@ func spend_cash_cents(amount_cents: Variant) -> bool:
 		return false
 	if amount_cents == 0:
 		return true
-	_cash_cents -= amount_cents
+	if _first_studio_economy and not _committing_cycle_cash:
+		var plan := StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles, _cash_cents, -amount_cents, kind, 0, 0, false, source_id)
+		if plan.is_empty(): return false
+		_cash_cents = plan.cash_cents
+		_studio_finance = plan.ledger
+		finance_changed.emit()
+	else:
+		_cash_cents -= amount_cents
 	cash_changed.emit()
 	return true
 
@@ -541,7 +586,7 @@ func get_post_launch_campaign_offer(release_id: StringName) -> Dictionary:
 func purchase_post_launch_campaign(release_id: StringName, expected_cycle: int) -> bool:
 	if expected_cycle != _completed_run_cycles or get_post_launch_campaign_offer(release_id).get("can_purchase", false) != true:
 		return false
-	return complete_productive_action(Callable(), -POST_LAUNCH_CAMPAIGN_COST_CENTS, expected_cycle, release_id)
+	return complete_productive_action(Callable(), -POST_LAUNCH_CAMPAIGN_COST_CENTS, expected_cycle, release_id, &"campaign", release_id)
 
 
 func get_release_metadata(release_id: StringName) -> Dictionary:
@@ -597,13 +642,14 @@ func accept_primitive_contract() -> ContractState:
 	var was_blocked := is_blocking_signals()
 	set_block_signals(true)
 	_primitive_contract = accepted
-	if not add_cash_cents(ContractState.GUARANTEED_UPFRONT_CENTS):
+	if not add_cash_cents(ContractState.GUARANTEED_UPFRONT_CENTS, &"publisher_receipt", accepted.get_offer_id()):
 		_primitive_contract = null
 		set_block_signals(was_blocked)
 		return null
 	set_block_signals(was_blocked)
 	cash_changed.emit()
 	contracts_changed.emit()
+	finance_changed.emit()
 	return _primitive_contract
 
 
@@ -806,7 +852,7 @@ func can_complete_productive_cycle(direct_cash_delta_cents: int = 0, campaign_re
 	return not _plan_productive_cycle(direct_cash_delta_cents, campaign_release_id).is_empty()
 
 
-func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: StringName = &"") -> Dictionary:
+func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: StringName = &"", finance_kind: StringName = &"", source_id: StringName = &"") -> Dictionary:
 	if _productive_cycle_in_progress or _feature_purchase_in_progress or _pending_contract_completion != null or _completed_run_cycles < 0 or _completed_run_cycles == MAX_SIGNED_INT or _available_redraws < 0 or _available_redraws > MAX_REDRAWS:
 		return {}
 	if not campaign_release_id.is_empty() and (direct_cash_delta_cents != -POST_LAUNCH_CAMPAIGN_COST_CENTS or not _released_games.has(campaign_release_id) or not ReleasedGameSales.can_campaign(_released_games[campaign_release_id])):
@@ -818,6 +864,7 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 	var cash_after_action := _cash_cents + direct_cash_delta_cents
 	var next_records: Dictionary = {}
 	var payable := 0
+	var earned := 0
 	for id: StringName in _released_games:
 		if not _cash_initialized or not _released_games[id] is Dictionary or _released_games[id].get("release_id") != id:
 			return {}
@@ -828,10 +875,19 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 		if release_payable > MAX_SIGNED_INT - payable:
 			return {}
 		payable += release_payable
+		var release_earned: int = next.entitlement_cents - _released_games[id].entitlement_cents
+		if release_earned < 0 or release_earned > MAX_SIGNED_INT - earned: return {}
+		earned += release_earned
 		next_records[id] = next
 	if payable > MAX_SIGNED_INT - cash_after_action:
 		return {}
-	return {"records": next_records, "payable": payable}
+	var finance_plan: Dictionary = {}
+	if _first_studio_economy:
+		if finance_kind.is_empty():
+			finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
+		finance_plan = StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles + 1, _cash_cents, direct_cash_delta_cents, finance_kind, earned, payable, true, source_id)
+		if finance_plan.is_empty(): return {}
+	return {"records": next_records, "payable": payable, "finance": finance_plan}
 
 
 ## The direct-effects callback must be synchronous and atomic on false, using
@@ -839,13 +895,14 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 ## inside the callback. All fallible run consequences preflight
 ## BEFORE that callback. expected_cycle lets delayed callers reject replays.
 ## All release records preflight together; settlement sums checked integer cents.
-## No awaits, expenses or reports are defined here.
-func complete_productive_action(direct_effects: Callable = Callable(), direct_cash_delta_cents: int = 0, expected_cycle: int = -1, campaign_release_id: StringName = &"") -> bool:
+## Direct effects -> income/spend -> calendar/sales settlement -> due rent and
+## oldest arrears -> report -> notifications. No await can split this boundary.
+func complete_productive_action(direct_effects: Callable = Callable(), direct_cash_delta_cents: int = 0, expected_cycle: int = -1, campaign_release_id: StringName = &"", finance_kind: StringName = &"", source_id: StringName = &"") -> bool:
 	if _publishing_cycle:
 		return false
 	if expected_cycle != -1 and expected_cycle != _completed_run_cycles:
 		return false
-	var plan := _plan_productive_cycle(direct_cash_delta_cents, campaign_release_id)
+	var plan := _plan_productive_cycle(direct_cash_delta_cents, campaign_release_id, finance_kind, source_id)
 	if plan.is_empty():
 		return false
 	var cash_before := _cash_cents
@@ -875,14 +932,18 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	_released_games = plan.records
 	if plan.payable > 0:
 		add_cash_cents(plan.payable)
+	if not plan.finance.is_empty():
+		spend_cash_cents(plan.finance.rent_paid_cents)
+		_studio_finance = plan.finance.ledger
 	_refresh_publisher_unlocks()
 	_committing_cycle_cash = false
-	# Reserved ordering: monthly expenses, then report data (both deferred).
 	set_block_signals(was_blocked)
 	_productive_cycle_in_progress = false
 	_publishing_cycle = true
 	if _cash_cents != cash_before:
 		cash_changed.emit()
+	if not plan.finance.is_empty():
+		finance_changed.emit()
 	if _available_redraws != redraws_before:
 		redraws_changed.emit()
 	if _familiarity != familiarity_before or _owned_features != ownership_before:

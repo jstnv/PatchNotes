@@ -337,7 +337,7 @@ func _verify_priority_controls(phase: DesignPhase, categories: Array[ProjectStat
 		var slider := phase.get_node("%%%s" % node_name) as VSlider
 		_expect(slider != null and slider.min_value == 5.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 5-50 bounds in five-point steps" % node_name)
 	var priority_panel := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
-	var priority_columns := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel/PriorityLayout").get_children()
+	var priority_columns := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel/PriorityLayout").get_children().filter(func(child: Node): return child is VBoxContainer)
 	_expect(priority_panel.size.x <= 1008.0 and priority_panel.size.y >= 72.0, "Compact Design priority panel fits the established phase width")
 	_expect(priority_columns.size() == 4 and not priority_panel.is_visible_in_tree(), "Four vertical priority controls remain inside the closed modal")
 	_expect(not phase.get_node("PhaseLayout").visible, "Legacy horizontal HUD is not exposed")

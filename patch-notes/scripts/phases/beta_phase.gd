@@ -147,7 +147,7 @@ func commit_priority_distribution(distribution: Dictionary = _priority_draft) ->
 		_priority_draft = _priority_allocation.get_distribution()
 		_project_state.advance_cycle()
 		return true
-	if not _run_state.complete_productive_action(commit): return false
+	if not _run_state.complete_productive_action(commit, 0, -1, &"", &"priority_change", _project_state.get_release_id()): return false
 	_sync_priority_controls()
 	_refresh_redraw_controls()
 	return true
@@ -512,7 +512,7 @@ func host_playtest() -> bool:
 		_project_state.advance_cycle()
 		_pending_corrective_pass_ids.assign(pass_ids)
 		return true
-	if not _run_state.complete_productive_action(commit, -HOST_PLAYTEST_COST_CENTS):
+	if not _run_state.complete_productive_action(commit, -HOST_PLAYTEST_COST_CENTS, -1, &"", &"playtest", _project_state.get_release_id()):
 		_transaction_in_progress = false
 		_update_play_action()
 		_update_host_playtest_action()
@@ -561,7 +561,7 @@ func play_selected_hand(insight_rolls: Array[int] = [], replacement_category_rol
 		_project_state.exhaust_beta_cards(preflight.finite_ids)
 		_project_state.advance_cycle()
 		return true
-	if not _run_state.complete_productive_action(commit, preflight.cash_gain_cents):
+	if not _run_state.complete_productive_action(commit, preflight.cash_gain_cents, -1, &"", &"beta_income", _project_state.get_release_id()):
 		for view: CardView in preflight.next_views: view.free()
 		_deal_rng.state = deal_rng_state
 		_insight_rng.state = insight_rng_state

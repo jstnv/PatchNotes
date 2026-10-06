@@ -7,6 +7,8 @@ var phase: Control
 var stats: Array[Label] = []
 var footer: Label
 var footer_panel: PanelContainer
+var cash_button: Button
+var studio_finances: StudioFinances
 var change_priorities: Button
 var synergy_notification: SynergyNotification
 var tutorial_overlay: TutorialOverlay
@@ -80,6 +82,16 @@ func _ready() -> void:
 	tutorial_button.custom_minimum_size.x = 100
 	tutorial_button.pressed.connect(show_tutorial)
 	footer_row.add_child(tutorial_button)
+	cash_button = Button.new()
+	cash_button.name = "CashButton"
+	cash_button.custom_minimum_size.x = 148
+	cash_button.text = "Cash: —"
+	cash_button.tooltip_text = "Open Studio Finances: actual monthly revenue, costs, rent and available cash. Browsing is free."
+	cash_button.pressed.connect(show_finances)
+	footer_row.add_child(cash_button)
+	studio_finances = StudioFinances.new()
+	studio_finances.name = "StudioFinances"
+	add_child(studio_finances)
 	synergy_notification = SynergyNotification.new()
 	synergy_notification.name = "SynergyNotification"
 	add_child(synergy_notification)
@@ -98,17 +110,22 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 		if run.cash_changed.is_connected(refresh): run.cash_changed.disconnect(refresh)
 		if run.calendar_changed.is_connected(refresh): run.calendar_changed.disconnect(refresh)
 		if run.features_changed.is_connected(refresh): run.features_changed.disconnect(refresh)
+		if run.finance_changed.is_connected(refresh): run.finance_changed.disconnect(refresh)
 	project = project_state
 	run = run_state
 	if project != null:
 		project.values_changed.connect(refresh)
 		project.cycle_changed.connect(refresh)
-	run.cash_changed.connect(refresh)
-	run.calendar_changed.connect(refresh)
-	run.features_changed.connect(refresh)
+	if run != null:
+		run.cash_changed.connect(refresh)
+		run.calendar_changed.connect(refresh)
+		run.features_changed.connect(refresh)
+		run.finance_changed.connect(refresh)
+	studio_finances.bind_run(run)
 	refresh()
 
 func set_phase(controller: Control) -> void:
+	studio_finances.close()
 	_presented_scores.clear()
 	for pulse in _score_pulses:
 		if is_instance_valid(pulse): pulse.queue_free()
@@ -172,6 +189,16 @@ func set_tutorial_context(context: StringName) -> void:
 func show_tutorial() -> void:
 	contextual_tip.dismiss()
 	tutorial_overlay.open(tutorial_context)
+
+
+func show_finances() -> bool:
+	if run == null or phase is MainMenu or not is_instance_valid(phase): return false
+	contextual_tip.dismiss()
+	tutorial_overlay.close()
+	var return_label := "Back to Studio" if phase is StudioPhase else "Back to Game"
+	if phase is ContractPhase: return_label = "Back to Contract"
+	elif phase is PostGameReview: return_label = "Back to Review"
+	return studio_finances.open(return_label)
 
 
 func show_current_tip() -> void:
@@ -290,7 +317,11 @@ func _production_guidance() -> Dictionary:
 	return {"key": name + "_choose", "title": "Select four cards", "body": "Choose four cards. Matching all four primary Core labels gives ×1.5 Core gains; the Synergy ? button explains other bonuses. Features exhaust; Passes return."}
 
 func refresh() -> void:
-	if run == null: return
+	if run == null:
+		cash_button.disabled = true
+		cash_button.text = "Cash: —"
+		footer.text = "Date: —     |     Cycle: —     |     Next Bill: —"
+		return
 	if project == null:
 		change_priorities.disabled = true
 		_refresh_footer()
@@ -345,5 +376,20 @@ func _show_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
 
 func _refresh_footer() -> void:
 	var cents := run.get_cash_cents()
-	var cash := "$%d.%02d" % [cents / 100, cents % 100] if cents >= 0 else "—"
-	footer.text = "Cash: %s     |     Date: %s     |     Cycle: %d     |     Next Bill: —" % [cash, run.get_calendar_label(), run.get_completed_run_cycles()]
+	cash_button.text = "Cash: %s" % (CashFormatter.format_exact_cents(cents) if cents >= 0 else "—")
+	cash_button.disabled = phase is MainMenu or not is_instance_valid(phase)
+	var finances := run.get_studio_finance_report()
+	var next_bill := "—"
+	if finances.get("available", false):
+		var due: int = finances.get("next_due_cycle", 0)
+		next_bill = "%s · M%d end" % [CashFormatter.format_exact_cents(finances.get("monthly_rent_cents", 0)), due / 2] if due > 0 else "Unavailable"
+		if finances.get("unpaid_rent_cents", 0) > 0: next_bill += " · unpaid " + CashFormatter.format_exact_cents(finances.unpaid_rent_cents)
+	footer.text = "Date: %s     |     Cycle: %d     |     Next Bill: %s" % [run.get_calendar_label(), run.get_completed_run_cycles(), next_bill]
+	if finances.get("unpaid_rent_cents", 0) > 0:
+		# Lead with arrears so they remain visible even if the date/bill suffix trims.
+		footer.text = "Unpaid rent %s · Cash → Finances     |     %s" % [CashFormatter.format_exact_cents(finances.unpaid_rent_cents), footer.text]
+		footer.add_theme_color_override("font_color", Color("ffc779"))
+	else:
+		footer.remove_theme_color_override("font_color")
+	footer.tooltip_text = footer.text
+	cash_button.tooltip_text = "Studio Finances · Available cash %s\n%s" % [CashFormatter.format_exact_cents(cents), run.get_financial_block_reason() if finances.get("financially_blocked", false) else "Monthly earnings, settled cash, expenses and rent. Opening and browsing are free."]

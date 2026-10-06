@@ -38,7 +38,8 @@ func _snapshot() -> Dictionary:
 	var credits := {}
 	for id in run.get_owned_feature_ids(): credits[id] = run.get_feature_familiarity(id)
 	return {"cash": run.get_cash_cents(), "cycles": run.get_completed_run_cycles(),
-		"redraws": run.get_available_redraws(), "owned": run.get_owned_feature_ids(), "credits": credits}
+		"redraws": run.get_available_redraws(), "owned": run.get_owned_feature_ids(), "credits": credits,
+		"finance": run.get_studio_finance_snapshot()}
 
 func _mouse(point: Vector2, pressed: bool, button: MouseButton = MOUSE_BUTTON_LEFT) -> void:
 	var event := InputEventMouseButton.new()
@@ -89,16 +90,16 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	_mouse(at + Vector2(2, 1), false)
 	expect(store._selected == &"text" and map.popup.visible and not map.dragging, "Small mouse jitter remains a node click (%d)" % width)
 	expect(store._details.text.contains("Graphics") and store._owned_summary.text.contains("Graphics") and store._owned_summary.text.contains("Sound") and store._owned_summary.text.contains("Tech") and store._owned_summary.text.contains("Design"), "Details and totals spell out Core categories")
-	_key(KEY_UP)
-	await process_frame
-	expect(store._selected == &"colored_text" and root.gui_get_focus_owner() == store._nodes[&"colored_text"], "Up selects and focuses direct child")
-	expect(store._details.text.contains("2 Graphics · 1 Scope") and map.popup.visible, "Arrow selection opens correct details")
-	_key(KEY_DOWN)
-	expect(store._selected == &"text", "Down returns to parent")
-	_key(KEY_RIGHT)
-	expect(store._selected == &"sprites", "Right chooses next root on same row")
 	_key(KEY_LEFT)
-	expect(store._selected == &"text", "Left returns to previous root")
+	await process_frame
+	expect(store._selected == &"colored_text" and root.gui_get_focus_owner() == store._nodes[&"colored_text"], "Left selects and focuses outward Visuals child")
+	expect(store._details.text.contains("2 Graphics · 1 Scope") and map.popup.visible, "Arrow selection opens correct details")
+	_key(KEY_RIGHT)
+	expect(store._selected == &"text", "Right returns to inward Visuals parent")
+	_key(KEY_DOWN)
+	expect(store._selected == &"sprites", "Down chooses next root on the adjacent track")
+	_key(KEY_UP)
+	expect(store._selected == &"text", "Up returns to previous root")
 	var top: StringName = &"text"
 	for id: StringName in store._nodes:
 		if store._nodes[id].position.y < store._nodes[top].position.y: top = id
@@ -108,7 +109,7 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	map._focus_node(&"colored_text")
 	_key(KEY_ESCAPE)
 	expect(not map.popup.visible, "Escape dismisses keyboard-opened details")
-	_key(KEY_DOWN)
+	_key(KEY_RIGHT)
 	expect(store._selected == &"text", "Arrow browsing resumes from focused node after dismissal")
 	# Actual GUI button routing, not direct calls to _input: drags must not click.
 	await _reset_view()
@@ -158,7 +159,7 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	var buy_point := store._buy.get_global_rect().get_center()
 	_mouse(buy_point, true)
 	_mouse(buy_point, false)
-	expect(_snapshot() == before, "Passive navigation and owned purchase button preserve cash, cycles, redraws, ownership and familiarity")
+	expect(_snapshot() == before, "Passive navigation and owned purchase button preserve cash, cycles, redraws, ownership, familiarity and finance history")
 	# Native Tab focus signal also opens and reveals a Tech card.
 	store._nodes[&"keyboard_and_mouse"].grab_focus()
 	await create_timer(0.56).timeout
@@ -166,7 +167,7 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	expect(store._nodes[&"keyboard_and_mouse"].tooltip_text.contains("Tech"), "Tech abbreviation also appears in tooltip")
 	if "--capture" in OS.get_cmdline_user_args():
 		await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png("res://design-logs/feature-radial-map-v1/navigation-%d.png" % width)
+		root.get_texture().get_image().save_png("res://design-logs/feature-bloom-map-v1/navigation-%d.png" % width)
 	_mouse(store.global_position + Vector2(2, 2), true)
 	_mouse(store.global_position + Vector2(2, 2), false)
 	expect(not map.popup.visible, "Click outside details dismisses")
@@ -208,6 +209,6 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	expect(tutorial.page_index == 1, "Tutorial Next Tip remains clickable above map")
 	_key(KEY_ESCAPE)
 	expect(not tutorial.visible, "Escape closes Tutorial overlay")
-	_key(KEY_RIGHT)
+	_key(KEY_DOWN)
 	expect(store._selected == &"sprites", "Map arrow navigation resumes after closing Tutorial")
 	expect(_snapshot() == before, "All navigation remains zero-cost")

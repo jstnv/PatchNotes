@@ -111,7 +111,7 @@ func commit_priority_distribution(distribution: Dictionary = _priority_draft) ->
 		_priority_draft = _priority_allocation.get_priority_distribution()
 		_project_state.advance_cycle()
 		return true
-	if not _run_state.complete_productive_action(commit): return false
+	if not _run_state.complete_productive_action(commit, 0, -1, &"", &"priority_change", _project_state.get_release_id()): return false
 	_sync_priority_controls()
 	return true
 
@@ -180,7 +180,7 @@ func host_playtest() -> bool:
 		_pending_playtest_categories.assign(corrective_categories)
 		_project_state.advance_cycle()
 		return true
-	if not (_run_state.complete_productive_action(commit) if _run_state != null else commit.call()): return false
+	if not (_run_state.complete_productive_action(commit, 0, -1, &"", &"playtest", _project_state.get_release_id()) if _run_state != null else commit.call()): return false
 	print("Host Playtest complete! One cycle advanced. Corrective Passes queued: %s" % _format_corrective_pass_names(_pending_playtest_categories))
 	_update_host_playtest_action()
 	return true
@@ -828,7 +828,7 @@ func _on_play_alpha_hand_pressed() -> void:
 		if not _project_state.add_alpha_production(additions, action.scope, action.alpha_bug_pressure): return false
 		_complete_successful_action()
 		return true
-	if not (_run_state.complete_productive_action(commit, -play_cost) if _run_state != null else commit.call()):
+	if not (_run_state.complete_productive_action(commit, -play_cost, -1, &"", &"feature_play", _project_state.get_release_id()) if _run_state != null else commit.call()):
 		return
 	if not final_production.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_production.specialization_stat, additions))

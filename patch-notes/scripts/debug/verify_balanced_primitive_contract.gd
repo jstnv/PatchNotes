@@ -98,7 +98,8 @@ func _verify_offer_and_navigation() -> void:
 	expect(run_snapshot(run, project) == before and studio.get_node("%Dashboard").visible, "Closing contract details returns to Studio for free")
 	var accepted: Array[ContractState] = []
 	var cash_observations: Array = []
-	run.cash_changed.connect(func(): cash_observations.append([run.get_primitive_contract(), run.get_cash_cents(), run.accept_primitive_contract()]))
+	var observe_cash := func(): cash_observations.append([run.get_primitive_contract(), run.get_cash_cents(), run.accept_primitive_contract()])
+	run.cash_changed.connect(observe_cash)
 	studio.contract_requested.connect(func(_source: StudioPhase, state: ContractState): accepted.append(state))
 	studio.get_node("%Contracts").pressed.emit()
 	(detail.find_child("AcceptContractButton", true, false) as Button).pressed.emit()
@@ -109,6 +110,8 @@ func _verify_offer_and_navigation() -> void:
 	expect(cash_observations.size() == 1 and cash_observations[0][0] == state and cash_observations[0][1] == before[0] + 40000 and cash_observations[0][2] == null, "Cash observers see accepted ownership and cannot reenter for a second guarantee")
 	var after_acceptance := run_snapshot(run, project)
 	expect(not run.is_primitive_contract_offer_available() and run.accept_primitive_contract() == null and run_snapshot(run, project) == after_acceptance, "Accepted offer cannot pay twice")
+	# Release the fixture's observer, which captures the RefCounted RunState.
+	run.cash_changed.disconnect(observe_cash)
 	studio.queue_free()
 	await process_frame
 

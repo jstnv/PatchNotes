@@ -12,6 +12,7 @@ var help: Label
 var title_label: Label
 var commit_button: Button
 var initial_setup := false
+var priority_chart: PriorityInfluenceChart
 const INITIAL_FOOTER_REVEAL := 46.0
 
 func configure(controller: Control, priority_panel: Control, commit: Button) -> void:
@@ -49,24 +50,36 @@ func configure(controller: Control, priority_panel: Control, commit: Button) -> 
 	help.text = "Future draws only · total 100 · 5-point steps\nCommit a changed allocation: 1 cycle. Cancel: free."
 	content.add_child(help)
 	priority_panel.reparent(content)
-	priority_panel.custom_minimum_size = Vector2(580, 184)
+	priority_panel.custom_minimum_size = Vector2(580, 220)
 	priority_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	priority_panel.show()
 	var columns := priority_panel.get_child(0)
+	columns.add_theme_constant_override("separation", 8)
+	var sliders: Array = []
+	var beta: bool = phase.get_workspace().phase_name == "Beta"
+	var names := PriorityInfluenceChart.BETA_NAMES if beta else PriorityInfluenceChart.CORE_NAMES
+	var colors := PriorityInfluenceChart.BETA_COLORS if beta else PriorityInfluenceChart.CORE_COLORS
 	for column in columns.get_children():
 		if column is VBoxContainer:
-			column.custom_minimum_size = Vector2(112, 168)
+			column.custom_minimum_size = Vector2(80, 168)
+			column.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			var index := sliders.size()
 			for child in column.get_children():
 				if child is VSlider:
+					sliders.append(child)
 					child.custom_minimum_size = Vector2(32, 122)
 					child.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 					child.size_flags_vertical = Control.SIZE_EXPAND_FILL
 				elif child is Label:
-					child.add_theme_font_size_override("font_size", 16)
-					child.text = child.text.trim_suffix(" Priority")
+					child.add_theme_font_size_override("font_size", 14)
+					child.add_theme_color_override("font_color", colors[index])
+					if child.text.ends_with("Priority"): child.text = names[index]
 		else:
 			column.reparent(content)
 			column.custom_minimum_size = Vector2.ZERO
+	priority_chart = PriorityInfluenceChart.new()
+	columns.add_child(priority_chart)
+	priority_chart.bind_controls(sliders, names, colors)
 	feedback = Label.new()
 	feedback.name = "PriorityFeedback"
 	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -108,7 +121,7 @@ func open() -> bool:
 
 func _help_text(phase_name: String) -> String:
 	if initial_setup and phase_name in ["Design", "Alpha"]:
-		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTechnology (technical systems), and Design (gameplay).\nScope is how much game you build. Aim for the Scope target in the HUD.\nPriorities weight future cards, not scores. Total 100 · 5–50 · steps of 5.\nBegin %s is free." % phase_name
+		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTech (systems), and Design (gameplay). Scope is how much you build.\nPriorities weight future cards, not scores. Total 100 · 5–50 · steps of 5.\nBegin %s is free." % phase_name
 	if initial_setup:
 		return "Higher priorities make that category more likely in future draws and redraws.\nSet the initial %s allocation · total 100 · 5-point steps.\nBeginning the phase is free." % phase_name
 	return "Higher priorities make that category more likely in future draws and redraws.\nThe current pool and your scores stay the same. Total 100 · 5-point steps.\nCommit a changed allocation: 1 cycle and one redraw restored (up to 4). Cancel: free."

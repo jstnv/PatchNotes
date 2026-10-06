@@ -1,0 +1,29 @@
+PATCH NOTES — TASK29 ADDENDUM TO TASK10 SAVE CONTRACT v1
+2026-10-05. Specification only: durable saves remain unimplemented.
+
+Source: current RunState and StudioFinanceLedger on main HEAD85b687490974229e9a2e40355be4cea52833047d plus local Task29 changes; authority §68 and live Task29. This supplements Task10's older field inventory without claiming its obsolete fields are live.
+
+Authoritative ownership
+RunState owns _studio_finance alongside _cash_cents, _cash_initialized, _completed_run_cycles, _available_redraws, named Studio/specialty, Feature ownership/familiarity, release metadata and sales, contracts and payout/entitlement IDs. The ledger starts at successful Studio naming with550000c financing, cycle0 and no rent. Anonymous legacy/test runs have unavailable expense history; never fabricate an old rent/expense timeline.
+
+Schema_version1 snapshot
+initial_cash_cents; last_cycle; cash_cents; unsettled_sales_net_cents; actions; transactions; monthly_rows; obligations. All monetary values/cycle counters/sequences are signed64-bit integer cents, not JSON floating approximations. kind and source_id are StringName values; a future loader must validate known types/IDs before explicit normalization. No current JSON loader is supplied.
+Each action: cycle,cash_before,direct_delta,kind,sales_earned,settled,productive,source_id. Zero-delta productive events remain recorded. This complete ordered journal is needed to reconstruct all derived fields and reject altered/missing provenance.
+Each transaction: sequence,cycle,month,kind,amount_cents,cash_delta_cents,cash_before_cents,cash_after_cents,source_id,due_month. Separate actual earned net and settled cash; the70% share is not applied again. Publisher receipts and Beta income have distinct kinds. Financing and principal are not operating revenue/expense; interest is an expense.
+Each obligation: month,due_cycle,due_cents,paid_cents,unpaid_cents,paid_on_time,late,payments[]. Payment contains cycle,month,cents. Original delinquency stays late after recovery. Payment month and obligation month may differ.
+Each monthly row: month,partial,opening/closing/cash_change; sales_net_earned/sales_settled; other_income aggregate and publisher/beta/miscellaneous breakdown; Feature play/Store/campaign/playtest/other expenses; rent_due/rent_paid/rent_unpaid; operating_revenue/expenses/net_profit; financing_in/principal_paid/interest (monetary field suffix _cents). Current empty partial row can be derived and is not a new transaction.
+
+Atomic checkpoint
+Persist only between complete actions, outside _productive_cycle_in_progress/_committing_cycle_cash/_publishing_cycle and UI animation transaction locks. Required commit includes direct effect (ProjectState or ContractState), exact cash, central cycle, redraw refill, all title earning/settlement, due and paid rent, finance journal, publisher/contract completion IDs and ownership/familiarity changes. Never save one portion as authoritative ahead of another. Presentation tween state, open menus and report selection are transient; reconstruction cannot execute callbacks, settle income, pay rent, refill redraws or mint payout IDs.
+
+Restore validation
+Validate old base-state invariants; deep-copy typed finance data; replay the entire action journal from initial financing; compare every monthly row/obligation/payment/transaction; require last_cycle and cash_cents to equal RunState and aggregate unsettled_sales_net_cents to match title entitlement less settled. Missing or corrupted history must display unavailable and cannot silently disable rent for a named Studio. Current runtime rejects productive actions with invalid named-Studio finance provenance. Future migrations require explicit version policy; no schema repair or old save invention is authorized here.
+
+Shortfall and exactly-once boundaries
+First rent aftercycle2, then each productive even cycle. Direct cost must be affordable before that action's receipts. All income fits64bit before rent. Settle earned sales before bills. Pay oldest debt first; partial payments leave explicit arrears without negativecash. While arrears exist, a productive action must clear all old/new due rent or reject completely. Positive external receipts service arrears without time; passive navigation and eligible launch remain free. expected_cycle rejects stale callback replays; contract/release ID guards remain authoritative. Rent due uniqueness derives from strictly sequential committed cycles, not UI events.
+
+Deferred lending extension
+No loan balances, approved score/terms or borrowing actions are implemented. Future loans need typed loan IDs, origination cycle, original/remaining principal, fixed total interest, exact-cent installment schedule/firstdue, paid/unpaid components, immutable one-time-startup eligibility flag independent of payoff, missed-payment evidence and checked payoff transactions. Keep Student Loan trait/employee payroll separate. Those future fields and values require the approved lending design, not inference from this foundation.
+
+Verification references
+verify_studio_finance_ledger.gd; verify_studio_finance_integration.gd; verify_studio_finances.gd; Task29 native routes and JSON captures. These validate live transactions and read-only snapshots, not disk-save/resume functionality.

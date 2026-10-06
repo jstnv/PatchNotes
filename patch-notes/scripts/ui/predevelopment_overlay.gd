@@ -13,6 +13,7 @@ var back_button: Button
 var priority_sliders: Array[HSlider] = []
 var priority_labels: Array[Label] = []
 var priority_total: Label
+var priority_chart: PriorityInfluenceChart
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -40,6 +41,7 @@ func _ready() -> void:
 	columns.add_child(identity)
 	var priorities := VBoxContainer.new()
 	priorities.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	priorities.size_flags_stretch_ratio = 1.5
 	priorities.add_theme_constant_override("separation", 8)
 	columns.add_child(priorities)
 	_add_label(identity, "Game name", 16)
@@ -57,11 +59,20 @@ func _ready() -> void:
 	_add_label(priorities, "Initial Design priorities", 20)
 	_add_label(priorities, "Priorities weight future draws, not scores.\nAllocate 100 total, 5-50 each in steps of 5.", 14)
 	priorities.tooltip_text = "Graphics: visuals. Sound: audio. Tech: systems. Design: gameplay. Core scores measure quality; Scope measures how much game you build."
+	var priority_body := HBoxContainer.new()
+	priority_body.add_theme_constant_override("separation", 16)
+	priorities.add_child(priority_body)
+	var priority_controls := VBoxContainer.new()
+	priority_controls.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	priority_controls.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	priority_controls.add_theme_constant_override("separation", 14)
+	priority_body.add_child(priority_controls)
 	for i in range(4):
 		var row := HBoxContainer.new()
-		priorities.add_child(row)
+		priority_controls.add_child(row)
 		var value := _add_label(row, "", 16)
-		value.custom_minimum_size.x = 160
+		value.custom_minimum_size.x = 102
+		value.add_theme_color_override("font_color", PriorityInfluenceChart.CORE_COLORS[i])
 		priority_labels.append(value)
 		var slider := HSlider.new()
 		slider.min_value = 5
@@ -69,9 +80,13 @@ func _ready() -> void:
 		slider.step = 5
 		slider.value = 25
 		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slider.custom_minimum_size.x = 100
 		row.add_child(slider)
 		priority_sliders.append(slider)
 		slider.value_changed.connect(func(_value: float): _refresh_priorities())
+	priority_chart = PriorityInfluenceChart.new()
+	priority_body.add_child(priority_chart)
+	priority_chart.bind_controls(priority_sliders, PriorityInfluenceChart.CORE_NAMES, PriorityInfluenceChart.CORE_COLORS)
 	priority_total = _add_label(priorities, "", 16)
 	_add_label(layout, "Begin Development: 1 calendar cycle • New project starts at cycle 0 • No cash required\nEditing or cancelling: 0 cycles • Themes have no gameplay effects yet", 16)
 	error_label = _add_label(layout, "", 16)

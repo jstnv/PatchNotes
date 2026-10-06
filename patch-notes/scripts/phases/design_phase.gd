@@ -121,7 +121,7 @@ func commit_priority_distribution(distribution: Dictionary = _priority_draft) ->
 		_priority_draft = _priority_allocation.get_priority_distribution()
 		_project_state.advance_cycle()
 		return true
-	if not _run_state.complete_productive_action(commit):
+	if not _run_state.complete_productive_action(commit, 0, -1, &"", &"priority_change", _project_state.get_release_id()):
 		return false
 	_sync_priority_controls()
 	return true
@@ -571,7 +571,7 @@ func _on_play_card_pressed() -> void:
 		if not _project_state.add_core_scores_and_scope(additions, base_hand.scope, base_hand.bug_pressure): return false
 		_complete_successful_cycle()
 		return true
-	if not (_run_state.complete_productive_action(commit, -play_cost) if _run_state != null else commit.call()):
+	if not (_run_state.complete_productive_action(commit, -play_cost, -1, &"", &"feature_play", _project_state.get_release_id()) if _run_state != null else commit.call()):
 		return
 	if not final_action.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_action.specialization_stat, additions))

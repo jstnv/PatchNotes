@@ -61,11 +61,15 @@ func _verify_year_labels() -> void:
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
 	var run: RunState = game.run_state
+	# Synthetic year-label fixture: explicitly funded, not a played route.
+	check(run.add_cash_cents(3000000, &"financing_in"), "Calendar fixture funds its actual rent obligations")
 	var studio: StudioPhase = game.get("_active_phase")
 	var hud := game.get_node("%GameplayHUD") as GameplayHUD
 	for cycle in [0, 23, 24, 95, 96]:
 		while run.get_completed_run_cycles() < cycle:
-			check(run.complete_productive_action(), "Shared productive boundary advances")
+			var advanced := run.complete_productive_action()
+			check(advanced, "Shared productive boundary advances")
+			if not advanced: break # Never hang if a future obligation rejects.
 		var year: int = 1980 + cycle / 24
 		check(run.get_current_year() == year and hud.footer.text.contains(str(year)) and studio.get_node("Dashboard/Layout/Heading/Title").text.contains(str(year)), "Cycle %d shows year %d in Studio and shared HUD" % [cycle, year])
 		var before := snapshot(run, [])
@@ -97,13 +101,19 @@ func _verify_studio_purchase_years() -> void:
 	for action in ["store", "reserve", "campaign"]:
 		var run := new_run()
 		run.set_studio_name("Boundary Studio", &"adventure")
+		check(run.add_cash_cents(3000000, &"financing_in"), "Synthetic purchase/year fixture funds rent")
 		run.finalize_starter_selection()
+		# Reach the calendar through checked transactions before the release.
+		var release_cycle := 93 if action == "campaign" else 95
+		while run.get_completed_run_cycles() < release_cycle:
+			var advanced := run.complete_productive_action()
+			check(advanced, "Synthetic boundary fixture advances all ledgers together")
+			if not advanced: break
 		var project := release(10)
 		run.register_release(project)
 		if action == "campaign":
 			run.complete_productive_action()
 			run.complete_productive_action()
-		run.set("_completed_run_cycles", 95) # Boundary fixture, not a playable time skip.
 		var studio := load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
 		root.add_child(studio)
 		studio.setup(project, run, snapshots)

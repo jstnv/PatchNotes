@@ -324,7 +324,7 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 		source_studio.show_development_error(validation)
 		return false
 	if not run_state.can_complete_productive_cycle():
-		source_studio.show_development_error("Development could not begin because the calendar or sales state is invalid.")
+		source_studio.show_development_error(run_state.get_financial_block_reason() if not run_state.get_financial_block_reason().is_empty() else "Development could not begin because the calendar or sales state is invalid.")
 		return false
 	_transition_in_progress = true
 	var next := PrimitivePredevelopment.prepare_project(base_name, genre, theme_id, run_state)
@@ -341,7 +341,7 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 	# No cash cost. Sales earning/settlement uses the same atomic boundary as all
 	# other productive actions. Preparation above never touches the released game.
 	# This is a Studio action, not a completed development cycle of the new game.
-	if not run_state.complete_productive_action():
+	if not run_state.complete_productive_action(Callable(), 0, -1, &"", &"development", next.get_release_id()):
 		design.free()
 		_transition_in_progress = false
 		return false

@@ -12,11 +12,19 @@ var zoom := 1.0
 var bounds := Vector2.ZERO
 var origins: Dictionary = {}
 var center := Vector2.ZERO
-var core_radius := 0.0
-const INNER_RADIUS := 450.0
-const OUTER_RADIUS := 750.0
-const BRANCH_STEP := 310.0
-const ROW_STEP := 200.0
+var category_regions: Dictionary = {}
+var category_headers: Dictionary = {}
+var category_paths: Array[PackedVector2Array] = []
+var hub: Label
+const CATEGORY_DIRECTIONS := {
+	&"Visuals": Vector2.LEFT, &"Audio": Vector2.LEFT,
+	&"Technology & Tools": Vector2.UP,
+	&"Gameplay": Vector2.RIGHT, &"Story & World": Vector2.RIGHT,
+}
+const COLUMN_STEP := 176.0
+const ROW_STEP := 212.0
+const BRANCH_STEP := 212.0
+const FAMILY_GAP := 40.0
 const LABEL_OFFSET := Vector2(-8, 136)
 const LABEL_SIZE := Vector2(144, 36)
 var dragging := false
@@ -154,7 +162,7 @@ func decorate(button: Button, card: CardData) -> void:
 	title.name = "FeatureName"
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_constant_override("line_spacing", -2)
 	title.text = card.card_name
 	title.position = LABEL_OFFSET
@@ -174,64 +182,95 @@ func decorate(button: Button, card: CardData) -> void:
 	button.add_child(status)
 
 func layout_map(children: Dictionary) -> void:
-	# Membership comes from the Primitive ledger, not ownership or graph-root status.
-	# New roots (Save Files) and the multi-Feature gate stay outside this core.
-	var primitive: Dictionary = {}
-	for entry: Dictionary in FeatureStoreCatalog.starting_features():
-		primitive[StringName(entry.id)] = true
-	var controls: Array[Control] = []
-	for index in range(store.LANE_ORDER.size()):
-		var lane: StringName = store.LANE_ORDER[index]
-		var direction := Vector2.UP.rotated(TAU * index / store.LANE_ORDER.size())
-		origins[lane] = direction * OUTER_RADIUS
+	# Category paths organize the map only; purchase prerequisites stay in _edges.
+	for lane: StringName in store.LANE_ORDER:
+		var direction: Vector2 = CATEGORY_DIRECTIONS[lane]
+		var used: Array[float] = []
+		used.resize(4 if direction == Vector2.UP else 2)
+		used.fill(0.0)
+		var across := Vector2.RIGHT * COLUMN_STEP if direction == Vector2.UP else Vector2.DOWN * ROW_STEP
+		var families: Array = []
+		for id: StringName in store.LANE_MEMBERS[lane]:
+			if not store._edges.any(func(edge: Array): return edge[1] == id): families.append(id)
+		if lane == &"Gameplay": families.append(&"gameplay_gate")
+		# Pack whole families so their real prerequisite arrows never cross another family.
+		var family_order := families.duplicate()
+		families.sort_custom(func(a: StringName, b: StringName):
+			var difference := _branch_length(a, children, direction) - _branch_length(b, children, direction)
+			return family_order.find(a) < family_order.find(b) if is_zero_approx(difference) else difference > 0.0)
+		for id: StringName in families:
+			var track := 0
+			for i in range(1, used.size()):
+				if used[i] < used[track]: track = i
+			_place_branch(id, direction * used[track] + across * track, children, direction)
+			used[track] += _branch_length(id, children, direction) + FAMILY_GAP
+		var area := node_footprint(store._nodes[store.LANE_MEMBERS[lane][0]])
+		for id: StringName in store.LANE_MEMBERS[lane]:
+			area = area.merge(node_footprint(store._nodes[id]))
+		if lane == &"Gameplay": area = area.merge(store._gate.get_rect())
+		area = area.grow(32.0)
+		area.position.y -= 64.0
+		area.size.y += 64.0
+		category_regions[lane] = area
 		var heading := Label.new()
-		heading.text = str(lane).to_upper()
+		heading.name = "Category" + str(store.LANE_ORDER.find(lane))
+		heading.text = str(lane)
 		heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		heading.size = Vector2(240, 32)
-		heading.position = direction * 240.0 - heading.size / 2.0
+		heading.add_theme_font_size_override("font_size", 36)
+		heading.size = Vector2(area.size.x, 44)
+		heading.position = area.position + Vector2(0, 16)
+		heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		tree.add_child(heading)
-		controls.append(heading)
-		var outer: Array[StringName] = []
-		var inner: Array[StringName] = []
-		for id: StringName in store.LANE_MEMBERS[lane]:
-			if not primitive.has(id): continue
-			if children.has(id): outer.append(id)
-			else: inner.append(id)
-		var count := outer.size() + inner.size()
-		while outer.size() < maxi(ceili(count / 2.0), count - 3):
-			outer.append(inner.pop_front())
-		_place_core_row(outer, direction, OUTER_RADIUS, children)
-		_place_core_row(inner, direction, INNER_RADIUS, children)
-		# Independent roots have no invented edge back to a Primitive Feature.
-		var extra_roots: Array[StringName] = []
-		for id: StringName in store.LANE_MEMBERS[lane]:
-			if not primitive.has(id) and not store._edges.any(func(edge: Array): return edge[1] == id):
-				extra_roots.append(id)
-		if lane == &"Gameplay": extra_roots.append(&"gameplay_gate")
-		for i in range(extra_roots.size()):
-			var spoke := direction.rotated(0.38 + i * 0.25)
-			_place_branch(extra_roots[i], spoke * (OUTER_RADIUS + BRANCH_STEP), children)
-	for id: StringName in store._nodes:
-		controls.append(store._nodes[id])
-		if primitive.has(id):
-			core_radius = maxf(core_radius, (store._nodes[id].position + store.NODE_SIZE / 2.0).length() + 108.0)
-	controls.append(store._gate)
-	var hub := Label.new()
-	hub.text = "PRIMITIVE CORE\nBranches grow outward"
+		category_headers[lane] = heading
+		origins[lane] = area.get_center()
+	# An open central trunk, with two boughs on each side and a crown above.
+	var crown: Rect2 = category_regions[&"Technology & Tools"]
+	var inner_edge := crown.size.x / 2.0 + 140.0
+	for lane: StringName in store.LANE_ORDER:
+		var area: Rect2 = category_regions[lane]
+		var destination: Vector2
+		match lane:
+			&"Technology & Tools": destination = Vector2(-area.size.x / 2.0, -area.size.y - 240.0)
+			&"Visuals": destination = Vector2(-inner_edge - area.size.x, -area.size.y - 80.0)
+			&"Audio": destination = Vector2(-inner_edge - area.size.x, 100.0)
+			&"Gameplay": destination = Vector2(inner_edge, -area.size.y - 80.0)
+			_: destination = Vector2(inner_edge, 100.0)
+		_move_category(lane, destination - area.position)
+	hub = Label.new()
+	hub.name = "FeatureLibraryRoot"
+	hub.text = "FEATURE LIBRARY"
 	hub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hub.add_theme_font_size_override("font_size", 26)
-	hub.size = Vector2(340, 80)
-	hub.position = -hub.size / 2.0
+	hub.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hub.add_theme_font_size_override("font_size", 42)
+	hub.size = Vector2(440, 100)
+	var lower_height := maxf(category_regions[&"Audio"].size.y, category_regions[&"Story & World"].size.y)
+	hub.position = Vector2(-hub.size.x / 2.0, 100.0 + lower_height / 2.0 - hub.size.y / 2.0)
+	hub.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	tree.add_child(hub)
-	controls.append(hub)
-	var area := Rect2(Vector2.ONE * -core_radius, Vector2.ONE * core_radius * 2.0)
-	for control in controls:
-		area = area.merge(node_footprint(control) if control is Button else control.get_rect())
-	area = area.grow(60.0)
-	center = -area.position
-	for control in controls: control.position += center
-	for lane: StringName in origins: origins[lane] += center
-	bounds = area.size
+	center = hub.get_rect().get_center()
+	for lane: StringName in store.LANE_ORDER:
+		var direction: Vector2 = CATEGORY_DIRECTIONS[lane]
+		var area: Rect2 = category_regions[lane]
+		var start := edge_port(hub.get_rect(), direction)
+		if direction == Vector2.UP:
+			category_paths.append(PackedVector2Array([start, Vector2(center.x, area.end.y)]))
+		else:
+			var end := Vector2(area.end.x if direction == Vector2.LEFT else area.position.x, area.get_center().y)
+			var fork_x := direction.x * (inner_edge - 70.0)
+			category_paths.append(PackedVector2Array([start, Vector2(fork_x, start.y), Vector2(fork_x, end.y), end]))
+	var extent := hub.get_rect().grow(8.0)
+	for area: Rect2 in category_regions.values(): extent = extent.merge(area)
+	extent = extent.grow(32.0)
+	var half_width := maxf(absf(extent.position.x), absf(extent.end.x))
+	extent.position.x = -half_width
+	extent.size.x = half_width * 2.0
+	var offset := -extent.position
+	for lane: StringName in store.LANE_ORDER: _move_category(lane, offset)
+	hub.position += offset
+	center += offset
+	for i in range(category_paths.size()):
+		for j in range(category_paths[i].size()): category_paths[i][j] += offset
+	bounds = extent.size
 	store._lane_heading.hide()
 	tree.size = bounds
 	# Wait for Containers to lay out before measuring the first overview.
@@ -247,24 +286,47 @@ func _center_canvas() -> void:
 	if tree != null:
 		tree.position = _focus_padding + (canvas.size - bounds * zoom - _focus_padding * 2.0).max(Vector2.ZERO) / 2.0
 
-func _place_core_row(ids: Array[StringName], direction: Vector2, radius: float, children: Dictionary) -> void:
-	var tangent := direction.rotated(PI / 2.0)
-	for i in range(ids.size()):
-		var point := direction * radius + tangent * (i - (ids.size() - 1) / 2.0) * ROW_STEP
-		_place_branch(ids[i], point, children)
+func _move_category(lane: StringName, offset: Vector2) -> void:
+	for id: StringName in store.LANE_MEMBERS[lane]: store._nodes[id].position += offset
+	if lane == &"Gameplay": store._gate.position += offset
+	category_headers[lane].position += offset
+	category_regions[lane].position += offset
+	origins[lane] += offset
 
-func _place_branch(id: StringName, point: Vector2, children: Dictionary) -> void:
+func _branch_length(id: StringName, children: Dictionary, direction: Vector2) -> float:
+	var length := LABEL_OFFSET.y + LABEL_SIZE.y if direction == Vector2.UP else 180.0
+	for child: StringName in children.get(id, []):
+		length = maxf(length, BRANCH_STEP + _branch_length(child, children, direction))
+	return length
+
+func _place_branch(id: StringName, point: Vector2, children: Dictionary, direction: Vector2) -> void:
 	var node: Control = store._gate if id == &"gameplay_gate" else store._nodes[id]
-	node.position = point - node.size / 2.0
+	node.position = point
+	if id == &"gameplay_gate": node.position.x -= (node.size.x - store.NODE_SIZE.x) / 2.0
 	var descendants: Array = children.get(id, [])
 	for i in range(descendants.size()):
-		var direction := point.normalized().rotated((i - (descendants.size() - 1) / 2.0) * 0.24)
-		_place_branch(descendants[i], direction * (point.length() + BRANCH_STEP), children)
+		var across := Vector2.RIGHT * COLUMN_STEP if direction == Vector2.UP else Vector2.DOWN * ROW_STEP
+		_place_branch(descendants[i], point + direction * BRANCH_STEP + across * i, children, direction)
 
 func draw_core() -> void:
-	if core_radius <= 0.0: return
-	tree.draw_circle(center, core_radius, Color(0.17, 0.20, 0.26, 0.28))
-	tree.draw_arc(center, core_radius, 0, TAU, 160, Color("414b5c"), 2, true)
+	for lane: StringName in store.LANE_ORDER:
+		if not category_regions.has(lane): continue
+		var area: Rect2 = category_regions[lane]
+		tree.draw_style_box(_category_style(), area)
+		var header: Label = category_headers[lane]
+		tree.draw_line(Vector2(area.position.x + 20, header.get_rect().end.y + 8), Vector2(area.end.x - 20, header.get_rect().end.y + 8), Color("47515f"), 2.0, true)
+	for path: PackedVector2Array in category_paths:
+		tree.draw_polyline(path, Color("667688"), 4.0, true)
+	if hub != null:
+		tree.draw_style_box(_category_style(), hub.get_rect().grow(8.0))
+
+func _category_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("1c2029")
+	style.border_color = Color("394453")
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(12)
+	return style
 
 func node_footprint(node: Control) -> Rect2:
 	return Rect2(node.position + Vector2(LABEL_OFFSET.x, 0), Vector2(LABEL_SIZE.x, LABEL_OFFSET.y + LABEL_SIZE.y))
