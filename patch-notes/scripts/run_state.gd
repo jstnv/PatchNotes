@@ -520,6 +520,13 @@ func get_released_game_sales(release_id: StringName) -> Dictionary:
 	return _released_games.get(release_id, {}).duplicate(true)
 
 
+func get_released_game_monthly_report(release_id: StringName) -> Dictionary:
+	if not _release_metadata.has(release_id) or not _released_games.has(release_id): return {}
+	var release_cycle: Variant = _release_metadata[release_id].get("release_cycle", null)
+	if typeof(release_cycle) != TYPE_INT or release_cycle < 0: return {}
+	return ReleasedGameMonthlyReport.build(_released_games[release_id], release_cycle)
+
+
 ## An offer is anchored to the current release-age cycle, not the calendar month.
 func get_post_launch_campaign_offer(release_id: StringName) -> Dictionary:
 	if not _released_games.has(release_id):

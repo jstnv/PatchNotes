@@ -206,7 +206,7 @@ func _guidance_for_current_state() -> Dictionary:
 		&"main_menu":
 			return {}
 		&"predevelopment":
-			return {"key": "predevelopment_setup", "title": "Plan your game", "body": "Name the game and choose a Genre and Theme. Editing is free; Begin Development advances one cycle."}
+			return {"key": "predevelopment_setup", "title": "Plan your game", "body": "Name the game, choose a Genre and Theme, and allocate 100 initial Design priority points. Editing is free; Begin Development advances one cycle and deals the first hand."}
 		&"studio":
 			if run != null and run.needs_starter_selection():
 				return {"key": "studio_first_store", "title": "Explore your starting pool", "body": "Your specialty granted your first Features. Visit the Store for optional additions: initial Primitive purchases cost cash and zero cycles. A B game needs 30 played Scope."}

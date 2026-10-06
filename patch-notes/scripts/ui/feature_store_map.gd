@@ -107,6 +107,14 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer) -> void:
 	price.scroll_active = false
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	details.add_child(price)
+	var back := Button.new()
+	back.name = "BackToMapButton"
+	back.text = "Back to Map"
+	back.tooltip_text = "Close these Feature details without purchasing."
+	back.pressed.connect(func():
+		dismiss()
+		scroll.grab_focus())
+	details.add_child(back)
 	store._buy = Button.new()
 	store._buy.pressed.connect(store._purchase)
 	details.add_child(store._buy)

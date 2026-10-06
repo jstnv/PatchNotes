@@ -30,6 +30,10 @@ var _priority_inputs: Dictionary = {}
 var _completion_panel: PanelContainer
 var _completion_stats: Label
 var _title: Label
+var _score_values: Array[Label] = []
+var _change_priorities: Button
+var _priority_modal: CanvasLayer
+var _completion_modal: CanvasLayer
 
 
 func setup(state: ContractState, run: RunState, category_rolls: Array[float] = [], definition_rolls: Array[float] = []) -> bool:
@@ -70,15 +74,44 @@ func _build_ui() -> void:
 	_title = Label.new()
 	_title.text = "Balanced Primitive Contract"
 	_title.add_theme_font_size_override("font_size", 25)
+	var header := PanelContainer.new()
+	header.name = "ContractHeader"
+	layout.add_child(header)
+	var header_row := HBoxContainer.new()
+	header_row.add_theme_constant_override("separation", 18)
+	header.add_child(header_row)
+	for category in ["Graphics", "Sound", "Tech", "Design", "Scope"]:
+		var value := Label.new()
+		value.name = category + "Counter"
+		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		header_row.add_child(value)
+		_score_values.append(value)
+	_change_priorities = Button.new()
+	_change_priorities.text = "Change Priorities"
+	_change_priorities.pressed.connect(open_priority_overlay)
+	header_row.add_child(_change_priorities)
 	layout.add_child(_title)
 	_status_label = Label.new()
 	layout.add_child(_status_label)
 	_scores_label = Label.new()
 	_scores_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_scores_label.hide()
 	layout.add_child(_scores_label)
 	var priority_row := HBoxContainer.new()
 	priority_row.add_theme_constant_override("separation", 10)
-	layout.add_child(priority_row)
+	_priority_modal = CanvasLayer.new()
+	_priority_modal.layer = 20
+	add_child(_priority_modal)
+	var priority_content := _modal_content(_priority_modal, Vector2(700, 250))
+	var priority_title := Label.new()
+	priority_title.text = "Change Priorities"
+	priority_title.add_theme_font_size_override("font_size", 24)
+	priority_content.add_child(priority_title)
+	var help := Label.new()
+	help.text = "Future draws only · total 100 · 5·50 in steps of 5
+Changed priorities cost 1 cycle. Cancel is free."
+	priority_content.add_child(help)
+	priority_content.add_child(priority_row)
 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
 		var box := VBoxContainer.new()
 		box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -97,8 +130,20 @@ func _build_ui() -> void:
 	_commit_button = Button.new()
 	_commit_button.text = "Commit Priorities (1 cycle)"
 	_commit_button.tooltip_text = "A valid changed allocation costs one cycle and affects later draws, not the current hand."
-	_commit_button.pressed.connect(func(): commit_priority_distribution())
-	priority_row.add_child(_commit_button)
+	_commit_button.pressed.connect(func():
+		if commit_priority_distribution(): _priority_modal.hide())
+	var priority_actions := HBoxContainer.new()
+	priority_content.add_child(priority_actions)
+	priority_actions.add_child(_commit_button)
+	var cancel := Button.new()
+	cancel.text = "Cancel"
+	cancel.pressed.connect(func():
+		_priority_draft = _state.get_priority_distribution()
+		_sync_priority_inputs()
+		_priority_modal.hide()
+		_change_priorities.grab_focus())
+	priority_actions.add_child(cancel)
+	_priority_modal.hide()
 	var pool_title := Label.new()
 	pool_title.text = "Contract Draw — select exactly four cards"
 	layout.add_child(pool_title)
@@ -133,14 +178,16 @@ func _build_ui() -> void:
 	organize.tooltip_text = "Alternate category (Graphics, Sound, Tech, Design) and Scope (highest first). The button names the next sort. No cash, cycle or redraw cost."
 	organize.pressed.connect(func():
 		if not hand_motion.busy: organize.text = _candidate_row.cycle_organization())
-	hand_motion.busy_changed.connect(func(): organize.disabled = hand_motion.busy)
+	hand_motion.busy_changed.connect(func():
+		organize.disabled = hand_motion.busy or _state.is_completed()
+		_refresh_actions())
 	actions.add_child(organize)
 	actions.move_child(organize, _redraw_button.get_index() + 1)
 
 func _present_action(kind: String, action: Callable) -> void:
 	if hand_motion.busy: return
 	if hand_motion.play(kind, _candidate_row, _selected_views, action, _score_snapshot, _display_scores, _restore_scores):
-		if _state.is_completed(): _completion_panel.hide()
+		if _state.is_completed(): _completion_modal.hide()
 
 func _score_snapshot() -> Dictionary:
 	var values := {&"scope": _state.get_scope(), "_cycle": _run.get_completed_run_cycles(), "_redraws": _run.get_available_redraws()}
@@ -161,7 +208,7 @@ func _display_scores(values: Dictionary, deltas: Dictionary) -> void:
 	pulse.z_index = 200
 	pulse.add_theme_color_override("font_color", Color("f5ce69"))
 	add_child(pulse)
-	pulse.global_position = _scores_label.global_position + Vector2(0, 20)
+	pulse.global_position = _score_values[0].global_position + Vector2(0, 20)
 	var tween := pulse.create_tween().set_parallel()
 	tween.tween_property(pulse, "position:y", pulse.position.y - 16.0, 0.55)
 	tween.tween_property(pulse, "modulate:a", 0.0, 0.55)
@@ -173,15 +220,53 @@ func _restore_scores() -> void:
 	if _state.is_completed(): _show_completion()
 
 
-func _build_completion_panel() -> void:
-	_completion_panel = PanelContainer.new()
-	_completion_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	_completion_panel.custom_minimum_size = Vector2(560, 360)
-	_completion_panel.visible = false
-	add_child(_completion_panel)
+func _modal_content(layer: CanvasLayer, minimum: Vector2) -> VBoxContainer:
+	var shade := ColorRect.new()
+	shade.color = Color(0.015, 0.01, 0.015, 0.82)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.mouse_filter = Control.MOUSE_FILTER_STOP
+	layer.add_child(shade)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.add_child(center)
+	var panel := PanelContainer.new()
+	panel.name = "ContractModal"
+	panel.theme = preload("res://resources/ui/workspace_theme.tres")
+	var surface := StyleBoxFlat.new()
+	surface.bg_color = Color("#1b1b21")
+	surface.border_color = Color("#665447")
+	surface.set_border_width_all(1)
+	surface.set_corner_radius_all(6)
+	surface.content_margin_left = 18
+	surface.content_margin_right = 18
+	surface.content_margin_top = 16
+	surface.content_margin_bottom = 16
+	panel.add_theme_stylebox_override("panel", surface)
+	panel.custom_minimum_size = minimum
+	center.add_child(panel)
 	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 16)
-	_completion_panel.add_child(content)
+	content.add_theme_constant_override("separation", 12)
+	panel.add_child(content)
+	return content
+
+
+func open_priority_overlay() -> void:
+	if not can_edit_priorities() or hand_motion.busy: return
+	_priority_draft = _state.get_priority_distribution()
+	_sync_priority_inputs()
+	_refresh_actions()
+	_priority_modal.show()
+	(_priority_inputs[ProjectState.CoreScore.GRAPHICS] as SpinBox).get_line_edit().grab_focus()
+
+
+func _build_completion_panel() -> void:
+	_completion_modal = CanvasLayer.new()
+	_completion_modal.layer = 30
+	add_child(_completion_modal)
+	var content := _modal_content(_completion_modal, Vector2(560, 360))
+	_completion_panel = content.get_parent() as PanelContainer
+	_completion_panel.hide()
+	_completion_modal.hide()
 	var title := Label.new()
 	title.text = "Contract Complete"
 	title.add_theme_font_size_override("font_size", 26)
@@ -392,7 +477,7 @@ func _make_card_view(card: CardData) -> CardView:
 
 
 func _on_card_pressed(view: CardView) -> void:
-	if _state.is_completed() or view not in _candidate_row.get_children(): return
+	if _state.is_completed() or hand_motion.busy or _priority_modal.visible or view not in _candidate_row.get_children(): return
 	if _selected_views.has(view):
 		_selected_views.erase(view)
 		view.set_selected(false)
@@ -403,6 +488,8 @@ func _on_card_pressed(view: CardView) -> void:
 
 
 func _show_completion() -> void:
+	# The authoritative action completes before its visual replay. Do not cover it.
+	if hand_motion != null and (hand_motion.capturing or hand_motion.busy): return
 	var result := _state.get_result()
 	if result == null: return
 	_completion_stats.text = "Final Scope: %d / %d\nGraphics: %s / 6\nSound: %s / 6\nTechnology: %s / 6\nDesign: %s / 6\nCompletion: %.1f%%\nGuaranteed Upfront: %s\nCompletion Payment: %s\nTotal Payout: %s" % [
@@ -413,13 +500,20 @@ func _show_completion() -> void:
 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.DESIGN)),
 		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_upfront_cents()),
 		CashFormatter.format_exact_cents(result.get_completion_payment_cents()), CashFormatter.format_exact_cents(result.get_payout_cents())]
+	_selected_views.clear()
+	_candidate_row.hide()
+	_priority_modal.hide()
+	_completion_modal.show()
 	_completion_panel.show()
 	(_completion_panel.find_child("DismissCompletionButton", true, false) as Button).grab_focus()
 
 
 func _refresh_all() -> void:
 	if _state == null: return
-	_status_label.text = "Hand %d / %d · Date: %s · Redraws: %d / 4" % [_state.get_successful_hand_count(), ContractState.REQUIRED_HANDS, _run.get_calendar_label(), _run.get_available_redraws()]
+	_status_label.text = "Hands remaining: %d / %d · Select exactly four cards" % [maxi(0, ContractState.REQUIRED_HANDS - _state.get_successful_hand_count()), ContractState.REQUIRED_HANDS]
+	for i in range(4):
+		_score_values[i].text = "%s\n%s / %s" % [["Graphics", "Sound", "Tech", "Design"][i], _format_half(_presented_scores.get(HandPresentation.CORE[i], _state.get_core_score_half_units(i))), _format_half(ContractState.EXPECTED_CORE_HALF_UNITS)]
+	_score_values[4].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", _state.get_scope()), ContractState.EXPECTED_SCOPE]
 	_scores_label.text = "Scope %d / 12 · Graphics %s · Sound %s · Technology %s · Design %s" % [
 		_presented_scores.get(&"scope", _state.get_scope()), _format_half(_presented_scores.get(&"graphics", _state.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS))),
 		_format_half(_presented_scores.get(&"sound", _state.get_core_score_half_units(ProjectState.CoreScore.SOUND))), _format_half(_presented_scores.get(&"technology", _state.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY))),
@@ -429,9 +523,11 @@ func _refresh_all() -> void:
 
 func _refresh_actions() -> void:
 	if _state == null: return
-	_play_button.disabled = _state.is_completed() or _selected_views.size() != HAND_SIZE or _state.plan_hand(_selected_cards()).is_empty()
+	var animating := hand_motion != null and hand_motion.busy
+	_change_priorities.disabled = animating or not can_edit_priorities()
+	_play_button.disabled = animating or _state.is_completed() or _selected_views.size() != HAND_SIZE or _state.plan_hand(_selected_cards()).is_empty()
 	_redraw_button.text = "Redraw Selected (%d/4)" % _run.get_available_redraws()
-	_redraw_button.disabled = _state.is_completed() or _selected_views.is_empty() or not _run.can_consume_redraw(_selected_views.size())
+	_redraw_button.disabled = animating or _state.is_completed() or _selected_views.is_empty() or not _run.can_consume_redraw(_selected_views.size())
 	_commit_button.disabled = not _state.can_commit_priorities(_priority_draft) or not _run.can_complete_productive_cycle()
 	guidance_changed.emit()
 

@@ -117,6 +117,10 @@ func _verify_flow() -> void:
 	expect(overlay.error_label.text == "Enter a game name." and game.project_state == old and run.get_completed_run_cycles() == calendar_before, "Missing-name UI validation preserves project and time")
 	overlay.name_input.text = "Doom"
 	overlay.name_input.text_changed.emit("Doom")
+	overlay.priority_sliders[0].value = 50
+	overlay.begin_button.pressed.emit()
+	expect(overlay.begin_button.disabled and game.project_state == old and run.get_completed_run_cycles() == calendar_before, "Invalid pre-development priorities reject without spending or creating a project")
+	for i in range(4): overlay.priority_sliders[i].value = [50, 15, 15, 20][i]
 	overlay.genre_input.select(5)
 	overlay.theme_input.select(9)
 	for window_size in [Vector2i(1152, 648), Vector2i(900, 600)]:
@@ -152,7 +156,7 @@ func _verify_flow() -> void:
 	expect(not fresh.has_design_bug_finalization() and not fresh.has_alpha_finalization() and not fresh.has_beta_finalization() and not fresh.has_review_result() and not fresh.has_awareness_result() and not fresh.has_month_one_sales_revenue_result(), "Fresh project has no prior phase or launch results")
 	expect(fresh.has_competitor_snapshot() and fresh.has_market_forecast_snapshot() and not fresh.is_competitor_snapshot_revealed() and not fresh.is_market_forecast_snapshot_revealed(), "New project has freshly assigned concealed market snapshots")
 	var design: DesignPhase = game.get("_active_phase")
-	expect(design != null and design.get("_project_state") == fresh and design.get_priority_distribution() == {0: 25, 1: 25, 2: 25, 3: 25} and design.get("_exhausted_card_ids").is_empty(), "Transition enters fresh Design planning with reset priorities/exhaustion")
+	expect(design != null and design.get("_project_state") == fresh and design.get_priority_distribution() == {0: 50, 1: 15, 2: 15, 3: 20} and design.get("_exhausted_card_ids").is_empty(), "Transition deals Design using Pre-Development priorities and fresh exhaustion")
 	expect(game.get_node("%GameplayHUD").project == fresh and not old.values_changed.is_connected(game.get_node("%GameplayHUD").refresh), "Existing HUD is rebound and disconnects old project")
 	var rebuilt: Control = load("res://scenes/gameplay.tscn").instantiate()
 	rebuilt.project_state = fresh
@@ -162,7 +166,7 @@ func _verify_flow() -> void:
 	expect(rebuilt.get("_active_phase") is DesignPhase and rebuilt.project_state == fresh and rebuilt.run_state == run and reconstruction_before == [fresh.get_current_cycle(), run.get_completed_run_cycles(), run.get_cash_cents(), fresh.get_feature_supply_ids(), fresh.get_assigned_competitor_snapshot_id_for_authority(), fresh.get_assigned_market_forecast_snapshot_id_for_authority()], "Reconstructing fresh Design preserves identity, supply, snapshots and zero project cycles without recharging")
 	rebuilt.queue_free()
 	design.get_workspace().overlay.cancel()
-	expect(design.begin_design() and fresh.get_current_cycle() == 0, "Design's existing Begin stays free after Pre-Development")
+	expect(not design.is_initial_priority_planning() and fresh.get_current_cycle() == 0, "Design begins automatically from Pre-Development without another cycle")
 	var history: Dictionary = design.call("_build_design_feature_history")
 	expect(history.valid and history.unimplemented_ids.has(&"save_files"), "New Design supply and history include purchased Save Files")
 	run.add_cash(1000)

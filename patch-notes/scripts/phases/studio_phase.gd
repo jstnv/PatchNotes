@@ -17,6 +17,7 @@ var _selected_contract_offer_id: StringName
 var _predevelopment: PredevelopmentOverlay
 var _review_view: PostGameReview
 var _selected_release_id: StringName
+var _monthly_report: MonthlySalesReport
 
 
 func _ready() -> void:
@@ -26,6 +27,7 @@ func _ready() -> void:
 	%PostGameSummaries.pressed.connect(open_summary)
 	%CloseSummaryButton.pressed.connect(close_summary)
 	%DetailedReviewButton.pressed.connect(open_detailed_review)
+	%MonthlySalesButton.pressed.connect(open_monthly_sales)
 	%Contracts.pressed.connect(_open_contracts)
 	%CampaignButton.pressed.connect(_purchase_selected_campaign)
 	%GameList.item_selected.connect(_on_game_selected)
@@ -152,9 +154,9 @@ func close_summary() -> void:
 	tutorial_context_changed.emit(&"studio")
 
 
-## The former interstitial review is still inspectable, but no longer gates
-## automatic Studio entry or performs release registration when dismissed.
-func open_detailed_review() -> void:
+## Launch and history share this screen. Release registration happens before
+## presentation; dismissing either mode only changes navigation.
+func open_detailed_review(launch_reveal := false) -> void:
 	if _selected_release_id.is_empty():
 		return
 	if _review_view != null:
@@ -170,14 +172,34 @@ func open_detailed_review() -> void:
 			_review_view = null
 			return
 		add_child(_review_view)
-		_review_view.get_node("%ContinueButton").text = "Back to Summary"
+		_review_view.get_node("%ContinueButton").text = "Continue to Studio" if launch_reveal else "Back to Summary"
 		_review_view.continue_to_studio_requested.connect(func():
 			_review_view.hide()
-			open_summary())
+			if launch_reveal: close_summary()
+			else: open_summary())
 	%Dashboard.hide()
 	%SummaryPanel.hide()
 	_review_view.show()
 	tutorial_context_changed.emit(&"review")
+	if launch_reveal: _review_view.start_launch_reveal()
+
+
+func open_launch_review() -> void:
+	_selected_release_id = _project_state.get_release_id()
+	open_detailed_review(true)
+
+
+func open_monthly_sales() -> void:
+	if _selected_release_id.is_empty(): return
+	if _monthly_report == null:
+		_monthly_report = MonthlySalesReport.new()
+		_monthly_report.name = "MonthlySalesReport"
+		add_child(_monthly_report)
+		_monthly_report.closed.connect(open_summary)
+	_monthly_report.setup(_run_state, _selected_release_id)
+	%Dashboard.hide()
+	%SummaryPanel.hide()
+	_monthly_report.show()
 
 
 func _open_contracts() -> void:
@@ -200,7 +222,7 @@ func _open_contracts() -> void:
 	%Dashboard.hide()
 	_contract_detail.show()
 	tutorial_context_changed.emit(&"contract")
-	(_contract_detail.find_child("AcceptContractButton", true, false) as Button).grab_focus()
+	(_contract_detail.find_child("CloseContractDetailButton", true, false) as Button).grab_focus()
 
 
 func _ensure_contract_detail() -> void:
@@ -219,17 +241,35 @@ func _ensure_contract_detail() -> void:
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 14)
 	margin.add_child(layout)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 16)
+	layout.add_child(header)
 	var title := Label.new()
 	title.name = "ContractDetailTitle"
 	title.text = "Balanced Primitive Contract"
 	title.add_theme_font_size_override("font_size", 26)
-	layout.add_child(title)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+	var back := Button.new()
+	back.name = "CloseContractDetailButton"
+	back.unique_name_in_owner = true
+	back.text = "Back to Studio"
+	back.custom_minimum_size = Vector2(180, 46)
+	back.pressed.connect(_close_contract_detail)
+	header.add_child(back)
+	# Wrapping text must not grow the full-screen panel beyond its workspace.
+	# Keep both navigation and acceptance outside the scrolling description.
+	var scroll := ScrollContainer.new()
+	scroll.name = "ContractDetailScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(scroll)
 	var details := Label.new()
 	details.name = "ContractDetailText"
 	details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed $400.00 immediately; the earned remainder pays after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance."
 	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	layout.add_child(details)
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(details)
 	var actions := HBoxContainer.new()
 	layout.add_child(actions)
 	var accept := Button.new()
@@ -239,13 +279,6 @@ func _ensure_contract_detail() -> void:
 	accept.custom_minimum_size = Vector2(200, 46)
 	accept.pressed.connect(_accept_contract)
 	actions.add_child(accept)
-	var back := Button.new()
-	back.name = "CloseContractDetailButton"
-	back.unique_name_in_owner = true
-	back.text = "Back to Studio"
-	back.custom_minimum_size = Vector2(180, 46)
-	back.pressed.connect(_close_contract_detail)
-	actions.add_child(back)
 
 
 func _configure_contract_detail() -> void:
@@ -431,3 +464,6 @@ func _refresh_summary() -> void:
 
 func get_project_state() -> ProjectState: return _project_state
 func get_run_state() -> RunState: return _run_state
+
+func get_predevelopment_priorities() -> Dictionary:
+	return _predevelopment.get_initial_priorities() if _predevelopment != null and _predevelopment.visible else {}

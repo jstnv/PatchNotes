@@ -23,6 +23,7 @@ var _update: Callable
 var _restore: Callable
 var _prior_focus: Control
 var _sources: Array = []
+var _source_ids: Array[StringName] = []
 var _specialization := false
 var _bonus_timeline: Array[Dictionary] = []
 var capturing := false
@@ -55,6 +56,7 @@ func play(kind: String, fan: Control, selected: Array, action: Callable, snapsho
 	_sources = fan.ordered_cards() if fan is CardFan else fan.get_children()
 	# Capture the old pool before the authoritative action replaces/frees it.
 	for source: CardView in _sources:
+		_source_ids.append(source.card_data.id)
 		var ghost: CardView = CARD_SCENE.instantiate()
 		ghost.set_card(source.card_data)
 		add_child(ghost)
@@ -174,39 +176,69 @@ func _animate(kind: String) -> void:
 				_tween.chain().tween_callback(_score_bonus.bind(i))
 				_tween.chain().tween_interval(0.24)
 		_tween.chain().tween_interval(0.18)
+		# A purely visual victory wave after every resolved score/bonus is shown.
+		for i in range(_hand.size()):
+			var ghost := _hand[i]
+			_tween.chain().tween_callback(_record.bind(i, "exit_bounce"))
+			_tween.chain().tween_property(ghost, "position:y", -22.0, 0.10).as_relative()
+			_tween.chain().tween_property(ghost, "position:y", 22.0, 0.13).as_relative().set_ease(Tween.EASE_IN)
+			_tween.chain().tween_callback(_record.bind(i, "exit_grounded"))
+		_tween.chain().tween_callback(_record.bind(-1, "exit_slide"))
 		_tween.chain()
-		for ghost in _hand: _tween.parallel().tween_property(ghost, "modulate:a", 0.0, 0.16)
+		for ghost in _hand:
+			_tween.parallel().tween_property(ghost, "position:x", size.x + CardFan.CARD_SIZE.x, 0.38).as_relative().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	_tween.chain().tween_callback(_return_fan)
 
 func _return_fan() -> void:
 	if not is_instance_valid(_fan):
 		_clear()
 		return
-	if _fan is CardFan: _fan.retain_order(_sources)
 	var targets: Array = _fan.ordered_cards() if _fan is CardFan else _fan.get_children()
+	# Successful hands rebuild views. Match each unplayed occurrence once by
+	# definition, never reuse a played card or invent a retained candidate.
+	var returning: Array = []
+	var matches := {}
+	for i in range(_source_ids.size()):
+		if _ghosts[i] in _hand: continue
+		if is_instance_valid(_sources[i]) and _sources[i] in targets:
+			returning.append(_sources[i])
+			matches[_sources[i]] = i
+			continue
+		if action_kind == "redraw": continue
+		for target in targets:
+			if target not in returning and target.card_data.id == _source_ids[i]:
+				returning.append(target)
+				matches[target] = i
+				break
+	if _fan is CardFan: _fan.retain_order(returning)
+	targets = _fan.ordered_cards() if _fan is CardFan else targets
 	_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	var retained: Array = []
 	for source in targets:
-		var old_index := _sources.find(source)
+		var target: Vector2 = get_global_transform().affine_inverse() * source.get_global_transform() * (source.size / 2.0) - CardFan.CARD_SIZE / 2.0
+		var old_index: int = matches.get(source, -1)
 		var ghost: CardView
 		var is_new := old_index < 0
 		if not is_new:
 			ghost = _ghosts[old_index]
 			retained.append(ghost)
+			# Reuse the visible bottom-fan card, preserving its current transform.
 		else:
 			ghost = CARD_SCENE.instantiate()
 			ghost.set_card(source.card_data)
 			add_child(ghost)
 			ghost.size = CardFan.CARD_SIZE
 			ghost.pivot_offset = ghost.size / 2.0
-			ghost.position = Vector2(size.x + 80, size.y) - ghost.size / 2.0
+			# New candidates drop into their own slot from above the viewport.
+			ghost.position = Vector2(target.x, -ghost.size.y - get_global_transform().origin.y)
 			ghost.scale = Vector2.ONE * 0.34
 			ghost.modulate.a = 0.0
 			_ghosts.append(ghost)
-		var target: Vector2 = get_global_transform().affine_inverse() * source.get_global_transform() * (source.size / 2.0) - ghost.size / 2.0
 		ghost.z_index = targets.find(source)
 		if is_new: _tween.chain().tween_callback(_record.bind(targets.find(source), "deal"))
-		else: _tween.parallel()
+		else:
+			_tween.parallel().tween_callback(_record.bind(targets.find(source), "return_from_bottom"))
+			_tween.parallel()
 		_tween.tween_property(ghost, "position", target, 0.22)
 		_tween.parallel().tween_property(ghost, "rotation", source.get_global_transform().get_rotation() - get_global_transform().get_rotation(), 0.22)
 		_tween.parallel().tween_property(ghost, "scale", source.get_global_transform().get_scale() / get_global_transform().get_scale(), 0.22)
@@ -272,6 +304,7 @@ func _clear() -> void:
 	_bonus_timeline.clear()
 	_specialization_header = Callable()
 	_sources.clear()
+	_source_ids.clear()
 	if is_instance_valid(_fan): _fan.show()
 	hide()
 	if _restore.is_valid(): _restore.call()

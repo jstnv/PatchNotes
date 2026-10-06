@@ -71,7 +71,7 @@ func _run() -> void:
 	expect(not run.needs_starter_selection(), "Successful first-project commit closes the starter purchase window")
 	expect(project.get_feature_supply_ids() == run.get_owned_feature_ids() and project.has_competitor_snapshot() and project.has_market_forecast_snapshot(), "Fresh project uses owned supply and authoritative snapshots")
 	var design: DesignPhase = game.get("_active_phase")
-	expect(design != null and design.get_workspace().overlay.visible and hud.tutorial_context == &"design" and not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Design planning uses its own inline help without a hidden toast")
+	expect(design != null and not design.get_workspace().overlay.visible and not design.is_initial_priority_planning() and design.get("_candidate_cards").size() == 7 and hud.tutorial_context == &"design" and not hud.tutorial_overlay.visible, "Pre-Development leads directly into the first guided Design pool")
 	var current := snapshot(run)
 	expect(not game.call("_begin_next_project", studio, "Duplicate", &"action", &"fantasy") and snapshot(run) == current, "Stale setup callback cannot charge twice")
 	hud.contextual_tip.dismiss()

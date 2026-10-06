@@ -88,6 +88,20 @@ func _verify() -> void:
 		await _capture("detail", dimensions.x)
 		map.dismiss()
 		expect(selected.get_theme_stylebox("normal").border_color == FeatureStore.SCORE_COLORS[&"graphics"] and selected.get_theme_stylebox("normal").border_width_left == 3, "Dismissing details restores width while retaining category color")
+		for id: StringName in [&"text", &"save_files", &"difficulty_levels", &"branching_nodes"]:
+			map._focus_node(id)
+			await create_timer(0.56).timeout
+			var back := map.popup.find_child("BackToMapButton", true, false) as Button
+			expect(back != null and back.is_visible_in_tree() and not back.disabled and store.get_global_rect().encloses(map.popup.get_global_rect()) and map.popup.get_global_rect().encloses(back.get_global_rect()), "Back to Map is reachable for %s at %d" % [id, dimensions.x])
+			if back != null:
+				for pressed in [true, false]:
+					var event := InputEventMouseButton.new()
+					event.position = back.get_global_rect().get_center()
+					event.global_position = event.position
+					event.button_index = MOUSE_BUTTON_LEFT
+					event.pressed = pressed
+					root.push_input(event, true)
+			expect(not map.popup.visible and store._selected.is_empty() and store.visible and root.gui_get_focus_owner() == map.scroll, "Back to Map dismisses details and restores map focus without closing Store")
 		expect(before == [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids()], "Radial browsing preserves cash, calendar, redraws and ownership")
 		game.queue_free()
 		await process_frame

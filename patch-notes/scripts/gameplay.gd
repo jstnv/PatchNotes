@@ -20,6 +20,7 @@ var _controlled_review_roll := -1
 var active_contract_state: ContractState
 
 func _ready() -> void:
+	add_child(MenuTransitions.new())
 	_review_rng.randomize()
 	if run_state == null:
 		run_state = RunState.new()
@@ -261,6 +262,7 @@ func _replace_beta_with_launch(source_beta_phase: Control, launch_scene: PackedS
 	%PhaseRoot.remove_child(source_beta_phase)
 	source_beta_phase.queue_free()
 	run_state.refresh_redraws()
+	studio_phase.open_launch_review()
 	_transition_in_progress = false
 	return true
 
@@ -313,6 +315,10 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 		return false
 	if _transition_in_progress or not is_instance_valid(source_studio) or source_studio != _active_phase or source_studio.get_parent() != %PhaseRoot:
 		return false
+	var initial_priorities: Dictionary = source_studio.get_predevelopment_priorities() if source_studio.has_method("get_predevelopment_priorities") else {}
+	if not initial_priorities.is_empty() and not PriorityAllocation.is_valid_distribution(initial_priorities):
+		source_studio.show_development_error("Allocate exactly 100 priority points.")
+		return false
 	var validation := PrimitivePredevelopment.validation_error(base_name, genre, theme_id)
 	if not validation.is_empty():
 		source_studio.show_development_error(validation)
@@ -350,6 +356,9 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 	%PhaseRoot.add_child(design)
 	_active_phase = design
 	%GameplayHUD.set_phase(design)
+	if not initial_priorities.is_empty():
+		design.set_priority_distribution(initial_priorities)
+		design.get_workspace().overlay.commit_draft()
 	%PhaseRoot.remove_child(source_studio)
 	source_studio.queue_free()
 	_transition_in_progress = false

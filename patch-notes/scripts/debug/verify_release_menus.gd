@@ -54,7 +54,18 @@ func _run() -> void:
 	check(beta.request_launch(), "Launch enters Studio through the real phase transition")
 	await _settle()
 	var studio: StudioPhase = game.get("_active_phase")
-	check(hud.tutorial_context == &"studio" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Automatic Studio entry presents nonblocking guidance")
+	check(hud.tutorial_context == &"review" and not hud.tutorial_overlay.visible, "Launch opens the detailed Review context")
+	var launch_review: PostGameReview = studio.get("_review_view")
+	check(launch_review != null and launch_review.visible and launch_review.reveal_running and not studio.get_node("%Dashboard").visible, "Launch automatically reveals review before dashboard")
+	check(launch_review.get_node("%ReviewLabel").text == "Final Review: 0.0 / 10.0", "Final Review waits for preceding rows")
+	await create_timer(1.0).timeout
+	check(launch_review.get_node("%ScopeLabel").text == "Scope Completion: %.1f%%" % (state.get_review_result().get_scope_completion() * 100.0) and launch_review.get_node("%AwarenessLabel").text == "Awareness: 0", "Scope finishes before Awareness begins")
+	await create_timer(3.4).timeout
+	check(not launch_review.reveal_running and launch_review.get_node("%ReviewLabel").text == "Final Review: %.1f / 10.0" % state.get_review_result().get_final_review(), "Reveal finishes on exact committed Review")
+	check(launch_review.get("_bugs_label").text == "Bugs Remaining: %d" % state.get_remaining_bugs(), "Bugs reveal shows actual remaining Bugs")
+	await _capture("launch-reveal")
+	launch_review.get_node("%ContinueButton").pressed.emit()
+	check(studio.get_node("%Dashboard").visible and not launch_review.visible, "Launch review Continue opens dashboard")
 	hud.contextual_tip.dismiss()
 	check(studio != null and launch_before == [run.get_cash_cents(), run.get_completed_run_cycles(), state.get_current_cycle()], "Launch automatically enters Studio at zero cash and cycle cost")
 	var sales_before := run.get_released_game_sales(state.get_release_id())
@@ -62,7 +73,7 @@ func _run() -> void:
 	studio.get_node("%DetailedReviewButton").pressed.emit()
 	await _settle()
 	var review: PostGameReview = studio.get("_review_view")
-	check(hud.tutorial_context == &"review" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Opening Detailed Review selects inline Review guidance")
+	check(hud.tutorial_context == &"review" and not hud.tutorial_overlay.visible, "Reopening Detailed Review retains Review guidance context without repeating a dismissed tip")
 	hud.contextual_tip.dismiss()
 	check(review != null and review.get_node("%Categories").get_tab_count() == 5, "Review offers five performance categories")
 	var before := [run.get_cash_cents(), run.get_completed_run_cycles(), state.get_current_cycle(), state.get_review_result()]

@@ -13,7 +13,7 @@ func expect(ok: bool, text: String) -> void:
 	print("PASS: " if ok else "FAIL: ", text)
 	if not ok: failures += 1
 
-func settle(seconds := 0.22) -> void:
+func settle(seconds := 0.70) -> void:
 	await create_timer(seconds).timeout
 
 func shot(name: String) -> void:
@@ -121,12 +121,30 @@ func _production(width: int) -> void:
 	for i in range(4):
 		for event in ["rise", "score", "grounded"]: expected.append([i, event])
 	expect(order == expected, "Cards bounce left to right only after the previous card lands, independent of click order")
+	var return_count := 0
+	for event in motion.trace:
+		if event.event == "return_from_bottom": return_count += 1
+	var expected_returns := 0
+	for id in [&"sound_pass", &"technology_pass", &"design_pass"]:
+		if fan.ordered_cards().any(func(view): return view.card_data.id == id): expected_returns += 1
+	expect(return_count == expected_returns, "Rebuilt post-play views reuse each recurring unplayed bottom-fan card exactly once")
 	var bonuses: Array = []
 	var deals: Array = []
 	for event in motion.trace:
 		if event.event == "bonus": bonuses.append(event.index)
 		if event.event == "deal": deals.append(event)
 	expect(bonuses == [0, 1, 2, 3], "Specialization bonuses reveal once per card, left to right")
+	var finale: Array = []
+	for event in motion.trace:
+		if event.event in ["bonus", "exit_bounce", "exit_grounded", "exit_slide"]:
+			finale.append([event.index, event.event])
+	var expected_finale: Array = []
+	for i in range(4): expected_finale.append([i, "bonus"])
+	for i in range(4):
+		expected_finale.append([i, "exit_bounce"])
+		expected_finale.append([i, "exit_grounded"])
+	expected_finale.append([-1, "exit_slide"])
+	expect(finale == expected_finale, "Final score bonuses precede the left-to-right exit wave and group slide")
 	var staggered := true
 	for i in range(1, deals.size()):
 		# Tween callbacks are frame-quantized; require distinct arrivals rather

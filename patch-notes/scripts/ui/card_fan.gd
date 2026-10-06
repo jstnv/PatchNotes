@@ -2,6 +2,11 @@ class_name CardFan
 extends Container
 
 const CARD_SIZE := Vector2(240, 336)
+const WAVE_HEIGHT := 6.0
+const WAVE_PERIOD := 3.6
+const WAVE_SPACING := 0.62
+var _wave_time := 0.0
+var _poses: Dictionary = {}
 var _tweens: Dictionary = {}
 var _pressed: CardView
 var _visual_order: Array[CardView] = []
@@ -61,12 +66,36 @@ func _ready() -> void:
 	child_entered_tree.connect(_connect_card)
 	for child in get_children(): _connect_card(child)
 
+func _process(delta: float) -> void:
+	# HandPresentation hides the real fan while it animates its captured cards.
+	if not is_visible_in_tree(): return
+	_wave_time = fmod(_wave_time + delta, WAVE_PERIOD)
+	for card in ordered_cards(): _apply_wave(card)
+
+func _apply_wave(card: CardView) -> void:
+	if not _poses.has(card): return
+	var pose: Dictionary = _poses[card]
+	var phase: float = _wave_time * TAU / WAVE_PERIOD - pose.index * WAVE_SPACING
+	var strength := 0.45 if card.is_selected() else 1.0
+	card.position.y = pose.position.y + sin(phase) * WAVE_HEIGHT * strength
+	card.rotation = pose.angle + cos(phase) * deg_to_rad(0.65) * strength
+
+func _set_base_position(value: Vector2, card: CardView) -> void:
+	_poses[card].position = value
+	card.position = value
+	_apply_wave(card)
+
+func _set_base_angle(value: float, card: CardView) -> void:
+	_poses[card].angle = value
+	_apply_wave(card)
+
 func _connect_card(child: Node) -> void:
 	if not child is CardView: return
 	_ignore_pointer(child)
 	child.ready.connect(func(): _ignore_pointer(child); child.input_button.focus_mode = Control.FOCUS_ALL, CONNECT_ONE_SHOT)
 	if not child.selection_changed.is_connected(queue_sort): child.selection_changed.connect(queue_sort)
 	child.tree_exiting.connect(func():
+		_poses.erase(child)
 		if _tweens.has(child):
 			_tweens[child].kill()
 			_tweens.erase(child), CONNECT_ONE_SHOT)
@@ -118,15 +147,29 @@ func arrange(immediate := false) -> void:
 		card.size = CARD_SIZE
 		card.pivot_offset = CARD_SIZE / 2.0
 		card.z_index = i + (20 if card.is_selected() else 0)
+		if not immediate and not card.is_selected() and card.has_meta("fan_entering") and _tweens.has(card) and _tweens[card].is_running(): continue
 		if _tweens.has(card): _tweens[card].kill()
+		if not _poses.has(card):
+			_poses[card] = {"position": card.position, "angle": card.rotation, "index": i}
+		_poses[card].index = i
 		if immediate or not card.has_meta("fan_placed"):
-			card.position = target
-			card.rotation = angle
+			var entrance := not immediate and not card.has_meta("fan_placed") and is_visible_in_tree()
+			_set_base_position(target, card)
+			_set_base_angle(angle, card)
 			card.scale = Vector2.ONE * factor
 			card.set_meta("fan_placed", true)
+			if entrance:
+				var start := Vector2(target.x, -CARD_SIZE.y - global_position.y)
+				_set_base_position(start, card)
+				card.set_meta("fan_entering", true)
+				var entry := create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+				_tweens[card] = entry
+				entry.tween_interval(i * 0.045)
+				entry.tween_method(_set_base_position.bind(card), start, target, 0.34)
+				entry.tween_callback(func(): card.remove_meta("fan_entering"))
 		else:
 			var tween := create_tween().set_parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 			_tweens[card] = tween
-			tween.tween_property(card, "position", target, 0.16)
-			tween.tween_property(card, "rotation", angle, 0.16)
+			tween.tween_method(_set_base_position.bind(card), _poses[card].position, target, 0.16)
+			tween.tween_method(_set_base_angle.bind(card), _poses[card].angle, angle, 0.16)
 			tween.tween_property(card, "scale", Vector2.ONE * factor, 0.16)
