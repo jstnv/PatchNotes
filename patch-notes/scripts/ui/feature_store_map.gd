@@ -379,6 +379,7 @@ func dismiss() -> void:
 				style.set_border_width_all(3)
 	store._selected = &""
 	popup.hide()
+	store._refresh_spending_advice()
 
 func show_details() -> void:
 	store._buy.disabled = true

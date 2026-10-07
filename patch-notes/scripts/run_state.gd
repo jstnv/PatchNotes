@@ -133,6 +133,56 @@ func get_studio_finance_snapshot() -> Dictionary:
 	return _studio_finance.duplicate(true)
 
 
+## Hidden, derived from immutable committed release IDs. Reopening/re-registering
+## a release cannot create another sample; incomplete games are never samples.
+func get_development_pacing() -> Dictionary:
+	var releases: Dictionary = {}
+	for id: StringName in _released_games:
+		releases[id] = _release_metadata.get(id, {})
+	return FeatureSpendingGuidance.pacing(releases)
+
+
+## Owned means eligible for a future project's supply, not just an unlocked
+## Store branch. Preview adds only the selected new Feature, without ownership.
+func get_feature_spending_advice(purchase_id: StringName = &"") -> Dictionary:
+	var ids := get_owned_feature_ids()
+	var price := 0
+	var purchase_cycles := 0
+	if not purchase_id.is_empty() and not owns_feature(purchase_id):
+		var offer := get_primitive_reserve_offer(purchase_id)
+		if not offer.is_empty():
+			purchase_cycles = 0 if offer.initial else 1
+		else:
+			offer = get_feature_store_offer(purchase_id)
+			if offer.is_empty() or not offer.unlocked or needs_starter_selection():
+				return {"available": false, "reason": "Spending estimate unavailable for this locked Feature."}
+			purchase_cycles = 1
+		price = int(offer.price_cents)
+		ids.append(purchase_id)
+	var cards: Array[CardData] = []
+	var unpriced := 0
+	for id: StringName in ids:
+		if not _feature_definitions.has(id): return {"available": false}
+		var entry: Dictionary = _feature_definitions[id]
+		if _feature_offers.has(id):
+			unpriced += 1
+			continue
+		# Reuse the actual charge path; no parallel play-price formula.
+		var card := CardData.new()
+		card.id = id
+		card.card_type = StringName(entry.type)
+		card.phase = StringName(entry.phase)
+		card.primary_value = int(entry.primary_value)
+		card.secondary_value = int(entry.secondary_value)
+		card.scope = int(entry.scope)
+		cards.append(card)
+	var play_cost := primitive_feature_hand_cost_cents(cards)
+	var pool := {"available": play_cost >= 0, "known_play_cost_cents": play_cost,
+		"unpriced_count": unpriced, "feature_count": ids.size()}
+	return FeatureSpendingGuidance.estimate(get_development_pacing(), pool,
+		get_studio_finance_report(), _completed_run_cycles, get_cash_cents(), price, purchase_cycles)
+
+
 func get_financial_block_reason() -> String:
 	if not _first_studio_economy: return ""
 	if _studio_finance.get("cash_cents", -1) != _cash_cents or _studio_finance.get("last_cycle", -1) != _completed_run_cycles:

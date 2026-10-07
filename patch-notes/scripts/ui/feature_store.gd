@@ -30,6 +30,7 @@ var _lane_heading: Label
 var _details: Label
 var _cash: Label
 var _owned_summary: Label
+var _spending_advice: Label
 var _buy: Button
 var _selected: StringName
 
@@ -61,6 +62,11 @@ func setup(run: RunState) -> void:
 	_owned_summary.add_theme_font_size_override("font_size", 14)
 	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Play cost is once per owned Feature in a project; Passes are free. Later Store Features have no defined play price yet."
 	layout.add_child(_owned_summary)
+	_spending_advice = Label.new()
+	_spending_advice.name = "SpendingAdvice"
+	_spending_advice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_spending_advice.add_theme_font_size_override("font_size", 14)
+	layout.add_child(_spending_advice)
 	var lanes := HBoxContainer.new()
 	lanes.add_theme_constant_override("separation", 8)
 	layout.add_child(lanes)
@@ -78,6 +84,7 @@ func setup(run: RunState) -> void:
 	_map.configure(self, layout)
 	_run.features_changed.connect(_refresh)
 	_run.cash_changed.connect(_refresh)
+	_run.sales_changed.connect(_refresh)
 	_refresh()
 
 
@@ -248,6 +255,14 @@ func _select_node(id: StringName) -> void:
 
 func _show_details() -> void:
 	_map.show_details()
+	_refresh_spending_advice()
+
+
+func _refresh_spending_advice() -> void:
+	var advice := _run.get_feature_spending_advice(_selected)
+	_spending_advice.text = FeatureSpendingGuidance.message(advice)
+	_spending_advice.tooltip_text = FeatureSpendingGuidance.explanation(advice)
+	_spending_advice.add_theme_color_override("font_color", Color("e9c46a") if advice.get("below_reserve", false) else Color("bdd5cf"))
 
 
 func _purchase() -> void:
