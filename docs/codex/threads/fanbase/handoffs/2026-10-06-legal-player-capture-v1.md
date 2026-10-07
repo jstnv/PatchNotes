@@ -1,0 +1,15 @@
+# Handoff: legal above-5 Fanbase capture v1
+
+**Status:** READY for a read-only capture or analysis by the main implementing thread. No gameplay implementation, merge, push, or numerical lock is requested.
+
+**Decision/open question:** The branch's conversion, loss, and Awareness rates are provisional. Existing automated routes mostly have Reviews below 5.0; fixtures with high Reviews do not show how a real player reaches them. We need one provenance-complete above-5 case before choosing a curve or rate.
+
+**Source revision:** Fanbase commit `bd450a9e4e8d83ece1478cdf5a16526432e36cce` (parent `2b5717d0de737f77f1b1bc8c1a02da0db9f53942`). At handoff, the local remote-tracking branch points there; verify the actual branch and working tree before capture. If the capture uses a later revision, record its SHA and relevant diff. Preserve unrelated local edits.
+
+**Requested behavior:** Capture the smallest legal, unforced route that naturally yields a Review above 5.0. Record seed/run identity, startup ledger, specialty, Store purchases, project Genre/Theme, hand counts and selected cards, redraws, priorities, Beta actions/QA/Marketing, launch cycle, Review breakdown, market context, launch Awareness and fans. Continue through the first two productive cycles after that release and one subsequent launch if feasible; record per-cycle earned units and exact-cent revenue, month boundary settlement, fan ledger gained/lost/ending, and the next title's launch fan Awareness. If a later weak release naturally occurs in the same route, include its monthly loss; do not force a Review solely to satisfy this handoff. Note any campaign and simultaneous-release activity.
+
+**Dependencies:** Use the existing branch ledger and legal route tooling where useful. The fan formulas in `StudioFanbase` are trial values; the capture must label measured state separately from counterfactual overlays. Do not infer unique buyers from unit totals. Keep the current lifespan/settlement coefficients fixed and account for $500 rent and actual cash timing if comparing economic outcomes.
+
+**Acceptance checks:** (1) Replay is legal without injected Reviews, sales, money, or free waits; source SHA and inputs permit reproduction. (2) The Review, release snapshot, earned/settled units and cents, calendar boundary, and fan history reconcile to branch runtime state with zero unexplained discrepancy. (3) Review exactly 5.0 neutrality remains covered by the existing verifier rather than repeated as a new capture goal. (4) Compare branch linear conversion with the near-5 alternative on the same recorded earned-unit sequence as a labeled read-only overlay; report the difference without changing code or selecting a winner. (5) State clearly which requested observations were unavailable, especially buyer identities, a weak release, or next launch.
+
+**Output:** A concise dated, versioned evidence file with a link to exact raw capture and commands, plus a short finding on which open question the capture can answer. Return it to this design thread for a numerical ruling. Do not add a duplicate implementation task for the existing monthly ledger, Awareness, or Fans UI.

@@ -560,6 +560,17 @@ func can_advance_calendar_cycle() -> bool:
 	return can_complete_productive_cycle()
 
 
+## A free phase exit validates current state, not a hypothetical paid cycle.
+## Keep capacity/reentrancy/provenance guards; do not earn sales or service rent.
+func can_transition_without_productive_cycle() -> bool:
+	if _productive_cycle_in_progress or _publishing_cycle or _feature_purchase_in_progress or _pending_contract_completion != null or _completed_run_cycles < 0 or _completed_run_cycles == MAX_SIGNED_INT or _available_redraws < 0 or _available_redraws > MAX_REDRAWS or _cash_cents < 0:
+		return false
+	for id: StringName in _released_games:
+		if not _cash_initialized or not _released_games[id] is Dictionary or _released_games[id].get("release_id") != id or not ReleasedGameSales.is_valid(_released_games[id]):
+			return false
+	return not _first_studio_economy or get_studio_finance_report().get("available", false)
+
+
 func will_next_cycle_cross_month_boundary() -> bool:
 	return _completed_run_cycles < MAX_SIGNED_INT and get_current_half() == 2
 

@@ -237,7 +237,22 @@ func _return_fan() -> void:
 	for ghost in _ghosts:
 		if ghost not in retained and ghost not in _hand and ghost.get_index() < _sources.size():
 			_tween.parallel().tween_property(ghost, "modulate:a", 0.0, 0.18)
-	_tween.chain().tween_callback(func(): _record(-1, "fan_restored"); _clear())
+	_tween.chain().tween_callback(_finish_return)
+
+func _finish_return() -> void:
+	_record(-1, "fan_restored")
+	if not _fan is CardFan or not _fan.has_organization():
+		_clear()
+		return
+	# Arrivals finish in retained-first order before the live fan moves into its
+	# chosen grouping. Keep input blocked until that short movement completes.
+	for ghost in _ghosts: ghost.hide()
+	_fan.show()
+	_fan.reapply_organization()
+	_record(-1, "sort_started")
+	_tween = create_tween()
+	_tween.tween_interval(0.18)
+	_tween.tween_callback(func(): _record(-1, "sorted"); _clear(false))
 
 func _score_bonus(index: int) -> void:
 	if index == 0 and _specialization_header.is_valid():
@@ -279,7 +294,7 @@ func cancel() -> void:
 func _exit_tree() -> void:
 	if busy: cancel()
 
-func _clear() -> void:
+func _clear(restore_organization := true) -> void:
 	var was_busy := busy
 	busy = false
 	action_kind = ""
@@ -295,7 +310,9 @@ func _clear() -> void:
 	_bonus_timeline.clear()
 	_specialization_header = Callable()
 	_sources.clear()
-	if is_instance_valid(_fan): _fan.show()
+	if is_instance_valid(_fan):
+		_fan.show()
+		if was_busy and restore_organization and _fan is CardFan: _fan.reapply_organization()
 	hide()
 	if _restore.is_valid(): _restore.call()
 	if is_instance_valid(_prior_focus) and _prior_focus.is_inside_tree() and _prior_focus.is_visible_in_tree(): _prior_focus.grab_focus()

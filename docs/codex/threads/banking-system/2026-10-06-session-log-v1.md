@@ -1,0 +1,10 @@
+# Banking System design session log, v1
+
+2026-10-06 (America/Los_Angeles). Design only; no gameplay, shared TODO, Drive, commit, or push action.
+
+- **Branch and source:** `main` at `2b5717d0de737f77f1b1bc8c1a02da0db9f53942`. Existing modified scene/scripts, untracked docs/analysis, and `.codex-godot-temp` were preserved. `4f5aa30` is an ancestor of HEAD; Task33 finance/credit scripts are tracked in the current checkout. The later [64-suite local gate](../../logs/2026-10-06-campaign-pool-ui-v1.md) includes pending uncommitted Alpha repair, but no suite was rerun in this design session.
+- **Files changed here:** `2026-10-06-state-v1.md`, `2026-10-06-first-loan-proposal-v1.md`, `HANDOFF.md`, `working-notes.md`, `README.md`, and this log, all inside `docs/codex/threads/banking-system/`. No shared design authority or TODO was changed.
+- **Inputs:** CURRENT_STATE, TODO, economy-banking design, cross-system decisions, current RunState/finance/Bank source, Task29/30/33 local findings and route summaries, balance evidence, and the later Alpha/UI session log. No Google Drive read.
+- **Read-only checks:** 12-payment exact-cent schedule recomputation passed: $500 principal, $32.50 total interest, $46.66 first and $42.16 final payment. Eight Task33 first-settlement rows all exceed the proposed $46.66 capacity threshold; computed capacity range $500.87–$1,112.76. Every local Markdown link in this folder resolves. `git diff --check` exited 0. Current `git status` still shows the pre-existing gameplay/UI changes and untracked docs/analysis; no new runtime file was edited.
+- **Limits:** $5,700 comparisons are arithmetic until matched genuine trait-selection routes are run. The exact reported human 6.2 route has no complete local cash/settlement capture. Loan overlays are design calculations, not native loan behavior. The 25% capacity, 1% rate, 12-month term, first due and fixed $500 offer are **PROPOSED** only.
+- **Follow-up:** review the candidate terms and run bounded matched loan/no-loan read-only evidence before any numerical lock. Transfer approved, scoped tasks to the shared TODO only when the user explicitly asks.

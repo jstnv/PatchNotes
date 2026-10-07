@@ -6,22 +6,35 @@ const WAVE_HEIGHT := 6.0
 const WAVE_PERIOD := 3.6
 const WAVE_SPACING := 0.62
 const SELECTION_LIMIT := 4
+enum Organization { NONE, CATEGORY, SCOPE }
+var beta_sort_only := false
+var _organization := Organization.NONE
 var _wave_time := 0.0
 var _poses: Dictionary = {}
 var _tweens: Dictionary = {}
 var _pressed: CardView
 var _visual_order: Array[CardView] = []
-var _scope_sort_next := false
 
 func cycle_organization() -> String:
-	if _scope_sort_next:
+	if not beta_sort_only and _organization == Organization.CATEGORY:
 		organize_by_scope()
 	else:
 		organize_by_primary()
-	_scope_sort_next = not _scope_sort_next
-	return "Sort by Scope" if _scope_sort_next else "Sort by Category"
+	if beta_sort_only: return "Sort"
+	return "Sort by Scope" if _organization == Organization.CATEGORY else "Sort by Category"
+
+func has_organization() -> bool:
+	return _organization != Organization.NONE
+
+func reapply_organization() -> void:
+	if _organization == Organization.SCOPE: organize_by_scope()
+	elif _organization == Organization.CATEGORY: organize_by_primary()
 
 func organize_by_scope() -> void:
+	if beta_sort_only:
+		organize_by_primary()
+		return
+	_organization = Organization.SCOPE
 	var cards := ordered_cards()
 	var scopes: Array[int] = []
 	for card in cards:
@@ -36,11 +49,17 @@ func organize_by_scope() -> void:
 
 func organize_by_primary() -> void:
 	# Stable visual grouping only: authoritative candidate slots stay untouched.
+	_organization = Organization.CATEGORY
 	var cards := ordered_cards()
 	_visual_order.clear()
+	if beta_sort_only:
+		for category in [CardData.BETA_CATEGORY_QA, CardData.BETA_CATEGORY_MARKETING, CardData.BETA_CATEGORY_INSIDER]:
+			for card in cards:
+				if card.card_data.beta_category == category: _visual_order.append(card)
+	# Corrective Core Passes in Beta follow the three action types.
 	for category in [&"graphics", &"sound", &"technology", &"design"]:
 		for card in cards:
-			if card.card_data.primary_stat == category: _visual_order.append(card)
+			if card.card_data.primary_stat == category and card not in _visual_order: _visual_order.append(card)
 	for card in cards:
 		if card not in _visual_order: _visual_order.append(card)
 	arrange()

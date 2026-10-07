@@ -66,8 +66,10 @@ func configure(controller: Control, title: String) -> void:
 	pool_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	organize_button = Button.new()
 	organize_button.name = "OrganizePoolButton"
-	organize_button.text = "Sort by Category"
-	organize_button.tooltip_text = "Alternate category (Graphics, Sound, Tech, Design) and Scope (highest first). The button names the next sort. No cash, cycle or redraw cost."
+	var fan: CardFan = phase.get_node("%HandContainer")
+	fan.beta_sort_only = title == "Beta"
+	organize_button.text = "Sort" if fan.beta_sort_only else "Sort by Category"
+	organize_button.tooltip_text = "Group QA, Marketing, then Insider cards; corrective Core Passes follow. Replacements keep this order after entering. No cash, cycle or redraw cost." if fan.beta_sort_only else "Alternate category (Graphics, Sound, Tech, Design) and Scope (highest first). The button names the next sort; replacements keep the current sort after entering. No cash, cycle or redraw cost."
 	organize_button.pressed.connect(func():
 		if hand_motion != null and hand_motion.busy: return
 		organize_button.text = phase.get_node("%HandContainer").cycle_organization()

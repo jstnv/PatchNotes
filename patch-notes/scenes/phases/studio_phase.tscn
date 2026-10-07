@@ -167,6 +167,14 @@ unique_name_in_owner = true
 text = "Monthly Sales"
 custom_minimum_size = Vector2(140, 44)
 
+[node name="CampaignButton" type="Button" parent="SummaryPanel/Margin/Layout/Header"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 44)
+text = "Run Campaign · $100 · 1 cycle"
+disabled = true
+tooltip_text = "Target this released game for a one-month Awareness boost. One productive cycle; only at the first sales cycle of Month 2 or later."
+
 [node name="CloseSummaryButton" type="Button" parent="SummaryPanel/Margin/Layout/Header"]
 layout_mode = 2
 unique_name_in_owner = true
@@ -272,15 +280,6 @@ autowrap_mode = 3
 layout_mode = 2
 unique_name_in_owner = true
 autowrap_mode = 3
-
-[node name="CampaignButton" type="Button" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
-layout_mode = 2
-unique_name_in_owner = true
-custom_minimum_size = Vector2(270, 44)
-size_flags_horizontal = 0
-text = "Run Campaign · $100 · 1 cycle"
-disabled = true
-tooltip_text = "Target this released game for a one-month Awareness boost. One productive cycle; only at the first sales cycle of Month 2 or later."
 
 [node name="MarketLabel" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
 layout_mode = 2

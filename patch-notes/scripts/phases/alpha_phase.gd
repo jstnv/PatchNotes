@@ -232,7 +232,7 @@ func _can_proceed_to_beta() -> bool:
 		_phase_state == PhaseState.ACTIVE_DEVELOPMENT
 		and _project_state != null
 		and _project_state.can_advance_cycle()
-		and (_run_state == null or _run_state.can_advance_calendar_cycle())
+		and (_run_state == null or _run_state.can_transition_without_productive_cycle())
 		and not _project_state.has_alpha_finalization()
 		and _has_valid_active_candidate_pool()
 		and _build_alpha_feature_history(false).valid
