@@ -66,6 +66,12 @@ func _finance_route() -> Dictionary:
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Rent Route %d" % declared_seed
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	# Studio creation now requires one explicit background and confirmation.
+	var background: OptionButton = menu.get_node("CenterContainer/MenuLayout/StudioTraits/Background")
+	background.select(1)
+	menu.call("_refresh_traits")
+	menu.get_node("CenterContainer/MenuLayout/StudioTraits/ReviewChoices").pressed.emit()
+	menu.get_node("CenterContainer/MenuLayout/CreationReview/ConfirmStudio").pressed.emit()
 	var run: RunState = game.run_state
 	if not run.has_method("get_studio_finance_report"):
 		out.errors.append("Task29 finance API unavailable")

@@ -602,7 +602,7 @@ func get_awareness_result() -> AwarenessResult:
 func commit_awareness_result(result: AwarenessResult) -> bool:
 	if not _has_beta_finalization or _review_result == null or _awareness_result != null or result == null:
 		return false
-	if result.get_formula_id() != &"primitive_awareness_v1" or result.get_marketing_output_used() != _marketing_output or result.get_total_awareness() < 0 or not is_finite(result.get_awareness_multiplier()):
+	if result.get_formula_id() != &"primitive_awareness_v2" or result.get_marketing_output_used() != _marketing_output or result.get_total_awareness() < 0 or not is_finite(result.get_awareness_multiplier()):
 		return false
 	_awareness_result = result
 	values_changed.emit()

@@ -11,6 +11,7 @@ signal sales_changed
 signal contracts_changed
 signal publishers_changed
 signal finance_changed
+signal fans_changed
 
 const CENTS_PER_DOLLAR := 100
 const MAX_REDRAWS := 4
@@ -51,6 +52,19 @@ var _starter_selection_confirmed := false
 var _first_tutorial_project_id: StringName
 var _first_game_tutorial: FirstGameTutorial
 var _studio_finance: Dictionary = {}
+var _fanbase: Dictionary = StudioFanbase.create()
+
+
+func get_fans() -> int:
+	return int(_fanbase.fans)
+
+
+func get_fanbase_history() -> Array:
+	return _fanbase.months.duplicate(true)
+
+
+func get_fanbase_snapshot() -> Dictionary:
+	return _fanbase.duplicate(true)
 
 
 ## Arm only at the successful first-project creation boundary, never on a view.
@@ -607,10 +621,13 @@ func register_release(project: ProjectState) -> bool:
 	var year := get_current_year()
 	var title := _resolve_release_title(project.get_base_name(), year)
 	var record := _create_release_sales_record(project)
+	var next_fans := StudioFanbase.register_release(_fanbase, record, project.get_awareness_result().get_existing_fans())
+	if next_fans.is_empty(): return false
 	record.base_name = project.get_base_name()
 	record.release_title = title
 	record.release_year = year
 	_released_games[id] = record
+	_fanbase = next_fans
 	_release_metadata[id] = {"base_name": project.get_base_name(), "genre": project.get_genre_id(),
 		"theme": project.get_theme_id(), "genre_ratios": project.get_genre_ratios(),
 		"release_title": title, "release_year": year, "release_cycle": _completed_run_cycles,
@@ -621,6 +638,7 @@ func register_release(project: ProjectState) -> bool:
 		_sidestreet_entitlements[id] = {"offer_id": StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID, id]), "state": null}
 	_refresh_publisher_unlocks()
 	sales_changed.emit()
+	fans_changed.emit()
 	return true
 
 func _capture_release_review(project: ProjectState) -> Dictionary:
@@ -965,6 +983,8 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 		if release_earned < 0 or release_earned > MAX_SIGNED_INT - earned: return {}
 		earned += release_earned
 		next_records[id] = next
+	var fan_plan := StudioFanbase.plan(_fanbase, _released_games, next_records, _completed_run_cycles + 1)
+	if fan_plan.is_empty(): return {}
 	if payable > MAX_SIGNED_INT - cash_after_action:
 		return {}
 	var finance_plan: Dictionary = {}
@@ -973,7 +993,7 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 			finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
 		finance_plan = StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles + 1, _cash_cents, direct_cash_delta_cents, finance_kind, earned, payable, true, source_id)
 		if finance_plan.is_empty(): return {}
-	return {"records": next_records, "payable": payable, "finance": finance_plan}
+	return {"records": next_records, "payable": payable, "finance": finance_plan, "fans": fan_plan}
 
 
 ## The direct-effects callback must be synchronous and atomic on false, using
@@ -1016,6 +1036,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	_completed_run_cycles += 1
 	_available_redraws = mini(MAX_REDRAWS, _available_redraws + 1)
 	_released_games = plan.records
+	var previous_fans := get_fans()
+	_fanbase = plan.fans
 	if plan.payable > 0:
 		add_cash_cents(plan.payable)
 	if not plan.finance.is_empty():
@@ -1040,6 +1062,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 		contracts_changed.emit()
 	if not _released_games.is_empty():
 		sales_changed.emit()
+	if get_fans() != previous_fans or _completed_run_cycles % 2 == 0:
+		fans_changed.emit()
 	calendar_changed.emit()
 	_publishing_cycle = false
 	return true

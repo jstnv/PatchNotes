@@ -8,6 +8,8 @@ var stats: Array[Label] = []
 var footer: Label
 var footer_panel: PanelContainer
 var cash_button: Button
+var fans_button: Button
+var fans_dialog: AcceptDialog
 var studio_finances: StudioFinances
 var settings_menu: DemoSettingsMenu
 var settings_button: Button
@@ -89,6 +91,12 @@ func _ready() -> void:
 	settings_button.text = "Settings"
 	settings_button.pressed.connect(show_settings)
 	footer_row.add_child(settings_button)
+	fans_button = Button.new()
+	fans_button.name = "FansButton"
+	fans_button.custom_minimum_size.x = 108
+	fans_button.text = "Fans: 0"
+	fans_button.pressed.connect(show_fans)
+	footer_row.add_child(fans_button)
 	cash_button = Button.new()
 	cash_button.name = "CashButton"
 	cash_button.custom_minimum_size.x = 148
@@ -96,6 +104,10 @@ func _ready() -> void:
 	cash_button.tooltip_text = "Open Studio Finances: actual monthly revenue, costs, rent and available cash. Browsing is free."
 	cash_button.pressed.connect(show_finances)
 	footer_row.add_child(cash_button)
+	fans_dialog = AcceptDialog.new()
+	fans_dialog.name = "FanHistory"
+	fans_dialog.title = "Studio Fans"
+	add_child(fans_dialog)
 	studio_finances = StudioFinances.new()
 	studio_finances.name = "StudioFinances"
 	add_child(studio_finances)
@@ -121,6 +133,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 		if run.calendar_changed.is_connected(refresh): run.calendar_changed.disconnect(refresh)
 		if run.features_changed.is_connected(refresh): run.features_changed.disconnect(refresh)
 		if run.finance_changed.is_connected(refresh): run.finance_changed.disconnect(refresh)
+		if run.fans_changed.is_connected(refresh): run.fans_changed.disconnect(refresh)
 	project = project_state
 	run = run_state
 	if project != null:
@@ -131,12 +144,14 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 		run.calendar_changed.connect(refresh)
 		run.features_changed.connect(refresh)
 		run.finance_changed.connect(refresh)
+		run.fans_changed.connect(refresh)
 	studio_finances.bind_run(run)
 	refresh()
 
 func set_phase(controller: Control) -> void:
 	settings_menu.close()
 	studio_finances.close()
+	fans_dialog.hide()
 	_presented_scores.clear()
 	for pulse in _score_pulses:
 		if is_instance_valid(pulse): pulse.queue_free()
@@ -210,6 +225,17 @@ func show_finances() -> bool:
 	if phase is ContractPhase: return_label = "Back to Contract"
 	elif phase is PostGameReview: return_label = "Back to Review"
 	return studio_finances.open(return_label)
+
+
+func show_fans() -> void:
+	if run == null or phase is MainMenu: return
+	var rows: Array = run.get_fanbase_history()
+	var lines: Array[String] = ["Current fans: %d" % run.get_fans(), "Fans change when monthly sales settle."]
+	for index in range(maxi(0, rows.size() - 12), rows.size()):
+		var row: Dictionary = rows[index]
+		lines.append("Month %d: %d + %d - %d = %d" % [row.month, row.starting, row.gained, row.lost, row.ending])
+	fans_dialog.dialog_text = "\n".join(lines)
+	fans_dialog.popup_centered(Vector2i(440, 340))
 
 
 func show_current_tip() -> void:
@@ -337,6 +363,8 @@ func _production_guidance() -> Dictionary:
 func refresh() -> void:
 	if run == null:
 		cash_button.disabled = true
+		fans_button.disabled = true
+		fans_button.text = "Fans: —"
 		cash_button.text = "Cash: —"
 		footer.text = "Date: —     |     Cycle: —     |     Next Bill: —"
 		return
@@ -394,6 +422,10 @@ func _show_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
 
 func _refresh_footer() -> void:
 	var cents := run.get_cash_cents()
+	fans_button.text = "Fans: %d" % run.get_fans()
+	fans_button.disabled = phase is MainMenu or not is_instance_valid(phase)
+	var fan_history: Array = run.get_fanbase_history()
+	fans_button.tooltip_text = "Monthly fan history. No monthly settlement yet." if fan_history.is_empty() else "Month %d · +%d gained · -%d lost · %d total" % [fan_history[-1].month, fan_history[-1].gained, fan_history[-1].lost, fan_history[-1].ending]
 	cash_button.text = "Cash: %s" % (CashFormatter.format_exact_cents(cents) if cents >= 0 else "—")
 	cash_button.disabled = phase is MainMenu or not is_instance_valid(phase)
 	var finances := run.get_studio_finance_report()

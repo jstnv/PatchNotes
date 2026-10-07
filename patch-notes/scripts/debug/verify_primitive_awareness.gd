@@ -39,7 +39,7 @@ func _verify_formula_examples() -> void:
 	for marketing: int in examples:
 		var state := _launch_state(marketing)
 		var result := PrimitiveAwarenessCalculator.calculate(state)
-		_expect(result != null and result.get_formula_id() == &"primitive_awareness_v1", "Marketing %d produces the locked profile" % marketing)
+		_expect(result != null and result.get_formula_id() == &"primitive_awareness_v2", "Marketing %d produces the locked profile" % marketing)
 		_expect(result.get_marketing_output_used() == marketing and result.get_launch_marketing() == marketing and result.get_current_launch_marketing() == marketing, "Marketing %d converts exactly through month-one Launch Marketing" % marketing)
 		_expect(result.get_launch_marketing_decay_basis_points() == 10000 and result.get_organic_awareness() == 100 and result.get_existing_fans() == 0 and result.get_fan_awareness() == 0, "Marketing %d uses exact Primitive constants" % marketing)
 		_expect(result.get_total_awareness() == examples[marketing][0] and _equal(result.get_awareness_multiplier(), examples[marketing][1]), "Marketing %d produces exact Total Awareness and multiplier" % marketing)

@@ -382,7 +382,7 @@ func _ensure_review_result() -> bool:
 func _ensure_awareness_result() -> bool:
 	if project_state.has_awareness_result():
 		return true
-	var result := PrimitiveAwarenessCalculator.calculate(project_state)
+	var result := PrimitiveAwarenessCalculator.calculate(project_state, run_state.get_fans())
 	return result != null and project_state.commit_awareness_result(result)
 
 

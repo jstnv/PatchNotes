@@ -24,6 +24,7 @@ func _run() -> void:
 	verify_tutorial(hud, project, run, game.get("_active_phase"))
 	var header := hud.get_node("PersistentHeader")
 	var footer := hud.footer
+	check(hud.settings_button.get_global_rect().end.x <= hud.fans_button.get_global_rect().position.x and hud.fans_button.get_global_rect().end.x <= hud.cash_button.get_global_rect().position.x and hud.cash_button.get_global_rect().end.x <= hud.footer_panel.get_global_rect().end.x, "Settings, fan and cash controls fit the 1152px footer")
 	for title: String in ["Design", "Alpha", "Beta"]:
 		var phase: Control = game.get("_active_phase")
 		check(hud.tutorial_context == StringName(title.to_lower()), title + ": real transition selects relevant guidance")
