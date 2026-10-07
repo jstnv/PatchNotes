@@ -1,0 +1,2928 @@
+{
+  "method": "two consecutive completed months with positive settled sales; compare 25% of average post-rent surplus against 25% of min(latest, average) post-rent surplus; fixed-action loan overlay",
+  "max_payment_cents": 4666,
+  "routes": [
+    {
+      "route": "route_base_early_ordinary_1104.json",
+      "funding": "base",
+      "band": "early",
+      "policy": "ordinary",
+      "seed": 1104,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "design",
+      "issue_cash_cents": 571678,
+      "quote": {
+        "first_sales_cents": 279020,
+        "latest_sales_cents": 74825,
+        "average_sales_cents": 176922,
+        "average_capacity_cents": 31730,
+        "conservative_sales_cents": 74825,
+        "conservative_capacity_cents": 6206,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 577474
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 498130
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 437036
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 387390
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 335688
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 560810
+          }
+        ],
+        "low_cash_cents": 335688,
+        "low_cash_cycle": 26,
+        "cash_at_route_end_cents": 560810,
+        "principal_remaining_cents": 25004
+      }
+    },
+    {
+      "route": "route_base_early_ordinary_4417.json",
+      "funding": "base",
+      "band": "early",
+      "policy": "ordinary",
+      "seed": 4417,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "design",
+      "issue_cash_cents": 586056,
+      "quote": {
+        "first_sales_cents": 296503,
+        "latest_sales_cents": 79720,
+        "average_sales_cents": 188111,
+        "average_capacity_cents": 34527,
+        "conservative_sales_cents": 79720,
+        "conservative_capacity_cents": 7430,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 589453
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 493612
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 442721
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 391677
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 338576
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 601461
+          }
+        ],
+        "low_cash_cents": 338576,
+        "low_cash_cycle": 26,
+        "cash_at_route_end_cents": 601461,
+        "principal_remaining_cents": 25004
+      }
+    },
+    {
+      "route": "route_base_early_synergy_1104.json",
+      "funding": "base",
+      "band": "early",
+      "policy": "synergy",
+      "seed": 1104,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "design",
+      "issue_cash_cents": 539315,
+      "quote": {
+        "first_sales_cents": 250349,
+        "latest_sales_cents": 67133,
+        "average_sales_cents": 158741,
+        "average_capacity_cents": 27185,
+        "conservative_sales_cents": 67133,
+        "conservative_capacity_cents": 4283,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": false
+      },
+      "overlay": null
+    },
+    {
+      "route": "route_base_early_synergy_4417.json",
+      "funding": "base",
+      "band": "early",
+      "policy": "synergy",
+      "seed": 4417,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "design",
+      "issue_cash_cents": 602599,
+      "quote": {
+        "first_sales_cents": 288810,
+        "latest_sales_cents": 77623,
+        "average_sales_cents": 183216,
+        "average_capacity_cents": 33304,
+        "conservative_sales_cents": 77623,
+        "conservative_capacity_cents": 6905,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 584597
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 506057
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 436467
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 384723
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 331623
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 615989
+          }
+        ],
+        "low_cash_cents": 331623,
+        "low_cash_cycle": 26,
+        "cash_at_route_end_cents": 615989,
+        "principal_remaining_cents": 25004
+      }
+    },
+    {
+      "route": "route_base_middle_ordinary_1104.json",
+      "funding": "base",
+      "band": "middle",
+      "policy": "ordinary",
+      "seed": 1104,
+      "first_settlement_cycle": 16,
+      "second_settlement_cycle": 18,
+      "issue_action_index": 19,
+      "issue_phase": "design",
+      "issue_cash_cents": 623063,
+      "quote": {
+        "first_sales_cents": 369929,
+        "latest_sales_cents": 99301,
+        "average_sales_cents": 234615,
+        "average_capacity_cents": 46153,
+        "conservative_sales_cents": 99301,
+        "conservative_capacity_cents": 12325,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 20,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 20,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 650537
+          },
+          {
+            "number": 2,
+            "due_cycle": 22,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 596276
+          },
+          {
+            "number": 3,
+            "due_cycle": 24,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 547071
+          },
+          {
+            "number": 4,
+            "due_cycle": 26,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 496817
+          },
+          {
+            "number": 5,
+            "due_cycle": 28,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 450010
+          },
+          {
+            "number": 6,
+            "due_cycle": 30,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 400447
+          },
+          {
+            "number": 7,
+            "due_cycle": 32,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 703233
+          }
+        ],
+        "low_cash_cents": 400447,
+        "low_cash_cycle": 30,
+        "cash_at_route_end_cents": 703233,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_base_middle_ordinary_4417.json",
+      "funding": "base",
+      "band": "middle",
+      "policy": "ordinary",
+      "seed": 4417,
+      "first_settlement_cycle": 16,
+      "second_settlement_cycle": 18,
+      "issue_action_index": 19,
+      "issue_phase": "design",
+      "issue_cash_cents": 600587,
+      "quote": {
+        "first_sales_cents": 350349,
+        "latest_sales_cents": 94405,
+        "average_sales_cents": 222377,
+        "average_capacity_cents": 43094,
+        "conservative_sales_cents": 94405,
+        "conservative_capacity_cents": 11101,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 20,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 20,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 614474
+          },
+          {
+            "number": 2,
+            "due_cycle": 22,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 542626
+          },
+          {
+            "number": 3,
+            "due_cycle": 24,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 473931
+          },
+          {
+            "number": 4,
+            "due_cycle": 26,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 424984
+          },
+          {
+            "number": 5,
+            "due_cycle": 28,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 373283
+          },
+          {
+            "number": 6,
+            "due_cycle": 30,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 320223
+          },
+          {
+            "number": 7,
+            "due_cycle": 32,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 704828
+          }
+        ],
+        "low_cash_cents": 320223,
+        "low_cash_cycle": 30,
+        "cash_at_route_end_cents": 704828,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_base_middle_synergy_1104.json",
+      "funding": "base",
+      "band": "middle",
+      "policy": "synergy",
+      "seed": 1104,
+      "first_settlement_cycle": 16,
+      "second_settlement_cycle": 18,
+      "issue_action_index": 19,
+      "issue_phase": "design",
+      "issue_cash_cents": 545350,
+      "quote": {
+        "first_sales_cents": 301398,
+        "latest_sales_cents": 81119,
+        "average_sales_cents": 191258,
+        "average_capacity_cents": 35314,
+        "conservative_sales_cents": 81119,
+        "conservative_capacity_cents": 7779,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 20,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 20,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 556740
+          },
+          {
+            "number": 2,
+            "due_cycle": 22,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 499892
+          },
+          {
+            "number": 3,
+            "due_cycle": 24,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 425896
+          },
+          {
+            "number": 4,
+            "due_cycle": 26,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 378348
+          },
+          {
+            "number": 5,
+            "due_cycle": 28,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 327346
+          },
+          {
+            "number": 6,
+            "due_cycle": 30,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 274286
+          },
+          {
+            "number": 7,
+            "due_cycle": 32,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 589954
+          }
+        ],
+        "low_cash_cents": 274286,
+        "low_cash_cycle": 30,
+        "cash_at_route_end_cents": 589954,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_base_middle_synergy_4417.json",
+      "funding": "base",
+      "band": "middle",
+      "policy": "synergy",
+      "seed": 4417,
+      "first_settlement_cycle": 16,
+      "second_settlement_cycle": 18,
+      "issue_action_index": 19,
+      "issue_phase": "design",
+      "issue_cash_cents": 695543,
+      "quote": {
+        "first_sales_cents": 411188,
+        "latest_sales_cents": 111189,
+        "average_sales_cents": 261188,
+        "average_capacity_cents": 52797,
+        "conservative_sales_cents": 111189,
+        "conservative_capacity_cents": 15297,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 20,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 20,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 702716
+          },
+          {
+            "number": 2,
+            "due_cycle": 22,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 644959
+          },
+          {
+            "number": 3,
+            "due_cycle": 24,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 586558
+          },
+          {
+            "number": 4,
+            "due_cycle": 26,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 537807
+          },
+          {
+            "number": 5,
+            "due_cycle": 28,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 488203
+          },
+          {
+            "number": 6,
+            "due_cycle": 30,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 436542
+          },
+          {
+            "number": 7,
+            "due_cycle": 32,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 904167
+          }
+        ],
+        "low_cash_cents": 436542,
+        "low_cash_cycle": 30,
+        "cash_at_route_end_cents": 904167,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_base_odd_ordinary_1104.json",
+      "funding": "base",
+      "band": "odd",
+      "policy": "ordinary",
+      "seed": 1104,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "predevelopment",
+      "issue_cash_cents": 630252,
+      "quote": {
+        "first_sales_cents": 167832,
+        "latest_sales_cents": 212587,
+        "average_sales_cents": 190209,
+        "average_capacity_cents": 35052,
+        "conservative_sales_cents": 190209,
+        "conservative_capacity_cents": 35052,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 627914
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 608850
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 532344
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 474089
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 427283
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 377020
+          },
+          {
+            "number": 7,
+            "due_cycle": 30,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 658128
+          }
+        ],
+        "low_cash_cents": 377020,
+        "low_cash_cycle": 28,
+        "cash_at_route_end_cents": 658128,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_base_odd_ordinary_4417.json",
+      "funding": "base",
+      "band": "odd",
+      "policy": "ordinary",
+      "seed": 4417,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "predevelopment",
+      "issue_cash_cents": 634643,
+      "quote": {
+        "first_sales_cents": 171328,
+        "latest_sales_cents": 217482,
+        "average_sales_cents": 194405,
+        "average_capacity_cents": 36101,
+        "conservative_sales_cents": 194405,
+        "conservative_capacity_cents": 36101,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 633509
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 604150
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 508351
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 458201
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 407898
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 355538
+          },
+          {
+            "number": 7,
+            "due_cycle": 30,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 687694
+          }
+        ],
+        "low_cash_cents": 355538,
+        "low_cash_cycle": 28,
+        "cash_at_route_end_cents": 687694,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_base_odd_synergy_1104.json",
+      "funding": "base",
+      "band": "odd",
+      "policy": "synergy",
+      "seed": 1104,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "predevelopment",
+      "issue_cash_cents": 559336,
+      "quote": {
+        "first_sales_cents": 130769,
+        "latest_sales_cents": 165734,
+        "average_sales_cents": 148251,
+        "average_capacity_cents": 24562,
+        "conservative_sales_cents": 148251,
+        "conservative_capacity_cents": 24562,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 542817
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 505067
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 419770
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 357523
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 305821
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 252762
+          },
+          {
+            "number": 7,
+            "due_cycle": 30,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 540457
+          }
+        ],
+        "low_cash_cents": 252762,
+        "low_cash_cycle": 28,
+        "cash_at_route_end_cents": 540457,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_base_odd_synergy_4417.json",
+      "funding": "base",
+      "band": "odd",
+      "policy": "synergy",
+      "seed": 4417,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "predevelopment",
+      "issue_cash_cents": 610403,
+      "quote": {
+        "first_sales_cents": 159440,
+        "latest_sales_cents": 202797,
+        "average_sales_cents": 181118,
+        "average_capacity_cents": 32779,
+        "conservative_sales_cents": 181118,
+        "conservative_capacity_cents": 32779,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 615373
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 571518
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 485921
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 421373
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 369672
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 316612
+          },
+          {
+            "number": 7,
+            "due_cycle": 30,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 687734
+          }
+        ],
+        "low_cash_cents": 316612,
+        "low_cash_cycle": 28,
+        "cash_at_route_end_cents": 687734,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_base_slow_ordinary_1104.json",
+      "funding": "base",
+      "band": "slow",
+      "policy": "ordinary",
+      "seed": 1104,
+      "first_settlement_cycle": 20,
+      "second_settlement_cycle": 22,
+      "issue_action_index": 23,
+      "issue_phase": "design",
+      "issue_cash_cents": 553832,
+      "quote": {
+        "first_sales_cents": 393006,
+        "latest_sales_cents": 106993,
+        "average_sales_cents": 249999,
+        "average_capacity_cents": 49999,
+        "conservative_sales_cents": 106993,
+        "conservative_capacity_cents": 14248,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 24,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 24,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 588299
+          },
+          {
+            "number": 2,
+            "due_cycle": 26,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 574934
+          },
+          {
+            "number": 3,
+            "due_cycle": 28,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 501225
+          },
+          {
+            "number": 4,
+            "due_cycle": 30,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 445768
+          },
+          {
+            "number": 5,
+            "due_cycle": 32,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 401059
+          },
+          {
+            "number": 6,
+            "due_cycle": 34,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 352894
+          },
+          {
+            "number": 7,
+            "due_cycle": 36,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 301975
+          },
+          {
+            "number": 8,
+            "due_cycle": 38,
+            "payment_cents": 4374,
+            "principal_cents": 4166,
+            "interest_cents": 208,
+            "cash_after_cents": 249699
+          },
+          {
+            "number": 9,
+            "due_cycle": 40,
+            "payment_cents": 4333,
+            "principal_cents": 4166,
+            "interest_cents": 167,
+            "cash_after_cents": 644176
+          }
+        ],
+        "low_cash_cents": 249699,
+        "low_cash_cycle": 38,
+        "cash_at_route_end_cents": 644176,
+        "principal_remaining_cents": 12506
+      }
+    },
+    {
+      "route": "route_base_slow_ordinary_4417.json",
+      "funding": "base",
+      "band": "slow",
+      "policy": "ordinary",
+      "seed": 4417,
+      "first_settlement_cycle": 20,
+      "second_settlement_cycle": 22,
+      "issue_action_index": 23,
+      "issue_phase": "design",
+      "issue_cash_cents": 663503,
+      "quote": {
+        "first_sales_cents": 495104,
+        "latest_sales_cents": 133566,
+        "average_sales_cents": 314335,
+        "average_capacity_cents": 66083,
+        "conservative_sales_cents": 133566,
+        "conservative_capacity_cents": 20891,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 24,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 24,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 710956
+          },
+          {
+            "number": 2,
+            "due_cycle": 26,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 700283
+          },
+          {
+            "number": 3,
+            "due_cycle": 28,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 617071
+          },
+          {
+            "number": 4,
+            "due_cycle": 30,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 576711
+          },
+          {
+            "number": 5,
+            "due_cycle": 32,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 532702
+          },
+          {
+            "number": 6,
+            "due_cycle": 34,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 484538
+          },
+          {
+            "number": 7,
+            "due_cycle": 36,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 433618
+          },
+          {
+            "number": 8,
+            "due_cycle": 38,
+            "payment_cents": 4374,
+            "principal_cents": 4166,
+            "interest_cents": 208,
+            "cash_after_cents": 381342
+          },
+          {
+            "number": 9,
+            "due_cycle": 40,
+            "payment_cents": 4333,
+            "principal_cents": 4166,
+            "interest_cents": 167,
+            "cash_after_cents": 843652
+          }
+        ],
+        "low_cash_cents": 381342,
+        "low_cash_cycle": 38,
+        "cash_at_route_end_cents": 843652,
+        "principal_remaining_cents": 12506
+      }
+    },
+    {
+      "route": "route_base_slow_synergy_1104.json",
+      "funding": "base",
+      "band": "slow",
+      "policy": "synergy",
+      "seed": 1104,
+      "first_settlement_cycle": 20,
+      "second_settlement_cycle": 22,
+      "issue_action_index": 23,
+      "issue_phase": "design",
+      "issue_cash_cents": 559839,
+      "quote": {
+        "first_sales_cents": 387412,
+        "latest_sales_cents": 105594,
+        "average_sales_cents": 246503,
+        "average_capacity_cents": 49125,
+        "conservative_sales_cents": 105594,
+        "conservative_capacity_cents": 13898,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 24,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 24,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 592208
+          },
+          {
+            "number": 2,
+            "due_cycle": 26,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 578143
+          },
+          {
+            "number": 3,
+            "due_cycle": 28,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 504036
+          },
+          {
+            "number": 4,
+            "due_cycle": 30,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 450879
+          },
+          {
+            "number": 5,
+            "due_cycle": 32,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 405471
+          },
+          {
+            "number": 6,
+            "due_cycle": 34,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 356608
+          },
+          {
+            "number": 7,
+            "due_cycle": 36,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 305688
+          },
+          {
+            "number": 8,
+            "due_cycle": 38,
+            "payment_cents": 4374,
+            "principal_cents": 4166,
+            "interest_cents": 208,
+            "cash_after_cents": 253412
+          },
+          {
+            "number": 9,
+            "due_cycle": 40,
+            "payment_cents": 4333,
+            "principal_cents": 4166,
+            "interest_cents": 167,
+            "cash_after_cents": 655876
+          }
+        ],
+        "low_cash_cents": 253412,
+        "low_cash_cycle": 38,
+        "cash_at_route_end_cents": 655876,
+        "principal_remaining_cents": 12506
+      }
+    },
+    {
+      "route": "route_base_slow_synergy_4417.json",
+      "funding": "base",
+      "band": "slow",
+      "policy": "synergy",
+      "seed": 4417,
+      "first_settlement_cycle": 20,
+      "second_settlement_cycle": 22,
+      "issue_action_index": 23,
+      "issue_phase": "design",
+      "issue_cash_cents": 692046,
+      "quote": {
+        "first_sales_cents": 487412,
+        "latest_sales_cents": 131468,
+        "average_sales_cents": 309440,
+        "average_capacity_cents": 64860,
+        "conservative_sales_cents": 131468,
+        "conservative_capacity_cents": 20367,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 24,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 24,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 717401
+          },
+          {
+            "number": 2,
+            "due_cycle": 26,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 710329
+          },
+          {
+            "number": 3,
+            "due_cycle": 28,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 648418
+          },
+          {
+            "number": 4,
+            "due_cycle": 30,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 597660
+          },
+          {
+            "number": 5,
+            "due_cycle": 32,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 539951
+          },
+          {
+            "number": 6,
+            "due_cycle": 34,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 491087
+          },
+          {
+            "number": 7,
+            "due_cycle": 36,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 440168
+          },
+          {
+            "number": 8,
+            "due_cycle": 38,
+            "payment_cents": 4374,
+            "principal_cents": 4166,
+            "interest_cents": 208,
+            "cash_after_cents": 387892
+          },
+          {
+            "number": 9,
+            "due_cycle": 40,
+            "payment_cents": 4333,
+            "principal_cents": 4166,
+            "interest_cents": 167,
+            "cash_after_cents": 941614
+          }
+        ],
+        "low_cash_cents": 387892,
+        "low_cash_cycle": 38,
+        "cash_at_route_end_cents": 941614,
+        "principal_remaining_cents": 12506
+      }
+    },
+    {
+      "route": "route_trait_early_ordinary_1104.json",
+      "funding": "trait",
+      "band": "early",
+      "policy": "ordinary",
+      "seed": 1104,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "design",
+      "issue_cash_cents": 591678,
+      "quote": {
+        "first_sales_cents": 279020,
+        "latest_sales_cents": 74825,
+        "average_sales_cents": 176922,
+        "average_capacity_cents": 31730,
+        "conservative_sales_cents": 74825,
+        "conservative_capacity_cents": 6206,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 597474
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 518130
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 457036
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 407390
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 355688
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 580810
+          }
+        ],
+        "low_cash_cents": 355688,
+        "low_cash_cycle": 26,
+        "cash_at_route_end_cents": 580810,
+        "principal_remaining_cents": 25004
+      }
+    },
+    {
+      "route": "route_trait_early_ordinary_4417.json",
+      "funding": "trait",
+      "band": "early",
+      "policy": "ordinary",
+      "seed": 4417,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "design",
+      "issue_cash_cents": 606056,
+      "quote": {
+        "first_sales_cents": 296503,
+        "latest_sales_cents": 79720,
+        "average_sales_cents": 188111,
+        "average_capacity_cents": 34527,
+        "conservative_sales_cents": 79720,
+        "conservative_capacity_cents": 7430,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 609453
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 513612
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 462721
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 411677
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 358576
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 621461
+          }
+        ],
+        "low_cash_cents": 358576,
+        "low_cash_cycle": 26,
+        "cash_at_route_end_cents": 621461,
+        "principal_remaining_cents": 25004
+      }
+    },
+    {
+      "route": "route_trait_early_synergy_1104.json",
+      "funding": "trait",
+      "band": "early",
+      "policy": "synergy",
+      "seed": 1104,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "design",
+      "issue_cash_cents": 559315,
+      "quote": {
+        "first_sales_cents": 250349,
+        "latest_sales_cents": 67133,
+        "average_sales_cents": 158741,
+        "average_capacity_cents": 27185,
+        "conservative_sales_cents": 67133,
+        "conservative_capacity_cents": 4283,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": false
+      },
+      "overlay": null
+    },
+    {
+      "route": "route_trait_early_synergy_4417.json",
+      "funding": "trait",
+      "band": "early",
+      "policy": "synergy",
+      "seed": 4417,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "design",
+      "issue_cash_cents": 622599,
+      "quote": {
+        "first_sales_cents": 288810,
+        "latest_sales_cents": 77623,
+        "average_sales_cents": 183216,
+        "average_capacity_cents": 33304,
+        "conservative_sales_cents": 77623,
+        "conservative_capacity_cents": 6905,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 604597
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 526057
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 456467
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 404723
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 351623
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 635989
+          }
+        ],
+        "low_cash_cents": 351623,
+        "low_cash_cycle": 26,
+        "cash_at_route_end_cents": 635989,
+        "principal_remaining_cents": 25004
+      }
+    },
+    {
+      "route": "route_trait_middle_ordinary_1104.json",
+      "funding": "trait",
+      "band": "middle",
+      "policy": "ordinary",
+      "seed": 1104,
+      "first_settlement_cycle": 16,
+      "second_settlement_cycle": 18,
+      "issue_action_index": 19,
+      "issue_phase": "design",
+      "issue_cash_cents": 643063,
+      "quote": {
+        "first_sales_cents": 369929,
+        "latest_sales_cents": 99301,
+        "average_sales_cents": 234615,
+        "average_capacity_cents": 46153,
+        "conservative_sales_cents": 99301,
+        "conservative_capacity_cents": 12325,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 20,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 20,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 670537
+          },
+          {
+            "number": 2,
+            "due_cycle": 22,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 616276
+          },
+          {
+            "number": 3,
+            "due_cycle": 24,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 567071
+          },
+          {
+            "number": 4,
+            "due_cycle": 26,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 516817
+          },
+          {
+            "number": 5,
+            "due_cycle": 28,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 470010
+          },
+          {
+            "number": 6,
+            "due_cycle": 30,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 420447
+          },
+          {
+            "number": 7,
+            "due_cycle": 32,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 723233
+          }
+        ],
+        "low_cash_cents": 420447,
+        "low_cash_cycle": 30,
+        "cash_at_route_end_cents": 723233,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_trait_middle_ordinary_4417.json",
+      "funding": "trait",
+      "band": "middle",
+      "policy": "ordinary",
+      "seed": 4417,
+      "first_settlement_cycle": 16,
+      "second_settlement_cycle": 18,
+      "issue_action_index": 19,
+      "issue_phase": "design",
+      "issue_cash_cents": 620587,
+      "quote": {
+        "first_sales_cents": 350349,
+        "latest_sales_cents": 94405,
+        "average_sales_cents": 222377,
+        "average_capacity_cents": 43094,
+        "conservative_sales_cents": 94405,
+        "conservative_capacity_cents": 11101,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 20,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 20,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 634474
+          },
+          {
+            "number": 2,
+            "due_cycle": 22,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 562626
+          },
+          {
+            "number": 3,
+            "due_cycle": 24,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 493931
+          },
+          {
+            "number": 4,
+            "due_cycle": 26,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 444984
+          },
+          {
+            "number": 5,
+            "due_cycle": 28,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 393283
+          },
+          {
+            "number": 6,
+            "due_cycle": 30,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 340223
+          },
+          {
+            "number": 7,
+            "due_cycle": 32,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 724828
+          }
+        ],
+        "low_cash_cents": 340223,
+        "low_cash_cycle": 30,
+        "cash_at_route_end_cents": 724828,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_trait_middle_synergy_1104.json",
+      "funding": "trait",
+      "band": "middle",
+      "policy": "synergy",
+      "seed": 1104,
+      "first_settlement_cycle": 16,
+      "second_settlement_cycle": 18,
+      "issue_action_index": 19,
+      "issue_phase": "design",
+      "issue_cash_cents": 565350,
+      "quote": {
+        "first_sales_cents": 301398,
+        "latest_sales_cents": 81119,
+        "average_sales_cents": 191258,
+        "average_capacity_cents": 35314,
+        "conservative_sales_cents": 81119,
+        "conservative_capacity_cents": 7779,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 20,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 20,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 576740
+          },
+          {
+            "number": 2,
+            "due_cycle": 22,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 519892
+          },
+          {
+            "number": 3,
+            "due_cycle": 24,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 445896
+          },
+          {
+            "number": 4,
+            "due_cycle": 26,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 398348
+          },
+          {
+            "number": 5,
+            "due_cycle": 28,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 347346
+          },
+          {
+            "number": 6,
+            "due_cycle": 30,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 294286
+          },
+          {
+            "number": 7,
+            "due_cycle": 32,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 609954
+          }
+        ],
+        "low_cash_cents": 294286,
+        "low_cash_cycle": 30,
+        "cash_at_route_end_cents": 609954,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_trait_middle_synergy_4417.json",
+      "funding": "trait",
+      "band": "middle",
+      "policy": "synergy",
+      "seed": 4417,
+      "first_settlement_cycle": 16,
+      "second_settlement_cycle": 18,
+      "issue_action_index": 19,
+      "issue_phase": "design",
+      "issue_cash_cents": 715543,
+      "quote": {
+        "first_sales_cents": 411188,
+        "latest_sales_cents": 111189,
+        "average_sales_cents": 261188,
+        "average_capacity_cents": 52797,
+        "conservative_sales_cents": 111189,
+        "conservative_capacity_cents": 15297,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 20,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 20,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 722716
+          },
+          {
+            "number": 2,
+            "due_cycle": 22,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 664959
+          },
+          {
+            "number": 3,
+            "due_cycle": 24,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 606558
+          },
+          {
+            "number": 4,
+            "due_cycle": 26,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 557807
+          },
+          {
+            "number": 5,
+            "due_cycle": 28,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 508203
+          },
+          {
+            "number": 6,
+            "due_cycle": 30,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 456542
+          },
+          {
+            "number": 7,
+            "due_cycle": 32,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 924167
+          }
+        ],
+        "low_cash_cents": 456542,
+        "low_cash_cycle": 30,
+        "cash_at_route_end_cents": 924167,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_trait_odd_ordinary_1104.json",
+      "funding": "trait",
+      "band": "odd",
+      "policy": "ordinary",
+      "seed": 1104,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "predevelopment",
+      "issue_cash_cents": 650252,
+      "quote": {
+        "first_sales_cents": 167832,
+        "latest_sales_cents": 212587,
+        "average_sales_cents": 190209,
+        "average_capacity_cents": 35052,
+        "conservative_sales_cents": 190209,
+        "conservative_capacity_cents": 35052,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 647914
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 628850
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 552344
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 494089
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 447283
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 397020
+          },
+          {
+            "number": 7,
+            "due_cycle": 30,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 678128
+          }
+        ],
+        "low_cash_cents": 397020,
+        "low_cash_cycle": 28,
+        "cash_at_route_end_cents": 678128,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_trait_odd_ordinary_4417.json",
+      "funding": "trait",
+      "band": "odd",
+      "policy": "ordinary",
+      "seed": 4417,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "predevelopment",
+      "issue_cash_cents": 654643,
+      "quote": {
+        "first_sales_cents": 171328,
+        "latest_sales_cents": 217482,
+        "average_sales_cents": 194405,
+        "average_capacity_cents": 36101,
+        "conservative_sales_cents": 194405,
+        "conservative_capacity_cents": 36101,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 653509
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 624150
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 528351
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 478201
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 427898
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 375538
+          },
+          {
+            "number": 7,
+            "due_cycle": 30,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 707694
+          }
+        ],
+        "low_cash_cents": 375538,
+        "low_cash_cycle": 28,
+        "cash_at_route_end_cents": 707694,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_trait_odd_synergy_1104.json",
+      "funding": "trait",
+      "band": "odd",
+      "policy": "synergy",
+      "seed": 1104,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "predevelopment",
+      "issue_cash_cents": 579336,
+      "quote": {
+        "first_sales_cents": 130769,
+        "latest_sales_cents": 165734,
+        "average_sales_cents": 148251,
+        "average_capacity_cents": 24562,
+        "conservative_sales_cents": 148251,
+        "conservative_capacity_cents": 24562,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 562817
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 525067
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 439770
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 377523
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 325821
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 272762
+          },
+          {
+            "number": 7,
+            "due_cycle": 30,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 560457
+          }
+        ],
+        "low_cash_cents": 272762,
+        "low_cash_cycle": 28,
+        "cash_at_route_end_cents": 560457,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_trait_odd_synergy_4417.json",
+      "funding": "trait",
+      "band": "odd",
+      "policy": "synergy",
+      "seed": 4417,
+      "first_settlement_cycle": 14,
+      "second_settlement_cycle": 16,
+      "issue_action_index": 17,
+      "issue_phase": "predevelopment",
+      "issue_cash_cents": 630403,
+      "quote": {
+        "first_sales_cents": 159440,
+        "latest_sales_cents": 202797,
+        "average_sales_cents": 181118,
+        "average_capacity_cents": 32779,
+        "conservative_sales_cents": 181118,
+        "conservative_capacity_cents": 32779,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 18,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 18,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 635373
+          },
+          {
+            "number": 2,
+            "due_cycle": 20,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 591518
+          },
+          {
+            "number": 3,
+            "due_cycle": 22,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 505921
+          },
+          {
+            "number": 4,
+            "due_cycle": 24,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 441373
+          },
+          {
+            "number": 5,
+            "due_cycle": 26,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 389672
+          },
+          {
+            "number": 6,
+            "due_cycle": 28,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 336612
+          },
+          {
+            "number": 7,
+            "due_cycle": 30,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 707734
+          }
+        ],
+        "low_cash_cents": 336612,
+        "low_cash_cycle": 28,
+        "cash_at_route_end_cents": 707734,
+        "principal_remaining_cents": 20838
+      }
+    },
+    {
+      "route": "route_trait_slow_ordinary_1104.json",
+      "funding": "trait",
+      "band": "slow",
+      "policy": "ordinary",
+      "seed": 1104,
+      "first_settlement_cycle": 20,
+      "second_settlement_cycle": 22,
+      "issue_action_index": 23,
+      "issue_phase": "design",
+      "issue_cash_cents": 573832,
+      "quote": {
+        "first_sales_cents": 393006,
+        "latest_sales_cents": 106993,
+        "average_sales_cents": 249999,
+        "average_capacity_cents": 49999,
+        "conservative_sales_cents": 106993,
+        "conservative_capacity_cents": 14248,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 24,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 24,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 608299
+          },
+          {
+            "number": 2,
+            "due_cycle": 26,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 594934
+          },
+          {
+            "number": 3,
+            "due_cycle": 28,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 521225
+          },
+          {
+            "number": 4,
+            "due_cycle": 30,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 465768
+          },
+          {
+            "number": 5,
+            "due_cycle": 32,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 421059
+          },
+          {
+            "number": 6,
+            "due_cycle": 34,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 372894
+          },
+          {
+            "number": 7,
+            "due_cycle": 36,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 321975
+          },
+          {
+            "number": 8,
+            "due_cycle": 38,
+            "payment_cents": 4374,
+            "principal_cents": 4166,
+            "interest_cents": 208,
+            "cash_after_cents": 269699
+          },
+          {
+            "number": 9,
+            "due_cycle": 40,
+            "payment_cents": 4333,
+            "principal_cents": 4166,
+            "interest_cents": 167,
+            "cash_after_cents": 664176
+          }
+        ],
+        "low_cash_cents": 269699,
+        "low_cash_cycle": 38,
+        "cash_at_route_end_cents": 664176,
+        "principal_remaining_cents": 12506
+      }
+    },
+    {
+      "route": "route_trait_slow_ordinary_4417.json",
+      "funding": "trait",
+      "band": "slow",
+      "policy": "ordinary",
+      "seed": 4417,
+      "first_settlement_cycle": 20,
+      "second_settlement_cycle": 22,
+      "issue_action_index": 23,
+      "issue_phase": "design",
+      "issue_cash_cents": 683503,
+      "quote": {
+        "first_sales_cents": 495104,
+        "latest_sales_cents": 133566,
+        "average_sales_cents": 314335,
+        "average_capacity_cents": 66083,
+        "conservative_sales_cents": 133566,
+        "conservative_capacity_cents": 20891,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 24,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 24,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 730956
+          },
+          {
+            "number": 2,
+            "due_cycle": 26,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 720283
+          },
+          {
+            "number": 3,
+            "due_cycle": 28,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 637071
+          },
+          {
+            "number": 4,
+            "due_cycle": 30,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 596711
+          },
+          {
+            "number": 5,
+            "due_cycle": 32,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 552702
+          },
+          {
+            "number": 6,
+            "due_cycle": 34,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 504538
+          },
+          {
+            "number": 7,
+            "due_cycle": 36,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 453618
+          },
+          {
+            "number": 8,
+            "due_cycle": 38,
+            "payment_cents": 4374,
+            "principal_cents": 4166,
+            "interest_cents": 208,
+            "cash_after_cents": 401342
+          },
+          {
+            "number": 9,
+            "due_cycle": 40,
+            "payment_cents": 4333,
+            "principal_cents": 4166,
+            "interest_cents": 167,
+            "cash_after_cents": 863652
+          }
+        ],
+        "low_cash_cents": 401342,
+        "low_cash_cycle": 38,
+        "cash_at_route_end_cents": 863652,
+        "principal_remaining_cents": 12506
+      }
+    },
+    {
+      "route": "route_trait_slow_synergy_1104.json",
+      "funding": "trait",
+      "band": "slow",
+      "policy": "synergy",
+      "seed": 1104,
+      "first_settlement_cycle": 20,
+      "second_settlement_cycle": 22,
+      "issue_action_index": 23,
+      "issue_phase": "design",
+      "issue_cash_cents": 579839,
+      "quote": {
+        "first_sales_cents": 387412,
+        "latest_sales_cents": 105594,
+        "average_sales_cents": 246503,
+        "average_capacity_cents": 49125,
+        "conservative_sales_cents": 105594,
+        "conservative_capacity_cents": 13898,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 24,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 24,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 612208
+          },
+          {
+            "number": 2,
+            "due_cycle": 26,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 598143
+          },
+          {
+            "number": 3,
+            "due_cycle": 28,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 524036
+          },
+          {
+            "number": 4,
+            "due_cycle": 30,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 470879
+          },
+          {
+            "number": 5,
+            "due_cycle": 32,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 425471
+          },
+          {
+            "number": 6,
+            "due_cycle": 34,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 376608
+          },
+          {
+            "number": 7,
+            "due_cycle": 36,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 325688
+          },
+          {
+            "number": 8,
+            "due_cycle": 38,
+            "payment_cents": 4374,
+            "principal_cents": 4166,
+            "interest_cents": 208,
+            "cash_after_cents": 273412
+          },
+          {
+            "number": 9,
+            "due_cycle": 40,
+            "payment_cents": 4333,
+            "principal_cents": 4166,
+            "interest_cents": 167,
+            "cash_after_cents": 675876
+          }
+        ],
+        "low_cash_cents": 273412,
+        "low_cash_cycle": 38,
+        "cash_at_route_end_cents": 675876,
+        "principal_remaining_cents": 12506
+      }
+    },
+    {
+      "route": "route_trait_slow_synergy_4417.json",
+      "funding": "trait",
+      "band": "slow",
+      "policy": "synergy",
+      "seed": 4417,
+      "first_settlement_cycle": 20,
+      "second_settlement_cycle": 22,
+      "issue_action_index": 23,
+      "issue_phase": "design",
+      "issue_cash_cents": 712046,
+      "quote": {
+        "first_sales_cents": 487412,
+        "latest_sales_cents": 131468,
+        "average_sales_cents": 309440,
+        "average_capacity_cents": 64860,
+        "conservative_sales_cents": 131468,
+        "conservative_capacity_cents": 20367,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      },
+      "overlay": {
+        "valid": true,
+        "first_due_cycle": 24,
+        "payments_observed": [
+          {
+            "number": 1,
+            "due_cycle": 24,
+            "payment_cents": 4666,
+            "principal_cents": 4166,
+            "interest_cents": 500,
+            "cash_after_cents": 737401
+          },
+          {
+            "number": 2,
+            "due_cycle": 26,
+            "payment_cents": 4624,
+            "principal_cents": 4166,
+            "interest_cents": 458,
+            "cash_after_cents": 730329
+          },
+          {
+            "number": 3,
+            "due_cycle": 28,
+            "payment_cents": 4583,
+            "principal_cents": 4166,
+            "interest_cents": 417,
+            "cash_after_cents": 668418
+          },
+          {
+            "number": 4,
+            "due_cycle": 30,
+            "payment_cents": 4541,
+            "principal_cents": 4166,
+            "interest_cents": 375,
+            "cash_after_cents": 617660
+          },
+          {
+            "number": 5,
+            "due_cycle": 32,
+            "payment_cents": 4499,
+            "principal_cents": 4166,
+            "interest_cents": 333,
+            "cash_after_cents": 559951
+          },
+          {
+            "number": 6,
+            "due_cycle": 34,
+            "payment_cents": 4458,
+            "principal_cents": 4166,
+            "interest_cents": 292,
+            "cash_after_cents": 511087
+          },
+          {
+            "number": 7,
+            "due_cycle": 36,
+            "payment_cents": 4416,
+            "principal_cents": 4166,
+            "interest_cents": 250,
+            "cash_after_cents": 460168
+          },
+          {
+            "number": 8,
+            "due_cycle": 38,
+            "payment_cents": 4374,
+            "principal_cents": 4166,
+            "interest_cents": 208,
+            "cash_after_cents": 407892
+          },
+          {
+            "number": 9,
+            "due_cycle": 40,
+            "payment_cents": 4333,
+            "principal_cents": 4166,
+            "interest_cents": 167,
+            "cash_after_cents": 961614
+          }
+        ],
+        "low_cash_cents": 407892,
+        "low_cash_cycle": 38,
+        "cash_at_route_end_cents": 961614,
+        "principal_remaining_cents": 12506
+      }
+    }
+  ],
+  "synthetic_second_month_boundaries": [
+    {
+      "second_sales_cents": 0,
+      "quote": {
+        "first_sales_cents": 279020,
+        "latest_sales_cents": 0,
+        "average_sales_cents": 139510,
+        "average_capacity_cents": 22377,
+        "conservative_sales_cents": 0,
+        "conservative_capacity_cents": 0,
+        "consecutive_positive": false,
+        "unpaid_rent_cents": 0,
+        "average_eligible": false,
+        "conservative_eligible": false
+      }
+    },
+    {
+      "second_sales_cents": 10000,
+      "quote": {
+        "first_sales_cents": 279020,
+        "latest_sales_cents": 10000,
+        "average_sales_cents": 144510,
+        "average_capacity_cents": 23627,
+        "conservative_sales_cents": 10000,
+        "conservative_capacity_cents": 0,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": false
+      }
+    },
+    {
+      "second_sales_cents": 60000,
+      "quote": {
+        "first_sales_cents": 279020,
+        "latest_sales_cents": 60000,
+        "average_sales_cents": 169510,
+        "average_capacity_cents": 29877,
+        "conservative_sales_cents": 60000,
+        "conservative_capacity_cents": 2500,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": false
+      }
+    },
+    {
+      "second_sales_cents": 68663,
+      "quote": {
+        "first_sales_cents": 279020,
+        "latest_sales_cents": 68663,
+        "average_sales_cents": 173841,
+        "average_capacity_cents": 30960,
+        "conservative_sales_cents": 68663,
+        "conservative_capacity_cents": 4665,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": false
+      }
+    },
+    {
+      "second_sales_cents": 68664,
+      "quote": {
+        "first_sales_cents": 279020,
+        "latest_sales_cents": 68664,
+        "average_sales_cents": 173842,
+        "average_capacity_cents": 30960,
+        "conservative_sales_cents": 68664,
+        "conservative_capacity_cents": 4666,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      }
+    },
+    {
+      "second_sales_cents": 70000,
+      "quote": {
+        "first_sales_cents": 279020,
+        "latest_sales_cents": 70000,
+        "average_sales_cents": 174510,
+        "average_capacity_cents": 31127,
+        "conservative_sales_cents": 70000,
+        "conservative_capacity_cents": 5000,
+        "consecutive_positive": true,
+        "unpaid_rent_cents": 0,
+        "average_eligible": true,
+        "conservative_eligible": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# Employees/Challenges TODO contribution — 2026-10-06
+
+User requested that this thread update the internal To Do List. Branch `main`; HEAD `2b5717d0de737f77f1b1bc8c1a02da0db9f53942`. Before edits, `docs/codex/TODO.md` already had concurrent Feature Store and Fanbase additions plus unrelated worktree changes; these were preserved. No Drive read in this turn, gameplay/test edit, commit or push.
+
+Changed files: `docs/codex/TODO.md` and this thread's `README.md`, `working-notes.md`, `2026-10-06-implementing-thread-draft-v1.md`, and this log. Added a QUEUED bounded read-only Employees/Challenges follow-up to Tasks 8/16/18, with exact baseline, counterfactual wage/course arms, matched comparison, outputs and limits. Kept the historical Tasks 8/16/18 COMPLETE at their read-only scope. Stage B implementation remains conditional; no employee reward, salary, hiring or course value was approved by the queue edit.
+
+Checks: read back the new TODO dispatch, bounded brief, design-package status and Tasks 8/16/18 registry rows; inspected the TODO diff to confirm pre-existing Feature Store/Fanbase changes remain. `git diff --check` on the edited tracked docs exited 0; all three referenced Employees/Challenges handoff files exist. No runtime check applies to this documentation-only handoff. Follow-up: execute Stage A on a coordinated stable snapshot after current higher-priority work, reconcile evidence in this thread, then seek explicit gameplay rulings before any implementation task.

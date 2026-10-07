@@ -1,0 +1,5 @@
+# Feature Store local session v7
+
+Date: 2026-10-06 (America/Los_Angeles). Branch `main`, HEAD `553d1a46f33d59641efa4c2e4ff141f958c1230d`. Read current live Levels definition, analysis-only Sub-Areas definition, thread findings and working notes. Recorded the user's tentative preference for exact duplicate printed stats in `working-notes.md`; this log is new. No design authority, central TODO, gameplay code, test, asset, configuration, commit or push change. Existing concurrent worktree edits preserved.
+
+Verification: the two definitions both specify Alpha World Design, Graphics 3, Design 2, Scope 2, finite; Sub-Areas has Levels as its parent and is absent from the live ledger. `git diff --check` exited 0 with line-ending warnings on concurrent files. Previous native timing evidence remains bounded to one seed and a temporary zero later-card play fee. No new simulation was run for this tradeoff discussion. Follow-up: review the pros/cons with the user and obtain an explicit design ruling before moving Sub-Areas from OPEN to approved.

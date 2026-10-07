@@ -1,0 +1,7 @@
+# Sub-Areas later-card fee counterfactual plan
+
+Predeclared 2026-10-06 (America/Los_Angeles) before calculating results. Source: branch `main`, HEAD `553d1a46f33d59641efa4c2e4ff141f958c1230d`, with the 593 tracked source hashes and native trace hashes recorded in `../sim-v4/predeclaration.json` and `../sim-v4/run-report.json`. This is a deterministic read-only overlay on those eight five-release native traces, **not a native paid-fee replay**.
+
+Question: if each committed `sub_areas` play cost $0, $50 or $90 in addition to the native Primitive hand cost, how would paired cash at common cycle 73 and respective Game 5 launch change? Count only actual selected-card commits; do not charge supply or draw. Keep the Store purchase quote and all other actions, sales, rent and timing fixed. Use native no-purchase controls unchanged. Verify exactly one candidate play in each of Games 4 and 5 in each trial route, before using the simple cash subtraction. Check the lowest recorded cash after first candidate play conservatively after subtracting **both** fees, and report any route that could be cash blocked. This bound overcharges before the second play and therefore errs toward a lower cash figure.
+
+This overlay cannot establish behavior if a fee changes decisions, hand legality, action rollback, future credit or financing. It does not rule a price or fee, nor complete Task 2's native parent-missing and legacy-start comparisons. Preserve the v4 raw traces; write only this folder's outputs.

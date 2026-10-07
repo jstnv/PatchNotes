@@ -1,0 +1,8 @@
+# Sub-Areas bounded-pilot access rule
+
+Date: 2026-10-06 (America/Los_Angeles). **ACTIVE/TRIAL design rule for the bounded pilot.** The user said “Run sims and Ill go with what you recommend” in response to the proposed Levels-prerequisite/Store-only decision. After the [24-route current-source comparison](FINDINGS-v8-sub-areas-parent-rule.md), the recommendation is:
+
+1. `sub_areas` is an **independent Store node** for the bounded pilot. Owning Levels is **not required**. The current single-parent familiarity discount therefore does **not** apply to Sub-Areas. Levels may be shown as a thematic comparison, but the pilot's prerequisite and quote must not imply a parent gate or discount.
+2. Sub-Areas is **Store-only**. It does not enter Ironclad, SideStreet or other Contract card pools without a separate design ruling. Current Contracts already use the fixed Primitive ledger; preserve that boundary in the pilot specification.
+
+The choice is structural and applies alongside the [approved printed identity](../../design/feature-store-progression.md) and [evaluation standard](DECISION-v1-optional-upgrade-standard.md). It does **not** authorize adding the card to gameplay. The $1,700 base, $90 later-card play fee, first-era availability, exact purchase timing, UI presentation, numerical success/downside threshold and rollout remain **OPEN**. No price may be inferred as safe from the improved one-cycle access: one no-parent Strategy buyer still stopped after Game 4 with arrears. The broader Task 2 comparison remains a separate read-only handoff. The shared To Do List was not edited by this decision.

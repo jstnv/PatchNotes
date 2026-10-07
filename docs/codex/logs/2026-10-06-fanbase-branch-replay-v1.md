@@ -1,0 +1,9 @@
+# Fanbase branch replay session
+
+2026-10-06, America/Los_Angeles. Shared checkout `main` at `553d1a46f33d59641efa4c2e4ff141f958c1230d`; no commit or push. Read `CURRENT_STATE.md`, `TODO.md`, Fanbase design, handoff v2, buyer-definition decision and prior fixed-sales shadow. The exact branch `bd450a9e4e8d83ece1478cdf5a16526432e36cce` was inspected in a clean managed worktree and run from a writable disposable `git archive` copy. Existing shared edits and `.codex-godot-temp` were untouched.
+
+Changed files in the shared tree: [Fanbase evidence](../threads/fanbase/2026-10-06-current-branch-replay-v1.md), [compact trace](../threads/fanbase/current-branch-replay-v1-trace.json), [counterfactual script](../threads/fanbase/replay-counterfactual-v1.ps1), [adapter instructions](../threads/fanbase/current-branch-replay-v1-adapter.md), and this log. The disposable copy additionally changed only Task 32 analysis startup steps and added a read-only state capture subclass; no gameplay file changed.
+
+Checks: Godot 4.7.1 import exit 0/no script parse error; first unchanged route produced zero releases because trait confirmation is now required; adapted route exit 0, five releases, 92 action signatures matching the historical route, zero route discrepancies. All claimed played actions were accepted. All 43 monthly linear fan totals reconcile exactly to branch state. Monthly earned units sum to each sales record and earned entitlement equals settled cents for all five titles. Counterfactual +11 Fans at the first 6.1 monthly boundary, +4 next-launch integer Awareness; conditional Game 4 Month 1 projection +10 units. Exact trace/source hashes and commands are in the evidence file. No full test suite, exported smoke or human playtest was run.
+
+Follow-up: Fanbase design can evaluate the curve without treating the candidate as approved. Weak-release loss and buyer-overlap decisions remain separate. No TODO edit was requested by the handoff.

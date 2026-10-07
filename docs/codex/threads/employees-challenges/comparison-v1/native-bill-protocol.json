@@ -1,0 +1,454 @@
+{
+  "checks": 46,
+  "examples": [
+    {
+      "bills": [
+        {
+          "bill_id": "rent:1",
+          "due_cents": 50000,
+          "due_cycle": 2,
+          "expense_type": "rent",
+          "late": false,
+          "month": 1,
+          "paid_cents": 50000,
+          "paid_on_time": true,
+          "payments": [
+            {
+              "cents": 50000,
+              "cycle": 2,
+              "month": 1
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "studio",
+          "unpaid_cents": 0
+        },
+        {
+          "bill_id": "pay:0:1",
+          "due_cents": 1000,
+          "due_cycle": 2,
+          "expense_type": "payroll",
+          "late": true,
+          "month": 1,
+          "paid_cents": 1000,
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": 500,
+              "cycle": 2,
+              "month": 1
+            },
+            {
+              "cents": 500,
+              "cycle": 2,
+              "month": 2
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "employee:0",
+          "unpaid_cents": 0
+        }
+      ],
+      "cash_after_recovery_cents": 123,
+      "count": 1,
+      "credit_after_first_close": {
+        "history": [
+          {
+            "after": 595,
+            "before": 600,
+            "change": -5,
+            "cycle": 2,
+            "month": 1,
+            "operating_profit_cents": -1000,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "bill_id": "pay:0:1",
+                "due_cycle": 2,
+                "evaluated_cycle": 2,
+                "overdue_cycles": 0,
+                "points": -5,
+                "recovered": false,
+                "type": "payroll"
+              }
+            ],
+            "requested_change": -5
+          }
+        ],
+        "last_processed_month": 1,
+        "policy_version": "typed_expenses_v1",
+        "score": 595
+      },
+      "credit_next_close": {
+        "history": [
+          {
+            "after": 595,
+            "before": 600,
+            "change": -5,
+            "cycle": 2,
+            "month": 1,
+            "operating_profit_cents": -1000,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "bill_id": "pay:0:1",
+                "due_cycle": 2,
+                "evaluated_cycle": 2,
+                "overdue_cycles": 0,
+                "points": -5,
+                "recovered": false,
+                "type": "payroll"
+              }
+            ],
+            "requested_change": -5
+          },
+          {
+            "after": 595,
+            "before": 595,
+            "change": 0,
+            "cycle": 4,
+            "month": 2,
+            "operating_profit_cents": 0,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "points": 0,
+                "type": "paid_no_profit"
+              }
+            ],
+            "requested_change": 0
+          }
+        ],
+        "last_processed_month": 2,
+        "policy_version": "typed_expenses_v1",
+        "score": 595
+      },
+      "initial_cash_cents": 50500,
+      "monthly_payroll_cents": 1000,
+      "receipt_cents": 623
+    },
+    {
+      "bills": [
+        {
+          "bill_id": "rent:1",
+          "due_cents": 50000,
+          "due_cycle": 2,
+          "expense_type": "rent",
+          "late": false,
+          "month": 1,
+          "paid_cents": 50000,
+          "paid_on_time": true,
+          "payments": [
+            {
+              "cents": 50000,
+              "cycle": 2,
+              "month": 1
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "studio",
+          "unpaid_cents": 0
+        },
+        {
+          "bill_id": "pay:0:1",
+          "due_cents": 1000,
+          "due_cycle": 2,
+          "expense_type": "payroll",
+          "late": true,
+          "month": 1,
+          "paid_cents": 1000,
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": 500,
+              "cycle": 2,
+              "month": 1
+            },
+            {
+              "cents": 500,
+              "cycle": 2,
+              "month": 2
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "employee:0",
+          "unpaid_cents": 0
+        },
+        {
+          "bill_id": "pay:1:1",
+          "due_cents": 1000,
+          "due_cycle": 2,
+          "expense_type": "payroll",
+          "late": true,
+          "month": 1,
+          "paid_cents": 1000,
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": 1000,
+              "cycle": 2,
+              "month": 2
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "employee:1",
+          "unpaid_cents": 0
+        }
+      ],
+      "cash_after_recovery_cents": 123,
+      "count": 2,
+      "credit_after_first_close": {
+        "history": [
+          {
+            "after": 595,
+            "before": 600,
+            "change": -5,
+            "cycle": 2,
+            "month": 1,
+            "operating_profit_cents": -2000,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "bill_id": "pay:0:1",
+                "due_cycle": 2,
+                "evaluated_cycle": 2,
+                "overdue_cycles": 0,
+                "points": -5,
+                "recovered": false,
+                "type": "payroll"
+              }
+            ],
+            "requested_change": -5
+          }
+        ],
+        "last_processed_month": 1,
+        "policy_version": "typed_expenses_v1",
+        "score": 595
+      },
+      "credit_next_close": {
+        "history": [
+          {
+            "after": 595,
+            "before": 600,
+            "change": -5,
+            "cycle": 2,
+            "month": 1,
+            "operating_profit_cents": -2000,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "bill_id": "pay:0:1",
+                "due_cycle": 2,
+                "evaluated_cycle": 2,
+                "overdue_cycles": 0,
+                "points": -5,
+                "recovered": false,
+                "type": "payroll"
+              }
+            ],
+            "requested_change": -5
+          },
+          {
+            "after": 595,
+            "before": 595,
+            "change": 0,
+            "cycle": 4,
+            "month": 2,
+            "operating_profit_cents": 0,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "points": 0,
+                "type": "paid_no_profit"
+              }
+            ],
+            "requested_change": 0
+          }
+        ],
+        "last_processed_month": 2,
+        "policy_version": "typed_expenses_v1",
+        "score": 595
+      },
+      "initial_cash_cents": 50500,
+      "monthly_payroll_cents": 2000,
+      "receipt_cents": 1623
+    },
+    {
+      "bills": [
+        {
+          "bill_id": "rent:1",
+          "due_cents": 50000,
+          "due_cycle": 2,
+          "expense_type": "rent",
+          "late": false,
+          "month": 1,
+          "paid_cents": 50000,
+          "paid_on_time": true,
+          "payments": [
+            {
+              "cents": 50000,
+              "cycle": 2,
+              "month": 1
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "studio",
+          "unpaid_cents": 0
+        },
+        {
+          "bill_id": "pay:0:1",
+          "due_cents": 1000,
+          "due_cycle": 2,
+          "expense_type": "payroll",
+          "late": true,
+          "month": 1,
+          "paid_cents": 1000,
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": 500,
+              "cycle": 2,
+              "month": 1
+            },
+            {
+              "cents": 500,
+              "cycle": 2,
+              "month": 2
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "employee:0",
+          "unpaid_cents": 0
+        },
+        {
+          "bill_id": "pay:1:1",
+          "due_cents": 1000,
+          "due_cycle": 2,
+          "expense_type": "payroll",
+          "late": true,
+          "month": 1,
+          "paid_cents": 1000,
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": 1000,
+              "cycle": 2,
+              "month": 2
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "employee:1",
+          "unpaid_cents": 0
+        },
+        {
+          "bill_id": "pay:2:1",
+          "due_cents": 1000,
+          "due_cycle": 2,
+          "expense_type": "payroll",
+          "late": true,
+          "month": 1,
+          "paid_cents": 1000,
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": 1000,
+              "cycle": 2,
+              "month": 2
+            }
+          ],
+          "recovery_overdue_cycles": 0,
+          "settled_cycle": 2,
+          "source_id": "employee:2",
+          "unpaid_cents": 0
+        }
+      ],
+      "cash_after_recovery_cents": 123,
+      "count": 3,
+      "credit_after_first_close": {
+        "history": [
+          {
+            "after": 595,
+            "before": 600,
+            "change": -5,
+            "cycle": 2,
+            "month": 1,
+            "operating_profit_cents": -3000,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "bill_id": "pay:0:1",
+                "due_cycle": 2,
+                "evaluated_cycle": 2,
+                "overdue_cycles": 0,
+                "points": -5,
+                "recovered": false,
+                "type": "payroll"
+              }
+            ],
+            "requested_change": -5
+          }
+        ],
+        "last_processed_month": 1,
+        "policy_version": "typed_expenses_v1",
+        "score": 595
+      },
+      "credit_next_close": {
+        "history": [
+          {
+            "after": 595,
+            "before": 600,
+            "change": -5,
+            "cycle": 2,
+            "month": 1,
+            "operating_profit_cents": -3000,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "bill_id": "pay:0:1",
+                "due_cycle": 2,
+                "evaluated_cycle": 2,
+                "overdue_cycles": 0,
+                "points": -5,
+                "recovered": false,
+                "type": "payroll"
+              }
+            ],
+            "requested_change": -5
+          },
+          {
+            "after": 595,
+            "before": 595,
+            "change": 0,
+            "cycle": 4,
+            "month": 2,
+            "operating_profit_cents": 0,
+            "policy_version": "typed_expenses_v1",
+            "reasons": [
+              {
+                "points": 0,
+                "type": "paid_no_profit"
+              }
+            ],
+            "requested_change": 0
+          }
+        ],
+        "last_processed_month": 2,
+        "policy_version": "typed_expenses_v1",
+        "score": 595
+      },
+      "initial_cash_cents": 50500,
+      "monthly_payroll_cents": 3000,
+      "receipt_cents": 2623
+    }
+  ],
+  "failures": [],
+  "limit": "Constructed native typed bill hooks; employee state and payroll production are absent. Byte reconstruction is not durable save/restart."
+}

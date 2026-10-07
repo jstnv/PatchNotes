@@ -26,6 +26,6 @@ The [system design](../../design/employees-courses.md) contains the candidate Pr
 | 2026-10-06 | Thread setup | OPEN | Existing locked architecture and Production trigger are the baseline; rewards and economics remain open. | No new ruling |
 | 2026-10-06 | Wage direction and pass-off | ACTIVE/TRIAL planning value / OPEN final wage | Drive design archive records $10 per in-game month as interim Production Specialist planning pay. Later lifespan authority preserves its interim status. User directs a wage revisit after economy polish. | [Design note](2026-10-06-design-note-v1.md); [source reconciliation](2026-10-06-drive-passoff-reconciliation-v1.md); no final numerical lock |
 
-## Proposed work for later TODO contribution
+## Shared TODO contribution
 
-Record candidate tasks here as decisions settle. Include source revision, dependencies, exact behavior, UI implications, and acceptance checks. Transfer work to the internal TODO only when the user prompts it.
+The user prompted a contribution on 2026-10-06. Stage A of the [handoff](2026-10-06-implementing-thread-draft-v1.md) is now a [QUEUED read-only follow-up](../../TODO.md) to Tasks 8/16/18. Stage B remains a draft that requires explicit reward, hiring, payroll and course rulings before implementation. Record further candidate tasks here as decisions settle, with source revision, dependencies, exact behavior, UI implications and acceptance checks.

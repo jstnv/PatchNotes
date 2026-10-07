@@ -18,6 +18,8 @@ Month 1 earns over two productive cycles after launch; monthly settlement pays t
 
 Ironclad and qualifying-release-linked SideStreet cash offers/history are implemented. All five publisher unlock profiles exist; Crown/Neon/Starwave offers and Promotion banking/consumption are absent. Employees, courses and payroll are absent. Background/secondary choices persist in RunState as explicitly inactive previews. Required Genre specialties and automatic rosters are active. Store ownership, parents, familiarity discounts and later one-cycle purchases work; proposed multi-era catalogs, numerical gates, new cards and later-card play fees remain design work.
 
+**Design approval, 2026-10-06:** the user selected the [Employees trial package](threads/employees-challenges/2026-10-06-trial-package-decision-v1.md): one Production Specialist after Game 1, $100/zero-cycle hire, temporary $10 monthly wage, first-full-month payday, optional bundled planning and rent → payroll → bank recovery. The [separate implementation task](threads/employees-challenges/2026-10-06-production-specialist-implementation-v1.md) is QUEUED; this is not implemented gameplay. Future course timing is approved, but course effects/amounts and final wages remain OPEN. The preceding bounded comparison used isolated main `553d1a4`; this approval update changes documentation only.
+
 ## Current verification and gaps
 
 The pending alpha_phase.gd/run_state.gd free-Alpha-exit repair is preserved. Its migration-discovered flaky test is now resolved locally: controlled native no-income and $1000 Insider-income hands prove blocked production versus genuine bill recovery separately (149 checks). The repair's runtime code was unchanged by this follow-up.

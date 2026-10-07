@@ -1,0 +1,11 @@
+# Feature Store local session v10
+
+Date: 2026-10-06 (America/Los_Angeles). Branch `main`, HEAD `553d1a46f33d59641efa4c2e4ff141f958c1230d` before and after. Read `CURRENT_STATE.md`, shared `TODO.md`, repository update guidance, Store design and relevant thread findings; inspected branch/status/diff. Preserved all concurrent edits and `.codex-godot-temp`.
+
+Question: does a $50 or $90 Sub-Areas per-play fee change the four paired five-release outcomes? Created `sim-v5/README.md` predeclaring a fixed-route read-only overlay, `sim-v5/fee_overlay.py`, generated `summary.csv` and `run-report.json`, and wrote `FINDINGS-v7-sub-areas-fee-sensitivity.md`. Updated this thread's `README.md`, `working-notes.md`, `HANDOFF.md`, `TODO-UPDATE-DRAFT-v1.md` and this log. Did not edit gameplay, tests, assets, configuration or shared `TODO.md`; no commit/push claimed.
+
+Exact command: `& 'C:/Users/64jus/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B docs/codex/threads/feature-store/sim-v5/fee_overlay.py`. Final run passed: stable HEAD, 593 tracked source hashes, eight native trace hashes, five releases, one purchase and one committed candidate play in each of Games 4/5 for four trial pairs, 12 fee rows and positive conservative cash floors. The first script run passed; a later added final-cash equality assertion and script-hash recording were rerun and passed. See `sim-v5/run-report.json` for exact SHA hashes.
+
+At $90 per play, common-cycle-73 paired cash signs remained one positive/three negative; respective Game 5 launch signs remained three positive/one negative. The worst Game 5 deficit was $1,159.68, and the narrowest positive margin was $159.56. Lowest conservative post-first-play cash floor was $4,562.98. These are accounting overlays, not native fee action checks or adaptive routes. Recommended treating legal access/solvency as a hard pilot gate, with Review/settled sales and Game 5 cash payback reported separately; no criterion, price or fee was approved.
+
+Follow-up: user review of the proposed optional-upgrade criterion; broader Task 2 native comparison for parent-missing, genuine $5,500 starts, live-node controls and later settlement. Shared To Do List remains untouched by this thread until explicit prompt.

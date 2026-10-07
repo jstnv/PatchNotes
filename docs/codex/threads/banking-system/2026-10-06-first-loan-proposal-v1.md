@@ -1,10 +1,10 @@
 # First bank loan offer — design proposal v1
 
-2026-10-06 (America/Los_Angeles). **PROPOSED, not approved and not implemented.** This is a small first offer to review against the [accepted foundation](../../design/economy-banking.md), not a change to that foundation. Its numbers should become authority only after a user ruling and a bounded native comparison.
+2026-10-06 (America/Los_Angeles). **Historical proposal, not implemented.** This small offer was compared with the [accepted foundation](../../design/economy-banking.md) and [B1 native routes](2026-10-06-b1-findings-v1.md). Its one-settlement gate is **SUPERSEDED** by the locked [two-settlement decision](2026-10-06-two-settlement-decision-v1.md). Its fixed $500 amount and fixed 12-month term are **SUPERSEDED** by the user's [selectable-loan ruling](2026-10-06-selectable-loan-decision-v1.md), which sets a $500 minimum. The proposed 1% rate and first-full-month due were later accepted; exact payment shape and selector limits remain open.
 
 ## Accepted constraints
 
-Only a genuine settled sales receipt unlocks borrowing; at most one loan may be active. Principal is at most $500 and must fit recurring repayment capacity. Early payoff waives future unaccrued interest. Cash cannot go negative, loan proceeds are financing rather than profit, principal repayment is a cash outflow rather than an expense, and a late bill retains original age/history. Credit weights are prototype values. The $5,500 base and separate $200 trait receipt must be compared separately.
+Only genuine settled sales unlock borrowing; at most one loan may be active. Principal must fit recurring repayment capacity; the older $500 ceiling used for this v1 study is now open for larger offers. Early payoff waives future unaccrued interest. Cash cannot go negative, loan proceeds are financing rather than profit, principal repayment is a cash outflow rather than an expense, and a late bill retains original age/history. Credit weights are prototype values. The $5,500 base and separate $200 trait receipt must be compared separately.
 
 ## Proposed offer and quote
 
@@ -20,6 +20,8 @@ Only a genuine settled sales receipt unlocks borrowing; at most one loan may be 
 The quote shows principal, all 12 dates and principal/interest splits, $532.50 scheduled total, first due, capacity calculation, current overdue state, and an explicit early-payoff example. Recheck source revision, eligibility, cash/ledger consistency, and quote identity on acceptance; repeated or stale acceptance must not issue a second receipt.
 
 ### Capacity calculation
+
+**Historical v1 candidate:** the two-settlement study linked above recommends a more conservative screen. Retain this version to show what B1 tested; do not implement it as the selected rule.
 
 Use actual **completed post-first-settlement months**, including later zero-sales months, up to the most recent three. For each month use settled net sales cash from the authoritative monthly finance row. Before the first settlement there is no sample and no eligibility. At first settlement the sample has one month. Publisher/Beta receipts, startup/trait financing, loan proceeds, forecasts, and unsettled earned revenue do not count.
 
@@ -54,9 +56,9 @@ The pre-sales arithmetic uses the observed ~$1,150 Feature spend as a **simplify
 | Cycle 16 | $4,000 | $350 | $550 | None if this is the first release. |
 | Cycle 18 | $4,500 | −$150 theoretical shortfall | $50 | None if this is the first release. |
 
-For a cycle-14 launch, Month 1 sales settle no earlier than cycle 16, so a loan issued then first falls due at cycle 18. Cycle-18 launch instead first settles at cycle 20 and a loan then first falls due at cycle 22. Thus this offer cannot erase the intended first-game pacing pressure or rescue a $5,500 route that cannot legally reach its first settlement. The $5,700 case has $200 more arithmetic headroom, but these are not matched native trait-selection routes. A 6.2-rated late launch remains a qualitative human pressure observation; its precise cash path is not available locally.
+For a cycle-14 launch, Month 1 sales settle at cycle 16 in the matched native routes, so a loan issued then first falls due at cycle 18. Cycle-18 launch instead first settles at cycle 20 and a loan then first falls due at cycle 22. Thus this offer cannot erase the intended first-game pacing pressure or rescue a $5,500 route that cannot legally reach its first settlement. The $5,700 matched cases have exactly $200 more cash. A 6.2-rated late launch remains a qualitative human pressure observation; the reproducible late Reviews were 6.4–6.8.
 
-The [Task33 eight-route summary](../../../../patch-notes/design-logs/task33-v1/route-summary.json) is $5,500-start native evidence with current rent, real payouts, and no bank debt. Early first releases at cycle 12 settle in Month 7 at $2,503.49–$2,965.03; slow releases at cycle 18 settle in Month 10 at $3,874.12–$4,951.04. The proposed one-month capacity range is respectively $500.87–$616.25 and $843.53–$1,112.76, so all eight would clear a $46.66 first-payment test **after** settlement if no other producer were live. These are read-only eligibility calculations, not playable loan routes. The four slow routes had already reached $0 cash and $320–$360 rent arrears at cycle 18; genuine Ironclad acceptance cleared that debt before their first sales settlement. The offer did not make the slow route feasible.
+The [Task33 eight-route summary](../../../../patch-notes/design-logs/task33-v1/route-summary.json) was the original $5,500-start native evidence. The subsequent [B1 comparison](2026-10-06-b1-findings-v1.md) ran 32 current-source no-loan routes with genuine matched $5,500 and $5,700 starts, first releases at cycles 12, 13, 14 and 18, and 80 fixed-action loan overlays. All first-settlement quotes cleared this proposed screen and all fixed overlays could pay through their observed horizons. Cycle-18 routes already had $0 cash and rent arrears at release; the offer was unavailable until cycle-20 settlement. The $200 trait receipt reduced those arrears but did not eliminate them in the matched routes.
 
 At the weak-sales edge, a single completed month needs at least **$686.64** settled net sales to support $46.66 under the proposed 25% formula with $500 rent and no other recurring bills. At $600 sales, capacity is only $25.00 and the $500 quote is rejected; at $700, capacity is $50.00 and it passes, subject to no arrears. This screen can prevent a weak first release from turning a loan into an automatic bailout. A high first month may still fade: recheck matched later-month cash, arrears, and loan repayments before accepting these terms.
 
@@ -64,7 +66,7 @@ At the weak-sales edge, a single completed month needs at least **$686.64** sett
 
 1. Is a fixed $500 offer sufficiently useful, or should a later design offer smaller increments without weakening the capacity guard?
 2. Is 1% monthly on the scheduled principal and a 12-month term a fair first price, especially when weak titles fade? Should credit score affect eligibility or rate in a later version?
-3. Is the first-full-month grace and 25% of settled-sales surplus appropriately cautious? A one-month sample can overstate durable income; compare at matched calendar checkpoints.
+3. Is the first-full-month grace and 25% of settled-sales surplus appropriately cautious? The matched comparison found later rolling capacity reached zero for multiple months despite a qualified first quote; the one-month sample can overstate durable income.
 4. Confirm rent-first service, interest-expense recognition at original due, and the exact Bank quote language through UI review before implementing.
 
 These remain proposals. See [handoff](HANDOFF.md) for bounded analysis and implementation acceptance conditions; nothing here enters the shared TODO without an explicit prompt.

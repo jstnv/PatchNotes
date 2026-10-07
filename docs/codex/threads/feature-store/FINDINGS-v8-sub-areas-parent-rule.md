@@ -1,0 +1,36 @@
+# Feature Store findings v8 — Sub-Areas parent rule and Store-only boundary
+
+Date: 2026-10-06 (America/Los_Angeles). **Read-only native comparison and bounded recommendation.** User delegated the pilot access recommendation after simulations; the separate [decision record](DECISION-v2-sub-areas-access.md) states the resulting design choice. This finding alone is evidence, not numerical approval.
+
+## Exact source and setup
+
+- Branch `main`, HEAD `553d1a46f33d59641efa4c2e4ff141f958c1230d` before and after. The [predeclaration](sim-v6/predeclaration.json) records the 24 jobs, 593 tracked source hashes and process-local driver SHA-256 `bc4ebde51a968715ebc7dd5fd1f97d17d8f82c9e015235baecb641d391db8164`. The [run report](sim-v6/run-report.json) records each Godot command, isolated profile, raw-trace hash, exit and unchanged tracked source comparison. Godot 4.7.1 ran the repository's current source; gameplay files, ledgers and tests were not edited.
+- Two specialties: Action starts with Levels, Strategy does not, under the locked specialty roster. Seeds 1104/4417 × ordinary/synergy policies × three arms = **24 native five-release routes**: no purchase; analysis-only Sub-Areas with Levels as required parent; analysis-only Sub-Areas with no parent. All arms use a fixed shopping opportunity after Game 3, not the earlier Review gate. This timing is a comparison device, **not a proposed purchase rule**. Candidate printed identity remains the approved finite Alpha World Design Graphics 3 / Design 2 / Scope 2. The $1,700 base is a **trial value** and later-card play fee is $0 in native source.
+- Current MainMenu trait flow gives genuine $5,700 startup; $500 rent, exact-cent all-title sales settlement, Ironclad/eligible SideStreet, finite retained hands and native one-cycle Store purchases run normally. Later games have 18-action production budgets. No loans, campaigns, free waits or injected cash. [Summary](sim-v6/summary.csv) records quotes, supply/draw/actual play, Reviews, cycles, common-calendar cash, actual Game 4 settled net at common cycle/equal age, final arrears and credit.
+
+## Native results
+
+All 24 traces were valid with zero script errors or finance/ledger discrepancies. **Twenty-two reached Game 5**; two stopped after Game 4 with a financial block. A completed release count does not imply zero arrears, so the table reports both. All eight no-purchase controls reached Game 5 with no unpaid rent.
+
+| Specialty / arm | Bought Sub-Areas | Actually played it | Bought, played, and reached Game 5 without arrears | Material observation |
+|---|---:|---:|---:|---|
+| Action / Levels required | 4/4 | 4/4 in Games 4 and 5 | 4/4 | Three Levels familiarity credits discounted the trial $1,700 child to $1,190. |
+| Action / no parent | 4/4 | 4/4 in Games 4 and 5 | 4/4 | Same recorded Reviews, release cycles and settled sales as the required-parent arm; trial quote was $510 higher and cash $510 lower. |
+| Strategy / Levels required | 1/4 | 1/4 in Game 4 | **0/4** | The one buyer stopped after Game 4 with $415.62 overdue rent. Other routes bought Levels but could not buy the child at the fixed shopping point; one later had $100.17 overdue rent. |
+| Strategy / no parent | 3/4 | 3/4 in Game 4; 2/4 in Game 5 | **2/4** | Two buyers reached Game 5 without arrears. A third stopped after Game 4 with $315.58 overdue rent; the fourth could not afford the child and abstained. |
+
+At the four Strategy post-Game-3 shopping points, cash was **$1,765.34 / $3,669.70 / $1,804.71 / $936.21** (seed1104 ordinary/synergy, seed4417 ordinary/synergy). With Levels missing, the trial full chain was **$450 parent + $1,700 child = $2,150**, requiring two productive purchase cycles; only **1/4** shopping points could afford that quote. A no-parent $1,700 child required one cycle and was affordable in **3/4**. The naïve required-parent route bought Levels first even when the full chain was unaffordable, stranding the parent expense. The [full-chain guard overlay](sim-v6/chain_guard.csv) selects the native no-purchase control in those three unaffordable cases after verifying identical first-three-release cycle/Review/cash checkpoints before shopping; only the one already-observed required-parent buyer remains, and it blocks after Game 4. This overlay is **route selection**, not a native guarded-purchase replay.
+
+The no-parent arm improves access but does **not** make the $1,700 price safe: seed4417/ordinary bought with only $104.71 immediately after purchase and later blocked. Reviews and settled sales also vary by seed; do not infer an intrinsic card gain or a numerical pass threshold from two seeds. In Action, removing the parent relationship also removes its 30% familiarity discount under the current Store formula. That cash penalty did not change the four Action routes' access or solvency, but it remains a design tradeoff.
+
+## Store-only Contract boundary
+
+`FeatureStoreCatalog.starting_features()` reads the fixed Primitive `data/card_ledger.json`; `RunState._primitive_contract_eligible_ids()` builds Ironclad/SideStreet supply only from that list. `sub_areas` is absent from the live Primitive and later Store ledgers and was installed only as a process-local Store shadow. The [audit](sim-v6/audit.py) found zero candidate draw/selection hits in Contract actions across all 24 routes. This verifies current source isolation and the pilot's ability to keep Store acquisition separate. It is **not** a simulation of hypothetical Contract eligibility or a new Contract-balance ruling.
+
+## Verification, recommendation and limits
+
+The [audit](sim-v6/audit.py) passed 24/24 raw SHA-256 traces, exits 0/valid, genuine startup, native cash/finance equality and ledger/row checks, exact unchanged HEAD/driver/source hashes, and zero Contract candidate hits. [Analysis script](sim-v6/analyze.py) produced the route table; [full-chain overlay](sim-v6/chain_guard.py) verified identical pre-shopping first-three-release checkpoints and corrected the stranded-parent comparison. No tracked source file changed during the run.
+
+**Recommendation for the bounded design pilot:** make Sub-Areas an independent Store node with **no required Levels parent** and no parent-familiarity discount under the current single-parent formula; keep it **outside all Contract supply** unless later separately approved. This gives parent-missing specialties a legal one-cycle path and avoids a parent purchase that cannot produce the child. It preserves the existing Primitive Contract pool boundary. This is a structural access recommendation, **not** approval of the $1,700 base, $90 candidate play fee, fixed-after-Game-3 timing, first-era unlock, numerical success threshold or gameplay implementation.
+
+Limits: two seeds, two specialties, two policies, $5,700 current trait start, one fixed shopping window, zero later-card play fee, one candidate printed card, no human UI test. Strategy's low cash demonstrates price/timing sensitivity; the shared Task 2 broader shopping comparison remains incomplete and owns genuine $5,500 starts, reserve/deferred policies, representative live-node controls and more seeds. Store-only is grounded in verified source separation, not a randomized Contract-inclusion trial.
