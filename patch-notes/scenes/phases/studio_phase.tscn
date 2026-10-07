@@ -37,6 +37,11 @@ layout_mode = 2
 text = "Studio Phase"
 theme_override_font_sizes/font_size = 28
 
+[node name="StudioIdentity" type="Label" parent="Dashboard/Layout"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+autowrap_mode = 3
+
 [node name="MenuCenter" type="CenterContainer" parent="Dashboard/Layout"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -81,6 +86,7 @@ visible = false
 custom_minimum_size = Vector2(270, 0)
 
 [node name="StoreHintText" type="Label" parent="Dashboard/Layout/MenuCenter/Menu/Right/StoreHint"]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 unique_name_in_owner = true
 autowrap_mode = 3

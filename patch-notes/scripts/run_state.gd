@@ -45,6 +45,7 @@ var _pending_publisher_notifications: Array[StringName] = []
 var _seen_tutorial_topics: Dictionary = {}
 var _studio_name := ""
 var _studio_specialty: StringName = &""
+var _studio_traits: Dictionary = {}
 var _first_studio_economy := false
 var _starter_selection_confirmed := false
 var _first_tutorial_project_id: StringName
@@ -65,7 +66,29 @@ func get_first_game_tutorial(project: ProjectState) -> FirstGameTutorial:
 	if project == null or project.get_release_id() != _first_tutorial_project_id: return null
 	return _first_game_tutorial
 
+## Legacy no-trait fixture/capture creation. New player flow uses create_studio.
 func set_studio_name(value: String, specialty: StringName = &"") -> bool:
+	return _commit_studio_creation(value, specialty, {})
+
+
+func create_studio(value: String, specialty: StringName, background: StringName, secondary_ids: Array) -> bool:
+	var selection := StudioTraits.evaluate(background, secondary_ids)
+	if not selection.valid: return false
+	return _commit_studio_creation(value, specialty, selection)
+
+
+func get_studio_traits() -> Dictionary:
+	return _studio_traits.duplicate(true)
+
+
+## Value checkpoint for eventual save integration, not a durable loader.
+func get_studio_creation_snapshot() -> Dictionary:
+	return {"name": _studio_name, "specialty_id": _studio_specialty,
+		"traits": get_studio_traits(), "base_funding_cents": FIRST_STUDIO_CASH_CENTS,
+		"confirmation_committed": not _studio_name.is_empty()}
+
+
+func _commit_studio_creation(value: String, specialty: StringName, selection: Dictionary) -> bool:
 	var cleaned := value.strip_edges()
 	if not _studio_name.is_empty() or not _studio_specialty.is_empty() or cleaned.is_empty() or cleaned.length() > 80 or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle or not _cash_initialized or _cash_cents != 0 or _completed_run_cycles != 0 or not _released_games.is_empty():
 		return false
@@ -76,12 +99,21 @@ func set_studio_name(value: String, specialty: StringName = &"") -> bool:
 		if not _feature_definitions.has(id):
 			return false
 		guaranteed[id] = true
+	var finance := StudioFinanceLedger.create(FIRST_STUDIO_CASH_CENTS)
+	var point_cash := int(selection.get("point_cash_cents", 0))
+	if point_cash > 0:
+		var receipt := StudioFinanceLedger.plan(finance, 0, FIRST_STUDIO_CASH_CENTS,
+			point_cash, &"financing_in", 0, 0, false, &"studio_trait_unspent_points_v1")
+		if receipt.is_empty(): return false
+		finance = receipt.ledger
+	if finance.is_empty(): return false
 	_owned_features = guaranteed
-	_cash_cents = FIRST_STUDIO_CASH_CENTS
+	_cash_cents = FIRST_STUDIO_CASH_CENTS + point_cash
+	_studio_traits = selection.duplicate(true)
 	_first_studio_economy = true
 	_studio_name = cleaned
 	_studio_specialty = specialty
-	_studio_finance = StudioFinanceLedger.create(_cash_cents)
+	_studio_finance = finance
 	cash_changed.emit()
 	features_changed.emit()
 	finance_changed.emit()
@@ -91,6 +123,10 @@ func set_studio_name(value: String, specialty: StringName = &"") -> bool:
 ## Historical expenses are available only for studios created with this ledger.
 func get_studio_finance_report() -> Dictionary:
 	return StudioFinanceLedger.report(_studio_finance, _completed_run_cycles, _cash_cents)
+
+
+func get_outstanding_expenses() -> Dictionary:
+	return StudioFinanceLedger.outstanding(_studio_finance, _completed_run_cycles)
 
 
 func get_studio_finance_snapshot() -> Dictionary:

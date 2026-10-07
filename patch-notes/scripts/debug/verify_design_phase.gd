@@ -712,7 +712,7 @@ func _verify_balanced_success(design_phase: Node) -> void:
 		_make_fixture(&"commit_technology", &"technology", 3, &"", 0, 1),
 		_make_fixture(&"commit_design", &"design", 2, &"", 0, 1),
 	]
-	_set_exact_candidates(design_phase, cards)
+	_set_exact_candidates(design_phase, cards, true)
 	_select_first(design_phase, 4)
 	var emissions := [0]
 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
@@ -726,7 +726,7 @@ func _verify_balanced_success(design_phase: Node) -> void:
 	_expect(design_phase.get_workspace().synergy_notification.title_label.text == "Balanced Production!", "Balanced Design action displays its synergy")
 	for card in cards:
 		_expect(design_phase.get("_exhausted_card_ids").has(card.id), "Balanced success preserves Feature exhaustion: %s" % card.id)
-	_expect(design_phase.get("_selected_card_views").is_empty() and design_phase.get_node("%HandContainer").get_child_count() == 7, "Balanced success clears selection and replaces the candidate pool")
+	_expect(design_phase.get("_selected_card_views").is_empty() and design_phase.get_node("%HandContainer").get_child_count() == 7, "Balanced success clears selection and refills the four played slots")
 
 
 func _verify_balanced_pass_success(design_phase: Node, database: Node) -> void:
@@ -835,7 +835,7 @@ func _verify_atomic_success(design_phase: Node, project_state: ProjectState, dat
 		database.call(&"get_card", &"graphics_pass"),
 		database.call(&"get_card", &"sprites"),
 	]
-	_set_exact_candidates(design_phase, cards)
+	_set_exact_candidates(design_phase, cards, true)
 	_select_first(design_phase, 4)
 	var old_views := design_phase.get_node("%HandContainer").get_children()
 	var emissions := [0]
@@ -851,9 +851,10 @@ func _verify_atomic_success(design_phase: Node, project_state: ProjectState, dat
 	_expect(not design_phase.get("_candidate_cards").any(func(card: CardData) -> bool: return design_phase.get("_exhausted_card_ids").has(card.id)), "Exhausted Features never appear in the next weighted pool")
 	var retained_features: Array = design_phase.get("_available_features").duplicate()
 	retained_features.append_array(design_phase.get("_candidate_cards"))
-	_expect(retained_features.has(database.call(&"get_card", &"sprites")), "Unselected Feature remains available or is redealt")
+	_expect(retained_features.has(database.call(&"get_card", &"sprites")), "Unselected Feature remains reserved")
 	_expect(design_phase.get("_selected_card_views").is_empty() and (design_phase.get_node("%PlayCardButton") as Button).disabled, "Successful play clears selections and disables Play")
-	_expect(design_phase.get_node("%HandContainer").get_child_count() == 7, "Successful play deals seven new candidates")
+	_expect(design_phase.get_node("%HandContainer").get_child_count() == 7, "Successful play retains three candidates and draws four replacements")
+	_expect(design_phase.get_node("%HandContainer").get_children().slice(0, 3) == old_views.slice(4), "Unplayed Design CardView instances retain their order")
 	(old_views[0] as CardView).card_pressed.emit(old_views[0])
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
 	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
@@ -869,16 +870,19 @@ func _verify_post_hand_deal_failure(design_phase: Node, restore_state: ProjectSt
 		database.call(&"get_card", &"sound_pass"),
 		database.call(&"get_card", &"technology_pass"),
 	]
-	_set_exact_candidates(design_phase, cards)
+	_set_exact_candidates(design_phase, cards, true)
 	_select_first(design_phase, 4)
 	var passes: Array[CardData] = []
 	passes.assign(database.call(&"get_cards_by_phase_and_types", CardData.PHASE_DESIGN, [&"pass"] as Array[StringName]))
 	design_phase.set("_pass_definitions", passes.slice(0, 3))
+	var old_views := design_phase.get_node("%HandContainer").get_children()
+	var exhausted_before: Dictionary = design_phase.get("_exhausted_card_ids").duplicate()
+	var rng_before: int = design_phase.get("_deal_rng").state
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
 	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
-	_expect(_values(project_state) == [4, 2, 2, 0, 1] and project_state.get_current_cycle() == 1, "Post-hand deal failure preserves the committed scores, Scope, and one cycle")
-	_expect(design_phase.get("_exhausted_card_ids").has(feature.id), "Post-hand deal failure preserves committed Feature exhaustion")
-	_expect(design_phase.get("_candidate_cards").is_empty() and design_phase.get_node("%HandContainer").get_child_count() == 0, "Post-hand deal failure leaves a safe empty pool rather than a partial pool")
+	_expect(_values(project_state) == [0, 0, 0, 0, 0] and project_state.get_current_cycle() == 0, "Refill failure rejects before committing production or a cycle")
+	_expect(design_phase.get("_exhausted_card_ids") == exhausted_before and design_phase.get("_deal_rng").state == rng_before, "Refill failure preserves exhaustion and draw RNG")
+	_expect(design_phase.get_node("%HandContainer").get_children() == old_views and design_phase.get_selected_candidate_views().size() == 4, "Refill failure preserves the complete visible pool and selected hand")
 	design_phase.set("_pass_definitions", passes)
 	design_phase.call("setup", restore_state)
 
@@ -1201,7 +1205,9 @@ func _set_pool(design_phase: Node, features: Array) -> void:
 	design_phase.call("_deal_next_candidate_pool")
 
 
-func _set_exact_candidates(design_phase: Node, cards: Array[CardData]) -> void:
+func _set_exact_candidates(design_phase: Node, cards: Array[CardData], fill_to_seven := false) -> void:
+	cards = cards.duplicate()
+	while fill_to_seven and cards.size() < 7: cards.append(root.get_node("CardDatabase").get_card(&"graphics_pass"))
 	design_phase.call("_clear_candidate_pool")
 	var candidates: Array = design_phase.get("_candidate_cards")
 	candidates.assign(cards)

@@ -182,7 +182,15 @@ func _verify_two_hand_completion() -> void:
 	(phase.get_selected_candidate_views()[0] as CardView).input_button.pressed.emit()
 	expect(not phase.call("_play_selected_hand") and run_snapshot(run, project) == rejected_before and state.get_successful_hand_count() == 0, "Incomplete hand rejects without run or contract mutation")
 	_select_first(phase, 4)
+	var before_views: Array = phase.get("_candidate_row").get_children()
 	expect(phase.call("_play_selected_hand"), "First contract hand succeeds")
+	var after_views: Array = phase.get("_candidate_row").get_children()
+	expect(after_views.size() == 7 and after_views.slice(0, 3) == before_views.slice(4), "Contract preserves all three unplayed instances before its four new candidates")
+	var finite_seen := {}
+	for card in phase.get_candidate_cards():
+		if not card.renewable:
+			expect(not finite_seen.has(card.id), "Contract refill cannot duplicate a reserved finite Feature")
+			finite_seen[card.id] = true
 	expect(run.get_cash_cents() == ContractState.GUARANTEED_UPFRONT_CENTS and run.get_released_game_sales(project.get_release_id()).earned_cycles == 1, "First hand advances and earns sales without another Contract payment or early settlement")
 	expect(state.get_successful_hand_count() == 1 and state.is_feature_exhausted(&"text") and not state.is_feature_exhausted(&"graphics_pass"), "Features exhaust locally while Passes remain renewable")
 	expect(not _card_ids(phase.get_candidate_cards()).has(&"text") and run.get_completed_run_cycles() == 1, "Second draw excludes exhausted Feature and first hand advances once")

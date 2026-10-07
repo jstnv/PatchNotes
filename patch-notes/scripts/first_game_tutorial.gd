@@ -17,19 +17,22 @@ func needs_scripted_deal() -> bool:
 	return (stage == Stage.FIRST_HAND and not first_pool_published) or (stage == Stage.REDRAW_HAND and not second_pool_published)
 
 
-func plan_deal(features: Array[CardData], passes: Array[CardData], priorities: Dictionary, cash_cents: int, costs: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
-	if not needs_scripted_deal(): return {}
-	var target := _dominant_stat(priorities, first_stat if stage == Stage.REDRAW_HAND else &"", rng)
+func plan_deal(features: Array[CardData], passes: Array[CardData], priorities: Dictionary, cash_cents: int, costs: Dictionary, rng: RandomNumberGenerator, retained: Array[CardData] = [], after_hand := false) -> Dictionary:
+	if (after_hand and stage != Stage.FIRST_HAND) or (not after_hand and not needs_scripted_deal()): return {}
+	var second := after_hand or stage == Stage.REDRAW_HAND
+	var target := _dominant_stat(priorities, first_stat if second else &"", rng)
 	var target_pass := _pass_for(passes, target)
 	if target_pass == null: return {}
-	var matching_count := 4 if stage == Stage.FIRST_HAND else 3
+	var matching_count := 3 if second else 4
+	var counts := {}
+	for card: CardData in retained: counts[card.primary_stat] = int(counts.get(card.primary_stat, 0)) + 1
 	var cards: Array[CardData] = []
 	var selected_features: Array[CardData] = []
 	var remaining: Array[CardData] = features.duplicate()
 	var budget := cash_cents
 	# Prefer actual affordable owned Features so the lesson can also build Scope.
 	# Renewable Core Passes guarantee the pattern even for the smallest legal pool.
-	for slot in range(matching_count):
+	for slot in range(matching_count - int(counts.get(target, 0))):
 		var eligible: Array[CardData] = []
 		for card: CardData in remaining:
 			if card.primary_stat == target and costs.get(card.id, -1) >= 0 and costs[card.id] <= budget:
@@ -43,8 +46,8 @@ func plan_deal(features: Array[CardData], passes: Array[CardData], priorities: D
 			selected_features.append(feature)
 			remaining.erase(feature)
 			budget -= int(costs[feature.id])
-	var counts := {target: matching_count}
-	while cards.size() < 7:
+	counts[target] = matching_count
+	while cards.size() + retained.size() < 7:
 		var entries: Array[Dictionary] = []
 		for card: CardData in remaining + passes:
 			if card.primary_stat == target or int(counts.get(card.primary_stat, 0)) >= 3: continue

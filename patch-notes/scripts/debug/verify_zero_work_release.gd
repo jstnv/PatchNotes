@@ -55,6 +55,9 @@ func _run() -> void:
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Release Guard"
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu.get("_background").select(1)
+	menu.call("_show_review")
+	menu.call("_confirm_studio")
 	for number in range(2):
 		var studio: StudioPhase = game.get("_active_phase")
 		check(game.call("_begin_next_project", studio, "Guard %d" % number, &"action", &"fantasy"), "Begin first/later project")

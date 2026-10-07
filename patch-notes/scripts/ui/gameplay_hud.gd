@@ -9,6 +9,8 @@ var footer: Label
 var footer_panel: PanelContainer
 var cash_button: Button
 var studio_finances: StudioFinances
+var settings_menu: DemoSettingsMenu
+var settings_button: Button
 var change_priorities: Button
 var synergy_notification: SynergyNotification
 var tutorial_overlay: TutorialOverlay
@@ -82,6 +84,11 @@ func _ready() -> void:
 	tutorial_button.custom_minimum_size.x = 100
 	tutorial_button.pressed.connect(show_tutorial)
 	footer_row.add_child(tutorial_button)
+	settings_button = Button.new()
+	settings_button.name = "SettingsButton"
+	settings_button.text = "Settings"
+	settings_button.pressed.connect(show_settings)
+	footer_row.add_child(settings_button)
 	cash_button = Button.new()
 	cash_button.name = "CashButton"
 	cash_button.custom_minimum_size.x = 148
@@ -101,6 +108,9 @@ func _ready() -> void:
 	contextual_tip = ContextualTip.new()
 	contextual_tip.name = "ContextualTip"
 	add_child(contextual_tip)
+	settings_menu = DemoSettingsMenu.new()
+	settings_menu.name = "SettingsMenu"
+	add_child(settings_menu)
 
 func setup(project_state: ProjectState, run_state: RunState) -> void:
 	if project != null:
@@ -125,6 +135,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 	refresh()
 
 func set_phase(controller: Control) -> void:
+	settings_menu.close()
 	studio_finances.close()
 	_presented_scores.clear()
 	for pulse in _score_pulses:
@@ -229,6 +240,13 @@ func _refresh_guidance() -> void:
 
 
 func _guidance_for_current_state() -> Dictionary:
+	# The native action publishes the next pool before the old hand finishes its
+	# presentation. Do not reveal or mark its guidance visited until it is playable.
+	var motion: HandPresentation
+	if is_instance_valid(phase):
+		if phase.has_method("get_workspace"): motion = phase.get_workspace().hand_motion
+		elif phase is ContractPhase: motion = phase.hand_motion
+	if motion != null and (motion.capturing or motion.busy): return {}
 	match tutorial_context:
 		&"main_menu":
 			return {}
@@ -393,3 +411,9 @@ func _refresh_footer() -> void:
 		footer.remove_theme_color_override("font_color")
 	footer.tooltip_text = footer.text
 	cash_button.tooltip_text = "Studio Finances · Available cash %s\n%s" % [CashFormatter.format_exact_cents(cents), run.get_financial_block_reason() if finances.get("financially_blocked", false) else "Monthly earnings, settled cash, expenses and rent. Opening and browsing are free."]
+
+
+func show_settings() -> void:
+	contextual_tip.dismiss()
+	tutorial_overlay.close()
+	settings_menu.open()

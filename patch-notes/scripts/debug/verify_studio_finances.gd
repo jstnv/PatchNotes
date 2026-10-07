@@ -3,7 +3,7 @@
 ## Omit --headless and append -- --capture for viewport evidence.
 extends SceneTree
 
-const OUTPUT := "res://design-logs/task29-finances-v1/"
+const OUTPUT := "res://design-logs/task33-v1/rendered/"
 var failures := 0
 var checks := 0
 
@@ -115,6 +115,16 @@ func _verify_resolution(resolution: Vector2i) -> void:
 	expect(menu.block_label.text.contains("launch") and menu.block_label.text.contains("income action"), "Blocked finance view preserves allowed navigation and recovery explanation")
 	_check_bounds(menu, resolution)
 	await _capture("unpaid-rent", resolution)
+	menu.finance_tabs.current_tab = 1
+	await _settle()
+	expect(menu.expense_details.text.contains("rent:2") and menu.expense_details.text.contains("Remaining $376.55") and menu.expense_details.text.contains("Overdue 0 cycles"), "Outstanding tab shows stable bill, exact remaining balance and newly missed age")
+	await _capture("outstanding-bills", resolution)
+	menu.open_bank()
+	await _settle()
+	expect(menu.bank_history.text.contains("Credit score: 595") and menu.bank_history.text.contains("rent:2"), "Bank displays real score and identified monthly reason")
+	await _capture("credit-missed-rent", resolution)
+	menu.back()
+	menu.finance_tabs.current_tab = 0
 	before = _snapshot(run)
 	var focus := InputEventAction.new()
 	focus.action = "ui_focus_next"

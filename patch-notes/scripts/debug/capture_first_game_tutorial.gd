@@ -52,6 +52,9 @@ func _run() -> void:
 		main._name_input.text = "First Steps Studio"
 		main.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 		main.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+		main.get("_background").select(1)
+		main.call("_show_review")
+		main.call("_confirm_studio")
 		var studio: Control = game.get("_active_phase")
 		if not game.call("_begin_next_project", studio, "Learning the Ropes", &"action", &"fantasy"):
 			push_error("Real first project did not start")

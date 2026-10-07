@@ -5,7 +5,7 @@ var traces: Array = []
 var capture := false
 
 func _initialize() -> void:
-	DirAccess.make_dir_recursive_absolute("res://design-logs/card-motion-v2")
+	DirAccess.make_dir_recursive_absolute("res://design-logs/candidate-pool-repair-v1/card-motion")
 	capture = "--capture" in OS.get_cmdline_user_args()
 	_verify.call_deferred()
 
@@ -19,7 +19,7 @@ func settle(seconds := 0.70) -> void:
 func shot(name: String) -> void:
 	if not capture: return
 	await RenderingServer.frame_post_draw
-	root.get_texture().get_image().save_png("res://design-logs/card-motion-v2/%s.png" % name)
+	root.get_texture().get_image().save_png("res://design-logs/candidate-pool-repair-v1/card-motion/%s.png" % name)
 
 func click(point: Vector2) -> void:
 	for pressed in [true, false]:
@@ -59,7 +59,7 @@ func _verify() -> void:
 		await _store(dimensions.x)
 	await _paid_hand()
 	await _contract()
-	var out := FileAccess.open("res://design-logs/card-motion-v2/animation-traces.json", FileAccess.WRITE)
+	var out := FileAccess.open("res://design-logs/candidate-pool-repair-v1/card-motion/animation-traces.json", FileAccess.WRITE)
 	out.store_string(JSON.stringify(traces, "\t"))
 	print("Card motion verification: %d failures" % failures)
 	quit(failures)
@@ -85,6 +85,9 @@ func _production(width: int) -> void:
 	for i in [3, 2, 1, 0]: views[i].input_button.pressed.emit()
 	await settle()
 	expect(views[0].position.y < unselected_y - 40 and views[0].z_index > views[6].z_index, "Selected cards extend above the fan and remain raised")
+	expect(views.slice(4).all(func(card): return card.input_button.disabled), "Four selected cards disable all remaining candidates")
+	click(views[6].get_global_transform() * Vector2(220, 170))
+	expect(phase.get_selected_candidate_views().size() == 4 and not views[6].is_selected(), "Native fan pointer cannot select a disabled fifth card")
 	click(views[3].get_global_transform() * Vector2(220, 170))
 	expect(not views[3].is_selected() and not views[4].is_selected(), "Native pointer routing selects the visible foreground card in an overlapping fan")
 	views[3].input_button.pressed.emit()
@@ -102,6 +105,7 @@ func _production(width: int) -> void:
 	phase.get_node("%PlayCardButton").pressed.emit()
 	expect(motion.busy and project.get_core_score(0) == 12 and run.get_completed_run_cycles() == cycle + 1, "Native specialization commits once before visual playback")
 	expect(root.gui_get_focus_owner() == motion, "Presentation owns keyboard focus while the hand resolves")
+	expect(not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Next-pool guidance waits until the current hand presentation finishes")
 	expect(hud.stats[1].text == "Graphics\n0" and not fan.visible, "Scoreboard holds old value while committed candidates are hidden")
 	var committed := _snapshot(project, run)
 	phase.get_node("%PlayCardButton").pressed.emit()
@@ -124,10 +128,7 @@ func _production(width: int) -> void:
 	var return_count := 0
 	for event in motion.trace:
 		if event.event == "return_from_bottom": return_count += 1
-	var expected_returns := 0
-	for id in [&"sound_pass", &"technology_pass", &"design_pass"]:
-		if fan.ordered_cards().any(func(view): return view.card_data.id == id): expected_returns += 1
-	expect(return_count == expected_returns, "Rebuilt post-play views reuse each recurring unplayed bottom-fan card exactly once")
+	expect(return_count == 3 and fan.ordered_cards().slice(0, 3) == views.slice(4), "Exactly three surviving instances return from the bottom in their previous order")
 	var bonuses: Array = []
 	var deals: Array = []
 	for event in motion.trace:
@@ -150,8 +151,11 @@ func _production(width: int) -> void:
 		# Tween callbacks are frame-quantized; require distinct arrivals rather
 		# than a fixed wall-clock interval on a slow rendering frame.
 		staggered = staggered and deals[i].msec > deals[i - 1].msec
-	expect(not deals.is_empty() and staggered, "New cards join the fan one at a time")
+	expect(deals.size() == 4 and staggered, "Exactly four new instances enter from the top one at a time")
 	expect(hud.stats[1].text == "Graphics\n12" and _snapshot(project, run) == committed and fan.visible, "Playback totals exactly match native resolution and makes no extra state changes")
+	expect(not hud.tip_button.disabled, "Guidance becomes available again when the retained pool is playable")
+	hud.contextual_tip.dismiss()
+	await shot("restored-fan-%d" % width)
 	traces.append({"phase": "Design", "width": width, "seed": 240930, "order": motion.trace.duplicate(true), "state": committed})
 	# Redraw one renewable Pass, preserving the remaining candidate instances.
 	_install(phase, [&"graphics_pass", &"sound_pass", &"technology_pass", &"design_pass", &"graphics_pass", &"sound_pass", &"design_pass"])
@@ -230,6 +234,9 @@ func _store(width: int) -> void:
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Motion Test Studio"
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu.get("_background").select(1)
+	menu.call("_show_review")
+	menu.call("_confirm_studio")
 	var run: RunState = game.run_state
 	var studio: StudioPhase = game.get("_active_phase")
 	studio.get_node("%FeatureStoreButton").pressed.emit()
@@ -339,11 +346,14 @@ func _contract() -> void:
 		for i in range(7): cards.append(root.get_node("CardDatabase").get_card(&"graphics_pass"))
 		phase._publish_candidate_pool(cards)
 		await settle()
+		var retained := phase._candidate_row.get_children().slice(4)
 		for i in range(4): phase._candidate_row.get_child(i).input_button.pressed.emit()
 		phase._play_button.pressed.emit()
 		expect(phase.hand_motion.busy and state.get_successful_hand_count() == hand + 1, "Contract commits hand once before presentation")
 		if hand == 1: expect(not phase._completion_panel.visible, "Contract completion waits until final hand finishes its visual sequence")
 		if phase.hand_motion.busy: await phase.hand_motion.finished
+		if hand == 0:
+			expect(phase._candidate_row.ordered_cards().slice(0, 3) == retained and phase.hand_motion.trace.filter(func(event): return event.event == "return_from_bottom").size() == 3 and phase.hand_motion.trace.filter(func(event): return event.event == "deal").size() == 4, "Contract returns the exact three duplicate Pass instances and deals only four new ones")
 		expect(state.get_core_score_half_units(0) == (hand + 1) * 24, "Contract animation preserves half-unit Specialization totals")
 	expect(phase._completion_panel.visible and state.is_completed() and run.get_completed_run_cycles() == 2, "Final bounce reveals native completion with exactly two productive cycles")
 	expect(original_release == [released.get_current_scope(), released.get_current_cycle(), released.get_review_result()], "Contract presentation leaves the frozen released project untouched")

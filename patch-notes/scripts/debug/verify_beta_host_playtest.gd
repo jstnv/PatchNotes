@@ -137,10 +137,10 @@ func _verify_pending_and_injection() -> void:
 	fixture.beta.setup(fixture.state, fixture.run, _snapshots)
 	_expect(fixture.beta.get_pending_corrective_pass_ids() == pending, "Priority, score changes, and UI reconstruction cannot alter pending IDs")
 	_expect(not fixture.beta.host_playtest() and fixture.run.get_cash() == 500 and fixture.state.get_current_cycle() == 2, "Second callback while pending cannot double-charge or advance")
-	_expect(fixture.beta.play_selected_hand([] as Array[int], [0.05, 0.15, 0.25, 0.35, 0.45] as Array[float], [0.1, 0.2, 0.3, 0.4, 0.5] as Array[float]), "Next successful production hand prepares five ordinary candidates")
+	_expect(fixture.beta.play_selected_hand([] as Array[int], [0.05, 0.15] as Array[float], [0.1, 0.2] as Array[float]), "Next successful hand prepares two ordinary candidates alongside two corrective Passes")
 	var cards: Array[CardData] = fixture.beta.get("_candidate_cards")
-	_expect(cards.size() == 7 and cards[0].id == &"sound_pass" and cards[1].id == &"technology_pass", "Replacement publishes queued Passes first, then five ordinary candidates")
-	for index in range(2, 7):
+	_expect(cards.size() == 7 and cards[3].id == &"sound_pass" and cards[4].id == &"technology_pass", "Replacement preserves three cards, then publishes queued Passes and two ordinary cards")
+	for index in range(5, 7):
 		_expect(cards[index].phase == CardData.PHASE_BETA and cards[index].card_type == &"beta", "Replacement ordinary slot %d remains a weighted Beta definition" % index)
 	_expect(fixture.beta.get_pending_corrective_pass_ids().is_empty(), "Pending correction clears only after complete pool publication")
 	_expect(fixture.state.get_current_cycle() == 3, "Host, priority commit, and production advance exactly three cycles")
@@ -165,9 +165,9 @@ func _verify_corrective_pass_resolution() -> void:
 	fixture.state.add_core_score(ProjectState.CoreScore.DESIGN, 3)
 	_select_count(fixture.beta, 4)
 	fixture.beta.host_playtest()
-	fixture.beta.play_selected_hand([] as Array[int], [0.05, 0.15, 0.25, 0.35, 0.45] as Array[float], [0.1, 0.2, 0.3, 0.4, 0.5] as Array[float])
-	var views: Array[CardView] = fixture.beta.get("_candidate_views")
-	for index in range(4):
+	fixture.beta.play_selected_hand([] as Array[int], [0.05, 0.15] as Array[float], [0.1, 0.2] as Array[float])
+	var views: Array[CardView] = fixture.beta.get("_candidate_views").duplicate()
+	for index in [3, 4, 5, 6]:
 		fixture.beta.call("_on_card_pressed", views[index])
 	_expect(fixture.beta.get_workspace().get("_synergy_help_title") == "Corrective Pass selected", "Beta tooltip explains that corrective Passes do not grant synergy")
 	var sound_before: int = fixture.state.get_core_score(ProjectState.CoreScore.SOUND)
@@ -188,18 +188,21 @@ func _verify_single_corrective_pass_resolution() -> void:
 	var fixture := await _make_beta(1000)
 	_select_count(fixture.beta, 4)
 	_expect(fixture.beta.host_playtest(), "Host Playtest queues a controlled single-Pass fixture")
-	_expect(fixture.beta.play_selected_hand([] as Array[int], [0.05, 0.15, 0.25, 0.35, 0.45] as Array[float], [0.1, 0.2, 0.3, 0.4, 0.5] as Array[float]), "Controlled hand publishes corrective Pass opportunities")
-	var views: Array[CardView] = fixture.beta.get("_candidate_views")
-	fixture.beta.call("_on_card_pressed", views[0])
-	for index in range(2, 5):
+	_expect(fixture.beta.play_selected_hand([] as Array[int], [0.05, 0.15] as Array[float], [0.1, 0.2] as Array[float]), "Controlled hand publishes corrective Pass opportunities")
+	var views: Array[CardView] = fixture.beta.get("_candidate_views").duplicate()
+	fixture.beta.call("_on_card_pressed", views[3])
+	for index in range(3):
 		fixture.beta.call("_on_card_pressed", views[index])
 	var graphics_before: int = fixture.state.get_core_score(ProjectState.CoreScore.GRAPHICS)
 	var sound_before: int = fixture.state.get_core_score(ProjectState.CoreScore.SOUND)
 	_expect(fixture.beta.play_selected_hand(), "One corrective Pass can resolve with three ordinary Beta cards")
 	_expect(fixture.state.get_core_score(ProjectState.CoreScore.GRAPHICS) == graphics_before + 2, "Selected corrective Pass applies exactly +2")
 	_expect(fixture.state.get_core_score(ProjectState.CoreScore.SOUND) == sound_before, "Unselected corrective Pass applies no effect")
-	for card: CardData in fixture.beta.get("_candidate_cards"):
-		_expect(card.card_type == &"beta", "Unselected corrective opportunity disappears when its pool retires")
+	_expect(views[4] in fixture.beta.get("_candidate_views") and views[4] in fixture.beta.get("_injected_corrective_views"), "Unplayed corrective Pass retains its instance and corrective eligibility")
+	var next_views: Array[CardView] = fixture.beta.get("_candidate_views")
+	for index in range(4): fixture.beta.call("_on_card_pressed", next_views[index])
+	_expect(fixture.beta.play_selected_hand(), "Retained corrective Pass remains playable in the following hand")
+	_expect(fixture.state.get_core_score(ProjectState.CoreScore.SOUND) == sound_before + 2 and views[4] not in fixture.beta.get("_candidate_views"), "Retained corrective Pass grants its +2 exactly once when played")
 	fixture.beta.queue_free()
 	await process_frame
 

@@ -3,7 +3,8 @@ extends RefCounted
 
 ## Pure run-finance journal. Calendar/cash remain owned by RunState; this class
 ## only plans value snapshots and rebuilds reports from checked provenance.
-const SCHEMA_VERSION := 1
+const SCHEMA_VERSION := 2
+const Bills := preload("res://scripts/finance/outstanding_expenses.gd")
 const MAX_INT: int = 9223372036854775807
 const MONTHLY_RENT_CENTS := 50000
 const EXPENSE_FIELDS := {
@@ -29,7 +30,8 @@ static func create(cash_cents: int) -> Dictionary:
 	row.cash_change_cents = cash_cents
 	var ledger := {"schema_version": SCHEMA_VERSION, "initial_cash_cents": cash_cents,
 		"last_cycle": 0, "cash_cents": cash_cents, "unsettled_sales_net_cents": 0,
-		"monthly_rows": [row], "obligations": [], "transactions": [], "actions": []}
+		"monthly_rows": [row], "obligations": [], "transactions": [], "actions": [],
+		"credit": Bills.create_credit()}
 	_append_transaction(ledger, 0, 1, &"starting_funding", cash_cents, cash_cents, 0, cash_cents, &"")
 	return ledger
 
@@ -65,8 +67,22 @@ static func report(ledger: Dictionary, current_cycle: int, current_cash: int) ->
 		"unpaid_rent_cents": unpaid, "monthly_rent_cents": MONTHLY_RENT_CENTS,
 		"next_due_cycle": base_cycle + 2 if base_cycle <= MAX_INT - 2 else -1,
 		"financially_blocked": unpaid > 0,
+		"outstanding_expenses": _outstanding_unchecked(ledger, current_cycle),
+		"credit": ledger.credit.duplicate(true),
 		"credit_inputs": {"completed_months": current_cycle / 2,
 			"paid_on_time_months": on_time, "late_months": late}}
+
+
+static func outstanding(ledger: Dictionary, current_cycle: int) -> Dictionary:
+	if not _is_valid(ledger) or ledger.last_cycle != current_cycle: return {"available": false}
+	return {"available": true, "bills": _outstanding_unchecked(ledger, current_cycle)}
+
+
+static func _outstanding_unchecked(ledger: Dictionary, current_cycle: int) -> Array:
+	var result: Array = []
+	for bill: Dictionary in ledger.obligations:
+		if bill.unpaid_cents > 0: result.append(Bills.describe(bill, current_cycle))
+	return result
 
 
 static func _new_row(month: int, opening: int) -> Dictionary:
@@ -185,9 +201,7 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	cash = available
 	if rent_due > 0:
 		if not _add(row, "rent_due_cents", rent_due): return {}
-		next.obligations.append({"month": month, "due_cycle": cycle, "due_cents": rent_due,
-			"paid_cents": 0, "unpaid_cents": rent_due, "paid_on_time": false,
-			"late": false, "payments": []})
+		next.obligations.append(Bills.create_bill(StringName("rent:%d" % month), &"studio_rent", &"rent", cycle, rent_due))
 		_append_transaction(next, cycle, month, &"rent_due", rent_due, 0, cash, cash, &"", month)
 	var rent_paid := 0
 	for obligation: Dictionary in next.obligations:
@@ -197,19 +211,16 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 			if not _add(row, "rent_paid_cents", payment): return {}
 			if payment > MAX_INT - rent_paid: return {}
 			rent_paid += payment
-			obligation.paid_cents += payment
-			obligation.unpaid_cents -= payment
-			obligation.payments.append({"cycle": cycle, "month": month, "cents": payment})
 			_append_transaction(next, cycle, month, &"rent_payment", payment, -payment, cash, cash - payment, &"", obligation.month)
 			cash -= payment
-			# A completed rent month remains marked late after eventual recovery.
-			if obligation.unpaid_cents == 0 and not obligation.late and obligation.due_cycle == cycle:
-				obligation.paid_on_time = true
-		if obligation.unpaid_cents > 0: obligation.late = true
+		if not Bills.service(obligation, payment, cycle, month): return {}
 		rows[int(obligation.month) - 1].rent_unpaid_cents = obligation.unpaid_cents
 	row.closing_cash_cents = cash
 	row.partial = not productive or cycle % 2 != 0
 	if not _update_totals(row): return {}
+	if productive and cycle % 2 == 0:
+		next.credit = Bills.close_month(next.credit, next.obligations, month, row.net_profit_cents)
+		if next.credit.is_empty(): return {}
 	next.last_cycle = cycle
 	next.cash_cents = cash
 	next.unsettled_sales_net_cents = unsettled - settled
@@ -239,3 +250,28 @@ static func _is_valid(ledger: Dictionary) -> bool:
 		if step.is_empty(): return false
 		rebuilt = step.ledger
 	return rebuilt == ledger
+
+
+## Schema 1 had no explicit bill IDs. The original unique rent month is its
+## identity. Migrate only if every old field equals the reconstructed journal.
+static func upgrade_v1(legacy: Dictionary) -> Dictionary:
+	if legacy.get("schema_version") != 1: return {}
+	var candidate := legacy.duplicate(true)
+	candidate.schema_version = SCHEMA_VERSION
+	candidate.credit = Bills.create_credit()
+	if typeof(candidate.get("actions")) != TYPE_ARRAY or typeof(candidate.get("initial_cash_cents")) != TYPE_INT or candidate.initial_cash_cents < 0: return {}
+	var rebuilt := create(candidate.initial_cash_cents)
+	for action in candidate.actions:
+		if typeof(action) != TYPE_DICTIONARY: return {}
+		for key in ["cycle", "cash_before", "direct_delta", "sales_earned", "settled"]:
+			if typeof(action.get(key)) != TYPE_INT: return {}
+		if typeof(action.get("productive")) != TYPE_BOOL or typeof(action.get("kind")) != TYPE_STRING_NAME or typeof(action.get("source_id")) != TYPE_STRING_NAME or action.cash_before != rebuilt.cash_cents: return {}
+		var step := _apply(rebuilt, action.cycle, action.cash_before, action.direct_delta, action.kind, action.sales_earned, action.settled, action.productive, action.source_id, false)
+		if step.is_empty(): return {}
+		rebuilt = step.ledger
+	var projected := rebuilt.duplicate(true)
+	projected.schema_version = 1
+	projected.erase("credit")
+	for bill: Dictionary in projected.obligations:
+		for key in ["bill_id", "source_id", "expense_type", "settled_cycle", "recovery_overdue_cycles"]: bill.erase(key)
+	return rebuilt if projected == legacy else {}

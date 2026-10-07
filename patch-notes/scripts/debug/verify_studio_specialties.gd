@@ -85,6 +85,9 @@ func _verify_ui() -> void:
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://design-logs/task25-v1/studio-specialty-1152.png")
 	enter.pressed.emit()
+	menu.get("_background").select(1)
+	menu.call("_show_review")
+	menu.call("_confirm_studio")
 	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids().size() == 18, "Menu commits exactly one specialty")
 	before = snapshot(run)
 	enter.pressed.emit()
@@ -92,9 +95,9 @@ func _verify_ui() -> void:
 	var studio: StudioPhase = game.get("_active_phase")
 	check(not game.call("_begin_next_project", studio, "", &"puzzle", &"fantasy") and snapshot(run) == before and run.needs_starter_selection(), "Failed first start preserves optional zero-cycle purchase window")
 	check(game.call("_begin_next_project", studio, "Puzzle Game", &"puzzle", &"fantasy") and game.project_state.get_genre_id() == &"puzzle" and run.get_studio_specialty() == &"action", "Successful nonmatching first game commits independent Genre")
-	check(not run.needs_starter_selection() and run.get_completed_run_cycles() == 1 and run.get_cash_cents() == 550000, "First-project boundary closes initial window with usual cost")
+	check(not run.needs_starter_selection() and run.get_completed_run_cycles() == 1 and run.get_cash_cents() == 570000, "First-project boundary closes initial window with usual cost")
 	var offer := run.get_primitive_reserve_offer(&"simple_story")
-	check(not offer.initial and run.purchase_primitive_reserve_feature(&"simple_story") and run.get_cash_cents() == 470000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
+	check(not offer.initial and run.purchase_primitive_reserve_feature(&"simple_story") and run.get_cash_cents() == 490000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
 	check(not game.project_state.get_feature_supply_ids().has(&"simple_story") and PrimitivePredevelopment.prepare_project("Next", &"racing", &"fantasy", run).get_feature_supply_ids().has(&"simple_story"), "New ownership feeds next supply without changing current frozen supply")
 	game.queue_free()
 	await process_frame

@@ -620,7 +620,7 @@ func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
 	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}
 
 
-func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = []) -> Dictionary:
+func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE, excluded_ids: Array[StringName] = []) -> Dictionary:
 	if _pending_playtest_categories.size() != 2 or _pending_playtest_categories[0] == _pending_playtest_categories[1]:
 		return {&"valid": false, &"error": "A corrective Alpha deal requires two distinct queued Core categories."}
 	var injected_cards: Array[CardData] = []
@@ -629,7 +629,7 @@ func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, cont
 		if pass_card == null:
 			return {&"valid": false, &"error": "A queued corrective Core Pass is unavailable."}
 		injected_cards.append(pass_card)
-	var weighted_deal := _build_weighted_candidate_definitions(priority_snapshot, controlled_rolls, CANDIDATE_POOL_SIZE - injected_cards.size())
+	var weighted_deal := _build_weighted_candidate_definitions(priority_snapshot, controlled_rolls, candidate_count - injected_cards.size(), excluded_ids)
 	if not weighted_deal.valid:
 		return weighted_deal
 	var cards := injected_cards.duplicate()
@@ -637,11 +637,11 @@ func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, cont
 	return {&"valid": true, &"cards": cards}
 
 
-func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE) -> Dictionary:
+func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE, excluded_ids: Array[StringName] = []) -> Dictionary:
 	var validation_error := _get_deal_input_validation_error(priority_snapshot, controlled_rolls, candidate_count)
 	if not validation_error.is_empty():
 		return {&"valid": false, &"error": validation_error}
-	var remaining_features := _available_features.duplicate()
+	var remaining_features := _available_features.filter(func(card: CardData): return card.id not in excluded_ids)
 	var selected_cards: Array[CardData] = []
 	for slot in range(candidate_count):
 		var entries: Array[Dictionary] = []
@@ -823,19 +823,37 @@ func _on_play_alpha_hand_pressed() -> void:
 		if play_cost < 0 or _run_state.get_cash_cents() < play_cost:
 			return
 	var final_production := _calculate_final_action_production(action)
+	var rng_before := _deal_rng.state
+	# Both played and reserved finite Features are unavailable to this refill.
+	var excluded: Array[StringName] = []
+	for card: CardData in _candidate_cards:
+		if not card.renewable: excluded.append(card.id)
+	var refill := _build_corrective_candidate_definitions(get_priority_distribution(), [], SELECTED_HAND_SIZE, excluded) if not _pending_playtest_categories.is_empty() else _build_weighted_candidate_definitions(get_priority_distribution(), [], SELECTED_HAND_SIZE, excluded)
+	if not refill.valid:
+		_deal_rng.state = rng_before
+		return
 	var additions: Dictionary[ProjectState.CoreScore, int] = final_production.score_additions
 	var commit := func() -> bool:
 		if not _project_state.add_alpha_production(additions, action.scope, action.alpha_bug_pressure): return false
 		_complete_successful_action()
 		return true
 	if not (_run_state.complete_productive_action(commit, -play_cost, -1, &"", &"feature_play", _project_state.get_release_id()) if _run_state != null else commit.call()):
+		_deal_rng.state = rng_before
 		return
 	if not final_production.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_production.specialization_stat, additions))
 	elif final_production.balanced_production:
 		print(_build_balanced_production_debug_message(additions))
-	if not _deal_next_candidate_pool():
-		push_warning("The Alpha hand resolved, but the next weighted candidate pool could not be dealt.")
+	for card: CardData in refill.cards:
+		var view := CARD_VIEW_SCENE.instantiate() as CardView
+		view.set_card(card)
+		view.card_pressed.connect(_on_card_pressed)
+		%HandContainer.add_child(view)
+		_candidate_cards.append(card)
+	_pending_playtest_categories.clear()
+	_refresh_redraw_controls()
+	_update_host_playtest_action()
+	_update_proceed_action()
 	if not final_production.specialization_stat.is_empty():
 		_workspace.show_synergy("%s Specialization!" % str(final_production.specialization_stat).capitalize(), "Production ×1.50")
 	elif final_production.balanced_production:
@@ -994,7 +1012,15 @@ func _complete_successful_action() -> void:
 			if _run_state != null:
 				_run_state.record_resolved_feature(_project_state, card.id, CardData.PHASE_ALPHA)
 			_available_features.erase(card)
-	_clear_candidate_pool()
+	var played := _selected_card_views.duplicate()
+	_selected_card_views.clear()
+	for view: CardView in played:
+		view.set_selected(false)
+		%HandContainer.remove_child(view)
+		view.queue_free()
+	_candidate_cards.clear()
+	for view in %HandContainer.get_children():
+		if view is CardView: _candidate_cards.append(view.card_data)
 	_project_state.advance_cycle()
 
 

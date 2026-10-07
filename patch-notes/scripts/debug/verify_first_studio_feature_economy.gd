@@ -61,6 +61,7 @@ func _run() -> void:
 	check(run.owns_feature(&"sprites") and run.owns_feature(&"scrolling") and run.get_cash_cents() == 460000 and run.get_completed_run_cycles() == 0 and run.get_starter_pool_summary().scope == 30, "Store buys multiple starter Features one click each for exact cash and zero cycles")
 	check(owned_summary.text.contains("Scope 30") and owned_summary.text.contains("Core Score 77") and owned_summary.text.contains("Graphics 19 · Sound 7 · Tech 22 · Design 29") and owned_summary.text.contains("$1370.00"), "Indicator refreshes from owned cards after sequential starter purchases")
 	root.size = Vector2i(900, 600)
+	root.content_scale_size = Vector2i(900, 600)
 	await process_frame
 	await process_frame
 	check(owned_summary.get_global_rect().end.x <= store.get_global_rect().end.x and owned_summary.get_global_rect().end.y < (store.get("_scroll") as ScrollContainer).get_global_rect().position.y, "Owned-pool indicator fits within the scaled Store canvas above the browser")

@@ -397,31 +397,36 @@ func _play_selected_hand() -> bool:
 		_feedback_label.text = _run.get_financial_block_reason()
 		return false
 	var next_cards: Array[CardData] = []
+	var rng_before := _rng.state
 	if not plan.completing:
 		var projected_exhausted: Dictionary = {}
 		for id: StringName in plan.exhausted_ids: projected_exhausted[id] = true
-		next_cards = _build_candidate_pool(projected_exhausted)
+		for view in _candidate_row.get_children():
+			if view is CardView and view not in _selected_views and not view.card_data.renewable: projected_exhausted[view.card_data.id] = true
+		next_cards = _build_candidate_pool(projected_exhausted, [], [], HAND_SIZE)
 		if next_cards.is_empty():
+			_rng.state = rng_before
 			return false
 	var expected_cycle := _run.get_completed_run_cycles()
 	var commit := func() -> bool: return _run.commit_contract_hand(_state, cards, remainder)
 	if not _run.complete_productive_action(commit, remainder, expected_cycle, &"", &"publisher_receipt" if remainder > 0 else &"contract_hand", _state.get_offer_id()):
+		_rng.state = rng_before
 		return false
 	if _state.is_completed():
 		_show_completion()
 	else:
-		_publish_candidate_pool(next_cards)
+		_publish_candidate_pool(next_cards, true)
 		_feedback_label.text = "Hand complete. Draw two is ready."
 	_refresh_all()
 	return true
 
 
-func _build_candidate_pool(extra_exhausted: Dictionary = {}, category_rolls: Array[float] = [], definition_rolls: Array[float] = []) -> Array[CardData]:
-	if (not category_rolls.is_empty() and category_rolls.size() != CANDIDATE_COUNT) or (not definition_rolls.is_empty() and definition_rolls.size() != CANDIDATE_COUNT):
+func _build_candidate_pool(extra_exhausted: Dictionary = {}, category_rolls: Array[float] = [], definition_rolls: Array[float] = [], candidate_count: int = CANDIDATE_COUNT) -> Array[CardData]:
+	if (not category_rolls.is_empty() and category_rolls.size() != candidate_count) or (not definition_rolls.is_empty() and definition_rolls.size() != candidate_count):
 		return []
 	var cards: Array[CardData] = []
 	var reserved: Dictionary = extra_exhausted.duplicate()
-	for slot in range(CANDIDATE_COUNT):
+	for slot in range(candidate_count):
 		var category_roll := category_rolls[slot] if not category_rolls.is_empty() else _rng.randf()
 		var definition_roll := definition_rolls[slot] if not definition_rolls.is_empty() else _rng.randf()
 		var card := _draw_one(&"", reserved, category_roll, definition_roll)
@@ -470,12 +475,18 @@ func _draw_one(type_filter: StringName, reserved_features: Dictionary, category_
 	return definitions[mini(floori(definition_roll * definitions.size()), definitions.size() - 1)]
 
 
-func _publish_candidate_pool(cards: Array[CardData]) -> void:
+func _publish_candidate_pool(cards: Array[CardData], retain_unselected := false) -> void:
+	_candidate_cards.clear()
 	for child in _candidate_row.get_children():
+		if not child is CardView: continue
+		if retain_unselected and child not in _selected_views:
+			_candidate_cards.append(child.card_data)
+			continue
+		child.set_selected(false)
 		_candidate_row.remove_child(child)
-		child.free()
-	_candidate_cards = cards.duplicate()
+		child.queue_free()
 	_selected_views.clear()
+	_candidate_cards.append_array(cards)
 	for card in cards: _candidate_row.add_child(_make_card_view(card))
 
 

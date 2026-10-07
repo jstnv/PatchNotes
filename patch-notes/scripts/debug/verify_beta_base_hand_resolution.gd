@@ -168,8 +168,10 @@ func _verify_lifecycle_and_replacement() -> void:
 	var beta: BetaPhase = fixture.beta
 	var priorities := {&"qa": 50, &"marketing": 45, &"insider": 5}
 	beta.set_priority_distribution(priorities)
+	var before_views: Array = beta.get("_candidate_views").duplicate()
 	_expect(beta.play_selected_hand([29] as Array[int]), "Finite and renewable mixed hand resolves")
-	_expect(beta.get("_candidate_cards").size() == 7 and beta.get_selected_candidate_count() == 0, "Successful action publishes seven replacements and clears selection")
+	_expect(beta.get("_candidate_views").slice(0, 3) == before_views.slice(4), "Beta preserves the exact three unplayed instances in order")
+	_expect(beta.get("_candidate_cards").size() == 7 and beta.get_selected_candidate_count() == 0, "Successful action retains three cards, draws four, and clears selection")
 	for card: CardData in beta.get("_candidate_cards"):
 		_expect(not fixture.state.is_beta_card_exhausted(card.id), "Replacement excludes every exhausted finite definition")
 	_expect(beta.get_priority_distribution() == priorities, "Replacement uses and preserves the latest valid priorities")

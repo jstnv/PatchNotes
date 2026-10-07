@@ -263,11 +263,16 @@ func _deal_next_candidate_pool(controlled_rolls: Array[float] = []) -> bool:
 		push_warning("Could not build a complete weighted Design candidate pool: %s" % deal.error)
 		return false
 
-	_candidate_cards.assign(deal.cards)
+	_publish_refill(deal)
+	return true
+
+
+func _publish_refill(deal: Dictionary) -> void:
+	_candidate_cards.append_array(deal.cards)
 	for feature: CardData in deal.selected_features:
 		_available_features.erase(feature)
 
-	for card in _candidate_cards:
+	for card in deal.cards:
 		var card_view: CardView = CARD_VIEW_SCENE.instantiate()
 		card_view.set_card(card)
 		card_view.card_pressed.connect(_on_card_pressed)
@@ -277,7 +282,6 @@ func _deal_next_candidate_pool(controlled_rolls: Array[float] = []) -> bool:
 		_get_first_game_tutorial().record_deal(deal.tutorial_stat)
 	_refresh_redraw_controls()
 	refresh_workspace()
-	return true
 
 
 func _can_redraw_selection() -> bool:
@@ -409,17 +413,17 @@ func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
 	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}
 
 
-func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = []) -> Dictionary:
+func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE) -> Dictionary:
 	var validation_error := _get_deal_input_validation_error(priority_snapshot)
 	if not validation_error.is_empty():
 		return {&"valid": false, &"error": validation_error}
-	if not controlled_rolls.is_empty() and controlled_rolls.size() != CANDIDATE_POOL_SIZE:
-		return {&"valid": false, &"error": "Controlled deal must provide exactly seven rolls."}
+	if not controlled_rolls.is_empty() and controlled_rolls.size() != candidate_count:
+		return {&"valid": false, &"error": "Controlled deal must match the number of new candidates."}
 	for roll: float in controlled_rolls:
 		if not is_finite(roll) or roll < 0.0 or roll >= 1.0:
 			return {&"valid": false, &"error": "Weighted deal rolls must be finite values in [0, 1)."}
 	var tutorial := _get_first_game_tutorial()
-	if tutorial != null and tutorial.needs_scripted_deal():
+	if candidate_count == CANDIDATE_POOL_SIZE and tutorial != null and tutorial.needs_scripted_deal():
 		var costs: Dictionary = {}
 		for card: CardData in _available_features:
 			costs[card.id] = _run_state.primitive_feature_hand_cost_cents([card] as Array[CardData])
@@ -429,7 +433,7 @@ func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, contro
 	var remaining_features: Array[CardData] = _available_features.duplicate()
 	var selected_cards: Array[CardData] = []
 	var selected_features: Array[CardData] = []
-	for slot in range(CANDIDATE_POOL_SIZE):
+	for slot in range(candidate_count):
 		var entries: Array[Dictionary] = []
 		for card: CardData in remaining_features + _pass_definitions:
 			var weight := _calculate_candidate_weight(card, priority_snapshot)
@@ -565,6 +569,21 @@ func _on_play_card_pressed() -> void:
 		if play_cost < 0 or _run_state.get_cash_cents() < play_cost:
 			return
 	var final_action := _calculate_final_action_production(base_hand)
+	var rng_before := _deal_rng.state
+	var retained: Array[CardData] = []
+	for view in hand_container.get_children():
+		if view is CardView and view not in _selected_card_views: retained.append(view.card_data)
+	var tutorial := _get_first_game_tutorial()
+	var refill: Dictionary
+	if tutorial != null and tutorial.stage == FirstGameTutorial.Stage.FIRST_HAND:
+		var costs := {}
+		for card: CardData in _available_features: costs[card.id] = _run_state.primitive_feature_hand_cost_cents([card] as Array[CardData])
+		refill = tutorial.plan_deal(_available_features, _pass_definitions, get_priority_distribution(), _run_state.get_cash_cents() - play_cost, costs, _deal_rng, retained, true)
+	else:
+		refill = _build_weighted_candidate_definitions(get_priority_distribution(), [], SELECTED_HAND_SIZE)
+	if not refill.get("valid", false):
+		_deal_rng.state = rng_before
+		return
 
 	var additions: Dictionary[ProjectState.CoreScore, int] = final_action.score_additions
 	var commit := func() -> bool:
@@ -572,14 +591,14 @@ func _on_play_card_pressed() -> void:
 		_complete_successful_cycle()
 		return true
 	if not (_run_state.complete_productive_action(commit, -play_cost, -1, &"", &"feature_play", _project_state.get_release_id()) if _run_state != null else commit.call()):
+		_deal_rng.state = rng_before
 		return
 	if not final_action.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_action.specialization_stat, additions))
 	elif final_action.balanced_production:
 		print("Balanced Production!")
 
-	if not _deal_next_candidate_pool():
-		push_warning("The Design hand resolved, but the next weighted candidate pool could not be dealt.")
+	_publish_refill(refill)
 	if not final_action.specialization_stat.is_empty():
 		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production ×1.50")
 	elif final_action.balanced_production:
@@ -751,11 +770,14 @@ func _complete_successful_cycle() -> void:
 			if _run_state != null:
 				_run_state.record_resolved_feature(_project_state, card.id, CardData.PHASE_DESIGN)
 
-	for card in _candidate_cards:
-		if card.card_type == &"feature" and not _exhausted_card_ids.has(card.id):
-			_return_feature_to_available(card)
-
-	_clear_candidate_pool()
+	var played := _selected_card_views.duplicate()
+	_clear_selection()
+	for view: CardView in played:
+		hand_container.remove_child(view)
+		view.queue_free()
+	_candidate_cards.clear()
+	for view in hand_container.get_children():
+		if view is CardView: _candidate_cards.append(view.card_data)
 	var tutorial := _get_first_game_tutorial()
 	if tutorial != null: tutorial.record_successful_hand()
 	_project_state.advance_cycle()

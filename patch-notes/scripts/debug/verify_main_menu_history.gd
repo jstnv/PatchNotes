@@ -48,8 +48,11 @@ func _run() -> void:
 	input.text = "  North Star  "
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu.get("_background").select(1)
+	menu.call("_show_review")
+	menu.call("_confirm_studio")
 	var studio: StudioPhase = game.get("_active_phase")
-	expect(studio != null and run.get_studio_name() == "North Star" and run.get_completed_run_cycles() == 0 and run.get_cash_cents() == 550000 and game.project_state == null, "Studio name commits once, grants initial funding, and enters empty Studio for free")
+	expect(studio != null and run.get_studio_name() == "North Star" and run.get_completed_run_cycles() == 0 and run.get_cash_cents() == 570000 and game.project_state == null, "Studio name commits once, grants initial funding, and enters empty Studio for free")
 	expect(run.finalize_starter_selection(), "History fixture closes the first-game purchase window before released projects")
 	game.get_node("%GameplayHUD").tutorial_overlay.close()
 	await _capture("new-studio")

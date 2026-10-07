@@ -266,7 +266,7 @@ func _verify_weighted_alpha_boundary(alpha: AlphaPhase, state: ProjectState, sta
 	_expect(alpha.get("_exhausted_feature_ids").has(&"character_backstories") and alpha.get("_exhausted_feature_ids").has(&"controls"), "Selected Alpha Features exhaust only after success")
 	_expect(not alpha.get("_available_features").any(func(card: CardData) -> bool: return card.id in [&"character_backstories", &"controls"]), "Exhausted Alpha Features leave the available pool")
 	_expect(alpha.get("_available_features").any(func(card: CardData) -> bool: return card.id == &"simple_story"), "Unselected Alpha Features remain available")
-	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_node("%HandContainer").get_child_count() == 7 and alpha.get_selected_candidate_count() == 0, "Successful Alpha action clears selection and deals seven replacements")
+	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_node("%HandContainer").get_child_count() == 7 and alpha.get_selected_candidate_count() == 0, "Successful Alpha action clears selection and refills four slots alongside three retained cards")
 	_expect(not alpha.get("_candidate_cards").any(func(card: CardData) -> bool: return alpha.get("_exhausted_feature_ids").has(card.id)), "Exhausted Alpha Features never enter the replacement pool")
 	var after_first_action := _state_snapshot(state)
 	(old_views[0] as CardView).card_pressed.emit(old_views[0])
@@ -344,7 +344,7 @@ func _verify_alpha_specialization_resolution() -> void:
 	_expect(mixed_result.specialization_stat.is_empty() and mixed_result.score_additions == mixed_scores, "A nonmatching Pass invalidates Specialization and preserves base aggregates")
 
 	alpha.set("_phase_state", AlphaPhase.PhaseState.ACTIVE_DEVELOPMENT)
-	_set_exact_candidates(alpha, design_features)
+	_set_exact_candidates(alpha, design_features, true)
 	var views := alpha.get_node("%HandContainer").get_children()
 	for view: CardView in views:
 		view.card_pressed.emit(view)
@@ -362,7 +362,7 @@ func _verify_alpha_specialization_resolution() -> void:
 	_expect(not alpha.get_workspace().hand_motion.busy and not alpha.get_workspace().synergy_notification.banner.visible and not alpha.get_workspace().hand_motion._specialization_header.is_valid(), "Cancelling playback clears the delayed specialization header")
 	_expect(alpha.get("_exhausted_feature_ids").size() == 4 and not alpha.get("_available_features").any(func(card: CardData) -> bool: return card.id in [&"simple_story", &"dialogue", &"character_backstories", &"multiple_endings"]), "Specialized Features exhaust through the existing lifecycle")
 	_expect(state.get_current_cycle() == 1 and value_emissions[0] == 1 and cycle_emissions[0] == 1, "Specialized action commits atomically and advances exactly one cycle")
-	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_selected_candidate_count() == 0, "Specialized action preserves seven-card replacement and selection clearing")
+	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_selected_candidate_count() == 0, "Specialized action preserves a seven-card pool and selection clearing")
 	alpha.queue_free()
 	await process_frame
 
@@ -470,8 +470,8 @@ func _verify_alpha_balanced_production_resolution() -> void:
 	var pass_card: CardData = alpha.get("_pass_definitions")[0]
 	var cards: Array[CardData] = [features[0], features[1], features[2], pass_card]
 	alpha.set("_phase_state", AlphaPhase.PhaseState.ACTIVE_DEVELOPMENT)
-	_set_exact_candidates(alpha, cards)
-	for view: CardView in alpha.get_node("%HandContainer").get_children():
+	_set_exact_candidates(alpha, cards, true)
+	for view: CardView in alpha.get_node("%HandContainer").get_children().slice(0, 4):
 		view.card_pressed.emit(view)
 	var base_action: Dictionary = alpha.call("_validate_and_calculate_base_action")
 	_expect(base_action.valid and base_action.cards.size() == 4, "Alpha Balanced lifecycle action validates four current candidate instances")
@@ -508,7 +508,7 @@ func _verify_alpha_balanced_production_resolution() -> void:
 		_expect(alpha.get("_exhausted_feature_ids").has(feature.id) and not alpha.get("_available_features").has(feature), "Played Alpha Balanced Feature exhausts: %s" % feature.id)
 	_expect(not alpha.get("_exhausted_feature_ids").has(pass_card.id), "Played Alpha Balanced Pass remains renewable")
 	_expect(available_before.any(func(card: CardData) -> bool: return card not in features and alpha.get("_available_features").has(card)), "An unselected Alpha Feature remains available after Balanced resolution")
-	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_node("%HandContainer").get_child_count() == 7 and alpha.get_selected_candidate_count() == 0, "Alpha Balanced preserves seven weighted replacements and clears selection")
+	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_node("%HandContainer").get_child_count() == 7 and alpha.get_selected_candidate_count() == 0, "Alpha Balanced preserves three retained cards plus four weighted replacements and clears selection")
 	var after_success := _state_snapshot(state)
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
 	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
@@ -591,14 +591,14 @@ func _verify_host_playtest() -> void:
 	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
 	_expect(state.get_current_cycle() == production_cycle_before + 1, "The successful production hand advances one additional cycle while injection advances none")
 	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_node("%HandContainer").get_child_count() == 7, "The corrective replacement publishes exactly seven candidates")
-	_expect(alpha.get("_candidate_cards")[0] == design_pass and alpha.get("_candidate_cards")[1] == sound_pass, "The first two replacement candidates match the queued corrective order")
+	_expect(alpha.get("_candidate_cards")[3] == design_pass and alpha.get("_candidate_cards")[4] == sound_pass, "Corrective Passes follow the three retained candidates")
 	var replacement_views := alpha.get_node("%HandContainer").get_children()
-	_expect(replacement_views[0] != replacement_views[1] and (replacement_views[0] as CardView).card_data == design_pass and (replacement_views[1] as CardView).card_data == sound_pass, "Injected Passes are distinct CardView candidate instances")
+	_expect(replacement_views[3] != replacement_views[4] and (replacement_views[3] as CardView).card_data == design_pass and (replacement_views[4] as CardView).card_data == sound_pass, "Injected Passes are distinct CardView candidate instances")
 	_expect(design_pass.renewable and sound_pass.renewable and design_pass.primary_value == 2 and sound_pass.primary_value == 2 and design_pass.scope == 0 and sound_pass.scope == 0, "Injected Passes retain ordinary renewable +2, zero-Scope definitions")
 	_expect(alpha.get_pending_playtest_categories().is_empty() and not alpha.get_node("%HostPlaytestButton").disabled and alpha.get_node("%HostPlaytestButton").text == "Host Playtest", "Successful complete corrective deal consumes pending state and re-enables Playtest")
-	(replacement_views[0] as CardView).card_pressed.emit(replacement_views[0])
-	(replacement_views[1] as CardView).card_pressed.emit(replacement_views[1])
-	_expect(alpha.get_selected_candidate_count() == 2 and (replacement_views[0] as CardView).is_selected() and (replacement_views[1] as CardView).is_selected(), "Injected Pass candidate instances select independently through normal CardView behavior")
+	(replacement_views[3] as CardView).card_pressed.emit(replacement_views[3])
+	(replacement_views[4] as CardView).card_pressed.emit(replacement_views[4])
+	_expect(alpha.get_selected_candidate_count() == 2 and (replacement_views[3] as CardView).is_selected() and (replacement_views[4] as CardView).is_selected(), "Injected Pass candidate instances select independently through normal CardView behavior")
 	var injected_specialization: Dictionary = alpha.call("_calculate_final_action_production", {
 		&"cards": [design_pass, design_pass, design_pass, design_pass] as Array[CardData],
 		&"score_additions": {design: 8},
@@ -640,14 +640,16 @@ func _verify_host_playtest_replacement_failure() -> void:
 		view.card_pressed.emit(view)
 	_expect(alpha.host_playtest() and alpha.get_pending_playtest_categories() == [ProjectState.CoreScore.GRAPHICS, ProjectState.CoreScore.SOUND], "Equal score and priority ties queue Graphics then Sound through fixed Core order")
 	alpha.set("_pass_definitions", passes.slice(0, 3))
+	var old_views := alpha.get_node("%HandContainer").get_children()
+	var rng_before: int = alpha.get("_deal_rng").state
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
 	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
-	_expect(state.get_current_cycle() == 2 and state.get_current_scope() > 0 and state.get_accumulated_alpha_bug_pressure() > 0.0, "Failed corrective replacement preserves committed production plus Playtest and production cycles")
-	_expect(alpha.get("_exhausted_feature_ids").size() == 4, "Failed corrective replacement preserves committed Feature exhaustion")
-	_expect(alpha.get("_candidate_cards").is_empty() and alpha.get_node("%HandContainer").get_child_count() == 0, "Failed corrective replacement publishes no partial pool")
+	_expect(state.get_current_cycle() == 1 and state.get_current_scope() == 0 and state.get_accumulated_alpha_bug_pressure() == 0.0, "Failed corrective refill preserves only the previously committed Playtest cycle")
+	_expect(alpha.get("_exhausted_feature_ids").is_empty() and alpha.get("_deal_rng").state == rng_before, "Failed corrective refill does not exhaust Features or consume draw RNG")
+	_expect(alpha.get_node("%HandContainer").get_children() == old_views and alpha.get_selected_candidate_count() == 4, "Failed corrective refill preserves the seven-card pool and selection")
 	_expect(alpha.get_pending_playtest_categories() == [ProjectState.CoreScore.GRAPHICS, ProjectState.CoreScore.SOUND], "Failed corrective replacement preserves the queued Playtest snapshot")
 	var cycle_after_failure := state.get_current_cycle()
-	_expect(not alpha.host_playtest() and state.get_current_cycle() == cycle_after_failure, "Invalid empty-pool state cannot spend another Playtest cycle")
+	_expect(not alpha.host_playtest() and state.get_current_cycle() == cycle_after_failure, "Pending corrective state cannot spend another Playtest cycle")
 
 	alpha.queue_free()
 	await process_frame
@@ -683,21 +685,24 @@ func _verify_post_hand_redeal_failure() -> void:
 	var features: Array = alpha.get("_available_features")
 	var passes: Array = alpha.get("_pass_definitions")
 	alpha.set("_phase_state", AlphaPhase.PhaseState.ACTIVE_DEVELOPMENT)
-	_set_exact_candidates(alpha, [features[0], features[1], features[2], features[3]] as Array[CardData])
+	_set_exact_candidates(alpha, [features[0], features[1], features[2], features[3]] as Array[CardData], true)
 	var views := alpha.get_node("%HandContainer").get_children()
-	for view: CardView in views:
+	for view: CardView in views.slice(0, 4):
 		view.card_pressed.emit(view)
 	alpha.set("_pass_definitions", passes.slice(0, 3))
+	var rng_before: int = alpha.get("_deal_rng").state
 	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
 	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
-	_expect(state.get_current_cycle() == 1 and state.get_current_scope() > 0 and state.get_accumulated_alpha_bug_pressure() > 0.0, "Post-hand redeal failure preserves committed Alpha production and one cycle")
-	_expect(alpha.get("_exhausted_feature_ids").size() == 4, "Post-hand redeal failure preserves committed Feature exhaustion")
-	_expect(alpha.get("_candidate_cards").is_empty() and alpha.get_node("%HandContainer").get_child_count() == 0, "Post-hand redeal failure leaves a safe empty pool without rollback")
+	_expect(state.get_current_cycle() == 0 and state.get_current_scope() == 0 and state.get_accumulated_alpha_bug_pressure() == 0.0, "Refill failure rejects before Alpha production or a cycle commits")
+	_expect(alpha.get("_exhausted_feature_ids").is_empty() and alpha.get("_deal_rng").state == rng_before, "Refill failure preserves exhaustion and draw RNG")
+	_expect(alpha.get_node("%HandContainer").get_children() == views and alpha.get_selected_candidate_count() == 4, "Refill failure preserves the complete candidate pool and selected hand")
 	alpha.queue_free()
 	await process_frame
 
 
-func _set_exact_candidates(alpha: AlphaPhase, cards: Array[CardData]) -> void:
+func _set_exact_candidates(alpha: AlphaPhase, cards: Array[CardData], fill_to_seven := false) -> void:
+	cards = cards.duplicate()
+	while fill_to_seven and cards.size() < 7: cards.append(root.get_node("CardDatabase").get_card(&"graphics_pass"))
 	alpha.call("_clear_candidate_pool")
 	alpha.set("_candidate_cards", cards.duplicate())
 	for card: CardData in cards:

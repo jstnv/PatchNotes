@@ -416,6 +416,7 @@ func _refresh_summary() -> void:
 	if _run_state == null or not is_node_ready(): return
 	var studio_title := "%s — Studio" % _run_state.get_studio_name() if not _run_state.get_studio_name().is_empty() else "Studio Phase"
 	$Dashboard/Layout/Heading/Title.text = "%s · %d" % [studio_title, _run_state.get_current_year()]
+	$Dashboard/Layout/StudioIdentity.text = "Genre specialty: %s\n%s" % [String(_run_state.get_studio_specialty()).capitalize(), StudioTraits.summary(_run_state.get_studio_traits())]
 	if _selected_release_id.is_empty(): return
 	var metadata := _run_state.get_release_metadata(_selected_release_id)
 	var snapshot: Dictionary = metadata.get("review", {})

@@ -738,6 +738,9 @@ func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls
 		return _invalid_play("Controlled insight rolls must match the rolls actually required.")
 	var projected_exhausted := _project_state.get_exhausted_beta_card_ids()
 	projected_exhausted.append_array(finite_ids)
+	for view: CardView in _candidate_views:
+		if view not in _selected_card_views and not view.card_data.renewable and view.card_data.id not in projected_exhausted:
+			projected_exhausted.append(view.card_data.id)
 	if not _project_state.can_advance_cycle():
 		return _invalid_play("The project cycle cannot advance safely.")
 	if not _run_state.can_complete_productive_cycle(cash_gain_cents):
@@ -868,20 +871,21 @@ func force_card_view_preparation_failure_for_verification() -> void:
 
 
 func _publish_replacement_pool(cards: Array, views: Array, injected_corrective_count: int = 0) -> void:
-	for view: CardView in _selected_card_views:
-		if is_instance_valid(view):
-			view.set_selected(false)
+	var played := _selected_card_views.duplicate()
 	_selected_card_views.clear()
-	for view: CardView in _candidate_views:
-		if is_instance_valid(view):
-			%HandContainer.remove_child(view)
-			view.queue_free()
-	_candidate_cards.assign(cards)
-	_candidate_views.assign(views)
-	_injected_corrective_views.clear()
-	for index in range(injected_corrective_count):
-		_injected_corrective_views.append(_candidate_views[index])
-	for view: CardView in _candidate_views:
+	for view: CardView in played:
+		view.set_selected(false)
+		_injected_corrective_views.erase(view)
+		_candidate_views.erase(view)
+		%HandContainer.remove_child(view)
+		view.queue_free()
+	_candidate_cards.clear()
+	for view: CardView in _candidate_views: _candidate_cards.append(view.card_data)
+	for index in range(views.size()):
+		var view: CardView = views[index]
+		_candidate_cards.append(cards[index])
+		_candidate_views.append(view)
+		if index < injected_corrective_count: _injected_corrective_views.append(view)
 		%HandContainer.add_child(view)
 	_refresh_redraw_controls()
 
@@ -919,7 +923,7 @@ func _invalid_play(message: String) -> Dictionary:
 
 func _build_replacement_candidate_definitions(definitions: Array[CardData], priorities: Dictionary, category_rolls: Array[float], definition_rolls: Array[float], excluded_ids: Array[StringName]) -> Dictionary:
 	if _pending_corrective_pass_ids.is_empty():
-		var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids)
+		var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, SELECTED_HAND_SIZE)
 		ordinary[&"injected_count"] = 0
 		ordinary[&"consumed_pending_ids"] = [] as Array[StringName]
 		return ordinary
@@ -934,7 +938,7 @@ func _build_replacement_candidate_definitions(definitions: Array[CardData], prio
 		if not _is_valid_corrective_pass(pass_card):
 			return _invalid_deal("A queued corrective Core Pass is unavailable.")
 		cards.append(pass_card)
-	var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, CANDIDATE_POOL_SIZE - cards.size())
+	var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, SELECTED_HAND_SIZE - cards.size())
 	if not ordinary.valid:
 		return ordinary
 	cards.append_array(ordinary.cards)

@@ -5,6 +5,7 @@ const CARD_SIZE := Vector2(240, 336)
 const WAVE_HEIGHT := 6.0
 const WAVE_PERIOD := 3.6
 const WAVE_SPACING := 0.62
+const SELECTION_LIMIT := 4
 var _wave_time := 0.0
 var _poses: Dictionary = {}
 var _tweens: Dictionary = {}
@@ -93,12 +94,26 @@ func _connect_card(child: Node) -> void:
 	if not child is CardView: return
 	_ignore_pointer(child)
 	child.ready.connect(func(): _ignore_pointer(child); child.input_button.focus_mode = Control.FOCUS_ALL, CONNECT_ONE_SHOT)
-	if not child.selection_changed.is_connected(queue_sort): child.selection_changed.connect(queue_sort)
+	if not child.selection_changed.is_connected(_selection_changed): child.selection_changed.connect(_selection_changed)
 	child.tree_exiting.connect(func():
 		_poses.erase(child)
 		if _tweens.has(child):
 			_tweens[child].kill()
 			_tweens.erase(child), CONNECT_ONE_SHOT)
+
+func _selection_changed() -> void:
+	_refresh_selection_input()
+	queue_sort()
+
+func _refresh_selection_input() -> void:
+	var cards := ordered_cards()
+	var count := 0
+	for card in cards:
+		if card.is_selected(): count += 1
+	for card in cards:
+		if not card.is_node_ready(): continue
+		card.input_button.disabled = count >= SELECTION_LIMIT and not card.is_selected()
+		card.input_button.focus_mode = Control.FOCUS_NONE if card.input_button.disabled else Control.FOCUS_ALL
 
 func _ignore_pointer(node: Node) -> void:
 	if node is Control: node.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -119,9 +134,9 @@ func _gui_input(event: InputEvent) -> void:
 		tooltip_text = card.input_button.tooltip_text if card != null else ""
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		var card := card_at(event.position)
-		if event.pressed: _pressed = card
+		if event.pressed: _pressed = card if card != null and not card.input_button.disabled else null
 		else:
-			if is_instance_valid(_pressed) and card == _pressed:
+			if is_instance_valid(_pressed) and card == _pressed and not card.input_button.disabled:
 				card.input_button.grab_focus()
 				card.card_pressed.emit(card)
 			_pressed = null
@@ -131,6 +146,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_SORT_CHILDREN and is_inside_tree(): arrange()
 
 func arrange(immediate := false) -> void:
+	_refresh_selection_input()
 	var cards := ordered_cards()
 	var count := cards.size()
 	var factor := clampf((size.y - 100.0) / CARD_SIZE.y, 0.45, 0.76)

@@ -149,6 +149,7 @@ func _refresh_artwork() -> void:
 
 
 func _on_input_button_pressed() -> void:
+	if input_button.disabled: return
 	card_pressed.emit(self)
 
 

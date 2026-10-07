@@ -22,6 +22,9 @@ func _run() -> void:
 		menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Navigation Test"
 		menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 		menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+		menu.get("_background").select(1)
+		menu.call("_show_review")
+		menu.call("_confirm_studio")
 		run = game.run_state
 		var studio: StudioPhase = game.get("_active_phase")
 		studio.get_node("%FeatureStoreButton").pressed.emit()

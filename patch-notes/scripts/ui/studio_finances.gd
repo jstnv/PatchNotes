@@ -13,6 +13,8 @@ var month_detail: RichTextLabel
 var totals_label: Label
 var block_label: Label
 var bank_history: RichTextLabel
+var expense_details: RichTextLabel
+var finance_tabs: TabContainer
 var page := &"finances"
 var report: Dictionary = {}
 var _title: Label
@@ -73,7 +75,17 @@ func _ready() -> void:
 	_finance_page.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_finance_page.add_theme_constant_override("separation", 8)
 	layout.add_child(_finance_page)
-	_label("Actual studio months · Sales revenue uses earned net after the 70% share, applied once. Cash settled is shown separately.", _finance_page)
+	finance_tabs = TabContainer.new()
+	finance_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_finance_page.add_child(finance_tabs)
+	var monthly := VBoxContainer.new()
+	monthly.name = "Monthly report"
+	finance_tabs.add_child(monthly)
+	expense_details = RichTextLabel.new()
+	expense_details.name = "Outstanding bills"
+	expense_details.scroll_active = true
+	finance_tabs.add_child(expense_details)
+	_label("Actual studio months · Sales revenue uses earned net after the 70% share, applied once. Cash settled is shown separately.", monthly)
 	month_table = Tree.new()
 	month_table.name = "FinanceMonthlyRows"
 	month_table.columns = 6
@@ -86,12 +98,12 @@ func _ready() -> void:
 		month_table.set_column_title(i, ["Run month", "Revenue", "Expenses", "Net profit", "Cash change", "Closing cash"][i])
 		month_table.set_column_custom_minimum_width(i, 100)
 	month_table.item_selected.connect(_show_month)
-	_finance_page.add_child(month_table)
+	monthly.add_child(month_table)
 	month_detail = RichTextLabel.new()
 	month_detail.name = "FinanceMonthDetail"
 	month_detail.custom_minimum_size.y = 145
 	month_detail.scroll_active = true
-	_finance_page.add_child(month_detail)
+	monthly.add_child(month_detail)
 	_bank_page = VBoxContainer.new()
 	_bank_page.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(_bank_page)
@@ -101,7 +113,7 @@ func _ready() -> void:
 	bank_history.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bank_history.scroll_active = true
 	_bank_page.add_child(bank_history)
-	_label("Banking foundation · Loan terms and a numerical credit score are not available yet.", _bank_page)
+	_label("Credit uses prototype policy defaults. Loans are not available; interest, term and capacity rules still need review.", _bank_page)
 	_set_page(&"finances")
 
 
@@ -209,6 +221,7 @@ func refresh() -> void:
 		_show_month()
 	else:
 		month_detail.text = "No monthly transactions recorded yet." if available else "Monthly history unavailable for this run. Prior income and expenses have not been reconstructed."
+	_update_expenses(available)
 	_update_bank(available, rows)
 
 
@@ -231,13 +244,29 @@ func _show_month() -> void:
 		return
 
 
+func _update_expenses(available: bool) -> void:
+	if not available:
+		expense_details.text = "Outstanding history unavailable. No historical bills have been invented."
+		return
+	var lines: Array[String] = ["Outstanding bills · two productive cycles = one month"]
+	var bills: Array = report.get("outstanding_expenses", [])
+	if bills.is_empty(): lines.append("No outstanding bills.")
+	for bill: Dictionary in bills:
+		lines.append("\n%s · %s" % [OutstandingExpenses.LABELS[bill.expense_type], bill.bill_id])
+		lines.append("Original due: Month %d, cycle %d · Original %s · Paid %s · Remaining %s" % [bill.month, bill.due_cycle, _money(bill.due_cents), _money(bill.paid_cents), _money(bill.unpaid_cents)])
+		lines.append("Missed payment · Overdue %d cycles (%.1f months). Credit tier: -%d; next age tier: -%d." % [bill.overdue_cycles, bill.overdue_cycles / 2.0, bill.penalty, bill.next_penalty])
+	lines.append("\nCredit applies once per completed month, using the oldest qualifying bill in each category. Partial payment preserves the original due date. Paying stops future penalties; past late history remains.")
+	expense_details.text = "\n".join(lines)
+
+
 func _update_bank(available: bool, rows: Array) -> void:
 	if not available:
 		bank_history.text = "Financial history unavailable for this run. No credit history has been invented."
 		return
 	var inputs: Dictionary = report.get("credit_inputs", {})
 	var completed: int = inputs.get("completed_months", 0)
-	var lines: Array[String] = []
+	var credit: Dictionary = report.get("credit", {})
+	var lines: Array[String] = ["Credit score: %d · Working range %d–%d" % [credit.get("score", 600), OutstandingExpenses.MIN_SCORE, OutstandingExpenses.MAX_SCORE]]
 	if completed == 0:
 		lines.append("Neutral starting history. No completed months yet.")
 	else:
@@ -249,7 +278,14 @@ func _update_bank(available: bool, rows: Array) -> void:
 		if row.get("partial", false): continue
 		lines.append("Month %d · Revenue %s · Expenses %s · Net profit %s · Rent unpaid %s" % [row.get("month", 0), _money(row.get("operating_revenue_cents", 0)), _money(row.get("operating_expenses_cents", 0)), _money(row.get("net_profit_cents", 0)), _money(row.get("rent_unpaid_cents", 0))])
 	lines.append("")
-	lines.append("This is actual financial history, not a credit score or loan offer. Partial months do not count as completed payment history.")
+	lines.append("Monthly credit changes · %s" % credit.get("policy_version", "unavailable"))
+	for entry: Dictionary in credit.get("history", []):
+		lines.append("Month %d: %d → %d (%+d)" % [entry.month, entry.before, entry.after, entry.change])
+		for reason: Dictionary in entry.reasons:
+			if reason.type == &"clean_profit": lines.append("  +%d · Profitable month, bills paid cleanly" % reason.points)
+			elif reason.type == &"paid_no_profit": lines.append("  +0 · Paid loss or break-even month")
+			else: lines.append("  %d · %s · %s · overdue %d cycles%s" % [reason.points, OutstandingExpenses.LABELS[reason.type], reason.bill_id, reason.overdue_cycles, " at recovery" if reason.recovered else ""])
+	lines.append("Partial months do not add credit. Repayment gives no instant bonus. Loan offers remain unavailable.")
 	bank_history.text = "\n".join(lines)
 
 

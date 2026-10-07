@@ -38,6 +38,7 @@ func _ready() -> void:
 			var main_menu := MainMenu.new()
 			main_menu.studio_created.connect(_on_studio_created.bind(main_menu))
 			main_menu.tutorial_requested.connect(%GameplayHUD.show_tutorial)
+			main_menu.settings_requested.connect(%GameplayHUD.show_settings)
 			%PhaseRoot.add_child(main_menu)
 			_active_phase = main_menu
 			%GameplayHUD.set_phase(main_menu)
@@ -51,11 +52,11 @@ func _ready() -> void:
 	_active_phase = design_phase
 	%GameplayHUD.set_phase(design_phase)
 
-func _on_studio_created(name: String, specialty: StringName, source: MainMenu) -> void:
+func _on_studio_created(name: String, specialty: StringName, background: StringName, secondary_ids: Array, source: MainMenu) -> void:
 	if _transition_in_progress or source != _active_phase or source.get_parent() != %PhaseRoot:
 		return
-	if not run_state.set_studio_name(name, specialty):
-		source.show_error("Enter a valid studio name and choose a Genre specialty.")
+	if not run_state.create_studio(name, specialty, background, secondary_ids):
+		source.show_error("Enter a valid name, Genre specialty and one background; check the trait limits.")
 		return
 	_enter_initial_studio()
 

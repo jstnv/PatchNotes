@@ -23,7 +23,6 @@ var _update: Callable
 var _restore: Callable
 var _prior_focus: Control
 var _sources: Array = []
-var _source_ids: Array[StringName] = []
 var _specialization := false
 var _bonus_timeline: Array[Dictionary] = []
 var capturing := false
@@ -56,7 +55,6 @@ func play(kind: String, fan: Control, selected: Array, action: Callable, snapsho
 	_sources = fan.ordered_cards() if fan is CardFan else fan.get_children()
 	# Capture the old pool before the authoritative action replaces/frees it.
 	for source: CardView in _sources:
-		_source_ids.append(source.card_data.id)
 		var ghost: CardView = CARD_SCENE.instantiate()
 		ghost.set_card(source.card_data)
 		add_child(ghost)
@@ -194,22 +192,15 @@ func _return_fan() -> void:
 		_clear()
 		return
 	var targets: Array = _fan.ordered_cards() if _fan is CardFan else _fan.get_children()
-	# Successful hands rebuild views. Match each unplayed occurrence once by
-	# definition, never reuse a played card or invent a retained candidate.
+	# Only surviving instances return. A fresh copy of the same renewable card
+	# is still a new draw, not the card the player reserved.
 	var returning: Array = []
 	var matches := {}
-	for i in range(_source_ids.size()):
+	for i in range(_sources.size()):
 		if _ghosts[i] in _hand: continue
 		if is_instance_valid(_sources[i]) and _sources[i] in targets:
 			returning.append(_sources[i])
 			matches[_sources[i]] = i
-			continue
-		if action_kind == "redraw": continue
-		for target in targets:
-			if target not in returning and target.card_data.id == _source_ids[i]:
-				returning.append(target)
-				matches[target] = i
-				break
 	if _fan is CardFan: _fan.retain_order(returning)
 	targets = _fan.ordered_cards() if _fan is CardFan else targets
 	_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -304,7 +295,6 @@ func _clear() -> void:
 	_bonus_timeline.clear()
 	_specialization_header = Callable()
 	_sources.clear()
-	_source_ids.clear()
 	if is_instance_valid(_fan): _fan.show()
 	hide()
 	if _restore.is_valid(): _restore.call()
