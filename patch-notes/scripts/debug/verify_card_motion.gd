@@ -111,10 +111,10 @@ func _production(width: int) -> void:
 	phase.get_node("%PlayCardButton").pressed.emit()
 	phase.get_node("%RedrawButton").pressed.emit()
 	expect(_snapshot(project, run) == committed, "Repeated UI callbacks during animation cannot replay or redraw")
-	await settle(0.34)
+	await settle(HandPresentation.BEAT_SECONDS + 0.03)
 	expect(motion._ghosts.size() == 7 and motion._hand.size() == 4 and motion._ghosts[4].scale.x < 0.4 and motion._ghosts[4].position.y > 160, "Unselected candidates shrink and lower while the selected hand centers")
 	await shot("centered-hand-%d" % width)
-	await settle(0.14)
+	await settle(HandPresentation.BEAT_SECONDS / 2.0)
 	expect(hud.stats[1].text == "Graphics\n2" and not hud._score_pulses.is_empty(), "First bounce updates the scoreboard and exposes a +2 base indicator")
 	await shot("score-bounce-%d" % width)
 	if motion.busy: await motion.finished
@@ -125,6 +125,12 @@ func _production(width: int) -> void:
 	for i in range(4):
 		for event in ["rise", "score", "grounded"]: expected.append([i, event])
 	expect(order == expected, "Cards bounce left to right only after the previous card lands, independent of click order")
+	var beats: Array = motion.trace.filter(func(e): return e.event == "rise")
+	for i in range(1, beats.size()):
+		expect(absf((beats[i].msec-beats[i-1].msec)/1000.0-HandPresentation.BEAT_SECONDS)<0.10,"Left-to-right bounces maintain140 BPM")
+	var timed_bonuses: Array = motion.trace.filter(func(e): return e.event == "bonus_rise")
+	var ends: Array = motion.trace.filter(func(e): return e.event == "specialization_complete")
+	expect(timed_bonuses.size()==4 and ends.size()==1 and absf((ends[0].msec-timed_bonuses[0].msec)/1000.0-HandPresentation.SPECIALIZATION_SECONDS)<0.15,"Four bonus bounces form one specialization cycle at4:1")
 	var return_count := 0
 	for event in motion.trace:
 		if event.event == "return_from_bottom": return_count += 1
@@ -168,9 +174,9 @@ func _production(width: int) -> void:
 	var redraws := run.get_available_redraws()
 	phase.get_node("%RedrawButton").pressed.emit()
 	expect(motion.busy and run.get_available_redraws() == redraws - 1 and run.get_cash_cents() == cash and run.get_completed_run_cycles() == cycle, "Animated redraw preserves the exact one-card budget and zero-cycle/cash rules")
-	await settle(0.36)
+	await settle(HandPresentation.BEAT_SECONDS + 0.03)
 	var center_x := motion._hand[0].position.x
-	await settle(0.18)
+	await settle(HandPresentation.BEAT_SECONDS / 2.0)
 	expect(motion._hand[0].position.x > center_x + 50, "Redrawn hand slides right after centering")
 	await shot("redraw-exit-%d" % width)
 	if motion.busy: await motion.finished
@@ -234,7 +240,6 @@ func _store(width: int) -> void:
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Motion Test Studio"
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
-	menu.get("_background").select(1)
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	var run: RunState = game.run_state

@@ -18,11 +18,15 @@ var _predevelopment: PredevelopmentOverlay
 var _review_view: PostGameReview
 var _selected_release_id: StringName
 var _monthly_report: MonthlySalesReport
+var _employees_panel: EmployeePanel
 
 
 func _ready() -> void:
 	%StartNextGame.pressed.connect(_open_predevelopment)
 	%FeatureStoreButton.pressed.connect(_open_feature_store)
+	%Employees.disabled = false
+	%Employees.tooltip_text = "Production Specialist hiring, training and payroll."
+	%Employees.pressed.connect(_open_employees)
 	%PublisherList.pressed.connect(_open_publishers)
 	%PostGameSummaries.pressed.connect(open_summary)
 	%CloseSummaryButton.pressed.connect(close_summary)
@@ -468,3 +472,11 @@ func get_run_state() -> RunState: return _run_state
 
 func get_predevelopment_priorities() -> Dictionary:
 	return _predevelopment.get_initial_priorities() if _predevelopment != null and _predevelopment.visible else {}
+
+
+func _open_employees() -> void:
+	if _run_state == null: return
+	if _employees_panel == null:
+		_employees_panel = EmployeePanel.new()
+		add_child(_employees_panel)
+	_employees_panel.open_for(_run_state)

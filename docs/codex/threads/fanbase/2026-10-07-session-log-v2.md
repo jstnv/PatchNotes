@@ -1,0 +1,7 @@
+# Fanbase design session — near-neutral capture queued v2
+
+2026-10-07, America/Los_Angeles. Shared checkout `main` at `b84d1a5b4e4957b044b4b52c41553cf611aff3ae`; shared TODO and other documentation/source edits were already present. This session added [near-neutral capture handoff](handoffs/2026-10-07-near-neutral-weak-capture-v1.md), added its row to [Fanbase handoff index](handoffs/README.md), and appended its bounded read-only task to [internal TODO](../../TODO.md). It did not alter gameplay, branch trial source or other design threads.
+
+Reason: the [completed branch capture](2026-10-07-quarter-trial-recovery-findings-v1.md) observed a legal 0.0-Review loss and later recovery, leaving Review just below 5.0 unobserved. The new task permits one predeclared legal continuation and one nearby alternative at most, with no broad search or injected state. It asks for monthly Fan and exact-cent finance reconciliation, and accepts an honest bounded miss as the result. The 15% loss coefficient and quarter Fan Awareness remain ACTIVE/TRIAL; no numerical value was approved. Branch trial provenance remains `codex/fanbase-quarter-trial` at `bd450a9e4e8d83ece1478cdf5a16526432e36cce` plus two uncommitted trial files, subject to exact source verification when the queued work starts.
+
+Check: targeted `git diff --check` for TODO and Fanbase thread files. Follow-up: the separate executing thread runs the read-only capture when coordinated; this design thread reviews the resulting evidence before any tuning decision.

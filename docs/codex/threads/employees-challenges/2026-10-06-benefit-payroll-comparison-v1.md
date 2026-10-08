@@ -1,6 +1,6 @@
 # Employees/Challenges — benefit and pay comparison v1
 
-2026-10-06, America/Los_Angeles. **Stage A COMPLETE, read-only analysis.** The recommendations below were submitted as OPEN. Subsequently the user [approved the trial package](2026-10-06-trial-package-decision-v1.md), and the [separate first Production implementation task](2026-10-06-production-specialist-implementation-v1.md) is QUEUED. The findings and counterfactual inputs retain their original evidence scope. No employee, hiring, payroll, course or reward runtime was added.
+2026-10-06, America/Los_Angeles. **Stage A COMPLETE, read-only analysis.** The recommendations below were submitted as OPEN. Subsequently the user [approved the trial package](2026-10-06-trial-package-decision-v1.md), and the [separate first Production implementation task](2026-10-06-production-specialist-implementation-v1.md) was completed locally on 2026-10-07. The findings and counterfactual inputs retain their original evidence scope. This comparison added no employee, hiring, payroll, course or reward runtime; [later implementation evidence](../../findings/2026-10-07-employees-implementation-v1.md) is separate.
 
 ## Recommendation submitted for review
 
@@ -99,4 +99,4 @@ An extra course cycle is productive calendar time. Base early/synergy 1104 at co
 - Native constructed bill protocol: 46 checks, zero failures. Constructed employee identity/commit model: 36 checks passed. The employee model is conceptual evidence; no employee runtime is verified.
 - Existing `verify_shared_redraw_and_priority_adjustment.gd` and `verify_atomic_selected_redraw.gd` passed. `verify_outstanding_expenses.gd`: 85 checks, zero failures. No maintained test was changed or broad release gate claimed.
 - Initial public-setter pilot, old forecast-field timeline attempt and overly early censoring were corrected and excluded/superseded. Final source/inputs/results are audited. See reproduction notes and session log.
-- Remaining: user rule approval, human deliberate-choice evidence, final wage/economy tuning, course effects/amounts, explicit payroll/bank order ruling, separate implementation task and eventual native atomicity/identity/UI/restore checks. No commit or push.
+- Subsequent status: [user approval](2026-10-06-trial-package-decision-v1.md) resolved the first Production rules and payroll/bank order; the [separate implementation task](2026-10-06-production-specialist-implementation-v1.md) was [completed locally on 2026-10-07](../../findings/2026-10-07-employees-implementation-v1.md). Remaining: human deliberate-choice evidence, final wage/economy tuning and course effects/amounts. Durable restart verification depends on checkpoint runtime. No commit or push is claimed here.

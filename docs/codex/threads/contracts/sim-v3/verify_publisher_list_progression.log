@@ -1,0 +1,195 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WARNING: Case mismatch opening requested file 'res://scenes/cards/card_view.tscn', stored as 'res://Scenes/cards/card_view.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+WARNING: Case mismatch opening requested file 'res://scenes/cards/card_view.tscn', stored as 'res://Scenes/cards/card_view.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+WARNING: Case mismatch opening requested file 'res://scenes/phases/post_game_review.tscn', stored as 'res://Scenes/phases/post_game_review.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+WARNING: Case mismatch opening requested file 'res://scenes/phases/post_game_review.tscn', stored as 'res://Scenes/phases/post_game_review.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: No publisher unlocks before first release
+PASS: Failed registration cannot advance progression
+WARNING: Case mismatch opening requested file 'res://scenes/phases/studio_phase.tscn', stored as 'res://Scenes/phases/studio_phase.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+   GDScript backtrace (most recent call first):
+       [0] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:67)
+       [1] _run (res://scripts/debug/verify_publisher_list_progression.gd:56)
+WARNING: Case mismatch opening requested file 'res://scenes/phases/studio_phase.tscn', stored as 'res://Scenes/phases/studio_phase.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+   GDScript backtrace (most recent call first):
+       [0] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:67)
+       [1] _run (res://scripts/debug/verify_publisher_list_progression.gd:56)
+PASS: First release enters Studio
+PASS: Only Ironclad unlocks at first release, and Studio presents its notification once
+PASS: One-time unlock banner names Ironclad
+PASS: Studio browser shows all five publishers
+PASS: Publisher browser fits the Studio viewport at (1152, 648)
+PASS: Publisher browser fits the Studio viewport at (900, 600)
+PASS: Publisher 0 displays identity, condition and personality
+PASS: Publisher 1 displays identity, condition and personality
+PASS: Publisher 2 displays identity, condition and personality
+PASS: Publisher 3 displays identity, condition and personality
+PASS: Publisher 4 displays identity, condition and personality
+PASS: Locked Starwave states the unattainable three-contract condition
+PASS: Browser navigation costs zero cash and cycles and preserves frozen results
+PASS: Existing cash-only Primitive Contract is explicitly assigned to Ironclad
+PASS: Contract details remain passive beside publisher browsing
+WARNING: Case mismatch opening requested file 'res://scenes/phases/studio_phase.tscn', stored as 'res://Scenes/phases/studio_phase.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+   GDScript backtrace (most recent call first):
+       [0] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:103)
+WARNING: Case mismatch opening requested file 'res://scenes/phases/studio_phase.tscn', stored as 'res://Scenes/phases/studio_phase.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+   GDScript backtrace (most recent call first):
+       [0] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:103)
+PASS: Studio reconstruction accepts same release
+PASS: Reconstruction neither repeats notification nor mutates release state
+PASS: Review 6.9 and Awareness 124 do not unlock threshold publishers
+PASS: Review 7.0 and Awareness 125 unlock exact thresholds from committed release history
+PASS: Publisher thresholds use frozen historical results
+PASS: New publisher notifications queue once
+PASS: Duplicate release registration cannot repeat notifications or unlock Starwave
+PASS: Two releases alone cannot meet Starwave's contract requirement
+PASS: Notification acknowledgment is one-shot
+PASS: Contract progression fixture has first release
+PASS: Accepting a contract does not unlock SideStreet
+WARNING: Case mismatch opening requested file 'res://scenes/phases/contract_phase.tscn', stored as 'res://Scenes/phases/contract_phase.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+   GDScript backtrace (most recent call first):
+       [0] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:129)
+       [1] _run (res://scripts/debug/verify_publisher_list_progression.gd:57)
+       [2] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:120)
+WARNING: Case mismatch opening requested file 'res://scenes/phases/contract_phase.tscn', stored as 'res://Scenes/phases/contract_phase.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+   GDScript backtrace (most recent call first):
+       [0] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:129)
+       [1] _run (res://scripts/debug/verify_publisher_list_progression.gd:57)
+       [2] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:120)
+PASS: Contract phase reuses authoritative state
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:308)
+       [5] _ready (res://scripts/phases/contract_phase.gd:61)
+       [6] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:131)
+       [7] _run (res://scripts/debug/verify_publisher_list_progression.gd:57)
+       [8] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:120)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:308)
+       [5] _ready (res://scripts/phases/contract_phase.gd:61)
+       [6] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:131)
+       [7] _run (res://scripts/debug/verify_publisher_list_progression.gd:57)
+       [8] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:120)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:308)
+       [5] _ready (res://scripts/phases/contract_phase.gd:61)
+       [6] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:131)
+       [7] _run (res://scripts/debug/verify_publisher_list_progression.gd:57)
+       [8] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:120)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:308)
+       [5] _ready (res://scripts/phases/contract_phase.gd:61)
+       [6] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:131)
+       [7] _run (res://scripts/debug/verify_publisher_list_progression.gd:57)
+       [8] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:120)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:308)
+       [5] _ready (res://scripts/phases/contract_phase.gd:61)
+       [6] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:131)
+       [7] _run (res://scripts/debug/verify_publisher_list_progression.gd:57)
+       [8] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:120)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:308)
+       [5] _ready (res://scripts/phases/contract_phase.gd:61)
+       [6] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:131)
+       [7] _run (res://scripts/debug/verify_publisher_list_progression.gd:57)
+       [8] _verify_browser_and_release_thresholds (res://scripts/debug/verify_publisher_list_progression.gd:120)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:135)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:135)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:418)
+       [5] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:137)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:418)
+       [5] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:137)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:490)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:418)
+       [5] _verify_contract_completion (res://scripts/debug/verify_publisher_list_progression.gd:137)
+PASS: First contract hand commits
+PASS: Partial contract never unlocks SideStreet
+PASS: Second contract hand completes
+PASS: Only committed completion unlocks SideStreet
+PASS: SideStreet notification is queued once
+PASS: Repeated completion cannot pay, advance, or notify again
+PASS: Fixed one-shot contract cannot meet Starwave's three-completion requirement
+Publisher List and progression verification: 0 failures

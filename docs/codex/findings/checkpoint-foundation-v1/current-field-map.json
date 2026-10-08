@@ -1,0 +1,147 @@
+{
+  "source": "patch-notes\\scripts\\run_state.gd",
+  "sha256": "54b72b06e0bd91b2870e871aedade5ae32e5b227ee86e1f73bec85efdf841f9e",
+  "fields": {
+    "_cash_cents": {
+      "category": "persist",
+      "mapping": "cash_cents"
+    },
+    "_cash_initialized": {
+      "category": "persist",
+      "mapping": "cash_initialized"
+    },
+    "_completed_run_cycles": {
+      "category": "persist",
+      "mapping": "completed_run_cycles"
+    },
+    "_available_redraws": {
+      "category": "persist",
+      "mapping": "available_redraws"
+    },
+    "_owned_features": {
+      "category": "persist",
+      "mapping": "owned_features"
+    },
+    "_feature_definitions": {
+      "category": "rebuild_from_catalog",
+      "mapping": "feature_definitions"
+    },
+    "_feature_offers": {
+      "category": "rebuild_from_catalog",
+      "mapping": "feature_offers"
+    },
+    "_familiarity": {
+      "category": "persist",
+      "mapping": "familiarity"
+    },
+    "_credited_projects": {
+      "category": "typed_adapter_pending",
+      "mapping": "Replace ProjectState object keys with stable release IDs; validate familiarity counts"
+    },
+    "_feature_purchase_in_progress": {
+      "category": "quiescent_guard",
+      "mapping": "feature_purchase_in_progress"
+    },
+    "_released_games": {
+      "category": "persist",
+      "mapping": "released_games"
+    },
+    "_release_metadata": {
+      "category": "persist",
+      "mapping": "release_metadata"
+    },
+    "_productive_cycle_in_progress": {
+      "category": "quiescent_guard",
+      "mapping": "productive_cycle_in_progress"
+    },
+    "_committing_cycle_cash": {
+      "category": "quiescent_guard",
+      "mapping": "committing_cycle_cash"
+    },
+    "_publishing_cycle": {
+      "category": "quiescent_guard",
+      "mapping": "publishing_cycle"
+    },
+    "_primitive_contract": {
+      "category": "typed_adapter_pending",
+      "mapping": "Completed ContractState/result DTO; null or paid complete only"
+    },
+    "_ironclad_completion_committed": {
+      "category": "persist",
+      "mapping": "ironclad_completion_committed"
+    },
+    "_sidestreet_entitlements": {
+      "category": "typed_adapter_pending",
+      "mapping": "Ordered entitlement records with completed ContractState DTO or null"
+    },
+    "_sidestreet_results": {
+      "category": "persist",
+      "mapping": "sidestreet_results"
+    },
+    "_pending_contract_completion": {
+      "category": "quiescent_guard",
+      "mapping": "pending_contract_completion"
+    },
+    "_unlocked_publishers": {
+      "category": "persist",
+      "mapping": "unlocked_publishers"
+    },
+    "_pending_publisher_notifications": {
+      "category": "persist",
+      "mapping": "pending_publisher_notifications"
+    },
+    "_seen_tutorial_topics": {
+      "category": "persist",
+      "mapping": "seen_tutorial_topics"
+    },
+    "_studio_name": {
+      "category": "persist",
+      "mapping": "studio_name"
+    },
+    "_studio_specialty": {
+      "category": "persist",
+      "mapping": "studio_specialty"
+    },
+    "_studio_traits": {
+      "category": "persist",
+      "mapping": "studio_traits"
+    },
+    "_lean_savings": {
+      "category": "persist",
+      "mapping": "lean_savings"
+    },
+    "_first_studio_economy": {
+      "category": "persist",
+      "mapping": "first_studio_economy"
+    },
+    "_starter_selection_confirmed": {
+      "category": "persist",
+      "mapping": "starter_selection_confirmed"
+    },
+    "_first_tutorial_project_id": {
+      "category": "persist",
+      "mapping": "first_tutorial_project_id"
+    },
+    "_first_game_tutorial": {
+      "category": "typed_adapter_pending",
+      "mapping": "Explicit FirstGameTutorial stage/stat/pool flags DTO"
+    },
+    "_studio_finance": {
+      "category": "persist",
+      "mapping": "studio_finance"
+    },
+    "_bank_run_id": {
+      "category": "persist",
+      "mapping": "bank_run_id"
+    },
+    "_employees": {
+      "category": "persist",
+      "mapping": "employees"
+    }
+  },
+  "pending_additions": [
+    "run-owned RNG streams: snapshot/review/design_deal/design_finalize/alpha_deal/alpha_finalize/beta_deal/beta_insight/contract_deal",
+    "next_project_serial",
+    "checkpoint coordinator state kept outside authoritative run"
+  ]
+}

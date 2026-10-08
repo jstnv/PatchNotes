@@ -1,0 +1,136 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: Release registration succeeds
+PASS: Registration is one-shot and pays/earns nothing
+PASS: Sales query returns an isolated snapshot
+PASS: First post-release crossing action succeeds
+PASS: 751 oracle: crossing earns before settling exact 262237 cents
+PASS: Repeated completion callback with original cycle rejects atomically
+PASS: Non-boundary second cycle earns but pays nothing
+PASS: Following boundary settles remaining Month 1 and first-half later sales exactly once
+PASS: Month 1 completes after two cycles while later release-age months continue earning
+PASS: Released ProjectState stays frozen
+PASS: First non-crossing split earns floor(total/2) for 750 units
+PASS: Both cycles settle cumulatively at one boundary for 750 units
+PASS: First non-crossing split earns floor(total/2) for 751 units
+PASS: Both cycles settle cumulatively at one boundary for 751 units
+PASS: First non-crossing split earns floor(total/2) for 1 units
+PASS: Both cycles settle cumulatively at one boundary for 1 units
+PASS: First non-crossing split earns floor(total/2) for 0 units
+PASS: Both cycles settle cumulatively at one boundary for 0 units
+PASS: Reconstructed project with same stable release ID reuses history
+PASS: Next-project releases register independently while retaining earlier history
+PASS: Settlement overflow rejects before direct effects, calendar, redraw and sales mutation
+PASS: Exact maximum cash is representable
+PASS: Failed atomic direct action leaves every run field unchanged
+PASS: Direct income plus settlement overflow rejects as one action
+PASS: Preflight accounts for direct spending before settlement
+PASS: Invalid sales state rejects without partial writes
+PASS: Calendar overflow rejects
+PASS: Revenue arithmetic overflow rejects registration input
+PASS: Zero-unit settlement is a signal-free cash no-op
+PASS: Notifications expose ready-state queries to UI
+PASS: Reentrant settlement callback cannot advance twice
+PASS: Cash observers see complete sales/calendar transaction
+PASS: Studio entry registers release
+PASS: Launch/Studio starts with zero earned and settled sales
+PASS: Studio distinguishes projection, earned, settled and unpaid values
+PASS: Studio reconstruction neither earns nor settles
+PASS: Feature Store browsing stays zero-cycle
+PASS: Live summary updates at settlement and Month 1 completion
+PASS: Existing Design fixture begins
+PASS: Real production rejects settlement overflow before scores, selection or lifecycle change
+PASS: Real production advances each clock and sales exactly once
+Sales earning and settlement verification: 0 failures
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_actions (res://scripts/debug/verify_sales_earning_and_settlement.gd:171)
+       [8] _verify (res://scripts/debug/verify_sales_earning_and_settlement.gd:43)
+       [9] _verify_studio (res://scripts/debug/verify_sales_earning_and_settlement.gd:158)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_actions (res://scripts/debug/verify_sales_earning_and_settlement.gd:171)
+       [8] _verify (res://scripts/debug/verify_sales_earning_and_settlement.gd:43)
+       [9] _verify_studio (res://scripts/debug/verify_sales_earning_and_settlement.gd:158)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_actions (res://scripts/debug/verify_sales_earning_and_settlement.gd:171)
+       [8] _verify (res://scripts/debug/verify_sales_earning_and_settlement.gd:43)
+       [9] _verify_studio (res://scripts/debug/verify_sales_earning_and_settlement.gd:158)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_actions (res://scripts/debug/verify_sales_earning_and_settlement.gd:171)
+       [8] _verify (res://scripts/debug/verify_sales_earning_and_settlement.gd:43)
+       [9] _verify_studio (res://scripts/debug/verify_sales_earning_and_settlement.gd:158)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_actions (res://scripts/debug/verify_sales_earning_and_settlement.gd:171)
+       [8] _verify (res://scripts/debug/verify_sales_earning_and_settlement.gd:43)
+       [9] _verify_studio (res://scripts/debug/verify_sales_earning_and_settlement.gd:158)
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_actions (res://scripts/debug/verify_sales_earning_and_settlement.gd:171)
+       [8] _verify (res://scripts/debug/verify_sales_earning_and_settlement.gd:43)
+       [9] _verify_studio (res://scripts/debug/verify_sales_earning_and_settlement.gd:158)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:614)
+       [5] _verify_actions (res://scripts/debug/verify_sales_earning_and_settlement.gd:178)
+       [6] _verify (res://scripts/debug/verify_sales_earning_and_settlement.gd:43)
+       [7] _verify_studio (res://scripts/debug/verify_sales_earning_and_settlement.gd:158)

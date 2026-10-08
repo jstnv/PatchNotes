@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "workspace": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067",
+  "cases": [
+    {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_store_process_probe.gd",
+        "--",
+        "hold",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\slot",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\0-hold.json"
+      ],
+      "result": {
+        "acquired": true
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_store_process_probe.gd",
+        "--",
+        "save",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\slot",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\1-save.json"
+      ],
+      "result": {
+        "status": "writer_busy"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_store_process_probe.gd",
+        "--",
+        "save",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\slot",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\2-save.json"
+      ],
+      "result": {
+        "path": "C:/Users/64jus/Downloads/Patch Notes Design Folder/checkpoint-implementation-20261007/process-2wlnn067/slot/checkpoint.1.json",
+        "sequence": 1,
+        "status": "saved"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_store_process_probe.gd",
+        "--",
+        "flush",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\slot",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\3-flush.json"
+      ],
+      "result": {
+        "reason": "Injected after flush",
+        "status": "io_error"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_store_process_probe.gd",
+        "--",
+        "read",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\slot",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\4-read.json"
+      ],
+      "result": {
+        "path": "C:/Users/64jus/Downloads/Patch Notes Design Folder/checkpoint-implementation-20261007/process-2wlnn067/slot/checkpoint.1.json",
+        "payload": {
+          "cash": "9007199254740993",
+          "kind": "studio",
+          "sequence": "1"
+        },
+        "sequence": 1,
+        "status": "valid"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_store_process_probe.gd",
+        "--",
+        "publish_hold",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\slot",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\5-publish_hold.json"
+      ],
+      "result": {
+        "path": "C:/Users/64jus/Downloads/Patch Notes Design Folder/checkpoint-implementation-20261007/process-2wlnn067/slot/checkpoint.2.json",
+        "sequence": 2,
+        "status": "saved"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_store_process_probe.gd",
+        "--",
+        "read",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\slot",
+        "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\checkpoint-implementation-20261007\\process-2wlnn067\\6-read.json"
+      ],
+      "result": {
+        "path": "C:/Users/64jus/Downloads/Patch Notes Design Folder/checkpoint-implementation-20261007/process-2wlnn067/slot/checkpoint.2.json",
+        "payload": {
+          "cash": "9007199254740993",
+          "kind": "studio",
+          "sequence": "2"
+        },
+        "sequence": 2,
+        "status": "valid"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "head": "b84d1a5b4e4957b044b4b52c41553cf611aff3ae",
+  "files": {
+    "scripts/run_state.gd": "2e1d807eeadca47634e22cd46657322d14eec2083e85d0e7877d7adaf63175ca",
+    "scripts/finance/feature_spending_guidance.gd": "576a00dbfaccb2c1a036c755800f2c847d757c0b76208aef112bcae02d4daea2",
+    "scripts/ui/feature_store_map.gd": "434847e545ffec0dd074ca88ea57acc894315674a1863f3d27004c87eb3b8bdb",
+    "scripts/debug/verify_feature_spending_guidance.gd": "991c531f03b60c2f7bfe607f9b4d8684f8ca7f885c6d0657cff16502a2a57ca5",
+    "scripts/debug/verify_store_shopping_guidance.gd": "85caae5ab7537c9330428fd73be9b7257fb7bb950179c0fa229d65fba6bc2746"
+  },
+  "unchanged_purchase_methods": [
+    "purchase_feature",
+    "purchase_starter_feature",
+    "purchase_primitive_reserve_feature",
+    "get_feature_store_offer",
+    "get_primitive_reserve_offer"
+  ],
+  "passed_suites": [
+    "verify_bank_finance.command",
+    "verify_candidate_retention.command",
+    "verify_employees.command",
+    "verify_feature_spending_guidance.command",
+    "verify_feature_store.command",
+    "verify_feature_store_cycle_purchase.command",
+    "verify_feature_store_navigation.command",
+    "verify_feature_store_radial.command",
+    "verify_store_shopping_guidance.command",
+    "verify_trait_lease.command"
+  ],
+  "pass_markers": 332,
+  "known_harness_invocation_error": "verify_primitive_reserve_store does not exist; corrected to verify_feature_store_cycle_purchase, which passed"
+}

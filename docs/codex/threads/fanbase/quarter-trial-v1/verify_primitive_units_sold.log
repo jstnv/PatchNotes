@@ -1,0 +1,40 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WARNING: Case mismatch opening requested file 'res://scenes/phases/launch_phase.tscn', stored as 'res://Scenes/phases/launch_phase.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+WARNING: Case mismatch opening requested file 'res://scenes/phases/launch_phase.tscn', stored as 'res://Scenes/phases/launch_phase.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Primitive snapshot ledgers load
+PASS: Result uses the locked Primitive Month 1 profile
+PASS: Base demand 500 and exact Review/7 quality inputs are preserved
+PASS: Zero Marketing preserves committed Awareness 100 and multiplier 1.50
+PASS: Month 1 decay and stable market are exact 1.00 basis-point factors
+PASS: 7.0 Review, 1.50 Awareness, and Stable Market produce exactly 750 units
+PASS: 8.0 Review, 1.625 Awareness, and 1.15 market floor 1067.857... to 1067
+PASS: Zero Review produces zero Month 1 units with no minimum guarantee
+PASS: Maximum valid Review with Awareness 2.00 and Market Boom floors once to 1857
+PASS: Final floor occurs after the complete fractional product
+PASS: market_crash applies exact basis points and one final floor
+PASS: market_slump applies exact basis points and one final floor
+PASS: stable_market applies exact basis points and one final floor
+PASS: market_surge applies exact basis points and one final floor
+PASS: market_boom applies exact basis points and one final floor
+PASS: Forecast reveal state and competitor timing do not change sales
+PASS: Sales calculation does not reveal concealed snapshots
+PASS: Missing launch prerequisites reject without mutation
+PASS: Nonfinite Review rejects atomically
+PASS: Nonfinite Awareness rejects atomically
+PASS: Overflowing Awareness input rejects atomically
+PASS: Valid Month 1 sales result commits once
+PASS: Repeated calculation and commit cannot replace the result
+PASS: Sales preserves every source result, Marketing, cycles, and reveal flags
+PASS: A result from different committed inputs rejects atomically
+PASS: LaunchPhase reads the committed Month 1 sales result
+PASS: Launch UI shows the accurate period and updated pending status
+PASS: Sales UI does not reveal concealed inputs, Bugs, revenue, or cash
+PASS: Launch reconstruction reuses the same immutable result
+PASS: Reconstruction preserves exact state identities, cash, and cycles
+Primitive Units-Sold verification passed.

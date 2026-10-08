@@ -1,12 +1,12 @@
 # Employees and courses
 
-Authority: Tasks8,16,18 and the [2026-10-06 user trial approval](../threads/employees-challenges/2026-10-06-trial-package-decision-v1.md). Status LOCKED architecture/trigger, ACTIVE/TRIAL first Production package, OPEN final tuning and other specialists/courses. No hiring, employees, courses, payroll or rewards in runtime. Typed payroll policy is an inactive finance hook; the [separate implementation task](../threads/employees-challenges/2026-10-06-production-specialist-implementation-v1.md) is QUEUED.
+Authority: Tasks8,16,18, the [2026-10-06 trial approval](../threads/employees-challenges/2026-10-06-trial-package-decision-v1.md) and the later [2026-10-07 mid-game direction](../threads/employees-challenges/2026-10-07-midgame-wage-direction-v1.md). Status LOCKED architecture/trigger, ACTIVE/TRIAL implemented first Production slice, user-selected future mid-game/$1,000 starting-pay direction with further work DEFERRED. Exact mid-game unlock, related economics, other specialists and courses remain OPEN. One after-Game-1 Production Specialist with $10 payroll remains implemented locally; courses are absent. [Implementation evidence](../findings/2026-10-07-employees-implementation-v1.md).
 
 ## Locked architecture / trigger
 
 Studio-owned specialists create meaningful hand/Beta/Contract choices. Challenge completion produces an immediate permanent employee-owned benefit; optional temporary effects must have explicit project/productive-cycle scope. Production trigger alone: successfully committed Design hand with a Core Pass and at least one Feature matching that Pass's printed primary or secondary Core stat, once per employee/project. Failed/unaffordable action, duplicate callback or reconstruction grants nothing.
 
-Other challenge triggers, Generalist, dismissal/rehire, course paths/effects/amounts and final salaries remain OPEN. The approved temporary Production package below resolves its reward, hiring, first payday and recovery rules. Completed studies alone do not approve other candidates.
+Other challenge triggers, Generalist, dismissal/rehire, course paths/effects/amounts, other specialist salaries and the exact mid-game unlock remain OPEN. The earlier approved temporary Production package below resolves its trial reward, hiring, first payday and recovery rules; the later $1,000 starting-pay direction is recorded at the end. Completed studies alone do not approve other candidates.
 
 ## Most useful candidate discussion
 
@@ -34,7 +34,7 @@ The comparison's recommendations were subsequently selected by the user as an AC
 
 ## Approved first Production trial
 
-**ACTIVE/TRIAL, 2026-10-06:** the user answered “Approve the trial package” in the implementation chat. [Decision and rationale](../threads/employees-challenges/2026-10-06-trial-package-decision-v1.md); [QUEUED task and acceptance](../threads/employees-challenges/2026-10-06-production-specialist-implementation-v1.md).
+**ACTIVE/TRIAL, 2026-10-06:** the user answered “Approve the trial package” in the implementation chat. [Decision and rationale](../threads/employees-challenges/2026-10-06-trial-package-decision-v1.md); [completed task and acceptance](../threads/employees-challenges/2026-10-06-production-specialist-implementation-v1.md).
 
 - One Production Specialist is available in Studio after Game 1, hired by explicit confirmation for $100 and zero productive cycles while bills are current and the fee is affordable. No required Contract or immediate hire.
 - Monthly payroll is temporarily $10. First full-month payday is even hire cycle `c+2` or odd cycle `c+3`, then every two productive cycles. Final wages are OPEN until the surrounding economy is stable.
@@ -43,3 +43,11 @@ The comparison's recommendations were subsequently selected by the user as an AC
 - Future courses are available in Studio after Game 2 at zero cycles; a raise starts in the expense month following enrollment and never revises an issued bill. For passive enrollment at cycle `c`, expense month is `floor(c/2)+1`, first raised bill `2*(expense_month+1)`. Course effects/tuition/raise amounts remain OPEN, and courses are outside the first implementation slice.
 
 Studio/employee/project/committed-action identities must preserve ownership, permanent training and one project use through phase exits and lossless reconstruction. The implementation task defines atomicity, payroll reporting, UI and focused checks. Durable restart is a separate checkpoint dependency. This approval adds no runtime by itself.
+
+## Current-source wage evidence — 2026-10-07
+
+The [matched wage comparison](../findings/2026-10-07-employees-wage-comparison-v1.md) is COMPLETE as bounded read-only analysis:180 native routes,48 fixed-journal sensitivities and38,347 checks. $50 blocks some work reachable at$25/$10; the visible planning policy demonstrates use but no Review improvement in the cited matched routes. Recommendation is to retain the existing$10 ACTIVE/TRIAL wage. $25/$50/$75 remain candidates; this is not a new ruling. Final wage and human benefit value remain OPEN. Long22-cycle feasibility was not achieved; shorter frugal20 and separately labeled actual-debt coverage retain their limitations. Courses and other specialists remain absent.
+
+## Later user direction — 2026-10-07
+
+The user directed the thread to **hold off on Employees**, move their intended entry to the **beginning of the mid game**, and set **$1,000 per in-game month as starting pay**. This supersedes the $25/$50/$75 next-wage candidate path and the after-Game-1/$10 slice as the future progression/pay target. It does not claim the existing local runtime has changed: that playable trial still offers one Production Specialist after Game 1 at $10/month. The $1,000 target has not been evaluated against a defined mid-game economy, and the exact unlock milestone, hire fee, course/raise amounts and other employee rules remain OPEN. Further design and implementation are DEFERRED until the user resumes this system. [Dated thread record](../threads/employees-challenges/2026-10-07-midgame-wage-direction-v1.md).

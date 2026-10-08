@@ -85,7 +85,6 @@ func _verify_ui() -> void:
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://design-logs/task25-v1/studio-specialty-1152.png")
 	enter.pressed.emit()
-	menu.get("_background").select(1)
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids().size() == 18, "Menu commits exactly one specialty")

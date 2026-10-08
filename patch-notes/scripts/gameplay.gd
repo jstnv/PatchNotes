@@ -52,11 +52,11 @@ func _ready() -> void:
 	_active_phase = design_phase
 	%GameplayHUD.set_phase(design_phase)
 
-func _on_studio_created(name: String, specialty: StringName, background: StringName, secondary_ids: Array, source: MainMenu) -> void:
+func _on_studio_created(name: String, specialty: StringName, trait_ids: Array, source: MainMenu) -> void:
 	if _transition_in_progress or source != _active_phase or source.get_parent() != %PhaseRoot:
 		return
-	if not run_state.create_studio(name, specialty, background, secondary_ids):
-		source.show_error("Enter a valid name, Genre specialty and one background; check the trait limits.")
+	if not run_state.create_studio_with_traits(name, specialty, trait_ids):
+		source.show_error("Enter a valid name and Genre specialty; check the trait limits.")
 		return
 	_enter_initial_studio()
 
@@ -382,7 +382,7 @@ func _ensure_review_result() -> bool:
 func _ensure_awareness_result() -> bool:
 	if project_state.has_awareness_result():
 		return true
-	var result := PrimitiveAwarenessCalculator.calculate(project_state)
+	var result := PrimitiveAwarenessCalculator.calculate(project_state, run_state)
 	return result != null and project_state.commit_awareness_result(result)
 
 

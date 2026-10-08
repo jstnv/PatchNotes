@@ -23,8 +23,8 @@ func reconcile(run: RunState) -> void:
 		check(row.opening_cash_cents == cash, "Monthly opening follows previous close")
 		var revenue: int = row.sales_net_earned_cents + row.other_income_cents
 		var costs: int = row.feature_play_cents + row.store_cents + row.campaign_cents + row.playtest_cents + row.other_expense_cents + row.interest_cents
-		check(row.net_profit_cents == revenue - costs - row.rent_due_cents, "Profit uses accrual rent and earned net, not cash settlement")
-		cash += row.financing_in_cents + row.other_income_cents + row.sales_settled_cents - costs - row.rent_paid_cents - row.principal_paid_cents
+		check(row.net_profit_cents == revenue - costs - row.rent_due_cents - row.payroll_due_cents, "Profit uses accrual rent and earned net, not cash settlement")
+		cash += row.financing_in_cents + row.other_income_cents + row.sales_settled_cents - costs + row.interest_cents - row.interest_paid_cents - row.rent_paid_cents - row.principal_paid_cents - row.payroll_paid_cents
 		check(row.closing_cash_cents == cash and row.cash_change_cents == cash - row.opening_cash_cents, "Monthly exact-cent cash movement reconciles")
 		earned += int(row.sales_net_earned_cents)
 		settled += int(row.sales_settled_cents)

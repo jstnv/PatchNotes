@@ -8,6 +8,10 @@ signal busy_changed
 signal card_step(index: int, event: String)
 
 const CARD_SCENE := preload("res://scenes/cards/card_view.tscn")
+const BPM := 140.0
+const BEAT_SECONDS := 60.0 / BPM
+const SPECIALIZATION_BEATS := 4
+const SPECIALIZATION_SECONDS := BEAT_SECONDS * SPECIALIZATION_BEATS
 const CORE := [&"graphics", &"sound", &"technology", &"design"]
 var busy := false
 var action_kind := ""
@@ -147,44 +151,47 @@ func _animate(kind: String) -> void:
 			var index := _hand.find(ghost)
 			var target := center + Vector2((index - (_hand.size() - 1) / 2.0) * 258.0 * scale_value, -10.0) - ghost.size / 2.0
 			ghost.z_index = 20 + index
-			_tween.tween_property(ghost, "position", target, 0.30)
-			_tween.tween_property(ghost, "scale", Vector2.ONE * scale_value, 0.30)
-			_tween.tween_property(ghost, "rotation", 0.0, 0.30)
+			_tween.tween_property(ghost, "position", target, BEAT_SECONDS)
+			_tween.tween_property(ghost, "scale", Vector2.ONE * scale_value, BEAT_SECONDS)
+			_tween.tween_property(ghost, "rotation", 0.0, BEAT_SECONDS)
 		else:
 			var offset: float = remaining.find(ghost) - (remaining.size() - 1) / 2.0
-			_tween.tween_property(ghost, "position", Vector2(size.x / 2.0 + offset * 58.0, size.y - 85.0 + offset * offset * 3.0) - ghost.size / 2.0, 0.30)
-			_tween.tween_property(ghost, "rotation", offset * deg_to_rad(7.0), 0.30)
-			_tween.tween_property(ghost, "scale", Vector2.ONE * 0.34, 0.30)
-			_tween.tween_property(ghost, "modulate:a", 0.65, 0.30)
+			_tween.tween_property(ghost, "position", Vector2(size.x / 2.0 + offset * 58.0, size.y - 85.0 + offset * offset * 3.0) - ghost.size / 2.0, BEAT_SECONDS)
+			_tween.tween_property(ghost, "rotation", offset * deg_to_rad(7.0), BEAT_SECONDS)
+			_tween.tween_property(ghost, "scale", Vector2.ONE * 0.34, BEAT_SECONDS)
+			_tween.tween_property(ghost, "modulate:a", 0.65, BEAT_SECONDS)
 	_tween.chain().tween_callback(func(): _record(-1, "centered"))
 	if kind == "redraw":
 		_tween.chain()
 		for ghost in _hand:
-			_tween.parallel().tween_property(ghost, "position:x", size.x + 260.0 + _hand.find(ghost) * 150.0, 0.36).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+			_tween.parallel().tween_property(ghost, "position:x", size.x + 260.0 + _hand.find(ghost) * 150.0, BEAT_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	else:
 		for i in range(_hand.size()):
 			var ghost := _hand[i]
 			_tween.chain().tween_callback(_record.bind(i, "rise"))
-			_tween.chain().tween_property(ghost, "position:y", -28.0, 0.15).as_relative()
+			_tween.chain().tween_property(ghost, "position:y", -28.0, BEAT_SECONDS / 2.0).as_relative()
 			_tween.chain().tween_callback(_score_card.bind(i))
-			_tween.chain().tween_property(ghost, "position:y", 28.0, 0.19).as_relative().set_ease(Tween.EASE_IN)
+			_tween.chain().tween_property(ghost, "position:y", 28.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
 			_tween.chain().tween_callback(_record.bind(i, "grounded"))
 		if _specialization:
+			_tween.chain().tween_callback(_begin_specialization)
 			for i in range(_hand.size()):
+				_tween.chain().tween_callback(_record.bind(i, "bonus_rise"))
+				_tween.chain().tween_property(_hand[i], "position:y", -28.0, BEAT_SECONDS / 2.0).as_relative()
 				_tween.chain().tween_callback(_score_bonus.bind(i))
-				_tween.chain().tween_interval(0.24)
-		_tween.chain().tween_interval(0.18)
+				_tween.chain().tween_property(_hand[i], "position:y", 28.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
+			_tween.chain().tween_callback(_record.bind(-1, "specialization_complete"))
 		# A purely visual victory wave after every resolved score/bonus is shown.
 		for i in range(_hand.size()):
 			var ghost := _hand[i]
 			_tween.chain().tween_callback(_record.bind(i, "exit_bounce"))
-			_tween.chain().tween_property(ghost, "position:y", -22.0, 0.10).as_relative()
-			_tween.chain().tween_property(ghost, "position:y", 22.0, 0.13).as_relative().set_ease(Tween.EASE_IN)
+			_tween.chain().tween_property(ghost, "position:y", -22.0, BEAT_SECONDS / 2.0).as_relative()
+			_tween.chain().tween_property(ghost, "position:y", 22.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
 			_tween.chain().tween_callback(_record.bind(i, "exit_grounded"))
 		_tween.chain().tween_callback(_record.bind(-1, "exit_slide"))
 		_tween.chain()
 		for ghost in _hand:
-			_tween.parallel().tween_property(ghost, "position:x", size.x + CardFan.CARD_SIZE.x, 0.38).as_relative().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+			_tween.parallel().tween_property(ghost, "position:x", size.x + CardFan.CARD_SIZE.x, BEAT_SECONDS).as_relative().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	_tween.chain().tween_callback(_return_fan)
 
 func _return_fan() -> void:
@@ -230,13 +237,13 @@ func _return_fan() -> void:
 		else:
 			_tween.parallel().tween_callback(_record.bind(targets.find(source), "return_from_bottom"))
 			_tween.parallel()
-		_tween.tween_property(ghost, "position", target, 0.22)
-		_tween.parallel().tween_property(ghost, "rotation", source.get_global_transform().get_rotation() - get_global_transform().get_rotation(), 0.22)
-		_tween.parallel().tween_property(ghost, "scale", source.get_global_transform().get_scale() / get_global_transform().get_scale(), 0.22)
-		_tween.parallel().tween_property(ghost, "modulate:a", 1.0, 0.22)
+		_tween.tween_property(ghost, "position", target, BEAT_SECONDS / 2.0)
+		_tween.parallel().tween_property(ghost, "rotation", source.get_global_transform().get_rotation() - get_global_transform().get_rotation(), BEAT_SECONDS / 2.0)
+		_tween.parallel().tween_property(ghost, "scale", source.get_global_transform().get_scale() / get_global_transform().get_scale(), BEAT_SECONDS / 2.0)
+		_tween.parallel().tween_property(ghost, "modulate:a", 1.0, BEAT_SECONDS / 2.0)
 	for ghost in _ghosts:
 		if ghost not in retained and ghost not in _hand and ghost.get_index() < _sources.size():
-			_tween.parallel().tween_property(ghost, "modulate:a", 0.0, 0.18)
+			_tween.parallel().tween_property(ghost, "modulate:a", 0.0, BEAT_SECONDS / 2.0)
 	_tween.chain().tween_callback(_finish_return)
 
 func _finish_return() -> void:
@@ -251,13 +258,16 @@ func _finish_return() -> void:
 	_fan.reapply_organization()
 	_record(-1, "sort_started")
 	_tween = create_tween()
-	_tween.tween_interval(0.18)
+	_tween.tween_interval(BEAT_SECONDS / 2.0)
 	_tween.tween_callback(func(): _record(-1, "sorted"); _clear(false))
 
-func _score_bonus(index: int) -> void:
-	if index == 0 and _specialization_header.is_valid():
+func _begin_specialization() -> void:
+	_record(-1, "specialization_started")
+	if _specialization_header.is_valid():
 		_specialization_header.call()
 		_specialization_header = Callable()
+
+func _score_bonus(index: int) -> void:
 	var deltas := _bonus_timeline[index]
 	var parts: Array[String] = []
 	for key in deltas:
@@ -273,8 +283,8 @@ func _score_bonus(index: int) -> void:
 		_hand[index].add_child(label)
 		label.position = Vector2(8, 90)
 		var pop := label.create_tween().set_parallel()
-		pop.tween_property(label, "position:y", 65.0, 0.22)
-		pop.tween_property(label, "modulate:a", 0.0, 0.6).set_delay(0.4)
+		pop.tween_property(label, "position:y", 65.0, BEAT_SECONDS / 2.0)
+		pop.tween_property(label, "modulate:a", 0.0, BEAT_SECONDS).set_delay(BEAT_SECONDS / 2.0)
 	_record(index, "bonus")
 
 func _record(index: int, event: String) -> void:

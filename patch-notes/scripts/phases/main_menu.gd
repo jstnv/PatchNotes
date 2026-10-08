@@ -1,7 +1,7 @@
 class_name MainMenu
 extends Control
 
-signal studio_created(name: String, specialty: StringName, background: StringName, secondary_ids: Array)
+signal studio_created(name: String, specialty: StringName, trait_ids: Array)
 signal tutorial_requested
 signal settings_requested
 
@@ -13,7 +13,6 @@ var _preview: Label
 var _emphasis: Label
 var _traits_step: VBoxContainer
 var _review_step: VBoxContainer
-var _background: OptionButton
 var _trait_checks: Dictionary = {}
 var _trait_error: Label
 var _points: Label
@@ -133,7 +132,7 @@ func _submit() -> void:
 	_error.text = ""
 	_setup.hide()
 	_traits_step.show()
-	_background.grab_focus()
+	_trait_checks[&"family_funding"].grab_focus()
 	_refresh_traits()
 
 func _refresh_preview() -> void:
@@ -179,19 +178,9 @@ func _build_traits(layout: VBoxContainer) -> void:
 	_traits_step.name = "StudioTraits"
 	_traits_step.add_theme_constant_override("separation", 8)
 	layout.add_child(_traits_step)
-	_label(_traits_step, "Studio Traits · Choose one background").add_theme_font_size_override("font_size", 24)
-	_background = OptionButton.new()
-	_background.name = "Background"
-	_background.add_item("Choose a background — no default")
-	_background.set_item_disabled(0, true)
-	for id: StringName in StudioTraits.BACKGROUNDS:
-		_background.add_item(StudioTraits.BACKGROUNDS[id])
-		_background.set_item_metadata(_background.item_count - 1, id)
-	_background.select(0)
-	_background.item_selected.connect(func(_index: int): _refresh_traits())
-	_traits_step.add_child(_background)
-	_label(_traits_step, "Background and secondary effects are PREVIEW ONLY. Choices are saved;\nno cash, fans, publisher bonus, discounts, Awareness or bills are granted by them.")
-	_label(_traits_step, "Optional previews · At most two positives and one negative")
+	_label(_traits_step, "Studio Traits · Optional choices").add_theme_font_size_override("font_size", 24)
+	_label(_traits_step, "Active effects and point prices are shown below; previews have no effect.")
+	_label(_traits_step, "Choose at most two positives and one negative; none is required.")
 	var scroll := ScrollContainer.new()
 	scroll.name = "TraitScroll"
 	scroll.custom_minimum_size.y = 174
@@ -200,11 +189,11 @@ func _build_traits(layout: VBoxContainer) -> void:
 	var roster := VBoxContainer.new()
 	roster.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(roster)
-	for id: StringName in StudioTraits.SECONDARIES:
-		var entry: Dictionary = StudioTraits.SECONDARIES[id]
+	for id: StringName in StudioTraits.TRAITS:
+		var entry: Dictionary = StudioTraits.TRAITS[id]
 		var check := CheckBox.new()
 		check.name = String(id)
-		check.text = "%s %s · %s · Preview" % ["+" if entry.positive else "−", entry.name, entry.price]
+		check.text = "%s %s · %s" % ["+" if entry.positive else "−", entry.name, entry.price]
 		check.tooltip_text = entry.description
 		roster.add_child(check)
 		var description := _label(roster, entry.description)
@@ -244,13 +233,12 @@ func _secondary_ids() -> Array:
 
 
 func _selection() -> Dictionary:
-	var background: StringName = &"" if _background.selected <= 0 else _background.get_item_metadata(_background.selected)
-	return StudioTraits.evaluate(background, _secondary_ids())
+	return StudioTraits.evaluate_traits(_secondary_ids())
 
 
 func _refresh_traits() -> void:
 	var selection := _selection()
-	_points.text = "4 / 4 active points remain · previews spend/refund 0\nUnused-point cash: $200 once ($50/point, $300 cap). Base funding: $5,500."
+	_points.text = "%d points remain · $50 per unused point, no cap\nBase funding: $5,500. Preview choices spend/refund no points." % selection.get("remaining_points", 0)
 	_trait_error.text = selection.reason
 	_traits_step.get_node("ReviewChoices").disabled = not selection.valid
 
@@ -260,7 +248,7 @@ func _show_review() -> void:
 	if not selection.valid:
 		_refresh_traits()
 		return
-	_review.text = "%s\nGenre specialty: %s · free roster, no trait points\n%s\n\n4 unspent points × $50 = $200 startup receipt\nBase funding $5,500 + point cash $200 = $5,700\nMonthly rent: $500 · first due after two productive cycles\n\nOnly the roster and point cash are active. All trait effects remain previews." % [_name_input.text.strip_edges(), _specialty.get_item_text(_specialty.selected), StudioTraits.summary(selection)]
+	_review.text = "%s\nGenre specialty: %s · free roster\n%s\n\n%d unused points × $50 = %s\nFamily Funding: %s\nStarting cash: %s\nMonthly rent: %s · first due after two productive cycles" % [_name_input.text.strip_edges(), _specialty.get_item_text(_specialty.selected), StudioTraits.summary(selection), selection.remaining_points, CashFormatter.format_exact_cents(selection.point_cash_cents), CashFormatter.format_exact_cents(selection.get("family_funding_cents", 0)), CashFormatter.format_exact_cents(550000 + selection.point_cash_cents + selection.get("family_funding_cents", 0)), CashFormatter.format_exact_cents(51500 if StudioTraits.is_active(selection, &"expensive_lease") else 50000)]
 	_traits_step.hide()
 	_review_step.show()
 	_review_step.get_node("ConfirmStudio").grab_focus()
@@ -271,11 +259,10 @@ func _confirm_studio() -> void:
 	var selection := _selection()
 	if not selection.valid or _specialty.selected <= 0 or _name_input.text.strip_edges().is_empty(): return
 	_submitted = true
-	studio_created.emit(_name_input.text.strip_edges(), _specialty.get_item_metadata(_specialty.selected), selection.background_id, selection.secondary_ids)
+	studio_created.emit(_name_input.text.strip_edges(), _specialty.get_item_metadata(_specialty.selected), selection.trait_ids)
 
 
 func _clear_trait_draft() -> void:
-	_background.select(0)
 	for check: CheckBox in _trait_checks.values(): check.set_pressed_no_signal(false)
 	_submitted = false
 	_refresh_traits()

@@ -1,0 +1,146 @@
+{
+  "historical": {
+    "valid": true,
+    "stop": "financial_block",
+    "initial_cash_cents": 550000,
+    "releases": [
+      [
+        3.8,
+        23,
+        105,
+        12,
+        142000
+      ],
+      [
+        9.0,
+        31,
+        107,
+        32,
+        0
+      ]
+    ],
+    "final_cycle": 32,
+    "final_cash_cents": 0,
+    "final_arrears_cents": 14765,
+    "final_credit": 598,
+    "errors": [],
+    "discrepancies": [],
+    "first_blocker": "beta"
+  },
+  "current_legacy": {
+    "valid": true,
+    "stop": "financial_block",
+    "initial_cash_cents": 550000,
+    "releases": [
+      [
+        3.8,
+        23,
+        105,
+        12,
+        142000
+      ],
+      [
+        9.0,
+        31,
+        107,
+        32,
+        0
+      ]
+    ],
+    "final_cycle": 32,
+    "final_cash_cents": 0,
+    "final_arrears_cents": 14765,
+    "final_credit": 598,
+    "errors": [],
+    "discrepancies": [],
+    "first_blocker": "beta"
+  },
+  "current_trait": {
+    "valid": true,
+    "stop": "four releases",
+    "initial_cash_cents": 570000,
+    "releases": [
+      [
+        3.8,
+        23,
+        105,
+        12,
+        162000
+      ],
+      [
+        9.0,
+        31,
+        107,
+        33,
+        5235
+      ],
+      [
+        6.2,
+        30,
+        103,
+        53,
+        1042467
+      ],
+      [
+        7.4,
+        30,
+        111,
+        73,
+        1276411
+      ]
+    ],
+    "final_cycle": 73,
+    "final_cash_cents": 1276411,
+    "final_arrears_cents": 0,
+    "final_credit": 630,
+    "errors": [],
+    "discrepancies": [],
+    "first_blocker": null
+  },
+  "historical_current_legacy_action_signatures_equal": true,
+  "historical_current_legacy_release_signatures_equal": true,
+  "matched_finance_actions_through_cycle_32": 33,
+  "rent_16": {
+    "legacy": {
+      "cash_before_payment_cents": 35235,
+      "payment_cents": 35235,
+      "cash_after_payment_cents": 0
+    },
+    "trait": {
+      "cash_before_payment_cents": 55235,
+      "payment_cents": 50000,
+      "cash_after_payment_cents": 5235
+    }
+  },
+  "first_legacy_trait_action_divergence": [
+    35,
+    [
+      "beta",
+      2,
+      false,
+      32,
+      32
+    ],
+    [
+      "beta",
+      2,
+      true,
+      32,
+      33
+    ]
+  ],
+  "before_action_35": {
+    "legacy": {
+      "cycle": 32,
+      "cash_cents": 0,
+      "arrears_cents": 14765,
+      "credit": 598
+    },
+    "trait": {
+      "cycle": 32,
+      "cash_cents": 5235,
+      "arrears_cents": 0,
+      "credit": 603
+    }
+  }
+}

@@ -1,0 +1,205 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PASS: Fixture finalizes Design Hidden Bugs
+PASS: Fixture adds Alpha Hidden Bugs without rerolling Design
+Loaded 40 cards.
+PASS: Beta accepts the exact authoritatively Alpha-finalized ProjectState
+PASS: Loading Beta mutates no Bug state and consumes zero cycles
+PASS: Zero-Bug project enters Beta with zero Hidden, Known, and Remaining Bugs
+PASS: Beta initially displays authoritative Known and Fixed Bugs as zero
+PASS: Beta rejects a ProjectState that has not finalized Alpha
+PASS: Fixture finalizes Design Hidden Bugs
+PASS: Fixture adds Alpha Hidden Bugs without rerolling Design
+PASS: Partial discovery reports the actual three Bugs moved
+PASS: Partial discovery moves Hidden 10 to Hidden 7, Known 3, Remaining 10
+PASS: One successful nonzero discovery emits exactly once
+PASS: Fixture finalizes Design Hidden Bugs
+PASS: Fixture adds Alpha Hidden Bugs without rerolling Design
+PASS: Discovery clamps and reports the four available Hidden Bugs
+PASS: Clamped discovery conserves all four Remaining Bugs
+PASS: Clamped nonzero discovery is one authoritative transaction
+PASS: Repeated discovery from zero Hidden Bugs is a signal-free no-op
+PASS: Fixture finalizes Design Hidden Bugs
+PASS: Fixture adds Alpha Hidden Bugs without rerolling Design
+PASS: Fixing fixture discovers five Bugs
+PASS: Partial fixing reports two Known Bugs removed
+PASS: Partial fixing leaves Hidden unchanged and reduces Remaining by two
+PASS: Partial fixing records the cumulative actual amount
+PASS: One successful nonzero fixing transaction emits exactly once
+PASS: Fixing clamps and reports the three available Known Bugs
+PASS: Clamped fixing discards excess strength and protects Hidden Bugs
+PASS: Cumulative Fixed Bugs includes the clamped actual amount
+PASS: Fixture finalizes Design Hidden Bugs
+PASS: Fixture adds Alpha Hidden Bugs without rerolling Design
+PASS: Fixing with zero Known Bugs removes nothing
+PASS: Hidden-only Bugs are protected by a signal-free fixing no-op
+PASS: Fixture finalizes Design Hidden Bugs
+PASS: Fixture adds Alpha Hidden Bugs without rerolling Design
+PASS: Full lifecycle discovers six of eight Hidden Bugs
+PASS: Discovery decreases Hidden exactly as Known increases and conserves Remaining
+PASS: Full lifecycle fixes four Known Bugs
+PASS: Fixing reduces Remaining exactly by the actual fixed amount
+PASS: Malformed discovery request is rejected: -1
+PASS: Malformed fixing request is rejected: -1
+PASS: Malformed discovery request is rejected: 3
+PASS: Malformed fixing request is rejected: 3
+PASS: Malformed discovery request is rejected: 3.0
+PASS: Malformed fixing request is rejected: 3.0
+PASS: Malformed discovery request is rejected: 1.5
+PASS: Malformed fixing request is rejected: 1.5
+PASS: Malformed discovery request is rejected: inf
+PASS: Malformed fixing request is rejected: inf
+PASS: Malformed discovery request is rejected: nan
+PASS: Malformed fixing request is rejected: nan
+PASS: Malformed discovery request is rejected: <null>
+PASS: Malformed fixing request is rejected: <null>
+PASS: Malformed discovery request is rejected: true
+PASS: Malformed fixing request is rejected: true
+PASS: Malformed discovery request is rejected: []
+PASS: Malformed fixing request is rejected: []
+PASS: All invalid requests are atomic and emit no misleading notification
+PASS: Zero discovery and fixing requests are accepted no-ops
+PASS: Zero requests mutate nothing and emit nothing
+PASS: Fixture finalizes Design Hidden Bugs
+PASS: Fixture adds Alpha Hidden Bugs without rerolling Design
+PASS: First Beta shell loads finalized QA state
+PASS: Successful discovery refreshes the Beta Bug display synchronously
+PASS: Successful fixing refreshes Known and Fixed Bugs synchronously
+PASS: Reconstructed Beta shell accepts the same finalized ProjectState
+PASS: Beta reconstruction preserves Hidden, Known, and Fixed Bugs instead of resetting them
+PASS: Normal Beta UI conceals Hidden, Remaining, pressure, contribution, and generated totals
+PASS: Beta shell displays its phase identity and authoritative public Bug counts
+Beta QA state verification passed.
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:35)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug discovery requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] discover_bugs (res://scripts/project_state.gd:420)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:91)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)
+WARNING: Bug fixing requests must be nonnegative integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] fix_known_bugs (res://scripts/project_state.gd:437)
+       [1] _verify_full_lifecycle_and_invalid_inputs (res://scripts/debug/verify_beta_qa_state.gd:92)
+       [2] _initialize (res://scripts/debug/verify_beta_qa_state.gd:14)
+       [3] _verify_beta_entry_and_zero_state (res://scripts/debug/verify_beta_qa_state.gd:37)

@@ -48,7 +48,6 @@ func _run() -> void:
 	input.text = "  North Star  "
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
-	menu.get("_background").select(1)
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	var studio: StudioPhase = game.get("_active_phase")

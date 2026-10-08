@@ -1,0 +1,7 @@
+# Employees wage design session — 2026-10-07
+
+Branch `main`, HEAD `b84d1a5b4e4957b044b4b52c41553cf611aff3ae` at inspection. Existing shared worktree edits and `.codex-godot-temp` were preserved. Read CURRENT_STATE and TODO first, then repository conventions, Employees design and thread, comparison/implementation evidence, and relevant Banking, Store, lifespan and recent logs. No Drive access.
+
+Created [wage tuning proposal](2026-10-07-wage-tuning-proposal-v1.md) and linked it from this folder's index/working notes. Extracted the recorded 32-control and 24 chronology-correct arm summaries from `comparison-v1/assessment.json`; the $10/$50/$75/$100 completion and cash numbers in the note match those saved summaries. Arithmetic for monthly rent, multi-staff pay and Bank capacity is labeled as such. No new native run, gameplay/test edit, shared TODO edit, commit or push. Final salary and courses remain OPEN; revisit with current economy routes and human choice evidence after early Store and other relevant rules settle.
+
+Verification: 40 local Markdown links across the proposal, this log, README and working notes checked; zero missing. `git -c core.safecrlf=false diff --check -- docs/codex/threads/employees-challenges` passed. Reviewed the scoped README/working-notes diff. The preexisting shared TODO modification was not touched. This documentation and arithmetic review required no gameplay test.

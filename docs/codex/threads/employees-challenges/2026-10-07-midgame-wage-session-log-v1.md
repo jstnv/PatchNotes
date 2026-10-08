@@ -1,0 +1,7 @@
+# Employees mid-game direction session — 2026-10-07
+
+Branch `main`, HEAD `b84d1a5b4e4957b044b4b52c41553cf611aff3ae` at inspection. Read CURRENT_STATE and TODO first, then the Employees design/thread, repository conventions, latest completed current-source wage findings and relevant local logs. Inspected branch, HEAD, status and scoped diffs before editing; substantial concurrent worktree changes were preserved.
+
+The user paused further employee work, rejected $50 as too low, and selected early mid-game entry with $1,000/month starting pay. Recorded the new direction in [the dated thread note](2026-10-07-midgame-wage-direction-v1.md), marked the earlier $50 proposal superseded, and updated this thread's index/working notes plus the shared Employees design, DECISIONS and CURRENT_STATE authority. Historical comparison results remain evidence. Exact unlock, hire fee, courses and wider economics are open. Existing after-Game-1/$10 gameplay remains untouched; the shared TODO remains untouched. No Drive access, new wage simulation, gameplay/test edit, commit or push.
+
+Verification: 89 local Markdown links across the eight relevant current documents checked, zero missing. `git -c core.safecrlf=false diff --check -- docs/codex/threads/employees-challenges docs/codex/design/employees-courses.md docs/codex/DECISIONS.md docs/codex/CURRENT_STATE.md` passed. The scoped diff contains documentation only. No runtime checks were run for this design/status correction.

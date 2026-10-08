@@ -1,6 +1,6 @@
 # Production Specialist implementation task
 
-2026-10-06, America/Los_Angeles. **QUEUED.** Implement one playable Production Specialist using the [user-approved trial package](2026-10-06-trial-package-decision-v1.md). This is the separate Stage B task following the completed Tasks8/16/18 comparison. Begin in a coordinated gameplay slot after preserving current work and rechecking branch, HEAD, status, diff and applicable source. Approval is recorded; this document does not report implementation completion.
+2026-10-06, America/Los_Angeles. **COMPLETE locally, 2026-10-07.** The [implementation findings](../../findings/2026-10-07-employees-implementation-v1.md) report the source and checks. This was the separate Stage B task for one playable Production Specialist under the [user-approved trial package](2026-10-06-trial-package-decision-v1.md), following the completed Tasks8/16/18 comparison. The original acceptance scope follows; its preimplementation source snapshot and dispatch instructions are historical.
 
 ## Scope and dependencies
 

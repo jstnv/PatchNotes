@@ -1,0 +1,36 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PASS: New run begins at Month 1 first half with zero completed cycles
+PASS: First successful run cycle advances once without crossing a month
+PASS: One cycle reaches Month 1 second half
+PASS: Second successful cycle reports and crosses the month boundary
+PASS: Two cycles reach Month 2 first half
+PASS: Calendar overflow rejects without mutation or signal
+PASS: Studio accepts complete committed launch results
+PASS: Summary is hidden on Studio entry
+Loaded 40 cards.
+PASS: Studio displays calendar and exact projected release totals
+PASS: Studio clearly distinguishes projected from earned and settled values
+PASS: Studio entry costs zero calendar/project cycles and zero cash
+PASS: Studio preserves exact ProjectState and RunState identities
+PASS: Studio preserves snapshot and Bug concealment
+PASS: Studio reconstructs from committed results
+PASS: Opening a reconstructed summary reuses committed results without time or cash mutation
+PASS: Studio accepts complete committed launch results
+PASS: Summary is hidden on Studio entry
+PASS: Studio displays calendar and exact projected release totals
+PASS: Studio clearly distinguishes projected from earned and settled values
+PASS: Studio entry costs zero calendar/project cycles and zero cash
+PASS: Studio preserves exact ProjectState and RunState identities
+PASS: Studio displays only previously revealed snapshot facts
+PASS: Studio reconstructs from committed results
+PASS: Opening a reconstructed summary reuses committed results without time or cash mutation
+Run calendar and automatic Studio entry verification passed.
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Condition "!is_inside_tree()" is true.
+   at: grab_focus (scene/gui/control.cpp:2996)
+   GDScript backtrace (most recent call first):
+       [0] open_summary (res://scripts/phases/studio_phase.gd:146)
+       [1] _verify_studio_summary (res://scripts/debug/verify_run_calendar_and_studio_entry.gd:40)
+       [2] _initialize (res://scripts/debug/verify_run_calendar_and_studio_entry.gd:10)

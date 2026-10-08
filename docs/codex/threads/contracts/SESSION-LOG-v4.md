@@ -1,0 +1,9 @@
+# Contracts session log v4 — overnight queue
+
+2026-10-07 (America/Los_Angeles). Branch `main`, HEAD `b84d1a5b4e4957b044b4b52c41553cf611aff3ae` before and after this documentation update. Read `CURRENT_STATE.md`, the shared `TODO.md`, `docs/codex/README.md`, the Contracts authority and Task 34 brief, recent Contracts findings/logs, current ContractState source and worktree diff/status. Task2 Store's read-only comparison became complete during this session; the Contracts start condition was updated to require a coordinated stable snapshot rather than waiting for that finished analysis.
+
+The user requested enough Contracts work in the internal To Do List for an overnight session. Narrow edits to [TODO](../../TODO.md) queue five read-only Task 34 checkpoints, 34A→34E, while retaining the separate later design review. Created the detailed [overnight handoff](OVERNIGHT-TASKS-v1.md) and updated [HANDOFF](HANDOFF.md) and [README](README.md). The checkpoints cover typed-state parity, Crown liquidity, Crown legal hands, a distinct legally eligible Neon cohort, and an audited decision packet. Existing unrelated shared-list edits were preserved.
+
+Checks: `git diff --check -- docs/codex/TODO.md` produced no whitespace errors; `git status --short -- patch-notes` was empty; `rg` confirmed the queue, handoff and thread status all reference 34A→34E. The Store completion and the Contracts start condition agree in the current shared list. No simulation or gameplay check was run for this documentation-only change. No candidate advance was tested or approved here. No gameplay, maintained test, asset, configuration or implementation authority was changed; no commit or push was made.
+
+Next: begin 34A on a coordinated stable source snapshot. If typed-state parity or a central receipt probe fails, publish the limitation in this folder and stop dependent slices. Keep numerical rulings for the post-findings design review.

@@ -1,0 +1,31 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PASS: Locked sales/revenue profile is used
+PASS: 751 units split by cumulative floor into 375 and 376
+PASS: Gross uses exact aggregate 999-cent unit price
+PASS: Cumulative platform net floors once to $2,622.37 and $5,251.74
+PASS: Projected Month 1 totals remain exact cents
+PASS: Launch projection earns and settles no sales
+PASS: Even totals split without loss
+PASS: A one-unit odd split preserves the exact cumulative total and aggregate floor
+PASS: Returned schedule arrays cannot mutate the result
+PASS: Zero units safely produce zero projected revenue
+PASS: Invalid total rejects atomically: -1
+PASS: Invalid total rejects atomically: 1.0
+PASS: Invalid total rejects atomically: nan
+PASS: Invalid total rejects atomically: inf
+PASS: Invalid total rejects atomically: 1
+PASS: Invalid total rejects atomically: <null>
+PASS: Invalid total rejects atomically: true
+PASS: Invalid total rejects atomically: []
+PASS: Invalid total rejects atomically: {  }
+PASS: Gross-cent overflow rejects atomically
+PASS: Valid project schedule commits once
+PASS: Repeated calculation or commit cannot replace the result
+PASS: Commit preserves source units and consumes zero cycles
+PASS: A schedule from different units rejects without partial commit
+PASS: Missing committed units reject without mutation
+Primitive Month 1 sales/revenue foundation verification passed.
+Loaded 40 cards.
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)

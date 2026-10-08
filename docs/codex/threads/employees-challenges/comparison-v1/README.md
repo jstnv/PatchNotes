@@ -1,6 +1,6 @@
 # Employees comparison v1 — reproduction and evidence
 
-Read [findings](../2026-10-06-benefit-payroll-comparison-v1.md) and [protocol](PREDECLARATION.md) before interpreting the outputs. These are read-only scene routes and financial/identity models. Values and the recommended package await user approval.
+Read [findings](../2026-10-06-benefit-payroll-comparison-v1.md) and [protocol](PREDECLARATION.md) before interpreting the outputs. These are completed read-only scene routes and financial/identity models. The recommendations were subsequently selected in the [user-approved trial package](../2026-10-06-trial-package-decision-v1.md); the [separate implementation task](../2026-10-06-production-specialist-implementation-v1.md) was completed locally on 2026-10-07. Alternative scenario inputs remain evidence, with final wages and course effects/amounts OPEN. Native employee gameplay is evidenced separately in the [implementation findings](../../../findings/2026-10-07-employees-implementation-v1.md).
 
 ## Evidence map
 

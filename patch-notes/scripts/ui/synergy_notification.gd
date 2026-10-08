@@ -33,7 +33,7 @@ func _ready() -> void:
 	content.add_child(detail_label)
 	timer = Timer.new()
 	timer.one_shot = true
-	timer.wait_time = 4.0
+	timer.wait_time = HandPresentation.SPECIALIZATION_SECONDS
 	timer.timeout.connect(banner.hide)
 	add_child(timer)
 	banner.hide()
@@ -47,6 +47,6 @@ func show_message(title: String, detail: String) -> void:
 	banner.scale = Vector2.ONE * 0.8
 	banner.modulate.a = 0.0
 	_popup = create_tween().set_parallel()
-	_popup.tween_property(banner, "scale", Vector2.ONE, 0.28).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_popup.tween_property(banner, "modulate:a", 1.0, 0.18)
+	_popup.tween_property(banner, "scale", Vector2.ONE, HandPresentation.BEAT_SECONDS / 2.0).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_popup.tween_property(banner, "modulate:a", 1.0, HandPresentation.BEAT_SECONDS / 2.0)
 	timer.start()

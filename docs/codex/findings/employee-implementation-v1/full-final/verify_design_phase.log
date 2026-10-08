@@ -1,0 +1,1173 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+Loaded 40 cards.
+PASS: Exactly 40 definitions load after the nine-card Primitive Beta expansion
+PASS: Design eligibility contains 17 definitions
+PASS: Alpha eligibility remains 14 definitions
+PASS: Beta eligibility contains only the nine Primitive Beta definitions
+PASS: No generic gameplay_pass definition remains
+PASS: Exactly four Design Pass definitions exist
+PASS: Pass definition exists: graphics_pass
+PASS: graphics_pass is a Design Pass
+PASS: graphics_pass has its matching Core Score +2
+PASS: graphics_pass has no secondary effect
+PASS: graphics_pass is renewable with 0 Scope and no department
+PASS: Pass definition exists: sound_pass
+PASS: sound_pass is a Design Pass
+PASS: sound_pass has its matching Core Score +2
+PASS: sound_pass has no secondary effect
+PASS: sound_pass is renewable with 0 Scope and no department
+PASS: Pass definition exists: technology_pass
+PASS: technology_pass is a Design Pass
+PASS: technology_pass has its matching Core Score +2
+PASS: technology_pass has no secondary effect
+PASS: technology_pass is renewable with 0 Scope and no department
+PASS: Pass definition exists: design_pass
+PASS: design_pass is a Design Pass
+PASS: design_pass has its matching Core Score +2
+PASS: design_pass has no secondary effect
+PASS: design_pass is renewable with 0 Scope and no department
+PASS: All 13 Design Features remain present
+PASS: Existing score-and-Scope batch caller remains compatible
+PASS: Compatible batch call leaves Bug Pressure at 0.0
+PASS: Compatible batch call retains one-signal behavior
+PASS: Invalid Bug Pressure transaction is rejected: -1.0
+PASS: Rejected Bug Pressure transaction is fully atomic
+PASS: Invalid Bug Pressure transaction is rejected: nan
+PASS: Rejected Bug Pressure transaction is fully atomic
+PASS: Invalid Bug Pressure transaction is rejected: inf
+PASS: Rejected Bug Pressure transaction is fully atomic
+PASS: Invalid Bug Pressure transaction is rejected: -inf
+PASS: Rejected Bug Pressure transaction is fully atomic
+PASS: A finite Bug Pressure transaction can reach a finite accumulated value
+PASS: Transaction producing nonfinite accumulated Bug Pressure is rejected
+PASS: Overflow rejection mutates no scores, Scope, Bug Pressure, or signals
+PASS: A fresh project-state reset restores Bug Pressure to 0.0
+PASS: Fresh ProjectState is distinguishably unfinalized with safe Design Bug defaults
+PASS: Fresh ProjectState Design Feature history begins empty
+PASS: A zero-Hidden-Bug Perfect result and Feature history store successfully
+PASS: Finalized zero Hidden Bugs is distinguishable from unfinalized state
+PASS: Design Bug finalization emits one authoritative values_changed signal
+PASS: Feature-history getters return defensive copies
+PASS: Repeated Design Bug finalization is rejected
+PASS: Repeated finalization neither overwrites nor emits again
+PASS: Invalid Design finalization input is rejected
+PASS: Invalid Design finalization stores nothing and emits nothing
+PASS: Invalid Design finalization input is rejected
+PASS: Invalid Design finalization stores nothing and emits nothing
+PASS: Invalid Design finalization input is rejected
+PASS: Invalid Design finalization stores nothing and emits nothing
+PASS: Structurally invalid Feature history rejects complete finalization
+PASS: Invalid history stores no Perfect, Hidden Bug, or Feature-history result
+PASS: Structurally invalid Feature history rejects complete finalization
+PASS: Invalid history stores no Perfect, Hidden Bug, or Feature-history result
+PASS: Structurally invalid Feature history rejects complete finalization
+PASS: Invalid history stores no Perfect, Hidden Bug, or Feature-history result
+PASS: Structurally invalid Feature history rejects complete finalization
+PASS: Invalid history stores no Perfect, Hidden Bug, or Feature-history result
+PASS: Structurally invalid Feature history rejects complete finalization
+PASS: Invalid history stores no Perfect, Hidden Bug, or Feature-history result
+PASS: DesignPhase receives Gameplay's ProjectState instance
+PASS: Initialization changes no project values
+PASS: Initialization changes no cycles
+PASS: Bug Pressure initializes to 0.0 through its public getter
+PASS: Initial Bug Pressure display reads 0.00
+PASS: Fresh Design begins in Planning
+PASS: Planning deals no candidates
+PASS: Planning creates no CardViews
+PASS: Begin Design is visible and available in Planning
+PASS: Play control names the complete hand action
+PASS: Play Hand is disabled in Planning
+PASS: Proceed to Alpha is visible and initially interactable
+PASS: Old phase stat row is superseded by the persistent shell header
+PASS: Design priorities initialize at 25 / 25 / 25 / 25
+PASS: GraphicsPriority uses 5-50 bounds in five-point steps
+PASS: SoundPriority uses 5-50 bounds in five-point steps
+PASS: TechnologyPriority uses 5-50 bounds in five-point steps
+PASS: DesignPriority uses 5-50 bounds in five-point steps
+PASS: Compact Design priority panel fits the established phase width
+PASS: Four vertical priority controls remain inside the closed modal
+PASS: Legacy horizontal HUD is not exposed
+PASS: Initial Design priority allocation uses the complete budget
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Lowering Sound changes only Sound and frees ten priority
+PASS: One Design slider adjustment emits priorities_changed exactly once
+PASS: Alpha accepts the same comparison request
+PASS: Design and Alpha share identical allocation mathematics
+PASS: Design can spend available priority
+PASS: Raising Graphics changes only Graphics and consumes available priority
+PASS: Over-budget increase is handled safely
+PASS: Over-budget increase clamps to the highest fitting value without redistribution
+PASS: Below-range numeric request clamps safely
+PASS: Below-range request clamps to 5 and changes no other category
+PASS: Numeric non-step request normalizes safely
+PASS: Exact half-step snaps upward to 30
+PASS: Design allocations preserve bounds, steps, and budget
+PASS: Design rejects an invalid Core category
+PASS: Design rejects a malformed priority value
+PASS: Rejected Design requests do not mutate priorities
+PASS: Rejected Design requests emit nothing
+PASS: Design accepts a no-op request
+PASS: Design no-op emits nothing
+PASS: Design distribution getter returns a defensive copy
+PASS: Repeated Design priority adjustment 0 succeeds
+PASS: Repeated Design adjustment 0 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 1 succeeds
+PASS: Repeated Design adjustment 1 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 2 succeeds
+PASS: Repeated Design adjustment 2 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 3 succeeds
+PASS: Repeated Design adjustment 3 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 4 succeeds
+PASS: Repeated Design adjustment 4 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 5 succeeds
+PASS: Repeated Design adjustment 5 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 6 succeeds
+PASS: Repeated Design adjustment 6 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 7 succeeds
+PASS: Repeated Design adjustment 7 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 8 succeeds
+PASS: Repeated Design adjustment 8 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 9 succeeds
+PASS: Repeated Design adjustment 9 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 10 succeeds
+PASS: Repeated Design adjustment 10 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 11 succeeds
+PASS: Repeated Design adjustment 11 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 12 succeeds
+PASS: Repeated Design adjustment 12 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 13 succeeds
+PASS: Repeated Design adjustment 13 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 14 succeeds
+PASS: Repeated Design adjustment 14 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 15 succeeds
+PASS: Repeated Design adjustment 15 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 16 succeeds
+PASS: Repeated Design adjustment 16 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 17 succeeds
+PASS: Repeated Design adjustment 17 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 18 succeeds
+PASS: Repeated Design adjustment 18 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 19 succeeds
+PASS: Repeated Design adjustment 19 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 20 succeeds
+PASS: Repeated Design adjustment 20 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 21 succeeds
+PASS: Repeated Design adjustment 21 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 22 succeeds
+PASS: Repeated Design adjustment 22 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 23 succeeds
+PASS: Repeated Design adjustment 23 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 24 succeeds
+PASS: Repeated Design adjustment 24 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 25 succeeds
+PASS: Repeated Design adjustment 25 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 26 succeeds
+PASS: Repeated Design adjustment 26 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 27 succeeds
+PASS: Repeated Design adjustment 27 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 28 succeeds
+PASS: Repeated Design adjustment 28 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 29 succeeds
+PASS: Repeated Design adjustment 29 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 30 succeeds
+PASS: Repeated Design adjustment 30 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Repeated Design priority adjustment 31 succeeds
+PASS: Repeated Design adjustment 31 preserves invariants
+PASS: Design priority slider and label 0 match internal state
+PASS: Design priority slider and label 1 match internal state
+PASS: Design priority slider and label 2 match internal state
+PASS: Design priority slider and label 3 match internal state
+PASS: Design available-priority display derives from allocation state
+PASS: Priority changes do not reroll or alter visible Design candidates
+PASS: Priority changes preserve every authoritative project value
+PASS: Priority changes emit no ProjectState signal and advance no cycle
+PASS: Feature weight uses printed primary value and matching priority only
+PASS: Dual-score Feature weight includes printed primary and secondary contributions
+PASS: Pass weight uses its matching priority and printed definition value
+PASS: Scope and department do not contribute to candidate weight
+PASS: Dominant Sound priority increases the matching Sound Pass weight
+PASS: Controlled roll selects weighted interval 0
+PASS: Controlled roll selects weighted interval 1
+PASS: Controlled roll selects weighted interval 2
+PASS: Controlled roll selects weighted interval 3
+PASS: Exact cumulative boundary selects the following half-open interval
+PASS: Nonfinite roll cannot select an entry
+PASS: Nonfinite weight cannot select an entry
+PASS: Controlled weighted builder produces seven definitions
+PASS: Weighted pool contains only eligible Design definitions
+PASS: Weighted pool contains only eligible Design definitions
+PASS: Weighted pool contains only eligible Design definitions
+PASS: Weighted pool contains only eligible Design definitions
+PASS: Weighted pool contains only eligible Design definitions
+PASS: Weighted pool contains only eligible Design definitions
+PASS: Weighted pool contains only eligible Design definitions
+PASS: Feature definitions are selected without replacement within one pool
+PASS: Stable lexical ID ordering makes controlled deals independent of database iteration order
+PASS: A deal-time priority snapshot remains immutable across slider changes
+PASS: All-Pass controlled deal succeeds with Features exhausted
+PASS: No-Feature state produces seven renewable Pass instances
+PASS: Duplicate Pass definitions create seven distinct selectable CardViews
+PASS: Weighted dealing itself mutates no ProjectState value
+PASS: Invalid weighted input rejects the complete deal
+PASS: Invalid weighted input creates no partial candidate pool
+PASS: Failed weighted deal mutates no ProjectState value
+PASS: Design planning distribution restores 25 / 25 / 25 / 25 before Begin
+PASS: Begin Design succeeds once from Planning
+PASS: Begin Design is idempotent
+PASS: Begin Design enters Active Development
+PASS: Begin Design preserves the current allocation
+PASS: Begin Design deals exactly seven candidates
+PASS: First priority-weighted Design pool contains seven valid definitions with unique Features
+PASS: Begin Design is cycle-free and mutates no ProjectState value
+PASS: Begin Design retires after activation
+PASS: Active priority changes preserve candidate identity and order
+PASS: Active priority changes preserve Play-button state
+PASS: Active priority changes preserve selected candidates and Play state
+PASS: Active candidate 1 retains 240x336 bounds
+PASS: Active candidate 2 retains 240x336 bounds
+PASS: Active candidate 3 retains 240x336 bounds
+PASS: Active candidate 4 retains 240x336 bounds
+PASS: Active candidate 5 retains 240x336 bounds
+PASS: Active candidate 6 retains 240x336 bounds
+PASS: Active candidate 7 retains 240x336 bounds
+PASS: Seven-card pool uses the shared fan without horizontal scrolling
+PASS: Active Play Hand and Proceed controls remain accessible
+PASS: Bug Pressure display formats 0.166667 as Bug Pressure: 0.17
+PASS: Display formatting does not alter authoritative Bug Pressure
+PASS: Bug Pressure display formats 0.777778 as Bug Pressure: 0.78
+PASS: Display formatting does not alter authoritative Bug Pressure
+PASS: Bug Pressure display formats 1.500000 as Bug Pressure: 1.50
+PASS: Display formatting does not alter authoritative Bug Pressure
+PASS: Bug Pressure display formats 2.444400 as Bug Pressure: 2.44
+PASS: Display formatting does not alter authoritative Bug Pressure
+PASS: Candidate 1 selects independently
+PASS: Play state is correct with 1 selections
+PASS: Candidate 2 selects independently
+PASS: Play state is correct with 2 selections
+PASS: Candidate 3 selects independently
+PASS: Play state is correct with 3 selections
+PASS: Candidate 4 selects independently
+PASS: Play state is correct with 4 selections
+PASS: Four selection outlines are visible
+PASS: A fifth selection preserves the original four
+PASS: A selected candidate can be deselected
+PASS: A deselected candidate can be reselected
+PASS: Selection, deselection, and fifth attempt consume no time
+PASS: Seven-Feature availability contains seven valid definitions with unique Features
+PASS: Five available Features still produce seven candidates through renewable Pass entries
+PASS: Three available Features still produce seven candidates through renewable Pass entries
+PASS: No Features contains seven instances
+PASS: No Features excludes Alpha cards
+PASS: No Features excludes Alpha cards
+PASS: No Features excludes Alpha cards
+PASS: No Features excludes Alpha cards
+PASS: No Features excludes Alpha cards
+PASS: No Features excludes Alpha cards
+PASS: No Features excludes Alpha cards
+PASS: No Features has 0 Features and 7 Passes
+PASS: Duplicate Pass definitions use distinct runtime CardView instances
+PASS: Controlled dealing consumes no time
+PASS: Text contributes fractional printed Bug Pressure of 3/18
+PASS: Sprites contributes fractional printed Bug Pressure of 14/18
+PASS: Split Screen includes printed primary and valid secondary values for 1.5 Bug Pressure
+PASS: Multiple Features sum fractional Bug Pressure without per-Feature rounding while Passes add 0.0
+PASS: Four matching cards trigger exactly one Graphics Specialization
+PASS: Four matching cards trigger exactly one Sound Specialization
+PASS: Four matching cards trigger exactly one Technology Specialization
+PASS: Four matching cards trigger exactly one Design Specialization
+PASS: Four matching primary stats trigger exactly one Graphics Specialization
+PASS: Validated base aggregate preserves unmodified primary production
+PASS: Validated base aggregate includes every unmodified secondary contribution
+PASS: Validated base result reports printed Scope and Feature presence
+PASS: Validated base result retains four cards and per-card contribution detail
+PASS: Specialization aggregates primary production before multiplying 17 by 1.50 and nearest-rounding to 26
+PASS: Differing valid secondary stats aggregate by Core Score before the Specialization multiplier and nearest rounding
+PASS: Specialization leaves Scope as the exact unmodified sum
+PASS: Specialization debug output identifies the hit and final added scores
+PASS: Specialization nearest-rounds aggregate 5 x 1.50 to 8 rather than ceiling-rounding per card to 9
+PASS: Selection order does not change Specialization or its result
+PASS: A 3-1 primary-stat split does not trigger
+PASS: A 2-2 primary-stat split does not trigger
+PASS: A 2-1-1 primary-stat split does not trigger
+PASS: Matching secondary stats alone do not trigger Specialization
+PASS: Nonspecialized mixed hand resolves unmodified primary and secondary scores
+PASS: Nonspecialized final production exactly equals base production
+PASS: Controlled selected hand can calculate validated base production independently
+PASS: Base calculation does not mutate ProjectState or emit state signals
+PASS: Base calculation does not mutate candidates, selections, or lifecycle
+PASS: Inclusive lower and upper Balanced boundaries qualify
+PASS: A score just below the lower Balanced boundary fails
+PASS: A score just above the upper Balanced boundary fails
+PASS: Balanced mean uses fractional division without integer truncation
+PASS: Balanced base aggregate includes secondary contributions normally
+PASS: Provisional scores equal cumulative scores plus unmodified base production
+PASS: Provisional and synergy calculation does not mutate ProjectState or Scope
+PASS: Balanced example aggregates per Core Score, multiplies by 1.20, and rounds to nearest integer
+PASS: Balanced Production leaves printed Scope unmodified
+PASS: Selection order does not affect Balanced eligibility or production
+PASS: A Pass-assisted action with a Feature can trigger Balanced Production
+PASS: A Pass-only action cannot trigger Balanced Production even when totals are balanced
+PASS: A nonqualifying mixed hand uses unmodified base production regardless of Scope
+PASS: Balanced eligibility uses base production even when Specialization qualifies
+PASS: Specialization takes precedence when both synergies qualify
+PASS: Specialization and Balanced multipliers never stack
+Specialization hit: Graphics Specialization! Added scores: Graphics +26, Sound +5, Technology +14, Design +8
+PASS: Specialized hand commits its aggregate-then-nearest-rounded production
+PASS: Specialization accumulates Bug Pressure from printed values without its production multiplier
+PASS: Specialized hand emits values_changed exactly once
+PASS: Specialization adds no extra cycles
+PASS: Cancelling playback clears the delayed specialization header
+PASS: Successful specialized Feature exhausts once: specialized_2
+PASS: Successful specialized Feature exhausts once: specialized_3
+PASS: Successful specialized Feature exhausts once: specialized_5
+PASS: Successful specialized Feature exhausts once: specialized_7
+Balanced Production!
+PASS: Balanced success adds only adjusted current production and unmodified Scope
+PASS: Balanced success accumulates fractional Bug Pressure from unadjusted printed values
+PASS: Successful Feature action refreshes the Bug Pressure label through values_changed
+PASS: Balanced success commits through one values_changed emission
+PASS: Balanced success advances exactly one cycle
+PASS: Balanced Design action displays its synergy
+PASS: Balanced success preserves Feature exhaustion: commit_graphics
+PASS: Balanced success preserves Feature exhaustion: commit_sound
+PASS: Balanced success preserves Feature exhaustion: commit_technology
+PASS: Balanced success preserves Feature exhaustion: commit_design
+PASS: Balanced success clears selection and refills the four played slots
+PASS: One Feature plus three real Passes triggers Balanced; each +2 aggregate remains +2 after nearest rounding
+Balanced Production!
+PASS: Pass-assisted Balanced action commits adjusted production and normal Feature Scope
+PASS: Feature-plus-Pass action accumulates only the Feature's fractional Bug Pressure
+PASS: Pass-assisted Balanced gains and Scope refresh in the visible stat display
+PASS: Pass-assisted Balanced action commits once and advances exactly one cycle
+PASS: Pass-assisted Balanced action exhausts its Feature
+PASS: Pass-assisted Balanced action does not exhaust Passes
+Balanced Production!
+PASS: First successful action retains fractional Bug Pressure across its redeal and cycle advancement
+PASS: First successful Feature action displays its fractional Bug Pressure
+Balanced Production!
+PASS: Two successful actions accumulate fractional Feature Bug Pressure correctly
+PASS: Multiple Feature actions display their accumulated Bug Pressure
+PASS: Two Bug Pressure-producing actions still advance exactly two cycles
+PASS: Malformed specialized hand applies no base score, bonus, or Scope
+PASS: Malformed hand adds no Bug Pressure
+PASS: Malformed hand leaves the Bug Pressure display unchanged
+PASS: Malformed hand consumes no time
+PASS: Malformed hand preserves candidates and selections
+PASS: Malformed hand preserves Play state and CardViews
+PASS: Four cards aggregate primary, secondary, repeated score, and Scope correctly
+PASS: Successful mixed action atomically accumulates every selected Feature's fractional Bug Pressure
+PASS: Complete hand commits through one values_changed emission
+PASS: Complete four-card hand advances exactly one cycle
+PASS: Every selected Feature is exhausted
+PASS: Pass definitions are never exhausted
+PASS: Exhausted Features never appear in the next weighted pool
+PASS: Unselected Feature remains reserved
+PASS: Successful play clears selections and disables Play
+PASS: Successful play retains three candidates and draws four replacements
+PASS: Unplayed Design CardView instances retain their order
+PASS: Stale activation cannot replay the previous hand
+PASS: Refill failure rejects before committing production or a cycle
+PASS: Refill failure preserves exhaustion and draw RNG
+PASS: Refill failure preserves the complete visible pool and selected hand
+PASS: Pass-only base result reports no Feature presence
+Specialization hit: Graphics Specialization! Added scores: Graphics +12
+PASS: Four matching +2 Pass instances trigger Specialization and contribute +12
+PASS: Pass-only hand adds 0 Scope
+PASS: Duplicate Pass-only hand adds exactly 0.0 Bug Pressure and preserves prior accumulation
+PASS: Pass-only action leaves the displayed Bug Pressure unchanged
+PASS: Pass-only hand advances one cycle; two hands equal one month
+PASS: Post-play no-Feature pool contains seven instances
+PASS: Post-play no-Feature pool excludes Alpha cards
+PASS: Post-play no-Feature pool excludes Alpha cards
+PASS: Post-play no-Feature pool excludes Alpha cards
+PASS: Post-play no-Feature pool excludes Alpha cards
+PASS: Post-play no-Feature pool excludes Alpha cards
+PASS: Post-play no-Feature pool excludes Alpha cards
+PASS: Post-play no-Feature pool excludes Alpha cards
+PASS: Post-play no-Feature pool has 0 Features and 7 Passes
+PASS: Specialized Passes do not exhaust
+PASS: Perfect Production includes exact 0.95A and 1.05A boundaries
+PASS: A score just below the Perfect lower boundary fails
+PASS: A score just above the Perfect upper boundary fails
+PASS: Perfect Production uses a fractional four-score mean
+PASS: Literal all-zero distribution qualifies for Perfect Production
+PASS: Perfect Production below Required Scope applies the 0.80 finalization modifier
+PASS: Perfect calculation preserves historical Bug Pressure and Scope
+PASS: Perfect calculation changes no Core Scores and advances no cycle
+PASS: Integer adjusted Bug Pressure receives no stochastic increment
+PASS: Non-Perfect finalization above Required Scope uses accumulated Bug Pressure unchanged
+PASS: Fractional pressure increments when stochastic roll is below the fraction
+PASS: Fractional pressure does not increment when stochastic roll equals the fraction
+PASS: Hidden Bug calculation mutates neither historical pressure nor Scope overshoot
+PASS: Variance roll 0.079999 maps to modifier -2
+PASS: Variance roll 0.080000 maps to modifier -1
+PASS: Variance roll 0.249999 maps to modifier -1
+PASS: Variance roll 0.250000 maps to modifier 0
+PASS: Variance roll 0.749999 maps to modifier 0
+PASS: Variance roll 0.750000 maps to modifier 1
+PASS: Variance roll 0.919999 maps to modifier 1
+PASS: Variance roll 0.920000 maps to modifier 2
+PASS: Variance roll 0.999999 maps to modifier 2
+PASS: Stochastic rounding and bounded variance consume independently controlled rolls
+PASS: All-zero Perfect finalization clamps negative variance to zero Hidden Bugs
+PASS: Invalid controlled rolls fail finalization calculation
+Perfect Production!
+Final Hidden Bugs: 0
+PASS: Proceeding immediately stores zero implemented and all 13 Design Features unimplemented
+PASS: Immediate finalization partition totals all 13 current Design Features
+PASS: Partial lifecycle partitions played Features from every remaining Feature
+PASS: Finalized Feature partition ordering is deterministic
+PASS: Candidate and selection order do not change the Feature partition
+PASS: Selected-but-unplayed Feature remains unimplemented
+PASS: Selected-but-unplayed Feature remains unimplemented
+PASS: Selected-but-unplayed Feature remains unimplemented
+PASS: A Pass ID in implemented lifecycle rejects semantic finalization
+PASS: Invalid semantic history leaves authoritative result empty and Design active
+PASS: Invalid semantic history emits neither authoritative nor Proceed signal
+PASS: An invalid implemented ID rejects semantic history validation
+PASS: An invalid unimplemented ID rejects semantic history validation
+Perfect Production!
+Final Hidden Bugs: 2
+PASS: Finalization after all 13 Features stores all implemented and none unimplemented
+PASS: Pass-only candidate state adds no Pass to persistent Feature history
+PASS: Stored history ID resolves publicly to a Design Feature: 4_color_palette
+PASS: Stored history ID resolves publicly to a Design Feature: 8_bit_music
+PASS: Stored history ID resolves publicly to a Design Feature: 8_bit_sound
+PASS: Stored history ID resolves publicly to a Design Feature: controller
+PASS: Stored history ID resolves publicly to a Design Feature: keyboard_and_mouse
+PASS: Stored history ID resolves publicly to a Design Feature: lives_system
+PASS: Stored history ID resolves publicly to a Design Feature: local_leaderboards
+PASS: Stored history ID resolves publicly to a Design Feature: menu_system
+PASS: Stored history ID resolves publicly to a Design Feature: score_system
+PASS: Stored history ID resolves publicly to a Design Feature: scrolling
+PASS: Stored history ID resolves publicly to a Design Feature: split_screen
+PASS: Stored history ID resolves publicly to a Design Feature: sprites
+PASS: Stored history ID resolves publicly to a Design Feature: text
+PASS: Failed authoritative storage leaves Design active and Proceed available
+PASS: Failed authoritative storage emits no Proceed signal
+PASS: Failed finalization emits no state signals and mutates no authoritative values
+PASS: Failed finalization preserves candidates and selections
+PASS: A complete hand remains playable above Required Scope without clamping overshoot
+PASS: Scope 19 / 30 does not automatically finalize Design
+PASS: Play Hand at Scope 19 depends only on complete selection
+Final Hidden Bugs: 0
+PASS: Proceed at Scope 19 emits finalization exactly once
+PASS: Authoritative finalized result is stored before Proceed emits
+PASS: Repeated Proceed activation does not reroll or overwrite Hidden Bugs
+PASS: Repeated Proceed activation cannot overwrite persistent Feature history
+PASS: Successful finalization stores a complete 13-Feature partition atomically
+PASS: Proceed freezes only necessary Design controls
+PASS: Proceed preserves scores, Scope 19, and fractional Bug Pressure
+PASS: Proceed at Scope 19 advances no cycle
+PASS: Proceed at Scope 19 emits one authoritative ProjectState values_changed signal
+PASS: Proceed preserves candidates and current selections without resolving them
+PASS: Proceed preserves available and exhausted Feature identities
+PASS: Proceed changes exhaustion status for neither selected Features nor Passes
+PASS: Scope 30 / 30 does not automatically finalize Design
+PASS: Play Hand at Scope 30 depends only on complete selection
+Final Hidden Bugs: 0
+PASS: Proceed at Scope 30 emits finalization exactly once
+PASS: Authoritative finalized result is stored before Proceed emits
+PASS: Repeated Proceed activation does not reroll or overwrite Hidden Bugs
+PASS: Repeated Proceed activation cannot overwrite persistent Feature history
+PASS: Successful finalization stores a complete 13-Feature partition atomically
+PASS: Proceed freezes only necessary Design controls
+PASS: Proceed preserves scores, Scope 30, and fractional Bug Pressure
+PASS: Proceed at Scope 30 advances no cycle
+PASS: Proceed at Scope 30 emits one authoritative ProjectState values_changed signal
+PASS: Proceed preserves candidates and current selections without resolving them
+PASS: Proceed preserves available and exhausted Feature identities
+PASS: Proceed changes exhaustion status for neither selected Features nor Passes
+PASS: Scope 32 / 30 does not automatically finalize Design
+PASS: Play Hand at Scope 32 depends only on complete selection
+Final Hidden Bugs: 0
+PASS: Proceed at Scope 32 emits finalization exactly once
+PASS: Authoritative finalized result is stored before Proceed emits
+PASS: Repeated Proceed activation does not reroll or overwrite Hidden Bugs
+PASS: Repeated Proceed activation cannot overwrite persistent Feature history
+PASS: Successful finalization stores a complete 13-Feature partition atomically
+PASS: Proceed freezes only necessary Design controls
+PASS: Proceed preserves scores, Scope 32, and fractional Bug Pressure
+PASS: Proceed at Scope 32 advances no cycle
+PASS: Proceed at Scope 32 emits one authoritative ProjectState values_changed signal
+PASS: Proceed preserves candidates and current selections without resolving them
+PASS: Proceed preserves available and exhausted Feature identities
+PASS: Proceed changes exhaustion status for neither selected Features nor Passes
+DesignPhase verification passed.
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+WARNING: Bug Pressure additions must be finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_core_scores_and_scope (res://scripts/project_state.gd:133)
+       [1] _verify_project_state_bug_pressure_transactions (res://scripts/debug/verify_design_phase.gd:408)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:27)
+WARNING: Bug Pressure additions must be finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_core_scores_and_scope (res://scripts/project_state.gd:133)
+       [1] _verify_project_state_bug_pressure_transactions (res://scripts/debug/verify_design_phase.gd:408)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:27)
+WARNING: Bug Pressure additions must be finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_core_scores_and_scope (res://scripts/project_state.gd:133)
+       [1] _verify_project_state_bug_pressure_transactions (res://scripts/debug/verify_design_phase.gd:408)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:27)
+WARNING: Bug Pressure additions must be finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_core_scores_and_scope (res://scripts/project_state.gd:133)
+       [1] _verify_project_state_bug_pressure_transactions (res://scripts/debug/verify_design_phase.gd:408)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:27)
+WARNING: Accumulated Bug Pressure must remain finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_core_scores_and_scope (res://scripts/project_state.gd:137)
+       [1] _verify_project_state_bug_pressure_transactions (res://scripts/debug/verify_design_phase.gd:416)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:27)
+WARNING: Design Bug finalization has already occurred.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_design_bugs (res://scripts/project_state.gd:480)
+       [1] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:435)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Perfect Production finalization value must be boolean.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_design_bugs (res://scripts/project_state.gd:483)
+       [1] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:441)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Final Hidden Bugs must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_design_bugs (res://scripts/project_state.gd:486)
+       [1] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:441)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Final Hidden Bugs must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_design_bugs (res://scripts/project_state.gd:486)
+       [1] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:441)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Design Feature history IDs must be nonempty and unique: text
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_feature_history_ids (res://scripts/project_state.gd:745)
+       [1] finalize_design_bugs (res://scripts/project_state.gd:488)
+       [2] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:452)
+       [3] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Design Feature history collections cannot overlap: text
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_design_bugs (res://scripts/project_state.gd:499)
+       [1] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:452)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Design Feature history IDs must be nonempty and unique: 
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_feature_history_ids (res://scripts/project_state.gd:745)
+       [1] finalize_design_bugs (res://scripts/project_state.gd:488)
+       [2] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:452)
+       [3] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Design Feature history IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_feature_history_ids (res://scripts/project_state.gd:741)
+       [1] finalize_design_bugs (res://scripts/project_state.gd:488)
+       [2] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:452)
+       [3] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Design Feature history must be provided as arrays.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_feature_history_ids (res://scripts/project_state.gd:735)
+       [1] finalize_design_bugs (res://scripts/project_state.gd:488)
+       [2] _verify_project_state_design_finalization (res://scripts/debug/verify_design_phase.gd:452)
+       [3] _initialize (res://scripts/debug/verify_design_phase.gd:28)
+WARNING: Invalid priority category: 999
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_priority (res://scripts/phases/priority_allocation.gd:28)
+       [1] set_priority (res://scripts/phases/design_phase.gd:97)
+       [2] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:151)
+WARNING: Priority must be numeric.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_priority (res://scripts/phases/priority_allocation.gd:31)
+       [1] set_priority (res://scripts/phases/design_phase.gd:97)
+       [2] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:152)
+WARNING: Could not build a complete weighted Design candidate pool: Card 'malformed_weight_fixture' has an invalid primary stat: invalid
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:264)
+       [1] _verify_weighted_dealing (res://scripts/debug/verify_design_phase.gd:308)
+       [2] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:172)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:183)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:183)
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:183)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:254)
+       [6] begin_design (res://scripts/phases/design_phase.gd:159)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:183)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _set_pool (res://scripts/debug/verify_design_phase.gd:1205)
+       [6] _verify_pool_compositions (res://scripts/debug/verify_design_phase.gd:494)
+       [7] _initialize (res://scripts/debug/verify_design_phase.gd:42)
+       [8] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _set_pool (res://scripts/debug/verify_design_phase.gd:1205)
+       [6] _verify_pool_compositions (res://scripts/debug/verify_design_phase.gd:494)
+       [7] _initialize (res://scripts/debug/verify_design_phase.gd:42)
+       [8] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _set_pool (res://scripts/debug/verify_design_phase.gd:1205)
+       [6] _verify_pool_compositions (res://scripts/debug/verify_design_phase.gd:494)
+       [7] _initialize (res://scripts/debug/verify_design_phase.gd:42)
+       [8] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _set_pool (res://scripts/debug/verify_design_phase.gd:1205)
+       [6] _verify_pool_compositions (res://scripts/debug/verify_design_phase.gd:494)
+       [7] _initialize (res://scripts/debug/verify_design_phase.gd:42)
+       [8] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _set_pool (res://scripts/debug/verify_design_phase.gd:1205)
+       [6] _verify_pool_compositions (res://scripts/debug/verify_design_phase.gd:496)
+       [7] _initialize (res://scripts/debug/verify_design_phase.gd:42)
+       [8] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _set_pool (res://scripts/debug/verify_design_phase.gd:1205)
+       [6] _verify_pool_compositions (res://scripts/debug/verify_design_phase.gd:496)
+       [7] _initialize (res://scripts/debug/verify_design_phase.gd:42)
+       [8] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _set_pool (res://scripts/debug/verify_design_phase.gd:1205)
+       [6] _verify_pool_compositions (res://scripts/debug/verify_design_phase.gd:498)
+       [7] _initialize (res://scripts/debug/verify_design_phase.gd:42)
+       [8] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:281)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:267)
+       [5] _set_pool (res://scripts/debug/verify_design_phase.gd:1205)
+       [6] _verify_pool_compositions (res://scripts/debug/verify_design_phase.gd:498)
+       [7] _initialize (res://scripts/debug/verify_design_phase.gd:42)
+       [8] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _calculate_hand (res://scripts/debug/verify_design_phase.gd:1151)
+       [5] _verify_bug_pressure_calculation (res://scripts/debug/verify_design_phase.gd:607)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:43)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _calculate_hand (res://scripts/debug/verify_design_phase.gd:1151)
+       [5] _verify_bug_pressure_calculation (res://scripts/debug/verify_design_phase.gd:607)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:43)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_balanced_pass_success (res://scripts/debug/verify_design_phase.gd:740)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:48)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_balanced_pass_success (res://scripts/debug/verify_design_phase.gd:752)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:48)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_two_action_bug_pressure_accumulation (res://scripts/debug/verify_design_phase.gd:783)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:49)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_two_action_bug_pressure_accumulation (res://scripts/debug/verify_design_phase.gd:785)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:49)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_atomic_failure (res://scripts/debug/verify_design_phase.gd:814)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:51)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_atomic_failure (res://scripts/debug/verify_design_phase.gd:820)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:51)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Card 'malformed_fixture' has a secondary value without a secondary stat.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_base_hand (res://scripts/phases/design_phase.gd:998)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/design_phase.gd:835)
+       [2] _on_play_card_pressed (res://scripts/phases/design_phase.gd:562)
+       [3] play (res://scripts/ui/hand_presentation.gd:77)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_atomic_failure (res://scripts/debug/verify_design_phase.gd:820)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:51)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_atomic_success (res://scripts/debug/verify_design_phase.gd:838)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:53)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_atomic_success (res://scripts/debug/verify_design_phase.gd:838)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:53)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_atomic_success (res://scripts/debug/verify_design_phase.gd:843)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:53)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_atomic_success (res://scripts/debug/verify_design_phase.gd:843)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:53)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_post_hand_deal_failure (res://scripts/debug/verify_design_phase.gd:873)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:54)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_post_hand_deal_failure (res://scripts/debug/verify_design_phase.gd:881)
+       [6] _initialize (res://scripts/debug/verify_design_phase.gd:54)
+       [7] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:978)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:978)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:978)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:993)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:993)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:993)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_design_phase.gd:1219)
+       [4] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:993)
+       [5] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [6] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Exhausted ID is not an eligible Design Feature: graphics_pass
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _build_design_feature_history (res://scripts/phases/design_phase.gd:671)
+       [1] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:1002)
+       [2] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [3] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Exhausted ID is not an eligible Design Feature: graphics_pass
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _build_design_feature_history (res://scripts/phases/design_phase.gd:671)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:631)
+       [2] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:1010)
+       [3] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [4] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Card not found: missing_feature
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] get_card (res://scripts/cards/card_database.gd:193)
+       [1] _is_valid_design_feature_history (res://scripts/phases/design_phase.gd:704)
+       [2] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:1014)
+       [3] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [4] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Card not found: missing_feature
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] get_card (res://scripts/cards/card_database.gd:193)
+       [1] _is_valid_design_feature_history (res://scripts/phases/design_phase.gd:704)
+       [2] _verify_feature_history_finalization (res://scripts/debug/verify_design_phase.gd:1015)
+       [3] _initialize (res://scripts/debug/verify_design_phase.gd:57)
+       [4] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)
+WARNING: Design Bug finalization has already occurred.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_design_bugs (res://scripts/project_state.gd:480)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:634)
+       [2] _verify_design_finalization (res://scripts/debug/verify_design_phase.gd:1058)
+       [3] _initialize (res://scripts/debug/verify_design_phase.gd:58)
+       [4] _verify_design_priorities (res://scripts/debug/verify_design_phase.gd:208)

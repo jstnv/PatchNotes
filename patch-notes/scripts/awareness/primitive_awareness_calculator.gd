@@ -11,7 +11,7 @@ const MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS := 10000
 const AWARENESS_SCALE := 200
 
 
-static func calculate(project_state: ProjectState) -> AwarenessResult:
+static func calculate(project_state: ProjectState, run_state: RunState = null) -> AwarenessResult:
 	if project_state == null or not project_state.has_beta_finalization() or not project_state.is_launch_ready() or not project_state.has_review_result():
 		return null
 	var marketing_output := project_state.get_marketing_output()
@@ -22,6 +22,9 @@ static func calculate(project_state: ProjectState) -> AwarenessResult:
 	var current_launch_marketing := launch_marketing
 	var fan_awareness := 0
 	var total_awareness := ORGANIC_AWARENESS + current_launch_marketing + fan_awareness
+	if run_state != null:
+		total_awareness = run_state.trait_launch_awareness(total_awareness)
+		if total_awareness < 0: return null
 	var awareness_multiplier := 1.0 + (float(total_awareness) / float(AWARENESS_SCALE))
 	if not is_finite(awareness_multiplier):
 		return null

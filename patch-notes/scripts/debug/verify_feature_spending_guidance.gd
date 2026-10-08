@@ -60,7 +60,7 @@ func go() -> void:
 	var extra: Array[CardData] = [db.get_card(reserve_id)]
 	var quote := run.get_feature_spending_advice(reserve_id)
 	check(quote.known_play_cost_cents == a.known_play_cost_cents + run.primitive_feature_hand_cost_cents(extra) and quote.purchase_cycles == 0, "Starter preview includes selected Feature play cost, zero purchase cycles")
-	check(not run.get_feature_spending_advice(&"animated_sprites").available and not run.get_feature_spending_advice(&"missing").available, "Unavailable and invalid quotes remain unavailable")
+	check(run.get_feature_spending_advice(&"animated_sprites").acquisition.requirements.size() > 0 and not run.get_feature_spending_advice(&"missing").available, "Locked paths disclose requirements; invalid quotes remain unavailable")
 	check(state(run) == before, "All advisory queries preserve cash, cycles, redraws, ownership and journals")
 	var unfinished := ProjectState.new(30)
 	unfinished.advance_cycle()

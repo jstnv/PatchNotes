@@ -1,6 +1,6 @@
 # Handoff: legal strong → weak → recovery Fanbase capture v1
 
-**Status:** QUEUED in the [internal TODO](../../../TODO.md) as a bounded read-only capture **after** the [quarter Fan Awareness branch trial](2026-10-06-quarter-awareness-trial-v1.md) is applied and verified on a separate branch checkout. No gameplay tuning, merge or push is requested.
+**Status:** COMPLETE as a bounded read-only capture, 2026-10-07, following the [quarter Fan Awareness branch trial](2026-10-06-quarter-awareness-trial-v1.md). The [findings](../2026-10-07-quarter-trial-recovery-findings-v1.md) and [reproduction bundle](../quarter-trial-v1/README.md) hold the observed route and conditional no-loss comparison. The result informs discussion; it does not approve the 15% loss coefficient or other final tuning.
 
 **Question:** On a legal route where a studio has Fans before a below-5.0 release, how many Fans are lost across monthly boundaries under the provisional loss rule, how much does the trial quarter-Fan launch Awareness affect the next game's sales, and can a later good release rebuild the audience? The [conditional loss screen](../2026-10-06-mature-weak-loss-screen-v1.md) is a bound, not played evidence.
 

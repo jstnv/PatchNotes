@@ -1,0 +1,40 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: Two-argument record remains Month 1-only
+PASS: 751 units earn 375 and settle 262237 cents on first boundary
+PASS: Month 1 finishes with the original odd-unit and odd-cent floors
+PASS: Legacy fixture earns nothing after Month 1 and settles remaining cents
+PASS: Repeated run-cycle callback is rejected
+PASS: Legacy fixture cannot accept a campaign
+PASS: Month 1 campaign rejection leaves the record untouched
+PASS: Live record preserves locked Month 1 output
+PASS: Month 2 uses 80 organic points, 37 base units and 41 units with fixed +10
+PASS: Month 2 first half earns floor(37/2) and lifetime cumulative net
+PASS: Campaign affects selected Month 2 and earns its first odd-unit half
+PASS: Second campaign in the same release-age month is rejected
+PASS: Second half earns remaining 21 campaign units and settles exact cumulative net
+PASS: Month 3 retention floors to 25.7200 points and second campaign boost is +5
+PASS: Per-release campaign history retains prior-count quote and organic decay
+PASS: Another release has separate age and campaign history
+PASS: First age-cycle can settle on a calendar boundary independently of release age
+PASS: Weak Review reaches zero organic sales and a campaign can revive it
+PASS: Synthetic Review 9.1 retains more organic Awareness and units
+PASS: Zero-sale dormancy is revivable without changing Review
+PASS: Synthetic Review 9.1 reproduces the V3 Month 22 zero-sale and 33-unit campaign revival
+PASS: Sales remain evaluable at release age Month 23
+PASS: Sales remain evaluable at release age Month 24
+PASS: No fixed expiry is imposed after Month 24
+PASS: Matched 750-unit Month 1 releases diverge by frozen quality and launch Awareness
+PASS: Incomplete frozen later-month inputs are rejected
+PASS: Out-of-range Review is rejected
+PASS: Awareness scaling overflow is rejected at creation
+PASS: Later-unit numerator overflow is rejected
+PASS: Revenue overflow is rejected
+PASS: Corrupt unit history is rejected before advancing
+PASS: Corrupt campaign quote history is rejected
+PASS: Corrupt fractional Awareness is rejected
+PASS: Duplicate cycle cannot mint a second sales half
+Game lifespan sales verification: 0 failures
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)

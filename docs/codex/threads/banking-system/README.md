@@ -36,5 +36,7 @@ The current foundation includes exact-cent cash and finance journals, $500 month
 - [Selector clarification session log](2026-10-06-selector-clarification-session-v1.md): corrected the assistant's extra decision gate after user clarification.
 - [Proposal decline session log](2026-10-06-proposal-decline-session-v1.md): records the user's decision to leave the extra menu proposal behind and park this handoff.
 - [Shared TODO contribution session log](2026-10-06-todo-contribution-session-v1.md): records the user-authorized transfer and exact checks.
-- [B3–B5 completion audit](2026-10-06-task-completion-audit-v1.md): current checkout still has only the typed-bill foundation and Bank history; lending tasks remain queued.
+- [Historical B3–B5 audit](2026-10-06-task-completion-audit-v1.md): pre-implementation snapshot, now superseded.
+- [B3–B5 completion recheck](2026-10-07-task-completion-recheck-v1.md): current local implementation and hash-matched gate evidence; durable restart remains separate.
+- [Checkpoint and export TODO handoff](2026-10-07-checkpoint-handoff-session-v1.md): user-requested Task10 Bank restore and Task11 exported Bank/Continue acceptance.
 - [Drive handoff reconciliation, v1](2026-10-06-drive-handoffs-v1.md): relevant historical pass offs compared with the local TODO and current source state.

@@ -6,6 +6,7 @@ var scroll: ScrollContainer
 var canvas: Control
 var tree: Control
 var popup: PanelContainer
+var shopping_details: Label
 var price: RichTextLabel
 var zoom_label: Label
 var zoom := 1.0
@@ -115,6 +116,17 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer) -> void:
 	price.scroll_active = false
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	details.add_child(price)
+	var guidance_scroll := ScrollContainer.new()
+	guidance_scroll.custom_minimum_size = Vector2(310,180)
+	guidance_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	details.add_child(guidance_scroll)
+	shopping_details = Label.new()
+	shopping_details.name = "ShoppingDetails"
+	shopping_details.custom_minimum_size.x = 290
+	shopping_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	shopping_details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	shopping_details.add_theme_font_size_override("font_size",13)
+	guidance_scroll.add_child(shopping_details)
 	var back := Button.new()
 	back.name = "BackToMapButton"
 	back.text = "Back to Map"
@@ -407,6 +419,8 @@ func show_details() -> void:
 		price.text = "[s]%s[/s]  [color=#7ed6be]−%d%% familiarity[/color]\n[b]%s[/b]" % [base, offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents)] if offer.discount_percent > 0 else base
 		store._buy.disabled = not offer.unlocked or not offer.affordable or store._run.needs_starter_selection()
 		store._buy.text = "After first game" if store._run.needs_starter_selection() else "Requires prerequisite" if not offer.unlocked else "Insufficient cash" if not offer.affordable else "Purchase"
+	var advice := store._run.get_feature_spending_advice(store._selected)
+	shopping_details.text = FeatureSpendingGuidance.acquisition_text(advice) + "\n\n" + FeatureSpendingGuidance.explanation(advice)
 	price.visible = not price.text.is_empty()
 	popup.show()
 	popup.reset_size()

@@ -34,6 +34,7 @@ var _run_state: RunState
 var _phase_state := PhaseState.PLANNING
 var _priority_allocation := PRIORITY_ALLOCATION_SCRIPT.new()
 var _priority_draft: Dictionary[ProjectState.CoreScore, int] = {}
+var _employee_priority_choice: Dictionary = {}
 var _syncing_priority_controls := false
 var _available_features: Array[CardData] = []
 var _pass_definitions: Array[CardData] = []
@@ -789,7 +790,7 @@ func _update_play_action() -> void:
 		var cards: Array[CardData] = []
 		for view: CardView in _selected_card_views:
 			cards.append(view.card_data)
-		var cost := _run_state.primitive_feature_hand_cost_cents(cards)
+		var cost := _run_state.primitive_feature_hand_cost_cents(cards, _project_state.get_release_id())
 		if cost >= 0:
 			%PlayAlphaHandButton.text = "Implement · " + CashFormatter.format_exact_cents(cost)
 			if _run_state.get_cash_cents() < cost:
@@ -819,22 +820,39 @@ func _on_play_alpha_hand_pressed() -> void:
 	if _run_state != null:
 		var selected_cards: Array[CardData] = []
 		selected_cards.assign(action.cards)
-		play_cost = _run_state.primitive_feature_hand_cost_cents(selected_cards)
+		play_cost = _run_state.primitive_feature_hand_cost_cents(selected_cards, _project_state.get_release_id())
 		if play_cost < 0 or _run_state.get_cash_cents() < play_cost:
 			return
+	var lean_before := int(_run_state.get_lean_savings().get(_project_state.get_release_id(), 0)) if _run_state != null else 0
+	var normal_cost := _run_state.primitive_feature_hand_cost_cents(action.cards as Array[CardData]) if _run_state != null else 0
+	var lean_saving := normal_cost - play_cost
+	var employee_plan := {}
+	var employee_priorities := _employee_priority_choice.duplicate()
+	if _run_state != null:
+		employee_plan = _run_state.plan_employee_hand(_project_state,&"alpha",action.cards,get_priority_distribution(),employee_priorities)
+		if employee_plan.is_empty(): return
+	elif not employee_priorities.is_empty(): return
+	var refill_priorities := employee_priorities if not employee_priorities.is_empty() else get_priority_distribution()
 	var final_production := _calculate_final_action_production(action)
 	var rng_before := _deal_rng.state
 	# Both played and reserved finite Features are unavailable to this refill.
 	var excluded: Array[StringName] = []
 	for card: CardData in _candidate_cards:
 		if not card.renewable: excluded.append(card.id)
-	var refill := _build_corrective_candidate_definitions(get_priority_distribution(), [], SELECTED_HAND_SIZE, excluded) if not _pending_playtest_categories.is_empty() else _build_weighted_candidate_definitions(get_priority_distribution(), [], SELECTED_HAND_SIZE, excluded)
+	var refill := _build_corrective_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE, excluded) if not _pending_playtest_categories.is_empty() else _build_weighted_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE, excluded)
 	if not refill.valid:
 		_deal_rng.state = rng_before
 		return
 	var additions: Dictionary[ProjectState.CoreScore, int] = final_production.score_additions
 	var commit := func() -> bool:
+		if _run_state != null and (not _run_state.can_commit_employee_hand(employee_plan) or int(_run_state.get_lean_savings().get(_project_state.get_release_id(), 0)) != lean_before): return false
 		if not _project_state.add_alpha_production(additions, action.scope, action.alpha_bug_pressure): return false
+		if not employee_priorities.is_empty():
+			_priority_allocation.set_distribution(employee_priorities)
+			_priority_draft = _priority_allocation.get_priority_distribution()
+		if _run_state != null:
+			_run_state.commit_employee_hand(employee_plan)
+			_run_state.commit_lean_saving(_project_state.get_release_id(), lean_before, lean_saving)
 		_complete_successful_action()
 		return true
 	if not (_run_state.complete_productive_action(commit, -play_cost, -1, &"", &"feature_play", _project_state.get_release_id()) if _run_state != null else commit.call()):
@@ -1135,3 +1153,19 @@ func refresh_overlay_actions() -> void:
 	_update_play_action()
 	_update_host_playtest_action()
 	_update_proceed_action()
+
+
+func get_employee_hand_status() -> Dictionary:
+	if _run_state == null or _project_state == null: return {}
+	var roster := _run_state.get_employees()
+	var base := _validate_and_calculate_base_action()
+	return {"hired":not roster.employees.is_empty(),"available":EmployeeRoster.available(roster,_project_state.get_release_id()),"qualifying":base.get("valid",false) and EmployeeRoster.matches(EmployeeRoster.card_facts(base.get("cards",[])))}
+
+
+func play_hand_with_employee_plan(distribution: Dictionary) -> bool:
+	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution(): return false
+	var before := _project_state.get_current_cycle()
+	_employee_priority_choice = distribution.duplicate()
+	_on_play_alpha_hand_pressed()
+	_employee_priority_choice.clear()
+	return _project_state.get_current_cycle() == before+1

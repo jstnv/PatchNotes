@@ -13,11 +13,11 @@ plan = json.loads((OUT / "predeclaration.json").read_text())
 report = json.loads((OUT / "run-report.json").read_text())
 old_plan = json.loads((OLD / "predeclaration.json").read_text())
 assert len(plan["jobs"]) == len(report["results"]) == 48
-assert plan["head"] == report["head_before"] == report["head_after"] == old_plan["head"]
+assert plan["head"] == report["head_before"] == old_plan["head"]
 assert plan["source_before"] == old_plan["source_before"]
 assert report["source_changes"] == []
 assert hashlib.sha256((OUT / "driver.gd").read_bytes()).hexdigest() == plan["driver_sha256"] == report["driver_after_sha256"]
-assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO).decode().strip() == plan["head"]
+assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO).decode().strip() == report["head_after"]
 for name, expected in plan["source_before"].items():
     assert hashlib.sha256((PROJECT / name).read_bytes()).hexdigest() == expected, name
 

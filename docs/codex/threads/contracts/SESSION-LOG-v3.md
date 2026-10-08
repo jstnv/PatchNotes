@@ -1,0 +1,9 @@
+# Contracts session log v3
+
+2026-10-07 (America/Los_Angeles). Branch `main`, HEAD `b84d1a5b4e4957b044b4b52c41553cf611aff3ae` before and after this bounded read-only work. Inspected CURRENT_STATE, TODO, Contracts design/Task34 brief, Task32 report/raw artifacts and current Contracts/finance/Studio source. Existing other-thread TODO/Store worktree edits were preserved. `git status --short -- patch-notes` remained empty; no gameplay, tests, assets, configuration, shared TODO or implementation authority changed.
+
+Created [historical payout arithmetic](FINDINGS-v2-historical-payout-arithmetic.md) and its [reproducible calculation](historical-payout-v1/analyze.ps1). Check: 1,280/1,280 A=$0 exact-cent parity against Task32, 16 summary groups; source-input SHA-256 values saved. This is selected historical hand arithmetic, not current playable advance evidence.
+
+Prepared [sim-v1](sim-v1/PREDECLARATION.md), then ran an isolated copied Godot 4.7.1 project after a direct external-script load crashed before execution. The [focused replay](sim-v1/FOCUSED-REPLAY-v1.md) records exact source SHA manifest, commands, raw routes, action/ledger comparison and limits: current legacy $5,500 route exactly reproduces the historical Game 2 cycle-32 $147.65 arrears block; genuine $5,700 trait flow pays rent with $52.35 left and proceeds. Both valid, zero discrepancies. Removed an initial duplicate trait raw capture after retaining the final rerun and its command/log.
+
+Prepared [sim-v2](sim-v2/PREDECLARATION.md) to test a narrow constructed finance overlay. Its [compatibility probe](sim-v2/LIMITATION-v1.md) showed serialized JSON loses required integer/StringName provenance; the current planner rejected the raw snapshot. Per predeclaration, no advance arm ran and no numerical ruling followed. Next: a separately predeclared **in-process typed-state** advance comparison, then the full Task34 Crown/Neon/controls cohort. No commit, push or release claim.

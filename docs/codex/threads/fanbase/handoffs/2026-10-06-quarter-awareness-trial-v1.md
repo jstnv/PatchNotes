@@ -1,6 +1,6 @@
 # Handoff: quarter Fan Awareness trial v1
 
-**Status:** QUEUED in the [internal TODO](../../../TODO.md) as a narrow Fanbase-branch trial, 2026-10-06. Start only in a coordinated nonoverlapping gameplay slot. The design thread does not edit gameplay; this handoff is not permission to merge or push.
+**Status:** COMPLETE as an isolated branch trial, 2026-10-07. The [findings](../2026-10-07-quarter-trial-recovery-findings-v1.md) and [reproduction bundle](../quarter-trial-v1/README.md) record the checks. Source: `codex/fanbase-quarter-trial` at `bd450a9e4e8d83ece1478cdf5a16526432e36cce` plus two uncommitted trial files. No merge, commit, push, main Fanbase activation or final numerical approval.
 
 **Decision:** [User-approved ACTIVE/TRIAL mapping](../2026-10-06-quarter-awareness-trial-decision-v1.md): at launch, `fan_awareness = min(150, floor(launch_fans / 4))`. Use the frozen at-launch Fan count; add fan Awareness once to organic and Marketing Awareness. Keep the current total-Awareness-to-sales multiplier and all Review, monthly fan, lifespan, settlement and cash rules. Do not add an independent Fan multiplier to sales.
 

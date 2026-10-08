@@ -18,6 +18,7 @@ This is the dedicated local record for this Fanbase design thread. Other design 
 - [Proportional Fan Awareness candidate screen, v1](2026-10-06-proportional-awareness-screen-v1.md)
 - [Quarter Fan Awareness trial decision, v1](2026-10-06-quarter-awareness-trial-decision-v1.md)
 - [Mature weak-release loss sensitivity, v1](2026-10-06-mature-weak-loss-screen-v1.md)
+- [Quarter Awareness trial and legal recovery findings, v1](2026-10-07-quarter-trial-recovery-findings-v1.md)
 - [Implementation handoffs](handoffs/README.md): the main implementing thread should read this index first, then only the handoffs marked ready.
 
 ## Boundaries
@@ -25,3 +26,5 @@ This is the dedicated local record for this Fanbase design thread. Other design 
 This thread records decisions, evidence, open questions, and handoffs. It does not edit gameplay or the internal [TODO](../../TODO.md), merge, or push. Update TODO only when the user explicitly prompts it. Use local evidence first; consult Drive only if essential authority is missing or demonstrably stale. Keep **LOCKED**, **ACTIVE/TRIAL**, **OBSERVED**, **OPEN**, and **SUPERSEDED** separate. Branch behavior and test results do not, by themselves, approve numerical tuning.
 
 When the user approves a rule, record the decision and rationale in a new versioned file here and reconcile it into the authoritative design document. Cross-system decisions belong in [DECISIONS.md](../../DECISIONS.md). Give the main implementing thread a versioned handoff with source revision, exact behavior, dependencies, acceptance checks, and status. Do not duplicate work already present on its Fanbase branch.
+
+- [Near-neutral follow-up findings](2026-10-07-near-neutral-findings-v1.md): both bounded attempts exhausted; Reviews3.6/3.5 miss the target, so near-neutral behavior remains unresolved. Runtime unchanged.

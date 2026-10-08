@@ -403,9 +403,10 @@ func _refresh_footer() -> void:
 		next_bill = "%s · M%d end" % [CashFormatter.format_exact_cents(finances.get("monthly_rent_cents", 0)), due / 2] if due > 0 else "Unavailable"
 		if finances.get("unpaid_rent_cents", 0) > 0: next_bill += " · unpaid " + CashFormatter.format_exact_cents(finances.unpaid_rent_cents)
 	footer.text = "Date: %s     |     Cycle: %d     |     Next Bill: %s" % [run.get_calendar_label(), run.get_completed_run_cycles(), next_bill]
-	if finances.get("unpaid_rent_cents", 0) > 0:
+	if finances.get("total_overdue_cents", 0) > 0:
 		# Lead with arrears so they remain visible even if the date/bill suffix trims.
-		footer.text = "Unpaid rent %s · Cash → Finances     |     %s" % [CashFormatter.format_exact_cents(finances.unpaid_rent_cents), footer.text]
+		var label := "Unpaid rent" if finances.total_overdue_cents == finances.unpaid_rent_cents else "Unpaid bills"
+		footer.text = "%s %s · Cash → Finances     |     %s" % [label, CashFormatter.format_exact_cents(finances.total_overdue_cents), footer.text]
 		footer.add_theme_color_override("font_color", Color("ffc779"))
 	else:
 		footer.remove_theme_color_override("font_color")

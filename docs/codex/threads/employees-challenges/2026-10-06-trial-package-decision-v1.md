@@ -1,6 +1,6 @@
 # Employees and Challenges trial approval
 
-2026-10-06, America/Los_Angeles. **ACTIVE/TRIAL.** In the main implementation chat, the user answered **“Approve the trial package”** to the package below, following the [completed comparison](2026-10-06-benefit-payroll-comparison-v1.md). This approves a playable trial and resolves the rule prerequisites for the [separate Production Specialist task](2026-10-06-production-specialist-implementation-v1.md). That task is QUEUED; gameplay has not been added.
+2026-10-06, America/Los_Angeles. **ACTIVE/TRIAL.** In the main implementation chat, the user answered **“Approve the trial package”** to the package below, following the [completed comparison](2026-10-06-benefit-payroll-comparison-v1.md). This approved a playable trial and resolved the rule prerequisites for the [separate Production Specialist task](2026-10-06-production-specialist-implementation-v1.md). That task was subsequently [completed locally on 2026-10-07](../../findings/2026-10-07-employees-implementation-v1.md).
 
 ## Approved trial rules
 
@@ -29,4 +29,4 @@ For future courses, use the native expense-month convention. A passive enrollmen
 
 ## Implementation dispatch
 
-The approved task covers one Production Specialist, hiring, challenge/reward, payroll and Studio/finance presentation. Preserve the internal queue's existing work order and use one overlapping gameplay implementation at a time. Future courses and final tuning remain follow-ups; they do not block the approved temporary first slice. No commit, push or release approval is included in this decision.
+The approved task covers one Production Specialist, hiring, challenge/reward, payroll and Studio/finance presentation; it is now complete locally. Future courses and final tuning remain follow-ups. No commit, push or release approval is included in this decision.

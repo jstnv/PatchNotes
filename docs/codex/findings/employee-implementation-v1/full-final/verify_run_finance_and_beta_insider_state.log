@@ -1,0 +1,564 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+Loaded 40 cards.
+PASS: Run cash begins explicitly uninitialized
+PASS: Income rejects before the new-run boundary initializes cash
+PASS: Malformed starting cash rejects atomically: -1
+PASS: Malformed starting cash rejects atomically: 1.0
+PASS: Malformed starting cash rejects atomically: 0.5
+PASS: Malformed starting cash rejects atomically: 1
+PASS: Malformed starting cash rejects atomically: nan
+PASS: Malformed starting cash rejects atomically: inf
+PASS: Malformed starting cash rejects atomically: -inf
+PASS: Malformed starting cash rejects atomically: <null>
+PASS: Malformed starting cash rejects atomically: true
+PASS: Malformed starting cash rejects atomically: []
+PASS: Malformed starting cash rejects atomically: {  }
+PASS: Controlled whole-dollar initialization commits exact cents once
+PASS: Cash cannot be initialized twice
+PASS: Playtest Rival Games adds exactly $1,000.00 and emits once
+PASS: Zero cash addition is a signal-free successful no-op
+PASS: Malformed cash addition rejects: -1
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: 1.0
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: 0.5
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: 1
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: nan
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: inf
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: -inf
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: <null>
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: true
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: []
+PASS: Rejected cash addition preserves state and signals
+PASS: Malformed cash addition rejects: {  }
+PASS: Rejected cash addition preserves state and signals
+PASS: Cash accepts the largest representable exact-cent initial value
+PASS: Cash-cent overflow rejects atomically
+PASS: Competitor snapshot begins unset and concealed
+PASS: Competitor reveal fails without a snapshot and emits nothing
+PASS: Malformed competitor snapshot ID rejects: 
+PASS: Malformed competitor snapshot ID rejects: 
+PASS: Malformed competitor snapshot ID rejects:  spaces 
+PASS: Malformed competitor snapshot ID rejects: Uppercase
+PASS: Malformed competitor snapshot ID rejects: hyphen-id
+PASS: Malformed competitor snapshot ID rejects: 1
+PASS: Malformed competitor snapshot ID rejects: 1.0
+PASS: Malformed competitor snapshot ID rejects: <null>
+PASS: Malformed competitor snapshot ID rejects: true
+PASS: Malformed competitor snapshot ID rejects: []
+PASS: Malformed competitor snapshot ID rejects: {  }
+PASS: Competitor authority assigns one controlled snapshot without revealing it
+PASS: Player query conceals the assigned competitor snapshot
+PASS: Competitor snapshot cannot be replaced
+PASS: Competitor reveal exposes the existing snapshot exactly once
+PASS: Repeated competitor reveal is an idempotent signal-free success
+PASS: Market forecast begins unset and concealed
+PASS: Forecast reveal fails without a snapshot and emits nothing
+PASS: Malformed forecast snapshot ID rejects: 
+PASS: Malformed forecast snapshot ID rejects: 
+PASS: Malformed forecast snapshot ID rejects:  spaces 
+PASS: Malformed forecast snapshot ID rejects: Uppercase
+PASS: Malformed forecast snapshot ID rejects: hyphen-id
+PASS: Malformed forecast snapshot ID rejects: 1
+PASS: Malformed forecast snapshot ID rejects: 1.0
+PASS: Malformed forecast snapshot ID rejects: <null>
+PASS: Malformed forecast snapshot ID rejects: true
+PASS: Malformed forecast snapshot ID rejects: []
+PASS: Malformed forecast snapshot ID rejects: {  }
+PASS: Forecast authority assigns one controlled snapshot without revealing it
+PASS: Player query conceals the assigned forecast
+PASS: Forecast snapshot cannot be replaced
+PASS: Forecast reveal exposes the existing snapshot exactly once
+PASS: Repeated forecast reveal is an idempotent signal-free success
+PASS: Beta accepts the finalized shared ProjectState
+PASS: Controlled Beta candidate pool deals without effects
+PASS: Active Beta priorities remain editable
+PASS: Beta loading, dealing, selection, and priority editing mutate no run or project state
+PASS: Beta UI does not expose snapshot identifiers
+PASS: Beta reconstruction preserves snapshot visibility, project state, and run cash
+Perfect Production!
+Final Hidden Bugs: 0
+PASS: Run-state transition fixture begins Alpha
+Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 0; implemented 0; unimplemented 14
+PASS: Run-state transition fixture finalizes Alpha
+PASS: Gameplay retains the exact run-state instance across Design, Alpha, and Beta
+PASS: ProjectState does not store run cash
+PASS: BetaPhase does not store run cash
+PASS: CardData and CardView do not store run cash
+Run finance and Beta Insider state verification passed.
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+WARNING: Run cash must be initialized before income is added.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash_cents (res://scripts/run_state.gd:494)
+       [1] add_cash (res://scripts/run_state.gd:487)
+       [2] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:28)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:447)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:31)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Run cash has already been initialized.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:456)
+       [1] initialize_cash (res://scripts/run_state.gd:449)
+       [2] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:36)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash additions must be nonnegative whole-dollar integers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash (res://scripts/run_state.gd:485)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:42)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: Cash overflowed.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash_cents (res://scripts/run_state.gd:502)
+       [1] _verify_cash_api (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:48)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:17)
+WARNING: A competitor snapshot must exist before it can be revealed.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] reveal_competitor_snapshot (res://scripts/project_state.gd:318)
+       [1] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:56)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Competitor snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_competitor_snapshot_id (res://scripts/project_state.gd:304)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:58)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: The competitor snapshot has already been assigned.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] assign_competitor_snapshot_id (res://scripts/project_state.gd:307)
+       [1] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:61)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: A market forecast snapshot must exist before it can be revealed.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] reveal_market_forecast_snapshot (res://scripts/project_state.gd:363)
+       [1] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:66)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: Market forecast snapshot IDs must be strings.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:405)
+       [1] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:349)
+       [2] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:68)
+       [3] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: The market forecast snapshot has already been assigned.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] assign_market_forecast_snapshot_id (res://scripts/project_state.gd:352)
+       [1] _verify_snapshot_apis (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:71)
+       [2] _initialize (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:18)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1010)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:878)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1156)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:72)
+       [6] _replace_design_with_alpha (res://scripts/gameplay.gd:154)
+       [7] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:125)
+       [8] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:649)
+       [9] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:123)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1010)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:878)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1156)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1115)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:782)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1148)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1135)
+       [9] set_phase (res://scripts/ui/gameplay_hud.gd:179)
+       [10] _replace_design_with_alpha (res://scripts/gameplay.gd:156)
+       [11] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:125)
+       [12] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:649)
+       [13] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:123)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1010)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:878)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1156)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1115)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:782)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1148)
+       [7] _close (res://scripts/ui/priority_overlay.gd:159)
+       [8] cancel (res://scripts/ui/priority_overlay.gd:132)
+       [9] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:125)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:126)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:126)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:126)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:126)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:126)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:126)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:126)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1010)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:878)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1156)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1115)
+       [5] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [6] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:126)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1010)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:878)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1156)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] add_scope (res://scripts/project_state.gd:784)
+       [5] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:127)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1010)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:878)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1156)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] finalize_alpha (res://scripts/project_state.gd:548)
+       [5] _finalize_alpha (res://scripts/phases/alpha_phase.gd:352)
+       [6] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:128)

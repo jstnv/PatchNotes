@@ -11,6 +11,7 @@ signal sales_changed
 signal contracts_changed
 signal publishers_changed
 signal finance_changed
+signal employees_changed
 
 const CENTS_PER_DOLLAR := 100
 const MAX_REDRAWS := 4
@@ -46,11 +47,14 @@ var _seen_tutorial_topics: Dictionary = {}
 var _studio_name := ""
 var _studio_specialty: StringName = &""
 var _studio_traits: Dictionary = {}
+var _lean_savings: Dictionary = {}
 var _first_studio_economy := false
 var _starter_selection_confirmed := false
 var _first_tutorial_project_id: StringName
 var _first_game_tutorial: FirstGameTutorial
 var _studio_finance: Dictionary = {}
+var _bank_run_id: StringName = &""
+var _employees: Dictionary = EmployeeRoster.create(&"")
 
 
 ## Arm only at the successful first-project creation boundary, never on a view.
@@ -77,6 +81,12 @@ func create_studio(value: String, specialty: StringName, background: StringName,
 	return _commit_studio_creation(value, specialty, selection)
 
 
+func create_studio_with_traits(value: String, specialty: StringName, trait_ids: Array) -> bool:
+	var selection := StudioTraits.evaluate_traits(trait_ids)
+	if not selection.valid: return false
+	return _commit_studio_creation(value, specialty, selection)
+
+
 func get_studio_traits() -> Dictionary:
 	return _studio_traits.duplicate(true)
 
@@ -99,21 +109,29 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 		if not _feature_definitions.has(id):
 			return false
 		guaranteed[id] = true
-	var finance := StudioFinanceLedger.create(FIRST_STUDIO_CASH_CENTS)
+	var finance := StudioFinanceLedger.create(FIRST_STUDIO_CASH_CENTS, 51500 if StudioTraits.is_active(selection, &"expensive_lease") else 50000)
 	var point_cash := int(selection.get("point_cash_cents", 0))
 	if point_cash > 0:
 		var receipt := StudioFinanceLedger.plan(finance, 0, FIRST_STUDIO_CASH_CENTS,
 			point_cash, &"financing_in", 0, 0, false, &"studio_trait_unspent_points_v1")
 		if receipt.is_empty(): return false
 		finance = receipt.ledger
+	var family_cash := int(selection.get("family_funding_cents", 0))
+	if family_cash > 0:
+		var receipt := StudioFinanceLedger.plan(finance, 0, FIRST_STUDIO_CASH_CENTS + point_cash,
+			family_cash, &"financing_in", 0, 0, false, &"studio_trait_family_funding_v1")
+		if receipt.is_empty(): return false
+		finance = receipt.ledger
 	if finance.is_empty(): return false
 	_owned_features = guaranteed
-	_cash_cents = FIRST_STUDIO_CASH_CENTS + point_cash
+	_cash_cents = FIRST_STUDIO_CASH_CENTS + point_cash + family_cash
 	_studio_traits = selection.duplicate(true)
 	_first_studio_economy = true
 	_studio_name = cleaned
 	_studio_specialty = specialty
 	_studio_finance = finance
+	_bank_run_id = StringName(Crypto.new().generate_random_bytes(16).hex_encode())
+	_employees = EmployeeRoster.create(_bank_run_id)
 	cash_changed.emit()
 	features_changed.emit()
 	finance_changed.emit()
@@ -133,6 +151,40 @@ func get_studio_finance_snapshot() -> Dictionary:
 	return _studio_finance.duplicate(true)
 
 
+func get_bank_quote(principal: Variant, months: Variant) -> Dictionary:
+	if not _first_studio_economy: return {}
+	return StudioFinanceLedger.bank_quote(_studio_finance, principal, months, _bank_run_id)
+
+
+func get_bank_payoff_quote(loan_id: StringName) -> Dictionary:
+	return StudioFinanceLedger.payoff_quote(_studio_finance, loan_id)
+
+
+func accept_bank_loan(quote: Dictionary) -> bool:
+	if not _bank_action_available(): return false
+	return _commit_bank_plan(StudioFinanceLedger.accept_loan(_studio_finance, quote, _bank_run_id))
+
+
+func pay_off_bank_loan(quote: Dictionary) -> bool:
+	if not _bank_action_available(): return false
+	return _commit_bank_plan(StudioFinanceLedger.pay_off(_studio_finance, quote))
+
+
+func _bank_action_available() -> bool:
+	return _first_studio_economy and not _productive_cycle_in_progress and not _publishing_cycle and not _feature_purchase_in_progress and _pending_contract_completion == null and _studio_finance.get("cash_cents") == _cash_cents and _studio_finance.get("last_cycle") == _completed_run_cycles
+
+
+func _commit_bank_plan(plan: Dictionary) -> bool:
+	if plan.is_empty(): return false
+	_studio_finance = plan.ledger
+	_cash_cents = plan.cash_cents
+	_publishing_cycle = true
+	cash_changed.emit()
+	finance_changed.emit()
+	_publishing_cycle = false
+	return true
+
+
 ## Hidden, derived from immutable committed release IDs. Reopening/re-registering
 ## a release cannot create another sample; incomplete games are never samples.
 func get_development_pacing() -> Dictionary:
@@ -146,19 +198,12 @@ func get_development_pacing() -> Dictionary:
 ## Store branch. Preview adds only the selected new Feature, without ownership.
 func get_feature_spending_advice(purchase_id: StringName = &"") -> Dictionary:
 	var ids := get_owned_feature_ids()
-	var price := 0
-	var purchase_cycles := 0
-	if not purchase_id.is_empty() and not owns_feature(purchase_id):
-		var offer := get_primitive_reserve_offer(purchase_id)
-		if not offer.is_empty():
-			purchase_cycles = 0 if offer.initial else 1
-		else:
-			offer = get_feature_store_offer(purchase_id)
-			if offer.is_empty() or not offer.unlocked or needs_starter_selection():
-				return {"available": false, "reason": "Spending estimate unavailable for this locked Feature."}
-			purchase_cycles = 1
-		price = int(offer.price_cents)
-		ids.append(purchase_id)
+	var path := get_feature_acquisition_quote(purchase_id)
+	if not path.available: return path
+	for step: Dictionary in path.steps:
+		if not ids.has(step.id): ids.append(step.id)
+	var price: int = path.price_cents
+	var purchase_cycles: int = path.cycles
 	var cards: Array[CardData] = []
 	var unpriced := 0
 	for id: StringName in ids:
@@ -177,10 +222,45 @@ func get_feature_spending_advice(purchase_id: StringName = &"") -> Dictionary:
 		card.scope = int(entry.scope)
 		cards.append(card)
 	var play_cost := primitive_feature_hand_cost_cents(cards)
+	# This advice covers a fresh project and its full unused cap.
+	play_cost -= lean_discount(play_cost, &"next_project_advice")
 	var pool := {"available": play_cost >= 0, "known_play_cost_cents": play_cost,
 		"unpriced_count": unpriced, "feature_count": ids.size()}
-	return FeatureSpendingGuidance.estimate(get_development_pacing(), pool,
-		get_studio_finance_report(), _completed_run_cycles, get_cash_cents(), price, purchase_cycles)
+	var advice := FeatureSpendingGuidance.estimate(get_development_pacing(), pool,
+		get_studio_finance_report(), _completed_run_cycles, get_cash_cents(), price, purchase_cycles, get_studio_finance_snapshot())
+	advice["acquisition"] = path
+	return advice
+
+
+## Current quotes only. Never purchases or assumes an ancestor is already owned.
+func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
+	var path := {"available":true,"steps":[],"price_cents":0,"cycles":0,"requirements":[]}
+	var pending: Array[StringName] = []
+	var seen: Dictionary = {}
+	while not id.is_empty():
+		if seen.has(id) or not _feature_definitions.has(id): return {"available":false,"reason":"Acquisition quote unavailable for this Feature."}
+		seen[id] = true
+		pending.push_front(id)
+		var offer := get_feature_store_offer(id)
+		id = StringName(offer.get("parent", &""))
+	for feature: StringName in pending:
+		var offer := get_feature_store_offer(feature)
+		var primitive := offer.is_empty()
+		if primitive: offer = get_primitive_reserve_offer(feature)
+		if offer.is_empty(): return {"available":false,"reason":"Current acquisition price unavailable."}
+		var owned := owns_feature(feature)
+		var cost := 0 if owned else int(offer.price_cents)
+		var cycles := 0 if owned or (primitive and offer.initial) else 1
+		if cost > MAX_SIGNED_INT - int(path.price_cents): return {"available":false,"reason":"Acquisition quote exceeds the supported range."}
+		var status := "Owned" if owned else "Available" if (offer.can_purchase if primitive else offer.unlocked and not needs_starter_selection()) else "Locked / unavailable now"
+		if not owned and not offer.affordable: status += "; insufficient cash"
+		path.steps.append({"id":feature,"name":offer.name,"owned":owned,"price_cents":cost,"cycles":cycles,"status":status})
+		path.price_cents += cost
+		path.cycles += cycles
+		if not primitive and not owned:
+			if needs_starter_selection() and not path.requirements.has("Later Features require the first game's completion."): path.requirements.append("Later Features require the first game's completion.")
+			if not offer.unlocked and StringName(offer.parent).is_empty(): path.requirements.append(offer.prerequisite)
+	return path
 
 
 func get_financial_block_reason() -> String:
@@ -190,7 +270,7 @@ func get_financial_block_reason() -> String:
 	var unpaid := StudioFinanceLedger.get_unpaid(_studio_finance)
 	if unpaid < 0: return "Financial history is unavailable; production cannot be committed safely."
 	if unpaid == 0: return ""
-	return "Unpaid rent: %s. Further production must clear all overdue rent. You can still launch, browse Finances, or use an available income action that clears the balance." % CashFormatter.format_exact_cents(unpaid)
+	return "Unpaid bills: %s. Further production must clear all overdue bills. You can still launch, browse Finances, or use an available income action that clears the balance." % CashFormatter.format_exact_cents(unpaid)
 
 func get_studio_name() -> String:
 	return _studio_name
@@ -280,7 +360,7 @@ func purchase_primitive_reserve_feature(id: StringName) -> bool:
 	return complete_productive_action(commit, -price, _completed_run_cycles, &"", &"store", id)
 
 
-func primitive_feature_hand_cost_cents(cards: Array[CardData]) -> int:
+func primitive_feature_hand_cost_cents(cards: Array[CardData], project_id: StringName = &"") -> int:
 	if not _first_studio_economy:
 		return 0
 	var total := 0
@@ -300,7 +380,7 @@ func primitive_feature_hand_cost_cents(cards: Array[CardData]) -> int:
 		if printed < 0 or printed > (MAX_SIGNED_INT - total) / 1000:
 			return -1
 		total += printed * 1000
-	return total
+	return total - lean_discount(total, project_id)
 
 ## Presentation-only progress: no calendar, cash or production mutation.
 func visit_guidance_tip(key: StringName) -> bool:
@@ -1008,6 +1088,7 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	var ownership_before := _owned_features.duplicate()
 	var publishers_before := _unlocked_publishers.duplicate()
 	var completed_contracts_before := get_completed_contract_count()
+	var employees_before := _employees.duplicate(true)
 	_productive_cycle_in_progress = true
 	# Publish run notifications only after cash and sales have committed together.
 	var was_blocked := is_blocking_signals()
@@ -1030,7 +1111,7 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	if plan.payable > 0:
 		add_cash_cents(plan.payable)
 	if not plan.finance.is_empty():
-		spend_cash_cents(plan.finance.rent_paid_cents)
+		spend_cash_cents(plan.finance.bills_paid_cents)
 		_studio_finance = plan.finance.ledger
 	_refresh_publisher_unlocks()
 	_committing_cycle_cash = false
@@ -1052,5 +1133,65 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	if not _released_games.is_empty():
 		sales_changed.emit()
 	calendar_changed.emit()
+	if _employees != employees_before: employees_changed.emit()
 	_publishing_cycle = false
+	return true
+
+
+func get_employees() -> Dictionary:
+	return _employees.duplicate(true)
+
+
+func get_production_hire_quote() -> Dictionary:
+	if not _first_studio_economy or _released_games.is_empty() or not EmployeeRoster.valid(_employees) or not _employees.employees.is_empty(): return {}
+	return StudioFinanceLedger.hire_quote(_studio_finance,_bank_run_id)
+
+
+func hire_production_specialist(quote: Dictionary) -> bool:
+	if not _bank_action_available() or quote.is_empty() or quote != get_production_hire_quote(): return false
+	var finance := StudioFinanceLedger.hire_employee(_studio_finance,quote,_bank_run_id)
+	var roster := EmployeeRoster.hire(_employees,quote.employee_id,_completed_run_cycles)
+	if finance.is_empty() or roster.is_empty(): return false
+	_studio_finance = finance.ledger
+	_cash_cents = finance.cash_cents
+	_employees = roster
+	_publishing_cycle = true
+	cash_changed.emit()
+	finance_changed.emit()
+	employees_changed.emit()
+	_publishing_cycle = false
+	return true
+
+
+func plan_employee_hand(project: ProjectState, phase: StringName, cards: Array, before: Dictionary, proposed: Dictionary = {}) -> Dictionary:
+	if project == null or not EmployeeRoster.valid(_employees): return {}
+	if _employees.employees.is_empty(): return {"before":_employees.duplicate(true),"after":_employees.duplicate(true),"cycle":_completed_run_cycles} if proposed.is_empty() else {}
+	var roster := EmployeeRoster.plan_hand(_employees,project.get_release_id(),phase,project.get_current_cycle(),_completed_run_cycles,cards,before,proposed)
+	if roster.is_empty(): return {}
+	return {"before":_employees.duplicate(true),"after":roster,"cycle":_completed_run_cycles}
+
+
+func can_commit_employee_hand(plan: Dictionary) -> bool:
+	return not plan.is_empty() and plan.get("before") == _employees and plan.get("cycle") == _completed_run_cycles
+
+
+## Called only inside the already preflighted production callback.
+func commit_employee_hand(plan: Dictionary) -> void:
+	_employees = plan.after
+
+
+func trait_launch_awareness(raw: int) -> int:
+	return StudioTraits.launch_awareness(_studio_traits, raw, _released_games.is_empty())
+
+
+func lean_discount(normal_cents: int, project_id: StringName) -> int:
+	if normal_cents <= 0 or project_id.is_empty() or not StudioTraits.is_active(_studio_traits, &"lean_production"): return 0
+	return mini(normal_cents / 10, maxi(0, 10000 - int(_lean_savings.get(project_id, 0))))
+
+func get_lean_savings() -> Dictionary:
+	return _lean_savings.duplicate(true)
+
+func commit_lean_saving(project_id: StringName, expected_saved: int, saving: int) -> bool:
+	if not _productive_cycle_in_progress or project_id.is_empty() or int(_lean_savings.get(project_id, 0)) != expected_saved or saving < 0 or saving > 10000 - expected_saved: return false
+	if saving > 0: _lean_savings[project_id] = expected_saved + saving
 	return true

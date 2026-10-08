@@ -1,0 +1,178 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PASS: Initial funding has a reconcilable cash receipt
+PASS: Initial funding is excluded from operating revenue and profit
+PASS: Initial current-month report shows no fabricated completed month
+PASS: Synthetic planned action accepted: feature_play at cycle 1
+PASS: Planning preserves input ledger: feature_play at cycle 1
+PASS: First half charges Feature cost without rent or early settlement
+PASS: Synthetic planned action accepted: calendar at cycle 2
+PASS: Planning preserves input ledger: calendar at cycle 2
+PASS: Second half settles exactly 24691 cents before paying 50000 rent
+PASS: Completed month and newly entered partial month remain distinct
+PASS: Exact sales earned, sales paid, rent due and rent paid are separate fields
+PASS: Accrual profit excludes funding and matches sales minus play cost minus rent due
+PASS: Credit input facts count actual completed paid-on-time rent months
+PASS: Trace preserves direct action, noncash earning, cash settlement, rent due, then rent payment ordering
+PASS: Boundary rent belongs to the month just completed
+PASS: Repeated productive cycle rejects without recharging rent
+PASS: Skipped productive cycle cannot fabricate intervening months
+PASS: Mismatched live cash rejects before journal mutation
+PASS: Cash settlement cannot exceed net earned entitlement
+PASS: Forecasts and future earnings are never fabricated into current report rows
+PASS: Synthetic planned action accepted: contract_hand at cycle 3
+PASS: Planning preserves input ledger: contract_hand at cycle 3
+PASS: Synthetic planned action accepted: publisher_receipt at cycle 4
+PASS: Planning preserves input ledger: publisher_receipt at cycle 4
+PASS: Contract cash receipt is operating income, distinct from sales and rent
+PASS: Publisher receipts have a separate report category
+PASS: Second month bills exactly once on the same calendar
+PASS: Synthetic planned action accepted: development at cycle 1
+PASS: Planning preserves input ledger: development at cycle 1
+PASS: Synthetic planned action accepted: development at cycle 2
+PASS: Planning preserves input ledger: development at cycle 2
+PASS: Insufficient rent pays available cash and records exact unpaid balance
+PASS: Partially paid due month is late immediately
+PASS: Unresolved arrears block ordinary productive actions
+PASS: One-cent-short productive recovery rejects entirely
+PASS: An exact legal productive receipt can resolve the obligation
+PASS: Beta recovery income remains distinct from Publisher receipts
+PASS: External expense cannot spend from a blocked zero-cash account
+PASS: Synthetic planned action accepted: publisher_receipt at cycle 2
+PASS: Planning preserves input ledger: publisher_receipt at cycle 2
+PASS: Later partial receipt updates old unpaid rent while payment belongs to the current month
+PASS: Later payment does not expense already accrued rent twice
+PASS: Passive recovery spends no time and records boundary-month versus current-month payments
+PASS: Synthetic planned action accepted: publisher_receipt at cycle 2
+PASS: Planning preserves input ledger: publisher_receipt at cycle 2
+PASS: Receipt fully resolves debt and leaves its exact remainder as cash
+PASS: A late obligation never becomes on-time after recovery
+PASS: Alternative recovery plans preserve the original blocked fixture
+PASS: Synthetic planned action accepted: development at cycle 3
+PASS: Planning preserves input ledger: development at cycle 3
+PASS: Synthetic planned action accepted: development at cycle 4
+PASS: Planning preserves input ledger: development at cycle 4
+PASS: A later month's new rent remains a separate obligation
+PASS: Repeated shortfalls produce factual late-month inputs without an invented score
+PASS: Passive report and arrears queries cannot charge rent or move cash
+PASS: Synthetic planned action accepted: other_income at cycle 0
+PASS: Planning preserves input ledger: other_income at cycle 0
+PASS: Synthetic planned action accepted: principal_paid at cycle 0
+PASS: Planning preserves input ledger: principal_paid at cycle 0
+PASS: Synthetic planned action accepted: interest at cycle 0
+PASS: Planning preserves input ledger: interest at cycle 0
+PASS: Synthetic planned action accepted: store at cycle 0
+PASS: Planning preserves input ledger: store at cycle 0
+PASS: Synthetic planned action accepted: campaign at cycle 0
+PASS: Planning preserves input ledger: campaign at cycle 0
+PASS: Synthetic planned action accepted: playtest at cycle 0
+PASS: Planning preserves input ledger: playtest at cycle 0
+PASS: Synthetic planned action accepted: other_expense at cycle 0
+PASS: Planning preserves input ledger: other_expense at cycle 0
+PASS: Synthetic planned action accepted: financing_in at cycle 0
+PASS: Planning preserves input ledger: financing_in at cycle 0
+PASS: Synthetic financing and principal repayment change cash only; no lending system is implemented
+PASS: Interest and each cash operating cost affect profit while principal does not
+PASS: Miscellaneous receipts remain distinct and financing is not operating income
+PASS: Expenses retain exact category attribution
+PASS: Unknown or wrong-signed cash kinds reject rather than misclassifying receipts
+PASS: Passive cash actions cannot earn or settle sales
+PASS: Synthetic planned action accepted: calendar at cycle 1
+PASS: Planning preserves input ledger: calendar at cycle 1
+PASS: Later settlement cannot fund an initially unaffordable direct purchase
+PASS: Synthetic planned action accepted: calendar at cycle 1
+PASS: Planning preserves input ledger: calendar at cycle 1
+PASS: Synthetic planned action accepted: calendar at cycle 2
+PASS: Planning preserves input ledger: calendar at cycle 2
+PASS: Previously earned revenue settling at the due boundary can exactly cover rent
+PASS: Synthetic planned action accepted: feature_play at cycle 1
+PASS: Planning preserves input ledger: feature_play at cycle 1
+PASS: Defensive reconstruction preserves valid provenance
+PASS: Mutating returned report rows or facts cannot mutate authoritative history
+PASS: Missing provenance and negative starting cash remain unavailable
+PASS: Malformed primitive field safely unavailable: schema_version / <null>
+PASS: Malformed primitive field safely unavailable: schema_version / 0
+PASS: Malformed primitive field safely unavailable: schema_version / 0.0
+PASS: Malformed primitive field safely unavailable: schema_version / true
+PASS: Malformed primitive field safely unavailable: schema_version / []
+PASS: Malformed primitive field safely unavailable: schema_version / {  }
+PASS: Malformed primitive field safely unavailable: schema_version / -1
+PASS: Malformed primitive field safely unavailable: initial_cash_cents / <null>
+PASS: Malformed primitive field safely unavailable: initial_cash_cents / 0
+PASS: Malformed primitive field safely unavailable: initial_cash_cents / 0.0
+PASS: Malformed primitive field safely unavailable: initial_cash_cents / true
+PASS: Malformed primitive field safely unavailable: initial_cash_cents / []
+PASS: Malformed primitive field safely unavailable: initial_cash_cents / {  }
+PASS: Malformed primitive field safely unavailable: initial_cash_cents / -1
+PASS: Malformed primitive field safely unavailable: last_cycle / <null>
+PASS: Malformed primitive field safely unavailable: last_cycle / 0
+PASS: Malformed primitive field safely unavailable: last_cycle / 0.0
+PASS: Malformed primitive field safely unavailable: last_cycle / true
+PASS: Malformed primitive field safely unavailable: last_cycle / []
+PASS: Malformed primitive field safely unavailable: last_cycle / {  }
+PASS: Malformed primitive field safely unavailable: last_cycle / -1
+PASS: Malformed primitive field safely unavailable: cash_cents / <null>
+PASS: Malformed primitive field safely unavailable: cash_cents / 0
+PASS: Malformed primitive field safely unavailable: cash_cents / 0.0
+PASS: Malformed primitive field safely unavailable: cash_cents / true
+PASS: Malformed primitive field safely unavailable: cash_cents / []
+PASS: Malformed primitive field safely unavailable: cash_cents / {  }
+PASS: Malformed primitive field safely unavailable: cash_cents / -1
+PASS: Malformed primitive field safely unavailable: unsettled_sales_net_cents / <null>
+PASS: Malformed primitive field safely unavailable: unsettled_sales_net_cents / 0
+PASS: Malformed primitive field safely unavailable: unsettled_sales_net_cents / 0.0
+PASS: Malformed primitive field safely unavailable: unsettled_sales_net_cents / true
+PASS: Malformed primitive field safely unavailable: unsettled_sales_net_cents / []
+PASS: Malformed primitive field safely unavailable: unsettled_sales_net_cents / {  }
+PASS: Malformed primitive field safely unavailable: unsettled_sales_net_cents / -1
+PASS: Malformed collection safely unavailable: monthly_rows
+PASS: Malformed collection safely unavailable: obligations
+PASS: Malformed collection safely unavailable: transactions
+PASS: Malformed collection safely unavailable: actions
+PASS: Malformed action safely unavailable: cycle
+PASS: Malformed action safely unavailable: cash_before
+PASS: Malformed action safely unavailable: direct_delta
+PASS: Malformed action safely unavailable: sales_earned
+PASS: Malformed action safely unavailable: settled
+PASS: Malformed action safely unavailable: productive
+PASS: Malformed action safely unavailable: kind
+PASS: Malformed action safely unavailable: source_id
+PASS: Tampered derived profit cannot reconstruct
+PASS: Missing transaction cannot reconstruct
+PASS: Altered transaction sequence cannot reconstruct
+PASS: Non-dictionary journal action safely unavailable
+PASS: Invented malformed obligation safely unavailable
+PASS: Wrong live calendar or cash cannot present a falsely reconciled report
+PASS: Exact maximum starting cash is representable
+PASS: Direct income overflow rejects before rent
+PASS: Minimum signed delta rejects without unsafe negation
+PASS: Synthetic planned action accepted: store at cycle 1
+PASS: Planning preserves input ledger: store at cycle 1
+PASS: Monthly aggregate receipt overflow rejects despite representable cash
+PASS: Synthetic planned action accepted: calendar at cycle 1
+PASS: Planning preserves input ledger: calendar at cycle 1
+PASS: Intermediate settlement overflow rejects even when subsequent rent would lower cash
+PASS: Synthetic planned action accepted: calendar at cycle 1
+PASS: Planning preserves input ledger: calendar at cycle 1
+PASS: Unsettled net entitlement aggregate overflow rejects
+PASS: Synthetic planned action accepted: calendar at cycle 1
+PASS: Planning preserves input ledger: calendar at cycle 1
+PASS: Synthetic planned action accepted: calendar at cycle 2
+PASS: Planning preserves input ledger: calendar at cycle 2
+PASS: Synthetic planned action accepted: calendar at cycle 3
+PASS: Planning preserves input ledger: calendar at cycle 3
+PASS: Operating revenue aggregate overflow rejects with sufficient cash capacity
+PASS: Synthetic planned action accepted: calendar at cycle 1
+PASS: Planning preserves input ledger: calendar at cycle 1
+PASS: Synthetic planned action accepted: calendar at cycle 2
+PASS: Planning preserves input ledger: calendar at cycle 2
+PASS: Synthetic planned action accepted: other_expense at cycle 2
+PASS: Planning preserves input ledger: other_expense at cycle 2
+PASS: Synthetic planned action accepted: financing_in at cycle 2
+PASS: Planning preserves input ledger: financing_in at cycle 2
+PASS: Operating expense aggregate overflow rejects with sufficient cash to pay
+PASS: Negative sales amounts reject without mutation
+Studio finance ledger verification: 172 checks, 0 failures
+Loaded 40 cards.
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)

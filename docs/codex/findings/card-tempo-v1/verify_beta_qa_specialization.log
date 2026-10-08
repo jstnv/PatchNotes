@@ -1,0 +1,41 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Two QA cards are the documented minimum trigger
+PASS: One QA card is below the documented trigger minimum
+PASS: Duplicate renewable QA instances participate normally
+PASS: One played off-category card cancels QA Specialization
+Beta hand resolved: QA Specialization! Card Value ×1.50 | Bugs discovered: 19 | Cycle advanced: 1
+PASS: Four Search instances resolve a specialized hand
+PASS: QA specialization displays an in-game notification
+PASS: Specialized Search applies V 1.5 per card, floors each formula, sequences, and clamps
+PASS: Qualifying feedback names QA Specialization and its exact value modifier
+PASS: Specialization adds no cycle and preserves seven-card replacement
+Beta hand resolved: QA Specialization! Card Value ×1.50 | Known Bugs fixed: 3 | Cycle advanced: 1
+PASS: Four Debug instances resolve a specialized hand
+PASS: Specialized Debug floors each floor(1 + 1.5) result and clamps at zero
+Beta hand resolved: QA Specialization! Card Value ×1.50 | Bugs discovered: 0 | Known Bugs fixed: 0 | Cycle advanced: 1
+PASS: Qualifying zero-Bug QA hand completes normally
+PASS: Zero-Bug hand reports the synergy without negative state
+Beta hand resolved: QA Specialization! Card Value ×1.50 | Bugs discovered: 7 | Known Bugs fixed: 4 | Cycle advanced: 1
+PASS: Mixed Search/Debug QA composition qualifies regardless selected ordering
+PASS: Specialized Searches discover seven before specialized Debug fixes four
+Beta hand resolved: Bugs discovered: 3 | Known Bugs fixed: 2 | Marketing Output gained: 2 | Cycle advanced: 1
+PASS: QA plus Marketing resolves without Specialization
+PASS: Disqualified QA uses base formulas and Marketing is not multiplied
+PASS: Nonqualifying hand shows no false synergy feedback
+Beta hand resolved: Bugs discovered: 3 | Known Bugs fixed: 3 | Cash gained: $1000 | No rival insight gained | Finite cards exhausted: playtest_rival_games | Cycle advanced: 1
+PASS: Nonbalanced QA and Insider hand retains base action behavior
+PASS: QA Specialization does not alter payout or the base 10-percent insight boundary
+PASS: Specialization does not alter finite or renewable lifecycle
+WARNING: Beta hand rejected: A complete replacement pool could not be prepared.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:541)
+       [1] _verify_atomic_failure (res://scripts/debug/verify_beta_qa_specialization.gd:142)
+       [2] _make_beta (res://scripts/debug/verify_beta_qa_specialization.gd:46)
+PASS: Forced replacement failure rejects specialized hand
+PASS: Failed specialized preflight preserves Bugs, cycle, and selection
+Beta QA Specialization verification passed.

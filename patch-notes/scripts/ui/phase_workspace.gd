@@ -24,6 +24,8 @@ var run: RunState
 var synergy_notification: SynergyNotification
 var synergy_help_button: Button
 var organize_button: Button
+var employee_plan_button: Button
+var _employee_dialog: EmployeePlanningDialog
 var _synergy_help_title := ""
 var _synergy_help_body := ""
 var hand_motion: HandPresentation
@@ -62,6 +64,16 @@ func configure(controller: Control, title: String) -> void:
 	synergy_help_button.custom_minimum_size.x = 164
 	synergy_help_button.pressed.connect(func(): synergy_help_requested.emit(_synergy_help_title, _synergy_help_body))
 	selected_row.add_child(synergy_help_button)
+	if title in ["Design","Alpha"]:
+		employee_plan_button = Button.new()
+		employee_plan_button.text = "Specialist plan"
+		employee_plan_button.tooltip_text = "Optional priorities bundled with a matching Pass/Feature hand."
+		employee_plan_button.pressed.connect(func():
+			if _employee_dialog == null:
+				_employee_dialog = EmployeePlanningDialog.new()
+				add_child(_employee_dialog)
+			_employee_dialog.open_for(phase))
+		selected_row.add_child(employee_plan_button)
 	var pool_title := label("Backlog / Draw Pool", layout, "BacklogTitle")
 	pool_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	organize_button = Button.new()
@@ -190,6 +202,12 @@ func bind_states(project_state: ProjectState, run_state: RunState) -> void:
 	refresh()
 
 func refresh() -> void:
+	if not is_instance_valid(phase) or not phase.is_inside_tree(): return
+	if employee_plan_button != null and phase.has_method("get_employee_hand_status"):
+		var status: Dictionary = phase.get_employee_hand_status()
+		employee_plan_button.visible = status.get("hired",false)
+		employee_plan_button.disabled = not status.get("available",false) or not status.get("qualifying",false)
+		employee_plan_button.tooltip_text = "Select a matching Pass and Feature, then optionally plan priorities with this hand." if status.get("available",false) else "Train with a matching Design hand first; only one use is available per project."
 	if not is_instance_valid(phase) or not phase.is_inside_tree(): return
 	var entries: Array[String] = []
 	for view: CardView in phase.get_selected_candidate_views():

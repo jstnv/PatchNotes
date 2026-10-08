@@ -1,0 +1,626 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: Reconstructed history gate: []
+PASS: Repeated finalization is a no-op
+PASS: Reconstructed history gate: [&"graphics_pass"]
+PASS: Repeated finalization is a no-op
+PASS: Reconstructed history gate: [&"unknown"]
+PASS: Repeated finalization is a no-op
+PASS: Reconstructed history gate: [&"text"]
+PASS: Repeated finalization is a no-op
+PASS: Reconstructed history gate: [&"colored_text"]
+PASS: Repeated finalization is a no-op
+PASS: Begin first/later project
+Perfect Production!
+Final Hidden Bugs: 0
+PASS: Zero-hand project stays actionable in Alpha
+PASS: Zero-hand project stays actionable in Alpha
+PASS: Zero-hand project stays actionable in Alpha
+PASS: Failed attempts preserve cash, cycles, RNG, cards, redraws, release ID and prior sales
+PASS: Visible player-facing reason
+PASS: Pass-only hand really commits without Feature Scope
+PASS: Pass-only project cannot release or earn sales
+PASS: Merely selecting a finite Feature is insufficient
+PASS: Exactly one finite Feature committed below required Scope
+PASS: Existing under-Scope opt-in remains
+Alpha completed! Pressure 0.5556; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 0; implemented 1; unimplemented 8
+PASS: Feature work permits Beta
+PASS: Under-Scope game can launch
+PASS: One committed release per project
+PASS: Under-Scope release grants no SideStreet entitlement
+PASS: Stale duplicate Launch rejects
+PASS: Duplicate has no financial/calendar effect
+PASS: Begin first/later project
+Perfect Production!
+Final Hidden Bugs: 1
+PASS: Zero-hand project stays actionable in Alpha
+PASS: Zero-hand project stays actionable in Alpha
+PASS: Zero-hand project stays actionable in Alpha
+PASS: Failed attempts preserve cash, cycles, RNG, cards, redraws, release ID and prior sales
+PASS: Visible player-facing reason
+PASS: Pass-only hand really commits without Feature Scope
+PASS: Pass-only project cannot release or earn sales
+PASS: Merely selecting a finite Feature is insufficient
+PASS: Exactly one finite Feature committed below required Scope
+PASS: Existing under-Scope opt-in remains
+Alpha completed! Pressure 0.5556; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 1; implemented 1; unimplemented 8
+PASS: Feature work permits Beta
+PASS: Under-Scope game can launch
+PASS: One committed release per project
+PASS: Under-Scope release grants no SideStreet entitlement
+PASS: Stale duplicate Launch rejects
+PASS: Duplicate has no financial/calendar effect
+Zero-work release verification: 0 failures
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:75)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:75)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:75)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:82)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:82)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:82)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_zero_work_release.gd:65)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:68)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:75)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:75)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:75)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:77)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:82)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:82)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_zero_work_release.gd:33)
+       [4] _run (res://scripts/debug/verify_zero_work_release.gd:82)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] _run (res://scripts/debug/verify_zero_work_release.gd:86)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] _run (res://scripts/debug/verify_zero_work_release.gd:86)

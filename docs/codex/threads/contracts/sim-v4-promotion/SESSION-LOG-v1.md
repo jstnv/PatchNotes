@@ -1,0 +1,9 @@
+# Local session log — Promotion sensitivity
+
+2026-10-07, America/Los_Angeles. Branch `main`, HEAD `b84d1a5b4e4957b044b4b52c41553cf611aff3ae`. The shared worktree already held unrelated uncommitted work; only new files within `docs/codex/threads/contracts/sim-v4-promotion/` were created for this subtask. No gameplay source, tests, assets, configuration, shared To Do List or design authority was edited. No commit, push or release gate is claimed.
+
+Files: `PREDECLARATION.md`, `promotion_sweep.gd`, `run.py`, `audit.py`, `crown.json`, `neon.json`, corresponding `.log` and `.command.json` files, `summary.csv`, `audit.json`, `FINDINGS.md`, `README.md`, this log and a local `.gitignore` for disposable isolated profiles. The first manual invocation passed a malformed PowerShell input argument and failed its capture hash gate; it supplied no evidence. The corrected invocation passed, then `run.py` reproduced both runs with recorded exact arguments and exit codes.
+
+Checks: Crown native Godot 1,600/1,600; Neon native Godot 1,600/1,600; independent Python audit 1,205/1,205; zero failures. The audit verified 1,045 manifest-listed copied source files (excluding Task 34's declared modified analysis hook), two archived harness hashes, both native typed input hashes, current-cap parity with Task 34, exact integer awards, same calendars, once-only Promotion consumption, and the pinned frozen Neon Awareness threshold. Godot emitted root-certificate and Windows case-path warnings; neither failed the headless analysis.
+
+Follow-up: treat Crown 12/Neon 20 as bounded pilot candidates, audit Crown 18's conditional Neon unlock before any higher-cap decision, and observe actual earning/settlement after Game 5 on a later legal route before a final numerical lock. The analysis overlay itself cannot verify live offer issuance or Promotion persistence.

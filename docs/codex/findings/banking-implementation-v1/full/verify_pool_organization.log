@@ -1,0 +1,512 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: design native phase start
+PASS: design sort visibly groups its own categories
+PASS: Manual sort changes no authoritative state
+PASS: DesignPhase redraw begins real presentation
+PASS: Correct transaction cost before animation
+PASS: Exact reserved instances survive visual sorting
+PASS: Only selected slots receive new instances
+PASS: Repeated action/sort callbacks during presentation are passive
+PASS: Reserved bottom fan returns and each replacement deals from above
+PASS: All entrance animations finish before the active sort starts
+PASS: Automatic sorting preserves committed cash, clocks, redraws, RNG and cards
+PASS: Visual sort never remaps authoritative candidate slots
+PASS: Production still toggles to descending Scope
+PASS: DesignPhase redraw begins real presentation
+PASS: Correct transaction cost before animation
+PASS: Exact reserved instances survive visual sorting
+PASS: Only selected slots receive new instances
+PASS: Repeated action/sort callbacks during presentation are passive
+PASS: Reserved bottom fan returns and each replacement deals from above
+PASS: All entrance animations finish before the active sort starts
+PASS: Automatic sorting preserves committed cash, clocks, redraws, RNG and cards
+PASS: Visual sort never remaps authoritative candidate slots
+PASS: DesignPhase play begins real presentation
+PASS: Correct transaction cost before animation
+PASS: Exact reserved instances survive visual sorting
+PASS: Only selected slots receive new instances
+PASS: Repeated action/sort callbacks during presentation are passive
+PASS: Reserved bottom fan returns and each replacement deals from above
+PASS: All entrance animations finish before the active sort starts
+PASS: Automatic sorting preserves committed cash, clocks, redraws, RNG and cards
+PASS: Visual sort never remaps authoritative candidate slots
+PASS: Cancelled presentation preserves current sort and committed transaction
+PASS: alpha native phase start
+PASS: alpha sort visibly groups its own categories
+PASS: Manual sort changes no authoritative state
+PASS: AlphaPhase redraw begins real presentation
+PASS: Correct transaction cost before animation
+PASS: Exact reserved instances survive visual sorting
+PASS: Only selected slots receive new instances
+PASS: Repeated action/sort callbacks during presentation are passive
+PASS: Reserved bottom fan returns and each replacement deals from above
+PASS: All entrance animations finish before the active sort starts
+PASS: Automatic sorting preserves committed cash, clocks, redraws, RNG and cards
+PASS: Visual sort never remaps authoritative candidate slots
+PASS: Production still toggles to descending Scope
+PASS: AlphaPhase redraw begins real presentation
+PASS: Correct transaction cost before animation
+PASS: Exact reserved instances survive visual sorting
+PASS: Only selected slots receive new instances
+PASS: Repeated action/sort callbacks during presentation are passive
+PASS: Reserved bottom fan returns and each replacement deals from above
+PASS: All entrance animations finish before the active sort starts
+PASS: Automatic sorting preserves committed cash, clocks, redraws, RNG and cards
+PASS: Visual sort never remaps authoritative candidate slots
+PASS: AlphaPhase play begins real presentation
+PASS: Correct transaction cost before animation
+PASS: Exact reserved instances survive visual sorting
+PASS: Only selected slots receive new instances
+PASS: Repeated action/sort callbacks during presentation are passive
+PASS: Reserved bottom fan returns and each replacement deals from above
+PASS: All entrance animations finish before the active sort starts
+PASS: Automatic sorting preserves committed cash, clocks, redraws, RNG and cards
+PASS: Visual sort never remaps authoritative candidate slots
+PASS: Cancelled presentation preserves current sort and committed transaction
+PASS: beta native phase start
+PASS: beta sort visibly groups its own categories
+PASS: Manual sort changes no authoritative state
+PASS: Beta repeats type sort without a Scope toggle
+PASS: BetaPhase redraw begins real presentation
+PASS: Correct transaction cost before animation
+PASS: Exact reserved instances survive visual sorting
+PASS: Only selected slots receive new instances
+PASS: Repeated action/sort callbacks during presentation are passive
+PASS: Reserved bottom fan returns and each replacement deals from above
+PASS: All entrance animations finish before the active sort starts
+PASS: Automatic sorting preserves committed cash, clocks, redraws, RNG and cards
+PASS: Visual sort never remaps authoritative candidate slots
+Beta hand resolved: Bugs discovered: 5 | Marketing Output gained: 3 | Cycle advanced: 1
+PASS: BetaPhase play begins real presentation
+PASS: Correct transaction cost before animation
+PASS: Exact reserved instances survive visual sorting
+PASS: Only selected slots receive new instances
+PASS: Repeated action/sort callbacks during presentation are passive
+PASS: Reserved bottom fan returns and each replacement deals from above
+PASS: All entrance animations finish before the active sort starts
+PASS: Automatic sorting preserves committed cash, clocks, redraws, RNG and cards
+PASS: Visual sort never remaps authoritative candidate slots
+PASS: Cancelled presentation preserves current sort and committed transaction
+PASS: Corrective Passes follow QA/Marketing/Insider without disappearing
+PASS: Summary selects the actual older release ID
+PASS: All four summary actions fit the top bar at 1152
+PASS: Campaign stays beside other actions while statistics scroll
+PASS: All four summary actions fit the top bar at 1280
+PASS: Campaign stays beside other actions while statistics scroll
+PASS: Resizing, selecting and scrolling stay passive
+PASS: Moved button runs existing $100/one-cycle campaign only on selected title
+PASS: Campaign repeat callback still rejects atomically
+Pool organization / campaign header: 0 failures
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [8] _run (res://scripts/debug/verify_pool_organization.gd:181)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [8] _run (res://scripts/debug/verify_pool_organization.gd:181)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [8] _run (res://scripts/debug/verify_pool_organization.gd:181)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [8] _run (res://scripts/debug/verify_pool_organization.gd:181)
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:266)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:253)
+       [6] begin_design (res://scripts/phases/design_phase.gd:158)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [8] _run (res://scripts/debug/verify_pool_organization.gd:181)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_pool_organization.gd:35)
+       [4] production (res://scripts/debug/verify_pool_organization.gd:104)
+       [5] _run (res://scripts/debug/verify_pool_organization.gd:181)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:117)
+       [7] settle (res://scripts/debug/verify_pool_organization.gd:8)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:122)
+       [7] settle (res://scripts/debug/verify_pool_organization.gd:8)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] redraw_selected_cards (res://scripts/phases/design_phase.gd:337)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:122)
+       [8] settle (res://scripts/debug/verify_pool_organization.gd:8)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:220)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:123)
+       [7] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [8] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [9] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:601)
+       [5] play (res://scripts/ui/hand_presentation.gd:77)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [7] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [8] production (res://scripts/debug/verify_pool_organization.gd:123)
+       [9] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [10] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [11] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:601)
+       [5] play (res://scripts/ui/hand_presentation.gd:77)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [7] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [8] production (res://scripts/debug/verify_pool_organization.gd:123)
+       [9] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [10] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [11] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:280)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:601)
+       [5] play (res://scripts/ui/hand_presentation.gd:77)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [7] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [8] production (res://scripts/debug/verify_pool_organization.gd:123)
+       [9] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [10] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [11] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:220)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:220)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:220)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:126)
+       [6] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [8] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:126)
+       [6] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [8] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:126)
+       [6] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [8] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [6] _run (res://scripts/debug/verify_pool_organization.gd:181)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:135)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [6] _run (res://scripts/debug/verify_pool_organization.gd:181)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:135)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [6] _run (res://scripts/debug/verify_pool_organization.gd:181)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:135)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [6] _run (res://scripts/debug/verify_pool_organization.gd:181)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:135)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [6] _run (res://scripts/debug/verify_pool_organization.gd:181)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:135)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:493)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:157)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:100)
+       [6] _run (res://scripts/debug/verify_pool_organization.gd:181)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:135)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_pool_organization.gd:35)
+       [4] production (res://scripts/debug/verify_pool_organization.gd:104)
+       [5] _run (res://scripts/debug/verify_pool_organization.gd:181)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:135)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] install (res://scripts/debug/verify_pool_organization.gd:35)
+       [4] production (res://scripts/debug/verify_pool_organization.gd:104)
+       [5] _run (res://scripts/debug/verify_pool_organization.gd:181)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:135)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:117)
+       [7] settle (res://scripts/debug/verify_pool_organization.gd:8)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:117)
+       [7] settle (res://scripts/debug/verify_pool_organization.gd:8)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:122)
+       [7] settle (res://scripts/debug/verify_pool_organization.gd:8)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] redraw_selected_cards (res://scripts/phases/alpha_phase.gd:551)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:122)
+       [8] settle (res://scripts/debug/verify_pool_organization.gd:8)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:220)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [6] production (res://scripts/debug/verify_pool_organization.gd:123)
+       [7] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [8] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [9] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:851)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [6] exercise_action (res://scripts/debug/verify_pool_organization.gd:67)
+       [7] production (res://scripts/debug/verify_pool_organization.gd:123)
+       [8] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [9] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [10] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:220)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:149)
+       [5] production (res://scripts/debug/verify_pool_organization.gd:126)
+       [6] exercise_action (res://scripts/debug/verify_pool_organization.gd:85)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:322)
+       [8] <anonymous lambda> (res://scripts/ui/hand_presentation.gd:255)

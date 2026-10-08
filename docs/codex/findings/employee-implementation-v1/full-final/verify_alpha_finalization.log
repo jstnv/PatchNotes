@@ -1,0 +1,735 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+Loaded 40 cards.
+PASS: ProjectState rejects Alpha finalization before Design finalizes
+PASS: Rejected pre-Design Alpha finalization stores and emits nothing
+PASS: ProjectState boundary fixture stores Design finalization
+PASS: ProjectState rejects negative Alpha Hidden Bugs
+PASS: ProjectState rejects overlapping Alpha Feature histories
+PASS: Invalid authoritative Alpha finalizations remain atomic
+PASS: ProjectState commits valid Alpha finalization atomically
+PASS: ProjectState adds Alpha contribution to existing Design Bugs and emits once
+PASS: ProjectState one-shot boundary rejects double addition and history replacement
+PASS: Fixture stores finalized Design state
+PASS: Planning rejects Proceed to Beta before Begin Alpha
+PASS: Planning rejection changes no authoritative state and consumes no cycle
+PASS: Proceed to Beta is unavailable during Planning
+PASS: Fixture stores finalized Design state
+PASS: Fixture stores Alpha Scope and pressure
+PASS: Fixture begins Alpha through the public lifecycle
+Alpha completed! Pressure 0.0000; stochastic result 0; variance +1; Alpha Hidden Bugs 1; total Hidden Bugs 5; implemented 0; unimplemented 14
+PASS: Scope 30 / 30 finalizes immediately without warning
+PASS: Scope 30 finalizes Alpha exactly once
+PASS: Scope 30 remains authoritative and unclamped
+PASS: Immediate Alpha finalization consumes zero cycles and opens no warning
+PASS: Fixture stores finalized Design state
+PASS: Fixture stores Alpha Scope and pressure
+PASS: Fixture begins Alpha through the public lifecycle
+Alpha completed! Pressure 0.0000; stochastic result 0; variance -1; Alpha Hidden Bugs 0; total Hidden Bugs 4; implemented 0; unimplemented 14
+PASS: Scope 32 / 30 finalizes immediately without warning
+PASS: Scope 32 finalizes Alpha exactly once
+PASS: Scope 32 remains authoritative and unclamped
+PASS: Immediate Alpha finalization consumes zero cycles and opens no warning
+PASS: Fixture stores finalized Design state
+PASS: Fixture stores Alpha Scope and pressure
+PASS: Fixture begins Alpha through the public lifecycle
+Host Playtest complete! One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Under-Scope fixture queues one Host Playtest before warning
+PASS: First under-Scope Proceed activation warns instead of finalizing
+PASS: Under-Scope warning reports actual Scope, required Scope, exact shortfall, and review consequence
+PASS: Repeated under-Scope activation does not create another warning callback
+PASS: Cancel preserves scores, Scope, pressure, Bugs, histories, pool, selection, priorities, lifecycle, pending Playtest, and cycles
+PASS: Under-Scope Proceed can reopen one warning after cancellation
+Alpha completed! Pressure 0.5000; stochastic result 1; variance +0; Alpha Hidden Bugs 1; total Hidden Bugs 7; implemented 0; unimplemented 14; pending Playtest discarded
+PASS: Under-Scope confirmation finalizes while preserving actual and required Scope
+PASS: Under-Scope confirmation consumes zero cycles and applies no review penalty
+PASS: Successful Alpha finalization discards pending corrective categories without injection or refund
+PASS: Fixture stores finalized Design state
+PASS: Fixture stores Alpha Scope and pressure
+PASS: Fixture begins Alpha through the public lifecycle
+PASS: Controlled stochastic rounding produces floor at the fraction boundary and floor plus one below it
+PASS: Variance boundary 0.000000 maps to -2
+PASS: Variance boundary 0.079999 maps to -2
+PASS: Variance boundary 0.080000 maps to -1
+PASS: Variance boundary 0.249999 maps to -1
+PASS: Variance boundary 0.250000 maps to +0
+PASS: Variance boundary 0.749999 maps to +0
+PASS: Variance boundary 0.750000 maps to +1
+PASS: Variance boundary 0.919999 maps to +1
+PASS: Variance boundary 0.920000 maps to +2
+PASS: Variance boundary 0.999999 maps to +2
+PASS: Fixture stores finalized Design state
+PASS: Fixture begins Alpha through the public lifecycle
+PASS: Zero Alpha pressure clamps a negative intermediate contribution to zero
+PASS: Fixture stores finalized Design state
+PASS: Fixture stores Alpha Scope and pressure
+PASS: Fixture begins Alpha through the public lifecycle
+PASS: History fixture selects an Alpha Feature through the live candidate pool
+PASS: History fixture selects an Alpha Feature through the live candidate pool
+PASS: History fixture selects an Alpha Feature through the live candidate pool
+PASS: History fixture selects an Alpha Feature through the live candidate pool
+PASS: History fixture leaves one dealt and selected Feature unplayed
+Alpha completed! Pressure 1.7778; stochastic result 1; variance +0; Alpha Hidden Bugs 1; total Hidden Bugs 3; implemented 4; unimplemented 10
+PASS: History fixture finalizes after one successful Alpha production action
+PASS: Successfully played and exhausted Alpha Features persist as implemented stable IDs
+PASS: Dealt and selected but unplayed Alpha Feature persists as unimplemented
+PASS: Played-history finalization partitions all 14 authoritative Alpha Features exactly once
+PASS: Fixture stores finalized Design state
+PASS: Fixture stores Alpha Scope and pressure
+PASS: Fixture begins Alpha through the public lifecycle
+Alpha completed! Pressure 3.4000; stochastic result 4; variance +1; Alpha Hidden Bugs 5; total Hidden Bugs 12; implemented 2; unimplemented 12
+PASS: Controlled Alpha finalization commits successfully
+PASS: Alpha rounded Bugs plus one variance add to existing Design Hidden Bugs exactly once
+PASS: Alpha history stores exhausted Feature IDs and all other 12 authoritative Alpha Features as unimplemented
+PASS: Alpha history excludes Pass definitions
+PASS: Alpha finalization preserves Design Feature history unchanged
+PASS: Design Perfect Production is neither reapplied nor allowed to modify fractional Alpha pressure
+PASS: Authoritative finalization emits once, requests one transition, and consumes zero cycles
+PASS: Alpha retirement does not redraw, inject, exhaust, or replace the visible pool
+PASS: Alpha retirement disables production, Playtest, and Proceed actions
+PASS: Repeated and stale Alpha finalization calls are rejected
+PASS: Repeated callbacks cannot reroll, double-add Bugs, replace history, or emit another transition
+PASS: Retired Alpha priority controls reject mutation
+PASS: Alpha history getters return mutation-safe copies
+PASS: Fixture stores finalized Design state
+PASS: Fixture stores Alpha Scope and pressure
+PASS: Fixture begins Alpha through the public lifecycle
+Host Playtest complete! One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Failure fixture queues a corrective Playtest
+PASS: Invalid Alpha Feature history rejects finalization
+PASS: Failed finalization atomically preserves state, pending Playtest, lifecycle, and active phase
+Alpha finalization verification passed.
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+WARNING: Alpha cannot finalize before Design finalization.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_alpha (res://scripts/project_state.gd:520)
+       [1] _verify_project_state_finalization_boundary (res://scripts/debug/verify_alpha_finalization.gd:31)
+       [2] _initialize (res://scripts/debug/verify_alpha_finalization.gd:16)
+WARNING: Alpha Hidden Bugs must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_alpha (res://scripts/project_state.gd:523)
+       [1] _verify_project_state_finalization_boundary (res://scripts/debug/verify_alpha_finalization.gd:36)
+       [2] _initialize (res://scripts/debug/verify_alpha_finalization.gd:16)
+WARNING: Alpha Feature history collections cannot overlap: controls
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_alpha (res://scripts/project_state.gd:536)
+       [1] _verify_project_state_finalization_boundary (res://scripts/debug/verify_alpha_finalization.gd:37)
+       [2] _initialize (res://scripts/debug/verify_alpha_finalization.gd:16)
+WARNING: Alpha finalization has already occurred.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] finalize_alpha (res://scripts/project_state.gd:517)
+       [1] _verify_project_state_finalization_boundary (res://scripts/debug/verify_alpha_finalization.gd:42)
+       [2] _initialize (res://scripts/debug/verify_alpha_finalization.gd:16)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [6] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [6] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [6] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [6] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [6] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [6] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:60)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [6] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:864)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [7] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:864)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [7] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:864)
+       [4] play (res://scripts/ui/hand_presentation.gd:77)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_played_feature_history (res://scripts/debug/verify_alpha_finalization.gd:133)
+       [7] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:224)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:494)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:158)
+       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)

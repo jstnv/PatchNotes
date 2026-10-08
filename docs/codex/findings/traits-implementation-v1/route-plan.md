@@ -1,0 +1,3 @@
+# Traits T3 predeclared route
+
+Use a disposable copy of current main plus pending approved implementations. Genuine new Studio: Action, Lean Production + Studio Buzz + Expensive Lease. Use native ordinary/early/1104 policy and available Contracts; stop after two successful releases. No state/cash/card/Review injection. Capture startup traits, every paid hand normal/charged/cumulative saving, launch Awareness and monthly rent. Reconcile finance and native histories. This is functionality evidence, not a balance comparison. Unknown first-release and Family funding have separate focused native checks.

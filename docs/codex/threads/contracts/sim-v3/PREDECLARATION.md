@@ -1,0 +1,5 @@
+# Task34 typed capture and advance trial v3
+
+2026-10-07. Analysis only on a copied main `b84d1a5` project; runtime source stays fixed. Preserve previous failed JSON probe as evidence. Gate 34A first: replay the existing Action/synergy/seed4417/Recorded Sounds route with genuine legacy and preview-trait creation, compare action/release signatures and cycle32 finance exactly against sim-v1. Capture native dictionaries before JSON, preserve Godot Variant types with `store_var`, and verify equality after `get_var`. Require current finance reports and sales validation; a pure $150 candidate receipt probe must leave its input byte-identical.
+
+After that gate, use the recorded typed eligible-release checkpoints with native finance and native Contract hand mechanics for candidate Crown advances $0/$150/$200/$300, unchanged caps/targets. No live publisher offer is implied. Declare the bounded legal-hand and separate Neon cohorts before running their candidate arms. A failed parity gate stops dependent experiments. Existing simulation recommendations remain candidates; this trial cannot approve values.

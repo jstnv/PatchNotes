@@ -1,5 +1,7 @@
 # Banking B3–B5 completion audit
 
+**SUPERSEDED by the [2026-10-07 recheck](2026-10-07-task-completion-recheck-v1.md).** This audit described `main` at `553d1a4` before the overnight Banking implementation. B3–B5 are now marked complete locally on the later worktree; retain the observations below only as historical state.
+
 2026-10-06 (America/Los_Angeles). Read-only check of the user's question whether the Banking tasks are done.
 
 ## Repository state

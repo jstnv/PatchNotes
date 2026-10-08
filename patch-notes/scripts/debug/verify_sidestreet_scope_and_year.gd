@@ -60,7 +60,6 @@ func _verify_year_labels() -> void:
 	(menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName") as LineEdit).text = "Calendar Studio"
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
-	menu.get("_background").select(1)
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	var run: RunState = game.run_state

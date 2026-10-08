@@ -1,0 +1,91 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PASS: Creation has score 600 and neutral history
+PASS: Atomic immutable finance plan at cycle 1
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Clean profit/loss/break-even month -1
+PASS: Monthly credit processes exactly once
+PASS: Duplicate boundary rejects
+PASS: Atomic immutable finance plan at cycle 1
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Clean profit/loss/break-even month 0
+PASS: Monthly credit processes exactly once
+PASS: Duplicate boundary rejects
+PASS: Atomic immutable finance plan at cycle 1
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Clean profit/loss/break-even month 1
+PASS: Monthly credit processes exactly once
+PASS: Duplicate boundary rejects
+PASS: Atomic immutable finance plan at cycle 1
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Newly missed due penalizes at zero age with stable original rent ID
+PASS: Read-only outstanding query shows exact remaining cents and zero-cycle miss
+PASS: Arrears block preserved; age cannot advance with a free Wait
+PASS: Unaffordable optional actions create no bill or credit loss
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Exact partial payment does not reset original date or immediately change credit
+PASS: Atomic immutable finance plan at cycle 3
+PASS: Half-month legal recovery preserves closed late age
+PASS: Atomic immutable finance plan at cycle 4
+PASS: Half-month recovery retains closing-period debit despite profitable recovered month
+PASS: Atomic immutable finance plan at cycle 5
+PASS: Atomic immutable finance plan at cycle 6
+PASS: Following clean profitable month resumes gain with no past-bill debit
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Atomic immutable finance plan at cycle 3
+PASS: Atomic immutable finance plan at cycle 4
+PASS: Same opening-boundary recovery retains first debit without inventing a second elapsed period
+PASS: Atomic immutable finance plan at cycle 1
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Sales settle before rent and credit at the due boundary
+PASS: Atomic immutable finance plan at cycle 1
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Borrow/repay fixture earns no profit or credit
+PASS: Typed fixture initial service: rent
+PASS: Typed fixture initial service: bank_installment
+PASS: Typed fixture initial service: payroll
+PASS: Typed fixture initial service: student_loan
+PASS: Distinct types add correct age tiers in synthetic month 1
+PASS: Profitable month with penalties earns no clean bonus
+PASS: Distinct types add correct age tiers in synthetic month 2
+PASS: Profitable month with penalties earns no clean bonus
+PASS: Distinct types add correct age tiers in synthetic month 3
+PASS: Profitable month with penalties earns no clean bonus
+PASS: Typed additive defaults measured 600 to 440 over three missed months
+PASS: Rent tier at cycle 2
+PASS: Rent tier at cycle 3
+PASS: Rent tier at cycle 4
+PASS: Rent tier at cycle 6
+PASS: Multiple invoices or split installment components cannot multiply category penalties
+PASS: Duplicate obligation identity rejects
+PASS: Odd-cent partial payment preserves age
+PASS: Closing-boundary recovery freezes real age
+PASS: Closing-boundary repayment cannot erase age-tier debit
+PASS: Cleared late bill stops future debit
+PASS: Repeated credit callback rejects
+PASS: Payment/refund/overpayment farming rejects
+PASS: Upper clamp retains full reason history
+PASS: Lower clamp retains debit history without cash effects
+PASS: Atomic immutable finance plan at cycle 1
+PASS: Atomic immutable finance plan at cycle 2
+PASS: Typed checkpoint roundtrip preserves IDs, credit and all exact records; not a disk save
+PASS: Tampered bill provenance rejects: bill_id
+PASS: Tampered bill provenance rejects: source_id
+PASS: Tampered bill provenance rejects: expense_type
+PASS: Tampered bill provenance rejects: due_cycle
+PASS: Tampered bill provenance rejects: settled_cycle
+PASS: Tampered bill provenance rejects: payments
+PASS: Tampered credit provenance rejects: policy_version
+PASS: Tampered credit provenance rejects: score
+PASS: Tampered credit provenance rejects: history
+PASS: Tampered credit provenance rejects: last_processed_month
+PASS: Explicit v1 migration reconstructs existing rent identity without charging cash again
+PASS: V1 altered historical due fails migration
+PASS: Unknown type or missing identity rejects
+PASS: Credit boundary multiplication overflow rejects
+PASS: Maximum exact-cent bill services without sum overflow
+PASS: Income overflow leaves credit and ledger untouched
+Outstanding expenses: 85 checks, 0 failures
+Loaded 40 cards.
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
