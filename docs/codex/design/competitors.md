@@ -41,6 +41,16 @@ Keep active projects, inventories, RNG and pending news in the checkpoint. Resum
 
 Before selecting a population cap, benchmark representative opening and long-running worlds on the minimum target hardware. Measure worst and percentile time added to a productive action, memory, save size, deterministic replay, legal-result parity with player resolution, and exactly-once monthly news. If the measured pause is too long, simplify the AI's choice search or process the bounded world update across frames while holding the action transaction; keep the actual hand and outcome rules intact.
 
+## Genre-led Feature progression — LOCKED direction / OPEN route details
+
+Each studio's permanent Genre specialty determines an authored Feature progression route. It acquires nodes through its own Store, cash and research rather than receiving a finished pool as its calendar age increases. Within its route, its purchasing policy favors legal nodes that bring its usable Core mix closer to the target ratios for that specialty Genre. The route supplies direction; the current ratio gap supplies the next purchase priority. This is the user's selected simplification for competitor progression, not a fixed numerical ranking formula.
+
+For example, the current Role-Playing Review targets are Graphics 20, Sound 26, Technology 40 and Design 46 out of 132. That is about 15% Graphics, 20% Sound, 30% Technology and 35% Design. An RPG specialist whose usable Feature pool falls short in Design and Technology should favor available nodes that address those gaps. Count a node's primary and secondary Core contributions and its prerequisite chain; buying a node is not itself a guarantee that the card will be drawn or played.
+
+**PROPOSED bounded choice:** at a legal Store decision, inspect only the next eligible stage of that specialty's authored route. Filter by owned parents, era and other unlock conditions, then rank available nodes by projected ratio improvement, affordable cost and a stable tie rule. Queue/research a selected node through the ordinary acquisition steps; ownership and future card supply begin only at completion. If the required payment is unaffordable, the studio defers and continues other legal work. This avoids searching the entire Store tree or simulating future projects for every purchase.
+
+Incumbents' opening inventories represent advanced positions along their specialty routes. Later entrants begin from their specialty's ordinary starter roster under the era rules at founding. Exact route nodes/order or tiers, deficit metric (printed owned supply versus expected played output), cash reserve, tie rules, how traits alter purchasing, and whether a current off-specialty project changes a short-term choice remain OPEN. Project Genre remains independent of studio specialty; this rule sets long-term Store direction, not a forced Genre for every game.
+
 ## Opening cohort and later entrants
 
 The 1980 incumbents have distinct identities, specialties, traits, prior released games, cash, Fans and owned Features. Their head start should be visible in their existing catalog and ability to produce stronger early work. The exact number of incumbents, their histories, Reviews, start dates, assets and verified opening rating floor are OPEN. Their designated opening games must satisfy the first-game Review guarantee above through this starting setup and their actual production rules.
@@ -66,6 +76,7 @@ The future design must decide how Study Competition and Playtest Rival Games rev
 | How many incumbents exist in January 1980, and what prior games/resources do they have? | Defines the visible starting market and opening difficulty. |
 | What is the highest legal player first-game Review across starting builds, Features, cash and rent, and what incumbent opening floor exceeds it? | Makes the strict first-game guarantee testable as the starting economy changes. |
 | How often do entrants appear, and can studios run out of money, pause, recover or close? | Controls long-run population and performance. |
+| What are the authored node stages for each specialty, and how is the Core ratio gap measured and cost-weighted? | Makes Feature growth explainable and affordable without a broad AI search. |
 | What bounded policy chooses among actual legal hands and redraws, and which optional Contracts, employee or Bank actions may it take? | Keeps real hand outcomes while bounding AI decision work. |
 | What Review qualifies for next-month news, and how are simultaneous releases shown? | Sets alert frequency and clarity. |
 | How do AI sales, Fans, operating costs and cash limits use the evolving player systems? | Prevents a background economy from inventing unapproved numbers. |
