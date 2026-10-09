@@ -16,6 +16,7 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 
 - [Studio Traits design thread working folder](threads/studio-traits/)
 - [Core loop and Studio](design/core-and-studio.md)
+- [AI studios and competitors](design/competitors.md)
 - [Economy and banking](design/economy-banking.md)
 - [Banking System design thread workspace](threads/banking-system/README.md)
 - [Sales and game lifespan](design/game-lifespan.md)
