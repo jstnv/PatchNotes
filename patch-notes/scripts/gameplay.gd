@@ -18,15 +18,39 @@ var _transition_in_progress := false
 var _review_rng := RandomNumberGenerator.new()
 var _controlled_review_roll := -1
 var active_contract_state: ContractState
+var checkpoints: CheckpointCoordinator
+var _save_label: Label
+var _save_failure_dialog: AcceptDialog
+var _quit_dialog: ConfirmationDialog
+var _session_quit: Button
+var _startup_panel: PanelContainer
 
 func _ready() -> void:
 	add_child(MenuTransitions.new())
-	_review_rng.randomize()
 	if run_state == null:
 		run_state = RunState.new()
+		checkpoints = CheckpointCoordinator.new()
+		add_child(checkpoints)
+		checkpoints.attach(run_state)
+		checkpoints.status_changed.connect(_checkpoint_status)
+		_build_checkpoint_controls()
+	_start_gameplay()
+
+func _start_gameplay() -> void:
+	var data_error := StartupDataCheck.inspect(get_node_or_null("/root/CardDatabase"))
+	if not data_error.is_empty():
+		_show_startup_failure(data_error)
+		return
+	if _startup_panel != null:
+		_startup_panel.queue_free()
+		_startup_panel = null
+		get_node("/root/CardDatabase").load_cards("res://data/card_ledger.json")
+	%GameplayHUD.show()
+	_review_rng = run_state.random_streams.stream(&"review")
 	_snapshot_database = SNAPSHOT_DATABASE_SCRIPT.new()
 	if not _snapshot_database.load_ledgers() or (project_state != null and not _initialize_project_snapshots()):
 		push_error("Could not initialize the Primitive project snapshots.")
+		_show_startup_failure("Could not initialize the Primitive project snapshots.")
 		return
 	if not run_state.is_cash_initialized() and not run_state.initialize_cash(0):
 		push_error("Could not initialize the prototype run with $0 Studio cash.")
@@ -36,6 +60,10 @@ func _ready() -> void:
 	if project_state == null:
 		if run_state.get_studio_name().is_empty():
 			var main_menu := MainMenu.new()
+			if checkpoints != null: main_menu.checkpoint_info = checkpoints.store.inspect()
+			main_menu.continue_requested.connect(_continue_checkpoint)
+			main_menu.recovery_requested.connect(_show_checkpoint_recovery)
+			main_menu.quit_requested.connect(_request_quit)
 			main_menu.studio_created.connect(_on_studio_created.bind(main_menu))
 			main_menu.tutorial_requested.connect(%GameplayHUD.show_tutorial)
 			main_menu.settings_requested.connect(%GameplayHUD.show_settings)
@@ -52,15 +80,65 @@ func _ready() -> void:
 	_active_phase = design_phase
 	%GameplayHUD.set_phase(design_phase)
 
+func _show_startup_failure(reason: String) -> void:
+	%GameplayHUD.hide()
+	if _startup_panel != null:
+		_startup_panel.get_node("Content/Reason").text = reason
+		return
+	_startup_panel = PanelContainer.new()
+	_startup_panel.name = "StartupRecovery"
+	_startup_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var surface := StyleBoxFlat.new()
+	surface.bg_color = Color(0.07,0.027,0.04,1)
+	surface.content_margin_left = 40
+	surface.content_margin_right = 40
+	surface.content_margin_top = 80
+	surface.content_margin_bottom = 40
+	_startup_panel.add_theme_stylebox_override("panel",surface)
+	add_child(_startup_panel)
+	var content := VBoxContainer.new()
+	content.name = "Content"
+	content.add_theme_constant_override("separation",16)
+	_startup_panel.add_child(content)
+	var title := Label.new()
+	title.text = "Game data could not be loaded"
+	title.add_theme_font_size_override("font_size",26)
+	content.add_child(title)
+	var message := Label.new()
+	message.name = "Reason"
+	message.text = reason
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(message)
+	var help := Label.new()
+	help.text = "Check that the complete game package is available, then retry. Your saved Studio has not been changed."
+	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(help)
+	for label in ["Retry","Save local diagnostic","Quit"]:
+		var button := Button.new()
+		button.text = label
+		button.custom_minimum_size.y = 44
+		content.add_child(button)
+		if label == "Retry": button.pressed.connect(_start_gameplay)
+		elif label == "Quit": button.pressed.connect(func(): get_tree().quit())
+		else:
+			button.pressed.connect(func():
+				var file := FileAccess.open("user://startup-diagnostic.txt",FileAccess.WRITE)
+				if file == null: help.text = "The diagnostic could not be saved. Saved Studio files remain unchanged."
+				else:
+					file.store_string("Patch Notes startup\nGodot: %s\n%s\n" % [Engine.get_version_info().string,message.text])
+					help.text = "Diagnostic saved locally: " + ProjectSettings.globalize_path("user://startup-diagnostic.txt"))
+		if label == "Retry": button.grab_focus.call_deferred()
+
 func _on_studio_created(name: String, specialty: StringName, trait_ids: Array, source: MainMenu) -> void:
 	if _transition_in_progress or source != _active_phase or source.get_parent() != %PhaseRoot:
 		return
 	if not run_state.create_studio_with_traits(name, specialty, trait_ids):
 		source.show_error("Enter a valid name and Genre specialty; check the trait limits.")
 		return
+	if checkpoints != null: checkpoints.replace_on_save = checkpoints.store.inspect().status != &"empty"
 	_enter_initial_studio()
 
-func _enter_initial_studio() -> void:
+func _enter_initial_studio(restored: bool = false) -> void:
 	var studio := STUDIO_PHASE_SCENE.instantiate() as StudioPhase
 	if studio == null or not studio.setup(null, run_state, _snapshot_database):
 		push_error("Could not open the new Studio.")
@@ -74,7 +152,8 @@ func _enter_initial_studio() -> void:
 	if previous != null:
 		%PhaseRoot.remove_child(previous)
 		previous.queue_free()
-	run_state.refresh_redraws()
+	if not restored: run_state.refresh_redraws()
+	if checkpoints != null: checkpoints.entered_studio(restored)
 
 
 ## Verifier/new-project injection boundary. Controlled rolls use the locked
@@ -110,8 +189,7 @@ func _initialize_project_snapshots(target: ProjectState = project_state) -> bool
 			_snapshot_database.has_competitor(target.get_assigned_competitor_snapshot_id_for_authority())
 			and _snapshot_database.has_forecast(target.get_assigned_market_forecast_snapshot_id_for_authority())
 		)
-	var rng := RandomNumberGenerator.new()
-	rng.randomize()
+	var rng := run_state.random_streams.stream(&"snapshot")
 	var competitor_roll := _controlled_snapshot_rolls[0] if _controlled_snapshot_rolls.size() == 2 else rng.randi_range(0, 99)
 	var forecast_roll := _controlled_snapshot_rolls[1] if _controlled_snapshot_rolls.size() == 2 else rng.randi_range(0, 99)
 	var competitor_id := _snapshot_database.select_competitor_id(competitor_roll)
@@ -263,6 +341,7 @@ func _replace_beta_with_launch(source_beta_phase: Control, launch_scene: PackedS
 	%PhaseRoot.remove_child(source_beta_phase)
 	source_beta_phase.queue_free()
 	run_state.refresh_redraws()
+	if checkpoints != null: checkpoints.entered_studio()
 	studio_phase.open_launch_review()
 	_transition_in_progress = false
 	return true
@@ -277,6 +356,7 @@ func _on_contract_requested(source_studio: StudioPhase, state: ContractState) ->
 		if contract_phase != null: contract_phase.queue_free()
 		_transition_in_progress = false
 		return
+	if checkpoints != null: checkpoints.in_studio = false
 	active_contract_state = state
 	contract_phase.completion_dismissed.connect(_on_contract_completion_dismissed)
 	%PhaseRoot.add_child(contract_phase)
@@ -304,6 +384,8 @@ func _on_contract_completion_dismissed(source_contract: ContractPhase) -> void:
 	%PhaseRoot.remove_child(source_contract)
 	source_contract.queue_free()
 	run_state.refresh_redraws()
+	active_contract_state = null
+	if checkpoints != null: checkpoints.entered_studio()
 	_transition_in_progress = false
 
 
@@ -327,14 +409,21 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 	if not run_state.can_complete_productive_cycle():
 		source_studio.show_development_error(run_state.get_financial_block_reason() if not run_state.get_financial_block_reason().is_empty() else "Development could not begin because the calendar or sales state is invalid.")
 		return false
+	if run_state.next_project_serial == RunState.MAX_SIGNED_INT: return false
+	if checkpoints != null and not checkpoints.before_departure(): return false
 	_transition_in_progress = true
+	var saved_rng := run_state.random_streams.snapshot()
 	var next := PrimitivePredevelopment.prepare_project(base_name, genre, theme_id, run_state)
+	if next != null and not run_state._bank_run_id.is_empty():
+		next._release_id = StringName("%s:project:%d" % [run_state._bank_run_id, run_state.next_project_serial])
 	if next == null or not _initialize_project_snapshots(next):
+		run_state.random_streams.restore(saved_rng)
 		_transition_in_progress = false
 		source_studio.show_development_error("Could not prepare the new project. Please try again.")
 		return false
 	var design := DESIGN_PHASE_SCENE.instantiate() as DesignPhase
 	if design == null:
+		run_state.random_streams.restore(saved_rng)
 		_transition_in_progress = false
 		return false
 	design.setup(next, run_state)
@@ -342,10 +431,14 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 	# No cash cost. Sales earning/settlement uses the same atomic boundary as all
 	# other productive actions. Preparation above never touches the released game.
 	# This is a Studio action, not a completed development cycle of the new game.
+	if checkpoints != null: checkpoints.in_studio = false
 	if not run_state.complete_productive_action(Callable(), 0, -1, &"", &"development", next.get_release_id()):
+		if checkpoints != null: checkpoints.in_studio = true
 		design.free()
+		run_state.random_streams.restore(saved_rng)
 		_transition_in_progress = false
 		return false
+	run_state.next_project_serial += 1
 	if run_state.needs_starter_selection():
 		run_state.begin_first_game_tutorial(next)
 		run_state.finalize_starter_selection()
@@ -405,3 +498,117 @@ func _ensure_month_one_sales_revenue_result() -> bool:
 		return true
 	var result := PrimitiveMonthOneSalesRevenueCalculator.calculate(project_state)
 	return result != null and project_state.commit_month_one_sales_revenue_result(result)
+
+func _build_checkpoint_controls() -> void:
+	get_tree().auto_accept_quit = false
+	var layer := CanvasLayer.new()
+	layer.layer = 80
+	add_child(layer)
+	var panel := VBoxContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	panel.position = Vector2(-248,-72)
+	panel.custom_minimum_size = Vector2(236,32)
+	layer.add_child(panel)
+	_save_label = Label.new()
+	var status_row := HBoxContainer.new()
+	panel.add_child(status_row)
+	_save_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_save_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	status_row.add_child(_save_label)
+	_session_quit = Button.new()
+	_session_quit.text = "Quit"
+	_session_quit.pressed.connect(_request_quit)
+	_session_quit.hide()
+	status_row.add_child(_session_quit)
+	_save_failure_dialog = AcceptDialog.new()
+	_save_failure_dialog.title = "Not saved"
+	_save_failure_dialog.dialog_text = "Your last action happened, but it has not been saved.\nRetry to continue, return to your last saved Studio, or quit without saving."
+	_save_failure_dialog.dialog_hide_on_ok = false
+	_save_failure_dialog.get_ok_button().text = "Retry save"
+	_save_failure_dialog.confirmed.connect(func():
+		if checkpoints.retry(): _save_failure_dialog.hide())
+	_save_failure_dialog.add_button("Return to saved Studio",false,"return").pressed.connect(func():
+		_save_failure_dialog.hide()
+		_confirm_return_checkpoint())
+	_save_failure_dialog.add_button("Quit",false,"quit").pressed.connect(func():
+		_save_failure_dialog.hide()
+		_request_quit())
+	add_child(_save_failure_dialog)
+	_quit_dialog = ConfirmationDialog.new()
+	_quit_dialog.title = "Quit Patch Notes?"
+	_quit_dialog.confirmed.connect(func(): get_tree().quit())
+	add_child(_quit_dialog)
+
+func _checkpoint_status() -> void:
+	if _save_label == null: return
+	_save_label.text = "Studio saved" if checkpoints.failure.is_empty() else "Not saved"
+	_session_quit.visible = not run_state.get_studio_name().is_empty()
+	_save_label.tooltip_text = checkpoints.failure
+	if checkpoints.failure.is_empty(): _save_failure_dialog.hide()
+	elif not _save_failure_dialog.visible: _save_failure_dialog.popup_centered(Vector2i(640,200))
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST: _request_quit()
+
+func _request_quit() -> void:
+	if checkpoints==null:
+		get_tree().quit()
+		return
+	if checkpoints.in_studio and checkpoints.failure.is_empty(): checkpoints.flush()
+	if (_active_phase is MainMenu) or (checkpoints.in_studio and checkpoints.failure.is_empty()):
+		get_tree().quit()
+		return
+	var info := checkpoints.store.inspect()
+	var destination := "your last saved Studio"
+	if info.status==&"valid": destination = "%s, cycle %s" % [info.payload.run.studio_name,info.payload.run.completed_run_cycles]
+	_quit_dialog.dialog_text = "Progress since your last Studio checkpoint will be lost. Continue will return to %s. Quit anyway?" % destination
+	_quit_dialog.popup_centered()
+	_quit_dialog.get_cancel_button().grab_focus()
+
+func _confirm_return_checkpoint() -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.dialog_text = "Discard unsaved changes and return to the last saved Studio?"
+	add_child(dialog)
+	dialog.confirmed.connect(_continue_checkpoint)
+	dialog.popup_centered()
+	dialog.get_cancel_button().grab_focus()
+
+func _continue_checkpoint() -> void:
+	if checkpoints==null or _transition_in_progress: return
+	var restored := checkpoints.load_current()
+	if restored==null:
+		_show_checkpoint_recovery()
+		return
+	run_state = restored
+	project_state = null
+	active_contract_state = null
+	_review_rng = run_state.random_streams.stream(&"review")
+	_controlled_review_roll = -1
+	_controlled_snapshot_rolls.clear()
+	%GameplayHUD.setup(null,run_state)
+	_enter_initial_studio(true)
+
+func _show_checkpoint_recovery() -> void:
+	if checkpoints==null: return
+	var info := checkpoints.store.inspect()
+	var dialog := ConfirmationDialog.new()
+	dialog.title = "Saved Studio recovery"
+	var reason := checkpoints.failure if not checkpoints.failure.is_empty() else str(info.get("reason",info.status))
+	dialog.dialog_text = "The saved Studio could not be loaded: %s.\nYour checkpoint files have been preserved." % reason
+	dialog.get_ok_button().text = "Retry"
+	add_child(dialog)
+	dialog.confirmed.connect(_continue_checkpoint)
+	var location := dialog.add_button("Open save folder",false,"folder")
+	location.pressed.connect(func(): OS.shell_open(checkpoints.store.directory))
+	if info.has("backup") and info.status!=&"incompatible":
+		var backup: Dictionary = info.backup.payload.run
+		dialog.dialog_text += "\nRecover %s at cycle %s from the validated backup?" % [backup.studio_name,backup.completed_run_cycles]
+		var recover := dialog.add_button("Recover backup",false,"recover")
+		recover.pressed.connect(func():
+			var result := checkpoints.store.recover_backup()
+			if result.status==&"saved":
+				dialog.hide()
+				_continue_checkpoint()
+			else: dialog.dialog_text = "Recovery failed: "+str(result.get("reason",result.status)))
+	dialog.popup_centered(Vector2i(580,220))
+	dialog.get_cancel_button().grab_focus()

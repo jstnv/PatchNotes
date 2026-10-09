@@ -1,0 +1,1637 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Zero, half and full payout are 0, 60000 and 120000 exact cents
+PASS: Scope and Core odd numerator floor exactly in integer cents
+PASS: Overproduction caps at the publisher investment
+PASS: First release creates one dormant entitlement before SideStreet unlock
+PASS: Repeated release registration is idempotent
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:123)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:98)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:123)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:98)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:123)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:98)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:123)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:98)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:123)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:98)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+PASS: Ironclad second hand unlocks the early first-release offer
+PASS: Studio reconstructs release and unlocked offer
+PASS: Studio displays SideStreet cash-only detail
+PASS: Offer browsing and dismissal preserve cash, calendar, redraws and sales
+PASS: Acceptance creates separate release-linked ContractState
+PASS: Acceptance costs zero cash and cycles; duplicate acceptance rejects
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:140)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:140)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:140)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:140)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+PASS: Hand one advances once and pays no SideStreet cash
+PASS: Feature is finite while Core Pass remains renewable
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+PASS: Completion records one immutable offer result with zero upfront
+PASS: First SideStreet offer is exhausted for this release
+PASS: Repeated completion callback cannot repay or advance
+PASS: Two distinct releases queue two immutable offer IDs before Ironclad
+PASS: Two releases without contracts cannot unlock Starwave
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:158)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:99)
+       [9] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:149)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:158)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:99)
+       [9] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:149)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:158)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:99)
+       [9] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:149)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:158)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:99)
+       [9] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:149)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:158)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:99)
+       [9] _verify_early_offer_and_studio (res://scripts/debug/verify_sidestreet_contract.gd:149)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+PASS: Unlock exposes oldest pending release offer
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:162)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:162)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:162)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:162)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:162)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:162)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+PASS: Hand one advances once and pays no SideStreet cash
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+PASS: One SideStreet completion does not unlock Starwave and leaves second offer pending
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:166)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:166)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:166)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:166)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:166)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:166)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+PASS: Hand one advances once and pays no SideStreet cash
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+PASS: Two releases and three distinct committed completions unlock Starwave
+PASS: Starwave notification queues once after the third distinct completion
+PASS: Completed offers never repeat
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:229)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:100)
+       [9] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:171)
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:229)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:100)
+       [9] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:171)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:229)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:100)
+       [9] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:171)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:229)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:100)
+       [9] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:171)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:229)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:100)
+       [9] _verify_two_queued_offers_and_starwave (res://scripts/debug/verify_sidestreet_contract.gd:171)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+PASS: Partial SideStreet state opens for priority and redraw checks
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:236)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:236)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:236)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:236)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:236)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:236)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:236)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+PASS: SideStreet entry preserves shared redraws and draws seven candidates
+PASS: New release queues its offer while SideStreet is active
+PASS: Queued offer cannot be accepted over an active Contract
+PASS: Incomplete hand rejects without mutation
+PASS: Unchanged and invalid SideStreet priority commits cost nothing
+PASS: Changed SideStreet priority costs one productive cycle
+PASS: Priority change affects later draws, not the current seven
+PASS: SideStreet phase reconstruction reuses the accepted ContractState
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:251)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:251)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:251)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:251)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:251)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:251)
+PASS: Reconstruction does not refresh redraws, advance or pay
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:255)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:255)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] redraw_selected_cards (res://scripts/phases/contract_phase.gd:380)
+       [4] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:259)
+PASS: SideStreet redraw consumes shared allowance and preserves Feature class
+PASS: Partial Contract cannot pay, count, or unlock Starwave
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:205)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:101)
+       [9] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:262)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:205)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:101)
+       [9] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:262)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:205)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:101)
+       [9] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:262)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:205)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:101)
+       [9] _verify_partial_priority_and_queue (res://scripts/debug/verify_sidestreet_contract.gd:262)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+PASS: Second release enters at the month boundary with independent sales history
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:214)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:214)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:214)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:214)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:214)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:214)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:214)
+       [8] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+PASS: Hand one advances once and pays no SideStreet cash
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+PASS: SideStreet second hand reaches normal Month 1 settlement
+PASS: Contract payout and every release's earned sales settle exactly once at the shared boundary
+PASS: Contract leaves second ProjectState review and forecast frozen
+PASS: Authoritative ContractState opens in ContractPhase
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:178)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:102)
+       [9] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:222)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:178)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:102)
+       [9] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:222)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:178)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:102)
+       [9] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:222)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:178)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:102)
+       [9] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:222)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:68)
+       [7] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:178)
+       [8] _verify (res://scripts/debug/verify_sidestreet_contract.gd:102)
+       [9] _verify_sales_boundary (res://scripts/debug/verify_sidestreet_contract.gd:222)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:70)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:74)
+PASS: First hand commits through the shared productive cycle
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:79)
+PASS: Second hand has a legal seven-candidate draw and four-card play
+PASS: Second hand commits payout and completion
+PASS: Exactly two successful hands complete
+PASS: Completion view shows Scope, four Core scores, percent and exact payout
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:184)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:184)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:184)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:184)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:184)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:184)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:184)
+       [7] complete_contract (res://scripts/debug/verify_sidestreet_contract.gd:90)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:186)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:186)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:188)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:188)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:188)
+PASS: Overflow fixture completes SideStreet hand one
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:189)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:189)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_overflow (res://scripts/debug/verify_sidestreet_contract.gd:189)
+PASS: Overflow fixture reaches one cent beyond payout capacity
+PASS: Overflow rejects hand two without cash, Contract, history, calendar, redraw or sales mutation
+SideStreet contract verification: 0 failures

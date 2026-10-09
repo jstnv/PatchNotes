@@ -18,6 +18,9 @@ This is the dedicated local record for this Fanbase design thread. Other design 
 - [Proportional Fan Awareness candidate screen, v1](2026-10-06-proportional-awareness-screen-v1.md)
 - [Quarter Fan Awareness trial decision, v1](2026-10-06-quarter-awareness-trial-decision-v1.md)
 - [Mature weak-release loss sensitivity, v1](2026-10-06-mature-weak-loss-screen-v1.md)
+- [Near-neutral loss rounding sensitivity, v1](2026-10-08-near-neutral-rounding-screen-v1.md)
+- [Zero-minimum-loss decision, v1](2026-10-08-zero-minimum-loss-decision-v1.md)
+- [Cross-title overlap screen, v1](2026-10-08-cross-title-overlap-screen-v1.md)
 - [Quarter Awareness trial and legal recovery findings, v1](2026-10-07-quarter-trial-recovery-findings-v1.md)
 - [Implementation handoffs](handoffs/README.md): the main implementing thread should read this index first, then only the handoffs marked ready.
 
@@ -27,4 +30,7 @@ This thread records decisions, evidence, open questions, and handoffs. It does n
 
 When the user approves a rule, record the decision and rationale in a new versioned file here and reconcile it into the authoritative design document. Cross-system decisions belong in [DECISIONS.md](../../DECISIONS.md). Give the main implementing thread a versioned handoff with source revision, exact behavior, dependencies, acceptance checks, and status. Do not duplicate work already present on its Fanbase branch.
 
-- [Near-neutral follow-up findings](2026-10-07-near-neutral-findings-v1.md): both bounded attempts exhausted; Reviews3.6/3.5 miss the target, so near-neutral behavior remains unresolved. Runtime unchanged.
+- [Near-neutral v1 findings](2026-10-07-near-neutral-findings-v1.md): both initial bounded attempts exhausted; Reviews3.6/3.5 missed the target. The separately approved v2 result below supersedes this target status, while retaining the v1 observations. Runtime unchanged.
+- [Separately approved v2 completion](../../findings/fanbase-near-neutral-v2/README.md),2026-10-08: exactly one4/4/4 capture reaches Review4.3 with93 launch Fans, losses9 then0, and reconciled two-boundary finance. Target band complete;4.8–4.9 and final tuning remain open. Runtime unchanged.
+- [V2 design review](2026-10-08-near-neutral-v2-review-v1.md): retain the loss coefficient as a trial; immediate-neutral fairness and final tuning remain open.
+- [15% loss trial decision](2026-10-08-loss-rate-trial-decision-v1.md): user accepted the observed Review4.3 severity for a playable trial; final rate remains open.

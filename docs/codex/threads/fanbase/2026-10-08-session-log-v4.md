@@ -1,0 +1,5 @@
+# Fanbase design session — TODO next-step reconciliation v4
+
+2026-10-08, America/Los_Angeles. Shared checkout `main` at `91ce539978b87ac0a6efe3a1e028cae5f1360f19`, with pre-existing concurrent TODO/source changes preserved. At the user's request, edited only Fanbase wording in [internal TODO](../../TODO.md): the already approved and dispatched [one-attempt v2 capture](handoffs/2026-10-07-near-neutral-continuation-v2.md) is the next step, its result pending. Linked the [zero-minimum-loss ruling](2026-10-08-zero-minimum-loss-decision-v1.md), [rounding screen](2026-10-08-near-neutral-rounding-screen-v1.md) and [cross-title overlap screen](2026-10-08-cross-title-overlap-screen-v1.md) without queuing duplicate experiments or approving numerical values.
+
+No gameplay/source file, merge, push or Drive edit. Check: targeted `git diff --check -- docs/codex/TODO.md` and readback of the two changed Fanbase sections. Follow-up: review the v2 capture when PN Implementation records it, then discuss the provisional 15% coefficient; no additional Fanbase route search follows automatically.

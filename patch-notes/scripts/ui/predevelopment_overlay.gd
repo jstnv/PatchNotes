@@ -14,6 +14,7 @@ var priority_sliders: Array[HSlider] = []
 var priority_labels: Array[Label] = []
 var priority_total: Label
 var priority_chart: PriorityInfluenceChart
+var genre_targets_label: Label
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -52,7 +53,11 @@ func _ready() -> void:
 	identity.add_child(name_input)
 	_add_label(identity, "Genre", 16)
 	genre_input = _add_options(identity, "genres")
-	genre_input.tooltip_text = "Genre affects Review through the game's final Core Scores."
+	genre_input.tooltip_text = "Genre sets the Core targets used in this game's production rating."
+	genre_targets_label = _add_label(identity, "", 15)
+	genre_targets_label.name = "GenreTargets"
+	genre_input.item_selected.connect(func(_index: int): _refresh_genre_targets())
+	_refresh_genre_targets()
 	_add_label(identity, "Theme", 16)
 	theme_input = _add_options(identity, "themes")
 	theme_input.tooltip_text = "Choose a Theme for this game's identity. Themes have no gameplay effect yet."
@@ -130,8 +135,14 @@ func _add_options(parent: Node, kind: String) -> OptionButton:
 
 func open() -> void:
 	error_label.text = ""
+	_refresh_genre_targets()
 	show()
 	name_input.grab_focus()
+
+func _refresh_genre_targets() -> void:
+	var profile := PrimitiveReviewCalculator.get_genre_profile(genre_input.get_selected_metadata())
+	if profile == null: genre_targets_label.text = ""; return
+	genre_targets_label.text = "Core targets\nGraphics %d · Sound %d\nTechnology %d · Design %d\n\nAll targets: 8/10 production.\n125%% of each: 10/10.\nScope and Bugs affect the final Review." % [profile.get_standard(0), profile.get_standard(1), profile.get_standard(2), profile.get_standard(3)]
 
 func get_initial_priorities() -> Dictionary:
 	var result := {}

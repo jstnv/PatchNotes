@@ -1,0 +1,167 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+Loaded 40 cards.
+PASS: Beta priorities default independently to QA 35, Marketing 35, Insider 30
+PASS: Priority getter returns a defensive distribution copy
+PASS: Exact-total step-aligned Beta allocation is accepted
+PASS: Valid allocation commits atomically and emits once
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+WARNING: Beta priorities require exactly QA, Marketing, and Insider integer step values totaling 100.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_distribution (res://scripts/phases/beta_priority_allocation.gd:21)
+       [1] _verify_priority_allocator (res://scripts/debug/verify_beta_planning.gd:46)
+       [2] _initialize (res://scripts/debug/verify_beta_planning.gd:18)
+PASS: Malformed Beta allocation rejects
+PASS: Rejected allocation mutates nothing and emits nothing
+PASS: Category roll starts in QA's 35% interval
+PASS: Exact 35% boundary belongs to Marketing
+PASS: Exact 70% boundary belongs to Insider
+PASS: Final category absorbs residual error
+PASS: QA uses Debug 2 to Search 1 half-open weighting
+PASS: Increasing QA priority expands QA's category interval without using card values or counts
+PASS: Incomplete Beta definitions reject before pool construction
+PASS: Beta accepts the finalized shared ProjectState
+PASS: Beta enters Planning
+PASS: Planning shows no candidates and has no selection
+PASS: Planning displays authoritative public Bug counts
+PASS: Planning conceals Hidden and Remaining Bugs and pressure
+PASS: Planning rejects foreign candidate selection
+PASS: Begin rejects an allocation not totaling 100
+PASS: Failed Begin leaves Planning with no partial pool
+PASS: Failed Begin mutates no project or Bug state
+PASS: Valid Begin publishes the complete controlled pool
+PASS: Begin enters Active Development with exactly seven views
+PASS: Renewable Debug can fill all seven QA slots with replacement
+PASS: Duplicate definitions have seven distinct candidate-instance identities
+PASS: Begin and dealing consume zero cycles and preserve all project and Bug state
+PASS: Four duplicate-definition instances select independently
+WARNING: At most four Beta candidate instances may be selected.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _on_card_pressed (res://scripts/phases/beta_phase.gd:1055)
+       [1] _verify_planning_and_begin (res://scripts/debug/verify_beta_planning.gd:113)
+PASS: Fifth selection rejects without disturbing the existing four
+PASS: Selected instance toggles off without reordering candidates
+PASS: Selected-candidate query returns a defensive array
+PASS: Valid Active priority redistribution commits
+PASS: Active priority edits neither reroll nor reset selection
+PASS: Repeated Begin cannot create another pool
+PASS: Selection, deselection, priority editing, and repeated Begin consume zero cycles and mutate no project state
+PASS: Repeated setup reconstructs display without duplicating or resetting local pool state
+PASS: Finite-depletion controlled deal succeeds by renormalizing remaining categories
+PASS: Insider finite definitions draw without replacement in controlled order
+PASS: Empty Insider category receives zero weight for remaining slots
+PASS: Finite definitions appear at most once within one pool
+PASS: Dealing and selection do not exhaust finite definitions for a later pool
+PASS: Beta CardView shows its card name
+PASS: Beta CardView shows printed Beta value without fake production
+PASS: Beta CardView shows category
+PASS: Beta CardView hides fake secondary production and Scope anatomy
+PASS: Beta CardView visibly states lifecycle
+PASS: Beta CardView shows its card name
+PASS: Beta CardView shows printed Beta value without fake production
+PASS: Beta CardView shows category
+PASS: Beta CardView hides fake secondary production and Scope anatomy
+PASS: Beta CardView visibly states lifecycle
+PASS: Beta CardView shows its card name
+PASS: Beta CardView shows printed Beta value without fake production
+PASS: Beta CardView shows category
+PASS: Beta CardView hides fake secondary production and Scope anatomy
+PASS: Beta CardView visibly states lifecycle
+PASS: Beta CardView shows its card name
+PASS: Beta CardView shows printed Beta value without fake production
+PASS: Beta CardView shows category
+PASS: Beta CardView hides fake secondary production and Scope anatomy
+PASS: Beta CardView visibly states lifecycle
+PASS: Beta CardView shows its card name
+PASS: Beta CardView shows printed Beta value without fake production
+PASS: Beta CardView shows category
+PASS: Beta CardView hides fake secondary production and Scope anatomy
+PASS: Beta CardView visibly states lifecycle
+PASS: Beta CardView shows its card name
+PASS: Beta CardView shows printed Beta value without fake production
+PASS: Beta CardView shows category
+PASS: Beta CardView hides fake secondary production and Scope anatomy
+PASS: Beta CardView visibly states lifecycle
+PASS: Beta CardView shows its card name
+PASS: Beta CardView shows printed Beta value without fake production
+PASS: Beta CardView shows category
+PASS: Beta CardView hides fake secondary production and Scope anatomy
+PASS: Beta CardView visibly states lifecycle
+PASS: Finite dealing and display advance no cycle
+Beta planning and selection verification passed.

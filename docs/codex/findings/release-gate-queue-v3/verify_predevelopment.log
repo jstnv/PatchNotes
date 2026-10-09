@@ -1,0 +1,424 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Exactly eight Primitive genres
+PASS: Exactly the ten locked Primitive Themes in ledger order
+PASS: Locked genre ratios stored on project: action
+PASS: Project choices and ratio copies are immutable
+PASS: Theme stores identity only for action / Fantasy
+PASS: Theme stores identity only for action / Science Fiction
+PASS: Theme stores identity only for action / Horror
+PASS: Theme stores identity only for action / Crime
+PASS: Theme stores identity only for action / War
+PASS: Theme stores identity only for action / Historical
+PASS: Theme stores identity only for action / Contemporary
+PASS: Theme stores identity only for action / Western
+PASS: Theme stores identity only for action / Post-Apocalyptic
+PASS: Theme stores identity only for action / Mystery
+PASS: Locked genre ratios stored on project: adventure
+PASS: Project choices and ratio copies are immutable
+PASS: Theme stores identity only for adventure / Fantasy
+PASS: Theme stores identity only for adventure / Science Fiction
+PASS: Theme stores identity only for adventure / Horror
+PASS: Theme stores identity only for adventure / Crime
+PASS: Theme stores identity only for adventure / War
+PASS: Theme stores identity only for adventure / Historical
+PASS: Theme stores identity only for adventure / Contemporary
+PASS: Theme stores identity only for adventure / Western
+PASS: Theme stores identity only for adventure / Post-Apocalyptic
+PASS: Theme stores identity only for adventure / Mystery
+PASS: Locked genre ratios stored on project: role_playing
+PASS: Project choices and ratio copies are immutable
+PASS: Theme stores identity only for role_playing / Fantasy
+PASS: Theme stores identity only for role_playing / Science Fiction
+PASS: Theme stores identity only for role_playing / Horror
+PASS: Theme stores identity only for role_playing / Crime
+PASS: Theme stores identity only for role_playing / War
+PASS: Theme stores identity only for role_playing / Historical
+PASS: Theme stores identity only for role_playing / Contemporary
+PASS: Theme stores identity only for role_playing / Western
+PASS: Theme stores identity only for role_playing / Post-Apocalyptic
+PASS: Theme stores identity only for role_playing / Mystery
+PASS: Locked genre ratios stored on project: strategy
+PASS: Project choices and ratio copies are immutable
+PASS: Theme stores identity only for strategy / Fantasy
+PASS: Theme stores identity only for strategy / Science Fiction
+PASS: Theme stores identity only for strategy / Horror
+PASS: Theme stores identity only for strategy / Crime
+PASS: Theme stores identity only for strategy / War
+PASS: Theme stores identity only for strategy / Historical
+PASS: Theme stores identity only for strategy / Contemporary
+PASS: Theme stores identity only for strategy / Western
+PASS: Theme stores identity only for strategy / Post-Apocalyptic
+PASS: Theme stores identity only for strategy / Mystery
+PASS: Locked genre ratios stored on project: simulation
+PASS: Project choices and ratio copies are immutable
+PASS: Theme stores identity only for simulation / Fantasy
+PASS: Theme stores identity only for simulation / Science Fiction
+PASS: Theme stores identity only for simulation / Horror
+PASS: Theme stores identity only for simulation / Crime
+PASS: Theme stores identity only for simulation / War
+PASS: Theme stores identity only for simulation / Historical
+PASS: Theme stores identity only for simulation / Contemporary
+PASS: Theme stores identity only for simulation / Western
+PASS: Theme stores identity only for simulation / Post-Apocalyptic
+PASS: Theme stores identity only for simulation / Mystery
+PASS: Locked genre ratios stored on project: puzzle
+PASS: Project choices and ratio copies are immutable
+PASS: Theme stores identity only for puzzle / Fantasy
+PASS: Theme stores identity only for puzzle / Science Fiction
+PASS: Theme stores identity only for puzzle / Horror
+PASS: Theme stores identity only for puzzle / Crime
+PASS: Theme stores identity only for puzzle / War
+PASS: Theme stores identity only for puzzle / Historical
+PASS: Theme stores identity only for puzzle / Contemporary
+PASS: Theme stores identity only for puzzle / Western
+PASS: Theme stores identity only for puzzle / Post-Apocalyptic
+PASS: Theme stores identity only for puzzle / Mystery
+PASS: Locked genre ratios stored on project: sports
+PASS: Project choices and ratio copies are immutable
+PASS: Theme stores identity only for sports / Fantasy
+PASS: Theme stores identity only for sports / Science Fiction
+PASS: Theme stores identity only for sports / Horror
+PASS: Theme stores identity only for sports / Crime
+PASS: Theme stores identity only for sports / War
+PASS: Theme stores identity only for sports / Historical
+PASS: Theme stores identity only for sports / Contemporary
+PASS: Theme stores identity only for sports / Western
+PASS: Theme stores identity only for sports / Post-Apocalyptic
+PASS: Theme stores identity only for sports / Mystery
+PASS: Locked genre ratios stored on project: racing
+PASS: Project choices and ratio copies are immutable
+PASS: Theme stores identity only for racing / Fantasy
+PASS: Theme stores identity only for racing / Science Fiction
+PASS: Theme stores identity only for racing / Horror
+PASS: Theme stores identity only for racing / Crime
+PASS: Theme stores identity only for racing / War
+PASS: Theme stores identity only for racing / Historical
+PASS: Theme stores identity only for racing / Contemporary
+PASS: Theme stores identity only for racing / Western
+PASS: Theme stores identity only for racing / Post-Apocalyptic
+PASS: Theme stores identity only for racing / Mystery
+PASS: Whitespace-only name rejects
+PASS: Unknown genre and theme reject
+PASS: Preparing or rejecting choices has no run cost
+PASS: Duplicate names create distinct project identities
+PASS: First released use retains the unmodified title
+PASS: Unreleased title lookup neither resolves a duplicate nor creates history
+PASS: Duplicate created in 1980 resolves using actual 1981 release year
+PASS: Same-year duplicates are accepted without invented sequel suffixes
+PASS: Repeated and reconstructed release registration is a signal-free no-op
+PASS: Reconstruction in 1982 preserves resolved title, release year and sales
+PASS: Later names and sales earning never rename earlier releases; base/title stored separately
+PASS: Same release ID cannot be reconstructed with different permanent genre identity
+PASS: Launch enters Studio automatically after results commit
+PASS: Automatic Studio entry retains zero cash and cycle cost
+PASS: Accepting Ironclad credits its guarantee without advancing time
+PASS: Produce Next Game opens overlay
+PASS: Missing-name UI validation preserves project and time
+PASS: Invalid pre-development priorities reject without spending or creating a project
+PASS: Overlay and confirmation fit above unchanged HUD at (1152, 648)
+PASS: Overlay and confirmation fit above unchanged HUD at (900, 600)
+PASS: Cancel returns to Studio
+PASS: Opening, editing and cancelling are free and preserve the draft
+PASS: Calendar overflow rejects confirmation without replacing project or spending cash
+PASS: Begin Development remains available with the accepted Contract guarantee
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:144)
+       [13] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:144)
+       [13] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:144)
+       [13] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:144)
+       [13] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:144)
+       [13] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+PASS: Confirmation creates a fresh named project with selected choices
+PASS: Confirmation costs one run cycle, starts project cycle zero and refreshes redraws to four
+PASS: Repeated confirmation from stale Studio cannot charge twice
+PASS: Same RunState preserves ownership, familiarity and contract identity
+PASS: Begin cycle earns and settles historical sales through exact-cent boundary
+PASS: Released project stays frozen
+PASS: Fresh project resets every score, Scope, Bug Pressure and Marketing
+PASS: Fresh Bugs and all phase Feature histories are empty
+PASS: Fresh project has no prior phase or launch results
+PASS: New project has freshly assigned concealed market snapshots
+PASS: Transition deals Design using Pre-Development priorities and fresh exhaustion
+PASS: Existing HUD is rebound and disconnects old project
+PASS: Reconstructing fresh Design preserves identity, supply, snapshots and zero project cycles without recharging
+PASS: Design begins automatically from Pre-Development without another cycle
+PASS: New Design supply and history include purchased Save Files
+PASS: Later purchases cannot alter creation-time project supply
+PASS: Launch enters Studio automatically after results commit
+PASS: Automatic Studio entry retains zero cash and cycle cost
+PASS: Second game completes existing release flow and registers separately
+PASS: First release keeps its name and later duplicate uses actual release year
+PASS: Released duplicate title is visible in Studio summary
+PASS: History queries cannot rename or redate immutable release metadata
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:190)
+       [13] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [14] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:190)
+       [13] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [14] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:190)
+       [13] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [14] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:190)
+       [13] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [14] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:455)
+       [9] _on_development_requested (res://scripts/gameplay.gd:393)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:172)
+       [12] _verify_flow (res://scripts/debug/verify_predevelopment.gd:190)
+       [13] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [14] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+PASS: Another project begins with both sales records retained and same-boundary settlement
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_flow (res://scripts/debug/verify_predevelopment.gd:198)
+       [6] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [7] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_flow (res://scripts/debug/verify_predevelopment.gd:198)
+       [6] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [7] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_flow (res://scripts/debug/verify_predevelopment.gd:198)
+       [6] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [7] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_flow (res://scripts/debug/verify_predevelopment.gd:198)
+       [6] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [7] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_flow (res://scripts/debug/verify_predevelopment.gd:198)
+       [6] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [7] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:623)
+       [5] play (res://scripts/ui/hand_presentation.gd:81)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _verify_flow (res://scripts/debug/verify_predevelopment.gd:198)
+       [8] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [9] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:623)
+       [5] play (res://scripts/ui/hand_presentation.gd:81)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _verify_flow (res://scripts/debug/verify_predevelopment.gd:198)
+       [8] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [9] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:623)
+       [5] play (res://scripts/ui/hand_presentation.gd:81)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _verify_flow (res://scripts/debug/verify_predevelopment.gd:198)
+       [8] _release_active_project (res://scripts/debug/verify_predevelopment.gd:80)
+       [9] _settle (res://scripts/debug/verify_predevelopment.gd:16)
+PASS: First Design hand advances project zero to one and run calendar once
+PASS: Two games settle independently and sum exact cents
+PASS: Combined multi-release overflow rejects before direct action
+PASS: Rejected multi-release action preserves all history, cash and cycles
+Pre-Development verification: 0 failures

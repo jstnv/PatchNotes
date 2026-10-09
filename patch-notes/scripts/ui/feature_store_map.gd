@@ -35,6 +35,7 @@ var _drag_origin := Vector2.ZERO
 var _drag_scroll := Vector2.ZERO
 var _pressed_node: StringName = &""
 var _view_revision := 0
+var _scroll_request := 0
 var _focus_padding := Vector2.ZERO
 var _focus_tween: Tween
 var _menu_tween: Tween
@@ -117,7 +118,7 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer) -> void:
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	details.add_child(price)
 	var guidance_scroll := ScrollContainer.new()
-	guidance_scroll.custom_minimum_size = Vector2(310,180)
+	guidance_scroll.custom_minimum_size = Vector2(310,140)
 	guidance_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	details.add_child(guidance_scroll)
 	shopping_details = Label.new()
@@ -371,8 +372,13 @@ func set_zoom(value: float, anchor: Vector2 = Vector2(-1, -1)) -> void:
 	_scroll_after_layout(next, _view_revision)
 
 func _scroll_after_layout(offset: Vector2, revision: int) -> void:
+	_scroll_request += 1
+	var request := _scroll_request
+	# Scrollbar ranges follow the resized canvas on the next container pass.
+	# A newer navigation request supersedes the zoom anchor request.
 	await get_tree().process_frame
-	if revision != _view_revision: return
+	await get_tree().process_frame
+	if revision != _view_revision or request != _scroll_request: return
 	scroll.scroll_horizontal = roundi(offset.x)
 	scroll.scroll_vertical = roundi(offset.y)
 
@@ -407,18 +413,20 @@ func show_details() -> void:
 	if store._run.owns_feature(store._selected):
 		store._details.text += "\nOwned"
 		store._buy.text = "Already owned"
-	elif offer.is_empty():
+	elif offer.is_empty() and store._run.needs_starter_selection():
 		var reserve := store._run.get_primitive_reserve_offer(store._selected)
 		price.text = CashFormatter.format_exact_cents(reserve.price_cents)
-		store._details.text += "\n0 cycles" if reserve.initial else "\n1 cycle"
+		if reserve.base_price_cents > reserve.price_cents: price.text += "\nResourceful saving included: " + CashFormatter.format_exact_cents(reserve.base_price_cents-reserve.price_cents)
+		store._details.text += "\n0 cycles"
 		store._buy.disabled = not reserve.can_purchase
 		store._buy.text = "Purchase" if reserve.can_purchase else "Insufficient cash"
 	else:
-		store._details.text += "\n" + str(offer.prerequisite) + "\n1 cycle"
-		var base := CashFormatter.format_exact_cents(offer.base_price_cents)
-		price.text = "[s]%s[/s]  [color=#7ed6be]−%d%% familiarity[/color]\n[b]%s[/b]" % [base, offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents)] if offer.discount_percent > 0 else base
-		store._buy.disabled = not offer.unlocked or not offer.affordable or store._run.needs_starter_selection()
-		store._buy.text = "After first game" if store._run.needs_starter_selection() else "Requires prerequisite" if not offer.unlocked else "Insufficient cash" if not offer.affordable else "Purchase"
+		var quote := store._run.get_feature_research_quote(store._selected)
+		price.text = "Base %s\nDown payment %s %s\nPaid so far %s\nNext installment %s\n%d action(s) left; 1 cycle each" % [CashFormatter.format_exact_cents(quote.base_cents),CashFormatter.format_exact_cents(quote.down_cents),"paid" if quote.queued else "(0 cycles)",CashFormatter.format_exact_cents(quote.paid_cents),CashFormatter.format_exact_cents(quote.due_cents),quote.remaining_actions]
+		if quote.saving_cents > 0: price.text += "\nResourceful included: " + CashFormatter.format_exact_cents(quote.saving_cents)
+		store._details.text += "\n" + ("FIFO: research head" if quote.head else "Waiting in queue" if quote.queued else str(offer.get("prerequisite","Primitive reserve")))
+		store._buy.disabled = not quote.can_admit
+		store._buy.text = "Queued" if quote.queued else "Queue research" if quote.can_admit else "Unavailable - cash or prerequisites"
 	var advice := store._run.get_feature_spending_advice(store._selected)
 	shopping_details.text = FeatureSpendingGuidance.acquisition_text(advice) + "\n\n" + FeatureSpendingGuidance.explanation(advice)
 	price.visible = not price.text.is_empty()

@@ -59,7 +59,7 @@ func _run() -> void:
 				phase.get("_exhausted_card_ids")[&"text"] = true
 				phase.get_node("%ProceedToAlphaButton").pressed.emit()
 				check(hud.synergy_notification.banner.visible and hud.synergy_notification.title_label.text == "Perfect Production!", "Perfect Production notification survives the phase transition")
-				check(hud.synergy_notification.banner.mouse_filter == Control.MOUSE_FILTER_IGNORE and hud.synergy_notification.timer.wait_time == 4.0, "Notification is nonblocking and expires after four seconds")
+				check(hud.synergy_notification.banner.mouse_filter == Control.MOUSE_FILTER_IGNORE and hud.synergy_notification.timer.wait_time == HandPresentation.SPECIALIZATION_SECONDS, "Notification is nonblocking and spans four tempo beats")
 				hud.synergy_notification.timer.timeout.emit()
 				check(not hud.synergy_notification.banner.visible, "Notification hides when its timer expires")
 			else:

@@ -1,0 +1,16 @@
+# Contracts design session v12 — Game-5 continuation
+
+2026-10-08 (America/Los_Angeles). User authorized the read-only Game-5 continuation. Branch `main`, HEAD `91ce539978b87ac0a6efe3a1e028cae5f1360f19`; branch/status/diff, `CURRENT_STATE`, `TODO`, workflow, Contracts authority and v7 evidence were inspected before edits. The shared main worktree contained extensive existing uncommitted project and documentation changes; all 1,146 project-file hashes still matched the v7 pinned source. The v8 [source manifest](sim-v8/source-manifest.json) independently recorded 104 dirty project paths and analysis script hash `50792c7213287d8e2b85ebe92fa5671418425c98f3d113720279015c718bee95`.
+
+## Thread-local files and exact checks
+
+- New: [v8 predeclaration, runner, analysis script, source/archive/trace and audits](sim-v8/README.md), [v8 findings](FINDINGS-v8-crown-neon-game5-continuation.md), this log. Updated this folder's [README](README.md) and [HANDOFF](HANDOFF.md). No gameplay, tests, assets, configuration, shared TODO or shared design authority edit.
+- `run.py prepare` copied and SHA-256 checked 1,146 project files into an isolated Downloads project. The v8 and v7 source-file hash maps were equal. Godot 4.7.1 headless `--editor --import --quit`: exit 0, no filtered errors. `run.py crown-lease-chain`: exit 0, `valid=true`, four successful native arms, no route blockers; exact command and logs are in `sim-v8/`. One root-certificate-store diagnostic and nonfatal Windows path/phase warnings remain in the Godot log.
+- `audit.py`: all source-copy hashes, legal prefix, Crown/Neon hands and Promotion, Game-5 launches, common cycles 90/92/94, real chain sales settlements, finance validity, no arrears/loan/blockers and cash reconciliation passed. Chain minus Crown-only at cycle 94: +127,937 cents cash = +145,116 cents Neon receipt −21,679 cents settled sales +4,500 cents deferred Feature spending. Chain Game 6 is two productive cycles behind.
+- `archive_source_overlay.py` verified and archived all 104 dirty project paths. `pack.py` verified and archived the complete raw native trace. A second `audit.py` run with those archives exited 0; [at-run summary](sim-v8/audit-summary-at-run.json) retains true source-copy and overlay checks. No commit, push, merge or release claim.
+
+## Cleanup blocker and follow-up
+
+Automatic approval review **rejected recursive deletion** of `C:\Users\64jus\Downloads\Patch Notes Design Folder\contracts-game5-v8-source-copy` and `C:\Users\64jus\Downloads\Patch Notes Design Folder\contracts-game5-v8-profiles`, stating that the user authorized read-only simulation but not irreversible removal of the generated project copy and profiles outside the repo. No workaround deletion was attempted. Both directories remain; the source overlay and trace are already archived in this thread's folder. Explicit user authorization is needed if those exact disposable directories should be removed. Preserve `.codex-godot-temp` and other worktree changes.
+
+Design follow-up: retain the bounded ACTIVE/TRIAL package. The next proposed study is one legal actual-loan or arrears pressure route, separate from the now-complete Game-5 comparison. Final balance, Starwave offer and player-selected Neon focus remain OPEN.

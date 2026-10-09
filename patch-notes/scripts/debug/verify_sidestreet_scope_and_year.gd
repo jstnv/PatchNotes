@@ -58,8 +58,9 @@ func _verify_year_labels() -> void:
 	var menu: MainMenu = game.get("_active_phase")
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	(menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName") as LineEdit).text = "Calendar Studio"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
+	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	var run: RunState = game.run_state
@@ -123,8 +124,8 @@ func _verify_studio_purchase_years() -> void:
 		root.add_child(hud)
 		hud.setup(project, run)
 		var ok := false
-		if action == "store": ok = run.purchase_feature(&"save_files")
-		elif action == "reserve": ok = run.purchase_primitive_reserve_feature(&"sprites")
+		if action == "store": ok = ResearchTestActions.acquire(run,&"save_files")
+		elif action == "reserve": ok = ResearchTestActions.acquire(run,&"sprites")
 		else: ok = run.purchase_post_launch_campaign(project.get_release_id(), 95)
 		check(ok and run.get_completed_run_cycles() == 96 and hud.footer.text.contains("1984") and studio.get_node("Dashboard/Layout/Heading/Title").text.contains("1984"), action + " updates both year labels at its successful boundary")
 		var before := snapshot(run, [project])

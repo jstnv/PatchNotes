@@ -1,0 +1,88 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Planning rejects Beta Host Playtest
+PASS: Planning rejection spends no cash and advances no cycle
+PASS: Cash below $500 rejects Host Playtest
+PASS: Unaffordable action is fully atomic
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Active Host Playtest accepts 0 selected cards
+PASS: Host Playtest preserves pool and selection order with 0 selections
+PASS: Host Playtest preserves priorities and Bugs with 0 selections
+PASS: Host Playtest costs exactly $500 and one cycle with 0 selections
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Active Host Playtest accepts 1 selected cards
+PASS: Host Playtest preserves pool and selection order with 1 selections
+PASS: Host Playtest preserves priorities and Bugs with 1 selections
+PASS: Host Playtest costs exactly $500 and one cycle with 1 selections
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Active Host Playtest accepts 2 selected cards
+PASS: Host Playtest preserves pool and selection order with 2 selections
+PASS: Host Playtest preserves priorities and Bugs with 2 selections
+PASS: Host Playtest costs exactly $500 and one cycle with 2 selections
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Active Host Playtest accepts 3 selected cards
+PASS: Host Playtest preserves pool and selection order with 3 selections
+PASS: Host Playtest preserves priorities and Bugs with 3 selections
+PASS: Host Playtest costs exactly $500 and one cycle with 3 selections
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Active Host Playtest accepts 4 selected cards
+PASS: Host Playtest preserves pool and selection order with 4 selections
+PASS: Host Playtest preserves priorities and Bugs with 4 selections
+PASS: Host Playtest costs exactly $500 and one cycle with 4 selections
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Sound Pass, Technology Pass
+PASS: Valid Active Development Host Playtest succeeds
+PASS: Weakness ranking snapshots Sound then Technology using enum tie order
+PASS: Activation changes no Bugs, Marketing, snapshots, or lifecycle
+PASS: Changed committed priorities succeed
+PASS: Host and priority commit each consume one cycle
+PASS: Priority, score changes, and UI reconstruction cannot alter pending IDs
+PASS: Second callback while pending cannot double-charge or advance
+Beta hand resolved: Bugs discovered: 2 | Known Bugs fixed: 2 | Marketing Output gained: 2 | Beta Host Playtest corrective Passes injected: Sound Pass, Technology Pass | Cycle advanced: 1
+PASS: Next successful hand prepares two ordinary candidates alongside two corrective Passes
+PASS: Replacement preserves three cards, then publishes queued Passes and two ordinary cards
+PASS: Replacement ordinary slot 5 remains a weighted Beta definition
+PASS: Replacement ordinary slot 6 remains a weighted Beta definition
+PASS: Pending correction clears only after complete pool publication
+PASS: Host, priority commit, and production advance exactly three cycles
+PASS: Consumption feedback identifies both injected Passes
+WARNING: Beta hand rejected: A complete replacement CardView pool could not be prepared.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:545)
+       [1] _verify_pending_and_injection (res://scripts/debug/verify_beta_host_playtest.gd:154)
+       [2] _make_beta (res://scripts/debug/verify_beta_host_playtest.gd:46)
+PASS: Forced corrective replacement failure rejects the production hand
+PASS: Failed production preserves pending correction, state, pool, and selection
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Sound Pass, Technology Pass
+Beta hand resolved: Bugs discovered: 2 | Known Bugs fixed: 2 | Marketing Output gained: 2 | Beta Host Playtest corrective Passes injected: Sound Pass, Technology Pass | Cycle advanced: 1
+PASS: Beta tooltip explains that corrective Passes do not grant synergy
+Beta hand resolved: Corrective Pass gains: Sound +2, Technology +2 | Known Bugs fixed: 0 | Cycle advanced: 1
+PASS: Two corrective Passes can resolve with two ordinary Beta cards
+PASS: Each selected corrective Pass adds exactly +2 to its matching Core Score
+PASS: Corrective Pass feedback reports gains and cancels both Beta synergies
+PASS: Corrective Pass definitions never exhaust
+PASS: Later ordinary pool contains no expired corrective Pass opportunity
+PASS: Later ordinary pool contains no expired corrective Pass opportunity
+PASS: Later ordinary pool contains no expired corrective Pass opportunity
+PASS: Later ordinary pool contains no expired corrective Pass opportunity
+PASS: Later ordinary pool contains no expired corrective Pass opportunity
+PASS: Later ordinary pool contains no expired corrective Pass opportunity
+PASS: Later ordinary pool contains no expired corrective Pass opportunity
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Sound Pass, Technology Pass
+PASS: A later Host Playtest may queue another correction after consumption
+Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Host Playtest queues a controlled single-Pass fixture
+Beta hand resolved: Bugs discovered: 2 | Known Bugs fixed: 2 | Marketing Output gained: 2 | Beta Host Playtest corrective Passes injected: Graphics Pass, Sound Pass | Cycle advanced: 1
+PASS: Controlled hand publishes corrective Pass opportunities
+Beta hand resolved: Corrective Pass gains: Graphics +2 | Bugs discovered: 2 | Known Bugs fixed: 2 | Marketing Output gained: 2 | Cycle advanced: 1
+PASS: One corrective Pass can resolve with three ordinary Beta cards
+PASS: Selected corrective Pass applies exactly +2
+PASS: Unselected corrective Pass applies no effect
+PASS: Unplayed corrective Pass retains its instance and corrective eligibility
+Beta hand resolved: Corrective Pass gains: Sound +2 | Bugs discovered: 1 | Known Bugs fixed: 1 | Cycle advanced: 1
+PASS: Retained corrective Pass remains playable in the following hand
+PASS: Retained corrective Pass grants its +2 exactly once when played
+Beta Host Playtest verification passed.

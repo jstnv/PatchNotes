@@ -1,0 +1,648 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+Loaded 40 cards.
+PASS: Gameplay starts with Design as its only active phase
+PASS: Gameplay tracks the startup Design phase
+Perfect Production!
+Final Hidden Bugs: 1
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:74)
+       [6] _replace_design_with_alpha (res://scripts/gameplay.gd:232)
+       [7] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [8] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [9] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:59)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1144)
+       [9] set_phase (res://scripts/ui/gameplay_hud.gd:179)
+       [10] _replace_design_with_alpha (res://scripts/gameplay.gd:234)
+       [11] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [12] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [13] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:59)
+PASS: Gameplay transitions only after authoritative Design finalization
+PASS: Finalization emits once and scene replacement emits no extra state or cycle signal
+PASS: Transition preserves scores, Scope, Required Scope, both Bug Pressures, and cycle
+PASS: Proceed does not resolve selected cards before replacement
+PASS: Immediate Proceed from Planning deals no candidates and consumes zero cycles
+PASS: Immediate Planning finalization stores zero implemented and all Design Features unimplemented
+PASS: Alpha becomes the only active phase after Proceed
+PASS: Alpha receives Gameplay's existing ProjectState instance
+PASS: Alpha priority phase visibly identifies itself
+PASS: Transitioned Alpha initializes its independent 25 / 25 / 25 / 25 allocation
+PASS: Corrected Alpha allocation controls appear after the real transition
+PASS: Transitioned Alpha begins in Planning with zero candidates
+PASS: Transitioned Alpha exposes Begin Alpha and no resolution action
+PASS: Finalized Design is removed from PhaseRoot
+PASS: Finalized Design Feature history survives scene replacement
+PASS: Feature-history getters remain mutation-safe after transition
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Stale Design inputs and signals cannot mutate state or create another Alpha
+PASS: Transition preserves requested Scope case exactly: 19
+PASS: Gameplay starts with Design as its only active phase
+PASS: Gameplay tracks the startup Design phase
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+PASS: Active-development transition fixture begins Design explicitly
+Perfect Production!
+Final Hidden Bugs: 0
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:74)
+       [6] _replace_design_with_alpha (res://scripts/gameplay.gd:232)
+       [7] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [8] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [9] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:59)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1144)
+       [9] set_phase (res://scripts/ui/gameplay_hud.gd:179)
+       [10] _replace_design_with_alpha (res://scripts/gameplay.gd:234)
+       [11] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [12] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [13] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:59)
+PASS: Gameplay transitions only after authoritative Design finalization
+PASS: Finalization emits once and scene replacement emits no extra state or cycle signal
+PASS: Transition preserves scores, Scope, Required Scope, both Bug Pressures, and cycle
+PASS: Proceed does not resolve selected cards before replacement
+PASS: Alpha becomes the only active phase after Proceed
+PASS: Alpha receives Gameplay's existing ProjectState instance
+PASS: Alpha priority phase visibly identifies itself
+PASS: Transitioned Alpha initializes its independent 25 / 25 / 25 / 25 allocation
+PASS: Corrected Alpha allocation controls appear after the real transition
+PASS: Transitioned Alpha begins in Planning with zero candidates
+PASS: Transitioned Alpha exposes Begin Alpha and no resolution action
+PASS: Finalized Design is removed from PhaseRoot
+PASS: Finalized Design Feature history survives scene replacement
+PASS: Feature-history getters remain mutation-safe after transition
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Stale Design inputs and signals cannot mutate state or create another Alpha
+PASS: Transition preserves requested Scope case exactly: 30
+PASS: Gameplay starts with Design as its only active phase
+PASS: Gameplay tracks the startup Design phase
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:46)
+PASS: Active-development transition fixture begins Design explicitly
+Perfect Production!
+Final Hidden Bugs: 0
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:74)
+       [6] _replace_design_with_alpha (res://scripts/gameplay.gd:232)
+       [7] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [8] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [9] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:59)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1144)
+       [9] set_phase (res://scripts/ui/gameplay_hud.gd:179)
+       [10] _replace_design_with_alpha (res://scripts/gameplay.gd:234)
+       [11] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [12] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [13] _verify_successful_transition (res://scripts/debug/verify_gameplay_transition.gd:59)
+PASS: Gameplay transitions only after authoritative Design finalization
+PASS: Finalization emits once and scene replacement emits no extra state or cycle signal
+PASS: Transition preserves scores, Scope, Required Scope, both Bug Pressures, and cycle
+PASS: Proceed does not resolve selected cards before replacement
+PASS: Alpha becomes the only active phase after Proceed
+PASS: Alpha receives Gameplay's existing ProjectState instance
+PASS: Alpha priority phase visibly identifies itself
+PASS: Transitioned Alpha initializes its independent 25 / 25 / 25 / 25 allocation
+PASS: Corrected Alpha allocation controls appear after the real transition
+PASS: Transitioned Alpha begins in Planning with zero candidates
+PASS: Transitioned Alpha exposes Begin Alpha and no resolution action
+PASS: Finalized Design is removed from PhaseRoot
+PASS: Finalized Design Feature history survives scene replacement
+PASS: Feature-history getters remain mutation-safe after transition
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Persisted transition history contains only Design Features
+PASS: Stale Design inputs and signals cannot mutate state or create another Alpha
+PASS: Transition preserves requested Scope case exactly: 32
+Perfect Production!
+Final Hidden Bugs: 0
+ERROR: Failed to instantiate scene state of "", node count is 0. Make sure the PackedScene resource is valid.
+   at: instantiate (scene/resources/packed_scene.cpp:173)
+   GDScript backtrace (most recent call first):
+       [0] _replace_design_with_alpha (res://scripts/gameplay.gd:222)
+       [1] _verify_failed_instantiation (res://scripts/debug/verify_gameplay_transition.gd:112)
+ERROR: Could not instantiate a valid AlphaPhase placeholder.
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _replace_design_with_alpha (res://scripts/gameplay.gd:224)
+       [1] _verify_failed_instantiation (res://scripts/debug/verify_gameplay_transition.gd:112)
+PASS: Failed Alpha instantiation keeps finalized Design under PhaseRoot
+PASS: Failed replacement mutates no ProjectState value or signal
+Perfect Production!
+Final Hidden Bugs: 0
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:74)
+       [6] _replace_design_with_alpha (res://scripts/gameplay.gd:232)
+       [7] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [8] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [9] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:130)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1144)
+       [9] set_phase (res://scripts/ui/gameplay_hud.gd:179)
+       [10] _replace_design_with_alpha (res://scripts/gameplay.gd:234)
+       [11] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [12] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [13] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:130)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] _close (res://scripts/ui/priority_overlay.gd:159)
+       [8] cancel (res://scripts/ui/priority_overlay.gd:132)
+       [9] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:132)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:133)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:133)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:133)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:133)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:133)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:133)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:133)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] begin_alpha (res://scripts/phases/alpha_phase.gd:166)
+       [6] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:133)
+PASS: Alpha-to-Beta fixture enters Active Alpha through Gameplay
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] add_scope (res://scripts/project_state.gd:784)
+       [5] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:134)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] finalize_alpha (res://scripts/project_state.gd:548)
+       [5] _finalize_alpha (res://scripts/phases/alpha_phase.gd:356)
+       [6] _verify_alpha_to_beta_transition (res://scripts/debug/verify_gameplay_transition.gd:138)
+Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 0; implemented 0; unimplemented 14
+PASS: Alpha finalization requests the Gameplay Beta transition
+PASS: Repeated Alpha completion signals cannot create duplicate Beta phases
+PASS: Gameplay replaces Alpha with the Beta placeholder as its only active phase
+PASS: Beta receives the exact existing ProjectState instance
+PASS: Finalized Alpha history survives scene replacement
+PASS: Beta entry preserves all unresolved Bugs as Hidden and initializes Known Bugs at zero
+PASS: Design history survives the Alpha-to-Beta replacement unchanged
+PASS: Alpha finalization and Beta replacement consume zero cycles
+PASS: Beta active shell displays public Bug counts without Hidden or Remaining Bug disclosure
+Perfect Production!
+Final Hidden Bugs: 0
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:74)
+       [6] _replace_design_with_alpha (res://scripts/gameplay.gd:232)
+       [7] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [8] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [9] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:165)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1144)
+       [9] set_phase (res://scripts/ui/gameplay_hud.gd:179)
+       [10] _replace_design_with_alpha (res://scripts/gameplay.gd:234)
+       [11] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [12] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [13] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:165)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] _close (res://scripts/ui/priority_overlay.gd:159)
+       [8] cancel (res://scripts/ui/priority_overlay.gd:132)
+       [9] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:167)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:169)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:169)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:169)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:169)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:169)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:169)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:169)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] begin_alpha (res://scripts/phases/alpha_phase.gd:166)
+       [6] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:169)
+PASS: Failed-Beta fixture enters valid Active Alpha
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] finalize_alpha (res://scripts/project_state.gd:548)
+       [5] _finalize_alpha (res://scripts/phases/alpha_phase.gd:356)
+       [6] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:170)
+Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 0; implemented 0; unimplemented 14
+PASS: Failed-Beta fixture finalizes Alpha authoritatively
+ERROR: Failed to instantiate scene state of "", node count is 0. Make sure the PackedScene resource is valid.
+   at: instantiate (scene/resources/packed_scene.cpp:173)
+   GDScript backtrace (most recent call first):
+       [0] _replace_alpha_with_beta (res://scripts/gameplay.gd:257)
+       [1] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:172)
+ERROR: Could not instantiate a valid BetaPhase placeholder.
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _replace_alpha_with_beta (res://scripts/gameplay.gd:259)
+       [1] _verify_failed_beta_instantiation (res://scripts/debug/verify_gameplay_transition.gd:172)
+PASS: Failed Beta instantiation keeps the finalized Alpha source under PhaseRoot
+PASS: Failed Beta replacement cannot alter finalized ProjectState data
+Gameplay transition verification passed.

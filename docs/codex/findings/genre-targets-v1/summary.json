@@ -1,0 +1,804 @@
+{
+  "routes": 144,
+  "checks": 15144,
+  "targets": {
+    "action": {
+      "proposed": [
+        40,
+        26,
+        40,
+        26
+      ],
+      "exact": [
+        39.6,
+        26.400000000000002,
+        39.6,
+        26.400000000000002
+      ],
+      "moderated": [
+        36.3,
+        29.700000000000003,
+        36.3,
+        29.700000000000003
+      ]
+    },
+    "adventure": {
+      "proposed": [
+        33,
+        26,
+        20,
+        53
+      ],
+      "exact": [
+        33.0,
+        26.400000000000002,
+        19.8,
+        52.800000000000004
+      ],
+      "moderated": [
+        33.0,
+        29.700000000000003,
+        26.4,
+        42.900000000000006
+      ]
+    },
+    "role_playing": {
+      "proposed": [
+        20,
+        26,
+        40,
+        46
+      ],
+      "exact": [
+        19.8,
+        26.400000000000002,
+        39.6,
+        46.2
+      ],
+      "moderated": [
+        26.4,
+        29.700000000000003,
+        36.3,
+        39.6
+      ]
+    },
+    "strategy": {
+      "proposed": [
+        20,
+        13,
+        53,
+        46
+      ],
+      "exact": [
+        19.8,
+        13.200000000000001,
+        52.800000000000004,
+        46.2
+      ],
+      "moderated": [
+        26.4,
+        23.1,
+        42.900000000000006,
+        39.6
+      ]
+    },
+    "simulation": {
+      "proposed": [
+        20,
+        20,
+        59,
+        33
+      ],
+      "exact": [
+        19.8,
+        19.8,
+        59.400000000000006,
+        33.0
+      ],
+      "moderated": [
+        26.4,
+        26.4,
+        46.2,
+        33.0
+      ]
+    },
+    "puzzle": {
+      "proposed": [
+        20,
+        13,
+        40,
+        59
+      ],
+      "exact": [
+        19.8,
+        13.200000000000001,
+        39.6,
+        59.400000000000006
+      ],
+      "moderated": [
+        26.4,
+        23.1,
+        36.3,
+        46.2
+      ]
+    },
+    "sports": {
+      "proposed": [
+        33,
+        33,
+        40,
+        26
+      ],
+      "exact": [
+        33.0,
+        33.0,
+        39.6,
+        26.400000000000002
+      ],
+      "moderated": [
+        33.0,
+        33.0,
+        36.3,
+        29.700000000000003
+      ]
+    },
+    "racing": {
+      "proposed": [
+        40,
+        33,
+        46,
+        13
+      ],
+      "exact": [
+        39.6,
+        33.0,
+        46.2,
+        13.200000000000001
+      ],
+      "moderated": [
+        36.3,
+        33.0,
+        39.6,
+        23.1
+      ]
+    }
+  },
+  "summary": {
+    "action": {
+      "scores_mean": [
+        38.22,
+        22.33,
+        42.56,
+        26.67
+      ],
+      "cycles": [
+        11,
+        17
+      ],
+      "models": {
+        "current": {
+          "mean": 6.078,
+          "min": 3.8,
+          "max": 7.7,
+          "at_least_7": 7,
+          "production_mean": 6.62
+        },
+        "proposed": {
+          "mean": 6.583,
+          "min": 4.4,
+          "max": 8.5,
+          "at_least_7": 8,
+          "production_mean": 7.044
+        },
+        "exact": {
+          "mean": 6.567,
+          "min": 4.4,
+          "max": 8.4,
+          "at_least_7": 8,
+          "production_mean": 7.035
+        },
+        "moderated": {
+          "mean": 6.378,
+          "min": 4.3,
+          "max": 7.9,
+          "at_least_7": 8,
+          "production_mean": 6.849
+        }
+      },
+      "all_targets_met": 0,
+      "switch_gain_mean": 0.161
+    },
+    "adventure": {
+      "scores_mean": [
+        26.94,
+        15.72,
+        19.67,
+        53
+      ],
+      "cycles": [
+        11,
+        17
+      ],
+      "models": {
+        "current": {
+          "mean": 4.05,
+          "min": 2.7,
+          "max": 5.5,
+          "at_least_7": 0,
+          "production_mean": 4.971
+        },
+        "proposed": {
+          "mean": 4.95,
+          "min": 3.4,
+          "max": 6.7,
+          "at_least_7": 0,
+          "production_mean": 5.816
+        },
+        "exact": {
+          "mean": 4.95,
+          "min": 3.4,
+          "max": 6.7,
+          "at_least_7": 0,
+          "production_mean": 5.808
+        },
+        "moderated": {
+          "mean": 4.578,
+          "min": 3.3,
+          "max": 6.0,
+          "at_least_7": 0,
+          "production_mean": 5.383
+        }
+      },
+      "all_targets_met": 1,
+      "switch_gain_mean": 0.261
+    },
+    "role_playing": {
+      "scores_mean": [
+        17.78,
+        17.06,
+        34.78,
+        50
+      ],
+      "cycles": [
+        11,
+        17
+      ],
+      "models": {
+        "current": {
+          "mean": 4.361,
+          "min": 2.8,
+          "max": 6.2,
+          "at_least_7": 0,
+          "production_mean": 5.263
+        },
+        "proposed": {
+          "mean": 5.117,
+          "min": 3.5,
+          "max": 6.6,
+          "at_least_7": 0,
+          "production_mean": 5.878
+        },
+        "exact": {
+          "mean": 5.117,
+          "min": 3.5,
+          "max": 6.6,
+          "at_least_7": 0,
+          "production_mean": 5.88
+        },
+        "moderated": {
+          "mean": 4.839,
+          "min": 3.3,
+          "max": 6.7,
+          "at_least_7": 0,
+          "production_mean": 5.557
+        }
+      },
+      "all_targets_met": 0,
+      "switch_gain_mean": 0.472
+    },
+    "strategy": {
+      "scores_mean": [
+        18.56,
+        13.22,
+        51.44,
+        44.06
+      ],
+      "cycles": [
+        11,
+        17
+      ],
+      "models": {
+        "current": {
+          "mean": 4.061,
+          "min": 2.2,
+          "max": 5.7,
+          "at_least_7": 0,
+          "production_mean": 5.113
+        },
+        "proposed": {
+          "mean": 5.244,
+          "min": 2.6,
+          "max": 7.2,
+          "at_least_7": 2,
+          "production_mean": 6.361
+        },
+        "exact": {
+          "mean": 5.244,
+          "min": 2.6,
+          "max": 7.2,
+          "at_least_7": 2,
+          "production_mean": 6.355
+        },
+        "moderated": {
+          "mean": 4.65,
+          "min": 2.5,
+          "max": 6.7,
+          "at_least_7": 0,
+          "production_mean": 5.627
+        }
+      },
+      "all_targets_met": 0,
+      "switch_gain_mean": 0.078
+    },
+    "simulation": {
+      "scores_mean": [
+        20,
+        17.78,
+        57.06,
+        28.5
+      ],
+      "cycles": [
+        11,
+        17
+      ],
+      "models": {
+        "current": {
+          "mean": 3.711,
+          "min": 1.5,
+          "max": 6.0,
+          "at_least_7": 0,
+          "production_mean": 5.179
+        },
+        "proposed": {
+          "mean": 4.628,
+          "min": 2.1,
+          "max": 6.7,
+          "at_least_7": 0,
+          "production_mean": 6.114
+        },
+        "exact": {
+          "mean": 4.633,
+          "min": 2.1,
+          "max": 6.7,
+          "at_least_7": 0,
+          "production_mean": 6.127
+        },
+        "moderated": {
+          "mean": 4.311,
+          "min": 1.9,
+          "max": 7.0,
+          "at_least_7": 1,
+          "production_mean": 5.684
+        }
+      },
+      "all_targets_met": 0,
+      "switch_gain_mean": 0.144
+    },
+    "puzzle": {
+      "scores_mean": [
+        13.94,
+        12.67,
+        39.78,
+        53.89
+      ],
+      "cycles": [
+        11,
+        17
+      ],
+      "models": {
+        "current": {
+          "mean": 3.789,
+          "min": 2.3,
+          "max": 5.0,
+          "at_least_7": 0,
+          "production_mean": 4.622
+        },
+        "proposed": {
+          "mean": 4.983,
+          "min": 3.5,
+          "max": 7.0,
+          "at_least_7": 1,
+          "production_mean": 5.823
+        },
+        "exact": {
+          "mean": 4.983,
+          "min": 3.5,
+          "max": 7.0,
+          "at_least_7": 1,
+          "production_mean": 5.818
+        },
+        "moderated": {
+          "mean": 4.339,
+          "min": 2.8,
+          "max": 5.9,
+          "at_least_7": 0,
+          "production_mean": 5.069
+        }
+      },
+      "all_targets_met": 0,
+      "switch_gain_mean": 0.056
+    },
+    "sports": {
+      "scores_mean": [
+        27,
+        33.22,
+        49.89,
+        17.56
+      ],
+      "cycles": [
+        11,
+        17
+      ],
+      "models": {
+        "current": {
+          "mean": 4.439,
+          "min": 2.9,
+          "max": 5.8,
+          "at_least_7": 0,
+          "production_mean": 5.949
+        },
+        "proposed": {
+          "mean": 5.033,
+          "min": 3.5,
+          "max": 6.5,
+          "at_least_7": 0,
+          "production_mean": 6.322
+        },
+        "exact": {
+          "mean": 5.006,
+          "min": 3.4,
+          "max": 6.5,
+          "at_least_7": 0,
+          "production_mean": 6.298
+        },
+        "moderated": {
+          "mean": 4.861,
+          "min": 3.3,
+          "max": 6.2,
+          "at_least_7": 0,
+          "production_mean": 6.115
+        }
+      },
+      "all_targets_met": 0,
+      "switch_gain_mean": 0.411
+    },
+    "racing": {
+      "scores_mean": [
+        36.89,
+        24.22,
+        49.78,
+        17.56
+      ],
+      "cycles": [
+        11,
+        17
+      ],
+      "models": {
+        "current": {
+          "mean": 4.822,
+          "min": 3.0,
+          "max": 6.7,
+          "at_least_7": 0,
+          "production_mean": 5.882
+        },
+        "proposed": {
+          "mean": 5.806,
+          "min": 4.0,
+          "max": 7.9,
+          "at_least_7": 6,
+          "production_mean": 6.828
+        },
+        "exact": {
+          "mean": 5.806,
+          "min": 4.1,
+          "max": 7.9,
+          "at_least_7": 6,
+          "production_mean": 6.82
+        },
+        "moderated": {
+          "mean": 5.317,
+          "min": 3.7,
+          "max": 7.3,
+          "at_least_7": 2,
+          "production_mean": 6.243
+        }
+      },
+      "all_targets_met": 0,
+      "switch_gain_mean": 0.206
+    }
+  },
+  "cohorts": {
+    "ordinary_early": {
+      "current": 3.454,
+      "proposed": 4.171,
+      "moderated": 3.825
+    },
+    "ordinary_slow": {
+      "current": 5.312,
+      "proposed": 6.125,
+      "moderated": 5.883
+    },
+    "synergy_early": {
+      "current": 3.646,
+      "proposed": 4.392,
+      "moderated": 4.046
+    },
+    "synergy_slow": {
+      "current": 5.646,
+      "proposed": 6.612,
+      "moderated": 6.292
+    },
+    "target_deficit_early": {
+      "current": 3.325,
+      "proposed": 4.021,
+      "moderated": 3.712
+    },
+    "target_deficit_slow": {
+      "current": 5.1,
+      "proposed": 6.438,
+      "moderated": 5.696
+    }
+  },
+  "anchors": {
+    "action": {
+      "balanced_33": 7.45,
+      "target_8": [
+        40,
+        26,
+        40,
+        26
+      ],
+      "integer_target_10": [
+        50,
+        33,
+        50,
+        33
+      ]
+    },
+    "adventure": {
+      "balanced_33": 7.218,
+      "target_8": [
+        33,
+        26,
+        20,
+        53
+      ],
+      "integer_target_10": [
+        42,
+        33,
+        25,
+        67
+      ]
+    },
+    "role_playing": {
+      "balanced_33": 7.115,
+      "target_8": [
+        20,
+        26,
+        40,
+        46
+      ],
+      "integer_target_10": [
+        25,
+        33,
+        50,
+        58
+      ]
+    },
+    "strategy": {
+      "balanced_33": 6.512,
+      "target_8": [
+        20,
+        13,
+        53,
+        46
+      ],
+      "integer_target_10": [
+        25,
+        17,
+        67,
+        58
+      ]
+    },
+    "simulation": {
+      "balanced_33": 6.99,
+      "target_8": [
+        20,
+        20,
+        59,
+        33
+      ],
+      "integer_target_10": [
+        25,
+        25,
+        74,
+        42
+      ]
+    },
+    "puzzle": {
+      "balanced_33": 6.591,
+      "target_8": [
+        20,
+        13,
+        40,
+        59
+      ],
+      "integer_target_10": [
+        25,
+        17,
+        50,
+        74
+      ]
+    },
+    "sports": {
+      "balanced_33": 7.544,
+      "target_8": [
+        33,
+        33,
+        40,
+        26
+      ],
+      "integer_target_10": [
+        42,
+        42,
+        50,
+        33
+      ]
+    },
+    "racing": {
+      "balanced_33": 6.779,
+      "target_8": [
+        40,
+        33,
+        46,
+        13
+      ],
+      "integer_target_10": [
+        50,
+        42,
+        58,
+        17
+      ]
+    }
+  },
+  "rounding_max_review_difference": 0.10000000000000053,
+  "switch_gain_positive": 77,
+  "by_policy_genre": {
+    "ordinary": {
+      "action": {
+        "current": 5.6,
+        "proposed": 6.15,
+        "moderated": 5.933
+      },
+      "adventure": {
+        "current": 4.1,
+        "proposed": 4.65,
+        "moderated": 4.5
+      },
+      "role_playing": {
+        "current": 4.583,
+        "proposed": 5.217,
+        "moderated": 5.0
+      },
+      "strategy": {
+        "current": 4.15,
+        "proposed": 5.217,
+        "moderated": 4.717
+      },
+      "simulation": {
+        "current": 3.817,
+        "proposed": 4.7,
+        "moderated": 4.333
+      },
+      "puzzle": {
+        "current": 4.15,
+        "proposed": 5.367,
+        "moderated": 4.65
+      },
+      "sports": {
+        "current": 4.25,
+        "proposed": 4.8,
+        "moderated": 4.617
+      },
+      "racing": {
+        "current": 4.417,
+        "proposed": 5.083,
+        "moderated": 5.083
+      }
+    },
+    "synergy": {
+      "action": {
+        "current": 6.317,
+        "proposed": 6.8,
+        "moderated": 6.6
+      },
+      "adventure": {
+        "current": 4.283,
+        "proposed": 5.3,
+        "moderated": 4.833
+      },
+      "role_playing": {
+        "current": 4.467,
+        "proposed": 5.183,
+        "moderated": 4.95
+      },
+      "strategy": {
+        "current": 4.483,
+        "proposed": 5.617,
+        "moderated": 5.117
+      },
+      "simulation": {
+        "current": 4.183,
+        "proposed": 4.967,
+        "moderated": 4.883
+      },
+      "puzzle": {
+        "current": 3.733,
+        "proposed": 4.833,
+        "moderated": 4.383
+      },
+      "sports": {
+        "current": 4.533,
+        "proposed": 5.15,
+        "moderated": 4.983
+      },
+      "racing": {
+        "current": 5.167,
+        "proposed": 6.167,
+        "moderated": 5.6
+      }
+    },
+    "target_deficit": {
+      "action": {
+        "current": 6.317,
+        "proposed": 6.8,
+        "moderated": 6.6
+      },
+      "adventure": {
+        "current": 3.767,
+        "proposed": 4.9,
+        "moderated": 4.4
+      },
+      "role_playing": {
+        "current": 4.033,
+        "proposed": 4.95,
+        "moderated": 4.567
+      },
+      "strategy": {
+        "current": 3.55,
+        "proposed": 4.9,
+        "moderated": 4.117
+      },
+      "simulation": {
+        "current": 3.133,
+        "proposed": 4.217,
+        "moderated": 3.717
+      },
+      "puzzle": {
+        "current": 3.483,
+        "proposed": 4.75,
+        "moderated": 3.983
+      },
+      "sports": {
+        "current": 4.533,
+        "proposed": 5.15,
+        "moderated": 4.983
+      },
+      "racing": {
+        "current": 4.883,
+        "proposed": 6.167,
+        "moderated": 5.267
+      }
+    }
+  }
+}

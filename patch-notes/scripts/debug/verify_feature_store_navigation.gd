@@ -19,9 +19,13 @@ func _run() -> void:
 		await process_frame
 		var menu: MainMenu = game.get("_active_phase")
 		menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
+		if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
+			menu._replace_dialog.hide()
+			menu._replace_dialog.confirmed.emit()
 		menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Navigation Test"
-		menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
+		menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
 		menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+		menu.call("_open_folder", &"traits")
 		menu.call("_show_review")
 		menu.call("_confirm_studio")
 		run = game.run_state

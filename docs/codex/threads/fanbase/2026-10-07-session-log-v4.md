@@ -1,0 +1,3 @@
+# Fanbase design session — continuation dispatched v4
+
+2026-10-07, America/Los_Angeles. The user explicitly said, “Send it to PN implementation.” The Codex app `send_message_to_thread` call to **PN Implementation** (`01a11488-6601-7cf0-9b09-7fa2b3f5efdd`, local) succeeded and returned that thread ID. The message linked [v2 handoff](handoffs/2026-10-07-near-neutral-continuation-v2.md), authorized exactly one read-only 4 Design / 4 Alpha / 4 Beta Game 3 attempt, and required stopping after it even if Review misses `[4.0, 5.0)`. No result was available at dispatch. This session updated only the Fanbase handoff index status; no gameplay or TODO change.

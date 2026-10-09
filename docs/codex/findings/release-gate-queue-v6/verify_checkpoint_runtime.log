@@ -1,0 +1,104 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Initial Studio automatically saves
+PASS: Invalid Studio purchase rejects
+PASS: Invalid purchase leaves exact checkpoint unchanged
+PASS: Depart from durable Studio
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_checkpoint_runtime.gd:36)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_checkpoint_runtime.gd:36)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_checkpoint_runtime.gd:36)
+PASS: Actual Design deal
+PASS: Actual deal contains seven candidates
+PASS: Departure and deal never overwrite Studio checkpoint
+PASS: Continue rolls back the entire unsaved project
+PASS: Depart from durable Studio
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_checkpoint_runtime.gd:36)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_checkpoint_runtime.gd:36)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/verify_checkpoint_runtime.gd:36)
+PASS: Actual Design deal
+PASS: Actual deal contains seven candidates
+PASS: Continue reproduces project identity and actual tutorial deal
+PASS: Continue reproduces all stream positions
+PASS: Departure and deal never overwrite Studio checkpoint
+PASS: Continue rolls back the entire unsaved project
+PASS: Committed action before injected I/O failure
+PASS: Save failure preserves committed memory
+PASS: Failed save blocks further mutations
+PASS: Failed save blocks departure
+PASS: Interrupted publication preserves previous generation
+PASS: Retry saves without replaying action
+PASS: Retry restores action access without extra cash
+PASS: Continue hydrates the newly committed generation
+PASS: Corrupt current cannot silently load backup
+PASS: Explicit recovery publishes preserved valid backup
+PASS: Explicit recovered backup restores exact earlier cash
+Checkpoint runtime verification: 0 failures

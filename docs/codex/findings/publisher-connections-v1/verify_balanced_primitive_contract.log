@@ -1,0 +1,593 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Zero completion retains exactly the 40000-cent guarantee
+PASS: Half completion pays 100000 more cents, 140000 total
+PASS: Perfect completion remains capped at 240000 total cents
+PASS: Scope and Core overproduction cap before payout
+PASS: Remainder floors to exact cents before adding guarantee
+PASS: Invalid completion input rejects
+PASS: Contract primary-Core Specialization multiplies primary and secondary scores by 1.50 while Scope stays printed
+PASS: Detached ContractState cannot commit a hand before the RunState-owned upfront transfer
+PASS: Offer is unavailable before a released game enters Studio
+PASS: Studio registers the first release
+PASS: One-shot offer becomes available after Studio entry
+PASS: Opening contract details is passive
+PASS: Closing contract details returns to Studio for free
+PASS: Acceptance creates and publishes one authoritative ContractState
+PASS: ContractState is separate and starts at locked values
+PASS: Acceptance atomically pays exact 40000 cents without cycle, redraw, sales or ProjectState mutation
+PASS: Cash observers see accepted ownership and cannot reenter for a second guarantee
+PASS: Accepted offer cannot pay twice
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:129)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:57)
+       [8] _verify_offer_and_navigation (res://scripts/debug/verify_balanced_primitive_contract.gd:116)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:129)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:57)
+       [8] _verify_offer_and_navigation (res://scripts/debug/verify_balanced_primitive_contract.gd:116)
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:129)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:57)
+       [8] _verify_offer_and_navigation (res://scripts/debug/verify_balanced_primitive_contract.gd:116)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:129)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:57)
+       [8] _verify_offer_and_navigation (res://scripts/debug/verify_balanced_primitive_contract.gd:116)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:129)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:57)
+       [8] _verify_offer_and_navigation (res://scripts/debug/verify_balanced_primitive_contract.gd:116)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:129)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:57)
+       [8] _verify_offer_and_navigation (res://scripts/debug/verify_balanced_primitive_contract.gd:116)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:129)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:57)
+       [8] _verify_offer_and_navigation (res://scripts/debug/verify_balanced_primitive_contract.gd:116)
+PASS: Contract entry does not refresh shared redraws
+PASS: Each draw has seven ledger-backed Design/Alpha Features or Core Passes with no duplicate finite Feature
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:142)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:142)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] redraw_selected_cards (res://scripts/phases/contract_phase.gd:380)
+       [4] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:148)
+PASS: Selected Feature and Pass redraw atomically
+PASS: Redraw is type-preserving and consumes one allowance per card
+PASS: Unchanged priority commit costs nothing
+PASS: Invalid priority commit costs nothing
+PASS: Valid changed priorities commit
+PASS: Priority commit advances once and restores one redraw
+PASS: Priority commit preserves current draw and integrates with sales earning
+PASS: Committed priorities control later redraw category weighting
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:176)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:58)
+       [8] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:163)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:176)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:58)
+       [8] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:163)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:176)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:58)
+       [8] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:163)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:176)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:58)
+       [8] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:163)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:176)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:58)
+       [8] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:163)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:176)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:58)
+       [8] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:163)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:176)
+       [7] _verify (res://scripts/debug/verify_balanced_primitive_contract.gd:58)
+       [8] _verify_redraw_and_priorities (res://scripts/debug/verify_balanced_primitive_contract.gd:163)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:179)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:179)
+PASS: Incomplete hand rejects without run or contract mutation
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:186)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:186)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:186)
+PASS: First contract hand succeeds
+PASS: Contract preserves all three unplayed instances before its four new candidates
+PASS: Contract refill cannot duplicate a reserved finite Feature
+PASS: Contract refill cannot duplicate a reserved finite Feature
+PASS: Contract refill cannot duplicate a reserved finite Feature
+PASS: Contract refill cannot duplicate a reserved finite Feature
+PASS: Contract refill cannot duplicate a reserved finite Feature
+PASS: First hand advances and earns sales without another Contract payment or early settlement
+PASS: Features exhaust locally while Passes remain renewable
+PASS: Second draw excludes exhausted Feature and first hand advances once
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:199)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:199)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:199)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:199)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:199)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_two_hand_completion (res://scripts/debug/verify_balanced_primitive_contract.gd:199)
+PASS: Phase reconstruction reuses ContractState and cannot repay the guarantee
+PASS: Second hand completes the contract
+PASS: Second hand commits one immutable result with separately recorded guarantee and remainder
+PASS: Completion view shows Scope, Core, percentage and all exact-cent reward parts
+PASS: Completion remainder pays before the shared boundary settles earned sales
+PASS: Contract never mutates frozen ProjectState
+PASS: Repeated completion callback cannot repay or advance
+PASS: Completion dismissal is passive
+PASS: Studio re-entry preserves Ironclad completion and exposes the newly unlocked release-linked SideStreet offer
+PASS: Studio reconstruction preserves cash, calendar, redraws, sales and frozen project
+PASS: Upfront overflow rejects acceptance without ownership, cash, cycle, redraw or sales mutation
+PASS: Accepted guarantee can leave cash one cent below signed limit
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:249)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:249)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:249)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:249)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:249)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:249)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:249)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:252)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:252)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:252)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_overflow_rollback (res://scripts/debug/verify_balanced_primitive_contract.gd:252)
+PASS: Non-completing hand can commit at near-maximum cash
+PASS: Completing payout overflow rejects
+PASS: Overflow rollback preserves contract, cash, calendar, redraws and sales
+PASS: Contract navigation fixture starts with two available redraws
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:299)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:342)
+       [8] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:285)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:299)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:342)
+       [8] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:285)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:299)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:342)
+       [8] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:285)
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:299)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:342)
+       [8] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:285)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:299)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:342)
+       [8] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:285)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:299)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:342)
+       [8] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:285)
+PASS: Gameplay retains accepted ContractState and enters ContractPhase
+PASS: Contract entry itself does not grant another redraw refill
+PASS: Contract entry teaches the matching-primary synergy in the in-game Tip
+PASS: Contract in-game Tip previews the selected synergy without changing run state
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:299)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:299)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:420)
+       [5] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:299)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] redraw_selected_cards (res://scripts/phases/contract_phase.gd:380)
+       [4] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:301)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] redraw_selected_cards (res://scripts/phases/contract_phase.gd:380)
+       [4] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:301)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] redraw_selected_cards (res://scripts/phases/contract_phase.gd:380)
+       [4] _verify_gameplay_transition (res://scripts/debug/verify_balanced_primitive_contract.gd:301)
+PASS: Contract consumes three redraws between its two successful hands
+PASS: Completed Contract retains only the productive hand's single restored redraw
+PASS: Completion dismissal returns through Gameplay to the same Studio dashboard state
+PASS: Returning to Studio only refills redraws; cash, sales and the two-hand cycle count remain unchanged
+Balanced Primitive Contract verification: 0 failures

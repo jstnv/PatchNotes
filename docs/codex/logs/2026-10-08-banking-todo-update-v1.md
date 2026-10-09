@@ -1,0 +1,9 @@
+# Banking shared-list update — 2026-10-08
+
+On `main` at inspected HEAD `91ce539978b87ac0a6efe3a1e028cae5f1360f19`, preserved the existing concurrent dirty worktree and `.codex-godot-temp`. The user explicitly requested a To Do List update and invited other bounded tasks. This design thread changed no gameplay, loan policy, or economic coefficient; no commit or push.
+
+Updated `docs/codex/TODO.md` in place: Task10 now requires source-matched research1/traits4 checkpoint evidence and completion of its A01–A12 breadth; Task11 requires a fresh current-source export before the existing visible Bank/Continue route; Task13 and the release-track summary no longer describe the connected save runtime as absent. Added Banking B6 as one read-only balance review after Task10/Task11: genuine separate $5,500/$5,700 starts, short and delayed first releases, bounded attempt to reproduce the reported 6.2-rated late case, then matched post-Game-1 no-loan/$500/larger-eligible-loan continuations. The $1,150 Feature spend remains an observation, not a fixed charge; no numerical tuning is approved by the task.
+
+Updated `docs/codex/threads/banking-system/HANDOFF.md` and `README.md` to point to the shared entry. This dated log records the change. Source inputs: `CURRENT_STATE.md`, `TODO.md`, `README.md`, economy/lifespan design, current Banking handoff, B1/current-balance findings and the 2026-10-08 Research/Resourceful log. The implementing thread owns execution and later status changes.
+
+Checks: `git diff --check -- docs/codex/TODO.md docs/codex/threads/banking-system/HANDOFF.md docs/codex/threads/banking-system/README.md` passed with only LF/CRLF normalization warnings. The new log and handoff note have zero trailing-whitespace lines. `Test-Path` found all referenced local targets, including this log and the B1 and Research/Resourceful evidence. No runtime test was run for this documentation-only update.

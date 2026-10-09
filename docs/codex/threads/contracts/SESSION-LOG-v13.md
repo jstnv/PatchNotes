@@ -1,0 +1,7 @@
+# Contracts design session v13 — authorized v8 cleanup
+
+2026-10-08 (America/Los_Angeles). The user explicitly authorized removal after the [v12 cleanup rejection](SESSION-LOG-v12.md). Branch `main`, HEAD `91ce539978b87ac0a6efe3a1e028cae5f1360f19`; thread status/diff and current state/queue were inspected. No gameplay, tests, assets, configuration, shared TODO or shared design authority edit.
+
+Verified that the exact source-copy and profiles paths resolved as ordinary directories directly within `C:\Users\64jus\Downloads\Patch Notes Design Folder`, and that this thread's `sim-v8/native-traces.zip` and `sim-v8/dirty-source-overlay.zip` existed. In one PowerShell operation, reverified both resolved paths, removed only `contracts-game5-v8-source-copy` and `contracts-game5-v8-profiles`, and confirmed both paths absent. `.codex-godot-temp`, the main worktree and other folders were untouched.
+
+Reran `sim-v8/audit.py` after cleanup: exit 0; analysis script, archived dirty overlay and all legal-arm/finance checks passed. `copy_hashes_unchanged` is now `null` because the disposable copy is gone; [at-run audit](sim-v8/audit-summary-at-run.json) retains `true` from before cleanup. Updated [sim-v8 README](sim-v8/README.md) and this folder's [README](README.md) to reflect the current cleanup state. No commit or push claim. The next proposed design question remains an actual active-loan or arrears pressure route.

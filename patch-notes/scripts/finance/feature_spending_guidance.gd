@@ -98,10 +98,14 @@ static func acquisition_text(advice: Dictionary) -> String:
 	if path.is_empty() or path.steps.is_empty(): return ""
 	var lines: Array[String] = ["Cost to acquire — current quotes"]
 	for step: Dictionary in path.steps:
+		var research: Dictionary = step.get("research",{})
+		if not research.is_empty():
+			lines.append("%s: base %s; down %s %s; next installment %s; %d actions left. Conditional remaining total %s." % [step.name,CashFormatter.format_exact_cents(research.base_cents),CashFormatter.format_exact_cents(research.down_cents),"already paid" if research.queued else "due on admission",CashFormatter.format_exact_cents(research.due_cents),research.remaining_actions,CashFormatter.format_exact_cents(step.price_cents)])
+			continue
 		lines.append("%s: %s · %d cycle(s) · %s" % [step.name,CashFormatter.format_exact_cents(step.price_cents),step.cycles,step.status])
-	lines.append("Quoted total: %s · %d cycle(s)" % [CashFormatter.format_exact_cents(path.price_cents),path.cycles])
+	lines.append("Conditional total: %s · %d cycle(s)" % [CashFormatter.format_exact_cents(path.price_cents),path.cycles])
 	for requirement: String in path.requirements: lines.append("Requirement: " + requirement)
-	lines.append("Each step is separate. Requote after buying: bills, settlement, familiarity and unlocks can change.")
+	lines.append("Each step is separate. Requote before every admission/research action: bills, settlement, familiarity and unlocks can change.")
 	return "\n".join(lines)
 
 static func explanation(advice: Dictionary) -> String:

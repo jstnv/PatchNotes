@@ -22,8 +22,8 @@ const SECONDARIES := {
 const TRAITS := {
 	&"family_funding": {"name":"Family Funding", "positive":true, "price":"2 points", "description":"Active: $300 separate startup funding."},
 	&"cult_following": {"name":"Cult Following", "positive":true, "price":"Preview", "description":"Inactive preview; seed size and price pending."},
-	&"publisher_connections": {"name":"Publisher Connections", "positive":true, "price":"Preview", "description":"Inactive preview; publisher benefit pending."},
-	&"resourceful": SECONDARIES[&"resourceful"],
+	&"publisher_connections": {"name":"Publisher Connections", "positive":true, "price":"1 point", "description":"Active: first Ironclad advance $550; remaining pool $1,850. Full payout stays $2,400."},
+	&"resourceful": {"name":"Resourceful", "positive":true, "price":"1 point", "description":"Active: up to $100 off the first paid Store acquisition per release window. Research saving applies to the final installment; down payment unchanged."},
 	&"lean_production": {"name":"Lean Production", "positive":true, "price":"2 points", "description":"Active: 10% off paid Primitive hands; up to $100 per project."},
 	&"studio_buzz": {"name":"Studio Buzz", "positive":true, "price":"1 point", "description":"Active: +3 Awareness on every launch."},
 	&"college_dropout": {"name":"College Dropout", "positive":false, "price":"Preview", "description":"Education debt deferred; no points or bills."},
@@ -31,7 +31,8 @@ const TRAITS := {
 	&"expensive_lease": {"name":"Expensive Lease", "positive":false, "price":"Grants 2 points", "description":"Active: $515 rent every month from month 1."},
 	&"unknown_name": {"name":"Unknown Name", "positive":false, "price":"Grants 2 points", "description":"Active: -10 Awareness on first successful launch, floored at zero."}}
 
-static func evaluate_traits(chosen: Array) -> Dictionary:
+static func evaluate_traits(chosen: Array, version: int = 5) -> Dictionary:
+	if version not in [3,4,5]: return {"valid":false,"reason":"Unsupported trait version."}
 	var seen := {}
 	var positive := 0
 	var negative := 0
@@ -50,14 +51,18 @@ static func evaluate_traits(chosen: Array) -> Dictionary:
 		if seen.has(id): ids.append(id)
 	var spent := 2 if seen.has(&"family_funding") else 0
 	spent += 1 if seen.has(&"studio_buzz") else 0
+	spent += 1 if version >= 4 and seen.has(&"resourceful") else 0
 	spent += 2 if seen.has(&"lean_production") else 0
+	spent += 1 if version >= 5 and seen.has(&"publisher_connections") else 0
 	var refunded := 2 if seen.has(&"unknown_name") or seen.has(&"expensive_lease") else 0
 	var active: Array[StringName] = []
 	for id: StringName in [&"family_funding", &"studio_buzz", &"unknown_name", &"lean_production", &"expensive_lease"]:
 		if seen.has(id): active.append(id)
+	if version >= 4 and seen.has(&"resourceful"): active.append(&"resourceful")
+	if version >= 5 and seen.has(&"publisher_connections"): active.append(&"publisher_connections")
 	var remaining := STARTING_POINTS - spent + refunded
 	if remaining < 0: return {"valid":false, "reason":"Not enough build points."}
-	return {"valid":true, "reason":"", "version":3, "trait_ids":ids,
+	return {"valid":true, "reason":"", "version":version, "trait_ids":ids,
 		"effects_mode":&"approved_effects_v1", "active_ids":active, "starting_points":4,
 		"spent_points":spent, "refunded_points":refunded, "remaining_points":remaining, "point_cash_cents":cash_for_points(remaining),
 		"family_funding_cents":30000 if seen.has(&"family_funding") else 0}

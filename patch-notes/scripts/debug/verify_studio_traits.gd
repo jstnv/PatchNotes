@@ -41,7 +41,7 @@ func _run() -> void:
 		canonical.initialize_cash_cents(0)
 		check(canonical.create_studio_with_traits("Canonical", &"action", chosen), "Canonical optional choices accepted: " + str(chosen))
 		var snap := canonical.get_studio_traits()
-		check(snap.version == 3 and not snap.has("background_id") and snap.trait_ids.size() == chosen.size() and canonical.get_cash_cents() == 550000 + snap.point_cash_cents + snap.family_funding_cents, "Versioned selection contains only canonical trait identities; approved effects paired with point accounting")
+		check(snap.version == 5 and not snap.has("background_id") and snap.trait_ids.size() == chosen.size() and canonical.get_cash_cents() == 550000 + snap.point_cash_cents + snap.family_funding_cents, "Versioned selection contains only canonical trait identities; approved effects paired with point accounting")
 		var committed := state(canonical)
 		check(not canonical.create_studio_with_traits("Again", &"action", []) and state(canonical) == committed, "Canonical confirmation pays only once")
 	for invalid: Array in [[&"family_funding", &"cult_following", &"studio_buzz"], [&"graduate", &"unknown_name"], [&"family_funding", &"family_funding"], [&"student_loan"], [null]]:
@@ -78,35 +78,43 @@ func verify_ui(resolution: Vector2i) -> void:
 	var menu: MainMenu = game.get("_active_phase")
 	var layout := menu.get_node("CenterContainer/MenuLayout")
 	layout.get_node("StartGame").pressed.emit()
+	if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
+		menu._replace_dialog.hide()
+		menu._replace_dialog.confirmed.emit()
+	menu.get("_name_input").text = "Bonita Studio"
 	menu.get("_name_input").text = "Bonita Studio"
 	menu.get("_specialty").select(1)
-	menu.call("_submit")
+	menu.call("_open_folder", &"traits")
 	check(not is_instance_valid(menu.get("_background")) and menu.call("_selection").valid and state(run) == before, "Traits step has no default and browsing is free")
 	menu.get("_trait_checks")[&"cult_following"].button_pressed = true
 	menu.get("_trait_checks")[&"resourceful"].button_pressed = false
 	menu.get("_trait_checks")[&"studio_buzz"].button_pressed = true
 	menu.get("_trait_checks")[&"college_dropout"].button_pressed = true
 	menu.get("_trait_checks")[&"lean_production"].button_pressed = true
-	check(layout.get_node("StudioTraits/ReviewChoices").disabled and menu.get("_trait_error").text.contains("at most"), "Over-cap UI explains and blocks invalid build")
+	check(menu._needs_attention(&"traits") and menu.get("_trait_error").text.contains("at most"), "Over-cap UI explains and blocks invalid build")
 	menu.get("_trait_checks")[&"lean_production"].button_pressed = false
 	menu.call("_refresh_traits")
 	await settle()
-	for path in ["StudioTraits/ReviewChoices", "StudioTraits/Back", "StudioTraits/Points"]:
+	for path in ["StudioSetup/EnterStudio", "StudioSetup/Back"]:
 		var rect: Rect2 = layout.get_node(path).get_global_rect()
 		check(rect.position.y >= 0 and rect.end.y <= resolution.y - 45 and rect.end.x <= resolution.x, "Trait footer stays above HUD: " + path)
 	await capture("traits")
+	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	await settle()
 	check(menu.get("_review").text.contains("Cult Following") and menu.get("_review").text.contains("Action") and menu.get("_review").text.contains(CashFormatter.format_exact_cents(565000)), "Confirmation identifies background, Genre and actual cash")
 	await capture("confirmation")
-	layout.get_node("CreationReview/Back").pressed.emit()
-	layout.get_node("StudioTraits/Back").pressed.emit()
 	layout.get_node("StudioSetup/Back").pressed.emit()
 	check(state(run) == before and menu.call("_secondary_ids").is_empty(), "Cancel resets uncommitted choices and pays nothing")
 	layout.get_node("StartGame").pressed.emit()
+	if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
+		menu._replace_dialog.hide()
+		menu._replace_dialog.confirmed.emit()
+	menu.get("_name_input").text = "Bonita Studio"
 	menu.get("_specialty").select(1)
-	menu.call("_submit")
+	menu.call("_open_folder", &"traits")
 	menu.get("_trait_checks")[&"family_funding"].button_pressed = true
+	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	menu.call("_confirm_studio")

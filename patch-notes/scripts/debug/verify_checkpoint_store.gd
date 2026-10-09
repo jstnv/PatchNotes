@@ -1,4 +1,13 @@
 extends SceneTree
+class TestStore extends StudioCheckpointStore:
+	func acquire() -> bool:
+		var test_port := OS.get_environment("PN_CHECKPOINT_TEST_PORT")
+		if test_port.is_empty(): return super.acquire()
+		if _writer != null: return true
+		var server := TCPServer.new()
+		if server.listen(int(test_port),"127.0.0.1") != OK: return false
+		_writer = server
+		return true
 var failures := 0
 var checks := 0
 func check(ok: bool, label: String) -> void:
@@ -12,14 +21,14 @@ func validate(payload: Dictionary) -> String:
 	return "" if payload.kind == "studio" else "INCOMPATIBLE_CONTENT"
 func _initialize() -> void:
 	var path := "user://checkpoint-store-test-"+Crypto.new().generate_random_bytes(8).hex_encode()
-	var store := StudioCheckpointStore.new(path,validate)
+	var store := TestStore.new(path,validate)
 	check(store.inspect().status==&"empty","Fresh slot empty")
 	check(store.save({"cash":"550000","kind":"studio"}).status==&"saved","Initial generation publishes")
 	var initial := store.inspect()
 	check(initial.status==&"valid" and initial.sequence==1,"Published generation validates")
-	var other := StudioCheckpointStore.new(path,validate)
+	var other := TestStore.new(path,validate)
 	check(other.save({"cash":"0","kind":"studio"}).status==&"writer_busy","Second owner refused")
-	for fault in [&"before_write",&"after_flush",&"before_rename"]:
+	for fault in [&"before_write",&"during_write",&"after_flush",&"before_rename"]:
 		store.fault=fault
 		check(store.save({"cash":"400000","kind":"studio"}).status==&"io_error","Injected publication failure")
 		check(store.inspect()==initial,"Previous generation unchanged; temp not promoted")

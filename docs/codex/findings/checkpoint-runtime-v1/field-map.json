@@ -1,0 +1,54 @@
+{
+  "source_sha256": "6164551a9ffb2b9a2f29d74fa571895ce3ddb7a22bb163ab96cc9bb9ed04341d",
+  "fields": 42,
+  "direct": [
+    "_available_redraws",
+    "_bank_run_id",
+    "_cash_cents",
+    "_cash_initialized",
+    "_completed_run_cycles",
+    "_credited_projects",
+    "_employees",
+    "_familiarity",
+    "_first_studio_economy",
+    "_first_tutorial_project_id",
+    "_ironclad_completion_committed",
+    "_lean_savings",
+    "_owned_features",
+    "_pending_publisher_notifications",
+    "_promotion_awards",
+    "_promotion_consumed",
+    "_release_metadata",
+    "_released_games",
+    "_seen_tutorial_topics",
+    "_sidestreet_results",
+    "_starter_selection_confirmed",
+    "_studio_finance",
+    "_studio_name",
+    "_studio_specialty",
+    "_studio_traits",
+    "_unlocked_publishers"
+  ],
+  "typed_adapters": {
+    "_publisher_offers": "first-unlock trial offer DTOs",
+    "_primitive_contract": "completed Contract DTO",
+    "_sidestreet_entitlements": "ordered entitlement DTOs",
+    "_first_game_tutorial": "tutorial DTO",
+    "random_streams": "nine seed/state pairs",
+    "next_project_serial": "next project identity serial"
+  },
+  "rebuilt": {
+    "_feature_definitions": "compatible packaged catalog",
+    "_feature_offers": "compatible packaged catalog"
+  },
+  "transient": {
+    "_feature_purchase_in_progress": "quiescent transaction guard",
+    "_productive_cycle_in_progress": "quiescent transaction guard",
+    "_committing_cycle_cash": "quiescent transaction guard",
+    "_publishing_cycle": "quiescent transaction guard",
+    "_pending_contract_completion": "quiescent transaction guard",
+    "checkpoint_mutations_allowed": "coordinator access gate",
+    "studio_departure_guard": "coordinator callable; never serialized",
+    "checkpoint_before_mutation": "pending-save flush before the next action"
+  }
+}

@@ -21,7 +21,7 @@ func setup_release_snapshot(metadata: Dictionary, sales: Dictionary) -> bool:
 	%ScopeLabel.text = "Scope Completion: %.1f%%" % (data.scope_completion * 100.0)
 	%AwarenessLabel.text = "Awareness: %d" % data.awareness
 	%UnitsLabel.text = "Projected Month 1 Units: %d" % data.projected_units
-	%CoreDescription.text = "Final production compared with this release's review standards."
+	%CoreDescription.text = "Final scores / this release's saved targets. Meeting all four targets gives 8/10 production; 125% of each gives 10/10."
 	var labels: Array[Label] = [%GraphicsLabel, %SoundLabel, %TechnologyLabel, %DesignLabel]
 	var names := ["Graphics", "Sound", "Technology", "Design"]
 	for index in range(4):
@@ -53,7 +53,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> bool:
 	var review := project_state.get_review_result()
 	var labels: Array[Label] = [%GraphicsLabel, %SoundLabel, %TechnologyLabel, %DesignLabel]
 	var names := ["Graphics", "Sound", "Technology", "Design"]
-	%CoreDescription.text = "Final production compared with this release's review standards."
+	%CoreDescription.text = "Final scores / this release's saved targets. Meeting all four targets gives 8/10 production; 125% of each gives 10/10."
 	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
 		var score := project_state.get_core_score(category)
 		var standard := review.get_standard(category)
@@ -70,6 +70,10 @@ func setup(project_state: ProjectState, run_state: RunState) -> bool:
 
 
 func _ready() -> void:
+	# A launch can attach this view before PhaseHost has sized the new Studio.
+	# Container minimum sizing at zero height can leave expanded anchor offsets.
+	# Refit after the parent layout settles, keeping the footer in the viewport.
+	_refit_surface.call_deferred()
 	var rows := %ScopeLabel.get_parent()
 	var scope_row := HBoxContainer.new()
 	scope_row.add_theme_constant_override("separation", 24)
@@ -93,6 +97,9 @@ func _ready() -> void:
 	%ContinueButton.pressed.connect(func():
 		finish_reveal()
 		continue_to_studio_requested.emit())
+
+func _refit_surface() -> void:
+	$Margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 
 func _set_reveal_targets(scope: float, production: float, bugs: int, awareness: int, review: float) -> void:

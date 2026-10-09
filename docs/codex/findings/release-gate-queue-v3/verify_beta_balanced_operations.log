@@ -1,0 +1,50 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: 2 QA / 1 Marketing / 1 Insider qualifies
+PASS: 1 QA / 2 Marketing / 1 Insider qualifies
+PASS: 1 QA / 1 Marketing / 2 Insider qualifies
+PASS: 3 QA / 1 Marketing fails without Insider
+PASS: 3 QA / 1 Insider fails without Marketing
+PASS: 1 QA / 3 Marketing fails without Insider
+PASS: Marketing and Insider without QA fails
+PASS: A three-card composition cannot qualify
+Beta hand resolved: Balanced Operations! Output ×1.25 | Bugs discovered: 4 | Known Bugs fixed: 3 | Marketing Output gained: 2 | Cash gained: $1000 | Rival insight gained | Finite cards exhausted: playtest_rival_games | Cycle advanced: 1
+PASS: Balanced 2/1/1 hand resolves at the Playtest success boundary
+PASS: Balanced Beta action displays an in-game notification
+PASS: Base Search 3 becomes ceil(3.75)=4, then base Debug 2 becomes ceil(2.5)=3
+PASS: Aggregate Marketing 1 becomes ceil(1.25)=2
+PASS: Fixed payout remains $1,000 and balanced Playtest chance succeeds through roll 12
+PASS: Feedback reports only Balanced Operations
+PASS: Balanced hand advances one cycle and publishes seven replacements
+PASS: Balanced Operations preserves finite and renewable lifecycle
+Beta hand resolved: Balanced Operations! Output ×1.25 | Bugs discovered: 4 | Marketing Output gained: 4 | Market forecast gained | Finite cards exhausted: predict_market_trends | Cycle advanced: 1
+PASS: Balanced 1/2/1 hand resolves at forecast success boundary 37
+PASS: Balanced Search floors base request before applying and ceiling the multiplier
+PASS: Aggregate Marketing 3 becomes ceil(3.75)=4 rather than per-card rounding
+PASS: Balanced forecast chance is 38 percent
+Beta hand resolved: Balanced Operations! Output ×1.25 | Known Bugs fixed: 3 | Marketing Output gained: 2 | Rival insight gained | Market forecast gained | Finite cards exhausted: study_competition, predict_market_trends | Cycle advanced: 1
+PASS: Balanced 1/1/2 hand resolves both 38-percent insight boundaries
+PASS: Balanced Debug fixes three and Marketing one rounds upward to two
+PASS: Study and Predict independently reveal their assigned snapshots
+Beta hand resolved: Balanced Operations! Output ×1.25 | Bugs discovered: 2 | Marketing Output gained: 3 | Cash gained: $1000 | No rival insight gained | Finite cards exhausted: playtest_rival_games | Cycle advanced: 1
+PASS: Balanced Playtest roll 13 is a normal insight failure
+PASS: Insight failure preserves payout, exhaustion, and one-cycle success
+Beta hand resolved: Balanced Operations! Output ×1.25 | Known Bugs fixed: 0 | Marketing Output gained: 2 | No rival insight gained | No market forecast gained | Finite cards exhausted: study_competition, predict_market_trends | Cycle advanced: 1
+PASS: Balanced Study and Predict failure begins at roll 38
+PASS: Failure boundaries reveal neither snapshot
+Beta hand resolved: QA Specialization! Card Value ×1.50 | Bugs discovered: 7 | Known Bugs fixed: 4 | Cycle advanced: 1
+PASS: Four-QA hand retains QA Specialization
+PASS: QA Specialization precedence prevents stacking
+WARNING: Beta hand rejected: A complete replacement pool could not be prepared.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:545)
+       [1] _verify_atomicity (res://scripts/debug/verify_beta_balanced_operations.gd:159)
+       [2] _make_beta (res://scripts/debug/verify_beta_balanced_operations.gd:50)
+PASS: Forced replacement failure rejects a qualifying Balanced hand
+PASS: Rejected action never displays a synergy notification
+PASS: Rejected Balanced hand preserves all observed state and selection
+Beta Balanced Operations verification passed.

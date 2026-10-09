@@ -54,8 +54,10 @@ var _launch_authorized := false
 
 func _ready() -> void:
 	%RedrawButton.pressed.connect(_on_redraw_pressed)
-	_deal_rng.randomize()
-	_insight_rng.randomize()
+	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"beta_deal")
+	else: _deal_rng.randomize()
+	if _run_state != null: _insight_rng = _run_state.random_streams.stream(&"beta_insight")
+	else: _insight_rng.randomize()
 	_priority_draft = _priority_allocation.get_distribution()
 	_priority_allocation.allocation_changed.connect(_on_committed_priorities_changed)
 	%BeginBetaButton.pressed.connect(_on_begin_beta_pressed)
@@ -91,6 +93,8 @@ func setup(project_state: ProjectState, run_state: RunState = null, snapshot_dat
 		_run_state.cash_changed.disconnect(_update_host_playtest_action)
 	_project_state = project_state
 	_run_state = run_state
+	if _run_state != null: _insight_rng = _run_state.random_streams.stream(&"beta_insight")
+	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"beta_deal")
 	_snapshot_database = snapshot_database
 	if not _project_state.values_changed.is_connected(_refresh_known_bugs):
 		_project_state.values_changed.connect(_refresh_known_bugs)

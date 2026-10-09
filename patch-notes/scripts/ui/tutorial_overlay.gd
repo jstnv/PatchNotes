@@ -38,8 +38,8 @@ const TOPICS := {
 		{"title": "Contracts: Shared Resources", "body": "Contracts share your run calendar and redraw budget. Acceptance is free, but an accepted contract cannot be abandoned. Completion pays the cash reward once."},
 	],
 	&"feature_store": [
-		{"title": "Feature Store: Follow the Tree", "body": "Select a node to inspect its prerequisites, price and familiarity discount. Owned Features carry into future projects; playing prerequisite Features can reduce a child's price."},
-		{"title": "Feature Store: Purchase Carefully", "body": "Opening and browsing cost zero cycles. Starter Primitive purchases also take no cycles; later branch and Primitive reserve purchases each take one. Every purchase spends its displayed cash price. Locked nodes require prerequisites."},
+		{"title": "Feature Store: Follow the Tree", "body": "Select a node to inspect its prerequisites, down payment and next installment. Familiarity reduces research installments when they are paid. Only completed Features carry into future projects."},
+		{"title": "Feature Store: Purchase Carefully", "body": "Browsing is free. Initial Primitive purchases stay instant at zero cycles. Later acquisitions enter a FIFO queue: half the base price now, with no cancellation or reordering. Research pays the remaining installment and advances one productive cycle. Only the queue head can progress; ownership begins on completion."},
 	],
 }
 

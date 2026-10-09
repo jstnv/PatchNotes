@@ -83,7 +83,7 @@ func _verify_flow() -> void:
 	root.size = Vector2i(1152, 648)
 	var run := RunState.new()
 	run.initialize_cash_cents(220001)
-	run.purchase_feature(&"save_files")
+	ResearchTestActions.acquire(run,&"save_files")
 	run.spend_cash_cents(1)
 	for i in range(22): run.advance_calendar_cycle() # Store node purchase already spent the first cycle.
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
@@ -170,7 +170,7 @@ func _verify_flow() -> void:
 	var history: Dictionary = design.call("_build_design_feature_history")
 	expect(history.valid and history.unimplemented_ids.has(&"save_files"), "New Design supply and history include purchased Save Files")
 	run.add_cash(1000)
-	run.purchase_feature(&"colored_text")
+	ResearchTestActions.acquire(run,&"colored_text")
 	expect(not fresh.get_feature_supply_ids().has(&"colored_text"), "Later purchases cannot alter creation-time project supply")
 	var second_studio := await _release_active_project(game)
 	expect(second_studio != null and run.get_released_game_ids().size() == 2, "Second game completes existing release flow and registers separately")

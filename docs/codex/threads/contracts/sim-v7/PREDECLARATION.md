@@ -1,0 +1,18 @@
+# Crown→Neon offer-chain v7 — predeclaration
+
+Prepared 2026-10-08 (America/Los_Angeles) before executing new arms. This is a **read-only** balance continuation of the approved Crown/Neon trial on a hash-pinned copy of the **current** integrated worktree, including its latest Store/Traits/Publisher Connections changes. No gameplay, tests, assets, configuration, shared TODO or design authority edits are allowed. Preserve exact source HEAD, branch, dirty project-file hashes and analysis-script hash, native traces, commands and failures. The source copy is disposable; archive its dirty overlay in this folder before cleanup.
+
+## Fixed legal foundation
+
+One Action-specialty seed-1104 Studio: Lean Production + Studio Buzz + Expensive Lease, synergy native card policy, ordinary Game-2 QA (no Neon-seeking marketing override), no Store purchases/research, and no Publisher Connections. Take Ironclad after Game 1. After Game 2, request the same $500/12-month Bank quote and make the same production-hire decision as the established native route. Require frozen Game-2 Review≥7.0 and Awareness<125, pending Crown, locked Neon. Do not force a review, Awareness, card, cash, loan or cycle to obtain the state. If the source change makes the foundation illegal or nonqualifying, retain the failure and stop this bounded study.
+
+Branch four arms from the **same** Studio checkpoint before Crown:
+
+1. **Crown→Neon:** legally complete Crown; launch Game 3 with its Promotion; require Neon newly pending; legally complete Neon immediately in Studio; launch Game 4 with earned Neon Promotion.
+2. **Crown only:** complete the same Crown hands and promoted Game 3; leave the newly available Neon offer pending, then launch Game 4. This is the primary *player-choice* comparator. It differs by a legal Neon Contract and two productive cycles, including its payout, Promotion and earlier/later sales.
+3. **Crown cash-only:** complete the same Crown hands; suppress only its banked award in analysis memory before Game 3; do not take Neon if unavailable, then launch Game 4. This intervention is not a player action or persistence test; it isolates Crown Promotion in the no-Neon continuation.
+4. **No Crown:** leave Crown pending, launch Game 3 immediately, do not take Crown or Neon, then launch Game 4. This legal arm includes earlier launches and less Contract cash; treat as broad opportunity-cost context.
+
+Continue native game development after Game 4. Let `L` be the Crown→Neon arm's Game-4 launch cycle. Capture all arms at calendar `L`, `L+2` and `L+4` when reachable, with the latter two representing actual earning and two completed settlement months for the chained arm. Earlier-launch arms must reach the matched calendar through actual legal productive development; no free waiting. If an arm blocks before the endpoint, preserve its blocker and do not replace the seed/policy.
+
+Audit identical prebranch state, Crown hands and Game-3 draws/choices/review between Crown→Neon and Crown only, exact pending Neon offer after promoted Game 3, valid Neon acceptance/hands/completion/award, Game-4 frozen Awareness and unlocks, all cards/cycles, once-only receipts, finance journal validity, actual per-title/portfolio settled sales, end cash, arrears, credit and typed obligations. Direct Crown→Neon minus Crown-only end-cash is a **strategy comparison**, not isolated Promotion or causal value of an unlock in general. Report the Neon two-cycle opportunity cost and no-Crown timing explicitly. Starwave profile status is an outcome only; its offer remains unimplemented. One deterministic legal route cannot prove frequency, optimal cap, final balance or Fanbase interaction. A favorable result does not approve a numerical change.

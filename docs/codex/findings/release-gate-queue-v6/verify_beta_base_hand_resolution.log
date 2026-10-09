@@ -1,0 +1,108 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Planning rejects Play Hand with zero effects
+PASS: Zero selections reject
+PASS: One through three selections reject
+Beta hand resolved: Bugs discovered: 0 | Known Bugs fixed: 0 | Marketing Output gained: 2 | Cycle advanced: 1
+PASS: Search and Debug with no available work still resolve successfully
+PASS: Empty QA work changes no Bugs and advances exactly one cycle
+Beta hand resolved: Bugs discovered: 1 | Known Bugs fixed: 1 | Marketing Output gained: 2 | Cycle advanced: 1
+PASS: One Search and one Debug resolve sequentially in a mixed hand
+PASS: Debug fixes the Bug found by Search even when the visible Known count returns to zero
+PASS: Mixed-hand UI exposes successful fixing when Known Bugs has no net change
+Beta hand resolved: QA Specialization! Card Value ×1.50 | Bugs discovered: 7 | Known Bugs fixed: 4 | Cycle advanced: 1
+PASS: Multiple renewable QA instances resolve as one base hand
+PASS: QA Specialization changes Final Card Value before sequential Search, then Debug fixes four
+PASS: Mixed Search and Debug records all four Bugs fixed after discovery
+PASS: Mixed Search and Debug refreshes both visible Beta Bug values
+PASS: Mixed hand feedback reports both actual operations
+PASS: Renewable QA definitions do not exhaust
+Beta hand resolved: Marketing Specialization! Card Value ×1.50 | Marketing Output gained: 10 | Finite cards exhausted: press_interview | Cycle advanced: 1
+PASS: All four Marketing definitions resolve with Marketing Specialization
+PASS: Marketing contributes floor((1 + 1 + 2 + 3) × 1.5) once
+PASS: Only finite Press Interview exhausts
+PASS: Retired references and repeated callbacks cannot replay a hand
+Beta hand resolved: Marketing Output gained: 4 | Cash gained: $1000 | No rival insight gained | Finite cards exhausted: playtest_rival_games | Cycle advanced: 1
+PASS: Failed 10-percent insight roll remains a successful Playtest hand
+PASS: Nonbalanced Playtest awards exactly $1,000 without insight at failure boundary 10
+PASS: Playtest exhausts and advances one cycle even when insight fails
+Beta hand resolved: Balanced Operations! Output ×1.25 | Known Bugs fixed: 0 | Marketing Output gained: 2 | Cash gained: $1000 | Rival insight gained | Market forecast gained | Finite cards exhausted: playtest_rival_games, predict_market_trends | Cycle advanced: 1
+PASS: Playtest roll 9 and Forecast roll 29 hit their exact success intervals
+PASS: Successful insight rolls reveal both existing snapshots
+PASS: Revealed rival UI shows exact name and project-relative cycle
+PASS: Revealed forecast UI shows exact name and multiplier
+Beta hand resolved: Marketing Output gained: 2 | No rival insight gained | No market forecast gained | Finite cards exhausted: study_competition, predict_market_trends | Cycle advanced: 1
+PASS: Study and Forecast rolls 30 are normal successful-card failures
+PASS: Failed insight rolls preserve concealment but do not reject the hand
+PASS: Feedback distinguishes both failed insight outcomes
+Beta hand resolved: Marketing Output gained: 2 | Finite cards exhausted: study_competition, predict_market_trends | Cycle advanced: 1
+PASS: Already revealed snapshots consume no unnecessary controlled insight rolls
+PASS: Idempotent informational cards still exhaust and complete the hand
+Beta hand resolved: Balanced Operations! Output ×1.25 | Bugs discovered: 3 | Known Bugs fixed: 3 | Marketing Output gained: 4 | Rival insight gained | Finite cards exhausted: press_interview, study_competition | Cycle advanced: 1
+PASS: Finite and renewable mixed hand resolves
+PASS: Beta preserves the exact three unplayed instances in order
+PASS: Successful action retains three cards, draws four, and clears selection
+PASS: Replacement excludes every exhausted finite definition
+PASS: Replacement excludes every exhausted finite definition
+PASS: Replacement excludes every exhausted finite definition
+PASS: Replacement excludes every exhausted finite definition
+PASS: Replacement excludes every exhausted finite definition
+PASS: Replacement excludes every exhausted finite definition
+PASS: Replacement excludes every exhausted finite definition
+PASS: Replacement uses and preserves the latest valid priorities
+PASS: Selected finite cards exhaust
+PASS: Fully exhausted Insider category renormalizes to a complete QA/Marketing pool
+PASS: Depleted Insider definitions receive zero draw weight
+PASS: Depleted Insider definitions receive zero draw weight
+PASS: Depleted Insider definitions receive zero draw weight
+PASS: Depleted Insider definitions receive zero draw weight
+PASS: Depleted Insider definitions receive zero draw weight
+PASS: Depleted Insider definitions receive zero draw weight
+PASS: Depleted Insider definitions receive zero draw weight
+WARNING: Beta hand rejected: Assigned project snapshots are missing or unknown.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:545)
+       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:201)
+       [2] _make_beta (res://scripts/debug/verify_beta_base_hand_resolution.gd:48)
+PASS: Unknown assigned snapshot rejects atomically
+PASS: Uninitialized RunState rejects atomically
+WARNING: Beta hand rejected: A selected finite definition is invalid or exhausted.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:545)
+       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:216)
+       [2] _make_beta (res://scripts/debug/verify_beta_base_hand_resolution.gd:48)
+PASS: Already exhausted selected finite definition rejects atomically
+WARNING: Beta hand rejected: The project cycle cannot advance safely.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:545)
+       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:223)
+       [2] _make_beta (res://scripts/debug/verify_beta_base_hand_resolution.gd:48)
+PASS: Cycle overflow rejects atomically
+WARNING: Beta hand rejected: Run cash would overflow.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:545)
+       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:230)
+       [2] _make_beta (res://scripts/debug/verify_beta_base_hand_resolution.gd:48)
+PASS: Cash overflow rejects with complete state, pool, selection, and cycle preservation
+WARNING: Beta hand rejected: A complete replacement pool could not be prepared.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:545)
+       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:236)
+       [2] _make_beta (res://scripts/debug/verify_beta_base_hand_resolution.gd:48)
+PASS: Forced replacement-generation failure is atomic
+WARNING: Beta hand rejected: A complete replacement CardView pool could not be prepared.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:545)
+       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:238)
+       [2] _make_beta (res://scripts/debug/verify_beta_base_hand_resolution.gd:48)
+PASS: Forced CardView preparation failure is atomic
+Beta base hand resolution verification passed.

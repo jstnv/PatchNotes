@@ -1,0 +1,52 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+PASS: Exact signed64 0
+PASS: Exact signed64 1
+PASS: Exact signed64 9007199254740993
+PASS: Exact signed64 9223372036854775807
+PASS: Exact signed64 -1
+PASS: Exact signed64 -9223372036854775808
+PASS: Reject noncanonical/overflow 
+PASS: Reject noncanonical/overflow 00
+PASS: Reject noncanonical/overflow 01
+PASS: Reject noncanonical/overflow -0
+PASS: Reject noncanonical/overflow +1
+PASS: Reject noncanonical/overflow  1
+PASS: Reject noncanonical/overflow 1 
+PASS: Reject noncanonical/overflow 1.0
+PASS: Reject noncanonical/overflow 1e2
+PASS: Reject noncanonical/overflow --1
+PASS: Reject noncanonical/overflow 9223372036854775808
+PASS: Reject noncanonical/overflow -9223372036854775809
+PASS: Reject noncanonical/overflow １２
+PASS: Reject noncanonical/overflow <null>
+PASS: Reject noncanonical/overflow 1.0
+PASS: Unsigned field rejects negative
+PASS: Schema distinguishes integer and numeric-looking text
+PASS: Envelope/typed map/ID/full precision roundtrip
+PASS: Canonical IEEE754 big-endian hex
+PASS: Negative zero float bits preserved
+PASS: Reject invalid/nonfinite float
+PASS: Reject invalid/nonfinite float
+PASS: Reject invalid/nonfinite float
+PASS: Reject invalid/nonfinite float
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Strict JSON rejects duplicate/token/truncation
+PASS: Corrupt payload rejected before typed hydration
+PASS: Future envelope preserved as incompatible
+PASS: Repeated typed map identity rejected
+PASS: Missing/extra record fields reject
+PASS: Objects cannot enter typed fields
+PASS: Bounded nesting
+Checkpoint codec: 46 checks, 0 failures
+Loaded 40 cards.

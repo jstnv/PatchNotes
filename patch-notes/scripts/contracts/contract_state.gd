@@ -27,10 +27,13 @@ var _exhausted_feature_ids: Dictionary = {}
 var _priorities: Dictionary = {}
 var _result: ContractResult
 var _upfront_committed := false
+var _publisher_connections := false
 var _payout_committed := false
 var _contract_id: StringName = CONTRACT_ID
 var _offer_id: StringName = CONTRACT_ID
 var _source_release_id: StringName
+var _trial_terms: Dictionary = {}
+var _neon_focus := -1
 
 
 func _init(eligible_feature_ids: Array[StringName] = [], contract_id: StringName = CONTRACT_ID, offer_id: StringName = CONTRACT_ID, source_release_id: StringName = &"") -> void:
@@ -170,7 +173,7 @@ func plan_hand(cards: Array[CardData]) -> Dictionary:
 	var remainder := 0
 	var total_payout := 0
 	if completing:
-		var completion := calculate_sidestreet_completion(_scope + scope_addition, projected_scores) if _contract_id == SIDESTREET_CONTRACT_ID else calculate_completion(_scope + scope_addition, projected_scores)
+		var completion := calculate_for_state(_scope + scope_addition, projected_scores)
 		if completion.is_empty():
 			return {}
 		numerator = completion.numerator
@@ -202,7 +205,8 @@ func commit_hand(cards: Array[CardData], expected_remainder_cents: int) -> bool:
 		_exhausted_feature_ids[id] = true
 	_successful_hands += 1
 	if plan.completing:
-		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents, plan.remainder_cents, 0 if _contract_id == SIDESTREET_CONTRACT_ID else GUARANTEED_UPFRONT_CENTS)
+		var completion := calculate_for_state(_scope,_core_half_units)
+		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents, plan.remainder_cents, get_advance_cents(), int(completion.get("denominator",96)), int(completion.get("promotion",0)))
 		_payout_committed = true
 	return true
 
@@ -250,3 +254,35 @@ func _add_score(additions: Dictionary, stat: StringName, value: int, multiplier:
 		return false
 	additions[category] += amount
 	return true
+
+func freeze_trial(focus: int) -> bool:
+	var terms := PublisherTrialTerms.terms(_contract_id)
+	if terms.is_empty() or _upfront_committed or not _trial_terms.is_empty(): return false
+	if _contract_id==PublisherTrialTerms.NEON and (focus<0 or focus>3): return false
+	_trial_terms = terms
+	_neon_focus = focus if _contract_id==PublisherTrialTerms.NEON else -1
+	return true
+
+func calculate_for_state(scope: int, cores: Dictionary) -> Dictionary:
+	if _contract_id in [PublisherTrialTerms.CROWN,PublisherTrialTerms.NEON]:
+		if _trial_terms!=PublisherTrialTerms.terms(_contract_id): return {}
+		return PublisherTrialTerms.completion(_contract_id,scope,cores,_neon_focus)
+	if _contract_id==SIDESTREET_CONTRACT_ID: return calculate_sidestreet_completion(scope,cores)
+	if _contract_id==CONTRACT_ID: return _calculate_completion_for_budget(scope,cores,PUBLISHER_INVESTMENT_CENTS-get_advance_cents(),get_advance_cents())
+	return {}
+
+func get_advance_cents() -> int:
+	if not _trial_terms.is_empty(): return _trial_terms.advance_cents
+	return 0 if _contract_id==SIDESTREET_CONTRACT_ID else GUARANTEED_UPFRONT_CENTS + (15000 if _publisher_connections else 0)
+
+func get_scope_target() -> int: return int(_trial_terms.get("scope",EXPECTED_SCOPE))
+
+func get_core_target(category: int) -> int:
+	if _contract_id==PublisherTrialTerms.CROWN: return 8
+	if _contract_id==PublisherTrialTerms.NEON: return 18 if category==_neon_focus else 4
+	return EXPECTED_CORE_HALF_UNITS
+
+func get_title() -> String:
+	if _contract_id==PublisherTrialTerms.CROWN: return "Crown & Quill Contract"
+	if _contract_id==PublisherTrialTerms.NEON: return "Neon Circuit Contract — "+String(PublisherTrialTerms.STATS[_neon_focus]).capitalize()
+	return "SideStreet Cash Contract" if _contract_id==SIDESTREET_CONTRACT_ID else "Balanced Primitive Contract"

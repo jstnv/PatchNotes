@@ -1,0 +1,106 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: Fresh process sees exact predeparture generation
+PASS: Native project departure
+PASS: Design priorities
+PASS: Passive UI preserves streams
+PASS: Native design hand
+PASS: Passive UI preserves streams
+PASS: Native design hand
+PASS: Unsaved phase/advance/hand never overwrites Studio
+PASS: Independent process actual deals/effects/future streams match exactly
+PASS: Continue rolls back full unsaved phase
+Phase restart design: 0 failures
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/checkpoint_phase_probe.gd:69)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/checkpoint_phase_probe.gd:69)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/checkpoint_phase_probe.gd:69)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/checkpoint_phase_probe.gd:69)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _run (res://scripts/debug/checkpoint_phase_probe.gd:69)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:623)
+       [5] hand (res://scripts/debug/checkpoint_phase_probe.gd:19)
+       [6] _run (res://scripts/debug/checkpoint_phase_probe.gd:72)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:623)
+       [5] hand (res://scripts/debug/checkpoint_phase_probe.gd:19)
+       [6] _run (res://scripts/debug/checkpoint_phase_probe.gd:72)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:623)
+       [5] hand (res://scripts/debug/checkpoint_phase_probe.gd:19)
+       [6] _run (res://scripts/debug/checkpoint_phase_probe.gd:72)

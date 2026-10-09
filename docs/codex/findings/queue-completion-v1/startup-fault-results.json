@@ -1,0 +1,263 @@
+{
+  "workspace": "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89",
+  "runs": [
+    {
+      "name": "startup-fault-import",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [],
+      "errors": []
+    },
+    {
+      "name": "startup-prepare",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "prepare",
+        "1152",
+        "648"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [],
+      "errors": []
+    },
+    {
+      "name": "startup-card_ledger-missing",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--rendering-method",
+        "gl_compatibility",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1152",
+        "648",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\card_ledger.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\card_ledger.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-card_ledger-missing.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [
+        "ERROR: Could not open card file: res://data/card_ledger.json",
+        "ERROR: Parse JSON failed. Error at line 0: Unknown error getting token"
+      ],
+      "errors": []
+    },
+    {
+      "name": "startup-card_ledger-malformed",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--rendering-method",
+        "gl_compatibility",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1280",
+        "720",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\card_ledger.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\card_ledger.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-card_ledger-malformed.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [
+        "ERROR: Parse JSON failed. Error at line 0: Expected '}'",
+        "ERROR: Failed to parse cards.json",
+        "ERROR: Parse JSON failed. Error at line 0: Expected '}'"
+      ],
+      "errors": []
+    },
+    {
+      "name": "startup-feature_store_ledger-missing",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1152",
+        "648",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\feature_store_ledger.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\feature_store_ledger.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-feature_store_ledger-missing.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [
+        "ERROR: Parse JSON failed. Error at line 0: Unknown error getting token",
+        "ERROR: Parse JSON failed. Error at line 0: Unknown error getting token"
+      ],
+      "errors": []
+    },
+    {
+      "name": "startup-feature_store_ledger-malformed",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1280",
+        "720",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\feature_store_ledger.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\feature_store_ledger.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-feature_store_ledger-malformed.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [
+        "ERROR: Parse JSON failed. Error at line 0: Expected '}'",
+        "ERROR: Parse JSON failed. Error at line 0: Expected '}'"
+      ],
+      "errors": []
+    },
+    {
+      "name": "startup-primitive_predevelopment-missing",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1152",
+        "648",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\primitive_predevelopment.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\primitive_predevelopment.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-primitive_predevelopment-missing.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [],
+      "errors": []
+    },
+    {
+      "name": "startup-primitive_predevelopment-malformed",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1280",
+        "720",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\primitive_predevelopment.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\primitive_predevelopment.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-primitive_predevelopment-malformed.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [],
+      "errors": []
+    },
+    {
+      "name": "startup-primitive_competitor_ledger-missing",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1152",
+        "648",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\primitive_competitor_ledger.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\primitive_competitor_ledger.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-primitive_competitor_ledger-missing.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [],
+      "errors": []
+    },
+    {
+      "name": "startup-primitive_competitor_ledger-malformed",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1280",
+        "720",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\primitive_competitor_ledger.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\primitive_competitor_ledger.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-primitive_competitor_ledger-malformed.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [],
+      "errors": []
+    },
+    {
+      "name": "startup-primitive_market_forecast_ledger-missing",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1152",
+        "648",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\primitive_market_forecast_ledger.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\primitive_market_forecast_ledger.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-primitive_market_forecast_ledger-missing.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [],
+      "errors": []
+    },
+    {
+      "name": "startup-primitive_market_forecast_ledger-malformed",
+      "command": [
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project",
+        "--script",
+        "res://scripts/debug/startup_fault_probe.gd",
+        "--",
+        "fault",
+        "1280",
+        "720",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\project\\data\\primitive_market_forecast_ledger.json",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\startup-data-acceptance-hlf_iv89\\primitive_market_forecast_ledger.json.good",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-completion-v1\\startup-primitive_market_forecast_ledger-malformed.png"
+      ],
+      "exit": 0,
+      "expected_missing_data_errors": [],
+      "errors": []
+    }
+  ]
+}

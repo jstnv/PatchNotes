@@ -49,8 +49,10 @@ var _scope_warning_pending := false
 
 func _ready() -> void:
 	%RedrawButton.pressed.connect(_on_redraw_pressed)
-	_deal_rng.randomize()
-	_finalization_rng.randomize()
+	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"alpha_deal")
+	else: _deal_rng.randomize()
+	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"alpha_finalize")
+	else: _finalization_rng.randomize()
 	_priority_allocation.allocation_changed.connect(_on_priority_allocation_changed)
 	_priority_draft = _priority_allocation.get_priority_distribution()
 	%BeginAlphaButton.pressed.connect(_on_begin_alpha_pressed)
@@ -77,6 +79,8 @@ func setup(project_state: ProjectState, run_state: RunState = null) -> void:
 		_project_state.values_changed.disconnect(_refresh_alpha_bug_pressure)
 	_project_state = project_state
 	_run_state = run_state
+	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"alpha_finalize")
+	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"alpha_deal")
 	if _run_state != null and not _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
 		_run_state.redraws_changed.connect(_refresh_redraw_controls)
 	if _project_state != null and not _project_state.values_changed.is_connected(_refresh_alpha_bug_pressure):
@@ -207,7 +211,7 @@ func request_proceed_to_beta() -> bool:
 		) % [actual, required, shortfall]
 		%UnderScopeDialog.popup_centered()
 		return false
-	return _finalize_alpha(_finalization_rng.randf(), _finalization_rng.randf())
+	return _finalize_with_run_rng()
 
 
 func _on_proceed_to_beta_pressed() -> void:
@@ -220,7 +224,7 @@ func _on_under_scope_confirmed() -> void:
 	_scope_warning_pending = false
 	if not _can_proceed_to_beta():
 		return
-	_finalize_alpha(_finalization_rng.randf(), _finalization_rng.randf())
+	_finalize_with_run_rng()
 
 
 func _on_under_scope_canceled() -> void:
@@ -1169,3 +1173,9 @@ func play_hand_with_employee_plan(distribution: Dictionary) -> bool:
 	_on_play_alpha_hand_pressed()
 	_employee_priority_choice.clear()
 	return _project_state.get_current_cycle() == before+1
+
+func _finalize_with_run_rng() -> bool:
+	var prior_rng := _finalization_rng.state
+	var accepted := _finalize_alpha(_finalization_rng.randf(), _finalization_rng.randf())
+	if not accepted: _finalization_rng.state = prior_rng
+	return accepted

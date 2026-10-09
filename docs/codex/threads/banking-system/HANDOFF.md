@@ -1,5 +1,9 @@
 # Banking System handoff to the implementing thread
 
+**Current acceptance follow-up, 2026-10-08:** B3–B5 are implemented locally, and the partial-payment and unsaved mid-phase loan restart gaps pass. The next work is the [current-source Task10/Task11 acceptance handoff](2026-10-08-next-acceptance-handoff-v1.md); the historical B3–B5 implementation brief below remains as provenance.
+
+**Shared list update, 2026-10-08:** Task10/Task11 now call for current research1/traits4 checkpoint and export evidence. A separate bounded read-only B6 first-game pressure and post-loan affordability review is queued after their acceptance. [Session record](../../logs/2026-10-08-banking-todo-update-v1.md).
+
 Updated 2026-10-06 (America/Los_Angeles). **B3–B5 contributed to the shared [TODO](../../TODO.md) at the user's request; no gameplay implementation in this design thread.** Read [state](2026-10-06-state-v1.md), [candidate offer](2026-10-06-first-loan-proposal-v1.md), and the authoritative [economy design](../../design/economy-banking.md) before implementation. This folder owns the design notes; the main implementing thread owns eventual code changes.
 
 ## Dependencies and implementation details

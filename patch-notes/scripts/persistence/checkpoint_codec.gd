@@ -56,6 +56,12 @@ func encode(value: Variant, schema: Variant, depth: int = 0) -> Variant:
 				return {"f64":bytes.hex_encode()}
 		return fail("Unknown trusted schema")
 	if not schema is Dictionary: return fail("Invalid trusted schema")
+	if schema.has("one_of"):
+		for alternative: Variant in schema.one_of:
+			var candidate := CheckpointCodec.new()
+			var encoded: Variant = candidate.encode(value, alternative, depth + 1)
+			if candidate.error.is_empty(): return encoded
+		return fail("No matching record schema")
 	if schema.has("nullable"):
 		return null if value == null else encode(value, schema.nullable, depth+1)
 	if schema.has("array"):
@@ -69,7 +75,7 @@ func encode(value: Variant, schema: Variant, depth: int = 0) -> Variant:
 		for key: Variant in value:
 			entries.append({"key":encode(key,schema.map[0],depth+1),"value":encode(value[key],schema.map[1],depth+1)})
 		return entries
-	if value.size() != schema.size(): return fail("Record field count")
+	if value.size() != schema.size(): return fail("Record field count: expected %s; got %s" % [schema.keys(),value.keys()])
 	var out := {}
 	for key: String in schema:
 		if not value.has(key): return fail("Missing field: " + key)
@@ -100,6 +106,12 @@ func decode(value: Variant, schema: Variant, depth: int = 0) -> Variant:
 				return number if is_finite(number) else fail("Nonfinite float")
 		return fail("Unknown trusted schema")
 	if not schema is Dictionary: return fail("Invalid trusted schema")
+	if schema.has("one_of"):
+		for alternative: Variant in schema.one_of:
+			var candidate := CheckpointCodec.new()
+			var decoded: Variant = candidate.decode(value, alternative, depth + 1)
+			if candidate.error.is_empty(): return decoded
+		return fail("No matching record schema")
 	if schema.has("nullable"): return null if value == null else decode(value,schema.nullable,depth+1)
 	if schema.has("array"):
 		if not value is Array: return fail("Expected array")

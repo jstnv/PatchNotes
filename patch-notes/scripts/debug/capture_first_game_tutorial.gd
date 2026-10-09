@@ -50,8 +50,9 @@ func _run() -> void:
 		var main: MainMenu = game.get("_active_phase")
 		main.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 		main._name_input.text = "First Steps Studio"
-		main.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
+		main.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
 		main.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+		main.call("_open_folder", &"traits")
 		main.call("_show_review")
 		main.call("_confirm_studio")
 		var studio: Control = game.get("_active_phase")

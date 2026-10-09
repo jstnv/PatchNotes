@@ -31,6 +31,8 @@ var _familiarity: Dictionary = {}
 # Retain project identity: reconstruction and phase changes cannot mint credits.
 var _credited_projects: Dictionary = {}
 var _feature_purchase_in_progress := false
+var _feature_research: Array = []
+var _resourceful_claims: Dictionary = {}
 var _released_games: Dictionary = {}
 var _release_metadata: Dictionary = {}
 var _productive_cycle_in_progress := false
@@ -55,6 +57,17 @@ var _first_game_tutorial: FirstGameTutorial
 var _studio_finance: Dictionary = {}
 var _bank_run_id: StringName = &""
 var _employees: Dictionary = EmployeeRoster.create(&"")
+var random_streams := RunRandom.new()
+var next_project_serial := 1
+var checkpoint_mutations_allowed := true
+var studio_departure_guard: Callable
+var checkpoint_before_mutation: Callable
+var _publisher_offers: Dictionary = {}
+var _promotion_awards: Dictionary = {}
+var _promotion_consumed: Dictionary = {}
+
+func can_mutate_checkpoint() -> bool:
+	return checkpoint_mutations_allowed and (not checkpoint_before_mutation.is_valid() or checkpoint_before_mutation.call())
 
 
 ## Arm only at the successful first-project creation boundary, never on a view.
@@ -99,6 +112,7 @@ func get_studio_creation_snapshot() -> Dictionary:
 
 
 func _commit_studio_creation(value: String, specialty: StringName, selection: Dictionary) -> bool:
+	if not can_mutate_checkpoint(): return false
 	var cleaned := value.strip_edges()
 	if not _studio_name.is_empty() or not _studio_specialty.is_empty() or cleaned.is_empty() or cleaned.length() > 80 or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle or not _cash_initialized or _cash_cents != 0 or _completed_run_cycles != 0 or not _released_games.is_empty():
 		return false
@@ -161,11 +175,13 @@ func get_bank_payoff_quote(loan_id: StringName) -> Dictionary:
 
 
 func accept_bank_loan(quote: Dictionary) -> bool:
+	if not can_mutate_checkpoint(): return false
 	if not _bank_action_available(): return false
 	return _commit_bank_plan(StudioFinanceLedger.accept_loan(_studio_finance, quote, _bank_run_id))
 
 
 func pay_off_bank_loan(quote: Dictionary) -> bool:
+	if not can_mutate_checkpoint(): return false
 	if not _bank_action_available(): return false
 	return _commit_bank_plan(StudioFinanceLedger.pay_off(_studio_finance, quote))
 
@@ -243,6 +259,7 @@ func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
 		pending.push_front(id)
 		var offer := get_feature_store_offer(id)
 		id = StringName(offer.get("parent", &""))
+	var saving_available := resourceful_saving(10000) > 0
 	for feature: StringName in pending:
 		var offer := get_feature_store_offer(feature)
 		var primitive := offer.is_empty()
@@ -251,10 +268,22 @@ func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
 		var owned := owns_feature(feature)
 		var cost := 0 if owned else int(offer.price_cents)
 		var cycles := 0 if owned or (primitive and offer.initial) else 1
+		var research := {}
+		if not owned and not (primitive and offer.initial):
+			research = get_feature_research_quote(feature)
+			cost = int(research.remaining_cents) + (0 if research.queued else int(research.down_cents))
+			cycles = research.remaining_actions
+			var projected_saving := resourceful_saving(int(FeatureResearch.payment(research.base_cents,research.actions,research.actions-1,research.discount_percent).due_cents))
+			if not saving_available:
+				cost += projected_saving
+				research.remaining_cents += projected_saving
+				research.due_cents += int(research.saving_cents)
+				research.saving_cents = 0
+			elif projected_saving > 0: saving_available = false
 		if cost > MAX_SIGNED_INT - int(path.price_cents): return {"available":false,"reason":"Acquisition quote exceeds the supported range."}
 		var status := "Owned" if owned else "Available" if (offer.can_purchase if primitive else offer.unlocked and not needs_starter_selection()) else "Locked / unavailable now"
 		if not owned and not offer.affordable: status += "; insufficient cash"
-		path.steps.append({"id":feature,"name":offer.name,"owned":owned,"price_cents":cost,"cycles":cycles,"status":status})
+		path.steps.append({"id":feature,"name":offer.name,"owned":owned,"price_cents":cost,"cycles":cycles,"status":status,"research":research})
 		path.price_cents += cost
 		path.cycles += cycles
 		if not primitive and not owned:
@@ -309,12 +338,15 @@ func get_primitive_reserve_offer(id: StringName) -> Dictionary:
 		return {}
 	var price := (scope + 1) * 15000
 	var initial := needs_starter_selection()
+	var base_price := price
+	if initial: price -= resourceful_saving(price)
 	return {"id": id, "name": entry.name, "phase": entry.phase, "scope": scope,
-		"price_cents": price, "owned": owns_feature(id), "affordable": _cash_initialized and _cash_cents >= price,
+		"base_price_cents":base_price,"price_cents": price, "owned": owns_feature(id), "affordable": _cash_initialized and _cash_cents >= price,
 		"initial": initial, "can_purchase": not owns_feature(id) and _cash_initialized and _cash_cents >= price}
 
 
 func purchase_starter_feature(id: StringName) -> bool:
+	if not can_mutate_checkpoint(): return false
 	if not needs_starter_selection() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle:
 		return false
 	var offer := get_primitive_reserve_offer(id)
@@ -327,6 +359,7 @@ func purchase_starter_feature(id: StringName) -> bool:
 		set_block_signals(was_blocked)
 		_feature_purchase_in_progress = false
 		return false
+	if resourceful_saving(int(offer.base_price_cents)) > 0: _resourceful_claims[_released_games.size()] = id
 	_owned_features[id] = true
 	set_block_signals(was_blocked)
 	cash_changed.emit()
@@ -337,6 +370,7 @@ func purchase_starter_feature(id: StringName) -> bool:
 
 
 func finalize_starter_selection() -> bool:
+	if not can_mutate_checkpoint(): return false
 	if not needs_starter_selection() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle:
 		return false
 	_starter_selection_confirmed = true
@@ -344,20 +378,7 @@ func finalize_starter_selection() -> bool:
 
 
 func purchase_primitive_reserve_feature(id: StringName) -> bool:
-	if needs_starter_selection():
-		return false
-	var offer := get_primitive_reserve_offer(id)
-	if offer.is_empty() or offer.owned or not offer.affordable:
-		return false
-	var price: int = offer.price_cents
-	if not can_complete_productive_cycle(-price):
-		return false
-	var commit := func() -> bool:
-		if owns_feature(id):
-			return false
-		_owned_features[id] = true
-		return true
-	return complete_productive_action(commit, -price, _completed_run_cycles, &"", &"store", id)
+	return admit_feature_research(get_feature_research_quote(id))
 
 
 func primitive_feature_hand_cost_cents(cards: Array[CardData], project_id: StringName = &"") -> int:
@@ -429,11 +450,11 @@ func record_resolved_feature(project: ProjectState, id: StringName, phase: Strin
 		return false
 	if StringName(_feature_definitions[id].phase) != phase:
 		return false
-	var credited: Dictionary = _credited_projects.get(project, {})
+	var credited: Dictionary = _credited_projects.get(project.get_release_id(), {})
 	if credited.has(id):
 		return false
 	credited[id] = true
-	_credited_projects[project] = credited
+	_credited_projects[project.get_release_id()] = credited
 	_familiarity[id] = get_feature_familiarity(id) + 1
 	features_changed.emit()
 	return true
@@ -465,20 +486,83 @@ func get_feature_store_offer(id: StringName) -> Dictionary:
 
 
 func purchase_feature(id: StringName) -> bool:
-	if needs_starter_selection() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle:
-		return false
+	return admit_feature_research(get_feature_research_quote(id))
+
+
+func resourceful_saving(price: int) -> int:
+	return mini(10000,price) if price > 0 and StudioTraits.is_active(_studio_traits,&"resourceful") and not _resourceful_claims.has(_released_games.size()) else 0
+
+
+func get_feature_research_queue() -> Array:
+	var pending: Array = []
+	for entry: Dictionary in _feature_research:
+		if entry.payments.size() < entry.actions: pending.append(entry.duplicate(true))
+	return pending
+
+
+func get_feature_research_quote(id: StringName) -> Dictionary:
 	var offer := get_feature_store_offer(id)
-	if offer.is_empty() or offer.owned or not offer.unlocked or not offer.affordable:
-		return false
-	var price: int = offer.price_cents
-	if not can_complete_productive_cycle(-price):
-		return false
+	var primitive := offer.is_empty()
+	if primitive: offer = get_primitive_reserve_offer(id)
+	if offer.is_empty(): return {}
+	var base: int = offer.base_price_cents
+	var entry: Dictionary = {}
+	for candidate: Dictionary in _feature_research:
+		if candidate.feature_id == id: entry = candidate
+	var queued: bool = not entry.is_empty() and entry.payments.size() < entry.actions
+	var actions: int = entry.get("actions",1)
+	var done: int = entry.get("payments",[]).size()
+	var discount: int = offer.get("discount_percent",0)
+	var arithmetic := FeatureResearch.payment(base,actions,mini(done,actions-1),discount)
+	if arithmetic.is_empty(): return {}
+	var saving := resourceful_saving(arithmetic.due_cents) if done == actions-1 else 0
+	var remaining := 0
+	for index in range(done,actions): remaining += int(FeatureResearch.payment(base,actions,index,discount).due_cents)
+	if done < actions: remaining -= resourceful_saving(int(FeatureResearch.payment(base,actions,actions-1,discount).due_cents))
+	var paid := 0 if entry.is_empty() else int(arithmetic.down_cents)
+	for installment: Dictionary in entry.get("payments",[]): paid += int(installment.paid_cents)
+	var pending := get_feature_research_queue()
+	var head: bool = queued and not pending.is_empty() and pending[0].feature_id == id
+	var unlocked: bool = primitive or offer.get("unlocked",false)
+	return {"feature_id":id,"entry_id":StringName("%s:research:%s" % [_bank_run_id,id]),
+		"base_cents":base,"down_cents":arithmetic.down_cents,"due_cents":arithmetic.due_cents-saving,"saving_cents":saving,
+		"nominal_cents":arithmetic.nominal_cents,"discount_percent":discount,"actions":actions,"completed":done,
+		"paid_cents":paid,"remaining_actions":actions-done,"remaining_cents":remaining,"queued":queued,"head":head,"unlocked":unlocked,
+		"can_admit":not needs_starter_selection() and not offer.owned and unlocked and not queued and _cash_initialized and _cash_cents>=arithmetic.down_cents and get_financial_block_reason().is_empty(),
+		"can_research":head and can_complete_productive_cycle(-int(arithmetic.due_cents-saving)),
+		"cycle":_completed_run_cycles,"cash_cents":_cash_cents,"revision":_studio_finance.get("actions",[]).size(),"queue_size":_feature_research.size(),"resourceful_window":_released_games.size()}
+
+
+func admit_feature_research(quote: Dictionary) -> bool:
+	if not can_mutate_checkpoint() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle: return false
+	if quote.is_empty() or typeof(quote.get("feature_id")) != TYPE_STRING_NAME: return false
+	if quote != get_feature_research_quote(quote.get("feature_id",&"")) or not quote.can_admit: return false
+	var plan := StudioFinanceLedger.plan(_studio_finance,_completed_run_cycles,_cash_cents,-int(quote.down_cents),&"store",0,0,false,StringName(str(quote.entry_id)+":admit")) if _first_studio_economy else {"cash_cents":_cash_cents-int(quote.down_cents),"ledger":_studio_finance}
+	if plan.is_empty(): return false
+	_feature_purchase_in_progress = true
+	_feature_research.append({"id":quote.entry_id,"feature_id":quote.feature_id,"base_cents":quote.base_cents,"actions":1,"admitted_cycle":_completed_run_cycles,"payments":[]})
+	_cash_cents = plan.cash_cents
+	_studio_finance = plan.ledger
+	cash_changed.emit()
+	finance_changed.emit()
+	features_changed.emit()
+	_feature_purchase_in_progress = false
+	return true
+
+
+func research_feature(quote: Dictionary) -> bool:
+	if not can_mutate_checkpoint() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle: return false
+	if quote.is_empty() or typeof(quote.get("feature_id")) != TYPE_STRING_NAME: return false
+	if quote != get_feature_research_quote(quote.get("feature_id",&"")) or not quote.can_research: return false
 	var commit := func() -> bool:
-		if owns_feature(id):
-			return false
-		_owned_features[id] = true
-		return true
-	return complete_productive_action(commit, -price, _completed_run_cycles, &"", &"store", id)
+		for entry: Dictionary in _feature_research:
+			if entry.id != quote.entry_id: continue
+			entry.payments.append({"cycle":_completed_run_cycles+1,"nominal_cents":quote.nominal_cents,"discount_percent":quote.discount_percent,"paid_cents":quote.due_cents,"saving_cents":quote.saving_cents,"window":quote.resourceful_window})
+			if quote.saving_cents > 0: _resourceful_claims[_released_games.size()] = quote.entry_id
+			if entry.payments.size() == entry.actions: _owned_features[entry.feature_id] = true
+			return true
+		return false
+	return complete_productive_action(commit,-int(quote.due_cents),quote.cycle,&"",&"store",StringName("%s:%d" % [quote.entry_id,quote.completed]))
 
 
 ## The new-run boundary supplies the locked starting amount explicitly. The
@@ -529,6 +613,7 @@ func add_cash(amount: Variant) -> bool:
 
 
 func add_cash_cents(amount_cents: Variant, kind: StringName = &"other_income", source_id: StringName = &"") -> bool:
+	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle or (_productive_cycle_in_progress and not _committing_cycle_cash):
 		return false
 	if not _cash_initialized:
@@ -563,6 +648,7 @@ func spend_cash(amount: Variant) -> bool:
 
 
 func spend_cash_cents(amount_cents: Variant, kind: StringName = &"other_expense", source_id: StringName = &"") -> bool:
+	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle or (_productive_cycle_in_progress and not _committing_cycle_cash):
 		return false
 	if not _cash_initialized:
@@ -601,6 +687,7 @@ func can_consume_redraw(count: int = 1) -> bool:
 
 
 func consume_redraw(count: int = 1) -> bool:
+	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle:
 		return false
 	if not can_consume_redraw(count):
@@ -676,7 +763,7 @@ func can_register_release(project: ProjectState) -> bool:
 			return false
 		var metadata: Dictionary = _release_metadata[id]
 		return metadata.base_name == project.get_base_name() and metadata.genre == project.get_genre_id() and metadata.theme == project.get_theme_id() and metadata.genre_ratios == project.get_genre_ratios() and _released_games[id].get("review_tenths", -1) == expected_record.get("review_tenths", -1) and _released_games[id].get("launch_awareness", -1) == expected_record.get("launch_awareness", -1) and _released_games[id].get("market_bp", -1) == expected_record.get("market_bp", -1)
-	return true
+	return project.get_awareness_result().get_promotion_awards()==get_pending_promotion_awards()
 
 
 func _create_release_sales_record(project: ProjectState) -> Dictionary:
@@ -688,6 +775,7 @@ func _create_release_sales_record(project: ProjectState) -> Dictionary:
 
 
 func register_release(project: ProjectState) -> bool:
+	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle:
 		return false
 	if not can_register_release(project):
@@ -706,6 +794,8 @@ func register_release(project: ProjectState) -> bool:
 		"theme": project.get_theme_id(), "genre_ratios": project.get_genre_ratios(),
 		"release_title": title, "release_year": year, "release_cycle": _completed_run_cycles,
 		"review": _capture_release_review(project)}
+	for offer_id: StringName in project.get_awareness_result().get_promotion_awards():
+		_promotion_consumed[offer_id] = id
 	# Qualification is captured only on the first committed registration. Existing
 	# entitlements (including legacy under-Scope offers) are never re-evaluated.
 	if project.get_current_scope() >= project.get_required_scope():
@@ -761,6 +851,7 @@ func get_post_launch_campaign_offer(release_id: StringName) -> Dictionary:
 
 
 func purchase_post_launch_campaign(release_id: StringName, expected_cycle: int) -> bool:
+	if not can_mutate_checkpoint(): return false
 	if expected_cycle != _completed_run_cycles or get_post_launch_campaign_offer(release_id).get("can_purchase", false) != true:
 		return false
 	return complete_productive_action(Callable(), -POST_LAUNCH_CAMPAIGN_COST_CENTS, expected_cycle, release_id, &"campaign", release_id)
@@ -807,19 +898,26 @@ func is_primitive_contract_offer_available() -> bool:
 	return not _released_games.is_empty() and _primitive_contract == null and get_active_contract() == null and not _productive_cycle_in_progress and not _publishing_cycle
 
 
+func get_ironclad_advance_cents() -> int:
+	return 55000 if StudioTraits.is_active(_studio_traits,&"publisher_connections") else 40000
+
+
 func accept_primitive_contract() -> ContractState:
+	if not can_mutate_checkpoint(): return null
+	if studio_departure_guard.is_valid() and not studio_departure_guard.call(): return null
 	if not is_primitive_contract_offer_available():
 		return null
-	if not _cash_initialized or _cash_cents > MAX_SIGNED_INT - ContractState.GUARANTEED_UPFRONT_CENTS:
+	if not _cash_initialized or _cash_cents > MAX_SIGNED_INT - get_ironclad_advance_cents():
 		return null
 	var accepted := ContractState.new(_primitive_contract_eligible_ids())
+	accepted._publisher_connections = StudioTraits.is_active(_studio_traits,&"publisher_connections")
 	if not accepted.commit_upfront():
 		return null
 	# Block observers until both ownership and the exact-cent guarantee commit.
 	var was_blocked := is_blocking_signals()
 	set_block_signals(true)
 	_primitive_contract = accepted
-	if not add_cash_cents(ContractState.GUARANTEED_UPFRONT_CENTS, &"publisher_receipt", accepted.get_offer_id()):
+	if not add_cash_cents(accepted.get_advance_cents(), &"publisher_receipt", accepted.get_offer_id()):
 		_primitive_contract = null
 		set_block_signals(was_blocked)
 		return null
@@ -835,6 +933,9 @@ func get_primitive_contract() -> ContractState:
 
 
 func get_active_contract() -> ContractState:
+	for offer: Dictionary in _publisher_offers.values():
+		var state: ContractState = offer.state
+		if state!=null and not state.is_completed(): return state
 	if _primitive_contract != null and not _primitive_contract.is_completed():
 		return _primitive_contract
 	for release_id: StringName in _sidestreet_entitlements:
@@ -845,6 +946,8 @@ func get_active_contract() -> ContractState:
 
 
 func owns_contract_state(state: ContractState) -> bool:
+	for offer: Dictionary in _publisher_offers.values():
+		if offer.state==state and state!=null: return true
 	if state == null:
 		return false
 	if _primitive_contract == state:
@@ -881,6 +984,8 @@ func is_sidestreet_offer_available() -> bool:
 
 
 func accept_sidestreet_offer(offer_id: StringName) -> ContractState:
+	if not can_mutate_checkpoint(): return null
+	if studio_departure_guard.is_valid() and not studio_departure_guard.call(): return null
 	if not is_sidestreet_offer_available() or offer_id.is_empty():
 		return null
 	var next := get_next_sidestreet_offer()
@@ -913,6 +1018,7 @@ func commit_contract_hand(state: ContractState, cards: Array[CardData], expected
 	var plan := state.plan_hand(cards)
 	if plan.is_empty() or plan.remainder_cents != expected_payment_cents:
 		return false
+	if plan.completing and _publisher_offers.has(state.get_offer_id()) and _promotion_awards.has(state.get_offer_id()): return false
 	if state.get_contract_id() == ContractState.SIDESTREET_CONTRACT_ID and plan.completing:
 		if _sidestreet_results.has(state.get_offer_id()) or not _sidestreet_entitlements.has(state.get_source_release_id()):
 			return false
@@ -931,6 +1037,9 @@ func _record_paid_contract_completion() -> void:
 	if state == null:
 		return
 	_pending_contract_completion = null
+	if _publisher_offers.has(state.get_offer_id()):
+		_promotion_awards[state.get_offer_id()] = state.get_result().get_promotion()
+		return
 	if state == _primitive_contract:
 		_ironclad_completion_committed = true
 		return
@@ -945,7 +1054,11 @@ func _record_paid_contract_completion() -> void:
 
 func get_completed_contract_count() -> int:
 	var ironclad := 1 if _ironclad_completion_committed else 0
-	return ironclad + _sidestreet_results.size()
+	var trials := 0
+	for offer: Dictionary in _publisher_offers.values():
+		var state: ContractState = offer.state
+		if state!=null and state.is_completed() and state.is_payout_committed(): trials += 1
+	return ironclad + _sidestreet_results.size() + trials
 
 
 func get_unlocked_publisher_ids() -> Array[StringName]:
@@ -977,15 +1090,29 @@ func get_publisher_status(id: StringName) -> Dictionary:
 			PublisherCatalog.IRONCLAD:
 				requirement = "Release your first game (%d / 1)." % released
 			PublisherCatalog.SIDESTREET:
-				requirement = "Complete one contract (%d / 1)." % contracts
+				requirement = "Complete the Ironclad Contract (%d / 1)." % int(_ironclad_completion_committed)
 			PublisherCatalog.CROWN_QUILL:
 				requirement = "Release any game with Final Review 7.0 or higher."
 			PublisherCatalog.NEON_CIRCUIT:
 				requirement = "Release any game with committed Total Awareness 125 or higher."
 			PublisherCatalog.STARWAVE:
 				requirement = "Release at least two games (%d / 2) and complete at least three contracts (%d / 3)." % [released, contracts]
+		var availability: String = entry.availability
+		if id in [PublisherCatalog.CROWN_QUILL, PublisherCatalog.NEON_CIRCUIT]:
+			for offer: Dictionary in _publisher_offers.values():
+				if offer.publisher_id != id: continue
+				var state: ContractState = offer.state
+				if state == null:
+					availability = "Contract available from Contracts. This one-time offer does not expire."
+					if get_active_contract() != null:
+						availability = "Contract pending. Finish the active Contract first; this offer does not expire."
+				elif state.is_completed() and state.is_payout_committed():
+					availability = "One-time Contract completed. Cash and Promotion have been awarded."
+				else:
+					availability = "Contract in progress. Resume it from Contracts."
+				break
 		return {"id": id, "name": entry.name, "personality": entry.personality,
-			"availability": entry.availability, "unlocked": _unlocked_publishers.has(id),
+			"availability": availability, "unlocked": _unlocked_publishers.has(id),
 			"requirement": requirement}
 	return {}
 
@@ -997,6 +1124,15 @@ func _refresh_publisher_unlocks() -> bool:
 		if _unlocked_publishers.has(id) or not _meets_publisher_requirement(id):
 			continue
 		_unlocked_publishers[id] = true
+		if id in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT]:
+			var offer_id := StringName("%s:%s:first" % [_bank_run_id,id])
+			var source: StringName
+			for release_id: StringName in _release_metadata:
+				var frozen: Dictionary = _release_metadata[release_id].review
+				if (id==PublisherCatalog.CROWN_QUILL and frozen.final_review>=7.0) or (id==PublisherCatalog.NEON_CIRCUIT and frozen.awareness>=125):
+					source = release_id
+					break
+			_publisher_offers[offer_id] = {"publisher_id":id,"source_release_id":source,"state":null}
 		_pending_publisher_notifications.append(id)
 		changed = true
 	if changed:
@@ -1009,7 +1145,7 @@ func _meets_publisher_requirement(id: StringName) -> bool:
 		PublisherCatalog.IRONCLAD:
 			return not _released_games.is_empty()
 		PublisherCatalog.SIDESTREET:
-			return get_completed_contract_count() >= 1
+			return _ironclad_completion_committed
 		PublisherCatalog.CROWN_QUILL:
 			for metadata: Dictionary in _release_metadata.values():
 				var snapshot: Dictionary = metadata.get("review", {})
@@ -1075,6 +1211,7 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 ## Direct effects -> income/spend -> calendar/sales settlement -> due rent and
 ## oldest arrears -> report -> notifications. No await can split this boundary.
 func complete_productive_action(direct_effects: Callable = Callable(), direct_cash_delta_cents: int = 0, expected_cycle: int = -1, campaign_release_id: StringName = &"", finance_kind: StringName = &"", source_id: StringName = &"") -> bool:
+	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle:
 		return false
 	if expected_cycle != -1 and expected_cycle != _completed_run_cycles:
@@ -1148,6 +1285,7 @@ func get_production_hire_quote() -> Dictionary:
 
 
 func hire_production_specialist(quote: Dictionary) -> bool:
+	if not can_mutate_checkpoint(): return false
 	if not _bank_action_available() or quote.is_empty() or quote != get_production_hire_quote(): return false
 	var finance := StudioFinanceLedger.hire_employee(_studio_finance,quote,_bank_run_id)
 	var roster := EmployeeRoster.hire(_employees,quote.employee_id,_completed_run_cycles)
@@ -1190,6 +1328,78 @@ func lean_discount(normal_cents: int, project_id: StringName) -> int:
 
 func get_lean_savings() -> Dictionary:
 	return _lean_savings.duplicate(true)
+
+func get_pending_publisher_offer_ids() -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for id: StringName in _publisher_offers:
+		if _publisher_offers[id].state==null: ids.append(id)
+	return ids
+
+func get_pending_promotion_awards() -> Dictionary:
+	var pending := {}
+	for id: StringName in _promotion_awards:
+		if not _promotion_consumed.has(id): pending[id] = _promotion_awards[id]
+	return pending
+
+func get_pending_promotion() -> int:
+	var total := 0
+	for points: int in get_pending_promotion_awards().values():
+		if points<0 or points>MAX_SIGNED_INT-total: return -1
+		total += points
+	return total
+
+func get_release_promotion(release: StringName) -> int:
+	var total := 0
+	for id: StringName in _promotion_consumed:
+		if _promotion_consumed[id]==release: total += int(_promotion_awards[id])
+	return total
+
+func get_pending_contract_choices() -> Array[Dictionary]:
+	var choices: Array[Dictionary] = []
+	if get_active_contract()!=null: return choices
+	if is_primitive_contract_offer_available(): choices.append({"offer_id":ContractState.CONTRACT_ID,"label":"Ironclad Interactive"})
+	if _unlocked_publishers.has(PublisherCatalog.SIDESTREET):
+		for release: StringName in _sidestreet_entitlements:
+			var offer: Dictionary = _sidestreet_entitlements[release]
+			if offer.state==null: choices.append({"offer_id":offer.offer_id,"label":"SideStreet — "+get_released_game_display_name(release)})
+	for id: StringName in get_pending_publisher_offer_ids():
+		choices.append({"offer_id":id,"label":PublisherCatalog.name_for(_publisher_offers[id].publisher_id)})
+	return choices
+
+func get_publisher_contract_offer(id: StringName) -> Dictionary:
+	if not _publisher_offers.has(id) or _publisher_offers[id].state!=null or get_active_contract()!=null: return {}
+	var offer: Dictionary = _publisher_offers[id]
+	var eligible := _primitive_contract_eligible_ids()
+	var kind := PublisherTrialTerms.contract_id(offer.publisher_id)
+	return {"offer_id":id,"publisher_id":offer.publisher_id,"source_release_id":offer.source_release_id,"eligible":eligible,"focus":PublisherTrialTerms.focus(eligible) if kind==PublisherTrialTerms.NEON else -1,"terms":PublisherTrialTerms.terms(kind),"cycle":_completed_run_cycles,"finance_revision":_studio_finance.get("actions",[]).size()}
+
+func accept_publisher_contract(quote: Dictionary) -> ContractState:
+	if not can_mutate_checkpoint() or _publishing_cycle or _productive_cycle_in_progress: return null
+	if studio_departure_guard.is_valid() and not studio_departure_guard.call(): return null
+	if typeof(quote.get("offer_id"))!=TYPE_STRING_NAME: return null
+	var current := get_publisher_contract_offer(quote.offer_id)
+	if current.is_empty() or current!=quote: return null
+	var kind := PublisherTrialTerms.contract_id(quote.publisher_id)
+	var eligible: Array[StringName] = []
+	eligible.assign(quote.eligible)
+	var accepted := ContractState.new(eligible,kind,quote.offer_id,quote.source_release_id)
+	if not accepted.freeze_trial(quote.focus) or not accepted.commit_upfront(): return null
+	var was_blocked := is_blocking_signals()
+	set_block_signals(true)
+	_publisher_offers[quote.offer_id].state = accepted
+	var advance := accepted.get_advance_cents()
+	if advance>0 and not add_cash_cents(advance,&"publisher_receipt",quote.offer_id):
+		_publisher_offers[quote.offer_id].state = null
+		set_block_signals(was_blocked)
+		return null
+	set_block_signals(was_blocked)
+	_publishing_cycle = true
+	if advance>0:
+		cash_changed.emit()
+		finance_changed.emit()
+	contracts_changed.emit()
+	_publishing_cycle = false
+	return accepted
 
 func commit_lean_saving(project_id: StringName, expected_saved: int, saving: int) -> bool:
 	if not _productive_cycle_in_progress or project_id.is_empty() or int(_lean_savings.get(project_id, 0)) != expected_saved or saving < 0 or saving > 10000 - expected_saved: return false

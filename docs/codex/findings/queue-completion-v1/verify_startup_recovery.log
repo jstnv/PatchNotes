@@ -1,0 +1,31 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Current package data valid
+PASS: Missing required ledger rejected
+PASS: Malformed required ledger rejected
+PASS: Missing required ledger rejected
+PASS: Malformed required ledger rejected
+PASS: Missing required ledger rejected
+PASS: Malformed required ledger rejected
+PASS: Missing required ledger rejected
+PASS: Malformed required ledger rejected
+PASS: Missing required ledger rejected
+PASS: Malformed required ledger rejected
+PASS: Failure provides visible recovery controls
+PASS: Retry/diagnostic/Quit with visible keyboard focus
+PASS: Local diagnostic saved
+PASS: Failure and diagnostic preserve run and RNG
+Loaded 40 cards.
+SCRIPT ERROR: Left operand of 'is' is a previously freed instance.
+   at: GameplayHUD._refresh_footer (res://scripts/ui/gameplay_hud.gd:403)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_footer (res://scripts/ui/gameplay_hud.gd:403)
+       [1] refresh (res://scripts/ui/gameplay_hud.gd:345)
+       [2] setup (res://scripts/ui/gameplay_hud.gd:135)
+       [3] _start_gameplay (res://scripts/gameplay.gd:58)
+       [4] _run (res://scripts/debug/verify_startup_recovery.gd:26)
+PASS: Retry opens menu after valid data
+Startup recovery: 0 failures

@@ -1,0 +1,5 @@
+# Fanbase design session — v2 completion review v5
+
+2026-10-08, America/Los_Angeles. Shared checkout `main` at `91ce539978b87ac0a6efe3a1e028cae5f1360f19`; concurrent TODO, findings and design edits were preserved. Reviewed the new [v2 native capture](../../findings/fanbase-near-neutral-v2/README.md), its `audit.json`, attempt command and source status. Updated only the Fanbase handoff's top status, thread README and a new [design review](2026-10-08-near-neutral-v2-review-v1.md). The implementing thread had already updated TODO, CURRENT_STATE, design evidence and handoff index; no duplicate shared-file edit was needed.
+
+Result: one declared4/4/4 continuation reached Review4.3/93 launch Fans; weak-title losses9 then0, other-title gains1 per boundary; native/independent/reconstruction and finance checks reported clean. Source remains isolated branch `bd450a9` plus two trial files, not integrated main. The 15% coefficient remains ACTIVE/TRIAL;4.8–4.9 player behavior and final tuning remain OPEN. No gameplay edit, merge, push or Drive action in this design review. Check: `git diff --check -- docs/codex/threads/fanbase`.

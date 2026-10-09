@@ -53,8 +53,9 @@ func _run() -> void:
 	var menu: MainMenu = game.get("_active_phase")
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Release Guard"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
+	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	for number in range(2):

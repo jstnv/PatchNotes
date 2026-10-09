@@ -8,6 +8,8 @@ func _verify() -> void:
 		root.content_scale_size=resolution
 		var game:Control=load("res://scenes/gameplay.tscn").instantiate()
 		game.project_state=ProjectState.new(30)
+		# This test replaces the run below; keep disk coordination out of the fixture.
+		game.run_state=RunState.new()
 		root.add_child(game)
 		await process_frame
 		var previous:Control=game.get("_active_phase")

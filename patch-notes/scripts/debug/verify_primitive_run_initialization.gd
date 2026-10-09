@@ -29,8 +29,9 @@ func _verify_normal_prototype_run() -> void:
 	var menu: MainMenu = gameplay.get("_active_phase")
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	(menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName") as LineEdit).text = "Test Studio"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
+	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	var studio: StudioPhase = gameplay.get("_active_phase")

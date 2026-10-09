@@ -76,7 +76,7 @@ func has_predevelopment_identity() -> bool: return not _base_name.is_empty()
 func get_base_name() -> String: return _base_name
 func get_genre_id() -> StringName: return _genre_id
 func get_theme_id() -> StringName: return _theme_id
-## Graphics / Sound / Technology / Design, saved for Genre Fit at Review.
+## Legacy Genre proportions retained for identity validation and save compatibility.
 func get_genre_ratios() -> Array[int]: return _genre_ratios.duplicate()
 func get_feature_supply_ids() -> Array[StringName]: return _feature_supply_ids.duplicate()
 

@@ -1,0 +1,405 @@
+{
+  "source_head": "91ce539978b87ac0a6efe3a1e028cae5f1360f19",
+  "source_branch": "main",
+  "analysis_script_sha256": "d71a7b4d7c66f8d3e986f8c879b319e706c84b004767ba54211a8426987b7391",
+  "checks": {
+    "copy_hashes_unchanged": null,
+    "analysis_script_matches_manifest": true,
+    "dirty_overlay_matches_manifest": true,
+    "neon-current": {
+      "valid_native_route": true,
+      "identical_prebranch_state": true,
+      "identical_prebranch_pending_awards": true,
+      "same_target_offer": true,
+      "same_contract_result_and_hands": true,
+      "same_contract_accepted_state": true,
+      "same_postcontract_card_choices": true,
+      "same_trial_cash_launch_cycle": true,
+      "same_trial_cash_unpromoted_review": true,
+      "trial_consumed_only_target_award": true,
+      "cash_suppressed_target_award": true,
+      "matched_L_plus_2_and_L_plus_4": true,
+      "finance_valid": true,
+      "cash_nonnegative": true
+    },
+    "neon-lease": {
+      "valid_native_route": true,
+      "identical_prebranch_state": true,
+      "identical_prebranch_pending_awards": true,
+      "same_target_offer": true,
+      "same_contract_result_and_hands": true,
+      "same_contract_accepted_state": true,
+      "same_postcontract_card_choices": true,
+      "same_trial_cash_launch_cycle": true,
+      "same_trial_cash_unpromoted_review": true,
+      "trial_consumed_only_target_award": true,
+      "cash_suppressed_target_award": true,
+      "matched_L_plus_2_and_L_plus_4": true,
+      "finance_valid": true,
+      "cash_nonnegative": true
+    },
+    "crown-lease": {
+      "valid_native_route": true,
+      "identical_prebranch_state": true,
+      "identical_prebranch_pending_awards": true,
+      "same_target_offer": true,
+      "same_contract_result_and_hands": true,
+      "same_contract_accepted_state": true,
+      "same_postcontract_card_choices": true,
+      "same_trial_cash_launch_cycle": true,
+      "same_trial_cash_unpromoted_review": true,
+      "trial_consumed_only_target_award": true,
+      "cash_suppressed_target_award": true,
+      "matched_L_plus_2_and_L_plus_4": true,
+      "finance_valid": true,
+      "cash_nonnegative": true
+    }
+  },
+  "results": {
+    "neon-current": {
+      "foundation_release_cycles": [
+        12,
+        33
+      ],
+      "foundation_pending_offers": [
+        "0050cea30da7c07783b92346e8a5b611:neon_circuit:first"
+      ],
+      "arms": {
+        "trial": {
+          "mode": "trial",
+          "offer_id": "0050cea30da7c07783b92346e8a5b611:neon_circuit:first",
+          "contract": {
+            "cash": 145116,
+            "promotion": 18,
+            "scope": 14
+          },
+          "launch_cycle": 53,
+          "launch_review": 6.1,
+          "launch_awareness": 129,
+          "launch_promotion": 18,
+          "month_1_units": 537,
+          "month_1_projected_net_cents": 375524,
+          "target_settled_cents_L_plus_2": 187412,
+          "target_settled_cents_L_plus_4": 429370,
+          "target_earned_cents_L_plus_4": 483216,
+          "target_total_units_L_plus_4": 537,
+          "portfolio_earned_cents_L_plus_4": 1788108,
+          "portfolio_settled_cents_L_plus_4": 1733563,
+          "cash_cents_L_plus_4": 900512,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 618,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        },
+        "cash_only": {
+          "mode": "cash_only",
+          "offer_id": "0050cea30da7c07783b92346e8a5b611:neon_circuit:first",
+          "contract": {
+            "cash": 145116,
+            "promotion": 18,
+            "scope": 14
+          },
+          "launch_cycle": 53,
+          "launch_review": 6.1,
+          "launch_awareness": 111,
+          "launch_promotion": 0,
+          "month_1_units": 508,
+          "month_1_projected_net_cents": 355244,
+          "target_settled_cents_L_plus_2": 177622,
+          "target_settled_cents_L_plus_4": 403496,
+          "target_earned_cents_L_plus_4": 452447,
+          "target_total_units_L_plus_4": 508,
+          "portfolio_earned_cents_L_plus_4": 1757339,
+          "portfolio_settled_cents_L_plus_4": 1707689,
+          "cash_cents_L_plus_4": 874638,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 618,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        },
+        "no_offer": {
+          "mode": "no_offer",
+          "offer_id": "0050cea30da7c07783b92346e8a5b611:neon_circuit:first",
+          "contract": null,
+          "launch_cycle": 51,
+          "launch_review": 6.1,
+          "launch_awareness": 111,
+          "launch_promotion": 0,
+          "month_1_units": 508,
+          "month_1_projected_net_cents": 355244,
+          "target_settled_cents_L_plus_2": 403496,
+          "target_settled_cents_L_plus_4": 480419,
+          "target_earned_cents_L_plus_4": 509090,
+          "target_total_units_L_plus_4": 508,
+          "portfolio_earned_cents_L_plus_4": 1813982,
+          "portfolio_settled_cents_L_plus_4": 1784612,
+          "cash_cents_L_plus_4": 792445,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 621,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        }
+      },
+      "delta_trial_minus_cash": {
+        "awareness": 18,
+        "month_1_units": 29,
+        "target_settled_cents_L_plus_4": 25874,
+        "cash_cents_L_plus_4": 25874
+      }
+    },
+    "neon-lease": {
+      "foundation_release_cycles": [
+        12,
+        33
+      ],
+      "foundation_pending_offers": [
+        "b47719db625e6c0976dc05f06a147809:neon_circuit:first"
+      ],
+      "arms": {
+        "trial": {
+          "mode": "trial",
+          "offer_id": "b47719db625e6c0976dc05f06a147809:neon_circuit:first",
+          "contract": {
+            "cash": 145116,
+            "promotion": 18,
+            "scope": 14
+          },
+          "launch_cycle": 53,
+          "launch_review": 7.7,
+          "launch_awareness": 132,
+          "launch_promotion": 18,
+          "month_1_units": 684,
+          "month_1_projected_net_cents": 478321,
+          "target_settled_cents_L_plus_2": 239160,
+          "target_settled_cents_L_plus_4": 547551,
+          "target_earned_cents_L_plus_4": 616782,
+          "target_total_units_L_plus_4": 684,
+          "portfolio_earned_cents_L_plus_4": 2009088,
+          "portfolio_settled_cents_L_plus_4": 1939157,
+          "cash_cents_L_plus_4": 1090006,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 621,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit",
+            "crown_quill"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        },
+        "cash_only": {
+          "mode": "cash_only",
+          "offer_id": "b47719db625e6c0976dc05f06a147809:neon_circuit:first",
+          "contract": {
+            "cash": 145116,
+            "promotion": 18,
+            "scope": 14
+          },
+          "launch_cycle": 53,
+          "launch_review": 7.7,
+          "launch_awareness": 114,
+          "launch_promotion": 0,
+          "month_1_units": 647,
+          "month_1_projected_net_cents": 452447,
+          "target_settled_cents_L_plus_2": 225873,
+          "target_settled_cents_L_plus_4": 514684,
+          "target_earned_cents_L_plus_4": 577621,
+          "target_total_units_L_plus_4": 647,
+          "portfolio_earned_cents_L_plus_4": 1969927,
+          "portfolio_settled_cents_L_plus_4": 1906290,
+          "cash_cents_L_plus_4": 1057139,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 621,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit",
+            "crown_quill"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        },
+        "no_offer": {
+          "mode": "no_offer",
+          "offer_id": "b47719db625e6c0976dc05f06a147809:neon_circuit:first",
+          "contract": null,
+          "launch_cycle": 51,
+          "launch_review": 7.7,
+          "launch_awareness": 114,
+          "launch_promotion": 0,
+          "month_1_units": 647,
+          "month_1_projected_net_cents": 452447,
+          "target_settled_cents_L_plus_2": 514684,
+          "target_settled_cents_L_plus_4": 619579,
+          "target_earned_cents_L_plus_4": 661537,
+          "target_total_units_L_plus_4": 647,
+          "portfolio_earned_cents_L_plus_4": 2053843,
+          "portfolio_settled_cents_L_plus_4": 2011185,
+          "cash_cents_L_plus_4": 1012418,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 621,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit",
+            "crown_quill"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        }
+      },
+      "delta_trial_minus_cash": {
+        "awareness": 18,
+        "month_1_units": 37,
+        "target_settled_cents_L_plus_4": 32867,
+        "cash_cents_L_plus_4": 32867
+      }
+    },
+    "crown-lease": {
+      "foundation_release_cycles": [
+        12,
+        33,
+        53
+      ],
+      "foundation_pending_offers": [
+        "032f39940bfd1a498a7421dc792d535a:crown_quill:first"
+      ],
+      "arms": {
+        "trial": {
+          "mode": "trial",
+          "offer_id": "032f39940bfd1a498a7421dc792d535a:crown_quill:first",
+          "contract": {
+            "cash": 192000,
+            "promotion": 12,
+            "scope": 14
+          },
+          "launch_cycle": 73,
+          "launch_review": 7.3,
+          "launch_awareness": 126,
+          "launch_promotion": 12,
+          "month_1_units": 637,
+          "month_1_projected_net_cents": 445454,
+          "target_settled_cents_L_plus_2": 222377,
+          "target_settled_cents_L_plus_4": 508391,
+          "target_earned_cents_L_plus_4": 572027,
+          "target_total_units_L_plus_4": 637,
+          "portfolio_earned_cents_L_plus_4": 3158037,
+          "portfolio_settled_cents_L_plus_4": 3092303,
+          "cash_cents_L_plus_4": 1784152,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 633,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit",
+            "crown_quill",
+            "starwave"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        },
+        "cash_only": {
+          "mode": "cash_only",
+          "offer_id": "032f39940bfd1a498a7421dc792d535a:crown_quill:first",
+          "contract": {
+            "cash": 192000,
+            "promotion": 12,
+            "scope": 14
+          },
+          "launch_cycle": 73,
+          "launch_review": 7.3,
+          "launch_awareness": 114,
+          "launch_promotion": 0,
+          "month_1_units": 613,
+          "month_1_projected_net_cents": 428670,
+          "target_settled_cents_L_plus_2": 213985,
+          "target_settled_cents_L_plus_4": 488111,
+          "target_earned_cents_L_plus_4": 547551,
+          "target_total_units_L_plus_4": 613,
+          "portfolio_earned_cents_L_plus_4": 3133561,
+          "portfolio_settled_cents_L_plus_4": 3072023,
+          "cash_cents_L_plus_4": 1763872,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 633,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit",
+            "crown_quill",
+            "starwave"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        },
+        "no_offer": {
+          "mode": "no_offer",
+          "offer_id": "032f39940bfd1a498a7421dc792d535a:crown_quill:first",
+          "contract": null,
+          "launch_cycle": 71,
+          "launch_review": 7.3,
+          "launch_awareness": 114,
+          "launch_promotion": 0,
+          "month_1_units": 613,
+          "month_1_projected_net_cents": 428670,
+          "target_settled_cents_L_plus_2": 488111,
+          "target_settled_cents_L_plus_4": 586013,
+          "target_earned_cents_L_plus_4": 624474,
+          "target_total_units_L_plus_4": 613,
+          "portfolio_earned_cents_L_plus_4": 3210484,
+          "portfolio_settled_cents_L_plus_4": 3169925,
+          "cash_cents_L_plus_4": 1665274,
+          "total_overdue_cents_L_plus_4": 0,
+          "unpaid_rent_cents_L_plus_4": 0,
+          "credit_score_L_plus_4": 636,
+          "outstanding_expenses_L_plus_4": [],
+          "unlocked_L_plus_4": [
+            "ironclad",
+            "sidestreet",
+            "neon_circuit",
+            "crown_quill"
+          ],
+          "finance_valid_L_plus_2": true,
+          "finance_valid_L_plus_4": true
+        }
+      },
+      "delta_trial_minus_cash": {
+        "awareness": 12,
+        "month_1_units": 24,
+        "target_settled_cents_L_plus_4": 20280,
+        "cash_cents_L_plus_4": 20280
+      }
+    }
+  }
+}

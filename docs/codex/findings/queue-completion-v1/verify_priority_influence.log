@@ -1,0 +1,872 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Pre-Development default: chart exists
+PASS: Pre-Development default: chart follows displayed draft values
+PASS: Pre-Development default: chart retains the true allocated total
+PASS: Pre-Development default: slice proportions are correct
+PASS: Pre-Development default: complete pie accounts for every slice
+PASS: Pre-Development labels use Graphics, Sound, Tech, Design
+PASS: Pre-Development (1152, 648): menu fits viewport
+PASS: Pre-Development (1152, 648): chart fits its visible menu
+PASS: Pre-Development (1152, 648): pie retains a readable size
+PASS: Pre-Development edited: chart exists
+PASS: Pre-Development edited: chart follows displayed draft values
+PASS: Pre-Development edited: chart retains the true allocated total
+PASS: Pre-Development edited: slice proportions are correct
+PASS: Pre-Development edited: complete pie accounts for every slice
+PASS: Valid displayed allocation enables Begin Development
+PASS: Pre-Development under budget: chart exists
+PASS: Pre-Development under budget: chart follows displayed draft values
+PASS: Pre-Development under budget: chart retains the true allocated total
+PASS: Pre-Development under budget: slice proportions are correct
+PASS: Pre-Development under budget: complete pie accounts for every slice
+PASS: Unallocated draft remains invalid for Begin Development
+PASS: Pre-Development over budget: chart exists
+PASS: Pre-Development over budget: chart follows displayed draft values
+PASS: Pre-Development over budget: chart retains the true allocated total
+PASS: Pre-Development over budget: slice proportions are correct
+PASS: Pre-Development over budget: complete pie accounts for every slice
+PASS: Over-budget draft remains invalid for Begin Development
+PASS: Design: initialization opens
+PASS: Design default: chart exists
+PASS: Design default: chart follows displayed draft values
+PASS: Design default: chart retains the true allocated total
+PASS: Design default: slice proportions are correct
+PASS: Design default: complete pie accounts for every slice
+PASS: Design: chart names match phase categories
+PASS: Design (1152, 648): menu fits viewport
+PASS: Design (1152, 648): chart fits its visible menu
+PASS: Design (1152, 648): pie retains a readable size
+PASS: Design staged initialization: chart exists
+PASS: Design staged initialization: chart follows displayed draft values
+PASS: Design staged initialization: chart retains the true allocated total
+PASS: Design staged initialization: slice proportions are correct
+PASS: Design staged initialization: complete pie accounts for every slice
+PASS: Design: chart and draft edits preserve committed values, cash, time, redraws and project
+PASS: Design reset: chart exists
+PASS: Design reset: chart follows displayed draft values
+PASS: Design reset: chart retains the true allocated total
+PASS: Design reset: slice proportions are correct
+PASS: Design reset: complete pie accounts for every slice
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Design: default allocation begins phase
+PASS: Design: active priority editor opens
+PASS: Design invalid active draft: chart exists
+PASS: Design invalid active draft: chart follows displayed draft values
+PASS: Design invalid active draft: chart retains the true allocated total
+PASS: Design invalid active draft: slice proportions are correct
+PASS: Design invalid active draft: complete pie accounts for every slice
+PASS: Design: chart does not bypass invalid-total rejection
+PASS: Design cancel restores display: chart exists
+PASS: Design cancel restores display: chart follows displayed draft values
+PASS: Design cancel restores display: chart retains the true allocated total
+PASS: Design cancel restores display: slice proportions are correct
+PASS: Design cancel restores display: complete pie accounts for every slice
+PASS: Design: open, draft, rejected commit and Cancel preserve gameplay
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] setup (res://scripts/phases/alpha_phase.gd:92)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:123)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:29)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:125)
+       [9] _verify (res://scripts/debug/verify_priority_influence.gd:29)
+       [10] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [11] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Alpha: initialization opens
+PASS: Alpha default: chart exists
+PASS: Alpha default: chart follows displayed draft values
+PASS: Alpha default: chart retains the true allocated total
+PASS: Alpha default: slice proportions are correct
+PASS: Alpha default: complete pie accounts for every slice
+PASS: Alpha: chart names match phase categories
+PASS: Alpha (1152, 648): menu fits viewport
+PASS: Alpha (1152, 648): chart fits its visible menu
+PASS: Alpha (1152, 648): pie retains a readable size
+PASS: Alpha staged initialization: chart exists
+PASS: Alpha staged initialization: chart follows displayed draft values
+PASS: Alpha staged initialization: chart retains the true allocated total
+PASS: Alpha staged initialization: slice proportions are correct
+PASS: Alpha staged initialization: complete pie accounts for every slice
+PASS: Alpha: chart and draft edits preserve committed values, cash, time, redraws and project
+PASS: Alpha reset: chart exists
+PASS: Alpha reset: chart follows displayed draft values
+PASS: Alpha reset: chart retains the true allocated total
+PASS: Alpha reset: slice proportions are correct
+PASS: Alpha reset: complete pie accounts for every slice
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] begin_alpha (res://scripts/phases/alpha_phase.gd:166)
+       [6] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [7] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [8] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] _close (res://scripts/ui/priority_overlay.gd:159)
+       [8] commit_draft (res://scripts/ui/priority_overlay.gd:149)
+       [9] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [10] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Alpha: default allocation begins phase
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1144)
+       [9] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:150)
+       [10] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Alpha: active priority editor opens
+PASS: Alpha invalid active draft: chart exists
+PASS: Alpha invalid active draft: chart follows displayed draft values
+PASS: Alpha invalid active draft: chart retains the true allocated total
+PASS: Alpha invalid active draft: slice proportions are correct
+PASS: Alpha invalid active draft: complete pie accounts for every slice
+PASS: Alpha: chart does not bypass invalid-total rejection
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] _close (res://scripts/ui/priority_overlay.gd:159)
+       [8] cancel (res://scripts/ui/priority_overlay.gd:132)
+       [9] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:159)
+       [10] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Alpha cancel restores display: chart exists
+PASS: Alpha cancel restores display: chart follows displayed draft values
+PASS: Alpha cancel restores display: chart retains the true allocated total
+PASS: Alpha cancel restores display: slice proportions are correct
+PASS: Alpha cancel restores display: complete pie accounts for every slice
+PASS: Alpha: open, draft, rejected commit and Cancel preserve gameplay
+PASS: Beta: initialization opens
+PASS: Beta default: chart exists
+PASS: Beta default: chart follows displayed draft values
+PASS: Beta default: chart retains the true allocated total
+PASS: Beta default: slice proportions are correct
+PASS: Beta default: complete pie accounts for every slice
+PASS: Beta: chart names match phase categories
+PASS: Beta (1152, 648): menu fits viewport
+PASS: Beta (1152, 648): chart fits its visible menu
+PASS: Beta (1152, 648): pie retains a readable size
+PASS: Beta staged initialization: chart exists
+PASS: Beta staged initialization: chart follows displayed draft values
+PASS: Beta staged initialization: chart retains the true allocated total
+PASS: Beta staged initialization: slice proportions are correct
+PASS: Beta staged initialization: complete pie accounts for every slice
+PASS: Beta: chart and draft edits preserve committed values, cash, time, redraws and project
+PASS: Beta reset: chart exists
+PASS: Beta reset: chart follows displayed draft values
+PASS: Beta reset: chart retains the true allocated total
+PASS: Beta reset: slice proportions are correct
+PASS: Beta reset: complete pie accounts for every slice
+PASS: Beta: default allocation begins phase
+PASS: Beta: active priority editor opens
+PASS: Beta invalid active draft: chart exists
+PASS: Beta invalid active draft: chart follows displayed draft values
+PASS: Beta invalid active draft: chart retains the true allocated total
+PASS: Beta invalid active draft: slice proportions are correct
+PASS: Beta invalid active draft: complete pie accounts for every slice
+PASS: Beta: chart does not bypass invalid-total rejection
+PASS: Beta cancel restores display: chart exists
+PASS: Beta cancel restores display: chart follows displayed draft values
+PASS: Beta cancel restores display: chart retains the true allocated total
+PASS: Beta cancel restores display: slice proportions are correct
+PASS: Beta cancel restores display: complete pie accounts for every slice
+PASS: Beta: open, draft, rejected commit and Cancel preserve gameplay
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Contract default: chart exists
+PASS: Contract default: chart follows displayed draft values
+PASS: Contract default: chart retains the true allocated total
+PASS: Contract default: slice proportions are correct
+PASS: Contract default: complete pie accounts for every slice
+PASS: Contract (1152, 648): menu fits viewport
+PASS: Contract (1152, 648): chart fits its visible menu
+PASS: Contract (1152, 648): pie retains a readable size
+PASS: Contract edited: chart exists
+PASS: Contract edited: chart follows displayed draft values
+PASS: Contract edited: chart retains the true allocated total
+PASS: Contract edited: slice proportions are correct
+PASS: Contract edited: complete pie accounts for every slice
+PASS: Contract priority menu retains a Cancel button
+PASS: Contract cancellation reset: chart exists
+PASS: Contract cancellation reset: chart follows displayed draft values
+PASS: Contract cancellation reset: chart retains the true allocated total
+PASS: Contract cancellation reset: slice proportions are correct
+PASS: Contract cancellation reset: complete pie accounts for every slice
+PASS: Contract Cancel closes the priority menu
+PASS: Contract chart editing and cancellation preserve frozen release, sales, cash, calendar, redraws, hands and candidates
+PASS: Pre-Development default: chart exists
+PASS: Pre-Development default: chart follows displayed draft values
+PASS: Pre-Development default: chart retains the true allocated total
+PASS: Pre-Development default: slice proportions are correct
+PASS: Pre-Development default: complete pie accounts for every slice
+PASS: Pre-Development labels use Graphics, Sound, Tech, Design
+PASS: Pre-Development (900, 600): menu fits viewport
+PASS: Pre-Development (900, 600): chart fits its visible menu
+PASS: Pre-Development (900, 600): pie retains a readable size
+PASS: Pre-Development edited: chart exists
+PASS: Pre-Development edited: chart follows displayed draft values
+PASS: Pre-Development edited: chart retains the true allocated total
+PASS: Pre-Development edited: slice proportions are correct
+PASS: Pre-Development edited: complete pie accounts for every slice
+PASS: Valid displayed allocation enables Begin Development
+PASS: Pre-Development under budget: chart exists
+PASS: Pre-Development under budget: chart follows displayed draft values
+PASS: Pre-Development under budget: chart retains the true allocated total
+PASS: Pre-Development under budget: slice proportions are correct
+PASS: Pre-Development under budget: complete pie accounts for every slice
+PASS: Unallocated draft remains invalid for Begin Development
+PASS: Pre-Development over budget: chart exists
+PASS: Pre-Development over budget: chart follows displayed draft values
+PASS: Pre-Development over budget: chart retains the true allocated total
+PASS: Pre-Development over budget: slice proportions are correct
+PASS: Pre-Development over budget: complete pie accounts for every slice
+PASS: Over-budget draft remains invalid for Begin Development
+PASS: Design: initialization opens
+PASS: Design default: chart exists
+PASS: Design default: chart follows displayed draft values
+PASS: Design default: chart retains the true allocated total
+PASS: Design default: slice proportions are correct
+PASS: Design default: complete pie accounts for every slice
+PASS: Design: chart names match phase categories
+PASS: Design (900, 600): menu fits viewport
+PASS: Design (900, 600): chart fits its visible menu
+PASS: Design (900, 600): pie retains a readable size
+PASS: Design staged initialization: chart exists
+PASS: Design staged initialization: chart follows displayed draft values
+PASS: Design staged initialization: chart retains the true allocated total
+PASS: Design staged initialization: slice proportions are correct
+PASS: Design staged initialization: complete pie accounts for every slice
+PASS: Design: chart and draft edits preserve committed values, cash, time, redraws and project
+PASS: Design reset: chart exists
+PASS: Design reset: chart follows displayed draft values
+PASS: Design reset: chart retains the true allocated total
+PASS: Design reset: slice proportions are correct
+PASS: Design reset: complete pie accounts for every slice
+WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Design: default allocation begins phase
+PASS: Design: active priority editor opens
+PASS: Design invalid active draft: chart exists
+PASS: Design invalid active draft: chart follows displayed draft values
+PASS: Design invalid active draft: chart retains the true allocated total
+PASS: Design invalid active draft: slice proportions are correct
+PASS: Design invalid active draft: complete pie accounts for every slice
+PASS: Design: chart does not bypass invalid-total rejection
+PASS: Design cancel restores display: chart exists
+PASS: Design cancel restores display: chart follows displayed draft values
+PASS: Design cancel restores display: chart retains the true allocated total
+PASS: Design cancel restores display: slice proportions are correct
+PASS: Design cancel restores display: complete pie accounts for every slice
+PASS: Design: open, draft, rejected commit and Cancel preserve gameplay
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] setup (res://scripts/phases/alpha_phase.gd:92)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:123)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:29)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:125)
+       [9] _verify (res://scripts/debug/verify_priority_influence.gd:29)
+       [10] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [11] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Alpha: initialization opens
+PASS: Alpha default: chart exists
+PASS: Alpha default: chart follows displayed draft values
+PASS: Alpha default: chart retains the true allocated total
+PASS: Alpha default: slice proportions are correct
+PASS: Alpha default: complete pie accounts for every slice
+PASS: Alpha: chart names match phase categories
+PASS: Alpha (900, 600): menu fits viewport
+PASS: Alpha (900, 600): chart fits its visible menu
+PASS: Alpha (900, 600): pie retains a readable size
+PASS: Alpha staged initialization: chart exists
+PASS: Alpha staged initialization: chart follows displayed draft values
+PASS: Alpha staged initialization: chart retains the true allocated total
+PASS: Alpha staged initialization: slice proportions are correct
+PASS: Alpha staged initialization: complete pie accounts for every slice
+PASS: Alpha: chart and draft edits preserve committed values, cash, time, redraws and project
+PASS: Alpha reset: chart exists
+PASS: Alpha reset: chart follows displayed draft values
+PASS: Alpha reset: chart retains the true allocated total
+PASS: Alpha reset: slice proportions are correct
+PASS: Alpha reset: complete pie accounts for every slice
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [7] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] begin_alpha (res://scripts/phases/alpha_phase.gd:166)
+       [6] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [7] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [8] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] _close (res://scripts/ui/priority_overlay.gd:159)
+       [8] commit_draft (res://scripts/ui/priority_overlay.gd:149)
+       [9] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:146)
+       [10] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Alpha: default allocation begins phase
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1144)
+       [9] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:150)
+       [10] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Alpha: active priority editor opens
+PASS: Alpha invalid active draft: chart exists
+PASS: Alpha invalid active draft: chart follows displayed draft values
+PASS: Alpha invalid active draft: chart retains the true allocated total
+PASS: Alpha invalid active draft: slice proportions are correct
+PASS: Alpha invalid active draft: complete pie accounts for every slice
+PASS: Alpha: chart does not bypass invalid-total rejection
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] _close (res://scripts/ui/priority_overlay.gd:159)
+       [8] cancel (res://scripts/ui/priority_overlay.gd:132)
+       [9] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:159)
+       [10] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Alpha cancel restores display: chart exists
+PASS: Alpha cancel restores display: chart follows displayed draft values
+PASS: Alpha cancel restores display: chart retains the true allocated total
+PASS: Alpha cancel restores display: slice proportions are correct
+PASS: Alpha cancel restores display: complete pie accounts for every slice
+PASS: Alpha: open, draft, rejected commit and Cancel preserve gameplay
+PASS: Beta: initialization opens
+PASS: Beta default: chart exists
+PASS: Beta default: chart follows displayed draft values
+PASS: Beta default: chart retains the true allocated total
+PASS: Beta default: slice proportions are correct
+PASS: Beta default: complete pie accounts for every slice
+PASS: Beta: chart names match phase categories
+PASS: Beta (900, 600): menu fits viewport
+PASS: Beta (900, 600): chart fits its visible menu
+PASS: Beta (900, 600): pie retains a readable size
+PASS: Beta staged initialization: chart exists
+PASS: Beta staged initialization: chart follows displayed draft values
+PASS: Beta staged initialization: chart retains the true allocated total
+PASS: Beta staged initialization: slice proportions are correct
+PASS: Beta staged initialization: complete pie accounts for every slice
+PASS: Beta: chart and draft edits preserve committed values, cash, time, redraws and project
+PASS: Beta reset: chart exists
+PASS: Beta reset: chart follows displayed draft values
+PASS: Beta reset: chart retains the true allocated total
+PASS: Beta reset: slice proportions are correct
+PASS: Beta reset: complete pie accounts for every slice
+PASS: Beta: default allocation begins phase
+PASS: Beta: active priority editor opens
+PASS: Beta invalid active draft: chart exists
+PASS: Beta invalid active draft: chart follows displayed draft values
+PASS: Beta invalid active draft: chart retains the true allocated total
+PASS: Beta invalid active draft: slice proportions are correct
+PASS: Beta invalid active draft: complete pie accounts for every slice
+PASS: Beta: chart does not bypass invalid-total rejection
+PASS: Beta cancel restores display: chart exists
+PASS: Beta cancel restores display: chart follows displayed draft values
+PASS: Beta cancel restores display: chart retains the true allocated total
+PASS: Beta cancel restores display: slice proportions are correct
+PASS: Beta cancel restores display: complete pie accounts for every slice
+PASS: Beta: open, draft, rejected commit and Cancel preserve gameplay
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:492)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:310)
+       [5] _ready (res://scripts/phases/contract_phase.gd:63)
+       [6] _verify_contract_chart (res://scripts/debug/verify_priority_influence.gd:177)
+       [7] _verify (res://scripts/debug/verify_priority_influence.gd:30)
+       [8] _verify_phase_chart (res://scripts/debug/verify_priority_influence.gd:164)
+       [9] _settle_chart (res://scripts/debug/verify_priority_influence.gd:38)
+PASS: Contract default: chart exists
+PASS: Contract default: chart follows displayed draft values
+PASS: Contract default: chart retains the true allocated total
+PASS: Contract default: slice proportions are correct
+PASS: Contract default: complete pie accounts for every slice
+PASS: Contract (900, 600): menu fits viewport
+PASS: Contract (900, 600): chart fits its visible menu
+PASS: Contract (900, 600): pie retains a readable size
+PASS: Contract edited: chart exists
+PASS: Contract edited: chart follows displayed draft values
+PASS: Contract edited: chart retains the true allocated total
+PASS: Contract edited: slice proportions are correct
+PASS: Contract edited: complete pie accounts for every slice
+PASS: Contract priority menu retains a Cancel button
+PASS: Contract cancellation reset: chart exists
+PASS: Contract cancellation reset: chart follows displayed draft values
+PASS: Contract cancellation reset: chart retains the true allocated total
+PASS: Contract cancellation reset: slice proportions are correct
+PASS: Contract cancellation reset: complete pie accounts for every slice
+PASS: Contract Cancel closes the priority menu
+PASS: Contract chart editing and cancellation preserve frozen release, sales, cash, calendar, redraws, hands and candidates
+Priority influence verification: 306 checks, 0 failures

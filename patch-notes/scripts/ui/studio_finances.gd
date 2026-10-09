@@ -169,6 +169,7 @@ func _ready() -> void:
 	_label("Rate: 1% of scheduled opening principal per month. Credit uses prototype defaults; score does not set eligibility or price.", _bank_page)
 	_confirm = ConfirmationDialog.new()
 	_confirm.title = "Confirm Bank transaction"
+	_confirm.dialog_autowrap = true
 	_confirm.confirmed.connect(_confirm_transaction)
 	add_child(_confirm)
 	_set_page(&"finances")

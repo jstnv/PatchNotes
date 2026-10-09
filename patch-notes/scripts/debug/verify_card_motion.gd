@@ -106,7 +106,7 @@ func _production(width: int) -> void:
 	expect(motion.busy and project.get_core_score(0) == 12 and run.get_completed_run_cycles() == cycle + 1, "Native specialization commits once before visual playback")
 	expect(root.gui_get_focus_owner() == motion, "Presentation owns keyboard focus while the hand resolves")
 	expect(not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Next-pool guidance waits until the current hand presentation finishes")
-	expect(hud.stats[1].text == "Graphics\n0" and not fan.visible, "Scoreboard holds old value while committed candidates are hidden")
+	expect(hud.stats[1].text == "Graphics\n0 / 33" and not fan.visible, "Scoreboard holds old value and target while committed candidates are hidden")
 	var committed := _snapshot(project, run)
 	phase.get_node("%PlayCardButton").pressed.emit()
 	phase.get_node("%RedrawButton").pressed.emit()
@@ -115,7 +115,7 @@ func _production(width: int) -> void:
 	expect(motion._ghosts.size() == 7 and motion._hand.size() == 4 and motion._ghosts[4].scale.x < 0.4 and motion._ghosts[4].position.y > 160, "Unselected candidates shrink and lower while the selected hand centers")
 	await shot("centered-hand-%d" % width)
 	await settle(HandPresentation.BEAT_SECONDS / 2.0)
-	expect(hud.stats[1].text == "Graphics\n2" and not hud._score_pulses.is_empty(), "First bounce updates the scoreboard and exposes a +2 base indicator")
+	expect(hud.stats[1].text == "Graphics\n2 / 33" and not hud._score_pulses.is_empty(), "First bounce updates the scoreboard and exposes a +2 base indicator")
 	await shot("score-bounce-%d" % width)
 	if motion.busy: await motion.finished
 	var order: Array = []
@@ -158,7 +158,7 @@ func _production(width: int) -> void:
 		# than a fixed wall-clock interval on a slow rendering frame.
 		staggered = staggered and deals[i].msec > deals[i - 1].msec
 	expect(deals.size() == 4 and staggered, "Exactly four new instances enter from the top one at a time")
-	expect(hud.stats[1].text == "Graphics\n12" and _snapshot(project, run) == committed and fan.visible, "Playback totals exactly match native resolution and makes no extra state changes")
+	expect(hud.stats[1].text == "Graphics\n12 / 33" and _snapshot(project, run) == committed and fan.visible, "Playback totals exactly match native resolution and makes no extra state changes")
 	expect(not hud.tip_button.disabled, "Guidance becomes available again when the retained pool is playable")
 	hud.contextual_tip.dismiss()
 	await shot("restored-fan-%d" % width)
@@ -200,7 +200,7 @@ func _production(width: int) -> void:
 	motion = phase.get_workspace().hand_motion
 	expect(motion.busy and project.get_core_score(0) == 24, "Alpha uses native scoring with the shared animation")
 	motion.cancel()
-	expect(hud.stats[1].text == "Graphics\n24" and not motion.busy, "Animation cancellation restores the authoritative scoreboard without rollback or replay")
+	expect(hud.stats[1].text == "Graphics\n24 / 33" and not motion.busy, "Animation cancellation restores the authoritative scoreboard without rollback or replay")
 	project.add_scope(30)
 	phase.call("_finalize_alpha", 0.0, 0.5)
 	phase = game.get("_active_phase")
@@ -238,8 +238,9 @@ func _store(width: int) -> void:
 	var menu: MainMenu = game.get("_active_phase")
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Motion Test Studio"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
+	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	var run: RunState = game.run_state

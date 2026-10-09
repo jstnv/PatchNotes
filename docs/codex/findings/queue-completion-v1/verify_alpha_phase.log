@@ -1,0 +1,1466 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+PASS: ProjectState accepts one valid atomic Alpha production transaction
+PASS: Valid Alpha transaction commits scores, Scope, and separate pressure together
+PASS: Alpha transaction leaves Design pressure unchanged and emits exactly once
+WARNING: Alpha Bug Pressure additions must be finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_alpha_production (res://scripts/project_state.gd:188)
+       [1] _verify_project_state_alpha_transactions (res://scripts/debug/verify_alpha_phase.gd:31)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:42)
+PASS: Invalid Alpha pressure is rejected atomically: -1.0
+PASS: Rejected Alpha transaction mutates nothing and emits nothing
+WARNING: Alpha Bug Pressure additions must be finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_alpha_production (res://scripts/project_state.gd:188)
+       [1] _verify_project_state_alpha_transactions (res://scripts/debug/verify_alpha_phase.gd:31)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:42)
+PASS: Invalid Alpha pressure is rejected atomically: nan
+PASS: Rejected Alpha transaction mutates nothing and emits nothing
+WARNING: Alpha Bug Pressure additions must be finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_alpha_production (res://scripts/project_state.gd:188)
+       [1] _verify_project_state_alpha_transactions (res://scripts/debug/verify_alpha_phase.gd:31)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:42)
+PASS: Invalid Alpha pressure is rejected atomically: inf
+PASS: Rejected Alpha transaction mutates nothing and emits nothing
+WARNING: Alpha Bug Pressure additions must be finite and nonnegative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_alpha_production (res://scripts/project_state.gd:188)
+       [1] _verify_project_state_alpha_transactions (res://scripts/debug/verify_alpha_phase.gd:31)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:42)
+PASS: Invalid Alpha pressure is rejected atomically: -inf
+PASS: Rejected Alpha transaction mutates nothing and emits nothing
+WARNING: Alpha Bug Pressure additions must be numeric.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_alpha_production (res://scripts/project_state.gd:184)
+       [1] _verify_project_state_alpha_transactions (res://scripts/debug/verify_alpha_phase.gd:31)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:42)
+PASS: Invalid Alpha pressure is rejected atomically: invalid
+PASS: Rejected Alpha transaction mutates nothing and emits nothing
+WARNING: Alpha Core Score additions cannot be negative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_alpha_production (res://scripts/project_state.gd:199)
+       [1] _verify_project_state_alpha_transactions (res://scripts/debug/verify_alpha_phase.gd:37)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:42)
+WARNING: Alpha Scope additions cannot be negative.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_alpha_production (res://scripts/project_state.gd:181)
+       [1] _verify_project_state_alpha_transactions (res://scripts/debug/verify_alpha_phase.gd:37)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:42)
+PASS: Negative Alpha scores and Scope are rejected
+PASS: Rejected negative Alpha transactions remain atomic
+Loaded 40 cards.
+PASS: Alpha initializes in Planning
+PASS: Fresh ProjectState initializes separate Design and Alpha pressure at 0.0
+PASS: Alpha pressure display initializes at exactly 0.00
+PASS: Alpha UI does not expose concealed Hidden Bugs
+PASS: Alpha Planning creates no candidates or CardViews
+PASS: Begin Alpha is visible and usable in Planning
+PASS: Alpha resolution placeholder is visibly disabled
+PASS: Host Playtest is visible but unavailable during Planning
+PASS: Alpha initializes independently at 25 / 25 / 25 / 25
+PASS: GraphicsPriority uses 5-50 bounds in five-point steps
+PASS: SoundPriority uses 5-50 bounds in five-point steps
+PASS: TechnologyPriority uses 5-50 bounds in five-point steps
+PASS: DesignPriority uses 5-50 bounds in five-point steps
+PASS: Corrected Alpha allocation panel fits the established phase bounds
+PASS: Initial Alpha allocation uses the complete budget
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Lowering changes only Sound and frees allocation
+PASS: One slider adjustment emits exactly once
+PASS: Raising Graphics can spend available allocation
+PASS: Raising changes only Graphics and consumes allocation
+PASS: Over-budget request is handled safely
+PASS: Over-budget request clamps to the highest fitting value
+PASS: Below-range numeric request is normalized
+PASS: Below-range request clamps to 5 without redistribution
+PASS: Non-step numeric request is normalized
+PASS: Exact half-step snaps upward
+PASS: Numeric request below half-step normalizes
+PASS: Nearest-step normalization rounds 12.4 to 10
+WARNING: Invalid priority category: 999
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_priority (res://scripts/phases/priority_allocation.gd:28)
+       [1] set_priority (res://scripts/phases/alpha_phase.gd:99)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:82)
+PASS: Invalid Core category is rejected
+WARNING: Priority must be numeric.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_priority (res://scripts/phases/priority_allocation.gd:31)
+       [1] set_priority (res://scripts/phases/alpha_phase.gd:99)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:83)
+PASS: Nonnumeric request is rejected
+WARNING: Priority must be finite.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] set_priority (res://scripts/phases/priority_allocation.gd:35)
+       [1] set_priority (res://scripts/phases/alpha_phase.gd:99)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:84)
+PASS: Nonfinite request is rejected
+PASS: Rejected requests mutate and emit nothing
+PASS: No-op request is accepted
+PASS: No-op emits nothing
+PASS: Distribution getter is defensive
+PASS: Repeated numeric adjustment 0 succeeds
+PASS: Repeated adjustment 0 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 1 succeeds
+PASS: Repeated adjustment 1 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 2 succeeds
+PASS: Repeated adjustment 2 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 3 succeeds
+PASS: Repeated adjustment 3 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 4 succeeds
+PASS: Repeated adjustment 4 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 5 succeeds
+PASS: Repeated adjustment 5 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 6 succeeds
+PASS: Repeated adjustment 6 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 7 succeeds
+PASS: Repeated adjustment 7 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 8 succeeds
+PASS: Repeated adjustment 8 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 9 succeeds
+PASS: Repeated adjustment 9 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 10 succeeds
+PASS: Repeated adjustment 10 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 11 succeeds
+PASS: Repeated adjustment 11 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 12 succeeds
+PASS: Repeated adjustment 12 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 13 succeeds
+PASS: Repeated adjustment 13 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 14 succeeds
+PASS: Repeated adjustment 14 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 15 succeeds
+PASS: Repeated adjustment 15 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 16 succeeds
+PASS: Repeated adjustment 16 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 17 succeeds
+PASS: Repeated adjustment 17 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 18 succeeds
+PASS: Repeated adjustment 18 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 19 succeeds
+PASS: Repeated adjustment 19 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 20 succeeds
+PASS: Repeated adjustment 20 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 21 succeeds
+PASS: Repeated adjustment 21 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 22 succeeds
+PASS: Repeated adjustment 22 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 23 succeeds
+PASS: Repeated adjustment 23 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 24 succeeds
+PASS: Repeated adjustment 24 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 25 succeeds
+PASS: Repeated adjustment 25 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 26 succeeds
+PASS: Repeated adjustment 26 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 27 succeeds
+PASS: Repeated adjustment 27 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 28 succeeds
+PASS: Repeated adjustment 28 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 29 succeeds
+PASS: Repeated adjustment 29 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 30 succeeds
+PASS: Repeated adjustment 30 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 31 succeeds
+PASS: Repeated adjustment 31 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 32 succeeds
+PASS: Repeated adjustment 32 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 33 succeeds
+PASS: Repeated adjustment 33 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 34 succeeds
+PASS: Repeated adjustment 34 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 35 succeeds
+PASS: Repeated adjustment 35 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 36 succeeds
+PASS: Repeated adjustment 36 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 37 succeeds
+PASS: Repeated adjustment 37 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 38 succeeds
+PASS: Repeated adjustment 38 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 39 succeeds
+PASS: Repeated adjustment 39 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 40 succeeds
+PASS: Repeated adjustment 40 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 41 succeeds
+PASS: Repeated adjustment 41 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 42 succeeds
+PASS: Repeated adjustment 42 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 43 succeeds
+PASS: Repeated adjustment 43 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 44 succeeds
+PASS: Repeated adjustment 44 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 45 succeeds
+PASS: Repeated adjustment 45 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 46 succeeds
+PASS: Repeated adjustment 46 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 47 succeeds
+PASS: Repeated adjustment 47 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 48 succeeds
+PASS: Repeated adjustment 48 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 49 succeeds
+PASS: Repeated adjustment 49 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 50 succeeds
+PASS: Repeated adjustment 50 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 51 succeeds
+PASS: Repeated adjustment 51 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 52 succeeds
+PASS: Repeated adjustment 52 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 53 succeeds
+PASS: Repeated adjustment 53 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 54 succeeds
+PASS: Repeated adjustment 54 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 55 succeeds
+PASS: Repeated adjustment 55 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 56 succeeds
+PASS: Repeated adjustment 56 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 57 succeeds
+PASS: Repeated adjustment 57 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 58 succeeds
+PASS: Repeated adjustment 58 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 59 succeeds
+PASS: Repeated adjustment 59 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 60 succeeds
+PASS: Repeated adjustment 60 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 61 succeeds
+PASS: Repeated adjustment 61 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 62 succeeds
+PASS: Repeated adjustment 62 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 63 succeeds
+PASS: Repeated adjustment 63 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 64 succeeds
+PASS: Repeated adjustment 64 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 65 succeeds
+PASS: Repeated adjustment 65 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 66 succeeds
+PASS: Repeated adjustment 66 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 67 succeeds
+PASS: Repeated adjustment 67 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 68 succeeds
+PASS: Repeated adjustment 68 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 69 succeeds
+PASS: Repeated adjustment 69 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 70 succeeds
+PASS: Repeated adjustment 70 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 71 succeeds
+PASS: Repeated adjustment 71 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 72 succeeds
+PASS: Repeated adjustment 72 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 73 succeeds
+PASS: Repeated adjustment 73 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 74 succeeds
+PASS: Repeated adjustment 74 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 75 succeeds
+PASS: Repeated adjustment 75 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 76 succeeds
+PASS: Repeated adjustment 76 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 77 succeeds
+PASS: Repeated adjustment 77 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 78 succeeds
+PASS: Repeated adjustment 78 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Repeated numeric adjustment 79 succeeds
+PASS: Repeated adjustment 79 preserves allocation invariants
+PASS: Alpha slider and allocation label 0 match internal state
+PASS: Alpha slider and allocation label 1 match internal state
+PASS: Alpha slider and allocation label 2 match internal state
+PASS: Alpha slider and allocation label 3 match internal state
+PASS: Alpha available-priority label derives from allocation state
+PASS: Alpha source definitions load through CardDatabase
+PASS: Current ledger supplies exactly 14 eligible Alpha Features
+PASS: Alpha explicitly authorizes all four existing Core Pass definitions
+PASS: Alpha Feature IDs are stable, unique, phase-correct, and nonrenewable
+PASS: No generic Gameplay Pass enters Alpha
+PASS: Design-phase Core Passes remain unchanged and are Alpha-authorized locally
+PASS: Alpha Feature weight uses both printed score contributions
+PASS: Alpha Pass weight uses matching priority and printed definition value
+PASS: Department and Scope do not affect Alpha weight
+PASS: Missing secondary score contributes zero weight
+PASS: Simple Story contributes exactly 2/18 Alpha pressure
+PASS: Enemies contributes exactly 10/18 Alpha pressure
+PASS: Music contributes exactly 14/18 Alpha pressure
+PASS: Alpha exact cumulative boundary uses Design's following half-open interval
+PASS: Controlled Alpha roll selects interval 0
+PASS: Controlled Alpha roll selects interval 1
+PASS: Controlled Alpha roll selects interval 2
+PASS: Controlled Alpha roll selects interval 3
+PASS: Lexical ID ordering makes controlled Alpha deals deterministic
+PASS: Pass definitions draw with replacement through seven distinct candidate slots
+PASS: Duplicate Feature input cannot produce a partial visible pool
+PASS: A failed initial deal remains rejected
+PASS: Failed Begin Alpha stays in Planning with no partial pool
+PASS: Failed Alpha deal mutates no authoritative state or cycle
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:207)
+       [6] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:207)
+       [6] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+PASS: Begin Alpha builds one complete deterministic seven-candidate pool
+PASS: Begin Alpha can succeed only once
+PASS: Successful Begin Alpha enters Active Development and retires its control
+PASS: Begin Alpha creates exactly seven candidate CardViews
+PASS: Alpha Features draw without replacement within a pool
+PASS: All Alpha candidates retain 240x336 CardView bounds
+PASS: Alpha CardViews display established Department labels
+PASS: Missing Alpha artwork uses CardView's existing fallback
+PASS: Play Alpha Hand remains disabled with 1 selections
+PASS: Play Alpha Hand remains disabled with 2 selections
+PASS: Play Alpha Hand remains disabled with 3 selections
+PASS: Four Alpha candidate instances select independently with existing visuals
+PASS: Play Alpha Hand enables with exactly four valid instances
+PASS: Duplicate Pass draws create independently selectable CardViews
+WARNING: Exactly four Alpha candidates may be selected.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _on_card_pressed (res://scripts/phases/alpha_phase.gd:777)
+       [1] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:232)
+       [2] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+PASS: A fifth Alpha selection preserves the original four
+PASS: Selected Alpha candidate toggles off independently
+PASS: Deselecting one candidate disables Play Alpha Hand
+PASS: Post-deal slider changes do not alter candidate order or identity
+PASS: Post-deal slider changes preserve Alpha selection
+PASS: Begin Alpha uses the intended deal-time priority snapshot
+PASS: Malformed active Alpha pool rejects Host Playtest without spending a cycle or queuing corrective Passes
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:248)
+       [6] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:248)
+       [6] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+WARNING: Candidate 'character_backstories' has an invalid primary score.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:912)
+       [2] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:820)
+       [3] play (res://scripts/ui/hand_presentation.gd:81)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:248)
+       [6] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+PASS: Malformed Alpha card resolves no scores, Scope, pressure, signal, or cycle
+PASS: Malformed resolution preserves the pool, four selections, and enabled action
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:255)
+       [6] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:255)
+       [6] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:255)
+       [7] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:255)
+       [7] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_weighted_alpha_boundary (res://scripts/debug/verify_alpha_phase.gd:255)
+       [7] _initialize (res://scripts/debug/verify_alpha_phase.gd:100)
+PASS: Alpha hand aggregates repeated printed primary and secondary production without synergy
+PASS: Unproduced Core Scores remain unchanged
+PASS: Alpha Scope equals the exact printed Scope sum
+PASS: Multiple Alpha Features sum fractional pressure without per-Feature rounding
+PASS: Alpha production leaves accumulated Design Bug Pressure unchanged
+PASS: Alpha production leaves existing Hidden Bugs unchanged
+PASS: Successful Alpha transaction emits once and advances exactly one cycle
+PASS: Alpha pressure display updates through values_changed at two decimals
+PASS: Display formatting preserves authoritative fractional precision
+PASS: Selected Alpha Features exhaust only after success
+PASS: Exhausted Alpha Features leave the available pool
+PASS: Unselected Alpha Features remain available
+PASS: Successful Alpha action clears selection and refills four slots alongside three retained cards
+PASS: Exhausted Alpha Features never enter the replacement pool
+PASS: Stale CardView and repeated Play activation cannot resolve again
+PASS: Alpha can deal a seven-Pass pool after Features run out
+PASS: No-Feature Alpha pool contains seven renewable Pass instances
+Alpha Specialization hit: Design Specialization! Added scores: Design +12
+PASS: Four matching Passes specialize their aggregated printed +8 to +12
+PASS: Pass-only Alpha hand adds zero Scope and exactly 0.0 pressure
+PASS: Pass-only action leaves Alpha pressure display unchanged
+PASS: Passes never exhaust
+PASS: Second successful Alpha hand advances exactly one additional cycle and signal
+PASS: Alpha Specialization fixture loads authoritative definitions
+PASS: Four same-primary Alpha Features qualify by primary Core Score
+PASS: Specialization multiplies full primary and secondary aggregates then nearest-rounds per Core Score
+PASS: Alpha debug output identifies Specialization and final score additions
+PASS: Nearest rounding occurs after full-hand per-score aggregation, including a secondary aggregate
+PASS: Matching and duplicate Pass instances participate separately in Alpha Specialization
+PASS: A nonmatching Pass invalidates Specialization and preserves base aggregates
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:347)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:347)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:347)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:347)
+WARNING: Exactly four Alpha candidates may be selected.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _on_card_pressed (res://scripts/phases/alpha_phase.gd:777)
+       [1] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:350)
+WARNING: Exactly four Alpha candidates may be selected.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _on_card_pressed (res://scripts/phases/alpha_phase.gd:777)
+       [1] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:350)
+WARNING: Exactly four Alpha candidates may be selected.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _on_card_pressed (res://scripts/phases/alpha_phase.gd:777)
+       [1] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:350)
+PASS: Specialized base action retains printed Scope and unmultiplied Alpha pressure
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:357)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:357)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:357)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:357)
+Alpha Specialization hit: Design Specialization! Added scores: Technology +3, Design +14
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:357)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_alpha_specialization_resolution (res://scripts/debug/verify_alpha_phase.gd:357)
+PASS: Resolved same-primary Feature hand commits specialized primary and secondary totals
+PASS: Specialization changes neither Scope nor Alpha Bug Pressure
+PASS: Alpha Specialization changes neither Design pressure nor Hidden Bugs
+PASS: Cancelling playback clears the delayed specialization header
+PASS: Specialized Features exhaust through the existing lifecycle
+PASS: Specialized action commits atomically and advances exactly one cycle
+PASS: Specialized action preserves a seven-card pool and selection clearing
+PASS: Alpha Balanced uses inclusive exact 0.80A and 1.20A boundaries
+PASS: A provisional score slightly below Alpha's lower boundary fails
+PASS: A provisional score slightly above Alpha's upper boundary fails
+PASS: Alpha provisional totals include cumulative Design carryover plus unmodified current-action base production
+PASS: A mixed Alpha Feature-and-Pass action activates Balanced Production from cumulative totals
+PASS: Alpha Balanced aggregates primary, secondary, and Pass production per Core Score before x1.20 nearest rounding
+PASS: Alpha Balanced nearest-rounds aggregate 2 to 2 and aggregate 3 to 4
+PASS: Alpha Balanced feedback identifies activation and deterministic final gains
+PASS: The same Alpha hand fails from different historical totals, proving the hand alone is not evaluated
+PASS: Alpha Balanced qualification and reward are independent of selection order
+PASS: A balanced all-Pass Alpha action cannot trigger Balanced Production
+PASS: Alpha Balanced eligibility uses unmodified base production even when Specialization also qualifies
+PASS: Alpha Specialization takes precedence over an eligible Balanced result
+PASS: Alpha precedence applies only x1.50, never stacked x1.80 or sequential multipliers
+PASS: Precedence feedback reports Specialization as the applied winner
+PASS: Alpha Balanced lifecycle fixture loads authoritative definitions
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:473)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:473)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:473)
+PASS: Alpha Balanced lifecycle action validates four current candidate instances
+PASS: Alpha Balanced fixture seeds cumulative Design-era project scores and Design Bug Pressure
+PASS: Alpha Balanced fixture stores existing finalized Hidden Bugs
+PASS: Balanced Production is the winning synergy for the controlled Alpha lifecycle action
+PASS: Earlier project production participates in the real Alpha provisional balance test
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:499)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:499)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:499)
+Alpha Balanced Production hit! Added scores: Graphics +5, Technology +5, Design +4
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:499)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:499)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:499)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_alpha_balanced_production_resolution (res://scripts/debug/verify_alpha_phase.gd:499)
+PASS: Alpha Balanced commits the expected final Graphics aggregate
+PASS: Alpha Balanced commits the expected final Sound aggregate
+PASS: Alpha Balanced commits the expected final Technology aggregate
+PASS: Alpha Balanced commits the expected final Design aggregate
+PASS: Alpha Balanced leaves printed Scope unchanged
+PASS: Alpha Balanced leaves printed-value fractional Alpha Bug Pressure unchanged
+PASS: Alpha Balanced changes neither Design Bug Pressure nor finalized Hidden Bugs
+PASS: Alpha Balanced commits atomically and advances exactly one cycle
+PASS: Played Alpha Balanced Feature exhausts: simple_story
+PASS: Played Alpha Balanced Feature exhausts: controls
+PASS: Played Alpha Balanced Feature exhausts: enemies
+PASS: Played Alpha Balanced Pass remains renewable
+PASS: An unselected Alpha Feature remains available after Balanced resolution
+PASS: Alpha Balanced preserves three retained cards plus four weighted replacements and clears selection
+PASS: Repeated Alpha Balanced resolution is stale-safe and changes nothing
+PASS: Host Playtest rejects Planning activation
+PASS: Rejected Planning Playtest consumes no cycle and queues nothing
+PASS: Playtest fixture seeds authoritative cumulative Design carryover scores
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:543)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:543)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:543)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:543)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:543)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:543)
+PASS: Host Playtest fixture enters Active Development with seven candidates
+Host Playtest complete! One cycle advanced. Corrective Passes queued: Design Pass, Sound Pass
+PASS: Host Playtest succeeds during valid Active Development without requiring a separate hand
+PASS: Successful Host Playtest advances exactly one authoritative cycle
+PASS: Host Playtest produces no scores, Scope, Bug Pressure, Hidden Bugs, or finalization changes
+PASS: Two lowest scores use higher Alpha priority to queue Design then Sound
+PASS: Host Playtest preserves visible candidate identity and order
+PASS: Host Playtest preserves selection and Play Hand availability
+PASS: Host Playtest preserves Feature lifecycle and priorities
+PASS: Pending Playtest state is exposed through the existing action-button boundary
+PASS: Host Playtest feedback names queued Passes deterministically
+PASS: Queued corrective categories are snapshots unaffected by later priority and score changes
+PASS: A pending Playtest rejects stacking without spending a cycle or replacing its snapshot
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:572)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:572)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:572)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:572)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:572)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:572)
+PASS: Incomplete Alpha production does not consume a pending Playtest
+PASS: Corrective construction prepends the two queued public Pass definitions
+PASS: Corrective construction fills exactly five remaining slots in existing weighted draw order
+PASS: A guaranteed Pass definition remains eligible for an ordinary weighted duplicate
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:590)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:590)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:590)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:590)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:590)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:590)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:590)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:873)
+       [4] play (res://scripts/ui/hand_presentation.gd:81)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _verify_host_playtest (res://scripts/debug/verify_alpha_phase.gd:590)
+PASS: The successful production hand advances one additional cycle while injection advances none
+PASS: The corrective replacement publishes exactly seven candidates
+PASS: Corrective Passes follow the three retained candidates
+PASS: Injected Passes are distinct CardView candidate instances
+PASS: Injected Passes retain ordinary renewable +2, zero-Scope definitions
+PASS: Successful complete corrective deal consumes pending state and re-enables Playtest
+PASS: Injected Pass candidate instances select independently through normal CardView behavior
+PASS: Injected Pass definitions participate normally in Alpha Specialization
+PASS: Injected Pass definitions participate normally in Alpha Balanced Production
+PASS: Playtest replacement-failure fixture loads Alpha sources
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_host_playtest_replacement_failure (res://scripts/debug/verify_alpha_phase.gd:637)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_host_playtest_replacement_failure (res://scripts/debug/verify_alpha_phase.gd:637)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_host_playtest_replacement_failure (res://scripts/debug/verify_alpha_phase.gd:637)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_host_playtest_replacement_failure (res://scripts/debug/verify_alpha_phase.gd:637)
+Host Playtest complete! One cycle advanced. Corrective Passes queued: Graphics Pass, Sound Pass
+PASS: Equal score and priority ties queue Graphics then Sound through fixed Core order
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest_replacement_failure (res://scripts/debug/verify_alpha_phase.gd:645)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest_replacement_failure (res://scripts/debug/verify_alpha_phase.gd:645)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest_replacement_failure (res://scripts/debug/verify_alpha_phase.gd:645)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_host_playtest_replacement_failure (res://scripts/debug/verify_alpha_phase.gd:645)
+PASS: Failed corrective refill preserves only the previously committed Playtest cycle
+PASS: Failed corrective refill does not exhaust Features or consume draw RNG
+PASS: Failed corrective refill preserves the seven-card pool and selection
+PASS: Failed corrective replacement preserves the queued Playtest snapshot
+PASS: Pending corrective state cannot spend another Playtest cycle
+PASS: Post-hand failure fixture loads Alpha sources
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:688)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:688)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:688)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _set_exact_candidates (res://scripts/debug/verify_alpha_phase.gd:712)
+       [4] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:688)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:694)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:694)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:694)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:64)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:694)
+PASS: Refill failure rejects before Alpha production or a cycle commits
+PASS: Refill failure preserves exhaustion and draw RNG
+PASS: Refill failure preserves the complete candidate pool and selected hand
+PASS: Alpha retains the exact injected ProjectState
+Alpha priority verification passed.

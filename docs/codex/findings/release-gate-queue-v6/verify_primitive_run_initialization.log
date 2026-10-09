@@ -1,0 +1,187 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+Loaded 40 cards.
+PASS: Controlled project rolls are accepted before Gameplay enters tree
+PASS: Normal startup waits at main menu
+PASS: Studio identity commits before the first game without a cycle
+PASS: Named first Studio receives funding and the Action roster
+PASS: First game uses the shared Pre-Development transaction
+PASS: First-project commit closes starter purchasing
+PASS: First game costs one run cycle and begins at project zero
+PASS: First Studio funding remains available to the initial project
+PASS: Controlled rolls assign the exact authoritative snapshots atomically
+PASS: Both player-facing snapshot queries remain concealed
+Perfect Production!
+Final Hidden Bugs: 1
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:74)
+       [6] _replace_design_with_alpha (res://scripts/gameplay.gd:232)
+       [7] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [8] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [9] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:53)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] open (res://scripts/ui/priority_overlay.gd:115)
+       [8] open_priority_overlay (res://scripts/phases/alpha_phase.gd:1144)
+       [9] set_phase (res://scripts/ui/gameplay_hud.gd:179)
+       [10] _replace_design_with_alpha (res://scripts/gameplay.gd:234)
+       [11] _on_design_proceed_to_alpha_requested (res://scripts/gameplay.gd:203)
+       [12] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:662)
+       [13] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:53)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] _update_play_action (res://scripts/phases/alpha_phase.gd:786)
+       [6] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:1157)
+       [7] _close (res://scripts/ui/priority_overlay.gd:159)
+       [8] cancel (res://scripts/ui/priority_overlay.gd:132)
+       [9] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:55)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:56)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:56)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:56)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:56)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:56)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:498)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:162)
+       [5] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:56)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] refresh_workspace (res://scripts/phases/alpha_phase.gd:1124)
+       [5] begin_alpha (res://scripts/phases/alpha_phase.gd:166)
+       [6] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:56)
+PASS: Prototype transition fixture begins Alpha
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] add_scope (res://scripts/project_state.gd:784)
+       [5] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/phases/alpha_phase.gd:1019)
+       [1] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:887)
+       [2] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:1165)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [4] finalize_alpha (res://scripts/project_state.gd:548)
+       [5] _finalize_alpha (res://scripts/phases/alpha_phase.gd:356)
+       [6] _verify_normal_prototype_run (res://scripts/debug/verify_primitive_run_initialization.gd:59)
+Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 1; implemented 0; unimplemented 9
+PASS: Prototype transition fixture finalizes Alpha
+PASS: The funded RunState survives Design, Alpha, and Beta
+PASS: Phase transitions preserve both exact snapshot identities
+PASS: Initialization and transitions add no cycles or Marketing Output
+PASS: Only existing authoritative Alpha finalization affects Bug state
+PASS: Beta dealing remains available without finance or snapshot effects
+PASS: Beta dealing and selection award no cash and never reroll snapshots
+PASS: A controlled $1,000 payout adds to the preserved first-Studio funding
+PASS: Controlled injected ProjectState receives a valid atomic snapshot pair
+PASS: Injected initialized RunState is preserved without a second initialization signal
+PASS: Injected valid snapshots survive Gameplay initialization unchanged
+PASS: Injected uninitialized prototype RunState initializes once at the normal new-run boundary
+WARNING: Market forecast snapshot IDs must be nonempty lowercase stable identifiers.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _normalize_snapshot_id (res://scripts/project_state.gd:409)
+       [1] initialize_snapshots (res://scripts/project_state.gd:267)
+       [2] _verify_injected_run_states (res://scripts/debug/verify_primitive_run_initialization.gd:108)
+PASS: Malformed atomic snapshot transaction commits neither identity
+PASS: Valid atomic snapshot transaction commits both identities with one signal
+WARNING: Project snapshots can only be initialized together on an empty ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_snapshots (res://scripts/project_state.gd:271)
+       [1] _verify_injected_run_states (res://scripts/debug/verify_primitive_run_initialization.gd:110)
+PASS: Repeated atomic initialization cannot replace either snapshot
+WARNING: Project initialization rejected a partial snapshot assignment.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _initialize_project_snapshots (res://scripts/gameplay.gd:185)
+       [1] _start_gameplay (res://scripts/gameplay.gd:51)
+       [2] _ready (res://scripts/gameplay.gd:37)
+       [3] _verify_injected_run_states (res://scripts/debug/verify_primitive_run_initialization.gd:118)
+ERROR: Could not initialize the Primitive project snapshots.
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _start_gameplay (res://scripts/gameplay.gd:52)
+       [1] _ready (res://scripts/gameplay.gd:37)
+       [2] _verify_injected_run_states (res://scripts/debug/verify_primitive_run_initialization.gd:118)
+PASS: Partial injected snapshot state aborts project initialization without cash or Design publication
+Primitive run initialization verification passed.

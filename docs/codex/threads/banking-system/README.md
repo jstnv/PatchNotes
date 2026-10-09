@@ -8,7 +8,7 @@ Started 2026-10-06 (America/Los_Angeles). This folder is the local workspace for
 2. Record agreed banking rules and rationale in the [economy and banking design](../../design/economy-banking.md). Record cross-system rulings in [DECISIONS.md](../../DECISIONS.md) when relevant.
 3. The user explicitly prompted the [shared TODO contribution](../../TODO.md) on 2026-10-06. B3–B5 are queued there; keep future status updates synchronized with that list.
 
-The current foundation includes exact-cent cash and finance journals, $500 monthly rent, typed expenses, and monthly credit updates. Loans are unavailable. The accepted lending direction and its open terms are summarized in the [system design](../../design/economy-banking.md); implementation status is in [CURRENT_STATE](../../CURRENT_STATE.md).
+The original foundation included exact-cent cash and finance journals, $500 monthly rent, typed expenses, and monthly credit updates. Selectable loans are now implemented locally; [CURRENT_STATE](../../CURRENT_STATE.md) and the [current acceptance handoff](2026-10-08-next-acceptance-handoff-v1.md) track the remaining checkpoint and export gates. Accepted lending rules are in the [system design](../../design/economy-banking.md).
 
 ## Thread records
 
@@ -39,4 +39,6 @@ The current foundation includes exact-cent cash and finance journals, $500 month
 - [Historical B3–B5 audit](2026-10-06-task-completion-audit-v1.md): pre-implementation snapshot, now superseded.
 - [B3–B5 completion recheck](2026-10-07-task-completion-recheck-v1.md): current local implementation and hash-matched gate evidence; durable restart remains separate.
 - [Checkpoint and export TODO handoff](2026-10-07-checkpoint-handoff-session-v1.md): user-requested Task10 Bank restore and Task11 exported Bank/Continue acceptance.
+- [Current-source acceptance handoff](2026-10-08-next-acceptance-handoff-v1.md): next Task10/Task11 gates after Banking restart coverage and the Research/Resourceful checkpoint revision.
+- [Shared-list update session](../../logs/2026-10-08-banking-todo-update-v1.md): current-source Task10/Task11 refresh and queued B6 read-only balance review.
 - [Drive handoff reconciliation, v1](2026-10-06-drive-handoffs-v1.md): relevant historical pass offs compared with the local TODO and current source state.

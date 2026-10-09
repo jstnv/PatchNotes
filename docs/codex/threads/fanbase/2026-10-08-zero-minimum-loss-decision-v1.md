@@ -1,0 +1,9 @@
+# Decision: allow zero near-neutral Fan loss v1
+
+2026-10-08, America/Los_Angeles. **User ruling:** “sure” in response to the proposal to keep zero Fan loss when a just-below-5.0 Review's calculated loss is below one, without forcing a minimum one-Fan penalty. This resolves that narrow design question.
+
+**LOCKED behavior:** Review exactly 5.0 remains neutral. For Review below 5.0, a title may lose zero integer Fans at a monthly boundary, or over its entire capped exposure, when its cumulative calculated loss target rounds to zero. Do not impose `max(1, loss)` or a similar minimum. Preserve the approved incremental cumulative-target accounting so later newly reached exposure can cause a loss only when the target actually increases; do not repeatedly charge previously accounted reach. This rule applies to the Fan loss target, not to Review scoring or sales.
+
+**Boundary of approval:** The user did not approve the provisional 15% loss coefficient, the Review-neutral reach estimate, per-title launch-Fan reserve, cross-title overlap treatment, or a final general rounding specification. The current branch uses floor on its cumulative integer target and already exhibits the approved zero-loss behavior, so this decision alone requests no gameplay edit. The selected quarter-Fan Awareness formula also retains **ACTIVE/TRIAL** status; its separate integer steps are not finalized by this decision.
+
+**Evidence:** [Conditional rounding screen](2026-10-08-near-neutral-rounding-screen-v1.md) shows that at trial 15%, Review 4.9 needs at least 67 estimated exposed Fans for its first lost Fan. A title with 55 launch Fans therefore loses zero at full exposure. [Played v1 capture](2026-10-07-near-neutral-findings-v1.md) has Reviews 3.6/3.5, not a near-neutral played case. The dispatched [v2 attempt](handoffs/2026-10-07-near-neutral-continuation-v2.md) is still evidence gathering and cannot retroactively approve a coefficient.

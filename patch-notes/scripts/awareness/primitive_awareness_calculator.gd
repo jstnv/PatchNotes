@@ -23,9 +23,14 @@ static func calculate(project_state: ProjectState, run_state: RunState = null) -
 	var fan_awareness := 0
 	var total_awareness := ORGANIC_AWARENESS + current_launch_marketing + fan_awareness
 	if run_state != null:
+		var promotion := run_state.get_pending_promotion()
+		if promotion<0 or promotion>ProjectState.MAX_SIGNED_INT-total_awareness: return null
+		total_awareness += promotion
 		total_awareness = run_state.trait_launch_awareness(total_awareness)
 		if total_awareness < 0: return null
 	var awareness_multiplier := 1.0 + (float(total_awareness) / float(AWARENESS_SCALE))
 	if not is_finite(awareness_multiplier):
 		return null
-	return AwarenessResult.new(FORMULA_ID, marketing_output, launch_marketing, MONTH_ONE_LAUNCH_MARKETING_DECAY_BASIS_POINTS, current_launch_marketing, ORGANIC_AWARENESS, EXISTING_FANS, FAN_VISIBILITY_BASIS_POINTS, MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS, fan_awareness, total_awareness, AWARENESS_SCALE, awareness_multiplier)
+	var result := AwarenessResult.new(FORMULA_ID, marketing_output, launch_marketing, MONTH_ONE_LAUNCH_MARKETING_DECAY_BASIS_POINTS, current_launch_marketing, ORGANIC_AWARENESS, EXISTING_FANS, FAN_VISIBILITY_BASIS_POINTS, MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS, fan_awareness, total_awareness, AWARENESS_SCALE, awareness_multiplier)
+	if run_state!=null: result._promotion_awards = run_state.get_pending_promotion_awards()
+	return result

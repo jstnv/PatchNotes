@@ -259,7 +259,7 @@ func _guidance_for_current_state() -> Dictionary:
 		&"feature_store":
 			if run != null and run.needs_starter_selection():
 				return {"key": "store_starter", "title": "Compare starter Features", "body": "Select a node to see its price and Scope. Starter purchases cost zero cycles; you can return to Studio at any time."}
-			return {"key": "store_branches", "title": "Follow the branches", "body": "Select a node for its prerequisite, discount and final price. Owned Features stay available for future projects."}
+			return {"key": "store_branches", "title": "Follow the branches", "body": "Queue an eligible Feature with a zero-cycle down payment, then Research the queue head for one productive cycle. Only completed research grants ownership."}
 		&"review":
 			return {"key": "review_categories", "title": "Explore your release", "body": "Open each category for the frozen Review and sales results. Browsing or returning to Studio costs nothing."}
 		&"contract":
@@ -345,8 +345,13 @@ func refresh() -> void:
 		_refresh_footer()
 		_refresh_guidance()
 		return
+	var profile := PrimitiveReviewCalculator.get_project_profile(project)
 	for index in range(4):
-		stats[index + 1].text = ["Graphics", "Sound", "Technology", "Design"][index] + "\n" + str(_presented_scores.get(HandPresentation.CORE[index], project.get_core_score(index)))
+		var category: String = ["Graphics", "Sound", "Technology", "Design"][index]
+		var score: int = _presented_scores.get(HandPresentation.CORE[index], project.get_core_score(index))
+		var target := project.get_review_result().get_standard(index) if project.has_review_result() else profile.get_standard(index) if profile != null else 0
+		stats[index + 1].text = category + "\n" + ("%d / %d" % [score, target] if target > 0 else str(score))
+		stats[index + 1].tooltip_text = "%s score / this project's target.\nMeeting all four targets gives 8/10 production quality.\n125%% of each target gives 10/10.\nScope, Bugs and variance determine the final Review." % category
 	stats[0].text = "Marketing\n%d" % _presented_scores.get(&"marketing", project.get_marketing_output()) if phase is BetaPhase else "Employees\n—"
 	stats[5].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", project.get_current_scope()), project.get_required_scope()]
 	stats[5].tooltip_text = "Scope measures how much game you have built: %d of the %d target.\nFeature cards add their printed Scope. Reaching the target completes\nScope for Review; Core quality is judged separately.\nSynergies do not increase Scope." % [project.get_current_scope(), project.get_required_scope()]

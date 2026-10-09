@@ -1,0 +1,114 @@
+{
+  "profile": "C:\\Users\\64jus\\AppData\\Local\\Temp\\checkpoint-acceptance-eb849_ct",
+  "test_lease_port": 47413,
+  "runs": [
+    {
+      "case": "permission_denied",
+      "mode": "initial",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_fault_matrix_probe.gd",
+        "--",
+        "initial",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\checkpoint-acceptance-eb849_ct\\permission_denied"
+      ],
+      "exit": 0,
+      "errors": [],
+      "passes": 1
+    },
+    {
+      "case": "permission_denied",
+      "mode": "fault-permission_denied",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_fault_matrix_probe.gd",
+        "--",
+        "fault-permission_denied",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\checkpoint-acceptance-eb849_ct\\permission_denied"
+      ],
+      "exit": 0,
+      "errors": [],
+      "passes": 3
+    },
+    {
+      "case": "permission_denied",
+      "mode": "read-100",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_fault_matrix_probe.gd",
+        "--",
+        "read-100",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\checkpoint-acceptance-eb849_ct\\permission_denied"
+      ],
+      "exit": 0,
+      "errors": [],
+      "passes": 1
+    },
+    {
+      "case": "disk_full",
+      "mode": "initial",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_fault_matrix_probe.gd",
+        "--",
+        "initial",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\checkpoint-acceptance-eb849_ct\\disk_full"
+      ],
+      "exit": 0,
+      "errors": [],
+      "passes": 1
+    },
+    {
+      "case": "disk_full",
+      "mode": "fault-disk_full",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_fault_matrix_probe.gd",
+        "--",
+        "fault-disk_full",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\checkpoint-acceptance-eb849_ct\\disk_full"
+      ],
+      "exit": 0,
+      "errors": [],
+      "passes": 3
+    },
+    {
+      "case": "disk_full",
+      "mode": "read-100",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/checkpoint_fault_matrix_probe.gd",
+        "--",
+        "read-100",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\checkpoint-acceptance-eb849_ct\\disk_full"
+      ],
+      "exit": 0,
+      "errors": [],
+      "passes": 1
+    }
+  ]
+}

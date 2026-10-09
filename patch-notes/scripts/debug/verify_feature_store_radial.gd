@@ -22,9 +22,13 @@ func _verify() -> void:
 		await process_frame
 		var menu: MainMenu = game.get("_active_phase")
 		menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
+		if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
+			menu._replace_dialog.hide()
+			menu._replace_dialog.confirmed.emit()
 		menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Category Store Test"
-		menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
+		menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
 		menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+		menu.call("_open_folder", &"traits")
 		menu.call("_show_review")
 		menu.call("_confirm_studio")
 		var run: RunState = game.run_state
@@ -94,6 +98,8 @@ func _verify() -> void:
 		for lane: StringName in store.LANE_ORDER:
 			store._select_lane(lane)
 			await process_frame
+			await process_frame
+			# Scroll applies after two layout frames; observe its resulting transform.
 			await process_frame
 			var point: Vector2 = map.tree.global_position + map.origins[lane] * map.zoom
 			expect(map._map_rect().has_point(point), "Category shortcut centers its branch: " + str(lane))

@@ -55,8 +55,10 @@ var _syncing_priority_controls := false
 
 func _ready() -> void:
 	%RedrawButton.pressed.connect(_on_redraw_pressed)
-	_finalization_rng.randomize()
-	_deal_rng.randomize()
+	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"design_finalize")
+	else: _finalization_rng.randomize()
+	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"design_deal")
+	else: _deal_rng.randomize()
 	_priority_allocation.allocation_changed.connect(_on_priority_allocation_changed)
 	_priority_draft = _priority_allocation.get_priority_distribution()
 	play_card_button.pressed.connect(_on_play_card_pressed)
@@ -79,6 +81,8 @@ func setup(project_state: ProjectState, run_state: RunState = null) -> void:
 
 	_project_state = project_state
 	_run_state = run_state
+	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"design_finalize")
+	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"design_deal")
 	if _run_state != null and not _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
 		_run_state.redraws_changed.connect(_refresh_redraw_controls)
 	if _project_state != null:
@@ -627,14 +631,17 @@ func _on_proceed_to_alpha_pressed() -> void:
 	if is_gameplay_input_blocked(): return
 	if _finalization_requested:
 		return
+	var prior_rng := _finalization_rng.state
 	var finalization := _calculate_design_finalization(
 		_finalization_rng.randf(),
 		_finalization_rng.randf(),
 	)
 	if not finalization.valid:
+		_finalization_rng.state = prior_rng
 		return
 	var feature_history := _build_design_feature_history()
 	if not feature_history.valid:
+		_finalization_rng.state = prior_rng
 		return
 	if not _project_state.finalize_design_bugs(
 		finalization.perfect_production,
@@ -642,6 +649,7 @@ func _on_proceed_to_alpha_pressed() -> void:
 		feature_history.implemented_ids,
 		feature_history.unimplemented_ids,
 	):
+		_finalization_rng.state = prior_rng
 		return
 	_finalization_requested = true
 	%BeginDesignButton.disabled = true

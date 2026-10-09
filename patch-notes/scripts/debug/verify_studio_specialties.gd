@@ -30,7 +30,7 @@ func _run() -> void:
 		check(not run.set_studio_name("Changed", &"racing") and snapshot(run) == before, "Specialty and grant cannot repeat or switch: " + genre)
 		for id: StringName in run.get_owned_feature_ids():
 			check(run.get_feature_familiarity(id) == 0 and StudioSpecialties.PRIMITIVE_IDS.has(str(id)), "Only Primitive ownership, no familiarity: " + str(id))
-		check(not run.owns_feature(&"colored_text") and run.get_feature_store_offer(&"colored_text").unlocked and not run.purchase_feature(&"colored_text"), "Owned parent unlocks branch without free descendant or early branch purchase")
+		check(not run.owns_feature(&"colored_text") and run.get_feature_store_offer(&"colored_text").unlocked and not ResearchTestActions.acquire(run,&"colored_text"), "Owned parent unlocks branch without free descendant or early branch purchase")
 		for chosen: StringName in [StringName(genre), &"puzzle" if genre != "puzzle" else &"action"]:
 			var project := PrimitivePredevelopment.prepare_project("Independent Genre", chosen, &"fantasy", run)
 			check(project.get_genre_id() == chosen and project.get_feature_supply_ids() == run.get_owned_feature_ids() and project.get_current_scope() == 0 and run.get_studio_specialty() == StringName(genre), "Matching / nonmatching project keeps independent Genre and unplayed Scope")
@@ -62,7 +62,7 @@ func _verify_ui() -> void:
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	var setup := menu.get_node("CenterContainer/MenuLayout/StudioSetup")
 	var name_input := setup.get_node("StudioName") as LineEdit
-	var choice := setup.get_node("StudioSpecialty") as OptionButton
+	var choice := setup.get_node("FolderContent/genre/Genre/StudioSpecialty") as OptionButton
 	name_input.text = "Genre Studio"
 	var before := snapshot(run)
 	setup.get_node("EnterStudio").pressed.emit()
@@ -75,6 +75,7 @@ func _verify_ui() -> void:
 	setup.get_node("Back").pressed.emit()
 	check(snapshot(run) == before and choice.selected == 0, "Cancel clears uncommitted choice without granting")
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
+	name_input.text = "Genre Studio"
 	choice.select(1)
 	choice.item_selected.emit(1)
 	await process_frame
@@ -85,6 +86,7 @@ func _verify_ui() -> void:
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://design-logs/task25-v1/studio-specialty-1152.png")
 	enter.pressed.emit()
+	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids().size() == 18, "Menu commits exactly one specialty")
@@ -96,7 +98,7 @@ func _verify_ui() -> void:
 	check(game.call("_begin_next_project", studio, "Puzzle Game", &"puzzle", &"fantasy") and game.project_state.get_genre_id() == &"puzzle" and run.get_studio_specialty() == &"action", "Successful nonmatching first game commits independent Genre")
 	check(not run.needs_starter_selection() and run.get_completed_run_cycles() == 1 and run.get_cash_cents() == 570000, "First-project boundary closes initial window with usual cost")
 	var offer := run.get_primitive_reserve_offer(&"simple_story")
-	check(not offer.initial and run.purchase_primitive_reserve_feature(&"simple_story") and run.get_cash_cents() == 490000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
+	check(not offer.initial and ResearchTestActions.acquire(run,&"simple_story") and run.get_cash_cents() == 490000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
 	check(not game.project_state.get_feature_supply_ids().has(&"simple_story") and PrimitivePredevelopment.prepare_project("Next", &"racing", &"fantasy", run).get_feature_supply_ids().has(&"simple_story"), "New ownership feeds next supply without changing current frozen supply")
 	game.queue_free()
 	await process_frame

@@ -1,0 +1,7 @@
+# Contracts design session v11 — bounded trial retained
+
+2026-10-08 (America/Los_Angeles). Branch `main`, HEAD `91ce539978b87ac0a6efe3a1e028cae5f1360f19`. Inspected branch, status and thread-file diff before edits; the shared worktree already contained unrelated gameplay and shared-document changes, plus this folder's prior v5–v7 evidence. Read `CURRENT_STATE.md`, `TODO.md`, repository workflow, Contracts design authority, v7 findings, approval v2 and this folder's README/HANDOFF. Preserved all other worktree changes and `.codex-godot-temp`.
+
+User said “Lets keep it. what next?” after the v7 recommendation. Recorded retention of the existing Crown/Neon ACTIVE/TRIAL pilot in [decision v3](DECISION-v3-retain-bounded-trial.md), clarified current status in [README](README.md) and [HANDOFF](HANDOFF.md), and left Game-5 and cash-pressure continuations proposed. Publisher Connections is now correctly marked locally implemented in this thread's README per current authority and the separate verification log.
+
+Checks: `git diff --check -- docs/codex/threads/contracts/README.md docs/codex/threads/contracts/HANDOFF.md` exited 0; a PowerShell line scan found no trailing whitespace in the two new Markdown files. Git emitted only expected LF-to-CRLF working-copy warnings. No simulation or gameplay/test/asset/config change this session. No shared TODO, shared design-authority, commit, push or release claim. Next: read-only common-calendar Game-5 continuation of v7's four arms, then a separate active-loan/arrears route if still needed.

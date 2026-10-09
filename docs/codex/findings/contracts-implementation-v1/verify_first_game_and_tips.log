@@ -1,0 +1,92 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: New run waits at main menu without creating a project
+PASS: Main-menu How to Play opens the separate tutorial for free
+PASS: Naming studio funds $5,500 + $200 point cash and grants the free Action roster
+PASS: First Studio offers an inline Store hint without a blocking selection menu
+PASS: Starter purchases remain open until the first project begins
+PASS: Specialty roster opens game setup without mutating the run
+PASS: First game setup presents nonblocking Pre-Development guidance
+PASS: Tip button manually replays setup guidance for free
+PASS: Missing name rejects without project or time mutation
+PASS: Cancelling setup is free and does not bypass it
+PASS: Cancelling setup leaves starter purchases open
+PASS: Reopening preserves draft and costs nothing
+PASS: Setup fits above the footer at (900, 600)
+PASS: Setup fits above the footer at (1152, 648)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:392)
+       [9] _on_development_requested (res://scripts/gameplay.gd:330)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:161)
+       [12] _run (res://scripts/debug/verify_first_game_and_tips.gd:69)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:392)
+       [9] _on_development_requested (res://scripts/gameplay.gd:330)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:161)
+       [12] _run (res://scripts/debug/verify_first_game_and_tips.gd:69)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:140)
+       [1] refresh (res://scripts/cards/card_view.gd:93)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:285)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:258)
+       [6] begin_design (res://scripts/phases/design_phase.gd:163)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _begin_next_project (res://scripts/gameplay.gd:392)
+       [9] _on_development_requested (res://scripts/gameplay.gd:330)
+       [10] <anonymous lambda> (res://scripts/phases/studio_phase.gd:130)
+       [11] _confirm (res://scripts/ui/predevelopment_overlay.gd:161)
+       [12] _run (res://scripts/debug/verify_first_game_and_tips.gd:69)
+PASS: First project locks chosen identity
+PASS: Begin costs exactly one run cycle, project zero, no cash, redraw four
+PASS: Successful first-project commit closes the starter purchase window
+PASS: Fresh project uses owned supply and authoritative snapshots
+PASS: Pre-Development leads directly into the first guided Design pool
+PASS: Stale setup callback cannot charge twice
+PASS: Repeat phase entry does not repeat tips
+PASS: Tutorial button opens current phase reference menu
+PASS: First visit shows nonblocking alpha guidance
+PASS: Repeat alpha visit is quiet and free
+PASS: Manual alpha reference is relevant and free
+PASS: First visit shows nonblocking beta guidance
+PASS: Repeat beta visit is quiet and free
+PASS: Manual beta reference is relevant and free
+PASS: First visit shows nonblocking review guidance
+PASS: Repeat review visit is quiet and free
+PASS: Manual review reference is relevant and free
+PASS: First visit shows nonblocking contract guidance
+PASS: Repeat contract visit is quiet and free
+PASS: Manual contract reference is relevant and free
+PASS: First visit shows nonblocking feature_store guidance
+PASS: Repeat feature_store visit is quiet and free
+PASS: Manual feature_store reference is relevant and free
+PASS: Reconstruction retains project and seen tips without charging
+First-game and phase-tip verification: 0 failures

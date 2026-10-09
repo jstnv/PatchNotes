@@ -1,0 +1,593 @@
+{
+  "branch": "main",
+  "head": "91ce539978b87ac0a6efe3a1e028cae5f1360f19",
+  "analysis_script_sha256": "50792c7213287d8e2b85ebe92fa5671418425c98f3d113720279015c718bee95",
+  "checks": {
+    "copy_hashes_unchanged": true,
+    "analysis_script_matches_manifest": true,
+    "dirty_overlay_matches_manifest": true,
+    "crown-lease-chain": {
+      "native_route_valid": true,
+      "legal_crown_only_foundation": true,
+      "identical_prebranch_state": true,
+      "crown_hands_and_results_identical": true,
+      "crown_advance_and_full_cash": true,
+      "same_chain_crown_prefix_through_game3": true,
+      "same_game3_launch_before_neon": true,
+      "neon_offer_pending_only_after_promoted_game3": true,
+      "legal_neon_result": true,
+      "same_game4_cards_and_review": true,
+      "neon_promotion_on_game4_only": true,
+      "neon_costs_two_native_cycles": true,
+      "game5_launched_legally": true,
+      "game5_two_cycle_strategy_delay": true,
+      "matched_calendar_endpoints": true,
+      "two_actual_chain_game5_settlements": true,
+      "finance_valid_and_nonnegative": true,
+      "no_action_blockers": true,
+      "project_access_and_two_cycle_gap": true,
+      "no_overdue_at_endpoint": true,
+      "no_active_bank_or_outstanding_bill": true,
+      "third_contract_unlocks_starwave_profile_only_in_chain": true,
+      "matched_cash_reconciles": true
+    }
+  },
+  "results": {
+    "foundation": {
+      "release_cycles": [
+        12,
+        32
+      ],
+      "last_review": 7.2,
+      "last_awareness": 113,
+      "cash_cents_before": 203252,
+      "monthly_rent_cents": 51500,
+      "loan_quote": {
+        "accepted": false,
+        "basis_cents": 0,
+        "capacity_cents": 0,
+        "eligible": false,
+        "latest_sales_cents": 0,
+        "maximum_principal_cents": 0,
+        "obligations_cents": 0,
+        "older_sales_cents": 700,
+        "reason": "Two completed months with positive settled sales are required.",
+        "rent_cents": 51500,
+        "schedule": {
+          "accepted_cycle": 32,
+          "first_due_cycle": 34,
+          "last_due_cycle": 56,
+          "maximum_installment_cents": 4667,
+          "principal_cents": 50000,
+          "schema_version": 1,
+          "term_months": 12,
+          "total_interest_cents": 3250,
+          "total_payment_cents": 53250
+        }
+      },
+      "hire": true
+    },
+    "arms": {
+      "chain": {
+        "game3": {
+          "cycle": 52,
+          "review": 7.7,
+          "awareness": 126,
+          "month_1_units": 672,
+          "promotion": 12,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:neon_circuit:first"
+          ]
+        },
+        "game4": {
+          "cycle": 72,
+          "review": 7.3,
+          "awareness": 132,
+          "month_1_units": 779,
+          "promotion": 18,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit",
+            "starwave"
+          ]
+        },
+        "game5": {
+          "cycle": 90,
+          "review": 7.1,
+          "awareness": 105,
+          "month_1_units": 773,
+          "promotion": 0
+        },
+        "contracts": [
+          {
+            "cash": 192000,
+            "promotion": 12,
+            "scope": 14
+          },
+          {
+            "cash": 145116,
+            "promotion": 18,
+            "scope": 14
+          }
+        ],
+        "matched_G": {
+          "cycle": 90,
+          "cash_cents": 1490214,
+          "portfolio_settled_cents": 3230765,
+          "game3_settled_cents": 874824,
+          "game4_settled_cents": 979719,
+          "game5_settled_cents": 0,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 639,
+          "project_cycle": 17,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 622000,
+          "publisher_receipts_cents": 572949,
+          "completed_contracts": 3,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit",
+            "starwave"
+          ],
+          "pending_offers": []
+        },
+        "G_plus_2": {
+          "cycle": 92,
+          "cash_cents": 1960667,
+          "portfolio_settled_cents": 3776218,
+          "game3_settled_cents": 874824,
+          "game4_settled_cents": 984614,
+          "game5_settled_cents": 540558,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 642,
+          "project_cycle": 1,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 644500,
+          "publisher_receipts_cents": 572949,
+          "completed_contracts": 3,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit",
+            "starwave"
+          ],
+          "pending_offers": []
+        },
+        "G_plus_4": {
+          "cycle": 94,
+          "cash_cents": 2017518,
+          "portfolio_settled_cents": 3925169,
+          "game3_settled_cents": 874824,
+          "game4_settled_cents": 987411,
+          "game5_settled_cents": 686712,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 645,
+          "project_cycle": 3,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 684100,
+          "publisher_receipts_cents": 572949,
+          "completed_contracts": 3,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit",
+            "starwave"
+          ],
+          "pending_offers": []
+        },
+        "game6_development_completed": true
+      },
+      "crown_only": {
+        "game3": {
+          "cycle": 52,
+          "review": 7.7,
+          "awareness": 126,
+          "month_1_units": 672,
+          "promotion": 12,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:neon_circuit:first"
+          ]
+        },
+        "game4": {
+          "cycle": 70,
+          "review": 7.3,
+          "awareness": 114,
+          "month_1_units": 736,
+          "promotion": 0,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit"
+          ]
+        },
+        "game5": {
+          "cycle": 88,
+          "review": 7.1,
+          "awareness": 105,
+          "month_1_units": 773,
+          "promotion": 0
+        },
+        "contracts": [
+          {
+            "cash": 192000,
+            "promotion": 12,
+            "scope": 14
+          }
+        ],
+        "matched_G": {
+          "cycle": 90,
+          "cash_cents": 1795324,
+          "portfolio_settled_cents": 3703491,
+          "game3_settled_cents": 874824,
+          "game4_settled_cents": 911887,
+          "game5_settled_cents": 540558,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 639,
+          "project_cycle": 1,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 644500,
+          "publisher_receipts_cents": 427833,
+          "completed_contracts": 2,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:neon_circuit:first"
+          ]
+        },
+        "G_plus_2": {
+          "cycle": 92,
+          "cash_cents": 1852175,
+          "portfolio_settled_cents": 3852442,
+          "game3_settled_cents": 874824,
+          "game4_settled_cents": 914684,
+          "game5_settled_cents": 686712,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 642,
+          "project_cycle": 3,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 684100,
+          "publisher_receipts_cents": 427833,
+          "completed_contracts": 2,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:neon_circuit:first"
+          ]
+        },
+        "G_plus_4": {
+          "cycle": 94,
+          "cash_cents": 1889581,
+          "portfolio_settled_cents": 3946848,
+          "game3_settled_cents": 874824,
+          "game4_settled_cents": 916083,
+          "game5_settled_cents": 779719,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 645,
+          "project_cycle": 5,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 688600,
+          "publisher_receipts_cents": 427833,
+          "completed_contracts": 2,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill",
+            "neon_circuit"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:neon_circuit:first"
+          ]
+        },
+        "game6_development_completed": true
+      },
+      "crown_cash_only": {
+        "game3": {
+          "cycle": 52,
+          "review": 7.7,
+          "awareness": 114,
+          "month_1_units": 647,
+          "promotion": 0,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ],
+          "pending_offers": []
+        },
+        "game4": {
+          "cycle": 70,
+          "review": 7.3,
+          "awareness": 114,
+          "month_1_units": 736,
+          "promotion": 0,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ]
+        },
+        "game5": {
+          "cycle": 88,
+          "review": 7.1,
+          "awareness": 105,
+          "month_1_units": 773,
+          "promotion": 0
+        },
+        "contracts": [
+          {
+            "cash": 192000,
+            "promotion": 12,
+            "scope": 14
+          }
+        ],
+        "matched_G": {
+          "cycle": 90,
+          "cash_cents": 1750569,
+          "portfolio_settled_cents": 3658736,
+          "game3_settled_cents": 830069,
+          "game4_settled_cents": 911887,
+          "game5_settled_cents": 540558,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 639,
+          "project_cycle": 1,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 644500,
+          "publisher_receipts_cents": 427833,
+          "completed_contracts": 2,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ],
+          "pending_offers": []
+        },
+        "G_plus_2": {
+          "cycle": 92,
+          "cash_cents": 1807420,
+          "portfolio_settled_cents": 3807687,
+          "game3_settled_cents": 830069,
+          "game4_settled_cents": 914684,
+          "game5_settled_cents": 686712,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 642,
+          "project_cycle": 3,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 684100,
+          "publisher_receipts_cents": 427833,
+          "completed_contracts": 2,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ],
+          "pending_offers": []
+        },
+        "G_plus_4": {
+          "cycle": 94,
+          "cash_cents": 1844826,
+          "portfolio_settled_cents": 3902093,
+          "game3_settled_cents": 830069,
+          "game4_settled_cents": 916083,
+          "game5_settled_cents": 779719,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 645,
+          "project_cycle": 5,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 688600,
+          "publisher_receipts_cents": 427833,
+          "completed_contracts": 2,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ],
+          "pending_offers": []
+        },
+        "game6_development_completed": true
+      },
+      "no_crown": {
+        "game3": {
+          "cycle": 50,
+          "review": 7.7,
+          "awareness": 114,
+          "month_1_units": 647,
+          "promotion": 0,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:crown_quill:first"
+          ]
+        },
+        "game4": {
+          "cycle": 68,
+          "review": 7.3,
+          "awareness": 114,
+          "month_1_units": 736,
+          "promotion": 0,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ]
+        },
+        "game5": {
+          "cycle": 86,
+          "review": 7.1,
+          "awareness": 105,
+          "month_1_units": 773,
+          "promotion": 0
+        },
+        "contracts": [],
+        "matched_G": {
+          "cycle": 90,
+          "cash_cents": 1667920,
+          "portfolio_settled_cents": 3807687,
+          "game3_settled_cents": 830069,
+          "game4_settled_cents": 914684,
+          "game5_settled_cents": 686712,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 639,
+          "project_cycle": 3,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 684100,
+          "publisher_receipts_cents": 235833,
+          "completed_contracts": 1,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:crown_quill:first"
+          ]
+        },
+        "G_plus_2": {
+          "cycle": 92,
+          "cash_cents": 1705326,
+          "portfolio_settled_cents": 3902093,
+          "game3_settled_cents": 830069,
+          "game4_settled_cents": 916083,
+          "game5_settled_cents": 779719,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 642,
+          "project_cycle": 5,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 688600,
+          "publisher_receipts_cents": 235833,
+          "completed_contracts": 1,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:crown_quill:first"
+          ]
+        },
+        "G_plus_4": {
+          "cycle": 94,
+          "cash_cents": 1665566,
+          "portfolio_settled_cents": 3962233,
+          "game3_settled_cents": 830069,
+          "game4_settled_cents": 916782,
+          "game5_settled_cents": 839160,
+          "total_overdue_cents": 0,
+          "unpaid_rent_cents": 0,
+          "credit_score": 642,
+          "project_cycle": 7,
+          "financially_blocked": false,
+          "bank_loans": 0,
+          "outstanding_expenses": 0,
+          "monthly_rent_cents": 51500,
+          "monthly_payroll_cents": 1000,
+          "feature_play_cents": 736000,
+          "publisher_receipts_cents": 235833,
+          "completed_contracts": 1,
+          "unlocked": [
+            "ironclad",
+            "sidestreet",
+            "crown_quill"
+          ],
+          "pending_offers": [
+            "55851fddbcb7b86bea07d4eddf10260d:crown_quill:first"
+          ]
+        },
+        "game6_development_completed": true
+      }
+    },
+    "chain_minus_crown_only": {
+      "cash_cents_at_G": -305110,
+      "cash_cents_at_G_plus_2": 108492,
+      "cash_cents_at_G_plus_4": 127937,
+      "portfolio_settled_cents_at_G_plus_4": -21679,
+      "game5_settled_cents_at_G_plus_4": -93007,
+      "feature_play_spend_cents_at_G_plus_4": -4500,
+      "publisher_receipts_cents_at_G_plus_4": 145116
+    }
+  }
+}

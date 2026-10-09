@@ -14,6 +14,7 @@ var _fan_awareness: int
 var _total_awareness: int
 var _awareness_scale: int
 var _awareness_multiplier: float
+var _promotion_awards: Dictionary = {}
 
 
 func _init(formula_id: StringName, marketing_output: int, launch_marketing: int, launch_marketing_decay_basis_points: int, current_launch_marketing: int, organic_awareness: int, existing_fans: int, fan_visibility_basis_points: int, fan_launch_decay_basis_points: int, fan_awareness: int, total_awareness: int, awareness_scale: int, awareness_multiplier: float) -> void:
@@ -45,3 +46,4 @@ func get_fan_awareness() -> int: return _fan_awareness
 func get_total_awareness() -> int: return _total_awareness
 func get_awareness_scale() -> int: return _awareness_scale
 func get_awareness_multiplier() -> float: return _awareness_multiplier
+func get_promotion_awards() -> Dictionary: return _promotion_awards.duplicate()

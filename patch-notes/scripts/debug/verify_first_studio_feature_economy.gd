@@ -24,7 +24,7 @@ func _run() -> void:
 	for id: StringName in run.get_owned_feature_ids(): scope += database.get_card(id).scope
 	check(scope == 26 and run.get_owned_feature_ids().has(&"controls") and not run.owns_feature(&"sprites"), "Adventure roster derives 26 printed Scope from the ledger")
 	var before := [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_owned_feature_ids()]
-	check(not run.purchase_feature(&"colored_text") and before == [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_owned_feature_ids()], "Feature Store cannot bypass pending starter selection")
+	check(not ResearchTestActions.acquire(run,&"colored_text") and before == [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_owned_feature_ids()], "Feature Store cannot bypass pending starter selection")
 	check(run.get_primitive_reserve_offer(&"sprites").price_cents == 45000 and run.get_primitive_reserve_offer(&"sprites").initial, "Two-Scope optional Feature costs exactly $450 in the Store")
 	var optional_run := RunState.new()
 	optional_run.initialize_cash_cents(0)
@@ -77,10 +77,10 @@ func _run() -> void:
 	check(run.finalize_starter_selection() and not run.finalize_starter_selection(), "Starter window can close only once")
 	var reserve := run.get_primitive_reserve_offer(&"sprites")
 	check(reserve.owned and not reserve.initial, "Purchased starter remains owned after the first game boundary")
-	check(run.purchase_primitive_reserve_feature(&"enemies") and run.owns_feature(&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Later Studio reserve purchase spends exact cents and one productive cycle")
+	check(ResearchTestActions.acquire(run,&"enemies") and run.owns_feature(&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Later Studio reserve purchase spends exact cents and one productive cycle")
 	check(owned_summary.text.contains("Scope 32") and owned_summary.text.contains("Core Score 82") and owned_summary.text.contains("Graphics 21 · Sound 7 · Tech 25 · Design 29") and owned_summary.text.contains("$1460.00"), "Indicator refreshes after a reserve purchase")
-	check(not run.purchase_primitive_reserve_feature(&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Duplicate reserve purchase changes nothing")
-	check(run.purchase_feature(&"colored_text") and run.get_cash_cents() == 300000 and run.get_completed_run_cycles() == 2 and owned_summary.text.contains("Scope 33") and owned_summary.text.contains("Core Score 84") and owned_summary.text.contains("Graphics 23 · Sound 7 · Tech 25 · Design 29") and owned_summary.text.contains("$1460.00") and owned_summary.text.contains("1 Store Feature with play cost TBD"), "Owned later Feature costs one cycle and contributes printed Scope and Core while its undefined play cost stays explicit")
+	check(not ResearchTestActions.acquire(run,&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Duplicate reserve purchase changes nothing")
+	check(ResearchTestActions.acquire(run,&"colored_text") and run.get_cash_cents() == 300000 and run.get_completed_run_cycles() == 2 and owned_summary.text.contains("Scope 33") and owned_summary.text.contains("Core Score 84") and owned_summary.text.contains("Graphics 23 · Sound 7 · Tech 25 · Design 29") and owned_summary.text.contains("$1460.00") and owned_summary.text.contains("1 Store Feature with play cost TBD"), "Owned later Feature costs one cycle and contributes printed Scope and Core while its undefined play cost stays explicit")
 	var project := PrimitivePredevelopment.prepare_project("Economy Game", &"action", &"fantasy", run)
 	check(project.get_feature_supply_ids().has(&"enemies") and project.get_feature_supply_ids().has(&"scrolling"), "Next project snapshots store-purchased starter and reserve Features")
 	var cards: Array[CardData] = [database.get_card(&"text"), database.get_card(&"controls"), database.get_card(&"graphics_pass")]

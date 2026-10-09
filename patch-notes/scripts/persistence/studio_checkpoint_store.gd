@@ -78,11 +78,36 @@ func inspect() -> Dictionary:
 	return current
 
 func save(payload: Dictionary) -> Dictionary:
+	return _publish(payload,false)
+
+## Explicit recovery preserves the damaged current generation as evidence.
+func recover_backup() -> Dictionary:
+	var inspected := inspect()
+	if inspected.status==&"incompatible" or not inspected.has("backup"): return {"status":&"invalid","reason":"No recoverable backup"}
+	return _publish(inspected.backup.payload,true)
+
+## Archive first, then publish at a fresh generation. A failed replacement
+## leaves every prior generation at its original path as well as the archive.
+func replace_run(payload: Dictionary) -> Dictionary:
+	if not acquire(): return {"status":&"writer_busy"}
+	var names := DirAccess.get_files_at(directory)
+	if not names.is_empty():
+		var archive := directory.path_join("archive-"+Crypto.new().generate_random_bytes(12).hex_encode())
+		if DirAccess.make_dir_recursive_absolute(archive)!=OK: return {"status":&"io_error","reason":"Archive directory"}
+		for name in names:
+			var from := directory.path_join(name)
+			var to := archive.path_join(name)
+			if DirAccess.copy_absolute(from,to)!=OK or FileAccess.get_sha256(from)!=FileAccess.get_sha256(to): return {"status":&"io_error","reason":"Archive verification"}
+	return _publish(payload,true)
+
+func _publish(payload: Dictionary, explicit_recovery: bool) -> Dictionary:
 	if not acquire(): return {"status":&"writer_busy"}
 	if not validator.is_valid(): return {"status":&"invalid","reason":"No payload validator"}
 	var current := inspect()
-	if current.status not in [&"empty",&"valid"]: return current
-	var sequence: int = current.get("sequence",0)
+	if current.status not in [&"empty",&"valid"] and not explicit_recovery: return current
+	var generations := _generations()
+	if not _scan_error.is_empty(): return {"status":&"invalid","reason":_scan_error}
+	var sequence: int = generations[-1] if not generations.is_empty() else 0
 	if sequence == 9223372036854775807: return {"status":&"invalid","reason":"Generation overflow"}
 	sequence += 1
 	var candidate := payload.duplicate(true)
@@ -95,12 +120,19 @@ func save(payload: Dictionary) -> Dictionary:
 	if fault == &"before_write": return {"status":&"io_error","reason":"Injected before write"}
 	if DirAccess.make_dir_recursive_absolute(directory) != OK: return {"status":&"io_error","reason":"Create save directory"}
 	var temporary := directory.path_join("checkpoint.%d.%s.tmp" % [sequence,Crypto.new().generate_random_bytes(12).hex_encode()])
+	if fault == &"permission_denied": return {"status":&"io_error","reason":"Injected permission denied opening temporary generation"}
 	var file := FileAccess.open(temporary,FileAccess.WRITE)
 	if file == null: return {"status":&"io_error","reason":"Open temporary generation"}
+	if fault == &"during_write":
+		file.store_string(source.substr(0,source.length()/2))
+		file.flush()
+		file.close()
+		return {"status":&"io_error","reason":"Injected partial write"}
 	file.store_buffer(source.to_utf8_buffer())
 	file.flush()
 	var write_error := file.get_error()
 	file.close()
+	if fault == &"disk_full": write_error = ERR_FILE_CANT_WRITE
 	if write_error != OK: return {"status":&"io_error","reason":"Write/flush generation"}
 	if fault == &"after_flush": return {"status":&"io_error","reason":"Injected after flush"}
 	var checked := _read_path(temporary,sequence)
@@ -109,6 +141,17 @@ func save(payload: Dictionary) -> Dictionary:
 	var final_path := _path(sequence)
 	if FileAccess.file_exists(final_path): return {"status":&"io_error","reason":"Generation collision"}
 	if DirAccess.rename_absolute(temporary,final_path) != OK: return {"status":&"io_error","reason":"Publish generation"}
-	# Retain older finalized generations and all failed temporary evidence.
-	# No overwrite rename or delete-before-publish is used.
+	# Publication already committed. Cleanup is best effort and never removes
+	# the newest two validated generations or damaged/incompatible evidence.
+	if fault not in [&"after_rename",&"during_cleanup"]: _prune_valid_history()
 	return {"status":&"saved","sequence":sequence,"path":final_path}
+
+func _prune_valid_history() -> void:
+	var generations := _generations()
+	if not _scan_error.is_empty(): return
+	var retained := 0
+	for index in range(generations.size()-1,-1,-1):
+		var sequence := generations[index]
+		if _read_path(_path(sequence),sequence).status!=&"valid": continue
+		retained += 1
+		if retained>2: DirAccess.remove_absolute(_path(sequence))

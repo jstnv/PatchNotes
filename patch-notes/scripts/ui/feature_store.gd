@@ -33,6 +33,10 @@ var _owned_summary: Label
 var _spending_advice: Label
 var _buy: Button
 var _selected: StringName
+var _research_list: OptionButton
+var _research_button: Button
+var _research_quote: Dictionary = {}
+var _admission_dialog: ConfirmationDialog
 
 static func score_label(stat: StringName) -> String:
 	return "Tech" if stat == &"technology" else str(stat).capitalize()
@@ -67,6 +71,18 @@ func setup(run: RunState) -> void:
 	_spending_advice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_spending_advice.add_theme_font_size_override("font_size", 14)
 	layout.add_child(_spending_advice)
+	var queue_bar := HBoxContainer.new()
+	layout.add_child(queue_bar)
+	_research_list = OptionButton.new()
+	_research_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_research_list.item_selected.connect(func(index: int): _select_node(_research_list.get_item_metadata(index)))
+	queue_bar.add_child(_research_list)
+	_research_button = Button.new()
+	_research_button.text = "Research"
+	_research_button.pressed.connect(func():
+		var quote := _research_quote.duplicate(true)
+		if _run.research_feature(quote): _refresh())
+	queue_bar.add_child(_research_button)
 	var lanes := HBoxContainer.new()
 	lanes.add_theme_constant_override("separation", 8)
 	layout.add_child(lanes)
@@ -85,6 +101,7 @@ func setup(run: RunState) -> void:
 	_run.features_changed.connect(_refresh)
 	_run.cash_changed.connect(_refresh)
 	_run.sales_changed.connect(_refresh)
+	_run.calendar_changed.connect(_refresh, CONNECT_DEFERRED)
 	_refresh()
 
 
@@ -94,9 +111,24 @@ func open_store() -> void:
 
 
 func _refresh() -> void:
-	if _tree == null:
+	# Deferred run signals can arrive after Studio has been detached for departure.
+	if not is_inside_tree() or _tree == null:
 		return
 	_cash.text = "Feature Store"
+	_research_list.clear()
+	_research_quote = {}
+	var pending := _run.get_feature_research_queue()
+	_research_list.visible = not _run.needs_starter_selection()
+	_research_button.visible = not _run.needs_starter_selection()
+	for entry: Dictionary in pending:
+		var q := _run.get_feature_research_quote(entry.feature_id)
+		_research_list.add_item("%d. %s - %d action(s) left" % [_research_list.item_count+1,_run._feature_definitions[entry.feature_id].name,q.remaining_actions])
+		_research_list.set_item_metadata(_research_list.item_count-1,entry.feature_id)
+	if pending.is_empty(): _research_list.add_item("Research queue empty")
+	else: _research_quote = _run.get_feature_research_quote(pending[0].feature_id)
+	_research_button.disabled = _research_quote.is_empty() or not _research_quote.can_research
+	_research_button.text = "Research" if _research_quote.is_empty() else "Research %s - 1 cycle" % CashFormatter.format_exact_cents(_research_quote.due_cents)
+	_research_button.tooltip_text = "Only the first queued Feature receives research. No automatic progress or due bills."
 	if _run.needs_starter_selection():
 		var pool := _run.get_starter_pool_summary()
 		_cash.text += "\nFirst-game pool: %d Scope · Optional Primitive purchases cost 0 cycles" % pool.scope
@@ -127,6 +159,9 @@ func _refresh() -> void:
 			if _run.needs_starter_selection():
 				status = "After first game"
 				color = Color("343943")
+		var research := _run.get_feature_research_quote(id)
+		if not _run.needs_starter_selection() and not _run.owns_feature(id):
+			status = "Research head" if research.head else "Queued" if research.queued else "Locked" if not research.unlocked else "Queue available" if research.can_admit else "Queue - Need cash / clear bills"
 		var card: CardData = get_node("/root/CardDatabase").get_card(id)
 		button.text = card.card_name + "\n" + status
 		(button.get_node("MapStatus") as Label).text = status
@@ -137,7 +172,7 @@ func _refresh() -> void:
 		if not offer.is_empty() and offer.owned:
 			button.tooltip_text += "\nOwned Feature\nPrerequisite: %s" % offer.prerequisite
 		elif not offer.is_empty():
-			button.tooltip_text += "\nPrerequisite: %s\nBase: %s · Discount: %d%% · Final: %s\nPurchase: 1 productive cycle · %s" % [offer.prerequisite, CashFormatter.format_exact_cents(offer.base_price_cents), offer.discount_percent, CashFormatter.format_exact_cents(offer.price_cents), "Owned" if offer.owned else "Affordable" if offer.affordable and offer.unlocked else "Need cash" if offer.unlocked else "Locked"]
+			button.tooltip_text += "\nPrerequisite: %s\nBase: %s. Queue down payment: %s (0 cycles).\nNext research installment: %s (1 cycle); %d%% familiarity now." % [offer.prerequisite,CashFormatter.format_exact_cents(research.base_cents),CashFormatter.format_exact_cents(research.down_cents),CashFormatter.format_exact_cents(research.due_cents),research.discount_percent]
 		elif not reserve.is_empty() and not reserve.owned:
 			button.tooltip_text += "\nPrimitive %s · %s" % ["starter" if reserve.initial else "reserve", CashFormatter.format_exact_cents(reserve.price_cents)]
 		else:
@@ -266,12 +301,19 @@ func _refresh_spending_advice() -> void:
 
 
 func _purchase() -> void:
-	# Failed/stale requests leave the view and selection untouched.
-	if not _run.get_primitive_reserve_offer(_selected).is_empty():
-		if _run.needs_starter_selection():
-			_run.purchase_starter_feature(_selected)
-		else:
-			_run.purchase_primitive_reserve_feature(_selected)
-	else:
-		_run.purchase_feature(_selected)
-
+	var reserve := _run.get_primitive_reserve_offer(_selected)
+	if not reserve.is_empty() and _run.needs_starter_selection():
+		_run.purchase_starter_feature(_selected)
+		return
+	var quote := _run.get_feature_research_quote(_selected)
+	if quote.is_empty() or not quote.can_admit: return
+	if is_instance_valid(_admission_dialog): _admission_dialog.queue_free()
+	_admission_dialog = ConfirmationDialog.new()
+	_admission_dialog.title = "Queue Feature research?"
+	_admission_dialog.dialog_text = "Pay %s now (0 cycles). This down payment is irreversible.\nNo cancellation or reordering. Ownership begins only after research finishes.\nNext installment at current familiarity: %s; 1 productive cycle.\nFuture familiarity can change the remaining price." % [CashFormatter.format_exact_cents(quote.down_cents),CashFormatter.format_exact_cents(quote.due_cents)]
+	_admission_dialog.confirmed.connect(func():
+		_run.admit_feature_research(quote)
+		_refresh())
+	add_child(_admission_dialog)
+	_admission_dialog.popup_centered()
+	_admission_dialog.get_cancel_button().grab_focus()

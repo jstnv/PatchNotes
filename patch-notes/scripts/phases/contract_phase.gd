@@ -46,6 +46,7 @@ func setup(state: ContractState, run: RunState, category_rolls: Array[float] = [
 		return false
 	_state = state
 	_run = run
+	if _run != null: _rng = _run.random_streams.stream(&"contract_deal")
 	_initial_category_rolls = category_rolls.duplicate()
 	_initial_definition_rolls = definition_rolls.duplicate()
 	_priority_draft = state.get_priority_distribution()
@@ -55,7 +56,8 @@ func setup(state: ContractState, run: RunState, category_rolls: Array[float] = [
 
 
 func _ready() -> void:
-	_rng.randomize()
+	if _run != null: _rng = _run.random_streams.stream(&"contract_deal")
+	else: _rng.randomize()
 	_build_ui()
 	if _state != null:
 		_initialize_presentation()
@@ -293,7 +295,7 @@ func _build_completion_panel() -> void:
 
 
 func _initialize_presentation() -> void:
-	_title.text = "SideStreet Cash Contract" if _state.get_contract_id() == ContractState.SIDESTREET_CONTRACT_ID else "Balanced Primitive Contract"
+	_title.text = _state.get_title()
 	_priority_draft = _state.get_priority_distribution()
 	_sync_priority_inputs()
 	if _state.is_completed():
@@ -514,14 +516,15 @@ func _show_completion() -> void:
 	if hand_motion != null and (hand_motion.capturing or hand_motion.busy): return
 	var result := _state.get_result()
 	if result == null: return
-	_completion_stats.text = "Final Scope: %d / %d\nGraphics: %s / 6\nSound: %s / 6\nTechnology: %s / 6\nDesign: %s / 6\nCompletion: %.1f%%\nGuaranteed Upfront: %s\nCompletion Payment: %s\nTotal Payout: %s" % [
-		result.get_scope(), ContractState.EXPECTED_SCOPE,
-		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS)),
-		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.SOUND)),
-		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY)),
-		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.DESIGN)),
+	_completion_stats.text = "Final Scope: %d / %d\nGraphics: %s / %s\nSound: %s / %s\nTechnology: %s / %s\nDesign: %s / %s\nCompletion: %.1f%%\nGuaranteed Upfront: %s\nCompletion Payment: %s\nTotal Payout: %s" % [
+		result.get_scope(), _state.get_scope_target(),
+		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS)), _format_half(_state.get_core_target(0)),
+		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.SOUND)), _format_half(_state.get_core_target(1)),
+		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY)), _format_half(_state.get_core_target(2)),
+		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.DESIGN)), _format_half(_state.get_core_target(3)),
 		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_upfront_cents()),
 		CashFormatter.format_exact_cents(result.get_completion_payment_cents()), CashFormatter.format_exact_cents(result.get_payout_cents())]
+	if not _state._trial_terms.is_empty(): _completion_stats.text += "\nPromotion earned: %d Awareness for the next successful launch" % result.get_promotion()
 	_selected_views.clear()
 	_candidate_row.hide()
 	_priority_modal.hide()
@@ -534,10 +537,10 @@ func _refresh_all() -> void:
 	if _state == null: return
 	_status_label.text = "Hands remaining: %d / %d · Select exactly four cards" % [maxi(0, ContractState.REQUIRED_HANDS - _state.get_successful_hand_count()), ContractState.REQUIRED_HANDS]
 	for i in range(4):
-		_score_values[i].text = "%s\n%s / %s" % [["Graphics", "Sound", "Tech", "Design"][i], _format_half(_presented_scores.get(HandPresentation.CORE[i], _state.get_core_score_half_units(i))), _format_half(ContractState.EXPECTED_CORE_HALF_UNITS)]
-	_score_values[4].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", _state.get_scope()), ContractState.EXPECTED_SCOPE]
-	_scores_label.text = "Scope %d / 12 · Graphics %s · Sound %s · Technology %s · Design %s" % [
-		_presented_scores.get(&"scope", _state.get_scope()), _format_half(_presented_scores.get(&"graphics", _state.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS))),
+		_score_values[i].text = "%s\n%s / %s" % [["Graphics", "Sound", "Tech", "Design"][i], _format_half(_presented_scores.get(HandPresentation.CORE[i], _state.get_core_score_half_units(i))), _format_half(_state.get_core_target(i))]
+	_score_values[4].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", _state.get_scope()), _state.get_scope_target()]
+	_scores_label.text = "Scope %d / %d · Graphics %s · Sound %s · Technology %s · Design %s" % [
+		_presented_scores.get(&"scope", _state.get_scope()), _state.get_scope_target(), _format_half(_presented_scores.get(&"graphics", _state.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS))),
 		_format_half(_presented_scores.get(&"sound", _state.get_core_score_half_units(ProjectState.CoreScore.SOUND))), _format_half(_presented_scores.get(&"technology", _state.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY))),
 		_format_half(_presented_scores.get(&"design", _state.get_core_score_half_units(ProjectState.CoreScore.DESIGN)))]
 	_refresh_actions()

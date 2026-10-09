@@ -18,6 +18,8 @@ User presentation ruling, 2026-10-06: Beta uses a single **Sort** action groupin
 
 ## Current Studio capabilities
 
+User-approved presentation timing, 2026-10-07: played cards bounce left to right at **140 BPM** (60/140 seconds per bounce). A specialization spans **four bounces per full cycle** (12/7 seconds); its four bonus bounces use the same beat as base scoring and exit bounces. Score callbacks occur at bounce peaks. Transitions use whole or half beats. This changes no productive-cycle costs or scoring rules. [Implementation checks](../logs/2026-10-07-card-tempo-v1.md).
+
 Store, owned-pool summary, Pre-Development, release history/detailed Review, per-title monthly reports/campaigns, publisher profiles and cash Contracts. Cash HUD opens Finances and Bank. Tutorial, progressive/contextual tips, hand sorting/animations, priority overlays and spending advice are implemented. Guidance does not create hidden productive actions; no free Wait or offline earnings is approved.
 
 ## Rationale and open work

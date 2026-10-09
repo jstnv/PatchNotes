@@ -1,0 +1,110 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+PASS: Exact cents initialize once while the legacy getter remains whole-dollar
+PASS: Cent income preserves sub-dollar precision
+PASS: Cent spending preserves sub-dollar precision
+WARNING: Run cash has already been initialized.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:581)
+       [1] _verify_exact_cent_authority (res://scripts/debug/verify_exact_cent_run_state.gd:24)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:8)
+PASS: Cent authority cannot initialize twice
+PASS: Zero-cent operations are successful signal-free no-ops
+PASS: Prototype $0 initializes as exactly 0 cents
+PASS: Playtest Rival Games remains an exact $1,000.00 addition
+PASS: Beta Host Playtest remains an exact $500.00 cost
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: -1
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: 1.0
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: nan
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: inf
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: 1
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: <null>
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: true
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: []
+WARNING: Starting cash cents must be a nonnegative integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash_cents (res://scripts/run_state.gd:584)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:38)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Invalid cent initialization rejects: {  }
+WARNING: Cash overflowed.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] add_cash_cents (res://scripts/run_state.gd:628)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:41)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Cent overflow rejects atomically
+PASS: Exact maximum spending reaches zero without underflow
+WARNING: Starting cash must be a nonnegative whole-dollar integer.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] initialize_cash (res://scripts/run_state.gd:572)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:44)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Whole-dollar compatibility rejects conversion overflow
+WARNING: Run cash cannot cover this cost.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] spend_cash_cents (res://scripts/run_state.gd:661)
+       [1] _verify_overflow_and_atomicity (res://scripts/debug/verify_exact_cent_run_state.gd:47)
+       [2] _initialize (res://scripts/debug/verify_exact_cent_run_state.gd:10)
+PASS: Unaffordable cent spending rejects atomically
+PASS: Sub-$1,000 formatting shows exact dollars and cents
+PASS: K formatting truncates to one decimal
+PASS: M formatting truncates to one decimal
+PASS: Higher supported magnitudes format without changing cents
+PASS: Formatter rejects invalid authoritative input
+Exact-cent RunState verification passed.
+Loaded 40 cards.

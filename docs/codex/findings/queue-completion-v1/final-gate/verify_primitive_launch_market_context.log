@@ -1,0 +1,38 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Primitive snapshot ledgers load
+PASS: market_crash resolves to exact authoritative basis points
+PASS: market_crash resolution never rerolls its snapshot
+PASS: market_slump resolves to exact authoritative basis points
+PASS: market_slump resolution never rerolls its snapshot
+PASS: stable_market resolves to exact authoritative basis points
+PASS: stable_market resolution never rerolls its snapshot
+PASS: market_surge resolves to exact authoritative basis points
+PASS: market_surge resolution never rerolls its snapshot
+PASS: market_boom resolves to exact authoritative basis points
+PASS: market_boom resolution never rerolls its snapshot
+PASS: reckless_upstart resolves to target cycle 10
+PASS: fast_follower resolves to target cycle 12
+PASS: established_rival resolves to target cycle 16
+PASS: obsessive_polisher resolves to target cycle 20
+PASS: Cycle below target resolves negative BEFORE_TARGET context
+PASS: Cycle equal to target resolves ON_TARGET context
+PASS: Cycle above target resolves positive AFTER_TARGET context
+PASS: Undefined competitor consequence creates neither neutral nor combined modifier
+PASS: Missing finalization and launch results reject atomically
+PASS: Unknown snapshot ID rejects atomically
+PASS: Partial snapshot assignment rejects atomically
+PASS: Valid context commits exactly once
+PASS: Repeated resolution cannot replace the committed result
+PASS: Resolution preserves Review, Awareness, Marketing, cycles, and reveal flags
+PASS: LaunchPhase accepts a committed market context
+PASS: Concealed launch UI exposes no snapshot content
+PASS: Revealed launch context displays through immutable ledgers
+PASS: Previously revealed facts display with exact market multiplier and rival target
+PASS: Existing Review, Awareness, and pending-release presentation remains
+PASS: Launch reconstruction reuses the same committed context
+PASS: Resolution and reconstruction consume zero cash and zero cycles
+Primitive Launch Market Context verification passed.

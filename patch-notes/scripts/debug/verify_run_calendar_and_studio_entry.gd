@@ -6,6 +6,9 @@ var _failures := 0
 
 
 func _initialize() -> void:
+	_verify.call_deferred()
+
+func _verify() -> void:
 	_verify_calendar()
 	await _verify_studio_summary(false)
 	await _verify_studio_summary(true)

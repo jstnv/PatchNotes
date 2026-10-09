@@ -30,8 +30,9 @@ func _run() -> void:
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	var studio_input: LineEdit = menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName")
 	studio_input.text = "First Studio"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioSpecialty").select(1)
+	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
 	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	var studio: StudioPhase = game.get("_active_phase")
