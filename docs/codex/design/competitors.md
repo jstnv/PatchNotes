@@ -27,7 +27,17 @@ Each studio needs a stable identity and at least: name/founding date, Genre spec
 
 The studio should choose projects and legal actions from what it owns and can afford. Its specialty grants a starting roster under the same structural rule as the player; a project may choose its own Genre independently. Traits should use existing definitions where their effects make sense for an AI studio. Exact trait choices, AI planning styles and handling of player-facing trait effects remain OPEN. Feature ownership, prerequisites, familiarity and research belong to the studio itself. Later entrants begin with the current studio-creation structure rather than inheriting incumbents' inventories.
 
-The simulator should reuse the game's phase, Core/Scope/Bug, Review, launch and calendar rules where possible, without UI animation. How closely the AI reproduces seven-card candidate hands, redraw decisions, publisher Contracts, expenses, Bank use and employee actions remains OPEN. A compact policy is acceptable only if its generated results can be explained by legal resources and development progress; this is a design constraint, not approval of a particular shortcut.
+**LOCKED direction, 2026-10-09:** AI studios draw and resolve actual legal card hands. Design, Alpha and Beta use the same candidate eligibility, finite/renewable supply, selection limits, redraw budget, priorities, synergies, costs, Bugs, QA, Marketing and phase/Review rules that apply to the player. An AI decision policy chooses among legal actions and cards; it does not invent Core totals or roll a final Review. Exact AI choices, use of optional publisher Contracts, Bank, employees and courses remain OPEN.
+
+## Performance design — PROPOSED guardrails, no numerical cap yet
+
+Run rival decisions only when a successful productive action advances the shared calendar, never once per rendered frame and never as a catch-up simulation on load. Process active studios in stable ID order with deterministic, per-studio random state. A blocked studio can take a recorded idle turn. Resolve a finite number of zero-cycle redraw/choice steps within one turn so a rival cannot loop indefinitely.
+
+Extract or reuse data-only candidate-deal and hand-resolution rules shared with the player. The current Design/Alpha/Beta phase scripts are `Control` scenes that also manage `CardView` nodes and animations; rival hands should use the same rules without creating those scenes, card art or motion for each studio. A bounded policy can rank the current seven candidates and legal selections using a small heuristic. It should choose one real path, without searching many future projects or running Monte Carlo rollouts for every rival action.
+
+Keep active projects, inventories, RNG and pending news in the checkpoint. Resume from that state instead of replaying all historical hands. Retain compact immutable release records and only current accounting state needed for monthly income/Fans; long history should not be re-resolved each cycle. The maximum active-studio count, decision budget, release-history indexing and any work chunking remain OPEN until profiling.
+
+Before selecting a population cap, benchmark representative opening and long-running worlds on the minimum target hardware. Measure worst and percentile time added to a productive action, memory, save size, deterministic replay, legal-result parity with player resolution, and exactly-once monthly news. If the measured pause is too long, simplify the AI's choice search or process the bounded world update across frames while holding the action transaction; keep the actual hand and outcome rules intact.
 
 Released competitor games continue to exist while their studio starts another project. Income and Fan changes accrue on the ordinary monthly earning/settlement boundary, with a separate ledger per studio. No release creates immediate spendable launch cash. The player's current sales/Fanbase coefficients are trial or incomplete, so competitor economic rates and any independent market size remain OPEN.
 
@@ -56,7 +66,7 @@ The future design must decide how Study Competition and Playtest Rival Games rev
 | How many incumbents exist in January 1980, and what prior games/resources do they have? | Defines the visible starting market and opening difficulty. |
 | What is the highest legal player first-game Review across starting builds, Features, cash and rent, and what incumbent opening floor exceeds it? | Makes the strict first-game guarantee testable as the starting economy changes. |
 | How often do entrants appear, and can studios run out of money, pause, recover or close? | Controls long-run population and performance. |
-| How faithfully are candidate hands, redraws, research, traits and Contracts simulated? | Sets the line between shared gameplay rules and AI policy simplifications. |
+| What bounded policy chooses among actual legal hands and redraws, and which optional Contracts, employee or Bank actions may it take? | Keeps real hand outcomes while bounding AI decision work. |
 | What Review qualifies for next-month news, and how are simultaneous releases shown? | Sets alert frequency and clarity. |
 | How do AI sales, Fans, operating costs and cash limits use the evolving player systems? | Prevents a background economy from inventing unapproved numbers. |
 | What information do Beta intel cards expose about real projects? | Connects existing cards to useful decisions. |
