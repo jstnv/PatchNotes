@@ -13,11 +13,11 @@ Every released game, including a competitor's, belongs in the world market recor
 1. Multiple AI studios develop games concurrently with the player. Each studio persists across projects rather than being a fresh random rival attached to one player project.
 2. Each studio has its own permanent Genre specialty, selected traits, bankroll, Fanbase, Feature Store ownership and progression, active project, and release history. These resources are separate from the player's and other studios' resources.
 3. Their projects follow a development path similar to the player's: acquire usable Features, make a game, receive a Review, release it, earn money and gain or lose Fans through the relevant systems, then use their resources for later games. Their choices and outcomes should emerge from their studio state rather than a rating rolled only at launch.
-4. January 1980 begins with a small incumbent cohort. Those studios already have games in the market and unlocked Feature pools, plus the resources and history needed to support that starting position. Their early games are intended to outrate the player's early games.
+4. January 1980 begins with a small incumbent cohort. Those studios already have games in the market and unlocked Feature pools, plus the resources and history needed to support that starting position. Their opening games are guaranteed to receive higher Reviews than the player's first game.
 5. More studios found later. New entrants use the same starting framework of specialty, traits, bankroll and Feature access as a newly created player studio; the exact entrant policy and any AI-specific adjustments remain OPEN.
 6. A high-reviewed competitor release produces a notification at the start of the **following calendar month**, rather than immediately when the rival releases.
 
-The opening superiority rule needs a precise comparison window and exception rule. A literal strictly-higher guarantee is impossible when the player's Review is 10.0 under the current 10.0 cap. Do not silently cap or rewrite the player's Review; resolve this design question before specifying score guarantees.
+The player's first game cannot reach a 10.0 Review under its starting Feature access, cash and rent constraints. The opening guarantee is literal: each designated incumbent opening game must strictly outscore any legal player first-game release. Determine the highest legally attainable first-game Review across starting builds and timing, then choose and verify an incumbent opening rating floor above it. Preserve the player's ordinary Review calculation; revisit the floor if future starting content or economics raises the player ceiling.
 
 ## Shared clock and studio state — proposed first simulation contract
 
@@ -33,7 +33,7 @@ Released competitor games continue to exist while their studio starts another pr
 
 ## Opening cohort and later entrants
 
-The 1980 incumbents have distinct identities, specialties, traits, prior released games, cash, Fans and owned Features. Their head start should be visible in their existing catalog and ability to produce stronger early work. The exact number of incumbents, their histories, Reviews, start dates and assets are OPEN. The early-rating guarantee above is a design goal, not permission to falsify player Reviews.
+The 1980 incumbents have distinct identities, specialties, traits, prior released games, cash, Fans and owned Features. Their head start should be visible in their existing catalog and ability to produce stronger early work. The exact number of incumbents, their histories, Reviews, start dates, assets and verified opening rating floor are OPEN. Their designated opening games must satisfy the first-game Review guarantee above through this starting setup and their actual production rules.
 
 As calendar time advances, additional studios can be founded and start from the same studio-creation framework available to the player at that date. Entry cadence, maximum active population, initial genre distribution, later-era access, failure/retirement and whether a new entrant can later become an incumbent-like leader are OPEN. Entrants must not appear merely because the player opens a menu or reloads a save.
 
@@ -54,7 +54,7 @@ The future design must decide how Study Competition and Playtest Rival Games rev
 | Question | Why it matters |
 |---|---|
 | How many incumbents exist in January 1980, and what prior games/resources do they have? | Defines the visible starting market and opening difficulty. |
-| What exactly does “higher rated than the player at first” mean: which player releases, strict guarantee or bounded expected lead, and what happens at a player 10.0? | Makes the opening advantage testable without changing player scoring implicitly. |
+| What is the highest legal player first-game Review across starting builds, Features, cash and rent, and what incumbent opening floor exceeds it? | Makes the strict first-game guarantee testable as the starting economy changes. |
 | How often do entrants appear, and can studios run out of money, pause, recover or close? | Controls long-run population and performance. |
 | How faithfully are candidate hands, redraws, research, traits and Contracts simulated? | Sets the line between shared gameplay rules and AI policy simplifications. |
 | What Review qualifies for next-month news, and how are simultaneous releases shown? | Sets alert frequency and clarity. |
