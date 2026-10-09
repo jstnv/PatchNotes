@@ -29,6 +29,8 @@ The studio should choose projects and legal actions from what it owns and can af
 
 **LOCKED direction, 2026-10-09:** AI studios draw and resolve actual legal card hands. Design, Alpha and Beta use the same candidate eligibility, finite/renewable supply, selection limits, redraw budget, priorities, synergies, costs, Bugs, QA, Marketing and phase/Review rules that apply to the player. An AI decision policy chooses among legal actions and cards; it does not invent Core totals or roll a final Review. Exact AI choices, use of optional publisher Contracts, Bank, employees and courses remain OPEN.
 
+Released competitor games continue to exist while their studio starts another project. Income and Fan changes accrue on the ordinary monthly earning/settlement boundary, with a separate ledger per studio. No release creates immediate spendable launch cash. The player's current sales/Fanbase coefficients are trial or incomplete, so competitor economic rates and any independent market size remain OPEN.
+
 ## Performance design — PROPOSED guardrails, no numerical cap yet
 
 Run rival decisions only when a successful productive action advances the shared calendar, never once per rendered frame and never as a catch-up simulation on load. Process active studios in stable ID order with deterministic, per-studio random state. A blocked studio can take a recorded idle turn. Resolve a finite number of zero-cycle redraw/choice steps within one turn so a rival cannot loop indefinitely.
@@ -38,8 +40,6 @@ Extract or reuse data-only candidate-deal and hand-resolution rules shared with 
 Keep active projects, inventories, RNG and pending news in the checkpoint. Resume from that state instead of replaying all historical hands. Retain compact immutable release records and only current accounting state needed for monthly income/Fans; long history should not be re-resolved each cycle. The maximum active-studio count, decision budget, release-history indexing and any work chunking remain OPEN until profiling.
 
 Before selecting a population cap, benchmark representative opening and long-running worlds on the minimum target hardware. Measure worst and percentile time added to a productive action, memory, save size, deterministic replay, legal-result parity with player resolution, and exactly-once monthly news. If the measured pause is too long, simplify the AI's choice search or process the bounded world update across frames while holding the action transaction; keep the actual hand and outcome rules intact.
-
-Released competitor games continue to exist while their studio starts another project. Income and Fan changes accrue on the ordinary monthly earning/settlement boundary, with a separate ledger per studio. No release creates immediate spendable launch cash. The player's current sales/Fanbase coefficients are trial or incomplete, so competitor economic rates and any independent market size remain OPEN.
 
 ## Opening cohort and later entrants
 
