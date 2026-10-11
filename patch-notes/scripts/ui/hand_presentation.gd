@@ -428,9 +428,10 @@ func _clear(restore_organization := true) -> void:
 		_fan.show()
 		if was_busy and restore_organization and _fan is CardFan: _fan.reapply_organization()
 	hide()
-	if _restore.is_valid(): _restore.call()
+	# Restore old focus before phase navigation can open a new modal.
 	if is_instance_valid(_prior_focus) and _prior_focus.is_inside_tree() and _prior_focus.is_visible_in_tree(): _prior_focus.grab_focus()
 	_prior_focus = null
+	if _restore.is_valid(): _restore.call()
 	if was_busy:
 		busy_changed.emit()
 		finished.emit()

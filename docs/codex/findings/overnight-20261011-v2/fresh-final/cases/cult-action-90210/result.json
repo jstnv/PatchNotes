@@ -1,0 +1,1838 @@
+{
+	"accepted_commands": 80,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"final_state": "final_state.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"studio_checkpoint": "studio_checkpoint.json",
+		"tape": "replay.tape.json",
+		"telemetry": ""
+	},
+	"case_id": "cult-action-90210",
+	"commands": 80,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "",
+	"final_release_count": 4,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "90214"
+			},
+			"state": {
+				"integer": "-8662722541675902248"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "90215"
+			},
+			"state": {
+				"integer": "7796106130052958013"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "90216"
+			},
+			"state": {
+				"integer": "3707261142380282122"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "90217"
+			},
+			"state": {
+				"integer": "-7311413471862326155"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "90218"
+			},
+			"state": {
+				"integer": "5935119185731202224"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "90212"
+			},
+			"state": {
+				"integer": "-2197863887156908283"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "90213"
+			},
+			"state": {
+				"integer": "-7378631262489549213"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "90211"
+			},
+			"state": {
+				"integer": "3340755709344562941"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "90210"
+			},
+			"state": {
+				"integer": "8281921344610787444"
+			}
+		}
+	},
+	"final_run_cycle": 31,
+	"final_state": "6bfa99fc3547093e37efca48619ea32c8f6ddd4fe92daef9bfad5a4ece11a1ac",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "90214"
+			},
+			"state": {
+				"integer": "7838906209963402624"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "90215"
+			},
+			"state": {
+				"integer": "-4243701639899355987"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "90216"
+			},
+			"state": {
+				"integer": "2120434583947437018"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "90217"
+			},
+			"state": {
+				"integer": "8484570807794230023"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "90218"
+			},
+			"state": {
+				"integer": "-3598037042068528588"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "90212"
+			},
+			"state": {
+				"integer": "-4889366237730183386"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "90213"
+			},
+			"state": {
+				"integer": "1474769986116609619"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "90211"
+			},
+			"state": {
+				"integer": "7193241612132575225"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "90210"
+			},
+			"state": {
+				"integer": "829105388285782220"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "cf73254a7ad47bcbeb49366d7518ad62f9ae206dd04703ce780d7851227cef6a",
+	"input_identity": "f6d809abaa74a91e21965ec8963e61dbcd1b9f2cdebab3ba233d5a7bea098b3b",
+	"last_choice": {
+		"type": "launch"
+	},
+	"max_commands": 180,
+	"ok": true,
+	"outcome": {
+		"calendar": {
+			"half": 2,
+			"label": "1981 · Month 16, Second Half",
+			"month": 16,
+			"year": 1981
+		},
+		"cash_cents": 395577,
+		"employees": {
+			"employees": {
+				"overnight-v2-cult-action-90210:production:1": {
+					"employee_id": "overnight-v2-cult-action-90210:production:1",
+					"hire_cycle": 9,
+					"owner": "overnight-v2-cult-action-90210",
+					"projects": {
+						"overnight-v2-cult-action-90210:project:2": {
+							"actions": [
+								"overnight-v2-cult-action-90210:project:2:design:0",
+								"overnight-v2-cult-action-90210:project:2:design:1",
+								"overnight-v2-cult-action-90210:project:2:alpha:2",
+								"overnight-v2-cult-action-90210:project:2:alpha:3"
+							],
+							"trained_action": "overnight-v2-cult-action-90210:project:2:design:1",
+							"used_action": ""
+						},
+						"overnight-v2-cult-action-90210:project:3": {
+							"actions": [
+								"overnight-v2-cult-action-90210:project:3:design:0",
+								"overnight-v2-cult-action-90210:project:3:design:1",
+								"overnight-v2-cult-action-90210:project:3:alpha:2",
+								"overnight-v2-cult-action-90210:project:3:alpha:3"
+							],
+							"trained_action": "overnight-v2-cult-action-90210:project:3:design:0",
+							"used_action": ""
+						},
+						"overnight-v2-cult-action-90210:project:4": {
+							"actions": [
+								"overnight-v2-cult-action-90210:project:4:design:0",
+								"overnight-v2-cult-action-90210:project:4:design:1",
+								"overnight-v2-cult-action-90210:project:4:alpha:2",
+								"overnight-v2-cult-action-90210:project:4:alpha:3"
+							],
+							"trained_action": "",
+							"used_action": ""
+						}
+					},
+					"trained": true,
+					"type": "production"
+				}
+			},
+			"events": [
+				{
+					"cycle": 9,
+					"employee_id": "overnight-v2-cult-action-90210:production:1",
+					"type": "hire"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "design_pass",
+							"primary": "design",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "scrolling",
+							"primary": "technology",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "sprites",
+							"primary": "graphics",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "keyboard_and_mouse",
+							"primary": "technology",
+							"secondary": "",
+							"type": "feature"
+						}
+					],
+					"cycle": 11,
+					"phase": "design",
+					"project_cycle": 0,
+					"project_id": "overnight-v2-cult-action-90210:project:2",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "technology_pass",
+							"primary": "technology",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "8_bit_sound",
+							"primary": "sound",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "graphics_pass",
+							"primary": "graphics",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "text",
+							"primary": "graphics",
+							"secondary": "",
+							"type": "feature"
+						}
+					],
+					"cycle": 12,
+					"phase": "design",
+					"project_cycle": 1,
+					"project_id": "overnight-v2-cult-action-90210:project:2",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "general_combat",
+							"primary": "design",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "multiple_endings",
+							"primary": "design",
+							"secondary": "technology",
+							"type": "feature"
+						},
+						{
+							"id": "enemies",
+							"primary": "graphics",
+							"secondary": "technology",
+							"type": "feature"
+						},
+						{
+							"id": "maps",
+							"primary": "graphics",
+							"secondary": "technology",
+							"type": "feature"
+						}
+					],
+					"cycle": 13,
+					"phase": "alpha",
+					"project_cycle": 2,
+					"project_id": "overnight-v2-cult-action-90210:project:2",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "levels",
+							"primary": "graphics",
+							"secondary": "design",
+							"type": "feature"
+						},
+						{
+							"id": "design_pass",
+							"primary": "design",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "exploration",
+							"primary": "graphics",
+							"secondary": "sound",
+							"type": "feature"
+						},
+						{
+							"id": "sound_effects",
+							"primary": "sound",
+							"secondary": "technology",
+							"type": "feature"
+						}
+					],
+					"cycle": 14,
+					"phase": "alpha",
+					"project_cycle": 3,
+					"project_id": "overnight-v2-cult-action-90210:project:2",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "technology_pass",
+							"primary": "technology",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "scrolling",
+							"primary": "technology",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "split_screen",
+							"primary": "design",
+							"secondary": "technology",
+							"type": "feature"
+						},
+						{
+							"id": "controller",
+							"primary": "technology",
+							"secondary": "",
+							"type": "feature"
+						}
+					],
+					"cycle": 18,
+					"phase": "design",
+					"project_cycle": 0,
+					"project_id": "overnight-v2-cult-action-90210:project:3",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "keyboard_and_mouse",
+							"primary": "technology",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "sprites",
+							"primary": "graphics",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "8_bit_sound",
+							"primary": "sound",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "menu_system",
+							"primary": "technology",
+							"secondary": "",
+							"type": "feature"
+						}
+					],
+					"cycle": 19,
+					"phase": "design",
+					"project_cycle": 1,
+					"project_id": "overnight-v2-cult-action-90210:project:3",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "technology_pass",
+							"primary": "technology",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "levels",
+							"primary": "graphics",
+							"secondary": "design",
+							"type": "feature"
+						},
+						{
+							"id": "exploration",
+							"primary": "graphics",
+							"secondary": "sound",
+							"type": "feature"
+						},
+						{
+							"id": "graphics_pass",
+							"primary": "graphics",
+							"secondary": "",
+							"type": "pass"
+						}
+					],
+					"cycle": 20,
+					"phase": "alpha",
+					"project_cycle": 2,
+					"project_id": "overnight-v2-cult-action-90210:project:3",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "general_combat",
+							"primary": "design",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "design_pass",
+							"primary": "design",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "sound_effects",
+							"primary": "sound",
+							"secondary": "technology",
+							"type": "feature"
+						},
+						{
+							"id": "enemies",
+							"primary": "graphics",
+							"secondary": "technology",
+							"type": "feature"
+						}
+					],
+					"cycle": 21,
+					"phase": "alpha",
+					"project_cycle": 3,
+					"project_id": "overnight-v2-cult-action-90210:project:3",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "scrolling",
+							"primary": "technology",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "4_color_palette",
+							"primary": "graphics",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "menu_system",
+							"primary": "technology",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "split_screen",
+							"primary": "design",
+							"secondary": "technology",
+							"type": "feature"
+						}
+					],
+					"cycle": 25,
+					"phase": "design",
+					"project_cycle": 0,
+					"project_id": "overnight-v2-cult-action-90210:project:4",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "technology_pass",
+							"primary": "technology",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "design_pass",
+							"primary": "design",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "sound_pass",
+							"primary": "sound",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "technology_pass",
+							"primary": "technology",
+							"secondary": "",
+							"type": "pass"
+						}
+					],
+					"cycle": 26,
+					"phase": "design",
+					"project_cycle": 1,
+					"project_id": "overnight-v2-cult-action-90210:project:4",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "maps",
+							"primary": "graphics",
+							"secondary": "technology",
+							"type": "feature"
+						},
+						{
+							"id": "multiple_endings",
+							"primary": "design",
+							"secondary": "technology",
+							"type": "feature"
+						},
+						{
+							"id": "enemies",
+							"primary": "graphics",
+							"secondary": "technology",
+							"type": "feature"
+						},
+						{
+							"id": "design_pass",
+							"primary": "design",
+							"secondary": "",
+							"type": "pass"
+						}
+					],
+					"cycle": 27,
+					"phase": "alpha",
+					"project_cycle": 2,
+					"project_id": "overnight-v2-cult-action-90210:project:4",
+					"proposed": {},
+					"type": "hand"
+				},
+				{
+					"before": {
+						"0": 25,
+						"1": 25,
+						"2": 25,
+						"3": 25
+					},
+					"cards": [
+						{
+							"id": "controls",
+							"primary": "technology",
+							"secondary": "design",
+							"type": "feature"
+						},
+						{
+							"id": "design_pass",
+							"primary": "design",
+							"secondary": "",
+							"type": "pass"
+						},
+						{
+							"id": "general_combat",
+							"primary": "design",
+							"secondary": "",
+							"type": "feature"
+						},
+						{
+							"id": "power_ups",
+							"primary": "sound",
+							"secondary": "technology",
+							"type": "feature"
+						}
+					],
+					"cycle": 28,
+					"phase": "alpha",
+					"project_cycle": 3,
+					"project_id": "overnight-v2-cult-action-90210:project:4",
+					"proposed": {},
+					"type": "hand"
+				}
+			],
+			"owner": "overnight-v2-cult-action-90210",
+			"schema_version": 1
+		},
+		"fans": 4,
+		"finance": {
+			"available": true,
+			"bank_loans": [],
+			"cash_cents": 395577,
+			"credit": {
+				"history": [
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 2,
+						"month": 1,
+						"operating_profit_cents": -64000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 4,
+						"month": 2,
+						"operating_profit_cents": -106000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 6,
+						"month": 3,
+						"operating_profit_cents": -77000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 603,
+						"before": 600,
+						"change": 3,
+						"cycle": 8,
+						"month": 4,
+						"operating_profit_cents": 175314,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 606,
+						"before": 603,
+						"change": 3,
+						"cycle": 10,
+						"month": 5,
+						"operating_profit_cents": 198257,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 606,
+						"before": 606,
+						"change": 0,
+						"cycle": 12,
+						"month": 6,
+						"operating_profit_cents": -45832,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 606,
+						"before": 606,
+						"change": 0,
+						"cycle": 14,
+						"month": 7,
+						"operating_profit_cents": -89112,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 609,
+						"before": 606,
+						"change": 3,
+						"cycle": 16,
+						"month": 8,
+						"operating_profit_cents": 35196,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 612,
+						"before": 609,
+						"change": 3,
+						"cycle": 18,
+						"month": 9,
+						"operating_profit_cents": 4943,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 612,
+						"before": 612,
+						"change": 0,
+						"cycle": 20,
+						"month": 10,
+						"operating_profit_cents": -45370,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 612,
+						"before": 612,
+						"change": 0,
+						"cycle": 22,
+						"month": 11,
+						"operating_profit_cents": -67420,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 612,
+						"before": 612,
+						"change": 0,
+						"cycle": 24,
+						"month": 12,
+						"operating_profit_cents": -44706,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 615,
+						"before": 612,
+						"change": 3,
+						"cycle": 26,
+						"month": 13,
+						"operating_profit_cents": 50559,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 615,
+						"before": 615,
+						"change": 0,
+						"cycle": 28,
+						"month": 14,
+						"operating_profit_cents": -39539,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 615,
+						"before": 615,
+						"change": 0,
+						"cycle": 30,
+						"month": 15,
+						"operating_profit_cents": -54713,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					}
+				],
+				"last_processed_month": 15,
+				"policy_version": "typed_expenses_v1",
+				"score": 615
+			},
+			"credit_inputs": {
+				"completed_months": 15,
+				"late_months": 0,
+				"paid_on_time_months": 25
+			},
+			"education": {},
+			"financially_blocked": false,
+			"monthly_payroll_cents": 1000,
+			"monthly_rent_cents": 50000,
+			"next_due_cycle": 32,
+			"outstanding_expenses": [],
+			"rows": [
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 501000,
+					"closing_cash_cents": 501000,
+					"feature_play_cents": 14000,
+					"financing_in_cents": 565000,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 1,
+					"net_profit_cents": -64000,
+					"opening_cash_cents": 0,
+					"operating_expenses_cents": 64000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -106000,
+					"closing_cash_cents": 395000,
+					"feature_play_cents": 56000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 2,
+					"net_profit_cents": -106000,
+					"opening_cash_cents": 501000,
+					"operating_expenses_cents": 106000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -77000,
+					"closing_cash_cents": 318000,
+					"feature_play_cents": 27000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 3,
+					"net_profit_cents": -77000,
+					"opening_cash_cents": 395000,
+					"operating_expenses_cents": 77000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 100000,
+					"campaign_cents": 0,
+					"cash_change_cents": 175314,
+					"closing_cash_cents": 493314,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 4,
+					"net_profit_cents": 175314,
+					"opening_cash_cents": 318000,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 225314,
+					"other_expense_cents": 0,
+					"other_income_cents": 140000,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 40000,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 85314,
+					"sales_settled_cents": 85314,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 198257,
+					"closing_cash_cents": 691571,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 5,
+					"net_profit_cents": 198257,
+					"opening_cash_cents": 493314,
+					"operating_expenses_cents": 90000,
+					"operating_revenue_cents": 288257,
+					"other_expense_cents": 10000,
+					"other_income_cents": 179166,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 179166,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 109091,
+					"sales_settled_cents": 109091,
+					"store_cents": 30000
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -45832,
+					"closing_cash_cents": 645739,
+					"feature_play_cents": 27000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 6,
+					"net_profit_cents": -45832,
+					"opening_cash_cents": 691571,
+					"operating_expenses_cents": 78000,
+					"operating_revenue_cents": 32168,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 32168,
+					"sales_settled_cents": 32168,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -89112,
+					"closing_cash_cents": 556627,
+					"feature_play_cents": 50000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 7,
+					"net_profit_cents": -89112,
+					"opening_cash_cents": 645739,
+					"operating_expenses_cents": 101000,
+					"operating_revenue_cents": 11888,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 11888,
+					"sales_settled_cents": 11888,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 100000,
+					"campaign_cents": 0,
+					"cash_change_cents": 35196,
+					"closing_cash_cents": 591823,
+					"feature_play_cents": 18000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 8,
+					"net_profit_cents": 35196,
+					"opening_cash_cents": 556627,
+					"operating_expenses_cents": 69000,
+					"operating_revenue_cents": 104196,
+					"other_expense_cents": 0,
+					"other_income_cents": 100000,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 4196,
+					"sales_settled_cents": 4196,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 4943,
+					"closing_cash_cents": 596766,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 9,
+					"net_profit_cents": 4943,
+					"opening_cash_cents": 591823,
+					"operating_expenses_cents": 51000,
+					"operating_revenue_cents": 55943,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 55943,
+					"sales_settled_cents": 55943,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -45370,
+					"closing_cash_cents": 551396,
+					"feature_play_cents": 65000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 10,
+					"net_profit_cents": -45370,
+					"opening_cash_cents": 596766,
+					"operating_expenses_cents": 116000,
+					"operating_revenue_cents": 70630,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 70630,
+					"sales_settled_cents": 70630,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -67420,
+					"closing_cash_cents": 483976,
+					"feature_play_cents": 36000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 11,
+					"net_profit_cents": -67420,
+					"opening_cash_cents": 551396,
+					"operating_expenses_cents": 87000,
+					"operating_revenue_cents": 19580,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 19580,
+					"sales_settled_cents": 19580,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -44706,
+					"closing_cash_cents": 439270,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 12,
+					"net_profit_cents": -44706,
+					"opening_cash_cents": 483976,
+					"operating_expenses_cents": 51000,
+					"operating_revenue_cents": 6294,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 6294,
+					"sales_settled_cents": 6294,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 50559,
+					"closing_cash_cents": 489829,
+					"feature_play_cents": 39000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 13,
+					"net_profit_cents": 50559,
+					"opening_cash_cents": 439270,
+					"operating_expenses_cents": 90000,
+					"operating_revenue_cents": 140559,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 140559,
+					"sales_settled_cents": 140559,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -39539,
+					"closing_cash_cents": 450290,
+					"feature_play_cents": 27000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 14,
+					"net_profit_cents": -39539,
+					"opening_cash_cents": 489829,
+					"operating_expenses_cents": 78000,
+					"operating_revenue_cents": 38461,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 38461,
+					"sales_settled_cents": 38461,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -54713,
+					"closing_cash_cents": 395577,
+					"feature_play_cents": 17000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 15,
+					"net_profit_cents": -54713,
+					"opening_cash_cents": 450290,
+					"operating_expenses_cents": 68000,
+					"operating_revenue_cents": 13287,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 1000,
+					"payroll_paid_cents": 1000,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 13287,
+					"sales_settled_cents": 13287,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 0,
+					"closing_cash_cents": 395577,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 16,
+					"net_profit_cents": 2098,
+					"opening_cash_cents": 395577,
+					"operating_expenses_cents": 0,
+					"operating_revenue_cents": 2098,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": true,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 0,
+					"rent_paid_cents": 0,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 2098,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				}
+			],
+			"total_overdue_cents": 0,
+			"unpaid_rent_cents": 0
+		},
+		"in_studio": true,
+		"owned_features": [
+			"text",
+			"sprites",
+			"4_color_palette",
+			"8_bit_sound",
+			"keyboard_and_mouse",
+			"controller",
+			"scrolling",
+			"menu_system",
+			"split_screen",
+			"multiple_endings",
+			"controls",
+			"enemies",
+			"power_ups",
+			"general_combat",
+			"levels",
+			"maps",
+			"exploration",
+			"sound_effects",
+			"lives_system"
+		],
+		"phase": "studio",
+		"releases": [
+			{
+				"id": "overnight-v2-cult-action-90210:project:1",
+				"metadata": {
+					"base_name": "Fresh campaign 1",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 7,
+					"release_title": "Fresh campaign 1",
+					"release_year": 1980,
+					"review": {
+						"awareness": 113,
+						"competitor_id": "",
+						"competitor_target_cycle": -1,
+						"cores": [
+							20,
+							12,
+							19,
+							10
+						],
+						"development_cycles": 6,
+						"fan_awareness": 5,
+						"final_review": 2.2,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 20,
+						"launch_marketing": 8,
+						"production_rating": 3.47001244893872,
+						"projected_gross_cents": 244755,
+						"projected_net_cents": 171328,
+						"projected_units": 245,
+						"remaining_bugs": 3,
+						"required_scope": 30,
+						"scope": 21,
+						"scope_completion": 0.7,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 42,
+					"base_name": "Fresh campaign 1",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 2,
+					"earned_units": 350,
+					"entitlement_cents": 244755,
+					"exhausted": true,
+					"last_processed_run_cycle": 31,
+					"last_settlement_run_cycle": 20,
+					"later_enabled": true,
+					"launch_awareness": 113,
+					"market_bp": 10000,
+					"monthly_units": 0,
+					"organic_awareness_scaled": 42,
+					"release_id": "overnight-v2-cult-action-90210:project:1",
+					"release_title": "Fresh campaign 1",
+					"release_year": 1980,
+					"review_tenths": 22,
+					"settled_cents": 244755,
+					"total_earned_cycles": 24,
+					"total_units": 245
+				}
+			},
+			{
+				"id": "overnight-v2-cult-action-90210:project:2",
+				"metadata": {
+					"base_name": "Fresh campaign 2",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 17,
+					"release_title": "Fresh campaign 2",
+					"release_year": 1980,
+					"review": {
+						"awareness": 106,
+						"competitor_id": "",
+						"competitor_target_cycle": -1,
+						"cores": [
+							21,
+							8,
+							20,
+							14
+						],
+						"development_cycles": 6,
+						"fan_awareness": 3,
+						"final_review": 1.6,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 12,
+						"launch_marketing": 3,
+						"production_rating": 3.36848310445236,
+						"projected_gross_cents": 156843,
+						"projected_net_cents": 109790,
+						"projected_units": 157,
+						"remaining_bugs": 5,
+						"required_scope": 30,
+						"scope": 20,
+						"scope_completion": 0.666666666666667,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 3661,
+					"base_name": "Fresh campaign 2",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 2,
+					"earned_units": 218,
+					"entitlement_cents": 152447,
+					"exhausted": true,
+					"last_processed_run_cycle": 31,
+					"last_settlement_run_cycle": 28,
+					"later_enabled": true,
+					"launch_awareness": 106,
+					"market_bp": 9000,
+					"monthly_units": 0,
+					"organic_awareness_scaled": 3661,
+					"release_id": "overnight-v2-cult-action-90210:project:2",
+					"release_title": "Fresh campaign 2",
+					"release_year": 1980,
+					"review_tenths": 16,
+					"settled_cents": 152447,
+					"total_earned_cycles": 14,
+					"total_units": 157
+				}
+			},
+			{
+				"id": "overnight-v2-cult-action-90210:project:3",
+				"metadata": {
+					"base_name": "Fresh campaign 3",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 24,
+					"release_title": "Fresh campaign 3",
+					"release_year": 1981,
+					"review": {
+						"awareness": 110,
+						"competitor_id": "",
+						"competitor_target_cycle": -1,
+						"cores": [
+							15,
+							8,
+							30,
+							14
+						],
+						"development_cycles": 6,
+						"fan_awareness": 1,
+						"final_review": 1.8,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 6,
+						"launch_marketing": 9,
+						"production_rating": 3.2600217894382,
+						"projected_gross_cents": 198801,
+						"projected_net_cents": 139160,
+						"projected_units": 199,
+						"remaining_bugs": 6,
+						"required_scope": 30,
+						"scope": 21,
+						"scope_completion": 0.7,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 103530,
+					"base_name": "Fresh campaign 3",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 2,
+					"earned_units": 275,
+					"entitlement_cents": 192307,
+					"exhausted": true,
+					"last_processed_run_cycle": 31,
+					"last_settlement_run_cycle": 30,
+					"later_enabled": true,
+					"launch_awareness": 110,
+					"market_bp": 10000,
+					"monthly_units": 6,
+					"organic_awareness_scaled": 103530,
+					"release_id": "overnight-v2-cult-action-90210:project:3",
+					"release_title": "Fresh campaign 3",
+					"release_year": 1981,
+					"review_tenths": 18,
+					"settled_cents": 190209,
+					"total_earned_cycles": 7,
+					"total_units": 199
+				}
+			},
+			{
+				"id": "overnight-v2-cult-action-90210:project:4",
+				"metadata": {
+					"base_name": "Fresh campaign 4",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 31,
+					"release_title": "Fresh campaign 4",
+					"release_year": 1981,
+					"review": {
+						"awareness": 109,
+						"competitor_id": "",
+						"competitor_target_cycle": -1,
+						"cores": [
+							7,
+							3,
+							29,
+							20
+						],
+						"development_cycles": 6,
+						"fan_awareness": 1,
+						"final_review": 1.3,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 4,
+						"launch_marketing": 8,
+						"production_rating": 2.36081599267872,
+						"projected_gross_cents": 163836,
+						"projected_net_cents": 114685,
+						"projected_units": 164,
+						"remaining_bugs": 2,
+						"required_scope": 30,
+						"scope": 18,
+						"scope_completion": 0.6,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 0,
+					"base_name": "Fresh campaign 4",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 0,
+					"earned_units": 0,
+					"entitlement_cents": 0,
+					"exhausted": false,
+					"last_processed_run_cycle": -1,
+					"last_settlement_run_cycle": -1,
+					"later_enabled": true,
+					"launch_awareness": 109,
+					"market_bp": 11500,
+					"monthly_units": 0,
+					"organic_awareness_scaled": 0,
+					"release_id": "overnight-v2-cult-action-90210:project:4",
+					"release_title": "Fresh campaign 4",
+					"release_year": 1981,
+					"review_tenths": 13,
+					"settled_cents": 0,
+					"total_earned_cycles": 0,
+					"total_units": 164
+				}
+			}
+		],
+		"research_queue": []
+	},
+	"policy": {
+		"config": {
+			"card_order": "shuffle",
+			"development": {
+				"genre": "action",
+				"hands": {
+					"alpha": {
+						"float_bits": "0300000000000040"
+					},
+					"beta": {
+						"float_bits": "0300000000000040"
+					},
+					"design": {
+						"float_bits": "0300000000000040"
+					}
+				},
+				"name_prefix": "Fresh campaign",
+				"selection": "features_first",
+				"theme": "fantasy"
+			},
+			"policy_seed": "90710"
+		},
+		"id": "bounded-campaign-stress",
+		"source_identity": "de20fc6f9ea48542e0596ac2794865df06bc1bc65021baf517cfd8361db83be0",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 31,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "7db5a592e2113f4837467da493c25bfdaa02dbd435bc83f7b6a7125336e1fdc8",
+	"status": "completed",
+	"study": {},
+	"tape_identity": "26bc4aad1857880095d3545ec351cea97948734273bd2caa0bdb1b9a0b391965",
+	"target_release_count": 4,
+	"telemetry_sha256": ""
+}

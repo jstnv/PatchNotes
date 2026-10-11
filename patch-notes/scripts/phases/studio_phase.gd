@@ -458,8 +458,8 @@ func _refresh_contract_action() -> void:
 		%Contracts.tooltip_text = "Review the fixed Ironclad Primitive contract offer."
 	elif not _run_state.get_pending_contract_choices().is_empty():
 		%Contracts.disabled = false
-		%Contracts.text = "SideStreet Offer"
-		%Contracts.tooltip_text = "Review the next cash-only offer linked to a released game."
+		%Contracts.text = "Contracts"
+		%Contracts.tooltip_text = "Review your available publisher contract offers."
 	else:
 		%Contracts.disabled = true
 		%Contracts.text = "Contract Completed" if _run_state.get_completed_contract_count() > 0 else "Contracts"

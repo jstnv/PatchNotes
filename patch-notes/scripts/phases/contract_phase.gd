@@ -297,6 +297,8 @@ func _build_completion_panel() -> void:
 	dismiss.name = "DismissCompletionButton"
 	dismiss.unique_name_in_owner = true
 	dismiss.text = "Return to Studio"
+	dismiss.focus_next = NodePath(".")
+	dismiss.focus_previous = NodePath(".")
 	dismiss.pressed.connect(func(): completion_dismissed.emit(self))
 	content.add_child(dismiss)
 

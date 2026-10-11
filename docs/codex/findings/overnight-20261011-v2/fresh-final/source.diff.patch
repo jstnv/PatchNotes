@@ -1,0 +1,291 @@
+diff --git a/patch-notes/scripts/debug/verify_contract_presentation.gd b/patch-notes/scripts/debug/verify_contract_presentation.gd
+index 8329f9c..c16aee8 100644
+--- a/patch-notes/scripts/debug/verify_contract_presentation.gd
++++ b/patch-notes/scripts/debug/verify_contract_presentation.gd
+@@ -4,7 +4,7 @@ extends "res://scripts/debug/verify_balanced_primitive_contract.gd"
+ func _verify() -> void:
+ 	snapshots.load_ledgers()
+ 	database = root.get_node("CardDatabase")
+-	for resolution in [Vector2i(1152, 648), Vector2i(1600, 900)]:
++	for resolution in [Vector2i(1152, 648), Vector2i(1280, 720), Vector2i(1600, 900)]:
+ 		root.size = resolution
+ 		root.content_scale_size = resolution
+ 		var project := release(751)
+@@ -30,6 +30,7 @@ func _verify() -> void:
+ 		await capture("pool", resolution)
+ 		for hand in range(2):
+ 			_select_first(phase, 4)
++			phase.get("_play_button").grab_focus()
+ 			phase.get("_play_button").pressed.emit()
+ 			expect(phase.hand_motion.busy and not phase.get("_completion_modal").visible, "Hand animation starts with completion hidden")
+ 			var timeout := 0
+@@ -51,7 +52,13 @@ func _verify() -> void:
+ 		var after := run_snapshot(run, project)
+ 		var dismissed := [false]
+ 		phase.completion_dismissed.connect(func(_phase): dismissed[0] = true)
+-		(panel.find_child("DismissCompletionButton", true, false) as Button).pressed.emit()
++		var dismiss := panel.find_child("DismissCompletionButton", true, false) as Button
++		expect(root.gui_get_focus_owner() == dismiss, "Completion owns keyboard focus after animation cleanup")
++		await key(KEY_TAB)
++		expect(root.gui_get_focus_owner() == dismiss, "Tab stays inside completion")
++		await key(KEY_TAB, true)
++		expect(root.gui_get_focus_owner() == dismiss, "Shift Tab stays inside completion")
++		await key(KEY_ENTER)
+ 		expect(dismissed[0] and run_snapshot(run, project) == after, "Completion return remains passive and actionable")
+ 		phase.queue_free()
+ 		studio.queue_free()
+@@ -64,3 +71,16 @@ func capture(label: String, resolution: Vector2i) -> void:
+ 	if "--capture" not in OS.get_cmdline_user_args(): return
+ 	await RenderingServer.frame_post_draw
+ 	root.get_texture().get_image().save_png("res://design-logs/contract-ui-v1/%s-%dx%d.png" % [label, resolution.x, resolution.y])
++
++
++func key(code: Key, shift := false) -> void:
++	var event := InputEventKey.new()
++	event.keycode = code
++	event.shift_pressed = shift
++	event.pressed = true
++	Input.parse_input_event(event)
++	await process_frame
++	event = event.duplicate()
++	event.pressed = false
++	Input.parse_input_event(event)
++	await process_frame
+diff --git a/patch-notes/scripts/debug/verify_employee_hands.gd b/patch-notes/scripts/debug/verify_employee_hands.gd
+index 6b7f161..10f1425 100644
+--- a/patch-notes/scripts/debug/verify_employee_hands.gd
++++ b/patch-notes/scripts/debug/verify_employee_hands.gd
+@@ -63,7 +63,11 @@ func _run() -> void:
+ 				phase.get("_deal_rng").state=prior_rng
+ 				var cycle := run.get_completed_run_cycles()
+ 				var redraw := run.get_available_redraws()
+-				check(phase.play_hand_with_employee_plan(changed),"Commit bundled "+label+" plan")
++				dialog.open_for(phase)
++				for i in range(4): dialog.inputs[i].value = changed[i]
++				dialog.get_ok_button().pressed.emit()
++				var motion: HandPresentation = phase.get_workspace().hand_motion
++				check(not dialog.visible and motion.busy,"Dialog commits bundled "+label+" plan through presentation")
+ 				check(run.get_completed_run_cycles()==cycle+1 and run.get_available_redraws()==mini(4,redraw+1),"One ordinary cycle/refill")
+ 				check(phase.get_priority_distribution()==changed and not EmployeeRoster.available(run.get_employees(),project.get_release_id()),"Priority and per-project use committed together")
+ 				var after := phase.get_node("%HandContainer").get_children()
+@@ -71,6 +75,13 @@ func _run() -> void:
+ 				check(after.filter(func(v):return v not in retained).map(func(v):return v.card_data)==expected.cards,"Normal replacements use proposed priorities with no extra roll")
+ 				var complete := state(phase,run,project)
+ 				check(not phase.play_hand_with_employee_plan(changed) and state(phase,run,project)==complete,"Duplicate bundled callback is inert")
++				var frames := 0
++				while motion.busy and frames < 600:
++					await create_timer(0.02).timeout
++					frames += 1
++				check(not motion.busy and run.get_completed_run_cycles()==cycle+1,"Specialist animation finishes without a second gameplay commit")
++				check(motion.trace.filter(func(step):return step.event=="score").size()==4,"Specialist presents four card score events once")
++				check(phase.get_selected_candidate_views().is_empty() and phase.get_workspace().played_hand.text.contains("Select"),"Specialist completion clears stale hand selection text")
+ 				reconcile(run)
+ 				break
+ 			else:
+diff --git a/patch-notes/scripts/debug/verify_employee_ui.gd b/patch-notes/scripts/debug/verify_employee_ui.gd
+index 7b66dca..81feacc 100644
+--- a/patch-notes/scripts/debug/verify_employee_ui.gd
++++ b/patch-notes/scripts/debug/verify_employee_ui.gd
+@@ -28,9 +28,12 @@ func _run() -> void:
+ 		check(run.register_release(_released_project(751)),"UI post-release fixture")
+ 		var before:=snapshot(run)
+ 		studio.get_node("%Employees").pressed.emit()
+-		check(not panel.get_ok_button().disabled and panel.dialog_text.contains("$100.00") and panel.dialog_text.contains("$10.00") and panel.dialog_text.contains("cycle 2"),"Fee wage and first payday shown before confirmation")
+-		await process_frame
+-		check(panel.size.x<=resolution.x and panel.size.y<=resolution.y,"Employee dialog fits viewport")
++		check(not panel.get_ok_button().disabled and panel.details_text.contains("$100.00") and panel.details_text.contains("$10.00") and panel.details_text.contains("cycle 2"),"Fee wage and first payday shown before confirmation")
++		for frame in range(8): await process_frame
++		print("EMPLOYEE_GEOMETRY ",panel.position," ",panel.size," root ",root.position," ",root.size," embedded ",root.gui_embed_subwindows)
++		check(Rect2(Vector2.ZERO,Vector2(resolution)).encloses(Rect2(Vector2(panel.position),Vector2(panel.size))),"Employee dialog including settled wrapping fits viewport")
++		check(panel._details.text == panel.details_text and panel._scroll.size.y > 0,"Complete hiring and training copy is available in scroll surface")
++		check(Rect2(Vector2.ZERO,Vector2(panel.size)).encloses(panel.get_ok_button().get_global_rect()) and Rect2(Vector2.ZERO,Vector2(panel.size)).encloses(panel.get_cancel_button().get_global_rect()),"Hire and Back buttons stay inside dialog")
+ 		if "--capture" in OS.get_cmdline_user_args():
+ 			await process_frame
+ 			root.get_texture().get_image().save_png(ProjectSettings.globalize_path("res://../docs/codex/findings/employee-implementation-v1/hire-%d.png" % resolution.x))
+@@ -41,7 +44,7 @@ func _run() -> void:
+ 		await process_frame
+ 		check(run.get_employees().employees.size()==1 and run.get_cash_cents()==before[0]-10000,"Confirmed UI hires once")
+ 		studio.get_node("%Employees").pressed.emit()
+-		check(panel.get_ok_button().disabled and panel.dialog_text.contains("training incomplete"),"Owned training status and no second hire")
++		check(panel.get_ok_button().disabled and panel.details_text.contains("training incomplete"),"Owned training status and no second hire")
+ 		panel.get_cancel_button().pressed.emit()
+ 		game.queue_free()
+ 		await process_frame
+diff --git a/patch-notes/scripts/phases/contract_phase.gd b/patch-notes/scripts/phases/contract_phase.gd
+index ad24e57..8ef3cb4 100644
+--- a/patch-notes/scripts/phases/contract_phase.gd
++++ b/patch-notes/scripts/phases/contract_phase.gd
+@@ -297,6 +297,8 @@ func _build_completion_panel() -> void:
+ 	dismiss.name = "DismissCompletionButton"
+ 	dismiss.unique_name_in_owner = true
+ 	dismiss.text = "Return to Studio"
++	dismiss.focus_next = NodePath(".")
++	dismiss.focus_previous = NodePath(".")
+ 	dismiss.pressed.connect(func(): completion_dismissed.emit(self))
+ 	content.add_child(dismiss)
+ 
+diff --git a/patch-notes/scripts/phases/design_phase.gd b/patch-notes/scripts/phases/design_phase.gd
+index d1ee4a4..143fc80 100644
+--- a/patch-notes/scripts/phases/design_phase.gd
++++ b/patch-notes/scripts/phases/design_phase.gd
+@@ -466,7 +466,7 @@ func _on_play_card_pressed() -> void:
+ 	_hand_command_busy = false
+ 	var final_action: Dictionary = result.final_action
+ 	if not final_action.specialization_stat.is_empty():
+-		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production Ã—1.50")
++		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production ×1.50")
+ 	elif final_action.balanced_production:
+ 		_workspace.show_synergy("Balanced Production!", "Hand total shared across four categories")
+ 
+@@ -486,7 +486,7 @@ func _on_proceed_to_alpha_pressed() -> void:
+ 	_update_play_button()
+ 	if finalization.perfect_production:
+ 		print("Perfect Production!")
+-		_workspace.show_synergy("Perfect Production!", "Finalization Bug Pressure Ã—0.80")
++		_workspace.show_synergy("Perfect Production!", "Finalization Bug Pressure ×0.80")
+ 	print("Final Hidden Bugs: %d" % finalization.hidden_bugs)
+ 	proceed_to_alpha_requested.emit()
+ 
+@@ -634,7 +634,7 @@ func _update_play_button() -> void:
+ 				cards.append(view.card_data)
+ 			var cost := _run_state.primitive_feature_hand_cost_cents(cards, _project_state.get_release_id())
+ 			if cost >= 0:
+-				play_card_button.text = "Implement Â· " + CashFormatter.format_exact_cents(cost)
++				play_card_button.text = "Implement · " + CashFormatter.format_exact_cents(cost)
+ 				if _run_state.get_cash_cents() < cost:
+ 					play_card_button.disabled = true
+ 					play_card_button.tooltip_text = "Insufficient cash for this hand."
+@@ -670,19 +670,19 @@ func get_first_game_guidance() -> Dictionary:
+ 		var first := tutorial.stage == FirstGameTutorial.Stage.FIRST_HAND
+ 		return {"key": "first_game_" + ("first" if first else "redraw") + ("_implement" if selected_match else "_find"),
+ 			"title": ("Implement your %s synergy" if selected_match else "%s Specialization is playable") % core,
+-			"hint": "First game Â· " + ("Press Implement for %s Specialization." % core if selected_match else "Find four %s primary labels, then Implement. Selected cards lift out of the fan." % core),
+-			"body": "At least four cards share %s as their primary Core (the first score). Look across the fan to find them. Choose any four matching cards and press Implement for Ã—1.5 hand Core gains. Printed Scope stays the same; Passes add no Scope. Playing still uses one cycle and the shown Feature cost." % core}
++			"hint": "First game · " + ("Press Implement for %s Specialization." % core if selected_match else "Find four %s primary labels, then Implement. Selected cards lift out of the fan." % core),
++			"body": "At least four cards share %s as their primary Core (the first score). Look across the fan to find them. Choose any four matching cards and press Implement for ×1.5 hand Core gains. Printed Scope stays the same; Passes add no Scope. Playing still uses one cycle and the shown Feature cost." % core}
+ 	if tutorial.stage == FirstGameTutorial.Stage.REDRAW_HAND and matching.size() == 3 and not other_slots.is_empty():
+ 		if _run_state.get_available_redraws() == 0:
+-			return {"key": "first_game_redraw_empty", "title": "No redraws left", "hint": "First game Â· Play a hand to restore one redraw.", "body": "This pool is one %s card short of Specialization. Your redraw bank is empty. You can play any affordable four-card hand normally; a successful hand restores one redraw." % core}
++			return {"key": "first_game_redraw_empty", "title": "No redraws left", "hint": "First game · Play a hand to restore one redraw.", "body": "This pool is one %s card short of Specialization. Your redraw bank is empty. You can play any affordable four-card hand normally; a successful hand restores one redraw." % core}
+ 		var ready := _selected_card_views.size() == 1 and _selected_card_views[0].card_data.primary_stat != stat
+ 		var wrong_selection := not ready and not _selected_card_views.is_empty()
+ 		var selection_help := "Click selected cards again to deselect them. " if wrong_selection else ""
+ 		return {"key": "first_game_redraw_now" if ready else "first_game_redraw_wrong" if wrong_selection else "first_game_redraw_select",
+ 			"title": "Redraw your selected card" if ready else "One card away from %s Specialization" % core,
+-			"hint": "First game Â· " + ("Press Redraw for the fourth %s card." % core if ready else "Keep three %s cards. Select only one other card and Redraw." % core),
++			"hint": "First game · " + ("Press Redraw for the fourth %s card." % core if ready else "Keep three %s cards. Select only one other card and Redraw." % core),
+ 			"body": selection_help + "Keep the three %s cards unselected for now. Select only one card with a different primary label, then Redraw. This tutorial guarantees a %s Pass: one redraw, zero cash or cycles. Then find all four %s cards in the fan and Implement. Later redraws use normal chance." % [core, core, core]}
+-	return {"key": "first_game_pool_changed", "title": "Your pool has changed", "hint": "First game Â· Find four matching primary labels, or play another hand.", "body": "Your choices changed the guided pattern. You can still find a Specialization by matching four primary Core labels, or play any affordable four cards normally. The guided opening ends after your second successful Design hand."}
++	return {"key": "first_game_pool_changed", "title": "Your pool has changed", "hint": "First game · Find four matching primary labels, or play another hand.", "body": "Your choices changed the guided pattern. You can still find a Specialization by matching four primary Core labels, or play any affordable four cards normally. The guided opening ends after your second successful Design hand."}
+ 
+ 
+ func refresh_workspace() -> void:
+diff --git a/patch-notes/scripts/ui/employee_panel.gd b/patch-notes/scripts/ui/employee_panel.gd
+index 46984a6..941f62d 100644
+--- a/patch-notes/scripts/ui/employee_panel.gd
++++ b/patch-notes/scripts/ui/employee_panel.gd
+@@ -2,12 +2,23 @@ class_name EmployeePanel
+ extends ConfirmationDialog
+ var run: RunState
+ var quote: Dictionary = {}
++var details_text := ""
++var _details: Label
++var _scroll: ScrollContainer
+ 
+ func _ready() -> void:
+ 	title = "Production Specialist"
+ 	exclusive = true
+-	get_label().autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+-	get_label().custom_minimum_size.x = 600
++	# Keep growing training copy inside a bounded scroll surface so the
++	# confirmation buttons remain reachable after repeated opens/resizes.
++	get_label().hide()
++	_scroll = ScrollContainer.new()
++	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
++	add_child(_scroll)
++	_details = Label.new()
++	_details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
++	_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	_scroll.add_child(_details)
+ 	get_cancel_button().text = "Back"
+ 	confirmed.connect(_hire)
+ 
+@@ -29,16 +40,28 @@ func open_for(value: RunState) -> void:
+ 	lines.append("\nTraining: commit a Design hand with a Core Pass and a Feature matching its printed primary or secondary Core stat.")
+ 	lines.append("Once trained: optionally change priorities with one later matching Design/Alpha hand per project. The training hand cannot use the new benefit. Each new project gets one use; training is permanent.")
+ 	lines.append("The hand still costs its ordinary money and one cycle. Planning changes its replacement draws, with no extra cards or redraws.")
+-	dialog_text = "\n\n".join(lines)
++	details_text = "\n\n".join(lines)
+ 	get_ok_button().text = "Hire for $100.00"
+ 	get_ok_button().disabled = quote.is_empty()
+-	popup_centered(Vector2i(670,430))
++	_fit_and_open()
+ 
+ func _hire() -> void:
+ 	if run == null: return
+ 	if not run.hire_production_specialist(quote):
+ 		open_for(run)
+-		dialog_text = "Hiring could not be completed. Cash or bills changed; review the current offer.\n\n" + dialog_text
++		details_text = "Hiring could not be completed. Cash or bills changed; review the current offer.\n\n" + details_text
++		_fit_and_open()
++
++
++func _fit_and_open() -> void:
++	_details.text = details_text
++	get_label().hide()
++	var available := get_parent().get_viewport().get_visible_rect().size
++	var target := Vector2i(mini(760, int(available.x) - 64), mini(480, int(available.y) - 64))
++	_scroll.custom_minimum_size = Vector2(target.x - 32, target.y - 90)
++	_scroll.scroll_vertical = 0
++	popup_centered(target)
++	get_cancel_button().grab_focus()
+ 
+ 
+ func _input(event: InputEvent) -> void:
+diff --git a/patch-notes/scripts/ui/employee_planning_dialog.gd b/patch-notes/scripts/ui/employee_planning_dialog.gd
+index 2e53be5..4a9d749 100644
+--- a/patch-notes/scripts/ui/employee_planning_dialog.gd
++++ b/patch-notes/scripts/ui/employee_planning_dialog.gd
+@@ -58,7 +58,9 @@ func _refresh() -> void:
+ 
+ func _commit() -> void:
+ 	if not is_instance_valid(phase): return
+-	if not phase.play_hand_with_employee_plan(_distribution()):
++	var distribution := _distribution()
++	hide()
++	if not phase.get_workspace().present_employee_plan(distribution):
+ 		explanation.text = "The hand was rejected or changed. Your Specialist use was not spent. Close this dialog and review the hand."
+ 		get_ok_button().disabled = true
+ 		popup_centered(Vector2i(600,310))
+diff --git a/patch-notes/scripts/ui/hand_presentation.gd b/patch-notes/scripts/ui/hand_presentation.gd
+index 476c534..08b3ac3 100644
+--- a/patch-notes/scripts/ui/hand_presentation.gd
++++ b/patch-notes/scripts/ui/hand_presentation.gd
+@@ -428,9 +428,10 @@ func _clear(restore_organization := true) -> void:
+ 		_fan.show()
+ 		if was_busy and restore_organization and _fan is CardFan: _fan.reapply_organization()
+ 	hide()
+-	if _restore.is_valid(): _restore.call()
++	# Restore old focus before phase navigation can open a new modal.
+ 	if is_instance_valid(_prior_focus) and _prior_focus.is_inside_tree() and _prior_focus.is_visible_in_tree(): _prior_focus.grab_focus()
+ 	_prior_focus = null
++	if _restore.is_valid(): _restore.call()
+ 	if was_busy:
+ 		busy_changed.emit()
+ 		finished.emit()
+diff --git a/patch-notes/scripts/ui/phase_workspace.gd b/patch-notes/scripts/ui/phase_workspace.gd
+index e74d110..432a257 100644
+--- a/patch-notes/scripts/ui/phase_workspace.gd
++++ b/patch-notes/scripts/ui/phase_workspace.gd
+@@ -161,6 +161,11 @@ func _present_action(kind: String, action: Callable) -> void:
+ 	hand_motion.play(kind, phase.get_node("%HandContainer"), phase.get_selected_candidate_views(), action,
+ 		func(): return HandPresentation.project_snapshot(project, run), _update_presented_scores, _restore_presented_scores)
+ 
++func present_employee_plan(distribution: Dictionary) -> bool:
++	var accepted := [false]
++	_present_action("play", func(): accepted[0] = phase.play_hand_with_employee_plan(distribution))
++	return accepted[0]
++
+ func _update_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
+ 	_presented_values = values.duplicate()
+ 	score_display_changed.emit(values, deltas)

@@ -63,7 +63,11 @@ func _run() -> void:
 				phase.get("_deal_rng").state=prior_rng
 				var cycle := run.get_completed_run_cycles()
 				var redraw := run.get_available_redraws()
-				check(phase.play_hand_with_employee_plan(changed),"Commit bundled "+label+" plan")
+				dialog.open_for(phase)
+				for i in range(4): dialog.inputs[i].value = changed[i]
+				dialog.get_ok_button().pressed.emit()
+				var motion: HandPresentation = phase.get_workspace().hand_motion
+				check(not dialog.visible and motion.busy,"Dialog commits bundled "+label+" plan through presentation")
 				check(run.get_completed_run_cycles()==cycle+1 and run.get_available_redraws()==mini(4,redraw+1),"One ordinary cycle/refill")
 				check(phase.get_priority_distribution()==changed and not EmployeeRoster.available(run.get_employees(),project.get_release_id()),"Priority and per-project use committed together")
 				var after := phase.get_node("%HandContainer").get_children()
@@ -71,6 +75,13 @@ func _run() -> void:
 				check(after.filter(func(v):return v not in retained).map(func(v):return v.card_data)==expected.cards,"Normal replacements use proposed priorities with no extra roll")
 				var complete := state(phase,run,project)
 				check(not phase.play_hand_with_employee_plan(changed) and state(phase,run,project)==complete,"Duplicate bundled callback is inert")
+				var frames := 0
+				while motion.busy and frames < 600:
+					await create_timer(0.02).timeout
+					frames += 1
+				check(not motion.busy and run.get_completed_run_cycles()==cycle+1,"Specialist animation finishes without a second gameplay commit")
+				check(motion.trace.filter(func(step):return step.event=="score").size()==4,"Specialist presents four card score events once")
+				check(phase.get_selected_candidate_views().is_empty() and phase.get_workspace().played_hand.text.contains("Select"),"Specialist completion clears stale hand selection text")
 				reconcile(run)
 				break
 			else:

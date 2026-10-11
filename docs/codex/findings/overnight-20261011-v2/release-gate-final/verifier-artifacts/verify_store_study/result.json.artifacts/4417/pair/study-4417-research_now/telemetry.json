@@ -1,0 +1,1525 @@
+{
+	"final_state": "e69363ea7d907fe46c55d9786f866b2243458adeda4d8f49ef806c8963e7bcd2",
+	"initial_state": "57b4968ead70d6ff9ee042f8a850007f5f5d991f549380ddba2cee46b0960e24",
+	"samples": [
+		{
+			"accepted": null,
+			"cash_cents": "413000",
+			"command_type": "",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "studio",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {},
+			"research_queue": [],
+			"run_cycle": 7,
+			"sequence": 18,
+			"state_digest": "57b4968ead70d6ff9ee042f8a850007f5f5d991f549380ddba2cee46b0960e24",
+			"step": 0,
+			"transaction_cash_low_cents": "413000",
+			"transaction_count": 15,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "328000",
+			"command_type": "admit_research",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "studio",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"quote": {
+						"actions": 1,
+						"base_cents": 170000,
+						"can_admit": true,
+						"can_research": false,
+						"cash_cents": 413000,
+						"completed": 0,
+						"cycle": 7,
+						"discount_percent": 0,
+						"down_cents": 85000,
+						"due_cents": 85000,
+						"entry_id": "store-study-action-4417:research:recorded_sounds",
+						"feature_id": "recorded_sounds",
+						"head": false,
+						"nominal_cents": 85000,
+						"paid_cents": 0,
+						"queue_size": 0,
+						"queued": false,
+						"remaining_actions": 1,
+						"remaining_cents": 85000,
+						"resourceful_window": 1,
+						"revision": 8,
+						"saving_cents": 0,
+						"unlocked": true
+					}
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 7,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 18,
+				"type": "admit_research"
+			},
+			"research_queue": [
+				{
+					"actions": 1,
+					"admitted_cycle": 7,
+					"base_cents": 170000,
+					"feature_id": "recorded_sounds",
+					"id": "store-study-action-4417:research:recorded_sounds",
+					"payments": []
+				}
+			],
+			"run_cycle": 7,
+			"sequence": 19,
+			"state_digest": "1f0f7b97dbc3ca989e8205b5728aff1ae19af82b4d7c1e78f85ed42353e0541a",
+			"step": 1,
+			"transaction_cash_low_cents": "328000",
+			"transaction_count": 16,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "248944",
+			"command_type": "research",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "studio",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"quote": {
+						"actions": 1,
+						"base_cents": 170000,
+						"can_admit": false,
+						"can_research": true,
+						"cash_cents": 328000,
+						"completed": 0,
+						"cycle": 7,
+						"discount_percent": 0,
+						"down_cents": 85000,
+						"due_cents": 85000,
+						"entry_id": "store-study-action-4417:research:recorded_sounds",
+						"feature_id": "recorded_sounds",
+						"head": true,
+						"nominal_cents": 85000,
+						"paid_cents": 85000,
+						"queue_size": 1,
+						"queued": true,
+						"remaining_actions": 1,
+						"remaining_cents": 85000,
+						"resourceful_window": 1,
+						"revision": 9,
+						"saving_cents": 0,
+						"unlocked": true
+					}
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 7,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 19,
+				"type": "research"
+			},
+			"research_queue": [],
+			"run_cycle": 8,
+			"sequence": 20,
+			"state_digest": "7082dd4f4555d7b78bd08d6948f07396114416615beb1a7afbfffffc8d3cb72b",
+			"step": 2,
+			"transaction_cash_low_cents": "243000",
+			"transaction_count": 21,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "248944",
+			"command_type": "begin_development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"genre": "action",
+					"name": "Store Study Release 2",
+					"theme": "fantasy"
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 8,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 20,
+				"type": "begin_development"
+			},
+			"research_queue": [],
+			"run_cycle": 9,
+			"sequence": 21,
+			"state_digest": "d1617826b7518bbe637b07e342d44e2fb5da8de45ab00268310e958db52317df",
+			"step": 3,
+			"transaction_cash_low_cents": "248944",
+			"transaction_count": 23,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "248944",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 9,
+						"schema_version": 1,
+						"sequence": 0,
+						"type": "begin"
+					}
+				},
+				"phase": "design",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 9,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 21,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 9,
+			"sequence": 22,
+			"state_digest": "f9fb6a5ded62a7f2dc97b020f14f8b25ca45e537f2f68c9b1a7b9d6bc9124ffe",
+			"step": 4,
+			"transaction_cash_low_cents": "248944",
+			"transaction_count": 23,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "234272",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 9,
+						"schema_version": 1,
+						"sequence": 1,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 9,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 22,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 10,
+			"sequence": 23,
+			"state_digest": "8fe4e68063065f3fd8f43d81f181e66fb6f8ef409be1e2f16440c281f8d18ff5",
+			"step": 5,
+			"transaction_cash_low_cents": "212944",
+			"transaction_count": 28,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "220272",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "design",
+						"project_cycle": 1,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 10,
+						"schema_version": 1,
+						"sequence": 2,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 10,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 23,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 11,
+			"sequence": 24,
+			"state_digest": "2c73af12598de1b8eba48ef3c3676cd431ffc364e2ac385ed842b374293d0fe9",
+			"step": 6,
+			"transaction_cash_low_cents": "220272",
+			"transaction_count": 30,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "220272",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 2,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 11,
+						"schema_version": 1,
+						"sequence": 3,
+						"type": "request_exit"
+					}
+				},
+				"phase": "design",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 11,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 24,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 11,
+			"sequence": 25,
+			"state_digest": "d668ec8ac7dfe7fdb832ee347106897da5bf0edca0d6beb9f7df172af8c6b21c",
+			"step": 7,
+			"transaction_cash_low_cents": "220272",
+			"transaction_count": 30,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "220272",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 2,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 11,
+						"schema_version": 1,
+						"sequence": 4,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "design",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 11,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 25,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 11,
+			"sequence": 26,
+			"state_digest": "4caec2b80627716fa0619ba3fb4c57735f9e8244fdad8a03d83bc5474b73d8d5",
+			"step": 8,
+			"transaction_cash_low_cents": "220272",
+			"transaction_count": 30,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "220272",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 2,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 11,
+						"schema_version": 1,
+						"sequence": 5,
+						"type": "begin"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 11,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 26,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 11,
+			"sequence": 27,
+			"state_digest": "65ec686d7d4178501f5e189471ff39c75f6a4e0bcca47c14536a500f7b854b0d",
+			"step": 9,
+			"transaction_cash_low_cents": "220272",
+			"transaction_count": 30,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "163552",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 2,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 11,
+						"schema_version": 1,
+						"sequence": 6,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 11,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 27,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 12,
+			"sequence": 28,
+			"state_digest": "7ed84f0164acf7ea8ee67b655975ab0ba9945e729f158f5b41b2201fc6ca7f42",
+			"step": 10,
+			"transaction_cash_low_cents": "163552",
+			"transaction_count": 35,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "136552",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 3,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 12,
+						"schema_version": 1,
+						"sequence": 7,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 12,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 28,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 29,
+			"state_digest": "8d871fcacaf2d9fb4e8592a5330409830022fd5c08f3eb5857f1c39c21b76998",
+			"step": 11,
+			"transaction_cash_low_cents": "136552",
+			"transaction_count": 37,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "136552",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 13,
+						"schema_version": 1,
+						"sequence": 8,
+						"type": "request_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 13,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 29,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 30,
+			"state_digest": "7a0f42874ab6c8e11b99245c5cfcac7c01a9ed76f2835cebe87a4bf41b727df1",
+			"step": 12,
+			"transaction_cash_low_cents": "136552",
+			"transaction_count": 37,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "136552",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 13,
+						"schema_version": 1,
+						"sequence": 9,
+						"type": "confirm_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 13,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 30,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 31,
+			"state_digest": "b33c5c40cbd1604093fefea7a71ebd117646f38dee0087fb8fa50dea4170aa07",
+			"step": 13,
+			"transaction_cash_low_cents": "136552",
+			"transaction_count": 37,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "136552",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 13,
+						"schema_version": 1,
+						"sequence": 10,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 13,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 31,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 32,
+			"state_digest": "72750e784f3a160da531d0e8fd8f3d40a1223f9bd1e707803cddc16dae5101b6",
+			"step": 14,
+			"transaction_cash_low_cents": "136552",
+			"transaction_count": 37,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "136552",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 4,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 13,
+						"schema_version": 1,
+						"sequence": 11,
+						"type": "begin"
+					}
+				},
+				"phase": "beta",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 13,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 32,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 33,
+			"state_digest": "18c906ef0984692ed69a47bea6338827811e8e7c839ef1635bc213c422902551",
+			"step": 15,
+			"transaction_cash_low_cents": "136552",
+			"transaction_count": 37,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "92846",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 4,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 13,
+						"schema_version": 1,
+						"sequence": 12,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 13,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 33,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 14,
+			"sequence": 34,
+			"state_digest": "316ebc891ebf7b80ad209d4b732e0df879867a4ebc3d9a147b59592ad1205109",
+			"step": 16,
+			"transaction_cash_low_cents": "92846",
+			"transaction_count": 42,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "92846",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 5,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 14,
+						"schema_version": 1,
+						"sequence": 13,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 14,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 34,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 15,
+			"sequence": 35,
+			"state_digest": "10935fe788519c344c0a9aa2febc046054ca9bd63066c260d526c1d3474d28c8",
+			"step": 17,
+			"transaction_cash_low_cents": "92846",
+			"transaction_count": 44,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "92846",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 6,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 15,
+						"schema_version": 1,
+						"sequence": 14,
+						"type": "request_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 15,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 35,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 15,
+			"sequence": 36,
+			"state_digest": "e21556a97a6fc3163d9d90a251f3a3692e5e8f48e3c2180471e95a2ba090ec49",
+			"step": 18,
+			"transaction_cash_low_cents": "92846",
+			"transaction_count": 44,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "92846",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 6,
+						"project_id": "store-study-action-4417:project:2",
+						"run_cycle": 15,
+						"schema_version": 1,
+						"sequence": 15,
+						"type": "confirm_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 15,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 36,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 15,
+			"sequence": 37,
+			"state_digest": "fa7979bba94ebb026ad648d646b5d0e2e8ee7943d1f6d2328ae95bc31d4db205",
+			"step": 19,
+			"transaction_cash_low_cents": "92846",
+			"transaction_count": 44,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "92846",
+			"command_type": "launch",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "studio",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "store-study-action-4417:project:1",
+					"release_cycle": 7,
+					"review": 1.5
+				},
+				{
+					"id": "store-study-action-4417:project:2",
+					"release_cycle": 15,
+					"review": 2.4
+				}
+			],
+			"request": {
+				"payload": {},
+				"phase": "beta",
+				"project_id": "store-study-action-4417:project:2",
+				"run_cycle": 15,
+				"run_id": "store-study-action-4417",
+				"schema_version": 1,
+				"sequence": 37,
+				"type": "launch"
+			},
+			"research_queue": [],
+			"run_cycle": 15,
+			"sequence": 38,
+			"state_digest": "e69363ea7d907fe46c55d9786f866b2243458adeda4d8f49ef806c8963e7bcd2",
+			"step": 20,
+			"transaction_cash_low_cents": "92846",
+			"transaction_count": 44,
+			"transactions_observed": 0
+		}
+	],
+	"sampling": "initial_and_after_each_executed_command",
+	"schema_version": "1",
+	"source_identity": "7db5a592e2113f4837467da493c25bfdaa02dbd435bc83f7b6a7125336e1fdc8"
+}

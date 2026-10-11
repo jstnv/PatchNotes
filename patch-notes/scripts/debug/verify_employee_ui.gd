@@ -28,9 +28,12 @@ func _run() -> void:
 		check(run.register_release(_released_project(751)),"UI post-release fixture")
 		var before:=snapshot(run)
 		studio.get_node("%Employees").pressed.emit()
-		check(not panel.get_ok_button().disabled and panel.dialog_text.contains("$100.00") and panel.dialog_text.contains("$10.00") and panel.dialog_text.contains("cycle 2"),"Fee wage and first payday shown before confirmation")
-		await process_frame
-		check(panel.size.x<=resolution.x and panel.size.y<=resolution.y,"Employee dialog fits viewport")
+		check(not panel.get_ok_button().disabled and panel.details_text.contains("$100.00") and panel.details_text.contains("$10.00") and panel.details_text.contains("cycle 2"),"Fee wage and first payday shown before confirmation")
+		for frame in range(8): await process_frame
+		print("EMPLOYEE_GEOMETRY ",panel.position," ",panel.size," root ",root.position," ",root.size," embedded ",root.gui_embed_subwindows)
+		check(Rect2(Vector2.ZERO,Vector2(resolution)).encloses(Rect2(Vector2(panel.position),Vector2(panel.size))),"Employee dialog including settled wrapping fits viewport")
+		check(panel._details.text == panel.details_text and panel._scroll.size.y > 0,"Complete hiring and training copy is available in scroll surface")
+		check(Rect2(Vector2.ZERO,Vector2(panel.size)).encloses(panel.get_ok_button().get_global_rect()) and Rect2(Vector2.ZERO,Vector2(panel.size)).encloses(panel.get_cancel_button().get_global_rect()),"Hire and Back buttons stay inside dialog")
 		if "--capture" in OS.get_cmdline_user_args():
 			await process_frame
 			root.get_texture().get_image().save_png(ProjectSettings.globalize_path("res://../docs/codex/findings/employee-implementation-v1/hire-%d.png" % resolution.x))
@@ -41,7 +44,7 @@ func _run() -> void:
 		await process_frame
 		check(run.get_employees().employees.size()==1 and run.get_cash_cents()==before[0]-10000,"Confirmed UI hires once")
 		studio.get_node("%Employees").pressed.emit()
-		check(panel.get_ok_button().disabled and panel.dialog_text.contains("training incomplete"),"Owned training status and no second hire")
+		check(panel.get_ok_button().disabled and panel.details_text.contains("training incomplete"),"Owned training status and no second hire")
 		panel.get_cancel_button().pressed.emit()
 		game.queue_free()
 		await process_frame

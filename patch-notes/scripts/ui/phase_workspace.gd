@@ -161,6 +161,11 @@ func _present_action(kind: String, action: Callable) -> void:
 	hand_motion.play(kind, phase.get_node("%HandContainer"), phase.get_selected_candidate_views(), action,
 		func(): return HandPresentation.project_snapshot(project, run), _update_presented_scores, _restore_presented_scores)
 
+func present_employee_plan(distribution: Dictionary) -> bool:
+	var accepted := [false]
+	_present_action("play", func(): accepted[0] = phase.play_hand_with_employee_plan(distribution))
+	return accepted[0]
+
 func _update_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
 	_presented_values = values.duplicate()
 	score_display_changed.emit(values, deltas)

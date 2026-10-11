@@ -1,0 +1,159 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/debug/campaign_stress_policy.gd",
+    "id": "bounded-campaign-stress",
+    "version": "1",
+    "source_identity": "de20fc6f9ea48542e0596ac2794865df06bc1bc65021baf517cfd8361db83be0"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "action-4417",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "overnight-v2-action-4417",
+          "studio_name": "Overnight action-4417",
+          "specialty": "action",
+          "traits": [],
+          "seed": "4417"
+        }
+      },
+      "max_commands": 180,
+      "target_release_count": 4,
+      "policy": {
+        "config": {
+          "policy_seed": "4917",
+          "card_order": "configured",
+          "development": {
+            "genre": "action",
+            "theme": "fantasy",
+            "name_prefix": "Fresh campaign",
+            "selection": "features_first",
+            "hands": {
+              "design": 2,
+              "alpha": 2,
+              "beta": 2
+            }
+          }
+        },
+        "id": "bounded-campaign-stress",
+        "version": "1",
+        "source_identity": "de20fc6f9ea48542e0596ac2794865df06bc1bc65021baf517cfd8361db83be0"
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "cult-action-90210",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "overnight-v2-cult-action-90210",
+          "studio_name": "Overnight cult-action-90210",
+          "specialty": "action",
+          "traits": [
+            "cult_following"
+          ],
+          "seed": "90210"
+        }
+      },
+      "max_commands": 180,
+      "target_release_count": 4,
+      "policy": {
+        "config": {
+          "policy_seed": "90710",
+          "card_order": "shuffle",
+          "development": {
+            "genre": "action",
+            "theme": "fantasy",
+            "name_prefix": "Fresh campaign",
+            "selection": "features_first",
+            "hands": {
+              "design": 2,
+              "alpha": 2,
+              "beta": 2
+            }
+          }
+        },
+        "id": "bounded-campaign-stress",
+        "version": "1",
+        "source_identity": "de20fc6f9ea48542e0596ac2794865df06bc1bc65021baf517cfd8361db83be0"
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "education-rpg-1104",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "overnight-v2-education-rpg-1104",
+          "studio_name": "Overnight education-rpg-1104",
+          "specialty": "role_playing",
+          "traits": [
+            "college_dropout"
+          ],
+          "seed": "1104"
+        }
+      },
+      "max_commands": 180,
+      "target_release_count": 4,
+      "policy": {
+        "config": {
+          "policy_seed": "1604",
+          "card_order": "shuffle",
+          "development": {
+            "genre": "role_playing",
+            "theme": "fantasy",
+            "name_prefix": "Fresh campaign",
+            "selection": "features_first",
+            "hands": {
+              "design": 2,
+              "alpha": 2,
+              "beta": 2
+            }
+          }
+        },
+        "id": "bounded-campaign-stress",
+        "version": "1",
+        "source_identity": "de20fc6f9ea48542e0596ac2794865df06bc1bc65021baf517cfd8361db83be0"
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "puzzle-77",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "overnight-v2-puzzle-77",
+          "studio_name": "Overnight puzzle-77",
+          "specialty": "puzzle",
+          "traits": [],
+          "seed": "77"
+        }
+      },
+      "max_commands": 180,
+      "target_release_count": 4,
+      "policy": {
+        "config": {
+          "policy_seed": "577",
+          "card_order": "shuffle",
+          "development": {
+            "genre": "puzzle",
+            "theme": "fantasy",
+            "name_prefix": "Fresh campaign",
+            "selection": "features_first",
+            "hands": {
+              "design": 2,
+              "alpha": 2,
+              "beta": 2
+            }
+          }
+        },
+        "id": "bounded-campaign-stress",
+        "version": "1",
+        "source_identity": "de20fc6f9ea48542e0596ac2794865df06bc1bc65021baf517cfd8361db83be0"
+      }
+    }
+  ]
+}

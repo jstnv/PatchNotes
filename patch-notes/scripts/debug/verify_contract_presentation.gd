@@ -4,7 +4,7 @@ extends "res://scripts/debug/verify_balanced_primitive_contract.gd"
 func _verify() -> void:
 	snapshots.load_ledgers()
 	database = root.get_node("CardDatabase")
-	for resolution in [Vector2i(1152, 648), Vector2i(1600, 900)]:
+	for resolution in [Vector2i(1152, 648), Vector2i(1280, 720), Vector2i(1600, 900)]:
 		root.size = resolution
 		root.content_scale_size = resolution
 		var project := release(751)
@@ -30,6 +30,7 @@ func _verify() -> void:
 		await capture("pool", resolution)
 		for hand in range(2):
 			_select_first(phase, 4)
+			phase.get("_play_button").grab_focus()
 			phase.get("_play_button").pressed.emit()
 			expect(phase.hand_motion.busy and not phase.get("_completion_modal").visible, "Hand animation starts with completion hidden")
 			var timeout := 0
@@ -51,7 +52,13 @@ func _verify() -> void:
 		var after := run_snapshot(run, project)
 		var dismissed := [false]
 		phase.completion_dismissed.connect(func(_phase): dismissed[0] = true)
-		(panel.find_child("DismissCompletionButton", true, false) as Button).pressed.emit()
+		var dismiss := panel.find_child("DismissCompletionButton", true, false) as Button
+		expect(root.gui_get_focus_owner() == dismiss, "Completion owns keyboard focus after animation cleanup")
+		await key(KEY_TAB)
+		expect(root.gui_get_focus_owner() == dismiss, "Tab stays inside completion")
+		await key(KEY_TAB, true)
+		expect(root.gui_get_focus_owner() == dismiss, "Shift Tab stays inside completion")
+		await key(KEY_ENTER)
 		expect(dismissed[0] and run_snapshot(run, project) == after, "Completion return remains passive and actionable")
 		phase.queue_free()
 		studio.queue_free()
@@ -64,3 +71,16 @@ func capture(label: String, resolution: Vector2i) -> void:
 	if "--capture" not in OS.get_cmdline_user_args(): return
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("res://design-logs/contract-ui-v1/%s-%dx%d.png" % [label, resolution.x, resolution.y])
+
+
+func key(code: Key, shift := false) -> void:
+	var event := InputEventKey.new()
+	event.keycode = code
+	event.shift_pressed = shift
+	event.pressed = true
+	Input.parse_input_event(event)
+	await process_frame
+	event = event.duplicate()
+	event.pressed = false
+	Input.parse_input_event(event)
+	await process_frame

@@ -2,12 +2,23 @@ class_name EmployeePanel
 extends ConfirmationDialog
 var run: RunState
 var quote: Dictionary = {}
+var details_text := ""
+var _details: Label
+var _scroll: ScrollContainer
 
 func _ready() -> void:
 	title = "Production Specialist"
 	exclusive = true
-	get_label().autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	get_label().custom_minimum_size.x = 600
+	# Keep growing training copy inside a bounded scroll surface so the
+	# confirmation buttons remain reachable after repeated opens/resizes.
+	get_label().hide()
+	_scroll = ScrollContainer.new()
+	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(_scroll)
+	_details = Label.new()
+	_details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_scroll.add_child(_details)
 	get_cancel_button().text = "Back"
 	confirmed.connect(_hire)
 
@@ -29,16 +40,28 @@ func open_for(value: RunState) -> void:
 	lines.append("\nTraining: commit a Design hand with a Core Pass and a Feature matching its printed primary or secondary Core stat.")
 	lines.append("Once trained: optionally change priorities with one later matching Design/Alpha hand per project. The training hand cannot use the new benefit. Each new project gets one use; training is permanent.")
 	lines.append("The hand still costs its ordinary money and one cycle. Planning changes its replacement draws, with no extra cards or redraws.")
-	dialog_text = "\n\n".join(lines)
+	details_text = "\n\n".join(lines)
 	get_ok_button().text = "Hire for $100.00"
 	get_ok_button().disabled = quote.is_empty()
-	popup_centered(Vector2i(670,430))
+	_fit_and_open()
 
 func _hire() -> void:
 	if run == null: return
 	if not run.hire_production_specialist(quote):
 		open_for(run)
-		dialog_text = "Hiring could not be completed. Cash or bills changed; review the current offer.\n\n" + dialog_text
+		details_text = "Hiring could not be completed. Cash or bills changed; review the current offer.\n\n" + details_text
+		_fit_and_open()
+
+
+func _fit_and_open() -> void:
+	_details.text = details_text
+	get_label().hide()
+	var available := get_parent().get_viewport().get_visible_rect().size
+	var target := Vector2i(mini(760, int(available.x) - 64), mini(480, int(available.y) - 64))
+	_scroll.custom_minimum_size = Vector2(target.x - 32, target.y - 90)
+	_scroll.scroll_vertical = 0
+	popup_centered(target)
+	get_cancel_button().grab_focus()
 
 
 func _input(event: InputEvent) -> void:

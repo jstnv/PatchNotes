@@ -466,7 +466,7 @@ func _on_play_card_pressed() -> void:
 	_hand_command_busy = false
 	var final_action: Dictionary = result.final_action
 	if not final_action.specialization_stat.is_empty():
-		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production Ã—1.50")
+		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production ×1.50")
 	elif final_action.balanced_production:
 		_workspace.show_synergy("Balanced Production!", "Hand total shared across four categories")
 
@@ -486,7 +486,7 @@ func _on_proceed_to_alpha_pressed() -> void:
 	_update_play_button()
 	if finalization.perfect_production:
 		print("Perfect Production!")
-		_workspace.show_synergy("Perfect Production!", "Finalization Bug Pressure Ã—0.80")
+		_workspace.show_synergy("Perfect Production!", "Finalization Bug Pressure ×0.80")
 	print("Final Hidden Bugs: %d" % finalization.hidden_bugs)
 	proceed_to_alpha_requested.emit()
 
@@ -634,7 +634,7 @@ func _update_play_button() -> void:
 				cards.append(view.card_data)
 			var cost := _run_state.primitive_feature_hand_cost_cents(cards, _project_state.get_release_id())
 			if cost >= 0:
-				play_card_button.text = "Implement Â· " + CashFormatter.format_exact_cents(cost)
+				play_card_button.text = "Implement · " + CashFormatter.format_exact_cents(cost)
 				if _run_state.get_cash_cents() < cost:
 					play_card_button.disabled = true
 					play_card_button.tooltip_text = "Insufficient cash for this hand."
@@ -670,19 +670,19 @@ func get_first_game_guidance() -> Dictionary:
 		var first := tutorial.stage == FirstGameTutorial.Stage.FIRST_HAND
 		return {"key": "first_game_" + ("first" if first else "redraw") + ("_implement" if selected_match else "_find"),
 			"title": ("Implement your %s synergy" if selected_match else "%s Specialization is playable") % core,
-			"hint": "First game Â· " + ("Press Implement for %s Specialization." % core if selected_match else "Find four %s primary labels, then Implement. Selected cards lift out of the fan." % core),
-			"body": "At least four cards share %s as their primary Core (the first score). Look across the fan to find them. Choose any four matching cards and press Implement for Ã—1.5 hand Core gains. Printed Scope stays the same; Passes add no Scope. Playing still uses one cycle and the shown Feature cost." % core}
+			"hint": "First game · " + ("Press Implement for %s Specialization." % core if selected_match else "Find four %s primary labels, then Implement. Selected cards lift out of the fan." % core),
+			"body": "At least four cards share %s as their primary Core (the first score). Look across the fan to find them. Choose any four matching cards and press Implement for ×1.5 hand Core gains. Printed Scope stays the same; Passes add no Scope. Playing still uses one cycle and the shown Feature cost." % core}
 	if tutorial.stage == FirstGameTutorial.Stage.REDRAW_HAND and matching.size() == 3 and not other_slots.is_empty():
 		if _run_state.get_available_redraws() == 0:
-			return {"key": "first_game_redraw_empty", "title": "No redraws left", "hint": "First game Â· Play a hand to restore one redraw.", "body": "This pool is one %s card short of Specialization. Your redraw bank is empty. You can play any affordable four-card hand normally; a successful hand restores one redraw." % core}
+			return {"key": "first_game_redraw_empty", "title": "No redraws left", "hint": "First game · Play a hand to restore one redraw.", "body": "This pool is one %s card short of Specialization. Your redraw bank is empty. You can play any affordable four-card hand normally; a successful hand restores one redraw." % core}
 		var ready := _selected_card_views.size() == 1 and _selected_card_views[0].card_data.primary_stat != stat
 		var wrong_selection := not ready and not _selected_card_views.is_empty()
 		var selection_help := "Click selected cards again to deselect them. " if wrong_selection else ""
 		return {"key": "first_game_redraw_now" if ready else "first_game_redraw_wrong" if wrong_selection else "first_game_redraw_select",
 			"title": "Redraw your selected card" if ready else "One card away from %s Specialization" % core,
-			"hint": "First game Â· " + ("Press Redraw for the fourth %s card." % core if ready else "Keep three %s cards. Select only one other card and Redraw." % core),
+			"hint": "First game · " + ("Press Redraw for the fourth %s card." % core if ready else "Keep three %s cards. Select only one other card and Redraw." % core),
 			"body": selection_help + "Keep the three %s cards unselected for now. Select only one card with a different primary label, then Redraw. This tutorial guarantees a %s Pass: one redraw, zero cash or cycles. Then find all four %s cards in the fan and Implement. Later redraws use normal chance." % [core, core, core]}
-	return {"key": "first_game_pool_changed", "title": "Your pool has changed", "hint": "First game Â· Find four matching primary labels, or play another hand.", "body": "Your choices changed the guided pattern. You can still find a Specialization by matching four primary Core labels, or play any affordable four cards normally. The guided opening ends after your second successful Design hand."}
+	return {"key": "first_game_pool_changed", "title": "Your pool has changed", "hint": "First game · Find four matching primary labels, or play another hand.", "body": "Your choices changed the guided pattern. You can still find a Specialization by matching four primary Core labels, or play any affordable four cards normally. The guided opening ends after your second successful Design hand."}
 
 
 func refresh_workspace() -> void:

@@ -1,0 +1,64 @@
+{
+  "format": "patch-notes-isolated-simulation-v1",
+  "mode": "run",
+  "ok": true,
+  "created_utc": "2026-10-11T14:55:11.199076+00:00",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v2\\fresh-final",
+  "godot_executable": "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "git": {
+    "branch": "main",
+    "head": "e8ace395fa56eda9d9393e14f65b905188ebd2dc",
+    "dirty": true
+  },
+  "policy": {
+    "script": "res://scripts/debug/campaign_stress_policy.gd",
+    "id": "bounded-campaign-stress",
+    "version": "1",
+    "source_identity": "de20fc6f9ea48542e0596ac2794865df06bc1bc65021baf517cfd8361db83be0"
+  },
+  "case_count": 4,
+  "input_hashes": {
+    "experiment.json": "8f8b9059733455c11635ab86e9783d2ef685284471073028607dc30f6ec1d46a",
+    "requested.json": "74ecf18a66687b76d2703f6eed72cc0d488b7cfdc79dcd7435dbc0b1da850e24"
+  },
+  "frozen_source_identity": "001cd720a9e99c34778628b81374bc242bacad397b4c536f0128f088774346a9",
+  "results": [
+    {
+      "case_id": "action-4417",
+      "ok": true,
+      "status": "completed",
+      "commands": 80,
+      "final_run_cycle": 31,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "cult-action-90210",
+      "ok": true,
+      "status": "completed",
+      "commands": 80,
+      "final_run_cycle": 31,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "education-rpg-1104",
+      "ok": true,
+      "status": "completed",
+      "commands": 80,
+      "final_run_cycle": 31,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "puzzle-77",
+      "ok": true,
+      "status": "completed",
+      "commands": 80,
+      "final_run_cycle": 31,
+      "final_release_count": 4
+    }
+  ]
+}

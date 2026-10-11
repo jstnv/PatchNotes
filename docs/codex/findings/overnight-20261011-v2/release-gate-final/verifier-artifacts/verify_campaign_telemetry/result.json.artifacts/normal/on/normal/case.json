@@ -1,0 +1,37 @@
+{
+	"case_id": "normal",
+	"initial": {
+		"recipe": {
+			"schema_version": 1,
+			"seed": "4417",
+			"specialty": "action",
+			"studio_id": "telemetry_fixture",
+			"studio_name": "Telemetry fixture",
+			"traits": []
+		}
+	},
+	"max_commands": 100,
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": 2,
+				"beta": 2,
+				"design": 2
+			},
+			"name_prefix": "Telemetry game",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"schema_version": "1",
+	"study": {
+		"arm": "normal",
+		"pair_id": "telemetry-equivalence"
+	},
+	"target_release_count": 2,
+	"telemetry": true
+}

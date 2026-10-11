@@ -58,7 +58,9 @@ func _refresh() -> void:
 
 func _commit() -> void:
 	if not is_instance_valid(phase): return
-	if not phase.play_hand_with_employee_plan(_distribution()):
+	var distribution := _distribution()
+	hide()
+	if not phase.get_workspace().present_employee_plan(distribution):
 		explanation.text = "The hand was rejected or changed. Your Specialist use was not spent. Close this dialog and review the hand."
 		get_ok_button().disabled = true
 		popup_centered(Vector2i(600,310))
