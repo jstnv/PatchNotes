@@ -3,8 +3,9 @@ extends RefCounted
 
 ## Pure run-finance journal. Calendar/cash remain owned by RunState; this class
 ## only plans value snapshots and rebuilds reports from checked provenance.
-const SCHEMA_VERSION := 5
+const SCHEMA_VERSION := 6
 const Bank := preload("res://scripts/finance/bank_loan.gd")
+const Education := preload("res://scripts/finance/education_debt.gd")
 const Bills := preload("res://scripts/finance/outstanding_expenses.gd")
 const MAX_INT: int = 9223372036854775807
 const MONTHLY_RENT_CENTS := 50000
@@ -32,7 +33,7 @@ static func create(cash_cents: int, monthly_rent_cents: int = MONTHLY_RENT_CENTS
 	var ledger := {"schema_version": SCHEMA_VERSION, "initial_cash_cents": cash_cents, "monthly_rent_cents": monthly_rent_cents,
 		"last_cycle": 0, "cash_cents": cash_cents, "unsettled_sales_net_cents": 0,
 		"monthly_rows": [row], "obligations": [], "transactions": [], "actions": [],
-		"credit": Bills.create_credit(), "bank_loans": [], "employees": []}
+		"credit": Bills.create_credit(), "bank_loans": [], "employees": [], "education": {}}
 	_append_transaction(ledger, 0, 1, &"starting_funding", cash_cents, cash_cents, 0, cash_cents, &"")
 	return ledger
 
@@ -54,7 +55,38 @@ static func _unpaid_category(ledger: Dictionary, category: StringName) -> int:
 
 static func bank_quote(ledger: Dictionary, principal: Variant, months: Variant, run_id: StringName) -> Dictionary:
 	if not _is_valid(ledger): return {}
-	return Bank.quote(ledger, principal, months, run_id, ledger.monthly_rent_cents, _monthly_payroll(ledger))
+	return _bank_quote_unchecked(ledger,principal,months,run_id)
+
+static func _bank_quote_unchecked(ledger: Dictionary, principal: Variant, months: Variant, run_id: StringName) -> Dictionary:
+	var reserve := Education.overlap_reserve(ledger.education,Bank.schedule(principal,months,ledger.last_cycle))
+	var payroll := _monthly_payroll(ledger)
+	if reserve > MAX_INT-payroll: return {}
+	return Bank.quote(ledger,principal,months,run_id,ledger.monthly_rent_cents,payroll+reserve)
+
+static func open_education(ledger: Dictionary, run_id: StringName, trait_id: StringName) -> Dictionary:
+	if not _is_valid(ledger): return {}
+	var account := Education.create(run_id,trait_id)
+	if account.is_empty(): return {}
+	var operation := {"type":&"education_open","run_id":run_id,"trait_id":trait_id,"account_id":account.account_id}
+	return _apply(ledger,0,ledger.cash_cents,0,&"calendar",0,0,false,account.account_id,true,operation)
+
+static func _education_payoff_unchecked(ledger: Dictionary) -> Dictionary:
+	var account: Dictionary = ledger.education
+	if account.is_empty() or account.closed: return {}
+	var interest := 0
+	for bill: Dictionary in ledger.obligations:
+		if bill.expense_type == &"student_loan": interest += int(bill.interest_cents)-int(bill.interest_paid_cents)
+	var principal: int = account.schedule.principal_cents-account.principal_paid_cents
+	var prior := _blocking_unpaid_unchecked(ledger)
+	if interest > MAX_INT-principal or prior < 0 or prior > MAX_INT-principal-interest: return {}
+	return {"type":&"education_payoff","account_id":account.account_id,"revision":ledger.actions.size(),"principal_cents":principal,"interest_cents":interest,"total_cents":principal+interest,"other_due_cents":prior,"required_cash_cents":prior+principal+interest}
+
+static func education_payoff_quote(ledger: Dictionary) -> Dictionary:
+	return _education_payoff_unchecked(ledger) if _is_valid(ledger) else {}
+
+static func pay_off_education(ledger: Dictionary, quote: Dictionary) -> Dictionary:
+	if not _is_valid(ledger) or typeof(quote.get("account_id")) != TYPE_STRING_NAME: return {}
+	return _apply(ledger,ledger.last_cycle,ledger.cash_cents,0,&"calendar",0,0,false,quote.account_id,true,quote)
 
 
 static func accept_loan(ledger: Dictionary, quote: Dictionary, run_id: StringName) -> Dictionary:
@@ -90,6 +122,13 @@ static func pay_off(ledger: Dictionary, quote: Dictionary) -> Dictionary:
 
 
 static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, delta: int, kind: StringName, source_id: StringName) -> bool:
+	if operation.get("type") == &"education_open":
+		if typeof(operation.get("run_id")) != TYPE_STRING_NAME or typeof(operation.get("trait_id")) != TYPE_STRING_NAME: return false
+		var account := Education.create(operation.run_id,operation.trait_id)
+		return not account.is_empty() and operation == {"type":&"education_open","run_id":operation.run_id,"trait_id":operation.trait_id,"account_id":account.account_id} and ledger.last_cycle == 0 and ledger.actions.is_empty() and ledger.education.is_empty() and delta == 0 and kind == &"calendar" and source_id == account.account_id
+	if operation.get("type") == &"education_payoff":
+		var expected := _education_payoff_unchecked(ledger)
+		return not expected.is_empty() and operation == expected and ledger.cash_cents >= expected.required_cash_cents and delta == 0 and kind == &"calendar" and source_id == expected.account_id
 	if operation.get("type") == &"hire":
 		if typeof(operation.get("run_id")) != TYPE_STRING_NAME: return false
 		var expected := _hire_quote_unchecked(ledger,operation.run_id)
@@ -98,7 +137,7 @@ static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, del
 		if typeof(operation.get("quote")) != TYPE_DICTIONARY: return false
 		var quote: Dictionary = operation.quote
 		if typeof(quote.get("schedule")) != TYPE_DICTIONARY or typeof(quote.get("run_id")) != TYPE_STRING_NAME: return false
-		var expected := Bank.quote(ledger, quote.schedule.get("principal_cents"), quote.schedule.get("term_months"), quote.run_id, ledger.monthly_rent_cents, _monthly_payroll(ledger))
+		var expected := _bank_quote_unchecked(ledger,quote.schedule.get("principal_cents"),quote.schedule.get("term_months"),quote.run_id)
 		return expected.get("accepted", false) and quote == expected and delta == expected.schedule.principal_cents and kind == &"financing_in" and source_id == expected.loan_id
 	if operation.get("type") == &"payoff":
 		if typeof(operation.get("loan_id")) != TYPE_STRING_NAME: return false
@@ -112,9 +151,42 @@ static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, del
 static func get_unpaid(ledger: Dictionary) -> int:
 	return _unpaid_unchecked(ledger) if _is_valid(ledger) else -1
 
+static func _blocking_unpaid_unchecked(ledger: Dictionary) -> int:
+	var total := 0
+	for bill: Dictionary in ledger.obligations:
+		if bill.expense_type == &"student_loan": continue
+		if bill.unpaid_cents > MAX_INT-total: return -1
+		total += int(bill.unpaid_cents)
+	return total
+
+static func get_blocking_unpaid(ledger: Dictionary) -> int:
+	return _blocking_unpaid_unchecked(ledger) if _is_valid(ledger) else -1
+
 
 static func report(ledger: Dictionary, current_cycle: int, current_cash: int) -> Dictionary:
-	if not _is_valid(ledger) or ledger.last_cycle != current_cycle or ledger.cash_cents != current_cash:
+	if not _is_valid(ledger): return {"available": false}
+	return _report_unchecked(ledger, current_cycle, current_cash)
+
+
+## One synchronous read of the same journal for the simulation observation.
+## Only the report requires Run's current cash/cycle to match. Existing payoff
+## and hire getters validate ledger provenance independently of those counters.
+## No validated state escapes this call and mutations retain their own checks.
+static func action_observation(ledger: Dictionary, current_cycle: int, current_cash: int, run_id: StringName, include_hire: bool) -> Dictionary:
+	var result := {"finance":{"available":false},"hire_quote":{},"education_payoff_quote":{},"bank_payoff_quotes":[]}
+	if not _is_valid(ledger): return result
+	result.finance = _report_unchecked(ledger, current_cycle, current_cash)
+	if include_hire: result.hire_quote = _hire_quote_unchecked(ledger, run_id)
+	result.education_payoff_quote = _education_payoff_unchecked(ledger)
+	# The previous aggregate discovered loans through the report. A mismatched
+	# report therefore has no Bank payoff list even when the journal is valid.
+	for loan: Dictionary in result.finance.get("bank_loans", []):
+		if not loan.closed: result.bank_payoff_quotes.append(_payoff_unchecked(ledger, loan.loan_id))
+	return result
+
+
+static func _report_unchecked(ledger: Dictionary, current_cycle: int, current_cash: int) -> Dictionary:
+	if ledger.last_cycle != current_cycle or ledger.cash_cents != current_cash:
 		return {"available": false}
 	var rows: Array = ledger.monthly_rows.duplicate(true)
 	var current_month := current_cycle / 2 + 1
@@ -132,9 +204,9 @@ static func report(ledger: Dictionary, current_cycle: int, current_cash: int) ->
 	return {"available": true, "rows": rows, "cash_cents": current_cash,
 		"unpaid_rent_cents": _unpaid_category(ledger, &"rent"), "total_overdue_cents": unpaid, "monthly_rent_cents": ledger.monthly_rent_cents, "monthly_payroll_cents": _monthly_payroll(ledger),
 		"next_due_cycle": base_cycle + 2 if base_cycle <= MAX_INT - 2 else -1,
-		"financially_blocked": unpaid > 0,
+		"financially_blocked": _blocking_unpaid_unchecked(ledger) > 0,
 		"outstanding_expenses": _outstanding_unchecked(ledger, current_cycle),
-		"credit": ledger.credit.duplicate(true), "bank_loans": ledger.bank_loans.duplicate(true),
+		"credit": ledger.credit.duplicate(true), "bank_loans": ledger.bank_loans.duplicate(true), "education": ledger.education.duplicate(true),
 		"credit_inputs": {"completed_months": current_cycle / 2,
 			"paid_on_time_months": on_time, "late_months": late}}
 
@@ -230,7 +302,8 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	# This comparison also rejects MIN_INT without ever negating it.
 	if direct_delta < -cash_before or direct_delta > MAX_INT - cash_before: return {}
 	var old_unpaid := _unpaid_unchecked(ledger)
-	if old_unpaid < 0 or (not productive and old_unpaid > 0 and direct_delta < 0): return {}
+	var blocking_unpaid := _blocking_unpaid_unchecked(ledger)
+	if old_unpaid < 0 or blocking_unpaid < 0 or (not productive and blocking_unpaid > 0 and direct_delta < 0): return {}
 	var cash := cash_before + direct_delta
 	if settled > MAX_INT - cash: return {} # Settlement must fit BEFORE rent is paid.
 	if sales_earned > MAX_INT - int(ledger.unsettled_sales_net_cents): return {}
@@ -252,7 +325,11 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 			if cycle == employee.first_due_cycle + employee.issued * 2: payroll_due += int(employee.wage_cents)
 	if payroll_due > MAX_INT - old_unpaid - rent_due - bank_due: return {}
 	var total_due := old_unpaid + rent_due + bank_due + payroll_due
-	if productive and old_unpaid > 0 and available < total_due: return {}
+	var education_due := {}
+	if productive and not ledger.education.is_empty() and not ledger.education.closed and ledger.education.issued < 96:
+		var due := Education.installment(ledger.education.schedule,int(ledger.education.issued)+1)
+		if due.due_cycle == cycle: education_due = due
+	if not education_due.is_empty() and education_due.payment_cents > MAX_INT-total_due: return {}
 	# Replay owns its private reconstruction and can append in place. Public
 	# plans always deep-copy the caller's snapshot, including rejection paths.
 	var next: Dictionary = ledger.duplicate(true) if copy_source else ledger
@@ -260,6 +337,7 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 		if productive or not _bank_operation_valid(ledger, operation, direct_delta, kind, source_id): return {}
 		if operation.type == &"hire":
 			next.employees.append({"employee_id":operation.employee_id,"wage_cents":operation.wage_cents,"hire_cycle":cycle,"first_due_cycle":operation.first_due_cycle,"issued":0})
+		if operation.type == &"education_open": next.education = Education.create(operation.run_id,operation.trait_id)
 		if operation.type == &"accept":
 			next.bank_loans.append({"loan_id": operation.quote.loan_id, "run_id": operation.quote.run_id, "quote_id": operation.quote.quote_id, "schedule": operation.quote.schedule.duplicate(true), "issued": 0, "principal_paid_cents": 0, "interest_paid_cents": 0, "closed": false, "closed_cycle": -1, "early_payoff": false})
 	var month := (cycle - 1) / 2 + 1 if productive else cycle / 2 + 1
@@ -310,12 +388,30 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 			loan.issued += 1
 			if not _add(row, "interest_cents", installment.interest_cents): return {}
 			_append_transaction(next, cycle, month, &"bank_interest_due", installment.interest_cents, 0, cash, cash, loan.loan_id, month)
+	if not education_due.is_empty():
+		var account: Dictionary = next.education
+		var bill := Bills.create_bill(StringName("%s:%d" % [account.account_id,education_due.number]),account.account_id,&"student_loan",cycle,education_due.payment_cents)
+		bill.merge({"principal_cents":education_due.principal_cents,"interest_cents":education_due.interest_cents,"principal_paid_cents":0,"interest_paid_cents":0})
+		next.obligations.append(bill)
+		account.issued += 1
+		if not _add(row,"interest_cents",education_due.interest_cents): return {}
+		_append_transaction(next,cycle,month,&"education_interest_due",education_due.interest_cents,0,cash,cash,account.account_id,month)
 	var rent_paid := 0
 	var bills_paid := 0
-	# Stable insertion order is chronological within each category.
-	for category: StringName in [&"rent", &"payroll", &"bank_installment"]:
-		for obligation: Dictionary in next.obligations:
-			if obligation.expense_type != category or obligation.unpaid_cents == 0: continue
+	# Elective payoffs have explicit precedence; ordinary service merges debts.
+	var ordered: Array = next.obligations.filter(func(b): return b.unpaid_cents > 0 and (operation.get("type") != &"payoff" or b.expense_type != &"student_loan"))
+	ordered.sort_custom(func(a,b):
+		var ar := 0 if a.expense_type == &"rent" else (1 if a.expense_type == &"payroll" else 2)
+		var br := 0 if b.expense_type == &"rent" else (1 if b.expense_type == &"payroll" else 2)
+		if operation.get("type") == &"education_payoff":
+			if a.expense_type == &"student_loan": ar = 3
+			if b.expense_type == &"student_loan": br = 3
+		if ar != br: return ar < br
+		if a.due_cycle != b.due_cycle: return a.due_cycle < b.due_cycle
+		if a.expense_type != b.expense_type: return a.expense_type == &"bank_installment"
+		return String(a.bill_id) < String(b.bill_id))
+	for obligation: Dictionary in ordered:
+			var category: StringName = obligation.expense_type
 			var payment := mini(cash, int(obligation.unpaid_cents))
 			if payment > 0:
 				if category == &"rent":
@@ -323,22 +419,41 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 					rent_paid += payment
 				elif category == &"payroll":
 					if not _add(row,"payroll_paid_cents",payment): return {}
-				elif category == &"bank_installment":
+				elif category in [&"bank_installment",&"student_loan"]:
 					var interest := mini(payment, int(obligation.interest_cents) - int(obligation.interest_paid_cents))
 					var principal := payment - interest
 					if not _add(row, "interest_paid_cents", interest) or not _add(row, "principal_paid_cents", principal): return {}
 					obligation.interest_paid_cents += interest
 					obligation.principal_paid_cents += principal
-					for loan: Dictionary in next.bank_loans:
-						if loan.loan_id == obligation.source_id:
-							loan.interest_paid_cents += interest
-							loan.principal_paid_cents += principal
+					if category == &"student_loan":
+						next.education.interest_paid_cents += interest
+						next.education.principal_paid_cents += principal
+					else:
+						for loan: Dictionary in next.bank_loans:
+							if loan.loan_id == obligation.source_id:
+								loan.interest_paid_cents += interest
+								loan.principal_paid_cents += principal
 				bills_paid += payment
-				_append_transaction(next, cycle, month, &"rent_payment" if category == &"rent" else (&"payroll_payment" if category == &"payroll" else &"bank_payment"), payment, -payment, cash, cash - payment, obligation.source_id if category != &"rent" else &"", obligation.month)
+				var payment_kind: StringName = {&"rent":&"rent_payment",&"payroll":&"payroll_payment",&"bank_installment":&"bank_payment",&"student_loan":&"education_payment"}[category]
+				_append_transaction(next, cycle, month, payment_kind, payment, -payment, cash, cash - payment, obligation.source_id if category != &"rent" else &"", obligation.month)
 				cash -= payment
 			if not Bills.service(obligation, payment, cycle, month): return {}
 			if category == &"rent": rows[int(obligation.month) - 1].rent_unpaid_cents = obligation.unpaid_cents
 			if category == &"payroll": rows[int(obligation.month) - 1].payroll_unpaid_cents = obligation.unpaid_cents
+	# The actual merged payment plan must clear blocking arrears on recovery.
+	if productive and blocking_unpaid > 0 and _blocking_unpaid_unchecked(next) > 0: return {}
+	if operation.get("type") == &"education_payoff":
+		var account: Dictionary = next.education
+		var principal: int = account.schedule.principal_cents-account.principal_paid_cents
+		if principal > cash or not _add(row,"principal_paid_cents",principal): return {}
+		_append_transaction(next,cycle,month,&"education_payoff",principal,-principal,cash,cash-principal,account.account_id)
+		cash -= principal
+		bills_paid += principal
+		account.principal_paid_cents += principal
+		account.early_payoff = account.issued < 96
+	if not next.education.is_empty() and not next.education.closed and next.education.principal_paid_cents == next.education.schedule.principal_cents:
+		next.education.closed = true
+		next.education.closed_cycle = cycle
 	if operation.get("type") == &"payoff":
 		for loan: Dictionary in next.bank_loans:
 			if loan.loan_id != operation.loan_id: continue
@@ -412,6 +527,7 @@ static func upgrade_v1(legacy: Dictionary) -> Dictionary:
 	var projected := rebuilt.duplicate(true)
 	projected.schema_version = 1
 	projected.erase("credit")
+	projected.erase("education")
 	if not legacy.has("monthly_rent_cents"): projected.erase("monthly_rent_cents")
 	if not legacy.has("bank_loans"): projected.erase("bank_loans")
 	if not legacy.has("employees"): projected.erase("employees")
@@ -420,6 +536,26 @@ static func upgrade_v1(legacy: Dictionary) -> Dictionary:
 			if not legacy.monthly_rows[i].has(key): projected.monthly_rows[i].erase(key)
 	for bill: Dictionary in projected.obligations:
 		for key in ["bill_id", "source_id", "expense_type", "settled_cycle", "recovery_overdue_cycles"]: bill.erase(key)
+	return rebuilt if projected == legacy else {}
+
+## Only exact prior journal state gains an empty education account.
+static func upgrade_v5(legacy: Dictionary) -> Dictionary:
+	if legacy.get("schema_version") != 5 or legacy.has("education") or typeof(legacy.get("actions")) != TYPE_ARRAY: return {}
+	if typeof(legacy.get("initial_cash_cents")) != TYPE_INT or typeof(legacy.get("monthly_rent_cents")) != TYPE_INT: return {}
+	var rebuilt := create(legacy.initial_cash_cents,legacy.monthly_rent_cents)
+	if rebuilt.is_empty(): return {}
+	for action: Variant in legacy.actions:
+		if not action is Dictionary: return {}
+		for key in ["cycle","cash_before","direct_delta","sales_earned","settled"]:
+			if typeof(action.get(key)) != TYPE_INT: return {}
+		if typeof(action.get("kind")) != TYPE_STRING_NAME or typeof(action.get("source_id")) != TYPE_STRING_NAME or typeof(action.get("productive")) != TYPE_BOOL or typeof(action.get("operation",{})) != TYPE_DICTIONARY: return {}
+		if action.get("operation",{}).get("type") in [&"education_open",&"education_payoff"]: return {}
+		var step := _apply(rebuilt,action.cycle,action.cash_before,action.direct_delta,action.kind,action.sales_earned,action.settled,action.productive,action.source_id,false,action.get("operation",{}))
+		if step.is_empty(): return {}
+		rebuilt = step.ledger
+	var projected := rebuilt.duplicate(true)
+	projected.erase("education")
+	projected.schema_version = 5
 	return rebuilt if projected == legacy else {}
 
 

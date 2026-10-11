@@ -1,0 +1,203 @@
+{
+	"accepted_commands": 3,
+	"artifacts": {
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"result": "result.json",
+		"tape": "replay.tape.json"
+	},
+	"case_id": "bound",
+	"commands": 3,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "Policy step bound reached",
+	"final_release_count": 0,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "-3769052622640144973"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "2595083601206648032"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "8959219825053441037"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "-3123388024809317574"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "1949419003375820633"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "8313555227222613638"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4418"
+			},
+			"state": {
+				"integer": "-4414717220470972372"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4417"
+			},
+			"state": {
+				"integer": "7667890629391786239"
+			}
+		}
+	},
+	"final_run_cycle": 0,
+	"final_state": "3ffe62dbeb1cf676b02803cc6735ba0f6fe47eee4106859a5ca351903eecacb3",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "-3769052622640144973"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "2595083601206648032"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "8959219825053441037"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "-3123388024809317574"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "1949419003375820633"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "8313555227222613638"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4418"
+			},
+			"state": {
+				"integer": "-4414717220470972372"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4417"
+			},
+			"state": {
+				"integer": "7667890629391786239"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "3114f653b92b49d9120ab4990a1973fd5cf30278d6972f282bc27b843763f53e",
+	"input_identity": "1ec1ffbb19db8b44ff28fc57fbce991c8e850fe118ec9550dd0d1b5de5697552",
+	"last_choice": {
+		"type": "acknowledge_publishers"
+	},
+	"max_commands": 3,
+	"ok": false,
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"integer": "2"
+				},
+				"beta": {
+					"integer": "2"
+				},
+				"design": {
+					"integer": "2"
+				}
+			},
+			"name_prefix": "Batch game",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "d4a01c466d75b8541e2bc76eddf74ad6eb98d709f0dc0dcdcb50a85d4ae6621f",
+		"version": "1"
+	},
+	"productive_commands": 0,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "6a050a995f437103e8b52f1ba12532b07ec7d54cafbcbe61cd8953f21ba4d576",
+	"status": "command_bound",
+	"tape_identity": "0770e359847ce6b4d5803cd4511179d1763c98aeabb8b40052dbd1f1fea3af9f",
+	"target_release_count": 2
+}

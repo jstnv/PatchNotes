@@ -1,0 +1,1474 @@
+{
+	"checkpoint_cases": [
+		{
+			"accepted_commands": 0,
+			"artifacts": {
+				"initial": "initial.json",
+				"metrics": "metrics.json",
+				"result": "result.json",
+				"tape": "replay.tape.json"
+			},
+			"case_id": "checkpoint",
+			"commands": 0,
+			"engine_version": "4.7.1-stable (official)",
+			"error": "Policy factory must return a valid Callable",
+			"final_release_count": 0,
+			"final_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"final_run_cycle": 0,
+			"final_state": "247d089ff8220a3d28756cd10a9b99c1f6a9376136103a8f99e98b999d63d9c1",
+			"initial_release_count": 0,
+			"initial_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"initial_run_cycle": 0,
+			"initial_state": "247d089ff8220a3d28756cd10a9b99c1f6a9376136103a8f99e98b999d63d9c1",
+			"input_identity": "35c0368862d8f6f864da191d1fece2c977d079ad483807dd41d569e57f22c880",
+			"last_choice": null,
+			"max_commands": 100,
+			"ok": false,
+			"policy": {
+				"config": {
+					"genre": "action",
+					"hands": {
+						"alpha": {
+							"integer": "2"
+						},
+						"beta": {
+							"integer": "2"
+						},
+						"design": {
+							"integer": "2"
+						}
+					},
+					"name_prefix": "Batch game",
+					"selection": "features_first",
+					"theme": "fantasy"
+				},
+				"id": "finite-development-fixture",
+				"source_identity": "d4a01c466d75b8541e2bc76eddf74ad6eb98d709f0dc0dcdcb50a85d4ae6621f",
+				"version": "1"
+			},
+			"productive_commands": 0,
+			"replayable": true,
+			"rng_algorithm": "godot-4.7.1-rng-v1",
+			"schema_version": "1",
+			"source_identity": "6a050a995f437103e8b52f1ba12532b07ec7d54cafbcbe61cd8953f21ba4d576",
+			"status": "invalid_policy",
+			"tape_identity": "4778f902ff202a5d2f8f4615b83b1d1f28f42c00d23b3f0dacf18dc64c104e0a",
+			"target_release_count": 3
+		}
+	],
+	"checks": 22,
+	"failure_cases": [
+		{
+			"accepted_commands": 3,
+			"artifacts": {
+				"initial": "initial.json",
+				"metrics": "metrics.json",
+				"result": "result.json",
+				"tape": "replay.tape.json"
+			},
+			"case_id": "bound",
+			"commands": 3,
+			"engine_version": "4.7.1-stable (official)",
+			"error": "Policy step bound reached",
+			"final_release_count": 0,
+			"final_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"final_run_cycle": 0,
+			"final_state": "3ffe62dbeb1cf676b02803cc6735ba0f6fe47eee4106859a5ca351903eecacb3",
+			"initial_release_count": 0,
+			"initial_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"initial_run_cycle": 0,
+			"initial_state": "3114f653b92b49d9120ab4990a1973fd5cf30278d6972f282bc27b843763f53e",
+			"input_identity": "1ec1ffbb19db8b44ff28fc57fbce991c8e850fe118ec9550dd0d1b5de5697552",
+			"last_choice": {
+				"type": "acknowledge_publishers"
+			},
+			"max_commands": 3,
+			"ok": false,
+			"policy": {
+				"config": {
+					"genre": "action",
+					"hands": {
+						"alpha": {
+							"integer": "2"
+						},
+						"beta": {
+							"integer": "2"
+						},
+						"design": {
+							"integer": "2"
+						}
+					},
+					"name_prefix": "Batch game",
+					"selection": "features_first",
+					"theme": "fantasy"
+				},
+				"id": "finite-development-fixture",
+				"source_identity": "d4a01c466d75b8541e2bc76eddf74ad6eb98d709f0dc0dcdcb50a85d4ae6621f",
+				"version": "1"
+			},
+			"productive_commands": 0,
+			"replayable": true,
+			"rng_algorithm": "godot-4.7.1-rng-v1",
+			"schema_version": "1",
+			"source_identity": "6a050a995f437103e8b52f1ba12532b07ec7d54cafbcbe61cd8953f21ba4d576",
+			"status": "command_bound",
+			"tape_identity": "0770e359847ce6b4d5803cd4511179d1763c98aeabb8b40052dbd1f1fea3af9f",
+			"target_release_count": 2
+		},
+		{
+			"accepted_commands": 0,
+			"artifacts": {
+				"initial": "initial.json",
+				"metrics": "metrics.json",
+				"result": "result.json",
+				"tape": "replay.tape.json"
+			},
+			"case_id": "rejected",
+			"commands": 1,
+			"engine_version": "4.7.1-stable (official)",
+			"error": "Unsupported Studio command",
+			"final_release_count": 0,
+			"final_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"final_run_cycle": 0,
+			"final_state": "2214e6a526c24de61c19f32d1914f98c8ca2fd617e059990a6bbc7744b153262",
+			"initial_release_count": 0,
+			"initial_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"initial_run_cycle": 0,
+			"initial_state": "2214e6a526c24de61c19f32d1914f98c8ca2fd617e059990a6bbc7744b153262",
+			"input_identity": "53097df5ed3d17e4d4a110e1ec93836ca74dc9b2ac922ce2dd51caeee82ed63a",
+			"last_choice": {
+				"type": "wait"
+			},
+			"max_commands": 100,
+			"ok": false,
+			"policy": {
+				"config": {
+					"genre": "action",
+					"hands": {
+						"alpha": {
+							"integer": "2"
+						},
+						"beta": {
+							"integer": "2"
+						},
+						"design": {
+							"integer": "2"
+						}
+					},
+					"name_prefix": "Batch game",
+					"selection": "features_first",
+					"theme": "fantasy"
+				},
+				"id": "finite-development-fixture",
+				"source_identity": "d4a01c466d75b8541e2bc76eddf74ad6eb98d709f0dc0dcdcb50a85d4ae6621f",
+				"version": "1"
+			},
+			"productive_commands": 0,
+			"replayable": true,
+			"rng_algorithm": "godot-4.7.1-rng-v1",
+			"schema_version": "1",
+			"source_identity": "6a050a995f437103e8b52f1ba12532b07ec7d54cafbcbe61cd8953f21ba4d576",
+			"status": "rejected_policy_action",
+			"tape_identity": "0ffe5b044686d2edb1c9bd600d4f052b3626b5813723bb7b79a6936364090e91",
+			"target_release_count": 2
+		},
+		{
+			"accepted_commands": 0,
+			"artifacts": {
+				"initial": "initial.json",
+				"metrics": "metrics.json",
+				"result": "result.json",
+				"tape": "replay.tape.json"
+			},
+			"case_id": "malformed",
+			"commands": 0,
+			"engine_version": "4.7.1-stable (official)",
+			"error": "Policy must return a plain {type,payload} decision",
+			"final_release_count": 0,
+			"final_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"final_run_cycle": 0,
+			"final_state": "18f9a3ff1686aa8aa17588db4ce4aa4e1a54f75c89ec37ea542087ff291e7d8f",
+			"initial_release_count": 0,
+			"initial_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"initial_run_cycle": 0,
+			"initial_state": "18f9a3ff1686aa8aa17588db4ce4aa4e1a54f75c89ec37ea542087ff291e7d8f",
+			"input_identity": "491e692625b2a859d1c19382daa97fc667191953d0164e5a95f57ab6f48e99aa",
+			"last_choice": {
+				"type": {
+					"integer": "14"
+				}
+			},
+			"max_commands": 100,
+			"ok": false,
+			"policy": {
+				"config": {
+					"genre": "action",
+					"hands": {
+						"alpha": {
+							"integer": "2"
+						},
+						"beta": {
+							"integer": "2"
+						},
+						"design": {
+							"integer": "2"
+						}
+					},
+					"name_prefix": "Batch game",
+					"selection": "features_first",
+					"theme": "fantasy"
+				},
+				"id": "finite-development-fixture",
+				"source_identity": "d4a01c466d75b8541e2bc76eddf74ad6eb98d709f0dc0dcdcb50a85d4ae6621f",
+				"version": "1"
+			},
+			"productive_commands": 0,
+			"replayable": true,
+			"rng_algorithm": "godot-4.7.1-rng-v1",
+			"schema_version": "1",
+			"source_identity": "6a050a995f437103e8b52f1ba12532b07ec7d54cafbcbe61cd8953f21ba4d576",
+			"status": "malformed_policy_decision",
+			"tape_identity": "6ec0576adffdf59bb7da1bfba53d7c076442adbd26b90e9fbf07aa01f1d4f8ba",
+			"target_release_count": 2
+		},
+		{
+			"accepted_commands": 0,
+			"artifacts": {
+				"initial": "initial.json",
+				"metrics": "metrics.json",
+				"result": "result.json",
+				"tape": "replay.tape.json"
+			},
+			"case_id": "first",
+			"commands": 0,
+			"engine_version": "4.7.1-stable (official)",
+			"error": "Policy factory must return a valid Callable",
+			"final_release_count": 0,
+			"final_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"final_run_cycle": 0,
+			"final_state": "247d089ff8220a3d28756cd10a9b99c1f6a9376136103a8f99e98b999d63d9c1",
+			"initial_release_count": 0,
+			"initial_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"initial_run_cycle": 0,
+			"initial_state": "247d089ff8220a3d28756cd10a9b99c1f6a9376136103a8f99e98b999d63d9c1",
+			"input_identity": "f085049fc39a62ce55e97c7ece40f1d38fe8c2952ae3da9bb9ff3cc3bb671a9d",
+			"last_choice": null,
+			"max_commands": 100,
+			"ok": false,
+			"policy": {
+				"config": {
+					"genre": "action",
+					"hands": {
+						"alpha": {
+							"integer": "2"
+						},
+						"beta": {
+							"integer": "2"
+						},
+						"design": {
+							"integer": "2"
+						}
+					},
+					"name_prefix": "Batch game",
+					"selection": "features_first",
+					"theme": "fantasy"
+				},
+				"id": "finite-development-fixture",
+				"source_identity": "d4a01c466d75b8541e2bc76eddf74ad6eb98d709f0dc0dcdcb50a85d4ae6621f",
+				"version": "1"
+			},
+			"productive_commands": 0,
+			"replayable": true,
+			"rng_algorithm": "godot-4.7.1-rng-v1",
+			"schema_version": "1",
+			"source_identity": "6a050a995f437103e8b52f1ba12532b07ec7d54cafbcbe61cd8953f21ba4d576",
+			"status": "invalid_policy",
+			"tape_identity": "4778f902ff202a5d2f8f4615b83b1d1f28f42c00d23b3f0dacf18dc64c104e0a",
+			"target_release_count": 2
+		}
+	],
+	"failures": 4,
+	"metrics": [
+		{
+			"artifact_write_us": 2207,
+			"case_id": "first",
+			"commands_per_second": 0.0,
+			"elapsed_us": 77861,
+			"execute_and_trace_us": 0,
+			"finalization_us": 33985,
+			"godot_static_bytes_after_release": 69781804,
+			"godot_static_bytes_before": 69738536,
+			"godot_static_bytes_with_case": 69939692,
+			"measurement": "instrumented independent campaign; exact trace hashing included",
+			"objects_after_release": 1624,
+			"objects_before": 1624,
+			"objects_with_case": 1646,
+			"os": "Windows",
+			"policy_and_observation_us": 0,
+			"process_cumulative_peak_godot_static_bytes": 98326442,
+			"processor": "13th Gen Intel(R) Core(TM) i7-13620H",
+			"processor_count": 16,
+			"productive_command_max_us": 0,
+			"schema_version": "1",
+			"setup_us": 3196
+		},
+		{
+			"artifact_write_us": 2606,
+			"case_id": "second",
+			"commands_per_second": 0.0,
+			"elapsed_us": 74351,
+			"execute_and_trace_us": 0,
+			"finalization_us": 34024,
+			"godot_static_bytes_after_release": 69824316,
+			"godot_static_bytes_before": 69781064,
+			"godot_static_bytes_with_case": 69982204,
+			"measurement": "instrumented independent campaign; exact trace hashing included",
+			"objects_after_release": 1624,
+			"objects_before": 1624,
+			"objects_with_case": 1646,
+			"os": "Windows",
+			"policy_and_observation_us": 0,
+			"process_cumulative_peak_godot_static_bytes": 98326442,
+			"processor": "13th Gen Intel(R) Core(TM) i7-13620H",
+			"processor_count": 16,
+			"productive_command_max_us": 0,
+			"schema_version": "1",
+			"setup_us": 3027
+		}
+	],
+	"ok": false,
+	"successful_cases": [
+		{
+			"accepted_commands": 0,
+			"artifacts": {
+				"initial": "initial.json",
+				"metrics": "metrics.json",
+				"result": "result.json",
+				"tape": "replay.tape.json"
+			},
+			"case_id": "first",
+			"commands": 0,
+			"engine_version": "4.7.1-stable (official)",
+			"error": "Policy factory must return a valid Callable",
+			"final_release_count": 0,
+			"final_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"final_run_cycle": 0,
+			"final_state": "247d089ff8220a3d28756cd10a9b99c1f6a9376136103a8f99e98b999d63d9c1",
+			"initial_release_count": 0,
+			"initial_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "4421"
+					},
+					"state": {
+						"integer": "-3769052622640144973"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "4422"
+					},
+					"state": {
+						"integer": "2595083601206648032"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "4423"
+					},
+					"state": {
+						"integer": "8959219825053441037"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "4424"
+					},
+					"state": {
+						"integer": "-3123388024809317574"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "4425"
+					},
+					"state": {
+						"integer": "3240748199037475431"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "4419"
+					},
+					"state": {
+						"integer": "1949419003375820633"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "4420"
+					},
+					"state": {
+						"integer": "8313555227222613638"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "4418"
+					},
+					"state": {
+						"integer": "-4414717220470972372"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "4417"
+					},
+					"state": {
+						"integer": "7667890629391786239"
+					}
+				}
+			},
+			"initial_run_cycle": 0,
+			"initial_state": "247d089ff8220a3d28756cd10a9b99c1f6a9376136103a8f99e98b999d63d9c1",
+			"input_identity": "f085049fc39a62ce55e97c7ece40f1d38fe8c2952ae3da9bb9ff3cc3bb671a9d",
+			"last_choice": null,
+			"max_commands": 100,
+			"ok": false,
+			"policy": {
+				"config": {
+					"genre": "action",
+					"hands": {
+						"alpha": {
+							"integer": "2"
+						},
+						"beta": {
+							"integer": "2"
+						},
+						"design": {
+							"integer": "2"
+						}
+					},
+					"name_prefix": "Batch game",
+					"selection": "features_first",
+					"theme": "fantasy"
+				},
+				"id": "finite-development-fixture",
+				"source_identity": "d4a01c466d75b8541e2bc76eddf74ad6eb98d709f0dc0dcdcb50a85d4ae6621f",
+				"version": "1"
+			},
+			"productive_commands": 0,
+			"replayable": true,
+			"rng_algorithm": "godot-4.7.1-rng-v1",
+			"schema_version": "1",
+			"source_identity": "6a050a995f437103e8b52f1ba12532b07ec7d54cafbcbe61cd8953f21ba4d576",
+			"status": "invalid_policy",
+			"tape_identity": "4778f902ff202a5d2f8f4615b83b1d1f28f42c00d23b3f0dacf18dc64c104e0a",
+			"target_release_count": 2
+		},
+		{
+			"accepted_commands": 0,
+			"artifacts": {
+				"initial": "initial.json",
+				"metrics": "metrics.json",
+				"result": "result.json",
+				"tape": "replay.tape.json"
+			},
+			"case_id": "second",
+			"commands": 0,
+			"engine_version": "4.7.1-stable (official)",
+			"error": "Policy factory must return a valid Callable",
+			"final_release_count": 0,
+			"final_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "8195"
+					},
+					"state": {
+						"integer": "-3179727794679548135"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "8196"
+					},
+					"state": {
+						"integer": "3184408429167244870"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "8197"
+					},
+					"state": {
+						"integer": "-8898199420695513741"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "8198"
+					},
+					"state": {
+						"integer": "-2534063196848720736"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "8199"
+					},
+					"state": {
+						"integer": "3830073026998072269"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "8193"
+					},
+					"state": {
+						"integer": "2538743831336417471"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "8194"
+					},
+					"state": {
+						"integer": "8902880055183210476"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "8192"
+					},
+					"state": {
+						"integer": "-3825392392510375534"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "8191"
+					},
+					"state": {
+						"integer": "8257215457352383077"
+					}
+				}
+			},
+			"final_run_cycle": 0,
+			"final_state": "b88b449d75e598727bdc0683b37e75c8f7f05a5d6954a7e1e113934ec7a5c986",
+			"initial_release_count": 0,
+			"initial_rng": {
+				"alpha_deal": {
+					"seed": {
+						"integer": "8195"
+					},
+					"state": {
+						"integer": "-3179727794679548135"
+					}
+				},
+				"alpha_finalize": {
+					"seed": {
+						"integer": "8196"
+					},
+					"state": {
+						"integer": "3184408429167244870"
+					}
+				},
+				"beta_deal": {
+					"seed": {
+						"integer": "8197"
+					},
+					"state": {
+						"integer": "-8898199420695513741"
+					}
+				},
+				"beta_insight": {
+					"seed": {
+						"integer": "8198"
+					},
+					"state": {
+						"integer": "-2534063196848720736"
+					}
+				},
+				"contract_deal": {
+					"seed": {
+						"integer": "8199"
+					},
+					"state": {
+						"integer": "3830073026998072269"
+					}
+				},
+				"design_deal": {
+					"seed": {
+						"integer": "8193"
+					},
+					"state": {
+						"integer": "2538743831336417471"
+					}
+				},
+				"design_finalize": {
+					"seed": {
+						"integer": "8194"
+					},
+					"state": {
+						"integer": "8902880055183210476"
+					}
+				},
+				"review": {
+					"seed": {
+						"integer": "8192"
+					},
+					"state": {
+						"integer": "-3825392392510375534"
+					}
+				},
+				"snapshot": {
+					"seed": {
+						"integer": "8191"
+					},
+					"state": {
+						"integer": "8257215457352383077"
+					}
+				}
+			},
+			"initial_run_cycle": 0,
+			"initial_state": "b88b449d75e598727bdc0683b37e75c8f7f05a5d6954a7e1e113934ec7a5c986",
+			"input_identity": "1ac193d428b3b742417d3910f96f89f711458d213bfbb5bba5c98629aa618d54",
+			"last_choice": null,
+			"max_commands": 100,
+			"ok": false,
+			"policy": {
+				"config": {
+					"genre": "action",
+					"hands": {
+						"alpha": {
+							"integer": "2"
+						},
+						"beta": {
+							"integer": "2"
+						},
+						"design": {
+							"integer": "2"
+						}
+					},
+					"name_prefix": "Batch game",
+					"selection": "features_first",
+					"theme": "fantasy"
+				},
+				"id": "finite-development-fixture",
+				"source_identity": "d4a01c466d75b8541e2bc76eddf74ad6eb98d709f0dc0dcdcb50a85d4ae6621f",
+				"version": "1"
+			},
+			"productive_commands": 0,
+			"replayable": true,
+			"rng_algorithm": "godot-4.7.1-rng-v1",
+			"schema_version": "1",
+			"source_identity": "6a050a995f437103e8b52f1ba12532b07ec7d54cafbcbe61cd8953f21ba4d576",
+			"status": "invalid_policy",
+			"tape_identity": "4dba3a7139a7d6a9e97052e9c72db5bc99877065a4b48e7a70ebe28d55f78f82",
+			"target_release_count": 2
+		}
+	]
+}

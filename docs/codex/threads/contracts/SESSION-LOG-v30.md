@@ -1,0 +1,5 @@
+# Contracts session v30 — shared To Do List contribution
+
+2026-10-10 (America/Los_Angeles). Branch `main`, inspected HEAD `41c87c76fb4d3c06a5332d93f0e7b0997007475d`, status and diff before edits. The shared TODO, Contracts authority and this thread's files already had concurrent uncommitted changes; the edit preserved them. Read `CURRENT_STATE.md`, `TODO.md`, current Contracts approval/handoff and the versioned [exported acceptance script](EXPORT-ACCEPTANCE-v1.md). The user explicitly said “go ahead and update the list,” authorizing this shared queue change.
+
+Added one Contracts exported acceptance item23 to `docs/codex/TODO.md` and linked existing Crown/Neon C5 item14 and Starwave item20 to it. The item is QUEUED / OPEN, subject to current computer-control scope and the prior desktop launch blocker; it is not dispatched or executed. Updated only this thread's `README.md`, `HANDOFF.md` and this log alongside the shared TODO. No gameplay, tests, assets, configuration, implementation authority, computer control, cross-thread message, simulation, commit or push was performed. Final Contract balance remains OPEN.

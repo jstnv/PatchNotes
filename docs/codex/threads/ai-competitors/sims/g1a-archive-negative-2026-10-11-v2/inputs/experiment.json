@@ -1,0 +1,115 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "finite-development-fixture",
+    "version": "1",
+    "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "g1a-reject-1980-title",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "g1a-bad-year",
+          "studio_name": "Bad Year Fixture",
+          "specialty": "action",
+          "traits": [
+            "family_funding",
+            "cult_following"
+          ],
+          "seed": "4417",
+          "incumbent": {
+            "owned_features": [
+              "music",
+              "dialogue",
+              "secrets"
+            ],
+            "historical_titles": [
+              {
+                "id": "g1a-history-1980",
+                "title": "Invalid Archive",
+                "genre": "action",
+                "theme": "fantasy",
+                "year": 1980,
+                "review_tenths": 72
+              }
+            ]
+          }
+        }
+      },
+      "max_commands": 60,
+      "target_release_count": 1,
+      "telemetry": true,
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "G1a Opening",
+          "selection": "features_first",
+          "hands": {
+            "design": 3,
+            "alpha": 5,
+            "beta": 2
+          }
+        },
+        "id": "finite-development-fixture",
+        "version": "1",
+        "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00"
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "g1a-reject-missing-parent",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "g1a-bad-parent",
+          "studio_name": "Bad Parent Fixture",
+          "specialty": "action",
+          "traits": [
+            "family_funding",
+            "cult_following"
+          ],
+          "seed": "90210",
+          "incumbent": {
+            "owned_features": [
+              "branching_nodes"
+            ],
+            "historical_titles": [
+              {
+                "id": "g1a-history-1979",
+                "title": "Invalid Feature",
+                "genre": "action",
+                "theme": "fantasy",
+                "year": 1979,
+                "review_tenths": 72
+              }
+            ]
+          }
+        }
+      },
+      "max_commands": 60,
+      "target_release_count": 1,
+      "telemetry": true,
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "G1a Opening",
+          "selection": "features_first",
+          "hands": {
+            "design": 3,
+            "alpha": 5,
+            "beta": 2
+          }
+        },
+        "id": "finite-development-fixture",
+        "version": "1",
+        "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00"
+      }
+    }
+  ]
+}

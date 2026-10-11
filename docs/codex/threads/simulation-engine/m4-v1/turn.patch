@@ -1,0 +1,906 @@
+--- before/patch-notes/scripts/debug/campaign_batch_cli.gd
++++ after/patch-notes/scripts/debug/campaign_batch_cli.gd
+@@ -0,0 +1,83 @@
++## Explicit test-only cohort benchmark. Independent campaigns are not a rival
++## world, and measured throughput includes exact trace hashing and persistence.
++extends SceneTree
++
++const Batch := preload("res://scripts/simulation/campaign_batch.gd")
++const Fixture := preload("res://scripts/simulation/finite_fixture_policy.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++
++func _initialize() -> void:
++	await process_frame
++	var options := {"config":OS.get_environment("PN_CAMPAIGN_BATCH_CONFIG"),"output-dir":OS.get_environment("PN_CAMPAIGN_BATCH_OUTPUT"),"cohort":OS.get_environment("PN_CAMPAIGN_BATCH_COUNT"),"samples":OS.get_environment("PN_CAMPAIGN_BATCH_SAMPLES"),"warmups":OS.get_environment("PN_CAMPAIGN_BATCH_WARMUPS"),"output":OS.get_environment("PN_CARD_FRAME_OUTPUT")}
++	for argument in OS.get_cmdline_user_args():
++		var pair := argument.trim_prefix("--").split("=",true,1)
++		if pair.size() == 2 and options.has(pair[0]): options[pair[0]] = pair[1]
++	for field in ["config","cohort","samples","warmups"]:
++		if options[field].is_empty():
++			print("Usage: -- --config=<case-template.json> --output-dir=<new-directory> --cohort=<positive-count> --samples=<positive-count> --warmups=<nonnegative-count> [--output=<report.json>]")
++			quit(2)
++			return
++	if options["output-dir"].is_empty() and not options.output.is_empty(): options["output-dir"] = options.output+".batch"
++	if options["output-dir"].is_empty() or not _count(options.cohort,1) or not _count(options.samples,1) or not _count(options.warmups,0):
++		quit(2)
++		return
++	var template: Variant = JSON.parse_string(FileAccess.get_file_as_string(options.config))
++	if template is Dictionary and template.get("format") == "patch-notes-development-replay": template = Batch.load_case(options.config)
++	if not template is Dictionary or not Batch.valid_case(template) or not template.initial.get("recipe") is Dictionary or not Fixture.valid_config(template.policy.config):
++		print("A valid explicit fresh-Studio case template and finite fixture config are required")
++		quit(2)
++		return
++	if template.policy.id != Fixture.POLICY_ID or template.policy.version != Fixture.POLICY_VERSION or template.policy.source_identity != FileAccess.get_sha256("res://scripts/simulation/finite_fixture_policy.gd"):
++		print("Fixture policy identity mismatch")
++		quit(2)
++		return
++	var recipe: Dictionary = template.initial.recipe
++	if not recipe.get("seed") is String or not recipe.seed.is_valid_int() or int(recipe.seed) < 0 or int(recipe.seed) > RunState.MAX_SIGNED_INT-RunRandom.STREAMS.size()-int(options.cohort):
++		print("Invalid cohort seed range")
++		quit(2)
++		return
++	var cases: Array = []
++	for index in range(int(options.cohort)):
++		var item: Dictionary = template.duplicate(true)
++		item.case_id = "%s-%04d" % [template.case_id,index]
++		item.initial.recipe.studio_id = "%s-%04d" % [recipe.studio_id,index]
++		item.initial.recipe.seed = str(int(recipe.seed)+index)
++		cases.append(item)
++	var definitions: RefCounted = root.get_node("CardDatabase").get_development_catalog()
++	var warmups: Array = []
++	var samples: Array = []
++	var all_ok := true
++	var expected_results := ""
++	for index in range(int(options.warmups)+int(options.samples)):
++		var warming: bool = index < int(options.warmups)
++		var sample_index: int = index if warming else index-int(options.warmups)
++		var label := "%s-%03d" % ["warmup" if warming else "sample",sample_index]
++		var batch := Batch.run_cases(cases,definitions,Fixture.factory,options["output-dir"].path_join(label))
++		all_ok = all_ok and batch.ok
++		var identity := Replay.digest(batch.results)
++		if expected_results.is_empty(): expected_results = identity
++		elif identity != expected_results:
++			all_ok = false
++			batch["repeat_divergence"] = true
++		if warming: warmups.append(batch)
++		else: samples.append(batch)
++	var elapsed: Array[float] = []
++	var throughput: Array[float] = []
++	for sample: Dictionary in samples:
++		var microseconds := 0
++		var commands := 0
++		for metric: Dictionary in sample.metrics: microseconds += int(metric.elapsed_us)
++		for result: Dictionary in sample.results: commands += int(result.commands)
++		elapsed.append(float(microseconds)/1000000.0)
++		throughput.append(float(commands)*1000000.0/maxi(1,microseconds))
++	var report := {"ok":all_ok,"schema_version":"1","cohort":int(options.cohort),"warmup_count":int(options.warmups),"sample_count":int(options.samples),"scope":"independent test campaigns, not a shared-calendar AI world","deterministic_result_identity":expected_results,"samples":samples,"warmups":warmups,"measurement":{"elapsed_seconds":elapsed,"instrumented_commands_per_second":throughput,"timing_includes":"setup, policy, legal execution, full-state trace hashing and artifact persistence; excludes final metrics-file write","memory_scope":"Godot static allocation counters; process cumulative peak is not per-case resident memory"}}
++	var report_path: String = options.output if not options.output.is_empty() else options["output-dir"].path_join("batch-report.json")
++	if not Batch._write_json(report_path,report):
++		print("Could not persist batch report")
++		quit(1)
++		return
++	print(JSON.stringify({"ok":all_ok,"cohort":report.cohort,"warmups":report.warmup_count,"samples":report.sample_count,"measurement":report.measurement}))
++	quit(0 if all_ok else 1)
++
++func _count(value: String,minimum: int) -> bool:
++	return value.is_valid_int() and int(value) >= minimum and int(value) <= 1000000
+--- before/patch-notes/scripts/debug/campaign_replay_cli.gd
++++ after/patch-notes/scripts/debug/campaign_replay_cli.gd
+@@ -2,6 +2,7 @@
+ extends SceneTree
+ const Session := preload("res://scripts/simulation/campaign_session.gd")
+ const Replay := preload("res://scripts/simulation/development_replay.gd")
++const Factory := preload("res://scripts/simulation/run_factory.gd")
+ 
+ func _initialize() -> void:
+ 	await process_frame
+@@ -36,39 +37,4 @@
+ 	quit(0 if report.ok else 1)
+ 
+ static func create_fresh_session(recipe: Variant, database: Node) -> RefCounted:
+-	if not recipe is Dictionary or recipe.get("schema_version") != 1: return null
+-	for field in ["studio_id","studio_name","specialty","seed"]:
+-		if not recipe.get(field) is String or recipe[field].is_empty(): return null
+-	if not recipe.seed.is_valid_int() or int(recipe.seed) < 0 or int(recipe.seed) > ProjectState.MAX_SIGNED_INT-RunRandom.STREAMS.size() or not recipe.get("traits") is Array: return null
+-	var traits: Array[StringName] = []
+-	for id: Variant in recipe.traits:
+-		if not id is String: return null
+-		traits.append(StringName(id))
+-	var run := RunState.new()
+-	run.initialize_cash(0)
+-	if not run.create_studio_with_traits(recipe.studio_name,StringName(recipe.specialty),traits): return null
+-	# Replace generated identities consistently, including education-debt opening
+-	# records. This is deterministic fixture bootstrap, not a save migration.
+-	var generated := String(run._bank_run_id)
+-	var stable := String(recipe.studio_id)
+-	run._studio_finance = _replace_identity(run._studio_finance,generated,stable)
+-	run._bank_run_id = StringName(stable)
+-	run._employees = EmployeeRoster.create(StringName(stable))
+-	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = int(recipe.seed)+RunRandom.STREAMS.find(id)
+-	var snapshots := PrimitiveSnapshotDatabase.new()
+-	if not snapshots.load_ledgers(): return null
+-	var session := Session.new()
+-	return session if session.initialize(run,database.get_development_catalog(),snapshots) else null
+-
+-static func _replace_identity(value: Variant, old: String, replacement: String) -> Variant:
+-	if value is StringName: return StringName(String(value).replace(old,replacement))
+-	if value is String: return value.replace(old,replacement)
+-	if value is Array:
+-		var result: Array = value.duplicate(true)
+-		for index in range(result.size()): result[index] = _replace_identity(result[index],old,replacement)
+-		return result
+-	if value is Dictionary:
+-		var result: Dictionary = {}
+-		for key in value: result[_replace_identity(key,old,replacement)] = _replace_identity(value[key],old,replacement)
+-		return result
+-	return value
++	return null if database == null else Factory.create_fresh_session(recipe,database.get_development_catalog())
+--- before/patch-notes/scripts/debug/verify_campaign_batch.gd
++++ after/patch-notes/scripts/debug/verify_campaign_batch.gd
+@@ -0,0 +1,133 @@
++extends SceneTree
++
++const Batch := preload("res://scripts/simulation/campaign_batch.gd")
++const Factory := preload("res://scripts/simulation/run_factory.gd")
++const Fixture := preload("res://scripts/simulation/finite_fixture_policy.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++var failures := 0
++var checks := 0
++
++func expect(ok: bool,message: String) -> void:
++	checks += 1
++	if not ok:
++		failures += 1
++		push_error("FAIL: "+message)
++
++func _case(id: String,seed_value: String = "4417") -> Dictionary:
++	return {"schema_version":"1","case_id":id,"initial":{"recipe":{"schema_version":1,"studio_id":"batch_"+id,"studio_name":"Batch fixture","specialty":"action","traits":[],"seed":seed_value}},"max_commands":100,"target_release_count":2,"policy":{"id":Fixture.POLICY_ID,"version":Fixture.POLICY_VERSION,"source_identity":FileAccess.get_sha256("res://scripts/simulation/finite_fixture_policy.gd"),"config":{"genre":"action","theme":"fantasy","name_prefix":"Batch game","selection":"features_first","hands":{"design":2,"alpha":2,"beta":2}}}}
++
++func _probe_case(id: String,policy_id: String) -> Dictionary:
++	var item := _case(id)
++	item.policy = {"id":policy_id,"version":"1","source_identity":FileAccess.get_sha256("res://scripts/debug/verify_campaign_batch.gd"),"config":{}}
++	return item
++
++func _replay_case(item: Dictionary,directory: String,definitions: RefCounted) -> Dictionary:
++	var exact := Batch.load_case(directory.path_join(item.case_id).path_join("case.variant.json"))
++	if exact.is_empty() or Replay.digest(exact) != Replay.digest(item): return {"ok":false}
++	var session: RefCounted = Factory.create(exact.initial,definitions)
++	var tape := Replay.load_tape(directory.path_join(item.case_id).path_join("replay.tape.json"))
++	if session == null: return {"ok":false}
++	return Replay.replay(session,tape)
++
++func _initialize() -> void:
++	await process_frame
++	var output := OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	if output.is_empty():
++		push_error("PN_CARD_FRAME_OUTPUT required for isolated recoverable batch evidence")
++		quit(2)
++		return
++	var directory := output+".artifacts"
++	var definitions: RefCounted = root.get_node("CardDatabase").get_development_catalog()
++	var first := _case("first")
++	first["exact_input_probe"] = {3:&"typed_name","large_integer":RunState.MAX_SIGNED_INT}
++	var second := _case("second","8191")
++	var cases: Array = [first,second]
++	var initial_config := Replay.digest(cases)
++	var original := Batch.run_cases(cases,definitions,Fixture.factory,directory.path_join("original"))
++	expect(original.ok and original.results.size() == 2,"Two explicit seeded fixture campaigns complete")
++	var repeated := Batch.run_cases(cases,definitions,Fixture.factory,directory.path_join("repeat"))
++	expect(repeated.ok and original.results == repeated.results,"Repeated batch deterministic records match exactly")
++	var reversed := Batch.run_cases([second,first],definitions,Fixture.factory,directory.path_join("reversed"))
++	expect(reversed.ok and original.results[0] == reversed.results[1] and original.results[1] == reversed.results[0],"Case ordering does not change independent results")
++	expect(initial_config == Replay.digest(cases),"Batch leaves caller configuration untouched")
++	var loaded_case := Batch.load_case(directory.path_join("original/first/case.variant.json"))
++	expect(loaded_case == first and loaded_case.exact_input_probe[3] is StringName and loaded_case.exact_input_probe.large_integer == RunState.MAX_SIGNED_INT,"Exact artifact retains integer keys, StringNames and signed 64-bit inputs")
++	var loaded_run := Batch.run_cases([loaded_case],definitions,Fixture.factory,directory.path_join("loaded"))
++	expect(loaded_run.ok and loaded_run.results[0] == original.results[0],"Reloaded typed case reproduces deterministic identity and outcomes")
++	expect(original.results[0].initial_rng != original.results[1].initial_rng and original.results[0].final_rng != original.results[1].final_rng,"Explicit independent seeds retain distinct stream states")
++	for item: Dictionary in cases:
++		expect(_replay_case(item,directory.path_join("original"),definitions).ok,"Persisted successful tape exactly replays "+item.case_id)
++	var saved_bytes := FileAccess.get_file_as_bytes(directory.path_join("original/first/replay.tape.json"))
++	expect(not Batch.run_cases(cases,definitions,Fixture.factory,directory.path_join("original")).ok and saved_bytes == FileAccess.get_file_as_bytes(directory.path_join("original/first/replay.tape.json")),"Existing artifacts are never overwritten")
++	var case_collision := second.duplicate(true)
++	case_collision.case_id = "FIRST"
++	expect(not Batch.run_cases([first,case_collision],definitions,Fixture.factory,directory.path_join("case-collision")).ok,"Case-insensitive destination aliases reject before writes")
++	DirAccess.make_dir_recursive_absolute(directory.path_join("file-collision"))
++	Batch._write_json(directory.path_join("file-collision/first"),{"preserved":true})
++	var file_before := FileAccess.get_file_as_bytes(directory.path_join("file-collision/first"))
++	expect(not Batch.run_cases([first],definitions,Fixture.factory,directory.path_join("file-collision")).ok and file_before == FileAccess.get_file_as_bytes(directory.path_join("file-collision/first")),"Existing file destination is preserved")
++	var invalid := first.duplicate(true)
++	invalid.case_id = "../escape"
++	expect(not Batch.run_cases([invalid],definitions,Fixture.factory,directory.path_join("invalid")).ok,"Case identifiers cannot escape artifact directory")
++	invalid = first.duplicate(true)
++	invalid.max_commands = 0
++	expect(not Batch.run_cases([invalid],definitions,Fixture.factory,directory.path_join("invalid-bound")).ok,"Explicit positive command bound required")
++	for nonfinite in [INF,-INF,NAN]:
++		invalid = first.duplicate(true)
++		invalid.max_commands = nonfinite
++		expect(not Batch.valid_case(invalid),"Nonfinite command bounds reject before int conversion")
++		invalid = first.duplicate(true)
++		invalid.policy.config.hands.design = nonfinite
++		expect(not Batch.valid_case(invalid) and not Fixture.valid_config(invalid.policy.config),"Nonfinite nested policy input rejects")
++	var idle_factory := func(_configuration: Dictionary) -> Callable:
++		return func(_view: Dictionary) -> Dictionary: return {"type":&"acknowledge_publishers"}
++	var mutation_factory := func(configuration: Dictionary) -> Callable:
++		configuration.clear()
++		return func(view: Dictionary) -> Dictionary:
++			view.owned_features.clear()
++			view.research_quotes.clear()
++			view.studio_actions.finance.clear()
++			view.clear()
++			return {"type":&"acknowledge_publishers"}
++	var bound := _probe_case("bound","observation-isolation-probe")
++	bound.max_commands = 3
++	var idle := Batch.run_cases([bound],definitions,idle_factory,directory.path_join("idle"))
++	var mutation := Batch.run_cases([bound],definitions,mutation_factory,directory.path_join("mutation"))
++	expect(not idle.ok and idle.results[0].status == "command_bound" and idle.results[0].commands == 3,"Zero-cycle policy is stopped at exact command bound")
++	expect(idle.results == mutation.results,"Policy config and observation mutations cannot reach mechanics or input config")
++	expect(_replay_case(bound,directory.path_join("idle"),definitions).ok,"Bound failure retains recoverable executed prefix")
++	var rejected_factory := func(_configuration: Dictionary) -> Callable:
++		return func(_view: Dictionary) -> Dictionary: return {"type":&"wait"}
++	var rejected_case := _probe_case("rejected","rejected-command-probe")
++	var rejected := Batch.run_cases([rejected_case],definitions,rejected_factory,directory.path_join("rejected"))
++	expect(not rejected.ok and rejected.results[0].status == "rejected_policy_action" and rejected.results[0].commands == 1 and rejected.results[0].accepted_commands == 0,"Rejected command is recorded exactly once")
++	expect(rejected.results[0].initial_state == rejected.results[0].final_state and rejected.results[0].initial_rng == rejected.results[0].final_rng,"Rejected policy preserves all state and RNG")
++	expect(_replay_case(rejected_case,directory.path_join("rejected"),definitions).ok,"Rejected command tape reproduces from disk")
++	var malformed_factory := func(_configuration: Dictionary) -> Callable:
++		return func(_view: Dictionary) -> Dictionary: return {"type":14}
++	var malformed_case := _probe_case("malformed","malformed-decision-probe")
++	var malformed := Batch.run_cases([malformed_case],definitions,malformed_factory,directory.path_join("malformed"))
++	expect(not malformed.ok and malformed.results[0].status == "malformed_policy_decision" and malformed.results[0].commands == 0 and not malformed.results[0].last_choice.is_empty(),"Malformed decision and unchanged replay prefix are preserved separately")
++	expect(_replay_case(malformed_case,directory.path_join("malformed"),definitions).ok,"Malformed-policy empty prefix still replays")
++	var unusable_factory := func(_configuration: Dictionary) -> Callable: return Callable()
++	var unusable := Batch.run_cases([_probe_case("invalid-policy","invalid-callable-probe")],definitions,unusable_factory,directory.path_join("invalid-policy"))
++	expect(not unusable.ok and unusable.results[0].status == "invalid_policy" and unusable.results[0].commands == 0,"Invalid factory stops before mechanics")
++	var invalid_recipe := _case("invalid-recipe")
++	invalid_recipe.initial.recipe.seed = &"4417"
++	var invalid_initial := Batch.run_cases([invalid_recipe],definitions,Fixture.factory,directory.path_join("invalid-initial"))
++	expect(not invalid_initial.ok and invalid_initial.results[0].status == "invalid_initial_state" and not invalid_initial.results[0].replayable,"Invalid typed recipe has no fake replayable state")
++	var recovered_invalid := Batch.load_case(directory.path_join("invalid-initial/invalid-recipe/case.variant.json"))
++	var repeated_invalid := Batch.run_cases([recovered_invalid],definitions,Fixture.factory,directory.path_join("invalid-initial-recovered"))
++	expect(invalid_initial.results == repeated_invalid.results and recovered_invalid.initial.recipe.seed is StringName,"Malformed recipe reproduces from exact artifact without JSON repair")
++	var resumed: RefCounted = Factory.create(first.initial,definitions)
++	expect(Replay.replay(resumed,Replay.load_tape(directory.path_join("original/first/replay.tape.json"))).ok,"Checkpoint prefix restored from original tape")
++	var checkpoint_case := _case("checkpoint")
++	checkpoint_case.initial = {"checkpoint":resumed.export_checkpoint()}
++	checkpoint_case.target_release_count = 3
++	var continued := Batch.run_cases([checkpoint_case],definitions,Fixture.factory,directory.path_join("checkpoint"))
++	expect(continued.ok and continued.results[0].initial_release_count == 2 and continued.results[0].final_release_count == 3,"Absolute release target handles Studio checkpoint continuation")
++	expect(_replay_case(checkpoint_case,directory.path_join("checkpoint"),definitions).ok,"Checkpoint continuation tape recovers exactly")
++	var report := {"ok":failures == 0,"checks":checks,"failures":failures,"successful_cases":original.results,"failure_cases":[idle.results[0],rejected.results[0],malformed.results[0],unusable.results[0]],"checkpoint_cases":continued.results,"metrics":original.metrics}
++	if not Batch._write_json(output,report): failures += 1
++	print("Campaign batch verification: %d checks, %d failures" % [checks,failures])
++	quit(0 if failures == 0 else 1)
+--- before/patch-notes/scripts/debug/verify_campaign_live_parity.gd
++++ after/patch-notes/scripts/debug/verify_campaign_live_parity.gd
+@@ -0,0 +1,324 @@
++## Continuous native Gameplay/coordinator versus the scene-free campaign.
++## Drives real scene actions synchronously; this is not an audio/visual playtest.
++extends SceneTree
++const Bootstrap := preload("res://scripts/debug/campaign_replay_cli.gd")
++const Campaign := preload("res://scripts/simulation/campaign_session.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++var game: Control
++var session: RefCounted
++var failures := 0
++var comparisons := 0
++var traces: Array = []
++var live_signals: Array = []
++var sim_signals: Array = []
++var route_id := ""
++var tape: Dictionary
++var segment := 0
++
++func expect(ok: bool,label: String) -> void:
++	if not ok:
++		failures += 1
++		push_error("FAIL: "+label)
++
++func watch(run: RunState,events: Array) -> void:
++	for name in [&"cash_changed",&"calendar_changed",&"redraws_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"publishers_changed",&"finance_changed",&"fans_changed",&"employees_changed"]:
++		run.connect(name,func() -> void: events.append(str(name)))
++
++func watch_project(project: ProjectState,events: Array) -> void:
++	for name in [&"values_changed",&"cycle_changed"]:
++		project.connect(name,func() -> void: events.append(str(name)))
++
++func clear_signals() -> void:
++	live_signals.clear()
++	sim_signals.clear()
++
++func mechanics(run: RunState) -> Dictionary:
++	var result: Dictionary = Replay.freeze(run)
++	# Only HUD visit acknowledgments and native coordinator object bindings.
++	for key in ["_seen_tutorial_topics","studio_departure_guard","checkpoint_before_mutation"]: result.erase(key)
++	return result
++
++func snapshot(native: bool) -> Dictionary:
++	var run: RunState = game.run_state if native else session.run
++	var phase: StringName = &"studio"
++	var state: Dictionary = {}
++	var project: ProjectState
++	var hand: RefCounted
++	if native:
++		var view: Control = game._active_phase
++		if view is ContractPhase:
++			phase = &"contract"
++			state = {"contract":Replay.freeze(game.active_contract_state),"cards":Replay.freeze(view.get_candidate_cards())}
++		elif not view is StudioPhase:
++			project = game.project_state
++			if view is DesignPhase: phase = &"design"; hand = view._capture_design_command()
++			elif view is AlphaPhase: phase = &"alpha"; hand = view._capture_alpha_command()
++			elif view is BetaPhase: phase = &"beta"; hand = view._capture_beta_command()
++	else:
++		phase = session.phase()
++		if phase == &"contract": state = {"contract":Replay.freeze(session.contract._state),"cards":Replay.freeze(session.contract.cards)}
++		elif phase != &"studio": project = session.development.project; hand = session.development.hand
++	if hand != null:
++		state = {"project":Replay.freeze(project),"cards":Replay.freeze(hand._candidate_cards),"priorities":Replay.freeze(hand.priorities),"active":hand.active}
++		if phase != &"beta" and hand.active:
++			state.available = Replay.freeze(hand._available_features)
++			state.exhausted = Replay.freeze(hand._exhausted_card_ids if phase == &"design" else hand._exhausted_feature_ids)
++		if phase == &"alpha": state.pending = Replay.freeze(hand._pending_playtest_categories)
++		if phase == &"beta":
++			state.pending = Replay.freeze(hand._pending_corrective_pass_ids)
++			state.injected = []
++			for id in hand.candidate_ids: state.injected.append(id in hand.injected_candidate_ids)
++	return {"phase":str(phase),"run":mechanics(run),"phase_state":state}
++
++func compare(label: String) -> void:
++	var native := snapshot(true)
++	var headless := snapshot(false)
++	var matched: bool = native == headless and live_signals == sim_signals
++	comparisons += 1
++	traces.append({"route":route_id,"step":label,"matched":matched,"native":Replay.digest(native),"headless":Replay.digest(headless),"live_signals":live_signals.duplicate(),"sim_signals":sim_signals.duplicate(),"hud_seen_topics":Replay.freeze(game.run_state._seen_tutorial_topics)})
++	expect(matched,"Continuous campaign parity: "+route_id+" / "+label)
++	if not matched and failures == 1:
++		FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT")+".divergence.json",FileAccess.WRITE).store_string(JSON.stringify({"step":label,"native":native,"headless":headless,"live_signals":live_signals,"sim_signals":sim_signals},"\t"))
++
++func act(kind: StringName,payload: Dictionary = {}) -> Dictionary:
++	var result := Replay.record(session,tape,session.command(kind,payload))
++	expect(result.ok,"Headless legal action: "+str(kind))
++	return result
++
++func dev(kind: StringName,payload: Dictionary = {}) -> Dictionary:
++	return act(&"development",{"request":session.development.command(kind,payload)})
++
++func acknowledge() -> void:
++	act(&"acknowledge_publishers")
++
++func native_select(slots: Array) -> void:
++	var phase: Control = game._active_phase
++	phase.get_workspace().hand_motion.cancel()
++	for slot in slots: phase._on_card_pressed(phase.get_node("%HandContainer").get_child(slot))
++
++func begin_project(title: String,genre: StringName = &"action") -> void:
++	clear_signals()
++	expect(game._begin_next_project(game._active_phase,title,genre,&"fantasy"),"Native Begin Development")
++	act(&"begin_development",{"name":title,"genre":genre,"theme":&"fantasy"})
++	watch_project(game.project_state,live_signals)
++	watch_project(session.development.project,sim_signals)
++	compare("Begin "+title)
++
++func begin_phase() -> void:
++	clear_signals()
++	expect(game._active_phase.get_workspace().overlay.commit_draft(),"Native initial deal accepted")
++	dev(&"begin")
++	compare("Initial "+str(session.phase()))
++
++func play() -> void:
++	clear_signals()
++	native_select([0,1,2,3])
++	var phase: Control = game._active_phase
++	var cycle: int = game.run_state.get_completed_run_cycles()
++	if phase is DesignPhase: phase._on_play_card_pressed()
++	elif phase is AlphaPhase: phase._on_play_alpha_hand_pressed()
++	else: phase.play_selected_hand()
++	phase.get_workspace().hand_motion.cancel()
++	expect(game.run_state.get_completed_run_cycles() == cycle+1,"Native hand commits")
++	dev(&"play",{"candidate_ids":session.development.hand.candidate_ids.slice(0,4)})
++	compare("Hand "+str(session.phase()))
++
++func exit_phase() -> void:
++	clear_signals()
++	var phase: Control = game._active_phase
++	var index: int = session.development.phase_index
++	if index == 0: phase._on_proceed_to_alpha_pressed()
++	elif index == 1:
++		phase.request_proceed_to_beta()
++		if phase._scope_warning_pending:
++			phase.get_node("%UnderScopeDialog").hide()
++			phase._on_under_scope_confirmed()
++	else:
++		phase.request_launch()
++		if phase._launch_confirmation_pending:
++			phase.get_node("%LaunchWarningDialog").hide()
++			phase.confirm_launch_for_verification()
++	dev(&"request_exit")
++	if session.development.awaiting_confirmation: dev(&"confirm_exit")
++	if index < 2: dev(&"enter_next_phase")
++	else:
++		act(&"launch")
++		acknowledge()
++		var studio: StudioPhase = game._active_phase
++		studio._review_view.finish_reveal()
++		studio._review_view.get_node("%ContinueButton").pressed.emit()
++	compare("Exit phase %d"%index)
++
++func full_project(title: String,extras := false) -> void:
++	begin_project(title)
++	if failures: return
++	for index in range(3):
++		begin_phase()
++		if failures: return
++		if extras:
++			clear_signals()
++			native_select([0])
++			expect(game._active_phase.redraw_selected_cards(),"Native redraw")
++			dev(&"redraw",{"candidate_ids":[session.development.hand.candidate_ids[0]]})
++			compare("Redraw %d"%index)
++		play()
++		if failures: return
++		if extras and index == 1:
++			clear_signals()
++			expect(game._active_phase.host_playtest(),"Native Alpha playtest")
++			dev(&"host_playtest")
++			compare("Host playtest")
++		play()
++		if failures: return
++		exit_phase()
++		await process_frame
++		if failures: return
++
++func hire() -> void:
++	clear_signals()
++	var quote: Dictionary = session.run.get_production_hire_quote()
++	game._active_phase._open_employees()
++	game._active_phase._employees_panel.hide()
++	game._active_phase._employees_panel.confirmed.emit()
++	act(&"hire",{"quote":quote})
++	compare("Hire through employee panel")
++
++func store_action(admission: bool) -> void:
++	clear_signals()
++	var studio: StudioPhase = game._active_phase
++	studio._open_feature_store()
++	var store: FeatureStore = studio._feature_store
++	store._select_node(&"save_files")
++	var quote: Dictionary = session.run.get_feature_research_quote(&"save_files")
++	if admission:
++		store._purchase()
++		store._admission_dialog.hide()
++		store._admission_dialog.confirmed.emit()
++	else: store._research_button.pressed.emit()
++	store.hide()
++	act(&"admit_research" if admission else &"research",{"quote":quote})
++	compare("Research admission" if admission else "Research completion")
++
++func contract() -> void:
++	clear_signals()
++	var studio: StudioPhase = game._active_phase
++	studio._open_contracts()
++	studio._selected_contract_offer_id = ContractState.CONTRACT_ID
++	studio._selected_contract_quote = {}
++	studio._accept_contract()
++	act(&"accept_contract",{"kind":&"ironclad"})
++	act(&"contract",{"request":session.contract.command(&"begin")})
++	compare("Accept and deal Ironclad")
++	clear_signals()
++	var priorities := {0:40,1:20,2:20,3:20}
++	expect(game._active_phase.commit_priority_distribution(priorities),"Native Contract priorities")
++	act(&"contract",{"request":session.contract.command(&"priorities",{"distribution":priorities})})
++	compare("Contract priorities")
++	for index in range(2):
++		clear_signals()
++		var phase: ContractPhase = game._active_phase
++		for slot in range(4): phase._on_card_pressed(phase._candidate_row.get_child(slot))
++		expect(phase._play_selected_hand(),"Native Contract hand")
++		act(&"contract",{"request":session.contract.command(&"play",{"candidate_ids":session.contract.candidate_ids.slice(0,4)})})
++		compare("Contract hand %d"%index)
++	clear_signals()
++	game._active_phase._completion_panel.find_child("DismissCompletionButton",true,false).pressed.emit()
++	act(&"dismiss_contract")
++	acknowledge()
++	compare("Contract returns Studio")
++
++func bank(payoff: bool) -> void:
++	clear_signals()
++	var menu: StudioFinances = game.get_node("%GameplayHUD").studio_finances
++	menu.open()
++	menu.open_bank()
++	var quote: Dictionary
++	if payoff:
++		quote = session.run.get_bank_payoff_quote(session.run.get_studio_finance_snapshot().bank_loans[0].loan_id)
++		menu._confirm_payoff()
++	else:
++		menu.amount_input.text = "500.00"
++		menu.term_input.text = "24"
++		menu._preview_quote()
++		quote = session.quote_bank(50000,24)
++		menu._confirm_accept()
++	menu._confirm.hide()
++	menu._confirm.confirmed.emit()
++	menu.close()
++	act(&"bank_payoff" if payoff else &"bank_borrow",{"quote":quote})
++	compare("Bank payoff" if payoff else "Bank borrow")
++
++func continue_studio(saved: Dictionary) -> void:
++	expect(Replay.save_tape(OS.get_environment("PN_CARD_FRAME_OUTPUT")+"."+route_id+".segment-"+str(segment)+".tape.json",tape),"Persist exact campaign segment")
++	segment += 1
++	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT")+"."+route_id+".segment-"+str(segment)+".checkpoint.json",FileAccess.WRITE).store_string(JSON.stringify(saved,"\t"))
++	clear_signals()
++	game._continue_checkpoint()
++	var restored := Campaign.new()
++	expect(restored.restore_checkpoint(saved,session.catalog,session.snapshots),"Simulation Studio restore")
++	session = restored
++	watch(game.run_state,live_signals)
++	watch(session.run,sim_signals)
++	tape = Replay.begin(session)
++	# Continue wires existing Studio, and never refreshes/rewards again.
++	compare("Actual native Continue versus simulation restore")
++
++func _initialize() -> void:
++	await process_frame
++	for seed_value in [4417,90210]:
++		route_id = "campaign_"+str(seed_value)
++		segment = 0
++		var recipe := {"schema_version":1,"studio_id":route_id,"studio_name":"Live parity","specialty":"action","traits":[],"seed":str(seed_value)}
++		FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT")+"."+route_id+".recipe.json",FileAccess.WRITE).store_string(JSON.stringify(recipe,"\t"))
++		session = Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
++		var native: RefCounted = Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
++		game = load("res://scenes/gameplay.tscn").instantiate()
++		game.run_state = native.run
++		root.add_child(game)
++		var coordinator := CheckpointCoordinator.new()
++		coordinator.store = StudioCheckpointStore.new("user://parity/"+route_id,coordinator.adapter.validate)
++		game.checkpoints = coordinator
++		game.add_child(coordinator)
++		coordinator.attach(game.run_state)
++		coordinator.status_changed.connect(game._checkpoint_status)
++		game._build_checkpoint_controls()
++		coordinator.entered_studio()
++		expect(coordinator.failure.is_empty(),"Native initial Studio saved")
++		watch(game.run_state,live_signals)
++		watch(session.run,sim_signals)
++		tape = Replay.begin(session)
++		clear_signals()
++		compare("Initial Studio")
++		await full_project("First")
++		if failures: break
++		hire()
++		store_action(true)
++		contract()
++		if failures: break
++		bank(false)
++		await process_frame
++		expect(coordinator.flush(),"Native enriched Studio save flushes")
++		var saved: Dictionary = session.export_checkpoint()
++		var native_saved: Dictionary = coordinator.store.inspect().payload.duplicate(true)
++		continue_studio(saved)
++		begin_project("Unsaved")
++		begin_phase()
++		play()
++		expect(coordinator.store.inspect().payload == native_saved,"Unsaved active hand cannot replace Studio checkpoint payload")
++		continue_studio(saved)
++		if failures: break
++		store_action(false)
++		await full_project("Second",true)
++		if failures: break
++		bank(true)
++		await process_frame
++		expect(coordinator.flush(),"Second release persists")
++		continue_studio(session.export_checkpoint())
++		expect(session.run.get_released_game_ids().size() == 2 and session.run.owns_feature(&"save_files"),"Two released games and researched Feature persist")
++		FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT")+"."+route_id+".snapshot.json",FileAccess.WRITE).store_string(JSON.stringify(snapshot(true),"\t"))
++		game.free()
++		await process_frame
++		if failures: break
++	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT"),FileAccess.WRITE).store_string(JSON.stringify({"failures":failures,"comparisons":comparisons,"traces":traces},"\t"))
++	print("Continuous campaign parity: %d failures, %d matched boundaries"%[failures,comparisons])
++	quit(1 if failures else 0)
+--- before/patch-notes/scripts/simulation/campaign_batch.gd
++++ after/patch-notes/scripts/simulation/campaign_batch.gd
+@@ -0,0 +1,193 @@
++## Bounded independent campaign experiments. No world scheduler or default AI.
++## The trusted policy factory receives config only and returns a Callable taking
++## a detached observation. Resolver commands and replay remain authoritative.
++extends RefCounted
++
++const Factory := preload("res://scripts/simulation/run_factory.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++const SCHEMA_VERSION := "1"
++
++static func run_cases(cases: Array,definitions: RefCounted,policy_factory: Callable,output_directory: String) -> Dictionary:
++	if cases.is_empty() or definitions == null or not policy_factory.is_valid() or output_directory.is_empty(): return {"ok":false,"error":"Cases, catalog, policy factory and artifact directory required","results":[],"metrics":[]}
++	var seen: Dictionary = {}
++	for item: Variant in cases:
++		if not item is Dictionary or not valid_case(item) or seen.has(item.case_id.to_lower()): return {"ok":false,"error":"Malformed or duplicate case","results":[],"metrics":[]}
++		seen[item.case_id.to_lower()] = true
++		if DirAccess.dir_exists_absolute(output_directory.path_join(item.case_id)) or FileAccess.file_exists(output_directory.path_join(item.case_id)): return {"ok":false,"error":"Artifact case destination already exists","results":[],"metrics":[]}
++	if DirAccess.make_dir_recursive_absolute(output_directory) != OK: return {"ok":false,"error":"Cannot create artifact directory","results":[],"metrics":[]}
++	# Reserve every child exclusively before executing anything. Recursive mkdir
++	# would also succeed for an existing child and permit accidental overwrites.
++	for item: Dictionary in cases:
++		if DirAccess.make_dir_absolute(output_directory.path_join(item.case_id)) != OK: return {"ok":false,"error":"Cannot reserve new case directory","results":[],"metrics":[]}
++	var results: Array = []
++	var measurements: Array = []
++	var all_ok := true
++	for item: Dictionary in cases:
++		var report := _run_case(item,definitions,policy_factory,output_directory.path_join(item.case_id))
++		results.append(report.result)
++		measurements.append(report.metrics)
++		all_ok = all_ok and report.result.ok
++	return {"ok":all_ok,"schema_version":SCHEMA_VERSION,"results":results,"metrics":measurements}
++
++static func valid_case(item: Dictionary) -> bool:
++	if item.get("schema_version") != SCHEMA_VERSION or not item.get("case_id") is String or not _safe_id(item.case_id): return false
++	if not item.get("initial") is Dictionary or item.initial.size() != 1 or (not item.initial.has("recipe") and not item.initial.has("checkpoint")): return false
++	if not _positive_bound(item.get("max_commands")) or not _positive_bound(item.get("target_release_count")): return false
++	if not item.get("policy") is Dictionary: return false
++	for field in ["id","version","source_identity"]:
++		if not item.policy.get(field) is String or item.policy[field].is_empty(): return false
++	return item.policy.get("config") is Dictionary and _plain(item)
++
++## The readable JSON companions are not identity authority: JSON changes key
++## types, StringNames and some large integers. Reuse the existing object-disabled
++## Variant container for exact case reconstruction, including invalid recipes.
++static func load_case(path: String) -> Dictionary:
++	var item := Replay.load_tape(path)
++	return item if valid_case(item) else {}
++
++static func _positive_bound(value: Variant) -> bool:
++	# JSON numbers arrive as doubles. Keep experiment counters exactly representable.
++	return (value is int or value is float) and is_finite(float(value)) and value >= 1 and value <= 1000000000 and value == int(value)
++
++static func _safe_id(value: String) -> bool:
++	if value.is_empty() or value.length() > 100: return false
++	for index in range(value.length()):
++		var character := value.substr(index,1)
++		if not character in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-": return false
++	return true
++
++static func _plain(value: Variant,depth: int = 0) -> bool:
++	if depth > 64: return false
++	if value is float: return is_finite(value)
++	if value == null or value is bool or value is int or value is String or value is StringName: return true
++	if value is Array:
++		for child: Variant in value:
++			if not _plain(child,depth+1): return false
++		return true
++	if value is Dictionary:
++		for key: Variant in value:
++			if not (key is String or key is StringName or key is int) or not _plain(value[key],depth+1): return false
++		return true
++	return false
++
++static func _run_case(item: Dictionary,definitions: RefCounted,policy_factory: Callable,directory: String) -> Dictionary:
++	var started := Time.get_ticks_usec()
++	var memory_before := OS.get_static_memory_usage()
++	var objects_before := int(Performance.get_monitor(Performance.OBJECT_COUNT))
++	var session: RefCounted = Factory.create(item.initial,definitions)
++	var choice_callable: Variant = policy_factory.call(item.policy.config.duplicate(true))
++	var setup_us := Time.get_ticks_usec()-started
++	var tape: Dictionary = {}
++	var accepted := 0
++	var productive_commands := 0
++	var policy_us := 0
++	var execute_trace_us := 0
++	var productive_command_max_us := 0
++	var status := "invalid_initial_state"
++	var error := "Invalid recipe or Studio checkpoint"
++	var last_choice: Variant = null
++	var initial_cycles := 0
++	var initial_releases := 0
++	if session != null:
++		tape = Replay.begin(session)
++		initial_cycles = session.run.get_completed_run_cycles()
++		initial_releases = session.run.get_released_game_ids().size()
++		if not choice_callable is Callable or not choice_callable.is_valid():
++			status = "invalid_policy"
++			error = "Policy factory must return a valid Callable"
++		else:
++			status = "command_bound"
++			error = "Policy step bound reached"
++			for _step in range(int(item.max_commands)):
++				if _completed(session,int(item.target_release_count)):
++					status = "completed"
++					error = ""
++					break
++				var policy_started := Time.get_ticks_usec()
++				var observation: Dictionary = session.observation().duplicate(true)
++				last_choice = choice_callable.call(observation)
++				policy_us += Time.get_ticks_usec()-policy_started
++				if not _valid_choice(last_choice):
++					status = "malformed_policy_decision"
++					error = "Policy must return a plain {type,payload} decision"
++					break
++				var request: Dictionary = session.command(StringName(last_choice.type),last_choice.get("payload",{}))
++				var before_cycle: int = session.run.get_completed_run_cycles()
++				var command_started := Time.get_ticks_usec()
++				var outcome := Replay.record(session,tape,request)
++				var command_us := Time.get_ticks_usec()-command_started
++				execute_trace_us += command_us
++				if session.run.get_completed_run_cycles() != before_cycle:
++					productive_commands += 1
++					productive_command_max_us = maxi(productive_command_max_us,command_us)
++				if not outcome.ok:
++					status = "rejected_policy_action"
++					error = str(outcome.get("error","Policy action rejected"))
++					break
++				accepted += 1
++			if status == "command_bound" and _completed(session,int(item.target_release_count)):
++				status = "completed"
++				error = ""
++	var finalized_at := Time.get_ticks_usec()
++	var result := {
++		"schema_version":SCHEMA_VERSION,"case_id":item.case_id,"ok":status == "completed","status":status,"error":error,
++		"source_identity":Replay.source_identity(),"engine_version":Engine.get_version_info().string,"rng_algorithm":RunRandom.ALGORITHM,
++		"input_identity":Replay.digest(item),"policy_identity_kind":"caller_declared_trusted_factory","policy":Replay.freeze(item.policy),"max_commands":int(item.max_commands),"target_release_count":int(item.target_release_count),
++		"commands":tape.get("steps",[]).size(),"accepted_commands":accepted,"productive_commands":productive_commands,
++		"initial_release_count":initial_releases,"initial_run_cycle":initial_cycles,"replayable":session != null,
++		"initial_state":tape.get("initial_state",""),"initial_rng":Replay.freeze(tape.get("initial_rng",{})),
++		"final_state":"" if session == null else Replay.digest(Replay.state(session)),"final_rng":{} if session == null else Replay.freeze(session.run.random_streams.snapshot()),
++		"final_run_cycle":0 if session == null else session.run.get_completed_run_cycles(),"final_release_count":0 if session == null else session.run.get_released_game_ids().size(),
++		"tape_identity":Replay.digest(tape),"last_choice":Replay.freeze(last_choice) if _plain(last_choice) else {"unsupported_variant_type":typeof(last_choice)},
++		"artifacts":{"exact_case":"case.variant.json","readable_case":"case.json","initial":"initial.json","tape":"replay.tape.json","result":"result.json","metrics":"metrics.json"}}
++	var finalize_us := Time.get_ticks_usec()-finalized_at
++	var write_started := Time.get_ticks_usec()
++	var saved := true
++	if saved:
++		# Attempt every independent evidence write; a failed companion must not
++		# prevent the exact input/tape and failure result from being attempted.
++		saved = _write_json(directory.path_join("initial.json"),item.initial) and saved
++		saved = _write_json(directory.path_join("case.json"),item) and saved
++		saved = Replay.save_tape(directory.path_join("case.variant.json"),item) and saved
++		saved = Replay.save_tape(directory.path_join("replay.tape.json"),tape) and saved
++	if not saved:
++		result.ok = false
++		result.status = "artifact_write_failed"
++		result.error = "Could not persist complete case evidence"
++	if not _write_json(directory.path_join("result.json"),result):
++		saved = false
++		result.ok = false
++		result.status = "artifact_write_failed"
++		result.error = "Could not persist case result"
++	var artifact_write_us := Time.get_ticks_usec()-write_started
++	var elapsed_us := Time.get_ticks_usec()-started
++	var metrics := {"schema_version":SCHEMA_VERSION,"case_id":item.case_id,"measurement":"instrumented independent campaign; exact trace hashing included","elapsed_us":elapsed_us,"setup_us":setup_us,"policy_and_observation_us":policy_us,"execute_and_trace_us":execute_trace_us,"finalization_us":finalize_us,"artifact_write_us":artifact_write_us,"productive_command_max_us":productive_command_max_us,"commands_per_second":float(result.commands)*1000000.0/maxi(1,elapsed_us),"godot_static_bytes_before":memory_before,"godot_static_bytes_with_case":OS.get_static_memory_usage(),"process_cumulative_peak_godot_static_bytes":OS.get_static_memory_peak_usage(),"objects_before":objects_before,"objects_with_case":int(Performance.get_monitor(Performance.OBJECT_COUNT)),"os":OS.get_name(),"processor":OS.get_processor_name(),"processor_count":OS.get_processor_count()}
++	# Drop per-case references before measuring the post-case baseline. Result rows
++	# retain digests, not Run objects or full tapes. Catalog ownership is external.
++	choice_callable = null
++	session = null
++	tape = {}
++	last_choice = null
++	metrics.godot_static_bytes_after_release = OS.get_static_memory_usage()
++	metrics.objects_after_release = int(Performance.get_monitor(Performance.OBJECT_COUNT))
++	if saved and not _write_json(directory.path_join("metrics.json"),metrics):
++		result.ok = false
++		result.status = "artifact_write_failed"
++		result.error = "Could not persist measurement evidence"
++		_write_json(directory.path_join("result.json"),result)
++	return {"result":result,"metrics":metrics}
++
++static func _completed(session: RefCounted,target: int) -> bool:
++	return session.in_studio and session.run.get_released_game_ids().size() >= target
++
++static func _valid_choice(value: Variant) -> bool:
++	return value is Dictionary and (value.get("type") is String or value.get("type") is StringName) and value.get("payload",{}) is Dictionary and value.size() == (2 if value.has("payload") else 1) and _plain(value)
++
++static func _write_json(path: String,value: Dictionary) -> bool:
++	var file := FileAccess.open(path,FileAccess.WRITE)
++	if file == null: return false
++	file.store_string(JSON.stringify(value,"\t"))
++	file.flush()
++	var saved := file.get_error() == OK
++	file.close()
++	return saved
+--- before/patch-notes/scripts/simulation/finite_fixture_policy.gd
++++ after/patch-notes/scripts/simulation/finite_fixture_policy.gd
+@@ -0,0 +1,52 @@
++## Explicit finite TEST policy, not approved competitor AI or balance advice.
++## Chooses from public observations, never future RNG or mutable Run references.
++## Configuration supplies all phase hand counts, Genre, Theme and card ordering.
++extends RefCounted
++
++const POLICY_ID := "finite-development-fixture"
++const POLICY_VERSION := "1"
++var _config: Dictionary
++var _hands: Dictionary = {}
++
++static func factory(config: Dictionary) -> Callable:
++	if not valid_config(config): return Callable()
++	var policy: RefCounted = load("res://scripts/simulation/finite_fixture_policy.gd").new()
++	policy._config = config.duplicate(true)
++	# Object-method Callables do not own their target. The closure deliberately
++	# retains this RefCounted policy for exactly as long as the batch owns it.
++	return func(view: Dictionary) -> Dictionary: return policy.choose(view)
++
++static func valid_config(config: Dictionary) -> bool:
++	for field in ["genre","theme","name_prefix"]:
++		if not config.get(field) is String or config[field].strip_edges().is_empty(): return false
++	if config.get("selection") not in ["visible_order","features_first"] or not config.get("hands") is Dictionary: return false
++	if config.hands.size() != 3: return false
++	for phase in ["design","alpha","beta"]:
++		var value: Variant = config.hands.get(phase)
++		if not (value is int or value is float) or not is_finite(float(value)) or value < 1 or value > 1000000 or value != int(value): return false
++	return true
++
++func choose(view: Dictionary) -> Dictionary:
++	if view.phase == &"studio":
++		return {"type":&"begin_development","payload":{"name":"%s %d" % [_config.name_prefix,view.releases.size()+1],"genre":_config.genre,"theme":_config.theme}}
++	if view.phase == &"contract": return {"type":&"unsupported_fixture_contract"}
++	var current: Dictionary = view.development
++	if current.finalized:
++		return {"type":&"launch"} if current.phase == "beta" else _development(view,&"enter_next_phase")
++	if current.confirmation_pending: return _development(view,&"confirm_exit")
++	if not current.active: return _development(view,&"begin")
++	var key := "%s:%s" % [view.project_id,current.phase]
++	if int(_hands.get(key,0)) >= int(_config.hands[current.phase]): return _development(view,&"request_exit")
++	var cards: Array = current.candidates.duplicate(true)
++	if _config.selection == "features_first":
++		cards.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
++			if (a.type == "feature") != (b.type == "feature"): return a.type == "feature"
++			return int(a.token) < int(b.token))
++	var tokens: Array[int] = []
++	for index in range(mini(4,cards.size())): tokens.append(int(cards[index].token))
++	_hands[key] = int(_hands.get(key,0))+1
++	return _development(view,&"play",{"candidate_ids":tokens})
++
++static func _development(view: Dictionary,kind: StringName,payload: Dictionary = {}) -> Dictionary:
++	var current: Dictionary = view.development
++	return {"type":&"development","payload":{"request":{"schema_version":1,"type":kind,"project_id":view.project_id,"phase":current.phase,"sequence":current.sequence,"project_cycle":current.project_cycle,"run_cycle":current.run_cycle,"payload":payload}}}
+--- before/patch-notes/scripts/simulation/run_factory.gd
++++ after/patch-notes/scripts/simulation/run_factory.gd
+@@ -0,0 +1,52 @@
++## Deterministic test bootstrap. This is not a player save migration or a rival
++## starting-resource policy. Every identity, seed and Studio choice is supplied.
++extends RefCounted
++
++const Session := preload("res://scripts/simulation/campaign_session.gd")
++
++static func create_fresh_session(recipe: Variant, definitions: RefCounted) -> RefCounted:
++	if definitions == null or not recipe is Dictionary or recipe.get("schema_version") != 1: return null
++	for field in ["studio_id","studio_name","specialty","seed"]:
++		if not recipe.get(field) is String or recipe[field].is_empty(): return null
++	if not recipe.seed.is_valid_int() or int(recipe.seed) < 0 or int(recipe.seed) > ProjectState.MAX_SIGNED_INT-RunRandom.STREAMS.size() or not recipe.get("traits") is Array: return null
++	var traits: Array[StringName] = []
++	for id: Variant in recipe.traits:
++		if not id is String: return null
++		traits.append(StringName(id))
++	var run := RunState.new()
++	run.initialize_cash(0)
++	if not run.create_studio_with_traits(recipe.studio_name,StringName(recipe.specialty),traits): return null
++	# Keep all generated references coherent, including education opening records.
++	var generated := String(run._bank_run_id)
++	var stable := String(recipe.studio_id)
++	run._studio_finance = _replace_identity(run._studio_finance,generated,stable)
++	run._bank_run_id = StringName(stable)
++	run._employees = EmployeeRoster.create(StringName(stable))
++	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = int(recipe.seed)+RunRandom.STREAMS.find(id)
++	var snapshots := PrimitiveSnapshotDatabase.new()
++	if not snapshots.load_ledgers(): return null
++	var session := Session.new()
++	return session if session.initialize(run,definitions,snapshots) else null
++
++## Exactly one input boundary. Active development snapshots are not accepted.
++static func create(initial: Dictionary, definitions: RefCounted) -> RefCounted:
++	if initial.size() != 1: return null
++	if initial.has("recipe"): return create_fresh_session(initial.recipe,definitions)
++	if not initial.get("checkpoint") is Dictionary or definitions == null: return null
++	var snapshots := PrimitiveSnapshotDatabase.new()
++	if not snapshots.load_ledgers(): return null
++	var session := Session.new()
++	return session if session.restore_checkpoint(initial.checkpoint,definitions,snapshots) else null
++
++static func _replace_identity(value: Variant, old: String, replacement: String) -> Variant:
++	if value is StringName: return StringName(String(value).replace(old,replacement))
++	if value is String: return value.replace(old,replacement)
++	if value is Array:
++		var result: Array = value.duplicate(true)
++		for index in range(result.size()): result[index] = _replace_identity(result[index],old,replacement)
++		return result
++	if value is Dictionary:
++		var result: Dictionary = {}
++		for key in value: result[_replace_identity(key,old,replacement)] = _replace_identity(value[key],old,replacement)
++		return result
++	return value

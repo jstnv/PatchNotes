@@ -1,0 +1,150 @@
+{
+  "original_live_headless_equal": true,
+  "routes": 12,
+  "steps_per_path": 432,
+  "actions": {
+    "begin": {
+      "accepted": 36,
+      "rejected": 0
+    },
+    "redraw": {
+      "accepted": 72,
+      "rejected": 0
+    },
+    "priority": {
+      "accepted": 36,
+      "rejected": 36
+    },
+    "play": {
+      "accepted": 108,
+      "rejected": 0
+    },
+    "playtest": {
+      "accepted": 48,
+      "rejected": 60
+    },
+    "exit": {
+      "accepted": 36,
+      "rejected": 0
+    }
+  },
+  "protocol_steps": 42,
+  "reentry_checks": 14,
+  "fresh_process_replay_equal": true,
+  "focused_suites": [
+    {
+      "script": "verify_design_phase",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_design_phase",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_alpha_phase",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_alpha_phase",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_beta_planning",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_beta_planning",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_alpha_finalization",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-repair-alpha-finalization",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_beta_finalization_and_launch",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_beta_finalization_and_launch",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_alpha_exit_arrears",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_alpha_exit_arrears",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_beta_host_playtest",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-repair-beta-playtest",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_atomic_selected_redraw",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_atomic_selected_redraw",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_redraw_class_parity",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_redraw_class_parity",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_shared_redraw_and_priority_adjustment",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_shared_redraw_and_priority_adjustment",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_candidate_retention",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_candidate_retention",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_first_game_scripted_tutorial",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_first_game_scripted_tutorial",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_gameplay_transition",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_gameplay_transition",
+      "expected_negative_diagnostics": [
+        "ERROR: Failed to instantiate scene state of \"\", node count is 0. Make sure the PackedScene resource is valid.",
+        "ERROR: Could not instantiate a valid AlphaPhase placeholder.",
+        "ERROR: Failed to instantiate scene state of \"\", node count is 0. Make sure the PackedScene resource is valid.",
+        "ERROR: Could not instantiate a valid BetaPhase placeholder."
+      ]
+    },
+    {
+      "script": "verify_primitive_run_initialization",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_primitive_run_initialization",
+      "expected_negative_diagnostics": [
+        "ERROR: Could not initialize the Primitive project snapshots."
+      ]
+    },
+    {
+      "script": "verify_design_command",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_design_command",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_alpha_command",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_alpha_command",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_beta_command",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_beta_command",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_gameplay_hud_overlay",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_gameplay_hud_overlay",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_card_motion",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-check-verify_card_motion",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_development_replay",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-final-parity",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "script": "verify_development_protocol",
+      "evidence": "docs/codex/findings/card-presentation-v2/m2d-final-protocol-v5",
+      "expected_negative_diagnostics": []
+    }
+  ],
+  "todo_unchanged": true,
+  "previous_motion_artifact_restored": true
+}

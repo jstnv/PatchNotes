@@ -1,0 +1,33 @@
+{
+	"checks": 52,
+	"failures": 0,
+	"ok": true,
+	"rejection": {
+		"attempts": [
+			{
+				"reproduced": true,
+				"start_step": 36
+			}
+		],
+		"first_failure_step": 36,
+		"kind": "rejection",
+		"minimality": "Shortest reproducing suffix among preceding exact-restorable Studio boundaries; no arbitrary command deletion or global minimality claim",
+		"ok": true,
+		"original_commands": 38,
+		"reduced_commands": 1,
+		"reduced_failure_step": 0,
+		"removed_prefix_commands": 36,
+		"removed_tail_commands": 1,
+		"signature": {
+			"actual_result": "71aa11f84d07d0bb4031139e5b071b780ece453479e91b167049df3c81792f8f",
+			"actual_state": "e6041a4b797d3690c2b3e3402790e3c5adc9e766a690f112c53c23a27b5a6382",
+			"command_type": "unknown_test_command",
+			"detail": {
+				"error": "Unsupported Studio command"
+			},
+			"kind": "rejection",
+			"request_digest": "a94fc4f075e02709da2ee3e03abe06a409ce4eeeca9e460ea009c8bd9fe5ef71"
+		}
+	},
+	"scope": "Constructed negative controls from a legally played two-release prefix; no actual gameplay defect asserted"
+}

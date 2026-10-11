@@ -1,0 +1,36 @@
+{
+  "mode": "post-hoc source-pin and timestamp reconciliation; no pre-run cryptographic snapshot",
+  "source": {
+    "original_manifest_sha256": "9309f910bcd8a45d33bc798a7a2c62e6ec572a11e7b0b887f908bd991a77e033",
+    "original_file_count": 1180,
+    "hooks": {
+      "scripts/studio_traits.gd": "3e16c0a6ae492449d59796372e1d43b678801f38e0b84dac26298e5acf7cee69",
+      "scripts/run_state.gd": "109e65aaa16302ca8b601f0d4444c8682d58867ac1e0e641a73244e074cf7fc3",
+      "scripts/fanbase/studio_fanbase.gd": "f56a02e95aa54cf2b534b821f4a7f714cbb1f5e01347bf008310208bf5978dab",
+      "scripts/persistence/studio_checkpoint.gd": "7cc9b1b9887986c381e3ddfb4c7cd74b2c08aaec9665b8437f05d2fdda5df18a",
+      "scripts/fanbase/cult_candidate.gd": "348209c481061fa7f3f66ae230b2eacf3c074435c00fac80a0983a04bfc34917"
+    },
+    "driver": "candidate_restart.gd",
+    "driver_sha256": "6e0cb67bb2a393adab4a35e05b84528d04ec7e4b611f4a16c81f5bdc74eecfd9",
+    "plan_sha256": "9bb60f65e4f515ad2bf736468fe27eff7ee7633c379e1f295cde424277b82fca"
+  },
+  "source_sha256": "6e422d1411b3b2959be30426aeebd4391521b615c9bc2ba26b7de1cee1de8b43",
+  "command_sha256": "74882d13347cca51874fe035307406633e181011bc57f200af2277e34fb16978",
+  "result_sha256": "858abf18e175395d7a13645a92ce2e306cd83864aaeef7440ad5ebc43522bd68",
+  "log_sha256": "0f8c4e9523a0b5dd0823fae825ede0286ca8e0d312f05c5d853e299742c5cce0",
+  "inputs": {
+    "command": [
+      "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--path",
+      "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\cult-t7-v1-candidate-copy",
+      "--script",
+      "res://scripts/debug/candidate_restart.gd",
+      "--",
+      "final",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\cult-following-t7-v1\\route-1104-cult80p2-restart-final.json"
+    ],
+    "candidate_seed": 80,
+    "candidate_price": 2
+  }
+}

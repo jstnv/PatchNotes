@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "full_suite_assertions": 114,
+  "duration_seconds": 76.92200000002049,
+  "only_source_drift_since_education_pin": [
+    "patch-notes/scripts/debug/verify_card_motion.gd"
+  ],
+  "runtime_and_data_unchanged": true,
+  "card_and_contract_sections_unchanged": true,
+  "stores": [
+    {
+      "camera_steps_seconds": [
+        0.1,
+        0.1,
+        0.11
+      ],
+      "camera_zoom": [
+        0.163165266106443,
+        0.324177788085296,
+        1.08898741324075,
+        1.25
+      ],
+      "menu_alpha_at_010": 0.75,
+      "menu_steps_seconds": [
+        0.1,
+        0.11
+      ],
+      "menu_x": [
+        433.0,
+        463.0,
+        473.0
+      ],
+      "phase": "Store",
+      "width": 1152
+    },
+    {
+      "camera_steps_seconds": [
+        0.1,
+        0.1,
+        0.11
+      ],
+      "camera_zoom": [
+        0.247198879551821,
+        0.395761979728186,
+        1.10143684005203,
+        1.25
+      ],
+      "menu_alpha_at_010": 0.75,
+      "menu_steps_seconds": [
+        0.1,
+        0.11
+      ],
+      "menu_x": [
+        433.0,
+        463.0,
+        473.0
+      ],
+      "phase": "Store",
+      "width": 900
+    }
+  ],
+  "real_motion": [
+    {
+      "width": 1152,
+      "real_card_beat_intervals_seconds": [
+        0.42,
+        0.435,
+        0.42
+      ],
+      "real_specialization_cycle_seconds": 1.7
+    },
+    {
+      "width": 900,
+      "real_card_beat_intervals_seconds": [
+        0.434,
+        0.422,
+        0.434
+      ],
+      "real_specialization_cycle_seconds": 1.711
+    }
+  ],
+  "source_sha256": "fdd984fccd9a1048f816eb116d34ee10a0642e1c560c79c71c5cbe64cddcee2a",
+  "auditor_sha256": "9489223cdb2397dc223f832b3ff7873c5f1ea428fb4bdb614f9a61a689ee6f00"
+}

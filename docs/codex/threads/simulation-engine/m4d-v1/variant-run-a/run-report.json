@@ -1,0 +1,63 @@
+{
+  "format": "patch-notes-isolated-simulation-v1",
+  "mode": "run",
+  "ok": true,
+  "created_utc": "2026-10-11T10:13:20.568650+00:00",
+  "runner_sha256": "dce714acbd0045011b47696903ad2b775656e26c160077dadd4f96fa9442fecf",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\variant-run-a",
+  "godot_executable": "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "git": {
+    "branch": "main",
+    "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+    "dirty": true
+  },
+  "variant": {
+    "id": "isolation-a-v1",
+    "owner": "M4d synthetic verification",
+    "status": "CANDIDATE",
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\variant-a-v1",
+    "metadata_sha256": "d52dccaab5e6ccfcc51b8f150183344aac576049e7aba3aaea885f82b2294cb7",
+    "base_identity": "d7ba6c5233238c22c39b73301d84787a60f760dc41d5302f56f1ee04fab48de8",
+    "creation_identity": "d7ba6c5233238c22c39b73301d84787a60f760dc41d5302f56f1ee04fab48de8",
+    "candidate_identity": "a9c3e3a3c5ac87a628a26d2a34b418fc147448e45b2a49c24e98a69a36d2d921",
+    "canonical_identity": "d7ba6c5233238c22c39b73301d84787a60f760dc41d5302f56f1ee04fab48de8",
+    "canonical_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "baseline_drift": false,
+    "delta": [
+      {
+        "path": "scripts/run_state.gd",
+        "change": "modified",
+        "before_sha256": "07dde3a867ee916bdd8b813f214289037c270e1e78fb92b7c1e1e0b320d5f8e5",
+        "after_sha256": "bceea42a4e26a4429c7e2adcdd6e98a6ec5451531896d074192153abe660ad15"
+      }
+    ],
+    "canonical_delta": [],
+    "lineage": []
+  },
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "finite-development-fixture",
+    "version": "1",
+    "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00"
+  },
+  "case_count": 1,
+  "input_hashes": {
+    "experiment.json": "54ba1afd5a76492684e71c8443e8b4736b6b849fada9601f44369687d762b5e1",
+    "requested.json": "61094b89b34490e2cc726b8bb7c260490f3c43bc57a27ab726b6d7b5d39fbd47"
+  },
+  "frozen_source_identity": "a9c3e3a3c5ac87a628a26d2a34b418fc147448e45b2a49c24e98a69a36d2d921",
+  "results": [
+    {
+      "case_id": "action-4417",
+      "ok": true,
+      "status": "completed",
+      "commands": 36,
+      "final_run_cycle": 14,
+      "final_release_count": 2
+    }
+  ]
+}

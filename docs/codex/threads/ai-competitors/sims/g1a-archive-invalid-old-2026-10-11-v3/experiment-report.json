@@ -1,0 +1,97 @@
+{
+	"metrics": [
+		{
+			"artifact_write_us": 7709,
+			"case_id": "g1a-reject-tampered-old-envelope",
+			"commands_per_second": 0.0,
+			"elapsed_us": 66998,
+			"execute_and_trace_us": 0,
+			"finalization_us": 28162,
+			"godot_static_bytes_after_release": 70171579,
+			"godot_static_bytes_before": 70111482,
+			"godot_static_bytes_with_case": 70173583,
+			"measurement": "instrumented independent campaign; exact trace hashing included",
+			"objects_after_release": 1622,
+			"objects_before": 1621,
+			"objects_with_case": 1623,
+			"os": "Windows",
+			"policy_and_observation_us": 0,
+			"process_cumulative_peak_godot_static_bytes": 97904010,
+			"processor": "13th Gen Intel(R) Core(TM) i7-13620H",
+			"processor_count": 16,
+			"productive_command_max_us": 0,
+			"schema_version": "1",
+			"setup_us": 31124,
+			"telemetry_us": 0
+		}
+	],
+	"ok": false,
+	"results": [
+		{
+			"accepted_commands": 0,
+			"artifacts": {
+				"exact_case": "case.variant.json",
+				"final_state": "final_state.variant.json",
+				"initial": "initial.json",
+				"metrics": "metrics.json",
+				"readable_case": "case.json",
+				"result": "result.json",
+				"studio_checkpoint": "",
+				"tape": "replay.tape.json",
+				"telemetry": "telemetry.json"
+			},
+			"case_id": "g1a-reject-tampered-old-envelope",
+			"commands": 0,
+			"engine_version": "4.7.1-stable (official)",
+			"error": "Invalid recipe or Studio checkpoint",
+			"final_release_count": 0,
+			"final_rng": {},
+			"final_run_cycle": 0,
+			"final_state": "",
+			"initial_release_count": 0,
+			"initial_rng": {},
+			"initial_run_cycle": 0,
+			"initial_state": "",
+			"input_identity": "53b5b1062046a7b5c53be2d934ca6df97715f67eb4cd2ab68b077c735766b1a8",
+			"last_choice": null,
+			"max_commands": 60,
+			"ok": false,
+			"outcome": {},
+			"policy": {
+				"config": {
+					"genre": "action",
+					"hands": {
+						"alpha": {
+							"float_bits": "030000000000a040"
+						},
+						"beta": {
+							"float_bits": "0300000000000040"
+						},
+						"design": {
+							"float_bits": "0300000000004040"
+						}
+					},
+					"name_prefix": "G1a Opening",
+					"selection": "features_first",
+					"theme": "fantasy"
+				},
+				"id": "finite-development-fixture",
+				"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+				"version": "1"
+			},
+			"policy_identity_kind": "caller_declared_trusted_factory",
+			"productive_commands": 0,
+			"replayable": false,
+			"rng_algorithm": "godot-4.7.1-rng-v1",
+			"schema_version": "1",
+			"source_identity": "43b9cbea1282a5e6376c482c330735ad1c011293b86ffa269b7eb4133b71ee2f",
+			"status": "invalid_initial_state",
+			"study": {},
+			"tape_identity": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+			"target_release_count": 2,
+			"telemetry_sha256": "400279a0e022750a6f915f228c9993650389f51a12865010128947225e0b46eb"
+		}
+	],
+	"schema_version": "1",
+	"scope": "Explicit trusted policies; independent campaigns, not shared-calendar AI competitors"
+}

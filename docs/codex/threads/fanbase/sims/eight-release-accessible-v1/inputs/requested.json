@@ -1,0 +1,146 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "fanbase-accessible-hands",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "fan-1104-h5",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "fanbase-eight-1104",
+          "studio_name": "Fanbase Study 1104",
+          "specialty": "action",
+          "traits": [],
+          "seed": "1104"
+        }
+      },
+      "max_commands": 340,
+      "target_release_count": 8,
+      "telemetry": true,
+      "study": {
+        "pair_id": "fan-1104",
+        "arm": "h5"
+      },
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "Fan Study",
+          "selection": "visible_order",
+          "hands": {
+            "design": 5,
+            "alpha": 5,
+            "beta": 5
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "fan-1104-h6",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "fanbase-eight-1104",
+          "studio_name": "Fanbase Study 1104",
+          "specialty": "action",
+          "traits": [],
+          "seed": "1104"
+        }
+      },
+      "max_commands": 340,
+      "target_release_count": 8,
+      "telemetry": true,
+      "study": {
+        "pair_id": "fan-1104",
+        "arm": "h6"
+      },
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "Fan Study",
+          "selection": "visible_order",
+          "hands": {
+            "design": 6,
+            "alpha": 6,
+            "beta": 6
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "fan-4417-h5",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "fanbase-eight-4417",
+          "studio_name": "Fanbase Study 4417",
+          "specialty": "action",
+          "traits": [],
+          "seed": "4417"
+        }
+      },
+      "max_commands": 340,
+      "target_release_count": 8,
+      "telemetry": true,
+      "study": {
+        "pair_id": "fan-4417",
+        "arm": "h5"
+      },
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "Fan Study",
+          "selection": "visible_order",
+          "hands": {
+            "design": 5,
+            "alpha": 5,
+            "beta": 5
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "fan-4417-h6",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "fanbase-eight-4417",
+          "studio_name": "Fanbase Study 4417",
+          "specialty": "action",
+          "traits": [],
+          "seed": "4417"
+        }
+      },
+      "max_commands": 340,
+      "target_release_count": 8,
+      "telemetry": true,
+      "study": {
+        "pair_id": "fan-4417",
+        "arm": "h6"
+      },
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "Fan Study",
+          "selection": "visible_order",
+          "hands": {
+            "design": 6,
+            "alpha": 6,
+            "beta": 6
+          }
+        }
+      }
+    }
+  ]
+}

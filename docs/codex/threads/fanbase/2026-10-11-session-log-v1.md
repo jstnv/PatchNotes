@@ -1,0 +1,5 @@
+# Fanbase design session — post-600 taper recommendation v1
+
+2026-10-11, America/Los_Angeles. Shared checkout `main` at `41c87c76fb4d3c06a5332d93f0e7b0997007475d`; extensive concurrent worktree edits preserved. Read CURRENT_STATE, TODO, the Fanbase design and thread evidence; inspected branch, HEAD, status and relevant diffs before editing. The user asked to continue the design work. Compared the previously source-pinned 940-Fan played launch with the already documented fixed-action mild/moderate counterfactuals and wrote a [bounded trial recommendation](2026-10-11-post-600-taper-recommendation-v1.md). Added a pointer to this thread's README.
+
+Changed files: this new recommendation, this new log and this thread's README. Verification: document cross-links and `git diff --check` on the README; no gameplay test is implied. The numerical tail is still OPEN pending the user's explicit choice. No gameplay/source change, shared TODO update, Drive use, cross-thread message, merge, commit or push.

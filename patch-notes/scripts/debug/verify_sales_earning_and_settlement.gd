@@ -12,14 +12,14 @@ func expect(ok: bool, message: String) -> void:
 		failures += 1
 		push_error("FAIL: " + message)
 
-func release(total: int) -> ProjectState:
+func release(total: int, run: RunState = null) -> ProjectState:
 	var project := ProjectState.new(30)
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
 	project.finalize_design_bugs(false, 0, [&"text"], [])
 	project.finalize_alpha(0, [], [])
 	project.finalize_beta()
 	project.commit_review_result(ReviewResult.new(PrimitiveReviewCalculator.get_baseline_profile(), {}, 0.0, 0.0, 0.0, 7.0, 1.0, 0, 0.0, 1.0, 50, 0.0, 7.0, 7.0))
-	project.commit_awareness_result(PrimitiveAwarenessCalculator.calculate(project))
+	project.commit_awareness_result(PrimitiveAwarenessCalculator.calculate(project, run))
 	project.commit_launch_market_context_result(PrimitiveLaunchMarketContextCalculator.calculate(project, snapshots))
 	# Controlled unit oracle; all downstream production code uses the real result.
 	project.set("_units_sold_result", UnitsSoldResult.new(&"primitive_units_sold_v1", &"month_1", 500, 70, 70, 100, 200, 300, 10000, 10000, total, 1, float(total), total))
@@ -85,7 +85,7 @@ func _verify_oracle() -> void:
 	recreated.set("_release_id", id)
 	var before := snapshot(run, project)
 	expect(run.register_release(recreated) and snapshot(run, project) == before, "Reconstructed project with same stable release ID reuses history")
-	expect(run.register_release(release(751)) and run.get_released_game_ids().size() == 2, "Next-project releases register independently while retaining earlier history")
+	expect(run.register_release(release(751, run)) and run.get_released_game_ids().size() == 2, "Next-project releases register independently with current Fans while retaining earlier history")
 
 func _verify_atomicity() -> void:
 	var p := release(751)

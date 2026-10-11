@@ -1,0 +1,91 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-11T10:14:51.267574+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "isolation-a-v1",
+    "owner": "M4d synthetic verification",
+    "created_utc": "2026-10-11T10:13:03.982015+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "d7ba6c5233238c22c39b73301d84787a60f760dc41d5302f56f1ee04fab48de8",
+    "creation_identity": "d7ba6c5233238c22c39b73301d84787a60f760dc41d5302f56f1ee04fab48de8",
+    "lineage": [],
+    "canonical_git": {
+      "branch": "main",
+      "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "Synthetic isolation fixture only; do not adopt its capital change",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\variant-test-decision.md",
+    "sha256": "d600a45a0a5940a1e01e1306b7471f546e4f1c0f6bf14c80adf301c2b01ee6ab",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Two candidate processes overlap, canonical source remains unchanged and each exact replay passes"
+  ],
+  "base_identity": "d7ba6c5233238c22c39b73301d84787a60f760dc41d5302f56f1ee04fab48de8",
+  "candidate_identity": "a9c3e3a3c5ac87a628a26d2a34b418fc147448e45b2a49c24e98a69a36d2d921",
+  "canonical_identity": "d7ba6c5233238c22c39b73301d84787a60f760dc41d5302f56f1ee04fab48de8",
+  "baseline_drift": false,
+  "changes": [
+    {
+      "path": "scripts/run_state.gd",
+      "change": "modified",
+      "before_sha256": "07dde3a867ee916bdd8b813f214289037c270e1e78fb92b7c1e1e0b320d5f8e5",
+      "after_sha256": "bceea42a4e26a4429c7e2adcdd6e98a6ec5451531896d074192153abe660ad15"
+    }
+  ],
+  "canonical_changes_since_base": [],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\variant-run-a",
+      "ok": true,
+      "error": null,
+      "source_identity": "a9c3e3a3c5ac87a628a26d2a34b418fc147448e45b2a49c24e98a69a36d2d921",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "6c1da9d43a8ad5e090eda82045bedc3091a51188590ebfc317c14d69ee997dee",
+        "cases/action-4417/case.json": "151cbc17aa97d7c8c552477a802e08034d99b87225442834e3d642fabea0a880",
+        "cases/action-4417/case.variant.json": "ede9028c93844c3e20cd3005e1965679acb42c2b3e62252cfb2007a3d7e179f8",
+        "cases/action-4417/final_state.variant.json": "bf3376a6d13e49ccd0388351041d34d6b96d3da6fc96ac3bf81df86ba521652c",
+        "cases/action-4417/initial.json": "ce242580d3bc332d8f06865f0e9d14bb334bc42f790d0ebd68a675f8dd20ac8e",
+        "cases/action-4417/metrics.json": "aa3bf8c414784d9c1ef0d89668965041785aa6e1218828dc6e1d61ade63a5d9d",
+        "cases/action-4417/replay.tape.json": "ad27958be9e4ffa1262a6d95e25b190ccabd9645fd12422a914280df2629aeb4",
+        "cases/action-4417/result.json": "2ba3d9122cefd384d709884b3b2c2f93b2b3a5b70cbb1153135c27175750f1fe",
+        "cases/action-4417/studio_checkpoint.json": "79c6d1840064de1f322baa4f0d4004fd2528f4dcfa8767aaa1ebdd18357fb439",
+        "cases/action-4417/telemetry.json": "8dae14c529fee419d73338d032e0384eea8a18360442d7fb075661e37322a197",
+        "experiment-report.json": "5c74095ae9cf0280c5a5ca4899760255c9a7bc4ad48eb0f867e5f531187bedee",
+        "experiment.command.json": "3f271b8346ce2932bb1c3c06116558d25332eb76251612819796a3b510db7f87",
+        "experiment.log": "6c8d1e89de2455ccce87741a4dbd1176f594ebe9fd9d9cfd53189ee76466a046",
+        "git-provenance.json": "632f0fdf85fb7aeb94ed916df693f10724a5d04df4a9904ab2e7013851ead128",
+        "godot-version.command.json": "44f3f43fdeddf9f70692a112780b307fa2c5fd32dc3ca3703cc5173f09d1b2bb",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+        "import.command.json": "69cbf8fb7319d302dcef5454d38a68e8037390a1c4749f5a48517f6217173a11",
+        "import.log": "26a9951de16c784b808c38f3f47ae92f29c8b54641f8395fcaa11ce2b8e1054b",
+        "inputs/experiment.json": "54ba1afd5a76492684e71c8443e8b4736b6b849fada9601f44369687d762b5e1",
+        "inputs/requested.json": "61094b89b34490e2cc726b8bb7c260490f3c43bc57a27ab726b6d7b5d39fbd47",
+        "run-report.json": "6b51f1fd72b31dc87082869d0963b36f5a3689aac654e6963f8934791ec5cfcf",
+        "runner.py": "dce714acbd0045011b47696903ad2b775656e26c160077dadd4f96fa9442fecf",
+        "simulator_variant.py": "0ec4dbacfadf5adde8c6ad07839eaaf90396e70eb6429477ae64ff062be0cb08",
+        "snapshot-manifest.json": "c977598c775931c91e82c0e3835ab17a507d1415e0988094cd694fa73387f43e",
+        "source.diff.patch": "cad6fc6262fbaaf9bd8caaabc1c99f6d21c921978dfb2643e0865fc20ee5b151",
+        "variant-base-manifest.json": "6c1da9d43a8ad5e090eda82045bedc3091a51188590ebfc317c14d69ee997dee",
+        "variant-creation-manifest.json": "6c1da9d43a8ad5e090eda82045bedc3091a51188590ebfc317c14d69ee997dee",
+        "variant-integrity.json": "5ef08920fabdf4085294cee94c5a8e9357905a2ebde89b897857aed1f3a9d4cb",
+        "variant-provenance.json": "0638a7b2fe271252535a8cf62ca59e4c29f77b90f3e3053165cd60669e01378e",
+        "variant-variant.json": "d52dccaab5e6ccfcc51b8f150183344aac576049e7aba3aaea885f82b2294cb7",
+        "workspace-source-manifest.json": "c977598c775931c91e82c0e3835ab17a507d1415e0988094cd694fa73387f43e"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

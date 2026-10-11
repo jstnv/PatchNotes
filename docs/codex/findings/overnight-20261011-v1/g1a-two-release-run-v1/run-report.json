@@ -1,0 +1,177 @@
+{
+  "format": "patch-notes-isolated-simulation-v1",
+  "mode": "run",
+  "ok": true,
+  "created_utc": "2026-10-11T12:36:48.397859+00:00",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\g1a-two-release-run-v1",
+  "godot_executable": "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "git": {
+    "branch": "main",
+    "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+    "dirty": true
+  },
+  "variant": {
+    "id": "g1a-archive-validation-v1",
+    "owner": "pn-implementation",
+    "status": "CANDIDATE",
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\g1a-archive-validation-v1",
+    "metadata_sha256": "c14d4155dd3310a2103da632dfa6ddf552502065166c802940fa6bad463c7a5f",
+    "base_identity": "4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df",
+    "creation_identity": "ca0769c9f37e65681c94115e5867937e82a31c0b8102675517f534b1cb18eb67",
+    "candidate_identity": "38749eaf2397fece0c120c3ffcb454c73fd90ac4cf9e7dec4b5f287769a5abbb",
+    "canonical_identity": "6327c1134f5a00e480f6fcbd7db1ac3becc5892fb40fa34694b5f708ee81b303",
+    "canonical_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "baseline_drift": true,
+    "delta": [
+      {
+        "path": "scripts/debug/verify_incumbent_archive.gd",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "f448a4927871eaf40e529b26ee26bebcbeab8f17bdf0cafd3f39facf97a2e428"
+      },
+      {
+        "path": "scripts/debug/verify_incumbent_archive.gd.uid",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "e7567e25ffa4fefab87b79b2f3fc651d424823b9b836166a1fe6a34c7ada91ad"
+      },
+      {
+        "path": "scripts/persistence/checkpoint_schema.gd",
+        "change": "modified",
+        "before_sha256": "73f6667444f8c7a1b62477d5207b1e70c5967e92e8b3329e22938f4a3692b8c6",
+        "after_sha256": "a2a7929a9bb12515a40053fb6132e05bf1466049c01a61106c5de76d7ee8ed65"
+      },
+      {
+        "path": "scripts/persistence/studio_checkpoint.gd",
+        "change": "modified",
+        "before_sha256": "c7fef1376f04f0fa6fc0225f529acd67fd6f990173bfd518ef86347d068d3c42",
+        "after_sha256": "155f11179bf28ddf5f6358ef5c6f08c026fd4381efdd78533c911c681c3d8e32"
+      },
+      {
+        "path": "scripts/run_state.gd",
+        "change": "modified",
+        "before_sha256": "07dde3a867ee916bdd8b813f214289037c270e1e78fb92b7c1e1e0b320d5f8e5",
+        "after_sha256": "3c068b6952fe4a78edb1da080a7afc00d0a9cd35944bfe6761f64c8c4fd52506"
+      },
+      {
+        "path": "scripts/simulation/campaign_batch.gd",
+        "change": "modified",
+        "before_sha256": "82ececff9937ea066264fa81b82922341c6e1507819f97336dd728d925f29660",
+        "after_sha256": "97a421acbfa9917ee48d25df0b393f1489e0cc0a3a2af645e34bdc7365189775"
+      },
+      {
+        "path": "scripts/simulation/run_factory.gd",
+        "change": "modified",
+        "before_sha256": "76506099a511ea047295d96c4367cc217dfb000af4862d7f9bc69fbcbcac42e8",
+        "after_sha256": "6d2a43629821caf04cf5210f1234fb32dbd3feb98e041f4a64047cca0909a011"
+      }
+    ],
+    "canonical_delta": [
+      {
+        "path": "scripts/debug/verify_alpha_command.gd",
+        "change": "modified",
+        "before_sha256": "3b627dffb73318bd9c3482c78d8b812963ca117897d703289bd87ee1bb9046e0",
+        "after_sha256": "0ae7f35810ea42d097966e00d0884133aa9cacead8bdb9c8c68b7c016b5c2a03"
+      },
+      {
+        "path": "scripts/debug/verify_beta_command.gd",
+        "change": "modified",
+        "before_sha256": "bc026770c34adee1976f180f32204e1808e3f8bedd31d24ebd29c136773ae815",
+        "after_sha256": "32269954a0252a757d43b29f851bb8746137aa56bfbd7d91e90858d7129ff30d"
+      },
+      {
+        "path": "scripts/debug/verify_design_command.gd",
+        "change": "modified",
+        "before_sha256": "a36acd2878a430aff20d2349c14c42835454f74fa7eb35f458de458bb69b7736",
+        "after_sha256": "3de14612d5dfb9381b0b962769c80aca7ed88691947d03d49e8b122e4a4083fa"
+      },
+      {
+        "path": "scripts/debug/verify_design_phase.gd",
+        "change": "modified",
+        "before_sha256": "bb168e2009e8f228dac9237665a177052daea865242aeff5a0ad3840bcafdbdf",
+        "after_sha256": "cee35895a0250b972bfe6e4b3bd25a370204c7095dcddc860e4f825639bcea1b"
+      },
+      {
+        "path": "scripts/debug/verify_feature_store.gd",
+        "change": "modified",
+        "before_sha256": "5137e6bb9741a26fd41861673a40d8481bdc5c4534866735d4f5d9d6e08c7826",
+        "after_sha256": "2aa88d9b26955edb8302f715fb2f2c0f3d518f4e8d5697a44f5cbe35f3ea2ed2"
+      },
+      {
+        "path": "scripts/debug/verify_feature_store_copy.gd",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "6fab37c243fd1222a9b86d6b8e0471d6cd0087d14d73749c39c52c259550e3e7"
+      },
+      {
+        "path": "scripts/debug/verify_feature_store_copy.gd.uid",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "04baf24d644a4b039b43ac518454f704a8c6b9e4e1b0b282da9423670fcb8e9e"
+      },
+      {
+        "path": "scripts/ui/feature_store.gd",
+        "change": "modified",
+        "before_sha256": "a628734e3c39fad02f60e76af433cac3135e6e579372b4510252c15e437def4a",
+        "after_sha256": "2b6c41ea5618ddf119e48bdeaa32df5a8a66cbf2d69303d087c41a5cb3df5f88"
+      },
+      {
+        "path": "scripts/ui/feature_store_map.gd",
+        "change": "modified",
+        "before_sha256": "bbd7b07b4da41d9badcb8fcedcc5af3dfde911b5234a8cdd23dfb4197fd866d3",
+        "after_sha256": "6986d15c25b2e72d82e4511f0379ed223bda63ba310f9eb80239312af1d55704"
+      }
+    ],
+    "lineage": [
+      {
+        "id": "g1a-incumbent-archive-v1",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g1a-incumbent-archive-v1",
+        "metadata_sha256": "fc001ecfdcae00d6fb9dc091e1e4136b84d2a56a183d2cc96adc3b08a9f7c395",
+        "source_identity": "1090c3ecba5ccd0e6dd8341f5e51daab5d5a734b7ca0e99f9ab4b59257e95b5e"
+      },
+      {
+        "id": "g1a-incumbent-archive-v2",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g1a-incumbent-archive-v2",
+        "metadata_sha256": "900a87c5337765c823c5c911fd49e5592124d664292c268fbe6e2f1658b1563e",
+        "source_identity": "ca0769c9f37e65681c94115e5867937e82a31c0b8102675517f534b1cb18eb67"
+      }
+    ]
+  },
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "finite-development-fixture",
+    "version": "1",
+    "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00"
+  },
+  "case_count": 2,
+  "input_hashes": {
+    "experiment.json": "ba6dbcff12f3ae7570056d95889ed8a838e4478a8a87df389e09a1b6b1391b7d",
+    "requested.json": "41dff376f127f1d4bdeca963b111621500d6958ed680390e2eb2deede6e29656"
+  },
+  "frozen_source_identity": "38749eaf2397fece0c120c3ffcb454c73fd90ac4cf9e7dec4b5f287769a5abbb",
+  "results": [
+    {
+      "case_id": "g1a-incumbent-4417",
+      "ok": true,
+      "status": "completed",
+      "commands": 42,
+      "final_run_cycle": 22,
+      "final_release_count": 2
+    },
+    {
+      "case_id": "g1a-incumbent-90210",
+      "ok": true,
+      "status": "completed",
+      "commands": 41,
+      "final_run_cycle": 22,
+      "final_release_count": 2
+    }
+  ]
+}

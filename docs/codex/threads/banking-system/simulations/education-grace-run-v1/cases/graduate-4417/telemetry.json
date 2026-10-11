@@ -1,0 +1,5210 @@
+{
+	"final_state": "722269e69660e39219aae738120dbe270521a6536a42b1ccd6adcb04478a5db0",
+	"initial_state": "4580bdfc9064bb5c09f43c546ec793c53271ad60bb518589d67a80f863df523a",
+	"samples": [
+		{
+			"accepted": null,
+			"cash_cents": "600000",
+			"command_type": "",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "studio",
+			"release_count": 0,
+			"releases": [],
+			"request": {},
+			"research_queue": [],
+			"run_cycle": 0,
+			"sequence": 0,
+			"state_digest": "4580bdfc9064bb5c09f43c546ec793c53271ad60bb518589d67a80f863df523a",
+			"step": 0,
+			"transaction_cash_low_cents": "600000",
+			"transaction_count": 3,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "600000",
+			"command_type": "begin_development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"genre": "action",
+					"name": "Graduate 1",
+					"theme": "fantasy"
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 0,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 0,
+				"type": "begin_development"
+			},
+			"research_queue": [],
+			"run_cycle": 1,
+			"sequence": 1,
+			"state_digest": "58b8d42edf7f2f61a240c7576103ff2e44dd1aad8a54ce85b334257bb241aa4f",
+			"step": 1,
+			"transaction_cash_low_cents": "600000",
+			"transaction_count": 4,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "600000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 1,
+						"schema_version": 1,
+						"sequence": 0,
+						"type": "begin"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 1,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 1,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 1,
+			"sequence": 2,
+			"state_digest": "60cf819a26abb748d2bca884772d55596c75198d76a7dd23bff96e1182280f7d",
+			"step": 2,
+			"transaction_cash_low_cents": "600000",
+			"transaction_count": 4,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "515000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 1,
+						"schema_version": 1,
+						"sequence": 1,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 1,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 2,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 2,
+			"sequence": 3,
+			"state_digest": "e5846ba02b29359084fb8933269405901912453eeedf4e240276125bbb04812a",
+			"step": 3,
+			"transaction_cash_low_cents": "515000",
+			"transaction_count": 7,
+			"transactions_observed": 3
+		},
+		{
+			"accepted": true,
+			"cash_cents": "501000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "design",
+						"project_cycle": 1,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 2,
+						"schema_version": 1,
+						"sequence": 2,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 2,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 3,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 3,
+			"sequence": 4,
+			"state_digest": "783840ea672645f4f5a6e2a33e83c20afde00aed244111e4241a343d8fcfbd8e",
+			"step": 4,
+			"transaction_cash_low_cents": "501000",
+			"transaction_count": 8,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "442000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "design",
+						"project_cycle": 2,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 3,
+						"schema_version": 1,
+						"sequence": 3,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 3,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 4,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 4,
+			"sequence": 5,
+			"state_digest": "ae92a1939e0e554b584f620c979041d465be8a4829c31bc2e91898004cdfdc60",
+			"step": 5,
+			"transaction_cash_low_cents": "442000",
+			"transaction_count": 11,
+			"transactions_observed": 3
+		},
+		{
+			"accepted": true,
+			"cash_cents": "426000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "design",
+						"project_cycle": 3,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 4,
+						"schema_version": 1,
+						"sequence": 4,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 4,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 5,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 5,
+			"sequence": 6,
+			"state_digest": "fb5303e205464fb2ff90cea8a1f0cdae08a3f79fa07a7d3c7a2fd9a8cc3fd82e",
+			"step": 6,
+			"transaction_cash_low_cents": "426000",
+			"transaction_count": 12,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "426000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 5,
+						"schema_version": 1,
+						"sequence": 5,
+						"type": "request_exit"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 5,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 6,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 5,
+			"sequence": 7,
+			"state_digest": "c1b11c0d697120bba26a7c610ed247f6cf933dc8c46b8f7c3845cf5079f0eaf2",
+			"step": 7,
+			"transaction_cash_low_cents": "426000",
+			"transaction_count": 12,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "426000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 5,
+						"schema_version": 1,
+						"sequence": 6,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 5,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 7,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 5,
+			"sequence": 8,
+			"state_digest": "3600c8a54c7c1d494c141396b891aa34921a10594c294965e073d7a86c5b2b72",
+			"step": 8,
+			"transaction_cash_low_cents": "426000",
+			"transaction_count": 12,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "426000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 5,
+						"schema_version": 1,
+						"sequence": 7,
+						"type": "begin"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 5,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 8,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 5,
+			"sequence": 9,
+			"state_digest": "3622b348eb14ce774e065750203827a6975c8ea437f0eab57a70c02ddf0a889a",
+			"step": 9,
+			"transaction_cash_low_cents": "426000",
+			"transaction_count": 12,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "340000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 5,
+						"schema_version": 1,
+						"sequence": 8,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 5,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 9,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 6,
+			"sequence": 10,
+			"state_digest": "30e1cdea0d7bc24f5c2e7e88949f4bf1247b573a4a68a590e193be6a7b792648",
+			"step": 10,
+			"transaction_cash_low_cents": "340000",
+			"transaction_count": 15,
+			"transactions_observed": 3
+		},
+		{
+			"accepted": true,
+			"cash_cents": "318000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 5,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 6,
+						"schema_version": 1,
+						"sequence": 9,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 6,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 10,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 7,
+			"sequence": 11,
+			"state_digest": "c4164d15e60207939cb43a448cd702fc65d7b36fa88c2673f45f2418a607c779",
+			"step": 11,
+			"transaction_cash_low_cents": "318000",
+			"transaction_count": 16,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 6,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 7,
+						"schema_version": 1,
+						"sequence": 10,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 7,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 11,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 8,
+			"sequence": 12,
+			"state_digest": "ca563f7241715ba86afbb3c07faaf6d7e9317c551190a33de8a26d5ebf97ab35",
+			"step": 12,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 19,
+			"transactions_observed": 3
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 7,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 8,
+						"schema_version": 1,
+						"sequence": 11,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 8,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 12,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 9,
+			"sequence": 13,
+			"state_digest": "54610f882155ebe487e333ffbc74391ba54845c45c3e4146daade940cdb30221",
+			"step": 13,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 20,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 9,
+						"schema_version": 1,
+						"sequence": 12,
+						"type": "request_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 9,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 13,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 9,
+			"sequence": 14,
+			"state_digest": "5f8485e06239d5c073e8c3df104b2289a4b677424f360e7e3170a571bb5fed9e",
+			"step": 14,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 20,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 9,
+						"schema_version": 1,
+						"sequence": 13,
+						"type": "confirm_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 9,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 14,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 9,
+			"sequence": 15,
+			"state_digest": "fb4264ad7444e18ca93555aa5fe92e16c63059a8526d77350b68dce85b5e6140",
+			"step": 15,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 20,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 9,
+						"schema_version": 1,
+						"sequence": 14,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 9,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 15,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 9,
+			"sequence": 16,
+			"state_digest": "b71e38341b2f36ae19a05fe90e065ed9f84435daf0d7a5c28f4a5dc16d0ae2b4",
+			"step": 16,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 20,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 9,
+						"schema_version": 1,
+						"sequence": 15,
+						"type": "begin"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 9,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 16,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 9,
+			"sequence": 17,
+			"state_digest": "bb0d525d1bfe625a5f442a0730f3eb19c94b0cf767bea6fa73e08a4730d9e58b",
+			"step": 17,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 20,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "214000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 9,
+						"schema_version": 1,
+						"sequence": 16,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 9,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 17,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 10,
+			"sequence": 18,
+			"state_digest": "0b994609ab01fc8d5f35b439045cf9becb59271c38258cd58f5ed53cc46e4abf",
+			"step": 18,
+			"transaction_cash_low_cents": "214000",
+			"transaction_count": 23,
+			"transactions_observed": 3
+		},
+		{
+			"accepted": true,
+			"cash_cents": "314000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 9,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 10,
+						"schema_version": 1,
+						"sequence": 17,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 10,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 18,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 11,
+			"sequence": 19,
+			"state_digest": "7562c79d145e48552e0c643d949a7e4178514268401dd6c6451f0050d7d7306c",
+			"step": 19,
+			"transaction_cash_low_cents": "214000",
+			"transaction_count": 24,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 10,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 11,
+						"schema_version": 1,
+						"sequence": 18,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 11,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 19,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 12,
+			"sequence": 20,
+			"state_digest": "57ca63f161ccd8c7139adfcaa4ccf343d6044bb9fc29ee24e486fb9cfea631df",
+			"step": 20,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 27,
+			"transactions_observed": 3
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 11,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 12,
+						"schema_version": 1,
+						"sequence": 19,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 12,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 20,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 21,
+			"state_digest": "6ab523d10e2b6ec9ad6c3d04819bb141c2f82b274f68af71fecf5bea7243c2e2",
+			"step": 21,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 28,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 12,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 13,
+						"schema_version": 1,
+						"sequence": 20,
+						"type": "request_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 13,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 21,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 22,
+			"state_digest": "71bc60b023ca869d2dd63dc3c437dad6aacbd6a4d5c36bde9c8aea892017fbf6",
+			"step": 22,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 28,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 0,
+			"releases": [],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 12,
+						"project_id": "bank-grace-graduate-4417:project:1",
+						"run_cycle": 13,
+						"schema_version": 1,
+						"sequence": 21,
+						"type": "confirm_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 13,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 22,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 23,
+			"state_digest": "353638c2c1a339668cb97c3984a82764da4b0d9b1c5a26ae083a35c30df0196d",
+			"step": 23,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 28,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "264000",
+			"command_type": "launch",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "studio",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:1",
+				"run_cycle": 13,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 23,
+				"type": "launch"
+			},
+			"research_queue": [],
+			"run_cycle": 13,
+			"sequence": 24,
+			"state_digest": "5f1dd03a5eb216113509e806ec8eee04d2aeb171c7f83f63850cc92e4c2b2d41",
+			"step": 24,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 28,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "365048",
+			"command_type": "begin_development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"genre": "action",
+					"name": "Graduate 2",
+					"theme": "fantasy"
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 13,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 24,
+				"type": "begin_development"
+			},
+			"research_queue": [],
+			"run_cycle": 14,
+			"sequence": 25,
+			"state_digest": "051867cb60598e4564f0509c1c10974ed0b9703b190e4b6869b4d6cd451489b8",
+			"step": 25,
+			"transaction_cash_low_cents": "264000",
+			"transaction_count": 33,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "365048",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 14,
+						"schema_version": 1,
+						"sequence": 0,
+						"type": "begin"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 14,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 25,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 14,
+			"sequence": 26,
+			"state_digest": "0ec05911e593d9ae5f49f9ed89b1a8dd717b51b930401ee73095e59d99dd98d6",
+			"step": 26,
+			"transaction_cash_low_cents": "365048",
+			"transaction_count": 33,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "341048",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 14,
+						"schema_version": 1,
+						"sequence": 1,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 14,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 26,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 15,
+			"sequence": 27,
+			"state_digest": "2e9bcd8e7cba6b0959c503fa9455f2667798adc32886120671126c570e673395",
+			"step": 27,
+			"transaction_cash_low_cents": "341048",
+			"transaction_count": 35,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "457657",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "design",
+						"project_cycle": 1,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 15,
+						"schema_version": 1,
+						"sequence": 2,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 15,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 27,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 16,
+			"sequence": 28,
+			"state_digest": "21ca8e9e0625ba6d646593212df65191f27d8eea4cfae1ecabdece64cec844ec",
+			"step": 28,
+			"transaction_cash_low_cents": "316048",
+			"transaction_count": 40,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "441657",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "design",
+						"project_cycle": 2,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 16,
+						"schema_version": 1,
+						"sequence": 3,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 16,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 28,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 17,
+			"sequence": 29,
+			"state_digest": "c9c649d3898fba3369dd506f8a5efa328e6ac6dcb3ae2ecfeb954e16bef43b98",
+			"step": 29,
+			"transaction_cash_low_cents": "441657",
+			"transaction_count": 42,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "442097",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "design",
+						"project_cycle": 3,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 17,
+						"schema_version": 1,
+						"sequence": 4,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 17,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 29,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 18,
+			"sequence": 30,
+			"state_digest": "6b1bc604e8941e10182a74ee74d10d2a7ed425f17d3c04f87ee07d97084290c2",
+			"step": 30,
+			"transaction_cash_low_cents": "432657",
+			"transaction_count": 47,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "442097",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 18,
+						"schema_version": 1,
+						"sequence": 5,
+						"type": "request_exit"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 18,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 30,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 18,
+			"sequence": 31,
+			"state_digest": "694782cdca0f030bf6b23e1ed41af34e12371f873685e924bf00808a215a9301",
+			"step": 31,
+			"transaction_cash_low_cents": "442097",
+			"transaction_count": 47,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "442097",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 18,
+						"schema_version": 1,
+						"sequence": 6,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 18,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 31,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 18,
+			"sequence": 32,
+			"state_digest": "e7af49fe9b50f0e2658b82dae7a97bfda2339496e1b5ac174f097e272d4eecd5",
+			"step": 32,
+			"transaction_cash_low_cents": "442097",
+			"transaction_count": 47,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "442097",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 18,
+						"schema_version": 1,
+						"sequence": 7,
+						"type": "begin"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 18,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 32,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 18,
+			"sequence": 33,
+			"state_digest": "25c1d5f5412f78f9d81d629f7e3c30f40028c997ec86133ad49775a69baa6c94",
+			"step": 33,
+			"transaction_cash_low_cents": "442097",
+			"transaction_count": 47,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "406097",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 18,
+						"schema_version": 1,
+						"sequence": 8,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 18,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 33,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 19,
+			"sequence": 34,
+			"state_digest": "37d7bf1e60bbd6c70f40d0edda287ae610ec0d1b79530d21673604ef6ec4b7b7",
+			"step": 34,
+			"transaction_cash_low_cents": "406097",
+			"transaction_count": 49,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "370370",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 5,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 19,
+						"schema_version": 1,
+						"sequence": 9,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 19,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 34,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 20,
+			"sequence": 35,
+			"state_digest": "7723f0fbfdc85f7c33d50f21c1295ab72358c8fa00e7d734d3b389928236e1d6",
+			"step": 35,
+			"transaction_cash_low_cents": "370370",
+			"transaction_count": 54,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "366370",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 6,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 20,
+						"schema_version": 1,
+						"sequence": 10,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 20,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 35,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 21,
+			"sequence": 36,
+			"state_digest": "4bf6fe30bf5751d68e29cfa77034aa0f5c9bf6836b0ac6c0d96adfa29667ad0f",
+			"step": 36,
+			"transaction_cash_low_cents": "366370",
+			"transaction_count": 56,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "320656",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 7,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 21,
+						"schema_version": 1,
+						"sequence": 11,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 21,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 36,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 22,
+			"sequence": 37,
+			"state_digest": "49d92f8497691330b0240027535eaee1f3fc7c38ce411a8c8e957727d342c65c",
+			"step": 37,
+			"transaction_cash_low_cents": "320656",
+			"transaction_count": 61,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "320656",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 22,
+						"schema_version": 1,
+						"sequence": 12,
+						"type": "request_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 22,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 37,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 22,
+			"sequence": 38,
+			"state_digest": "ff4b3bddcc159a3067b1257147856351feeb4bc5ca1df6653ce0f8da8093f98a",
+			"step": 38,
+			"transaction_cash_low_cents": "320656",
+			"transaction_count": 61,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "320656",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 22,
+						"schema_version": 1,
+						"sequence": 13,
+						"type": "confirm_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 22,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 38,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 22,
+			"sequence": 39,
+			"state_digest": "5152909079b5e0c380100e84666ffaf15eea44e5dce3bb91ca277a80c17785cd",
+			"step": 39,
+			"transaction_cash_low_cents": "320656",
+			"transaction_count": 61,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "320656",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 22,
+						"schema_version": 1,
+						"sequence": 14,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 22,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 39,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 22,
+			"sequence": 40,
+			"state_digest": "988644c04795a603ddc73ec2c639bff3e48898d719b65d905fbe5374d005c9c5",
+			"step": 40,
+			"transaction_cash_low_cents": "320656",
+			"transaction_count": 61,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "320656",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 22,
+						"schema_version": 1,
+						"sequence": 15,
+						"type": "begin"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 22,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 40,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 22,
+			"sequence": 41,
+			"state_digest": "391daa07b573a4d510673babae076cb036af541b0e1b481fd94e29a1814db99d",
+			"step": 41,
+			"transaction_cash_low_cents": "320656",
+			"transaction_count": 61,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "320656",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 22,
+						"schema_version": 1,
+						"sequence": 16,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 22,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 41,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 23,
+			"sequence": 42,
+			"state_digest": "6fb35a06c179c53d53382d0faa3aa8320c94bf7a148fcc11b2ce7741956b1eaf",
+			"step": 42,
+			"transaction_cash_low_cents": "320656",
+			"transaction_count": 63,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "376251",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 9,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 23,
+						"schema_version": 1,
+						"sequence": 17,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 23,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 42,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 24,
+			"sequence": 43,
+			"state_digest": "540c779d46eff795486d028b3d731003eff808cd59c37b9a19dec4090b6d6be8",
+			"step": 43,
+			"transaction_cash_low_cents": "320656",
+			"transaction_count": 68,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "376251",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 10,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 24,
+						"schema_version": 1,
+						"sequence": 18,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 24,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 43,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 25,
+			"sequence": 44,
+			"state_digest": "a2534e85216d44365b599aaff33851a596605a2895ff39f02d87351ad7862d70",
+			"step": 44,
+			"transaction_cash_low_cents": "376251",
+			"transaction_count": 70,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "300775",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 11,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 25,
+						"schema_version": 1,
+						"sequence": 19,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 25,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 44,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 26,
+			"sequence": 45,
+			"state_digest": "ac97cbb5953586e43f100afb22bf6b8094aece9b2a4f7617be5499abf3a22d75",
+			"step": 45,
+			"transaction_cash_low_cents": "300775",
+			"transaction_count": 77,
+			"transactions_observed": 7
+		},
+		{
+			"accepted": true,
+			"cash_cents": "300775",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 12,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 26,
+						"schema_version": 1,
+						"sequence": 20,
+						"type": "request_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 26,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 45,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 26,
+			"sequence": 46,
+			"state_digest": "49916fd13eeb63a19c36e3ebd45c091aee39bf6611d9a29cf57b478021a6c9ed",
+			"step": 46,
+			"transaction_cash_low_cents": "300775",
+			"transaction_count": 77,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "300775",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 1,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 12,
+						"project_id": "bank-grace-graduate-4417:project:2",
+						"run_cycle": 26,
+						"schema_version": 1,
+						"sequence": 21,
+						"type": "confirm_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 26,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 46,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 26,
+			"sequence": 47,
+			"state_digest": "4068f238f4101ce857d83744527494a38d3b7d674f9e34fe4a5eefd492a2f714",
+			"step": 47,
+			"transaction_cash_low_cents": "300775",
+			"transaction_count": 77,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "300775",
+			"command_type": "launch",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "studio",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:2",
+				"run_cycle": 26,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 47,
+				"type": "launch"
+			},
+			"research_queue": [],
+			"run_cycle": 26,
+			"sequence": 48,
+			"state_digest": "636c926be7c47aca2df6fca2e0cdbe4031121a525cd12c5c375fa3c7ebcc23c9",
+			"step": 48,
+			"transaction_cash_low_cents": "300775",
+			"transaction_count": 77,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "300775",
+			"command_type": "begin_development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"genre": "action",
+					"name": "Graduate 3",
+					"theme": "fantasy"
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 26,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 48,
+				"type": "begin_development"
+			},
+			"research_queue": [],
+			"run_cycle": 27,
+			"sequence": 49,
+			"state_digest": "bad0da0d0d9779b15f6ceac070263eed00f157fee01fcacdefbe0b15967aeae7",
+			"step": 49,
+			"transaction_cash_low_cents": "300775",
+			"transaction_count": 79,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "300775",
+			"command_type": "development",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 27,
+						"schema_version": 1,
+						"sequence": 0,
+						"type": "begin"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 27,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 49,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 27,
+			"sequence": 50,
+			"state_digest": "b514aa9c90d7a4d73047a1245262127dcff1fe75847c3506cce4a9483c837b71",
+			"step": 50,
+			"transaction_cash_low_cents": "300775",
+			"transaction_count": 79,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "649039",
+			"command_type": "development",
+			"error": "",
+			"fans": "5",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 27,
+						"schema_version": 1,
+						"sequence": 1,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 27,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 50,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 28,
+			"sequence": 51,
+			"state_digest": "acbcc45c2079b697fc605394667f2b4265d59bdf07ff782bbccee48f8c2fef22",
+			"step": 51,
+			"transaction_cash_low_cents": "265775",
+			"transaction_count": 86,
+			"transactions_observed": 7
+		},
+		{
+			"accepted": true,
+			"cash_cents": "629039",
+			"command_type": "development",
+			"error": "",
+			"fans": "5",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "design",
+						"project_cycle": 1,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 28,
+						"schema_version": 1,
+						"sequence": 2,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 28,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 51,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 29,
+			"sequence": 52,
+			"state_digest": "5da35fa7f2deef31586745bacf2cd28050c49eb8260216592fbf668ee89978d4",
+			"step": 52,
+			"transaction_cash_low_cents": "629039",
+			"transaction_count": 88,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "668340",
+			"command_type": "development",
+			"error": "",
+			"fans": "6",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "design",
+						"project_cycle": 2,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 29,
+						"schema_version": 1,
+						"sequence": 3,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 29,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 52,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 30,
+			"sequence": 53,
+			"state_digest": "5ce5e6f72ebfb6a485de76a7262c3d74a34e179a7639076550c1cd7a422fd442",
+			"step": 53,
+			"transaction_cash_low_cents": "620039",
+			"transaction_count": 95,
+			"transactions_observed": 7
+		},
+		{
+			"accepted": true,
+			"cash_cents": "658340",
+			"command_type": "development",
+			"error": "",
+			"fans": "6",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "design",
+						"project_cycle": 3,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 30,
+						"schema_version": 1,
+						"sequence": 4,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 30,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 53,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 31,
+			"sequence": 54,
+			"state_digest": "d4b99e22ed022ec206eb61c5cfb7f4d0c1e9e716117bfcf22f067db8b7aeb6c7",
+			"step": 54,
+			"transaction_cash_low_cents": "658340",
+			"transaction_count": 97,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "658340",
+			"command_type": "development",
+			"error": "",
+			"fans": "6",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 31,
+						"schema_version": 1,
+						"sequence": 5,
+						"type": "request_exit"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 31,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 54,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 31,
+			"sequence": 55,
+			"state_digest": "3e46a9b9dcc6edd685e832690030f8154c8f42bc30a9de02e0535b0a874ed051",
+			"step": 55,
+			"transaction_cash_low_cents": "658340",
+			"transaction_count": 97,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "658340",
+			"command_type": "development",
+			"error": "",
+			"fans": "6",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 31,
+						"schema_version": 1,
+						"sequence": 6,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "design",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 31,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 55,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 31,
+			"sequence": 56,
+			"state_digest": "d5f291526673167ef1a4b5a934d0a643bc73dccae4aa06e1760b3fe359a2115a",
+			"step": 56,
+			"transaction_cash_low_cents": "658340",
+			"transaction_count": 97,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "658340",
+			"command_type": "development",
+			"error": "",
+			"fans": "6",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 31,
+						"schema_version": 1,
+						"sequence": 7,
+						"type": "begin"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 31,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 56,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 31,
+			"sequence": 57,
+			"state_digest": "ea86caaec563c35d5dacd436c3bd71f844ad62efb64c1dbf06a5b696fd7cc6ca",
+			"step": 57,
+			"transaction_cash_low_cents": "658340",
+			"transaction_count": 97,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "620200",
+			"command_type": "development",
+			"error": "",
+			"fans": "7",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 4,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 31,
+						"schema_version": 1,
+						"sequence": 8,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 31,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 57,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 32,
+			"sequence": 58,
+			"state_digest": "c8ee6d2cb3d292d67d7595cfafac06aa4a198d073a25fe24576db7657f0dc2c7",
+			"step": 58,
+			"transaction_cash_low_cents": "620200",
+			"transaction_count": 104,
+			"transactions_observed": 7
+		},
+		{
+			"accepted": true,
+			"cash_cents": "597200",
+			"command_type": "development",
+			"error": "",
+			"fans": "7",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 5,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 32,
+						"schema_version": 1,
+						"sequence": 9,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 32,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 58,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 33,
+			"sequence": 59,
+			"state_digest": "2a1a02eb7e353dec67e06d4b5a0dff45e7a623c95397dabdec468d6adc413b77",
+			"step": 59,
+			"transaction_cash_low_cents": "597200",
+			"transaction_count": 106,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "546591",
+			"command_type": "development",
+			"error": "",
+			"fans": "7",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 6,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 33,
+						"schema_version": 1,
+						"sequence": 10,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 33,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 59,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 34,
+			"sequence": 60,
+			"state_digest": "a71ac4ccdbd1273dced5c84f5bd6d10109fb3acd241571a690936aacc4f157e9",
+			"step": 60,
+			"transaction_cash_low_cents": "546591",
+			"transaction_count": 113,
+			"transactions_observed": 7
+		},
+		{
+			"accepted": true,
+			"cash_cents": "542591",
+			"command_type": "development",
+			"error": "",
+			"fans": "7",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 7,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 34,
+						"schema_version": 1,
+						"sequence": 11,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 34,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 60,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 35,
+			"sequence": 61,
+			"state_digest": "00c18c78f5adc9da530d79fe95d517cec37d54658d1c53a23c7bd06ea0f1cdfb",
+			"step": 61,
+			"transaction_cash_low_cents": "542591",
+			"transaction_count": 115,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "542591",
+			"command_type": "development",
+			"error": "",
+			"fans": "7",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 35,
+						"schema_version": 1,
+						"sequence": 12,
+						"type": "request_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 35,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 61,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 35,
+			"sequence": 62,
+			"state_digest": "b309cce28cdc780186943d74f12b4080df9e2042bf3154760ec0b86a66d62f38",
+			"step": 62,
+			"transaction_cash_low_cents": "542591",
+			"transaction_count": 115,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "542591",
+			"command_type": "development",
+			"error": "",
+			"fans": "7",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 35,
+						"schema_version": 1,
+						"sequence": 13,
+						"type": "confirm_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 35,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 62,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 35,
+			"sequence": 63,
+			"state_digest": "f23de951ad548eec2246e45dcd19aee44d0877d0e1d19aa913b8ba50d14e68da",
+			"step": 63,
+			"transaction_cash_low_cents": "542591",
+			"transaction_count": 115,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "542591",
+			"command_type": "development",
+			"error": "",
+			"fans": "7",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 35,
+						"schema_version": 1,
+						"sequence": 14,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 35,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 63,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 35,
+			"sequence": 64,
+			"state_digest": "215351fac8d7a93eba73c4a294c6f407cdb661d8f439ab465b076593bbfc85d5",
+			"step": 64,
+			"transaction_cash_low_cents": "542591",
+			"transaction_count": 115,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "542591",
+			"command_type": "development",
+			"error": "",
+			"fans": "7",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 35,
+						"schema_version": 1,
+						"sequence": 15,
+						"type": "begin"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 35,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 64,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 35,
+			"sequence": 65,
+			"state_digest": "577ff978c960bfa449e1670cf3cfbd24fce5ae782270a4dbecd05349598d142c",
+			"step": 65,
+			"transaction_cash_low_cents": "542591",
+			"transaction_count": 115,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "483199",
+			"command_type": "development",
+			"error": "",
+			"fans": "8",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 8,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 35,
+						"schema_version": 1,
+						"sequence": 16,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 35,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 65,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 36,
+			"sequence": 66,
+			"state_digest": "a92a5819930c00597276371cc2e76d329889f0d6dbffee104e47a8ad618081b4",
+			"step": 66,
+			"transaction_cash_low_cents": "483199",
+			"transaction_count": 122,
+			"transactions_observed": 7
+		},
+		{
+			"accepted": true,
+			"cash_cents": "583199",
+			"command_type": "development",
+			"error": "",
+			"fans": "8",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 9,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 36,
+						"schema_version": 1,
+						"sequence": 17,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 36,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 66,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 37,
+			"sequence": 67,
+			"state_digest": "a6c24fae241edb52f064cd06b32c41d4ddebcdc6e8972e40e5f323fa26fdc08b",
+			"step": 67,
+			"transaction_cash_low_cents": "483199",
+			"transaction_count": 124,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "514717",
+			"command_type": "development",
+			"error": "",
+			"fans": "8",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 10,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 37,
+						"schema_version": 1,
+						"sequence": 18,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 37,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 67,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 38,
+			"sequence": 68,
+			"state_digest": "d736718898dc3379231c9e5ed45bed4d4e4963bc580a39c456ef44132f0f0f54",
+			"step": 68,
+			"transaction_cash_low_cents": "514717",
+			"transaction_count": 131,
+			"transactions_observed": 7
+		},
+		{
+			"accepted": true,
+			"cash_cents": "514717",
+			"command_type": "development",
+			"error": "",
+			"fans": "8",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 11,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 38,
+						"schema_version": 1,
+						"sequence": 19,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 38,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 68,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 39,
+			"sequence": 69,
+			"state_digest": "fd4ede3cf9778ce545ef359cc7f23474132e84e956c624b082a87ee271372a08",
+			"step": 69,
+			"transaction_cash_low_cents": "514717",
+			"transaction_count": 133,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "514717",
+			"command_type": "development",
+			"error": "",
+			"fans": "8",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 12,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 39,
+						"schema_version": 1,
+						"sequence": 20,
+						"type": "request_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 39,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 69,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 39,
+			"sequence": 70,
+			"state_digest": "60015e61d0acca5ab9ff8f831b2cb72f78f4e572463a471ddf25808d1e5ba66a",
+			"step": 70,
+			"transaction_cash_low_cents": "514717",
+			"transaction_count": 133,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "514717",
+			"command_type": "development",
+			"error": "",
+			"fans": "8",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 12,
+						"project_id": "bank-grace-graduate-4417:project:3",
+						"run_cycle": 39,
+						"schema_version": 1,
+						"sequence": 21,
+						"type": "confirm_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 39,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 70,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 39,
+			"sequence": 71,
+			"state_digest": "c678a0d9ff62278a052c03e5f351acd4d3e1a4ab40ccf9b6e1657b265e905e8c",
+			"step": 71,
+			"transaction_cash_low_cents": "514717",
+			"transaction_count": 133,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "514717",
+			"command_type": "launch",
+			"error": "",
+			"fans": "8",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects"
+			],
+			"phase": "studio",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "bank-grace-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:2",
+					"release_cycle": 26,
+					"review": 5.2
+				},
+				{
+					"id": "bank-grace-graduate-4417:project:3",
+					"release_cycle": 39,
+					"review": 4.0
+				}
+			],
+			"request": {
+				"payload": {},
+				"phase": "beta",
+				"project_id": "bank-grace-graduate-4417:project:3",
+				"run_cycle": 39,
+				"run_id": "bank-grace-graduate-4417",
+				"schema_version": 1,
+				"sequence": 71,
+				"type": "launch"
+			},
+			"research_queue": [],
+			"run_cycle": 39,
+			"sequence": 72,
+			"state_digest": "722269e69660e39219aae738120dbe270521a6536a42b1ccd6adcb04478a5db0",
+			"step": 72,
+			"transaction_cash_low_cents": "514717",
+			"transaction_count": 133,
+			"transactions_observed": 0
+		}
+	],
+	"sampling": "initial_and_after_each_executed_command",
+	"schema_version": "1",
+	"source_identity": "13980fdeb9efabaeb070c8dddddcd8137982e3e073aa43ab87f7fdd1a57c4c4f"
+}

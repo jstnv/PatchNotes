@@ -1,0 +1,46 @@
+diff --git a/patch-notes/scripts/debug/verify_studio_fanbase.gd b/patch-notes/scripts/debug/verify_studio_fanbase.gd
+index 10a8ed2..61c7d01 100644
+--- a/patch-notes/scripts/debug/verify_studio_fanbase.gd
++++ b/patch-notes/scripts/debug/verify_studio_fanbase.gd
+@@ -30,6 +30,8 @@ func project_at(review: float, units: int, fans: int = 0) -> ProjectState:
+ 
+ func _run() -> void:
+ 	snapshots.load_ledgers()
++	for pair in [[0,0],[1,0],[2,0],[3,0],[4,1],[96,24],[149,37],[267,66],[599,149],[600,150],[601,150],[StudioFanbase.MAX_INT,150]]:
++		check(StudioFanbase.awareness_for(pair[0]) == pair[1],"Quarter Awareness boundary %d" % pair[0])
+ 	var run := RunState.new()
+ 	check(run.initialize_cash_cents(100000), "Fixture starts with cash")
+ 	var first := project_at(7.0, 750)
+@@ -41,7 +43,7 @@ func _run() -> void:
+ 	check(history.size() == 1 and history[0].starting == 0 and history[0].gained == 60 and history[0].lost == 0, "Monthly starting, gained and lost totals reconcile")
+ 	var frozen: int = run.get_released_game_sales(first.get_release_id()).launch_awareness
+ 	var second := project_at(7.0, 750, run.get_fans())
+-	check(second.get_awareness_result().get_existing_fans() == 60 and second.get_awareness_result().get_fan_awareness() == 25, "Next launch snapshots 60 fans as 25 Awareness")
++	check(second.get_awareness_result().get_existing_fans() == 60 and second.get_awareness_result().get_fan_awareness() == 15, "Next launch snapshots 60 fans as 15 Awareness")
+ 	check(run.register_release(second) and run.get_released_game_sales(first.get_release_id()).launch_awareness == frozen, "New fans do not rewrite an older launch")
+ 	var before := run.get_fanbase_snapshot()
+ 	check(not run.complete_productive_action(Callable(), 0, 1) and run.get_fanbase_snapshot() == before, "Duplicate callback leaves fans unchanged")
+diff --git a/patch-notes/scripts/fanbase/studio_fanbase.gd b/patch-notes/scripts/fanbase/studio_fanbase.gd
+index ac25a61..4eb6229 100644
+--- a/patch-notes/scripts/fanbase/studio_fanbase.gd
++++ b/patch-notes/scripts/fanbase/studio_fanbase.gd
+@@ -6,7 +6,6 @@ extends RefCounted
+ const CONVERSION_PERCENT := 8
+ const LOSS_PERCENT_PER_REVIEW_POINT := 15
+ const FAN_AWARENESS_LIMIT := 150
+-const FAN_AWARENESS_HALF_POINT := 300
+ const MAX_INT := 9223372036854775807
+ 
+ 
+@@ -16,9 +15,8 @@ static func create() -> Dictionary:
+ 
+ static func awareness_for(fans: int) -> int:
+ 	if fans <= 0: return 0
+-	# The rational curve approaches 150, but never reaches it for finite fans.
+-	if fans > MAX_INT / FAN_AWARENESS_LIMIT: return FAN_AWARENESS_LIMIT - 1
+-	return fans * FAN_AWARENESS_LIMIT / (fans + FAN_AWARENESS_HALF_POINT)
++	# Selected trial: divide before clamping; even MAX_INT cannot overflow.
++	return mini(FAN_AWARENESS_LIMIT, fans / 4)
+ 
+ 
+ static func register_release(state: Dictionary, record: Dictionary, launch_fans: int) -> Dictionary:

@@ -2,6 +2,12 @@
 
 Authority: cumulative §§39–44,47,55,57,59,61; current Tasks7,15,20,23,32,34. Source: [publisher catalog](../../../patch-notes/scripts/publishers/publisher_catalog.gd), [ContractState](../../../patch-notes/scripts/contracts/contract_state.gd), RunState and ContractPhase.
 
+## Current implementation — 2026-10-09
+
+Crown/Neon and the approved Starwave pilot are implemented locally. This supersedes the historical unimplemented descriptions below. Starwave issues one persistent offer at two distinct releases/three prior completed Contracts, freezes its Primitive pool and three-hand terms, pays only on hand3, and grants no Promotion. Existing two-hand publishers and banked Promotion are preserved. Focused verification and ten fresh-process rollback/restore stages pass; the source-pinned legal route earned$2,220, carried an actual Bank installment through hand2, paid all twelve installments, and consumed existing Neon18 on the next launch. The independent route/finance audit passes52,934 checks. [Implementation record](../logs/2026-10-09-starwave-implementation-v1.md).
+
+The combined pre-education gate passed101 maintained suites, clean import/export,212 package entries and headless EXE startup. [Gate evidence](../findings/release-gate-integrated-v3/gate-result.json). Headless input/layout checks do not replace rendered visual or actual exported-input acceptance; those remain deferred to an overnight task at the user's request. Current checkpoint content includes Fanbase/Starwave and rejects unsupported older content while preserving its original bytes. All approved publisher numbers remain ACTIVE/TRIAL, not final balance.
+
 ## Locked and implemented
 
 Five profiles with monotonic run-level unlocks; passive browser/notifications free. Ironclad owns the one-shot balanced Primitive offer. SideStreet requires Ironclad committed completion; Crown unlock uses frozen released Review≥7.0; Neon frozen launch Awareness≥125; Starwave two distinct releases and three distinct committed Contracts. Later sales/campaigns do not change frozen unlock inputs. RunState has an explicit Ironclad completion field, but its current SideStreet unlock predicate uses aggregate completed Contracts. This is equivalent only while Ironclad and SideStreet are the sole live offers; the Crown/Neon implementation must use the explicit Ironclad field.

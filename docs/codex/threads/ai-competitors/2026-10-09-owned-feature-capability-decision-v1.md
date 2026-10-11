@@ -1,0 +1,9 @@
+# 2026-10-09 decision: owned Features define rival capability input
+
+**Status:** **LOCKED input basis; OPEN legal-mix construction and exact computation.** A [later B ruling](2026-10-09-legal-project-capability-decision-v1.md) constrains that input to one legal project's potential; subsequent shopping-fit rulings are indexed in the [thread README](README.md). Authority for this record: the user's choice **A** in the AI Competitors design thread on 2026-10-09, resolving the [A/B brief](2026-10-09-next-decision-v1.md).
+
+For a rival's Feature shopping, derive its current four-Core capability from **that rival's owned Features eligible for ordinary Design/Alpha project supply**. The input includes permanent-specialty Primitive grants, completed purchases and completed research when they are owned and eligible. A queued or partially researched Feature, an unlocked but unowned Store node, and a renewable Pass do not contribute Feature Core. Past-release Core output is not the capability basis.
+
+This is an inventory basis, not a claim that every owned Feature appears in one project or hand. Ownership does not guarantee a draw, affordable play, selection or successful commit. Legal-mix construction from printed primary/secondary Core, duplicate and finite-use handling, active-project snapshot timing, exact arithmetic and CPU method remain **OPEN**. Later rulings select relevance, excess-Core treatment and equal proportional-gap fit; they do not make the full calculation ready for implementation. The permanent studio specialty still supplies the acquisition target; the independent project Genre still controls that project's Review standards.
+
+This decision changes no Store ownership/research rules, Review formula or gameplay. It does not authorize an implementation handoff or a `TODO.md` edit.

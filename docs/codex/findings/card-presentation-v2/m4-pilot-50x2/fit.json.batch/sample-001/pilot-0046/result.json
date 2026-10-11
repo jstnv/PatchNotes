@@ -1,0 +1,206 @@
+{
+	"accepted_commands": 36,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"tape": "replay.tape.json"
+	},
+	"case_id": "pilot-0046",
+	"commands": 36,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "",
+	"final_release_count": 2,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4467"
+			},
+			"state": {
+				"integer": "4270008500469232197"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4468"
+			},
+			"state": {
+				"integer": "6232646608501290462"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4469"
+			},
+			"state": {
+				"integer": "-2828560032230885"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4470"
+			},
+			"state": {
+				"integer": "2860388096588985284"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4471"
+			},
+			"state": {
+				"integer": "843109316637127805"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4465"
+			},
+			"state": {
+				"integer": "1851707664775511310"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4466"
+			},
+			"state": {
+				"integer": "-6935840361864299964"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4464"
+			},
+			"state": {
+				"integer": "-5327417271557703260"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4463"
+			},
+			"state": {
+				"integer": "5023201168511552473"
+			}
+		}
+	},
+	"final_run_cycle": 14,
+	"final_state": "5358ee5c8c529702247764521a8d57f2db9c6c7dceebf0d4abfc2fb81289cc59",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4467"
+			},
+			"state": {
+				"integer": "-6166691505040492599"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4468"
+			},
+			"state": {
+				"integer": "197444718806300406"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4469"
+			},
+			"state": {
+				"integer": "6561580942653093411"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4470"
+			},
+			"state": {
+				"integer": "-5521026907209665200"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4471"
+			},
+			"state": {
+				"integer": "843109316637127805"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4465"
+			},
+			"state": {
+				"integer": "-448219879024526993"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4466"
+			},
+			"state": {
+				"integer": "5915916344822266012"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4464"
+			},
+			"state": {
+				"integer": "-6812356102871319998"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4463"
+			},
+			"state": {
+				"integer": "5270251746991438613"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "248e0916de3999b25b97c21481075dcb102620367ddfd27b4d483e221d086b1c",
+	"input_identity": "ba3c77039ff10bb8520ba0da4394a63412ad483acb9749dafc1cc3b1035b9936",
+	"last_choice": {
+		"type": "launch"
+	},
+	"max_commands": 60,
+	"ok": true,
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"float_bits": "0300000000000040"
+				},
+				"beta": {
+					"float_bits": "0300000000000040"
+				},
+				"design": {
+					"float_bits": "0300000000000040"
+				}
+			},
+			"name_prefix": "Pilot",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 14,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "430763c166550fd44499f4eda5b72c915a07f910633c87cc47e95229c72693c8",
+	"status": "completed",
+	"tape_identity": "00be28cef469da8cc87c1b4d16ecac3b6bc7befb89bba8c6462e18ef0385d66e",
+	"target_release_count": 2
+}

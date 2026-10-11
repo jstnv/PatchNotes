@@ -1,0 +1,391 @@
+ M docs/codex/CURRENT_STATE.md
+ M docs/codex/DECISIONS.md
+ M docs/codex/README.md
+ M docs/codex/TODO.md
+ M docs/codex/design/core-and-studio.md
+ M docs/codex/design/economy-banking.md
+ M docs/codex/design/fanbase.md
+ M docs/codex/design/feature-store-progression.md
+ M docs/codex/design/publishers-contracts.md
+ M docs/codex/design/release-engineering.md
+ M docs/codex/design/studio-traits.md
+ M docs/codex/findings/bank-b6-v1/PLAN.md
+ M docs/codex/findings/bank-b6-v1/audit.py
+ M docs/codex/findings/bank-b6-v1/b6.gd
+ M docs/codex/findings/bank-b6-v1/run.py
+ M docs/codex/findings/bank-b6-v1/source-manifest.json
+ M docs/codex/findings/export-queue-v3/export.py
+ M docs/codex/findings/export-ui-queue-v1/README.md
+ M docs/codex/findings/export-ui-queue-v1/audit-result.json
+ M docs/codex/findings/export-ui-queue-v1/audit.py
+ M docs/codex/threads/banking-system/HANDOFF.md
+ M docs/codex/threads/banking-system/README.md
+ M docs/codex/threads/contracts/HANDOFF.md
+ M docs/codex/threads/contracts/README.md
+ M docs/codex/threads/fanbase/README.md
+ M docs/codex/threads/fanbase/handoffs/2026-10-08-current-main-fanbase-trial-v1.md
+ M docs/codex/threads/fanbase/handoffs/README.md
+ M patch-notes/data/audio_credits.json
+ M patch-notes/project.godot
+ M patch-notes/resources/ui/workspace_theme.tres
+ M patch-notes/scenes/cards/card_view.tscn
+ M patch-notes/scripts/awareness/primitive_awareness_calculator.gd
+ M patch-notes/scripts/cards/card_database.gd
+ M patch-notes/scripts/cards/card_view.gd
+ M patch-notes/scripts/contracts/contract_state.gd
+ M patch-notes/scripts/contracts/publisher_trial_terms.gd
+ M patch-notes/scripts/debug/verify_alpha_phase.gd
+ M patch-notes/scripts/debug/verify_beta_host_playtest.gd
+ M patch-notes/scripts/debug/verify_beta_planning.gd
+ M patch-notes/scripts/debug/verify_card_motion.gd
+ M patch-notes/scripts/debug/verify_checkpoint_recovery_ui.gd
+ M patch-notes/scripts/debug/verify_design_phase.gd
+ M patch-notes/scripts/debug/verify_game_lifespan_trial.gd
+ M patch-notes/scripts/debug/verify_genre_checkpoint.gd
+ M patch-notes/scripts/debug/verify_monthly_sales_report.gd
+ M patch-notes/scripts/debug/verify_outstanding_expenses.gd
+ M patch-notes/scripts/debug/verify_predevelopment.gd
+ M patch-notes/scripts/debug/verify_primitive_awareness.gd
+ M patch-notes/scripts/debug/verify_publisher_browser_states.gd
+ M patch-notes/scripts/debug/verify_publisher_trial_promotion.gd
+ M patch-notes/scripts/debug/verify_sales_earning_and_settlement.gd
+ M patch-notes/scripts/debug/verify_studio_traits.gd
+ M patch-notes/scripts/finance/feature_spending_guidance.gd
+ M patch-notes/scripts/finance/studio_finance_ledger.gd
+ M patch-notes/scripts/first_game_tutorial.gd
+ M patch-notes/scripts/gameplay.gd
+ M patch-notes/scripts/persistence/checkpoint_schema.gd
+ M patch-notes/scripts/persistence/studio_checkpoint.gd
+ M patch-notes/scripts/phases/alpha_phase.gd
+ M patch-notes/scripts/phases/beta_phase.gd
+ M patch-notes/scripts/phases/contract_phase.gd
+ M patch-notes/scripts/phases/design_phase.gd
+ M patch-notes/scripts/phases/main_menu.gd
+ M patch-notes/scripts/phases/post_game_review.gd
+ M patch-notes/scripts/phases/studio_phase.gd
+ M patch-notes/scripts/project_state.gd
+ M patch-notes/scripts/publishers/publisher_catalog.gd
+ M patch-notes/scripts/run_state.gd
+ M patch-notes/scripts/studio_traits.gd
+ M patch-notes/scripts/ui/card_fan.gd
+ M patch-notes/scripts/ui/demo_settings_menu.gd
+ M patch-notes/scripts/ui/gameplay_hud.gd
+ M patch-notes/scripts/ui/hand_presentation.gd
+ M patch-notes/scripts/ui/phase_workspace.gd
+ M patch-notes/scripts/ui/studio_finances.gd
+ M patch-notes/scripts/ui/synergy_notification.gd
+ M patch-notes/scripts/ui/tutorial_overlay.gd
+ M tools/release_gate.py
+?? docs/codex/findings/ai-competitors-gates-v1/
+?? docs/codex/findings/bank-b6-v1/README.md
+?? docs/codex/findings/bank-b6-v1/audit-result.json
+?? docs/codex/findings/bank-b6-v1/audit_v2.py
+?? docs/codex/findings/bank-b6-v1/current-ordinary-early-1104.command.json
+?? docs/codex/findings/bank-b6-v1/current-ordinary-early-1104.json.gz
+?? docs/codex/findings/bank-b6-v1/current-ordinary-early-1104.log
+?? docs/codex/findings/bank-b6-v1/current-ordinary-early-1104.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/current-ordinary-early-4417.command.json
+?? docs/codex/findings/bank-b6-v1/current-ordinary-early-4417.json.gz
+?? docs/codex/findings/bank-b6-v1/current-ordinary-early-4417.log
+?? docs/codex/findings/bank-b6-v1/current-ordinary-early-4417.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/current-ordinary-late-1104.command.json
+?? docs/codex/findings/bank-b6-v1/current-ordinary-late-1104.json.gz
+?? docs/codex/findings/bank-b6-v1/current-ordinary-late-1104.log
+?? docs/codex/findings/bank-b6-v1/current-ordinary-late-1104.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/current-ordinary-late-4417.command.json
+?? docs/codex/findings/bank-b6-v1/current-ordinary-late-4417.json.gz
+?? docs/codex/findings/bank-b6-v1/current-ordinary-late-4417.log
+?? docs/codex/findings/bank-b6-v1/current-ordinary-late-4417.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/current-synergy-early-1104.command.json
+?? docs/codex/findings/bank-b6-v1/current-synergy-early-1104.json.gz
+?? docs/codex/findings/bank-b6-v1/current-synergy-early-1104.log
+?? docs/codex/findings/bank-b6-v1/current-synergy-early-1104.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/current-synergy-early-4417.command.json
+?? docs/codex/findings/bank-b6-v1/current-synergy-early-4417.json.gz
+?? docs/codex/findings/bank-b6-v1/current-synergy-early-4417.log
+?? docs/codex/findings/bank-b6-v1/current-synergy-early-4417.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/current-synergy-late-1104.command.json
+?? docs/codex/findings/bank-b6-v1/current-synergy-late-1104.json.gz
+?? docs/codex/findings/bank-b6-v1/current-synergy-late-1104.log
+?? docs/codex/findings/bank-b6-v1/current-synergy-late-1104.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/current-synergy-late-4417.command.json
+?? docs/codex/findings/bank-b6-v1/current-synergy-late-4417.json.gz
+?? docs/codex/findings/bank-b6-v1/current-synergy-late-4417.log
+?? docs/codex/findings/bank-b6-v1/current-synergy-late-4417.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/evidence.py
+?? docs/codex/findings/bank-b6-v1/import-repair.command.json
+?? docs/codex/findings/bank-b6-v1/import-repair.log
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-early-1104.command.json
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-early-1104.json.gz
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-early-1104.log
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-early-1104.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-early-4417.command.json
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-early-4417.json.gz
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-early-4417.log
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-early-4417.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-late-1104.command.json
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-late-1104.json.gz
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-late-1104.log
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-late-1104.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-late-4417.command.json
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-late-4417.json.gz
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-late-4417.log
+?? docs/codex/findings/bank-b6-v1/legacy-ordinary-late-4417.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-early-1104.command.json
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-early-1104.json.gz
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-early-1104.log
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-early-1104.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-early-4417.command.json
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-early-4417.json.gz
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-early-4417.log
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-early-4417.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-late-1104.command.json
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-late-1104.json.gz
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-late-1104.log
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-late-1104.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-late-4417.command.json
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-late-4417.json.gz
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-late-4417.log
+?? docs/codex/findings/bank-b6-v1/legacy-synergy-late-4417.result-manifest.json
+?? docs/codex/findings/bank-b6-v1/route-manifest.json
+?? docs/codex/findings/bank-b6-v1/runner_support.py
+?? docs/codex/findings/bank-b6-v1/syntax-check.command.json
+?? docs/codex/findings/bank-b6-v1/syntax-check.log
+?? docs/codex/findings/bank-b6-v1/upstream-acceptance.json
+?? docs/codex/findings/bank-b6-v1/upstream-acceptance.template.json
+?? docs/codex/findings/bank-b6-v2/
+?? docs/codex/findings/card-motion-gate-repair-v1/
+?? docs/codex/findings/card-presentation-v2/
+?? docs/codex/findings/card-readability-v1/
+?? docs/codex/findings/checkpoint-modal-v1/
+?? docs/codex/findings/cult-following-t7-high-v1/
+?? docs/codex/findings/cult-following-t7-v1/
+?? docs/codex/findings/cult-following-t8-v1/
+?? docs/codex/findings/education-e4-compatibility-v1/
+?? docs/codex/findings/education-e4-rich-legacy-v1/
+?? docs/codex/findings/education-implementation-v1/
+?? docs/codex/findings/education-legacy-fixtures-v1/
+?? docs/codex/findings/export-fanbase-starwave-v1/
+?? docs/codex/findings/export-interaction-20261010-v2/
+?? docs/codex/findings/export-ui-queue-v1/repaired-continue/
+?? docs/codex/findings/export-ui-queue-v1/repaired-studio/
+?? docs/codex/findings/export-ui-queue-v1/second-continue/
+?? docs/codex/findings/export-ui-queue-v1/ui-actions-2026-10-09.json
+?? docs/codex/findings/fanbase-integration-v1/
+?? docs/codex/findings/fanbase-report-fixture-v1/
+?? docs/codex/findings/outstanding-expenses-gate-repair-v1/
+?? docs/codex/findings/overnight-export-v1/
+?? docs/codex/findings/overnight-ui-v1/
+?? docs/codex/findings/release-gate-card-modal-v1/
+?? docs/codex/findings/release-gate-card-modal-v2/
+?? docs/codex/findings/release-gate-education-v1/
+?? docs/codex/findings/release-gate-education-v2/
+?? docs/codex/findings/release-gate-education-v3/
+?? docs/codex/findings/release-gate-education-v4/
+?? docs/codex/findings/release-gate-integrated-v1/
+?? docs/codex/findings/release-gate-integrated-v2/
+?? docs/codex/findings/release-gate-integrated-v3/
+?? docs/codex/findings/release-gate-noninteractive-20261010-v1/
+?? docs/codex/findings/release-gate-queue-v1/profiles/
+?? docs/codex/findings/release-gate-queue-v2/profiles/
+?? docs/codex/findings/release-gate-queue-v3/export-smoke-yn3jgnff/
+?? docs/codex/findings/release-gate-queue-v3/profiles/
+?? docs/codex/findings/release-gate-queue-v4/profiles/
+?? docs/codex/findings/release-gate-queue-v5/profiles/
+?? docs/codex/findings/release-gate-queue-v6/export-smoke-_b_r_hlt/
+?? docs/codex/findings/release-gate-queue-v6/profiles/
+?? docs/codex/findings/release-gate-writer-isolation-v1/
+?? docs/codex/findings/soundtrack-sync-v1/
+?? docs/codex/findings/starwave-implementation-v1/
+?? docs/codex/findings/symmetric-card-frame-v1/
+?? docs/codex/logs/2026-10-09-ai-competitors-gates-v1.md
+?? docs/codex/logs/2026-10-09-card-modal-integrated-gate-v1.md
+?? docs/codex/logs/2026-10-09-card-motion-gate-repair-v1.md
+?? docs/codex/logs/2026-10-09-card-readability-v1.md
+?? docs/codex/logs/2026-10-09-checkpoint-modal-v1.md
+?? docs/codex/logs/2026-10-09-cult-following-t7-high-v1.md
+?? docs/codex/logs/2026-10-09-cult-following-t7-v1.md
+?? docs/codex/logs/2026-10-09-education-e4-compatibility-v1.md
+?? docs/codex/logs/2026-10-09-education-e4-rich-legacy-v1.md
+?? docs/codex/logs/2026-10-09-education-implementation-v1.md
+?? docs/codex/logs/2026-10-09-education-legacy-fixtures-v1.md
+?? docs/codex/logs/2026-10-09-fanbase-integration-v1.md
+?? docs/codex/logs/2026-10-09-outstanding-expenses-gate-repair-v1.md
+?? docs/codex/logs/2026-10-09-overnight-export-attempt-v1.md
+?? docs/codex/logs/2026-10-09-queue-execution-v1.md
+?? docs/codex/logs/2026-10-09-release-gate-writer-isolation-v1.md
+?? docs/codex/logs/2026-10-09-soundtrack-sync-v1.md
+?? docs/codex/logs/2026-10-09-starwave-implementation-v1.md
+?? docs/codex/logs/2026-10-09-symmetric-card-frame-v1.md
+?? docs/codex/logs/2026-10-10-balanced-production-v1.md
+?? docs/codex/logs/2026-10-10-card-presentation-v2.md
+?? docs/codex/logs/2026-10-10-export-interaction-v2.md
+?? docs/codex/logs/2026-10-10-noninteractive-queue-v1.md
+?? docs/codex/logs/2026-10-10-noninteractive-queue-v2.md
+?? docs/codex/logs/2026-10-10-playtest-percentages-v1.md
+?? docs/codex/threads/ai-competitors/
+?? docs/codex/threads/banking-system/2026-10-09-education-activation-handoff-v1.md
+?? docs/codex/threads/banking-system/2026-10-09-education-handoff-intake-v1.md
+?? docs/codex/threads/banking-system/2026-10-09-education-implementation-review-v1.md
+?? docs/codex/threads/banking-system/2026-10-09-education-payoff-action-sequence-decision-v1.md
+?? docs/codex/threads/banking-system/2026-10-09-education-payoff-reserve-decision-v1.md
+?? docs/codex/threads/banking-system/2026-10-09-education-pre-todo-readiness-v1.md
+?? docs/codex/threads/banking-system/2026-10-09-education-preview-migration-decision-v1.md
+?? docs/codex/threads/banking-system/2026-10-09-education-todo-contribution-session-v1.md
+?? docs/codex/threads/banking-system/2026-10-09-export-acceptance-session-v1.md
+?? docs/codex/threads/banking-system/2026-10-10-computer-use-todo-update-v1.md
+?? docs/codex/threads/banking-system/2026-10-10-export-acceptance-continuation-v1.md
+?? docs/codex/threads/banking-system/2026-10-10-implementation-status-recheck-v1.md
+?? docs/codex/threads/banking-system/acceptance-evidence-v1/
+?? docs/codex/threads/contracts/DECISION-v5-retain-post-v19-trial.md
+?? docs/codex/threads/contracts/EXPORT-ACCEPTANCE-v1.md
+?? docs/codex/threads/contracts/FINDINGS-v14-starwave-cross-specialty-screen.md
+?? docs/codex/threads/contracts/FINDINGS-v15-starwave-matched-game4.md
+?? docs/codex/threads/contracts/FINDINGS-v16-starwave-post-game5-settlement.md
+?? docs/codex/threads/contracts/FINDINGS-v17-crown-slow-first-screen.md
+?? docs/codex/threads/contracts/FINDINGS-v18-crown-starter-purchase-screen.md
+?? docs/codex/threads/contracts/FINDINGS-v19-starter-chain-matched-economics.md
+?? docs/codex/threads/contracts/FINDINGS-v20-exported-acceptance-reconciliation.md
+?? docs/codex/threads/contracts/PLAN-v1-starwave-cross-specialty-screen.md
+?? docs/codex/threads/contracts/SESSION-LOG-v20.md
+?? docs/codex/threads/contracts/SESSION-LOG-v21.md
+?? docs/codex/threads/contracts/SESSION-LOG-v22.md
+?? docs/codex/threads/contracts/SESSION-LOG-v23.md
+?? docs/codex/threads/contracts/SESSION-LOG-v24.md
+?? docs/codex/threads/contracts/SESSION-LOG-v25.md
+?? docs/codex/threads/contracts/SESSION-LOG-v26.md
+?? docs/codex/threads/contracts/SESSION-LOG-v27.md
+?? docs/codex/threads/contracts/SESSION-LOG-v28.md
+?? docs/codex/threads/contracts/SESSION-LOG-v29.md
+?? docs/codex/threads/contracts/SESSION-LOG-v30.md
+?? docs/codex/threads/contracts/SESSION-LOG-v31.md
+?? docs/codex/threads/contracts/sim-v12/
+?? docs/codex/threads/contracts/sim-v13/
+?? docs/codex/threads/contracts/sim-v14/
+?? docs/codex/threads/contracts/sim-v15/
+?? docs/codex/threads/contracts/sim-v16/
+?? docs/codex/threads/contracts/sim-v17/
+?? docs/codex/threads/contracts/sim-v18/
+?? docs/codex/threads/contracts/sim-v19/
+?? docs/codex/threads/fanbase/2026-10-09-current-main-integration-review-v1.md
+?? docs/codex/threads/fanbase/2026-10-09-export-and-balance-plan-v1.md
+?? docs/codex/threads/fanbase/2026-10-09-session-log-v2.md
+?? docs/codex/threads/fanbase/2026-10-09-session-log-v3.md
+?? docs/codex/threads/fanbase/2026-10-10-10-review-launch-benefit-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-10-review-recovery-player-feel-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-early-mid-growth-assessment-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-player-10-review-later-growth-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-player-capture-review-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-player-trial-feel-disposition-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-post-600-awareness-direction-decision-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-post-600-awareness-question-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-post-600-player-route-comparison-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-post-600-strong-launch-comparison-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-post-600-taper-screen-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v1.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v10.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v11.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v12.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v2.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v3.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v4.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v5.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v6.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v7.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v8.md
+?? docs/codex/threads/fanbase/2026-10-10-session-log-v9.md
+?? docs/codex/threads/fanbase/2026-10-10-weak-release-player-feel-v1.md
+?? docs/codex/threads/fanbase/2026-10-11-post-600-taper-recommendation-v1.md
+?? docs/codex/threads/fanbase/2026-10-11-session-log-v1.md
+?? docs/codex/threads/fanbase/captures/
+?? docs/codex/threads/simulation-engine/
+?? patch-notes/assets/audio/
+?? patch-notes/assets/card_frame_kit/
+?? patch-notes/scripts/audio/
+?? patch-notes/scripts/cards/balanced_production.gd
+?? patch-notes/scripts/cards/balanced_production.gd.uid
+?? patch-notes/scripts/debug/campaign_batch_cli.gd
+?? patch-notes/scripts/debug/campaign_batch_cli.gd.uid
+?? patch-notes/scripts/debug/campaign_replay_cli.gd
+?? patch-notes/scripts/debug/campaign_replay_cli.gd.uid
+?? patch-notes/scripts/debug/cult_native_route.gd
+?? patch-notes/scripts/debug/cult_native_route.gd.uid
+?? patch-notes/scripts/debug/cult_restart_probe.gd
+?? patch-notes/scripts/debug/cult_restart_probe.gd.uid
+?? patch-notes/scripts/debug/development_replay_cli.gd
+?? patch-notes/scripts/debug/development_replay_cli.gd.uid
+?? patch-notes/scripts/debug/education_native_route.gd
+?? patch-notes/scripts/debug/education_native_route.gd.uid
+?? patch-notes/scripts/debug/education_restart_probe.gd
+?? patch-notes/scripts/debug/education_restart_probe.gd.uid
+?? patch-notes/scripts/debug/fanbase_native_route.gd
+?? patch-notes/scripts/debug/fanbase_native_route.gd.uid
+?? patch-notes/scripts/debug/fanbase_restart_probe.gd
+?? patch-notes/scripts/debug/fanbase_restart_probe.gd.uid
+?? patch-notes/scripts/debug/fixtures/alpha_command_oracle_digests.json
+?? patch-notes/scripts/debug/fixtures/beta_command_oracle_digests.json
+?? patch-notes/scripts/debug/fixtures/design_command_oracle_digests.json
+?? patch-notes/scripts/debug/fixtures/development_replay_oracle_digests.json
+?? patch-notes/scripts/debug/fixtures/production_hand_pre_extraction.json
+?? patch-notes/scripts/debug/starwave_native_route.gd
+?? patch-notes/scripts/debug/starwave_native_route.gd.uid
+?? patch-notes/scripts/debug/starwave_restart_probe.gd
+?? patch-notes/scripts/debug/starwave_restart_probe.gd.uid
+?? patch-notes/scripts/debug/verify_alpha_command.gd
+?? patch-notes/scripts/debug/verify_alpha_command.gd.uid
+?? patch-notes/scripts/debug/verify_begin_project_extraction.gd
+?? patch-notes/scripts/debug/verify_begin_project_extraction.gd.uid
+?? patch-notes/scripts/debug/verify_beta_command.gd
+?? patch-notes/scripts/debug/verify_beta_command.gd.uid
+?? patch-notes/scripts/debug/verify_campaign_batch.gd
+?? patch-notes/scripts/debug/verify_campaign_batch.gd.uid
+?? patch-notes/scripts/debug/verify_campaign_continuation.gd
+?? patch-notes/scripts/debug/verify_campaign_continuation.gd.uid
+?? patch-notes/scripts/debug/verify_campaign_live_parity.gd
+?? patch-notes/scripts/debug/verify_campaign_live_parity.gd.uid
+?? patch-notes/scripts/debug/verify_campaign_session.gd
+?? patch-notes/scripts/debug/verify_campaign_session.gd.uid
+?? patch-notes/scripts/debug/verify_card_frame.gd
+?? patch-notes/scripts/debug/verify_card_frame.gd.uid
+?? patch-notes/scripts/debug/verify_contract_extraction.gd
+?? patch-notes/scripts/debug/verify_contract_extraction.gd.uid
+?? patch-notes/scripts/debug/verify_cult_following.gd
+?? patch-notes/scripts/debug/verify_cult_following.gd.uid
+?? patch-notes/scripts/debug/verify_design_command.gd
+?? patch-notes/scripts/debug/verify_design_command.gd.uid
+?? patch-notes/scripts/debug/verify_development_protocol.gd
+?? patch-notes/scripts/debug/verify_development_protocol.gd.uid
+?? patch-notes/scripts/debug/verify_development_replay.gd
+?? patch-notes/scripts/debug/verify_development_replay.gd.uid
+?? patch-notes/scripts/debug/verify_education_atomicity.gd
+?? patch-notes/scripts/debug/verify_education_atomicity.gd.uid
+?? patch-notes/scripts/debug/verify_education_debt.gd
+?? patch-notes/scripts/debug/verify_education_debt.gd.uid
+?? patch-notes/scripts/debug/verify_education_edges.gd
+?? patch-notes/scripts/debug/verify_education_edges.gd.uid
+?? patch-notes/scripts/debug/verify_fanbase_checkpoint.gd
+?? patch-notes/scripts/debug/verify_fanbase_checkpoint.gd.uid
+?? patch-notes/scripts/debug/verify_fanbase_incremental.gd
+?? patch-notes/scripts/debug/verify_fanbase_incremental.gd.uid
+?? patch-notes/scripts/debug/verify_fanbase_ui.gd
+?? patch-notes/scripts/debug/verify_fanbase_ui.gd.uid
+?? patch-notes/scripts/debug/verify_launch_extraction.gd
+?? patch-notes/scripts/debug/verify_launch_extraction.gd.uid
+?? patch-notes/scripts/debug/verify_production_extraction.gd
+?? patch-notes/scripts/debug/verify_production_extraction.gd.uid
+?? patch-notes/scripts/debug/verify_production_overflow.gd
+?? patch-notes/scripts/debug/verify_production_overflow.gd.uid
+?? patch-notes/scripts/debug/verify_soundtrack_sync.gd
+?? patch-notes/scripts/debug/verify_soundtrack_sync.gd.uid
+?? patch-notes/scripts/debug/verify_starwave.gd
+?? patch-notes/scripts/debug/verify_starwave.gd.uid
+?? patch-notes/scripts/debug/verify_starwave_ui.gd
+?? patch-notes/scripts/debug/verify_starwave_ui.gd.uid
+?? patch-notes/scripts/debug/verify_studio_fanbase.gd
+?? patch-notes/scripts/debug/verify_studio_fanbase.gd.uid
+?? patch-notes/scripts/debug/verify_upper_card_fan.gd
+?? patch-notes/scripts/debug/verify_upper_card_fan.gd.uid
+?? patch-notes/scripts/fanbase/
+?? patch-notes/scripts/finance/education_debt.gd
+?? patch-notes/scripts/finance/education_debt.gd.uid
+?? patch-notes/scripts/simulation/

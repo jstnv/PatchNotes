@@ -1,0 +1,152 @@
+{
+	"final_state": "7db854607b433a23e70dfe960046437d737e0634a5da3fe63d1442c4b1a354cd",
+	"initial_state": "7db854607b433a23e70dfe960046437d737e0634a5da3fe63d1442c4b1a354cd",
+	"samples": [
+		{
+			"accepted": null,
+			"cash_cents": "139275",
+			"command_type": "",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "studio",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-spend-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-spend-graduate-4417:project:2",
+					"release_cycle": 27,
+					"review": 5.5
+				}
+			],
+			"request": {},
+			"research_queue": [],
+			"run_cycle": 27,
+			"sequence": 48,
+			"state_digest": "7db854607b433a23e70dfe960046437d737e0634a5da3fe63d1442c4b1a354cd",
+			"step": 0,
+			"transaction_cash_low_cents": "139275",
+			"transaction_count": 80,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": false,
+			"cash_cents": "139275",
+			"command_type": "bank_borrow",
+			"error": "Financial action rejected",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"sprites",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"general_combat",
+				"levels",
+				"maps",
+				"exploration",
+				"sound_effects",
+				"recorded_sounds"
+			],
+			"phase": "studio",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "bank-spend-graduate-4417:project:1",
+					"release_cycle": 13,
+					"review": 4.0
+				},
+				{
+					"id": "bank-spend-graduate-4417:project:2",
+					"release_cycle": 27,
+					"review": 5.5
+				}
+			],
+			"request": {
+				"payload": {
+					"quote": {
+						"accepted": false,
+						"basis_cents": 2797,
+						"capacity_cents": 0,
+						"eligible": false,
+						"latest_sales_cents": 2797,
+						"maximum_principal_cents": 0,
+						"obligations_cents": 28273,
+						"older_sales_cents": 5595,
+						"reason": "Settled sales do not cover rent and required obligations with lending capacity left.",
+						"rent_cents": 50000,
+						"schedule": {
+							"accepted_cycle": 27,
+							"first_due_cycle": 30,
+							"last_due_cycle": 52,
+							"maximum_installment_cents": 4667,
+							"principal_cents": 50000,
+							"schema_version": 1,
+							"term_months": 12,
+							"total_interest_cents": 3250,
+							"total_payment_cents": 53250
+						}
+					}
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 27,
+				"run_id": "bank-spend-graduate-4417",
+				"schema_version": 1,
+				"sequence": 48,
+				"type": "bank_borrow"
+			},
+			"research_queue": [],
+			"run_cycle": 27,
+			"sequence": 48,
+			"state_digest": "7db854607b433a23e70dfe960046437d737e0634a5da3fe63d1442c4b1a354cd",
+			"step": 1,
+			"transaction_cash_low_cents": "139275",
+			"transaction_count": 80,
+			"transactions_observed": 0
+		}
+	],
+	"sampling": "initial_and_after_each_executed_command",
+	"schema_version": "1",
+	"source_identity": "01c1d31744a0a16c128215518657d0e39dc3c6f0c54a07c29ffca90557d32d33"
+}

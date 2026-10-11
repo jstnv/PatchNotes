@@ -7,6 +7,11 @@ signal guidance_changed
 const CARD_VIEW_SCENE := preload("res://scenes/cards/card_view.tscn")
 const CANDIDATE_COUNT := 7
 const HAND_SIZE := 4
+const ContractSession := preload("res://scripts/simulation/contract_session.gd")
+var _command_ids: Dictionary = {}
+var _command_next_id := 0
+var _command_sequence := 0
+var _command_busy := false
 
 var _state: ContractState
 var _run: RunState
@@ -44,6 +49,8 @@ func setup(state: ContractState, run: RunState, category_rolls: Array[float] = [
 		return false
 	if not definition_rolls.is_empty() and definition_rolls.size() != CANDIDATE_COUNT:
 		return false
+	for roll:float in category_rolls+definition_rolls:
+		if not is_finite(roll) or roll<0.0 or roll>=1.0:return false
 	_state = state
 	_run = run
 	if _run != null: _rng = _run.random_streams.stream(&"contract_deal")
@@ -51,7 +58,7 @@ func setup(state: ContractState, run: RunState, category_rolls: Array[float] = [
 	_initial_definition_rolls = definition_rolls.duplicate()
 	_priority_draft = state.get_priority_distribution()
 	if is_node_ready():
-		_initialize_presentation()
+		return _initialize_presentation()
 	return true
 
 
@@ -294,7 +301,7 @@ func _build_completion_panel() -> void:
 	content.add_child(dismiss)
 
 
-func _initialize_presentation() -> void:
+func _initialize_presentation() -> bool:
 	_title.text = _state.get_title()
 	_priority_draft = _state.get_priority_distribution()
 	_sync_priority_inputs()
@@ -306,9 +313,12 @@ func _initialize_presentation() -> void:
 		_initial_definition_rolls.clear()
 		if deal.is_empty():
 			_feedback_label.text = "The contract draw could not be prepared."
+			_refresh_all()
+			return false
 		else:
 			_publish_candidate_pool(deal)
 	_refresh_all()
+	return true
 
 
 func get_contract_state() -> ContractState:
@@ -337,12 +347,12 @@ func set_priority_draft(distribution: Dictionary) -> bool:
 
 
 func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
-	if _state == null or not _state.can_commit_priorities(distribution) or not _run.can_complete_productive_cycle():
-		return false
-	var expected_cycle := _run.get_completed_run_cycles()
-	var commit := func() -> bool: return _state.commit_priorities(distribution)
-	if not _run.complete_productive_action(commit, 0, expected_cycle, &"", &"priority_change", _state.get_offer_id()):
-		return false
+	if _command_busy or _state == null: return false
+	_command_busy = true
+	var ok: bool = _capture_contract().commit_priorities(distribution)
+	_command_busy = false
+	if not ok: return false
+	_command_sequence += 1
 	_priority_draft = _state.get_priority_distribution()
 	_sync_priority_inputs()
 	_feedback_label.text = "Priorities committed. The current draw is unchanged."
@@ -350,131 +360,77 @@ func commit_priority_distribution(distribution: Dictionary = _priority_draft) ->
 	return true
 
 
+
 func redraw_selected_cards(category_rolls: Array[float] = [], definition_rolls: Array[float] = []) -> bool:
-	var count := _selected_views.size()
-	if _state == null or _state.is_completed() or count == 0 or not _run.can_consume_redraw(count):
-		return false
-	if (not category_rolls.is_empty() and category_rolls.size() != count) or (not definition_rolls.is_empty() and definition_rolls.size() != count):
-		return false
-	var replacements: Array[CardData] = []
-	var reserved_features: Dictionary = {}
-	for visible_card in _candidate_cards:
-		if visible_card.card_type == &"feature": reserved_features[visible_card.id] = true
-	for index in range(count):
-		var old := _selected_views[index].card_data
-		var category_roll := category_rolls[index] if not category_rolls.is_empty() else _rng.randf()
-		var definition_roll := definition_rolls[index] if not definition_rolls.is_empty() else _rng.randf()
-		var replacement := _draw_one(old.card_type, reserved_features, category_roll, definition_roll, old.id)
-		if replacement == null:
-			return false
-		replacements.append(replacement)
-		if replacement.card_type == &"feature": reserved_features[replacement.id] = true
+	if _command_busy or _state == null: return false
+	_command_busy = true
+	var session := _capture_contract()
 	var old_views := _selected_views.duplicate()
-	for index in range(count):
-		var old_view: CardView = old_views[index]
-		var slot := old_view.get_index()
-		_candidate_cards[slot] = replacements[index]
-		var replacement_view := _make_card_view(replacements[index])
-		_candidate_row.remove_child(old_view)
-		old_view.queue_free()
-		_candidate_row.add_child(replacement_view)
-		_candidate_row.move_child(replacement_view, slot)
-	_selected_views.clear()
-	_run.consume_redraw(count)
+	var slots: Array[int] = []
+	for view in old_views: slots.append(view.get_index())
+	var prepared: Array[CardView] = []
+	var readiness := func(replacements: Array[CardData]) -> bool:
+		for card in replacements: prepared.append(_make_card_view(card))
+		return true
+	var publish := func(replacements: Array[CardData]) -> void:
+		for index in range(old_views.size()):
+			var old_view: CardView = old_views[index]
+			var slot: int = slots[index]
+			_candidate_cards[slot] = replacements[index]
+			_candidate_row.remove_child(old_view)
+			old_view.queue_free()
+			_candidate_row.add_child(prepared[index])
+			_candidate_row.move_child(prepared[index],slot)
+		_selected_views.clear()
+	var result: Dictionary = session.redraw(slots,category_rolls,definition_rolls,readiness,publish)
+	if result.ok:
+		session.sequence += 1
+		_sync_contract_tokens(session)
+	else:
+		for view in prepared:
+			if view.get_parent() == null: view.free()
+	_command_busy = false
+	if not result.ok: return false
 	_feedback_label.text = "Selected cards redrawn."
 	_refresh_all()
 	return true
 
 
+
 func _play_selected_hand() -> bool:
-	if _state == null or _state.is_completed() or _selected_views.size() != HAND_SIZE:
-		return false
-	var cards: Array[CardData] = []
-	for view in _selected_views: cards.append(view.card_data)
-	var plan := _state.plan_hand(cards)
-	if plan.is_empty():
-		return false
-	var remainder: int = plan.remainder_cents
-	if not _run.can_complete_productive_cycle(remainder):
+	if _command_busy or _state == null: return false
+	_command_busy = true
+	var session := _capture_contract()
+	var ids: Array[int] = []
+	for view in _selected_views:
+		if not _command_ids.has(view.get_instance_id()):
+			_command_busy = false
+			return false
+		ids.append(_command_ids[view.get_instance_id()])
+	var result: Dictionary = session.execute(session.command(&"play",{"candidate_ids":ids}))
+	if not result.ok:
+		_command_busy = false
 		_feedback_label.text = _run.get_financial_block_reason()
 		return false
-	var next_cards: Array[CardData] = []
-	var rng_before := _rng.state
-	if not plan.completing:
-		var projected_exhausted: Dictionary = {}
-		for id: StringName in plan.exhausted_ids: projected_exhausted[id] = true
-		for view in _candidate_row.get_children():
-			if view is CardView and view not in _selected_views and not view.card_data.renewable: projected_exhausted[view.card_data.id] = true
-		next_cards = _build_candidate_pool(projected_exhausted, [], [], HAND_SIZE)
-		if next_cards.is_empty():
-			_rng.state = rng_before
-			return false
-	var expected_cycle := _run.get_completed_run_cycles()
-	var commit := func() -> bool: return _run.commit_contract_hand(_state, cards, remainder)
-	if not _run.complete_productive_action(commit, remainder, expected_cycle, &"", &"publisher_receipt" if remainder > 0 else &"contract_hand", _state.get_offer_id()):
-		_rng.state = rng_before
-		return false
-	if _state.is_completed():
-		_show_completion()
+	if _state.is_completed(): _show_completion()
 	else:
-		_publish_candidate_pool(next_cards, true)
-		_feedback_label.text = "Hand complete. Draw two is ready."
+		_publish_candidate_pool(result.replacements,true)
+		_feedback_label.text = "Hand complete. Draw %d is ready." % (_state.get_successful_hand_count()+1)
+	_sync_contract_tokens(session)
+	_command_busy = false
 	_refresh_all()
 	return true
 
 
+
 func _build_candidate_pool(extra_exhausted: Dictionary = {}, category_rolls: Array[float] = [], definition_rolls: Array[float] = [], candidate_count: int = CANDIDATE_COUNT) -> Array[CardData]:
-	if (not category_rolls.is_empty() and category_rolls.size() != candidate_count) or (not definition_rolls.is_empty() and definition_rolls.size() != candidate_count):
-		return []
-	var cards: Array[CardData] = []
-	var reserved: Dictionary = extra_exhausted.duplicate()
-	for slot in range(candidate_count):
-		var category_roll := category_rolls[slot] if not category_rolls.is_empty() else _rng.randf()
-		var definition_roll := definition_rolls[slot] if not definition_rolls.is_empty() else _rng.randf()
-		var card := _draw_one(&"", reserved, category_roll, definition_roll)
-		if card == null:
-			return []
-		cards.append(card)
-		if card.card_type == &"feature": reserved[card.id] = true
-	return cards
+	return _capture_contract()._build_candidate_pool(extra_exhausted,category_rolls,definition_rolls,candidate_count)
+
 
 
 func _draw_one(type_filter: StringName, reserved_features: Dictionary, category_roll: float, definition_roll: float, excluded_id: StringName = &"") -> CardData:
-	if not is_finite(category_roll) or category_roll < 0.0 or category_roll >= 1.0 or not is_finite(definition_roll) or definition_roll < 0.0 or definition_roll >= 1.0:
-		return null
-	var by_category: Dictionary = {}
-	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES: by_category[category] = []
-	var database := get_node_or_null("/root/CardDatabase")
-	if database == null: return null
-	for id in _state.get_eligible_feature_ids():
-		if reserved_features.has(id) or _state.is_feature_exhausted(id) or id == excluded_id: continue
-		var card: CardData = database.get_card(id)
-		if card != null and (type_filter.is_empty() or type_filter == &"feature"):
-			by_category[ContractState.CORE_BY_STAT[card.primary_stat]].append(card)
-	for id in ContractState.PASS_IDS:
-		if id == excluded_id: continue
-		var pass_card: CardData = database.get_card(id)
-		if pass_card != null and (type_filter.is_empty() or type_filter == &"pass"):
-			by_category[ContractState.CORE_BY_STAT[pass_card.primary_stat]].append(pass_card)
-	var available_categories: Array[ProjectState.CoreScore] = []
-	var total_weight := 0
-	var priorities := _state.get_priority_distribution()
-	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
-		if not by_category[category].is_empty():
-			available_categories.append(category)
-			total_weight += priorities[category]
-	if total_weight <= 0: return null
-	var target := category_roll * total_weight
-	var cumulative := 0
-	var chosen := available_categories[-1]
-	for category in available_categories:
-		cumulative += priorities[category]
-		if target < cumulative:
-			chosen = category
-			break
-	var definitions: Array = by_category[chosen]
-	definitions.sort_custom(func(a: CardData, b: CardData) -> bool: return str(a.id) < str(b.id))
-	return definitions[mini(floori(definition_roll * definitions.size()), definitions.size() - 1)]
+	return _capture_contract()._draw_one(type_filter,reserved_features,category_roll,definition_roll,excluded_id)
+
 
 
 func _publish_candidate_pool(cards: Array[CardData], retain_unselected := false) -> void:
@@ -524,7 +480,9 @@ func _show_completion() -> void:
 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.DESIGN)), _format_half(_state.get_core_target(3)),
 		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_upfront_cents()),
 		CashFormatter.format_exact_cents(result.get_completion_payment_cents()), CashFormatter.format_exact_cents(result.get_payout_cents())]
-	if not _state._trial_terms.is_empty(): _completion_stats.text += "\nPromotion earned: %d Awareness for the next successful launch" % result.get_promotion()
+	if _state.get_contract_id()==PublisherTrialTerms.STARWAVE:
+		_completion_stats.text += "\nNo Promotion from this Contract. Existing awards are unchanged."
+	elif not _state._trial_terms.is_empty(): _completion_stats.text += "\nPromotion earned: %d Awareness for the next successful launch" % result.get_promotion()
 	_selected_views.clear()
 	_candidate_row.hide()
 	_priority_modal.hide()
@@ -535,7 +493,12 @@ func _show_completion() -> void:
 
 func _refresh_all() -> void:
 	if _state == null: return
-	_status_label.text = "Hands remaining: %d / %d · Select exactly four cards" % [maxi(0, ContractState.REQUIRED_HANDS - _state.get_successful_hand_count()), ContractState.REQUIRED_HANDS]
+	_status_label.text = "Hands remaining: %d / %d · Select exactly four cards" % [maxi(0, _state.get_required_hands() - _state.get_successful_hand_count()), _state.get_required_hands()]
+	if _state.get_contract_id()==PublisherTrialTerms.STARWAVE:
+		var cores := {}
+		for category in range(4): cores[category] = _state.get_core_score_half_units(category)
+		var earned := _state.calculate_for_state(_state.get_scope(),cores)
+		_status_label.text += "\nCash at current completion: %s · Paid after hand 3 · No Promotion" % CashFormatter.format_exact_cents(earned.get("remainder_cents",0))
 	for i in range(4):
 		_score_values[i].text = "%s\n%s / %s" % [["Graphics", "Sound", "Tech", "Design"][i], _format_half(_presented_scores.get(HandPresentation.CORE[i], _state.get_core_score_half_units(i))), _format_half(_state.get_core_target(i))]
 	_score_values[4].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", _state.get_scope()), _state.get_scope_target()]
@@ -577,3 +540,31 @@ func _format_half(half_units: int) -> String:
 
 func _category_name(category: ProjectState.CoreScore) -> String:
 	return ["Graphics", "Sound", "Technology", "Design"][category]
+
+
+func _capture_contract() -> RefCounted:
+	var database := get_node_or_null("/root/CardDatabase") if is_inside_tree() else null
+	var session := ContractSession.new(_state,_run,database.get_development_catalog() if database != null else null)
+	session._rng = _rng
+	session.cards = _candidate_cards.duplicate()
+	session.next_id = _command_next_id
+	session.sequence = _command_sequence
+	if _candidate_row != null:
+		for child in _candidate_row.get_children():
+			if not child is CardView: continue
+			if not _command_ids.has(child.get_instance_id()):
+				_command_ids[child.get_instance_id()] = session.next_id
+				session.next_id += 1
+			session.candidate_ids.append(_command_ids[child.get_instance_id()])
+	_command_next_id = session.next_id
+	return session
+
+func _sync_contract_tokens(session: RefCounted) -> void:
+	_command_ids.clear()
+	var index := 0
+	for child in _candidate_row.get_children():
+		if not child is CardView: continue
+		_command_ids[child.get_instance_id()] = session.candidate_ids[index]
+		index += 1
+	_command_next_id = session.next_id
+	_command_sequence = session.sequence

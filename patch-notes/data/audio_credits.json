@@ -1,1 +1,54 @@
-{"status":"missing_approved_media","shipped_assets":[],"required_before_audio_acceptance":["Approved music selection and playback cues","Approved SFX selection and playback cues","Source, license, author, and required attribution for each asset"],"note":"No placeholder audio is authorized or shipped. Master/Music/SFX buses and persistent controls are implemented; this manifest is an explicit missing-media gate, not a license grant."}
+{
+  "status": "user_selected_soundtrack_prototype",
+  "shipped_assets": [
+    {
+      "path": "res://assets/audio/crunch_time_70/crunch_time_A_jazz.wav",
+      "sha256": "be6d11ec05571197528ffabcd59b66859017e36a847912eac1e7fc0df7e40151",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/crunch_time_B_techno.wav",
+      "sha256": "f5515a5ddd59d908ea3e1bf30624124eba0b893a46d38304f191d4067d9fbd77",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/card_sfx/card_play.wav",
+      "sha256": "f64e6ab73649829a7d0423ed96183a83c848fa382acde9f852cd71642653b4ca",
+      "sample_rate": 48000,
+      "frames": 4320,
+      "channels": 1,
+      "sample_bytes": 2
+    },
+    {
+      "path": "res://assets/audio/card_sfx/card_whoosh.wav",
+      "sha256": "796667d93ed10efe63adf902a8d68ddebbabb1cb8d4b8bf036f4503da7d5202a",
+      "sample_rate": 48000,
+      "frames": 14400,
+      "channels": 1,
+      "sample_bytes": 2
+    }
+  ],
+  "source": "User-supplied Crunch Time Prototype 01 / Tempo_70 WAV",
+  "authors": "AI-assisted original composition and procedural synthesis for JooceBox Studios; human release review pending",
+  "license_notes": "assets/audio/crunch_time_70/LICENSE_NOTES.md",
+  "required_before_audio_acceptance": [
+    "Audible loop/synchronization and A/B preference playtest",
+    "Final release clearance/attribution review",
+    "Audible card tap/whoosh mix preference"
+  ],
+  "note": "Version A defaults on Music bus; B selectable via audio/soundtrack/prototype_variant. MP3 previews are not shipped.",
+  "card_sfx": {
+    "source": "Original procedural synthesis; no external samples",
+    "cues": {
+      "card_play.wav": "score and bonus reveal",
+      "card_whoosh.wav": "played/redrawn hand removal"
+    },
+    "provenance": "assets/audio/card_sfx/PROVENANCE.md"
+  }
+}

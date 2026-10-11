@@ -1,0 +1,9 @@
+# 2026-10-09 decision: Genre-independent Core shopping plan
+
+**Status: LOCKED qualitative G2 planner boundary; legal-mix math and values OPEN.** After the [source audit](2026-10-09-g2-genre-source-audit-v1.md), the user selected the recommended Genre-independent Core-potential comparison. This **revises F3's planned-project-Genre input** in the earlier [delegated Feature decisions](2026-10-09-feature-shopping-delegated-decisions-v1.md); F3's other frozen finite-envelope requirements remain.
+
+The rival Store planner compares owned-pool and hypothetical completed-ownership Core potential within the **same finite fresh-next-project Design/Alpha hand and cash envelope**, without first choosing a project Genre. It measures the resulting jointly legal four-Core mix against the rival's **permanent studio specialty** targets. Current source stores project Genre separately from Feature supply; the inspected Feature eligibility, candidate and Core-production paths do not use Genre. The Review calculator does use it. Actual AI project Genre/Theme selection, hand play and final Review remain G4 decisions and must use ordinary legality and scoring.
+
+The alternative selected a project Genre before each Store comparison. It is not used for first-slice Core shopping because current Feature eligibility and printed Core production do not depend on it, and making the shopping vector change with a Review target would couple two separate decisions. A future Genre-dependent Feature or production rule must trigger a source-parity review before this boundary is retained.
+
+The Design/Alpha hand counts, development cash allocation after known dues, feasible-vector enumeration, exact proportional-gap arithmetic, priority/action modeling and measured search/CPU limit remain **OPEN**. This decision does not permit raw catalog sums, incompatible independent Core maxima or guaranteed drawn cards. Market effects on Reviews remain separate.

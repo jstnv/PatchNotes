@@ -11,7 +11,7 @@ func check(ok: bool, message: String) -> void:
 	if not ok: failures += 1
 
 func state(run: RunState) -> Array:
-	return [run.get_studio_creation_snapshot(), run.get_cash_cents(), run.get_completed_run_cycles(), run.get_owned_feature_ids(), run.get_available_redraws(), run.get_studio_finance_snapshot()]
+	return [run.get_studio_creation_snapshot(), run.get_cash_cents(), run.get_fans(), run.get_completed_run_cycles(), run.get_owned_feature_ids(), run.get_available_redraws(), run.get_studio_finance_snapshot()]
 
 func _run() -> void:
 	check(StudioTraits.cash_for_points(-1) == -1 and StudioTraits.cash_for_points(0) == 0 and StudioTraits.cash_for_points(4) == 20000 and StudioTraits.cash_for_points(6) == 30000 and StudioTraits.cash_for_points(7) == 35000 and StudioTraits.cash_for_points(RunState.MAX_SIGNED_INT) == -1, "Point cash rejects negative, handles zero, exact cents, uncapped seven points and overflow rejection")
@@ -41,7 +41,8 @@ func _run() -> void:
 		canonical.initialize_cash_cents(0)
 		check(canonical.create_studio_with_traits("Canonical", &"action", chosen), "Canonical optional choices accepted: " + str(chosen))
 		var snap := canonical.get_studio_traits()
-		check(snap.version == 5 and not snap.has("background_id") and snap.trait_ids.size() == chosen.size() and canonical.get_cash_cents() == 550000 + snap.point_cash_cents + snap.family_funding_cents, "Versioned selection contains only canonical trait identities; approved effects paired with point accounting")
+		check(snap.version == 8 and not snap.has("background_id") and snap.trait_ids.size() == chosen.size() and canonical.get_cash_cents() == 550000 + snap.point_cash_cents + snap.family_funding_cents, "Versioned selection contains only canonical trait identities; approved effects paired with point accounting")
+		check(canonical.get_fans() == (20 if chosen.has(&"cult_following") else 0), "New optional Cult selection seeds twenty ordinary Fans once")
 		var committed := state(canonical)
 		check(not canonical.create_studio_with_traits("Again", &"action", []) and state(canonical) == committed, "Canonical confirmation pays only once")
 	for invalid: Array in [[&"family_funding", &"cult_following", &"studio_buzz"], [&"graduate", &"unknown_name"], [&"family_funding", &"family_funding"], [&"student_loan"], [null]]:
@@ -102,7 +103,8 @@ func verify_ui(resolution: Vector2i) -> void:
 	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	await settle()
-	check(menu.get("_review").text.contains("Cult Following") and menu.get("_review").text.contains("Action") and menu.get("_review").text.contains(CashFormatter.format_exact_cents(565000)), "Confirmation identifies background, Genre and actual cash")
+	check(menu.get("_review").text.contains("Cult Following") and menu.get("_review").text.contains("Action") and menu.get("_review").text.contains(CashFormatter.format_exact_cents(570000)), "Confirmation identifies background, Genre and actual cash")
+	check(menu.call("_selection").version == 8 and menu.get("_review").text.contains("Starting Fans: 20") and not menu.get("_review").text.contains("Starting Fans: 40") and menu.get("_review").text.contains("ordinary gains/losses"), "Overview states new version8 twenty-Fan seed and trial loss rule")
 	await capture("confirmation")
 	layout.get_node("StudioSetup/Back").pressed.emit()
 	check(state(run) == before and menu.call("_secondary_ids").is_empty(), "Cancel resets uncommitted choices and pays nothing")

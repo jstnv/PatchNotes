@@ -1,0 +1,467 @@
+{
+  "schema_version": "1",
+  "kind": "paired_command_boundary_observations",
+  "pair_id": "graduate-90210-bank",
+  "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\banking-system\\simulations\\spending-bank-variant-continuation-v1",
+  "overall_run_ok": false,
+  "both_cases_completed": false,
+  "provenance": {
+    "frozen_source_identity": "3fed02fde17bbff091a7444dcc57053b05bae9fca4f7da67a4485634b53f529b",
+    "source_identity": "01c1d31744a0a16c128215518657d0e39dc3c6f0c54a07c29ffca90557d32d33",
+    "engine_version": "4.7.1-stable (official)",
+    "rng_algorithm": "godot-4.7.1-rng-v1",
+    "initial_state": "8d2cdecf4699651eec1c5e79ceb5625af38205bbc8597370373d1810dc26eb67",
+    "initial_rng": {
+      "alpha_deal": {
+        "seed": {
+          "integer": "90214"
+        },
+        "state": {
+          "integer": "-3778062103485541076"
+        }
+      },
+      "alpha_finalize": {
+        "seed": {
+          "integer": "90215"
+        },
+        "state": {
+          "integer": "4309650623105660277"
+        }
+      },
+      "beta_deal": {
+        "seed": {
+          "integer": "90216"
+        },
+        "state": {
+          "integer": "8752082811544332082"
+        }
+      },
+      "beta_insight": {
+        "seed": {
+          "integer": "90217"
+        },
+        "state": {
+          "integer": "-2952471641845500178"
+        }
+      },
+      "contract_deal": {
+        "seed": {
+          "integer": "90218"
+        },
+        "state": {
+          "integer": "-3598037042068528588"
+        }
+      },
+      "design_deal": {
+        "seed": {
+          "integer": "90212"
+        },
+        "state": {
+          "integer": "7935061584700832767"
+        }
+      },
+      "design_finalize": {
+        "seed": {
+          "integer": "90213"
+        },
+        "state": {
+          "integer": "-8858836347259930149"
+        }
+      },
+      "review": {
+        "seed": {
+          "integer": "90211"
+        },
+        "state": {
+          "integer": "-1379647347864420301"
+        }
+      },
+      "snapshot": {
+        "seed": {
+          "integer": "90210"
+        },
+        "state": {
+          "integer": "-4256018454827735296"
+        }
+      }
+    },
+    "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+    "comparison_tool_sha256": "06f8756b872d4bf1d8f2f8b697fccebd5a3fe334270729feedcd18163442565c",
+    "left_artifact_hashes": {
+      "case": "46ad0c30d374c4b82c2cb773d405e140a36eb3f69d1c9feefc67d06088e4ab6a",
+      "result": "cdb245d9c78aaf32848f170f73219300ef612b5d8ffce0ab18df4b8fadb63351",
+      "telemetry": "93c58341df9eaaf753d2c71dbf2c8b7636c116c5c43aff84e12bb9bd31013f5e"
+    },
+    "right_artifact_hashes": {
+      "case": "c8f2e3332084e8af7bb84760c85fd7cc8126d07cfbc509121a8c27ce4f5aa7b2",
+      "result": "e6584c0cf40504c9459c702eb4e485d4726025ab1752627cfb73347b20b3158b",
+      "telemetry": "edd490087a71952590b0209a52b8e769b310c215661db3f98b8e58f3c0435164"
+    }
+  },
+  "conventions": {
+    "delta": "right minus left",
+    "sampling": "initial_and_after_each_executed_command",
+    "cash_low": "Minimum among observed command-boundary samples, including the initial state; not transient cash inside a command",
+    "transaction_cash_low": "Minimum of boundary cash and cash before/after newly appended ledger transactions. Excludes pre-study ledger history; does not infer unrecorded intermediate cash.",
+    "calendar": "Last observed sample at each shared run_cycle; zero-cycle actions use their final observed boundary at that cycle. No interpolation, extrapolation or assumption of equal phase.",
+    "release": "First post-command sample attaining each new release ordinal; compared launch milestones may occur at different calendar cycles",
+    "censoring": "Failed/bounded cases retain their observed prefix. Missing releases are unobserved, never zero-valued. No rejected action means none observed, not proof of no financial blocker.",
+    "integrity": "Local source/input/artifact consistency checks; no signatures or malicious-tampering guarantee. Variant tapes are not decoded here; use the separate exact replay command.",
+    "scope": "Independent campaigns; no winner, balance approval, human feel or shared-world AI claim"
+  },
+  "left": {
+    "case_id": "graduate-90210-no-loan",
+    "arm": "no-loan",
+    "status": "completed",
+    "completed": true,
+    "censored": false,
+    "termination_error": "",
+    "commands": 22,
+    "accepted_commands": 22,
+    "target_release_count": 3,
+    "unreached_release_count": 0,
+    "initial": {
+      "step": 0,
+      "run_cycle": 27,
+      "cash_cents": "426897",
+      "fans": "33",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 2,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "recorded_sounds"
+      ],
+      "research_queue": [],
+      "financially_blocked": false
+    },
+    "endpoint": {
+      "step": 22,
+      "run_cycle": 40,
+      "cash_cents": "380048",
+      "fans": "32",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 3,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "recorded_sounds"
+      ],
+      "research_queue": [],
+      "financially_blocked": false
+    },
+    "command_boundary_cash_low_cents": "380048",
+    "transaction_cash_low_cents": "380048",
+    "transaction_samples_observed": 23,
+    "first_financially_blocked_sample": null,
+    "sampled_cash_low": {
+      "cash_cents": "380048",
+      "step": 20,
+      "run_cycle": 40
+    },
+    "sampled_arrears_peak": {
+      "overdue_cents": "0",
+      "step": 0,
+      "run_cycle": 27
+    },
+    "finance_unavailable_samples": 0,
+    "first_rejected_action": null,
+    "rejection_observation": "none observed",
+    "releases": [
+      {
+        "id": "bank-spend-graduate-90210:project:1",
+        "release_cycle": 13,
+        "review": 5.8
+      },
+      {
+        "id": "bank-spend-graduate-90210:project:2",
+        "release_cycle": 27,
+        "review": 4.7
+      },
+      {
+        "id": "bank-spend-graduate-90210:project:3",
+        "release_cycle": 40,
+        "review": 5.6
+      }
+    ]
+  },
+  "right": {
+    "case_id": "graduate-90210-borrow-500-12",
+    "arm": "borrow-500-12",
+    "status": "rejected_policy_action",
+    "completed": false,
+    "censored": true,
+    "termination_error": "Financial action rejected",
+    "commands": 1,
+    "accepted_commands": 0,
+    "target_release_count": 3,
+    "unreached_release_count": 1,
+    "initial": {
+      "step": 0,
+      "run_cycle": 27,
+      "cash_cents": "426897",
+      "fans": "33",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 2,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "recorded_sounds"
+      ],
+      "research_queue": [],
+      "financially_blocked": false
+    },
+    "endpoint": {
+      "step": 1,
+      "run_cycle": 27,
+      "cash_cents": "426897",
+      "fans": "33",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 2,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "recorded_sounds"
+      ],
+      "research_queue": [],
+      "financially_blocked": false
+    },
+    "command_boundary_cash_low_cents": "426897",
+    "transaction_cash_low_cents": "426897",
+    "transaction_samples_observed": 2,
+    "first_financially_blocked_sample": null,
+    "sampled_cash_low": {
+      "cash_cents": "426897",
+      "step": 0,
+      "run_cycle": 27
+    },
+    "sampled_arrears_peak": {
+      "overdue_cents": "0",
+      "step": 0,
+      "run_cycle": 27
+    },
+    "finance_unavailable_samples": 0,
+    "first_rejected_action": {
+      "step": 1,
+      "run_cycle": 27,
+      "command_type": "bank_borrow",
+      "request": {
+        "payload": {
+          "quote": {
+            "accepted": false,
+            "basis_cents": 9790,
+            "capacity_cents": 0,
+            "eligible": false,
+            "latest_sales_cents": 9790,
+            "maximum_principal_cents": 0,
+            "obligations_cents": 28273,
+            "older_sales_cents": 18182,
+            "reason": "Settled sales do not cover rent and required obligations with lending capacity left.",
+            "rent_cents": 50000,
+            "schedule": {
+              "accepted_cycle": 27,
+              "first_due_cycle": 30,
+              "last_due_cycle": 52,
+              "maximum_installment_cents": 4667,
+              "principal_cents": 50000,
+              "schema_version": 1,
+              "term_months": 12,
+              "total_interest_cents": 3250,
+              "total_payment_cents": 53250
+            }
+          }
+        },
+        "phase": "studio",
+        "project_id": "",
+        "run_cycle": 27,
+        "run_id": "bank-spend-graduate-90210",
+        "schema_version": 1,
+        "sequence": 50,
+        "type": "bank_borrow"
+      },
+      "error": "Financial action rejected"
+    },
+    "rejection_observation": "recorded command rejection; inspect its error, not every rejection is financial",
+    "releases": [
+      {
+        "id": "bank-spend-graduate-90210:project:1",
+        "release_cycle": 13,
+        "review": 5.8
+      },
+      {
+        "id": "bank-spend-graduate-90210:project:2",
+        "release_cycle": 27,
+        "review": 4.7
+      }
+    ]
+  },
+  "initial_common_releases": [
+    {
+      "id": "bank-spend-graduate-90210:project:1",
+      "release_cycle": 13,
+      "review": 5.8
+    },
+    {
+      "id": "bank-spend-graduate-90210:project:2",
+      "release_cycle": 27,
+      "review": 4.7
+    }
+  ],
+  "matched_calendar": [
+    {
+      "run_cycle": 27,
+      "left": {
+        "step": 0,
+        "run_cycle": 27,
+        "cash_cents": "426897",
+        "fans": "33",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 2,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 1,
+        "run_cycle": 27,
+        "cash_cents": "426897",
+        "fans": "33",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 2,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "0",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    }
+  ],
+  "matched_release_milestones": []
+}

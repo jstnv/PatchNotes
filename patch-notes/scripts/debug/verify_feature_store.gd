@@ -149,7 +149,7 @@ func _verify_tree_ui() -> void:
 	var tree: Control = store.get("_tree")
 	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and _child_is_outward(store, tree.get_node("GameplayGate"), nodes[&"difficulty_levels"], &"Gameplay"), "Difficulty retains distinct Gameplay ownership gate inward of its node")
 	expect(lane_buttons[&"Gameplay"].focus_mode == Control.FOCUS_ALL and nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL, "Lane and node navigation are keyboard/controller focusable")
-	expect(nodes[&"colored_text"].text.contains("Need cash") and nodes[&"branching_nodes"].text.contains("Locked"), "Unaffordable and locked node states are distinct")
+	expect(nodes[&"colored_text"].text.contains("Need $325.00 to queue") and nodes[&"branching_nodes"].text.contains("Locked"), "Deposit-short and locked node states are distinct")
 	store.call("_select_lane", &"Visuals")
 	store.call("_select_node", &"colored_text")
 	expect(store.get("_buy").disabled, "One-cent-short UI disables purchase")

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/debug/experiment_policy/supplied_policy.gd",
+    "id": "example-delegating-test-policy",
+    "version": "1",
+    "source_identity": "1d245a44e0d18d65301771c5c4adf31266f54e9361824aeaa2e24e19bc121cc9"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "custom-90210",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "example-custom-90210",
+          "studio_name": "Custom Test Studio",
+          "specialty": "action",
+          "traits": [],
+          "seed": "90210"
+        }
+      },
+      "max_commands": 100,
+      "target_release_count": 2,
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "Custom Release",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        },
+        "id": "example-delegating-test-policy",
+        "version": "1",
+        "source_identity": "1d245a44e0d18d65301771c5c4adf31266f54e9361824aeaa2e24e19bc121cc9"
+      }
+    }
+  ]
+}

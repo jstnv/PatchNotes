@@ -1,0 +1,23 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.18 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+BACKEND WASAPI position=0.22264583408833 loops=0 length=27.4285625 time=27.4228568737121
+ERROR: FAIL: WAV backend reports wrap
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_soundtrack_sync.gd:16)
+       [1] run (res://scripts/debug/verify_soundtrack_sync.gd:43)
+ERROR: FAIL: Actual wrap stays unwrapped
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_soundtrack_sync.gd:16)
+       [1] run (res://scripts/debug/verify_soundtrack_sync.gd:44)
+ERROR: FAIL: Actual resume advances
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_soundtrack_sync.gd:16)
+       [1] run (res://scripts/debug/verify_soundtrack_sync.gd:51)
+Soundtrack sync: 2357 checks, 3 failures

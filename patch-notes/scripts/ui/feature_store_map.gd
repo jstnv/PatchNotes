@@ -186,6 +186,7 @@ func decorate(button: Button, card: CardData) -> void:
 	status.name = "MapStatus"
 	status.position = Vector2(6, 5)
 	status.size.x = 116
+	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	status.add_theme_font_size_override("font_size", 10)
 	var status_background := StyleBoxFlat.new()
@@ -402,6 +403,7 @@ func dismiss() -> void:
 func show_details() -> void:
 	store._buy.disabled = true
 	price.text = ""
+	var blockers: Array[String] = []
 	if store._selected.is_empty():
 		popup.hide()
 		return
@@ -426,9 +428,11 @@ func show_details() -> void:
 		if quote.saving_cents > 0: price.text += "\nResourceful included: " + CashFormatter.format_exact_cents(quote.saving_cents)
 		store._details.text += "\n" + ("FIFO: research head" if quote.head else "Waiting in queue" if quote.queued else str(offer.get("prerequisite","Primitive reserve")))
 		store._buy.disabled = not quote.can_admit
-		store._buy.text = "Queued" if quote.queued else "Queue research" if quote.can_admit else "Unavailable - cash or prerequisites"
+		blockers = store.queue_block_reasons(quote)
+		store._buy.text = "Research head" if quote.head else "Queued" if quote.queued else "Queue research" if quote.can_admit else store.queue_status(quote)
+	store._buy.tooltip_text = "\n".join(blockers)
 	var advice := store._run.get_feature_spending_advice(store._selected)
-	shopping_details.text = FeatureSpendingGuidance.acquisition_text(advice) + "\n\n" + FeatureSpendingGuidance.explanation(advice)
+	shopping_details.text = ("\n".join(blockers) + "\n\n" if not blockers.is_empty() else "") + FeatureSpendingGuidance.acquisition_text(advice) + "\n\n" + FeatureSpendingGuidance.explanation(advice)
 	price.visible = not price.text.is_empty()
 	popup.show()
 	popup.reset_size()

@@ -34,6 +34,9 @@ var _payoff: Dictionary = {}
 var _schedule_page := 0
 var _confirm: ConfirmationDialog
 var _confirmation_kind: StringName = &""
+var education_details: RichTextLabel
+var education_payoff_button: Button
+var _education_payoff: Dictionary = {}
 
 
 func _ready() -> void:
@@ -95,6 +98,19 @@ func _ready() -> void:
 	expense_details.name = "Outstanding bills"
 	expense_details.scroll_active = true
 	finance_tabs.add_child(expense_details)
+	var education_page := VBoxContainer.new()
+	education_page.name = "Education"
+	finance_tabs.add_child(education_page)
+	education_payoff_button = Button.new()
+	education_payoff_button.name = "EducationPayoffButton"
+	education_payoff_button.text = "Pay off education debt…"
+	education_payoff_button.pressed.connect(_confirm_education_payoff)
+	education_page.add_child(education_payoff_button)
+	education_details = RichTextLabel.new()
+	education_details.name = "EducationDetails"
+	education_details.scroll_active = true
+	education_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	education_page.add_child(education_details)
 	_label("Actual studio months · Sales revenue uses earned net after the 70% share, applied once. Cash settled is shown separately.", monthly)
 	month_table = Tree.new()
 	month_table.name = "FinanceMonthlyRows"
@@ -296,6 +312,7 @@ func refresh() -> void:
 		month_detail.text = "No monthly transactions recorded yet." if available else "Monthly history unavailable for this run. Prior income and expenses have not been reconstructed."
 	_update_expenses(available)
 	_update_bank(available, rows)
+	_update_education(available)
 
 
 func _show_month() -> void:
@@ -325,14 +342,14 @@ func _update_expenses(available: bool) -> void:
 	var lines: Array[String] = ["Outstanding bills · two productive cycles = one month"]
 	var bills: Array = report.get("outstanding_expenses", []).duplicate(true)
 	for bill: Dictionary in run.get_studio_finance_snapshot().get("obligations", []):
-		if bill.expense_type in [&"bank_installment",&"payroll"] and bill.unpaid_cents == 0:
+		if bill.expense_type in [&"bank_installment",&"payroll",&"student_loan"] and bill.unpaid_cents == 0:
 			bills.append(OutstandingExpenses.describe(bill, run.get_completed_run_cycles()))
 	if bills.is_empty(): lines.append("No outstanding bills.")
 	for bill: Dictionary in bills:
 		lines.append("\n%s · %s" % [OutstandingExpenses.LABELS[bill.expense_type], bill.bill_id])
 		lines.append("Original due: Month %d, cycle %d · Original %s · Paid %s · Remaining %s" % [bill.month, bill.due_cycle, _money(bill.due_cents), _money(bill.paid_cents), _money(bill.unpaid_cents)])
 		lines.append("%s · Overdue %d cycles (%.1f months). Credit tier: -%d; next age tier: -%d." % ["Paid on time" if bill.paid_on_time else "Late payment history", bill.overdue_cycles, bill.overdue_cycles / 2.0, bill.penalty, bill.next_penalty])
-		if bill.expense_type == &"bank_installment":
+		if bill.expense_type in [&"bank_installment",&"student_loan"]:
 			lines.append("Principal %s / %s paid · Interest %s / %s paid" % [_money(bill.principal_paid_cents),_money(bill.principal_cents),_money(bill.interest_paid_cents),_money(bill.interest_cents)])
 		for payment: Dictionary in bill.payments:
 			lines.append("  Cycle %d: %s" % [payment.cycle,_money(payment.cents)])
@@ -438,6 +455,7 @@ func _show_quote() -> void:
 
 func _confirm_accept() -> void:
 	if not visible or page != &"bank" or not _quote.get("accepted", false): return
+	_confirm.title = "Confirm Bank transaction"
 	_confirmation_kind = &"accept"
 	_confirm.dialog_text = "Borrow %s over %d months? Total scheduled interest: %s. First payment is due at cycle %d. No time passes on acceptance." % [_money(_quote.schedule.principal_cents),_quote.schedule.term_months,_money(_quote.schedule.total_interest_cents),_quote.schedule.first_due_cycle]
 	_confirm.popup_centered(Vector2i(520,180))
@@ -445,13 +463,54 @@ func _confirm_accept() -> void:
 
 func _confirm_payoff() -> void:
 	if not visible or page != &"bank" or _payoff.is_empty(): return
+	_confirm.title = "Confirm Bank transaction"
 	_confirmation_kind = &"payoff"
-	_confirm.dialog_text = "Pay %s to close this loan? This includes outstanding principal and due unpaid interest. Other overdue bills are paid first. Future interest is waived." % _money(_payoff.total_cents)
+	_confirm.dialog_text = "Pay %s to close this loan? This includes outstanding principal and due unpaid interest. Already-due rent and payroll bills must also be covered and are paid first. Future interest is waived." % _money(_payoff.total_cents)
 	_confirm.popup_centered(Vector2i(520,180))
 
 
 func _confirm_transaction() -> void:
-	if not visible or page != &"bank" or run == null: return
+	if not visible or run == null: return
+	if _confirmation_kind == &"education_payoff":
+		if page != &"finances": return
+		var education_ok := run.pay_off_education(_education_payoff)
+		refresh()
+		if not education_ok: education_details.text += "\nPayoff rejected: quote changed or cash is insufficient. No time passed."
+		return
+	if page != &"bank": return
 	var ok := run.accept_bank_loan(_quote) if _confirmation_kind == &"accept" else run.pay_off_bank_loan(_payoff)
 	refresh()
 	if not ok: quote_details.text = "Transaction rejected. Cash or finance state changed, funds are insufficient, or another action is in progress. Preview again."
+
+func _update_education(available: bool) -> void:
+	_education_payoff = {}
+	education_payoff_button.disabled = true
+	var account: Dictionary = report.get("education",{})
+	if not available or account.is_empty():
+		education_details.text = "No active education debt. Historical inactive previews create no debt or extra funding." if available else "Education history unavailable."
+		return
+	var terms: Dictionary = account.schedule
+	var remaining: int = terms.principal_cents-account.principal_paid_cents
+	var lines: Array[String] = ["%s · %s" % [StudioTraits.TRAITS[account.trait_id].name,"Closed" if account.closed else "Active"],"Repayment principal remaining: %s. Original liability: %s; no principal cash deposit." % [_money(remaining),_money(terms.principal_cents)],"Months 1–12: no education bill or interest. 96 dues from Month 13 to 108; nominal 8%/12 interest on scheduled opening principal.","Regular due: %s · Final due: %s. Missed payments never compound or rewrite the schedule." % [_money(terms.regular_due_cents),_money(EducationDebt.installment(terms,96).payment_cents)],"Principal paid: %s · Interest paid: %s." % [_money(account.principal_paid_cents),_money(account.interest_paid_cents)]]
+	if not account.closed:
+		_education_payoff = run.get_education_payoff_quote()
+		education_payoff_button.disabled = _education_payoff.is_empty()
+		if account.issued < 96:
+			var due := EducationDebt.installment(terms,int(account.issued)+1)
+			lines.append("Next scheduled due: Month %d / cycle %d · %s." % [due.due_cycle/2,due.due_cycle,_money(due.payment_cents)])
+		else: lines.append("All 96 scheduled bills have been issued. Only existing arrears remain; no new interest.")
+		if not _education_payoff.is_empty(): lines.append("Payoff: %s principal + %s due interest = %s. Other already-due bills paid first: %s. Cash required now: %s. No future bills reserved; no fee or future education interest." % [_money(_education_payoff.principal_cents),_money(_education_payoff.interest_cents),_money(_education_payoff.total_cents),_money(_education_payoff.other_due_cents),_money(_education_payoff.required_cash_cents)])
+	for bill: Dictionary in run.get_studio_finance_snapshot().obligations:
+		if bill.expense_type != &"student_loan": continue
+		var age := OutstandingExpenses.describe(bill,run.get_completed_run_cycles())
+		lines.append("\n%s · Original due Month %d / cycle %d · Age %d cycles\nPrincipal paid %s / %s · Interest paid %s / %s · Remaining %s" % [bill.bill_id,bill.month,bill.due_cycle,age.overdue_cycles,_money(bill.principal_paid_cents),_money(bill.principal_cents),_money(bill.interest_paid_cents),_money(bill.interest_cents),_money(bill.unpaid_cents)])
+		for payment: Dictionary in bill.payments: lines.append("  Cycle %d: paid %s" % [payment.cycle,_money(payment.cents)])
+	lines.append("Education arrears do not block production, but overdue bills prevent new Bank borrowing. Paying preserves past late history and gives no immediate credit bonus.")
+	education_details.text = "\n".join(lines)
+
+func _confirm_education_payoff() -> void:
+	if not visible or page != &"finances" or _education_payoff.is_empty(): return
+	_confirmation_kind = &"education_payoff"
+	_confirm.title = "Confirm education payoff"
+	_confirm.dialog_text = "Pay %s of already-due rent, payroll and Bank bills, then %s to close education debt? Total cash required: %s. This is one zero-cycle action; future education interest is waived." % [_money(_education_payoff.other_due_cents),_money(_education_payoff.total_cents),_money(_education_payoff.required_cash_cents)]
+	_confirm.popup_centered(Vector2i(520,220))

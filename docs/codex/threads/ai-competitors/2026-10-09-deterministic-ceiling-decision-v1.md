@@ -1,0 +1,11 @@
+# 2026-10-09 decision: deterministic legal-project capability ceiling
+
+**Later status:** The [delegated shopping record](2026-10-09-feature-shopping-delegated-decisions-v1.md) resolves the pre-target tie and selects a finite planning-envelope structure. Its numbers, exact search and CPU budget remain OPEN; the text below records the earlier ruling.
+
+**Status:** **LOCKED estimator intent; OPEN pre-target ties and computation.** A [later A ruling](2026-10-09-potential-relevance-decision-v1.md) requires a shopping candidate to improve legal-project potential; another [later A ruling](2026-10-09-best-overall-legal-mix-decision-v1.md) selects best overall fit first among legal mixes. Authority for this record: the user's choice **A** in this design thread on 2026-10-09, resolving the [ceiling versus draw-aware brief](2026-10-09-next-decision-v3.md).
+
+For rival Feature shopping, use a **deterministic legal ceiling** for the four-Core capability of the rival's [owned, project-eligible Features](2026-10-09-owned-feature-capability-decision-v1.md) within [one project](2026-10-09-legal-project-capability-decision-v1.md). Favorable card availability and choices may be considered if they form a possible legal Design/Alpha route. Do not weight this planning measure by the likelihood of those draws. Any represented four-Core mix must be **jointly attainable in the same project** under phase eligibility, finite Feature use and legal hand/card limits; do not combine separate per-Core maxima from mutually incompatible routes into an impossible vector.
+
+The ceiling is planning potential. It does not prescribe actual AI hand choices, alter draw RNG or shared phase rules, grant spendable cash, guarantee card commits, roll a final Review or guarantee a release. The later overall-first ruling supplies a selection priority, but pre-target baseline ties, exact legal-mix construction and arithmetic, cash and cycle assumptions, project snapshot timing, the calculation/CPU budget and opening Review verification remain **OPEN**. “Legal” here fixes the already approved project/card structure; it does not settle whether current cash or future earnings constrain the planning ceiling.
+
+This is design authority only. No gameplay, PR, `TODO.md` or implementation handoff change follows.

@@ -1,0 +1,16 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+SCRIPT ERROR: Parse Error: Cannot infer the type of "policy" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/debug/experiment_policy/supplied_policy.gd:16)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://scripts/debug/campaign_experiment_cli.gd:41)
+ERROR: Failed to load script "res://scripts/debug/experiment_policy/supplied_policy.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://scripts/debug/campaign_experiment_cli.gd:41)
+{"cases":0,"error":"Policy requires static factory(config: Dictionary) -> Callable","ok":false}
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

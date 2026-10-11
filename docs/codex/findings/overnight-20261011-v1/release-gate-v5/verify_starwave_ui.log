@@ -1,0 +1,706 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Create fixture
+PASS: First qualifying fixture
+PASS: One release cannot unlock Starwave
+PASS: Ironclad stays two hands
+PASS: Ironclad stays two hands
+PASS: Native trial completion hand
+PASS: Native trial completion hand
+PASS: Second qualifying fixture
+PASS: Two releases and two completions cannot unlock Starwave
+PASS: Native trial completion hand
+PASS: Native trial completion hand
+PASS: Third distinct completion unlocks Starwave
+PASS: Mouse opens Contract chooser
+PASS: Chooser has exact approved cash-only terms
+PASS: Chooser acceptance fits supported viewport
+PASS: Chooser changes no cash/time/RNG or offer
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+PASS: Keyboard confirms selected Starwave offer
+PASS: Progress/cash preview fits viewport
+PASS: Play button stays in viewport
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Mouse hand commits exactly once through animation
+PASS: Progress/cash preview fits viewport
+PASS: Play button stays in viewport
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Mouse hand commits exactly once through animation
+PASS: Progress/cash preview fits viewport
+PASS: Play button stays in viewport
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Mouse hand commits exactly once through animation
+PASS: Completed result fits viewport
+PASS: Result distinguishes cash-only reward
+PASS: Mouse dismiss returns to Studio
+PASS: Browser reports completed first offer
+PASS: Create fixture
+PASS: First qualifying fixture
+PASS: One release cannot unlock Starwave
+PASS: Ironclad stays two hands
+PASS: Ironclad stays two hands
+PASS: Native trial completion hand
+PASS: Native trial completion hand
+PASS: Second qualifying fixture
+PASS: Two releases and two completions cannot unlock Starwave
+PASS: Native trial completion hand
+PASS: Native trial completion hand
+PASS: Third distinct completion unlocks Starwave
+PASS: Mouse opens Contract chooser
+PASS: Chooser has exact approved cash-only terms
+PASS: Chooser acceptance fits supported viewport
+PASS: Chooser changes no cash/time/RNG or offer
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:319)
+       [5] _ready (res://scripts/phases/contract_phase.gd:70)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:338)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:355)
+       [8] _run (res://scripts/debug/verify_starwave_ui.gd:39)
+PASS: Keyboard confirms selected Starwave offer
+PASS: Progress/cash preview fits viewport
+PASS: Play button stays in viewport
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Mouse hand commits exactly once through animation
+PASS: Progress/cash preview fits viewport
+PASS: Play button stays in viewport
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:448)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:417)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [7] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Mouse hand commits exactly once through animation
+PASS: Progress/cash preview fits viewport
+PASS: Play button stays in viewport
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:208)
+       [5] click (res://scripts/debug/verify_starwave_ui.gd:8)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Mouse hand commits exactly once through animation
+PASS: Completed result fits viewport
+PASS: Result distinguishes cash-only reward
+PASS: Mouse dismiss returns to Studio
+PASS: Browser reports completed first offer
+Starwave UI verification: 0 failures
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

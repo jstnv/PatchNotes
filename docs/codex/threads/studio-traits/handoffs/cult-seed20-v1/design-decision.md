@@ -1,0 +1,9 @@
+# Cult Following seed 20 design review v1 — 2026-10-11
+
+**Authority: OPEN candidate / DESIGN review needed.** The existing 40 starting Fans for one positive point is implemented locally and **ACTIVE/TRIAL**. This record does not change that ruling and does not claim canonical implementation of 20 Fans.
+
+**Candidate for a user ruling:** Keep the same once-only Cult Following effect, slot and one-point price, but begin a new eligible Studio with **20 Fans** instead of 40. Ordinary Fan gain/loss and the existing Fanbase launch Awareness calculation continue unchanged. The private candidate changes only the Cult description and `starting_fans` return value in `scripts/studio_traits.gd`.
+
+**Evidence:** [Predeclared plan](2026-10-11-cult-seed-screen-plan-v1.md), [source-pinned finding](2026-10-11-cult-seed-screen-findings-v1.md), [audit data](2026-10-11-cult-seed-audit-results-v1.json), and frozen canonical/candidate run bundles under `docs/codex/threads/studio-traits/sims/`. Two matched seeds completed a strong→weak→recovery→follow-through route, with same actions/Reviews/RNG per revision pair and exact negative-control parity. At the fourth launch, candidate Cult was +$187.76/+7 Fans and +$159.79/+8 Fans versus control; current 40/1 was +$390.57/+12 and +$362.59/+16. Both Cult revisions paid $12,000 rent without arrears; Game 4 sales were unsettled. Fresh-process replays passed for both versions' seed-4417 Cult routes.
+
+**Dependencies and open questions:** The user must select whether 40/1 remains or 20/1 becomes the next ACTIVE/TRIAL value. A broader policy/seed study or human playtest may precede that ruling. If selected, PN Implementation owns canonical source adoption, UI copy, trait/Checkpoint compatibility checks, focused behavior tests and any export acceptance. No simulator finding alone approves balance or authorizes release claims.

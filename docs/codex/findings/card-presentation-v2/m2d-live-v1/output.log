@@ -1,0 +1,1920 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Cannot infer the type of "roll" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/simulation/development_actions.gd:236)
+SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant. (Warning treated as error.)
+   at: GDScript::reload (res://scripts/simulation/development_actions.gd:238)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/phases/design_phase.gd:0)
+ERROR: Failed to load script "res://scripts/phases/design_phase.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Replay snapshot ledger loads
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+PASS: Replay tutorial setup
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+PASS: Replay tutorial setup
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+PASS: Replay tutorial setup
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Replay studio setup
+PASS: Replay project supply freezes
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [2] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [3] begin_design (res://scripts/phases/design_phase.gd:169)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: DesignPhase._deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:271)
+       [1] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [2] begin_design (res://scripts/phases/design_phase.gd:169)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Design because the initial weighted candidate pool could not be dealt.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_design (res://scripts/phases/design_phase.gd:170)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: DesignPhase._capture_development_actions (res://scripts/phases/design_phase.gd:769)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/design_phase.gd:769)
+       [1] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+SCRIPT ERROR: Invalid call. Nonexistent function 'finalize' in base 'Nil'.
+   at: DesignPhase._on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+   GDScript backtrace (most recent call first):
+       [0] _on_proceed_to_alpha_pressed (res://scripts/phases/design_phase.gd:478)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:87)
+ERROR: FAIL: Replay exits design
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] _update_proceed_action (res://scripts/phases/alpha_phase.gd:263)
+       [2] _ready (res://scripts/phases/alpha_phase.gd:81)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [2] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [3] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [4] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [5] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [6] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'boundary' in base 'Nil'.
+   at: AlphaPhase._build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+   GDScript backtrace (most recent call first):
+       [0] _build_alpha_feature_history (res://scripts/phases/alpha_phase.gd:267)
+       [1] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:255)
+       [2] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [3] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [4] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [5] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid access to property or key 'valid' on a base object of type 'Dictionary'.
+   at: AlphaPhase._has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+   GDScript backtrace (most recent call first):
+       [0] _has_launch_feature_work (res://scripts/phases/alpha_phase.gd:256)
+       [1] refresh (res://scripts/ui/phase_workspace.gd:238)
+       [2] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [3] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [4] development_cases (res://scripts/debug/verify_development_replay.gd:57)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AlphaPhase._capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+   GDScript backtrace (most recent call first):
+       [0] _capture_development_actions (res://scripts/phases/alpha_phase.gd:843)
+       [1] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:393)
+       [2] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [3] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+SCRIPT ERROR: Invalid call. Nonexistent function 'initial_plan' in base 'Nil'.
+   at: AlphaPhase._deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+   GDScript backtrace (most recent call first):
+       [0] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:394)
+       [1] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+WARNING: Could not begin Alpha because its weighted candidate pool is invalid.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] begin_alpha (res://scripts/phases/alpha_phase.gd:172)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:61)
+ERROR: FAIL: Replay phase begins: alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits alpha
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+WARNING: Beta requires an authoritatively finalized Alpha ProjectState.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/phases/beta_phase.gd:84)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay Beta setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay launch authority
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:55)
+ERROR: FAIL: Replay phase begins: beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:62)
+ERROR: FAIL: Replay exits beta
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:95)
+PASS: Pinned development oracle exists
+ERROR: FAIL: live development traces match original
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] development_cases (res://scripts/debug/verify_development_replay.gd:105)
+Development replay: 12 routes (live)

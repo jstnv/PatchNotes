@@ -1,0 +1,27 @@
+{
+	"case_id": "rejected",
+	"initial": {
+		"recipe": {
+			"schema_version": 1,
+			"seed": "4417",
+			"specialty": "action",
+			"studio_id": "telemetry_fixture",
+			"studio_name": "Telemetry fixture",
+			"traits": []
+		}
+	},
+	"max_commands": 100,
+	"policy": {
+		"config": {},
+		"id": "telemetry-rejected-probe",
+		"source_identity": "971c7767a8d1dd74e67aec5112499a13b62a4458daaeff801f28ae5772bdb701",
+		"version": "1"
+	},
+	"schema_version": "1",
+	"study": {
+		"arm": "rejected",
+		"pair_id": "telemetry-equivalence"
+	},
+	"target_release_count": 2,
+	"telemetry": true
+}

@@ -1,6 +1,19 @@
 class_name AlphaPhase
 extends Control
 
+const DevelopmentActions := preload("res://scripts/simulation/development_actions.gd")
+
+const AlphaHandCommand := preload("res://scripts/simulation/alpha_hand_command.gd")
+
+var _command_view_ids: Dictionary = {}
+var _command_next_id := 0
+var _command_revision := 0
+var _hand_command_busy := false
+var _last_hand_command_result: Dictionary = {}
+
+const ProductionHand := preload("res://scripts/simulation/production_hand.gd")
+const BalancedProduction := preload("res://scripts/cards/balanced_production.gd")
+
 var _workspace: PhaseWorkspace
 
 signal priorities_changed
@@ -12,9 +25,8 @@ const WEIGHTED_CANDIDATE_MATH := preload("res://scripts/phases/weighted_candidat
 const CANDIDATE_POOL_SIZE := 7
 const SELECTED_HAND_SIZE := 4
 const ALPHA_BUG_PRESSURE_DENOMINATOR := 18.0
-const ALPHA_SPECIALIZATION_MULTIPLIER := 1.5
-const ALPHA_BALANCED_PRODUCTION_THRESHOLD := 0.20
-const ALPHA_BALANCED_PRODUCTION_MULTIPLIER := 1.20
+const ALPHA_SPECIALIZATION_MULTIPLIER := ProductionHand.SPECIALIZATION_MULTIPLIER
+const ALPHA_BALANCED_PRODUCTION_THRESHOLD := 0.15
 const BUG_VARIANCE_NEGATIVE_TWO_THRESHOLD := 0.08
 const BUG_VARIANCE_NEGATIVE_ONE_THRESHOLD := 0.25
 const BUG_VARIANCE_ZERO_THRESHOLD := 0.75
@@ -111,12 +123,9 @@ func set_priority(category: int, requested_value: Variant) -> bool:
 func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
 	if not is_inside_tree(): return false
 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or not PriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
-	var commit := func() -> bool:
-		if not _priority_allocation.set_distribution(distribution): return false
-		_priority_draft = _priority_allocation.get_priority_distribution()
-		_project_state.advance_cycle()
-		return true
-	if not _run_state.complete_productive_action(commit, 0, -1, &"", &"priority_change", _project_state.get_release_id()): return false
+	var publish:=func() -> void:
+		_priority_draft=_priority_allocation.get_priority_distribution()
+	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
 	_sync_priority_controls()
 	return true
 
@@ -176,19 +185,14 @@ func _on_begin_alpha_pressed() -> void:
 
 
 func host_playtest() -> bool:
-	if not _can_host_playtest():
-		return false
-	var corrective_categories := _select_corrective_categories()
-	if corrective_categories.size() != 2 or corrective_categories[0] == corrective_categories[1]:
-		return false
-	var commit := func() -> bool:
-		_pending_playtest_categories.assign(corrective_categories)
-		_project_state.advance_cycle()
-		return true
-	if not (_run_state.complete_productive_action(commit, 0, -1, &"", &"playtest", _project_state.get_release_id()) if _run_state != null else commit.call()): return false
-	print("Host Playtest complete! One cycle advanced. Corrective Passes queued: %s" % _format_corrective_pass_names(_pending_playtest_categories))
+	if not _can_host_playtest(): return false
+	_hand_command_busy=true
+	var actions:=_capture_development_actions()
+	actions.hand._pending_playtest_categories=_pending_playtest_categories
+	var accepted: bool = actions.host_playtest()
+	_hand_command_busy=false
 	_update_host_playtest_action()
-	return true
+	return accepted
 
 
 func _on_host_playtest_pressed() -> void:
@@ -260,106 +264,27 @@ func _update_proceed_action() -> void:
 
 
 func _build_alpha_feature_history(report_errors: bool = true) -> Dictionary:
-	var card_database := get_node_or_null("/root/CardDatabase")
-	if card_database == null:
-		if report_errors:
-			push_warning("Cannot finalize Alpha Feature history without CardDatabase.")
-		return {&"valid": false}
-	var definitions: Array[CardData] = []
-	definitions.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_ALPHA))
-	var eligible_ids: Dictionary[StringName, bool] = {}
-	for card: CardData in definitions:
-		if (
-			card == null
-			or card.id.is_empty()
-			or card.phase != CardData.PHASE_ALPHA
-			or card.card_type != &"feature"
-			or card.renewable
-			or eligible_ids.has(card.id)
-		):
-			if report_errors:
-				push_warning("Cannot finalize invalid Alpha Feature definition history.")
-			return {&"valid": false}
-		eligible_ids[card.id] = true
-	for exhausted_id: StringName in _exhausted_feature_ids:
-		if not eligible_ids.has(exhausted_id):
-			if report_errors:
-				push_warning("Exhausted ID is not an eligible Alpha Feature: %s" % exhausted_id)
-			return {&"valid": false}
-
-	var implemented_ids: Array[StringName] = []
-	var unimplemented_ids: Array[StringName] = []
-	for id: StringName in eligible_ids:
-		if _exhausted_feature_ids.has(id):
-			implemented_ids.append(id)
-		else:
-			unimplemented_ids.append(id)
-	implemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
-	unimplemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
-	return {
-		&"valid": true,
-		&"implemented_ids": implemented_ids,
-		&"unimplemented_ids": unimplemented_ids,
-	}
+	return _capture_development_actions().boundary()._build_alpha_feature_history(report_errors)
 
 
 func _calculate_alpha_finalization(stochastic_roll: float, variance_roll: float) -> Dictionary:
-	if (
-		_project_state == null
-		or not is_finite(stochastic_roll)
-		or stochastic_roll < 0.0
-		or stochastic_roll >= 1.0
-		or not is_finite(variance_roll)
-		or variance_roll < 0.0
-		or variance_roll >= 1.0
-	):
-		return {&"valid": false}
-	var pressure := _project_state.get_accumulated_alpha_bug_pressure()
-	if not is_finite(pressure) or pressure < 0.0:
-		return {&"valid": false}
-	var base := floori(pressure)
-	var fraction := pressure - base
-	var rounded := base + (1 if stochastic_roll < fraction else 0)
-	var variance := _get_alpha_bug_variance(variance_roll)
-	var generated := maxi(0, rounded + variance)
-	return {
-		&"valid": true,
-		&"pressure": pressure,
-		&"base": base,
-		&"rounded": rounded,
-		&"variance": variance,
-		&"generated": generated,
-	}
+	return _capture_development_actions().boundary()._calculate_alpha_finalization(stochastic_roll,variance_roll)
 
 
 func _get_alpha_bug_variance(roll: float) -> int:
-	if roll < BUG_VARIANCE_NEGATIVE_TWO_THRESHOLD:
-		return -2
-	if roll < BUG_VARIANCE_NEGATIVE_ONE_THRESHOLD:
-		return -1
-	if roll < BUG_VARIANCE_ZERO_THRESHOLD:
-		return 0
-	if roll < BUG_VARIANCE_POSITIVE_ONE_THRESHOLD:
-		return 1
-	return 2
+	return _capture_development_actions().boundary()._get_alpha_bug_variance(roll)
 
 
 func _finalize_alpha(stochastic_roll: float, variance_roll: float) -> bool:
 	if not _can_proceed_to_beta():
 		return false
-	var feature_history := _build_alpha_feature_history()
-	if not feature_history.valid:
-		return false
-	var finalization := _calculate_alpha_finalization(stochastic_roll, variance_roll)
-	if not finalization.valid:
-		return false
-	if not _project_state.finalize_alpha(
-		finalization.generated,
-		feature_history.implemented_ids,
-		feature_history.unimplemented_ids,
-	):
-		return false
-	var discarded_playtest := not _pending_playtest_categories.is_empty()
+	var discarded_playtest:=not _pending_playtest_categories.is_empty()
+	_hand_command_busy=true
+	var result: Dictionary = _capture_development_actions().finalize([stochastic_roll,variance_roll] as Array[float])
+	_hand_command_busy=false
+	if not result.ok: return false
+	var feature_history: Dictionary = result.history
+	var finalization: Dictionary = result.finalization
 	_pending_playtest_categories.clear()
 	_retire_alpha()
 	print(
@@ -430,22 +355,7 @@ func _has_valid_active_candidate_pool() -> bool:
 
 
 func _select_corrective_categories() -> Array[ProjectState.CoreScore]:
-	if _project_state == null:
-		return [] as Array[ProjectState.CoreScore]
-	var categories: Array[ProjectState.CoreScore] = []
-	categories.assign(ProjectState.CoreScore.values())
-	categories.sort_custom(func(a: ProjectState.CoreScore, b: ProjectState.CoreScore) -> bool:
-		var a_score := _project_state.get_core_score(a)
-		var b_score := _project_state.get_core_score(b)
-		if a_score != b_score:
-			return a_score < b_score
-		var a_priority := get_priority(a)
-		var b_priority := get_priority(b)
-		if a_priority != b_priority:
-			return a_priority > b_priority
-		return a < b
-	)
-	return categories.slice(0, 2)
+	return _capture_development_actions().corrective_categories()
 
 
 func _format_corrective_pass_names(categories: Array) -> String:
@@ -480,26 +390,21 @@ func _deal_next_candidate_pool(controlled_rolls: Array[float] = []) -> bool:
 	if not _candidate_cards.is_empty():
 		push_warning("Cannot deal Alpha candidates while a pool is active.")
 		return false
-	var had_pending_playtest := not _pending_playtest_categories.is_empty()
-	var deal := (
-		_build_corrective_candidate_definitions(get_priority_distribution(), controlled_rolls)
-		if had_pending_playtest
-		else _build_weighted_candidate_definitions(get_priority_distribution(), controlled_rolls)
-	)
+	var actions:=_capture_development_actions()
+	var deal: Dictionary = actions.initial_plan(controlled_rolls)
 	if not deal.valid:
 		push_warning("Could not build a complete weighted Alpha candidate pool: %s" % deal.error)
 		return false
-	_candidate_cards.assign(deal.cards)
+	actions.publish_initial(deal)
+	_candidate_cards.assign(actions.hand._candidate_cards)
+	_pending_playtest_categories.assign(actions.hand._pending_playtest_categories)
 	for card: CardData in _candidate_cards:
 		var card_view := CARD_VIEW_SCENE.instantiate() as CardView
 		card_view.set_card(card)
 		card_view.card_pressed.connect(_on_card_pressed)
 
 		%HandContainer.add_child(card_view)
-	if had_pending_playtest:
-		var injected_categories := _pending_playtest_categories.duplicate()
-		_pending_playtest_categories.clear()
-		print("Host Playtest corrective Passes injected and consumed: %s" % _format_corrective_pass_names(injected_categories))
+	_sync_command_tokens(actions.hand)
 	_update_host_playtest_action()
 	_update_proceed_action()
 	_refresh_redraw_controls()
@@ -520,48 +425,44 @@ func _can_redraw_selection() -> bool:
 
 func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
 	if not _can_redraw_selection(): return false
-	var count := _selected_card_views.size()
-	if not controlled_rolls.is_empty() and controlled_rolls.size() != count: return false
-	for roll: float in controlled_rolls:
-		if not is_finite(roll) or roll < 0.0 or roll >= 1.0: return false
-	var rng_state := _deal_rng.state
-	var plan := _plan_selected_redraw(controlled_rolls)
-	if not plan.valid:
-		_deal_rng.state = rng_state
-		if not plan.failed_features.is_empty():
-			%RedrawFeedbackLabel.text = "No more Feature cards"
-			for view: CardView in plan.failed_features: view.shake_no()
-		return false
-	# Prepare every view before changing the pool, lifecycle, selection, or budget.
+	_hand_command_busy=true
+	var actions:=_capture_development_actions()
+	var slots:=_redraw_slots()
+	var selected:=_selected_card_views.duplicate()
 	var prepared: Array[CardView] = []
-	for card: CardData in plan.cards:
-		var replacement_view := CARD_VIEW_SCENE.instantiate() as CardView
-		if replacement_view == null:
-			for view: CardView in prepared: view.free()
-			_deal_rng.state = rng_state
-			return false
-		replacement_view.set_card(card)
-		replacement_view.card_pressed.connect(_on_card_pressed)
-		prepared.append(replacement_view)
-	var selected := _selected_card_views.duplicate()
-	for index in range(count):
-		var old_view: CardView = selected[index]
-		var slot := old_view.get_index()
-		var replacement: CardData = plan.cards[index]
+	var prepare:=func(cards: Array) -> bool:
+		for card: CardData in cards:
+			var view: CardView = CARD_VIEW_SCENE.instantiate() as CardView
+			if view==null: return false
+			view.set_card(card)
+			view.card_pressed.connect(_on_card_pressed)
+			prepared.append(view)
+		return true
+	var publish:=func(_plan: Dictionary) -> void:
+		_candidate_cards.assign(actions.hand._candidate_cards)
 
-		_candidate_cards[slot] = replacement
+		for index in range(slots.size()):
+			var old: CardView = selected[index]
+			%HandContainer.remove_child(old)
+			old.queue_free()
+			%HandContainer.add_child(prepared[index])
+			%HandContainer.move_child(prepared[index],slots[index])
 
-		%HandContainer.remove_child(old_view)
-		old_view.queue_free()
-		%HandContainer.add_child(prepared[index])
-		%HandContainer.move_child(prepared[index], slot)
-	_selected_card_views.clear()
-	%RedrawFeedbackLabel.text = ""
-	# One budget notification, after the complete pool and selection are committed.
-	_run_state.consume_redraw(count)
+		_selected_card_views.clear()
+		_sync_command_tokens(actions.hand)
+	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish)
+	if not result.ok:
+		for view in prepared: view.free()
+		if not result.plan.failed_features.is_empty():
+			%RedrawFeedbackLabel.text="No more Feature cards"
+			for slot: int in result.plan.failed_features: (%HandContainer.get_child(slot) as CardView).shake_no()
+	else:
+		%RedrawFeedbackLabel.text=""
+		_sync_command_tokens(actions.hand)
+	_hand_command_busy=false
 	_update_play_action()
 	_refresh_redraw_controls()
-	return true
+	return result.ok
 
 
 func _on_redraw_pressed() -> void:
@@ -580,187 +481,47 @@ func _refresh_redraw_controls() -> void:
 
 
 func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
-	var cards: Array[CardData] = []
-	var reserved: Array[StringName] = []
-	var failed_features: Array[CardView] = []
-	var valid := true
-	for index in range(_selected_card_views.size()):
-		var view := _selected_card_views[index]
-		var old_card := view.card_data
-		var feature_entries: Array[Dictionary] = []
-		var pass_entries: Array[Dictionary] = []
-		for card: CardData in _available_features:
-			if card.id == old_card.id or reserved.has(card.id): continue
-			var already_visible := false
-			for current: CardData in _candidate_cards:
-				if current.id == card.id: already_visible = true
-			if already_visible: continue
-			var weight := _calculate_candidate_weight(card, get_priority_distribution())
-			if weight > 0.0: feature_entries.append({&"card": card, &"weight": weight})
-		for card: CardData in _pass_definitions:
-			if card.id == old_card.id: continue
-			var weight := _calculate_candidate_weight(card, get_priority_distribution())
-			if weight > 0.0: pass_entries.append({&"card": card, &"weight": weight})
-		feature_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
-		pass_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
-		var roll := controlled_rolls[index] if not controlled_rolls.is_empty() else _deal_rng.randf()
-		var entries: Array[Dictionary] = []
-		var weighted_roll := roll
-		if not feature_entries.is_empty() and not pass_entries.is_empty():
-			# Split one uniform roll by class, then use its remaining range for
-			# priority-weighted selection within that class.
-			entries = feature_entries if roll < 0.5 else pass_entries
-			weighted_roll = roll * 2.0 if roll < 0.5 else (roll - 0.5) * 2.0
-		elif not feature_entries.is_empty():
-			entries = feature_entries
-		else:
-			entries = pass_entries
-		var replacement := _select_weighted_entry(entries, weighted_roll)
-		if replacement == null:
-			valid = false
-			if old_card.card_type == &"feature": failed_features.append(view)
-		else:
-			cards.append(replacement)
-			if not replacement.renewable: reserved.append(replacement.id)
-	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}
+	var plan: Dictionary = _capture_development_actions().redraw_plan(_redraw_slots(),controlled_rolls)
+	var failed: Array[CardView] = []
+	for slot: int in plan.failed_features: failed.append(%HandContainer.get_child(slot))
+	plan.failed_features=failed
+	return plan
 
 
 func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE, excluded_ids: Array[StringName] = []) -> Dictionary:
-	if _pending_playtest_categories.size() != 2 or _pending_playtest_categories[0] == _pending_playtest_categories[1]:
-		return {&"valid": false, &"error": "A corrective Alpha deal requires two distinct queued Core categories."}
-	var injected_cards: Array[CardData] = []
-	for category: ProjectState.CoreScore in _pending_playtest_categories:
-		var pass_card := _get_pass_for_category(category)
-		if pass_card == null:
-			return {&"valid": false, &"error": "A queued corrective Core Pass is unavailable."}
-		injected_cards.append(pass_card)
-	var weighted_deal := _build_weighted_candidate_definitions(priority_snapshot, controlled_rolls, candidate_count - injected_cards.size(), excluded_ids)
-	if not weighted_deal.valid:
-		return weighted_deal
-	var cards := injected_cards.duplicate()
-	cards.append_array(weighted_deal.cards)
-	return {&"valid": true, &"cards": cards}
+	return _capture_alpha_command()._build_corrective_candidate_definitions(priority_snapshot, controlled_rolls, candidate_count, excluded_ids)
 
 
 func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE, excluded_ids: Array[StringName] = []) -> Dictionary:
-	var validation_error := _get_deal_input_validation_error(priority_snapshot, controlled_rolls, candidate_count)
-	if not validation_error.is_empty():
-		return {&"valid": false, &"error": validation_error}
-	var remaining_features := _available_features.filter(func(card: CardData): return card.id not in excluded_ids)
-	var selected_cards: Array[CardData] = []
-	for slot in range(candidate_count):
-		var entries: Array[Dictionary] = []
-		for card: CardData in remaining_features + _pass_definitions:
-			var weight := _calculate_candidate_weight(card, priority_snapshot)
-			if not is_finite(weight) or weight < 0.0:
-				return {&"valid": false, &"error": "Candidate '%s' produced an invalid weight." % card.id}
-			if weight > 0.0:
-				entries.append({&"card": card, &"weight": weight})
-		entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
-		var roll := controlled_rolls[slot] if not controlled_rolls.is_empty() else _deal_rng.randf()
-		var selected := _select_weighted_entry(entries, roll)
-		if selected == null:
-			return {&"valid": false, &"error": "Slot %d had no positive finite selectable weight." % (slot + 1)}
-		selected_cards.append(selected)
-		if selected.card_type == &"feature":
-			remaining_features.erase(selected)
-	return {&"valid": true, &"cards": selected_cards}
+	return _capture_alpha_command()._build_weighted_candidate_definitions(priority_snapshot, controlled_rolls, candidate_count, excluded_ids)
 
 
 func _select_weighted_entry(entries: Array[Dictionary], roll: float) -> CardData:
-	return WEIGHTED_CANDIDATE_MATH.select_weighted_entry(entries, roll)
+	return _capture_alpha_command()._select_weighted_entry(entries, roll)
 
 
 func _calculate_candidate_weight(card: CardData, priority_snapshot: Dictionary) -> float:
-	return WEIGHTED_CANDIDATE_MATH.calculate_printed_score_weight(card, priority_snapshot, CORE_SCORE_BY_STAT)
+	return _capture_alpha_command()._calculate_candidate_weight(card, priority_snapshot)
 
 
 func _get_deal_input_validation_error(priority_snapshot: Dictionary, controlled_rolls: Array[float], candidate_count: int = CANDIDATE_POOL_SIZE) -> String:
-	if candidate_count < 1 or candidate_count > CANDIDATE_POOL_SIZE:
-		return "Alpha candidate count must be between one and seven."
-	if priority_snapshot.size() != PriorityAllocation.CORE_CATEGORIES.size():
-		return "Priority snapshot must contain all four Core categories."
-	var total_priority := 0
-	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
-		if not priority_snapshot.has(category) or typeof(priority_snapshot[category]) != TYPE_INT:
-			return "Priority snapshot contains a missing or malformed category."
-		var value: int = priority_snapshot[category]
-		if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
-			return "Priority snapshot contains an out-of-range or non-step value."
-		total_priority += value
-	if total_priority > PriorityAllocation.MAX_TOTAL_PRIORITY:
-		return "Priority snapshot exceeds the allocation budget."
-	if not controlled_rolls.is_empty():
-		if controlled_rolls.size() != candidate_count:
-			return "A controlled Alpha deal requires exactly %d rolls." % candidate_count
-		for roll: float in controlled_rolls:
-			if not is_finite(roll) or roll < 0.0 or roll >= 1.0:
-				return "Controlled Alpha rolls must be finite values in [0, 1)."
-
-	var feature_ids: Dictionary[StringName, bool] = {}
-	for card: CardData in _available_features:
-		var error := _get_feature_validation_error(card)
-		if not error.is_empty():
-			return error
-		if feature_ids.has(card.id):
-			return "Alpha Feature IDs must be unique: %s" % card.id
-		if _exhausted_feature_ids.has(card.id):
-			return "Exhausted Alpha Feature cannot remain available: %s" % card.id
-		feature_ids[card.id] = true
-	if _pass_definitions.size() != 4:
-		return "Alpha requires exactly four Core Pass definitions."
-	var pass_categories: Dictionary[ProjectState.CoreScore, bool] = {}
-	var pass_ids: Dictionary[StringName, bool] = {}
-	for card: CardData in _pass_definitions:
-		var error := _get_pass_validation_error(card)
-		if not error.is_empty():
-			return error
-		var category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[card.primary_stat]
-		if pass_categories.has(category) or pass_ids.has(card.id):
-			return "Alpha requires one unique Pass per Core category."
-		pass_categories[category] = true
-		pass_ids[card.id] = true
-	return ""
+	return _capture_alpha_command()._get_deal_input_validation_error(priority_snapshot, controlled_rolls, candidate_count)
 
 
 func _get_pass_for_category(category: ProjectState.CoreScore) -> CardData:
-	for card: CardData in _pass_definitions:
-		if CORE_SCORE_BY_STAT.get(card.primary_stat, -1) == category:
-			return card
-	return null
+	return _capture_alpha_command()._get_pass_for_category(category)
 
 
 func _get_feature_validation_error(card: CardData) -> String:
-	if card == null or card.id.is_empty():
-		return "Alpha Features require stable nonempty IDs."
-	if card.phase != CardData.PHASE_ALPHA or card.card_type != &"feature" or card.renewable:
-		return "Candidate '%s' is not a nonrenewable Alpha Feature." % card.id
-	if card.department not in ALPHA_DEPARTMENTS:
-		return "Alpha Feature '%s' has an invalid department." % card.id
-	if card.scope < 0:
-		return "Alpha Feature '%s' has negative Scope." % card.id
-	return _get_printed_score_validation_error(card)
+	return _capture_alpha_command()._get_feature_validation_error(card)
 
 
 func _get_pass_validation_error(card: CardData) -> String:
-	if card == null or card.id.is_empty():
-		return "Core Passes require stable nonempty IDs."
-	if card.phase != CardData.PHASE_DESIGN or card.card_type != &"pass" or not card.renewable:
-		return "Candidate '%s' is not an Alpha-authorized Core Pass." % card.id
-	if not card.department.is_empty() or card.scope != 0 or not card.secondary_stat.is_empty() or card.secondary_value != 0:
-		return "Core Pass '%s' has invalid Alpha pool fields." % card.id
-	return _get_printed_score_validation_error(card)
+	return _capture_alpha_command()._get_pass_validation_error(card)
 
 
 func _get_printed_score_validation_error(card: CardData) -> String:
-	if not CORE_SCORE_BY_STAT.has(card.primary_stat) or card.primary_value < 0:
-		return "Candidate '%s' has an invalid primary score." % card.id
-	if card.secondary_stat.is_empty():
-		if card.secondary_value != 0:
-			return "Candidate '%s' has a secondary value without a stat." % card.id
-	elif not CORE_SCORE_BY_STAT.has(card.secondary_stat) or card.secondary_value < 0:
-		return "Candidate '%s' has an invalid secondary score." % card.id
-	return ""
+	return _capture_alpha_command()._get_printed_score_validation_error(card)
 
 
 func _on_card_pressed(card_view: CardView) -> void:
@@ -815,176 +576,76 @@ func _can_play_selected_instances() -> bool:
 
 
 func _on_play_alpha_hand_pressed() -> void:
-	if not _can_play_selected_instances():
+	if _hand_command_busy or not _can_play_selected_instances(): return
+	_hand_command_busy = true
+	var resolver := _capture_alpha_command()
+	var ids: Array[int] = []
+	for view in _selected_card_views: ids.append(_command_view_ids[view.get_instance_id()])
+	var result: Dictionary = resolver.execute(resolver.command(ids, _employee_priority_choice))
+	if not result.ok:
+		_hand_command_busy = false
 		return
-	var action := _validate_and_calculate_base_action()
-	if not action.valid:
-		return
-	var play_cost := 0
-	if _run_state != null:
-		var selected_cards: Array[CardData] = []
-		selected_cards.assign(action.cards)
-		play_cost = _run_state.primitive_feature_hand_cost_cents(selected_cards, _project_state.get_release_id())
-		if play_cost < 0 or _run_state.get_cash_cents() < play_cost:
-			return
-	var lean_before := int(_run_state.get_lean_savings().get(_project_state.get_release_id(), 0)) if _run_state != null else 0
-	var normal_cost := _run_state.primitive_feature_hand_cost_cents(action.cards as Array[CardData]) if _run_state != null else 0
-	var lean_saving := normal_cost - play_cost
-	var employee_plan := {}
-	var employee_priorities := _employee_priority_choice.duplicate()
-	if _run_state != null:
-		employee_plan = _run_state.plan_employee_hand(_project_state,&"alpha",action.cards,get_priority_distribution(),employee_priorities)
-		if employee_plan.is_empty(): return
-	elif not employee_priorities.is_empty(): return
-	var refill_priorities := employee_priorities if not employee_priorities.is_empty() else get_priority_distribution()
-	var final_production := _calculate_final_action_production(action)
-	var rng_before := _deal_rng.state
-	# Both played and reserved finite Features are unavailable to this refill.
-	var excluded: Array[StringName] = []
-	for card: CardData in _candidate_cards:
-		if not card.renewable: excluded.append(card.id)
-	var refill := _build_corrective_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE, excluded) if not _pending_playtest_categories.is_empty() else _build_weighted_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE, excluded)
-	if not refill.valid:
-		_deal_rng.state = rng_before
-		return
-	var additions: Dictionary[ProjectState.CoreScore, int] = final_production.score_additions
-	var commit := func() -> bool:
-		if _run_state != null and (not _run_state.can_commit_employee_hand(employee_plan) or int(_run_state.get_lean_savings().get(_project_state.get_release_id(), 0)) != lean_before): return false
-		if not _project_state.add_alpha_production(additions, action.scope, action.alpha_bug_pressure): return false
-		if not employee_priorities.is_empty():
-			_priority_allocation.set_distribution(employee_priorities)
-			_priority_draft = _priority_allocation.get_priority_distribution()
-		if _run_state != null:
-			_run_state.commit_employee_hand(employee_plan)
-			_run_state.commit_lean_saving(_project_state.get_release_id(), lean_before, lean_saving)
-		_complete_successful_action()
-		return true
-	if not (_run_state.complete_productive_action(commit, -play_cost, -1, &"", &"feature_play", _project_state.get_release_id()) if _run_state != null else commit.call()):
-		_deal_rng.state = rng_before
-		return
-	if not final_production.specialization_stat.is_empty():
-		print(_build_specialization_debug_message(final_production.specialization_stat, additions))
-	elif final_production.balanced_production:
-		print(_build_balanced_production_debug_message(additions))
-	for card: CardData in refill.cards:
+	_available_features.assign(resolver._available_features)
+	_exhausted_feature_ids.assign(resolver._exhausted_feature_ids)
+	_pending_playtest_categories.assign(resolver._pending_playtest_categories)
+	_priority_allocation.set_distribution(resolver.priorities)
+	_priority_draft = _priority_allocation.get_priority_distribution()
+	# The command has committed all gameplay; only update presentation here.
+	var played := _selected_card_views.duplicate()
+	_selected_card_views.clear()
+	for view in played:
+		view.set_selected(false)
+		%HandContainer.remove_child(view)
+		view.queue_free()
+	_candidate_cards.assign(resolver._candidate_cards)
+	for card: CardData in result.refill.cards:
 		var view := CARD_VIEW_SCENE.instantiate() as CardView
 		view.set_card(card)
 		view.card_pressed.connect(_on_card_pressed)
 		%HandContainer.add_child(view)
-		_candidate_cards.append(card)
-	_pending_playtest_categories.clear()
+	_command_revision = resolver.revision
+	_command_next_id = resolver.next_candidate_id
+	_command_view_ids.clear()
+	for index in range(%HandContainer.get_child_count()):
+		_command_view_ids[%HandContainer.get_child(index).get_instance_id()] = resolver.candidate_ids[index]
+	_last_hand_command_result = result
+	_hand_command_busy = false
 	_refresh_redraw_controls()
 	_update_host_playtest_action()
 	_update_proceed_action()
+	var final_production: Dictionary = result.final_action
 	if not final_production.specialization_stat.is_empty():
+		print(_build_specialization_debug_message(final_production.specialization_stat, final_production.score_additions))
 		_workspace.show_synergy("%s Specialization!" % str(final_production.specialization_stat).capitalize(), "Production ×1.50")
 	elif final_production.balanced_production:
-		_workspace.show_synergy("Balanced Production!", "Production ×1.20")
+		print(_build_balanced_production_debug_message(final_production.score_additions))
+		_workspace.show_synergy("Balanced Production!", "Hand total shared across four categories")
 
 
 func _validate_and_calculate_base_action() -> Dictionary:
-	if not _can_play_selected_instances():
-		return _invalid_action("A complete Alpha action requires four current candidate instances.")
-	var score_additions: Dictionary[ProjectState.CoreScore, int] = {}
-	var scope_amount := 0
-	var alpha_bug_pressure := 0.0
+	if not _can_play_selected_instances(): return _invalid_action("A complete Alpha action requires four current candidate instances.")
 	var cards: Array[CardData] = []
-	var seen_feature_ids: Dictionary[StringName, bool] = {}
-	for card_view: CardView in _selected_card_views:
-		var card := card_view.card_data
-		if card == null or not _candidate_cards.has(card):
-			return _invalid_action("Alpha selection contains stale or missing CardData.")
-		var validation_error := ""
-		if card.card_type == &"feature":
-			validation_error = _get_feature_validation_error(card)
-			if validation_error.is_empty() and (not _available_features.has(card) or _exhausted_feature_ids.has(card.id)):
-				validation_error = "Alpha Feature '%s' is not currently available." % card.id
-			if validation_error.is_empty() and seen_feature_ids.has(card.id):
-				validation_error = "Alpha Feature '%s' appears more than once in the action." % card.id
-			seen_feature_ids[card.id] = true
-		elif card.card_type == &"pass":
-			validation_error = _get_pass_validation_error(card)
-			if validation_error.is_empty() and not _pass_definitions.has(card):
-				validation_error = "Pass '%s' is not authorized for Alpha." % card.id
-		else:
-			validation_error = "Card '%s' has an invalid Alpha action type." % card.id
-		if not validation_error.is_empty():
-			return _invalid_action(validation_error)
-
-		cards.append(card)
-		var primary_category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[card.primary_stat]
-		score_additions[primary_category] = score_additions.get(primary_category, 0) + card.primary_value
-		if not card.secondary_stat.is_empty():
-			var secondary_category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[card.secondary_stat]
-			score_additions[secondary_category] = score_additions.get(secondary_category, 0) + card.secondary_value
-		scope_amount += card.scope
-		if card.card_type == &"feature":
-			alpha_bug_pressure += _calculate_feature_alpha_bug_pressure(card)
-	return {
-		&"valid": true,
-		&"cards": cards,
-		&"score_additions": score_additions,
-		&"scope": scope_amount,
-		&"alpha_bug_pressure": alpha_bug_pressure,
-	}
+	for view in _selected_card_views: cards.append(view.card_data)
+	return _capture_alpha_command().calculate_base(cards)
 
 
 func _calculate_final_action_production(base_action: Dictionary) -> Dictionary:
-	var cards: Array[CardData] = []
-	cards.assign(base_action.cards)
-	var specialization_stat := _get_specialization_stat(cards)
-	var provisional_scores := _calculate_provisional_core_scores(base_action.score_additions)
-	var has_feature := cards.any(func(card: CardData) -> bool: return card.card_type == &"feature")
-	var balanced_production := has_feature and _are_core_scores_balanced(provisional_scores)
-	var score_additions: Dictionary[ProjectState.CoreScore, int] = {}
-	for category: ProjectState.CoreScore in base_action.score_additions:
-		score_additions[category] = base_action.score_additions[category]
-	if not specialization_stat.is_empty():
-		for category: ProjectState.CoreScore in score_additions:
-			score_additions[category] = roundi(score_additions[category] * ALPHA_SPECIALIZATION_MULTIPLIER)
-	elif balanced_production:
-		for category: ProjectState.CoreScore in score_additions:
-			score_additions[category] = roundi(score_additions[category] * ALPHA_BALANCED_PRODUCTION_MULTIPLIER)
-	return {
-		&"specialization_stat": specialization_stat,
-		&"balanced_production": specialization_stat.is_empty() and balanced_production,
-		&"balanced_eligible": balanced_production,
-		&"provisional_scores": provisional_scores,
-		&"score_additions": score_additions,
-	}
+	return _capture_alpha_command()._calculate_final_action_production(base_action)
 
 
 func _calculate_provisional_core_scores(base_additions: Dictionary) -> Dictionary[ProjectState.CoreScore, int]:
-	var provisional_scores: Dictionary[ProjectState.CoreScore, int] = {}
-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
-		provisional_scores[category] = _project_state.get_core_score(category) + base_additions.get(category, 0)
-	return provisional_scores
+	return _capture_alpha_command()._calculate_provisional_core_scores(base_additions)
 
 
 func _are_core_scores_balanced(scores: Dictionary) -> bool:
-	var total := 0
-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
-		total += scores.get(category, 0)
-	var mean := total / 4.0
-	var lower_bound := mean * (1.0 - ALPHA_BALANCED_PRODUCTION_THRESHOLD)
-	var upper_bound := mean * (1.0 + ALPHA_BALANCED_PRODUCTION_THRESHOLD)
-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
-		var score: int = scores.get(category, 0)
-		if score < lower_bound or score > upper_bound:
-			return false
-	return true
+	return BalancedProduction.qualifies(scores)
 
 
 func _get_specialization_stat(cards: Array[CardData]) -> StringName:
-	if cards.size() != SELECTED_HAND_SIZE:
-		return &""
-	var specialization_stat := cards[0].primary_stat
-	if not CORE_SCORE_BY_STAT.has(specialization_stat):
-		return &""
-	for card: CardData in cards:
-		if card.primary_stat != specialization_stat:
-			return &""
-	return specialization_stat
+	var records: Array = []
+	for card in cards:
+		records.append({&"primary_stat": card.primary_stat})
+	return ProductionHand.specialization_stat(records)
 
 
 func _build_specialization_debug_message(specialization_stat: StringName, score_additions: Dictionary) -> String:
@@ -1009,41 +670,12 @@ func _build_balanced_production_debug_message(score_additions: Dictionary) -> St
 
 
 func _calculate_feature_alpha_bug_pressure(card: CardData) -> float:
-	var raw_score := card.primary_value
-	if not card.secondary_stat.is_empty():
-		raw_score += card.secondary_value
-	return (float(raw_score) * float(card.scope)) / ALPHA_BUG_PRESSURE_DENOMINATOR
+	return _capture_alpha_command()._calculate_feature_alpha_bug_pressure(card)
 
 
 func _invalid_action(message: String) -> Dictionary:
-	push_warning(message)
-	return {
-		&"valid": false,
-		&"cards": [] as Array[CardData],
-		&"score_additions": {},
-		&"scope": 0,
-		&"alpha_bug_pressure": 0.0,
-	}
+	return _capture_alpha_command()._invalid_action(message)
 
-
-func _complete_successful_action() -> void:
-	for card_view: CardView in _selected_card_views:
-		var card := card_view.card_data
-		if card.card_type == &"feature":
-			_exhausted_feature_ids[card.id] = true
-			if _run_state != null:
-				_run_state.record_resolved_feature(_project_state, card.id, CardData.PHASE_ALPHA)
-			_available_features.erase(card)
-	var played := _selected_card_views.duplicate()
-	_selected_card_views.clear()
-	for view: CardView in played:
-		view.set_selected(false)
-		%HandContainer.remove_child(view)
-		view.queue_free()
-	_candidate_cards.clear()
-	for view in %HandContainer.get_children():
-		if view is CardView: _candidate_cards.append(view.card_data)
-	_project_state.advance_cycle()
 
 
 func _clear_candidate_pool() -> void:
@@ -1125,7 +757,7 @@ func refresh_workspace() -> void:
 
 
 func is_gameplay_input_blocked() -> bool:
-	return not is_inside_tree() or (_workspace != null and _workspace.overlay != null and _workspace.overlay.visible)
+	return _hand_command_busy or not is_inside_tree() or (_workspace != null and _workspace.overlay != null and _workspace.overlay.visible)
 
 
 func can_edit_priorities() -> bool:
@@ -1179,3 +811,51 @@ func _finalize_with_run_rng() -> bool:
 	var accepted := _finalize_alpha(_finalization_rng.randf(), _finalization_rng.randf())
 	if not accepted: _finalization_rng.state = prior_rng
 	return accepted
+
+
+## Build the scene-free command state with session-local candidate tokens.
+func _capture_alpha_command() -> RefCounted:
+	var state := AlphaHandCommand.new()
+	state._project_state = _project_state
+	state._run_state = _run_state
+	state._deal_rng = _deal_rng
+	state._available_features.assign(_available_features)
+	state._pass_definitions.assign(_pass_definitions)
+	state._candidate_cards.assign(_candidate_cards)
+	state._exhausted_feature_ids.assign(_exhausted_feature_ids)
+	state.priorities = get_priority_distribution()
+	state.active = _phase_state == PhaseState.ACTIVE_DEVELOPMENT
+	state._pending_playtest_categories.assign(_pending_playtest_categories)
+	state.revision = _command_revision
+	if is_inside_tree() and get_node_or_null("%HandContainer")!=null:
+		for view in %HandContainer.get_children():
+			if not view is CardView: continue
+			var id := view.get_instance_id()
+			if not _command_view_ids.has(id):
+				_command_view_ids[id] = _command_next_id
+				_command_next_id += 1
+			state.candidate_ids.append(_command_view_ids[id])
+	state.next_candidate_id = _command_next_id
+	return state
+
+
+func _capture_development_actions() -> RefCounted:
+	var actions:=DevelopmentActions.new()
+	actions.phase=&"alpha"
+	actions.hand=_capture_alpha_command()
+	var database:=get_node_or_null("/root/CardDatabase") if is_inside_tree() else null
+	if database!=null: actions.catalog=database.get_development_catalog()
+	actions.finalization_rng=_finalization_rng
+	return actions
+
+func _redraw_slots() -> Array[int]:
+	var slots: Array[int] = []
+	for view: CardView in _selected_card_views: slots.append(view.get_index())
+	return slots
+
+func _sync_command_tokens(state: RefCounted) -> void:
+	_command_revision=state.revision
+	_command_next_id=state.next_candidate_id
+	_command_view_ids.clear()
+	for index in range(%HandContainer.get_child_count()):
+		_command_view_ids[%HandContainer.get_child(index).get_instance_id()]=state.candidate_ids[index]

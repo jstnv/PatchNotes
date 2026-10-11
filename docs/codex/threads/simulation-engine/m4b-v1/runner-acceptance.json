@@ -1,0 +1,147 @@
+{
+  "ok": true,
+  "checks": 111,
+  "python_unit_checks": 14,
+  "python_unit_command": [
+    "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tools/tests",
+    "-p",
+    "test_simulate.py",
+    "-v"
+  ],
+  "concurrent_run_windows_unix": [
+    [
+      1791710114.468303,
+      1791710132.585047
+    ],
+    [
+      1791710114.853049,
+      1791710132.585088
+    ]
+  ],
+  "isolated_profiles": 10,
+  "strict_replay_commands": 91,
+  "source_identities": [
+    "fc93d90d4cbbbec76a1fc810bc7bab44477a7c2783423dbf0caac728f8981573"
+  ],
+  "shared_mechanics_inputs_unchanged": true,
+  "shared_debug_source_drift": [
+    {
+      "path": "scripts/debug/verify_finance_observation.gd",
+      "before": "879cea16f0c91fd326faf5af4b9481491a725d51a676b17ffd41353d53aef2ba",
+      "after": "f8e75f5ddabea0ec8472f950ddd381bed4acff4028d64d6d57a3e5ff87c4bfc7"
+    }
+  ],
+  "runner_sha256": "7f841bbd6621792ebf6b5ee8efeeca13b730c0eccc832f60b3b66fc35418df25",
+  "cases": [
+    {
+      "label": "fixture",
+      "status": "completed",
+      "commands": 36,
+      "final_state": "731d673b2d380efba170547ff0be27eeda46ec8d4d663d8c5a400956794b2f9a",
+      "source_identity": "fc93d90d4cbbbec76a1fc810bc7bab44477a7c2783423dbf0caac728f8981573",
+      "final_release_count": 2,
+      "artifacts": {
+        "case.variant.json": "b5d4f154f2e4615debf2cdb926cde5d408d2536b5b9c8d32047cecc05128ca1a",
+        "final_state.variant.json": "22e6037e12deacd60f67a7e6c3450377a3441a360c4e569433efab83fdc2e54d",
+        "initial.json": "ce242580d3bc332d8f06865f0e9d14bb334bc42f790d0ebd68a675f8dd20ac8e",
+        "metrics.json": "c7be7a556442a6964f4eb9f6dcfc76f3f41a270429096ec76ab6bd3db88932a3",
+        "case.json": "04e83261da2c3e36dd60289225d6080ce1df1772856717536a80b3dfc2995cfd",
+        "result.json": "6c14ff75bf64ed4d0ecdf8d74c198ea035c4e1b2ca6cf3f1b38c71e526ff0173",
+        "studio_checkpoint.json": "2daf16411eafb5c982b901f3ef3a5f78b093c7e8c620f8d3684eac522e0109e0",
+        "replay.tape.json": "6c9fb80cc5dff46716fbbcaaa5d3597424481f9b0bd8e4e7fc28480b96dd5364"
+      },
+      "bundle": "runner-fixture-01",
+      "replay": "runner-fixture-replay-01"
+    },
+    {
+      "label": "custom",
+      "status": "completed",
+      "commands": 36,
+      "final_state": "0ae0172991dc5b945bcc8ee6afdd77197dbacacb742739558cf23ad81d863c16",
+      "source_identity": "fc93d90d4cbbbec76a1fc810bc7bab44477a7c2783423dbf0caac728f8981573",
+      "final_release_count": 2,
+      "artifacts": {
+        "case.variant.json": "52de61ba3f950ac4de5ef35d2fbbaec64c2f2c779fb12d0a7165442b6557c5ec",
+        "final_state.variant.json": "10f096ea8a1258597c896de5542d14188cef7e0a9e92c22a063c56364396f412",
+        "initial.json": "d4db079de70fa0a3450d5eed7dc58ec99d76dd60fb14f1bd519a0a356652873b",
+        "metrics.json": "bd778afb41e19270bd828a824e4be87cd91311bf3253bafe499a6f9a07cb593e",
+        "case.json": "85784af298a149e75d6d220ec74736933316ed877207bd9a284ea1d099ba82d9",
+        "result.json": "446fe538b8b9af9d05c36ee45f4d8da0b4c2962a79059b4c01e3adfd176aad23",
+        "studio_checkpoint.json": "130a971d1b1c59b5a5fb6ee144de865ea9b900c626296b702edbaf5d5aad7393",
+        "replay.tape.json": "b9117998ee30a7f5b34378fc0968a47132032b987728f15914769d000f2c0c5a"
+      },
+      "bundle": "runner-custom-01",
+      "replay": "runner-custom-replay-01"
+    },
+    {
+      "label": "continuation",
+      "status": "completed",
+      "commands": 18,
+      "final_state": "887ec1823f150014a3eab064d1aa0ef187b537735f336287ed11055e8884bec6",
+      "source_identity": "fc93d90d4cbbbec76a1fc810bc7bab44477a7c2783423dbf0caac728f8981573",
+      "final_release_count": 3,
+      "artifacts": {
+        "case.variant.json": "38b5d9ac1aaa8b76c6f3cc2db4d13a0d1f1d936a07cbecf267600292740d4e6b",
+        "final_state.variant.json": "7d9928a9a2b234471489f0d432f3519ee60a3eece11804ce4e726e46c272e6de",
+        "initial.json": "4d47d52de8f0d97cba18926e9a76517b42c302ea8903025c1cb4d359a2f7db22",
+        "metrics.json": "e53eea40f76cf7a9ff7ae69eb34580df3b0260421e11a18fec108d1342d76b87",
+        "case.json": "584098e1a2547297eb49314bfbb9de2c4bb2994527aa195e098f0e2f71f70c74",
+        "result.json": "2398fd51308a7e038c9970de9ea2159a1e1c062370785ee24788a1c1e05786a5",
+        "studio_checkpoint.json": "0a4db76eb5aec486dccb43a6d5dd0045885227272557ce4e773e3c19aaabcedb",
+        "replay.tape.json": "4ff8e4d8fbc0a5b6fc9cbe2e9c7832ce607a32f6fb8f928c0887c60ec331f301"
+      },
+      "bundle": "runner-continuation-01",
+      "replay": "runner-continuation-replay-01"
+    },
+    {
+      "label": "malformed",
+      "status": "malformed_policy_decision",
+      "commands": 0,
+      "final_state": "9171d97be77bcbcebfece8e7ff230cb7dbe6da0c90737b43796c02692e305591",
+      "source_identity": "fc93d90d4cbbbec76a1fc810bc7bab44477a7c2783423dbf0caac728f8981573",
+      "final_release_count": 0,
+      "artifacts": {
+        "case.variant.json": "90ffb203e2b39f51bb600dcccbf8cba2638e90aec5e57b6bf325799e52a94ca1",
+        "final_state.variant.json": "743d739b4537bd5649dacb7b6bd834a6fba73bd37310441b2704c1b24b4d5f15",
+        "initial.json": "ce242580d3bc332d8f06865f0e9d14bb334bc42f790d0ebd68a675f8dd20ac8e",
+        "metrics.json": "ec249d53d21120c1c30cd582d3c8931e7e032339333d0b25984ed8ffa7614afb",
+        "case.json": "5000035e19d0a3204c722dc9e13f6f83cd75e0fb144574023080c41a455530e6",
+        "result.json": "ab77f7d6b935bbf7651e7baed44f0c379e480dc4dbd64c26ad3838c624b8cd10",
+        "studio_checkpoint.json": "6cc8d79ec79026325c87d5e10352f047c9e578d48900f5b08058f32676889c81",
+        "replay.tape.json": "ba01d31ac85e33ead8491d0a14897706ffd0511fb832068ffb058c5d4833e0cd"
+      },
+      "bundle": "runner-malformed-01",
+      "replay": "runner-malformed-replay-01"
+    },
+    {
+      "label": "rejected",
+      "status": "rejected_policy_action",
+      "commands": 1,
+      "final_state": "9171d97be77bcbcebfece8e7ff230cb7dbe6da0c90737b43796c02692e305591",
+      "source_identity": "fc93d90d4cbbbec76a1fc810bc7bab44477a7c2783423dbf0caac728f8981573",
+      "final_release_count": 0,
+      "artifacts": {
+        "case.variant.json": "c7b1f13708952243c1f888b951e8aae5a151c76c7429183f9deece0b9fefaac2",
+        "final_state.variant.json": "743d739b4537bd5649dacb7b6bd834a6fba73bd37310441b2704c1b24b4d5f15",
+        "initial.json": "ce242580d3bc332d8f06865f0e9d14bb334bc42f790d0ebd68a675f8dd20ac8e",
+        "metrics.json": "efea38e341cfaf494f343b5e3fe0ef4666f5d31fef14144d2e92c03d9b3a2a86",
+        "case.json": "feed5c1142d5cd781b467c2515b5bcaf93cc5b719df94298389f6cea331a6ed6",
+        "result.json": "43d90e07c0e95fd2e3906bd4b0e3589642098c6172499cff9a1f6099ab4ecc00",
+        "studio_checkpoint.json": "6cc8d79ec79026325c87d5e10352f047c9e578d48900f5b08058f32676889c81",
+        "replay.tape.json": "9cd9ca4ee50acc9e3a0cb57dab14718548eeba2c685c921bf85242e776f21960"
+      },
+      "bundle": "runner-rejected-01",
+      "replay": "runner-rejected-replay-01"
+    }
+  ],
+  "limits": [
+    "Malformed first decision has an empty replayable prefix; policy reasoning is not reconstructed",
+    "Independent campaigns do not test shared-calendar AI scheduling",
+    "No computer control, visual or audible acceptance performed"
+  ]
+}

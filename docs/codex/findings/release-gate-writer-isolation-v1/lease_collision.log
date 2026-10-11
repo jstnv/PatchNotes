@@ -1,0 +1,18 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/release-gate-writer-isolation-v1/profiles/lease_collision-cto6_u3q/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/release-gate-writer-isolation-v1/profiles/lease_collision-cto6_u3q/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+PASS: Fresh coordinators use generated store subclass
+PASS: First real47733 writer acquired
+PASS: Actual TCP server is listening
+PASS: Same owner keeps existing lease
+PASS: Second owner rejected without phantom lease
+PASS: Explicit release closes the server
+PASS: Second owner acquires after release
+PASS: Prior owner rejected while second owns port
+PASS: Coordinator exit releases second lease
+PASS: Final coordinator exit releases port
+Gate lease collision:10 checks, 0 failures

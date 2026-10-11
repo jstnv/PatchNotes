@@ -56,6 +56,7 @@ static func estimate(history: Dictionary, pool: Dictionary, finance: Dictionary,
 		reserve += rent
 	var payroll := 0
 	var bank := 0
+	var education := 0
 	if history.get("available", false) and not ledger.is_empty():
 		var end_cycle := cycle + horizon
 		for employee: Dictionary in ledger.employees:
@@ -73,10 +74,18 @@ static func estimate(history: Dictionary, pool: Dictionary, finance: Dictionary,
 				if due.due_cycle <= cycle or due.payment_cents > MAX_INT-reserve: return {"available":false,"reason":"Bank estimate unavailable."}
 				bank += int(due.payment_cents)
 				reserve += int(due.payment_cents)
+		var account: Dictionary = ledger.get("education",{})
+		if not account.is_empty() and not account.closed:
+			for number in range(int(account.issued)+1,97):
+				var due := EducationDebt.installment(account.schedule,number)
+				if due.due_cycle > end_cycle: break
+				if due.due_cycle <= cycle or due.payment_cents > MAX_INT-reserve: return {"available":false,"reason":"Education estimate unavailable."}
+				education += int(due.payment_cents)
+				reserve += int(due.payment_cents)
 	var remaining := cash - purchase_cents
 	return {"available": true, "policy": VERSION, "pacing_available": history.get("available", false),
 		"complete": history.get("available", false) and history.get("excluded_count", 0) == 0 and pool.unpriced_count == 0 and not ledger.is_empty(),
-		"payroll_cents":payroll,"bank_cents":bank,"scheduled_bills_available":not ledger.is_empty(),
+		"payroll_cents":payroll,"bank_cents":bank,"education_cents":education,"scheduled_bills_available":not ledger.is_empty(),
 		"monthly_rent_cents": finance.monthly_rent_cents, "purchase_cents": purchase_cents, "purchase_cycles": purchase_cycles,
 		"cash_after_price_cents": remaining, "known_play_cost_cents": play_cost,
 		"unpriced_count": pool.unpriced_count, "owned_feature_count": pool.feature_count,
@@ -111,5 +120,5 @@ static func acquisition_text(advice: Dictionary) -> String:
 static func explanation(advice: Dictionary) -> String:
 	if not advice.get("available", false): return message(advice)
 	var rent_text := "Rent: %s (%d future monthly dues at %s/month)." % [CashFormatter.format_exact_cents(advice.rent_cents),advice.rent_boundaries,CashFormatter.format_exact_cents(advice.monthly_rent_cents)] if advice.pacing_available else "Rent estimate unavailable until a game is released; %s/month. Future payroll/Bank horizon unknown." % CashFormatter.format_exact_cents(advice.monthly_rent_cents)
-	var bills := "Scheduled payroll: %s. Bank installments: %s." % [CashFormatter.format_exact_cents(advice.payroll_cents),CashFormatter.format_exact_cents(advice.bank_cents)] if advice.get("scheduled_bills_available",false) and advice.pacing_available else "Future payroll/Bank bills excluded: schedule or pace unavailable."
+	var bills := "Scheduled payroll: %s. Bank installments: %s. Education dues: %s." % [CashFormatter.format_exact_cents(advice.payroll_cents),CashFormatter.format_exact_cents(advice.bank_cents),CashFormatter.format_exact_cents(advice.get("education_cents",0))] if advice.get("scheduled_bills_available",false) and advice.pacing_available else "Future payroll/Bank/education bills excluded: schedule or pace unavailable."
 	return "Purchases remain your choice; this is not a cash guarantee.\nProspective pool if the path is completed: play each known-price Feature once, %s. Unpaid typed bills: %s.\n%s\n%s\nKnown next-project costs: %s. Quoted acquisition is separate; purchase cycles are included in the bill horizon.\nUses observed development pace plus setup and acquisition cycles. %d Feature play fees are unknown and excluded. Optional actions, longer development and future income are excluded. Sales must actually settle. No draw/play guarantee." % [CashFormatter.format_exact_cents(advice.known_play_cost_cents),CashFormatter.format_exact_cents(advice.unpaid_cents),rent_text,bills,CashFormatter.format_exact_cents(advice.reserve_cents),advice.unpriced_count]

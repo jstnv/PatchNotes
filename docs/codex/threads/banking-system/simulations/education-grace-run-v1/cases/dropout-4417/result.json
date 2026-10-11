@@ -1,0 +1,1443 @@
+{
+	"accepted_commands": 72,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"final_state": "final_state.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"studio_checkpoint": "studio_checkpoint.json",
+		"tape": "replay.tape.json",
+		"telemetry": "telemetry.json"
+	},
+	"case_id": "dropout-4417",
+	"commands": 72,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "",
+	"final_release_count": 3,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "1690585996114044869"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "-49379052761971460"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "7992130303191705825"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "-6772905633898424670"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "5113516772226563436"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "-8720956609050524734"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4418"
+			},
+			"state": {
+				"integer": "8520834976151689573"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4417"
+			},
+			"state": {
+				"integer": "-7051774855971506515"
+			}
+		}
+	},
+	"final_run_cycle": 39,
+	"final_state": "9aa356b4fa37723a24681bc60c8ac5c11017252bd997b7413d2b6db5c61b8b12",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "-3769052622640144973"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "2595083601206648032"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "8959219825053441037"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "-3123388024809317574"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "1949419003375820633"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "8313555227222613638"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4418"
+			},
+			"state": {
+				"integer": "-4414717220470972372"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4417"
+			},
+			"state": {
+				"integer": "7667890629391786239"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "0b011976ef4c715562a3637fe8e0c112249f99f152b982c63c1add03eff599fe",
+	"input_identity": "6977c6f0eacaf1180ef0c710e18de70cde4288d89417c60bf3876d949ba7068e",
+	"last_choice": {
+		"type": "launch"
+	},
+	"max_commands": 120,
+	"ok": true,
+	"outcome": {
+		"calendar": {
+			"half": 2,
+			"label": "1981 · Month 20, Second Half",
+			"month": 20,
+			"year": 1981
+		},
+		"cash_cents": 643152,
+		"employees": {
+			"employees": {},
+			"events": [],
+			"owner": "bank-grace-dropout-4417",
+			"schema_version": 1
+		},
+		"fans": 8,
+		"finance": {
+			"available": true,
+			"bank_loans": [],
+			"cash_cents": 643152,
+			"credit": {
+				"history": [
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 2,
+						"month": 1,
+						"operating_profit_cents": -85000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 4,
+						"month": 2,
+						"operating_profit_cents": -73000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 6,
+						"month": 3,
+						"operating_profit_cents": -102000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 8,
+						"month": 4,
+						"operating_profit_cents": -76000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 10,
+						"month": 5,
+						"operating_profit_cents": -50000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 603,
+						"before": 600,
+						"change": 3,
+						"cycle": 12,
+						"month": 6,
+						"operating_profit_cents": 50000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 606,
+						"before": 603,
+						"change": 3,
+						"cycle": 14,
+						"month": 7,
+						"operating_profit_cents": 101048,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 609,
+						"before": 606,
+						"change": 3,
+						"cycle": 16,
+						"month": 8,
+						"operating_profit_cents": 92609,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 609,
+						"before": 609,
+						"change": 0,
+						"cycle": 18,
+						"month": 9,
+						"operating_profit_cents": -15560,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 609,
+						"before": 609,
+						"change": 0,
+						"cycle": 20,
+						"month": 10,
+						"operating_profit_cents": -71727,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 609,
+						"before": 609,
+						"change": 0,
+						"cycle": 22,
+						"month": 11,
+						"operating_profit_cents": -49714,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 612,
+						"before": 609,
+						"change": 3,
+						"cycle": 24,
+						"month": 12,
+						"operating_profit_cents": 55595,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 612,
+						"before": 612,
+						"change": 0,
+						"cycle": 26,
+						"month": 13,
+						"operating_profit_cents": -50536,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 615,
+						"before": 612,
+						"change": 3,
+						"cycle": 28,
+						"month": 14,
+						"operating_profit_cents": 373229,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 618,
+						"before": 615,
+						"change": 3,
+						"cycle": 30,
+						"month": 15,
+						"operating_profit_cents": 44291,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 618,
+						"before": 618,
+						"change": 0,
+						"cycle": 32,
+						"month": 16,
+						"operating_profit_cents": -23125,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 618,
+						"before": 618,
+						"change": 0,
+						"cycle": 34,
+						"month": 17,
+						"operating_profit_cents": -48569,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 618,
+						"before": 618,
+						"change": 0,
+						"cycle": 36,
+						"month": 18,
+						"operating_profit_cents": -38326,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 621,
+						"before": 618,
+						"change": 3,
+						"cycle": 38,
+						"month": 19,
+						"operating_profit_cents": 56610,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					}
+				],
+				"last_processed_month": 19,
+				"policy_version": "typed_expenses_v1",
+				"score": 621
+			},
+			"credit_inputs": {
+				"completed_months": 19,
+				"late_months": 0,
+				"paid_on_time_months": 26
+			},
+			"education": {
+				"account_id": "bank-grace-dropout-4417:education",
+				"closed": false,
+				"closed_cycle": -1,
+				"early_payoff": false,
+				"interest_paid_cents": 22803,
+				"issued": 7,
+				"principal_paid_cents": 26673,
+				"run_id": "bank-grace-dropout-4417",
+				"schedule": {
+					"first_due_cycle": 26,
+					"last_due_cycle": 216,
+					"principal_cents": 500000,
+					"regular_due_cents": 7068,
+					"schema_version": 1,
+					"term_months": 96,
+					"total_interest_cents": 178571,
+					"total_payment_cents": 678571
+				},
+				"schema_version": 1,
+				"trait_id": "college_dropout"
+			},
+			"financially_blocked": false,
+			"monthly_payroll_cents": 0,
+			"monthly_rent_cents": 50000,
+			"next_due_cycle": 40,
+			"outstanding_expenses": [],
+			"rows": [
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 495000,
+					"closing_cash_cents": 495000,
+					"feature_play_cents": 35000,
+					"financing_in_cents": 580000,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 1,
+					"net_profit_cents": -85000,
+					"opening_cash_cents": 0,
+					"operating_expenses_cents": 85000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -73000,
+					"closing_cash_cents": 422000,
+					"feature_play_cents": 23000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 2,
+					"net_profit_cents": -73000,
+					"opening_cash_cents": 495000,
+					"operating_expenses_cents": 73000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -102000,
+					"closing_cash_cents": 320000,
+					"feature_play_cents": 52000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 3,
+					"net_profit_cents": -102000,
+					"opening_cash_cents": 422000,
+					"operating_expenses_cents": 102000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -76000,
+					"closing_cash_cents": 244000,
+					"feature_play_cents": 26000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 4,
+					"net_profit_cents": -76000,
+					"opening_cash_cents": 320000,
+					"operating_expenses_cents": 76000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -50000,
+					"closing_cash_cents": 194000,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 5,
+					"net_profit_cents": -50000,
+					"opening_cash_cents": 244000,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 100000,
+					"campaign_cents": 0,
+					"cash_change_cents": 50000,
+					"closing_cash_cents": 244000,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 6,
+					"net_profit_cents": 50000,
+					"opening_cash_cents": 194000,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 100000,
+					"other_expense_cents": 0,
+					"other_income_cents": 100000,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 101048,
+					"closing_cash_cents": 345048,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 7,
+					"net_profit_cents": 101048,
+					"opening_cash_cents": 244000,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 151048,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 151048,
+					"sales_settled_cents": 151048,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 92609,
+					"closing_cash_cents": 437657,
+					"feature_play_cents": 49000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 8,
+					"net_profit_cents": 92609,
+					"opening_cash_cents": 345048,
+					"operating_expenses_cents": 99000,
+					"operating_revenue_cents": 191609,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 191609,
+					"sales_settled_cents": 191609,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -15560,
+					"closing_cash_cents": 422097,
+					"feature_play_cents": 25000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 9,
+					"net_profit_cents": -15560,
+					"opening_cash_cents": 437657,
+					"operating_expenses_cents": 75000,
+					"operating_revenue_cents": 59440,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 59440,
+					"sales_settled_cents": 59440,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -71727,
+					"closing_cash_cents": 350370,
+					"feature_play_cents": 49000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 10,
+					"net_profit_cents": -71727,
+					"opening_cash_cents": 422097,
+					"operating_expenses_cents": 99000,
+					"operating_revenue_cents": 27273,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 27273,
+					"sales_settled_cents": 27273,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -49714,
+					"closing_cash_cents": 300656,
+					"feature_play_cents": 13000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 11,
+					"net_profit_cents": -49714,
+					"opening_cash_cents": 350370,
+					"operating_expenses_cents": 63000,
+					"operating_revenue_cents": 13286,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 13286,
+					"sales_settled_cents": 13286,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 100000,
+					"campaign_cents": 0,
+					"cash_change_cents": 55595,
+					"closing_cash_cents": 356251,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 12,
+					"net_profit_cents": 55595,
+					"opening_cash_cents": 300656,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 105595,
+					"other_expense_cents": 0,
+					"other_income_cents": 100000,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 5595,
+					"sales_settled_cents": 5595,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -54271,
+					"closing_cash_cents": 301980,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 3333,
+					"interest_paid_cents": 3333,
+					"miscellaneous_income_cents": 0,
+					"month": 13,
+					"net_profit_cents": -50536,
+					"opening_cash_cents": 356251,
+					"operating_expenses_cents": 53333,
+					"operating_revenue_cents": 2797,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 3735,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 2797,
+					"sales_settled_cents": 2797,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 369469,
+					"closing_cash_cents": 671449,
+					"feature_play_cents": 35000,
+					"financing_in_cents": 0,
+					"interest_cents": 3308,
+					"interest_paid_cents": 3308,
+					"miscellaneous_income_cents": 0,
+					"month": 14,
+					"net_profit_cents": 373229,
+					"opening_cash_cents": 301980,
+					"operating_expenses_cents": 88308,
+					"operating_revenue_cents": 461537,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 3760,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 461537,
+					"sales_settled_cents": 461537,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 40506,
+					"closing_cash_cents": 711955,
+					"feature_play_cents": 29000,
+					"financing_in_cents": 0,
+					"interest_cents": 3283,
+					"interest_paid_cents": 3283,
+					"miscellaneous_income_cents": 0,
+					"month": 15,
+					"net_profit_cents": 44291,
+					"opening_cash_cents": 671449,
+					"operating_expenses_cents": 82283,
+					"operating_revenue_cents": 126574,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 3785,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 126574,
+					"sales_settled_cents": 126574,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -26935,
+					"closing_cash_cents": 685020,
+					"feature_play_cents": 37000,
+					"financing_in_cents": 0,
+					"interest_cents": 3258,
+					"interest_paid_cents": 3258,
+					"miscellaneous_income_cents": 0,
+					"month": 16,
+					"net_profit_cents": -23125,
+					"opening_cash_cents": 711955,
+					"operating_expenses_cents": 90258,
+					"operating_revenue_cents": 67133,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 3810,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 67133,
+					"sales_settled_cents": 67133,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -52404,
+					"closing_cash_cents": 632616,
+					"feature_play_cents": 31000,
+					"financing_in_cents": 0,
+					"interest_cents": 3233,
+					"interest_paid_cents": 3233,
+					"miscellaneous_income_cents": 0,
+					"month": 17,
+					"net_profit_cents": -48569,
+					"opening_cash_cents": 685020,
+					"operating_expenses_cents": 84233,
+					"operating_revenue_cents": 35664,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 3835,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 35664,
+					"sales_settled_cents": 35664,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -42187,
+					"closing_cash_cents": 590429,
+					"feature_play_cents": 4000,
+					"financing_in_cents": 0,
+					"interest_cents": 3207,
+					"interest_paid_cents": 3207,
+					"miscellaneous_income_cents": 0,
+					"month": 18,
+					"net_profit_cents": -38326,
+					"opening_cash_cents": 632616,
+					"operating_expenses_cents": 57207,
+					"operating_revenue_cents": 18881,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 3861,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 18881,
+					"sales_settled_cents": 18881,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 100000,
+					"campaign_cents": 0,
+					"cash_change_cents": 52723,
+					"closing_cash_cents": 643152,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 3181,
+					"interest_paid_cents": 3181,
+					"miscellaneous_income_cents": 0,
+					"month": 19,
+					"net_profit_cents": 56610,
+					"opening_cash_cents": 590429,
+					"operating_expenses_cents": 53181,
+					"operating_revenue_cents": 109791,
+					"other_expense_cents": 0,
+					"other_income_cents": 100000,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 3887,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 9791,
+					"sales_settled_cents": 9791,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 0,
+					"closing_cash_cents": 643152,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 20,
+					"net_profit_cents": 2098,
+					"opening_cash_cents": 643152,
+					"operating_expenses_cents": 0,
+					"operating_revenue_cents": 2098,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": true,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 0,
+					"rent_paid_cents": 0,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 2098,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				}
+			],
+			"total_overdue_cents": 0,
+			"unpaid_rent_cents": 0
+		},
+		"in_studio": true,
+		"owned_features": [
+			"text",
+			"sprites",
+			"4_color_palette",
+			"8_bit_sound",
+			"keyboard_and_mouse",
+			"controller",
+			"scrolling",
+			"menu_system",
+			"split_screen",
+			"multiple_endings",
+			"controls",
+			"enemies",
+			"power_ups",
+			"general_combat",
+			"levels",
+			"maps",
+			"exploration",
+			"sound_effects"
+		],
+		"phase": "studio",
+		"releases": [
+			{
+				"id": "bank-grace-dropout-4417:project:1",
+				"metadata": {
+					"base_name": "Dropout 1",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 13,
+					"release_title": "Dropout 1",
+					"release_year": 1980,
+					"review": {
+						"awareness": 103,
+						"competitor_id": "established_rival",
+						"competitor_target_cycle": 16,
+						"cores": [
+							33,
+							9,
+							40,
+							24
+						],
+						"development_cycles": 12,
+						"fan_awareness": 0,
+						"final_review": 4.0,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 0,
+						"launch_marketing": 3,
+						"production_rating": 5.17071406917331,
+						"projected_gross_cents": 431568,
+						"projected_net_cents": 302097,
+						"projected_units": 432,
+						"remaining_bugs": 3,
+						"required_scope": 30,
+						"scope": 29,
+						"scope_completion": 0.966666666666667,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 201,
+					"base_name": "Dropout 1",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 2,
+					"earned_units": 647,
+					"entitlement_cents": 452447,
+					"exhausted": true,
+					"last_processed_run_cycle": 39,
+					"last_settlement_run_cycle": 30,
+					"later_enabled": true,
+					"launch_awareness": 103,
+					"market_bp": 10000,
+					"monthly_units": 0,
+					"organic_awareness_scaled": 201,
+					"release_id": "bank-grace-dropout-4417:project:1",
+					"release_title": "Dropout 1",
+					"release_year": 1980,
+					"review_tenths": 40,
+					"settled_cents": 452447,
+					"total_earned_cycles": 26,
+					"total_units": 432
+				}
+			},
+			{
+				"id": "bank-grace-dropout-4417:project:2",
+				"metadata": {
+					"base_name": "Dropout 2",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 26,
+					"release_title": "Dropout 2",
+					"release_year": 1981,
+					"review": {
+						"awareness": 109,
+						"competitor_id": "",
+						"competitor_target_cycle": -1,
+						"cores": [
+							25,
+							21,
+							36,
+							24
+						],
+						"development_cycles": 12,
+						"fan_awareness": 0,
+						"final_review": 5.2,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 0,
+						"launch_marketing": 9,
+						"production_rating": 6.04226434626438,
+						"projected_gross_cents": 658341,
+						"projected_net_cents": 460838,
+						"projected_units": 659,
+						"remaining_bugs": 2,
+						"required_scope": 30,
+						"scope": 29,
+						"scope_completion": 0.966666666666667,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 37383,
+					"base_name": "Dropout 2",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 2,
+					"earned_units": 1030,
+					"entitlement_cents": 720279,
+					"exhausted": true,
+					"last_processed_run_cycle": 39,
+					"last_settlement_run_cycle": 38,
+					"later_enabled": true,
+					"launch_awareness": 109,
+					"market_bp": 11500,
+					"monthly_units": 7,
+					"organic_awareness_scaled": 37383,
+					"release_id": "bank-grace-dropout-4417:project:2",
+					"release_title": "Dropout 2",
+					"release_year": 1981,
+					"review_tenths": 52,
+					"settled_cents": 718181,
+					"total_earned_cycles": 13,
+					"total_units": 659
+				}
+			},
+			{
+				"id": "bank-grace-dropout-4417:project:3",
+				"metadata": {
+					"base_name": "Dropout 3",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 39,
+					"release_title": "Dropout 3",
+					"release_year": 1981,
+					"review": {
+						"awareness": 109,
+						"competitor_id": "fast_follower",
+						"competitor_target_cycle": 12,
+						"cores": [
+							31,
+							17,
+							38,
+							20
+						],
+						"development_cycles": 12,
+						"fan_awareness": 2,
+						"final_review": 4.0,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 8,
+						"launch_marketing": 7,
+						"production_rating": 5.87302884888518,
+						"projected_gross_cents": 396603,
+						"projected_net_cents": 277622,
+						"projected_units": 397,
+						"remaining_bugs": 6,
+						"required_scope": 30,
+						"scope": 29,
+						"scope_completion": 0.966666666666667,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 0,
+					"base_name": "Dropout 3",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 0,
+					"earned_units": 0,
+					"entitlement_cents": 0,
+					"exhausted": false,
+					"last_processed_run_cycle": -1,
+					"last_settlement_run_cycle": -1,
+					"later_enabled": true,
+					"launch_awareness": 109,
+					"market_bp": 9000,
+					"monthly_units": 0,
+					"organic_awareness_scaled": 0,
+					"release_id": "bank-grace-dropout-4417:project:3",
+					"release_title": "Dropout 3",
+					"release_year": 1981,
+					"review_tenths": 40,
+					"settled_cents": 0,
+					"total_earned_cycles": 0,
+					"total_units": 397
+				}
+			}
+		],
+		"research_queue": []
+	},
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"float_bits": "0300000000008040"
+				},
+				"beta": {
+					"float_bits": "0300000000008040"
+				},
+				"design": {
+					"float_bits": "0300000000008040"
+				}
+			},
+			"name_prefix": "Dropout",
+			"selection": "visible_order",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 39,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "13980fdeb9efabaeb070c8dddddcd8137982e3e073aa43ab87f7fdd1a57c4c4f",
+	"status": "completed",
+	"study": {},
+	"tape_identity": "1b6d242f5d2d99e813b44350e06b2b6b9dae01c9e8a5eb443e701c321434bc39",
+	"target_release_count": 3,
+	"telemetry_sha256": "429fd2b98eb09f9bab9cda8a6e69fcf052e27fb131c655f5952787b5c4b7b6bd"
+}

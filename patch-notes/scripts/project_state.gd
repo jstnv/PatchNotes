@@ -107,6 +107,7 @@ func add_core_score(category: CoreScore, amount: int) -> bool:
 	if amount < 0:
 		push_warning("Core Score additions cannot be negative.")
 		return false
+	if not _can_add_nonnegative(_core_scores[category], amount): return false
 	if amount == 0:
 		return true
 
@@ -144,6 +145,8 @@ func add_core_scores_and_scope(score_additions: Dictionary[CoreScore, int], scop
 		if score_additions[category] < 0:
 			push_warning("Core Score additions cannot be negative.")
 			return false
+
+	if not _can_add_core_and_scope(score_additions, scope_amount): return false
 
 	var changed := scope_amount != 0 or bug_pressure_amount != 0.0
 	for category: CoreScore in score_additions:
@@ -198,6 +201,8 @@ func add_alpha_production(score_additions: Dictionary[CoreScore, int], scope_amo
 		if score_additions[category] < 0:
 			push_warning("Alpha Core Score additions cannot be negative.")
 			return false
+
+	if not _can_add_core_and_scope(score_additions, scope_amount): return false
 
 	var changed := scope_amount != 0 or pressure_amount != 0.0
 	for category: CoreScore in score_additions:
@@ -602,7 +607,7 @@ func get_awareness_result() -> AwarenessResult:
 func commit_awareness_result(result: AwarenessResult) -> bool:
 	if not _has_beta_finalization or _review_result == null or _awareness_result != null or result == null:
 		return false
-	if result.get_formula_id() != &"primitive_awareness_v1" or result.get_marketing_output_used() != _marketing_output or result.get_total_awareness() < 0 or not is_finite(result.get_awareness_multiplier()):
+	if result.get_formula_id() != PrimitiveAwarenessCalculator.FORMULA_ID or result.get_marketing_output_used() != _marketing_output or result.get_total_awareness() < 0 or not is_finite(result.get_awareness_multiplier()):
 		return false
 	_awareness_result = result
 	values_changed.emit()
@@ -780,6 +785,7 @@ func add_scope(amount: int) -> bool:
 	if amount == 0:
 		return true
 
+	if not _can_add_nonnegative(_current_scope, amount): return false
 	_current_scope += amount
 	values_changed.emit()
 	return true
@@ -787,3 +793,15 @@ func add_scope(amount: int) -> bool:
 
 func _is_valid_core_score(category: int) -> bool:
 	return _core_scores.has(category)
+
+
+## Check before adding: subtraction stays within signed int range. No float
+## conversion is permitted at this boundary, including MAX_SIGNED_INT itself.
+static func _can_add_nonnegative(current: int, amount: int) -> bool:
+	return current >= 0 and amount >= 0 and amount <= MAX_SIGNED_INT - current
+
+func _can_add_core_and_scope(additions: Dictionary[CoreScore, int], scope_amount: int) -> bool:
+	if not _can_add_nonnegative(_current_scope, scope_amount): return false
+	for category: CoreScore in additions:
+		if not _can_add_nonnegative(_core_scores[category], additions[category]): return false
+	return true

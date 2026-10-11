@@ -87,12 +87,9 @@ func record_successful_hand() -> void:
 
 
 func guaranteed_redraw(current: Array[CardData], selected: Array[CardView], passes: Array[CardData]) -> CardData:
-	if stage != Stage.REDRAW_HAND or not second_pool_published or selected.size() != 1: return null
-	if selected[0].card_data.primary_stat == second_stat: return null
-	var matching := 0
-	for card: CardData in current:
-		if card.primary_stat == second_stat: matching += 1
-	return _pass_for(passes, second_stat) if matching == 3 else null
+	var cards: Array[CardData] = []
+	for view in selected: cards.append(view.card_data)
+	return guaranteed_redraw_cards(current,cards,passes)
 
 
 func record_successful_redraw() -> void:
@@ -116,3 +113,12 @@ func _pass_for(passes: Array[CardData], stat: StringName) -> CardData:
 	for card: CardData in passes:
 		if card.primary_stat == stat: return card
 	return null
+
+
+func guaranteed_redraw_cards(current: Array[CardData], selected: Array[CardData], passes: Array[CardData]) -> CardData:
+	if stage != Stage.REDRAW_HAND or not second_pool_published or selected.size() != 1: return null
+	if selected[0].primary_stat == second_stat: return null
+	var matching := 0
+	for card: CardData in current:
+		if card.primary_stat == second_stat: matching += 1
+	return _pass_for(passes, second_stat) if matching == 3 else null

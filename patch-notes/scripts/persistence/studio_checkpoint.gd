@@ -2,9 +2,12 @@ class_name StudioCheckpoint
 extends RefCounted
 
 const BUILD := "studio-checkpoint-runtime-v1"
-const PREVIOUS_RULES := "finance5-bank1-employees1-traits5-sales1-contracts3-research1"
-const RULES := PREVIOUS_RULES + "-review2"
-const FIELDS := ["_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
+const PREVIOUS_RULES := "finance5-bank1-employees1-traits5-sales1-contracts3-research1-review2"
+const PRE_EDUCATION_RULES := PREVIOUS_RULES + "-fanbase1-starwave1"
+const PRE_CULT_RULES := "finance6-bank1-employees1-traits6-sales1-contracts3-research1-review2-fanbase1-starwave1-education1"
+const PRE_CULT20_RULES := "finance6-bank1-employees1-traits7-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult1"
+const RULES := "finance6-bank1-employees1-traits8-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult2"
+const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
 var error := ""
 var _revision := ""
 var _previous_revision := ""
@@ -18,12 +21,29 @@ func previous_revision() -> String:
 	if _previous_revision.is_empty(): _previous_revision = _rules_revision(PREVIOUS_RULES)
 	return _previous_revision
 
-func _rules_revision(rules: String) -> String:
+# Credits are presentation metadata, not save content. Legacy revisions included
+# them; retain both verified credit manifests without ignoring gameplay hashes.
+const LEGACY_AUDIO_HASHES := ["56545f71a914d244952925813e71aeca3584e07ce36ddcbfbe07a15749ef1cf3", "66dcfcc25c7da4e974750353a4f192a89507563ffc7854c591bd21c9ddf25d78"]
+
+func _legacy_revisions(rules: String) -> Array[String]:
+	var result: Array[String] = [_rules_revision(rules)]
+	for audio_hash: String in LEGACY_AUDIO_HASHES: result.append(_rules_revision(rules, audio_hash))
+	return result
+
+func _rules_revision(rules: String, legacy_audio_hash: String = "") -> String:
 	var data := rules
 	var paths: Array[String] = []
 	_collect_data("res://data", paths)
 	paths.sort()
-	for path in paths: data += path + FileAccess.get_sha256(path)
+	for path in paths:
+		if path == "res://data/audio_credits.json":
+			# Version 7 already excluded audio credits. Preserve its real save
+			# identity when it becomes a supported historical revision.
+			if rules in [RULES, PRE_CULT20_RULES]: continue
+			if not legacy_audio_hash.is_empty():
+				data += path + legacy_audio_hash
+				continue
+		data += path + FileAccess.get_sha256(path)
 	return data.sha256_text()
 
 func _collect_data(directory: String, paths: Array[String]) -> void:
@@ -68,13 +88,11 @@ func _contract(state: ContractState) -> Variant:
 	return {"publisher_connections":state._publisher_connections,"contract_id":state._contract_id,"offer_id":state._offer_id,"source_release_id":state._source_release_id,"eligible":state._eligible_feature_ids,"scope":state._scope,"cores":state._core_half_units,"hands":state._successful_hands,"exhausted":state._exhausted_feature_ids,"priorities":state._priorities,"upfront":state._upfront_committed,"paid":state._payout_committed,"trial_terms":state._trial_terms,"neon_focus":state._neon_focus,"result":{"scope":result._scope,"cores":result._core_half_units,"numerator":result._completion_numerator,"payout":result._payout_cents,"remainder":result._remainder_cents,"upfront":result._upfront_cents,"denominator":result._denominator,"promotion":result._promotion}}
 
 func validate(payload: Dictionary) -> String:
-	var codec := CheckpointCodec.new()
-	var value: Variant = codec.decode(payload,CheckpointSchema.root())
-	if not codec.error.is_empty(): return codec.error
-	# The immediately preceding format has identical fields and data. Frozen
-	# releases stay authoritative; no active project is saved. Reading is passive,
-	# and the next normal Studio checkpoint records the current revision.
-	if value.content_revision not in [revision(), previous_revision()] or value.rng_algorithm != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
+	# Pre-Fanbase saves lack exact exposure provenance. Preserve unsupported
+	# bytes instead of inventing Fans or replaying old sales.
+	if payload.get("content_revision", "") not in ([revision(), _rules_revision(PRE_CULT20_RULES)] + _legacy_revisions(PRE_CULT_RULES) + _legacy_revisions(PRE_EDUCATION_RULES)) or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
+	var value: Dictionary = _decode_payload(payload)
+	if value.is_empty(): return error
 	if value.checkpoint_kind != "studio" or value.sequence < 1: return "Invalid checkpoint boundary"
 	var r: Dictionary = value.run
 	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
@@ -94,6 +112,22 @@ func validate(payload: Dictionary) -> String:
 	for loan: Dictionary in r.studio_finance.bank_loans:
 		if loan.run_id != value.run_id: return "Loan owner mismatch"
 	if not r.studio_traits.is_empty() and StudioTraits.evaluate_traits(r.studio_traits.trait_ids,r.studio_traits.version) != r.studio_traits: return "Invalid traits"
+	var education_id: StringName = &""
+	for id: StringName in [&"college_dropout",&"graduate"]:
+		if StudioTraits.is_active(r.studio_traits,id): education_id = id
+	var education: Dictionary = r.studio_finance.education
+	if education_id.is_empty():
+		if not education.is_empty(): return "Inactive education liability"
+	elif education.is_empty() or education.run_id != value.run_id or education.trait_id != education_id or education.account_id != StringName("%s:education" % value.run_id): return "Education trait/owner mismatch"
+	# Startup receipts are paired with exactly the saved trait version's effects.
+	if r.studio_finance.initial_cash_cents != RunState.FIRST_STUDIO_CASH_CENTS: return "Invalid base funding"
+	for entry: Array in [[&"studio_trait_unspent_points_v1",r.studio_traits.get("point_cash_cents",0)],[&"studio_trait_family_funding_v1",r.studio_traits.get("family_funding_cents",0)]]:
+		var count := 0
+		for action: Dictionary in r.studio_finance.actions:
+			if action.source_id != entry[0]: continue
+			count += 1
+			if action.cycle != 0 or action.productive or action.kind != &"financing_in" or action.direct_delta != entry[1] or entry[1] <= 0: return "Invalid trait receipt"
+		if count != (1 if entry[1] > 0 else 0): return "Missing or duplicated trait receipt"
 	if not r.resourceful_claims.is_empty() and not StudioTraits.is_active(r.studio_traits,&"resourceful"): return "Inactive Resourceful claim"
 	var claim_sources := {}
 	var catalog_for_claims := RunState.new()
@@ -125,6 +159,7 @@ func validate(payload: Dictionary) -> String:
 			if not r.owned_features.has(feature) or not r.credited_projects[id][feature]: return "Invalid familiarity Feature"
 			counts[feature] = int(counts.get(feature,0))+1
 	if counts != r.familiarity: return "Familiarity count mismatch"
+	if not StudioFanbase.validate(r.fanbase, r.released_games, r.release_metadata, r.completed_run_cycles, StudioTraits.starting_fans(r.studio_traits)): return "Invalid Fanbase provenance"
 	if r.released_games.keys() != r.release_metadata.keys(): return "Release order/identity mismatch"
 	for id: StringName in r.released_games:
 		var sales: Dictionary = r.released_games[id]
@@ -166,9 +201,18 @@ func validate(payload: Dictionary) -> String:
 		var offer: Dictionary = r.publisher_offers[offer_id]
 		if offer.publisher_id!=publisher or offer.source_release_id!=source or not _valid_contract(offer.state,r,PublisherTrialTerms.contract_id(publisher),offer_id,source): return "Invalid trial offer"
 		if offer.state!=null: expected_awards[offer_id] = offer.state.result.promotion
+	# Starwave qualifies from distinct prior Contracts and releases, rather than
+	# a single release. Its immutable first offer therefore has no source release.
+	var prior_completions: int = int(r.ironclad_completion_committed) + r.sidestreet_results.size() + expected_awards.size()
+	var starwave_id := StringName("%s:%s:first" % [r.bank_run_id,PublisherCatalog.STARWAVE])
+	if r.released_games.size()>=2 and prior_completions>=3:
+		if not r.unlocked_publishers.has(PublisherCatalog.STARWAVE) or not r.publisher_offers.has(starwave_id): return "Missing Starwave offer"
+		var starwave: Dictionary = r.publisher_offers[starwave_id]
+		if starwave.publisher_id!=PublisherCatalog.STARWAVE or starwave.source_release_id!=&"" or not _valid_contract(starwave.state,r,PublisherTrialTerms.STARWAVE,starwave_id,&""): return "Invalid Starwave offer"
+	elif r.unlocked_publishers.has(PublisherCatalog.STARWAVE) or r.publisher_offers.has(starwave_id): return "Unqualified Starwave offer"
 	for id: StringName in r.publisher_offers:
 		var publisher: StringName = r.publisher_offers[id].publisher_id
-		if publisher not in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT] or id!=StringName("%s:%s:first" % [r.bank_run_id,publisher]): return "Unknown trial offer"
+		if publisher not in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT,PublisherCatalog.STARWAVE] or id!=StringName("%s:%s:first" % [r.bank_run_id,publisher]): return "Unknown trial offer"
 	if expected_awards!=r.promotion_awards: return "Promotion award mismatch"
 	for id: StringName in r.promotion_consumed:
 		if not r.promotion_awards.has(id) or not r.released_games.has(r.promotion_consumed[id]): return "Invalid Promotion consumption"
@@ -200,7 +244,8 @@ func validate(payload: Dictionary) -> String:
 
 func _valid_contract(c: Variant, r: Dictionary, kind: StringName, offer: StringName, release: StringName) -> bool:
 	if c==null: return true
-	if c.contract_id!=kind or c.offer_id!=offer or c.source_release_id!=release or c.hands!=2 or not c.upfront or not c.paid or not PriorityAllocation.is_valid_distribution(c.priorities): return false
+	var required_hands := 3 if kind==PublisherTrialTerms.STARWAVE else 2
+	if c.contract_id!=kind or c.offer_id!=offer or c.source_release_id!=release or c.hands!=required_hands or not c.upfront or not c.paid or not PriorityAllocation.is_valid_distribution(c.priorities): return false
 	for id: StringName in c.eligible:
 		if not c.eligible[id] or not r.owned_features.has(id): return false
 		var primitive := false
@@ -230,14 +275,16 @@ func _valid_contract(c: Variant, r: Dictionary, kind: StringName, offer: StringN
 	for action: Dictionary in r.studio_finance.actions:
 		if action.source_id!=offer: continue
 		if action.kind==&"publisher_receipt": paid += int(action.direct_delta)
-		if action.productive: hands += 1
-	if paid!=int(expected.payout_cents) or hands!=2: return false
+		if action.productive and action.kind in [&"contract_hand",&"publisher_receipt"]:
+			hands += 1
+			if action.direct_delta != (int(expected.remainder_cents) if hands==required_hands else 0): return false
+	if paid!=int(expected.payout_cents) or hands!=required_hands: return false
 	return c.result == {"scope":c.scope,"cores":c.cores,"numerator":expected.numerator,"payout":expected.payout_cents,"remainder":expected.remainder_cents,"upfront":advance,"denominator":expected.get("denominator",96),"promotion":expected.get("promotion",0)}
 
 func hydrate(payload: Dictionary) -> RunState:
 	error = validate(payload)
 	if not error.is_empty(): return null
-	var value: Dictionary = CheckpointCodec.new().decode(payload,CheckpointSchema.root())
+	var value: Dictionary = _decode_payload(payload)
 	var run := RunState.new()
 	var r: Dictionary = value.run
 	for field: String in FIELDS:
@@ -256,6 +303,21 @@ func hydrate(payload: Dictionary) -> RunState:
 		run._first_game_tutorial = FirstGameTutorial.new()
 		for key: String in r.first_game_tutorial: run._first_game_tutorial.set(key,r.first_game_tutorial[key])
 	return run
+
+func _decode_payload(payload: Dictionary) -> Dictionary:
+	var prior: bool = payload.get("content_revision", "") in _legacy_revisions(PRE_EDUCATION_RULES)
+	var codec := CheckpointCodec.new()
+	var value: Variant = codec.decode(payload,CheckpointSchema.root(not prior))
+	if not codec.error.is_empty(): error = codec.error; return {}
+	if payload.get("content_revision", "") == _rules_revision(PRE_CULT20_RULES) and not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5,6,7]: error = "Invalid historical trait version"; return {}
+	if payload.get("content_revision", "") in _legacy_revisions(PRE_CULT_RULES) and not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5,6]: error = "Invalid historical trait version"; return {}
+	if prior:
+		if not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5]: error = "Invalid historical trait version"; return {}
+		var upgraded := StudioFinanceLedger.upgrade_v5(value.run.studio_finance)
+		if upgraded.is_empty(): error = "Invalid prior finance journal"; return {}
+		value.run.studio_finance = upgraded
+		value.content_revision = revision()
+	return value
 
 func _hydrate_contract(c: Variant) -> ContractState:
 	if c==null: return null

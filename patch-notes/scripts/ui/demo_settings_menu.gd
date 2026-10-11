@@ -92,7 +92,7 @@ func _build() -> void:
 		sliders[bus] = slider
 		mutes[bus] = mute
 	var audio_note := Label.new()
-	audio_note.text = "Audio controls are ready. Approved music/SFX are not installed.\nNo audio assets ship in this build; playback/credits acceptance is pending."
+	audio_note.text = "Crunch Time soundtrack prototype - 70 BPM.\nMusic controls the loop; SFX controls card taps and removal whooshes."
 	box.add_child(audio_note)
 	status = Label.new()
 	status.name = "Status"

@@ -1,0 +1,206 @@
+{
+	"accepted_commands": 180,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"tape": "replay.tape.json"
+	},
+	"case_id": "pilot-0002",
+	"commands": 180,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "",
+	"final_release_count": 10,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "-973842697194525255"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "8868778490432738882"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "-9021904120328304193"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4426"
+			},
+			"state": {
+				"integer": "-8795622921256051990"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4427"
+			},
+			"state": {
+				"integer": "-2477723426978490175"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "8610028439773719648"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "3534954131053090216"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "6485473429361248944"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "-3262750357987681555"
+			}
+		}
+	},
+	"final_run_cycle": 70,
+	"final_state": "3c535d3a860f62d885ad77367e87e7ef7a7618f1c8d3add2be7a0dcc175464e5",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "8959219825053441037"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "-3123388024809317574"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4426"
+			},
+			"state": {
+				"integer": "-8841859650825283180"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4427"
+			},
+			"state": {
+				"integer": "-2477723426978490175"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "-3769052622640144973"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "2595083601206648032"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "8313555227222613638"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "1949419003375820633"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "e840a56e0728bf2eb199bf26feb9e004cc09355aa20416c09df065feb1087fba",
+	"input_identity": "7286df15823f4b3d6e23b0add4b380553afd9d54602316fca2f32573b3aa4e21",
+	"last_choice": {
+		"type": "launch"
+	},
+	"max_commands": 300,
+	"ok": true,
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"float_bits": "0300000000000040"
+				},
+				"beta": {
+					"float_bits": "0300000000000040"
+				},
+				"design": {
+					"float_bits": "0300000000000040"
+				}
+			},
+			"name_prefix": "Pilot",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 70,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "430763c166550fd44499f4eda5b72c915a07f910633c87cc47e95229c72693c8",
+	"status": "completed",
+	"tape_identity": "f9e0612356cc354714c95f9931d87ac7abf93423cb1329382d6d5ef790eb3415",
+	"target_release_count": 10
+}

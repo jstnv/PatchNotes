@@ -316,6 +316,9 @@ func _configure_contract_detail() -> void:
 		var quote := _selected_contract_quote
 		var terms: Dictionary = quote.terms
 		title.text = PublisherCatalog.name_for(quote.publisher_id)+" Contract"
+		if quote.publisher_id==PublisherCatalog.STARWAVE:
+			details.text = "Three production hands · four cards per hand\nTargets: Scope 14 · Graphics/Sound/Technology/Design 7 each\nAdvance on acceptance: $0.00\nMaximum cash: $2,240.00, paid only after hand three. Hands one and two pay $0.00.\nCash scales with capped Scope and Core completion, rounded down to cents; no minimum completion is required.\nNo Promotion from this Contract. Existing awards are unchanged.\nYour %d owned Primitive Features and Core Passes are frozen at acceptance.\nEach hand costs one productive cycle; Feature play costs $0.\nAcceptance and browsing cost no cycles. This Contract cannot be abandoned." % quote.eligible.size()
+			return
 		var focus := "Balanced Cores: each Core target 4, with an additional weakest-Core share." if quote.focus<0 else "Frozen Core focus: %s (target 9); other Core targets: 2 each." % String(PublisherTrialTerms.STATS[quote.focus]).capitalize()
 		details.text = "Two production hands · four cards per hand\nScope target: %d\n%s\nAdvance on acceptance: %s\nMaximum total cash (including advance): %s\nMaximum Promotion: %d Awareness for your next successful launch.\nCash and whole Promotion are separately rounded down according to completion.\nYour %d owned Primitive Features and Core Passes are frozen at acceptance.\nEach hand costs one productive cycle; Feature play costs $0.\nAcceptance and browsing cost no cycles. This Contract cannot be abandoned." % [terms.scope,focus,CashFormatter.format_exact_cents(terms.advance_cents),CashFormatter.format_exact_cents(terms.cash_cents),terms.promotion,quote.eligible.size()]
 		return

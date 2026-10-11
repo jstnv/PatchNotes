@@ -11,6 +11,7 @@ signal sales_changed
 signal contracts_changed
 signal publishers_changed
 signal finance_changed
+signal fans_changed
 signal employees_changed
 
 const CENTS_PER_DOLLAR := 100
@@ -55,6 +56,14 @@ var _starter_selection_confirmed := false
 var _first_tutorial_project_id: StringName
 var _first_game_tutorial: FirstGameTutorial
 var _studio_finance: Dictionary = {}
+var _fanbase: Dictionary = StudioFanbase.create()
+
+func get_fans() -> int: return int(_fanbase.fans)
+
+func get_fanbase_history() -> Array: return _fanbase.months.duplicate(true)
+
+func get_fanbase_snapshot() -> Dictionary: return _fanbase.duplicate(true)
+
 var _bank_run_id: StringName = &""
 var _employees: Dictionary = EmployeeRoster.create(&"")
 var random_streams := RunRandom.new()
@@ -123,7 +132,13 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 		if not _feature_definitions.has(id):
 			return false
 		guaranteed[id] = true
+	var proposed_run_id := StringName(Crypto.new().generate_random_bytes(16).hex_encode())
 	var finance := StudioFinanceLedger.create(FIRST_STUDIO_CASH_CENTS, 51500 if StudioTraits.is_active(selection, &"expensive_lease") else 50000)
+	for trait_id: StringName in [&"college_dropout",&"graduate"]:
+		if StudioTraits.is_active(selection,trait_id):
+			var opened := StudioFinanceLedger.open_education(finance,proposed_run_id,trait_id)
+			if opened.is_empty(): return false
+			finance = opened.ledger
 	var point_cash := int(selection.get("point_cash_cents", 0))
 	if point_cash > 0:
 		var receipt := StudioFinanceLedger.plan(finance, 0, FIRST_STUDIO_CASH_CENTS,
@@ -137,15 +152,18 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 		if receipt.is_empty(): return false
 		finance = receipt.ledger
 	if finance.is_empty(): return false
+	var initial_fans := StudioFanbase.create(StudioTraits.starting_fans(selection))
 	_owned_features = guaranteed
 	_cash_cents = FIRST_STUDIO_CASH_CENTS + point_cash + family_cash
 	_studio_traits = selection.duplicate(true)
+	_fanbase = initial_fans
 	_first_studio_economy = true
 	_studio_name = cleaned
 	_studio_specialty = specialty
 	_studio_finance = finance
-	_bank_run_id = StringName(Crypto.new().generate_random_bytes(16).hex_encode())
+	_bank_run_id = proposed_run_id
 	_employees = EmployeeRoster.create(_bank_run_id)
+	fans_changed.emit()
 	cash_changed.emit()
 	features_changed.emit()
 	finance_changed.emit()
@@ -155,6 +173,13 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 ## Historical expenses are available only for studios created with this ledger.
 func get_studio_finance_report() -> Dictionary:
 	return StudioFinanceLedger.report(_studio_finance, _completed_run_cycles, _cash_cents)
+
+
+## Detached read bundle with the same gates as the individual public getters.
+## Ledger validation is shared only within this synchronous observation.
+func get_studio_action_finance_observation() -> Dictionary:
+	var include_hire: bool = _first_studio_economy and not _released_games.is_empty() and EmployeeRoster.valid(_employees) and _employees.employees.is_empty()
+	return StudioFinanceLedger.action_observation(_studio_finance, _completed_run_cycles, _cash_cents, _bank_run_id, include_hire)
 
 
 func get_outstanding_expenses() -> Dictionary:
@@ -184,6 +209,13 @@ func pay_off_bank_loan(quote: Dictionary) -> bool:
 	if not can_mutate_checkpoint(): return false
 	if not _bank_action_available(): return false
 	return _commit_bank_plan(StudioFinanceLedger.pay_off(_studio_finance, quote))
+
+func get_education_payoff_quote() -> Dictionary:
+	return StudioFinanceLedger.education_payoff_quote(_studio_finance)
+
+func pay_off_education(quote: Dictionary) -> bool:
+	if not can_mutate_checkpoint() or not _bank_action_available(): return false
+	return _commit_bank_plan(StudioFinanceLedger.pay_off_education(_studio_finance,quote))
 
 
 func _bank_action_available() -> bool:
@@ -296,7 +328,7 @@ func get_financial_block_reason() -> String:
 	if not _first_studio_economy: return ""
 	if _studio_finance.get("cash_cents", -1) != _cash_cents or _studio_finance.get("last_cycle", -1) != _completed_run_cycles:
 		return "Financial history is unavailable; production cannot be committed safely."
-	var unpaid := StudioFinanceLedger.get_unpaid(_studio_finance)
+	var unpaid := StudioFinanceLedger.get_blocking_unpaid(_studio_finance)
 	if unpaid < 0: return "Financial history is unavailable; production cannot be committed safely."
 	if unpaid == 0: return ""
 	return "Unpaid bills: %s. Further production must clear all overdue bills. You can still launch, browse Finances, or use an available income action that clears the balance." % CashFormatter.format_exact_cents(unpaid)
@@ -686,13 +718,21 @@ func can_consume_redraw(count: int = 1) -> bool:
 	return not _productive_cycle_in_progress and count > 0 and _available_redraws >= count
 
 
-func consume_redraw(count: int = 1) -> bool:
+func consume_redraw(count: int = 1, publish: Callable = Callable()) -> bool:
 	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle:
 		return false
 	if not can_consume_redraw(count):
 		return false
 	_available_redraws -= count
+	# Contract prepares replacements first, then publishes only after the debit
+	# succeeds. Observers still see the new pool at redraws_changed.
+	if publish.is_valid():
+		_publishing_cycle = true
+		publish.call()
+		redraws_changed.emit()
+		_publishing_cycle = false
+		return true
 	redraws_changed.emit()
 	return true
 
@@ -763,7 +803,7 @@ func can_register_release(project: ProjectState) -> bool:
 			return false
 		var metadata: Dictionary = _release_metadata[id]
 		return metadata.base_name == project.get_base_name() and metadata.genre == project.get_genre_id() and metadata.theme == project.get_theme_id() and metadata.genre_ratios == project.get_genre_ratios() and _released_games[id].get("review_tenths", -1) == expected_record.get("review_tenths", -1) and _released_games[id].get("launch_awareness", -1) == expected_record.get("launch_awareness", -1) and _released_games[id].get("market_bp", -1) == expected_record.get("market_bp", -1)
-	return project.get_awareness_result().get_promotion_awards()==get_pending_promotion_awards()
+	return project.get_awareness_result().get_promotion_awards()==get_pending_promotion_awards() and project.get_awareness_result().get_existing_fans()==get_fans()
 
 
 func _create_release_sales_record(project: ProjectState) -> Dictionary:
@@ -786,10 +826,13 @@ func register_release(project: ProjectState) -> bool:
 	var year := get_current_year()
 	var title := _resolve_release_title(project.get_base_name(), year)
 	var record := _create_release_sales_record(project)
+	var next_fans := StudioFanbase.register_release(_fanbase, record, project.get_awareness_result().get_existing_fans())
+	if next_fans.is_empty(): return false
 	record.base_name = project.get_base_name()
 	record.release_title = title
 	record.release_year = year
 	_released_games[id] = record
+	_fanbase = next_fans
 	_release_metadata[id] = {"base_name": project.get_base_name(), "genre": project.get_genre_id(),
 		"theme": project.get_theme_id(), "genre_ratios": project.get_genre_ratios(),
 		"release_title": title, "release_year": year, "release_cycle": _completed_run_cycles,
@@ -802,6 +845,7 @@ func register_release(project: ProjectState) -> bool:
 		_sidestreet_entitlements[id] = {"offer_id": StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID, id]), "state": null}
 	_refresh_publisher_unlocks()
 	sales_changed.emit()
+	fans_changed.emit()
 	return true
 
 func _capture_release_review(project: ProjectState) -> Dictionary:
@@ -820,6 +864,7 @@ func _capture_release_review(project: ProjectState) -> Dictionary:
 		"required_scope": project.get_required_scope(), "development_cycles": project.get_current_cycle(),
 		"cores": cores, "standards": standards, "remaining_bugs": project.get_remaining_bugs(),
 		"awareness": awareness.get_total_awareness(), "launch_marketing": awareness.get_launch_marketing(),
+		"launch_fans": awareness.get_existing_fans(), "fan_awareness": awareness.get_fan_awareness(),
 		"projected_units": units.get_final_units_sold(), "projected_gross_cents": revenue.get_projected_month_one_gross_cents(),
 		"projected_net_cents": revenue.get_projected_month_one_net_cents(),
 		"forecast_id": context.get_forecast_id_for_authority() if context.was_forecast_revealed_at_launch() else &"",
@@ -1038,7 +1083,8 @@ func _record_paid_contract_completion() -> void:
 		return
 	_pending_contract_completion = null
 	if _publisher_offers.has(state.get_offer_id()):
-		_promotion_awards[state.get_offer_id()] = state.get_result().get_promotion()
+		if state.get_contract_id()!=PublisherTrialTerms.STARWAVE:
+			_promotion_awards[state.get_offer_id()] = state.get_result().get_promotion()
 		return
 	if state == _primitive_contract:
 		_ironclad_completion_committed = true
@@ -1098,7 +1144,7 @@ func get_publisher_status(id: StringName) -> Dictionary:
 			PublisherCatalog.STARWAVE:
 				requirement = "Release at least two games (%d / 2) and complete at least three contracts (%d / 3)." % [released, contracts]
 		var availability: String = entry.availability
-		if id in [PublisherCatalog.CROWN_QUILL, PublisherCatalog.NEON_CIRCUIT]:
+		if id in [PublisherCatalog.CROWN_QUILL, PublisherCatalog.NEON_CIRCUIT, PublisherCatalog.STARWAVE]:
 			for offer: Dictionary in _publisher_offers.values():
 				if offer.publisher_id != id: continue
 				var state: ContractState = offer.state
@@ -1107,7 +1153,7 @@ func get_publisher_status(id: StringName) -> Dictionary:
 					if get_active_contract() != null:
 						availability = "Contract pending. Finish the active Contract first; this offer does not expire."
 				elif state.is_completed() and state.is_payout_committed():
-					availability = "One-time Contract completed. Cash and Promotion have been awarded."
+					availability = "One-time Contract completed. Cash has been awarded; this offer grants no Promotion." if id==PublisherCatalog.STARWAVE else "One-time Contract completed. Cash and Promotion have been awarded."
 				else:
 					availability = "Contract in progress. Resume it from Contracts."
 				break
@@ -1124,7 +1170,7 @@ func _refresh_publisher_unlocks() -> bool:
 		if _unlocked_publishers.has(id) or not _meets_publisher_requirement(id):
 			continue
 		_unlocked_publishers[id] = true
-		if id in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT]:
+		if id in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT,PublisherCatalog.STARWAVE]:
 			var offer_id := StringName("%s:%s:first" % [_bank_run_id,id])
 			var source: StringName
 			for release_id: StringName in _release_metadata:
@@ -1192,6 +1238,8 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 		if release_earned < 0 or release_earned > MAX_SIGNED_INT - earned: return {}
 		earned += release_earned
 		next_records[id] = next
+	var fan_plan := StudioFanbase.plan(_fanbase, _released_games, next_records, _completed_run_cycles + 1)
+	if fan_plan.is_empty(): return {}
 	if payable > MAX_SIGNED_INT - cash_after_action:
 		return {}
 	var finance_plan: Dictionary = {}
@@ -1200,7 +1248,7 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 			finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
 		finance_plan = StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles + 1, _cash_cents, direct_cash_delta_cents, finance_kind, earned, payable, true, source_id)
 		if finance_plan.is_empty(): return {}
-	return {"records": next_records, "payable": payable, "finance": finance_plan}
+	return {"records": next_records, "payable": payable, "finance": finance_plan, "fans": fan_plan}
 
 
 ## The direct-effects callback must be synchronous and atomic on false, using
@@ -1245,6 +1293,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	_completed_run_cycles += 1
 	_available_redraws = mini(MAX_REDRAWS, _available_redraws + 1)
 	_released_games = plan.records
+	var previous_fans := get_fans()
+	_fanbase = plan.fans
 	if plan.payable > 0:
 		add_cash_cents(plan.payable)
 	if not plan.finance.is_empty():
@@ -1269,6 +1319,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 		contracts_changed.emit()
 	if not _released_games.is_empty():
 		sales_changed.emit()
+	if get_fans() != previous_fans or _completed_run_cycles % 2 == 0:
+		fans_changed.emit()
 	calendar_changed.emit()
 	if _employees != employees_before: employees_changed.emit()
 	_publishing_cycle = false

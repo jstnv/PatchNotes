@@ -1,0 +1,7 @@
+# Fanbase near-neutral implementation review — 2026-10-11
+
+Recommendation: retain the current8% gain,15% loss and quarter-Fan Awareness mapping as ACTIVE/TRIAL. There is no numerical implementation delta in the [new design handoff](../../threads/fanbase/handoffs/2026-10-11-near-neutral-design-review-v1.md).
+
+Read the handoff and inspected the retained current-rules results and Studio journals. The two cases reached eight legal releases. Review4.9 occurred at frozen161 Fans in `fanbase-eight-1104:project:4` and83 Fans in `fanbase-eight-4417:project:6`; the reported once-only title losses are2 and1 respectively. These are about1.24% and1.20% of the frozen audience after whole-Fan rounding. The seed4417 first release also scored4.9 but began with zero Fans; it is not the nonzero-audience witness.
+
+The evidence supports a small near-neutral loss under these inputs; it does not settle whether that feels right to a player. The source-pinned study has a different calendar and scope from earlier weak-release captures. Do not pool endpoints as a matched balance comparison. No new simulation, coefficient or final balance approval was needed for this intake. Exact5.0 neutrality remains LOCKED. The post600 numerical taper and mature-growth extension remain held/deferred, as explicitly recorded by their owner. User feel review remains OPEN; there is no outstanding approved Fanbase code patch to implement from this packet.

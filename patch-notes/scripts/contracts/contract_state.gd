@@ -72,6 +72,10 @@ func get_successful_hand_count() -> int:
 	return _successful_hands
 
 
+func get_required_hands() -> int:
+	return int(_trial_terms.get("required_hands", REQUIRED_HANDS))
+
+
 func get_priority_distribution() -> Dictionary:
 	return _priorities.duplicate()
 
@@ -132,7 +136,7 @@ func commit_priorities(distribution: Dictionary) -> bool:
 
 
 func plan_hand(cards: Array[CardData]) -> Dictionary:
-	if is_completed() or _successful_hands >= REQUIRED_HANDS or cards.size() != 4:
+	if is_completed() or _successful_hands >= get_required_hands() or cards.size() != 4 or cards[0]==null:
 		return {}
 	var seen_features: Dictionary = {}
 	var specialization_stat := cards[0].primary_stat if not cards.is_empty() else StringName()
@@ -168,7 +172,7 @@ func plan_hand(cards: Array[CardData]) -> Dictionary:
 		if addition > RunState.MAX_SIGNED_INT - int(projected_scores[category]):
 			return {}
 		projected_scores[category] += addition
-	var completing := _successful_hands + 1 == REQUIRED_HANDS
+	var completing := _successful_hands + 1 == get_required_hands()
 	var numerator := 0
 	var remainder := 0
 	var total_payout := 0
@@ -264,7 +268,7 @@ func freeze_trial(focus: int) -> bool:
 	return true
 
 func calculate_for_state(scope: int, cores: Dictionary) -> Dictionary:
-	if _contract_id in [PublisherTrialTerms.CROWN,PublisherTrialTerms.NEON]:
+	if _contract_id in [PublisherTrialTerms.CROWN,PublisherTrialTerms.NEON,PublisherTrialTerms.STARWAVE]:
 		if _trial_terms!=PublisherTrialTerms.terms(_contract_id): return {}
 		return PublisherTrialTerms.completion(_contract_id,scope,cores,_neon_focus)
 	if _contract_id==SIDESTREET_CONTRACT_ID: return calculate_sidestreet_completion(scope,cores)
@@ -278,11 +282,13 @@ func get_advance_cents() -> int:
 func get_scope_target() -> int: return int(_trial_terms.get("scope",EXPECTED_SCOPE))
 
 func get_core_target(category: int) -> int:
+	if _contract_id==PublisherTrialTerms.STARWAVE: return 14
 	if _contract_id==PublisherTrialTerms.CROWN: return 8
 	if _contract_id==PublisherTrialTerms.NEON: return 18 if category==_neon_focus else 4
 	return EXPECTED_CORE_HALF_UNITS
 
 func get_title() -> String:
+	if _contract_id==PublisherTrialTerms.STARWAVE: return "Starwave Entertainment Contract"
 	if _contract_id==PublisherTrialTerms.CROWN: return "Crown & Quill Contract"
 	if _contract_id==PublisherTrialTerms.NEON: return "Neon Circuit Contract — "+String(PublisherTrialTerms.STATS[_neon_focus]).capitalize()
 	return "SideStreet Cash Contract" if _contract_id==SIDESTREET_CONTRACT_ID else "Balanced Primitive Contract"

@@ -1,0 +1,35 @@
+{
+	"case_id": "control-90210",
+	"initial": {
+		"recipe": {
+			"schema_version": 1.0,
+			"seed": "90210",
+			"specialty": "action",
+			"studio_id": "bank-spend-control-90210",
+			"studio_name": "Bank Spend Control",
+			"traits": []
+		}
+	},
+	"max_commands": 100.0,
+	"policy": {
+		"config": {
+			"borrow_after_two": false,
+			"genre": "action",
+			"hands": {
+				"alpha": 4.0,
+				"beta": 4.0,
+				"design": 4.0
+			},
+			"name_prefix": "Control",
+			"research_feature": "recorded_sounds",
+			"selection": "visible_order",
+			"theme": "fantasy"
+		},
+		"id": "banking-spending-prefix",
+		"source_identity": "2f977fee88377772c1b89d1272ea04d0eb91ceb90cc229540038e4c33ab3da66",
+		"version": "2"
+	},
+	"schema_version": "1",
+	"target_release_count": 2.0,
+	"telemetry": true
+}

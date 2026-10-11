@@ -14,8 +14,12 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 
 ## System documents
 
+- [Headless simulation: isolated runs, paired studies/reports, custom policies, replay and Studio continuation](threads/simulation-engine/USAGE.md)
+- [Design-thread simulator versions and TODO adoption handoffs](threads/simulation-engine/VARIANTS.md)
+- [Simulation Engine implementation and evidence](threads/simulation-engine/README.md)
 - [Studio Traits design thread working folder](threads/studio-traits/)
 - [Core loop and Studio](design/core-and-studio.md)
+- [AI Competitors design thread](threads/ai-competitors/README.md)
 - [Economy and banking](design/economy-banking.md)
 - [Banking System design thread workspace](threads/banking-system/README.md)
 - [Sales and game lifespan](design/game-lifespan.md)
@@ -36,6 +40,8 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 Design discussion: record important rules/rationale and their LOCKED / ACTIVE/TRIAL / OPEN status in the relevant system file; cross-system decisions in DECISIONS; new or changed work in TODO. Update CURRENT_STATE only for material state changes. A chat title or an analysis recommendation is not an approval.
 
 Implementation: inspect current source/status/diff, use the relevant local approved design, verify behavior, save findings, update TODO/design/state as appropriate and write logs/YYYY-MM-DD-topic-vN.md. Log tasks, branch/HEAD/worktree, actual files changed, implementation choices, exact checks/results, blockers and next work. Keep large data/specifications out of logs; reference them. Never overwrite another session's evidence.
+
+Design-thread simulator workflow (user request, 2026-10-11): a thread may prototype its addition in an isolated, named candidate version, run it concurrently with other threads and preserve evidence. Keep canonical source under this implementation thread's coordinated ownership. Submit the version's concrete design/source/evidence handoff through the internal TODO for review and adoption; retain all OPEN/ACTIVE/TRIAL distinctions. [Commands and workflow](threads/simulation-engine/VARIANTS.md).
 
 Completed analysis and completed gameplay are different statuses. Task IDs from Drive are stable; append follow-ups rather than renumbering. READY for a read-only experiment authorizes that experiment, not runtime implementation. Do not repeat a broad simulation without a new question/defect. Compare current economy proposals at matched calendar checkpoints, actual settlements and opportunity costs.
 

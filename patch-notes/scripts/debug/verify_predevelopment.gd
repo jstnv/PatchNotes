@@ -248,19 +248,20 @@ func _verify_release_titles() -> void:
 func _verify_multiple_sales() -> void:
 	var run := RunState.new()
 	run.initialize_cash_cents(1)
-	# Independently known 751-unit oracle for simultaneous released-game earning.
+	# Independently known 751-unit oracle with complete current sales/Fan provenance.
 	var records: Dictionary = run.get("_released_games")
-	records[&"one"] = ReleasedGameSales.create(&"one", 751)
-	records[&"two"] = ReleasedGameSales.create(&"two", 751)
-	run.complete_productive_action()
-	run.complete_productive_action()
+	for id: StringName in [&"one", &"two"]:
+		records[id] = ReleasedGameSales.create(id, 751, 50, 100, 10000)
+		run._fanbase = StudioFanbase.register_release(run._fanbase, records[id], 0)
+	expect(run.complete_productive_action() and run.complete_productive_action(), "Both concurrent oracle earning cycles commit")
 	expect(run.get_cash_cents() == 1050349 and run.get_released_game_sales(&"one").settled_cents == 525174 and run.get_released_game_sales(&"two").settled_cents == 525174, "Two games settle independently and sum exact cents")
 	var overflow := RunState.new()
 	overflow.initialize_cash_cents(RunState.MAX_SIGNED_INT - 800000)
 	var unsafe_records: Dictionary = overflow.get("_released_games")
-	unsafe_records[&"one"] = ReleasedGameSales.create(&"one", 751)
-	unsafe_records[&"two"] = ReleasedGameSales.create(&"two", 751)
-	overflow.complete_productive_action()
+	for id: StringName in [&"one", &"two"]:
+		unsafe_records[id] = ReleasedGameSales.create(id, 751, 50, 100, 10000)
+		overflow._fanbase = StudioFanbase.register_release(overflow._fanbase, unsafe_records[id], 0)
+	expect(overflow.complete_productive_action(), "Overflow fixture reaches the valid first earning half")
 	var before := [overflow.get_cash_cents(), overflow.get_completed_run_cycles(), overflow.get_released_game_sales(&"one"), overflow.get_released_game_sales(&"two")]
 	var touched := [false]
 	expect(not overflow.complete_productive_action(func() -> bool: touched[0] = true; return true) and not touched[0], "Combined multi-release overflow rejects before direct action")

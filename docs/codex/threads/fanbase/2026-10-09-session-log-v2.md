@@ -1,0 +1,7 @@
+# Fanbase design session — implementation completion review v2
+
+2026-10-09, America/Los_Angeles. Shared checkout `main` at `41c87c76fb4d3c06a5332d93f0e7b0997007475d`, with concurrent uncommitted source and shared-doc edits preserved. Read CURRENT_STATE and TODO first; inspected branch/HEAD/status/diff, Fanbase design, the implementation log, evidence README, audit result, restart result, source formula and handoff status. The implementing coordinator had already marked TODO item21 complete and updated CURRENT_STATE, Fanbase design and the handoff; this thread made no duplicate shared-state edit.
+
+Added [versioned design review](2026-10-09-current-main-integration-review-v1.md) and updated this thread's README and handoff index to reflect local completion. Evidence:21 focused suites, eight fresh-process restores and5,089 independent legal-route checks pass. The legal route reaches a later weak Review4.1 launch with6 frozen Fans/1 Awareness; it does not establish positive recovery or final balance. Current combined headless export gates pass, with actual exported Fanbase interaction still open. The 15% loss coefficient stays ACTIVE/TRIAL; other open values remain open.
+
+Files changed here: `docs/codex/threads/fanbase/handoffs/README.md`, `docs/codex/threads/fanbase/README.md`, `docs/codex/threads/fanbase/2026-10-09-current-main-integration-review-v1.md`, this log. Documentation checks follow. No gameplay edit, TODO update, Drive action, cross-thread message, merge, commit or push.

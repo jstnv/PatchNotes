@@ -1,0 +1,194 @@
+--- base/scripts/debug/verify_incumbent_archive.gd
++++ candidate/scripts/debug/verify_incumbent_archive.gd
+@@ -0,0 +1,60 @@
++extends SceneTree
++const Factory := preload("res://scripts/simulation/run_factory.gd")
++const Bootstrap := preload("res://scripts/debug/campaign_replay_cli.gd")
++var failures := 0
++var checks := 0
++
++func check(ok: bool, label: String) -> void:
++	checks += 1
++	print("PASS: " if ok else "FAIL: ", label)
++	if not ok: failures += 1
++
++func _initialize() -> void: _run.call_deferred()
++
++func snapshot(run: RunState) -> Array:
++	return [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_owned_feature_ids(), run._historical_titles.duplicate(true), run._opening_snapshot.duplicate(true), run.get_studio_finance_snapshot(), run.random_streams.snapshot()]
++
++func _run() -> void:
++	var recipe := {"schema_version":1,"studio_id":"archive-validation","studio_name":"Archive validation","specialty":"action","traits":[],"seed":"4417"}
++	var fixture := {"owned_features":["music","dialogue","secrets"],"historical_titles":[{"id":"history-1979","title":"Historical title","genre":"action","theme":"fantasy","year":1979,"review_tenths":78}]}
++	var negatives: Array = []
++	for id in ["archive-validation:project:1", "archive-validation:project:2", "archive-validation:project:9223372036854775807", "other:project:1"]:
++		var negative := fixture.duplicate(true)
++		negative.historical_titles[0].id = id
++		negatives.append(negative)
++	var empty := fixture.duplicate(true)
++	empty.historical_titles = []
++	negatives.append(empty)
++	var duplicate := fixture.duplicate(true)
++	duplicate.historical_titles.append(duplicate.historical_titles[0].duplicate(true))
++	negatives.append(duplicate)
++	var missing_parent := fixture.duplicate(true)
++	missing_parent.owned_features = ["branching_nodes"]
++	negatives.append(missing_parent)
++	for negative: Dictionary in negatives:
++		var session := Bootstrap.create_fresh_session(recipe, root.get_node("CardDatabase"))
++		check(session != null, "Fresh control")
++		var before := snapshot(session.run)
++		check(not Factory._apply_incumbent(session.run, negative) and snapshot(session.run) == before, "Invalid archive rejects atomically without ownership/cash/RNG mutation")
++		var request := recipe.duplicate(true)
++		request.incumbent = negative
++		check(Bootstrap.create_fresh_session(request, root.get_node("CardDatabase")) == null, "Invalid initial recipe rejected before commands")
++	var request := recipe.duplicate(true)
++	request.incumbent = fixture
++	var valid := Bootstrap.create_fresh_session(request, root.get_node("CardDatabase"))
++	check(valid != null, "Valid historical archive boots")
++	var adapter := StudioCheckpoint.new()
++	var payload := adapter.capture(valid.run)
++	check(not payload.is_empty() and adapter.validate(payload).is_empty(), "Valid opening checkpoint")
++	var restored := adapter.hydrate(payload)
++	check(restored != null and snapshot(restored) == snapshot(valid.run), "Opening checkpoint restores exact archive/state")
++	for id in ["archive-validation:project:1", "archive-validation:project:100", "other:project:1"]:
++		var corrupt := payload.duplicate(true)
++		corrupt.run.historical_titles[0].id = StringName(id)
++		check(not adapter.validate(corrupt).is_empty() and adapter.hydrate(corrupt) == null, "Restored archives reject future/live namespace: " + id)
++	var corrupt := payload.duplicate(true)
++	corrupt.run.historical_titles = []
++	check(not adapter.validate(corrupt).is_empty(), "Empty inconsistent opening rejected at restore")
++	check(adapter.capture(valid.run) == payload, "Rejected restores leave original valid state unchanged")
++	print("Incumbent validation: %d checks, %d failures" % [checks, failures])
++	quit(failures)
+--- base/scripts/debug/verify_incumbent_archive.gd.uid
++++ candidate/scripts/debug/verify_incumbent_archive.gd.uid
+@@ -0,0 +1 @@
++uid://clicritfft5mx
+--- base/scripts/persistence/checkpoint_schema.gd
++++ candidate/scripts/persistence/checkpoint_schema.gd
+@@ -126,6 +126,8 @@
+ 	run.credited_projects = map_of("id",map_of("id","bool"))
+ 	run.released_games = map_of("id",sales())
+ 	run.release_metadata = map_of("id",metadata())
++	run.historical_titles = array_of({"id":"id","title":"text","genre":"id","theme":"id","year":"uint","review_tenths":"uint"})
++	run.opening_snapshot = union_of([{},{"version":"uint","studio_id":"id","year":"uint","cash_cents":"uint","fans":"uint","owned_features":array_of("id"),"research_queue_empty":"bool","familiarity_empty":"bool","historical_title_count":"uint"}])
+ 	run.primitive_contract = optional(contract())
+ 	run.publisher_offers = map_of("id",{"publisher_id":"id","source_release_id":"id","state":optional(contract())})
+ 	run.promotion_awards = map_of("id","uint")
+--- base/scripts/persistence/studio_checkpoint.gd
++++ candidate/scripts/persistence/studio_checkpoint.gd
+@@ -6,8 +6,8 @@
+ const PRE_EDUCATION_RULES := PREVIOUS_RULES + "-fanbase1-starwave1"
+ const PRE_CULT_RULES := "finance6-bank1-employees1-traits6-sales1-contracts3-research1-review2-fanbase1-starwave1-education1"
+ const PRE_CULT20_RULES := "finance6-bank1-employees1-traits7-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult1"
+-const RULES := "finance6-bank1-employees1-traits8-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult2"
+-const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
++const RULES := "finance6-bank1-employees1-traits8-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult2-incumbentarchive2"
++const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_historical_titles","_opening_snapshot","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
+ var error := ""
+ var _revision := ""
+ var _previous_revision := ""
+@@ -152,6 +152,28 @@
+ 	var catalog := RunState.new()
+ 	for id: StringName in r.owned_features:
+ 		if not catalog._feature_definitions.has(id) or not r.owned_features[id]: return "Unknown owned Feature"
++	if r.opening_snapshot.is_empty() != r.historical_titles.is_empty(): return "Incomplete incumbent opening"
++	if not r.opening_snapshot.is_empty():
++		var opening: Dictionary = r.opening_snapshot
++		if opening.version!=1 or opening.studio_id!=value.run_id or opening.year!=RunState.START_YEAR or opening.historical_title_count!=r.historical_titles.size(): return "Invalid incumbent identity"
++		if opening.cash_cents!=RunState.FIRST_STUDIO_CASH_CENTS+int(r.studio_traits.get("point_cash_cents",0))+int(r.studio_traits.get("family_funding_cents",0)) or opening.fans!=StudioTraits.starting_fans(r.studio_traits): return "Invalid incumbent starting resources"
++		if not opening.research_queue_empty or not opening.familiarity_empty: return "Unproven incumbent opening"
++		var opening_owned := {}
++		for id: StringName in opening.owned_features:
++			if opening_owned.has(id) or not r.owned_features.has(id): return "Invalid incumbent Feature snapshot"
++			opening_owned[id] = true
++		for id: StringName in StudioSpecialties.preview(r.studio_specialty).ids:
++			if not opening_owned.has(id): return "Missing incumbent starter Feature"
++		for id: StringName in opening_owned:
++			if not catalog._feature_offers.has(id): continue
++			var parent := StringName(catalog._feature_offers[id].purchase_parent)
++			if not parent.is_empty() and not opening_owned.has(parent): return "Incomplete incumbent Feature chain"
++		var archive_ids := {}
++		for title: Dictionary in r.historical_titles:
++			if ":project:" in String(title.id): return "Reserved live title namespace"
++			if title.year<1 or title.year>=RunState.START_YEAR or title.review_tenths>100 or title.id.is_empty() or title.title.is_empty() or archive_ids.has(title.id) or r.released_games.has(title.id): return "Invalid incumbent archive title"
++			if PrimitivePredevelopment.find_entry("genres",title.genre).is_empty() or PrimitivePredevelopment.find_entry("themes",title.theme).is_empty(): return "Invalid incumbent archive catalog"
++			archive_ids[title.id] = true
+ 	var counts := {}
+ 	for id: StringName in r.credited_projects:
+ 		if not r.released_games.has(id): return "Unreleased familiarity project"
+--- base/scripts/run_state.gd
++++ candidate/scripts/run_state.gd
+@@ -36,6 +36,9 @@
+ var _resourceful_claims: Dictionary = {}
+ var _released_games: Dictionary = {}
+ var _release_metadata: Dictionary = {}
++# Frozen pre-1980 titles are display/history data, never live sales records.
++var _historical_titles: Array = []
++var _opening_snapshot: Dictionary = {}
+ var _productive_cycle_in_progress := false
+ var _committing_cycle_cash := false
+ var _publishing_cycle := false
+--- base/scripts/simulation/campaign_batch.gd
++++ candidate/scripts/simulation/campaign_batch.gd
+@@ -215,7 +215,7 @@
+ 	var releases: Array = []
+ 	for id: StringName in session.run.get_released_game_ids():
+ 		releases.append({"id":str(id),"metadata":session.run.get_release_metadata(id),"sales":session.run.get_released_game_sales(id)})
+-	return {"cash_cents":session.run.get_cash_cents(),"fans":session.run.get_fans(),"calendar":{"year":session.run.get_current_year(),"month":session.run.get_current_month(),"half":session.run.get_current_half(),"label":session.run.get_calendar_label()},"phase":str(session.phase()),"in_studio":session.in_studio,"releases":releases,"finance":session.run.get_studio_finance_report(),"employees":session.run.get_employees(),"owned_features":session.run.get_owned_feature_ids(),"research_queue":session.run.get_feature_research_queue()}
++	return {"cash_cents":session.run.get_cash_cents(),"fans":session.run.get_fans(),"calendar":{"year":session.run.get_current_year(),"month":session.run.get_current_month(),"half":session.run.get_current_half(),"label":session.run.get_calendar_label()},"phase":str(session.phase()),"in_studio":session.in_studio,"releases":releases,"historical_titles":session.run._historical_titles.duplicate(true),"opening_snapshot":session.run._opening_snapshot.duplicate(true),"finance":session.run.get_studio_finance_report(),"employees":session.run.get_employees(),"owned_features":session.run.get_owned_feature_ids(),"research_queue":session.run.get_feature_research_queue()}
+ 
+ static func _completed(session: RefCounted,target: int) -> bool:
+ 	return session.in_studio and session.run.get_released_game_ids().size() >= target
+--- base/scripts/simulation/run_factory.gd
++++ candidate/scripts/simulation/run_factory.gd
+@@ -22,11 +22,48 @@
+ 	run._studio_finance = _replace_identity(run._studio_finance,generated,stable)
+ 	run._bank_run_id = StringName(stable)
+ 	run._employees = EmployeeRoster.create(StringName(stable))
++	if recipe.has("incumbent") and not _apply_incumbent(run,recipe.incumbent): return null
+ 	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = int(recipe.seed)+RunRandom.STREAMS.find(id)
+ 	var snapshots := PrimitiveSnapshotDatabase.new()
+ 	if not snapshots.load_ledgers(): return null
+ 	var session := Session.new()
+ 	return session if session.initialize(run,definitions,snapshots) else null
++
++## Candidate bootstrap only. All post-start activity uses the ordinary commands.
++static func _apply_incumbent(run: RunState, fixture: Variant) -> bool:
++	if not fixture is Dictionary or fixture.size()!=2 or not fixture.get("owned_features") is Array or not fixture.get("historical_titles") is Array: return false
++	if fixture.historical_titles.is_empty(): return false
++	var owned := run._owned_features.duplicate(true)
++	var added := {}
++	for value: Variant in fixture.owned_features:
++		if not value is String or value.is_empty(): return false
++		var id := StringName(value)
++		if added.has(id) or run._owned_features.has(id) or not run._feature_definitions.has(id): return false
++		added[id] = true
++	for id: StringName in added: owned[id] = true
++	for id: StringName in owned:
++		if not run._feature_offers.has(id): continue
++		var parent := StringName(run._feature_offers[id].purchase_parent)
++		if not parent.is_empty() and not owned.has(parent): return false
++	var seen := {}
++	var archive: Array = []
++	for value: Variant in fixture.historical_titles:
++		if not value is Dictionary or value.size()!=6: return false
++		for key in ["id","title","genre","theme"]:
++			if not value.get(key) is String or value[key].is_empty(): return false
++		# Reserve the complete live namespace, including future/other-studio IDs.
++		if ":project:" in value.id: return false
++		if not _whole_in_range(value.get("year"),1,RunState.START_YEAR-1) or not _whole_in_range(value.get("review_tenths"),0,100): return false
++		if seen.has(value.id) or PrimitivePredevelopment.find_entry("genres",StringName(value.genre)).is_empty() or PrimitivePredevelopment.find_entry("themes",StringName(value.theme)).is_empty(): return false
++		seen[value.id] = true
++		archive.append({"id":StringName(value.id),"title":String(value.title),"genre":StringName(value.genre),"theme":StringName(value.theme),"year":int(value.year),"review_tenths":int(value.review_tenths)})
++	run._owned_features = owned
++	run._historical_titles = archive
++	run._opening_snapshot = {"version":1,"studio_id":run._bank_run_id,"year":RunState.START_YEAR,"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"owned_features":run.get_owned_feature_ids(),"research_queue_empty":run._feature_research.is_empty(),"familiarity_empty":run._familiarity.is_empty(),"historical_title_count":archive.size()}
++	return true
++
++static func _whole_in_range(value: Variant, minimum: int, maximum: int) -> bool:
++	return (value is int or value is float) and is_finite(float(value)) and value==int(value) and value>=minimum and value<=maximum
+ 
+ ## Exactly one input boundary. Active development snapshots are not accepted.
+ static func create(initial: Dictionary, definitions: RefCounted) -> RefCounted:

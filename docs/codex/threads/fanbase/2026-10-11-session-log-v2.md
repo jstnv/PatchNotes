@@ -1,0 +1,5 @@
+# Fanbase design session — taper hold v2
+
+2026-10-11, America/Los_Angeles. Shared checkout `main` at `41c87c76fb4d3c06a5332d93f0e7b0997007475d`; concurrent edits preserved. Read CURRENT_STATE, TODO, the prior taper recommendation and near-neutral records; inspected branch, HEAD, status and relevant diffs before editing. The user put the post-600 numerical choice on hold and noted the difficulty of naturally making a Review 5.0 game. Added [versioned hold/neutrality disposition](2026-10-11-post-600-hold-and-neutrality-v1.md) and README pointer. No new simulation: prior constructed exact-5.0 checks and played 4.3 evidence answer different questions, and neither selects a post-600 taper.
+
+Changed files: this new disposition, this new log and this thread's README. Exact checks: `git diff --check` on the README; no gameplay test or candidate route was run. Open: final rates, reach/overlap and post-600 taper choice. No gameplay/source edit, shared TODO update, Drive use, cross-thread message, merge, commit or push.

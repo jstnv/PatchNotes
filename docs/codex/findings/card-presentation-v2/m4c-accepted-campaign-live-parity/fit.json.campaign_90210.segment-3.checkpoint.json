@@ -1,0 +1,3366 @@
+{
+	"accepted_sequence": "54",
+	"engine_version": "4.7.1-stable (official)",
+	"integrity": "e61b611073ac9b8bead378df41977fb7e2c5666aaa957727355023cdef8ade3f",
+	"kind": "campaign_studio",
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "13980fdeb9efabaeb070c8dddddcd8137982e3e073aa43ab87f7fdd1a57c4c4f",
+	"studio_payload": {
+		"checkpoint_kind": "studio",
+		"content_revision": "668990bdd7aafab7ba7c4c064fe1ce04b13f8ba5422669d0bf3c2e580ccb61df",
+		"rng": [
+			{
+				"key": "snapshot",
+				"value": {
+					"seed": "90210",
+					"state": "-4256018454827735296"
+				}
+			},
+			{
+				"key": "review",
+				"value": {
+					"seed": "90211",
+					"state": "-1379647347864420301"
+				}
+			},
+			{
+				"key": "design_deal",
+				"value": {
+					"seed": "90212",
+					"state": "-7230071924046135159"
+				}
+			},
+			{
+				"key": "design_finalize",
+				"value": {
+					"seed": "90213",
+					"state": "-8858836347259930149"
+				}
+			},
+			{
+				"key": "alpha_deal",
+				"value": {
+					"seed": "90214",
+					"state": "357265567259875562"
+				}
+			},
+			{
+				"key": "alpha_finalize",
+				"value": {
+					"seed": "90215",
+					"state": "4309650623105660277"
+				}
+			},
+			{
+				"key": "beta_deal",
+				"value": {
+					"seed": "90216",
+					"state": "-2897408702579479418"
+				}
+			},
+			{
+				"key": "beta_insight",
+				"value": {
+					"seed": "90217",
+					"state": "-2952471641845500178"
+				}
+			},
+			{
+				"key": "contract_deal",
+				"value": {
+					"seed": "90218",
+					"state": "5935119185731202224"
+				}
+			}
+		],
+		"rng_algorithm": "godot-4.7.1-rng-v1",
+		"run": {
+			"available_redraws": "4",
+			"bank_run_id": "campaign_90210",
+			"cash_cents": "331466",
+			"cash_initialized": true,
+			"completed_run_cycles": "19",
+			"credited_projects": [
+				{
+					"key": "campaign_90210:project:1",
+					"value": [
+						{
+							"key": "text",
+							"value": true
+						},
+						{
+							"key": "keyboard_and_mouse",
+							"value": true
+						},
+						{
+							"key": "8_bit_sound",
+							"value": true
+						},
+						{
+							"key": "4_color_palette",
+							"value": true
+						},
+						{
+							"key": "scrolling",
+							"value": true
+						},
+						{
+							"key": "maps",
+							"value": true
+						},
+						{
+							"key": "multiple_endings",
+							"value": true
+						},
+						{
+							"key": "levels",
+							"value": true
+						},
+						{
+							"key": "general_combat",
+							"value": true
+						},
+						{
+							"key": "sound_effects",
+							"value": true
+						},
+						{
+							"key": "enemies",
+							"value": true
+						},
+						{
+							"key": "power_ups",
+							"value": true
+						},
+						{
+							"key": "exploration",
+							"value": true
+						}
+					]
+				},
+				{
+					"key": "campaign_90210:project:2",
+					"value": [
+						{
+							"key": "menu_system",
+							"value": true
+						},
+						{
+							"key": "save_files",
+							"value": true
+						},
+						{
+							"key": "split_screen",
+							"value": true
+						},
+						{
+							"key": "8_bit_sound",
+							"value": true
+						},
+						{
+							"key": "sprites",
+							"value": true
+						},
+						{
+							"key": "scrolling",
+							"value": true
+						},
+						{
+							"key": "enemies",
+							"value": true
+						},
+						{
+							"key": "general_combat",
+							"value": true
+						},
+						{
+							"key": "maps",
+							"value": true
+						},
+						{
+							"key": "multiple_endings",
+							"value": true
+						},
+						{
+							"key": "sound_effects",
+							"value": true
+						},
+						{
+							"key": "power_ups",
+							"value": true
+						},
+						{
+							"key": "exploration",
+							"value": true
+						}
+					]
+				}
+			],
+			"employees": {
+				"employees": [
+					{
+						"key": "campaign_90210:production:1",
+						"value": {
+							"employee_id": "campaign_90210:production:1",
+							"hire_cycle": "7",
+							"owner": "campaign_90210",
+							"projects": [
+								{
+									"key": "campaign_90210:project:2",
+									"value": {
+										"actions": [
+											"campaign_90210:project:2:design:0",
+											"campaign_90210:project:2:design:1",
+											"campaign_90210:project:2:alpha:2",
+											"campaign_90210:project:2:alpha:4"
+										],
+										"trained_action": "campaign_90210:project:2:design:0",
+										"used_action": ""
+									}
+								}
+							],
+							"trained": true,
+							"type": "production"
+						}
+					}
+				],
+				"events": [
+					{
+						"cycle": "7",
+						"employee_id": "campaign_90210:production:1",
+						"type": "hire"
+					},
+					{
+						"before": [
+							{
+								"key": "0",
+								"value": "25"
+							},
+							{
+								"key": "1",
+								"value": "25"
+							},
+							{
+								"key": "2",
+								"value": "25"
+							},
+							{
+								"key": "3",
+								"value": "25"
+							}
+						],
+						"cards": [
+							{
+								"id": "menu_system",
+								"primary": "technology",
+								"secondary": "",
+								"type": "feature"
+							},
+							{
+								"id": "save_files",
+								"primary": "technology",
+								"secondary": "",
+								"type": "feature"
+							},
+							{
+								"id": "split_screen",
+								"primary": "design",
+								"secondary": "technology",
+								"type": "feature"
+							},
+							{
+								"id": "design_pass",
+								"primary": "design",
+								"secondary": "",
+								"type": "pass"
+							}
+						],
+						"cycle": "12",
+						"phase": "design",
+						"project_cycle": "0",
+						"project_id": "campaign_90210:project:2",
+						"proposed": [],
+						"type": "hand"
+					},
+					{
+						"before": [
+							{
+								"key": "0",
+								"value": "25"
+							},
+							{
+								"key": "1",
+								"value": "25"
+							},
+							{
+								"key": "2",
+								"value": "25"
+							},
+							{
+								"key": "3",
+								"value": "25"
+							}
+						],
+						"cards": [
+							{
+								"id": "8_bit_sound",
+								"primary": "sound",
+								"secondary": "",
+								"type": "feature"
+							},
+							{
+								"id": "sprites",
+								"primary": "graphics",
+								"secondary": "",
+								"type": "feature"
+							},
+							{
+								"id": "design_pass",
+								"primary": "design",
+								"secondary": "",
+								"type": "pass"
+							},
+							{
+								"id": "scrolling",
+								"primary": "technology",
+								"secondary": "",
+								"type": "feature"
+							}
+						],
+						"cycle": "13",
+						"phase": "design",
+						"project_cycle": "1",
+						"project_id": "campaign_90210:project:2",
+						"proposed": [],
+						"type": "hand"
+					},
+					{
+						"before": [
+							{
+								"key": "0",
+								"value": "25"
+							},
+							{
+								"key": "1",
+								"value": "25"
+							},
+							{
+								"key": "2",
+								"value": "25"
+							},
+							{
+								"key": "3",
+								"value": "25"
+							}
+						],
+						"cards": [
+							{
+								"id": "design_pass",
+								"primary": "design",
+								"secondary": "",
+								"type": "pass"
+							},
+							{
+								"id": "enemies",
+								"primary": "graphics",
+								"secondary": "technology",
+								"type": "feature"
+							},
+							{
+								"id": "general_combat",
+								"primary": "design",
+								"secondary": "",
+								"type": "feature"
+							},
+							{
+								"id": "maps",
+								"primary": "graphics",
+								"secondary": "technology",
+								"type": "feature"
+							}
+						],
+						"cycle": "14",
+						"phase": "alpha",
+						"project_cycle": "2",
+						"project_id": "campaign_90210:project:2",
+						"proposed": [],
+						"type": "hand"
+					},
+					{
+						"before": [
+							{
+								"key": "0",
+								"value": "25"
+							},
+							{
+								"key": "1",
+								"value": "25"
+							},
+							{
+								"key": "2",
+								"value": "25"
+							},
+							{
+								"key": "3",
+								"value": "25"
+							}
+						],
+						"cards": [
+							{
+								"id": "multiple_endings",
+								"primary": "design",
+								"secondary": "technology",
+								"type": "feature"
+							},
+							{
+								"id": "sound_effects",
+								"primary": "sound",
+								"secondary": "technology",
+								"type": "feature"
+							},
+							{
+								"id": "power_ups",
+								"primary": "sound",
+								"secondary": "technology",
+								"type": "feature"
+							},
+							{
+								"id": "exploration",
+								"primary": "graphics",
+								"secondary": "sound",
+								"type": "feature"
+							}
+						],
+						"cycle": "16",
+						"phase": "alpha",
+						"project_cycle": "4",
+						"project_id": "campaign_90210:project:2",
+						"proposed": [],
+						"type": "hand"
+					}
+				],
+				"owner": "campaign_90210",
+				"schema_version": "1"
+			},
+			"familiarity": [
+				{
+					"key": "text",
+					"value": "1"
+				},
+				{
+					"key": "keyboard_and_mouse",
+					"value": "1"
+				},
+				{
+					"key": "8_bit_sound",
+					"value": "2"
+				},
+				{
+					"key": "4_color_palette",
+					"value": "1"
+				},
+				{
+					"key": "scrolling",
+					"value": "2"
+				},
+				{
+					"key": "maps",
+					"value": "2"
+				},
+				{
+					"key": "multiple_endings",
+					"value": "2"
+				},
+				{
+					"key": "levels",
+					"value": "1"
+				},
+				{
+					"key": "general_combat",
+					"value": "2"
+				},
+				{
+					"key": "sound_effects",
+					"value": "2"
+				},
+				{
+					"key": "enemies",
+					"value": "2"
+				},
+				{
+					"key": "power_ups",
+					"value": "2"
+				},
+				{
+					"key": "exploration",
+					"value": "2"
+				},
+				{
+					"key": "menu_system",
+					"value": "1"
+				},
+				{
+					"key": "save_files",
+					"value": "1"
+				},
+				{
+					"key": "split_screen",
+					"value": "1"
+				},
+				{
+					"key": "sprites",
+					"value": "1"
+				}
+			],
+			"fanbase": {
+				"fans": "0",
+				"last_cycle": "19",
+				"months": [
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "1",
+						"net": "0",
+						"releases": [],
+						"starting": "0"
+					},
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "2",
+						"net": "0",
+						"releases": [],
+						"starting": "0"
+					},
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "3",
+						"net": "0",
+						"releases": [],
+						"starting": "0"
+					},
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "4",
+						"net": "0",
+						"releases": [
+							{
+								"earned_units": "114",
+								"lost_fans": "0",
+								"new_fans": "0",
+								"release_id": "campaign_90210:project:1"
+							}
+						],
+						"starting": "0"
+					},
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "5",
+						"net": "0",
+						"releases": [
+							{
+								"earned_units": "144",
+								"lost_fans": "0",
+								"new_fans": "0",
+								"release_id": "campaign_90210:project:1"
+							}
+						],
+						"starting": "0"
+					},
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "6",
+						"net": "0",
+						"releases": [
+							{
+								"earned_units": "42",
+								"lost_fans": "0",
+								"new_fans": "0",
+								"release_id": "campaign_90210:project:1"
+							}
+						],
+						"starting": "0"
+					},
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "7",
+						"net": "0",
+						"releases": [
+							{
+								"earned_units": "15",
+								"lost_fans": "0",
+								"new_fans": "0",
+								"release_id": "campaign_90210:project:1"
+							}
+						],
+						"starting": "0"
+					},
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "8",
+						"net": "0",
+						"releases": [
+							{
+								"earned_units": "5",
+								"lost_fans": "0",
+								"new_fans": "0",
+								"release_id": "campaign_90210:project:1"
+							}
+						],
+						"starting": "0"
+					},
+					{
+						"ending": "0",
+						"gained": "0",
+						"lost": "0",
+						"month": "9",
+						"net": "0",
+						"releases": [
+							{
+								"earned_units": "2",
+								"lost_fans": "0",
+								"new_fans": "0",
+								"release_id": "campaign_90210:project:1"
+							}
+						],
+						"starting": "0"
+					}
+				],
+				"releases": [
+					{
+						"key": "campaign_90210:project:1",
+						"value": {
+							"accounted_units": "322",
+							"gained": "0",
+							"launch_fans": "0",
+							"loss_exposure_accounted": "0",
+							"lost": "0",
+							"neutral": {
+								"active_awareness_scaled": "62294",
+								"campaign_count": "0",
+								"campaign_months": [],
+								"earned_cycles": "2",
+								"earned_units": "836",
+								"entitlement_cents": "584614",
+								"exhausted": true,
+								"last_processed_run_cycle": "19",
+								"last_settlement_run_cycle": "18",
+								"later_enabled": true,
+								"launch_awareness": "104",
+								"market_bp": "10000",
+								"monthly_units": "11",
+								"organic_awareness_scaled": "62294",
+								"release_id": "campaign_90210:project:1",
+								"review_tenths": "50",
+								"settled_cents": "580419",
+								"total_earned_cycles": "12",
+								"total_units": "542"
+							},
+							"review_tenths": "21"
+						}
+					},
+					{
+						"key": "campaign_90210:project:2",
+						"value": {
+							"accounted_units": "0",
+							"gained": "0",
+							"launch_fans": "0",
+							"loss_exposure_accounted": "0",
+							"lost": "0",
+							"neutral": {
+								"active_awareness_scaled": "0",
+								"campaign_count": "0",
+								"campaign_months": [],
+								"earned_cycles": "0",
+								"earned_units": "0",
+								"entitlement_cents": "0",
+								"exhausted": false,
+								"last_processed_run_cycle": "-1",
+								"last_settlement_run_cycle": "-1",
+								"later_enabled": true,
+								"launch_awareness": "103",
+								"market_bp": "9000",
+								"monthly_units": "0",
+								"organic_awareness_scaled": "0",
+								"release_id": "campaign_90210:project:2",
+								"review_tenths": "50",
+								"settled_cents": "0",
+								"total_earned_cycles": "0",
+								"total_units": "486"
+							},
+							"review_tenths": "20"
+						}
+					}
+				]
+			},
+			"feature_research": [
+				{
+					"actions": "1",
+					"admitted_cycle": "7",
+					"base_cents": "220000",
+					"feature_id": "save_files",
+					"id": "campaign_90210:research:save_files",
+					"payments": [
+						{
+							"cycle": "11",
+							"discount_percent": "0",
+							"nominal_cents": "110000",
+							"paid_cents": "110000",
+							"saving_cents": "0",
+							"window": "1"
+						}
+					]
+				}
+			],
+			"first_game_tutorial": {
+				"first_pool_published": true,
+				"first_stat": "sound",
+				"second_pool_published": true,
+				"second_stat": "technology",
+				"stage": "3"
+			},
+			"first_studio_economy": true,
+			"first_tutorial_project_id": "campaign_90210:project:1",
+			"ironclad_completion_committed": true,
+			"lean_savings": [],
+			"next_project_serial": "3",
+			"owned_features": [
+				{
+					"key": "text",
+					"value": true
+				},
+				{
+					"key": "sprites",
+					"value": true
+				},
+				{
+					"key": "4_color_palette",
+					"value": true
+				},
+				{
+					"key": "8_bit_sound",
+					"value": true
+				},
+				{
+					"key": "keyboard_and_mouse",
+					"value": true
+				},
+				{
+					"key": "controller",
+					"value": true
+				},
+				{
+					"key": "scrolling",
+					"value": true
+				},
+				{
+					"key": "menu_system",
+					"value": true
+				},
+				{
+					"key": "split_screen",
+					"value": true
+				},
+				{
+					"key": "multiple_endings",
+					"value": true
+				},
+				{
+					"key": "controls",
+					"value": true
+				},
+				{
+					"key": "enemies",
+					"value": true
+				},
+				{
+					"key": "power_ups",
+					"value": true
+				},
+				{
+					"key": "general_combat",
+					"value": true
+				},
+				{
+					"key": "levels",
+					"value": true
+				},
+				{
+					"key": "maps",
+					"value": true
+				},
+				{
+					"key": "exploration",
+					"value": true
+				},
+				{
+					"key": "sound_effects",
+					"value": true
+				},
+				{
+					"key": "save_files",
+					"value": true
+				}
+			],
+			"pending_publisher_notifications": [],
+			"primitive_contract": {
+				"contract_id": "balanced_primitive_contract_v1",
+				"cores": [
+					{
+						"key": "0",
+						"value": "12"
+					},
+					{
+						"key": "1",
+						"value": "16"
+					},
+					{
+						"key": "2",
+						"value": "10"
+					},
+					{
+						"key": "3",
+						"value": "22"
+					}
+				],
+				"eligible": [
+					{
+						"key": "text",
+						"value": true
+					},
+					{
+						"key": "sprites",
+						"value": true
+					},
+					{
+						"key": "4_color_palette",
+						"value": true
+					},
+					{
+						"key": "8_bit_sound",
+						"value": true
+					},
+					{
+						"key": "keyboard_and_mouse",
+						"value": true
+					},
+					{
+						"key": "controller",
+						"value": true
+					},
+					{
+						"key": "scrolling",
+						"value": true
+					},
+					{
+						"key": "menu_system",
+						"value": true
+					},
+					{
+						"key": "split_screen",
+						"value": true
+					},
+					{
+						"key": "multiple_endings",
+						"value": true
+					},
+					{
+						"key": "controls",
+						"value": true
+					},
+					{
+						"key": "enemies",
+						"value": true
+					},
+					{
+						"key": "power_ups",
+						"value": true
+					},
+					{
+						"key": "general_combat",
+						"value": true
+					},
+					{
+						"key": "levels",
+						"value": true
+					},
+					{
+						"key": "maps",
+						"value": true
+					},
+					{
+						"key": "exploration",
+						"value": true
+					},
+					{
+						"key": "sound_effects",
+						"value": true
+					}
+				],
+				"exhausted": [
+					{
+						"key": "levels",
+						"value": true
+					},
+					{
+						"key": "8_bit_sound",
+						"value": true
+					},
+					{
+						"key": "4_color_palette",
+						"value": true
+					},
+					{
+						"key": "split_screen",
+						"value": true
+					},
+					{
+						"key": "sound_effects",
+						"value": true
+					},
+					{
+						"key": "exploration",
+						"value": true
+					}
+				],
+				"hands": "2",
+				"neon_focus": "-1",
+				"offer_id": "balanced_primitive_contract_v1",
+				"paid": true,
+				"priorities": [
+					{
+						"key": "0",
+						"value": "40"
+					},
+					{
+						"key": "1",
+						"value": "20"
+					},
+					{
+						"key": "2",
+						"value": "20"
+					},
+					{
+						"key": "3",
+						"value": "20"
+					}
+				],
+				"publisher_connections": false,
+				"result": {
+					"cores": [
+						{
+							"key": "0",
+							"value": "12"
+						},
+						{
+							"key": "1",
+							"value": "16"
+						},
+						{
+							"key": "2",
+							"value": "10"
+						},
+						{
+							"key": "3",
+							"value": "22"
+						}
+					],
+					"denominator": "96",
+					"numerator": "86",
+					"payout": "219166",
+					"promotion": "0",
+					"remainder": "179166",
+					"scope": "10",
+					"upfront": "40000"
+				},
+				"scope": "10",
+				"source_release_id": "",
+				"trial_terms": {},
+				"upfront": true
+			},
+			"promotion_awards": [],
+			"promotion_consumed": [],
+			"publisher_offers": [],
+			"release_metadata": [
+				{
+					"key": "campaign_90210:project:1",
+					"value": {
+						"base_name": "First",
+						"genre": "action",
+						"genre_ratios": [
+							"30",
+							"20",
+							"30",
+							"20"
+						],
+						"release_cycle": "7",
+						"release_title": "First",
+						"release_year": "1980",
+						"review": {
+							"awareness": "104",
+							"competitor_id": "",
+							"competitor_target_cycle": "-1",
+							"cores": [
+								"14",
+								"15",
+								"19",
+								"10"
+							],
+							"development_cycles": "6",
+							"fan_awareness": "0",
+							"final_review": {
+								"f64": "4000cccccccccccd"
+							},
+							"forecast_id": "stable_market",
+							"forecast_multiplier": "1.00",
+							"launch_fans": "0",
+							"launch_marketing": "4",
+							"production_rating": {
+								"f64": "4009c4e6cc58fb18"
+							},
+							"projected_gross_cents": "227772",
+							"projected_net_cents": "159440",
+							"projected_units": "228",
+							"remaining_bugs": "0",
+							"required_scope": "30",
+							"scope": "20",
+							"scope_completion": {
+								"f64": "3fe5555555555555"
+							},
+							"standards": [
+								"40",
+								"26",
+								"40",
+								"26"
+							]
+						},
+						"theme": "fantasy"
+					}
+				},
+				{
+					"key": "campaign_90210:project:2",
+					"value": {
+						"base_name": "Second",
+						"genre": "action",
+						"genre_ratios": [
+							"30",
+							"20",
+							"30",
+							"20"
+						],
+						"release_cycle": "19",
+						"release_title": "Second",
+						"release_year": "1980",
+						"review": {
+							"awareness": "103",
+							"competitor_id": "",
+							"competitor_target_cycle": "-1",
+							"cores": [
+								"13",
+								"9",
+								"30",
+								"19"
+							],
+							"development_cycles": "7",
+							"fan_awareness": "0",
+							"final_review": {
+								"f64": "4000000000000000"
+							},
+							"forecast_id": "",
+							"forecast_multiplier": "",
+							"launch_fans": "0",
+							"launch_marketing": "3",
+							"production_rating": {
+								"f64": "400bf21e525d817b"
+							},
+							"projected_gross_cents": "193806",
+							"projected_net_cents": "135664",
+							"projected_units": "194",
+							"remaining_bugs": "6",
+							"required_scope": "30",
+							"scope": "24",
+							"scope_completion": {
+								"f64": "3fe999999999999a"
+							},
+							"standards": [
+								"40",
+								"26",
+								"40",
+								"26"
+							]
+						},
+						"theme": "fantasy"
+					}
+				}
+			],
+			"released_games": [
+				{
+					"key": "campaign_90210:project:1",
+					"value": {
+						"active_awareness_scaled": "14633",
+						"base_name": "First",
+						"campaign_count": "0",
+						"campaign_months": [],
+						"earned_cycles": "2",
+						"earned_units": "323",
+						"entitlement_cents": "225873",
+						"exhausted": true,
+						"last_processed_run_cycle": "19",
+						"last_settlement_run_cycle": "18",
+						"later_enabled": true,
+						"launch_awareness": "104",
+						"market_bp": "10000",
+						"monthly_units": "1",
+						"organic_awareness_scaled": "14633",
+						"release_id": "campaign_90210:project:1",
+						"release_title": "First",
+						"release_year": "1980",
+						"review_tenths": "21",
+						"settled_cents": "225174",
+						"total_earned_cycles": "12",
+						"total_units": "228"
+					}
+				},
+				{
+					"key": "campaign_90210:project:2",
+					"value": {
+						"active_awareness_scaled": "0",
+						"base_name": "Second",
+						"campaign_count": "0",
+						"campaign_months": [],
+						"earned_cycles": "0",
+						"earned_units": "0",
+						"entitlement_cents": "0",
+						"exhausted": false,
+						"last_processed_run_cycle": "-1",
+						"last_settlement_run_cycle": "-1",
+						"later_enabled": true,
+						"launch_awareness": "103",
+						"market_bp": "9000",
+						"monthly_units": "0",
+						"organic_awareness_scaled": "0",
+						"release_id": "campaign_90210:project:2",
+						"release_title": "Second",
+						"release_year": "1980",
+						"review_tenths": "20",
+						"settled_cents": "0",
+						"total_earned_cycles": "0",
+						"total_units": "194"
+					}
+				}
+			],
+			"resourceful_claims": [],
+			"seen_tutorial_topics": [],
+			"sidestreet_entitlements": [],
+			"sidestreet_results": [],
+			"starter_selection_confirmed": true,
+			"studio_finance": {
+				"actions": [
+					{
+						"cash_before": "550000",
+						"cycle": "0",
+						"direct_delta": "20000",
+						"kind": "financing_in",
+						"productive": false,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "studio_trait_unspent_points_v1"
+					},
+					{
+						"cash_before": "570000",
+						"cycle": "1",
+						"direct_delta": "0",
+						"kind": "development",
+						"productive": true,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"cash_before": "570000",
+						"cycle": "2",
+						"direct_delta": "-19000",
+						"kind": "feature_play",
+						"productive": true,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"cash_before": "501000",
+						"cycle": "3",
+						"direct_delta": "-15000",
+						"kind": "feature_play",
+						"productive": true,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"cash_before": "486000",
+						"cycle": "4",
+						"direct_delta": "-36000",
+						"kind": "feature_play",
+						"productive": true,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"cash_before": "400000",
+						"cycle": "5",
+						"direct_delta": "-22000",
+						"kind": "feature_play",
+						"productive": true,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"cash_before": "378000",
+						"cycle": "6",
+						"direct_delta": "100000",
+						"kind": "beta_income",
+						"productive": true,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"cash_before": "428000",
+						"cycle": "7",
+						"direct_delta": "0",
+						"kind": "beta_income",
+						"productive": true,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"cash_before": "428000",
+						"cycle": "7",
+						"direct_delta": "-10000",
+						"kind": "other_expense",
+						"operation": {
+							"employee_id": "campaign_90210:production:1",
+							"fee_cents": "10000",
+							"first_due_cycle": "10",
+							"hire_cycle": "7",
+							"revision": "8",
+							"run_id": "campaign_90210",
+							"type": "hire",
+							"wage_cents": "1000"
+						},
+						"productive": false,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"cash_before": "418000",
+						"cycle": "7",
+						"direct_delta": "-110000",
+						"kind": "store",
+						"productive": false,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:research:save_files:admit"
+					},
+					{
+						"cash_before": "308000",
+						"cycle": "7",
+						"direct_delta": "40000",
+						"kind": "publisher_receipt",
+						"productive": false,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "balanced_primitive_contract_v1"
+					},
+					{
+						"cash_before": "348000",
+						"cycle": "8",
+						"direct_delta": "0",
+						"kind": "priority_change",
+						"productive": true,
+						"sales_earned": "79720",
+						"settled": "79720",
+						"source_id": "balanced_primitive_contract_v1"
+					},
+					{
+						"cash_before": "377720",
+						"cycle": "9",
+						"direct_delta": "0",
+						"kind": "contract_hand",
+						"productive": true,
+						"sales_earned": "79720",
+						"settled": "0",
+						"source_id": "balanced_primitive_contract_v1"
+					},
+					{
+						"cash_before": "377720",
+						"cycle": "10",
+						"direct_delta": "179166",
+						"kind": "publisher_receipt",
+						"productive": true,
+						"sales_earned": "20979",
+						"settled": "100699",
+						"source_id": "balanced_primitive_contract_v1"
+					},
+					{
+						"cash_before": "606585",
+						"cycle": "10",
+						"direct_delta": "50000",
+						"kind": "financing_in",
+						"operation": {
+							"quote": {
+								"accepted": true,
+								"basis_cents": "90209",
+								"capacity_cents": "9802",
+								"eligible": true,
+								"latest_sales_cents": "100699",
+								"loan_id": "campaign_90210:bank:1",
+								"maximum_principal_cents": "189720",
+								"obligations_cents": "1000",
+								"older_sales_cents": "79720",
+								"quote_id": "campaign_90210:quote:14:50000:24",
+								"reason": "Quote ready. Acceptance adds financing without advancing time.",
+								"rent_cents": "50000",
+								"revision": "14",
+								"run_id": "campaign_90210",
+								"schedule": {
+									"accepted_cycle": "10",
+									"first_due_cycle": "12",
+									"last_due_cycle": "58",
+									"maximum_installment_cents": "2584",
+									"principal_cents": "50000",
+									"schema_version": "1",
+									"term_months": "24",
+									"total_interest_cents": "6248",
+									"total_payment_cents": "56248"
+								}
+							},
+							"type": "accept"
+						},
+						"productive": false,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"cash_before": "656585",
+						"cycle": "11",
+						"direct_delta": "-110000",
+						"kind": "store",
+						"productive": true,
+						"sales_earned": "21678",
+						"settled": "0",
+						"source_id": "campaign_90210:research:save_files:0"
+					},
+					{
+						"cash_before": "546585",
+						"cycle": "12",
+						"direct_delta": "0",
+						"kind": "development",
+						"productive": true,
+						"sales_earned": "7693",
+						"settled": "29371",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"cash_before": "522372",
+						"cycle": "13",
+						"direct_delta": "-24000",
+						"kind": "feature_play",
+						"productive": true,
+						"sales_earned": "7692",
+						"settled": "0",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"cash_before": "498372",
+						"cycle": "14",
+						"direct_delta": "-31000",
+						"kind": "feature_play",
+						"productive": true,
+						"sales_earned": "2797",
+						"settled": "10489",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"cash_before": "424298",
+						"cycle": "15",
+						"direct_delta": "-27000",
+						"kind": "feature_play",
+						"productive": true,
+						"sales_earned": "2797",
+						"settled": "0",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"cash_before": "397298",
+						"cycle": "16",
+						"direct_delta": "0",
+						"kind": "playtest",
+						"productive": true,
+						"sales_earned": "700",
+						"settled": "3497",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"cash_before": "347253",
+						"cycle": "17",
+						"direct_delta": "-22000",
+						"kind": "feature_play",
+						"productive": true,
+						"sales_earned": "1398",
+						"settled": "0",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"cash_before": "325253",
+						"cycle": "18",
+						"direct_delta": "0",
+						"kind": "beta_income",
+						"productive": true,
+						"sales_earned": "0",
+						"settled": "1398",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"cash_before": "273130",
+						"cycle": "19",
+						"direct_delta": "100000",
+						"kind": "beta_income",
+						"productive": true,
+						"sales_earned": "699",
+						"settled": "0",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"cash_before": "373130",
+						"cycle": "19",
+						"direct_delta": "0",
+						"kind": "calendar",
+						"operation": {
+							"interest_cents": "0",
+							"loan_id": "campaign_90210:bank:1",
+							"principal_cents": "41664",
+							"revision": "24",
+							"total_cents": "41664",
+							"type": "payoff"
+						},
+						"productive": false,
+						"sales_earned": "0",
+						"settled": "0",
+						"source_id": "campaign_90210:bank:1"
+					}
+				],
+				"bank_loans": [
+					{
+						"closed": true,
+						"closed_cycle": "19",
+						"early_payoff": true,
+						"interest_paid_cents": "1874",
+						"issued": "4",
+						"loan_id": "campaign_90210:bank:1",
+						"principal_paid_cents": "50000",
+						"quote_id": "campaign_90210:quote:14:50000:24",
+						"run_id": "campaign_90210",
+						"schedule": {
+							"accepted_cycle": "10",
+							"first_due_cycle": "12",
+							"last_due_cycle": "58",
+							"maximum_installment_cents": "2584",
+							"principal_cents": "50000",
+							"schema_version": "1",
+							"term_months": "24",
+							"total_interest_cents": "6248",
+							"total_payment_cents": "56248"
+						}
+					}
+				],
+				"cash_cents": "331466",
+				"credit": {
+					"history": [
+						{
+							"after": "600",
+							"before": "600",
+							"change": "0",
+							"cycle": "2",
+							"month": "1",
+							"operating_profit_cents": "-69000",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "0",
+									"type": "paid_no_profit"
+								}
+							],
+							"requested_change": "0"
+						},
+						{
+							"after": "600",
+							"before": "600",
+							"change": "0",
+							"cycle": "4",
+							"month": "2",
+							"operating_profit_cents": "-101000",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "0",
+									"type": "paid_no_profit"
+								}
+							],
+							"requested_change": "0"
+						},
+						{
+							"after": "603",
+							"before": "600",
+							"change": "3",
+							"cycle": "6",
+							"month": "3",
+							"operating_profit_cents": "28000",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "3",
+									"type": "clean_profit"
+								}
+							],
+							"requested_change": "3"
+						},
+						{
+							"after": "603",
+							"before": "603",
+							"change": "0",
+							"cycle": "8",
+							"month": "4",
+							"operating_profit_cents": "-50280",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "0",
+									"type": "paid_no_profit"
+								}
+							],
+							"requested_change": "0"
+						},
+						{
+							"after": "606",
+							"before": "603",
+							"change": "3",
+							"cycle": "10",
+							"month": "5",
+							"operating_profit_cents": "228865",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "3",
+									"type": "clean_profit"
+								}
+							],
+							"requested_change": "3"
+						},
+						{
+							"after": "606",
+							"before": "606",
+							"change": "0",
+							"cycle": "12",
+							"month": "6",
+							"operating_profit_cents": "-132129",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "0",
+									"type": "paid_no_profit"
+								}
+							],
+							"requested_change": "0"
+						},
+						{
+							"after": "606",
+							"before": "606",
+							"change": "0",
+							"cycle": "14",
+							"month": "7",
+							"operating_profit_cents": "-95990",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "0",
+									"type": "paid_no_profit"
+								}
+							],
+							"requested_change": "0"
+						},
+						{
+							"after": "606",
+							"before": "606",
+							"change": "0",
+							"cycle": "16",
+							"month": "8",
+							"operating_profit_cents": "-74961",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "0",
+									"type": "paid_no_profit"
+								}
+							],
+							"requested_change": "0"
+						},
+						{
+							"after": "606",
+							"before": "606",
+							"change": "0",
+							"cycle": "18",
+							"month": "9",
+							"operating_profit_cents": "-72039",
+							"policy_version": "typed_expenses_v1",
+							"reasons": [
+								{
+									"points": "0",
+									"type": "paid_no_profit"
+								}
+							],
+							"requested_change": "0"
+						}
+					],
+					"last_processed_month": "9",
+					"policy_version": "typed_expenses_v1",
+					"score": "606"
+				},
+				"education": {},
+				"employees": [
+					{
+						"employee_id": "campaign_90210:production:1",
+						"first_due_cycle": "10",
+						"hire_cycle": "7",
+						"issued": "5",
+						"wage_cents": "1000"
+					}
+				],
+				"initial_cash_cents": "550000",
+				"last_cycle": "19",
+				"monthly_rent_cents": "50000",
+				"monthly_rows": [
+					{
+						"beta_income_cents": "0",
+						"campaign_cents": "0",
+						"cash_change_cents": "501000",
+						"closing_cash_cents": "501000",
+						"feature_play_cents": "19000",
+						"financing_in_cents": "570000",
+						"interest_cents": "0",
+						"interest_paid_cents": "0",
+						"miscellaneous_income_cents": "0",
+						"month": "1",
+						"net_profit_cents": "-69000",
+						"opening_cash_cents": "0",
+						"operating_expenses_cents": "69000",
+						"operating_revenue_cents": "0",
+						"other_expense_cents": "0",
+						"other_income_cents": "0",
+						"partial": false,
+						"payroll_due_cents": "0",
+						"payroll_paid_cents": "0",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "0",
+						"publisher_income_cents": "0",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "0",
+						"sales_settled_cents": "0",
+						"store_cents": "0"
+					},
+					{
+						"beta_income_cents": "0",
+						"campaign_cents": "0",
+						"cash_change_cents": "-101000",
+						"closing_cash_cents": "400000",
+						"feature_play_cents": "51000",
+						"financing_in_cents": "0",
+						"interest_cents": "0",
+						"interest_paid_cents": "0",
+						"miscellaneous_income_cents": "0",
+						"month": "2",
+						"net_profit_cents": "-101000",
+						"opening_cash_cents": "501000",
+						"operating_expenses_cents": "101000",
+						"operating_revenue_cents": "0",
+						"other_expense_cents": "0",
+						"other_income_cents": "0",
+						"partial": false,
+						"payroll_due_cents": "0",
+						"payroll_paid_cents": "0",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "0",
+						"publisher_income_cents": "0",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "0",
+						"sales_settled_cents": "0",
+						"store_cents": "0"
+					},
+					{
+						"beta_income_cents": "100000",
+						"campaign_cents": "0",
+						"cash_change_cents": "28000",
+						"closing_cash_cents": "428000",
+						"feature_play_cents": "22000",
+						"financing_in_cents": "0",
+						"interest_cents": "0",
+						"interest_paid_cents": "0",
+						"miscellaneous_income_cents": "0",
+						"month": "3",
+						"net_profit_cents": "28000",
+						"opening_cash_cents": "400000",
+						"operating_expenses_cents": "72000",
+						"operating_revenue_cents": "100000",
+						"other_expense_cents": "0",
+						"other_income_cents": "100000",
+						"partial": false,
+						"payroll_due_cents": "0",
+						"payroll_paid_cents": "0",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "0",
+						"publisher_income_cents": "0",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "0",
+						"sales_settled_cents": "0",
+						"store_cents": "0"
+					},
+					{
+						"beta_income_cents": "0",
+						"campaign_cents": "0",
+						"cash_change_cents": "-50280",
+						"closing_cash_cents": "377720",
+						"feature_play_cents": "0",
+						"financing_in_cents": "0",
+						"interest_cents": "0",
+						"interest_paid_cents": "0",
+						"miscellaneous_income_cents": "0",
+						"month": "4",
+						"net_profit_cents": "-50280",
+						"opening_cash_cents": "428000",
+						"operating_expenses_cents": "170000",
+						"operating_revenue_cents": "119720",
+						"other_expense_cents": "10000",
+						"other_income_cents": "40000",
+						"partial": false,
+						"payroll_due_cents": "0",
+						"payroll_paid_cents": "0",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "0",
+						"publisher_income_cents": "40000",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "79720",
+						"sales_settled_cents": "79720",
+						"store_cents": "110000"
+					},
+					{
+						"beta_income_cents": "0",
+						"campaign_cents": "0",
+						"cash_change_cents": "228865",
+						"closing_cash_cents": "606585",
+						"feature_play_cents": "0",
+						"financing_in_cents": "0",
+						"interest_cents": "0",
+						"interest_paid_cents": "0",
+						"miscellaneous_income_cents": "0",
+						"month": "5",
+						"net_profit_cents": "228865",
+						"opening_cash_cents": "377720",
+						"operating_expenses_cents": "51000",
+						"operating_revenue_cents": "279865",
+						"other_expense_cents": "0",
+						"other_income_cents": "179166",
+						"partial": false,
+						"payroll_due_cents": "1000",
+						"payroll_paid_cents": "1000",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "0",
+						"publisher_income_cents": "179166",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "100699",
+						"sales_settled_cents": "100699",
+						"store_cents": "0"
+					},
+					{
+						"beta_income_cents": "0",
+						"campaign_cents": "0",
+						"cash_change_cents": "-84213",
+						"closing_cash_cents": "522372",
+						"feature_play_cents": "0",
+						"financing_in_cents": "50000",
+						"interest_cents": "500",
+						"interest_paid_cents": "500",
+						"miscellaneous_income_cents": "0",
+						"month": "6",
+						"net_profit_cents": "-132129",
+						"opening_cash_cents": "606585",
+						"operating_expenses_cents": "161500",
+						"operating_revenue_cents": "29371",
+						"other_expense_cents": "0",
+						"other_income_cents": "0",
+						"partial": false,
+						"payroll_due_cents": "1000",
+						"payroll_paid_cents": "1000",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "2084",
+						"publisher_income_cents": "0",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "29371",
+						"sales_settled_cents": "29371",
+						"store_cents": "110000"
+					},
+					{
+						"beta_income_cents": "0",
+						"campaign_cents": "0",
+						"cash_change_cents": "-98074",
+						"closing_cash_cents": "424298",
+						"feature_play_cents": "55000",
+						"financing_in_cents": "0",
+						"interest_cents": "479",
+						"interest_paid_cents": "479",
+						"miscellaneous_income_cents": "0",
+						"month": "7",
+						"net_profit_cents": "-95990",
+						"opening_cash_cents": "522372",
+						"operating_expenses_cents": "106479",
+						"operating_revenue_cents": "10489",
+						"other_expense_cents": "0",
+						"other_income_cents": "0",
+						"partial": false,
+						"payroll_due_cents": "1000",
+						"payroll_paid_cents": "1000",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "2084",
+						"publisher_income_cents": "0",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "10489",
+						"sales_settled_cents": "10489",
+						"store_cents": "0"
+					},
+					{
+						"beta_income_cents": "0",
+						"campaign_cents": "0",
+						"cash_change_cents": "-77045",
+						"closing_cash_cents": "347253",
+						"feature_play_cents": "27000",
+						"financing_in_cents": "0",
+						"interest_cents": "458",
+						"interest_paid_cents": "458",
+						"miscellaneous_income_cents": "0",
+						"month": "8",
+						"net_profit_cents": "-74961",
+						"opening_cash_cents": "424298",
+						"operating_expenses_cents": "78458",
+						"operating_revenue_cents": "3497",
+						"other_expense_cents": "0",
+						"other_income_cents": "0",
+						"partial": false,
+						"payroll_due_cents": "1000",
+						"payroll_paid_cents": "1000",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "2084",
+						"publisher_income_cents": "0",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "3497",
+						"sales_settled_cents": "3497",
+						"store_cents": "0"
+					},
+					{
+						"beta_income_cents": "0",
+						"campaign_cents": "0",
+						"cash_change_cents": "-74123",
+						"closing_cash_cents": "273130",
+						"feature_play_cents": "22000",
+						"financing_in_cents": "0",
+						"interest_cents": "437",
+						"interest_paid_cents": "437",
+						"miscellaneous_income_cents": "0",
+						"month": "9",
+						"net_profit_cents": "-72039",
+						"opening_cash_cents": "347253",
+						"operating_expenses_cents": "73437",
+						"operating_revenue_cents": "1398",
+						"other_expense_cents": "0",
+						"other_income_cents": "0",
+						"partial": false,
+						"payroll_due_cents": "1000",
+						"payroll_paid_cents": "1000",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "2084",
+						"publisher_income_cents": "0",
+						"rent_due_cents": "50000",
+						"rent_paid_cents": "50000",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "1398",
+						"sales_settled_cents": "1398",
+						"store_cents": "0"
+					},
+					{
+						"beta_income_cents": "100000",
+						"campaign_cents": "0",
+						"cash_change_cents": "58336",
+						"closing_cash_cents": "331466",
+						"feature_play_cents": "0",
+						"financing_in_cents": "0",
+						"interest_cents": "0",
+						"interest_paid_cents": "0",
+						"miscellaneous_income_cents": "0",
+						"month": "10",
+						"net_profit_cents": "100699",
+						"opening_cash_cents": "273130",
+						"operating_expenses_cents": "0",
+						"operating_revenue_cents": "100699",
+						"other_expense_cents": "0",
+						"other_income_cents": "100000",
+						"partial": true,
+						"payroll_due_cents": "0",
+						"payroll_paid_cents": "0",
+						"payroll_unpaid_cents": "0",
+						"playtest_cents": "0",
+						"principal_paid_cents": "41664",
+						"publisher_income_cents": "0",
+						"rent_due_cents": "0",
+						"rent_paid_cents": "0",
+						"rent_unpaid_cents": "0",
+						"sales_net_earned_cents": "699",
+						"sales_settled_cents": "0",
+						"store_cents": "0"
+					}
+				],
+				"obligations": [
+					{
+						"bill_id": "rent:1",
+						"due_cents": "50000",
+						"due_cycle": "2",
+						"expense_type": "rent",
+						"late": false,
+						"month": "1",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "2",
+								"month": "1"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "2",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "rent:2",
+						"due_cents": "50000",
+						"due_cycle": "4",
+						"expense_type": "rent",
+						"late": false,
+						"month": "2",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "4",
+								"month": "2"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "4",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "rent:3",
+						"due_cents": "50000",
+						"due_cycle": "6",
+						"expense_type": "rent",
+						"late": false,
+						"month": "3",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "6",
+								"month": "3"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "6",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "rent:4",
+						"due_cents": "50000",
+						"due_cycle": "8",
+						"expense_type": "rent",
+						"late": false,
+						"month": "4",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "8",
+								"month": "4"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "8",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "rent:5",
+						"due_cents": "50000",
+						"due_cycle": "10",
+						"expense_type": "rent",
+						"late": false,
+						"month": "5",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "10",
+								"month": "5"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "10",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:production:1:payroll:5",
+						"due_cents": "1000",
+						"due_cycle": "10",
+						"expense_type": "payroll",
+						"late": false,
+						"month": "5",
+						"paid_cents": "1000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "1000",
+								"cycle": "10",
+								"month": "5"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "10",
+						"source_id": "campaign_90210:production:1",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "rent:6",
+						"due_cents": "50000",
+						"due_cycle": "12",
+						"expense_type": "rent",
+						"late": false,
+						"month": "6",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "12",
+								"month": "6"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "12",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:production:1:payroll:6",
+						"due_cents": "1000",
+						"due_cycle": "12",
+						"expense_type": "payroll",
+						"late": false,
+						"month": "6",
+						"paid_cents": "1000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "1000",
+								"cycle": "12",
+								"month": "6"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "12",
+						"source_id": "campaign_90210:production:1",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:bank:1:1",
+						"due_cents": "2584",
+						"due_cycle": "12",
+						"expense_type": "bank_installment",
+						"interest_cents": "500",
+						"interest_paid_cents": "500",
+						"late": false,
+						"month": "6",
+						"paid_cents": "2584",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "2584",
+								"cycle": "12",
+								"month": "6"
+							}
+						],
+						"principal_cents": "2084",
+						"principal_paid_cents": "2084",
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "12",
+						"source_id": "campaign_90210:bank:1",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "rent:7",
+						"due_cents": "50000",
+						"due_cycle": "14",
+						"expense_type": "rent",
+						"late": false,
+						"month": "7",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "14",
+								"month": "7"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "14",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:production:1:payroll:7",
+						"due_cents": "1000",
+						"due_cycle": "14",
+						"expense_type": "payroll",
+						"late": false,
+						"month": "7",
+						"paid_cents": "1000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "1000",
+								"cycle": "14",
+								"month": "7"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "14",
+						"source_id": "campaign_90210:production:1",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:bank:1:2",
+						"due_cents": "2563",
+						"due_cycle": "14",
+						"expense_type": "bank_installment",
+						"interest_cents": "479",
+						"interest_paid_cents": "479",
+						"late": false,
+						"month": "7",
+						"paid_cents": "2563",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "2563",
+								"cycle": "14",
+								"month": "7"
+							}
+						],
+						"principal_cents": "2084",
+						"principal_paid_cents": "2084",
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "14",
+						"source_id": "campaign_90210:bank:1",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "rent:8",
+						"due_cents": "50000",
+						"due_cycle": "16",
+						"expense_type": "rent",
+						"late": false,
+						"month": "8",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "16",
+								"month": "8"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "16",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:production:1:payroll:8",
+						"due_cents": "1000",
+						"due_cycle": "16",
+						"expense_type": "payroll",
+						"late": false,
+						"month": "8",
+						"paid_cents": "1000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "1000",
+								"cycle": "16",
+								"month": "8"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "16",
+						"source_id": "campaign_90210:production:1",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:bank:1:3",
+						"due_cents": "2542",
+						"due_cycle": "16",
+						"expense_type": "bank_installment",
+						"interest_cents": "458",
+						"interest_paid_cents": "458",
+						"late": false,
+						"month": "8",
+						"paid_cents": "2542",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "2542",
+								"cycle": "16",
+								"month": "8"
+							}
+						],
+						"principal_cents": "2084",
+						"principal_paid_cents": "2084",
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "16",
+						"source_id": "campaign_90210:bank:1",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "rent:9",
+						"due_cents": "50000",
+						"due_cycle": "18",
+						"expense_type": "rent",
+						"late": false,
+						"month": "9",
+						"paid_cents": "50000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "50000",
+								"cycle": "18",
+								"month": "9"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "18",
+						"source_id": "studio_rent",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:production:1:payroll:9",
+						"due_cents": "1000",
+						"due_cycle": "18",
+						"expense_type": "payroll",
+						"late": false,
+						"month": "9",
+						"paid_cents": "1000",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "1000",
+								"cycle": "18",
+								"month": "9"
+							}
+						],
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "18",
+						"source_id": "campaign_90210:production:1",
+						"unpaid_cents": "0"
+					},
+					{
+						"bill_id": "campaign_90210:bank:1:4",
+						"due_cents": "2521",
+						"due_cycle": "18",
+						"expense_type": "bank_installment",
+						"interest_cents": "437",
+						"interest_paid_cents": "437",
+						"late": false,
+						"month": "9",
+						"paid_cents": "2521",
+						"paid_on_time": true,
+						"payments": [
+							{
+								"cents": "2521",
+								"cycle": "18",
+								"month": "9"
+							}
+						],
+						"principal_cents": "2084",
+						"principal_paid_cents": "2084",
+						"recovery_overdue_cycles": "0",
+						"settled_cycle": "18",
+						"source_id": "campaign_90210:bank:1",
+						"unpaid_cents": "0"
+					}
+				],
+				"schema_version": "6",
+				"transactions": [
+					{
+						"amount_cents": "550000",
+						"cash_after_cents": "550000",
+						"cash_before_cents": "0",
+						"cash_delta_cents": "550000",
+						"cycle": "0",
+						"due_month": "0",
+						"kind": "starting_funding",
+						"month": "1",
+						"sequence": "1",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "20000",
+						"cash_after_cents": "570000",
+						"cash_before_cents": "550000",
+						"cash_delta_cents": "20000",
+						"cycle": "0",
+						"due_month": "0",
+						"kind": "financing_in",
+						"month": "1",
+						"sequence": "2",
+						"source_id": "studio_trait_unspent_points_v1"
+					},
+					{
+						"amount_cents": "0",
+						"cash_after_cents": "570000",
+						"cash_before_cents": "570000",
+						"cash_delta_cents": "0",
+						"cycle": "1",
+						"due_month": "0",
+						"kind": "development",
+						"month": "1",
+						"sequence": "3",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"amount_cents": "19000",
+						"cash_after_cents": "551000",
+						"cash_before_cents": "570000",
+						"cash_delta_cents": "-19000",
+						"cycle": "2",
+						"due_month": "0",
+						"kind": "feature_play",
+						"month": "1",
+						"sequence": "4",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "551000",
+						"cash_before_cents": "551000",
+						"cash_delta_cents": "0",
+						"cycle": "2",
+						"due_month": "1",
+						"kind": "rent_due",
+						"month": "1",
+						"sequence": "5",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "501000",
+						"cash_before_cents": "551000",
+						"cash_delta_cents": "-50000",
+						"cycle": "2",
+						"due_month": "1",
+						"kind": "rent_payment",
+						"month": "1",
+						"sequence": "6",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "15000",
+						"cash_after_cents": "486000",
+						"cash_before_cents": "501000",
+						"cash_delta_cents": "-15000",
+						"cycle": "3",
+						"due_month": "0",
+						"kind": "feature_play",
+						"month": "2",
+						"sequence": "7",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"amount_cents": "36000",
+						"cash_after_cents": "450000",
+						"cash_before_cents": "486000",
+						"cash_delta_cents": "-36000",
+						"cycle": "4",
+						"due_month": "0",
+						"kind": "feature_play",
+						"month": "2",
+						"sequence": "8",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "450000",
+						"cash_before_cents": "450000",
+						"cash_delta_cents": "0",
+						"cycle": "4",
+						"due_month": "2",
+						"kind": "rent_due",
+						"month": "2",
+						"sequence": "9",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "400000",
+						"cash_before_cents": "450000",
+						"cash_delta_cents": "-50000",
+						"cycle": "4",
+						"due_month": "2",
+						"kind": "rent_payment",
+						"month": "2",
+						"sequence": "10",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "22000",
+						"cash_after_cents": "378000",
+						"cash_before_cents": "400000",
+						"cash_delta_cents": "-22000",
+						"cycle": "5",
+						"due_month": "0",
+						"kind": "feature_play",
+						"month": "3",
+						"sequence": "11",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"amount_cents": "100000",
+						"cash_after_cents": "478000",
+						"cash_before_cents": "378000",
+						"cash_delta_cents": "100000",
+						"cycle": "6",
+						"due_month": "0",
+						"kind": "beta_income",
+						"month": "3",
+						"sequence": "12",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "478000",
+						"cash_before_cents": "478000",
+						"cash_delta_cents": "0",
+						"cycle": "6",
+						"due_month": "3",
+						"kind": "rent_due",
+						"month": "3",
+						"sequence": "13",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "428000",
+						"cash_before_cents": "478000",
+						"cash_delta_cents": "-50000",
+						"cycle": "6",
+						"due_month": "3",
+						"kind": "rent_payment",
+						"month": "3",
+						"sequence": "14",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "0",
+						"cash_after_cents": "428000",
+						"cash_before_cents": "428000",
+						"cash_delta_cents": "0",
+						"cycle": "7",
+						"due_month": "0",
+						"kind": "beta_income",
+						"month": "4",
+						"sequence": "15",
+						"source_id": "campaign_90210:project:1"
+					},
+					{
+						"amount_cents": "10000",
+						"cash_after_cents": "418000",
+						"cash_before_cents": "428000",
+						"cash_delta_cents": "-10000",
+						"cycle": "7",
+						"due_month": "0",
+						"kind": "other_expense",
+						"month": "4",
+						"sequence": "16",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "110000",
+						"cash_after_cents": "308000",
+						"cash_before_cents": "418000",
+						"cash_delta_cents": "-110000",
+						"cycle": "7",
+						"due_month": "0",
+						"kind": "store",
+						"month": "4",
+						"sequence": "17",
+						"source_id": "campaign_90210:research:save_files:admit"
+					},
+					{
+						"amount_cents": "40000",
+						"cash_after_cents": "348000",
+						"cash_before_cents": "308000",
+						"cash_delta_cents": "40000",
+						"cycle": "7",
+						"due_month": "0",
+						"kind": "publisher_receipt",
+						"month": "4",
+						"sequence": "18",
+						"source_id": "balanced_primitive_contract_v1"
+					},
+					{
+						"amount_cents": "0",
+						"cash_after_cents": "348000",
+						"cash_before_cents": "348000",
+						"cash_delta_cents": "0",
+						"cycle": "8",
+						"due_month": "0",
+						"kind": "priority_change",
+						"month": "4",
+						"sequence": "19",
+						"source_id": "balanced_primitive_contract_v1"
+					},
+					{
+						"amount_cents": "79720",
+						"cash_after_cents": "348000",
+						"cash_before_cents": "348000",
+						"cash_delta_cents": "0",
+						"cycle": "8",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "4",
+						"sequence": "20",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "79720",
+						"cash_after_cents": "427720",
+						"cash_before_cents": "348000",
+						"cash_delta_cents": "79720",
+						"cycle": "8",
+						"due_month": "0",
+						"kind": "sales_settlement",
+						"month": "4",
+						"sequence": "21",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "427720",
+						"cash_before_cents": "427720",
+						"cash_delta_cents": "0",
+						"cycle": "8",
+						"due_month": "4",
+						"kind": "rent_due",
+						"month": "4",
+						"sequence": "22",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "377720",
+						"cash_before_cents": "427720",
+						"cash_delta_cents": "-50000",
+						"cycle": "8",
+						"due_month": "4",
+						"kind": "rent_payment",
+						"month": "4",
+						"sequence": "23",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "0",
+						"cash_after_cents": "377720",
+						"cash_before_cents": "377720",
+						"cash_delta_cents": "0",
+						"cycle": "9",
+						"due_month": "0",
+						"kind": "contract_hand",
+						"month": "5",
+						"sequence": "24",
+						"source_id": "balanced_primitive_contract_v1"
+					},
+					{
+						"amount_cents": "79720",
+						"cash_after_cents": "377720",
+						"cash_before_cents": "377720",
+						"cash_delta_cents": "0",
+						"cycle": "9",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "5",
+						"sequence": "25",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "179166",
+						"cash_after_cents": "556886",
+						"cash_before_cents": "377720",
+						"cash_delta_cents": "179166",
+						"cycle": "10",
+						"due_month": "0",
+						"kind": "publisher_receipt",
+						"month": "5",
+						"sequence": "26",
+						"source_id": "balanced_primitive_contract_v1"
+					},
+					{
+						"amount_cents": "20979",
+						"cash_after_cents": "556886",
+						"cash_before_cents": "556886",
+						"cash_delta_cents": "0",
+						"cycle": "10",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "5",
+						"sequence": "27",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "100699",
+						"cash_after_cents": "657585",
+						"cash_before_cents": "556886",
+						"cash_delta_cents": "100699",
+						"cycle": "10",
+						"due_month": "0",
+						"kind": "sales_settlement",
+						"month": "5",
+						"sequence": "28",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "657585",
+						"cash_before_cents": "657585",
+						"cash_delta_cents": "0",
+						"cycle": "10",
+						"due_month": "5",
+						"kind": "rent_due",
+						"month": "5",
+						"sequence": "29",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "657585",
+						"cash_before_cents": "657585",
+						"cash_delta_cents": "0",
+						"cycle": "10",
+						"due_month": "5",
+						"kind": "payroll_due",
+						"month": "5",
+						"sequence": "30",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "607585",
+						"cash_before_cents": "657585",
+						"cash_delta_cents": "-50000",
+						"cycle": "10",
+						"due_month": "5",
+						"kind": "rent_payment",
+						"month": "5",
+						"sequence": "31",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "606585",
+						"cash_before_cents": "607585",
+						"cash_delta_cents": "-1000",
+						"cycle": "10",
+						"due_month": "5",
+						"kind": "payroll_payment",
+						"month": "5",
+						"sequence": "32",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "656585",
+						"cash_before_cents": "606585",
+						"cash_delta_cents": "50000",
+						"cycle": "10",
+						"due_month": "0",
+						"kind": "financing_in",
+						"month": "6",
+						"sequence": "33",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "110000",
+						"cash_after_cents": "546585",
+						"cash_before_cents": "656585",
+						"cash_delta_cents": "-110000",
+						"cycle": "11",
+						"due_month": "0",
+						"kind": "store",
+						"month": "6",
+						"sequence": "34",
+						"source_id": "campaign_90210:research:save_files:0"
+					},
+					{
+						"amount_cents": "21678",
+						"cash_after_cents": "546585",
+						"cash_before_cents": "546585",
+						"cash_delta_cents": "0",
+						"cycle": "11",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "6",
+						"sequence": "35",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "0",
+						"cash_after_cents": "546585",
+						"cash_before_cents": "546585",
+						"cash_delta_cents": "0",
+						"cycle": "12",
+						"due_month": "0",
+						"kind": "development",
+						"month": "6",
+						"sequence": "36",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"amount_cents": "7693",
+						"cash_after_cents": "546585",
+						"cash_before_cents": "546585",
+						"cash_delta_cents": "0",
+						"cycle": "12",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "6",
+						"sequence": "37",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "29371",
+						"cash_after_cents": "575956",
+						"cash_before_cents": "546585",
+						"cash_delta_cents": "29371",
+						"cycle": "12",
+						"due_month": "0",
+						"kind": "sales_settlement",
+						"month": "6",
+						"sequence": "38",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "575956",
+						"cash_before_cents": "575956",
+						"cash_delta_cents": "0",
+						"cycle": "12",
+						"due_month": "6",
+						"kind": "rent_due",
+						"month": "6",
+						"sequence": "39",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "575956",
+						"cash_before_cents": "575956",
+						"cash_delta_cents": "0",
+						"cycle": "12",
+						"due_month": "6",
+						"kind": "payroll_due",
+						"month": "6",
+						"sequence": "40",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "500",
+						"cash_after_cents": "575956",
+						"cash_before_cents": "575956",
+						"cash_delta_cents": "0",
+						"cycle": "12",
+						"due_month": "6",
+						"kind": "bank_interest_due",
+						"month": "6",
+						"sequence": "41",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "525956",
+						"cash_before_cents": "575956",
+						"cash_delta_cents": "-50000",
+						"cycle": "12",
+						"due_month": "6",
+						"kind": "rent_payment",
+						"month": "6",
+						"sequence": "42",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "524956",
+						"cash_before_cents": "525956",
+						"cash_delta_cents": "-1000",
+						"cycle": "12",
+						"due_month": "6",
+						"kind": "payroll_payment",
+						"month": "6",
+						"sequence": "43",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "2584",
+						"cash_after_cents": "522372",
+						"cash_before_cents": "524956",
+						"cash_delta_cents": "-2584",
+						"cycle": "12",
+						"due_month": "6",
+						"kind": "bank_payment",
+						"month": "6",
+						"sequence": "44",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "24000",
+						"cash_after_cents": "498372",
+						"cash_before_cents": "522372",
+						"cash_delta_cents": "-24000",
+						"cycle": "13",
+						"due_month": "0",
+						"kind": "feature_play",
+						"month": "7",
+						"sequence": "45",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"amount_cents": "7692",
+						"cash_after_cents": "498372",
+						"cash_before_cents": "498372",
+						"cash_delta_cents": "0",
+						"cycle": "13",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "7",
+						"sequence": "46",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "31000",
+						"cash_after_cents": "467372",
+						"cash_before_cents": "498372",
+						"cash_delta_cents": "-31000",
+						"cycle": "14",
+						"due_month": "0",
+						"kind": "feature_play",
+						"month": "7",
+						"sequence": "47",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"amount_cents": "2797",
+						"cash_after_cents": "467372",
+						"cash_before_cents": "467372",
+						"cash_delta_cents": "0",
+						"cycle": "14",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "7",
+						"sequence": "48",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "10489",
+						"cash_after_cents": "477861",
+						"cash_before_cents": "467372",
+						"cash_delta_cents": "10489",
+						"cycle": "14",
+						"due_month": "0",
+						"kind": "sales_settlement",
+						"month": "7",
+						"sequence": "49",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "477861",
+						"cash_before_cents": "477861",
+						"cash_delta_cents": "0",
+						"cycle": "14",
+						"due_month": "7",
+						"kind": "rent_due",
+						"month": "7",
+						"sequence": "50",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "477861",
+						"cash_before_cents": "477861",
+						"cash_delta_cents": "0",
+						"cycle": "14",
+						"due_month": "7",
+						"kind": "payroll_due",
+						"month": "7",
+						"sequence": "51",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "479",
+						"cash_after_cents": "477861",
+						"cash_before_cents": "477861",
+						"cash_delta_cents": "0",
+						"cycle": "14",
+						"due_month": "7",
+						"kind": "bank_interest_due",
+						"month": "7",
+						"sequence": "52",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "427861",
+						"cash_before_cents": "477861",
+						"cash_delta_cents": "-50000",
+						"cycle": "14",
+						"due_month": "7",
+						"kind": "rent_payment",
+						"month": "7",
+						"sequence": "53",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "426861",
+						"cash_before_cents": "427861",
+						"cash_delta_cents": "-1000",
+						"cycle": "14",
+						"due_month": "7",
+						"kind": "payroll_payment",
+						"month": "7",
+						"sequence": "54",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "2563",
+						"cash_after_cents": "424298",
+						"cash_before_cents": "426861",
+						"cash_delta_cents": "-2563",
+						"cycle": "14",
+						"due_month": "7",
+						"kind": "bank_payment",
+						"month": "7",
+						"sequence": "55",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "27000",
+						"cash_after_cents": "397298",
+						"cash_before_cents": "424298",
+						"cash_delta_cents": "-27000",
+						"cycle": "15",
+						"due_month": "0",
+						"kind": "feature_play",
+						"month": "8",
+						"sequence": "56",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"amount_cents": "2797",
+						"cash_after_cents": "397298",
+						"cash_before_cents": "397298",
+						"cash_delta_cents": "0",
+						"cycle": "15",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "8",
+						"sequence": "57",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "0",
+						"cash_after_cents": "397298",
+						"cash_before_cents": "397298",
+						"cash_delta_cents": "0",
+						"cycle": "16",
+						"due_month": "0",
+						"kind": "playtest",
+						"month": "8",
+						"sequence": "58",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"amount_cents": "700",
+						"cash_after_cents": "397298",
+						"cash_before_cents": "397298",
+						"cash_delta_cents": "0",
+						"cycle": "16",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "8",
+						"sequence": "59",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "3497",
+						"cash_after_cents": "400795",
+						"cash_before_cents": "397298",
+						"cash_delta_cents": "3497",
+						"cycle": "16",
+						"due_month": "0",
+						"kind": "sales_settlement",
+						"month": "8",
+						"sequence": "60",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "400795",
+						"cash_before_cents": "400795",
+						"cash_delta_cents": "0",
+						"cycle": "16",
+						"due_month": "8",
+						"kind": "rent_due",
+						"month": "8",
+						"sequence": "61",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "400795",
+						"cash_before_cents": "400795",
+						"cash_delta_cents": "0",
+						"cycle": "16",
+						"due_month": "8",
+						"kind": "payroll_due",
+						"month": "8",
+						"sequence": "62",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "458",
+						"cash_after_cents": "400795",
+						"cash_before_cents": "400795",
+						"cash_delta_cents": "0",
+						"cycle": "16",
+						"due_month": "8",
+						"kind": "bank_interest_due",
+						"month": "8",
+						"sequence": "63",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "350795",
+						"cash_before_cents": "400795",
+						"cash_delta_cents": "-50000",
+						"cycle": "16",
+						"due_month": "8",
+						"kind": "rent_payment",
+						"month": "8",
+						"sequence": "64",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "349795",
+						"cash_before_cents": "350795",
+						"cash_delta_cents": "-1000",
+						"cycle": "16",
+						"due_month": "8",
+						"kind": "payroll_payment",
+						"month": "8",
+						"sequence": "65",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "2542",
+						"cash_after_cents": "347253",
+						"cash_before_cents": "349795",
+						"cash_delta_cents": "-2542",
+						"cycle": "16",
+						"due_month": "8",
+						"kind": "bank_payment",
+						"month": "8",
+						"sequence": "66",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "22000",
+						"cash_after_cents": "325253",
+						"cash_before_cents": "347253",
+						"cash_delta_cents": "-22000",
+						"cycle": "17",
+						"due_month": "0",
+						"kind": "feature_play",
+						"month": "9",
+						"sequence": "67",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"amount_cents": "1398",
+						"cash_after_cents": "325253",
+						"cash_before_cents": "325253",
+						"cash_delta_cents": "0",
+						"cycle": "17",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "9",
+						"sequence": "68",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "0",
+						"cash_after_cents": "325253",
+						"cash_before_cents": "325253",
+						"cash_delta_cents": "0",
+						"cycle": "18",
+						"due_month": "0",
+						"kind": "beta_income",
+						"month": "9",
+						"sequence": "69",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"amount_cents": "1398",
+						"cash_after_cents": "326651",
+						"cash_before_cents": "325253",
+						"cash_delta_cents": "1398",
+						"cycle": "18",
+						"due_month": "0",
+						"kind": "sales_settlement",
+						"month": "9",
+						"sequence": "70",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "326651",
+						"cash_before_cents": "326651",
+						"cash_delta_cents": "0",
+						"cycle": "18",
+						"due_month": "9",
+						"kind": "rent_due",
+						"month": "9",
+						"sequence": "71",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "326651",
+						"cash_before_cents": "326651",
+						"cash_delta_cents": "0",
+						"cycle": "18",
+						"due_month": "9",
+						"kind": "payroll_due",
+						"month": "9",
+						"sequence": "72",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "437",
+						"cash_after_cents": "326651",
+						"cash_before_cents": "326651",
+						"cash_delta_cents": "0",
+						"cycle": "18",
+						"due_month": "9",
+						"kind": "bank_interest_due",
+						"month": "9",
+						"sequence": "73",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "50000",
+						"cash_after_cents": "276651",
+						"cash_before_cents": "326651",
+						"cash_delta_cents": "-50000",
+						"cycle": "18",
+						"due_month": "9",
+						"kind": "rent_payment",
+						"month": "9",
+						"sequence": "74",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "1000",
+						"cash_after_cents": "275651",
+						"cash_before_cents": "276651",
+						"cash_delta_cents": "-1000",
+						"cycle": "18",
+						"due_month": "9",
+						"kind": "payroll_payment",
+						"month": "9",
+						"sequence": "75",
+						"source_id": "campaign_90210:production:1"
+					},
+					{
+						"amount_cents": "2521",
+						"cash_after_cents": "273130",
+						"cash_before_cents": "275651",
+						"cash_delta_cents": "-2521",
+						"cycle": "18",
+						"due_month": "9",
+						"kind": "bank_payment",
+						"month": "9",
+						"sequence": "76",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "100000",
+						"cash_after_cents": "373130",
+						"cash_before_cents": "273130",
+						"cash_delta_cents": "100000",
+						"cycle": "19",
+						"due_month": "0",
+						"kind": "beta_income",
+						"month": "10",
+						"sequence": "77",
+						"source_id": "campaign_90210:project:2"
+					},
+					{
+						"amount_cents": "699",
+						"cash_after_cents": "373130",
+						"cash_before_cents": "373130",
+						"cash_delta_cents": "0",
+						"cycle": "19",
+						"due_month": "0",
+						"kind": "sales_earned",
+						"month": "10",
+						"sequence": "78",
+						"source_id": ""
+					},
+					{
+						"amount_cents": "0",
+						"cash_after_cents": "373130",
+						"cash_before_cents": "373130",
+						"cash_delta_cents": "0",
+						"cycle": "19",
+						"due_month": "0",
+						"kind": "calendar",
+						"month": "10",
+						"sequence": "79",
+						"source_id": "campaign_90210:bank:1"
+					},
+					{
+						"amount_cents": "41664",
+						"cash_after_cents": "331466",
+						"cash_before_cents": "373130",
+						"cash_delta_cents": "-41664",
+						"cycle": "19",
+						"due_month": "0",
+						"kind": "bank_payoff",
+						"month": "10",
+						"sequence": "80",
+						"source_id": "campaign_90210:bank:1"
+					}
+				],
+				"unsettled_sales_net_cents": "699"
+			},
+			"studio_name": "Live parity",
+			"studio_specialty": "action",
+			"studio_traits": {
+				"active_ids": [],
+				"effects_mode": "approved_effects_v1",
+				"family_funding_cents": "0",
+				"point_cash_cents": "20000",
+				"reason": "",
+				"refunded_points": "0",
+				"remaining_points": "4",
+				"spent_points": "0",
+				"starting_points": "4",
+				"trait_ids": [],
+				"valid": true,
+				"version": "7"
+			},
+			"unlocked_publishers": [
+				{
+					"key": "ironclad",
+					"value": true
+				},
+				{
+					"key": "sidestreet",
+					"value": true
+				}
+			]
+		},
+		"run_id": "campaign_90210",
+		"sequence": "1",
+		"source_build": "studio-checkpoint-runtime-v1"
+	}
+}

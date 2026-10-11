@@ -1,0 +1,206 @@
+{
+	"accepted_commands": 36,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"tape": "replay.tape.json"
+	},
+	"case_id": "pilot-0030",
+	"commands": 36,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "",
+	"final_release_count": 2,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4451"
+			},
+			"state": {
+				"integer": "-2326277455069549451"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4452"
+			},
+			"state": {
+				"integer": "-6881528785875674866"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4453"
+			},
+			"state": {
+				"integer": "-4036713533277755061"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4454"
+			},
+			"state": {
+				"integer": "-8007534087910476812"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4455"
+			},
+			"state": {
+				"integer": "-8749349896363802195"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4449"
+			},
+			"state": {
+				"integer": "7821916770380623628"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4450"
+			},
+			"state": {
+				"integer": "-1603271682531713676"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4448"
+			},
+			"state": {
+				"integer": "417320499533785684"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4447"
+			},
+			"state": {
+				"integer": "-5844721015987909623"
+			}
+		}
+	},
+	"final_run_cycle": 14,
+	"final_state": "dea1663aa5e0a97e4ddafcbb0de2bac1ed3bda08ccda0221eeb2a4d19c49b28e",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4451"
+			},
+			"state": {
+				"integer": "2687593355668129017"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4452"
+			},
+			"state": {
+				"integer": "9051729579514922022"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4453"
+			},
+			"state": {
+				"integer": "-3030878270347836589"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4454"
+			},
+			"state": {
+				"integer": "3333257953498956416"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4455"
+			},
+			"state": {
+				"integer": "-8749349896363802195"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4449"
+			},
+			"state": {
+				"integer": "8406064981684094623"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4450"
+			},
+			"state": {
+				"integer": "-3676542868178663988"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4448"
+			},
+			"state": {
+				"integer": "2041928757837301618"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4447"
+			},
+			"state": {
+				"integer": "-4322207466009491387"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "cea27814ef43663688d37e70412c23a5574d883db28782ed63d808d2e0ea159b",
+	"input_identity": "a087a12352c572e548589c8c56d3713f8724bea9e8552032578a526949a245df",
+	"last_choice": {
+		"type": "launch"
+	},
+	"max_commands": 60,
+	"ok": true,
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"float_bits": "0300000000000040"
+				},
+				"beta": {
+					"float_bits": "0300000000000040"
+				},
+				"design": {
+					"float_bits": "0300000000000040"
+				}
+			},
+			"name_prefix": "Pilot",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 14,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "430763c166550fd44499f4eda5b72c915a07f910633c87cc47e95229c72693c8",
+	"status": "completed",
+	"tape_identity": "ed6dd6f29fd3414cb61031bc7e10674d57bca782b0c1da039c95e22af6912602",
+	"target_release_count": 2
+}

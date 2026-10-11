@@ -1,0 +1,9 @@
+# Bounded neutral settlement continuation — 2026-10-09
+
+Predeclared after exact native Review5.0 was found on the second original search (seed1104,3/3/4), and explicitly authorized by parent. Preserve original PLAN, its ten matched launch records, and all original profiles/checkpoints. No extra neutral searches and no Review writes.
+
+For each of the ten matched builds, copy its completed profile into a fresh continuation profile, restore the actual final checkpoint through CheckpointCoordinator, and verify its exact payload hash before progress. Use the two genuine first-Ironclad hands via the inherited legal route helper, preserving all RNG streams and frozen release state. This is the initial two productive cycles of the available contract, not a free time advance. Record both cycles, real earned/settled sales, full Fan/finance state and a new `neutral-earned` Studio checkpoint. Inspect that checkpoint in one additional fresh process with exact payload, duplicate-creation and seed-corruption checks. Stop on any failure; no cash injections or mutated launch inputs.
+
+The first launch is at cycle11, so those hands reach cycles12/13: one calendar settlement/Fan boundary and the complete two-cycle Month1 earned entitlement (its second settlement is not yet due until cycle14). Distinguish earned and settled values. NormalFan mechanics must leave total Fans equal to the single initial seed across both earned halves at exact5.0. No-sale and other strict endpoints already have40 fresh-process checks.
+
+Candidate scripts run headlessly. Explicit checkpoint stores bind isolated port47846; preassigned game.run_state prevents gameplay from creating its default port62741 coordinator. No Computer Use, visible app or main gameplay edit. Original source/driver manifests stay immutable; continuation uses separate driver/manifests.

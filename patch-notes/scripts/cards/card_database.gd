@@ -278,11 +278,10 @@ func get_owned_features_for_phase(run: RunState, phase: StringName) -> Array[Car
 ## New projects retain their creation-time supply through all phases. A later
 ## Studio purchase never changes a project that has already begun development.
 func get_project_features_for_phase(project: ProjectState, phase: StringName) -> Array[CardData]:
-	if project == null or not project.has_predevelopment_identity():
-		return get_cards_by_phase_and_types(phase, [&"feature"] as Array[StringName])
-	var result: Array[CardData] = []
-	for id: StringName in project.get_feature_supply_ids():
-		var card := get_card(id)
-		if card != null and card.card_type == &"feature" and card.phase == phase:
-			result.append(card)
-	return result
+	return get_development_catalog().get_project_features_for_phase(project,phase)
+
+
+func get_development_catalog() -> RefCounted:
+	var additional: Array[CardData] = []
+	additional.assign(_store_cards.values())
+	return preload("res://scripts/simulation/development_catalog.gd").new(get_all_cards(),additional)

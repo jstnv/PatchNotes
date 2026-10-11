@@ -10,6 +10,7 @@ signal card_step(index: int, event: String)
 const CARD_SCENE := preload("res://scenes/cards/card_view.tscn")
 const BPM := 140.0
 const BEAT_SECONDS := 60.0 / BPM
+const SPECIALIZATION_LEAD_BEATS := 1
 const SPECIALIZATION_BEATS := 4
 const SPECIALIZATION_SECONDS := BEAT_SECONDS * SPECIALIZATION_BEATS
 const CORE := [&"graphics", &"sound", &"technology", &"design"]
@@ -28,21 +29,67 @@ var _restore: Callable
 var _prior_focus: Control
 var _sources: Array = []
 var _specialization := false
+var _balanced := false
+var _balanced_deltas: Dictionary = {}
 var _bonus_timeline: Array[Dictionary] = []
 var capturing := false
 var _specialization_header: Callable
+# Injectable clock for deterministic presentation verification; runtime uses music.
+var clock_source: Callable
+var _music_driven := false
+var _music_cursor := 0.0
+var _first_beat := 0
+var _play_sound: AudioStreamPlayer
+var _remove_sound: AudioStreamPlayer
+var _bonus_labels: Array[Dictionary] = []
 
-func note_specialization(header: Callable) -> void:
+func _music_seconds() -> float:
+	if clock_source.is_valid(): return float(clock_source.call())
+	return get_node("/root/Soundtrack").presentation_seconds()
+
+func _process(_delta: float) -> void:
+	if is_instance_valid(_play_sound):
+		var paused: bool = get_node("/root/Soundtrack").manually_paused
+		_play_sound.stream_paused = paused
+		_remove_sound.stream_paused = paused
+	if not _music_driven or not busy: return
+	advance_music(_music_seconds())
+
+func advance_music(now: float) -> void:
+	if not _music_driven or not busy: return
+	var elapsed := maxf(0.0, now - _music_cursor)
+	_music_cursor = maxf(_music_cursor, now)
+	if elapsed > 0.0 and _tween != null and _tween.is_valid():
+		_tween.custom_step(elapsed)
+	for effect in _bonus_labels:
+		if not is_instance_valid(effect.label): continue
+		var age: float = maxf(0.0, now - effect.started)
+		effect.label.position.y = lerpf(90.0, 65.0, minf(1.0, age / (BEAT_SECONDS / 2.0)))
+		effect.label.modulate.a = 1.0 - clampf((age - BEAT_SECONDS / 2.0) / BEAT_SECONDS, 0.0, 1.0)
+
+
+func note_specialization(header: Callable, balanced := false) -> void:
 	if capturing:
 		_specialization = true
+		_balanced = balanced
 		_specialization_header = header
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	z_index = 100
 	focus_mode = Control.FOCUS_ALL
+	_play_sound = _sound_player("res://assets/audio/card_sfx/card_play.wav", -5.0)
+	_remove_sound = _sound_player("res://assets/audio/card_sfx/card_whoosh.wav", -3.0)
 	hide()
 	resized.connect(func(): if busy: cancel())
+
+func _sound_player(path: String, volume: float) -> AudioStreamPlayer:
+	var player := AudioStreamPlayer.new()
+	player.stream = load(path)
+	player.bus = &"SFX"
+	player.volume_db = volume
+	add_child(player)
+	return player
 
 func _gui_input(_event: InputEvent) -> void:
 	if busy: accept_event()
@@ -56,6 +103,8 @@ func play(kind: String, fan: Control, selected: Array, action: Callable, snapsho
 	_restore = restore
 	trace.clear()
 	_specialization = false
+	_balanced = false
+	_balanced_deltas.clear()
 	_sources = fan.ordered_cards() if fan is CardFan else fan.get_children()
 	# Capture the old pool before the authoritative action replaces/frees it.
 	for source: CardView in _sources:
@@ -102,6 +151,16 @@ func play(kind: String, fan: Control, selected: Array, action: Callable, snapsho
 			bonus[key] = extra
 			_timeline[i][key] -= extra
 		_bonus_timeline.append(bonus)
+	if _balanced:
+		# Show printed card gains first, then one signed redistribution. The
+		# authoritative action has already committed exactly once above.
+		for key in CORE:
+			var printed := 0
+			for i in range(_cards.size()):
+				var amount := _weight(_cards[i], key)
+				_timeline[i][key] = amount
+				printed += amount
+			_balanced_deltas[key] = int(after[key]) - int(before[key]) - printed
 	busy_changed.emit()
 	_animate(kind)
 	return true
@@ -142,7 +201,11 @@ static func build_timeline(cards: Array[CardData], before: Dictionary, after: Di
 	return rows
 
 func _animate(kind: String) -> void:
+	_music_cursor = _music_seconds()
+	_first_beat = ceili((_music_cursor + BEAT_SECONDS) / BEAT_SECONDS)
+	_music_driven = true
 	_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).set_parallel()
+	_tween.pause()
 	var center := size / 2.0
 	var scale_value := minf(0.68, (size.x - 70.0) / (_hand.size() * 258.0))
 	var remaining := _ghosts.filter(func(card): return card not in _hand)
@@ -162,10 +225,12 @@ func _animate(kind: String) -> void:
 			_tween.tween_property(ghost, "modulate:a", 0.65, BEAT_SECONDS)
 	_tween.chain().tween_callback(func(): _record(-1, "centered"))
 	if kind == "redraw":
+		_tween.chain().tween_callback(_record.bind(-1, "redraw_exit"))
 		_tween.chain()
 		for ghost in _hand:
 			_tween.parallel().tween_property(ghost, "position:x", size.x + 260.0 + _hand.find(ghost) * 150.0, BEAT_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	else:
+		_tween.chain().tween_interval(maxf(0.0, _first_beat * BEAT_SECONDS - _music_cursor - BEAT_SECONDS))
 		for i in range(_hand.size()):
 			var ghost := _hand[i]
 			_tween.chain().tween_callback(_record.bind(i, "rise"))
@@ -173,21 +238,29 @@ func _animate(kind: String) -> void:
 			_tween.chain().tween_callback(_score_card.bind(i))
 			_tween.chain().tween_property(ghost, "position:y", 28.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
 			_tween.chain().tween_callback(_record.bind(i, "grounded"))
-		if _specialization:
+		if _balanced:
 			_tween.chain().tween_callback(_begin_specialization)
+			_tween.chain().tween_interval(SPECIALIZATION_LEAD_BEATS * BEAT_SECONDS)
+			_tween.chain().tween_callback(_redistribute_balanced)
+			_tween.chain().tween_interval(BEAT_SECONDS)
+		elif _specialization:
+			_tween.chain().tween_callback(_begin_specialization)
+			_tween.chain().tween_interval(SPECIALIZATION_LEAD_BEATS * BEAT_SECONDS)
 			for i in range(_hand.size()):
 				_tween.chain().tween_callback(_record.bind(i, "bonus_rise"))
 				_tween.chain().tween_property(_hand[i], "position:y", -28.0, BEAT_SECONDS / 2.0).as_relative()
 				_tween.chain().tween_callback(_score_bonus.bind(i))
 				_tween.chain().tween_property(_hand[i], "position:y", 28.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
+				_tween.chain().tween_callback(_record.bind(i, "bonus_grounded"))
 			_tween.chain().tween_callback(_record.bind(-1, "specialization_complete"))
-		# A purely visual victory wave after every resolved score/bonus is shown.
-		for i in range(_hand.size()):
-			var ghost := _hand[i]
-			_tween.chain().tween_callback(_record.bind(i, "exit_bounce"))
-			_tween.chain().tween_property(ghost, "position:y", -22.0, BEAT_SECONDS / 2.0).as_relative()
-			_tween.chain().tween_property(ghost, "position:y", 22.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
-			_tween.chain().tween_callback(_record.bind(i, "exit_grounded"))
+		if not _specialization:
+			# A purely visual victory wave after every resolved score/bonus is shown.
+			for i in range(_hand.size()):
+				var ghost := _hand[i]
+				_tween.chain().tween_callback(_record.bind(i, "exit_bounce"))
+				_tween.chain().tween_property(ghost, "position:y", -22.0, BEAT_SECONDS / 2.0).as_relative()
+				_tween.chain().tween_property(ghost, "position:y", 22.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
+				_tween.chain().tween_callback(_record.bind(i, "exit_grounded"))
 		_tween.chain().tween_callback(_record.bind(-1, "exit_slide"))
 		_tween.chain()
 		for ghost in _hand:
@@ -195,6 +268,7 @@ func _animate(kind: String) -> void:
 	_tween.chain().tween_callback(_return_fan)
 
 func _return_fan() -> void:
+	_music_driven = false
 	if not is_instance_valid(_fan):
 		_clear()
 		return
@@ -282,14 +356,38 @@ func _score_bonus(index: int) -> void:
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_hand[index].add_child(label)
 		label.position = Vector2(8, 90)
-		var pop := label.create_tween().set_parallel()
-		pop.tween_property(label, "position:y", 65.0, BEAT_SECONDS / 2.0)
-		pop.tween_property(label, "modulate:a", 0.0, BEAT_SECONDS).set_delay(BEAT_SECONDS / 2.0)
+		_bonus_labels.append({"label":label, "started":(_first_beat + _hand.size() + SPECIALIZATION_LEAD_BEATS + index + 0.5) * BEAT_SECONDS})
 	_record(index, "bonus")
 
 func _record(index: int, event: String) -> void:
-	trace.append({"index": index, "event": event, "msec": Time.get_ticks_msec()})
+	var beat := -1.0
+	var count := _hand.size()
+	match event:
+		"rise": beat = _first_beat + index
+		"score": beat = _first_beat + index + 0.5
+		"grounded": beat = _first_beat + index + 1.0
+		"bonus_rise": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS + index
+		"bonus": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS + index + 0.5
+		"bonus_grounded": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS + index + 1.0
+		"specialization_started": beat = _first_beat + count
+		"specialization_complete": beat = _first_beat + 2 * count + SPECIALIZATION_LEAD_BEATS
+		"balanced_redistributed": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS
+		"exit_slide": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS + 1 if _balanced else _first_beat + 2 * count + (SPECIALIZATION_LEAD_BEATS if _specialization else 0)
+		"exit_bounce": beat = _first_beat + count * (2 if _specialization else 1) + index
+		"exit_grounded": beat = _first_beat + count * (2 if _specialization else 1) + index + 1.0
+	var now := _music_seconds()
+	# Suppress stale audio bursts after a long frame.
+	if event in ["score", "bonus"] and now - beat * BEAT_SECONDS < 0.12: _play_sound.play()
+	if event in ["exit_slide", "redraw_exit"]: _remove_sound.play()
+	trace.append({"index": index, "event": event, "msec": Time.get_ticks_msec(),
+		"beat_index": beat, "scheduled_seconds": beat * BEAT_SECONDS,
+		"music_seconds": now, "lateness_seconds": now - beat * BEAT_SECONDS if beat >= 0 else 0.0})
 	card_step.emit(index, event)
+
+func _redistribute_balanced() -> void:
+	for key in _balanced_deltas: display_values[key] += _balanced_deltas[key]
+	if _update.is_valid(): _update.call(display_values.duplicate(), _balanced_deltas.duplicate())
+	_record(-1, "balanced_redistributed")
 
 func _score_card(index: int) -> void:
 	var deltas: Dictionary = _timeline[index]
@@ -298,6 +396,8 @@ func _score_card(index: int) -> void:
 	_record(index, "score")
 
 func cancel() -> void:
+	if is_instance_valid(_play_sound): _play_sound.stop()
+	if is_instance_valid(_remove_sound): _remove_sound.stop()
 	if _tween != null and _tween.is_valid(): _tween.kill()
 	_clear()
 
@@ -305,6 +405,7 @@ func _exit_tree() -> void:
 	if busy: cancel()
 
 func _clear(restore_organization := true) -> void:
+	_music_driven = false
 	var was_busy := busy
 	busy = false
 	action_kind = ""
@@ -318,6 +419,9 @@ func _clear(restore_organization := true) -> void:
 	_cards.clear()
 	_timeline.clear()
 	_bonus_timeline.clear()
+	_bonus_labels.clear()
+	_balanced_deltas.clear()
+	_balanced = false
 	_specialization_header = Callable()
 	_sources.clear()
 	if is_instance_valid(_fan):

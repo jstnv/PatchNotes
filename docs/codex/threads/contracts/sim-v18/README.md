@@ -1,0 +1,5 @@
+# V18 starter-buy Crown screen
+
+The [predeclaration](PREDECLARATION.md) fixed source, seeds, shopping rule, route policy and stop criteria before the first attempt. [Findings](../FINDINGS-v18-crown-starter-purchase-screen.md) summarize the four successful primary attempts. [Independent audit](audit-summary.json) passed 105,371 checks. Each attempt folder contains `command.json`, `attempt.json`, `godot.log`, `native-route.json` and `source-after.json`; successful routes also preserve before-Starwave checkpoints. No fallback ran because all four primaries succeeded.
+
+Run the bundled Python 3.12+ interpreter on `run.py` with `prepare`, `import`, `attempt <specialty> 1104`, and `verify` in that order. The runner refuses to overwrite files and validates the frozen native-v3 source, disposable copy and analysis driver before/after each stage. `audit.py --output <new-file>` independently checks the saved routes; it never runs or edits gameplay. The copy path and exact selected source hash are in `source-manifest.json`.

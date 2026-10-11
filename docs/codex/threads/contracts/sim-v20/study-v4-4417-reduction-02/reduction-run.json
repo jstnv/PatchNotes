@@ -1,0 +1,45 @@
+{
+  "format": "patch-notes-failure-reduction-v1",
+  "ok": true,
+  "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sim-v20\\study-v4-run-01",
+  "case": "sports-4417-prefix-v4",
+  "kind": "rejection",
+  "created_utc": "2026-10-11T11:27:08.607849+00:00",
+  "tool_sha256": "1b734f622302590839e511c8f85490729763d01f29f4d13776253b43fa514a37",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "input_hashes": {
+    "case.variant.json": "1ae8a7d080af9a939cce4bd0af89f8e512ece304075153f8d44b589300842716",
+    "replay.tape.json": "d69917326d763b18d71a4a97850b79333cdd1655cb34c9b7cc6d92a0009c6c47",
+    "result.json": "eca1eee35feef60f46dc3bd498845267fb0aad30a9591d43b70c7b6a14bf3863"
+  },
+  "original_status": "rejected_policy_action",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "reduction": {
+    "attempts": [
+      {
+        "reproduced": true,
+        "start_step": 3
+      }
+    ],
+    "first_failure_step": 22,
+    "kind": "rejection",
+    "minimality": "Shortest reproducing suffix among preceding exact-restorable Studio boundaries; no arbitrary command deletion or global minimality claim",
+    "ok": true,
+    "original_commands": 23,
+    "reduced_commands": 20,
+    "reduced_failure_step": 19,
+    "removed_prefix_commands": 3,
+    "removed_tail_commands": 0,
+    "signature": {
+      "actual_result": "dddee906cef916028ea9f51b3f72a57df2add64a364e1b7e21cd932c2d9ce51c",
+      "actual_state": "dfda9e6f1fccad29bdb3962aa7b15f2324ce9b6177b81b5d0caf563ecc7c9b05",
+      "command_type": "development",
+      "detail": {
+        "error": "The run calendar cannot advance safely."
+      },
+      "kind": "rejection",
+      "request_digest": "ea937a27ecfeef05577de9cba166bb935f1ff2ffe87fd46bd5fce9def7170e0c"
+    }
+  },
+  "fresh_process_confirmation": true
+}

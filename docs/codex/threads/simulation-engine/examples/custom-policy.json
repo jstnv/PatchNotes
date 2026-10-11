@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "policy": {"script": "custom-policy.gd", "id": "example-delegating-test-policy", "version": "1"},
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "custom-90210",
+      "initial": {"recipe": {"schema_version": 1, "studio_id": "example-custom-90210", "studio_name": "Custom Test Studio", "specialty": "action", "traits": [], "seed": "90210"}},
+      "max_commands": 100,
+      "target_release_count": 2,
+      "policy": {"config": {"genre": "action", "theme": "fantasy", "name_prefix": "Custom Release", "selection": "features_first", "hands": {"design": 2, "alpha": 2, "beta": 2}}}
+    }
+  ]
+}

@@ -1,5 +1,15 @@
 # Banking System handoff to the implementing thread
 
+**Latest design review, 2026-10-11:** The [paid-Feature/Bank handoff](HANDOFF-SPENDING-BANK-v1.md) records six source-pinned Store routes with on-time first education dues and two matched Graduate `$500/12-month` quotes rejected for zero sales capacity. It is DESIGN evidence only; no gameplay adoption candidate or new balance ruling.
+
+**Education E1–E4 status, 2026-10-10:** Implemented locally by the main thread. The [Banking review](2026-10-09-education-implementation-review-v1.md) reconciles the accepted native, restart, migration and 104-suite headless gate evidence. Actual exported Education/Bank/Continue/installment/payoff interaction [passes on the pinned build](2026-10-10-export-acceptance-continuation-v1.md); later whole-source and integrated acceptance remain separate. The historical brief below records the original handoff state.
+
+**Historical deferred design, before activation:** The [Studio Traits handoff intake](2026-10-09-education-handoff-intake-v1.md) records the approved future rent → payroll → mixed Bank/education original-due order. [Explicit payoff reserves](2026-10-09-education-payoff-reserve-decision-v1.md) and [saved inactive-preview treatment](2026-10-09-education-preview-migration-decision-v1.md) are also approved. At the time of that B3–B5 brief, education debt was inactive; the later E1–E4 implementation supersedes that status.
+
+**Historical queue contribution:** [Education debt activation E1–E4](2026-10-09-education-activation-handoff-v1.md) was added to the existing shared TODO education paragraph at the user's request. It was later dispatched and implemented locally. [Contribution record](2026-10-09-education-todo-contribution-session-v1.md).
+
+**Payoff action order now settled:** [2026-10-09 ruling](2026-10-09-education-payoff-action-sequence-decision-v1.md) pays already-due rent, payroll and Bank balances immediately before education payoff in one atomic zero-cycle action. The queued activation brief includes it.
+
 **Current acceptance follow-up, 2026-10-08:** B3–B5 are implemented locally, and the partial-payment and unsaved mid-phase loan restart gaps pass. The next work is the [current-source Task10/Task11 acceptance handoff](2026-10-08-next-acceptance-handoff-v1.md); the historical B3–B5 implementation brief below remains as provenance.
 
 **Shared list update, 2026-10-08:** Task10/Task11 now call for current research1/traits4 checkpoint and export evidence. A separate bounded read-only B6 first-game pressure and post-loan affordability review is queued after their acceptance. [Session record](../../logs/2026-10-08-banking-todo-update-v1.md).

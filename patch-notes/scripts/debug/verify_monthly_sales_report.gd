@@ -32,7 +32,10 @@ func _run() -> void:
 		_reconcile(run)
 		var revived := false
 		for offset in range(81):
-			if offset == 5: check(run.register_release(_released_project(2.3, 301)), "Second title starts concurrently at opposite alignment")
+			if offset == 5:
+				var second := _released_project(2.3, 301, run)
+				check(second.get_awareness_result().get_existing_fans() == run.get_fans(), "Concurrent fixture freezes the current earned Fan total")
+				check(run.register_release(second), "Second title starts concurrently at opposite alignment")
 			var record := run.get_released_game_sales(first_id)
 			var campaign: bool = offset in [2, 4] or (not revived and offset > 10 and offset % 2 == 0 and record.monthly_units == 0)
 			if campaign and offset > 10: revived = true

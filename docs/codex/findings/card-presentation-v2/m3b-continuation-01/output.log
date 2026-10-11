@@ -1,0 +1,22 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+ERROR: FAIL: Expected acceptance for bank_borrow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)
+       [1] act (res://scripts/debug/verify_campaign_session.gd:20)
+       [2] money (res://scripts/debug/verify_campaign_continuation.gd:54)
+       [3] _initialize (res://scripts/debug/verify_campaign_continuation.gd:73)
+ERROR: FAIL: Command matches direct Run transaction and signal order: bank_borrow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)
+       [1] money (res://scripts/debug/verify_campaign_continuation.gd:55)
+       [2] _initialize (res://scripts/debug/verify_campaign_continuation.gd:73)
+SCRIPT ERROR: Invalid access of index '0' on a base object of type: 'Array'.
+   at: _initialize (res://scripts/debug/verify_campaign_continuation.gd:127)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://scripts/debug/verify_campaign_continuation.gd:127)

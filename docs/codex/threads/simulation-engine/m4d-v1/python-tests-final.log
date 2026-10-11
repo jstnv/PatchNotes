@@ -1,0 +1,101 @@
+test_calendar_uses_last_zero_cycle_boundary_without_interpolation (test_compare_simulations.ComparisonTests.test_calendar_uses_last_zero_cycle_boundary_without_interpolation) ... ok
+test_cash_lows_different_ledger_and_boundary_scopes (test_compare_simulations.ComparisonTests.test_cash_lows_different_ledger_and_boundary_scopes) ... ok
+test_cli_output_is_exclusive_and_outside_bundle (test_compare_simulations.ComparisonTests.test_cli_output_is_exclusive_and_outside_bundle) ... {"ok": false, "error": "Output already exists"}
+{"ok": false, "error": "Output must be outside the input bundle"}
+ok
+test_command_bound_is_censored_at_actual_bound (test_compare_simulations.ComparisonTests.test_command_bound_is_censored_at_actual_bound) ... ok
+test_incomplete_malformed_retained_without_inventing_missing_release (test_compare_simulations.ComparisonTests.test_incomplete_malformed_retained_without_inventing_missing_release) ... ok
+test_initial_releases_separate_from_new_milestones (test_compare_simulations.ComparisonTests.test_initial_releases_separate_from_new_milestones) ... ok
+test_int64_and_cent_values_never_use_float_money (test_compare_simulations.ComparisonTests.test_int64_and_cent_values_never_use_float_money) ... ok
+test_pair_mismatch_rejected (test_compare_simulations.ComparisonTests.test_pair_mismatch_rejected) ... ok
+test_rehashed_invalid_telemetry_still_rejected (test_compare_simulations.ComparisonTests.test_rehashed_invalid_telemetry_still_rejected) ... ok
+test_rejected_action_retains_request_and_unchanged_state (test_compare_simulations.ComparisonTests.test_rejected_action_retains_request_and_unchanged_state) ... ok
+test_release_uses_first_post_launch_and_decimal_review_delta (test_compare_simulations.ComparisonTests.test_release_uses_first_post_launch_and_decimal_review_delta) ... ok
+test_result_consistency_and_missing_artifact_rejected (test_compare_simulations.ComparisonTests.test_result_consistency_and_missing_artifact_rejected) ... ok
+test_source_input_telemetry_runner_tampering_rejected (test_compare_simulations.ComparisonTests.test_source_input_telemetry_runner_tampering_rejected) ... ok
+test_unavailable_finance_is_null_not_zero (test_compare_simulations.ComparisonTests.test_unavailable_finance_is_null_not_zero) ... ok
+test_wrong_pair_or_duplicate_arm_rejected (test_compare_simulations.ComparisonTests.test_wrong_pair_or_duplicate_arm_rejected) ... ok
+test_artifact_edit_during_copy_rejected (test_reduce_simulation.ReductionTests.test_artifact_edit_during_copy_rejected) ... ok
+test_existing_destination_untouched (test_reduce_simulation.ReductionTests.test_existing_destination_untouched) ... ok
+test_invalid_case_and_bounds_rejected (test_reduce_simulation.ReductionTests.test_invalid_case_and_bounds_rejected) ... ok
+test_linked_input_output_rejected_before_resolution (test_reduce_simulation.ReductionTests.test_linked_input_output_rejected_before_resolution) ... ok
+test_linked_tape_rejected_before_copy (test_reduce_simulation.ReductionTests.test_linked_tape_rejected_before_copy) ... ok
+test_nonreplayable_case_rejected (test_reduce_simulation.ReductionTests.test_nonreplayable_case_rejected) ... ok
+test_old_bundle_reports_missing_support (test_reduce_simulation.ReductionTests.test_old_bundle_reports_missing_support) ... ok
+test_output_within_bundle_never_created (test_reduce_simulation.ReductionTests.test_output_within_bundle_never_created) ... ok
+test_snapshot_and_artifacts_copied_without_changes (test_reduce_simulation.ReductionTests.test_snapshot_and_artifacts_copied_without_changes) ... ok
+test_source_tampering_rejected (test_reduce_simulation.ReductionTests.test_source_tampering_rejected) ... ok
+test_destinations_are_exclusive (test_simulate.SimulatorRunnerTests.test_destinations_are_exclusive) ... ok
+test_external_policy_copied_only_into_frozen_debug_folder (test_simulate.SimulatorRunnerTests.test_external_policy_copied_only_into_frozen_debug_folder) ... ok
+test_nonfinite_json_rejected (test_simulate.SimulatorRunnerTests.test_nonfinite_json_rejected) ... ok
+test_nonzero_exit_and_runtime_errors_are_retained (test_simulate.SimulatorRunnerTests.test_nonzero_exit_and_runtime_errors_are_retained) ... ok
+test_output_within_source_rejected_before_creation (test_simulate.SimulatorRunnerTests.test_output_within_source_rejected_before_creation) ... ok
+test_policy_declared_wrong_hash_rejected (test_simulate.SimulatorRunnerTests.test_policy_declared_wrong_hash_rejected) ... ok
+test_policy_identity_is_actual_snapshot_hash (test_simulate.SimulatorRunnerTests.test_policy_identity_is_actual_snapshot_hash) ... ok
+test_policy_not_selected_implicitly (test_simulate.SimulatorRunnerTests.test_policy_not_selected_implicitly) ... ok
+test_profile_isolated_and_old_experiment_environment_removed (test_simulate.SimulatorRunnerTests.test_profile_isolated_and_old_experiment_environment_removed) ... ok
+test_snapshot_detects_concurrent_source_edit (test_simulate.SimulatorRunnerTests.test_snapshot_detects_concurrent_source_edit) ... ok
+test_snapshot_detects_missing_or_added_source (test_simulate.SimulatorRunnerTests.test_snapshot_detects_missing_or_added_source) ... ok
+test_snapshot_excludes_cache_analysis_and_preserves_import_settings (test_simulate.SimulatorRunnerTests.test_snapshot_excludes_cache_analysis_and_preserves_import_settings) ... ok
+test_timeout_preserves_command_and_log (test_simulate.SimulatorRunnerTests.test_timeout_preserves_command_and_log) ... ok
+test_unsafe_resource_paths_rejected (test_simulate.SimulatorRunnerTests.test_unsafe_resource_paths_rejected) ... ok
+test_changed_baseline_archive_rejected (test_simulator_variant.VariantTests.test_changed_baseline_archive_rejected) ... ok
+test_concurrent_canonical_change_during_capture_rejected (test_simulator_variant.VariantTests.test_concurrent_canonical_change_during_capture_rejected) ... ok
+test_creation_isolated_and_canonical_temp_preserved (test_simulator_variant.VariantTests.test_creation_isolated_and_canonical_temp_preserved) ... ok
+test_design_record_edit_between_hash_and_copy_rejected (test_simulator_variant.VariantTests.test_design_record_edit_between_hash_and_copy_rejected) ... ok
+test_extra_integrity_key_rejected (test_simulator_variant.VariantTests.test_extra_integrity_key_rejected) ... ok
+test_failed_evidence_retained_honestly (test_simulator_variant.VariantTests.test_failed_evidence_retained_honestly) ... ok
+test_fork_keeps_original_base_and_current_parent_revision (test_simulator_variant.VariantTests.test_fork_keeps_original_base_and_current_parent_revision) ... ok
+test_fork_new_id_required (test_simulator_variant.VariantTests.test_fork_new_id_required) ... ok
+test_frozen_run_survives_later_candidate_edits (test_simulator_variant.VariantTests.test_frozen_run_survives_later_candidate_edits) ... ok
+test_handoff_exact_delta_and_no_automatic_adoption (test_simulator_variant.VariantTests.test_handoff_exact_delta_and_no_automatic_adoption) ... ok
+test_handoff_flags_overlap_conflict (test_simulator_variant.VariantTests.test_handoff_flags_overlap_conflict) ... ok
+test_invalid_paths_and_case_collisions_rejected (test_simulator_variant.VariantTests.test_invalid_paths_and_case_collisions_rejected) ... ok
+test_junction_fallback_for_python_before_312 (test_simulator_variant.VariantTests.test_junction_fallback_for_python_before_312) ... ok
+test_metadata_edit_rejected (test_simulator_variant.VariantTests.test_metadata_edit_rejected) ... ok
+test_no_existing_output_overwrite (test_simulator_variant.VariantTests.test_no_existing_output_overwrite) ... ok
+test_other_variant_evidence_rejected (test_simulator_variant.VariantTests.test_other_variant_evidence_rejected) ... ok
+test_output_inside_canonical_or_parent_rejected (test_simulator_variant.VariantTests.test_output_inside_canonical_or_parent_rejected) ... ok
+test_runner_accepts_variant_and_rejects_output_inside_it (test_simulator_variant.VariantTests.test_runner_accepts_variant_and_rejects_output_inside_it) ... ok
+test_self_consistent_archive_manifest_mismatch_rejected (test_simulator_variant.VariantTests.test_self_consistent_archive_manifest_mismatch_rejected) ... ok
+test_snapshot_records_current_drift_without_changing_candidate (test_simulator_variant.VariantTests.test_snapshot_records_current_drift_without_changing_candidate) ... ok
+test_snapshot_rejects_root_file_and_root_directory_links (test_simulator_variant.VariantTests.test_snapshot_rejects_root_file_and_root_directory_links) ... ok
+test_stale_evidence_rejected (test_simulator_variant.VariantTests.test_stale_evidence_rejected) ... ok
+test_checkpoint_identity_mismatch_rejected_without_rewriting (test_store_study.StoreStudyTests.test_checkpoint_identity_mismatch_rejected_without_rewriting) ... ok
+test_existing_queue_owned_and_unknown_targets_rejected (test_store_study.StoreStudyTests.test_existing_queue_owned_and_unknown_targets_rejected) ... ok
+test_frozen_source_or_input_tampering_rejected (test_store_study.StoreStudyTests.test_frozen_source_or_input_tampering_rejected) ... ok
+test_incomplete_prefix_and_unavailable_checkpoint_rejected (test_store_study.StoreStudyTests.test_incomplete_prefix_and_unavailable_checkpoint_rejected) ... ok
+test_new_output_and_evidence_are_never_overwritten (test_store_study.StoreStudyTests.test_new_output_and_evidence_are_never_overwritten) ... ok
+test_pair_has_identical_detached_checkpoint_rng_and_explicit_policy (test_store_study.StoreStudyTests.test_pair_has_identical_detached_checkpoint_rng_and_explicit_policy) ... ok
+test_stable_pair_identity_changes_when_horizon_or_policy_changes (test_store_study.StoreStudyTests.test_stable_pair_identity_changes_when_horizon_or_policy_changes) ... ok
+test_unknown_prefix_policy_requires_complete_explicit_override (test_store_study.StoreStudyTests.test_unknown_prefix_policy_requires_complete_explicit_override) ... ok
+test_unsafe_ids_and_invalid_bounds_rejected (test_store_study.StoreStudyTests.test_unsafe_ids_and_invalid_bounds_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 70 tests in 19.962s
+
+OK
+{"ok": true, "output": "C:\\Users\\64jus\\AppData\\Local\\Temp\\tmp7clqo57p\\comparison", "both_cases_completed": true}
+{
+  "format": "patch-notes-failure-reduction-v1",
+  "ok": false,
+  "bundle": "C:\\Users\\64jus\\AppData\\Local\\Temp\\tmpxpipvbou\\bundle",
+  "case": "example",
+  "kind": "rejection",
+  "created_utc": "2026-10-11T10:24:30.386791+00:00",
+  "tool_sha256": "1b734f622302590839e511c8f85490729763d01f29f4d13776253b43fa514a37",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "error": "[WinError 183] Cannot create a file when that file already exists: 'C:\\\\Users\\\\64jus\\\\AppData\\\\Local\\\\Temp\\\\tmpxpipvbou\\\\existing'"
+}
+{
+  "format": "patch-notes-failure-reduction-v1",
+  "ok": false,
+  "bundle": "C:\\Users\\64jus\\AppData\\Local\\Temp\\tmpirbp78uw\\bundle",
+  "case": "example",
+  "kind": "rejection",
+  "created_utc": "2026-10-11T10:24:30.558250+00:00",
+  "tool_sha256": "1b734f622302590839e511c8f85490729763d01f29f4d13776253b43fa514a37",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "error": "Output must be outside original evidence and the canonical project"
+}
+C:\Users\64jus\AppData\Local\Temp\tmpdn9fbh_6\study.json

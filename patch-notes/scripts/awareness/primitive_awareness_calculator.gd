@@ -1,11 +1,10 @@
 class_name PrimitiveAwarenessCalculator
 extends RefCounted
 
-const FORMULA_ID := &"primitive_awareness_v1"
+const FORMULA_ID := &"primitive_awareness_fan_trial_v1"
 const BASIS_POINTS_PER_ONE := 10000
 const MONTH_ONE_LAUNCH_MARKETING_DECAY_BASIS_POINTS := 10000
 const ORGANIC_AWARENESS := 100
-const EXISTING_FANS := 0
 const FAN_VISIBILITY_BASIS_POINTS := 2500
 const MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS := 10000
 const AWARENESS_SCALE := 200
@@ -20,7 +19,10 @@ static func calculate(project_state: ProjectState, run_state: RunState = null) -
 	var launch_marketing := marketing_output
 	# Month one is exactly 100%, so integer Marketing Output remains exact.
 	var current_launch_marketing := launch_marketing
-	var fan_awareness := 0
+	var existing_fans := run_state.get_fans() if run_state != null else 0
+	if existing_fans < 0: return null
+	var fan_awareness := StudioFanbase.awareness_for(existing_fans)
+	if current_launch_marketing > ProjectState.MAX_SIGNED_INT - ORGANIC_AWARENESS - fan_awareness: return null
 	var total_awareness := ORGANIC_AWARENESS + current_launch_marketing + fan_awareness
 	if run_state != null:
 		var promotion := run_state.get_pending_promotion()
@@ -31,6 +33,6 @@ static func calculate(project_state: ProjectState, run_state: RunState = null) -
 	var awareness_multiplier := 1.0 + (float(total_awareness) / float(AWARENESS_SCALE))
 	if not is_finite(awareness_multiplier):
 		return null
-	var result := AwarenessResult.new(FORMULA_ID, marketing_output, launch_marketing, MONTH_ONE_LAUNCH_MARKETING_DECAY_BASIS_POINTS, current_launch_marketing, ORGANIC_AWARENESS, EXISTING_FANS, FAN_VISIBILITY_BASIS_POINTS, MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS, fan_awareness, total_awareness, AWARENESS_SCALE, awareness_multiplier)
+	var result := AwarenessResult.new(FORMULA_ID, marketing_output, launch_marketing, MONTH_ONE_LAUNCH_MARKETING_DECAY_BASIS_POINTS, current_launch_marketing, ORGANIC_AWARENESS, existing_fans, FAN_VISIBILITY_BASIS_POINTS, MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS, fan_awareness, total_awareness, AWARENESS_SCALE, awareness_multiplier)
 	if run_state!=null: result._promotion_awards = run_state.get_pending_promotion_awards()
 	return result

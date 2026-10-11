@@ -1,0 +1,92 @@
+--- before/patch-notes/scripts/studio_traits.gd
++++ after/patch-notes/scripts/studio_traits.gd
+@@ -1,7 +1,7 @@
+ class_name StudioTraits
+ extends RefCounted
+ 
+-## Historical v1 stays inactive; new Studios use the canonical v2 roster.
++## Historical versions retain their effects; new selections use version 8.
+ ## Unapproved prices never participate in the active point/cash calculation.
+ const VERSION := 1
+ const STARTING_POINTS := 4
+@@ -21,7 +21,7 @@
+ 
+ const TRAITS := {
+ 	&"family_funding": {"name":"Family Funding", "positive":true, "price":"2 points", "description":"Active: $300 separate startup funding."},
+-	&"cult_following": {"name":"Cult Following", "positive":true, "price":"1 point (trial)", "description":"Trial: 40 starting Fans once. Ordinary gains and losses apply."},
++	&"cult_following": {"name":"Cult Following", "positive":true, "price":"1 point (trial)", "description":"Trial: 20 starting Fans once. Ordinary gains and losses apply."},
+ 	&"publisher_connections": {"name":"Publisher Connections", "positive":true, "price":"1 point", "description":"Active: first Ironclad advance $550; remaining pool $1,850. Full payout stays $2,400."},
+ 	&"resourceful": {"name":"Resourceful", "positive":true, "price":"1 point", "description":"Active: up to $100 off the first paid Store acquisition per release window. Research saving applies to the final installment; down payment unchanged."},
+ 	&"lean_production": {"name":"Lean Production", "positive":true, "price":"2 points", "description":"Active: 10% off paid Primitive hands; up to $100 per project."},
+@@ -31,8 +31,8 @@
+ 	&"expensive_lease": {"name":"Expensive Lease", "positive":false, "price":"Grants 2 points", "description":"Active: $515 rent every month from month 1."},
+ 	&"unknown_name": {"name":"Unknown Name", "positive":false, "price":"Grants 2 points", "description":"Active: -10 Awareness on first successful launch, floored at zero."}}
+ 
+-static func evaluate_traits(chosen: Array, version: int = 7) -> Dictionary:
+-	if version not in [3,4,5,6,7]: return {"valid":false,"reason":"Unsupported trait version."}
++static func evaluate_traits(chosen: Array, version: int = 8) -> Dictionary:
++	if version not in [3,4,5,6,7,8]: return {"valid":false,"reason":"Unsupported trait version."}
+ 	var seen := {}
+ 	var positive := 0
+ 	var negative := 0
+@@ -129,4 +129,8 @@
+ 
+ 
+ static func starting_fans(selection: Dictionary) -> int:
+-	return 40 if selection.get("version", 0) >= 7 and is_active(selection, &"cult_following") else 0
++	if not is_active(selection, &"cult_following"): return 0
++	match selection.get("version", 0):
++		7: return 40
++		8: return 20
++	return 0
+--- before/patch-notes/scripts/debug/campaign_stress_suite.gd
++++ after/patch-notes/scripts/debug/campaign_stress_suite.gd
+@@ -167,7 +167,7 @@
+ 		expect(report.get("first_failure",{}).is_empty(),str(report.get("case_id"))+": no invariant failure hidden by route status")
+ 	if repeat_first_case(): expect(completed > 0,"Baseline reaches four releases; other suites preserve any bounded or blocked status")
+ 	for index in range(cases.size()):
+-		var expected_fans := "40" if "cult_following" in cases[index].initial.recipe.traits else "0"
++		var expected_fans := "20" if "cult_following" in cases[index].initial.recipe.traits else "0"
+ 		expect(reports[index].initial_fans == expected_fans,"Legal chosen Traits supply exactly their initial Fans")
+ 	expect(Batch._write_json(output,{"ok":failures == 0,"checks":checks+1,"failures":failures,"commands":commands,"completed_routes":completed,"cases":reports,"repeat":repeated,"scope":"Explicit case subset of four declared seeds, 180-command bounds, four-release targets; no balance sample or universal completion claim"}),"Persist bounded stress summary")
+ 	print("Campaign stress verification: %d checks, %d failures, %d commands across %d routes" % [checks,failures,commands,cases.size()])
+--- before/patch-notes/scripts/persistence/studio_checkpoint.gd
++++ after/patch-notes/scripts/persistence/studio_checkpoint.gd
+@@ -5,7 +5,8 @@
+ const PREVIOUS_RULES := "finance5-bank1-employees1-traits5-sales1-contracts3-research1-review2"
+ const PRE_EDUCATION_RULES := PREVIOUS_RULES + "-fanbase1-starwave1"
+ const PRE_CULT_RULES := "finance6-bank1-employees1-traits6-sales1-contracts3-research1-review2-fanbase1-starwave1-education1"
+-const RULES := "finance6-bank1-employees1-traits7-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult1"
++const PRE_CULT20_RULES := "finance6-bank1-employees1-traits7-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult1"
++const RULES := "finance6-bank1-employees1-traits8-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult2"
+ const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
+ var error := ""
+ var _revision := ""
+@@ -36,7 +37,9 @@
+ 	paths.sort()
+ 	for path in paths:
+ 		if path == "res://data/audio_credits.json":
+-			if rules == RULES: continue
++			# Version 7 already excluded audio credits. Preserve its real save
++			# identity when it becomes a supported historical revision.
++			if rules in [RULES, PRE_CULT20_RULES]: continue
+ 			if not legacy_audio_hash.is_empty():
+ 				data += path + legacy_audio_hash
+ 				continue
+@@ -87,7 +90,7 @@
+ func validate(payload: Dictionary) -> String:
+ 	# Pre-Fanbase saves lack exact exposure provenance. Preserve unsupported
+ 	# bytes instead of inventing Fans or replaying old sales.
+-	if payload.get("content_revision", "") not in ([revision()] + _legacy_revisions(PRE_CULT_RULES) + _legacy_revisions(PRE_EDUCATION_RULES)) or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
++	if payload.get("content_revision", "") not in ([revision(), _rules_revision(PRE_CULT20_RULES)] + _legacy_revisions(PRE_CULT_RULES) + _legacy_revisions(PRE_EDUCATION_RULES)) or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
+ 	var value: Dictionary = _decode_payload(payload)
+ 	if value.is_empty(): return error
+ 	if value.checkpoint_kind != "studio" or value.sequence < 1: return "Invalid checkpoint boundary"
+@@ -306,6 +309,7 @@
+ 	var codec := CheckpointCodec.new()
+ 	var value: Variant = codec.decode(payload,CheckpointSchema.root(not prior))
+ 	if not codec.error.is_empty(): error = codec.error; return {}
++	if payload.get("content_revision", "") == _rules_revision(PRE_CULT20_RULES) and not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5,6,7]: error = "Invalid historical trait version"; return {}
+ 	if payload.get("content_revision", "") in _legacy_revisions(PRE_CULT_RULES) and not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5,6]: error = "Invalid historical trait version"; return {}
+ 	if prior:
+ 		if not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5]: error = "Invalid historical trait version"; return {}

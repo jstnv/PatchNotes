@@ -1,0 +1,119 @@
+{
+  "format": "patch-notes-isolated-simulation-v1",
+  "mode": "run",
+  "ok": true,
+  "created_utc": "2026-10-11T11:03:02.069712+00:00",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\studio-traits\\sims\\cult-seed20-v1",
+  "godot_executable": "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "git": {
+    "branch": "main",
+    "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+    "dirty": true
+  },
+  "variant": {
+    "id": "cult-seed20-v1",
+    "owner": "studio-traits",
+    "status": "CANDIDATE",
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\studio-traits\\simulators\\cult-seed20-v1",
+    "metadata_sha256": "c1bbde9824e74b4152eb934eed3f0444914bc6ec682575935a18ea24eac0d947",
+    "base_identity": "577f46fd83d5a1e2bd21d017c40eba0b20a543faf9c2301cd6316d48aa394533",
+    "creation_identity": "577f46fd83d5a1e2bd21d017c40eba0b20a543faf9c2301cd6316d48aa394533",
+    "candidate_identity": "6f88576c9cca5647d6f0250618dfdb90c2d12d803274756ff8388660715b1ed5",
+    "canonical_identity": "577f46fd83d5a1e2bd21d017c40eba0b20a543faf9c2301cd6316d48aa394533",
+    "canonical_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "baseline_drift": false,
+    "delta": [
+      {
+        "path": "scripts/studio_traits.gd",
+        "change": "modified",
+        "before_sha256": "a71790586f497b48a4238e18d19da9f68561a346f0b309342e481defb82501e4",
+        "after_sha256": "d19c6d5d8bc511dcd8313131ee5ca833fe8d4c0e354f2a87cd284b7092ce6890"
+      }
+    ],
+    "canonical_delta": [],
+    "lineage": []
+  },
+  "policy": {
+    "script": "res://scripts/debug/experiment_policy/supplied_policy.gd",
+    "id": "studio-traits-cult-seed-screen",
+    "version": "1",
+    "source_identity": "662979fa7634b15174bb6279cef2111575988751e92193ca94db7273ef78b39f"
+  },
+  "case_count": 8,
+  "input_hashes": {
+    "experiment.json": "263715129fd346bb1fccc7861c377d21b63ba9e6b151cfe2a44c913e3741fbfc",
+    "requested.json": "dad5992c6a8ba4404ddf409cd8538f76eca86ba11005a23c3f80f9722ba93dc4"
+  },
+  "frozen_source_identity": "7789ca5c10cae5e071c761bb9284638436f4b8158f5b6619b669e7287c71c009",
+  "results": [
+    {
+      "case_id": "cult-seed-4417-control",
+      "ok": true,
+      "status": "completed",
+      "commands": 96,
+      "final_run_cycle": 49,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "cult-seed-4417-cult",
+      "ok": true,
+      "status": "completed",
+      "commands": 96,
+      "final_run_cycle": 49,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "cult-seed-4417-buzz",
+      "ok": true,
+      "status": "completed",
+      "commands": 96,
+      "final_run_cycle": 49,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "cult-seed-4417-family",
+      "ok": true,
+      "status": "completed",
+      "commands": 96,
+      "final_run_cycle": 49,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "cult-seed-1104-control",
+      "ok": true,
+      "status": "completed",
+      "commands": 96,
+      "final_run_cycle": 49,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "cult-seed-1104-cult",
+      "ok": true,
+      "status": "completed",
+      "commands": 96,
+      "final_run_cycle": 49,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "cult-seed-1104-buzz",
+      "ok": true,
+      "status": "completed",
+      "commands": 96,
+      "final_run_cycle": 49,
+      "final_release_count": 4
+    },
+    {
+      "case_id": "cult-seed-1104-family",
+      "ok": true,
+      "status": "completed",
+      "commands": 96,
+      "final_run_cycle": 49,
+      "final_release_count": 4
+    }
+  ]
+}

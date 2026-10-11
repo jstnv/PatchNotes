@@ -1,0 +1,48 @@
+{
+  "format": "patch-notes-isolated-simulation-v1",
+  "mode": "run",
+  "ok": true,
+  "created_utc": "2026-10-11T11:28:43.910616+00:00",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\g1a-baseline-2026-10-11-v1",
+  "godot_executable": "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "git": {
+    "branch": "main",
+    "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+    "dirty": true
+  },
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "finite-development-fixture",
+    "version": "1",
+    "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00"
+  },
+  "case_count": 2,
+  "input_hashes": {
+    "experiment.json": "cfa8d0205a6baa18bdaffba42849f7a4dbecf43831b558581cfa67575e12e18d",
+    "requested.json": "83f5f7dd98f2eafbc858e52536105627eb12748311c8e4cc14f2c5afc616a34f"
+  },
+  "frozen_source_identity": "4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df",
+  "results": [
+    {
+      "case_id": "g1a-control-4417",
+      "ok": true,
+      "status": "completed",
+      "commands": 22,
+      "final_run_cycle": 11,
+      "final_release_count": 1
+    },
+    {
+      "case_id": "g1a-control-90210",
+      "ok": true,
+      "status": "completed",
+      "commands": 22,
+      "final_run_cycle": 11,
+      "final_release_count": 1
+    }
+  ]
+}

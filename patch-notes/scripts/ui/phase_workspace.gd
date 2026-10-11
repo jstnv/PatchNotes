@@ -177,9 +177,9 @@ func move_control(node_name: String, destination: Node) -> void:
 	control.custom_minimum_size = Vector2(0, 30)
 
 func show_synergy(title: String, detail: String) -> void:
-	if hand_motion != null and hand_motion.capturing and "Specialization" in title:
+	if hand_motion != null and hand_motion.capturing:
 		synergy_notification.banner.hide()
-		hand_motion.note_specialization(func(): synergy_notification.show_message(title, detail))
+		hand_motion.note_specialization(func(): synergy_notification.show_message(title, detail), title == "Balanced Production!")
 		return
 	synergy_notification.show_message(title, detail)
 
@@ -244,7 +244,7 @@ func _synergy_tip() -> Dictionary:
 	var selected: Array[CardView] = phase.get_selected_candidate_views()
 	if phase_name == "Beta":
 		return _beta_synergy_tip(selected)
-	var overview := {"label": "Synergy ?", "title": "What is a synergy?", "body": "A synergy is a bonus for a four-card hand. Core means Graphics, Sound, Technology or Design; the first score on each card is its primary Core label. Match all four primary labels for ×1.5 hand Core gains, or use a Feature and close projected scores for ×1.2. Only one bonus applies."}
+	var overview := {"label": "Synergy ?", "title": "What is a synergy?", "body": "A synergy is a bonus for a four-card hand. Core means Graphics, Sound, Technology or Design; the first score on each card is its primary Core label. Match all four primary labels for ×1.5 hand Core gains, or use a Feature and hand gains within ±15% of their average to share the hand total evenly. Only one bonus applies."}
 	if selected.is_empty(): return overview
 	var first_stat: StringName = selected[0].card_data.primary_stat
 	var all_same := true
@@ -255,15 +255,15 @@ func _synergy_tip() -> Dictionary:
 		if all_same:
 			var stat_name := str(first_stat).capitalize()
 			return {"label": "Synergy: %d/4 %s" % [selected.size(), stat_name], "title": "Build a %s combo" % stat_name, "body": "%d selected cards share %s as their primary Core label. Choose %d more with that primary label for Specialization: ×1.5 to this hand's Core gains. Passes count too." % [selected.size(), stat_name, 4 - selected.size()]}
-		return {"label": "Synergy: mixed", "title": "Look for a combo", "body": "These primary Core labels differ. Match all four for Specialization, or use at least one Feature and keep the projected four Core scores close for Balanced Production."}
+		return {"label": "Synergy: mixed", "title": "Look for a combo", "body": "These primary Core labels differ. Match all four for Specialization, or use at least one Feature and keep this hand’s four Core gains within ±15% of their average for Balanced Production."}
 	var final_production := get_selected_production_synergy()
 	if not final_production.is_empty():
 		if not String(final_production.get("specialization_stat", &"")).is_empty():
 			var stat_name := str(final_production.specialization_stat).capitalize()
 			return {"label": "%s ×1.5" % stat_name, "title": "%s Specialization ready" % stat_name, "body": "All four cards share %s as their primary Core label. Playing this hand multiplies its Core gains by 1.5, rounded by category. Printed Scope and Bug Pressure do not multiply." % stat_name}
 		if final_production.get("balanced_production", false):
-			return {"label": "Balanced ×1.2", "title": "Balanced Production ready", "body": "This hand includes a Feature and leaves all four projected Core scores within 20% of their average. Playing it multiplies this hand's Core gains by 1.2, rounded by category. Scope does not multiply."}
-	return {"label": "Synergy: none", "title": "No synergy on this hand", "body": "The hand can still play normally. Four matching primary Core labels give Specialization; a Feature plus close projected Core scores can give Balanced Production. Only one bonus applies."}
+			return {"label": "Balanced split", "title": "Balanced Production ready", "body": "This hand includes a Feature and all four hand Core gains are within ±15% of their average. After the cards play, their original total is shared evenly. Spare points go to Graphics, Sound, Technology, then Design. Scope stays unchanged."}
+	return {"label": "Synergy: none", "title": "No synergy on this hand", "body": "The hand can still play normally. Four matching primary Core labels give Specialization; a Feature plus evenly distributed hand Core gains can give Balanced Production. Only one bonus applies."}
 
 
 func get_pool_specialization_guidance() -> Dictionary:

@@ -13,7 +13,7 @@ static func map_of(key: Variant, value: Variant) -> Dictionary: return {"map":[k
 static func optional(item: Variant) -> Dictionary: return {"nullable":item}
 static func union_of(items: Array) -> Dictionary: return {"one_of":items}
 
-static func finance() -> Dictionary:
+static func finance(education_enabled: bool = true) -> Dictionary:
 	var schedule := fields("schema_version principal_cents term_months accepted_cycle first_due_cycle last_due_cycle maximum_installment_cents total_interest_cents total_payment_cents")
 	var quote := fields("older_sales_cents latest_sales_cents basis_cents rent_cents obligations_cents capacity_cents maximum_principal_cents revision")
 	quote.merge(fields("eligible accepted", "bool"))
@@ -30,6 +30,11 @@ static func finance() -> Dictionary:
 	action.productive = "bool"
 	var ordinary_action := action.duplicate(true)
 	action.operation = union_of([{}, {"type":"id","quote":quote}, hire, payoff])
+	if education_enabled:
+		var education_payoff := fields("revision principal_cents interest_cents total_cents other_due_cents required_cash_cents")
+		education_payoff.merge(fields("type account_id","id"))
+		action.operation.one_of.append(education_payoff)
+		action.operation.one_of.append(fields("type run_id trait_id account_id","id"))
 	var transaction := fields("sequence cycle month amount_cents cash_before_cents cash_after_cents due_month")
 	transaction.cash_delta_cents = "int"
 	transaction.merge(fields("kind source_id", "id"))
@@ -64,6 +69,13 @@ static func finance() -> Dictionary:
 	employee.employee_id = "id"
 	var result := fields("schema_version initial_cash_cents monthly_rent_cents last_cycle cash_cents unsettled_sales_net_cents")
 	result.merge({"monthly_rows":array_of(row),"obligations":array_of(union_of([bill,bank_bill])),"transactions":array_of(transaction),"actions":array_of(union_of([ordinary_action,action])),"credit":credit,"bank_loans":array_of(loan),"employees":array_of(employee)})
+	if education_enabled:
+		var education := fields("schema_version issued principal_paid_cents interest_paid_cents")
+		education.merge(fields("account_id run_id trait_id","id"))
+		education.merge(fields("closed early_payoff","bool"))
+		education.closed_cycle = "int"
+		education.schedule = fields("schema_version principal_cents regular_due_cents term_months first_due_cycle last_due_cycle total_interest_cents total_payment_cents")
+		result.education = union_of([{},education])
 	return result
 
 static func employees() -> Dictionary:
@@ -88,7 +100,7 @@ static func sales() -> Dictionary:
 	return result
 
 static func metadata() -> Dictionary:
-	var review := fields("scope required_scope development_cycles remaining_bugs awareness launch_marketing projected_units projected_gross_cents projected_net_cents")
+	var review := fields("scope required_scope development_cycles remaining_bugs awareness launch_marketing launch_fans fan_awareness projected_units projected_gross_cents projected_net_cents")
 	review.merge(fields("final_review production_rating scope_completion", "float"))
 	review.cores = array_of("uint")
 	review.standards = array_of("uint")
@@ -98,9 +110,9 @@ static func metadata() -> Dictionary:
 	return {"base_name":"text","genre":"id","theme":"id","genre_ratios":array_of("uint"),"release_title":"text","release_year":"uint","release_cycle":"uint","review":review}
 
 static func contract() -> Dictionary:
-	return {"publisher_connections":"bool","contract_id":"id","offer_id":"id","source_release_id":"id","eligible":map_of("id","bool"),"scope":"uint","cores":map_of("uint","uint"),"hands":"uint","exhausted":map_of("id","bool"),"priorities":map_of("uint","uint"),"upfront":"bool","paid":"bool","trial_terms":union_of([{},fields("scope cash_cents advance_cents promotion denominator")]),"neon_focus":"int","result":{"scope":"uint","cores":map_of("uint","uint"),"numerator":"uint","payout":"uint","remainder":"uint","upfront":"uint","denominator":"uint","promotion":"uint"}}
+	return {"publisher_connections":"bool","contract_id":"id","offer_id":"id","source_release_id":"id","eligible":map_of("id","bool"),"scope":"uint","cores":map_of("uint","uint"),"hands":"uint","exhausted":map_of("id","bool"),"priorities":map_of("uint","uint"),"upfront":"bool","paid":"bool","trial_terms":union_of([{},fields("scope cash_cents advance_cents promotion denominator"),fields("scope cash_cents advance_cents promotion denominator required_hands")]),"neon_focus":"int","result":{"scope":"uint","cores":map_of("uint","uint"),"numerator":"uint","payout":"uint","remainder":"uint","upfront":"uint","denominator":"uint","promotion":"uint"}}
 
-static func root() -> Dictionary:
+static func root(education_enabled: bool = true) -> Dictionary:
 	var traits := fields("version starting_points spent_points refunded_points remaining_points point_cash_cents family_funding_cents")
 	traits.merge({"valid":"bool","reason":"text","trait_ids":array_of("id"),"active_ids":array_of("id"),"effects_mode":"id"})
 	var run := fields("cash_cents completed_run_cycles available_redraws next_project_serial")
@@ -124,6 +136,7 @@ static func root() -> Dictionary:
 	run.studio_traits = union_of([{},traits])
 	run.lean_savings = map_of("id","uint")
 	run.first_game_tutorial = optional({"stage":"uint","first_stat":"id","second_stat":"id","first_pool_published":"bool","second_pool_published":"bool"})
-	run.studio_finance = finance()
+	run.studio_finance = finance(education_enabled)
+	run.fanbase = StudioFanbase.schema()
 	run.employees = employees()
 	return {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":run,"rng":map_of("id",{"seed":"int","state":"int"})}

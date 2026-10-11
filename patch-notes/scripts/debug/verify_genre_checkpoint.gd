@@ -40,28 +40,30 @@ func _run() -> void:
 	var current := adapter.capture(run)
 	expect(not current.is_empty(), "Capture historical fixture under current schema: " + adapter.error)
 	if current.is_empty(): quit(1); return
+	var pre_fanbase := current.duplicate(true)
+	pre_fanbase.content_revision = adapter.previous_revision()
+	expect(pre_fanbase.content_revision != current.content_revision, "Fanbase revision is explicit")
+	expect(adapter.hydrate(pre_fanbase) == null and adapter.error == "INCOMPATIBLE_CONTENT_OR_RNG", "Pre-Fanbase content rejects without synthesizing historical Fans")
+	# The historical Review fixture remains frozen inside the current Fan schema.
 	var previous := current.duplicate(true)
-	previous.content_revision = adapter.previous_revision()
-	expect(previous.content_revision != current.content_revision, "Review revision is explicit")
-	expect(adapter.validate(previous).is_empty(), "Exact immediately previous content revision remains compatible")
 	var restored := adapter.hydrate(previous)
-	expect(restored != null, "Hydrate prior revision without recalculation: " + adapter.error)
+	expect(restored != null, "Hydrate current Fanbase schema without recalculation: " + adapter.error)
 	if restored == null: quit(1); return
 	var recaptured := adapter.capture(restored)
 	var expected_current := previous.duplicate(true)
 	expected_current.content_revision = adapter.revision()
-	expect(recaptured == expected_current, "Recapture differs only in content revision")
+	expect(recaptured == expected_current, "Recapture preserves exact current schema")
 	expect(restored.get_release_metadata(id) == history and restored.get_released_game_sales(id) == sales, "Historical Review, targets and sales are byte-equivalent typed values")
 	expect(history.review.standards == [33,33,33,33] and history.review.final_review == 7.7 and history.review.production_rating == 8.0, "Historical equal-33 standards and old final Review remain frozen")
 	var malformed := previous.duplicate(true)
 	malformed.run.cash_cents = str(run.get_cash_cents() + 1)
-	expect(adapter.hydrate(malformed) == null, "Previous revision still enforces all finance provenance validation")
+	expect(adapter.hydrate(malformed) == null, "Current schema still enforces all finance provenance validation")
 	var unknown := previous.duplicate(true)
 	unknown.content_revision = "unrelated-review-revision"
 	expect(adapter.hydrate(unknown) == null and adapter.error == "INCOMPATIBLE_CONTENT_OR_RNG", "Unknown revision remains incompatible")
 	var wrong_rng := previous.duplicate(true)
 	wrong_rng.rng_algorithm = "unknown-rng"
-	expect(adapter.hydrate(wrong_rng) == null, "Previous revision cannot bypass RNG compatibility")
+	expect(adapter.hydrate(wrong_rng) == null, "Current schema cannot bypass RNG compatibility")
 
 	# A separate hydrated fixture supplies the new project; it does not mutate
 	# the coordinator's historical save fixture or disguise an unsaved project.
@@ -103,14 +105,14 @@ func _run() -> void:
 		return
 	root.add_child(coordinator)
 	var saved := coordinator.store.save(previous)
-	expect(saved.status == &"saved", "Real store writes valid previous-revision generation")
+	expect(saved.status == &"saved", "Real store writes valid current-schema generation")
 	if saved.status != &"saved": coordinator.store.release_writer(); quit(1); return
 	var path: String = saved.path
 	var old_hash := FileAccess.get_sha256(path)
 	var old_files := DirAccess.get_files_at(coordinator.store.directory)
-	expect(coordinator.store.inspect().payload == previous, "Store inspection returns exact previous payload")
+	expect(coordinator.store.inspect().payload == previous, "Store inspection returns exact current payload")
 	var continued := coordinator.load_current()
-	expect(continued != null, "Real coordinator Continues prior revision")
+	expect(continued != null, "Real coordinator Continues current Fanbase schema")
 	if continued == null: coordinator.store.release_writer(); quit(1); return
 	coordinator.entered_studio(true)
 	await process_frame

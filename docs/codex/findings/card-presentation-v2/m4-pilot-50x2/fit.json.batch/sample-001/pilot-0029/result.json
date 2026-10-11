@@ -1,0 +1,206 @@
+{
+	"accepted_commands": 36,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"tape": "replay.tape.json"
+	},
+	"case_id": "pilot-0029",
+	"commands": 36,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "",
+	"final_release_count": 2,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4450"
+			},
+			"state": {
+				"integer": "-7350231345718111208"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4451"
+			},
+			"state": {
+				"integer": "4980971802651081537"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4452"
+			},
+			"state": {
+				"integer": "2628697683535481534"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4453"
+			},
+			"state": {
+				"integer": "-8192534586599655926"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4454"
+			},
+			"state": {
+				"integer": "3333257953498956416"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4448"
+			},
+			"state": {
+				"integer": "-3512627504032353509"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4449"
+			},
+			"state": {
+				"integer": "-8187515167714508889"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4447"
+			},
+			"state": {
+				"integer": "-376554894379843233"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4446"
+			},
+			"state": {
+				"integer": "5005248893549343756"
+			}
+		}
+	},
+	"final_run_cycle": 14,
+	"final_state": "3f32ae96e1c05eb2f109794770bda80e5619d85c4c530d1cc941b0c5cdab9770",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4450"
+			},
+			"state": {
+				"integer": "-3676542868178663988"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4451"
+			},
+			"state": {
+				"integer": "2687593355668129017"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4452"
+			},
+			"state": {
+				"integer": "9051729579514922022"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4453"
+			},
+			"state": {
+				"integer": "-3030878270347836589"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4454"
+			},
+			"state": {
+				"integer": "3333257953498956416"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4448"
+			},
+			"state": {
+				"integer": "2041928757837301618"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4449"
+			},
+			"state": {
+				"integer": "8406064981684094623"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4447"
+			},
+			"state": {
+				"integer": "-4322207466009491387"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4446"
+			},
+			"state": {
+				"integer": "7760400383853267224"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "e153efd423395efd30aa585770253a17f293a10dbaf571221cfb61bb1c341b81",
+	"input_identity": "8624f2b88b1077a8c4f6304009dc2aea5c1726cef6df7e8ce212f42f8678fcdb",
+	"last_choice": {
+		"type": "launch"
+	},
+	"max_commands": 60,
+	"ok": true,
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"float_bits": "0300000000000040"
+				},
+				"beta": {
+					"float_bits": "0300000000000040"
+				},
+				"design": {
+					"float_bits": "0300000000000040"
+				}
+			},
+			"name_prefix": "Pilot",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 14,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "430763c166550fd44499f4eda5b72c915a07f910633c87cc47e95229c72693c8",
+	"status": "completed",
+	"tape_identity": "747266f106a003ae2af751dc129fc5e56e19c83c2050c343cba84bee876a7ef7",
+	"target_release_count": 2
+}

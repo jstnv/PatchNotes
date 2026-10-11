@@ -1,0 +1,19 @@
+diff --git a/patch-notes/scripts/phases/beta_phase.gd b/patch-notes/scripts/phases/beta_phase.gd
+index 29c45f5..9e857fd 100644
+--- a/patch-notes/scripts/phases/beta_phase.gd
++++ b/patch-notes/scripts/phases/beta_phase.gd
+@@ -809,9 +809,12 @@ func _select_corrective_pass_ids() -> Array[StringName]:
+ 		return [] as Array[StringName]
+ 	var categories: Array[ProjectState.CoreScore] = []
+ 	categories.assign(ProjectState.CoreScore.values())
++	var profile := PrimitiveReviewCalculator.get_project_profile(_project_state)
++	if profile == null:
++		return [] as Array[StringName]
+ 	categories.sort_custom(func(a: ProjectState.CoreScore, b: ProjectState.CoreScore) -> bool:
+-		var a_score := _project_state.get_core_score(a)
+-		var b_score := _project_state.get_core_score(b)
++		var a_score := float(_project_state.get_core_score(a)) / profile.get_standard(a)
++		var b_score := float(_project_state.get_core_score(b)) / profile.get_standard(b)
+ 		return a_score < b_score if a_score != b_score else a < b
+ 	)
+ 	var ids: Array[StringName] = []

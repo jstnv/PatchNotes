@@ -12,7 +12,7 @@ const ENTRIES := [
 	{"id": SIDESTREET, "name": "SideStreet Games", "personality": "A developer-friendly independent partner.", "availability": "One $1,200 maximum cash-only offer per release meeting its size's required Scope, available after Ironclad completes. Existing offers stay available."},
 	{"id": CROWN_QUILL, "name": "Crown & Quill Software", "personality": "A selective, quality-focused boutique. Rewards balanced work with cash and next-release Promotion.", "availability": "One non-expiring Contract becomes available when this publisher unlocks."},
 	{"id": NEON_CIRCUIT, "name": "Neon Circuit Publishing", "personality": "Loud, fashionable, and marketing-driven. Rewards focused work with cash and next-release Promotion.", "availability": "One non-expiring Contract becomes available when this publisher unlocks."},
-	{"id": STARWAVE, "name": "Starwave Entertainment", "personality": "An ambitious mass-market publisher. Larger campaigns and stricter commercial terms are future systems.", "availability": "Unlocks after two distinct releases and three distinct completed contracts. No Starwave offer is implemented yet."},
+	{"id": STARWAVE, "name": "Starwave Entertainment", "personality": "An ambitious mass-market publisher. Its three-hand Primitive Contract rewards broad production with cash.", "availability": "One non-expiring Contract becomes available after two distinct releases and three distinct completed Contracts."},
 ]
 
 

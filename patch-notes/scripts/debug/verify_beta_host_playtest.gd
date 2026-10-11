@@ -14,6 +14,7 @@ func _initialize() -> void:
 	_database = root.get_node("CardDatabase")
 	_snapshots = PrimitiveSnapshotDatabase.new()
 	_snapshots.load_ledgers()
+	_verify_genre_percentage_selection()
 	await _verify_planning_and_affordability()
 	await _verify_selection_preservation()
 	await _verify_pending_and_injection()
@@ -213,3 +214,23 @@ func _expect(condition: bool, description: String) -> void:
 	else:
 		_failures += 1
 		push_error("FAIL: %s" % description)
+
+
+func _verify_genre_percentage_selection() -> void:
+	var state := ProjectState.new(30)
+	_expect(state.configure_predevelopment("Percentage test", &"action", &"fantasy", [] as Array[StringName]), "Percentage fixture configures Action standards")
+	var alpha := preload("res://scenes/phases/alpha_phase.tscn").instantiate() as AlphaPhase
+	var beta := BETA_SCENE.instantiate() as BetaPhase
+	alpha.setup(state)
+	beta.set("_project_state", state)
+	state.add_alpha_production({ProjectState.CoreScore.GRAPHICS: 20, ProjectState.CoreScore.SOUND: 18, ProjectState.CoreScore.TECHNOLOGY: 24, ProjectState.CoreScore.DESIGN: 19}, 0, 0.0)
+	_expect(alpha.call("_select_corrective_categories") == [ProjectState.CoreScore.GRAPHICS, ProjectState.CoreScore.TECHNOLOGY], "Alpha chooses 50% and 60%, not lower raw Sound/Design")
+	_expect(beta.call("_select_corrective_pass_ids") == [&"graphics_pass", &"technology_pass"], "Beta chooses the same lowest standard percentages")
+	state.add_alpha_production({ProjectState.CoreScore.GRAPHICS: 60, ProjectState.CoreScore.SOUND: 34, ProjectState.CoreScore.TECHNOLOGY: 56, ProjectState.CoreScore.DESIGN: 33}, 0, 0.0)
+	alpha.set_priority_distribution({ProjectState.CoreScore.GRAPHICS: 20, ProjectState.CoreScore.SOUND: 20, ProjectState.CoreScore.TECHNOLOGY: 20, ProjectState.CoreScore.DESIGN: 40})
+	_expect(alpha.call("_select_corrective_categories")[0] == ProjectState.CoreScore.DESIGN, "Equal 200% ratios preserve Alpha priority tie break")
+	_expect(beta.call("_select_corrective_pass_ids") == [&"graphics_pass", &"sound_pass"], "Equal percentages with unequal raw scores preserve Beta Core-order tie break")
+	state.add_alpha_production({ProjectState.CoreScore.GRAPHICS: 1, ProjectState.CoreScore.SOUND: 1}, 0, 0.0)
+	_expect(beta.call("_select_corrective_pass_ids") == [&"technology_pass", &"design_pass"], "Percentages remain uncapped above the Review cap")
+	alpha.free()
+	beta.free()

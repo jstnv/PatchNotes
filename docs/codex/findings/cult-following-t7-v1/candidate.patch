@@ -1,0 +1,112 @@
+--- pinned/scripts/studio_traits.gd
++++ candidate/scripts/studio_traits.gd
+@@ -31,8 +31,8 @@
+ 	&"expensive_lease": {"name":"Expensive Lease", "positive":false, "price":"Grants 2 points", "description":"Active: $515 rent every month from month 1."},
+ 	&"unknown_name": {"name":"Unknown Name", "positive":false, "price":"Grants 2 points", "description":"Active: -10 Awareness on first successful launch, floored at zero."}}
+ 
+-static func evaluate_traits(chosen: Array, version: int = 5) -> Dictionary:
+-	if version not in [3,4,5]: return {"valid":false,"reason":"Unsupported trait version."}
++static func evaluate_traits(chosen: Array, version: int = 6) -> Dictionary:
++	if version not in [3,4,5,6]: return {"valid":false,"reason":"Unsupported trait version."}
+ 	var seen := {}
+ 	var positive := 0
+ 	var negative := 0
+@@ -54,16 +54,18 @@
+ 	spent += 1 if version >= 4 and seen.has(&"resourceful") else 0
+ 	spent += 2 if seen.has(&"lean_production") else 0
+ 	spent += 1 if version >= 5 and seen.has(&"publisher_connections") else 0
++	spent += CultCandidate.price() if version == 6 and seen.has(&"cult_following") else 0
+ 	var refunded := 2 if seen.has(&"unknown_name") or seen.has(&"expensive_lease") else 0
+ 	var active: Array[StringName] = []
+ 	for id: StringName in [&"family_funding", &"studio_buzz", &"unknown_name", &"lean_production", &"expensive_lease"]:
+ 		if seen.has(id): active.append(id)
+ 	if version >= 4 and seen.has(&"resourceful"): active.append(&"resourceful")
+ 	if version >= 5 and seen.has(&"publisher_connections"): active.append(&"publisher_connections")
++	if version == 6 and seen.has(&"cult_following"): active.append(&"cult_following")
+ 	var remaining := STARTING_POINTS - spent + refunded
+ 	if remaining < 0: return {"valid":false, "reason":"Not enough build points."}
+ 	return {"valid":true, "reason":"", "version":version, "trait_ids":ids,
+-		"effects_mode":&"approved_effects_v1", "active_ids":active, "starting_points":4,
++		"effects_mode":&"analysis_cult_candidate_v1" if version==6 else &"approved_effects_v1", "active_ids":active, "starting_points":4,
+ 		"spent_points":spent, "refunded_points":refunded, "remaining_points":remaining, "point_cash_cents":cash_for_points(remaining),
+ 		"family_funding_cents":30000 if seen.has(&"family_funding") else 0}
+ 
+@@ -111,7 +113,7 @@
+ 
+ 
+ static func is_active(selection: Dictionary, id: StringName) -> bool:
+-	return selection.get("version", 0) >= 3 and selection.get("effects_mode", &"") == &"approved_effects_v1" and id in selection.get("active_ids", [])
++	return selection.get("version", 0) >= 3 and selection.get("effects_mode", &"") in [&"approved_effects_v1", &"analysis_cult_candidate_v1"] and id in selection.get("active_ids", [])
+ 
+ static func launch_awareness(selection: Dictionary, raw: int, first_release: bool) -> int:
+ 	if raw < 0: return -1
+--- pinned/scripts/run_state.gd
++++ candidate/scripts/run_state.gd
+@@ -149,6 +149,7 @@
+ 	_owned_features = guaranteed
+ 	_cash_cents = FIRST_STUDIO_CASH_CENTS + point_cash + family_cash
+ 	_studio_traits = selection.duplicate(true)
++	_fanbase = StudioFanbase.create(CultCandidate.initial(selection))
+ 	_first_studio_economy = true
+ 	_studio_name = cleaned
+ 	_studio_specialty = specialty
+--- pinned/scripts/fanbase/studio_fanbase.gd
++++ candidate/scripts/fanbase/studio_fanbase.gd
+@@ -9,8 +9,8 @@
+ const MAX_INT := 9223372036854775807
+ 
+ 
+-static func create() -> Dictionary:
+-	return {"fans": 0, "releases": {}, "months": [], "last_cycle": 0}
++static func create(initial_seed: int = 0) -> Dictionary:
++	return {"initial_seed":initial_seed, "fans": initial_seed, "releases": {}, "months": [], "last_cycle": 0}
+ 
+ 
+ static func awareness_for(fans: int) -> int:
+@@ -119,7 +119,7 @@
+ 	var month := CheckpointSchema.fields("month starting gained lost ending")
+ 	month.net = "int"
+ 	month.releases = CheckpointSchema.array_of({"release_id":"id", "earned_units":"uint", "new_fans":"uint", "lost_fans":"uint"})
+-	return {"fans":"uint", "last_cycle":"uint", "releases":CheckpointSchema.map_of("id", release), "months":CheckpointSchema.array_of(month)}
++	return {"initial_seed":"uint", "fans":"uint", "last_cycle":"uint", "releases":CheckpointSchema.map_of("id", release), "months":CheckpointSchema.array_of(month)}
+ 
+ 
+ ## Validate the persisted ledger from immutable launches and actual productive
+@@ -135,7 +135,7 @@
+ 		if meta.review.launch_fans != state.releases[id].launch_fans or meta.review.fan_awareness != awareness_for(meta.review.launch_fans): return false
+ 		if not launches.has(meta.release_cycle): launches[meta.release_cycle] = []
+ 		launches[meta.release_cycle].append(id)
+-	var rebuilt := create()
++	var rebuilt := create(state.initial_seed)
+ 	var current := {}
+ 	for boundary in range(cycle + 1):
+ 		if boundary > 0:
+--- pinned/scripts/persistence/studio_checkpoint.gd
++++ candidate/scripts/persistence/studio_checkpoint.gd
+@@ -19,7 +19,7 @@
+ 	return _previous_revision
+ 
+ func _rules_revision(rules: String) -> String:
+-	var data := rules
++	var data := rules + "-cult-analysis-v1-%d-%d"%[CultCandidate.fan_seed(),CultCandidate.price()]
+ 	var paths: Array[String] = []
+ 	_collect_data("res://data", paths)
+ 	paths.sort()
+@@ -124,6 +124,7 @@
+ 			if not r.owned_features.has(feature) or not r.credited_projects[id][feature]: return "Invalid familiarity Feature"
+ 			counts[feature] = int(counts.get(feature,0))+1
+ 	if counts != r.familiarity: return "Familiarity count mismatch"
++	if r.fanbase.initial_seed != CultCandidate.initial(r.studio_traits): return "Invalid analysis seed provenance"
+ 	if not StudioFanbase.validate(r.fanbase, r.released_games, r.release_metadata, r.completed_run_cycles): return "Invalid Fanbase provenance"
+ 	if r.released_games.keys() != r.release_metadata.keys(): return "Release order/identity mismatch"
+ 	for id: StringName in r.released_games:
+--- pinned/scripts/fanbase/cult_candidate.gd
++++ candidate/scripts/fanbase/cult_candidate.gd
+@@ -0,0 +1,7 @@
++class_name CultCandidate
++extends RefCounted
++## ANALYSIS COPY ONLY. Values are candidate inputs, never approved gameplay.
++static func fan_seed() -> int: return int(OS.get_environment("PN_CULT_SEED"))
++static func price() -> int: return int(OS.get_environment("PN_CULT_PRICE"))
++static func initial(selection: Dictionary) -> int:
++	return fan_seed() if StudioTraits.is_active(selection, &"cult_following") else 0

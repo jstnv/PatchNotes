@@ -1,0 +1,67 @@
+{
+	"accepted_commands": 0,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"final_state": "final_state.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"studio_checkpoint": "",
+		"tape": "replay.tape.json",
+		"telemetry": ""
+	},
+	"case_id": "invalid-initial",
+	"commands": 0,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "Invalid recipe or Studio checkpoint",
+	"final_release_count": 0,
+	"final_rng": {},
+	"final_run_cycle": 0,
+	"final_state": "",
+	"initial_release_count": 0,
+	"initial_rng": {},
+	"initial_run_cycle": 0,
+	"initial_state": "",
+	"input_identity": "75130709a6840bc0cd30be9b0c6d9c34bc6b7665baaf143ae41df724113c0f20",
+	"last_choice": null,
+	"max_commands": 100,
+	"ok": false,
+	"outcome": {},
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"integer": "2"
+				},
+				"beta": {
+					"integer": "2"
+				},
+				"design": {
+					"integer": "2"
+				}
+			},
+			"name_prefix": "Telemetry game",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 0,
+	"replayable": false,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "7b2da4c52d23daf292107b67b80e673370a22da8c0e1e0a81019b3c89f01193d",
+	"status": "invalid_initial_state",
+	"study": {
+		"arm": "invalid-initial",
+		"pair_id": "telemetry-equivalence"
+	},
+	"tape_identity": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+	"target_release_count": 2,
+	"telemetry_sha256": ""
+}

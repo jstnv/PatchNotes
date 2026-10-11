@@ -10,7 +10,7 @@ signal selection_changed
 var card_data: CardData
 var _selected: bool = false
 
-@onready var artwork_fallback: Panel = %ArtworkFallback
+@onready var artwork_fallback: TextureRect = %Background
 @onready var artwork: TextureRect = %Artwork
 @onready var card_name_label: Label = %CardName
 @onready var primary_score: Control = $PrimaryScore
@@ -66,7 +66,10 @@ func refresh() -> void:
 		return
 
 	visible = true
-	card_name_label.text = card_data.card_name
+	_fit_label(card_name_label, card_data.card_name, 15, 10, 2)
+	# A reused view must not retain text from an earlier two-score card.
+	secondary_score_value.text = ""
+	secondary_score_type.text = ""
 	if card_data.phase == CardData.PHASE_BETA:
 		_refresh_beta_data()
 		_refresh_renewability()
@@ -76,16 +79,16 @@ func refresh() -> void:
 	primary_score.visible = true
 	scope_display.visible = true
 	primary_score_value.text = "+%d" % card_data.primary_value
-	primary_score_type.text = _display_name(card_data.primary_stat)
+	_fit_label(primary_score_type, _score_name(card_data.primary_stat), 11, 9)
 
 	var has_secondary_score := not card_data.secondary_stat.is_empty()
 	secondary_score.visible = has_secondary_score
 	if has_secondary_score:
 		secondary_score_value.text = "+%d" % card_data.secondary_value
-		secondary_score_type.text = _display_name(card_data.secondary_stat)
+		_fit_label(secondary_score_type, _score_name(card_data.secondary_stat), 11, 9)
 
-	scope_value.text = str(card_data.scope)
-	department_label.text = _display_name(card_data.department)
+	scope_value.text = "S%d" % card_data.scope
+	_fit_label(department_label, _display_name(card_data.department), 14, 10)
 	department_label.visible = not card_data.department.is_empty()
 
 	_refresh_renewability()
@@ -96,14 +99,15 @@ func refresh() -> void:
 func _refresh_beta_data() -> void:
 	primary_score.visible = true
 	primary_score_value.text = "V%d" % card_data.beta_value
-	primary_score_type.text = _display_name(card_data.beta_category)
+	_fit_label(primary_score_type, _score_name(card_data.beta_category), 11, 9)
 	secondary_score.visible = false
 	scope_display.visible = false
-	var lifecycle := "Renewable" if card_data.renewable else "Finite"
+	scope_value.text = ""
 	if card_data.beta_category == CardData.BETA_CATEGORY_QA:
-		department_label.text = "%s | %s" % [_display_name(card_data.qa_operation), lifecycle]
+		department_label.text = _display_name(card_data.qa_operation)
 	else:
-		department_label.text = lifecycle
+		department_label.text = _display_name(card_data.beta_category)
+	_fit_label(department_label, department_label.text, 14, 10)
 	department_label.visible = true
 
 
@@ -128,7 +132,10 @@ func _refresh_card_tooltip() -> void:
 		if not card_data.secondary_stat.is_empty():
 			detail += " · +%d %s" % [card_data.secondary_value, _display_name(card_data.secondary_stat)]
 		synergy = "Synergy: the first score is primary. Four cards with primary %s trigger Specialization; secondary scores do not decide the match." % _display_name(card_data.primary_stat)
-	input_button.tooltip_text = "%s\n%s\n%s\n%s\nSelect cards to build a four-card hand." % [card_data.card_name, detail, lifecycle, synergy]
+	var department := _display_name(card_data.department)
+	if card_data.phase == CardData.PHASE_BETA and not card_data.qa_operation.is_empty():
+		department = _display_name(card_data.qa_operation)
+	input_button.tooltip_text = "%s\n%s\n%s\n%s\n%s\nSelect cards to build a four-card hand." % [card_data.card_name, department, detail, lifecycle, synergy]
 
 
 func _refresh_artwork() -> void:
@@ -145,7 +152,7 @@ func _refresh_artwork() -> void:
 		push_warning("Artwork is not a Texture2D for card '%s': %s" % [card_data.id, card_data.artwork_path])
 		return
 	artwork.texture = loaded_artwork
-	artwork_fallback.visible = false
+	# The kit background remains below artwork, including transparent artwork.
 
 
 func _on_input_button_pressed() -> void:
@@ -155,3 +162,40 @@ func _on_input_button_pressed() -> void:
 
 func _display_name(value: StringName) -> String:
 	return str(value).replace("_", " ").capitalize()
+
+
+func _score_name(value: StringName) -> String:
+	if value == &"graphics": return "GFX"
+	if value == &"technology": return "TECH"
+	if value == CardData.BETA_CATEGORY_MARKETING: return "MKTG"
+	return _display_name(value).to_upper()
+
+
+func _fit_label(label: Label, full_text: String, preferred: int, minimum: int, max_lines := 1) -> void:
+	# Fit using the actual bundled font; local rectangles never grow or move.
+	# Full wording remains available in the card tooltip.
+	var text := full_text.to_upper()
+	label.tooltip_text = full_text
+	label.set_meta("text_abbreviated", false)
+	var font := label.get_theme_font("font")
+	for font_size in range(preferred, minimum - 1, -1):
+		var lines: Array[String] = [""]
+		for word in text.split(" ", false):
+			var candidate := word if lines[-1].is_empty() else lines[-1] + " " + word
+			if font.get_string_size(candidate, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > label.size.x and not lines[-1].is_empty():
+				lines.append(word)
+			else:
+				lines[-1] = candidate
+		var height := font.get_height(font_size) * lines.size() + label.get_theme_constant("line_spacing") * (lines.size()-1)
+		var fits := lines.size() <= max_lines and height <= label.size.y
+		for line in lines:
+			fits = fits and font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= label.size.x
+		if fits:
+			label.add_theme_font_size_override("font_size", font_size)
+			label.text = "\n".join(lines)
+			return
+	label.add_theme_font_size_override("font_size", minimum)
+	while not text.is_empty() and font.get_string_size(text + "...", HORIZONTAL_ALIGNMENT_LEFT, -1, minimum).x > label.size.x:
+		text = text.left(-1)
+	label.text = text + "..."
+	label.set_meta("text_abbreviated", true)

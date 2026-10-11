@@ -8,6 +8,8 @@ const STUDIO_PHASE_SCENE := preload("res://scenes/phases/studio_phase.tscn")
 const CONTRACT_PHASE_SCENE := preload("res://scenes/phases/contract_phase.tscn")
 const SNAPSHOT_DATABASE_SCRIPT := preload("res://scripts/market/primitive_snapshot_database.gd")
 const REQUIRED_SCOPE := 30
+const LaunchSettlement := preload("res://scripts/simulation/launch_settlement.gd")
+const BeginProject := preload("res://scripts/simulation/begin_project.gd")
 
 var project_state: ProjectState
 var run_state: RunState
@@ -22,6 +24,9 @@ var checkpoints: CheckpointCoordinator
 var _save_label: Label
 var _save_failure_dialog: AcceptDialog
 var _quit_dialog: ConfirmationDialog
+var _return_checkpoint_dialog: ConfirmationDialog
+var _recovery_dialog: ConfirmationDialog
+var _loading_checkpoint := false
 var _session_quit: Button
 var _startup_panel: PanelContainer
 
@@ -179,24 +184,7 @@ func set_review_variance_roll_for_verification(roll: int) -> bool:
 
 
 func _initialize_project_snapshots(target: ProjectState = project_state) -> bool:
-	var has_competitor := target.has_competitor_snapshot()
-	var has_forecast := target.has_market_forecast_snapshot()
-	if has_competitor != has_forecast:
-		push_warning("Project initialization rejected a partial snapshot assignment.")
-		return false
-	if has_competitor:
-		return (
-			_snapshot_database.has_competitor(target.get_assigned_competitor_snapshot_id_for_authority())
-			and _snapshot_database.has_forecast(target.get_assigned_market_forecast_snapshot_id_for_authority())
-		)
-	var rng := run_state.random_streams.stream(&"snapshot")
-	var competitor_roll := _controlled_snapshot_rolls[0] if _controlled_snapshot_rolls.size() == 2 else rng.randi_range(0, 99)
-	var forecast_roll := _controlled_snapshot_rolls[1] if _controlled_snapshot_rolls.size() == 2 else rng.randi_range(0, 99)
-	var competitor_id := _snapshot_database.select_competitor_id(competitor_roll)
-	var forecast_id := _snapshot_database.select_forecast_id(forecast_roll)
-	if not _snapshot_database.has_competitor(competitor_id) or not _snapshot_database.has_forecast(forecast_id):
-		return false
-	return target.initialize_snapshots(competitor_id, forecast_id)
+	return BeginProject.initialize_snapshots(target,run_state,_snapshot_database,_controlled_snapshot_rolls)
 
 
 func _on_design_proceed_to_alpha_requested(source_design_phase: Control) -> void:
@@ -298,24 +286,12 @@ func _replace_beta_with_launch(source_beta_phase: Control, launch_scene: PackedS
 	):
 		return false
 	_transition_in_progress = true
-	if not _ensure_review_result():
-		push_error("Could not calculate the Primitive Review result.")
-		_transition_in_progress = false
-		return false
-	if not _ensure_awareness_result():
-		push_error("Could not calculate the Primitive Awareness result.")
-		_transition_in_progress = false
-		return false
-	if not _ensure_launch_market_context_result():
-		push_error("Could not resolve the Primitive launch market context.")
-		_transition_in_progress = false
-		return false
-	if not _ensure_units_sold_result():
-		push_error("Could not calculate Primitive Month 1 units sold.")
-		_transition_in_progress = false
-		return false
-	if not _ensure_month_one_sales_revenue_result():
-		push_error("Could not prepare the Primitive Month 1 sales and revenue foundation.")
+	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
+	settlement._review_rng = _review_rng
+	var frozen := settlement.freeze_results()
+	_controlled_review_roll = settlement._controlled_review_roll
+	if not frozen.ok:
+		push_error("Could not prepare the Primitive launch results: " + frozen.error)
 		_transition_in_progress = false
 		return false
 	# Validate committed launch results, then enter Studio and register the
@@ -412,36 +388,24 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 	if run_state.next_project_serial == RunState.MAX_SIGNED_INT: return false
 	if checkpoints != null and not checkpoints.before_departure(): return false
 	_transition_in_progress = true
-	var saved_rng := run_state.random_streams.snapshot()
-	var next := PrimitivePredevelopment.prepare_project(base_name, genre, theme_id, run_state)
-	if next != null and not run_state._bank_run_id.is_empty():
-		next._release_id = StringName("%s:project:%d" % [run_state._bank_run_id, run_state.next_project_serial])
-	if next == null or not _initialize_project_snapshots(next):
-		run_state.random_streams.restore(saved_rng)
-		_transition_in_progress = false
-		source_studio.show_development_error("Could not prepare the new project. Please try again.")
-		return false
-	var design := DESIGN_PHASE_SCENE.instantiate() as DesignPhase
-	if design == null:
-		run_state.random_streams.restore(saved_rng)
-		_transition_in_progress = false
-		return false
-	design.setup(next, run_state)
-	design.proceed_to_alpha_requested.connect(_on_design_proceed_to_alpha_requested.bind(design))
-	# No cash cost. Sales earning/settlement uses the same atomic boundary as all
-	# other productive actions. Preparation above never touches the released game.
-	# This is a Studio action, not a completed development cycle of the new game.
-	if checkpoints != null: checkpoints.in_studio = false
-	if not run_state.complete_productive_action(Callable(), 0, -1, &"", &"development", next.get_release_id()):
+	var prepared: Array[DesignPhase] = []
+	var readiness := func(next_project: ProjectState) -> bool:
+		var view := DESIGN_PHASE_SCENE.instantiate() as DesignPhase
+		if view == null: return false
+		view.setup(next_project,run_state)
+		view.proceed_to_alpha_requested.connect(_on_design_proceed_to_alpha_requested.bind(view))
+		prepared.append(view)
+		if checkpoints != null: checkpoints.in_studio = false
+		return true
+	var result := BeginProject.execute(run_state,_snapshot_database,base_name,genre,theme_id,readiness,_controlled_snapshot_rolls)
+	if not result.ok:
 		if checkpoints != null: checkpoints.in_studio = true
-		design.free()
-		run_state.random_streams.restore(saved_rng)
+		for view in prepared: view.free()
 		_transition_in_progress = false
+		source_studio.show_development_error(result.error)
 		return false
-	run_state.next_project_serial += 1
-	if run_state.needs_starter_selection():
-		run_state.begin_first_game_tutorial(next)
-		run_state.finalize_starter_selection()
+	var next: ProjectState = result.project
+	var design: DesignPhase = prepared[0]
 	project_state = next
 	_controlled_review_roll = -1
 	_controlled_snapshot_rolls.clear()
@@ -460,44 +424,44 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 
 
 func _ensure_review_result() -> bool:
-	if project_state.has_review_result():
-		return true
-	var rng_state := _review_rng.state
-	var roll := _controlled_review_roll if _controlled_review_roll >= 0 else _review_rng.randi_range(0, 99)
-	var result := PrimitiveReviewCalculator.calculate(project_state, roll)
-	if result == null or not project_state.commit_review_result(result):
-		_review_rng.state = rng_state
-		return false
-	_controlled_review_roll = -1
-	return true
+	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
+	settlement._review_rng = _review_rng
+	var ok := settlement._ensure_review_result()
+	_controlled_review_roll = settlement._controlled_review_roll
+	return ok
 
 
 func _ensure_awareness_result() -> bool:
-	if project_state.has_awareness_result():
-		return true
-	var result := PrimitiveAwarenessCalculator.calculate(project_state, run_state)
-	return result != null and project_state.commit_awareness_result(result)
+	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
+	settlement._review_rng = _review_rng
+	var ok := settlement._ensure_awareness_result()
+	_controlled_review_roll = settlement._controlled_review_roll
+	return ok
 
 
 func _ensure_launch_market_context_result() -> bool:
-	if project_state.has_launch_market_context_result():
-		return true
-	var result := PrimitiveLaunchMarketContextCalculator.calculate(project_state, _snapshot_database)
-	return result != null and project_state.commit_launch_market_context_result(result)
+	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
+	settlement._review_rng = _review_rng
+	var ok := settlement._ensure_launch_market_context_result()
+	_controlled_review_roll = settlement._controlled_review_roll
+	return ok
 
 
 func _ensure_units_sold_result() -> bool:
-	if project_state.has_units_sold_result():
-		return true
-	var result := PrimitiveUnitsSoldCalculator.calculate(project_state)
-	return result != null and project_state.commit_units_sold_result(result)
+	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
+	settlement._review_rng = _review_rng
+	var ok := settlement._ensure_units_sold_result()
+	_controlled_review_roll = settlement._controlled_review_roll
+	return ok
 
 
 func _ensure_month_one_sales_revenue_result() -> bool:
-	if project_state.has_month_one_sales_revenue_result():
-		return true
-	var result := PrimitiveMonthOneSalesRevenueCalculator.calculate(project_state)
-	return result != null and project_state.commit_month_one_sales_revenue_result(result)
+	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
+	settlement._review_rng = _review_rng
+	var ok := settlement._ensure_month_one_sales_revenue_result()
+	_controlled_review_roll = settlement._controlled_review_roll
+	return ok
+
 
 func _build_checkpoint_controls() -> void:
 	get_tree().auto_accept_quit = false
@@ -545,7 +509,19 @@ func _checkpoint_status() -> void:
 	_session_quit.visible = not run_state.get_studio_name().is_empty()
 	_save_label.tooltip_text = checkpoints.failure
 	if checkpoints.failure.is_empty(): _save_failure_dialog.hide()
-	elif not _save_failure_dialog.visible: _save_failure_dialog.popup_centered(Vector2i(640,200))
+	# load_current can emit failure synchronously. Continue owns that failure's
+	# recovery prompt; opening a second exclusive window here would collide.
+	elif not _loading_checkpoint and not _checkpoint_dialog_visible():
+		_save_failure_dialog.popup_centered(Vector2i(640,200))
+
+func _checkpoint_dialog_visible() -> bool:
+	for dialog in [_save_failure_dialog,_quit_dialog,_return_checkpoint_dialog,_recovery_dialog]:
+		if is_instance_valid(dialog) and dialog.visible: return true
+	return false
+
+func _hide_checkpoint_dialogs() -> void:
+	for dialog in [_save_failure_dialog,_quit_dialog,_return_checkpoint_dialog,_recovery_dialog]:
+		if is_instance_valid(dialog): dialog.hide()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST: _request_quit()
@@ -562,11 +538,15 @@ func _request_quit() -> void:
 	var destination := "your last saved Studio"
 	if info.status==&"valid": destination = "%s, cycle %s" % [info.payload.run.studio_name,info.payload.run.completed_run_cycles]
 	_quit_dialog.dialog_text = "Progress since your last Studio checkpoint will be lost. Continue will return to %s. Quit anyway?" % destination
+	_hide_checkpoint_dialogs()
 	_quit_dialog.popup_centered()
 	_quit_dialog.get_cancel_button().grab_focus()
 
 func _confirm_return_checkpoint() -> void:
+	_hide_checkpoint_dialogs()
+	if is_instance_valid(_return_checkpoint_dialog): _return_checkpoint_dialog.queue_free()
 	var dialog := ConfirmationDialog.new()
+	_return_checkpoint_dialog = dialog
 	dialog.dialog_text = "Discard unsaved changes and return to the last saved Studio?"
 	add_child(dialog)
 	dialog.confirmed.connect(_continue_checkpoint)
@@ -574,8 +554,11 @@ func _confirm_return_checkpoint() -> void:
 	dialog.get_cancel_button().grab_focus()
 
 func _continue_checkpoint() -> void:
-	if checkpoints==null or _transition_in_progress: return
+	if checkpoints==null or _transition_in_progress or _loading_checkpoint: return
+	_hide_checkpoint_dialogs()
+	_loading_checkpoint = true
 	var restored := checkpoints.load_current()
+	_loading_checkpoint = false
 	if restored==null:
 		_show_checkpoint_recovery()
 		return
@@ -590,8 +573,11 @@ func _continue_checkpoint() -> void:
 
 func _show_checkpoint_recovery() -> void:
 	if checkpoints==null: return
+	_hide_checkpoint_dialogs()
+	if is_instance_valid(_recovery_dialog): _recovery_dialog.queue_free()
 	var info := checkpoints.store.inspect()
 	var dialog := ConfirmationDialog.new()
+	_recovery_dialog = dialog
 	dialog.title = "Saved Studio recovery"
 	var reason := checkpoints.failure if not checkpoints.failure.is_empty() else str(info.get("reason",info.status))
 	dialog.dialog_text = "The saved Studio could not be loaded: %s.\nYour checkpoint files have been preserved." % reason

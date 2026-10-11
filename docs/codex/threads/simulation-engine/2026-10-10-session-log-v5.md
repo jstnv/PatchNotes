@@ -1,0 +1,10 @@
+# Simulation Engine session v5 — 2026-10-10
+
+- User authorized the recorded overflow repair, then Alpha extraction.
+- Inspected current state/TODO/README, relevant design and Simulation Engine/AI records, branch/HEAD/status/diff and source before implementation. `main`, HEAD `41c87c76fb4d3c06a5332d93f0e7b0997007475d`. Prior dirty work preserved; `.codex-godot-temp` untouched. No TODO edit, commit, push, computer control or AI policy decision.
+- Pinned pre-turn scripts/status; repaired `project_state.gd` integer preflights and added `debug/verify_production_overflow.gd`. Updated `verify_design_command.gd` to require overflow rejection while retaining immutable historical oracle evidence for unaffected cases.
+- Captured the unchanged Alpha scene as a verifier-only oracle against corrected ProjectState, then added `simulation/alpha_hand_command.gd`, adapted `phases/alpha_phase.gd`, and added `debug/verify_alpha_command.gd` plus its pinned digest fixture.
+- Original/extracted live/headless Alpha paths match across 171 attempts each, including exact RNG, floating-point state and signal order; final live/headless payloads also match directly. Additional malformed/stale/replayed/reentrant requests reject unchanged. All 13 focused suites pass, including native transition/animation regression. Exact commands, source hashes, elapsed times and logs: [results](m2b-v1/results.json).
+- The maintained animation verifier refreshed its ignored generated animation trace; gameplay source remained unchanged during checks. Existing artwork/fixture warnings and allowlisted certificate error are retained. No failed test invocation occurred in this pass.
+- Updated CURRENT_STATE and Simulation Engine README/findings. [Detailed implementation, evidence and limits](2026-10-10-extraction-m2b.md). Historical M2a overflow status is superseded by this repair; its original evidence remains intact.
+- Remaining: Beta hand; initial deals/redraws/playtest/exit commands; portable replay state and runner; full-run parity and later measured AI scale. No full-engine parity, performance, release-readiness or arbitrary-CardData safety claim.

@@ -1,0 +1,3 @@
+# Audit development diagnostics
+
+The first audit attempt passed the20 three-release routes then stopped at an overly broad equality check between the neutral pre-exit presentation snapshot and the restored Studio presentation. The former includes the completed project object's cores/scope/bugs/project cycle; a Studio checkpoint intentionally restores persistent RunState without that old project object. The exact complete checkpoint payload had already matched. The audit now separately compares every persistent state field (cash, Fans/full ledger, absolute cycle, full finance/report/block, redraws, sales) and leaves completed-project presentation outside that equality claim. No native evidence, checkpoint or gameplay was changed to satisfy the audit.

@@ -47,6 +47,7 @@ func _initialize() -> void:
 	_verify_balanced_success(design_phase)
 	_verify_balanced_pass_success(design_phase, database)
 	_verify_two_action_bug_pressure_accumulation(design_phase, database)
+	design_phase.get("_exhausted_card_ids").clear()
 	var failed_state := _reset_project_state(design_phase)
 	_verify_atomic_failure(design_phase, failed_state, database)
 	var base_state := _reset_project_state(design_phase)
@@ -636,10 +637,20 @@ func _verify_balanced_production(design_phase: Node) -> void:
 	var sound := ProjectState.CoreScore.SOUND
 	var technology := ProjectState.CoreScore.TECHNOLOGY
 	var design := ProjectState.CoreScore.DESIGN
-	_expect(design_phase.call("_are_core_scores_balanced", {graphics: 8, sound: 10, technology: 10, design: 12}), "Inclusive lower and upper Balanced boundaries qualify")
+	_expect(design_phase.call("_are_core_scores_balanced", {graphics: 17, sound: 20, technology: 20, design: 23}), "Inclusive lower and upper Balanced boundaries qualify")
 	_expect(not design_phase.call("_are_core_scores_balanced", {graphics: 8, sound: 11, technology: 11, design: 11}), "A score just below the lower Balanced boundary fails")
 	_expect(not design_phase.call("_are_core_scores_balanced", {graphics: 9, sound: 9, technology: 9, design: 12}), "A score just above the upper Balanced boundary fails")
 	_expect(design_phase.call("_are_core_scores_balanced", {graphics: 8, sound: 8, technology: 8, design: 9}), "Balanced mean uses fractional division without integer truncation")
+
+	_expect(not design_phase.call("_are_core_scores_balanced", {}), "Zero-output hands cannot proc Balanced")
+	_expect(not design_phase.call("_are_core_scores_balanced", {graphics: 16, sound: 20, technology: 20, design: 24}), "Outside the 15% endpoints does not proc")
+	for total in [20, 21, 22, 23]:
+		var split: Dictionary = design_phase.call("_apply_balanced_production", {graphics: total})
+		var sum := 0
+		for category in range(4):
+			sum += split[category]
+			_expect(split[category] == 5 + (1 if category < total % 4 else 0), "Remainder follows fixed Core order")
+		_expect(sum == total, "Redistribution conserves every whole point")
 
 	var project_state := _reset_project_state(design_phase)
 	var current: Dictionary[ProjectState.CoreScore, int] = {graphics: 3, sound: 3, technology: 5, design: 6}
@@ -647,15 +658,15 @@ func _verify_balanced_production(design_phase: Node) -> void:
 	var cards: Array[CardData] = [
 		_make_fixture(&"balanced_graphics", &"graphics", 2, &"sound", 1, 1),
 		_make_fixture(&"balanced_sound", &"sound", 4, &"graphics", 3, 1),
-		_make_fixture(&"balanced_technology", &"technology", 3, &"", 0, 1),
-		_make_fixture(&"balanced_design", &"design", 2, &"", 0, 1),
+		_make_fixture(&"balanced_technology", &"technology", 5, &"", 0, 1),
+		_make_fixture(&"balanced_design", &"design", 6, &"", 0, 1),
 	]
 	var values_before := _values(project_state)
 	var result := _calculate_hand(design_phase, cards)
-	_expect(result.base_hand.score_additions == {graphics: 5, sound: 5, technology: 3, design: 2}, "Balanced base aggregate includes secondary contributions normally")
-	_expect(result.provisional_scores == {graphics: 8, sound: 8, technology: 8, design: 8}, "Provisional scores equal cumulative scores plus unmodified base production")
+	_expect(result.base_hand.score_additions == {graphics: 5, sound: 5, technology: 5, design: 6}, "Balanced base aggregate includes secondary contributions normally")
+	_expect(result.provisional_scores == {graphics: 8, sound: 8, technology: 10, design: 12}, "Provisional scores equal cumulative scores plus unmodified base production")
 	_expect(_values(project_state) == values_before, "Provisional and synergy calculation does not mutate ProjectState or Scope")
-	_expect(result.balanced_production and result.score_additions == {graphics: 6, sound: 6, technology: 4, design: 2}, "Balanced example aggregates per Core Score, multiplies by 1.20, and rounds to nearest integer")
+	_expect(result.balanced_production and result.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Balanced hand total21 redistributes6/5/5/5 without a multiplier")
 	_expect(result.scope == 4, "Balanced Production leaves printed Scope unmodified")
 
 	var reversed := cards.duplicate()
@@ -692,7 +703,7 @@ func _verify_balanced_production(design_phase: Node) -> void:
 		_make_fixture(&"both_7", &"graphics", 7, &"technology", 7, 0),
 	]
 	var both := _calculate_hand(design_phase, specialized_cards)
-	_expect(both.balanced_eligible and both.provisional_scores == {graphics: 17, sound: 17, technology: 17, design: 17}, "Balanced eligibility uses base production even when Specialization qualifies")
+	_expect(not both.balanced_eligible and both.provisional_scores == {graphics: 17, sound: 17, technology: 17, design: 17}, "Balanced project totals cannot qualify an unbalanced hand")
 	_expect(both.specialization_stat == &"graphics" and not both.balanced_production, "Specialization takes precedence when both synergies qualify")
 	_expect(both.score_additions == {graphics: 26, technology: 14, sound: 5, design: 8}, "Specialization and Balanced multipliers never stack")
 
@@ -709,21 +720,22 @@ func _verify_balanced_success(design_phase: Node) -> void:
 	var cards: Array[CardData] = [
 		_make_fixture(&"commit_graphics", &"graphics", 2, &"sound", 1, 1),
 		_make_fixture(&"commit_sound", &"sound", 4, &"graphics", 3, 1),
-		_make_fixture(&"commit_technology", &"technology", 3, &"", 0, 1),
-		_make_fixture(&"commit_design", &"design", 2, &"", 0, 1),
+		_make_fixture(&"commit_technology", &"technology", 5, &"", 0, 1),
+		_make_fixture(&"commit_design", &"design", 6, &"", 0, 1),
 	]
 	_set_exact_candidates(design_phase, cards, true)
 	_select_first(design_phase, 4)
 	var emissions := [0]
 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+	_expect(design_phase.get_workspace().hand_motion._specialization_header.is_valid() and not design_phase.get_workspace().synergy_notification.banner.visible, "Balanced Design popup is deferred until music-grid bonus presentation")
 	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
-	_expect(_values(project_state) == [9, 9, 9, 8, 4], "Balanced success adds only adjusted current production and unmodified Scope")
-	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 15.0 / 18.0), "Balanced success accumulates fractional Bug Pressure from unadjusted printed values")
-	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: 0.83", "Successful Feature action refreshes the Bug Pressure label through values_changed")
+	_expect(_values(project_state) == [9, 8, 10, 11, 4], "Balanced success adds only adjusted current production and unmodified Scope")
+	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 21.0 / 18.0), "Balanced success accumulates fractional Bug Pressure from unadjusted printed values")
+	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: 1.17", "Successful Feature action refreshes the Bug Pressure label through values_changed")
 	_expect(emissions[0] == 1, "Balanced success commits through one values_changed emission")
 	_expect(project_state.get_current_cycle() == 1, "Balanced success advances exactly one cycle")
-	_expect(design_phase.get_workspace().synergy_notification.title_label.text == "Balanced Production!", "Balanced Design action displays its synergy")
+	_expect(not design_phase.get_workspace().synergy_notification.banner.visible and not design_phase.get_workspace().hand_motion._specialization_header.is_valid(), "Cancel discards the deferred Balanced Design popup without publishing it")
 	for card in cards:
 		_expect(design_phase.get("_exhausted_card_ids").has(card.id), "Balanced success preserves Feature exhaustion: %s" % card.id)
 	_expect(design_phase.get("_selected_card_views").is_empty() and design_phase.get_node("%HandContainer").get_child_count() == 7, "Balanced success clears selection and refills the four played slots")
@@ -772,6 +784,8 @@ func _verify_balanced_pass_success(design_phase: Node, database: Node) -> void:
 
 
 func _verify_two_action_bug_pressure_accumulation(design_phase: Node, database: Node) -> void:
+	# This fixture starts a new project, including its finite lifecycle.
+	design_phase.get("_exhausted_card_ids").clear()
 	var project_state := _reset_project_state(design_phase)
 	var pass_cards: Array[CardData] = [
 		database.call(&"get_card", &"sound_pass"),
@@ -1284,6 +1298,20 @@ func _is_lexically_sorted(values: Array) -> bool:
 		if str(values[index - 1]) > str(values[index]):
 			return false
 	return true
+
+
+func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "after"]) -> String:
+	# The extraction oracles predate the approved v8 Cult seed revision. These
+	# scenarios contain no Cult trait. Compare all mechanics/RNG/events intact,
+	# translating only that known metadata field in a detached digest copy.
+	# Raw captures and live/headless assertions retain the actual v8 state.
+	var historical := trace.duplicate(true)
+	for step: Dictionary in historical.steps:
+		for boundary in boundaries:
+			var traits: Dictionary = step[boundary].run._studio_traits
+			_expect(traits.version == {"integer": "8"} and not traits.trait_ids.has("cult_following"), "Historical oracle comparison permits only v8 non-Cult version metadata")
+			traits.version = {"integer": "7"}
+	return JSON.stringify(historical).sha256_text()
 
 
 func _finish() -> void:

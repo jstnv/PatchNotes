@@ -10,8 +10,22 @@ Started 2026-10-06 (America/Los_Angeles). This folder is the local workspace for
 
 The original foundation included exact-cent cash and finance journals, $500 monthly rent, typed expenses, and monthly credit updates. Selectable loans are now implemented locally; [CURRENT_STATE](../../CURRENT_STATE.md) and the [current acceptance handoff](2026-10-08-next-acceptance-handoff-v1.md) track the remaining checkpoint and export gates. Accepted lending rules are in the [system design](../../design/economy-banking.md).
 
+The [Studio Traits education handoff intake](2026-10-09-education-handoff-intake-v1.md) records the approved payment order. The [education-payoff reserve](2026-10-09-education-payoff-reserve-decision-v1.md) and [saved-preview treatment](2026-10-09-education-preview-migration-decision-v1.md) are also approved. The later E1–E4 education activation is implemented locally.
+
+The [education activation handoff](2026-10-09-education-activation-handoff-v1.md) collects these rules into serial implementation and acceptance gates. The [zero-cycle payoff sequence](2026-10-09-education-payoff-action-sequence-decision-v1.md) is approved. The package was implemented by the main thread; this Banking thread's [review](2026-10-09-education-implementation-review-v1.md) records local completion and the remaining exported interaction gate. No gameplay was implemented here.
+
 ## Thread records
 
+- [Exported Banking acceptance session](2026-10-09-export-acceptance-session-v1.md): user-accessible audited build, fresh Dropout payoff/Continue and genuine earned-cash installment.
+- [Exported acceptance continuation](2026-10-10-export-acceptance-continuation-v1.md): genuine earned-cash education payoff, cold Continue and preserved active Bank loan pass on the pinned build; later whole-source export remains separate.
+- [Education implementation review](2026-10-09-education-implementation-review-v1.md): E1–E4 local completion, exact source-hash check and remaining exported interaction gate.
+- [Education debt and Banking intake](2026-10-09-education-handoff-intake-v1.md): approved future service order, current-source boundaries, payoff and migration decisions, and deferred acceptance.
+- [Education-payoff reserve decision](2026-10-09-education-payoff-reserve-decision-v1.md): approved due-bill cash reserve, including older education arrears versus newer Bank bills.
+- [Education preview migration decision](2026-10-09-education-preview-migration-decision-v1.md): v3–v5 previews remain inactive on supported Continue; only new-version selections activate debt.
+- [Education activation handoff](2026-10-09-education-activation-handoff-v1.md): historical E1–E4 implementing scope, dependencies and acceptance; since implemented locally.
+- [Education pre-TODO readiness review](2026-10-09-education-pre-todo-readiness-v1.md): identified the zero-cycle payoff servicing choice, later resolved.
+- [Education payoff action-sequencing decision](2026-10-09-education-payoff-action-sequence-decision-v1.md): immediate due-bill service followed by education payoff in one atomic zero-cycle action.
+- [Education TODO contribution session](2026-10-09-education-todo-contribution-session-v1.md): existing shared entry queued, with source state and documentation checks; no gameplay dispatch.
 - [Working notes](working-notes.md): current baseline, open design questions, and future decisions.
 - [State of the system, v1](2026-10-06-state-v1.md): current code and local evidence intake.
 - [First loan proposal, v1](2026-10-06-first-loan-proposal-v1.md): candidate terms, math, and pressure checks.
@@ -42,3 +56,14 @@ The original foundation included exact-cent cash and finance journals, $500 mont
 - [Current-source acceptance handoff](2026-10-08-next-acceptance-handoff-v1.md): next Task10/Task11 gates after Banking restart coverage and the Research/Resourceful checkpoint revision.
 - [Shared-list update session](../../logs/2026-10-08-banking-todo-update-v1.md): current-source Task10/Task11 refresh and queued B6 read-only balance review.
 - [Drive handoff reconciliation, v1](2026-10-06-drive-handoffs-v1.md): relevant historical pass offs compared with the local TODO and current source state.
+- [Computer Use TODO update, 2026-10-10](2026-10-10-computer-use-todo-update-v1.md): current-source export and maintained-gate evidence, visible acceptance limits, and shared-list handoff.
+- [Implementation status recheck, 2026-10-10](2026-10-10-implementation-status-recheck-v1.md): confirms bounded Banking and Cult export routes, the 108-suite gate, and later source drift before fresh acceptance.
+- [Education grace study plan, 2026-10-11](2026-10-11-education-grace-study-plan-v1.md): predeclared legal cohorts, policy, measurements and stopping limits.
+- [Education grace simulator finding, 2026-10-11](2026-10-11-education-grace-finding-v1.md): six current-rules routes, exact dues, fresh-process replay and bounded cash outcomes.
+- [Education grace design-review handoff v1](HANDOFF-EDUCATION-GRACE-v1.md): no gameplay candidate; proposes a spending-sensitive follow-up decision.
+- [Simulator session log, 2026-10-11](2026-10-11-simulator-session-v1.md): source state, checks, evidence and remaining scope.
+- [Paid-Feature/Bank study plan, 2026-10-11](2026-10-11-spending-bank-study-plan-v1.md): predeclared seeds, legal Store route, matched Bank question and stopping conditions.
+- [Paid-Feature/Bank simulator finding, 2026-10-11](2026-10-11-spending-bank-finding-v1.md): six legal paid-Feature prefixes, first education due, two rejected Bank quotes and fresh-process replay.
+- [Paid-Feature/Bank design handoff v1](HANDOFF-SPENDING-BANK-v1.md): DESIGN review needed; no gameplay adoption candidate.
+- [Paid-Feature/Bank session log, 2026-10-11](2026-10-11-spending-bank-session-v1.md): source status, exact commands and retained failures.
+- [Eligible-sales TODO contribution, 2026-10-11](2026-10-11-eligible-sales-todo-session-v1.md): queues the next Banking-owned design study without assigning gameplay to the running implementation thread.

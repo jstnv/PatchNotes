@@ -1,0 +1,47 @@
+{
+	"case_id": "sports-1104-prefix",
+	"initial": {
+		"recipe": {
+			"schema_version": 1.0,
+			"seed": "1104",
+			"specialty": "sports",
+			"studio_id": "contracts-sidestreet-1104",
+			"studio_name": "SideStreet 1104",
+			"traits": []
+		}
+	},
+	"max_commands": 180.0,
+	"policy": {
+		"config": {
+			"development_first": {
+				"genre": "sports",
+				"hands": {
+					"alpha": 4.0,
+					"beta": 4.0,
+					"design": 3.0
+				},
+				"name_prefix": "SideStreet Screen",
+				"selection": "features_first",
+				"theme": "fantasy"
+			},
+			"development_later": {
+				"genre": "sports",
+				"hands": {
+					"alpha": 6.0,
+					"beta": 6.0,
+					"design": 5.0
+				},
+				"name_prefix": "SideStreet Screen",
+				"selection": "features_first",
+				"theme": "fantasy"
+			},
+			"mode": "prefix"
+		},
+		"id": "contracts-sidestreet-matched-v1",
+		"source_identity": "0def850c16005540a17d217a6ebe5021341793f15270863d9edbcb84330004a8",
+		"version": "3"
+	},
+	"schema_version": "1",
+	"target_release_count": 2.0,
+	"telemetry": true
+}

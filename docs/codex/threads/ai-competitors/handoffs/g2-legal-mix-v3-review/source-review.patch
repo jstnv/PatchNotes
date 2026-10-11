@@ -1,0 +1,843 @@
+--- base/scripts/debug/g2_legal_mix_reference_v2.gd
++++ candidate/scripts/debug/g2_legal_mix_reference_v2.gd
+@@ -0,0 +1,328 @@
++## PRIVATE CANDIDATE. Exact finite favorable-draw Core envelope; no AI defaults.
++## Unsupported traits/employees and incomplete searches defer, never approximate.
++extends RefCounted
++
++const Design := preload("res://scripts/simulation/design_hand_command.gd")
++const Alpha := preload("res://scripts/simulation/alpha_hand_command.gd")
++const Production := preload("res://scripts/simulation/production_hand.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++const MAX_SAFE := 1000000000
++
++static func gcd(a: int,b: int) -> int:
++	while b != 0:
++		var next := a % b
++		a = b
++		b = next
++	return a
++
++static func gap_key(core: Array,targets: Array) -> Dictionary:
++	if core.size() != 4 or targets.size() != 4: return {}
++	var denominator := 1
++	for index in range(4):
++		if not core[index] is int or not targets[index] is int or core[index] < 0 or targets[index] <= 0 or targets[index] > MAX_SAFE: return {}
++		var factor: int = int(targets[index]) / gcd(denominator,int(targets[index]))
++		if denominator > MAX_SAFE / factor: return {}
++		denominator *= factor
++	var gaps: Array[int] = []
++	var total := 0
++	for index in range(4):
++		var value: int = maxi(0,int(targets[index])-int(core[index])) * (denominator / int(targets[index]))
++		gaps.append(value)
++		total += value
++	return {"sum":total,"maximum":gaps.max(),"gaps":gaps,"denominator":denominator}
++
++static func better(a: Dictionary,b: Dictionary,target: int = -1) -> bool:
++	if b.is_empty(): return true
++	if a.sum != b.sum: return a.sum < b.sum
++	if target >= 0 and a.gaps[target] != b.gaps[target]: return a.gaps[target] < b.gaps[target]
++	if a.maximum != b.maximum: return a.maximum < b.maximum
++	for index in range(4):
++		if a.gaps[index] != b.gaps[index]: return a.gaps[index] < b.gaps[index]
++	return false
++
++static func relevant(before: Dictionary,after: Dictionary,target: int) -> bool:
++	if target < 0 or target >= 4 or before.get("denominator") != after.get("denominator") or before.gaps[target] <= 0 or after.gaps[target] >= before.gaps[target]: return false
++	for index in range(4):
++		if after.gaps[index] > before.gaps[index] and after.sum >= before.sum: return false
++	return true
++
++static func target_order(key: Dictionary) -> Array:
++	var result: Array = []
++	for index in range(4):
++		if key.gaps[index] > 0: result.append(index)
++	result.sort_custom(func(a: int,b: int) -> bool: return key.gaps[a] > key.gaps[b] if key.gaps[a] != key.gaps[b] else a < b)
++	return result
++
++static func defer(reason: String,transitions: int = 0,states: int = 0) -> Dictionary:
++	return {"status":"defer","reason":reason,"complete":false,"transitions":transitions,"states":states,"baseline":{},"targeted":[]}
++
++## Features appear once in a four-card multiset, Passes may repeat. Positive
++## priorities plus three retained Passes witness each such hand's availability.
++static func hand_catalog(run: RunState,catalog: RefCounted,owned: Array) -> Dictionary:
++	if run == null or catalog == null or not run.get_studio_traits().get("trait_ids",[]).is_empty() or not run.get_employees().get("employees",[]).is_empty(): return {"ok":false,"reason":"Trait/employee envelope not modeled"}
++	if owned.size() > 60: return {"ok":false,"reason":"Finite mask bound"}
++	var groups := {"design":[],"alpha":[]}
++	var feature_ids := owned.duplicate()
++	feature_ids.sort_custom(func(a: Variant,b: Variant) -> bool: return str(a) < str(b))
++	var seen := {}
++	for id: Variant in feature_ids:
++		var card: CardData = catalog.get_card(StringName(str(id)))
++		if seen.has(str(id)) or card == null or card.card_type != &"feature" or card.renewable or card.phase not in [&"design",&"alpha"]: return {"ok":false,"reason":"Invalid finite source"}
++		seen[str(id)] = true
++	for phase: String in groups:
++		var available: Array[CardData] = []
++		for id: Variant in feature_ids:
++			var card: CardData = catalog.get_card(StringName(str(id)))
++			if str(card.phase) == phase: available.append(card)
++		var passes: Array[CardData] = catalog.passes()
++		var sources: Array[CardData] = available + passes
++		var holder: RefCounted = Design.new() if phase == "design" else Alpha.new()
++		holder._available_features = available
++		holder._pass_definitions = passes
++		holder._project_state = ProjectState.new(30)
++		var tuples: Array = []
++		_enumerate(sources,0,[] as Array[CardData],tuples)
++		for selected: Array[CardData] in tuples:
++			holder._candidate_cards = selected
++			var base: Dictionary = holder.calculate_base(selected)
++			if not base.valid: return {"ok":false,"reason":"Shared base calculation rejected"}
++			var has_feature: bool = selected.any(func(card: CardData) -> bool: return card.card_type == &"feature")
++			var records: Array = []
++			var ids: Array = []
++			var mask := 0
++			for card: CardData in selected:
++				records.append({"primary_stat":card.primary_stat})
++				ids.append(str(card.id))
++				if card.card_type == &"feature": mask |= 1 << feature_ids.find(card.id)
++			var produced := Production.calculate(records,base.score_additions,has_feature)
++			var core: Array = []
++			for index in range(4): core.append(int(produced.score_additions.get(index,0)))
++			var cost := run.primitive_feature_hand_cost_cents(selected)
++			if cost < 0: return {"ok":false,"reason":"Unknown Feature cost"}
++			groups[phase].append({"ids":ids,"mask":mask,"core":core,"cost":cost,"scope":base.scope,"phase":phase,"production":str(produced.specialization_stat) if not produced.specialization_stat.is_empty() else ("balanced" if produced.balanced_production else "printed")})
++	return {"ok":true,"groups":groups,"feature_ids":feature_ids}
++
++static func _enumerate(sources: Array[CardData],start: int,current: Array[CardData],out: Array) -> void:
++	if current.size() == 4:
++		out.append(current.duplicate())
++		return
++	for index in range(start,sources.size()):
++		current.append(sources[index])
++		_enumerate(sources,index if sources[index].renewable else index+1,current,out)
++		current.pop_back()
++
++static func search(groups: Dictionary,targets: Array,hands: Array,cash: int,transition_cap: int,state_cap: int) -> Dictionary:
++	var started := Time.get_ticks_usec()
++	if gap_key([0,0,0,0],targets).is_empty() or hands.size() != 2 or cash < 0 or cash > MAX_SAFE or transition_cap < 1 or state_cap < 1: return defer("Invalid plan")
++	for count in hands:
++		if not count is int or count < 1 or count > 3: return defer("Unsupported hand count")
++	var transitions := 0
++	var dominance_checks := 0
++	var peak := 1
++	var layers: Array = []
++	var frontiers: Array = []
++	var phase_masks := [0,0]
++	for phase_index in range(2):
++		var phase := "design" if phase_index == 0 else "alpha"
++		for hand: Dictionary in groups[phase]: phase_masks[phase_index] |= int(hand.mask)
++	if (int(phase_masks[0]) & int(phase_masks[1])) != 0: return defer("Overlapping phase Feature mask")
++	for phase_index in range(2):
++		var phase := "design" if phase_index == 0 else "alpha"
++		var states := {"start":{"mask":0,"core":[0,0,0,0],"cost":0,"witness":[]}}
++		for slot in range(hands[phase_index]):
++			var next := {}
++			var final_slot: bool = slot == int(hands[phase_index])-1
++			for state: Dictionary in states.values():
++				for hand: Dictionary in groups[phase]:
++					transitions += 1
++					if transitions > transition_cap: return _bounded("Transition budget exhausted",transitions-1,peak,started,layers)
++					if (int(state.mask) & int(hand.mask)) != 0 or int(hand.cost) > cash-int(state.cost): continue
++					var core: Array = []
++					var clipped: Array = []
++					for index in range(4):
++						var value := int(state.core[index])+int(hand.core[index])
++						if value < 0 or value > MAX_SAFE: return defer("Core bound exceeded",transitions,peak)
++						core.append(value)
++						clipped.append(mini(value,int(targets[index])))
++					var mask: int = int(state.mask) | int(hand.mask)
++					# Feature identity no longer affects later phases. Retain work
++					# truth and actual cost, which still constrain legal Alpha exit.
++					var key := str(int(mask != 0) if final_slot else mask)+":"+str(clipped)
++					var cost: int = int(state.cost)+int(hand.cost)
++					if next.has(key) and next[key].cost <= cost: continue
++					var witness: Array = state.witness.duplicate()
++					witness.append(hand)
++					next[key] = {"mask":mask,"core":core,"cost":cost,"witness":witness}
++					if next.size() > state_cap: return _bounded("State budget exhausted",transitions,next.size(),started,layers)
++				states = next
++				peak = maxi(peak,states.size())
++				layers.append({"phase":phase,"slot":slot+1,"states":states.size()})
++		var frontier: Array = []
++		var rows: Array = states.values()
++		# Cheaper/equal rows are considered first. A no-work row must never
++		# remove a work row: a finite Feature is required for ordinary exit.
++		rows.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.cost < b.cost)
++		for row: Dictionary in rows:
++			var dominated := false
++			for other: Dictionary in frontier:
++				dominance_checks += 1
++				if dominance_checks > 2500000: return _bounded("Dominance comparison budget exhausted",transitions,peak,started,layers)
++				if other.mask == 0 and row.mask != 0: continue
++				var all_higher := true
++				for index in range(4):
++					if mini(other.core[index],targets[index]) < mini(row.core[index],targets[index]): all_higher = false; break
++				if all_higher: dominated = true; break
++			if not dominated: frontier.append(row)
++		frontiers.append(frontier)
++	var baseline := {}
++	var targeted: Array = [{},{},{},{}]
++	var legal := 0
++	for design: Dictionary in frontiers[0]:
++		for alpha: Dictionary in frontiers[1]:
++			transitions += 1
++			if transitions > transition_cap: return _bounded("Transition budget exhausted",transitions-1,peak,started,layers)
++			if design.cost+alpha.cost > cash or (design.mask == 0 and alpha.mask == 0): continue
++			legal += 1
++			var core: Array = []
++			for index in range(4): core.append(int(design.core[index])+int(alpha.core[index]))
++			var key := gap_key(core,targets)
++			var row := {"core":core,"cost":int(design.cost)+int(alpha.cost),"mask":int(design.mask)|int(alpha.mask),"witness":design.witness+alpha.witness,"gap":key}
++			if baseline.is_empty() or better(key,baseline.gap): baseline = row
++			for target in range(4):
++				if targeted[target].is_empty() or better(key,targeted[target].gap,target): targeted[target] = row
++	return {"status":"complete" if legal > 0 else "no_legal_mix","complete":true,"baseline":baseline,"targeted":targeted,"transitions":transitions,"states":peak,"legal_terminal_states":legal,"elapsed_us":Time.get_ticks_usec()-started,"layers":layers,"dominance_checks":dominance_checks,"frontier_sizes":[frontiers[0].size(),frontiers[1].size()],"certificate":"Exhaustive finite hand multisets; exact phase DP with obsolete-mask removal, cost/Core/work dominance, then exhaustive frontier join. No probability weighting."}
++
++static func _bounded(reason: String,transitions: int,states: int,started: int,layers: Array) -> Dictionary:
++	var result := defer(reason,transitions,states)
++	result.elapsed_us = Time.get_ticks_usec()-started
++	result.layers = layers
++	return result
++
++## Reference exhaustive implementation retained for small-fixture parity.
++static func reference_search(groups: Dictionary,targets: Array,hands: Array,cash: int,transition_cap: int,state_cap: int) -> Dictionary:
++	var started := Time.get_ticks_usec()
++	if gap_key([0,0,0,0],targets).is_empty() or hands.size() != 2 or cash < 0 or cash > MAX_SAFE or transition_cap < 1 or state_cap < 1: return defer("Invalid plan")
++	for count in hands:
++		if not count is int or count < 1 or count > 3: return defer("Unsupported hand count")
++	var states := {"start":{"mask":0,"core":[0,0,0,0],"cost":0,"witness":[]}}
++	var transitions := 0
++	var layers: Array = []
++	var peak := 1
++	for phase_index in range(2):
++		var phase := "design" if phase_index == 0 else "alpha"
++		for slot in range(hands[phase_index]):
++			var next := {}
++			for state: Dictionary in states.values():
++				for hand: Dictionary in groups[phase]:
++					transitions += 1
++					if transitions > transition_cap:
++						var result := defer("Transition budget exhausted",transitions-1,peak)
++						result.elapsed_us = Time.get_ticks_usec()-started
++						result.layers = layers
++						return result
++					if (int(state.mask) & int(hand.mask)) != 0 or int(hand.cost) > cash-int(state.cost): continue
++					var core: Array = []
++					var clipped: Array = []
++					for index in range(4):
++						var value := int(state.core[index])+int(hand.core[index])
++						if value < 0 or value > MAX_SAFE: return defer("Core bound exceeded",transitions,peak)
++						core.append(value)
++						clipped.append(mini(value,int(targets[index])))
++					var mask: int = int(state.mask) | int(hand.mask)
++					var key := str(mask)+":"+str(clipped)
++					var cost: int = int(state.cost)+int(hand.cost)
++					if next.has(key) and next[key].cost <= cost: continue
++					var witness: Array = state.witness.duplicate()
++					witness.append(hand)
++					next[key] = {"mask":mask,"core":core,"cost":cost,"witness":witness}
++					if next.size() > state_cap: return defer("State budget exhausted",transitions,next.size())
++				states = next
++				peak = maxi(peak,states.size())
++				layers.append({"phase":phase,"slot":slot+1,"states":states.size()})
++	var baseline := {}
++	var targeted: Array = [{},{},{},{}]
++	var legal := 0
++	for state: Dictionary in states.values():
++		if state.mask == 0: continue # Ordinary exit needs actual Feature work.
++		legal += 1
++		var key := gap_key(state.core,targets)
++		var row := state.duplicate()
++		row.gap = key
++		if baseline.is_empty() or better(key,baseline.gap): baseline = row
++		for target in range(4):
++			if targeted[target].is_empty() or better(key,targeted[target].gap,target): targeted[target] = row
++	return {"status":"complete" if legal > 0 else "no_legal_mix","complete":true,"baseline":baseline,"targeted":targeted,"transitions":transitions,"states":peak,"terminal_states":states.size(),"legal_terminal_states":legal,"elapsed_us":Time.get_ticks_usec()-started,"layers":layers,"certificate":"Exhaustive four-card multisets and exact finite-mask/capped-Core DP under the declared no-trait positive-priority hand/cash envelope"}
++
++static func known_cash(run: RunState,horizon: int) -> Dictionary:
++	var finance := run.get_studio_finance_report()
++	var ledger := run.get_studio_finance_snapshot()
++	if not finance.get("available",false) or horizon < 1 or not ledger.get("employees",[]).is_empty() or not ledger.get("bank_loans",[]).is_empty() or not ledger.get("education",{}).is_empty(): return {"ok":false,"reason":"Unsupported liability state"}
++	var cycle := run.get_completed_run_cycles()
++	var boundaries := (cycle+horizon)/2 - cycle/2
++	var due: int = int(finance.total_overdue_cents)+boundaries*int(finance.monthly_rent_cents)
++	return {"ok":true,"cycle":cycle,"horizon":horizon,"known_dues_cents":due,"spendable_after_dues":maxi(0,run.get_cash_cents()-due),"cash_cents":run.get_cash_cents()}
++
++## A favorable witness must be demonstrably selectable by authoritative deal
++## helpers. Controlled values prove possibility, without using/changing live RNG.
++static func validate_witness(catalog: RefCounted,owned: Array,witness: Array) -> Dictionary:
++	var totals := [0,0,0,0]
++	var histories: Array = []
++	for phase in ["design","alpha"]:
++		var holder: RefCounted = Design.new() if phase == "design" else Alpha.new()
++		var features: Array[CardData] = []
++		for id in owned:
++			var card: CardData = catalog.get_card(StringName(str(id)))
++			if str(card.phase) == phase: features.append(card)
++		holder._available_features = features
++		holder._pass_definitions = catalog.passes()
++		holder._project_state = ProjectState.new(30)
++		var priority: Dictionary = PriorityAllocation.new().get_priority_distribution()
++		var first := true
++		for step: Dictionary in witness:
++			if step.phase != phase: continue
++			var desired: Array = step.ids.duplicate()
++			if first:
++				for _filler in range(3): desired.append(str(catalog.passes()[0].id))
++			var rolls: Array[float] = []
++			var remaining: Array[CardData] = holder._available_features.duplicate()
++			for id in desired:
++				var entries: Array[Dictionary] = []
++				for card: CardData in remaining+holder._pass_definitions:
++					var weight: float = holder._calculate_candidate_weight(card,priority)
++					if weight > 0: entries.append({"card":card,"weight":weight})
++				entries.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return str(a.card.id)<str(b.card.id))
++				var total := 0.0
++				var before := 0.0
++				var weight := 0.0
++				for entry in entries:
++					total += entry.weight
++					if str(entry.card.id) == str(id): weight = entry.weight
++					elif weight == 0: before += entry.weight
++				if weight <= 0 or total <= 0: return {"ok":false,"reason":"Witness has no positive draw weight"}
++				rolls.append((before+weight/2.0)/total)
++				var card: CardData = catalog.get_card(StringName(str(id)))
++				if not card.renewable: remaining.erase(card)
++			var plan: Dictionary = holder._build_weighted_candidate_definitions(priority,rolls,desired.size())
++			if not plan.valid: return {"ok":false,"reason":"Authoritative weighted deal rejected"}
++			var observed: Array = []
++			for card: CardData in plan.cards: observed.append(str(card.id))
++			if observed != desired: return {"ok":false,"reason":"Controlled weighted selection differs"}
++			var selected: Array[CardData] = []
++			for id in step.ids: selected.append(catalog.get_card(StringName(str(id))))
++			holder._candidate_cards = selected
++			var base: Dictionary = holder.calculate_base(selected)
++			if not base.valid: return {"ok":false,"reason":"Witness shared production invalid"}
++			var records: Array = []
++			for card in selected: records.append({"primary_stat":card.primary_stat})
++			var result := Production.calculate(records,base.score_additions,selected.any(func(card: CardData) -> bool:return card.card_type == &"feature"))
++			for index in range(4):
++				if int(result.score_additions.get(index,0)) != int(step.core[index]): return {"ok":false,"reason":"Witness production differs"}
++				totals[index] += int(step.core[index])
++			for card: CardData in selected:
++				if not card.renewable:
++					holder._available_features.erase(card)
++					if phase == "design": holder._exhausted_card_ids[card.id] = true
++					else: holder._exhausted_feature_ids[card.id] = true
++			histories.append({"phase":phase,"desired":desired,"controlled_rolls":rolls,"observed":observed,"selected":step.ids})
++			first = false
++	return {"ok":true,"core":totals,"deals":histories,"scope":"Possible controlled availability with three retained renewable Passes, not a fixed-seed live route"}
+--- base/scripts/debug/verify_g2_legal_mix.gd
++++ candidate/scripts/debug/verify_g2_legal_mix.gd
+@@ -0,0 +1,165 @@
++extends SceneTree
++const Planner := preload("res://scripts/simulation/g2_legal_mix.gd")
++const Factory := preload("res://scripts/simulation/run_factory.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++var checks := 0
++var failures := 0
++var report := {}
++var out := ""
++
++func expect(value: bool,label: String) -> void:
++	checks += 1
++	if not value:
++		failures += 1
++		push_error("FAIL: "+label)
++
++func _initialize() -> void:
++	await process_frame
++	var args := {}
++	for arg in OS.get_cmdline_user_args():
++		var pair := arg.trim_prefix("--").split("=",true,1)
++		if pair.size() == 2: args[pair[0]] = pair[1]
++	out = str(args.get("output",""))
++	if out.is_empty(): quit(2); return
++	if args.get("mode","unit") == "unit": unit()
++	elif args.get("mode") == "catalog_parity": catalog_parity(args)
++	else: study(args)
++	report.checks = checks
++	report.failures = failures
++	report.ok = failures == 0
++	report.source_identity = Replay.source_identity()
++	FileAccess.open(out,FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
++	print("G2 private candidate: %d checks, %d failures" % [checks,failures])
++	quit(0 if failures == 0 else 1)
++
++func unit() -> void:
++	var key := Planner.gap_key([20,13,40,0],[40,26,40,26])
++	expect(key.sum == key.denominator*2,"Exact proportional gaps sum without rounding")
++	expect(Planner.gap_key([100,100,100,100],[40,26,40,26]).sum == 0,"No surplus credit")
++	expect(Planner.gap_key([0,0,0,0],[0,26,40,26]).is_empty(),"Zero target rejected")
++	expect(Planner.gap_key([0,0,0,0],[999999937,999999929,999999893,999999883]).is_empty(),"Overflow-risk exact denominator rejected")
++	var before := Planner.gap_key([0,5,5,5],[10,10,10,10])
++	expect(Planner.target_order(before) == [0,1,2,3],"Positive targets descending then G/S/T/D")
++	expect(Planner.relevant(before,Planner.gap_key([2,4,5,5],[10,10,10,10]),0),"Better total permits other-gap tradeoff")
++	expect(not Planner.relevant(before,Planner.gap_key([1,4,5,5],[10,10,10,10]),0),"Equal-total tradeoff rejected")
++	expect(not Planner.relevant(before,Planner.gap_key([0,6,5,5],[10,10,10,10]),0),"Unchanged target rejected")
++	var a := Planner.gap_key([5,5,0,0],[10,10,10,10])
++	var b := Planner.gap_key([10,0,0,0],[10,10,10,10])
++	expect(Planner.better(b,a,0),"Targeted tie favors target")
++	var balanced := Planner.gap_key([2,2,3,3],[10,10,10,10])
++	expect(Planner.better(balanced,b),"Baseline overall tie minimizes largest gap")
++	var feature := {"mask":1,"core":[10,0,0,0],"cost":10,"ids":["fixture"],"phase":"design"}
++	var pass_hand := {"mask":0,"core":[0,1,0,0],"cost":0,"ids":["pass"],"phase":"design"}
++	var groups := {"design":[feature,pass_hand],"alpha":[pass_hand]}
++	var solved := Planner.search(groups,[10,10,10,10],[2,1],10,100,100)
++	expect(solved.complete and solved.baseline.core == [10,2,0,0],"Finite feature can appear once; renewable hand repeats")
++	expect(solved.baseline.cost == 10 and solved.legal_terminal_states == 1,"Cash exact and equal paths collapse")
++	var denied := Planner.search(groups,[10,10,10,10],[2,1],9,100,100)
++	expect(denied.status == "no_legal_mix" and denied.baseline.is_empty(),"Insufficient finite work budget is no legal exit")
++	var bounded := Planner.search(groups,[10,10,10,10],[2,1],10,1,100)
++	expect(not bounded.complete and bounded.baseline.is_empty() and bounded.targeted.is_empty(),"Budget miss suppresses partial vector and rank")
++	for budget in [0,9,10,15,20]:
++		for hand_count in [1,2,3]:
++			var optimized := Planner.search(groups,[10,10,10,10],[hand_count,hand_count],budget,5000,5000)
++			var reference := Planner.reference_search(groups,[10,10,10,10],[hand_count,hand_count],budget,5000,5000)
++			expect(optimized.status == reference.status and optimized.baseline.get("gap",{}) == reference.baseline.get("gap",{}),"Optimized frontier agrees with unpruned small exhaustive fixture")
++	var mixed := {"design":[{"mask":1,"core":[4,0,0,1],"cost":5},{"mask":2,"core":[0,1,3,2],"cost":4},{"mask":0,"core":[0,2,1,0],"cost":0}],"alpha":[{"mask":4,"core":[1,0,2,4],"cost":6},{"mask":8,"core":[3,3,0,0],"cost":8},{"mask":0,"core":[2,0,1,0],"cost":0}]}
++	for budget in [0,5,10,15,20]:
++		for count in [1,2,3]:
++			var optimized := Planner.search(mixed,[10,13,11,9],[count,count],budget,50000,50000)
++			var reference := Planner.reference_search(mixed,[10,13,11,9],[count,count],budget,50000,50000)
++			expect(optimized.complete and reference.complete and optimized.status == reference.status and optimized.baseline.get("gap",{}) == reference.baseline.get("gap",{}),"Nontrivial finite-mask cost/work dominance baseline equals exhaustive reference")
++			for target in range(4): expect(optimized.targeted[target].get("gap",{}) == reference.targeted[target].get("gap",{}),"Every targeted vector objective equals exhaustive reference")
++	var catalog: RefCounted = root.get_node("CardDatabase").get_development_catalog()
++	var fresh: RefCounted = Factory.create({"recipe":{"schema_version":1,"studio_id":"g2-guard","studio_name":"G2 Guard","specialty":"action","traits":[],"seed":"4417"}},catalog)
++	expect(fresh != null and not Planner.hand_catalog(fresh.run,catalog,fresh.run.get_owned_feature_ids()).ok,"Scripted first-game boundary rejects before favorable dealing")
++	report = {"kind":"unit","scope":"Synthetic exact-math/DP negative controls; live weighted production covered by study witnesses"}
++
++func catalog_parity(args: Dictionary) -> void:
++	var catalog: RefCounted = root.get_node("CardDatabase").get_development_catalog()
++	var checkpoint: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(args.get("checkpoint",""))))
++	var session: RefCounted = Factory.create({"checkpoint":checkpoint},catalog) if checkpoint is Dictionary else null
++	var previous: GDScript = load(str(args.get("reference","")))
++	expect(session != null and previous != null,"Current legal Studio and retained v2 reference load")
++	if session == null or previous == null: return
++	var owned: Array = session.run.get_owned_feature_ids()
++	var pools: Array = [owned]
++	for entry in FeatureStoreCatalog.entries(): pools.append(owned+[StringName(entry.id)])
++	var rows: Array = []
++	for pool: Array in pools:
++		var before: Dictionary = previous.hand_catalog(session.run,catalog,pool)
++		var after := Planner.hand_catalog(session.run,catalog,pool)
++		expect(before.ok and after.ok and Replay.digest(before) == Replay.digest(after),"v2/v3 complete hand catalogs identical within tested pool bounds")
++		rows.append({"pool":pool,"v2":Replay.digest(before),"v3":Replay.digest(after)})
++	var tiny := Planner.hand_catalog(session.run,catalog,owned,1)
++	expect(not tiny.ok and tiny.get("tuples") == 1 and not tiny.has("groups"),"Preprocessing cap returns no partial hand catalog")
++	report = {"kind":"catalog_parity","rows":rows,"reference_path":args.reference,"reference_sha256":FileAccess.get_sha256(args.reference),"scope":"Baseline plus11 hypothetical catalog inputs; catalog equality only, no acquisition or ownership claim"}
++
++func study(args: Dictionary) -> void:
++	var catalog: RefCounted = root.get_node("CardDatabase").get_development_catalog()
++	var checkpoint: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(args.get("checkpoint",""))))
++	var session: RefCounted = Factory.create({"checkpoint":checkpoint},catalog) if checkpoint is Dictionary else null
++	expect(session != null,"Source-compatible real Studio checkpoint")
++	if session == null: return
++	var start_hash := Replay.digest(Replay.state(session))
++	var start_rng := Replay.digest(session.run.random_streams.snapshot())
++	var owned: Array = session.run.get_owned_feature_ids()
++	var candidate := StringName(str(args.get("candidate","")))
++	var acquisition := {}
++	if not candidate.is_empty():
++		var quote: Dictionary = session.run.get_feature_research_quote(candidate)
++		var due := Planner.known_cash(session.run,1)
++		if not quote.get("can_admit",false) or not due.get("ok",false) or int(quote.get("down_cents",0))+int(quote.get("remaining_cents",0))+int(due.get("known_dues_cents",0)) > session.run.get_cash_cents():
++			report = {"kind":"store","candidate":str(candidate),"status":"not_admissible_in_declared_screen","quote":quote,"dues":due,"initial_state":start_hash,"initial_rng":start_rng}
++			return
++		var tape := Replay.begin(session)
++		var admitted := Replay.record(session,tape,session.command(&"admit_research",{"quote":quote}))
++		expect(admitted.ok,"Candidate admitted through real current quote")
++		if not admitted.ok: return
++		expect(not session.run.owns_feature(candidate),"Admission does not grant ownership")
++		var paid := Replay.record(session,tape,session.command(&"research",{"quote":session.run.get_feature_research_quote(candidate)}))
++		expect(paid.ok and session.run.owns_feature(candidate),"Candidate ownership only after actual research completes")
++		if not paid.ok: return
++		Replay.save_tape(out+".acquisition.tape.json",tape)
++		Replay.save_tape(out+".acquisition.initial.json",{"checkpoint":checkpoint})
++		acquisition = {"tape":out+".acquisition.tape.json","initial":out+".acquisition.initial.json","commands":tape.steps.size(),"quote":quote,"post_checkpoint":session.export_checkpoint()}
++	var anchor_hash := Replay.digest(Replay.state(session))
++	var anchor_rng := Replay.digest(session.run.random_streams.snapshot())
++	var cash := Planner.known_cash(session.run,7)
++	expect(cash.get("ok",false),"Declared known-dues allowance available")
++	if not cash.get("ok",false): return
++	var allowance := mini(100000,int(cash.spendable_after_dues))
++	var targets: Array = PrimitiveReviewCalculator.GENRE_TARGETS[session.run.get_studio_specialty()]
++	var h := int(args.get("hands",1))
++	var baseline_catalog := Planner.hand_catalog(session.run,catalog,owned)
++	expect(baseline_catalog.ok,"Shared production enumerates owned finite sources")
++	if not baseline_catalog.ok: return
++	var baseline := Planner.search(baseline_catalog.groups,targets,[h,h],allowance,500000,100000)
++	var witness := {}
++	if baseline.complete and not baseline.baseline.is_empty():
++		witness = Planner.validate_witness(catalog,owned,baseline.baseline.witness)
++		expect(witness.ok and witness.core == baseline.baseline.core,"Full selected baseline vector has controlled legal deal/production witness")
++	var after := {}
++	var candidate_witness := {}
++	var target := -1
++	var qualifies := false
++	if not candidate.is_empty() and baseline.complete and not baseline.baseline.is_empty():
++		var expanded: Array = session.run.get_owned_feature_ids()
++		var after_catalog := Planner.hand_catalog(session.run,catalog,expanded)
++		expect(after_catalog.ok,"Legally owned candidate enters exact catalog")
++		if not after_catalog.ok: return
++		after = Planner.search(after_catalog.groups,targets,[h,h],allowance,500000,100000)
++		if after.complete:
++			for index in Planner.target_order(baseline.baseline.gap):
++				if not after.targeted[index].is_empty() and Planner.relevant(baseline.baseline.gap,after.targeted[index].gap,index):
++					target = index
++					qualifies = true
++					candidate_witness = Planner.validate_witness(catalog,expanded,after.targeted[index].witness)
++					expect(candidate_witness.ok and candidate_witness.core == after.targeted[index].core,"Candidate relevance uses witnessed joint vector")
++					break
++	expect(Replay.digest(Replay.state(session)) == anchor_hash and Replay.digest(session.run.random_streams.snapshot()) == anchor_rng,"Both ownership envelopes use one unchanged anchor state and RNG")
++	var store: Array = []
++	for entry: Dictionary in FeatureStoreCatalog.entries():
++		var offer: Dictionary = session.run.get_feature_store_offer(StringName(entry.id))
++		store.append({"id":entry.id,"parent":entry.purchase_parent,"owned":offer.get("owned",false),"unlocked":offer.get("unlocked",false),"quote":session.run.get_feature_research_quote(StringName(entry.id)),"era":"current_live_tier"})
++	report = {"kind":"planner","hands":[h,h],"status":"defer" if not baseline.complete or (not after.is_empty() and not after.complete) else "complete","cash_allocation":cash,"allowance_cents":allowance,"targets":targets,"owned_before":owned,"candidate":str(candidate),"anchor_state":anchor_hash,"anchor_rng":anchor_rng,"initial_state":start_hash,"initial_rng":start_rng,"acquisition":acquisition,"baseline":baseline,"after":after,"baseline_witness":witness,"candidate_witness":candidate_witness,"candidate_qualifies":qualifies,"target":target,"store_screen":store,"comparison":"Same post-research anchor/cash/RNG, remove only newly acquired candidate from baseline planning pool; legal ownership proven by real commands. Not pre/post full-state equality."}
+--- base/scripts/debug/verify_g2_legal_mix.gd.uid
++++ candidate/scripts/debug/verify_g2_legal_mix.gd.uid
+@@ -0,0 +1 @@
++uid://d1qskgrg70wdw
+--- base/scripts/simulation/g2_legal_mix.gd
++++ candidate/scripts/simulation/g2_legal_mix.gd
+@@ -0,0 +1,333 @@
++## PRIVATE CANDIDATE. Exact finite favorable-draw Core envelope; no AI defaults.
++## Unsupported traits/employees and incomplete searches defer, never approximate.
++extends RefCounted
++
++const Design := preload("res://scripts/simulation/design_hand_command.gd")
++const Alpha := preload("res://scripts/simulation/alpha_hand_command.gd")
++const Production := preload("res://scripts/simulation/production_hand.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++const MAX_SAFE := 1000000000
++
++static func gcd(a: int,b: int) -> int:
++	while b != 0:
++		var next := a % b
++		a = b
++		b = next
++	return a
++
++static func gap_key(core: Array,targets: Array) -> Dictionary:
++	if core.size() != 4 or targets.size() != 4: return {}
++	var denominator := 1
++	for index in range(4):
++		if not core[index] is int or not targets[index] is int or core[index] < 0 or targets[index] <= 0 or targets[index] > MAX_SAFE: return {}
++		var factor: int = int(targets[index]) / gcd(denominator,int(targets[index]))
++		if denominator > MAX_SAFE / factor: return {}
++		denominator *= factor
++	var gaps: Array[int] = []
++	var total := 0
++	for index in range(4):
++		var value: int = maxi(0,int(targets[index])-int(core[index])) * (denominator / int(targets[index]))
++		gaps.append(value)
++		total += value
++	return {"sum":total,"maximum":gaps.max(),"gaps":gaps,"denominator":denominator}
++
++static func better(a: Dictionary,b: Dictionary,target: int = -1) -> bool:
++	if b.is_empty(): return true
++	if a.sum != b.sum: return a.sum < b.sum
++	if target >= 0 and a.gaps[target] != b.gaps[target]: return a.gaps[target] < b.gaps[target]
++	if a.maximum != b.maximum: return a.maximum < b.maximum
++	for index in range(4):
++		if a.gaps[index] != b.gaps[index]: return a.gaps[index] < b.gaps[index]
++	return false
++
++static func relevant(before: Dictionary,after: Dictionary,target: int) -> bool:
++	if target < 0 or target >= 4 or before.get("denominator") != after.get("denominator") or before.gaps[target] <= 0 or after.gaps[target] >= before.gaps[target]: return false
++	for index in range(4):
++		if after.gaps[index] > before.gaps[index] and after.sum >= before.sum: return false
++	return true
++
++static func target_order(key: Dictionary) -> Array:
++	var result: Array = []
++	for index in range(4):
++		if key.gaps[index] > 0: result.append(index)
++	result.sort_custom(func(a: int,b: int) -> bool: return key.gaps[a] > key.gaps[b] if key.gaps[a] != key.gaps[b] else a < b)
++	return result
++
++static func defer(reason: String,transitions: int = 0,states: int = 0) -> Dictionary:
++	return {"status":"defer","reason":reason,"complete":false,"transitions":transitions,"states":states,"baseline":{},"targeted":[]}
++
++## Features appear once in a four-card multiset, Passes may repeat. Positive
++## priorities plus three retained Passes witness each such hand's availability.
++static func hand_catalog(run: RunState,catalog: RefCounted,owned: Array,tuple_cap: int = 10000) -> Dictionary:
++	if run == null or catalog == null or not run.get_studio_traits().get("trait_ids",[]).is_empty() or not run.get_employees().get("employees",[]).is_empty(): return {"ok":false,"reason":"Trait/employee envelope not modeled"}
++	if run.get_released_game_ids().is_empty(): return {"ok":false,"reason":"First-game scripted dealing is outside this post-release envelope"}
++	if tuple_cap < 1 or tuple_cap > 10000: return {"ok":false,"reason":"Invalid hand-catalog bound"}
++	if owned.size() > 60: return {"ok":false,"reason":"Finite mask bound"}
++	var groups := {"design":[],"alpha":[]}
++	var feature_ids := owned.duplicate()
++	feature_ids.sort_custom(func(a: Variant,b: Variant) -> bool: return str(a) < str(b))
++	var seen := {}
++	for id: Variant in feature_ids:
++		var card: CardData = catalog.get_card(StringName(str(id)))
++		if seen.has(str(id)) or card == null or card.card_type != &"feature" or card.renewable or card.phase not in [&"design",&"alpha"]: return {"ok":false,"reason":"Invalid finite source"}
++		seen[str(id)] = true
++	for phase: String in groups:
++		var available: Array[CardData] = []
++		for id: Variant in feature_ids:
++			var card: CardData = catalog.get_card(StringName(str(id)))
++			if str(card.phase) == phase: available.append(card)
++		var passes: Array[CardData] = catalog.passes()
++		var sources: Array[CardData] = available + passes
++		var holder: RefCounted = Design.new() if phase == "design" else Alpha.new()
++		holder._available_features = available
++		holder._pass_definitions = passes
++		holder._project_state = ProjectState.new(30)
++		var tuples: Array = []
++		if not _enumerate(sources,0,[] as Array[CardData],tuples,tuple_cap): return {"ok":false,"reason":"Hand-catalog tuple budget exhausted","phase":phase,"tuples":tuples.size()}
++		for selected: Array[CardData] in tuples:
++			holder._candidate_cards = selected
++			var base: Dictionary = holder.calculate_base(selected)
++			if not base.valid: return {"ok":false,"reason":"Shared base calculation rejected"}
++			var has_feature: bool = selected.any(func(card: CardData) -> bool: return card.card_type == &"feature")
++			var records: Array = []
++			var ids: Array = []
++			var mask := 0
++			for card: CardData in selected:
++				records.append({"primary_stat":card.primary_stat})
++				ids.append(str(card.id))
++				if card.card_type == &"feature": mask |= 1 << feature_ids.find(card.id)
++			var produced := Production.calculate(records,base.score_additions,has_feature)
++			var core: Array = []
++			for index in range(4): core.append(int(produced.score_additions.get(index,0)))
++			var cost := run.primitive_feature_hand_cost_cents(selected)
++			if cost < 0: return {"ok":false,"reason":"Unknown Feature cost"}
++			groups[phase].append({"ids":ids,"mask":mask,"core":core,"cost":cost,"scope":base.scope,"phase":phase,"production":str(produced.specialization_stat) if not produced.specialization_stat.is_empty() else ("balanced" if produced.balanced_production else "printed")})
++	return {"ok":true,"groups":groups,"feature_ids":feature_ids}
++
++static func _enumerate(sources: Array[CardData],start: int,current: Array[CardData],out: Array,limit: int) -> bool:
++	if current.size() == 4:
++		if out.size() >= limit: return false
++		out.append(current.duplicate())
++		return true
++	for index in range(start,sources.size()):
++		current.append(sources[index])
++		var ok := _enumerate(sources,index if sources[index].renewable else index+1,current,out,limit)
++		current.pop_back()
++		if not ok: return false
++	return true
++
++static func search(groups: Dictionary,targets: Array,hands: Array,cash: int,transition_cap: int,state_cap: int) -> Dictionary:
++	var started := Time.get_ticks_usec()
++	if gap_key([0,0,0,0],targets).is_empty() or hands.size() != 2 or cash < 0 or cash > MAX_SAFE or transition_cap < 1 or state_cap < 1: return defer("Invalid plan")
++	for count in hands:
++		if not count is int or count < 1 or count > 3: return defer("Unsupported hand count")
++	var transitions := 0
++	var dominance_checks := 0
++	var peak := 1
++	var layers: Array = []
++	var frontiers: Array = []
++	var phase_masks := [0,0]
++	for phase_index in range(2):
++		var phase := "design" if phase_index == 0 else "alpha"
++		for hand: Dictionary in groups[phase]: phase_masks[phase_index] |= int(hand.mask)
++	if (int(phase_masks[0]) & int(phase_masks[1])) != 0: return defer("Overlapping phase Feature mask")
++	for phase_index in range(2):
++		var phase := "design" if phase_index == 0 else "alpha"
++		var states := {"start":{"mask":0,"core":[0,0,0,0],"cost":0,"witness":[]}}
++		for slot in range(hands[phase_index]):
++			var next := {}
++			var final_slot: bool = slot == int(hands[phase_index])-1
++			for state: Dictionary in states.values():
++				for hand: Dictionary in groups[phase]:
++					transitions += 1
++					if transitions > transition_cap: return _bounded("Transition budget exhausted",transitions-1,peak,started,layers)
++					if (int(state.mask) & int(hand.mask)) != 0 or int(hand.cost) > cash-int(state.cost): continue
++					var core: Array = []
++					var clipped: Array = []
++					for index in range(4):
++						var value := int(state.core[index])+int(hand.core[index])
++						if value < 0 or value > MAX_SAFE: return defer("Core bound exceeded",transitions,peak)
++						core.append(value)
++						clipped.append(mini(value,int(targets[index])))
++					var mask: int = int(state.mask) | int(hand.mask)
++					# Feature identity no longer affects later phases. Retain work
++					# truth and actual cost, which still constrain legal Alpha exit.
++					var key := str(int(mask != 0) if final_slot else mask)+":"+str(clipped)
++					var cost: int = int(state.cost)+int(hand.cost)
++					if next.has(key) and next[key].cost <= cost: continue
++					var witness: Array = state.witness.duplicate()
++					witness.append(hand)
++					next[key] = {"mask":mask,"core":core,"cost":cost,"witness":witness}
++					if next.size() > state_cap: return _bounded("State budget exhausted",transitions,next.size(),started,layers)
++				states = next
++				peak = maxi(peak,states.size())
++				layers.append({"phase":phase,"slot":slot+1,"states":states.size()})
++		var frontier: Array = []
++		var rows: Array = states.values()
++		# Cheaper/equal rows are considered first. A no-work row must never
++		# remove a work row: a finite Feature is required for ordinary exit.
++		rows.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.cost < b.cost)
++		for row: Dictionary in rows:
++			var dominated := false
++			for other: Dictionary in frontier:
++				dominance_checks += 1
++				if dominance_checks > 2500000: return _bounded("Dominance comparison budget exhausted",transitions,peak,started,layers)
++				if other.mask == 0 and row.mask != 0: continue
++				var all_higher := true
++				for index in range(4):
++					if mini(other.core[index],targets[index]) < mini(row.core[index],targets[index]): all_higher = false; break
++				if all_higher: dominated = true; break
++			if not dominated: frontier.append(row)
++		frontiers.append(frontier)
++	var baseline := {}
++	var targeted: Array = [{},{},{},{}]
++	var legal := 0
++	for design: Dictionary in frontiers[0]:
++		for alpha: Dictionary in frontiers[1]:
++			transitions += 1
++			if transitions > transition_cap: return _bounded("Transition budget exhausted",transitions-1,peak,started,layers)
++			if design.cost+alpha.cost > cash or (design.mask == 0 and alpha.mask == 0): continue
++			legal += 1
++			var core: Array = []
++			for index in range(4): core.append(int(design.core[index])+int(alpha.core[index]))
++			var key := gap_key(core,targets)
++			var row := {"core":core,"cost":int(design.cost)+int(alpha.cost),"mask":int(design.mask)|int(alpha.mask),"witness":design.witness+alpha.witness,"gap":key}
++			if baseline.is_empty() or better(key,baseline.gap): baseline = row
++			for target in range(4):
++				if targeted[target].is_empty() or better(key,targeted[target].gap,target): targeted[target] = row
++	return {"status":"complete" if legal > 0 else "no_legal_mix","complete":true,"baseline":baseline,"targeted":targeted,"transitions":transitions,"states":peak,"legal_terminal_states":legal,"elapsed_us":Time.get_ticks_usec()-started,"layers":layers,"dominance_checks":dominance_checks,"frontier_sizes":[frontiers[0].size(),frontiers[1].size()],"certificate":"Exhaustive finite hand multisets; exact phase DP with obsolete-mask removal, cost/Core/work dominance, then exhaustive frontier join. No probability weighting."}
++
++static func _bounded(reason: String,transitions: int,states: int,started: int,layers: Array) -> Dictionary:
++	var result := defer(reason,transitions,states)
++	result.elapsed_us = Time.get_ticks_usec()-started
++	result.layers = layers
++	return result
++
++## Reference exhaustive implementation retained for small-fixture parity.
++static func reference_search(groups: Dictionary,targets: Array,hands: Array,cash: int,transition_cap: int,state_cap: int) -> Dictionary:
++	var started := Time.get_ticks_usec()
++	if gap_key([0,0,0,0],targets).is_empty() or hands.size() != 2 or cash < 0 or cash > MAX_SAFE or transition_cap < 1 or state_cap < 1: return defer("Invalid plan")
++	for count in hands:
++		if not count is int or count < 1 or count > 3: return defer("Unsupported hand count")
++	var states := {"start":{"mask":0,"core":[0,0,0,0],"cost":0,"witness":[]}}
++	var transitions := 0
++	var layers: Array = []
++	var peak := 1
++	for phase_index in range(2):
++		var phase := "design" if phase_index == 0 else "alpha"
++		for slot in range(hands[phase_index]):
++			var next := {}
++			for state: Dictionary in states.values():
++				for hand: Dictionary in groups[phase]:
++					transitions += 1
++					if transitions > transition_cap:
++						var result := defer("Transition budget exhausted",transitions-1,peak)
++						result.elapsed_us = Time.get_ticks_usec()-started
++						result.layers = layers
++						return result
++					if (int(state.mask) & int(hand.mask)) != 0 or int(hand.cost) > cash-int(state.cost): continue
++					var core: Array = []
++					var clipped: Array = []
++					for index in range(4):
++						var value := int(state.core[index])+int(hand.core[index])
++						if value < 0 or value > MAX_SAFE: return defer("Core bound exceeded",transitions,peak)
++						core.append(value)
++						clipped.append(mini(value,int(targets[index])))
++					var mask: int = int(state.mask) | int(hand.mask)
++					var key := str(mask)+":"+str(clipped)
++					var cost: int = int(state.cost)+int(hand.cost)
++					if next.has(key) and next[key].cost <= cost: continue
++					var witness: Array = state.witness.duplicate()
++					witness.append(hand)
++					next[key] = {"mask":mask,"core":core,"cost":cost,"witness":witness}
++					if next.size() > state_cap: return defer("State budget exhausted",transitions,next.size())
++				states = next
++				peak = maxi(peak,states.size())
++				layers.append({"phase":phase,"slot":slot+1,"states":states.size()})
++	var baseline := {}
++	var targeted: Array = [{},{},{},{}]
++	var legal := 0
++	for state: Dictionary in states.values():
++		if state.mask == 0: continue # Ordinary exit needs actual Feature work.
++		legal += 1
++		var key := gap_key(state.core,targets)
++		var row := state.duplicate()
++		row.gap = key
++		if baseline.is_empty() or better(key,baseline.gap): baseline = row
++		for target in range(4):
++			if targeted[target].is_empty() or better(key,targeted[target].gap,target): targeted[target] = row
++	return {"status":"complete" if legal > 0 else "no_legal_mix","complete":true,"baseline":baseline,"targeted":targeted,"transitions":transitions,"states":peak,"terminal_states":states.size(),"legal_terminal_states":legal,"elapsed_us":Time.get_ticks_usec()-started,"layers":layers,"certificate":"Exhaustive four-card multisets and exact finite-mask/capped-Core DP under the declared no-trait positive-priority hand/cash envelope"}
++
++static func known_cash(run: RunState,horizon: int) -> Dictionary:
++	var finance := run.get_studio_finance_report()
++	var ledger := run.get_studio_finance_snapshot()
++	if not finance.get("available",false) or horizon < 1 or not ledger.get("employees",[]).is_empty() or not ledger.get("bank_loans",[]).is_empty() or not ledger.get("education",{}).is_empty(): return {"ok":false,"reason":"Unsupported liability state"}
++	var cycle := run.get_completed_run_cycles()
++	var boundaries := (cycle+horizon)/2 - cycle/2
++	var due: int = int(finance.total_overdue_cents)+boundaries*int(finance.monthly_rent_cents)
++	return {"ok":true,"cycle":cycle,"horizon":horizon,"known_dues_cents":due,"spendable_after_dues":maxi(0,run.get_cash_cents()-due),"cash_cents":run.get_cash_cents()}
++
++## A favorable witness must be demonstrably selectable by authoritative deal
++## helpers. Controlled values prove possibility, without using/changing live RNG.
++static func validate_witness(catalog: RefCounted,owned: Array,witness: Array) -> Dictionary:
++	var totals := [0,0,0,0]
++	var histories: Array = []
++	for phase in ["design","alpha"]:
++		var holder: RefCounted = Design.new() if phase == "design" else Alpha.new()
++		var features: Array[CardData] = []
++		for id in owned:
++			var card: CardData = catalog.get_card(StringName(str(id)))
++			if str(card.phase) == phase: features.append(card)
++		holder._available_features = features
++		holder._pass_definitions = catalog.passes()
++		holder._project_state = ProjectState.new(30)
++		var priority: Dictionary = PriorityAllocation.new().get_priority_distribution()
++		var first := true
++		for step: Dictionary in witness:
++			if step.phase != phase: continue
++			var desired: Array = step.ids.duplicate()
++			if first:
++				for _filler in range(3): desired.append(str(catalog.passes()[0].id))
++			var rolls: Array[float] = []
++			var remaining: Array[CardData] = holder._available_features.duplicate()
++			for id in desired:
++				var entries: Array[Dictionary] = []
++				for card: CardData in remaining+holder._pass_definitions:
++					var weight: float = holder._calculate_candidate_weight(card,priority)
++					if weight > 0: entries.append({"card":card,"weight":weight})
++				entries.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return str(a.card.id)<str(b.card.id))
++				var total := 0.0
++				var before := 0.0
++				var weight := 0.0
++				for entry in entries:
++					total += entry.weight
++					if str(entry.card.id) == str(id): weight = entry.weight
++					elif weight == 0: before += entry.weight
++				if weight <= 0 or total <= 0: return {"ok":false,"reason":"Witness has no positive draw weight"}
++				rolls.append((before+weight/2.0)/total)
++				var card: CardData = catalog.get_card(StringName(str(id)))
++				if not card.renewable: remaining.erase(card)
++			var plan: Dictionary = holder._build_weighted_candidate_definitions(priority,rolls,desired.size())
++			if not plan.valid: return {"ok":false,"reason":"Authoritative weighted deal rejected"}
++			var observed: Array = []
++			for card: CardData in plan.cards: observed.append(str(card.id))
++			if observed != desired: return {"ok":false,"reason":"Controlled weighted selection differs"}
++			var selected: Array[CardData] = []
++			for id in step.ids: selected.append(catalog.get_card(StringName(str(id))))
++			holder._candidate_cards = selected
++			var base: Dictionary = holder.calculate_base(selected)
++			if not base.valid: return {"ok":false,"reason":"Witness shared production invalid"}
++			var records: Array = []
++			for card in selected: records.append({"primary_stat":card.primary_stat})
++			var result := Production.calculate(records,base.score_additions,selected.any(func(card: CardData) -> bool:return card.card_type == &"feature"))
++			for index in range(4):
++				if int(result.score_additions.get(index,0)) != int(step.core[index]): return {"ok":false,"reason":"Witness production differs"}
++				totals[index] += int(step.core[index])
++			for card: CardData in selected:
++				if not card.renewable:
++					holder._available_features.erase(card)
++					if phase == "design": holder._exhausted_card_ids[card.id] = true
++					else: holder._exhausted_feature_ids[card.id] = true
++			histories.append({"phase":phase,"desired":desired,"controlled_rolls":rolls,"observed":observed,"selected":step.ids})
++			first = false
++	return {"ok":true,"core":totals,"deals":histories,"scope":"Possible controlled availability with three retained renewable Passes, not a fixed-seed live route"}
+--- base/scripts/simulation/g2_legal_mix.gd.uid
++++ candidate/scripts/simulation/g2_legal_mix.gd.uid
+@@ -0,0 +1 @@
++uid://bgmdjgl3vkb2f

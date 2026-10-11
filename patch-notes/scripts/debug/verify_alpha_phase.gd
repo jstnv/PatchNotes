@@ -378,28 +378,28 @@ func _verify_alpha_balanced_production_calculation() -> void:
 	root.add_child(alpha)
 	await process_frame
 
-	_expect(alpha.call("_are_core_scores_balanced", {graphics: 8, sound: 10, technology: 10, design: 12}), "Alpha Balanced uses inclusive exact 0.80A and 1.20A boundaries")
+	_expect(alpha.call("_are_core_scores_balanced", {graphics: 17, sound: 20, technology: 20, design: 23}), "Alpha Balanced uses inclusive exact 0.85A and 1.15A boundaries")
 	_expect(not alpha.call("_are_core_scores_balanced", {graphics: 8, sound: 11, technology: 11, design: 11}), "A provisional score slightly below Alpha's lower boundary fails")
 	_expect(not alpha.call("_are_core_scores_balanced", {graphics: 9, sound: 9, technology: 9, design: 12}), "A provisional score slightly above Alpha's upper boundary fails")
 
 	var cards: Array[CardData] = [
 		_make_fixture(&"balanced_graphics", &"feature", &"graphics", 3, &"sound", 1, 1),
 		_make_fixture(&"balanced_sound", &"feature", &"sound", 2, &"graphics", 2, 1),
-		_make_fixture(&"balanced_technology", &"feature", &"technology", 3, &"design", 2, 1),
+		_make_fixture(&"balanced_technology", &"feature", &"technology", 5, &"design", 6, 1),
 		_make_fixture(&"balanced_sound_pass", &"pass", &"sound", 2, &"", 0, 0),
 	]
-	var base_scores: Dictionary[ProjectState.CoreScore, int] = {graphics: 5, sound: 5, technology: 3, design: 2}
+	var base_scores: Dictionary[ProjectState.CoreScore, int] = {graphics: 5, sound: 5, technology: 5, design: 6}
 	var qualifying_current: Dictionary[ProjectState.CoreScore, int] = {graphics: 3, sound: 3, technology: 5, design: 6}
 	state.add_core_scores_and_scope(qualifying_current, 0)
 	var qualifying: Dictionary = alpha.call("_calculate_final_action_production", {
 		&"cards": cards,
 		&"score_additions": base_scores,
 	})
-	_expect(qualifying.provisional_scores == {graphics: 8, sound: 8, technology: 8, design: 8}, "Alpha provisional totals include cumulative Design carryover plus unmodified current-action base production")
-	_expect(qualifying.specialization_stat.is_empty() and qualifying.balanced_production, "A mixed Alpha Feature-and-Pass action activates Balanced Production from cumulative totals")
-	_expect(qualifying.score_additions == {graphics: 6, sound: 6, technology: 4, design: 2}, "Alpha Balanced aggregates primary, secondary, and Pass production per Core Score before x1.20 nearest rounding")
-	_expect(qualifying.score_additions[design] == 2 and qualifying.score_additions[technology] == 4, "Alpha Balanced nearest-rounds aggregate 2 to 2 and aggregate 3 to 4")
-	_expect(alpha.call("_build_balanced_production_debug_message", qualifying.score_additions) == "Alpha Balanced Production hit! Added scores: Graphics +6, Sound +6, Technology +4, Design +2", "Alpha Balanced feedback identifies activation and deterministic final gains")
+	_expect(qualifying.provisional_scores == {graphics: 8, sound: 8, technology: 10, design: 12}, "Alpha provisional totals include cumulative Design carryover plus unmodified current-action base production")
+	_expect(qualifying.specialization_stat.is_empty() and qualifying.balanced_production, "A mixed Alpha Feature-and-Pass action activates Balanced Production from hand totals")
+	_expect(qualifying.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Alpha Balanced aggregates primary, secondary, and Pass production per Core Score before equal total-preserving redistribution")
+	_expect(qualifying.score_additions[design] == 5 and qualifying.score_additions[technology] == 5, "Redistribution equalizes the smaller categories")
+	_expect(alpha.call("_build_balanced_production_debug_message", qualifying.score_additions) == "Alpha Balanced Production hit! Added scores: Graphics +6, Sound +5, Technology +5, Design +5", "Alpha Balanced feedback identifies activation and deterministic final gains")
 
 	var unbalanced_state := ProjectState.new(30)
 	alpha.setup(unbalanced_state)
@@ -407,7 +407,7 @@ func _verify_alpha_balanced_production_calculation() -> void:
 		&"cards": cards,
 		&"score_additions": base_scores,
 	})
-	_expect(not same_hand_unbalanced.balanced_production and same_hand_unbalanced.score_additions == base_scores, "The same Alpha hand fails from different historical totals, proving the hand alone is not evaluated")
+	_expect(same_hand_unbalanced.balanced_production and same_hand_unbalanced.score_additions == qualifying.score_additions, "The same Alpha hand qualifies independently of historical totals")
 
 	alpha.setup(state)
 	var reversed_cards := cards.duplicate()
@@ -443,10 +443,19 @@ func _verify_alpha_balanced_production_calculation() -> void:
 		&"cards": matching_cards,
 		&"score_additions": {graphics: 5, sound: 1},
 	})
-	_expect(precedence.balanced_eligible and precedence.provisional_scores == {graphics: 5, sound: 5, technology: 5, design: 5}, "Alpha Balanced eligibility uses unmodified base production even when Specialization also qualifies")
+	_expect(not precedence.balanced_eligible and precedence.provisional_scores == {graphics: 5, sound: 5, technology: 5, design: 5}, "Cumulative balance cannot qualify an unbalanced specialized hand")
 	_expect(precedence.specialization_stat == &"graphics" and not precedence.balanced_production, "Alpha Specialization takes precedence over an eligible Balanced result")
 	_expect(precedence.score_additions == {graphics: 8, sound: 2}, "Alpha precedence applies only x1.50, never stacked x1.80 or sequential multipliers")
 	_expect(alpha.call("_build_specialization_debug_message", precedence.specialization_stat, precedence.score_additions) == "Alpha Specialization hit: Graphics Specialization! Added scores: Graphics +8, Sound +2", "Precedence feedback reports Specialization as the applied winner")
+
+	var both_cards: Array[CardData] = [
+		_make_fixture(&"tie_a", &"feature", &"graphics", 1, &"sound", 4, 1),
+		_make_fixture(&"tie_b", &"feature", &"graphics", 1, &"technology", 4, 1),
+		_make_fixture(&"tie_c", &"feature", &"graphics", 1, &"design", 4, 1),
+		_make_fixture(&"tie_d", &"feature", &"graphics", 1, &"", 0, 1),
+	]
+	var both: Dictionary = alpha.call("_calculate_final_action_production", {&"cards":both_cards, &"score_additions":{graphics:4,sound:4,technology:4,design:4}})
+	_expect(both.balanced_eligible and not both.balanced_production and both.specialization_stat == &"graphics" and both.score_additions == {graphics:6,sound:6,technology:6,design:6}, "Specialization still wins when both hand-local triggers qualify")
 
 	alpha.queue_free()
 	await process_frame
@@ -459,16 +468,14 @@ func _verify_alpha_balanced_production_resolution() -> void:
 	root.add_child(alpha)
 	await process_frame
 	_expect(alpha.call("_load_source_definitions"), "Alpha Balanced lifecycle fixture loads authoritative definitions")
-	var features: Array[CardData] = []
-	var used_primary_stats: Dictionary[StringName, bool] = {}
-	for card: CardData in alpha.get("_available_features"):
-		if not used_primary_stats.has(card.primary_stat):
-			features.append(card)
-			used_primary_stats[card.primary_stat] = true
-		if features.size() == 3:
-			break
-	var pass_card: CardData = alpha.get("_pass_definitions")[0]
-	var cards: Array[CardData] = [features[0], features[1], features[2], pass_card]
+	var fixture_feature := _make_fixture(&"balanced_lifecycle_graphics", &"feature", &"graphics", 2, &"", 0, 1)
+	var available: Array[CardData] = alpha.get("_available_features")
+	fixture_feature.phase = CardData.PHASE_ALPHA
+	fixture_feature.department = available[0].department
+	available.append(fixture_feature)
+	var features: Array[CardData] = [fixture_feature]
+	var pass_card: CardData = alpha.call("_get_pass_for_category", ProjectState.CoreScore.SOUND)
+	var cards: Array[CardData] = [fixture_feature, pass_card, alpha.call("_get_pass_for_category", ProjectState.CoreScore.TECHNOLOGY), alpha.call("_get_pass_for_category", ProjectState.CoreScore.DESIGN)]
 	alpha.set("_phase_state", AlphaPhase.PhaseState.ACTIVE_DEVELOPMENT)
 	_set_exact_candidates(alpha, cards, true)
 	for view: CardView in alpha.get_node("%HandContainer").get_children().slice(0, 4):
@@ -485,10 +492,10 @@ func _verify_alpha_balanced_production_resolution() -> void:
 	_expect(state.finalize_design_bugs(false, 7, [&"text"] as Array[StringName], [] as Array[StringName]), "Alpha Balanced fixture stores existing finalized Hidden Bugs")
 	var expected_additions: Dictionary[ProjectState.CoreScore, int] = {}
 	for category: ProjectState.CoreScore in CATEGORIES:
-		expected_additions[category] = roundi(base_action.score_additions.get(category, 0) * AlphaPhase.ALPHA_BALANCED_PRODUCTION_MULTIPLIER)
+		expected_additions[category] = 2
 	var final_action: Dictionary = alpha.call("_calculate_final_action_production", base_action)
 	_expect(final_action.specialization_stat.is_empty() and final_action.balanced_production, "Balanced Production is the winning synergy for the controlled Alpha lifecycle action")
-	_expect(final_action.provisional_scores.values().all(func(value: int) -> bool: return value == target), "Earlier project production participates in the real Alpha provisional balance test")
+	_expect(final_action.provisional_scores.values().all(func(value: int) -> bool: return value == target), "Provisional scoreboard is retained for diagnostics; hand alone qualifies")
 	var design_pressure_before := state.get_accumulated_bug_pressure()
 	var hidden_bugs_before := state.get_hidden_bugs()
 	var available_before: Array = alpha.get("_available_features").duplicate()
@@ -610,14 +617,14 @@ func _verify_host_playtest() -> void:
 	var balanced_cards: Array[CardData] = [
 		_make_fixture(&"playtest_graphics", &"feature", &"graphics", 3, &"sound", 1, 1),
 		_make_fixture(&"playtest_sound", &"feature", &"sound", 2, &"graphics", 2, 1),
-		_make_fixture(&"playtest_technology", &"feature", &"technology", 3, &"design", 2, 1),
+		_make_fixture(&"playtest_technology", &"feature", &"technology", 5, &"design", 6, 1),
 		sound_pass,
 	]
 	var injected_balanced: Dictionary = alpha.call("_calculate_final_action_production", {
 		&"cards": balanced_cards,
-		&"score_additions": {graphics: 5, sound: 5, technology: 3, design: 2},
+		&"score_additions": {graphics: 5, sound: 5, technology: 5, design: 6},
 	})
-	_expect(injected_balanced.balanced_production and injected_balanced.score_additions == {graphics: 6, sound: 6, technology: 4, design: 2}, "Injected Pass definitions participate normally in Alpha Balanced Production")
+	_expect(injected_balanced.balanced_production and injected_balanced.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Injected Pass definitions participate normally in Alpha Balanced Production")
 
 	alpha.queue_free()
 	await process_frame

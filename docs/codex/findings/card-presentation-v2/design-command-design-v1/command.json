@@ -1,0 +1,38 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--headless",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\card-presentation-v2\\design-command-design-v1\\wrappers\\verify_design_phase.gd"
+  ],
+  "exit": 16,
+  "errors": [
+    "ERROR: FAIL: First successful action retains fractional Bug Pressure across its redeal and cycle advancement",
+    "ERROR: FAIL: First successful Feature action displays its fractional Bug Pressure",
+    "ERROR: FAIL: Two successful actions accumulate fractional Feature Bug Pressure correctly",
+    "ERROR: FAIL: Multiple Feature actions display their accumulated Bug Pressure",
+    "ERROR: FAIL: Two Bug Pressure-producing actions still advance exactly two cycles",
+    "ERROR: FAIL: Four cards aggregate primary, secondary, repeated score, and Scope correctly",
+    "ERROR: FAIL: Successful mixed action atomically accumulates every selected Feature's fractional Bug Pressure",
+    "ERROR: FAIL: Complete hand commits through one values_changed emission",
+    "ERROR: FAIL: Complete four-card hand advances exactly one cycle",
+    "ERROR: FAIL: Every selected Feature is exhausted",
+    "ERROR: FAIL: Exhausted Features never appear in the next weighted pool",
+    "ERROR: FAIL: Successful play clears selections and disables Play",
+    "ERROR: FAIL: Unplayed Design CardView instances retain their order",
+    "ERROR: FAIL: Stale activation cannot replay the previous hand",
+    "ERROR: FAIL: Four matching +2 Pass instances trigger Specialization and contribute +12",
+    "ERROR: FAIL: Pass-only hand advances one cycle; two hands equal one month"
+  ],
+  "elapsed_seconds": 2.359,
+  "source_unchanged": true,
+  "profile": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\card-presentation-v2\\design-command-design-v1",
+  "driver_hashes": {
+    "docs\\codex\\findings\\card-presentation-v2\\run.py": "30e26e57dbcf38e817f8c5edfc4adf1df9fac34a37754e892cb0b5c762eb0b25",
+    "docs\\codex\\findings\\card-presentation-v2\\capture.gd": "7faf713cca655d061a989b7b9b72c46ee9101d09ed5f4e4d2d83f163585ff84b",
+    "tools\\release_gate.py": "3168c82e1aa55e876c1f7050b44d741c071dc359872df31984045f48d9a4d147"
+  },
+  "drivers_unchanged": true
+}

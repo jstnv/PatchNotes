@@ -1,0 +1,1209 @@
+{
+  "passed": true,
+  "all_pairs_valid": true,
+  "audit_script_sha256": "fc2335102df19abfc6fbdb803e82a025d50ec94038911f72516c4d037fff0cb5",
+  "source_head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+  "source_manifest_sha256": "7fbd2ca4263e0681ed092a747b869cf324dfe0eed34af502985324dcd56c709c",
+  "v13_reference_sha256": {
+    "action-1104-starwave": "29c741eeacc4f1db4c4a3e9306d9eb947c7687f07a0ad643685a92afd489681e",
+    "action-1104-skip": "b815c5b8f3184ec1a8bfa74c994d5be104db7a3ab1128f4becc868eeb1ee5eeb",
+    "puzzle-4417-starwave": "a39c1d16542d294e4624edceafe7df58181eb1ccecbfcafdd9780efa882bc00f",
+    "puzzle-4417-skip": "1d15fdad8b5c77646e3bc8b99db6e3febcc945aa52b6e32675818d2e45248abd",
+    "racing-1104-starwave": "584ee41a837f44ef68f3479161fad1d7f6f651ed3f234f56d2b17738a3d92260",
+    "racing-1104-skip": "b659b47ad21f7a79c0f227459fa547a9b5db169e3723c4bbc910e8b48a6354fa"
+  },
+  "initial_parse_failure": {
+    "manifest_sha256": "177cf14ccad5c12a977ee07729cd9f0cd99af2bcc7c8a20c50b4be78847faf3a",
+    "script_sha256": {
+      "cross_specialty_base.gd": "b2346ef2c58efcef192edeef45335f1536a89038010cc8d247cfd96ef2c4b70f",
+      "post_game5_continuation.gd": "0df061757680af1c7c02c18c6e02d2bac2191fbeb55c3130eb25bf95304ee567"
+    },
+    "godot_exit": 1,
+    "errors": [
+      "SCRIPT ERROR: Parse Error: Function \"_beta_hand()\" is a coroutine, so it must be called with \"await\".",
+      "ERROR: Failed to load script \"res://scripts/debug/post_game5_continuation.gd\" with error \"Parse error\"."
+    ]
+  },
+  "v2_false_parity_failure": {
+    "manifest_sha256": "1814518c27d08f36f8db2a3d17918432ad0287fd85990514793b4d51bbd4ab6e",
+    "stop": "v13 cycle-79 replay parity mismatch",
+    "v13_prefix_python_exact": true
+  },
+  "checks": 60165,
+  "attempts": {
+    "action-1104": {
+      "starwave": {
+        "arm": "starwave",
+        "valid": true,
+        "game5": {
+          "cycle": 94,
+          "review": 6.8,
+          "awareness": 237,
+          "promotion": 0,
+          "month_1_units": 955
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 1869015,
+            "settled_portfolio_cents": 2836359,
+            "earned_portfolio_cents": 2838457,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 17,
+            "original_overdue_bills": [],
+            "credit_score": 630,
+            "fans": 346,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2091844,
+            "settled_portfolio_cents": 3157337,
+            "earned_portfolio_cents": 3475518,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 633,
+            "fans": 359,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2442511,
+            "settled_portfolio_cents": 3581812,
+            "earned_portfolio_cents": 3688106,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 636,
+            "fans": 432,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "94": {
+            "cycle": 94,
+            "cash_cents": 2510955,
+            "settled_portfolio_cents": 4137756,
+            "earned_portfolio_cents": 4137756,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 642,
+            "fans": 528,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "96": {
+            "cycle": 96,
+            "cash_cents": 3104777,
+            "settled_portfolio_cents": 4814678,
+            "earned_portfolio_cents": 4814678,
+            "game5_settled_cents": 667831,
+            "game5_earned_cents": 667831,
+            "game5_earned_cycles": 2,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 1,
+            "original_overdue_bills": [],
+            "credit_score": 645,
+            "fans": 559,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "98": {
+            "cycle": 98,
+            "cash_cents": 3253644,
+            "settled_portfolio_cents": 5047545,
+            "earned_portfolio_cents": 5047545,
+            "game5_settled_cents": 894404,
+            "game5_earned_cents": 894404,
+            "game5_earned_cycles": 4,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 3,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 584,
+            "pending_offers": [],
+            "pending_promotion": {}
+          }
+        }
+      },
+      "skip": {
+        "arm": "skip",
+        "valid": true,
+        "game5": {
+          "cycle": 91,
+          "review": 6.8,
+          "awareness": 236,
+          "promotion": 0,
+          "month_1_units": 952
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 2222080,
+            "settled_portfolio_cents": 3469924,
+            "earned_portfolio_cents": 3576917,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 633,
+            "fans": 413,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2371917,
+            "settled_portfolio_cents": 3684610,
+            "earned_portfolio_cents": 3758735,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 636,
+            "fans": 450,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2464159,
+            "settled_portfolio_cents": 3833560,
+            "earned_portfolio_cents": 3884609,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 639,
+            "fans": 475,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "94": {
+            "cycle": 94,
+            "cash_cents": 3018462,
+            "settled_portfolio_cents": 4929363,
+            "earned_portfolio_cents": 4929363,
+            "game5_settled_cents": 778320,
+            "game5_earned_cents": 778320,
+            "game5_earned_cycles": 3,
+            "game5_last_settlement_cycle": 94,
+            "game6_work_cycles": 2,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 572,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "96": {
+            "cycle": 96,
+            "cash_cents": 3149574,
+            "settled_portfolio_cents": 5117475,
+            "earned_portfolio_cents": 5117475,
+            "game5_settled_cents": 961537,
+            "game5_earned_cents": 961537,
+            "game5_earned_cycles": 5,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 4,
+            "original_overdue_bills": [],
+            "credit_score": 651,
+            "fans": 592,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "98": {
+            "cycle": 98,
+            "cash_cents": 3214557,
+            "settled_portfolio_cents": 5234958,
+            "earned_portfolio_cents": 5234958,
+            "game5_settled_cents": 1075523,
+            "game5_earned_cents": 1075523,
+            "game5_earned_cycles": 7,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 6,
+            "original_overdue_bills": [],
+            "credit_score": 654,
+            "fans": 603,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          }
+        }
+      }
+    },
+    "puzzle-4417": {
+      "starwave": {
+        "arm": "starwave",
+        "valid": true,
+        "game5": {
+          "cycle": 94,
+          "review": 6.5,
+          "awareness": 220,
+          "promotion": 0,
+          "month_1_units": 1121
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 1593856,
+            "settled_portfolio_cents": 2718877,
+            "earned_portfolio_cents": 2719577,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 17,
+            "original_overdue_bills": [],
+            "credit_score": 627,
+            "fans": 296,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 1870945,
+            "settled_portfolio_cents": 3079715,
+            "earned_portfolio_cents": 3439156,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 630,
+            "fans": 316,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2249961,
+            "settled_portfolio_cents": 3555939,
+            "earned_portfolio_cents": 3672722,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 633,
+            "fans": 375,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "94": {
+            "cycle": 94,
+            "cash_cents": 2309236,
+            "settled_portfolio_cents": 4079714,
+            "earned_portfolio_cents": 4079714,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 642,
+            "fans": 441,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "96": {
+            "cycle": 96,
+            "cash_cents": 3029146,
+            "settled_portfolio_cents": 4869224,
+            "earned_portfolio_cents": 4869224,
+            "game5_settled_cents": 783915,
+            "game5_earned_cents": 783915,
+            "game5_earned_cycles": 2,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 1,
+            "original_overdue_bills": [],
+            "credit_score": 645,
+            "fans": 482,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "98": {
+            "cycle": 98,
+            "cash_cents": 3194181,
+            "settled_portfolio_cents": 5133559,
+            "earned_portfolio_cents": 5133559,
+            "game5_settled_cents": 1044754,
+            "game5_earned_cents": 1044754,
+            "game5_earned_cycles": 4,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 3,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 505,
+            "pending_offers": [],
+            "pending_promotion": {}
+          }
+        }
+      },
+      "skip": {
+        "arm": "skip",
+        "valid": true,
+        "game5": {
+          "cycle": 91,
+          "review": 6.5,
+          "awareness": 220,
+          "promotion": 0,
+          "month_1_units": 1121
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 2067137,
+            "settled_portfolio_cents": 3436358,
+            "earned_portfolio_cents": 3553142,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 633,
+            "fans": 360,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2230053,
+            "settled_portfolio_cents": 3671323,
+            "earned_portfolio_cents": 3746848,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 636,
+            "fans": 390,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2325094,
+            "settled_portfolio_cents": 3823072,
+            "earned_portfolio_cents": 3871323,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 639,
+            "fans": 409,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "94": {
+            "cycle": 94,
+            "cash_cents": 2994814,
+            "settled_portfolio_cents": 5001392,
+            "earned_portfolio_cents": 5001392,
+            "game5_settled_cents": 913985,
+            "game5_earned_cents": 913985,
+            "game5_earned_cycles": 3,
+            "game5_last_settlement_cycle": 94,
+            "game6_work_cycles": 2,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 493,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "96": {
+            "cycle": 96,
+            "cash_cents": 3131501,
+            "settled_portfolio_cents": 5213979,
+            "earned_portfolio_cents": 5213979,
+            "game5_settled_cents": 1123775,
+            "game5_earned_cents": 1123775,
+            "game5_earned_cycles": 5,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 4,
+            "original_overdue_bills": [],
+            "credit_score": 651,
+            "fans": 511,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "98": {
+            "cycle": 98,
+            "cash_cents": 3207671,
+            "settled_portfolio_cents": 5342649,
+            "earned_portfolio_cents": 5342649,
+            "game5_settled_cents": 1251047,
+            "game5_earned_cents": 1251047,
+            "game5_earned_cycles": 7,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 6,
+            "original_overdue_bills": [],
+            "credit_score": 654,
+            "fans": 523,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          }
+        }
+      }
+    },
+    "racing-1104": {
+      "starwave": {
+        "arm": "starwave",
+        "valid": true,
+        "game5": {
+          "cycle": 94,
+          "review": 5.7,
+          "awareness": 209,
+          "promotion": 0,
+          "month_1_units": 749
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 1951466,
+            "settled_portfolio_cents": 2869926,
+            "earned_portfolio_cents": 2871325,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 17,
+            "original_overdue_bills": [],
+            "credit_score": 630,
+            "fans": 356,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2119556,
+            "settled_portfolio_cents": 3130765,
+            "earned_portfolio_cents": 3388806,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 633,
+            "fans": 357,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2377701,
+            "settled_portfolio_cents": 3476218,
+            "earned_portfolio_cents": 3562932,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 636,
+            "fans": 387,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "94": {
+            "cycle": 94,
+            "cash_cents": 2257456,
+            "settled_portfolio_cents": 3822373,
+            "earned_portfolio_cents": 3822373,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 642,
+            "fans": 417,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "96": {
+            "cycle": 96,
+            "cash_cents": 2703828,
+            "settled_portfolio_cents": 4348245,
+            "earned_portfolio_cents": 4348245,
+            "game5_settled_cents": 523775,
+            "game5_earned_cents": 523775,
+            "game5_earned_cycles": 2,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 1,
+            "original_overdue_bills": [],
+            "credit_score": 645,
+            "fans": 426,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "98": {
+            "cycle": 98,
+            "cash_cents": 2792556,
+            "settled_portfolio_cents": 4520973,
+            "earned_portfolio_cents": 4520973,
+            "game5_settled_cents": 695803,
+            "game5_earned_cents": 695803,
+            "game5_earned_cycles": 4,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 3,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 433,
+            "pending_offers": [],
+            "pending_promotion": {}
+          }
+        }
+      },
+      "skip": {
+        "arm": "skip",
+        "valid": true,
+        "game5": {
+          "cycle": 91,
+          "review": 5.7,
+          "awareness": 209,
+          "promotion": 0,
+          "month_1_units": 749
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 2196550,
+            "settled_portfolio_cents": 3384610,
+            "earned_portfolio_cents": 3472023,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 633,
+            "fans": 378,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2306326,
+            "settled_portfolio_cents": 3560135,
+            "earned_portfolio_cents": 3612582,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 636,
+            "fans": 394,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2355911,
+            "settled_portfolio_cents": 3666428,
+            "earned_portfolio_cents": 3698596,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 639,
+            "fans": 403,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "94": {
+            "cycle": 94,
+            "cash_cents": 2599542,
+            "settled_portfolio_cents": 4434959,
+            "earned_portfolio_cents": 4434959,
+            "game5_settled_cents": 609789,
+            "game5_earned_cents": 609789,
+            "game5_earned_cycles": 3,
+            "game5_last_settlement_cycle": 94,
+            "game6_work_cycles": 2,
+            "original_overdue_bills": [],
+            "credit_score": 645,
+            "fans": 429,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "96": {
+            "cycle": 96,
+            "cash_cents": 2673907,
+            "settled_portfolio_cents": 4569924,
+            "earned_portfolio_cents": 4569924,
+            "game5_settled_cents": 744055,
+            "game5_earned_cents": 744055,
+            "game5_earned_cycles": 5,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 4,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 435,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "98": {
+            "cycle": 98,
+            "cash_cents": 2697630,
+            "settled_portfolio_cents": 4646147,
+            "earned_portfolio_cents": 4646147,
+            "game5_settled_cents": 819579,
+            "game5_earned_cents": 819579,
+            "game5_earned_cycles": 7,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 6,
+            "original_overdue_bills": [],
+            "credit_score": 651,
+            "fans": 439,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          }
+        }
+      }
+    }
+  },
+  "pairs": [
+    {
+      "cohort": "action-1104",
+      "paired": true,
+      "game5_starwave": {
+        "cycle": 94,
+        "review": 6.8,
+        "awareness": 237,
+        "promotion": 0,
+        "month_1_units": 955
+      },
+      "game5_skip": {
+        "cycle": 91,
+        "review": 6.8,
+        "awareness": 236,
+        "promotion": 0,
+        "month_1_units": 952
+      },
+      "matched_endpoints": [
+        {
+          "cycle": 94,
+          "starwave": {
+            "cycle": 94,
+            "cash_cents": 2510955,
+            "settled_portfolio_cents": 4137756,
+            "earned_portfolio_cents": 4137756,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 642,
+            "fans": 528,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 94,
+            "cash_cents": 3018462,
+            "settled_portfolio_cents": 4929363,
+            "earned_portfolio_cents": 4929363,
+            "game5_settled_cents": 778320,
+            "game5_earned_cents": 778320,
+            "game5_earned_cycles": 3,
+            "game5_last_settlement_cycle": 94,
+            "game6_work_cycles": 2,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 572,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": -507507,
+          "starwave_receipt_cents": 222000,
+          "settled_portfolio_delta_cents": -791607,
+          "settled_game5_delta_cents": -778320,
+          "other_cash_movement_delta_cents": 62100,
+          "game6_work_delta": -2
+        },
+        {
+          "cycle": 96,
+          "starwave": {
+            "cycle": 96,
+            "cash_cents": 3104777,
+            "settled_portfolio_cents": 4814678,
+            "earned_portfolio_cents": 4814678,
+            "game5_settled_cents": 667831,
+            "game5_earned_cents": 667831,
+            "game5_earned_cycles": 2,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 1,
+            "original_overdue_bills": [],
+            "credit_score": 645,
+            "fans": 559,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 96,
+            "cash_cents": 3149574,
+            "settled_portfolio_cents": 5117475,
+            "earned_portfolio_cents": 5117475,
+            "game5_settled_cents": 961537,
+            "game5_earned_cents": 961537,
+            "game5_earned_cycles": 5,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 4,
+            "original_overdue_bills": [],
+            "credit_score": 651,
+            "fans": 592,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": -44797,
+          "starwave_receipt_cents": 222000,
+          "settled_portfolio_delta_cents": -302797,
+          "settled_game5_delta_cents": -293706,
+          "other_cash_movement_delta_cents": 36000,
+          "game6_work_delta": -3
+        },
+        {
+          "cycle": 98,
+          "starwave": {
+            "cycle": 98,
+            "cash_cents": 3253644,
+            "settled_portfolio_cents": 5047545,
+            "earned_portfolio_cents": 5047545,
+            "game5_settled_cents": 894404,
+            "game5_earned_cents": 894404,
+            "game5_earned_cycles": 4,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 3,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 584,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 98,
+            "cash_cents": 3214557,
+            "settled_portfolio_cents": 5234958,
+            "earned_portfolio_cents": 5234958,
+            "game5_settled_cents": 1075523,
+            "game5_earned_cents": 1075523,
+            "game5_earned_cycles": 7,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 6,
+            "original_overdue_bills": [],
+            "credit_score": 654,
+            "fans": 603,
+            "pending_offers": [
+              "24446020d313c1f111affc03ee36785a:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": 39087,
+          "starwave_receipt_cents": 222000,
+          "settled_portfolio_delta_cents": -187413,
+          "settled_game5_delta_cents": -181119,
+          "other_cash_movement_delta_cents": 4500,
+          "game6_work_delta": -3
+        }
+      ],
+      "starwave_actual_settlement_increments_cents": [
+        667831,
+        226573
+      ],
+      "starwave_settlement_confirmed_at_96_98": [
+        true,
+        true
+      ]
+    },
+    {
+      "cohort": "puzzle-4417",
+      "paired": true,
+      "game5_starwave": {
+        "cycle": 94,
+        "review": 6.5,
+        "awareness": 220,
+        "promotion": 0,
+        "month_1_units": 1121
+      },
+      "game5_skip": {
+        "cycle": 91,
+        "review": 6.5,
+        "awareness": 220,
+        "promotion": 0,
+        "month_1_units": 1121
+      },
+      "matched_endpoints": [
+        {
+          "cycle": 94,
+          "starwave": {
+            "cycle": 94,
+            "cash_cents": 2309236,
+            "settled_portfolio_cents": 4079714,
+            "earned_portfolio_cents": 4079714,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 642,
+            "fans": 441,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 94,
+            "cash_cents": 2994814,
+            "settled_portfolio_cents": 5001392,
+            "earned_portfolio_cents": 5001392,
+            "game5_settled_cents": 913985,
+            "game5_earned_cents": 913985,
+            "game5_earned_cycles": 3,
+            "game5_last_settlement_cycle": 94,
+            "game6_work_cycles": 2,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 493,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": -685578,
+          "starwave_receipt_cents": 192000,
+          "settled_portfolio_delta_cents": -921678,
+          "settled_game5_delta_cents": -913985,
+          "other_cash_movement_delta_cents": 44100,
+          "game6_work_delta": -2
+        },
+        {
+          "cycle": 96,
+          "starwave": {
+            "cycle": 96,
+            "cash_cents": 3029146,
+            "settled_portfolio_cents": 4869224,
+            "earned_portfolio_cents": 4869224,
+            "game5_settled_cents": 783915,
+            "game5_earned_cents": 783915,
+            "game5_earned_cycles": 2,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 1,
+            "original_overdue_bills": [],
+            "credit_score": 645,
+            "fans": 482,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 96,
+            "cash_cents": 3131501,
+            "settled_portfolio_cents": 5213979,
+            "earned_portfolio_cents": 5213979,
+            "game5_settled_cents": 1123775,
+            "game5_earned_cents": 1123775,
+            "game5_earned_cycles": 5,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 4,
+            "original_overdue_bills": [],
+            "credit_score": 651,
+            "fans": 511,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": -102355,
+          "starwave_receipt_cents": 192000,
+          "settled_portfolio_delta_cents": -344755,
+          "settled_game5_delta_cents": -339860,
+          "other_cash_movement_delta_cents": 50400,
+          "game6_work_delta": -3
+        },
+        {
+          "cycle": 98,
+          "starwave": {
+            "cycle": 98,
+            "cash_cents": 3194181,
+            "settled_portfolio_cents": 5133559,
+            "earned_portfolio_cents": 5133559,
+            "game5_settled_cents": 1044754,
+            "game5_earned_cents": 1044754,
+            "game5_earned_cycles": 4,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 3,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 505,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 98,
+            "cash_cents": 3207671,
+            "settled_portfolio_cents": 5342649,
+            "earned_portfolio_cents": 5342649,
+            "game5_settled_cents": 1251047,
+            "game5_earned_cents": 1251047,
+            "game5_earned_cycles": 7,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 6,
+            "original_overdue_bills": [],
+            "credit_score": 654,
+            "fans": 523,
+            "pending_offers": [
+              "e8d8f908f619445e9ce681801431e148:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": -13490,
+          "starwave_receipt_cents": 192000,
+          "settled_portfolio_delta_cents": -209090,
+          "settled_game5_delta_cents": -206293,
+          "other_cash_movement_delta_cents": 3600,
+          "game6_work_delta": -3
+        }
+      ],
+      "starwave_actual_settlement_increments_cents": [
+        783915,
+        260839
+      ],
+      "starwave_settlement_confirmed_at_96_98": [
+        true,
+        true
+      ]
+    },
+    {
+      "cohort": "racing-1104",
+      "paired": true,
+      "game5_starwave": {
+        "cycle": 94,
+        "review": 5.7,
+        "awareness": 209,
+        "promotion": 0,
+        "month_1_units": 749
+      },
+      "game5_skip": {
+        "cycle": 91,
+        "review": 5.7,
+        "awareness": 209,
+        "promotion": 0,
+        "month_1_units": 749
+      },
+      "matched_endpoints": [
+        {
+          "cycle": 94,
+          "starwave": {
+            "cycle": 94,
+            "cash_cents": 2257456,
+            "settled_portfolio_cents": 3822373,
+            "earned_portfolio_cents": 3822373,
+            "game5_settled_cents": 0,
+            "game5_earned_cents": 0,
+            "game5_earned_cycles": 0,
+            "game5_last_settlement_cycle": -1,
+            "game6_work_cycles": 0,
+            "original_overdue_bills": [],
+            "credit_score": 642,
+            "fans": 417,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 94,
+            "cash_cents": 2599542,
+            "settled_portfolio_cents": 4434959,
+            "earned_portfolio_cents": 4434959,
+            "game5_settled_cents": 609789,
+            "game5_earned_cents": 609789,
+            "game5_earned_cycles": 3,
+            "game5_last_settlement_cycle": 94,
+            "game6_work_cycles": 2,
+            "original_overdue_bills": [],
+            "credit_score": 645,
+            "fans": 429,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": -342086,
+          "starwave_receipt_cents": 212000,
+          "settled_portfolio_delta_cents": -612586,
+          "settled_game5_delta_cents": -609789,
+          "other_cash_movement_delta_cents": 58500,
+          "game6_work_delta": -2
+        },
+        {
+          "cycle": 96,
+          "starwave": {
+            "cycle": 96,
+            "cash_cents": 2703828,
+            "settled_portfolio_cents": 4348245,
+            "earned_portfolio_cents": 4348245,
+            "game5_settled_cents": 523775,
+            "game5_earned_cents": 523775,
+            "game5_earned_cycles": 2,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 1,
+            "original_overdue_bills": [],
+            "credit_score": 645,
+            "fans": 426,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 96,
+            "cash_cents": 2673907,
+            "settled_portfolio_cents": 4569924,
+            "earned_portfolio_cents": 4569924,
+            "game5_settled_cents": 744055,
+            "game5_earned_cents": 744055,
+            "game5_earned_cycles": 5,
+            "game5_last_settlement_cycle": 96,
+            "game6_work_cycles": 4,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 435,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": 29921,
+          "starwave_receipt_cents": 212000,
+          "settled_portfolio_delta_cents": -221679,
+          "settled_game5_delta_cents": -220280,
+          "other_cash_movement_delta_cents": 39600,
+          "game6_work_delta": -3
+        },
+        {
+          "cycle": 98,
+          "starwave": {
+            "cycle": 98,
+            "cash_cents": 2792556,
+            "settled_portfolio_cents": 4520973,
+            "earned_portfolio_cents": 4520973,
+            "game5_settled_cents": 695803,
+            "game5_earned_cents": 695803,
+            "game5_earned_cycles": 4,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 3,
+            "original_overdue_bills": [],
+            "credit_score": 648,
+            "fans": 433,
+            "pending_offers": [],
+            "pending_promotion": {}
+          },
+          "skip": {
+            "cycle": 98,
+            "cash_cents": 2697630,
+            "settled_portfolio_cents": 4646147,
+            "earned_portfolio_cents": 4646147,
+            "game5_settled_cents": 819579,
+            "game5_earned_cents": 819579,
+            "game5_earned_cycles": 7,
+            "game5_last_settlement_cycle": 98,
+            "game6_work_cycles": 6,
+            "original_overdue_bills": [],
+            "credit_score": 651,
+            "fans": 439,
+            "pending_offers": [
+              "2a358f46260be268d33ca52d19bdced1:starwave:first"
+            ],
+            "pending_promotion": {}
+          },
+          "cash_delta_starwave_minus_skip_cents": 94926,
+          "starwave_receipt_cents": 212000,
+          "settled_portfolio_delta_cents": -125174,
+          "settled_game5_delta_cents": -123776,
+          "other_cash_movement_delta_cents": 8100,
+          "game6_work_delta": -3
+        }
+      ],
+      "starwave_actual_settlement_increments_cents": [
+        523775,
+        172028
+      ],
+      "starwave_settlement_confirmed_at_96_98": [
+        true,
+        true
+      ]
+    }
+  ],
+  "limitations": [
+    "Three solvent specialty cohorts and one fixed six-Design continuation policy.",
+    "The pre-Education source pin does not describe moving current-main balance.",
+    "Common-cycle cash includes different Game 6 work progress and is not a final balance lock."
+  ]
+}

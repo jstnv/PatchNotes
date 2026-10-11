@@ -3,3 +3,14 @@
 /patch-notes/design-logs/
 **/__pycache__/
 *.pyc
+
+# Import caches and scratch work stay local, including isolated simulator copies.
+**/.godot/
+**/.codex-godot-temp/
+# Disposable test profiles and rebuilt Windows exports are not source artifacts.
+/docs/**/APPDATA/
+/docs/**/LOCALAPPDATA/
+/docs/**/profiles/
+/docs/**/export-smoke-*/
+/docs/**/*.exe
+/docs/**/*.pck

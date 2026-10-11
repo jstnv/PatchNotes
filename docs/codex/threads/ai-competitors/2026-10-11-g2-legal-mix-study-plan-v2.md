@@ -1,0 +1,7 @@
+# G2 exact-search engineering revision — 2026-10-11
+
+Private CANDIDATE fork `g2-legal-mix-v2` retains v1 and its six honest state-budget deferrals. Before further runs: keep both seeds, all1/1–3/3 envelopes, cash allocation and500000-transition/100000-state bounds from v1 unchanged. No numerical AI allowance is selected.
+
+The revised exact algorithm evaluates phase envelopes independently, drops obsolete phase Feature identity only once that phase is complete, retains minimum cost for equal capped Core and Feature-work truth, prunes componentwise dominated completed-phase vectors, then exhaustively joins remaining frontiers. No-work vectors cannot dominate vectors with work because ordinary Alpha exit requires Feature work. Equal best-overall/target gap semantics remain unchanged. Add an explicit2500000 dominance-comparison bound to prevent the pruning routine itself from running without a bound. This is an experimental engineering guard, not an approved CPU rule.
+
+Compare the optimized algorithm with the retained unpruned reference on fifteen small hand/cash cases before real studies. Preserve all v1 source, logs and failure/deferral outcomes. Only once a current1/1 baseline finishes may its eleven-node Store screen proceed. Favorable selected-vector witnesses must pass authoritative deal/production validation. No change to canonical gameplay, rules, starting money, seeds, or Studio-only Continue.

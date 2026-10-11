@@ -30,7 +30,7 @@ func setup_release_snapshot(metadata: Dictionary, sales: Dictionary) -> bool:
 	%ScopeDetailLabel.text = "Delivered Scope: %d / %d\nScope Completion: %.1f%%" % [data.scope, data.required_scope, data.scope_completion * 100.0]
 	%CyclesLabel.text = "Development Time: %d cycles · Remaining Bugs: %d" % [data.development_cycles, data.remaining_bugs]
 	%MarketingDetailLabel.text = %AwarenessLabel.text
-	%LaunchMarketingLabel.text = "Launch Marketing: %d" % data.launch_marketing
+	%LaunchMarketingLabel.text = "Launch Marketing: %d\nFans at launch: %d · Fan Awareness: %d" % [data.launch_marketing, data.launch_fans, data.fan_awareness]
 	%SalesUnitsLabel.text = "Projected Month 1 Units: %d · Lifetime earned: %d" % [data.projected_units, sales.earned_units]
 	%SalesNetLabel.text = "Projected Gross: %s · Projected Net: %s\nEarned Gross: %s · Earned Net: %s · Paid: %s" % [CashFormatter.format_exact_cents(data.projected_gross_cents), CashFormatter.format_exact_cents(data.projected_net_cents), CashFormatter.format_exact_cents(sales.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS), CashFormatter.format_exact_cents(sales.entitlement_cents), CashFormatter.format_exact_cents(sales.settled_cents)]
 	%SalesNoteLabel.text = "Month 1 gross is before the platform share. Later sales continue by release age; earned net settles at calendar-month boundaries."
@@ -61,7 +61,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> bool:
 	%ScopeDetailLabel.text = "Delivered Scope: %d / %d\nScope Completion: %.1f%%" % [project_state.get_current_scope(), project_state.get_required_scope(), review.get_scope_completion() * 100.0]
 	%CyclesLabel.text = "Development Time: %d cycles" % project_state.get_current_cycle()
 	%MarketingDetailLabel.text = %AwarenessLabel.text
-	%LaunchMarketingLabel.text = "Launch Marketing: %d" % project_state.get_awareness_result().get_launch_marketing()
+	%LaunchMarketingLabel.text = "Launch Marketing: %d\nFans at launch: %d · Fan Awareness: %d" % [project_state.get_awareness_result().get_launch_marketing(), project_state.get_awareness_result().get_existing_fans(), project_state.get_awareness_result().get_fan_awareness()]
 	%SalesUnitsLabel.text = %UnitsLabel.text
 	%SalesNetLabel.text = "Projected Month 1 Net: %s" % CashFormatter.format_exact_cents(project_state.get_month_one_sales_revenue_result().get_projected_month_one_net_cents())
 	%SalesNoteLabel.text = "This is a forecast. Sales are earned as time advances and paid at calendar-month boundaries."

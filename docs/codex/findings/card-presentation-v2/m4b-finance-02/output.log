@@ -1,0 +1,14 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+ERROR: FAIL: Fixture later observation revision
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_finance_observation.gd:15)
+       [1] _initialize (res://scripts/debug/verify_finance_observation.gd:155)
+SCRIPT ERROR: Invalid access to property or key 'revision' on a base object of type 'Dictionary'.
+   at: _initialize (res://scripts/debug/verify_finance_observation.gd:159)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://scripts/debug/verify_finance_observation.gd:159)

@@ -1,0 +1,44 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/debug/experiment_policy/supplied_policy.gd",
+    "id": "intentional-rejection-fixture",
+    "version": "1",
+    "source_identity": "b06a4e7697a83c285330f7bfde40764a845e72ba332887bcc6ac0c9832b3c548"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "intentional-rejection-after-two",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "example-action-4417",
+          "studio_name": "Explicit Test Studio",
+          "specialty": "action",
+          "traits": [],
+          "seed": "4417"
+        }
+      },
+      "max_commands": 100,
+      "target_release_count": 3,
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "Example Release",
+          "selection": "visible_order",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        },
+        "id": "intentional-rejection-fixture",
+        "version": "1",
+        "source_identity": "b06a4e7697a83c285330f7bfde40764a845e72ba332887bcc6ac0c9832b3c548"
+      },
+      "telemetry": true
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "ok": true,
+  "scope": "Deliberate unknown-command negative fixture after two legal releases; not a discovered gameplay failure",
+  "canonical_files_unchanged": 608,
+  "original_commands": 37,
+  "accepted_prefix_commands": 36,
+  "reduced_commands": 1,
+  "initial_origin": "recipe",
+  "reduced_origin": "exact-restorable Studio checkpoint",
+  "fresh_process_confirmation": true,
+  "signature": {
+    "actual_result": "71aa11f84d07d0bb4031139e5b071b780ece453479e91b167049df3c81792f8f",
+    "actual_state": "731d673b2d380efba170547ff0be27eeda46ec8d4d663d8c5a400956794b2f9a",
+    "command_type": "intentional_reducer_rejection_fixture",
+    "detail": {
+      "error": "Unsupported Studio command"
+    },
+    "kind": "rejection",
+    "request_digest": "d34016c2dbb74426cb636c44c2ceefb9cf6e693168ecd11d2763107cc01b5762"
+  },
+  "minimality": "Shortest reproducing suffix among preceding exact-restorable Studio boundaries; no arbitrary command deletion or global minimality claim",
+  "commands": [
+    {
+      "argv": [
+        "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "tools/simulate.py",
+        "run",
+        "--config",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\reducer-negative-config.json",
+        "--output",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\reducer-original-run",
+        "--godot",
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--timeout",
+        "240"
+      ],
+      "start": 1791714128.1336257,
+      "end": 1791714158.0249562,
+      "exit": 1,
+      "expected_exit": 1
+    },
+    {
+      "argv": [
+        "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "tools/reduce_simulation.py",
+        "--bundle",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\reducer-original-run",
+        "--case",
+        "intentional-rejection-after-two",
+        "--kind",
+        "rejection",
+        "--max-commands",
+        "100",
+        "--output",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\reducer-reduced-run",
+        "--godot",
+        "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+        "--timeout",
+        "240"
+      ],
+      "start": 1791714158.0309558,
+      "end": 1791714189.1040022,
+      "exit": 0,
+      "expected_exit": 0
+    }
+  ],
+  "source_identity": "13980fdeb9efabaeb070c8dddddcd8137982e3e073aa43ab87f7fdd1a57c4c4f",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "reducer_sha256": "1b734f622302590839e511c8f85490729763d01f29f4d13776253b43fa514a37"
+}

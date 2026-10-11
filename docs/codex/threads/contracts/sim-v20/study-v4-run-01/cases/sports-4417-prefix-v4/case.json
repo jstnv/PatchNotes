@@ -1,0 +1,52 @@
+{
+	"case_id": "sports-4417-prefix-v4",
+	"initial": {
+		"recipe": {
+			"schema_version": 1.0,
+			"seed": "4417",
+			"specialty": "sports",
+			"studio_id": "contracts-sidestreet-v4-sports-4417",
+			"studio_name": "SideStreet v4 sports 4417",
+			"traits": []
+		}
+	},
+	"max_commands": 180.0,
+	"policy": {
+		"config": {
+			"development_first": {
+				"genre": "sports",
+				"hands": {
+					"alpha": 6.0,
+					"beta": 6.0,
+					"design": 5.0
+				},
+				"name_prefix": "SideStreet Screen",
+				"selection": "features_first",
+				"theme": "fantasy"
+			},
+			"development_later": {
+				"genre": "sports",
+				"hands": {
+					"alpha": 6.0,
+					"beta": 6.0,
+					"design": 5.0
+				},
+				"name_prefix": "SideStreet Screen",
+				"selection": "features_first",
+				"theme": "fantasy"
+			},
+			"mode": "prefix",
+			"starter_ids": [
+				"sprites",
+				"general_combat",
+				"levels"
+			]
+		},
+		"id": "contracts-sidestreet-postsettlement",
+		"source_identity": "ba7869ac9f1f020c7a980d52b503fc7156d1d1dea5d2345131ef7f6f8e9d821e",
+		"version": "4"
+	},
+	"schema_version": "1",
+	"target_release_count": 2.0,
+	"telemetry": true
+}

@@ -1,0 +1,23 @@
+{
+  "complete": false,
+  "source_manifest_sha256": "8922fd57eac43ec6ec04160bce01ca8f9712d4c05d396e7ebff721741953e8db",
+  "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+  "verified_files": 1189,
+  "exact_current_files": 1187,
+  "exact_head_recovery_paths": [
+    "patch-notes/scripts/debug/verify_game_lifespan_trial.gd",
+    "patch-notes/scripts/debug/verify_sales_earning_and_settlement.gd"
+  ],
+  "errors": [
+    {
+      "path": "patch-notes/scripts/debug/verify_monthly_sales_report.gd",
+      "reason": "HEAD bytes do not match recorded SHA256; no transformation attempted",
+      "head_sha256": "b06ede5707681f97fb9ca04923a693624d16e279c15cccfb7b35a74f8146c704",
+      "expected_sha256": "8eb52dcf3e04c85a325766bcbb77b0c04e00c8aa0f9fabe6fb6bef90e08ef427"
+    }
+  ],
+  "source_copy_written": false,
+  "archive_written": false,
+  "audit_recheck_run": false,
+  "original_manifest_and_audit_summary_preserved": true
+}

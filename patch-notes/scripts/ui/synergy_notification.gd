@@ -6,6 +6,7 @@ var title_label: Label
 var detail_label: Label
 var timer: Timer
 var _popup: Tween
+var _started := 0.0
 
 func _ready() -> void:
 	layer = 10
@@ -46,7 +47,12 @@ func show_message(title: String, detail: String) -> void:
 	banner.pivot_offset = banner.size / 2.0
 	banner.scale = Vector2.ONE * 0.8
 	banner.modulate.a = 0.0
-	_popup = create_tween().set_parallel()
-	_popup.tween_property(banner, "scale", Vector2.ONE, HandPresentation.BEAT_SECONDS / 2.0).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_popup.tween_property(banner, "modulate:a", 1.0, HandPresentation.BEAT_SECONDS / 2.0)
-	timer.start()
+	_started = get_node("/root/Soundtrack").presentation_seconds()
+
+func _process(_delta: float) -> void:
+	if not is_instance_valid(banner) or not banner.visible: return
+	var elapsed: float = get_node("/root/Soundtrack").presentation_seconds() - _started
+	var progress := clampf(elapsed / (HandPresentation.BEAT_SECONDS / 2.0), 0.0, 1.0)
+	banner.scale = Vector2.ONE * lerpf(0.8, 1.0, 1.0 - pow(1.0 - progress, 3.0))
+	banner.modulate.a = progress
+	if elapsed >= timer.wait_time + HandPresentation.SPECIALIZATION_LEAD_BEATS * HandPresentation.BEAT_SECONDS: banner.hide()

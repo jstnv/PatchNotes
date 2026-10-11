@@ -1,0 +1,509 @@
+{
+  "source_head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4",
+  "automated_pass": false,
+  "release_ready": false,
+  "remaining": [
+    "Exported legal Bank/exit/Continue/installment/payoff/two-game interaction",
+    "Approved asset/license set and audible music/SFX acceptance"
+  ],
+  "checks": [
+    "verify_alpha_command",
+    "verify_alpha_exit_arrears",
+    "verify_alpha_finalization",
+    "verify_alpha_phase",
+    "verify_atomic_selected_redraw",
+    "verify_balanced_primitive_contract",
+    "verify_bank_finance",
+    "verify_bank_integration",
+    "verify_bank_loan",
+    "verify_begin_project_extraction",
+    "verify_beta_balanced_operations",
+    "verify_beta_base_hand_resolution",
+    "verify_beta_card_data",
+    "verify_beta_command",
+    "verify_beta_finalization_and_launch",
+    "verify_beta_host_playtest",
+    "verify_beta_marketing_insider_state",
+    "verify_beta_marketing_specialization",
+    "verify_beta_planning",
+    "verify_beta_qa_specialization",
+    "verify_beta_qa_state",
+    "verify_campaign_batch",
+    "verify_campaign_continuation",
+    "verify_campaign_live_parity",
+    "verify_campaign_reducer",
+    "verify_campaign_seeded_parity",
+    "verify_campaign_session",
+    "verify_campaign_stress",
+    "verify_campaign_stress_cult",
+    "verify_campaign_stress_education",
+    "verify_campaign_stress_puzzle",
+    "verify_campaign_telemetry",
+    "verify_candidate_retention",
+    "verify_card_frame",
+    "verify_card_motion",
+    "verify_checkpoint_codec",
+    "verify_checkpoint_recovery_ui",
+    "verify_checkpoint_rng",
+    "verify_checkpoint_runtime",
+    "verify_checkpoint_store",
+    "verify_contract_extraction",
+    "verify_contract_presentation",
+    "verify_cult_following",
+    "verify_demo_settings",
+    "verify_design_command",
+    "verify_design_phase",
+    "verify_development_protocol"
+  ],
+  "headless_automated_pass": false,
+  "graphical_startup_deferred": false,
+  "test_writer_port": 47733,
+  "checkpoint_writer_instrumentation": {
+    "enabled": true,
+    "port": 47733,
+    "helper_sha256": "fae60611c2fac7f63a440d57f3a9e836269f3c762fa9e7d56ca4ce0235608bb0",
+    "wrappers": {
+      "verify_alpha_command": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_alpha_command.gd",
+        "sha256": "5076ea9d4a24d3bee76e5c11058831b98a94dc7759e45508b5bb7fa8d8f522ee",
+        "original": "res://scripts/debug/verify_alpha_command.gd",
+        "original_sha256": "0ae7f35810ea42d097966e00d0884133aa9cacead8bdb9c8c68b7c016b5c2a03",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_alpha_exit_arrears": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_alpha_exit_arrears.gd",
+        "sha256": "ecc0e5b3d9f7d371a06ca18ca74a66372fc0b251805825d0d8e165a2a82a6c11",
+        "original": "res://scripts/debug/verify_alpha_exit_arrears.gd",
+        "original_sha256": "adb35e56b16065473bcc69997952b54faea1fd975efe41d352b4ab58ef827390",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_alpha_finalization": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_alpha_finalization.gd",
+        "sha256": "7de7983b3e92a41a706918f422c019fd05b1b66d829750be56884f58daf8eecd",
+        "original": "res://scripts/debug/verify_alpha_finalization.gd",
+        "original_sha256": "11aa166297140956e77e554c9a487802930040e58a1bb33cba104e0f298bbdb9",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_alpha_phase": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_alpha_phase.gd",
+        "sha256": "2701395b0eb3b8b0982d3001c6fcfee0f4b8f88f8d4d485bfed562299a828780",
+        "original": "res://scripts/debug/verify_alpha_phase.gd",
+        "original_sha256": "15dd36b7236bedc6d2c21eb22fcfd9acc8732d4fe6fe4c36d9064954092eb95c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_atomic_selected_redraw": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_atomic_selected_redraw.gd",
+        "sha256": "d75befd90c3a0301fa1141cbb53dc8a230d25da04f91321485d10b42982d70d9",
+        "original": "res://scripts/debug/verify_atomic_selected_redraw.gd",
+        "original_sha256": "6cc5f13d78ebb90fbee1b5cbfd95cb501c1f3a56d05dcc496400035f572f63cc",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      },
+      "verify_balanced_primitive_contract": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_balanced_primitive_contract.gd",
+        "sha256": "323e83ecda968bff7e148f82c035c4fa19222970aa16287a7ba034b1a907acfa",
+        "original": "res://scripts/debug/verify_balanced_primitive_contract.gd",
+        "original_sha256": "87c88bfbfa16ab3ec120687dd205a199735d1a93c648e50040c2a1bed4212fc6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_bank_finance": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_bank_finance.gd",
+        "sha256": "28342ee4115fe13c25e99d3cf3483908583a81ee56f999ce5d753789efae46ca",
+        "original": "res://scripts/debug/verify_bank_finance.gd",
+        "original_sha256": "6c89ca810e51421091fa6e24ad4d286793a44a0cd0cbfae8b227ddc424322df7",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_bank_integration": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_bank_integration.gd",
+        "sha256": "ff958f2a240378db006d3dcf882872d631a78b2d4cbac3dc3bcf1e5191f8a007",
+        "original": "res://scripts/debug/verify_bank_integration.gd",
+        "original_sha256": "1b72c2ad5aff6e697add582685d3a02b5dc0ff4f4b38125bfa43fdf2f8f9ad64",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_bank_loan": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_bank_loan.gd",
+        "sha256": "0cdf5160cf76cc6a476b5645fe2729bb3d59659f5bcc77fa6ad7f7f30def9e60",
+        "original": "res://scripts/debug/verify_bank_loan.gd",
+        "original_sha256": "a6dcbe4442ff7c1137ed884d1f12364833635de750dbd96265a6c50183f309a9",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_begin_project_extraction": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_begin_project_extraction.gd",
+        "sha256": "ee86ac43dfe8920d1117dcdc91c0c3cc8925a041eb38f7a85c1e06470dc9218a",
+        "original": "res://scripts/debug/verify_begin_project_extraction.gd",
+        "original_sha256": "2e3068889db1bcb925f4e896093d48ff2ed284ebdd2445cf34c209cc8e6f5d8b",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_balanced_operations": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_balanced_operations.gd",
+        "sha256": "c85323abc84b314d0797c825eb5292b0b4d68e138e9b6898d4fd40a5ca4b2b44",
+        "original": "res://scripts/debug/verify_beta_balanced_operations.gd",
+        "original_sha256": "ba299282ada55125edcb2055d269bca29d51eeaa0d3b3f6d496311bc74f50fcc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_base_hand_resolution": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_base_hand_resolution.gd",
+        "sha256": "2ec927ac796776c88d2c5d646425b7a82513ad5e1b7fdba34394d618d3331734",
+        "original": "res://scripts/debug/verify_beta_base_hand_resolution.gd",
+        "original_sha256": "d3b6877feb6eaadf3a939d902c1c01e58a3e75b17f61ea9c83ebd0341b31dd49",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_card_data": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_card_data.gd",
+        "sha256": "72ea15a3d9e18f38b9060cead5425c56664742b6ed390eb5b47b42b5a9108fc9",
+        "original": "res://scripts/debug/verify_beta_card_data.gd",
+        "original_sha256": "b21eb3395db4fddbc5dd9d3c993ab48aa6b3691ef866e7e019c8e96499ad9a8a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_command": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_command.gd",
+        "sha256": "57a632083f2c81cc7dc85295beec46c7e7d20f95f7aaf2fd10290075e61f065c",
+        "original": "res://scripts/debug/verify_beta_command.gd",
+        "original_sha256": "32269954a0252a757d43b29f851bb8746137aa56bfbd7d91e90858d7129ff30d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_finalization_and_launch": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_finalization_and_launch.gd",
+        "sha256": "015df0c8cbf54a466f4ce19c10501dd9170c164026a71fbdab42bcda5cf2ee83",
+        "original": "res://scripts/debug/verify_beta_finalization_and_launch.gd",
+        "original_sha256": "2a474a9481eee6930267884a62ee2ecd1fa2dae0b1f0c6fc46ed7d23c3b8c1bc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_host_playtest": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_host_playtest.gd",
+        "sha256": "32241f70f4dc7fa0d0162ee6780b9e75f2c99f967705f780bfd5c272545fd071",
+        "original": "res://scripts/debug/verify_beta_host_playtest.gd",
+        "original_sha256": "2f679d56469c91db54fcccc5e40cf48996e8c94fb3adbf2fb2607fcfbe63741a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_marketing_insider_state": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_marketing_insider_state.gd",
+        "sha256": "e105bd0cff85787648509ed041342d25ca2e2bfc1d95416a507e72452a12c86c",
+        "original": "res://scripts/debug/verify_beta_marketing_insider_state.gd",
+        "original_sha256": "520bcfcc8791007cb902d48d95650eded74b0c60ccb55e3f9611da1ddf1f4cb2",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_marketing_specialization": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_marketing_specialization.gd",
+        "sha256": "24cd399c110a8a62b77c52ce6a1134f9a9448969ea9dd86be4e7f2f3840fc247",
+        "original": "res://scripts/debug/verify_beta_marketing_specialization.gd",
+        "original_sha256": "2240e948ada7cedc09153f51748c31e2b44de946edbc7a87c779e46c4292b59c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_planning": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_planning.gd",
+        "sha256": "20f022958c098bf903e7e92831f35b54098e625c52f0371f66a4da2e18c0aa6e",
+        "original": "res://scripts/debug/verify_beta_planning.gd",
+        "original_sha256": "f078027443a4b8ccf0605abf7dbb7faec665bf1f4d6dd2efac7af0acac64686f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_qa_specialization": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_qa_specialization.gd",
+        "sha256": "05eb1eba5f7af049400443e7b1ff618620c301fdeb4e876abbb9de1b6a614e8d",
+        "original": "res://scripts/debug/verify_beta_qa_specialization.gd",
+        "original_sha256": "4607ec1f9c287df6a82326e603f7e9e6db6aded36758619496695ae0321cd7f0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_beta_qa_state": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_beta_qa_state.gd",
+        "sha256": "ffb7465f758de66465abc5e4865024cb34c2d66f4f138c1312686f00dc2195ab",
+        "original": "res://scripts/debug/verify_beta_qa_state.gd",
+        "original_sha256": "6db5c7e45d406740717650a4abaa58289c9197a5264d2f8c61d7c62f1deff66c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_batch": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_batch.gd",
+        "sha256": "ff95e26c3a5945d0eea93ec76f55ec8d761b2300aaba317dfeab7e6dc3a1638a",
+        "original": "res://scripts/debug/verify_campaign_batch.gd",
+        "original_sha256": "50defe0a531af4f05096303820c89551ad7928bc328f8b90a9af16eafddecb36",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_continuation": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_continuation.gd",
+        "sha256": "98d626f67cbff696440c2cbf5cd05bc2ee1f455c27b2106dd88e8d5124b6db91",
+        "original": "res://scripts/debug/verify_campaign_continuation.gd",
+        "original_sha256": "db4b423a5a33cd5d034f3e192d9912a149e2ede900f174b84d38229bd7e247d5",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_live_parity": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_live_parity.gd",
+        "sha256": "b0a2716d1764a9314b26c19f9aafe8c73900d31e5ef5d1d2ecc029b0c5699e3f",
+        "original": "res://scripts/debug/verify_campaign_live_parity.gd",
+        "original_sha256": "c7d2d6b929e47c8035c4b0cd11fe611e2fa83bce8322733fad11f7e237ba7c91",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_reducer": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_reducer.gd",
+        "sha256": "9497944f6b66cefc7f9ab8796d2ae563c18680ec00fc27d236e226f0cd31f601",
+        "original": "res://scripts/debug/verify_campaign_reducer.gd",
+        "original_sha256": "1abe71d055b411561eb55f513c8cfe2eb52d19ada94ba57d7a2a2b83a0287933",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_seeded_parity": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_seeded_parity.gd",
+        "sha256": "3ef530564981a09f82b631a56b1210bd17439b9eb1522e3c7e6230f5f1ea9c94",
+        "original": "res://scripts/debug/verify_campaign_seeded_parity.gd",
+        "original_sha256": "a5763e17c9116d9dcd2d1a95e7a2e8928240870f191581f684bc4791f04bbccf",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_session": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_session.gd",
+        "sha256": "098e6dc37ba41d6a7a314f409125c9c646d15ab5853816574772b3ee365c560d",
+        "original": "res://scripts/debug/verify_campaign_session.gd",
+        "original_sha256": "c4081de9b924815ff87a57decb960754677fd453a707b4a895bd3b4ad1b7e430",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_stress": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_stress.gd",
+        "sha256": "8ec51817c5d7b9eca144714baa885e21bd75b28a276d5b471588147a96b240bd",
+        "original": "res://scripts/debug/verify_campaign_stress.gd",
+        "original_sha256": "ec761f08b5d6ee8fe1b1598e256f520cb9a18666a93bfc4c4defa31129dd4eaa",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_stress_cult": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_stress_cult.gd",
+        "sha256": "e1060f446af43def8c73c5708105a6171606ef36aa67a5704c2c8cc860d539f3",
+        "original": "res://scripts/debug/verify_campaign_stress_cult.gd",
+        "original_sha256": "fec82b7971c1e0c6a5cf50997291370009feb5f26922f8bd22a714bb305482fe",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_stress_education": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_stress_education.gd",
+        "sha256": "80096a327f2624b5e91cce47ee372de896c9c9a8982f2e68389309d8cd18b96f",
+        "original": "res://scripts/debug/verify_campaign_stress_education.gd",
+        "original_sha256": "c907466a17676cb68c31fc61162bb46d7aba116c58009c0c48fddc0d0744a7b5",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_stress_puzzle": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_stress_puzzle.gd",
+        "sha256": "0a6b7641a164becf9c6c699cc14c2126ebf6f837465ae146eb33b9617654e008",
+        "original": "res://scripts/debug/verify_campaign_stress_puzzle.gd",
+        "original_sha256": "5c49223a58028cdd723998d8df031bb0cc61172ab84f72b555747d80d784b941",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_campaign_telemetry": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_campaign_telemetry.gd",
+        "sha256": "8592a54b45a94387ed94ec658c8faab115836c048eaba34d6525c2ea58a2f800",
+        "original": "res://scripts/debug/verify_campaign_telemetry.gd",
+        "original_sha256": "971c7767a8d1dd74e67aec5112499a13b62a4458daaeff801f28ae5772bdb701",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_candidate_retention": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_candidate_retention.gd",
+        "sha256": "0fe47ffbdaa2bd376ca8060499f439cdbe163713afed5b51e09ae5e31ce2fa5a",
+        "original": "res://scripts/debug/verify_candidate_retention.gd",
+        "original_sha256": "fa3d7274979a97382b1c06ed72763ee509df77f4ce538662dc305c82fdf2ca03",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_card_frame": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_card_frame.gd",
+        "sha256": "b68a6e44d8ec0444c6a4533ab589485454ed005efc6b04e221294332beb7d34f",
+        "original": "res://scripts/debug/verify_card_frame.gd",
+        "original_sha256": "e163784483dd09a5211f5ef12df2ee268f81d1977a56bdb55507d644bc3a5ced",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_card_motion": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_card_motion.gd",
+        "sha256": "0135d59a3af8d049d79bc99b6e68ec293ed9e5450abf4a3520ff133ba39f6525",
+        "original": "res://scripts/debug/verify_card_motion.gd",
+        "original_sha256": "ca9bcc0664b22eff8f11025a70674cbbed41b5cf43e1b794b19cb2ba41208a18",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_checkpoint_codec": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_checkpoint_codec.gd",
+        "sha256": "cf47b5c8c04c8f45b4f47447f2c6e0fc73ae38744261d81f4e1d23f8dcbe5ac5",
+        "original": "res://scripts/debug/verify_checkpoint_codec.gd",
+        "original_sha256": "58d504595cc16f7695a607e0a91e36586ad284a9d3756925418478092930c7d4",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_checkpoint_recovery_ui": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_checkpoint_recovery_ui.gd",
+        "sha256": "536845cdf054a13fe59f86ce196166f7f0d14c5c96e99d07593ab0fc5fd4a67d",
+        "original": "res://scripts/debug/verify_checkpoint_recovery_ui.gd",
+        "original_sha256": "4fe85ec98b7e6b2e831cfda070e63e7b67b30125a3dad8ae76e3035804ac9cb2",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      },
+      "verify_checkpoint_rng": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_checkpoint_rng.gd",
+        "sha256": "6bce90b827a621d6386cba90dddb5eb755cce7f291edcb7fe6602a1d30bfa655",
+        "original": "res://scripts/debug/verify_checkpoint_rng.gd",
+        "original_sha256": "f54370dc10e4fa68d68c67b796dbb825db205e8b15770dc33c15a854f09c64a1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_checkpoint_runtime": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_checkpoint_runtime.gd",
+        "sha256": "34f7055370225d06eba4cbc36507c8b65745d8d26f6ac631fdc8ae69cd35fcfe",
+        "original": "res://scripts/debug/verify_checkpoint_runtime.gd",
+        "original_sha256": "d4ced092027518524e610b4835ca886e505ad30eca6b993e28a089d77136073f",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      },
+      "verify_checkpoint_store": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_checkpoint_store.gd",
+        "sha256": "064beed4fc32ef2375cb4149a2647947c4fce18b93195ab37c0a7d9b84e50137",
+        "original": "res://scripts/debug/verify_checkpoint_store.gd",
+        "original_sha256": "6f0c87408f4f9f6fea7dc02ac720fb067ea9d55b7c7eb0e9af62ae65f865a987",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_contract_extraction": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_contract_extraction.gd",
+        "sha256": "ff23af088a2ddebe91e828135a77654dedee3394be93a40c83210c2db2417174",
+        "original": "res://scripts/debug/verify_contract_extraction.gd",
+        "original_sha256": "f8bd76a6aa0daa62163c8d66658105a86003bba5f3d1fda89fd6a8bc4e17208d",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      },
+      "verify_contract_presentation": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_contract_presentation.gd",
+        "sha256": "40a4437f05aeddafa0e244373976f4a34813f3dbe681a9de0a5cced80b326b65",
+        "original": "res://scripts/debug/verify_contract_presentation.gd",
+        "original_sha256": "50e06e5b2411d905d09f41e457b544b7fc7ded6a6bfb96b144165ba87245dd9a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_cult_following": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_cult_following.gd",
+        "sha256": "5def5e8f9347318676f2ecd5f238f9042ee305c81470702c4a632541276f949e",
+        "original": "res://scripts/debug/verify_cult_following.gd",
+        "original_sha256": "3d5b1115ff4474bc6df7cdc8b7c8b9b581debd9b46278ba7ac0ccbefa40edbb5",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_demo_settings": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_demo_settings.gd",
+        "sha256": "49f6032d38770c1d21aa76cdcaac173d01e03f0db9d23101de2831c2ea721bed",
+        "original": "res://scripts/debug/verify_demo_settings.gd",
+        "original_sha256": "5b6da65f14ac704ec649fc8315159758ceac5915fbe5467f9a351cd7d3e6701d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_design_command": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_design_command.gd",
+        "sha256": "06d595a51ba0b4a6ff9c867474497197eedb6c06376d75dbd2eae6fd4d159523",
+        "original": "res://scripts/debug/verify_design_command.gd",
+        "original_sha256": "3de14612d5dfb9381b0b962769c80aca7ed88691947d03d49e8b122e4a4083fa",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_design_phase": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_design_phase.gd",
+        "sha256": "a9430c0f0d31730da45f69c2025348704be95f7f9a5810389c32c21b3fe625c0",
+        "original": "res://scripts/debug/verify_design_phase.gd",
+        "original_sha256": "cee35895a0250b972bfe6e4b3bd25a370204c7095dcddc860e4f825639bcea1b",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_development_protocol": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_development_protocol.gd",
+        "sha256": "78e0035e5348370b3a790ae37083ed32eb567c53991b67dd2d7d80373672684f",
+        "original": "res://scripts/debug/verify_development_protocol.gd",
+        "original_sha256": "9e750858522d6f7a54e2ac210a54ffdc8cd71a84bea2f2e51a291732396ff1ab",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      },
+      "verify_development_replay": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\checkpoint-wrappers\\verify_development_replay.gd",
+        "sha256": "9c097ccd1069c99a2a325aa01bf0ed31be854674d38a45222211b302c881fbbb",
+        "original": "res://scripts/debug/verify_development_replay.gd",
+        "original_sha256": "37f015cb8d81288225df3dd01d057ee16e66d00f1a4459ac05465f25941c3ab8",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "scope": "Per-verifier inheritance wrappers replace only pristine CheckpointCoordinator stores before use; isolated user profiles remain mandatory.",
+    "limits": [
+      "Real TCP collision/release semantics retained on47733; production62741 is not acquired or tested by instrumented coordinators.",
+      "Existing verifier-specific writer overrides remain under their original verifier control.",
+      "No runtime/package modification; exported smoke is uninstrumented main-menu startup, not save/Continue acceptance."
+    ]
+  },
+  "verifier_evidence": {
+    "verify_alpha_command": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_alpha_command",
+    "verify_alpha_exit_arrears": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_alpha_exit_arrears",
+    "verify_alpha_finalization": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_alpha_finalization",
+    "verify_alpha_phase": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_alpha_phase",
+    "verify_atomic_selected_redraw": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_atomic_selected_redraw",
+    "verify_balanced_primitive_contract": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_balanced_primitive_contract",
+    "verify_bank_finance": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_bank_finance",
+    "verify_bank_integration": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_bank_integration",
+    "verify_bank_loan": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_bank_loan",
+    "verify_begin_project_extraction": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_begin_project_extraction",
+    "verify_beta_balanced_operations": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_balanced_operations",
+    "verify_beta_base_hand_resolution": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_base_hand_resolution",
+    "verify_beta_card_data": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_card_data",
+    "verify_beta_command": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_command",
+    "verify_beta_finalization_and_launch": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_finalization_and_launch",
+    "verify_beta_host_playtest": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_host_playtest",
+    "verify_beta_marketing_insider_state": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_marketing_insider_state",
+    "verify_beta_marketing_specialization": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_marketing_specialization",
+    "verify_beta_planning": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_planning",
+    "verify_beta_qa_specialization": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_qa_specialization",
+    "verify_beta_qa_state": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_beta_qa_state",
+    "verify_campaign_batch": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_batch",
+    "verify_campaign_continuation": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_continuation",
+    "verify_campaign_live_parity": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_live_parity",
+    "verify_campaign_reducer": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_reducer",
+    "verify_campaign_seeded_parity": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_seeded_parity",
+    "verify_campaign_session": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_session",
+    "verify_campaign_stress": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_stress",
+    "verify_campaign_stress_cult": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_stress_cult",
+    "verify_campaign_stress_education": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_stress_education",
+    "verify_campaign_stress_puzzle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_stress_puzzle",
+    "verify_campaign_telemetry": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_campaign_telemetry",
+    "verify_candidate_retention": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_candidate_retention",
+    "verify_card_frame": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_card_frame",
+    "verify_card_motion": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_card_motion",
+    "verify_checkpoint_codec": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_checkpoint_codec",
+    "verify_checkpoint_recovery_ui": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_checkpoint_recovery_ui",
+    "verify_checkpoint_rng": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_checkpoint_rng",
+    "verify_checkpoint_runtime": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_checkpoint_runtime",
+    "verify_checkpoint_store": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_checkpoint_store",
+    "verify_contract_extraction": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_contract_extraction",
+    "verify_contract_presentation": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_contract_presentation",
+    "verify_cult_following": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_cult_following",
+    "verify_demo_settings": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_demo_settings",
+    "verify_design_command": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_design_command",
+    "verify_design_phase": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_design_phase",
+    "verify_development_protocol": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v4\\verifier-artifacts\\verify_development_protocol"
+  },
+  "failure": "verify_development_replay"
+}

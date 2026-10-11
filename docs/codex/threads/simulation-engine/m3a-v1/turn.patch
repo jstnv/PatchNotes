@@ -1,0 +1,854 @@
+--- before/patch-notes/scripts/debug/campaign_replay_cli.gd
++++ after/patch-notes/scripts/debug/campaign_replay_cli.gd
+@@ -0,0 +1,64 @@
++## Explicit fresh-Studio campaign recipe, never a player Continue decoder.
++extends SceneTree
++const Session := preload("res://scripts/simulation/campaign_session.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++
++func _initialize() -> void:
++	await process_frame
++	var recipe_path := OS.get_environment("PN_CAMPAIGN_RECIPE")
++	var tape_path := OS.get_environment("PN_CAMPAIGN_TAPE")
++	var output := OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	for argument in OS.get_cmdline_user_args():
++		var pair := argument.trim_prefix("--").split("=",true,1)
++		if pair.size() != 2: continue
++		if pair[0] == "recipe": recipe_path = pair[1]
++		if pair[0] == "tape": tape_path = pair[1]
++		if pair[0] == "output": output = pair[1]
++	if recipe_path.is_empty() or tape_path.is_empty():
++		print("Usage: -- --recipe=<fresh-studio.json> --tape=<campaign-tape.json> --output=<report.json>")
++		quit(2)
++		return
++	var session := create_fresh_session(JSON.parse_string(FileAccess.get_file_as_string(recipe_path)),root.get_node("CardDatabase"))
++	var report: Dictionary = {"ok":false,"error":"Invalid campaign recipe"}
++	if session != null: report = Replay.replay(session,Replay.load_tape(tape_path))
++	if not output.is_empty(): FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
++	print(JSON.stringify(report))
++	quit(0 if report.ok else 1)
++
++static func create_fresh_session(recipe: Variant, database: Node) -> RefCounted:
++	if not recipe is Dictionary or recipe.get("schema_version") != 1: return null
++	for field in ["studio_id","studio_name","specialty","seed"]:
++		if not recipe.get(field) is String or recipe[field].is_empty(): return null
++	if not recipe.seed.is_valid_int() or int(recipe.seed) < 0 or int(recipe.seed) > ProjectState.MAX_SIGNED_INT-RunRandom.STREAMS.size() or not recipe.get("traits") is Array: return null
++	var traits: Array[StringName] = []
++	for id: Variant in recipe.traits:
++		if not id is String: return null
++		traits.append(StringName(id))
++	var run := RunState.new()
++	run.initialize_cash(0)
++	if not run.create_studio_with_traits(recipe.studio_name,StringName(recipe.specialty),traits): return null
++	# Replace generated identities consistently, including education-debt opening
++	# records. This is deterministic fixture bootstrap, not a save migration.
++	var generated := String(run._bank_run_id)
++	var stable := String(recipe.studio_id)
++	run._studio_finance = _replace_identity(run._studio_finance,generated,stable)
++	run._bank_run_id = StringName(stable)
++	run._employees = EmployeeRoster.create(StringName(stable))
++	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = int(recipe.seed)+RunRandom.STREAMS.find(id)
++	var snapshots := PrimitiveSnapshotDatabase.new()
++	if not snapshots.load_ledgers(): return null
++	var session := Session.new()
++	return session if session.initialize(run,database.get_development_catalog(),snapshots) else null
++
++static func _replace_identity(value: Variant, old: String, replacement: String) -> Variant:
++	if value is StringName: return StringName(String(value).replace(old,replacement))
++	if value is String: return value.replace(old,replacement)
++	if value is Array:
++		var result: Array = value.duplicate(true)
++		for index in range(result.size()): result[index] = _replace_identity(result[index],old,replacement)
++		return result
++	if value is Dictionary:
++		var result: Dictionary = {}
++		for key in value: result[_replace_identity(key,old,replacement)] = _replace_identity(value[key],old,replacement)
++		return result
++	return value
+--- before/patch-notes/scripts/debug/verify_begin_project_extraction.gd
++++ after/patch-notes/scripts/debug/verify_begin_project_extraction.gd
+@@ -0,0 +1,60 @@
++extends SceneTree
++const Bootstrap := preload("res://scripts/debug/campaign_replay_cli.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++var failures := 0
++
++func expect(ok: bool,message: String) -> void:
++	if not ok:
++		failures += 1
++		push_error("FAIL: "+message)
++
++func mechanics(run: RunState,project: ProjectState) -> Dictionary:
++	var snapshot: Dictionary = Replay.freeze(run)
++	# HUD read acknowledgments are presentation state; no other Run field is
++	# normalized. Scripted tutorial mechanics remain part of the exact snapshot.
++	snapshot.erase("_seen_tutorial_topics")
++	return {"run":snapshot,"project":Replay.freeze(project)}
++
++func _initialize() -> void:
++	await process_frame
++	var original: Script = load(ProjectSettings.globalize_path("res://../docs/codex/threads/simulation-engine/m3a-v1/gameplay_oracle.gd"))
++	var traces: Array = []
++	for seed_value in [1104,4417,90210]:
++		for controlled in [false,true]:
++			var results: Array = []
++			for mode in ["original","live","headless"]:
++				var recipe := {"schema_version":1,"studio_id":"begin_parity","studio_name":"Begin parity","specialty":"action","traits":[],"seed":str(seed_value)}
++				var session := Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
++				var project: ProjectState
++				if mode == "headless":
++					if controlled:
++						# The public campaign protocol accepts decisions, never selected
++						# random outcomes. Controlled rolls are adapter fixture-only.
++						var result: Dictionary = load("res://scripts/simulation/begin_project.gd").execute(session.run,session.snapshots,"Next Game",&"puzzle",&"mystery",Callable(),[5,95] as Array[int])
++						expect(result.ok,"Headless controlled project")
++						project = result.project
++						session.run.refresh_redraws()
++					else:
++						expect(session.execute(session.command(&"begin_development",{"name":"Next Game","genre":&"puzzle","theme":&"mystery"})).ok,"Headless project")
++						project = session.development.project
++				else:
++					var game: Control = load("res://scenes/gameplay.tscn").instantiate()
++					if mode == "original": game.set_script(original)
++					game.run_state = session.run
++					if controlled: expect(game.set_snapshot_initialization_rolls(5,95),"Controlled rolls set before tree entry")
++					root.add_child(game)
++					var studio: Control = game._active_phase
++					expect(studio is StudioPhase,"Live Studio destination")
++					expect(game._begin_next_project(studio,"Next Game",&"puzzle",&"mystery"),mode+" Begin Development")
++					project = game.project_state
++					var once := mechanics(session.run,project)
++					expect(not game._begin_next_project(studio,"Again",&"action",&"fantasy") and once == mechanics(session.run,project),"Stale view cannot begin twice")
++					game.free()
++				results.append(mechanics(session.run,project))
++				await process_frame
++			expect(results[0] == results[1] and results[1] == results[2],"Original/live/headless Begin parity")
++			traces.append({"seed":seed_value,"controlled":controlled,"original":results[0],"live":results[1],"headless":results[2]})
++	var output := OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	if not output.is_empty(): FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(traces,"\t"))
++	print("Begin project extraction verification: %d failures; 6 original/live/headless fixtures" % failures)
++	quit(1 if failures else 0)
+--- before/patch-notes/scripts/debug/verify_campaign_session.gd
++++ after/patch-notes/scripts/debug/verify_campaign_session.gd
+@@ -0,0 +1,138 @@
++extends SceneTree
++const Bootstrap := preload("res://scripts/debug/campaign_replay_cli.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++const BeginProject := preload("res://scripts/simulation/begin_project.gd")
++var failures := 0
++var reentry_checks := 0
++var tape: Dictionary
++
++func expect(ok: bool,message: String) -> void:
++	if not ok:
++		failures += 1
++		push_error("FAIL: "+message)
++
++func fresh(recipe: Dictionary) -> RefCounted:
++	return Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
++
++func act(session: RefCounted,kind: StringName,payload: Dictionary = {},accepted: bool = true) -> Dictionary:
++	var before := Replay.state(session)
++	var result := Replay.record(session,tape,session.command(kind,payload))
++	expect(result.ok == accepted,"Expected acceptance for "+str(kind))
++	if not result.ok: expect(Replay.state(session) == before and result.events.is_empty(),"Rejection preserves state and all RNG: "+str(kind))
++	return result
++
++func dev(session: RefCounted,kind: StringName,payload: Dictionary = {}) -> void:
++	act(session,&"development",{"request":session.development.command(kind,payload)})
++
++func _initialize() -> void:
++	await process_frame
++	var recipe := {"schema_version":1,"studio_id":"campaign_fixture","studio_name":"Campaign","specialty":"action","traits":[],"seed":"4417"}
++	var session := fresh(recipe)
++	expect(session != null,"Fresh campaign initialized")
++	if session == null: quit(1); return
++	tape = Replay.begin(session)
++	var initial := Replay.state(session)
++	for change in [{"sequence":1},{"run_cycle":0.0},{"run_id":"foreign"},{"phase":"beta"},{"project_id":"foreign"},{"payload":[]},{"type":3},{"schema_version":2}]:
++		var request: Dictionary = session.command(&"begin_development",{"name":"Game","genre":&"action","theme":&"fantasy"})
++		request.merge(change,true)
++		expect(not session.execute(request).ok and initial == Replay.state(session),"Malformed/stale campaign rejects")
++	act(session,&"launch",{},false)
++	act(session,&"wait",{},false)
++	act(session,&"begin_development",{"name":" ","genre":&"action","theme":&"fantasy"},false)
++	act(session,&"begin_development",{"name":"Game","genre":&"action","theme":&"fantasy","priorities":{0:99}},false)
++	# The fixture policy is intentionally simple and finite, not competitor policy.
++	for game_index in range(3):
++		var start_cycle: int = session.run.get_completed_run_cycles()
++		var start: Dictionary = session.command(&"begin_development",{"name":"Same Name","genre":&"action" if game_index != 1 else &"puzzle","theme":&"fantasy","priorities":{0:30,1:20,2:30,3:20}})
++		var started := Replay.record(session,tape,start)
++		expect(started.ok,"Next project starts")
++		if not started.ok: break
++		expect(session.run.get_completed_run_cycles() == start_cycle+1 and session.development.project.get_current_cycle() == 0,"Begin advances Run once, project zero")
++		var once := Replay.state(session)
++		expect(not Replay.record(session,tape,start).ok and once == Replay.state(session),"Start cannot charge twice")
++		act(session,&"campaign",{"release_id":&"absent"},false)
++		act(session,&"launch",{},false)
++		# Every synchronous project notification attempts a reentrant campaign action.
++		var reentrant := func() -> void:
++			var before := Replay.state(session)
++			expect(not session.execute(session.command(&"launch")).ok and before == Replay.state(session),"Reentrant command rejects")
++			reentry_checks += 1
++		session.development.project.values_changed.connect(reentrant)
++		for phase_index in range(3):
++			if phase_index > 0: dev(session,&"enter_next_phase")
++			dev(session,&"begin")
++			for hand_index in range(2):
++				dev(session,&"play",{"candidate_ids":session.development.hand.candidate_ids.slice(0,4)})
++			dev(session,&"request_exit")
++			if session.development.awaiting_confirmation: dev(session,&"confirm_exit")
++		var before_launch: Array = [session.run.get_cash_cents(),session.run.get_completed_run_cycles(),session.development.project.get_current_cycle()]
++		var result := act(session,&"launch")
++		session.development.project.values_changed.disconnect(reentrant)
++		if not result.ok: break
++		expect(session.in_studio and before_launch == [session.run.get_cash_cents(),session.run.get_completed_run_cycles(),session.development.project.get_current_cycle()],"Release and Studio entry are free")
++		expect(session.run.get_released_game_ids().size() == game_index+1,"One registered release per project")
++		act(session,&"launch",{},false)
++		act(session,&"acknowledge_publishers")
++		var checkpoint := StudioCheckpoint.new()
++		expect(not checkpoint.capture(session.run).is_empty(),"Completed route remains representable by existing Studio checkpoint")
++		if game_index == 0:
++			# Exactly one admission and one completion. Quote is recorded, never
++			# silently regenerated while executing a submitted research command.
++			var quote: Dictionary = session.run.get_feature_research_quote(&"save_files")
++			expect(quote.get("can_admit",false),"Store node legal after first project")
++			if quote.get("can_admit",false):
++				act(session,&"admit_research",{"quote":quote})
++				act(session,&"admit_research",{"quote":quote},false)
++				act(session,&"research",{"quote":quote},false)
++				act(session,&"research",{"quote":session.run.get_feature_research_quote(&"save_files")})
++				expect(session.run.owns_feature(&"save_files") and &"save_files" not in session.development.project.get_feature_supply_ids(),"Research ownership does not rewrite released supply")
++		if game_index == 1:
++			expect(&"save_files" in session.development.project.get_feature_supply_ids(),"Following project freezes completed research into supply")
++		# Buy a campaign only if the current real release-age window allows it.
++		for id in session.run.get_released_game_ids():
++			if session.run.get_post_launch_campaign_offer(id).get("can_purchase",false):
++				act(session,&"campaign",{"release_id":id})
++				act(session,&"campaign",{"release_id":id},false)
++				break
++	expect(session.in_studio and session.run.get_released_game_ids().size() == 3,"Three complete projects reached Studio")
++	var ended := Replay.state(session)
++	var replayed := fresh(recipe)
++	var report := Replay.replay(replayed,tape)
++	expect(report.ok and Replay.state(replayed) == ended,"Fresh campaign replays complete command tape exactly")
++	var output := OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	if not output.is_empty():
++		Replay.save_tape(output+".tape.json",tape)
++		FileAccess.open(output+".recipe.json",FileAccess.WRITE).store_string(JSON.stringify(recipe,"\t"))
++		FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify({"replay":report,"steps":tape.steps.size(),"reentry_checks":reentry_checks,"final_state":ended},"\t"))
++	# Failed view preparation must consume no snapshots, finance or serial.
++	var rejected := fresh(recipe)
++	var rejected_before := Replay.state(rejected)
++	var readiness := func(_project: ProjectState) -> bool: return false
++	expect(not BeginProject.execute(rejected.run,rejected.snapshots,"Failed",&"action",&"fantasy",readiness).ok and rejected_before == Replay.state(rejected),"Failed destination preparation restores all RNG and Run state")
++	var blocked := fresh(recipe)
++	blocked.run.checkpoint_mutations_allowed = false
++	var blocked_before := Replay.state(blocked)
++	expect(not blocked.execute(blocked.command(&"begin_development",{"name":"Blocked","genre":&"action","theme":&"fantasy"})).ok and blocked_before == Replay.state(blocked),"Blocked checkpoint rejects begin atomically")
++	for traits in [["graduate"],["college_dropout"],["cult_following"],["resourceful"]]:
++		var trait_recipe := recipe.duplicate(true)
++		trait_recipe.traits = traits
++		var left := fresh(trait_recipe)
++		var right := fresh(trait_recipe)
++		expect(left != null and right != null and Replay.state(left) == Replay.state(right),"Deterministic trait bootstrap "+str(traits))
++	var policy_session := fresh(recipe)
++	var policy := func(view: Dictionary) -> Dictionary:
++		view.owned_features.clear()
++		view.research_quotes.clear()
++		return {"type":&"acknowledge_publishers"}
++	var bounded: Dictionary = policy_session.drive(policy,2,1)
++	expect(not bounded.ok and bounded.error == "Policy step bound reached" and bounded.tape.steps.size() == 2 and not policy_session.run.get_owned_feature_ids().is_empty(),"Policy is bounded and observation detached")
++	expect(not fresh(recipe).drive(func(_view: Dictionary) -> Dictionary: return {"type":&"wait"},2,1).ok,"Illegal policy decision stops the driver")
++	var observation_only := func(view: Dictionary) -> Dictionary:
++		if view.phase == &"studio": return {"type":&"begin_development","payload":{"name":"Policy","genre":&"action","theme":&"fantasy"}}
++		var current: Dictionary = view.development
++		return {"type":&"development","payload":{"request":{"schema_version":1,"type":&"begin","project_id":view.project_id,"phase":current.phase,"sequence":current.sequence,"project_cycle":current.project_cycle,"run_cycle":current.run_cycle,"payload":{}}}}
++	var driven := fresh(recipe)
++	var observed: Dictionary = driven.drive(observation_only,2,1)
++	expect(not observed.ok and observed.error == "Policy step bound reached" and driven.development.hand.active,"Policy can construct legal development commands from observation alone")
++	print("Campaign session verification: %d failures; %d steps; %d reentrant checks" % [failures,tape.steps.size(),reentry_checks])
++	quit(1 if failures else 0)
+--- before/patch-notes/scripts/debug/verify_launch_extraction.gd
++++ after/patch-notes/scripts/debug/verify_launch_extraction.gd
+@@ -0,0 +1,87 @@
++extends SceneTree
++const Launch := preload("res://scripts/simulation/launch_settlement.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++var failures := 0
++var traces: Array = []
++
++func expect(ok: bool,message: String) -> void:
++	if not ok:
++		failures += 1
++		push_error("FAIL: " + message)
++
++func fixture(seed_value: int, scenario: int) -> Dictionary:
++	var run := RunState.new()
++	run.initialize_cash(0)
++	run.create_studio_with_traits("Launch parity",&"action",[&"studio_buzz",&"unknown_name"] if scenario == 2 else [])
++	run._bank_run_id = &"launch_parity"
++	run._employees = EmployeeRoster.create(&"launch_parity")
++	run._fanbase = StudioFanbase.create(597 if scenario == 2 else 93)
++	if scenario == 2: run._promotion_awards[&"prior_offer"] = 8
++	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = seed_value + RunRandom.STREAMS.find(id)
++	var project := PrimitivePredevelopment.prepare_project("Repeated title",&"action",&"fantasy",run)
++	project._release_id = &"launch_parity:project:1"
++	project.initialize_snapshots(&"fast_follower",&"stable_market" if scenario == 0 else &"market_surge")
++	project.add_core_scores_and_scope({0:40,1:26,2:40,3:26},30 if scenario == 0 else 21)
++	run.record_resolved_feature(project,&"text",&"design")
++	project.finalize_design_bugs(false,0 if scenario == 0 else 4,[&"text"],[])
++	project.finalize_alpha(0,[],[])
++	project.add_marketing_output(scenario*5)
++	if scenario == 2:
++		project.reveal_competitor_snapshot()
++		project.reveal_market_forecast_snapshot()
++	project.finalize_beta()
++	var snapshots := PrimitiveSnapshotDatabase.new()
++	snapshots.load_ledgers()
++	return {"project":project,"run":run,"snapshots":snapshots}
++
++func capture(f: Dictionary,events: Array) -> Dictionary:
++	return {"project":Replay.freeze(f.project),"run":Replay.freeze(f.run),"events":events.duplicate(true)}
++
++func _initialize() -> void:
++	await process_frame
++	var oracle_path := ProjectSettings.globalize_path("res://../docs/codex/threads/simulation-engine/m3a-v1/gameplay_oracle.gd")
++	var oracle: Script = load(oracle_path)
++	for seed_value in [1104,4417,90210]:
++		for scenario in range(3):
++			var outcomes: Array = []
++			for mode in ["original","live","headless"]:
++				var f := fixture(seed_value,scenario)
++				var events: Array = []
++				f.project.values_changed.connect(func() -> void: events.append("project_values"))
++				for signal_name in ["sales_changed","fans_changed","publishers_changed","redraws_changed"]:
++					f.run.connect(signal_name,func() -> void: events.append(signal_name))
++				var before := [f.run.get_cash_cents(),f.run.get_completed_run_cycles(),f.project.get_current_cycle()]
++				if mode == "headless":
++					var settlement := Launch.new(f.project,f.run,f.snapshots)
++					expect(settlement.settle().ok,"Headless settlement")
++				else:
++					var game: Control = oracle.new() if mode == "original" else load("res://scripts/gameplay.gd").new()
++					game.project_state = f.project
++					game.run_state = f.run
++					game._snapshot_database = f.snapshots
++					game._review_rng = f.run.random_streams.stream(&"review")
++					for stage in Launch.STAGES: expect(game.call("_ensure_"+stage+"_result"),mode+" freeze "+stage)
++					expect(f.run.register_release(f.project),mode+" registration")
++					game.free()
++				f.run.refresh_redraws()
++				expect(before == [f.run.get_cash_cents(),f.run.get_completed_run_cycles(),f.project.get_current_cycle()],"Launch has zero cash/cycle cost")
++				var frozen := capture(f,events)
++				expect(Launch.new(f.project,f.run,f.snapshots).settle().ok and frozen == capture(f,events),"Duplicate settlement changes no result, award, RNG or notification")
++				outcomes.append(frozen)
++			expect(outcomes[0] == outcomes[1] and outcomes[1] == outcomes[2],"Original/live/headless exact launch parity")
++			traces.append({"seed":seed_value,"scenario":scenario,"original":outcomes[0],"live":outcomes[1],"headless":outcomes[2]})
++	# Deliberately constructed invalid state: reject before any freeze/RNG/event.
++	for failure_kind in ["snapshot","awareness","fanbase","checkpoint"]:
++		var f := fixture(4417,2)
++		if failure_kind == "snapshot": f.project._market_forecast_snapshot_id = &"missing"
++		if failure_kind == "awareness": f.project._marketing_output = ProjectState.MAX_SIGNED_INT
++		if failure_kind == "fanbase": f.run._fanbase.releases[f.project.get_release_id()] = {}
++		if failure_kind == "checkpoint": f.run.checkpoint_mutations_allowed = false
++		var events: Array = []
++		f.project.values_changed.connect(func() -> void: events.append("project"))
++		var before := capture(f,events)
++		expect(not Launch.new(f.project,f.run,f.snapshots).settle().ok and before == capture(f,events),failure_kind+" rejected without partial freeze")
++	var output := OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	if not output.is_empty(): FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(traces,"\t"))
++	print("Launch extraction verification: %d failures; 9 original/live/headless fixtures" % failures)
++	quit(1 if failures else 0)
+--- before/patch-notes/scripts/gameplay.gd
++++ after/patch-notes/scripts/gameplay.gd
+@@ -8,6 +8,8 @@
+ const CONTRACT_PHASE_SCENE := preload("res://scenes/phases/contract_phase.tscn")
+ const SNAPSHOT_DATABASE_SCRIPT := preload("res://scripts/market/primitive_snapshot_database.gd")
+ const REQUIRED_SCOPE := 30
++const LaunchSettlement := preload("res://scripts/simulation/launch_settlement.gd")
++const BeginProject := preload("res://scripts/simulation/begin_project.gd")
+ 
+ var project_state: ProjectState
+ var run_state: RunState
+@@ -182,24 +184,7 @@
+ 
+ 
+ func _initialize_project_snapshots(target: ProjectState = project_state) -> bool:
+-	var has_competitor := target.has_competitor_snapshot()
+-	var has_forecast := target.has_market_forecast_snapshot()
+-	if has_competitor != has_forecast:
+-		push_warning("Project initialization rejected a partial snapshot assignment.")
+-		return false
+-	if has_competitor:
+-		return (
+-			_snapshot_database.has_competitor(target.get_assigned_competitor_snapshot_id_for_authority())
+-			and _snapshot_database.has_forecast(target.get_assigned_market_forecast_snapshot_id_for_authority())
+-		)
+-	var rng := run_state.random_streams.stream(&"snapshot")
+-	var competitor_roll := _controlled_snapshot_rolls[0] if _controlled_snapshot_rolls.size() == 2 else rng.randi_range(0, 99)
+-	var forecast_roll := _controlled_snapshot_rolls[1] if _controlled_snapshot_rolls.size() == 2 else rng.randi_range(0, 99)
+-	var competitor_id := _snapshot_database.select_competitor_id(competitor_roll)
+-	var forecast_id := _snapshot_database.select_forecast_id(forecast_roll)
+-	if not _snapshot_database.has_competitor(competitor_id) or not _snapshot_database.has_forecast(forecast_id):
+-		return false
+-	return target.initialize_snapshots(competitor_id, forecast_id)
++	return BeginProject.initialize_snapshots(target,run_state,_snapshot_database,_controlled_snapshot_rolls)
+ 
+ 
+ func _on_design_proceed_to_alpha_requested(source_design_phase: Control) -> void:
+@@ -301,24 +286,12 @@
+ 	):
+ 		return false
+ 	_transition_in_progress = true
+-	if not _ensure_review_result():
+-		push_error("Could not calculate the Primitive Review result.")
+-		_transition_in_progress = false
+-		return false
+-	if not _ensure_awareness_result():
+-		push_error("Could not calculate the Primitive Awareness result.")
+-		_transition_in_progress = false
+-		return false
+-	if not _ensure_launch_market_context_result():
+-		push_error("Could not resolve the Primitive launch market context.")
+-		_transition_in_progress = false
+-		return false
+-	if not _ensure_units_sold_result():
+-		push_error("Could not calculate Primitive Month 1 units sold.")
+-		_transition_in_progress = false
+-		return false
+-	if not _ensure_month_one_sales_revenue_result():
+-		push_error("Could not prepare the Primitive Month 1 sales and revenue foundation.")
++	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
++	settlement._review_rng = _review_rng
++	var frozen := settlement.freeze_results()
++	_controlled_review_roll = settlement._controlled_review_roll
++	if not frozen.ok:
++		push_error("Could not prepare the Primitive launch results: " + frozen.error)
+ 		_transition_in_progress = false
+ 		return false
+ 	# Validate committed launch results, then enter Studio and register the
+@@ -415,36 +388,24 @@
+ 	if run_state.next_project_serial == RunState.MAX_SIGNED_INT: return false
+ 	if checkpoints != null and not checkpoints.before_departure(): return false
+ 	_transition_in_progress = true
+-	var saved_rng := run_state.random_streams.snapshot()
+-	var next := PrimitivePredevelopment.prepare_project(base_name, genre, theme_id, run_state)
+-	if next != null and not run_state._bank_run_id.is_empty():
+-		next._release_id = StringName("%s:project:%d" % [run_state._bank_run_id, run_state.next_project_serial])
+-	if next == null or not _initialize_project_snapshots(next):
+-		run_state.random_streams.restore(saved_rng)
+-		_transition_in_progress = false
+-		source_studio.show_development_error("Could not prepare the new project. Please try again.")
+-		return false
+-	var design := DESIGN_PHASE_SCENE.instantiate() as DesignPhase
+-	if design == null:
+-		run_state.random_streams.restore(saved_rng)
+-		_transition_in_progress = false
+-		return false
+-	design.setup(next, run_state)
+-	design.proceed_to_alpha_requested.connect(_on_design_proceed_to_alpha_requested.bind(design))
+-	# No cash cost. Sales earning/settlement uses the same atomic boundary as all
+-	# other productive actions. Preparation above never touches the released game.
+-	# This is a Studio action, not a completed development cycle of the new game.
+-	if checkpoints != null: checkpoints.in_studio = false
+-	if not run_state.complete_productive_action(Callable(), 0, -1, &"", &"development", next.get_release_id()):
++	var prepared: Array[DesignPhase] = []
++	var readiness := func(next_project: ProjectState) -> bool:
++		var view := DESIGN_PHASE_SCENE.instantiate() as DesignPhase
++		if view == null: return false
++		view.setup(next_project,run_state)
++		view.proceed_to_alpha_requested.connect(_on_design_proceed_to_alpha_requested.bind(view))
++		prepared.append(view)
++		if checkpoints != null: checkpoints.in_studio = false
++		return true
++	var result := BeginProject.execute(run_state,_snapshot_database,base_name,genre,theme_id,readiness,_controlled_snapshot_rolls)
++	if not result.ok:
+ 		if checkpoints != null: checkpoints.in_studio = true
+-		design.free()
+-		run_state.random_streams.restore(saved_rng)
+-		_transition_in_progress = false
+-		return false
+-	run_state.next_project_serial += 1
+-	if run_state.needs_starter_selection():
+-		run_state.begin_first_game_tutorial(next)
+-		run_state.finalize_starter_selection()
++		for view in prepared: view.free()
++		_transition_in_progress = false
++		source_studio.show_development_error(result.error)
++		return false
++	var next: ProjectState = result.project
++	var design: DesignPhase = prepared[0]
+ 	project_state = next
+ 	_controlled_review_roll = -1
+ 	_controlled_snapshot_rolls.clear()
+@@ -463,44 +424,44 @@
+ 
+ 
+ func _ensure_review_result() -> bool:
+-	if project_state.has_review_result():
+-		return true
+-	var rng_state := _review_rng.state
+-	var roll := _controlled_review_roll if _controlled_review_roll >= 0 else _review_rng.randi_range(0, 99)
+-	var result := PrimitiveReviewCalculator.calculate(project_state, roll)
+-	if result == null or not project_state.commit_review_result(result):
+-		_review_rng.state = rng_state
+-		return false
+-	_controlled_review_roll = -1
+-	return true
++	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
++	settlement._review_rng = _review_rng
++	var ok := settlement._ensure_review_result()
++	_controlled_review_roll = settlement._controlled_review_roll
++	return ok
+ 
+ 
+ func _ensure_awareness_result() -> bool:
+-	if project_state.has_awareness_result():
+-		return true
+-	var result := PrimitiveAwarenessCalculator.calculate(project_state, run_state)
+-	return result != null and project_state.commit_awareness_result(result)
++	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
++	settlement._review_rng = _review_rng
++	var ok := settlement._ensure_awareness_result()
++	_controlled_review_roll = settlement._controlled_review_roll
++	return ok
+ 
+ 
+ func _ensure_launch_market_context_result() -> bool:
+-	if project_state.has_launch_market_context_result():
+-		return true
+-	var result := PrimitiveLaunchMarketContextCalculator.calculate(project_state, _snapshot_database)
+-	return result != null and project_state.commit_launch_market_context_result(result)
++	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
++	settlement._review_rng = _review_rng
++	var ok := settlement._ensure_launch_market_context_result()
++	_controlled_review_roll = settlement._controlled_review_roll
++	return ok
+ 
+ 
+ func _ensure_units_sold_result() -> bool:
+-	if project_state.has_units_sold_result():
+-		return true
+-	var result := PrimitiveUnitsSoldCalculator.calculate(project_state)
+-	return result != null and project_state.commit_units_sold_result(result)
++	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
++	settlement._review_rng = _review_rng
++	var ok := settlement._ensure_units_sold_result()
++	_controlled_review_roll = settlement._controlled_review_roll
++	return ok
+ 
+ 
+ func _ensure_month_one_sales_revenue_result() -> bool:
+-	if project_state.has_month_one_sales_revenue_result():
+-		return true
+-	var result := PrimitiveMonthOneSalesRevenueCalculator.calculate(project_state)
+-	return result != null and project_state.commit_month_one_sales_revenue_result(result)
++	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
++	settlement._review_rng = _review_rng
++	var ok := settlement._ensure_month_one_sales_revenue_result()
++	_controlled_review_roll = settlement._controlled_review_roll
++	return ok
++
+ 
+ func _build_checkpoint_controls() -> void:
+ 	get_tree().auto_accept_quit = false
+--- before/patch-notes/scripts/simulation/begin_project.gd
++++ after/patch-notes/scripts/simulation/begin_project.gd
+@@ -0,0 +1,38 @@
++## One authoritative Studio -> fresh Design transaction. Scene preparation is
++## an optional synchronous readiness callback; no UI is needed by simulation.
++extends RefCounted
++
++static func initialize_snapshots(project: ProjectState, run: RunState, snapshots: PrimitiveSnapshotDatabase, controlled: Array[int] = []) -> bool:
++	var has_competitor := project.has_competitor_snapshot()
++	if has_competitor != project.has_market_forecast_snapshot(): return false
++	if has_competitor:
++		return snapshots.has_competitor(project.get_assigned_competitor_snapshot_id_for_authority()) and snapshots.has_forecast(project.get_assigned_market_forecast_snapshot_id_for_authority())
++	var rng := run.random_streams.stream(&"snapshot")
++	var before := rng.state
++	var competitor_roll: int = controlled[0] if controlled.size() == 2 else rng.randi_range(0,99)
++	var forecast_roll: int = controlled[1] if controlled.size() == 2 else rng.randi_range(0,99)
++	var competitor := snapshots.select_competitor_id(competitor_roll)
++	var forecast := snapshots.select_forecast_id(forecast_roll)
++	if not snapshots.has_competitor(competitor) or not snapshots.has_forecast(forecast) or not project.initialize_snapshots(competitor,forecast):
++		rng.state = before
++		return false
++	return true
++
++static func execute(run: RunState, snapshots: PrimitiveSnapshotDatabase, base_name: String, genre: StringName, theme: StringName, readiness: Callable = Callable(), controlled: Array[int] = []) -> Dictionary:
++	var error := PrimitivePredevelopment.validation_error(base_name,genre,theme)
++	if not error.is_empty(): return {"ok":false,"error":error}
++	if run == null or snapshots == null or run.next_project_serial == RunState.MAX_SIGNED_INT or not run.can_complete_productive_cycle(): return {"ok":false,"error":"Development cannot begin"}
++	var before := run.random_streams.snapshot()
++	var next := PrimitivePredevelopment.prepare_project(base_name,genre,theme,run)
++	if next != null and not run._bank_run_id.is_empty(): next._release_id = StringName("%s:project:%d" % [run._bank_run_id,run.next_project_serial])
++	if next == null or not initialize_snapshots(next,run,snapshots,controlled) or (readiness.is_valid() and not readiness.call(next)):
++		run.random_streams.restore(before)
++		return {"ok":false,"error":"Could not prepare the new project"}
++	if not run.complete_productive_action(Callable(),0,-1,&"",&"development",next.get_release_id()):
++		run.random_streams.restore(before)
++		return {"ok":false,"error":"Development cycle rejected"}
++	run.next_project_serial += 1
++	if run.needs_starter_selection():
++		run.begin_first_game_tutorial(next)
++		run.finalize_starter_selection()
++	return {"ok":true,"project":next,"events":[{"type":"development_begun","release_id":next.get_release_id()},{"type":"productive_cycle"}]}
+--- before/patch-notes/scripts/simulation/campaign_session.gd
++++ after/patch-notes/scripts/simulation/campaign_session.gd
+@@ -0,0 +1,137 @@
++## Scene-free multi-project session. Player Continue remains Studio-only and is
++## not implemented by this in-memory command protocol. Definitions are trusted.
++extends RefCounted
++
++const Development := preload("res://scripts/simulation/development_session.gd")
++const BeginProject := preload("res://scripts/simulation/begin_project.gd")
++const Launch := preload("res://scripts/simulation/launch_settlement.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++var run: RunState
++var catalog: RefCounted
++var snapshots: PrimitiveSnapshotDatabase
++var development: RefCounted
++var sequence := 0
++var in_studio := true
++var _busy := false
++
++func initialize(run_state: RunState, definitions: RefCounted, snapshot_definitions: PrimitiveSnapshotDatabase) -> bool:
++	if run != null or run_state == null or definitions == null or snapshot_definitions == null or not run_state.is_cash_initialized() or run_state._bank_run_id.is_empty() or run_state.get_studio_name().is_empty() or run_state.get_active_contract() != null: return false
++	run = run_state
++	catalog = definitions
++	snapshots = snapshot_definitions
++	# Initial Studio entry, once. Reconstructing a session must use a later explicit
++	# restore adapter; this initializer does not load player saves.
++	run.refresh_redraws()
++	return true
++
++func phase() -> StringName:
++	return &"studio" if in_studio else Development.PHASES[development.phase_index]
++
++func project_id() -> StringName:
++	return &"" if development == null else development.project.get_release_id()
++
++func command(kind: StringName, payload: Dictionary = {}) -> Dictionary:
++	return {"schema_version":1,"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"type":kind,"payload":payload.duplicate(true)}
++
++func reject(message: String) -> Dictionary:
++	return {"ok":false,"error":message,"events":[]}
++
++func execute(request: Dictionary) -> Dictionary:
++	if _busy or run == null: return reject("Session unavailable")
++	for field in ["schema_version","sequence","run_cycle"]:
++		if not request.get(field) is int: return reject("Malformed counter")
++	for field in ["run_id","project_id","phase","type"]:
++		if not request.get(field) is String and not request.get(field) is StringName: return reject("Malformed identity")
++	if not request.get("payload") is Dictionary: return reject("Malformed payload")
++	if request.schema_version != 1 or request.sequence != sequence or request.run_cycle != run.get_completed_run_cycles() or request.run_id != run._bank_run_id or request.project_id != project_id() or request.phase != phase(): return reject("Stale or unsupported command")
++	_busy = true
++	var before := run.random_streams.snapshot()
++	var result := _execute(StringName(request.type),request.payload)
++	if result.ok:
++		sequence += 1
++		result.sequence = sequence
++		result.rng_before = before
++		result.rng_after = run.random_streams.snapshot()
++		for ordinal in range(result.events.size()):
++			result.events[ordinal].event_id = "%s:%d:%d" % [run._bank_run_id,sequence,ordinal]
++	_busy = false
++	return result
++
++func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
++	if not in_studio:
++		if kind == &"development":
++			if payload.size() != 1 or not payload.get("request") is Dictionary: return reject("Missing development command")
++			return development.execute(payload.request)
++		if kind != &"launch" or not payload.is_empty() or development.phase_index != 2 or not development.finalized: return reject("Not at the launch boundary")
++		var result := Launch.new(development.project,run,snapshots).settle()
++		if not result.ok: return result
++		in_studio = true
++		run.refresh_redraws()
++		result.events.append({"type":"studio_entered","release_id":project_id()})
++		return result
++	if kind == &"begin_development":
++		for field in ["name","genre","theme"]:
++			if not payload.get(field) is String and not payload.get(field) is StringName: return reject("Missing project choice")
++		var priorities: Variant = payload.get("priorities",{})
++		if not priorities is Dictionary or (not priorities.is_empty() and not PriorityAllocation.is_valid_distribution(priorities)) or payload.size() != (4 if payload.has("priorities") else 3): return reject("Invalid priorities or project payload")
++		var result := BeginProject.execute(run,snapshots,str(payload.name),StringName(payload.genre),StringName(payload.theme))
++		if not result.ok: return reject(result.error)
++		development = Development.new()
++		development.initialize(result.project,run,catalog,snapshots)
++		if not priorities.is_empty(): development.hand.priorities = priorities.duplicate()
++		in_studio = false
++		return {"ok":true,"events":result.events}
++	if kind == &"acknowledge_publishers" and payload.is_empty():
++		return {"ok":true,"events":[{"type":"publishers_acknowledged","publishers":run.take_pending_publisher_notifications()}]}
++	if kind == &"starter_purchase":
++		if payload.size() != 1 or (not payload.get("feature_id") is String and not payload.get("feature_id") is StringName): return reject("Missing starter Feature")
++		if not run.purchase_starter_feature(StringName(payload.feature_id)): return reject("Starter purchase rejected")
++		return {"ok":true,"events":[{"type":"starter_feature_purchased","feature_id":StringName(payload.feature_id)}]}
++	if kind in [&"admit_research",&"research"]:
++		if payload.size() != 1 or not payload.get("quote") is Dictionary: return reject("Missing research quote")
++		var ok := run.admit_feature_research(payload.quote) if kind == &"admit_research" else run.research_feature(payload.quote)
++		if not ok: return reject("Research rejected")
++		var events: Array = [{"type":"research_admitted" if kind == &"admit_research" else "research_completed","feature_id":payload.quote.feature_id}]
++		if kind == &"research": events.append({"type":"productive_cycle"})
++		return {"ok":true,"events":events}
++	if kind == &"campaign":
++		if payload.size() != 1 or (not payload.get("release_id") is String and not payload.get("release_id") is StringName): return reject("Missing campaign release")
++		if not run.purchase_post_launch_campaign(StringName(payload.release_id),run.get_completed_run_cycles()): return reject("Campaign rejected")
++		return {"ok":true,"events":[{"type":"campaign_purchased","release_id":StringName(payload.release_id)},{"type":"productive_cycle"}]}
++	return reject("Unsupported Studio command")
++
++func observation() -> Dictionary:
++	var releases: Array = []
++	for id in run.get_released_game_ids():
++		releases.append({"id":id,"metadata":run.get_release_metadata(id),"sales":run.get_released_game_sales(id),"campaign":run.get_post_launch_campaign_offer(id)})
++	var quotes: Array = []
++	if in_studio:
++		var ids: Array = run._feature_definitions.keys()
++		ids.sort_custom(func(a: StringName,b: StringName) -> bool: return str(a) < str(b))
++		for id in ids:
++			var quote := run.get_feature_research_quote(id)
++			if not quote.is_empty(): quotes.append(quote)
++	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"releases":releases,"development":{} if in_studio else development.observation()}
++
++## Explicit termination budget and release target; no built-in gameplay policy.
++## Policies return {type,payload}; all actions still use the legal command path.
++func drive(policy: Callable,max_steps: int,target_release_count: int) -> Dictionary:
++	if not policy.is_valid() or max_steps < 1 or target_release_count < 1: return {"ok":false,"error":"Policy, step budget and release target required"}
++	var tape := Replay.begin(self)
++	for step in range(max_steps):
++		if in_studio and run.get_released_game_ids().size() >= target_release_count: return {"ok":true,"tape":tape}
++		var choice: Variant = policy.call(observation())
++		if not choice is Dictionary or (not choice.get("type") is String and not choice.get("type") is StringName) or not choice.get("payload",{}) is Dictionary: return {"ok":false,"error":"Malformed policy decision","step":step,"tape":tape}
++		var result := Replay.record(self,tape,command(StringName(choice.type),choice.get("payload",{})))
++		if not result.ok: return {"ok":false,"error":"Policy action rejected","step":step,"tape":tape}
++	var completed := in_studio and run.get_released_game_ids().size() >= target_release_count
++	return {"ok":completed,"error":"" if completed else "Policy step bound reached","tape":tape}
++
++func replay_state() -> Dictionary:
++	var definitions: Array = []
++	for card: CardData in catalog.cards.values():
++		var fields: Dictionary = {}
++		for property in card.get_property_list():
++			if property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE: fields[property.name] = Replay.freeze(card.get(property.name))
++		definitions.append(fields)
++	return {"kind":"campaign_v1","run":Replay.freeze(run),"sequence":sequence,"studio":in_studio,"development":{} if development == null else Replay.state(development),"definitions":definitions,"snapshots":Replay.freeze(snapshots)}
+--- before/patch-notes/scripts/simulation/development_replay.gd
++++ after/patch-notes/scripts/simulation/development_replay.gd
+@@ -23,6 +23,7 @@
+ 	return value
+ 
+ static func state(session: RefCounted) -> Dictionary:
++	if session.has_method("replay_state"): return session.replay_state()
+ 	var definitions: Array = []
+ 	for card: CardData in session.catalog.cards.values():
+ 		var fields: Dictionary = {}
+--- before/patch-notes/scripts/simulation/launch_settlement.gd
++++ after/patch-notes/scripts/simulation/launch_settlement.gd
+@@ -0,0 +1,106 @@
++## Ordered, zero-cycle release boundary. Existing calculators/RunState remain
++## the sole arithmetic, sales, Fans and Promotion owners.
++extends RefCounted
++
++const STAGES := ["review", "awareness", "launch_market_context", "units_sold", "month_one_sales_revenue"]
++var project_state: ProjectState
++var run_state: RunState
++var _snapshot_database: PrimitiveSnapshotDatabase
++var _review_rng: RandomNumberGenerator
++var _controlled_review_roll := -1
++var _busy := false
++
++func _init(project: ProjectState, run: RunState, snapshots: PrimitiveSnapshotDatabase, controlled_roll: int = -1) -> void:
++	project_state = project
++	run_state = run
++	_snapshot_database = snapshots
++	_review_rng = run.random_streams.stream(&"review") if run != null else null
++	_controlled_review_roll = controlled_roll
++
++## Preflight all stages against a detached project and a private review stream.
++## No signals or RNG changes reach the authoritative objects on rejection.
++func can_settle() -> bool:
++	if project_state == null or run_state == null or _snapshot_database == null or not project_state.is_launch_ready(): return false
++	if _controlled_review_roll < -1 or _controlled_review_roll >= 100: return false
++	if run_state._productive_cycle_in_progress or run_state._publishing_cycle: return false
++	var draft := ProjectState.new(project_state.get_required_scope())
++	for property in project_state.get_property_list():
++		if property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
++			var value: Variant = project_state.get(property.name)
++			draft.set(property.name, value.duplicate(true) if value is Array or value is Dictionary else value)
++	var probe := get_script().new(draft, run_state, _snapshot_database, _controlled_review_roll) as RefCounted
++	probe._review_rng = RandomNumberGenerator.new()
++	probe._review_rng.seed = _review_rng.seed
++	probe._review_rng.state = _review_rng.state
++	for stage in STAGES:
++		if not probe.call("_ensure_" + stage + "_result"): return false
++	if not run_state.can_register_release(draft): return false
++	if draft.get_release_id() in run_state.get_released_game_ids(): return true
++	return not StudioFanbase.register_release(run_state._fanbase, run_state._create_release_sales_record(draft), draft.get_awareness_result().get_existing_fans()).is_empty()
++
++func settle() -> Dictionary:
++	if _busy or not can_settle() or not run_state.can_mutate_checkpoint(): return {"ok":false,"error":"Release preflight rejected","events":[]}
++	_busy = true
++	var frozen := freeze_results()
++	if not frozen.ok:
++		_busy = false
++		return frozen
++	var events: Array = frozen.events
++	var registered := project_state.get_release_id() in run_state.get_released_game_ids()
++	var ok := run_state.register_release(project_state)
++	if ok and not registered: events.append({"type":"release_registered","release_id":project_state.get_release_id()})
++	_busy = false
++	return {"ok":ok,"error":"" if ok else "Registration rejected during publication","events":events}
++
++## Also used by Gameplay before it validates the destination views. Keeping this
++## staged adapter preserves its existing retry behavior after view failure.
++func freeze_results() -> Dictionary:
++	var events: Array = []
++	for stage in STAGES:
++		var existed: bool = project_state.call("has_" + stage + "_result")
++		if not call("_ensure_" + stage + "_result"):
++			return {"ok":false,"error":"Release changed during synchronous publication","events":events}
++		if not existed: events.append({"type":stage + "_frozen","release_id":project_state.get_release_id()})
++	return {"ok":true,"events":events}
++
++
++func _ensure_review_result() -> bool:
++	if project_state.has_review_result():
++		return true
++	var rng_state := _review_rng.state
++	var roll := _controlled_review_roll if _controlled_review_roll >= 0 else _review_rng.randi_range(0, 99)
++	var result := PrimitiveReviewCalculator.calculate(project_state, roll)
++	if result == null or not project_state.commit_review_result(result):
++		_review_rng.state = rng_state
++		return false
++	_controlled_review_roll = -1
++	return true
++
++
++func _ensure_awareness_result() -> bool:
++	if project_state.has_awareness_result():
++		return true
++	var result := PrimitiveAwarenessCalculator.calculate(project_state, run_state)
++	return result != null and project_state.commit_awareness_result(result)
++
++
++func _ensure_launch_market_context_result() -> bool:
++	if project_state.has_launch_market_context_result():
++		return true
++	var result := PrimitiveLaunchMarketContextCalculator.calculate(project_state, _snapshot_database)
++	return result != null and project_state.commit_launch_market_context_result(result)
++
++
++func _ensure_units_sold_result() -> bool:
++	if project_state.has_units_sold_result():
++		return true
++	var result := PrimitiveUnitsSoldCalculator.calculate(project_state)
++	return result != null and project_state.commit_units_sold_result(result)
++
++
++func _ensure_month_one_sales_revenue_result() -> bool:
++	if project_state.has_month_one_sales_revenue_result():
++		return true
++	var result := PrimitiveMonthOneSalesRevenueCalculator.calculate(project_state)
++	return result != null and project_state.commit_month_one_sales_revenue_result(result)
++

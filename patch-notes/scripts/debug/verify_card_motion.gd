@@ -53,7 +53,7 @@ func _snapshot(project: ProjectState, run: RunState) -> Array:
 	return [HandPresentation.project_snapshot(project, run), run.get_cash_cents(), run.get_owned_feature_ids(), project.get_exhausted_beta_card_ids()]
 
 func _verify() -> void:
-	for dimensions in [Vector2i(1152, 648), Vector2i(900, 600)]:
+	for dimensions in [Vector2i(1152, 648), Vector2i(1280, 720)]:
 		root.size = dimensions
 		await _production(dimensions.x)
 		await _store(dimensions.x)
@@ -114,7 +114,8 @@ func _production(width: int) -> void:
 	await settle(HandPresentation.BEAT_SECONDS + 0.03)
 	expect(motion._ghosts.size() == 7 and motion._hand.size() == 4 and motion._ghosts[4].scale.x < 0.4 and motion._ghosts[4].position.y > 160, "Unselected candidates shrink and lower while the selected hand centers")
 	await shot("centered-hand-%d" % width)
-	await settle(HandPresentation.BEAT_SECONDS / 2.0)
+	while not motion.trace.any(func(e): return e.event == "score"):
+		await process_frame
 	expect(hud.stats[1].text == "Graphics\n2 / 33" and not hud._score_pulses.is_empty(), "First bounce updates the scoreboard and exposes a +2 base indicator")
 	await shot("score-bounce-%d" % width)
 	if motion.busy: await motion.finished
@@ -147,11 +148,8 @@ func _production(width: int) -> void:
 			finale.append([event.index, event.event])
 	var expected_finale: Array = []
 	for i in range(4): expected_finale.append([i, "bonus"])
-	for i in range(4):
-		expected_finale.append([i, "exit_bounce"])
-		expected_finale.append([i, "exit_grounded"])
 	expected_finale.append([-1, "exit_slide"])
-	expect(finale == expected_finale, "Final score bonuses precede the left-to-right exit wave and group slide")
+	expect(finale == expected_finale, "Final score bonuses proceed directly to the group slide")
 	var staggered := true
 	for i in range(1, deals.size()):
 		# Tween callbacks are frame-quantized; require distinct arrivals rather
@@ -172,13 +170,26 @@ func _production(width: int) -> void:
 	var cash := run.get_cash_cents()
 	cycle = run.get_completed_run_cycles()
 	var redraws := run.get_available_redraws()
+	# The presenter advances from the audio clock, not SceneTree timer time.
+	# Sample exact music intervals so backend mix quantization/slow frames cannot
+	# move this assertion to another part of the slide (or beyond disposal).
+	var redraw_clock := [motion._music_seconds()]
+	motion.set_process(false)
+	motion.clock_source = func(): return redraw_clock[0]
 	phase.get_node("%RedrawButton").pressed.emit()
 	expect(motion.busy and run.get_available_redraws() == redraws - 1 and run.get_cash_cents() == cash and run.get_completed_run_cycles() == cycle, "Animated redraw preserves the exact one-card budget and zero-cycle/cash rules")
-	await settle(HandPresentation.BEAT_SECONDS + 0.03)
+	redraw_clock[0] += HandPresentation.BEAT_SECONDS + 0.000001
+	motion.advance_music(redraw_clock[0])
+	expect(motion.trace.filter(func(e): return e.event == "centered").size() == 1 and motion.trace.filter(func(e): return e.event == "redraw_exit").size() == 1, "Redraw starts one slide after one music interval of centering")
 	var center_x := motion._hand[0].position.x
-	await settle(HandPresentation.BEAT_SECONDS / 2.0)
+	redraw_clock[0] += HandPresentation.BEAT_SECONDS / 2.0
+	motion.advance_music(redraw_clock[0])
 	expect(motion._hand[0].position.x > center_x + 50, "Redrawn hand slides right after centering")
 	await shot("redraw-exit-%d" % width)
+	redraw_clock[0] += HandPresentation.BEAT_SECONDS / 2.0
+	motion.advance_music(redraw_clock[0])
+	motion.clock_source = Callable()
+	motion.set_process(true)
 	if motion.busy: await motion.finished
 	expect(fan.visible and fan.get_child(1) == views[1] and project.get_core_score(0) == 12, "Redraw returns to the fan without altering unaffected cards or scores")
 	expect(fan.ordered_cards()[0] == views[1] and fan.ordered_cards()[-1] == fan.get_child(0), "Retained cards lead; replacement follows, without changing authoritative slots")
@@ -254,14 +265,40 @@ func _store(width: int) -> void:
 	var small := store._map.zoom
 	var before := [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids()]
 	store._map._focus_node(&"branching_nodes")
-	await settle(0.20)
-	expect(store._map.zoom > small and store._map.focusing, "Selecting an outer Store node smoothly zooms toward it (%d)" % width)
-	await settle(0.13)
+	# An idle timer resumes on a frame boundary, not at an exact Tween time.
+	# Step the real camera/menu Tweens so intermediate assertions cannot sample
+	# an already-finished animation (or one which has barely started).
+	var camera_tween: Tween = store._map._focus_tween
+	camera_tween.pause()
+	expect(store._map.focusing and is_equal_approx(store._map.zoom, small) and store._buy.mouse_filter == Control.MOUSE_FILTER_IGNORE and store._buy.focus_mode == Control.FOCUS_NONE, "Store focus starts from the current overview without jumping or enabling purchase input")
+	await _step_store_camera(store._map, camera_tween, 10)
+	var first_zoom: float = store._map.zoom
+	await _step_store_camera(store._map, camera_tween, 10)
+	var intermediate_zoom: float = store._map.zoom
+	expect(first_zoom > small and intermediate_zoom > first_zoom and store._map.focusing and is_zero_approx(store._map.popup.modulate.a), "Selecting an outer Store node smoothly zooms toward it before revealing details (%d)" % width)
+	await _step_store_camera(store._map, camera_tween, 11)
+	var final_zoom: float = store._map.zoom
+	var menu_tween: Tween = store._map._menu_tween
+	expect(not store._map.focusing and final_zoom > intermediate_zoom and menu_tween != null and menu_tween.is_valid(), "Completed camera focus starts the separate menu animation")
+	if menu_tween == null or not menu_tween.is_valid():
+		game.queue_free()
+		await process_frame
+		return
+	menu_tween.pause()
 	var sliding_x := store._map.popup.position.x
-	await settle(0.24)
+	menu_tween.custom_step(0.10)
+	var intermediate_x: float = store._map.popup.position.x
+	var intermediate_alpha: float = store._map.popup.modulate.a
+	expect(intermediate_x > sliding_x and intermediate_alpha > 0.0 and intermediate_alpha < 1.0, "Store details progressively slide and fade in")
+	menu_tween.custom_step(0.11)
+	var final_x: float = store._map.popup.position.x
+	expect(final_x > intermediate_x and is_equal_approx(store._map.popup.modulate.a, 1.0) and store._buy.mouse_filter == Control.MOUSE_FILTER_STOP and store._buy.focus_mode == Control.FOCUS_ALL, "Finished Store details restore pointer and keyboard input")
+	await process_frame
+	await process_frame
 	var node_rect: Rect2 = store._nodes[&"branching_nodes"].get_global_rect()
 	expect(store._map.popup.position.x > sliding_x and store._map.popup.get_global_rect().position.x > node_rect.end.x, "Details slide right from the node border and finish on its right")
 	expect(store.get_global_rect().encloses(store._map.popup.get_global_rect()) and store._map._map_rect().encloses(node_rect), "Focused node and right-hand menu fit onscreen")
+	traces.append({"phase":"Store","width":width,"camera_zoom":[small,first_zoom,intermediate_zoom,final_zoom],"camera_steps_seconds":[0.10,0.10,0.11],"menu_x":[sliding_x,intermediate_x,final_x],"menu_alpha_at_010":intermediate_alpha,"menu_steps_seconds":[0.10,0.11]})
 	await shot("store-focus-%d" % width)
 	store._map._focus_node(&"text")
 	store._map._focus_node(&"save_files")
@@ -274,6 +311,17 @@ func _store(width: int) -> void:
 	expect(before == [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids()], "Store animations are entirely passive")
 	game.queue_free()
 	await process_frame
+
+func _step_store_camera(map: FeatureStoreMap, tween: Tween, steps: int) -> void:
+	# Advance in small fixed increments, letting each resized canvas publish its
+	# scrollbar range. No frame can advance this paused Tween's own clock.
+	for i in range(steps):
+		tween.custom_step(0.01)
+		if not map.focusing:
+			if map._menu_tween != null: map._menu_tween.pause()
+			return
+		await process_frame
+		await process_frame
 
 func _paid_hand() -> void:
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()

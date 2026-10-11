@@ -17,6 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+Soundtrack="*res://scripts/audio/soundtrack.gd"
+
 CardDatabase="*uid://xkdhybxtvj6a"
 
 [display]
@@ -33,3 +35,7 @@ window/stretch/aspect="expand"
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
+
+[audio]
+
+soundtrack/prototype_variant="A"

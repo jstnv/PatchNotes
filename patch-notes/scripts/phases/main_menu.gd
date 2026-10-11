@@ -63,7 +63,7 @@ func _ready() -> void:
 	resume.disabled = checkpoint_info.status != &"valid"
 	if not resume.disabled:
 		var saved: Dictionary = checkpoint_info.payload.run
-		resume.text = "Continue — %s · %d, Month %d" % [saved.studio_name,1980+int(saved.completed_run_cycles)/24,(int(saved.completed_run_cycles)/2)%12+1]
+		resume.text = "Continue — %s · %d, Month %d" % [saved.studio_name,1980+int(saved.completed_run_cycles)/24,int(saved.completed_run_cycles)/2+1]
 	resume.pressed.connect(func(): continue_requested.emit())
 	layout.add_child(resume)
 	var recovery := Button.new()
@@ -395,6 +395,9 @@ func _refresh_review() -> void:
 		_review.text = "Review your Traits: " + selection.reason
 		return
 	_review.text = "%s\nGenre specialty: %s · free roster\n%s\n\n%d unused points × $50 = %s\nFamily Funding: %s\nStarting cash: %s\nMonthly rent: %s · first due after two productive cycles" % [_name_input.text.strip_edges(), _specialty.get_item_text(_specialty.selected), StudioTraits.summary(selection), selection.remaining_points, CashFormatter.format_exact_cents(selection.point_cash_cents), CashFormatter.format_exact_cents(selection.get("family_funding_cents", 0)), CashFormatter.format_exact_cents(550000 + selection.point_cash_cents + selection.get("family_funding_cents", 0)), CashFormatter.format_exact_cents(51500 if StudioTraits.is_active(selection, &"expensive_lease") else 50000)]
+	_review.text += "\nStarting Fans: %d%s" % [StudioTraits.starting_fans(selection), " (Cult Following trial; ordinary gains/losses)" if StudioTraits.starting_fans(selection) > 0 else ""]
+	for id: StringName in [&"college_dropout",&"graduate"]:
+		if StudioTraits.is_active(selection,id): _review.text += "\n" + StudioTraits.TRAITS[id].description + " Interest: nominal 8% yearly on scheduled balances; first due Month 13."
 
 
 func _confirm_studio() -> void:

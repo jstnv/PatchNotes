@@ -1,0 +1,14 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Exact approved capped payout [0, 0, 0]
+PASS: Exact approved capped payout [14, 0, 112000]
+PASS: Exact approved capped payout [14, 14, 224000]
+PASS: Exact approved capped payout [999, 999, 224000]
+PASS: Malformed score rejects
+SCRIPT ERROR: Invalid call. Nonexistent function 'duplicate' in base 'RefCounted (CardData)'.
+   at: _run (res://scripts/debug/verify_starwave.gd:42)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://scripts/debug/verify_starwave.gd:42)

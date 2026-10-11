@@ -1,0 +1,27 @@
+extends "wrappers/verify_main_menu_history.gd"
+
+func _run() -> void:
+	var first := CheckpointCoordinator.new()
+	var second := CheckpointCoordinator.new()
+	root.add_child(first)
+	root.add_child(second)
+	first.store.directory=ProjectSettings.globalize_path("user://first")
+	second.store.directory=ProjectSettings.globalize_path("user://second")
+	expect(first.store is GateCheckpointStore and second.store is GateCheckpointStore,"Fresh coordinators use generated store subclass")
+	expect(first.store.acquire(),"First real47733 writer acquired")
+	var owned := first.store._writer
+	expect(owned!=null and owned.is_listening(),"Actual TCP server is listening")
+	expect(first.store.acquire() and first.store._writer==owned,"Same owner keeps existing lease")
+	expect(not second.store.acquire() and second.store._writer==null,"Second owner rejected without phantom lease")
+	first.store.release_writer()
+	expect(first.store._writer==null and not owned.is_listening(),"Explicit release closes the server")
+	expect(second.store.acquire(),"Second owner acquires after release")
+	expect(not first.store.acquire(),"Prior owner rejected while second owns port")
+	second.free()
+	expect(first.store.acquire(),"Coordinator exit releases second lease")
+	first.free()
+	var final_probe := TCPServer.new()
+	expect(final_probe.listen(47733,"127.0.0.1")==OK,"Final coordinator exit releases port")
+	final_probe.stop()
+	print("Gate lease collision:10 checks, %d failures"%failures)
+	quit(0 if failures==0 else 1)

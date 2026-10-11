@@ -1,0 +1,54 @@
+{
+  "format": "patch-notes-isolated-simulation-v1",
+  "mode": "run",
+  "ok": false,
+  "created_utc": "2026-10-11T11:34:42.344528+00:00",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\banking-system\\simulations\\spending-bank-variant-continuation-v1",
+  "godot_executable": "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "git": {
+    "branch": "main",
+    "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+    "dirty": true
+  },
+  "variant": {
+    "id": "education-bank-quote-v1",
+    "owner": "banking-system",
+    "status": "CANDIDATE",
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\banking-system\\simulators\\education-bank-quote-v1",
+    "metadata_sha256": "1b83fe02ec8853723297d3574d775d969cf8d9e1d58092174c6359343201581a",
+    "base_identity": "4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df",
+    "creation_identity": "4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df",
+    "candidate_identity": "30ad2ea73e5fb0986f04cddfd39f28bee80dc762260a96e033e0d4c5c4f4876f",
+    "canonical_identity": "4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df",
+    "canonical_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "baseline_drift": false,
+    "delta": [
+      {
+        "path": "scripts/simulation/campaign_session.gd",
+        "change": "modified",
+        "before_sha256": "deab365ecac979705dd9c81c1f1b629b00b07c8d6174d5847f0f9e3807ed4c6b",
+        "after_sha256": "ddd9700aec8e82b75206e48b5d4e9516ddcfbf4d4f7daa823b8b62d466d507fc"
+      }
+    ],
+    "canonical_delta": [],
+    "lineage": []
+  },
+  "policy": {
+    "script": "res://scripts/debug/experiment_policy/supplied_policy.gd",
+    "id": "banking-spending-prefix",
+    "version": "3",
+    "source_identity": "f7d51ef9705f2b50249ff51c2d34cead09b5edb4271be5e615c2071f1a0a7673"
+  },
+  "case_count": 4,
+  "input_hashes": {
+    "experiment.json": "97b57a69a3ca95204a698fd04057616481dd57ae11d7b6d149801d2a294a799e",
+    "requested.json": "d00e9b9b21fb9de7b5174b9d45bcbe41b43e37ba91e94782b3c2d658f4249176"
+  },
+  "frozen_source_identity": "3fed02fde17bbff091a7444dcc57053b05bae9fca4f7da67a4485634b53f529b",
+  "error": "experiment failed (1); see experiment.log and experiment.command.json"
+}

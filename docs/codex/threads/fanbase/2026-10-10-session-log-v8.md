@@ -1,0 +1,7 @@
+# Fanbase design session — post-600 route comparison v8
+
+2026-10-10, America/Los_Angeles. Shared checkout `main` at `41c87c76fb4d3c06a5332d93f0e7b0997007475d` with concurrent edits preserved. Read CURRENT_STATE/TODO, current Fanbase/sales source, thread decisions and local route evidence; inspected branch/HEAD/status/diff. The user requested the read-only taper comparison here. The normal-shell read of the game's local checkpoint directory returned access denied; a separately approved read-only shell call listed and parsed checkpoint119 without changing or copying it. Its SHA-256 and source hashes are pinned in the [comparison](2026-10-10-post-600-player-route-comparison-v1.md).
+
+Five saved launches include one actual above600: the0.4 title launched at895 Fans. Fixed-action arithmetic reproduces its48 Month1 units,69 earned units/$482.51 net entitlement at cycle146, and loss rows207/279/109/22. Candidate mild/moderate tapers add1/3 Month1 units and2/5 earned units at that saved age, move some weak-title losses earlier, and converge on the same617 cumulative loss/338 Studio Fans by month57. A fixed-input hypothetical strong launch at895 shows larger conditional benefits, but no strong title in the save actually launched above600. No numeric curve selected.
+
+Changed files: this thread's README, new bounded comparison and this log. Read-only arithmetic; no gameplay/source edit, live-save write, shared TODO or Drive update, cross-thread message, merge, commit or push.

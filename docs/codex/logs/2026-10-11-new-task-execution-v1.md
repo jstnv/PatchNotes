@@ -1,0 +1,23 @@
+# New TODO execution and review — 2026-10-11
+
+User request: there are new tasks in the internal TODO. Read current state/TODO/provenance first; inspected branch, HEAD, status/diff and linked current source. Existing broad implementation/read-only authorization was used for ready work. The queue continued receiving design-thread updates; fresh reads preserved those entries and avoided duplicate follow-up studies.
+
+Branch `main`, HEAD `41c87c76fb4d3c06a5332d93f0e7b0997007475d`, large pre-existing dirty worktree. No commit/push/computer control. Existing edits and `.codex-godot-temp` retained. One canonical gameplay implementation slot was used for Cult; all AI additions stayed in private candidates.
+
+| Item | Work completed / remaining boundary |
+|---|---|
+| Cult20 adoption | New trait8/20-Fan creation and genuine trait7/40-Fan Continue implemented. Seven focused suites,34 restart processes/629 checks,19 Awareness/Promotion checks and348 source/control audit checks pass. [Evidence](../findings/cult-seed20-v2/README.md). |
+| Cult post-adoption study |14 routes/1,554 commands through actual Game4 settlement;364 audit checks; four fresh replays/444 commands. Both seeds retain a bounded Cult cash/Fan advantage; no combination arrears. [Finding](../findings/cult-post-adoption-v1/FINDING.md). No tuning follows. |
+| AI G2 prototype | Exact private planner v1→v3. V2:207 checks/45 processes; two complete1/1 ceilings, four larger-envelope misses,16 legal research pairs and six locked-parent rows. Independent brute force matches18 reports. V3:124 checks.19 fresh replays across versions verify86 commands. [Finding](../threads/ai-competitors/2026-10-11-g2-legal-mix-finding-v1.md) and [sealed review packet](../threads/ai-competitors/handoffs/g2-legal-mix-v3-review/HANDOFF.md). Cash/due/hand/search policy, aggregate Store ranking, F6 and canonical source reconciliation remain OPEN. |
+| AI G1a archive candidate | Sealed hashes/delta/reports reviewed. Historical/live ID collision and empty-archive consistency gaps identified statically; no runtime reproduction claimed. [Corrective acceptance](2026-10-11-g1a-candidate-intake-v1.md). Cohort and trusted migration decisions remain OPEN; no adoption. |
+| Contracts | Current v22 post-settlement pairs reviewed, with separate source identities and retained failures. Retain rules pending design ruling; do not repeat the superseded v21 follow-up. |
+| Feature Pools |006–007 reviewed;007 already includes later admission after actual Game2 settlement. No approved gameplay delta. Human testing is user-deferred;008 copy remains proposed. |
+| Banking | Grace review recorded; later spending/quote handoff classified as design evidence. Current eligible-quote study is assigned to Banking with no PN Implementation action. |
+
+[Economy intake](2026-10-11-economy-handoff-intake-v1.md) records exact read-only checks and distinguishes report inspection from new execution. [Cult implementation session](2026-10-11-cult-seed20-adoption-v1.md), [post-adoption session](../findings/cult-post-adoption-v1/SESSION.md) and [G2 session](../threads/ai-competitors/2026-10-11-session-log-g2-prototype-v1.md) carry detailed changed-file lists, commands, source identities, timings and retained failures.
+
+Canonical source changes in this pass are two mechanics files (`studio_traits.gd`, `persistence/studio_checkpoint.gd`) and three debug files. Shared TODO, Studio Traits design, DECISIONS and CURRENT_STATE were reconciled to the verified result; evidence/scripts/logs were added. Canonical source identity remains `4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df` throughout completed post-adoption runs. Private G2 predates Cult8 and must not replace canonical source wholesale. Prior full-gate/export results remain historical; no release-readiness or final-balance claim.
+
+The remaining DESIGN entries now identify concrete decisions or corrective work. No approved new canonical gameplay task from this intake is left queued.
+
+Closeout verification: `cult-seed20-v2/audit.py` rerun passes348 checks and confirms the same canonical source and HEAD. Scoped `git diff --check` exits0 (line-ending conversion warnings only). Five authored intake/implementation documents pass48 local-link checks and direct whitespace checks; the untracked Cult verifier is also checked directly. The final status snapshot contains479 changed/untracked paths, including the large preserved pre-existing worktree and concurrent design-thread records; it is not a count of files authored by this task. [Documentation check record](../findings/cult-seed20-v2/documentation-check.json).

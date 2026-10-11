@@ -152,11 +152,17 @@ func _verify_finite_depletion_and_display() -> void:
 	var views: Array = beta.get("_candidate_views")
 	for view: CardView in views:
 		var card := view.card_data
-		_expect((view.get_node("%CardName") as Label).text == card.card_name, "Beta CardView shows its card name")
+		var name_label := view.get_node("%CardName") as Label
+		_expect(name_label.text.replace("\n", " ") == card.card_name.to_upper() and name_label.tooltip_text == card.card_name, "Beta CardView shows the complete fitted name with original tooltip")
 		_expect((view.get_node("%PrimaryScoreValue") as Label).text == "V%d" % card.beta_value, "Beta CardView shows printed Beta value without fake production")
-		_expect((view.get_node("%PrimaryScoreType") as Label).text.to_lower() == str(card.beta_category), "Beta CardView shows category")
+		var expected_category := "MKTG" if card.beta_category == CardData.BETA_CATEGORY_MARKETING else str(card.beta_category).to_upper()
+		_expect((view.get_node("%PrimaryScoreType") as Label).text == expected_category, "Beta CardView shows its fitted category")
 		_expect(not (view.get_node("%SecondaryScore") as Control).visible and not view.get_node("Scope").visible, "Beta CardView hides fake secondary production and Scope anatomy")
-		_expect((view.get_node("%Department") as Label).text.contains("Finite") or (view.get_node("%Department") as Label).text.contains("Renewable"), "Beta CardView visibly states lifecycle")
+		var lifecycle_icon := view.get_node("%Renewability") as TextureRect
+		var expected_icon: Texture2D = view.renewable_texture if card.renewable else view.nonrenewable_texture
+		_expect(lifecycle_icon.is_visible_in_tree() and lifecycle_icon.texture != null and lifecycle_icon.texture == expected_icon, "Beta CardView shows the matching lifecycle icon")
+		var expected_lifecycle := "Renewable: may return" if card.renewable else "Finite: exhausts"
+		_expect((view.get_node("%InputButton") as Button).tooltip_text.contains(expected_lifecycle), "Beta CardView retains full lifecycle explanation")
 	_expect(_state_snapshot(state)[0] == 0, "Finite dealing and display advance no cycle")
 	beta.queue_free()
 	await process_frame

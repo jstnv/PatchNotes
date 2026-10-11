@@ -1,0 +1,9 @@
+# 2026-10-09 decision: list the AI Competitors handoff in TODO
+
+**Status:** **LOCKED documentation handoff; implementation NOT DISPATCHED.** The user explicitly said, “Lets update the to do list now,” after reviewing the staged design handoff. This authorizes the [shared TODO entry](../../TODO.md) for a later separate implementation task. It does not request gameplay work in this design thread or approve the **OPEN** inputs below.
+
+**Later status, same date:** The user separately dispatched implementation. Its [G1 finding](../../findings/ai-competitors-gates-v1/README.md) proves a legal 10.0 first player release. The user then [selected a revised opening rule and a separate nonperfect first-game target](2026-10-09-opening-rule-revision-decision-v1.md). The original paragraph records the narrower authorization at the moment this TODO decision was made; its strict guarantee is historical and **SUPERSEDED**.
+
+The TODO entry points to the [current handoff](HANDOFF.md) and [staged brief](2026-10-09-implementation-handoff-draft-v1.md). It preserves persistent independent rivals, real legal Design/Alpha/Beta hands, the strict incumbent opening Review advantage, legal-project Feature shopping with earliest-era/current conditional quote ordering, next-month high-Review news and shared world-release history. G1–G5 are explicit stop gates rather than assumed values. The market's effect on Reviews remains a separate design topic.
+
+Player first-release ceiling and incumbent floor, cohort resources, planner envelope numbers/search, future node-era specifications, entrants, detailed AI choices, news threshold, optional-system coverage and CPU limits remain **OPEN**. The separate implementation task must return proposed choices for explicit design ruling before dependent gameplay. No PR merge, source implementation, cross-thread message, commit or push follows from this TODO update.

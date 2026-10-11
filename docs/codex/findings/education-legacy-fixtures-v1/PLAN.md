@@ -1,0 +1,9 @@
+# Pre-education checkpoint fixtures — 2026-10-09
+
+Seven controlled legacy-version creation fixtures made **before education runtime changes**: College Dropout and Graduate at canonical trait versions3/4/5, plus ordinary no-traitv5. This is old-runtime output, not a hand-edited or new-runtime-fabricated legacy DTO. Parent requested these for later E4 compatibility tests; writer waits until they are pinned.
+
+The external SceneTree script calls the existing `StudioTraits.evaluate_traits(ids, version)` and `RunState._commit_studio_creation` commit path used by public creation. The latter receives the canonical supported old-version selection directly; it generates real funding, ownership, IDs, finance and RNG. No runtime field or serialized-payload mutation. Validate/capture through the existing strict StudioCheckpoint and save/open through StudioCheckpointStore/CheckpointCodec.
+
+Verify both education previews inactive, no refund/debt/bill, unchanged four-point$200 financing receipt and$5,700 total cash. Export exact envelope and payload bytes/hashes, record full finance and selection, hydrate/recapture exactly under the old runtime. These are cycle0 creation fixtures, not historical human saves or proof of new-runtime compatibility. Later tests must consume these immutable bytes in separate processes.
+
+Use one unique profile per fixture, findings-owned output directories and explicit custom writer port48971. No gameplay scene/default coordinator, so production62741 and reserved47733/47846 are never acquired. No current user save, UI/Computer Use, main source edit, immutable-copy edit or shared TODO edit. Pin relevant scripts/data/project source plus external producer/runner before and after every process; fail on drift. Preserve failed artifacts rather than overwrite completed fixtures.

@@ -1,0 +1,559 @@
+{
+  "passed": true,
+  "checks": 208895,
+  "scope": "Independent exact-cent accounting, source binding, legal native route and explicitly constructed acceptance fixtures",
+  "approved_schedule_lines": 192,
+  "native_schedule_lines": 192,
+  "cases": 23,
+  "isolated_private_vectors": 4,
+  "native_ledgers": 61,
+  "input_sha256": "d99b46192c83c518cd222085fa62943642207d65afd0f588120b092652053d20",
+  "input_files": {
+    "docs\\codex\\findings\\education-implementation-v1\\runs\\focused-v4\\focused-cases.json": "d99b46192c83c518cd222085fa62943642207d65afd0f588120b092652053d20",
+    "docs\\codex\\findings\\education-implementation-v1\\runs\\edges-v3\\edge-cases.json": "3356d438de3cc061fa308364906f2a3da4fc9d26d45601bda750c93ae6a2288f",
+    "docs\\codex\\findings\\education-implementation-v1\\runs\\native-v1\\native-route.json": "b939011462cc30f6fad9ce9d894bb420a60c75effd646fe57857c01dcfa008ed"
+  },
+  "auditor_sha256": "7065046a639b0d10b9c011302ef322794da1ffb3cff32cc2c3541b729f0e7c6e",
+  "provenance": {
+    "focused-v4.command.json": {
+      "command_sha256": "4639e954f79a249cc8dc78c4d1bbe5b7f52bf6c960fece3d2638f810a310550e",
+      "source_manifest_sha256": "49e47647043641c2b06576114be7c5c92a5f4c69fe7fa5679a6d2d5ac79193d9",
+      "outputs": {
+        "runs/focused-v4/focused-cases.json": "d99b46192c83c518cd222085fa62943642207d65afd0f588120b092652053d20"
+      },
+      "historical_source_pin": {
+        "pin_sha256": "4b1304ca5fed1cd3253aa057307cd6e3b08705f9a730b2ca84832b88e26a9f40",
+        "archive_sha256": "4491a7972d1cab729ca785cabad4f986f0a4598d27808810cd68fe65396599ba",
+        "changed_test_paths": [
+          "patch-notes/scripts/debug/education_restart_probe.gd",
+          "patch-notes/scripts/debug/verify_education_edges.gd"
+        ]
+      }
+    },
+    "edges-v3.command.json": {
+      "command_sha256": "bb8b3952ff249338fc03bebf50384c3427db65302aeb8a43665fad7c973606a8",
+      "source_manifest_sha256": "d1bb17faeea3c9db1998ea352f6c246ddab70e9ae1de173862056f2b64996319",
+      "outputs": {
+        "runs/edges-v3/edge-cases.json": "3356d438de3cc061fa308364906f2a3da4fc9d26d45601bda750c93ae6a2288f"
+      },
+      "historical_source_pin": null
+    },
+    "native-v1.command.json": {
+      "command_sha256": "4bd477c1aca2fe25b0bd068a7292ad9a430a62fbae13687db0abed0a6ec27c42",
+      "source_manifest_sha256": "adf16702e189721c360bb7e45a37ddcbd5f5671d2ed8077dc4679511086ece6d",
+      "outputs": {
+        "runs/native-v1/native-route.json": "b939011462cc30f6fad9ce9d894bb420a60c75effd646fe57857c01dcfa008ed"
+      },
+      "historical_source_pin": {
+        "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+        "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+        "changed_test_paths": [
+          "patch-notes/scripts/debug/verify_education_edges.gd"
+        ]
+      }
+    },
+    "atomic-v1.command.json": {
+      "command_sha256": "f0113c3116f990e8bdce90a8d29657ae1d6de45f4af81cff10dc609c7a86ffb3",
+      "source_manifest_sha256": "49e47647043641c2b06576114be7c5c92a5f4c69fe7fa5679a6d2d5ac79193d9",
+      "outputs": {},
+      "historical_source_pin": {
+        "pin_sha256": "4b1304ca5fed1cd3253aa057307cd6e3b08705f9a730b2ca84832b88e26a9f40",
+        "archive_sha256": "4491a7972d1cab729ca785cabad4f986f0a4598d27808810cd68fe65396599ba",
+        "changed_test_paths": [
+          "patch-notes/scripts/debug/education_restart_probe.gd",
+          "patch-notes/scripts/debug/verify_education_edges.gd"
+        ]
+      }
+    }
+  },
+  "active_restarts": {
+    "processes": 13,
+    "native_checks": 325,
+    "constructed_processes": 9,
+    "genuine_processes": 4,
+    "original_byte_hashes_reconstructed": 11,
+    "retained_original_hashes_verified": 5,
+    "summaries": [
+      {
+        "mode": "creation",
+        "input_sha256": "bec222e49d469c073212d3ea44c3f0198a12efa2ed9e4340c52203989b9c6b26",
+        "native_checks": 4,
+        "cycle": 0,
+        "cash_cents": 580000,
+        "issued": 0,
+        "closed": false
+      },
+      {
+        "mode": "month12",
+        "input_sha256": "b384100f797edcc41f9eb8f5de815477152a1d8b26924c3c43d6a9e983411eb1",
+        "native_checks": 33,
+        "cycle": 24,
+        "cash_cents": 19980000,
+        "issued": 0,
+        "closed": false
+      },
+      {
+        "mode": "first_partial",
+        "input_sha256": "346a877a50fc51b283527e0bfbd739b7a647bebdd4387a3d989066cda3dd1191",
+        "native_checks": 11,
+        "cycle": 26,
+        "cash_cents": 0,
+        "issued": 1,
+        "closed": false
+      },
+      {
+        "mode": "partial_continue",
+        "input_sha256": "be74bb2dd4ed6b618888dca672d9da87b332f39dc0f5c1c9cccf8d8db013ce7e",
+        "native_checks": 9,
+        "cycle": 27,
+        "cash_cents": 0,
+        "issued": 1,
+        "closed": false
+      },
+      {
+        "mode": "recovery",
+        "input_sha256": "1bb47de90570b63695454a79b8ef15d97ef3e8fb93016de52862c8ad833060f7",
+        "native_checks": 10,
+        "cycle": 28,
+        "cash_cents": 19935964,
+        "issued": 2,
+        "closed": false
+      },
+      {
+        "mode": "final_due",
+        "input_sha256": "79bc29ef7cb07c911c9c534a9ddc03654d3088583b7136fd3c0b8ad8601507ac",
+        "native_checks": 197,
+        "cycle": 216,
+        "cash_cents": 0,
+        "issued": 96,
+        "closed": false
+      },
+      {
+        "mode": "final_continue",
+        "input_sha256": "963c39987b63e298ef3a6018a1b69ff34aca827a85565c3b68af12f8a51897d0",
+        "native_checks": 9,
+        "cycle": 217,
+        "cash_cents": 0,
+        "issued": 96,
+        "closed": false
+      },
+      {
+        "mode": "final_recovery",
+        "input_sha256": "44ad7b1c12a802726d0f8d3860f1f524eb3bbbbf88d4d34966ddc239e88d443e",
+        "native_checks": 10,
+        "cycle": 218,
+        "cash_cents": 42889,
+        "issued": 96,
+        "closed": true
+      },
+      {
+        "mode": "final_check",
+        "input_sha256": "f3b24da90ad6ec79e65ee71a3096d30dc0bd3a98ad9a62f71ac0e9829a0fb6a9",
+        "native_checks": 8,
+        "cycle": 218,
+        "cash_cents": 42889,
+        "issued": 96,
+        "closed": true
+      },
+      {
+        "mode": "native_seed",
+        "input_sha256": "6d4070bb108c5613377ae1395796c0188cfc37e3114aa87bfa6106d0f5c8dab0",
+        "native_checks": 4,
+        "cycle": 54,
+        "cash_cents": 1640247,
+        "issued": 15,
+        "closed": false
+      },
+      {
+        "mode": "native_rollback",
+        "input_sha256": "03bc5956b23f6e6fd2eba27cefd647fcf2b8ccad95da2448081b3810d6f9f880",
+        "native_checks": 8,
+        "cycle": 55,
+        "cash_cents": 1198961,
+        "issued": 15,
+        "closed": true
+      },
+      {
+        "mode": "native_payoff",
+        "input_sha256": "f3a346b34cc28bcd3f9547856b7cc7513730d191c977a36899472a482f700205",
+        "native_checks": 10,
+        "cycle": 54,
+        "cash_cents": 1198961,
+        "issued": 15,
+        "closed": true
+      },
+      {
+        "mode": "native_check",
+        "input_sha256": "b00b2184b5bb1e4a70e0fd115a0d3d1de7deb37303b032eeb4e87724744fa951",
+        "native_checks": 12,
+        "cycle": 54,
+        "cash_cents": 1198961,
+        "issued": 15,
+        "closed": true
+      }
+    ],
+    "provenance": {
+      "restart-creation-v2": {
+        "command_sha256": "ecf93c06cdf937cc48f5e2312454b2b882483d2c912c5e69bb3d742155ac3c0d",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-creation-v2/restart-trace.json": "bec222e49d469c073212d3ea44c3f0198a12efa2ed9e4340c52203989b9c6b26"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-month12-v2": {
+        "command_sha256": "ee5b61a3bf9d51dc715bcb265acb71ec8c52707db8a1fda325b8df21762892fe",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-month12-v2/restart-trace.json": "b384100f797edcc41f9eb8f5de815477152a1d8b26924c3c43d6a9e983411eb1"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-first_partial-v2": {
+        "command_sha256": "22c8b6562816db35f0f645d7e1cdc6dd637737a4d1617cf8ba2ef4a57f58bc6e",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-first_partial-v2/restart-trace.json": "346a877a50fc51b283527e0bfbd739b7a647bebdd4387a3d989066cda3dd1191"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-partial_continue-v2": {
+        "command_sha256": "b0c90ebb4d0416b00be6ce9c1eebc0192c6ecbc18b378d135a94b74f2ea360b3",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-partial_continue-v2/restart-trace.json": "be74bb2dd4ed6b618888dca672d9da87b332f39dc0f5c1c9cccf8d8db013ce7e"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-recovery-v2": {
+        "command_sha256": "458ba694d66a971afbbf70f005f5fab29d9b7ea2cebc198568cccfb37bc09fcd",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-recovery-v2/restart-trace.json": "1bb47de90570b63695454a79b8ef15d97ef3e8fb93016de52862c8ad833060f7"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-final_due-v2": {
+        "command_sha256": "e7bef4a3e168aa04f36e6cde2b3f43ba7bd1c6b7498a6d912cc076a3f21315ce",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-final_due-v2/restart-trace.json": "79bc29ef7cb07c911c9c534a9ddc03654d3088583b7136fd3c0b8ad8601507ac"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-final_continue-v2": {
+        "command_sha256": "6667e3caf805b43b186c9e46008f515d3e6e56f2a9ffba5b58578a2d91151082",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-final_continue-v2/restart-trace.json": "963c39987b63e298ef3a6018a1b69ff34aca827a85565c3b68af12f8a51897d0"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-final_recovery-v2": {
+        "command_sha256": "18b53ed09bbf5bf952c8a7c5fef93502bd1dfeb8b7af3078871c4e8be25717f1",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-final_recovery-v2/restart-trace.json": "44ad7b1c12a802726d0f8d3860f1f524eb3bbbbf88d4d34966ddc239e88d443e"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-final_check-v2": {
+        "command_sha256": "5bb7d2908e0e66e0c4ea0832bc74aee2e97933b9fd21c39c6edbe04cf1635671",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-final_check-v2/restart-trace.json": "f3b24da90ad6ec79e65ee71a3096d30dc0bd3a98ad9a62f71ac0e9829a0fb6a9"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-native_seed-v2": {
+        "command_sha256": "bf3a77a84fb309d85a5ca39cbd0a7db08812867f614b4dc00513f8fc167f82b0",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-native_seed-v2/restart-trace.json": "6d4070bb108c5613377ae1395796c0188cfc37e3114aa87bfa6106d0f5c8dab0"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-native_rollback-v2": {
+        "command_sha256": "025b8fc52ed0036844709b37ad12ae89e2dca5cba7f2a83bdb690a4c745bd50e",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-native_rollback-v2/restart-trace.json": "03bc5956b23f6e6fd2eba27cefd647fcf2b8ccad95da2448081b3810d6f9f880"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-native_payoff-v2": {
+        "command_sha256": "57e7772799a473773098d76e7f86288c3d3dceb5f799ce14df149652a08a30d0",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-native_payoff-v2/restart-trace.json": "f3a346b34cc28bcd3f9547856b7cc7513730d191c977a36899472a482f700205"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      },
+      "restart-native_check-v2": {
+        "command_sha256": "7944e48eb4a119a6073135b257335d7df951c8f31f7410ff6ca2e45f7aef4e03",
+        "source_manifest_sha256": "ad8efa8d4615276ab02d9b3e5caa58b65fe3dde38c31a142fedc88c44c195dfe",
+        "outputs": {
+          "runs/restart-native_check-v2/restart-trace.json": "b00b2184b5bb1e4a70e0fd115a0d3d1de7deb37303b032eeb4e87724744fa951"
+        },
+        "historical_source_pin": {
+          "pin_sha256": "a2641098838b56086fe24d1db59608159ae35aa26a3a8711097b67c880c58b5b",
+          "archive_sha256": "60d9f3ef637fc871f2a988a8e8d7940abb83c56fdca8c89bcef10431eb609a39",
+          "changed_test_paths": [
+            "patch-notes/scripts/debug/verify_education_edges.gd"
+          ]
+        }
+      }
+    }
+  },
+  "legacy_compatibility": {
+    "processes": 16,
+    "authentic_fixtures": 7,
+    "negative_copies": 7,
+    "detached_component_boundaries": 21,
+    "source_manifest_sha256": "094a5747b7b55d00e3d98ee334fb250de4fb0de6ca41439b5794e1a0f9f6157e",
+    "summary_sha256": "48db2898371fdff4371679bd55f2f1841abaf474fd5bc1d69ca263b889a94984"
+  },
+  "approved_reference_sha256": "6d837be7721b7a84f34654d21f252919a4983625c240b09e970b1cc5507740d4",
+  "summaries": [
+    {
+      "case": "bank-overlap",
+      "cycle": 26,
+      "cash_cents": 19722685,
+      "issued": 1,
+      "closed": false
+    },
+    {
+      "case": "college_dropout-final",
+      "cycle": 218,
+      "cash_cents": 13871429,
+      "issued": 96,
+      "closed": true
+    },
+    {
+      "case": "college_dropout-first",
+      "cycle": 26,
+      "cash_cents": 19342932,
+      "issued": 1,
+      "closed": false
+    },
+    {
+      "case": "college_dropout-partial-50000",
+      "cycle": 27,
+      "cash_cents": 0,
+      "issued": 1,
+      "closed": false
+    },
+    {
+      "case": "college_dropout-partial-50100",
+      "cycle": 27,
+      "cash_cents": 0,
+      "issued": 1,
+      "closed": false
+    },
+    {
+      "case": "creation-570000",
+      "cycle": 0,
+      "cash_cents": 570000,
+      "issued": 0,
+      "closed": false
+    },
+    {
+      "case": "creation-580000",
+      "cycle": 0,
+      "cash_cents": 580000,
+      "issued": 0,
+      "closed": false
+    },
+    {
+      "case": "creation-600000",
+      "cycle": 0,
+      "cash_cents": 600000,
+      "issued": 0,
+      "closed": false
+    },
+    {
+      "case": "creation-615000",
+      "cycle": 0,
+      "cash_cents": 615000,
+      "issued": 0,
+      "closed": false
+    },
+    {
+      "case": "graduate-final",
+      "cycle": 218,
+      "cash_cents": 11835737,
+      "issued": 96,
+      "closed": true
+    },
+    {
+      "case": "graduate-first",
+      "cycle": 26,
+      "cash_cents": 19321727,
+      "issued": 1,
+      "closed": false
+    },
+    {
+      "case": "graduate-partial-50000",
+      "cycle": 27,
+      "cash_cents": 0,
+      "issued": 1,
+      "closed": false
+    },
+    {
+      "case": "graduate-partial-50100",
+      "cycle": 27,
+      "cash_cents": 0,
+      "issued": 1,
+      "closed": false
+    },
+    {
+      "case": "payoff-0",
+      "cycle": 4,
+      "cash_cents": 19400000,
+      "issued": 0,
+      "closed": true
+    },
+    {
+      "case": "payoff-24",
+      "cycle": 28,
+      "cash_cents": 18800000,
+      "issued": 0,
+      "closed": true
+    },
+    {
+      "case": "payoff-26",
+      "cycle": 30,
+      "cash_cents": 18746667,
+      "issued": 1,
+      "closed": true
+    },
+    {
+      "case": "payoff-27",
+      "cycle": 31,
+      "cash_cents": 18746667,
+      "issued": 1,
+      "closed": true
+    },
+    {
+      "case": "edges/final-arrears-recovered",
+      "cycle": 218,
+      "cash_cents": 42889,
+      "issued": 96,
+      "closed": true
+    },
+    {
+      "case": "edges/final-due-arrears",
+      "cycle": 216,
+      "cash_cents": 0,
+      "issued": 96,
+      "closed": false
+    },
+    {
+      "case": "edges/four-category-arrears",
+      "cycle": 26,
+      "cash_cents": 0,
+      "issued": 1,
+      "closed": false
+    },
+    {
+      "case": "edges/mixed-recovered",
+      "cycle": 29,
+      "cash_cents": 0,
+      "issued": 2,
+      "closed": false
+    },
+    {
+      "case": "edges/older-education-newer-bank",
+      "cycle": 28,
+      "cash_cents": 0,
+      "issued": 2,
+      "closed": false
+    },
+    {
+      "case": "edges/same-date-shortage",
+      "cycle": 26,
+      "cash_cents": 0,
+      "issued": 1,
+      "closed": false
+    }
+  ],
+  "limits": [
+    "Constructed accounting and long-horizon funded restart fixtures are not legal player balance evidence.",
+    "Private ordering vectors deliberately bypass public validation; their transition arithmetic does not establish a reachable cash-positive-arrears RunState.",
+    "Source archives were preserved after runs against exact per-command before/after manifests; unrelated historical test-driver corrections are explicit.",
+    "Native and restart evidence is headless; rendered/exported interaction remains a separate gate."
+  ],
+  "auditor_archive": "auditors\\audit-7065046a639b0d10.py"
+}

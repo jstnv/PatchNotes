@@ -1,0 +1,206 @@
+{
+	"accepted_commands": 36,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"tape": "replay.tape.json"
+	},
+	"case_id": "pilot-0021",
+	"commands": 36,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "",
+	"final_release_count": 2,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4442"
+			},
+			"state": {
+				"integer": "7798369750222049584"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4443"
+			},
+			"state": {
+				"integer": "7647256142317374681"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4444"
+			},
+			"state": {
+				"integer": "611755196912719446"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4445"
+			},
+			"state": {
+				"integer": "-1608135111623244231"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4446"
+			},
+			"state": {
+				"integer": "7760400383853267224"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4440"
+			},
+			"state": {
+				"integer": "5803724757897667320"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4441"
+			},
+			"state": {
+				"integer": "-5521230828048215745"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4439"
+			},
+			"state": {
+				"integer": "-6727558045688874569"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4438"
+			},
+			"state": {
+				"integer": "-428712198700387292"
+			}
+		}
+	},
+	"final_run_cycle": 14,
+	"final_state": "d1685db4e637bcca7872b6647f5ea6d7d663a45f169d3cbeb7482358d01a9508",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4442"
+			},
+			"state": {
+				"integer": "750599562175646820"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4443"
+			},
+			"state": {
+				"integer": "7114735786022439825"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4444"
+			},
+			"state": {
+				"integer": "-4967872063840318786"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4445"
+			},
+			"state": {
+				"integer": "1396264160006474219"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4446"
+			},
+			"state": {
+				"integer": "7760400383853267224"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4440"
+			},
+			"state": {
+				"integer": "6469071188191612426"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4441"
+			},
+			"state": {
+				"integer": "-5613536661671146185"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4439"
+			},
+			"state": {
+				"integer": "104934964344819421"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4438"
+			},
+			"state": {
+				"integer": "-6259201259501973584"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "bc889326334d5176810b0d73566f5e4a6093d130a235ad85d03376911fb7a36c",
+	"input_identity": "eb87360d239486f78ad2d2572c8e43e6e99c0beb72cd6b5da244393a615b55ef",
+	"last_choice": {
+		"type": "launch"
+	},
+	"max_commands": 60,
+	"ok": true,
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"float_bits": "0300000000000040"
+				},
+				"beta": {
+					"float_bits": "0300000000000040"
+				},
+				"design": {
+					"float_bits": "0300000000000040"
+				}
+			},
+			"name_prefix": "Pilot",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 14,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "430763c166550fd44499f4eda5b72c915a07f910633c87cc47e95229c72693c8",
+	"status": "completed",
+	"tape_identity": "bdaa825e335536f7f4308f57dc081fe7ed72e8a06b8c8e53a2464c57433c6136",
+	"target_release_count": 2
+}

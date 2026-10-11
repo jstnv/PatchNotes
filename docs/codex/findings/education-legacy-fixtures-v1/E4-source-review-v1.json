@@ -1,0 +1,100 @@
+{
+  "reviewed_utc": "2026-10-09T10:20:38.262436+00:00",
+  "branch": "main",
+  "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+  "scope": "Read-only E4 source inspection; no new native execution",
+  "prior_revision_recomputed": "c7f6f3165ea85f7afd5070042d053ce581f84338437640c3e4b6de787c1f5a5b",
+  "all_old_data_hashes_unchanged": true,
+  "old_source_manifest_sha256": "3bf8a8953a2c725f83321f8979d755f2f20a495d5a707a8a99543265c6f2b299",
+  "reviewed_source": {
+    "scripts/persistence/studio_checkpoint.gd": "559da4af2bcddc65398377679ef2e43ad62a7e387f4a624095ed354db624c2d3",
+    "scripts/persistence/checkpoint_schema.gd": "73f6667444f8c7a1b62477d5207b1e70c5967e92e8b3329e22938f4a3692b8c6",
+    "scripts/persistence/checkpoint_codec.gd": "ed5497fb7510c8b1bb571e4410cd7ee7a1fe0f8bab015df8219f2adce9aeb7a3",
+    "scripts/persistence/studio_checkpoint_store.gd": "22143ec9959ce8255aae73607ff6b256f4b48d69b9bb9a76b3dbce86336e4fd9",
+    "scripts/persistence/checkpoint_coordinator.gd": "6db95918f6f56d9736504194e120f4749764ce45eb02f387a668fd7d59b38ce8",
+    "scripts/finance/studio_finance_ledger.gd": "22dd794b809fbdb30fa1f36f89214a0a1e351ca1daadee461ded46af9f2ca9dc",
+    "scripts/finance/education_debt.gd": "a9a5ebbfbc1a9dfc065d4714ac29319cfc31de1f50d70f58069e0c844d6ed5ec",
+    "scripts/studio_traits.gd": "a3f324c9d7a2b7b9ae32c18724a40be6473a2bdb8befb8a9334883f35140007c",
+    "scripts/run_state.gd": "7ea0ed4ecc7a9fb48d4ba8798fb0446f4cd7707a9093f7ad5664e260cb6a2f0d"
+  },
+  "fixtures": {
+    "v3-college_dropout": {
+      "manifest_sha256": "5bd713e1aba46202a7980b2b3bf7697fce3bb3cc317adc40692b7ba1411fca9c",
+      "files": {
+        "checkpoint.json": "4e1b1b7e5c836a59d04c90a997b8fc44507d7e6a9e7f30d077475c417fc27112",
+        "payload.json": "c610bb675fb1738db4f1ed9ae88fb5314e814c1ee31df19407bd96cfebdc2c56",
+        "result.json": "3e0c7adf99a7a4df462eb3e0d33874c2e91455398de9fa81d5969275d6465b5d",
+        "log": "65122412f4e601712997a68c1b14ffbb41f2218fe86dca4aa7c5c6b7c481f74d",
+        "command.json": "960e72e83f65fc23e896861286a36d3c012f62cdd21abfcec149ec6f439a33c8"
+      },
+      "revision": "c7f6f3165ea85f7afd5070042d053ce581f84338437640c3e4b6de787c1f5a5b"
+    },
+    "v3-graduate": {
+      "manifest_sha256": "8665f1fa19a9fb2bd9bcc32adf1ea915e4400563e97101b246f664e6724d1e54",
+      "files": {
+        "checkpoint.json": "17e5e55b665d8e65b3e23b65c025e7ef8e8e8c1b23bdd9dc93bf5ef9a8f8a210",
+        "payload.json": "bcb5fac137e10368c01ddb57c4a4490de458c4ffb0cb35d6fd5a839bedf06b6d",
+        "result.json": "b5d033504a039883419f2299edeb09c0e724aa8a8ce4731272abbcad1b765abc",
+        "log": "75f44b7589f1fa895e369b2b4a482b2ba79259c423f40102e16980e37e6ae843",
+        "command.json": "b4260ea06814eaa9ea28d8773b4713ca185cefafa921e12db6b3d9215eafa08f"
+      },
+      "revision": "c7f6f3165ea85f7afd5070042d053ce581f84338437640c3e4b6de787c1f5a5b"
+    },
+    "v4-college_dropout": {
+      "manifest_sha256": "7506565c7a5853385357809206dfa9de39225b251afae354cee21a3abe73aa9d",
+      "files": {
+        "checkpoint.json": "d907ddbf7152ac874d504d80e58b5640c2bd08cd955a89df07d7e7164c839adf",
+        "payload.json": "6dfcd6aae6dc44f1a69ac47d2621975af122caeb9128bcba7598541982cd79ce",
+        "result.json": "9f0fb8fa61e960955c6ee5a51e4bcf30fecdbcefe46f63db56b79d59e61d0d4b",
+        "log": "1eb976ebefe4d92a8dbf7f3386b4fd1324357b48a22dcd9daa3aa0479b953bdf",
+        "command.json": "a86d7f8489d73d0afe8b2a59983286f359dc81a4b63b4461dd02850ca0e19ebf"
+      },
+      "revision": "c7f6f3165ea85f7afd5070042d053ce581f84338437640c3e4b6de787c1f5a5b"
+    },
+    "v4-graduate": {
+      "manifest_sha256": "661924a013b61c2d23e59bda6dcf013ac2f9ed3c82ca4012b88d5ba0088a52fd",
+      "files": {
+        "checkpoint.json": "9a90ff5b93fa531459ba6645c5bbd97f44833ffdffa5ea1a14eddcd19d8d9758",
+        "payload.json": "962c11fcab4f9f420d1e2303a7e889d87ec228d5c298ef47b338a6a988013e39",
+        "result.json": "19588384a32c4dbb220f9d88d81fbaf84d8a178687213052b6a1c67bf23fac73",
+        "log": "6933c3e7c83f7aff2276899bec13e7cbe552f44366c94549b6019e99320ca474",
+        "command.json": "72de26972330695b61c55a9df2183b2d9494e2d3c26f93e6ca24561a7b1bb88c"
+      },
+      "revision": "c7f6f3165ea85f7afd5070042d053ce581f84338437640c3e4b6de787c1f5a5b"
+    },
+    "v5-college_dropout": {
+      "manifest_sha256": "0fbc78a2bb4a7a79003e528c82bf750a9dbe50ddb95fbcd1f645acf72be82b08",
+      "files": {
+        "checkpoint.json": "0c49ac73d55635ef7b37b3c5e2193f9a5a52765ed548ef8f423918b655c4e4a6",
+        "payload.json": "69c1bbb95eb8c9639e68188e0281b9e0d2559c012bd745b99b574e09a4537669",
+        "result.json": "c81afc02af75adf03a4ead09406c7de23112d8358cbfd018d8c4ec42ec822ecb",
+        "log": "380f48e45ac54cf15ce3437ee03b88f5395a940fcf8887a9d41ab2720cb9dc40",
+        "command.json": "36313cf3e7a344f5e9574a39c6f7928b3686c52b3756cd4736ec1786e4f05d49"
+      },
+      "revision": "c7f6f3165ea85f7afd5070042d053ce581f84338437640c3e4b6de787c1f5a5b"
+    },
+    "v5-graduate": {
+      "manifest_sha256": "cf35fa3aea4aff3f3eed78479118c6730c311109cf4b40f49691a854ffacbb67",
+      "files": {
+        "checkpoint.json": "70806a7db12fde3c7faccc5d5a8c167cc5b099f989f0ee0edef96af3942efb55",
+        "payload.json": "1d972cb2066b4c8e9e73f3da0c943a6f31683594f937516a460420fd7d6a037a",
+        "result.json": "1be8418a67c158644d83295b108fd3a829200a98ef7905323c3bf82315b6a245",
+        "log": "6ab90dd2295f93c7126d50e18b116d3e99c49a1d5e4758ec7783d5069bf1490a",
+        "command.json": "7581198de7d8d533df1eee26c8824db1344eea710bc11890fa043fe669b5a299"
+      },
+      "revision": "c7f6f3165ea85f7afd5070042d053ce581f84338437640c3e4b6de787c1f5a5b"
+    },
+    "v5-ordinary": {
+      "manifest_sha256": "7f14b135e863a08423e19eab2b9c4dd50bd55e00c7f2a5203f829e45bdc5d500",
+      "files": {
+        "checkpoint.json": "3bf83cab7b15f4a5355624a91ac97cfdf2ef0933512200f9745605ae221b5906",
+        "payload.json": "1c81f45a244679a2ec39e7d60a128576530af068307244f93a1b29a13f16299e",
+        "result.json": "956d1e64b69d6be7602fb178dd27015c4168031801f90dfe008dd6f27631e748",
+        "log": "55818f5e47a78d81e0bf9e9fef207e53a5d102e224ba4cf29756f1ae662363d8",
+        "command.json": "58f3bda8a2c1bd24568e5b72801ae150ff6a6dc1911a7654cd528081ac483999"
+      },
+      "revision": "c7f6f3165ea85f7afd5070042d053ce581f84338437640c3e4b6de787c1f5a5b"
+    }
+  },
+  "status": "No confirmed source defect; separate-process compatibility acceptance remains pending"
+}

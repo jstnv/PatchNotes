@@ -1,0 +1,1151 @@
+{
+	"accepted_commands": 0,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"final_state": "final_state.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"studio_checkpoint": "studio_checkpoint.json",
+		"tape": "replay.tape.json",
+		"telemetry": "telemetry.json"
+	},
+	"case_id": "graduate-4417-borrow-500-12",
+	"commands": 1,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "Financial action rejected",
+	"final_release_count": 2,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "8989928916104373167"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "-1494648530554463480"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "5299470435023032069"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "-1079178901457053040"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "3901457690118622830"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "3783608572789497710"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4418"
+			},
+			"state": {
+				"integer": "-4952197244165530210"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4417"
+			},
+			"state": {
+				"integer": "6059727017067314275"
+			}
+		}
+	},
+	"final_run_cycle": 27,
+	"final_state": "7db854607b433a23e70dfe960046437d737e0634a5da3fe63d1442c4b1a354cd",
+	"initial_release_count": 2,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "8989928916104373167"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "-1494648530554463480"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "5299470435023032069"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "-1079178901457053040"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "3901457690118622830"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "3783608572789497710"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4418"
+			},
+			"state": {
+				"integer": "-4952197244165530210"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4417"
+			},
+			"state": {
+				"integer": "6059727017067314275"
+			}
+		}
+	},
+	"initial_run_cycle": 27,
+	"initial_state": "7db854607b433a23e70dfe960046437d737e0634a5da3fe63d1442c4b1a354cd",
+	"input_identity": "89e663d969603e652e0b6b21e86be86e9d3f7c0a3b1ff294be4de8af6d00cb5a",
+	"last_choice": {
+		"payload": {
+			"quote": {
+				"accepted": false,
+				"basis_cents": {
+					"integer": "2797"
+				},
+				"capacity_cents": {
+					"integer": "0"
+				},
+				"eligible": false,
+				"latest_sales_cents": {
+					"integer": "2797"
+				},
+				"maximum_principal_cents": {
+					"integer": "0"
+				},
+				"obligations_cents": {
+					"integer": "28273"
+				},
+				"older_sales_cents": {
+					"integer": "5595"
+				},
+				"reason": "Settled sales do not cover rent and required obligations with lending capacity left.",
+				"rent_cents": {
+					"integer": "50000"
+				},
+				"schedule": {
+					"accepted_cycle": {
+						"integer": "27"
+					},
+					"first_due_cycle": {
+						"integer": "30"
+					},
+					"last_due_cycle": {
+						"integer": "52"
+					},
+					"maximum_installment_cents": {
+						"integer": "4667"
+					},
+					"principal_cents": {
+						"integer": "50000"
+					},
+					"schema_version": {
+						"integer": "1"
+					},
+					"term_months": {
+						"integer": "12"
+					},
+					"total_interest_cents": {
+						"integer": "3250"
+					},
+					"total_payment_cents": {
+						"integer": "53250"
+					}
+				}
+			}
+		},
+		"type": "bank_borrow"
+	},
+	"max_commands": 100,
+	"ok": false,
+	"outcome": {
+		"calendar": {
+			"half": 2,
+			"label": "1981 · Month 14, Second Half",
+			"month": 14,
+			"year": 1981
+		},
+		"cash_cents": 139275,
+		"employees": {
+			"employees": {},
+			"events": [],
+			"owner": "bank-spend-graduate-4417",
+			"schema_version": 1
+		},
+		"fans": 0,
+		"finance": {
+			"available": true,
+			"bank_loans": [],
+			"cash_cents": 139275,
+			"credit": {
+				"history": [
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 2,
+						"month": 1,
+						"operating_profit_cents": -85000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 4,
+						"month": 2,
+						"operating_profit_cents": -73000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 6,
+						"month": 3,
+						"operating_profit_cents": -102000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 8,
+						"month": 4,
+						"operating_profit_cents": -76000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 10,
+						"month": 5,
+						"operating_profit_cents": -50000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 603,
+						"before": 600,
+						"change": 3,
+						"cycle": 12,
+						"month": 6,
+						"operating_profit_cents": 50000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 603,
+						"before": 603,
+						"change": 0,
+						"cycle": 14,
+						"month": 7,
+						"operating_profit_cents": -60452,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 606,
+						"before": 603,
+						"change": 3,
+						"cycle": 16,
+						"month": 8,
+						"operating_profit_cents": 106609,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 606,
+						"before": 606,
+						"change": 0,
+						"cycle": 18,
+						"month": 9,
+						"operating_profit_cents": -11560,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 606,
+						"before": 606,
+						"change": 0,
+						"cycle": 20,
+						"month": 10,
+						"operating_profit_cents": -76727,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 606,
+						"before": 606,
+						"change": 0,
+						"cycle": 22,
+						"month": 11,
+						"operating_profit_cents": -53714,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 606,
+						"before": 606,
+						"change": 0,
+						"cycle": 24,
+						"month": 12,
+						"operating_profit_cents": -53405,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 609,
+						"before": 606,
+						"change": 3,
+						"cycle": 26,
+						"month": 13,
+						"operating_profit_cents": 39464,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					}
+				],
+				"last_processed_month": 13,
+				"policy_version": "typed_expenses_v1",
+				"score": 609
+			},
+			"credit_inputs": {
+				"completed_months": 13,
+				"late_months": 0,
+				"paid_on_time_months": 14
+			},
+			"education": {
+				"account_id": "bank-spend-graduate-4417:education",
+				"closed": false,
+				"closed_cycle": -1,
+				"early_payoff": false,
+				"interest_paid_cents": 13333,
+				"issued": 1,
+				"principal_paid_cents": 14940,
+				"run_id": "bank-spend-graduate-4417",
+				"schedule": {
+					"first_due_cycle": 26,
+					"last_due_cycle": 216,
+					"principal_cents": 2000000,
+					"regular_due_cents": 28273,
+					"schema_version": 1,
+					"term_months": 96,
+					"total_interest_cents": 714263,
+					"total_payment_cents": 2714263
+				},
+				"schema_version": 1,
+				"trait_id": "graduate"
+			},
+			"financially_blocked": false,
+			"monthly_payroll_cents": 0,
+			"monthly_rent_cents": 50000,
+			"next_due_cycle": 28,
+			"outstanding_expenses": [],
+			"rows": [
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 515000,
+					"closing_cash_cents": 515000,
+					"feature_play_cents": 35000,
+					"financing_in_cents": 600000,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 1,
+					"net_profit_cents": -85000,
+					"opening_cash_cents": 0,
+					"operating_expenses_cents": 85000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -73000,
+					"closing_cash_cents": 442000,
+					"feature_play_cents": 23000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 2,
+					"net_profit_cents": -73000,
+					"opening_cash_cents": 515000,
+					"operating_expenses_cents": 73000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -102000,
+					"closing_cash_cents": 340000,
+					"feature_play_cents": 52000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 3,
+					"net_profit_cents": -102000,
+					"opening_cash_cents": 442000,
+					"operating_expenses_cents": 102000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -76000,
+					"closing_cash_cents": 264000,
+					"feature_play_cents": 26000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 4,
+					"net_profit_cents": -76000,
+					"opening_cash_cents": 340000,
+					"operating_expenses_cents": 76000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -50000,
+					"closing_cash_cents": 214000,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 5,
+					"net_profit_cents": -50000,
+					"opening_cash_cents": 264000,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 100000,
+					"campaign_cents": 0,
+					"cash_change_cents": 50000,
+					"closing_cash_cents": 264000,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 6,
+					"net_profit_cents": 50000,
+					"opening_cash_cents": 214000,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 100000,
+					"other_expense_cents": 0,
+					"other_income_cents": 100000,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -60452,
+					"closing_cash_cents": 203548,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 7,
+					"net_profit_cents": -60452,
+					"opening_cash_cents": 264000,
+					"operating_expenses_cents": 211500,
+					"operating_revenue_cents": 151048,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 151048,
+					"sales_settled_cents": 151048,
+					"store_cents": 161500
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 106609,
+					"closing_cash_cents": 310157,
+					"feature_play_cents": 35000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 8,
+					"net_profit_cents": 106609,
+					"opening_cash_cents": 203548,
+					"operating_expenses_cents": 85000,
+					"operating_revenue_cents": 191609,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 191609,
+					"sales_settled_cents": 191609,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -11560,
+					"closing_cash_cents": 298597,
+					"feature_play_cents": 21000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 9,
+					"net_profit_cents": -11560,
+					"opening_cash_cents": 310157,
+					"operating_expenses_cents": 71000,
+					"operating_revenue_cents": 59440,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 59440,
+					"sales_settled_cents": 59440,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -76727,
+					"closing_cash_cents": 221870,
+					"feature_play_cents": 54000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 10,
+					"net_profit_cents": -76727,
+					"opening_cash_cents": 298597,
+					"operating_expenses_cents": 104000,
+					"operating_revenue_cents": 27273,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 27273,
+					"sales_settled_cents": 27273,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -53714,
+					"closing_cash_cents": 168156,
+					"feature_play_cents": 17000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 11,
+					"net_profit_cents": -53714,
+					"opening_cash_cents": 221870,
+					"operating_expenses_cents": 67000,
+					"operating_revenue_cents": 13286,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 13286,
+					"sales_settled_cents": 13286,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -53405,
+					"closing_cash_cents": 114751,
+					"feature_play_cents": 9000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 12,
+					"net_profit_cents": -53405,
+					"opening_cash_cents": 168156,
+					"operating_expenses_cents": 59000,
+					"operating_revenue_cents": 5595,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 5595,
+					"sales_settled_cents": 5595,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 100000,
+					"campaign_cents": 0,
+					"cash_change_cents": 24524,
+					"closing_cash_cents": 139275,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 13333,
+					"interest_paid_cents": 13333,
+					"miscellaneous_income_cents": 0,
+					"month": 13,
+					"net_profit_cents": 39464,
+					"opening_cash_cents": 114751,
+					"operating_expenses_cents": 63333,
+					"operating_revenue_cents": 102797,
+					"other_expense_cents": 0,
+					"other_income_cents": 100000,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 14940,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 2797,
+					"sales_settled_cents": 2797,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 0,
+					"closing_cash_cents": 139275,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 14,
+					"net_profit_cents": 699,
+					"opening_cash_cents": 139275,
+					"operating_expenses_cents": 0,
+					"operating_revenue_cents": 699,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": true,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 0,
+					"rent_paid_cents": 0,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 699,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				}
+			],
+			"total_overdue_cents": 0,
+			"unpaid_rent_cents": 0
+		},
+		"in_studio": true,
+		"owned_features": [
+			"text",
+			"sprites",
+			"4_color_palette",
+			"8_bit_sound",
+			"keyboard_and_mouse",
+			"controller",
+			"scrolling",
+			"menu_system",
+			"split_screen",
+			"multiple_endings",
+			"controls",
+			"enemies",
+			"power_ups",
+			"general_combat",
+			"levels",
+			"maps",
+			"exploration",
+			"sound_effects",
+			"recorded_sounds"
+		],
+		"phase": "studio",
+		"releases": [
+			{
+				"id": "bank-spend-graduate-4417:project:1",
+				"metadata": {
+					"base_name": "Graduate 1",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 13,
+					"release_title": "Graduate 1",
+					"release_year": 1980,
+					"review": {
+						"awareness": 103,
+						"competitor_id": "established_rival",
+						"competitor_target_cycle": 16,
+						"cores": [
+							33,
+							9,
+							40,
+							24
+						],
+						"development_cycles": 12,
+						"fan_awareness": 0,
+						"final_review": 4.0,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 0,
+						"launch_marketing": 3,
+						"production_rating": 5.17071406917331,
+						"projected_gross_cents": 431568,
+						"projected_net_cents": 302097,
+						"projected_units": 432,
+						"remaining_bugs": 3,
+						"required_scope": 30,
+						"scope": 29,
+						"scope_completion": 0.966666666666667,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 18691,
+					"base_name": "Graduate 1",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 2,
+					"earned_units": 646,
+					"entitlement_cents": 451747,
+					"exhausted": true,
+					"last_processed_run_cycle": 27,
+					"last_settlement_run_cycle": 26,
+					"later_enabled": true,
+					"launch_awareness": 103,
+					"market_bp": 10000,
+					"monthly_units": 2,
+					"organic_awareness_scaled": 18691,
+					"release_id": "bank-spend-graduate-4417:project:1",
+					"release_title": "Graduate 1",
+					"release_year": 1980,
+					"review_tenths": 40,
+					"settled_cents": 451048,
+					"total_earned_cycles": 14,
+					"total_units": 432
+				}
+			},
+			{
+				"id": "bank-spend-graduate-4417:project:2",
+				"metadata": {
+					"base_name": "Graduate 2",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 27,
+					"release_title": "Graduate 2",
+					"release_year": 1981,
+					"review": {
+						"awareness": 109,
+						"competitor_id": "",
+						"competitor_target_cycle": -1,
+						"cores": [
+							29,
+							22,
+							36,
+							22
+						],
+						"development_cycles": 12,
+						"fan_awareness": 0,
+						"final_review": 5.5,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 0,
+						"launch_marketing": 9,
+						"production_rating": 6.37813863041769,
+						"projected_gross_cents": 697302,
+						"projected_net_cents": 488111,
+						"projected_units": 698,
+						"remaining_bugs": 3,
+						"required_scope": 30,
+						"scope": 31,
+						"scope_completion": 1.0,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 0,
+					"base_name": "Graduate 2",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 0,
+					"earned_units": 0,
+					"entitlement_cents": 0,
+					"exhausted": false,
+					"last_processed_run_cycle": -1,
+					"last_settlement_run_cycle": -1,
+					"later_enabled": true,
+					"launch_awareness": 109,
+					"market_bp": 11500,
+					"monthly_units": 0,
+					"organic_awareness_scaled": 0,
+					"release_id": "bank-spend-graduate-4417:project:2",
+					"release_title": "Graduate 2",
+					"release_year": 1981,
+					"review_tenths": 55,
+					"settled_cents": 0,
+					"total_earned_cycles": 0,
+					"total_units": 698
+				}
+			}
+		],
+		"research_queue": []
+	},
+	"policy": {
+		"config": {
+			"borrow_after_two": true,
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"float_bits": "0300000000008040"
+				},
+				"beta": {
+					"float_bits": "0300000000008040"
+				},
+				"design": {
+					"float_bits": "0300000000008040"
+				}
+			},
+			"name_prefix": "Graduate",
+			"research_feature": "recorded_sounds",
+			"selection": "visible_order",
+			"theme": "fantasy"
+		},
+		"id": "banking-spending-prefix",
+		"source_identity": "f7d51ef9705f2b50249ff51c2d34cead09b5edb4271be5e615c2071f1a0a7673",
+		"version": "3"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 0,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "01c1d31744a0a16c128215518657d0e39dc3c6f0c54a07c29ffca90557d32d33",
+	"status": "rejected_policy_action",
+	"study": {
+		"arm": "borrow-500-12",
+		"pair_id": "graduate-4417-bank"
+	},
+	"tape_identity": "541f9068385f7f2771eeaa0318cb41c071f8c3b7a16ea07f872df0dc21998593",
+	"target_release_count": 3,
+	"telemetry_sha256": "1156237df3b3e7c595c262d8337a36339f94f3c3a85919410753692fff4dd79b"
+}

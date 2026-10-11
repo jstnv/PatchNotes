@@ -1,0 +1,17 @@
+--- base/scripts/studio_traits.gd
++++ candidate/scripts/studio_traits.gd
+@@ -21,7 +21,7 @@
+ 
+ const TRAITS := {
+ 	&"family_funding": {"name":"Family Funding", "positive":true, "price":"2 points", "description":"Active: $300 separate startup funding."},
+-	&"cult_following": {"name":"Cult Following", "positive":true, "price":"1 point (trial)", "description":"Trial: 40 starting Fans once. Ordinary gains and losses apply."},
++	&"cult_following": {"name":"Cult Following", "positive":true, "price":"1 point (trial)", "description":"Candidate trial: 20 starting Fans once. Ordinary gains and losses apply."},
+ 	&"publisher_connections": {"name":"Publisher Connections", "positive":true, "price":"1 point", "description":"Active: first Ironclad advance $550; remaining pool $1,850. Full payout stays $2,400."},
+ 	&"resourceful": {"name":"Resourceful", "positive":true, "price":"1 point", "description":"Active: up to $100 off the first paid Store acquisition per release window. Research saving applies to the final installment; down payment unchanged."},
+ 	&"lean_production": {"name":"Lean Production", "positive":true, "price":"2 points", "description":"Active: 10% off paid Primitive hands; up to $100 per project."},
+@@ -129,4 +129,4 @@
+ 
+ 
+ static func starting_fans(selection: Dictionary) -> int:
+-	return 40 if selection.get("version", 0) >= 7 and is_active(selection, &"cult_following") else 0
++	return 20 if selection.get("version", 0) >= 7 and is_active(selection, &"cult_following") else 0

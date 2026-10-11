@@ -62,6 +62,12 @@ def main():
     for path in ROOT.rglob('*'):
         if not path.is_file(): continue
         rel=path.relative_to(ROOT); parts=rel.parts
+        # Font rasterization settings are source inputs, not disposable cache.
+        # Keep them in the clean project without treating them as PCK payloads.
+        if parts[0]=='assets' and path.name.endswith(('.ttf.import','.otf.import')):
+            dest=project/rel;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(path,dest)
+            manifest.setdefault('import_settings',{})[rel.as_posix()]=sha(path)
+            continue
         include=(str(rel) in ['project.godot','export_presets.cfg','icon.svg'] or
                  (parts[0] in ['scripts','scenes','data','assets','resources','autoload'] and
                   not (parts[0]=='scripts' and len(parts)>1 and parts[1]=='debug') and
@@ -76,6 +82,11 @@ def main():
     run('clean-import',[GODOT,'--headless','--path',project,'--editor','--import','--quit'],env,workspace)
     exe=artifact/'Patch Notes Demo.exe'
     run('export-release',[GODOT,'--headless','--path',project,'--export-release','Windows Desktop',exe],env,workspace)
+    # Ship the bundled font's original license alongside the executable.
+    if (ROOT/'assets/card_frame_kit/fonts/Tiny5-Regular.ttf').exists():
+        license_path=ROOT/'assets/card_frame_kit/fonts/OFL.txt'
+        shutil.copy2(license_path,artifact/'Tiny5-OFL.txt')
+        manifest['license_sources']={'Tiny5-OFL.txt':{'source':license_path.relative_to(ROOT).as_posix(),'sha256':sha(license_path)}}
     manifest['artifacts']={p.name:{'sha256':sha(p),'bytes':p.stat().st_size} for p in artifact.iterdir() if p.is_file()}
     manifest['status']='exported; package inspection and executable smoke still required'
     (OUT/'build-manifest.json').write_text(json.dumps(manifest,indent=2),encoding='utf-8')

@@ -3,15 +3,17 @@ extends RefCounted
 
 const CROWN := &"crown_quill_primitive_trial_v1"
 const NEON := &"neon_circuit_primitive_trial_v1"
+const STARWAVE := &"starwave_primitive_trial_v1"
 const STATS := [&"graphics",&"sound",&"technology",&"design"]
 
 static func terms(id: StringName) -> Dictionary:
 	if id==CROWN: return {"scope":9,"cash_cents":192000,"advance_cents":15000,"promotion":12,"denominator":66}
 	if id==NEON: return {"scope":10,"cash_cents":156000,"advance_cents":0,"promotion":20,"denominator":86}
+	if id==STARWAVE: return {"scope":14,"cash_cents":224000,"advance_cents":0,"promotion":0,"denominator":112,"required_hands":3}
 	return {}
 
 static func contract_id(publisher: StringName) -> StringName:
-	return CROWN if publisher==PublisherCatalog.CROWN_QUILL else NEON if publisher==PublisherCatalog.NEON_CIRCUIT else &""
+	return CROWN if publisher==PublisherCatalog.CROWN_QUILL else NEON if publisher==PublisherCatalog.NEON_CIRCUIT else STARWAVE if publisher==PublisherCatalog.STARWAVE else &""
 
 static func focus(eligible: Array[StringName]) -> int:
 	var totals: Array[int] = [0,0,0,0]
@@ -39,6 +41,9 @@ static func completion(id: StringName, scope: int, cores: Dictionary, selected: 
 			numerator += capped
 			smallest = mini(smallest,capped)
 		numerator += 2*smallest
+	elif id==STARWAVE:
+		numerator = 4*mini(scope,14)
+		for category in range(4): numerator += mini(cores[category],14)
 	else:
 		if selected<0 or selected>3: return {}
 		for category in range(4): numerator += 3*mini(cores[category],18) if category==selected else mini(cores[category],4)

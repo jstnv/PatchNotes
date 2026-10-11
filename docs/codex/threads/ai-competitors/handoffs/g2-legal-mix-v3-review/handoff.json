@@ -1,0 +1,163 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-11T11:59:18.503135+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "g2-legal-mix-v3",
+    "owner": "ai-competitors",
+    "created_utc": "2026-10-11T11:47:23.971629+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "577f46fd83d5a1e2bd21d017c40eba0b20a543faf9c2301cd6316d48aa394533",
+    "creation_identity": "b7a9ca81d5fa51a860961e2845f87128b23b050843bc53547d5657870c5f2f41",
+    "lineage": [
+      {
+        "id": "g2-legal-mix-v1",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g2-legal-mix-v1",
+        "metadata_sha256": "faaaf9776b6585857099e0300cb9206808ede0027b7cd7c9a097fb014641825b",
+        "source_identity": "30eccc5b0d1f7f9b0ed33c5f701245b2d33ea06f73d973262ece12d35b2e3dee"
+      },
+      {
+        "id": "g2-legal-mix-v2",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g2-legal-mix-v2",
+        "metadata_sha256": "0a65c34a78dfad339a774a59cf46977aa35c0b7078b9f05d8079f42f36b19262",
+        "source_identity": "b7a9ca81d5fa51a860961e2845f87128b23b050843bc53547d5657870c5f2f41"
+      }
+    ],
+    "canonical_git": {
+      "branch": "main",
+      "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "DESIGN review only: private exact G2 legal-mix machinery and bounded evidence; no canonical adoption or approved rival policy. Wider G2/G3 values and aggregate Store ranking remain OPEN.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\2026-10-11-g2-legal-mix-finding-v1.md",
+    "sha256": "08baf9ff2e4d615415069e46eca4ecfb4a8511bc9456694818232bba79658d12",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Before any adoption, settle one held cash/due plan across candidates and the finite hand/search envelope; retain explicit DEFER on bounded misses.",
+    "Reconcile current canonical drift and preserve authoritative shared Production, finite Feature, cash, legal ownership and Studio-only Continue behavior.",
+    "Complete approved Store ordering/fallback integration, F6 progression review and source-compatible legal replay; retain explicit rejection of unsupported states."
+  ],
+  "base_identity": "577f46fd83d5a1e2bd21d017c40eba0b20a543faf9c2301cd6316d48aa394533",
+  "candidate_identity": "fcdb89546cbbb852f7c81bc1d315b6a40214ce2730357359408040fd04028063",
+  "canonical_identity": "4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "scripts/debug/g2_legal_mix_reference_v2.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a438a0410fa595337763298e89d378a8be36fcd95cbd855052fdd7f5ae6e0040"
+    },
+    {
+      "path": "scripts/debug/verify_g2_legal_mix.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "46737dd574e0774ffdc01e6d1d95565558f6d72afedb2ffd591c7c2beb46d9b3"
+    },
+    {
+      "path": "scripts/debug/verify_g2_legal_mix.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5551c32ef8f698d36da3ece6260c262649da0242f689d6da3a0c3d910cf4a9f2"
+    },
+    {
+      "path": "scripts/simulation/g2_legal_mix.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "681299f930564dcb2b5f78f445b54cd3afcf8a933ef70314e8b5cccb8909aa1c"
+    },
+    {
+      "path": "scripts/simulation/g2_legal_mix.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2f500310dcefede8172aae7ea2f67d613e0bf8fbc3aacb44047fba23d75a7fd6"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "scripts/debug/campaign_stress_suite.gd",
+      "change": "modified",
+      "before_sha256": "3c6567cb60e71c334a3522ddc8e10a15d7c33ab68db5ce148b75d9e6ccaa1c00",
+      "after_sha256": "cf6f26627f82509e9e3f83f5981bb47a7128c1b8d726483d4703b96cf25e84c7"
+    },
+    {
+      "path": "scripts/debug/verify_cult_following.gd",
+      "change": "modified",
+      "before_sha256": "d792d3a30665326bb2778c2649b6e5db0b6961360f324f487be22c8a0207f4a5",
+      "after_sha256": "3d5b1115ff4474bc6df7cdc8b7c8b9b581debd9b46278ba7ac0ccbefa40edbb5"
+    },
+    {
+      "path": "scripts/debug/verify_studio_traits.gd",
+      "change": "modified",
+      "before_sha256": "c06a2141ce35abed298c223764e3e8f035807997e4aa2eb57e8745ef73db3afd",
+      "after_sha256": "5e4e47a19318a0068884a321aea2a32344c124646c6d26ab3c8ba6d2679deada"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "bfe3adf0a9dd60efd9fbca1ff466ba820a3feafb87aaf14330b7a57372f5c21a",
+      "after_sha256": "c7fef1376f04f0fa6fc0225f529acd67fd6f990173bfd518ef86347d068d3c42"
+    },
+    {
+      "path": "scripts/studio_traits.gd",
+      "change": "modified",
+      "before_sha256": "a71790586f497b48a4238e18d19da9f68561a346f0b309342e481defb82501e4",
+      "after_sha256": "10721bfc791bfb194afb6404846705ff0484bdaae7dd3acc537f9ddb5debf483"
+    }
+  ],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\g2-legal-mix-v3-prefix",
+      "ok": true,
+      "error": null,
+      "source_identity": "fcdb89546cbbb852f7c81bc1d315b6a40214ce2730357359408040fd04028063",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "5517ec9d193b59656ac8a229b8255a4c4fb2fd23a1a08288d77c4cf764871ec4",
+        "cases/g2-prefix-4417/case.json": "4bb8edd40227fadbc991e9fd3cea7eca2803783e4da34964197b6981b54407e6",
+        "cases/g2-prefix-4417/case.variant.json": "241859b3f2b31e1bd54ba02f30e88470846ff146056e453956bed89e3b49eece",
+        "cases/g2-prefix-4417/final_state.variant.json": "93c7faa2abc1b7e4437a376044df3ab568415c3fa3f69f01b371675d987788f7",
+        "cases/g2-prefix-4417/initial.json": "92b953e9424aa03880b7b09080b000d63f25b0177df2c6a9730dfcece71b2d8f",
+        "cases/g2-prefix-4417/metrics.json": "6f809394216225ad30f6c2298f30382e5c2b071be3e894315ace6eecc343e778",
+        "cases/g2-prefix-4417/replay.tape.json": "ab0354d74d39f7dda113ee3bf4c631a5d32cf1b0a3cde3281696dd1aa0da56f2",
+        "cases/g2-prefix-4417/result.json": "c2c0e5e2ec21b0598b2a3a6b26e6ad05bd9df432966d0cf4166e223b2a4d56de",
+        "cases/g2-prefix-4417/studio_checkpoint.json": "db83cbdca8e79769517a75692b0ae6ed294f70dbcd2f273c3099696fdc32684d",
+        "cases/g2-prefix-4417/telemetry.json": "a98e46e11a4def8540a1500a74dfe8cc69d4e9d561c9075b69e3fa6223bc1a25",
+        "experiment-report.json": "ce219912836f313b9c7416129219344c1e5c5840a7b4b745ff43da8fcaa8377c",
+        "experiment.command.json": "63c56285875b6687e1975e3c85b42eb2158864e2d65d61a9423dc8dd747ef4ab",
+        "experiment.log": "6c8d1e89de2455ccce87741a4dbd1176f594ebe9fd9d9cfd53189ee76466a046",
+        "git-provenance.json": "ad6bc2b630a70f61531d27f219ee5a2d34398ff039abf999134f5b0ad26db5bb",
+        "godot-version.command.json": "36e67b0ceeaa886486119b571d2c3e931499e3a8fe723ffd41e4b74f0df57238",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "b0feda68f79c39035bd26d01771b16e21e4f5f262033fc05142b868e5186baa6",
+        "import.command.json": "62e26270c9ee4935aa541dc3f712ec59d7f7dfc39ae7f75b04c781eaca8225ba",
+        "import.log": "df6111f23aea0846ea03957636376eed55234c9935539a447f2f8831cee00f84",
+        "inputs/experiment.json": "c178231c39f8c9f2ac4e292ee04c2658b066a88f5ed37e2c67f967490a79fe42",
+        "inputs/requested.json": "fa80d1afb258a0a9e739d83f81d2905fa666e8d686e48fd2914116141ab44aed",
+        "run-report.json": "97d93a990eb888047c950d7a95051d303743cd92ade521b6324081fbdc43e919",
+        "runner.py": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "55481685708668f6bcb17b36ec5f735cfa715afcd37f0d10af003b83ce6f4e71",
+        "source.diff.patch": "d2fa0eac791d9a0f432bb7db050b4f7edeae6dad3be4b7423c95fa77e2b89174",
+        "variant-base-manifest.json": "6e0e359b40b4435ce33db07fca2da51ba2cd25e2b680652f6075dea618123136",
+        "variant-creation-manifest.json": "c3fd755f0ea482914f6ada4718e67bb6be68f0a3620422ec474f14c67111d2fe",
+        "variant-integrity.json": "5c80c97a219614ac72382cf8f5ec502799afddbf173b46b07f1a9708f14de073",
+        "variant-provenance.json": "b6bab761ade3e631f0c629884701ea1639f1db5bb5a29782f0248dd20f19d788",
+        "variant-variant.json": "61973ea4f78aeb8acf1430ebd1bf38a98ffcaa0a4373dd3864536d15fbd9b864",
+        "workspace-source-manifest.json": "a3aab59f95153d361ab8c5716021811865a41513dd24f10d368b4070db9cd107"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

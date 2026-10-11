@@ -1,0 +1,1085 @@
+{
+  "schema_version": "1",
+  "kind": "paired_command_boundary_observations",
+  "pair_id": "store-f54c26b8e2d82a72745f4206",
+  "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\feature-pools\\sims\\study007\\stageB-90210-run-01",
+  "overall_run_ok": true,
+  "both_cases_completed": true,
+  "provenance": {
+    "frozen_source_identity": "577f46fd83d5a1e2bd21d017c40eba0b20a543faf9c2301cd6316d48aa394533",
+    "source_identity": "13980fdeb9efabaeb070c8dddddcd8137982e3e073aa43ab87f7fdd1a57c4c4f",
+    "engine_version": "4.7.1-stable (official)",
+    "rng_algorithm": "godot-4.7.1-rng-v1",
+    "initial_state": "ff816396600ec735357c8e06131d348e42eb08ad576db8cfcb6d6effeff8a98f",
+    "initial_rng": {
+      "alpha_deal": {
+        "seed": {
+          "integer": "90214"
+        },
+        "state": {
+          "integer": "1312832113468349578"
+        }
+      },
+      "alpha_finalize": {
+        "seed": {
+          "integer": "90215"
+        },
+        "state": {
+          "integer": "-7540354110799565767"
+        }
+      },
+      "beta_deal": {
+        "seed": {
+          "integer": "90216"
+        },
+        "state": {
+          "integer": "-6950343429022622754"
+        }
+      },
+      "beta_insight": {
+        "seed": {
+          "integer": "90217"
+        },
+        "state": {
+          "integer": "-7311413471862326155"
+        }
+      },
+      "contract_deal": {
+        "seed": {
+          "integer": "90218"
+        },
+        "state": {
+          "integer": "-3598037042068528588"
+        }
+      },
+      "design_deal": {
+        "seed": {
+          "integer": "90212"
+        },
+        "state": {
+          "integer": "8204516464829393381"
+        }
+      },
+      "design_finalize": {
+        "seed": {
+          "integer": "90213"
+        },
+        "state": {
+          "integer": "2234812406621432575"
+        }
+      },
+      "review": {
+        "seed": {
+          "integer": "90211"
+        },
+        "state": {
+          "integer": "-1493934769694467946"
+        }
+      },
+      "snapshot": {
+        "seed": {
+          "integer": "90210"
+        },
+        "state": {
+          "integer": "5162734647332771986"
+        }
+      }
+    },
+    "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+    "comparison_tool_sha256": "06f8756b872d4bf1d8f2f8b697fccebd5a3fe334270729feedcd18163442565c",
+    "left_artifact_hashes": {
+      "case": "5b1104d0c748fa28b582e409e7997badc120c77f4a97d3f89536ea096df462cb",
+      "result": "762da463c66fac5f3199dfb921b301777c4f4283e1a5b7d91a81023fc45aed3d",
+      "telemetry": "422831bb4c0b04301c389d55853460914ade8da062b761d431613c130e4481c1"
+    },
+    "right_artifact_hashes": {
+      "case": "7ef0b7fc1d9d3512e06ef437403665805f9c9e2216d61135e8680cdbcfc2de6b",
+      "result": "0e185e2084d9b5b453bd8b0e42f018df1f3c332627d33163c4df34a4e9855384",
+      "telemetry": "63ddb1e77b2a798e1d269639531ac819bb1354b9412062bc3c6fa27373ac4121"
+    }
+  },
+  "conventions": {
+    "delta": "right minus left",
+    "sampling": "initial_and_after_each_executed_command",
+    "cash_low": "Minimum among observed command-boundary samples, including the initial state; not transient cash inside a command",
+    "transaction_cash_low": "Minimum of boundary cash and cash before/after newly appended ledger transactions. Excludes pre-study ledger history; does not infer unrecorded intermediate cash.",
+    "calendar": "Last observed sample at each shared run_cycle; zero-cycle actions use their final observed boundary at that cycle. No interpolation, extrapolation or assumption of equal phase.",
+    "release": "First post-command sample attaining each new release ordinal; compared launch milestones may occur at different calendar cycles",
+    "censoring": "Failed/bounded cases retain their observed prefix. Missing releases are unobserved, never zero-valued. No rejected action means none observed, not proof of no financial blocker.",
+    "integrity": "Local source/input/artifact consistency checks; no signatures or malicious-tampering guarantee. Variant tapes are not decoded here; use the separate exact replay command.",
+    "scope": "Independent campaigns; no winner, balance approval, human feel or shared-world AI claim"
+  },
+  "left": {
+    "case_id": "store-f54c26b8e2d82a72745f4206-research_now",
+    "arm": "research_now",
+    "status": "completed",
+    "completed": true,
+    "censored": false,
+    "termination_error": "",
+    "commands": 20,
+    "accepted_commands": 20,
+    "target_release_count": 4,
+    "unreached_release_count": 0,
+    "initial": {
+      "step": 0,
+      "run_cycle": 21,
+      "cash_cents": "489187",
+      "fans": "0",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 3,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects"
+      ],
+      "research_queue": [],
+      "financially_blocked": false
+    },
+    "endpoint": {
+      "step": 20,
+      "run_cycle": 29,
+      "cash_cents": "209322",
+      "fans": "0",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 4,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "recorded_sounds"
+      ],
+      "research_queue": [],
+      "financially_blocked": false
+    },
+    "command_boundary_cash_low_cents": "209322",
+    "transaction_cash_low_cents": "209322",
+    "transaction_samples_observed": 21,
+    "first_financially_blocked_sample": null,
+    "sampled_cash_low": {
+      "cash_cents": "209322",
+      "step": 16,
+      "run_cycle": 28
+    },
+    "sampled_arrears_peak": {
+      "overdue_cents": "0",
+      "step": 0,
+      "run_cycle": 21
+    },
+    "finance_unavailable_samples": 0,
+    "first_rejected_action": null,
+    "rejection_observation": "none observed",
+    "releases": [
+      {
+        "id": "feature-pools-study006-action-90210:project:1",
+        "release_cycle": 7,
+        "review": 2.1
+      },
+      {
+        "id": "feature-pools-study006-action-90210:project:2",
+        "release_cycle": 14,
+        "review": 2.0
+      },
+      {
+        "id": "feature-pools-study006-action-90210:project:3",
+        "release_cycle": 21,
+        "review": 1.5
+      },
+      {
+        "id": "feature-pools-study006-action-90210:project:4",
+        "release_cycle": 29,
+        "review": 2.2
+      }
+    ]
+  },
+  "right": {
+    "case_id": "store-f54c26b8e2d82a72745f4206-defer",
+    "arm": "defer",
+    "status": "completed",
+    "completed": true,
+    "censored": false,
+    "termination_error": "",
+    "commands": 18,
+    "accepted_commands": 18,
+    "target_release_count": 4,
+    "unreached_release_count": 0,
+    "initial": {
+      "step": 0,
+      "run_cycle": 21,
+      "cash_cents": "489187",
+      "fans": "0",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 3,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects"
+      ],
+      "research_queue": [],
+      "financially_blocked": false
+    },
+    "endpoint": {
+      "step": 18,
+      "run_cycle": 28,
+      "cash_cents": "343822",
+      "fans": "0",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 4,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects"
+      ],
+      "research_queue": [],
+      "financially_blocked": false
+    },
+    "command_boundary_cash_low_cents": "343822",
+    "transaction_cash_low_cents": "343822",
+    "transaction_samples_observed": 19,
+    "first_financially_blocked_sample": null,
+    "sampled_cash_low": {
+      "cash_cents": "343822",
+      "step": 15,
+      "run_cycle": 28
+    },
+    "sampled_arrears_peak": {
+      "overdue_cents": "0",
+      "step": 0,
+      "run_cycle": 21
+    },
+    "finance_unavailable_samples": 0,
+    "first_rejected_action": null,
+    "rejection_observation": "none observed",
+    "releases": [
+      {
+        "id": "feature-pools-study006-action-90210:project:1",
+        "release_cycle": 7,
+        "review": 2.1
+      },
+      {
+        "id": "feature-pools-study006-action-90210:project:2",
+        "release_cycle": 14,
+        "review": 2.0
+      },
+      {
+        "id": "feature-pools-study006-action-90210:project:3",
+        "release_cycle": 21,
+        "review": 1.5
+      },
+      {
+        "id": "feature-pools-study006-action-90210:project:4",
+        "release_cycle": 28,
+        "review": 2.4
+      }
+    ]
+  },
+  "initial_common_releases": [
+    {
+      "id": "feature-pools-study006-action-90210:project:1",
+      "release_cycle": 7,
+      "review": 2.1
+    },
+    {
+      "id": "feature-pools-study006-action-90210:project:2",
+      "release_cycle": 14,
+      "review": 2.0
+    },
+    {
+      "id": "feature-pools-study006-action-90210:project:3",
+      "release_cycle": 21,
+      "review": 1.5
+    }
+  ],
+  "matched_calendar": [
+    {
+      "run_cycle": 21,
+      "left": {
+        "step": 1,
+        "run_cycle": 21,
+        "cash_cents": "404187",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 21,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "feature-pools-study006-action-90210:research:recorded_sounds",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 0,
+        "run_cycle": 21,
+        "cash_cents": "489187",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "85000",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 22,
+      "left": {
+        "step": 2,
+        "run_cycle": 22,
+        "cash_cents": "356225",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 2,
+        "run_cycle": 22,
+        "cash_cents": "500725",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "design",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "144500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 23,
+      "left": {
+        "step": 4,
+        "run_cycle": 23,
+        "cash_cents": "356225",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "design",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 3,
+        "run_cycle": 23,
+        "cash_cents": "461725",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "design",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "105500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 24,
+      "left": {
+        "step": 5,
+        "run_cycle": 24,
+        "cash_cents": "357050",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "design",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 7,
+        "run_cycle": 24,
+        "cash_cents": "456550",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "alpha",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "99500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 25,
+      "left": {
+        "step": 9,
+        "run_cycle": 25,
+        "cash_cents": "322050",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "alpha",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 8,
+        "run_cycle": 25,
+        "cash_cents": "434550",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "alpha",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "112500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 26,
+      "left": {
+        "step": 10,
+        "run_cycle": 26,
+        "cash_cents": "271029",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "alpha",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 13,
+        "run_cycle": 26,
+        "cash_cents": "387529",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "beta",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "116500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 27,
+      "left": {
+        "step": 15,
+        "run_cycle": 27,
+        "cash_cents": "253029",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "beta",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 14,
+        "run_cycle": 27,
+        "cash_cents": "387529",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "beta",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "134500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 28,
+      "left": {
+        "step": 16,
+        "run_cycle": 28,
+        "cash_cents": "209322",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 3,
+        "phase": "beta",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "recorded_sounds"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 18,
+        "run_cycle": 28,
+        "cash_cents": "343822",
+        "fans": "0",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 4,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects"
+        ],
+        "research_queue": [],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "134500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 1,
+        "run_cycle": 0
+      }
+    }
+  ],
+  "matched_release_milestones": [
+    {
+      "release_ordinal": 4,
+      "left": {
+        "release": {
+          "id": "feature-pools-study006-action-90210:project:4",
+          "release_cycle": 29,
+          "review": 2.2
+        },
+        "sample": {
+          "step": 20,
+          "run_cycle": 29,
+          "cash_cents": "209322",
+          "fans": "0",
+          "overdue_cents": "0",
+          "finance_available": true,
+          "release_count": 4,
+          "phase": "studio",
+          "in_studio": true,
+          "owned_features": [
+            "text",
+            "sprites",
+            "4_color_palette",
+            "8_bit_sound",
+            "keyboard_and_mouse",
+            "controller",
+            "scrolling",
+            "menu_system",
+            "split_screen",
+            "multiple_endings",
+            "controls",
+            "enemies",
+            "power_ups",
+            "general_combat",
+            "levels",
+            "maps",
+            "exploration",
+            "sound_effects",
+            "recorded_sounds"
+          ],
+          "research_queue": [],
+          "financially_blocked": false
+        }
+      },
+      "right": {
+        "release": {
+          "id": "feature-pools-study006-action-90210:project:4",
+          "release_cycle": 28,
+          "review": 2.4
+        },
+        "sample": {
+          "step": 18,
+          "run_cycle": 28,
+          "cash_cents": "343822",
+          "fans": "0",
+          "overdue_cents": "0",
+          "finance_available": true,
+          "release_count": 4,
+          "phase": "studio",
+          "in_studio": true,
+          "owned_features": [
+            "text",
+            "sprites",
+            "4_color_palette",
+            "8_bit_sound",
+            "keyboard_and_mouse",
+            "controller",
+            "scrolling",
+            "menu_system",
+            "split_screen",
+            "multiple_endings",
+            "controls",
+            "enemies",
+            "power_ups",
+            "general_combat",
+            "levels",
+            "maps",
+            "exploration",
+            "sound_effects"
+          ],
+          "research_queue": [],
+          "financially_blocked": false
+        }
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "134500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": -1,
+        "review": "0.2",
+        "release_cycle": -1
+      }
+    }
+  ]
+}

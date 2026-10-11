@@ -1,0 +1,143 @@
+diff --git a/patch-notes/scripts/phases/design_phase.gd b/patch-notes/scripts/phases/design_phase.gd
+index aa8f823..5c9375a 100644
+--- a/patch-notes/scripts/phases/design_phase.gd
++++ b/patch-notes/scripts/phases/design_phase.gd
+@@ -1,6 +1,9 @@
+ class_name DesignPhase
+ extends Control
+ 
++const ProductionHand := preload("res://scripts/simulation/production_hand.gd")
++const BalancedProduction := preload("res://scripts/cards/balanced_production.gd")
++
+ var _workspace: PhaseWorkspace
+ 
+ signal proceed_to_alpha_requested
+@@ -11,9 +14,8 @@ const PRIORITY_ALLOCATION_SCRIPT := preload("res://scripts/phases/priority_alloc
+ const WEIGHTED_CANDIDATE_MATH := preload("res://scripts/phases/weighted_candidate_math.gd")
+ const CANDIDATE_POOL_SIZE := 7
+ const SELECTED_HAND_SIZE := 4
+-const SPECIALIZATION_MULTIPLIER := 1.5
+-const BALANCED_PRODUCTION_THRESHOLD := 0.20
+-const BALANCED_PRODUCTION_MULTIPLIER := 1.20
++const SPECIALIZATION_MULTIPLIER := ProductionHand.SPECIALIZATION_MULTIPLIER
++const BALANCED_PRODUCTION_THRESHOLD := 0.15
+ const BUG_PRESSURE_DENOMINATOR := 18.0
+ const PERFECT_PRODUCTION_THRESHOLD := 0.05
+ const PERFECT_BUG_PRESSURE_MULTIPLIER := 0.80
+@@ -624,7 +626,7 @@ func _on_play_card_pressed() -> void:
+ 	if not final_action.specialization_stat.is_empty():
+ 		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production ×1.50")
+ 	elif final_action.balanced_production:
+-		_workspace.show_synergy("Balanced Production!", "Production ×1.20")
++		_workspace.show_synergy("Balanced Production!", "Hand total shared across four categories")
+ 
+ 
+ func _on_proceed_to_alpha_pressed() -> void:
+@@ -893,37 +895,18 @@ func _calculate_feature_bug_pressure(card: CardData) -> float:
+ 
+ 
+ func _calculate_final_action_production(base_hand: Dictionary) -> Dictionary:
+-	var cards: Array[CardData] = []
+-	cards.assign(base_hand.cards)
+-	var provisional_scores := _calculate_provisional_core_scores(base_hand.score_additions)
+-	var specialization_stat := _get_specialization_stat(cards)
+-	var balanced_production: bool = (
+-		base_hand.has_feature
+-		and _are_core_scores_balanced(provisional_scores)
+-	)
+-	if not specialization_stat.is_empty():
+-		return {
+-			&"specialization_stat": specialization_stat,
+-			&"balanced_production": false,
+-			&"balanced_eligible": balanced_production,
+-			&"provisional_scores": provisional_scores,
+-			&"score_additions": _apply_specialization(base_hand.score_additions),
+-		}
+-	if balanced_production:
+-		return {
+-			&"specialization_stat": &"",
+-			&"balanced_production": true,
+-			&"balanced_eligible": true,
+-			&"provisional_scores": provisional_scores,
+-			&"score_additions": _apply_balanced_production(base_hand.score_additions),
+-		}
+-	return {
+-		&"specialization_stat": &"",
+-		&"balanced_production": false,
+-		&"balanced_eligible": false,
+-		&"provisional_scores": provisional_scores,
+-		&"score_additions": base_hand.score_additions.duplicate(),
+-	}
++	var records: Array = []
++	for card: CardData in base_hand.cards:
++		records.append({&"primary_stat": card.primary_stat})
++	var has_feature: bool = base_hand.has_feature
++	var result := ProductionHand.calculate(records, base_hand.score_additions, has_feature)
++	# Preserve Design's historical full-category specialization result shape.
++	if not result.specialization_stat.is_empty():
++		for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
++			if not result.score_additions.has(category):
++				result.score_additions[category] = 0
++	result[&"provisional_scores"] = _calculate_provisional_core_scores(base_hand.score_additions)
++	return result
+ 
+ 
+ func _calculate_provisional_core_scores(base_additions: Dictionary) -> Dictionary[ProjectState.CoreScore, int]:
+@@ -934,32 +917,18 @@ func _calculate_provisional_core_scores(base_additions: Dictionary) -> Dictionar
+ 
+ 
+ func _are_core_scores_balanced(scores: Dictionary) -> bool:
+-	var total := 0
+-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
+-		total += scores.get(category, 0)
+-	var mean := total / 4.0
+-	var lower_bound := mean * (1.0 - BALANCED_PRODUCTION_THRESHOLD)
+-	var upper_bound := mean * (1.0 + BALANCED_PRODUCTION_THRESHOLD)
+-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
+-		var score: int = scores.get(category, 0)
+-		if score < lower_bound or score > upper_bound:
+-			return false
+-	return true
++	return BalancedProduction.qualifies(scores)
+ 
+ 
+ func _apply_balanced_production(base_additions: Dictionary) -> Dictionary[ProjectState.CoreScore, int]:
+-	var adjusted: Dictionary[ProjectState.CoreScore, int] = {}
+-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
+-		var base_amount: int = base_additions.get(category, 0)
+-		adjusted[category] = roundi(base_amount * BALANCED_PRODUCTION_MULTIPLIER)
+-	return adjusted
++	return BalancedProduction.redistribute(base_additions)
+ 
+ 
+ func _apply_specialization(base_additions: Dictionary) -> Dictionary[ProjectState.CoreScore, int]:
+-	var adjusted: Dictionary[ProjectState.CoreScore, int] = {}
++	var adjusted := ProductionHand.specialize(base_additions)
+ 	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
+-		var base_amount: int = base_additions.get(category, 0)
+-		adjusted[category] = roundi(base_amount * SPECIALIZATION_MULTIPLIER)
++		if not adjusted.has(category):
++			adjusted[category] = 0
+ 	return adjusted
+ 
+ 
+@@ -984,15 +953,10 @@ func _get_card_validation_error(card: CardData) -> String:
+ 
+ 
+ func _get_specialization_stat(cards: Array[CardData]) -> StringName:
+-	if cards.size() != SELECTED_HAND_SIZE:
+-		return &""
+-	var shared_stat := cards[0].primary_stat
+-	if not CORE_SCORE_BY_STAT.has(shared_stat):
+-		return &""
+-	for card in cards.slice(1):
+-		if card.primary_stat != shared_stat:
+-			return &""
+-	return shared_stat
++	var records: Array = []
++	for card in cards:
++		records.append({&"primary_stat": card.primary_stat})
++	return ProductionHand.specialization_stat(records)
+ 
+ 
+ func _build_specialization_debug_message(specialization_stat: StringName, score_additions: Dictionary[ProjectState.CoreScore, int]) -> String:

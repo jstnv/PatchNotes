@@ -1,0 +1,1383 @@
+{
+  "passed": true,
+  "all_pairs_valid": true,
+  "source_head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+  "source_manifest_sha256": "91660036cab8e7c85ceffca9676635d9649038cc534036d4c3977e89a1d9a195",
+  "input_hashes": {
+    "action-1104": "61f1c69c203c9e671e18fc749abac267b368ec3ac91e6b14139affa2db25d335",
+    "puzzle-4417": "8c7c42f0edc205eefda55959d7e67f66fd1da0208e4160abf60a4ba972f91381",
+    "racing-1104": "dde276dc491b4d5aff1b395f3db86776fae4839e5b98a28cef5ef3c6ce09559c"
+  },
+  "original_technical_failure": {
+    "attempt": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sim-v13\\action-1104-starwave",
+    "manifest_sha256": "7e87f8b31d60a90c8bae8a73b1d09ef1ae8bc00d92e0dae1f3de32341ae9beea",
+    "runner_sha256": "dc3f323960dd3442957867afe601e1d401079ecb77edc70ddc904ea73db53ad0",
+    "analysis_scripts_sha256": {
+      "cross_specialty_base.gd": "b2346ef2c58efcef192edeef45335f1536a89038010cc8d247cfd96ef2c4b70f",
+      "matched_continuation.gd": "85941f5104e6e04fe97008b462e2591fa816983bd5c7c18c1ea679bcaed4313d"
+    },
+    "godot_exit": 1,
+    "reason": [
+      "SCRIPT ERROR: Parse Error: Cannot infer the type of \"cycle\" variable because the value doesn't have a set type.",
+      "ERROR: Failed to load script \"res://scripts/debug/matched_continuation.gd\" with error \"Parse error\"."
+    ]
+  },
+  "v2_adapter_failure": {
+    "attempt": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sim-v13\\repair-v2\\action-1104-starwave",
+    "manifest_sha256": "ae8c8c286095978ab19c556454c4af3f73abe779f9068dbfedc81837d27c96f6",
+    "runner_sha256": "7b1ac2a5bd9d2b86f4e67c6cedc6b806903493827a14e4fafbb3af98d88aa148",
+    "analysis_scripts_sha256": {
+      "cross_specialty_base.gd": "b2346ef2c58efcef192edeef45335f1536a89038010cc8d247cfd96ef2c4b70f",
+      "matched_continuation.gd": "2bfc8f69a7c467884408c38938406b7cec6e78ea2f55302e54f58849e4eee19c"
+    },
+    "stop": "Game-5 initial priority commit rejected",
+    "last_legal_cycle": 76
+  },
+  "v3_adapter_failure": {
+    "attempt": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sim-v13\\repair-v3\\action-1104-starwave",
+    "manifest_sha256": "fb878b1a1a5b35eca3b7a8d0c05e26946e24b772d397d6fc8c5986995bcb7ec8",
+    "runner_sha256": "7d999ee06371e3af984f4c370e708fea23e40a7b8decd35fe622ebf4e3b1d02d",
+    "analysis_scripts_sha256": {
+      "cross_specialty_base.gd": "b2346ef2c58efcef192edeef45335f1536a89038010cc8d247cfd96ef2c4b70f",
+      "matched_continuation.gd": "c5366163bec55903a0ab0525c8c49b925040711aab8213ef465ee6cddb29abb9"
+    },
+    "stop": "Game-5 initial priority commit rejected",
+    "last_legal_cycle": 76
+  },
+  "repaired_revision": {
+    "manifest_sha256": "91660036cab8e7c85ceffca9676635d9649038cc534036d4c3977e89a1d9a195",
+    "runner_sha256": "ec7522b34797accddab342cc3cba8b25fca59adbf53ab4a0f453162851322ebd",
+    "analysis_scripts_sha256": {
+      "cross_specialty_base.gd": "b2346ef2c58efcef192edeef45335f1536a89038010cc8d247cfd96ef2c4b70f",
+      "matched_continuation.gd": "9dcee280f1d2df7ac3582df5c7e22333fc68dc6e77d6406c750e43e8c3adbf25"
+    }
+  },
+  "attempts": {
+    "action-1104": {
+      "starwave": {
+        "arm": "starwave",
+        "valid": true,
+        "stop": "",
+        "game4": {
+          "cycle": 75,
+          "review": 8.1,
+          "awareness": 218,
+          "promotion": 18
+        },
+        "starwave": {
+          "scope": 20,
+          "cores_half_units": [
+            55,
+            13,
+            42,
+            14
+          ],
+          "numerator": 111,
+          "cash_cents": 222000,
+          "hand_cycles": [
+            55,
+            56,
+            57
+          ],
+          "draws": [
+            [
+              "enemies",
+              "8_bit_sound",
+              "general_combat",
+              "menu_system",
+              "exploration",
+              "text",
+              "scrolling"
+            ],
+            [
+              "menu_system",
+              "exploration",
+              "text",
+              "keyboard_and_mouse",
+              "levels",
+              "technology_pass",
+              "graphics_pass"
+            ],
+            [
+              "exploration",
+              "technology_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "4_color_palette",
+              "sprites",
+              "maps"
+            ]
+          ],
+          "selected": [
+            [
+              "enemies",
+              "8_bit_sound",
+              "general_combat",
+              "scrolling"
+            ],
+            [
+              "menu_system",
+              "text",
+              "keyboard_and_mouse",
+              "levels"
+            ],
+            [
+              "exploration",
+              "4_color_palette",
+              "sprites",
+              "maps"
+            ]
+          ]
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 1869015,
+            "settled_portfolio_cents": 2836359,
+            "earned_entitlement_cents": 2838457,
+            "project_cycle": 17,
+            "project_scope": 29,
+            "project_cores": [
+              45,
+              27,
+              43,
+              32
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 630,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "after Game 4 launch",
+            "game5_project_cycle": 0,
+            "game5_scope": 0
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2091844,
+            "settled_portfolio_cents": 3157337,
+            "earned_entitlement_cents": 3475518,
+            "project_cycle": 1,
+            "project_scope": 9,
+            "project_cores": [
+              7,
+              5,
+              11,
+              5
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 1,
+            "game5_scope": 9
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2442511,
+            "settled_portfolio_cents": 3581812,
+            "earned_entitlement_cents": 3688106,
+            "project_cycle": 3,
+            "project_scope": 13,
+            "project_cores": [
+              7,
+              5,
+              43,
+              5
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 3,
+            "game5_scope": 13
+          }
+        }
+      },
+      "skip": {
+        "arm": "skip",
+        "valid": true,
+        "stop": "",
+        "game4": {
+          "cycle": 72,
+          "review": 8.1,
+          "awareness": 218,
+          "promotion": 18
+        },
+        "starwave": null,
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 2222080,
+            "settled_portfolio_cents": 3469924,
+            "earned_entitlement_cents": 3576917,
+            "project_cycle": 2,
+            "project_scope": 13,
+            "project_cores": [
+              7,
+              5,
+              31,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 2,
+            "game5_scope": 13
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2371917,
+            "settled_portfolio_cents": 3684610,
+            "earned_entitlement_cents": 3758735,
+            "project_cycle": 4,
+            "project_scope": 15,
+            "project_cores": [
+              21,
+              5,
+              43,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 4,
+            "game5_scope": 15
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2464159,
+            "settled_portfolio_cents": 3833560,
+            "earned_entitlement_cents": 3884609,
+            "project_cycle": 6,
+            "project_scope": 15,
+            "project_cores": [
+              25,
+              11,
+              47,
+              7
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 639,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 6,
+            "game5_scope": 15
+          }
+        }
+      }
+    },
+    "puzzle-4417": {
+      "starwave": {
+        "arm": "starwave",
+        "valid": true,
+        "stop": "",
+        "game4": {
+          "cycle": 75,
+          "review": 7.2,
+          "awareness": 199,
+          "promotion": 11
+        },
+        "starwave": {
+          "scope": 12,
+          "cores_half_units": [
+            37,
+            10,
+            34,
+            10
+          ],
+          "numerator": 96,
+          "cash_cents": 192000,
+          "hand_cycles": [
+            55,
+            56,
+            57
+          ],
+          "draws": [
+            [
+              "4_color_palette",
+              "8_bit_sound",
+              "lives_system",
+              "menu_system",
+              "graphics_pass",
+              "text",
+              "scrolling"
+            ],
+            [
+              "4_color_palette",
+              "lives_system",
+              "graphics_pass",
+              "keyboard_and_mouse",
+              "levels",
+              "technology_pass",
+              "graphics_pass"
+            ],
+            [
+              "lives_system",
+              "keyboard_and_mouse",
+              "technology_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ]
+          ],
+          "selected": [
+            [
+              "8_bit_sound",
+              "menu_system",
+              "text",
+              "scrolling"
+            ],
+            [
+              "4_color_palette",
+              "graphics_pass",
+              "levels",
+              "graphics_pass"
+            ],
+            [
+              "lives_system",
+              "keyboard_and_mouse",
+              "technology_pass",
+              "graphics_pass"
+            ]
+          ]
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 1593856,
+            "settled_portfolio_cents": 2718877,
+            "earned_entitlement_cents": 2719577,
+            "project_cycle": 17,
+            "project_scope": 26,
+            "project_cores": [
+              24,
+              12,
+              51,
+              62
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 627,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "after Game 4 launch",
+            "game5_project_cycle": 0,
+            "game5_scope": 0
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 1870945,
+            "settled_portfolio_cents": 3079715,
+            "earned_entitlement_cents": 3439156,
+            "project_cycle": 1,
+            "project_scope": 6,
+            "project_cores": [
+              0,
+              0,
+              27,
+              0
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 630,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 1,
+            "game5_scope": 6
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2249961,
+            "settled_portfolio_cents": 3555939,
+            "earned_entitlement_cents": 3672722,
+            "project_cycle": 3,
+            "project_scope": 16,
+            "project_cores": [
+              7,
+              5,
+              31,
+              11
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 3,
+            "game5_scope": 16
+          }
+        }
+      },
+      "skip": {
+        "arm": "skip",
+        "valid": true,
+        "stop": "",
+        "game4": {
+          "cycle": 72,
+          "review": 7.2,
+          "awareness": 199,
+          "promotion": 11
+        },
+        "starwave": null,
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 2067137,
+            "settled_portfolio_cents": 3436358,
+            "earned_entitlement_cents": 3553142,
+            "project_cycle": 2,
+            "project_scope": 12,
+            "project_cores": [
+              3,
+              0,
+              31,
+              9
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 2,
+            "game5_scope": 12
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2230053,
+            "settled_portfolio_cents": 3671323,
+            "earned_entitlement_cents": 3746848,
+            "project_cycle": 4,
+            "project_scope": 16,
+            "project_cores": [
+              7,
+              5,
+              31,
+              23
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 4,
+            "game5_scope": 16
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2325094,
+            "settled_portfolio_cents": 3823072,
+            "earned_entitlement_cents": 3871323,
+            "project_cycle": 6,
+            "project_scope": 16,
+            "project_cores": [
+              7,
+              5,
+              31,
+              47
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 639,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 6,
+            "game5_scope": 16
+          }
+        }
+      }
+    },
+    "racing-1104": {
+      "starwave": {
+        "arm": "starwave",
+        "valid": true,
+        "stop": "",
+        "game4": {
+          "cycle": 75,
+          "review": 6.5,
+          "awareness": 223,
+          "promotion": 20
+        },
+        "starwave": {
+          "scope": 18,
+          "cores_half_units": [
+            72,
+            10,
+            43,
+            12
+          ],
+          "numerator": 106,
+          "cash_cents": 212000,
+          "hand_cycles": [
+            55,
+            56,
+            57
+          ],
+          "draws": [
+            [
+              "4_color_palette",
+              "8_bit_sound",
+              "multiple_endings",
+              "menu_system",
+              "graphics_pass",
+              "text",
+              "scrolling"
+            ],
+            [
+              "4_color_palette",
+              "graphics_pass",
+              "text",
+              "keyboard_and_mouse",
+              "levels",
+              "technology_pass",
+              "graphics_pass"
+            ],
+            [
+              "keyboard_and_mouse",
+              "technology_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "enemies",
+              "sprites",
+              "maps"
+            ]
+          ],
+          "selected": [
+            [
+              "8_bit_sound",
+              "multiple_endings",
+              "menu_system",
+              "scrolling"
+            ],
+            [
+              "4_color_palette",
+              "graphics_pass",
+              "text",
+              "levels"
+            ],
+            [
+              "graphics_pass",
+              "enemies",
+              "sprites",
+              "maps"
+            ]
+          ]
+        },
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 1951466,
+            "settled_portfolio_cents": 2869926,
+            "earned_entitlement_cents": 2871325,
+            "project_cycle": 17,
+            "project_scope": 26,
+            "project_cores": [
+              30,
+              38,
+              53,
+              23
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 630,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "after Game 4 launch",
+            "game5_project_cycle": 0,
+            "game5_scope": 0
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2119556,
+            "settled_portfolio_cents": 3130765,
+            "earned_entitlement_cents": 3388806,
+            "project_cycle": 1,
+            "project_scope": 8,
+            "project_cores": [
+              7,
+              5,
+              12,
+              0
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 1,
+            "game5_scope": 8
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2377701,
+            "settled_portfolio_cents": 3476218,
+            "earned_entitlement_cents": 3562932,
+            "project_cycle": 3,
+            "project_scope": 15,
+            "project_cores": [
+              12,
+              7,
+              31,
+              5
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 3,
+            "game5_scope": 15
+          }
+        }
+      },
+      "skip": {
+        "arm": "skip",
+        "valid": true,
+        "stop": "",
+        "game4": {
+          "cycle": 72,
+          "review": 6.5,
+          "awareness": 223,
+          "promotion": 20
+        },
+        "starwave": null,
+        "endpoints": {
+          "75": {
+            "cycle": 75,
+            "cash_cents": 2196550,
+            "settled_portfolio_cents": 3384610,
+            "earned_entitlement_cents": 3472023,
+            "project_cycle": 2,
+            "project_scope": 13,
+            "project_cores": [
+              12,
+              7,
+              16,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 2,
+            "game5_scope": 13
+          },
+          "77": {
+            "cycle": 77,
+            "cash_cents": 2306326,
+            "settled_portfolio_cents": 3560135,
+            "earned_entitlement_cents": 3612582,
+            "project_cycle": 4,
+            "project_scope": 15,
+            "project_cores": [
+              12,
+              7,
+              43,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 4,
+            "game5_scope": 15
+          },
+          "79": {
+            "cycle": 79,
+            "cash_cents": 2355911,
+            "settled_portfolio_cents": 3666428,
+            "earned_entitlement_cents": 3698596,
+            "project_cycle": 6,
+            "project_scope": 15,
+            "project_cores": [
+              14,
+              11,
+              57,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 639,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 6,
+            "game5_scope": 15
+          }
+        }
+      }
+    }
+  },
+  "pairs": [
+    {
+      "cohort": "action-1104",
+      "paired": true,
+      "starwave_game4": {
+        "cycle": 75,
+        "review": 8.1,
+        "awareness": 218,
+        "promotion": 18
+      },
+      "skip_game4": {
+        "cycle": 72,
+        "review": 8.1,
+        "awareness": 218,
+        "promotion": 18
+      },
+      "matched_endpoints": [
+        {
+          "cycle": 75,
+          "starwave": {
+            "cycle": 75,
+            "cash_cents": 1869015,
+            "settled_portfolio_cents": 2836359,
+            "earned_entitlement_cents": 2838457,
+            "project_cycle": 17,
+            "project_scope": 29,
+            "project_cores": [
+              45,
+              27,
+              43,
+              32
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 630,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "after Game 4 launch",
+            "game5_project_cycle": 0,
+            "game5_scope": 0
+          },
+          "skip": {
+            "cycle": 75,
+            "cash_cents": 2222080,
+            "settled_portfolio_cents": 3469924,
+            "earned_entitlement_cents": 3576917,
+            "project_cycle": 2,
+            "project_scope": 13,
+            "project_cores": [
+              7,
+              5,
+              31,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 2,
+            "game5_scope": 13
+          },
+          "cash_delta_starwave_minus_skip_cents": -353065,
+          "starwave_receipt_cents": 222000,
+          "settled_sales_delta_cents": -633565,
+          "other_cash_movement_delta_cents": 58500,
+          "game5_work_cycle_delta_starwave_minus_skip": -2,
+          "game5_scope_delta": -13
+        },
+        {
+          "cycle": 77,
+          "starwave": {
+            "cycle": 77,
+            "cash_cents": 2091844,
+            "settled_portfolio_cents": 3157337,
+            "earned_entitlement_cents": 3475518,
+            "project_cycle": 1,
+            "project_scope": 9,
+            "project_cores": [
+              7,
+              5,
+              11,
+              5
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 1,
+            "game5_scope": 9
+          },
+          "skip": {
+            "cycle": 77,
+            "cash_cents": 2371917,
+            "settled_portfolio_cents": 3684610,
+            "earned_entitlement_cents": 3758735,
+            "project_cycle": 4,
+            "project_scope": 15,
+            "project_cores": [
+              21,
+              5,
+              43,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 4,
+            "game5_scope": 15
+          },
+          "cash_delta_starwave_minus_skip_cents": -280073,
+          "starwave_receipt_cents": 222000,
+          "settled_sales_delta_cents": -527273,
+          "other_cash_movement_delta_cents": 25200,
+          "game5_work_cycle_delta_starwave_minus_skip": -3,
+          "game5_scope_delta": -6
+        },
+        {
+          "cycle": 79,
+          "starwave": {
+            "cycle": 79,
+            "cash_cents": 2442511,
+            "settled_portfolio_cents": 3581812,
+            "earned_entitlement_cents": 3688106,
+            "project_cycle": 3,
+            "project_scope": 13,
+            "project_cores": [
+              7,
+              5,
+              43,
+              5
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 3,
+            "game5_scope": 13
+          },
+          "skip": {
+            "cycle": 79,
+            "cash_cents": 2464159,
+            "settled_portfolio_cents": 3833560,
+            "earned_entitlement_cents": 3884609,
+            "project_cycle": 6,
+            "project_scope": 15,
+            "project_cores": [
+              25,
+              11,
+              47,
+              7
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 639,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "24446020d313c1f111affc03ee36785a:crown_quill:first": "24446020d313c1f111affc03ee36785a:project:3",
+              "24446020d313c1f111affc03ee36785a:neon_circuit:first": "24446020d313c1f111affc03ee36785a:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 6,
+            "game5_scope": 15
+          },
+          "cash_delta_starwave_minus_skip_cents": -21648,
+          "starwave_receipt_cents": 222000,
+          "settled_sales_delta_cents": -251748,
+          "other_cash_movement_delta_cents": 8100,
+          "game5_work_cycle_delta_starwave_minus_skip": -3,
+          "game5_scope_delta": -2
+        }
+      ]
+    },
+    {
+      "cohort": "puzzle-4417",
+      "paired": true,
+      "starwave_game4": {
+        "cycle": 75,
+        "review": 7.2,
+        "awareness": 199,
+        "promotion": 11
+      },
+      "skip_game4": {
+        "cycle": 72,
+        "review": 7.2,
+        "awareness": 199,
+        "promotion": 11
+      },
+      "matched_endpoints": [
+        {
+          "cycle": 75,
+          "starwave": {
+            "cycle": 75,
+            "cash_cents": 1593856,
+            "settled_portfolio_cents": 2718877,
+            "earned_entitlement_cents": 2719577,
+            "project_cycle": 17,
+            "project_scope": 26,
+            "project_cores": [
+              24,
+              12,
+              51,
+              62
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 627,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "after Game 4 launch",
+            "game5_project_cycle": 0,
+            "game5_scope": 0
+          },
+          "skip": {
+            "cycle": 75,
+            "cash_cents": 2067137,
+            "settled_portfolio_cents": 3436358,
+            "earned_entitlement_cents": 3553142,
+            "project_cycle": 2,
+            "project_scope": 12,
+            "project_cores": [
+              3,
+              0,
+              31,
+              9
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 2,
+            "game5_scope": 12
+          },
+          "cash_delta_starwave_minus_skip_cents": -473281,
+          "starwave_receipt_cents": 192000,
+          "settled_sales_delta_cents": -717481,
+          "other_cash_movement_delta_cents": 52200,
+          "game5_work_cycle_delta_starwave_minus_skip": -2,
+          "game5_scope_delta": -12
+        },
+        {
+          "cycle": 77,
+          "starwave": {
+            "cycle": 77,
+            "cash_cents": 1870945,
+            "settled_portfolio_cents": 3079715,
+            "earned_entitlement_cents": 3439156,
+            "project_cycle": 1,
+            "project_scope": 6,
+            "project_cores": [
+              0,
+              0,
+              27,
+              0
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 630,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 1,
+            "game5_scope": 6
+          },
+          "skip": {
+            "cycle": 77,
+            "cash_cents": 2230053,
+            "settled_portfolio_cents": 3671323,
+            "earned_entitlement_cents": 3746848,
+            "project_cycle": 4,
+            "project_scope": 16,
+            "project_cores": [
+              7,
+              5,
+              31,
+              23
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 4,
+            "game5_scope": 16
+          },
+          "cash_delta_starwave_minus_skip_cents": -359108,
+          "starwave_receipt_cents": 192000,
+          "settled_sales_delta_cents": -591608,
+          "other_cash_movement_delta_cents": 40500,
+          "game5_work_cycle_delta_starwave_minus_skip": -3,
+          "game5_scope_delta": -10
+        },
+        {
+          "cycle": 79,
+          "starwave": {
+            "cycle": 79,
+            "cash_cents": 2249961,
+            "settled_portfolio_cents": 3555939,
+            "earned_entitlement_cents": 3672722,
+            "project_cycle": 3,
+            "project_scope": 16,
+            "project_cores": [
+              7,
+              5,
+              31,
+              11
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 3,
+            "game5_scope": 16
+          },
+          "skip": {
+            "cycle": 79,
+            "cash_cents": 2325094,
+            "settled_portfolio_cents": 3823072,
+            "earned_entitlement_cents": 3871323,
+            "project_cycle": 6,
+            "project_scope": 16,
+            "project_cores": [
+              7,
+              5,
+              31,
+              47
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 639,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "e8d8f908f619445e9ce681801431e148:crown_quill:first": "e8d8f908f619445e9ce681801431e148:project:3",
+              "e8d8f908f619445e9ce681801431e148:neon_circuit:first": "e8d8f908f619445e9ce681801431e148:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 6,
+            "game5_scope": 16
+          },
+          "cash_delta_starwave_minus_skip_cents": -75133,
+          "starwave_receipt_cents": 192000,
+          "settled_sales_delta_cents": -267133,
+          "other_cash_movement_delta_cents": 0,
+          "game5_work_cycle_delta_starwave_minus_skip": -3,
+          "game5_scope_delta": 0
+        }
+      ]
+    },
+    {
+      "cohort": "racing-1104",
+      "paired": true,
+      "starwave_game4": {
+        "cycle": 75,
+        "review": 6.5,
+        "awareness": 223,
+        "promotion": 20
+      },
+      "skip_game4": {
+        "cycle": 72,
+        "review": 6.5,
+        "awareness": 223,
+        "promotion": 20
+      },
+      "matched_endpoints": [
+        {
+          "cycle": 75,
+          "starwave": {
+            "cycle": 75,
+            "cash_cents": 1951466,
+            "settled_portfolio_cents": 2869926,
+            "earned_entitlement_cents": 2871325,
+            "project_cycle": 17,
+            "project_scope": 26,
+            "project_cores": [
+              30,
+              38,
+              53,
+              23
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 630,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "after Game 4 launch",
+            "game5_project_cycle": 0,
+            "game5_scope": 0
+          },
+          "skip": {
+            "cycle": 75,
+            "cash_cents": 2196550,
+            "settled_portfolio_cents": 3384610,
+            "earned_entitlement_cents": 3472023,
+            "project_cycle": 2,
+            "project_scope": 13,
+            "project_cores": [
+              12,
+              7,
+              16,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 2,
+            "game5_scope": 13
+          },
+          "cash_delta_starwave_minus_skip_cents": -245084,
+          "starwave_receipt_cents": 212000,
+          "settled_sales_delta_cents": -514684,
+          "other_cash_movement_delta_cents": 57600,
+          "game5_work_cycle_delta_starwave_minus_skip": -2,
+          "game5_scope_delta": -13
+        },
+        {
+          "cycle": 77,
+          "starwave": {
+            "cycle": 77,
+            "cash_cents": 2119556,
+            "settled_portfolio_cents": 3130765,
+            "earned_entitlement_cents": 3388806,
+            "project_cycle": 1,
+            "project_scope": 8,
+            "project_cores": [
+              7,
+              5,
+              12,
+              0
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 633,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 1,
+            "game5_scope": 8
+          },
+          "skip": {
+            "cycle": 77,
+            "cash_cents": 2306326,
+            "settled_portfolio_cents": 3560135,
+            "earned_entitlement_cents": 3612582,
+            "project_cycle": 4,
+            "project_scope": 15,
+            "project_cores": [
+              12,
+              7,
+              43,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 4,
+            "game5_scope": 15
+          },
+          "cash_delta_starwave_minus_skip_cents": -186770,
+          "starwave_receipt_cents": 212000,
+          "settled_sales_delta_cents": -429370,
+          "other_cash_movement_delta_cents": 30600,
+          "game5_work_cycle_delta_starwave_minus_skip": -3,
+          "game5_scope_delta": -7
+        },
+        {
+          "cycle": 79,
+          "starwave": {
+            "cycle": 79,
+            "cash_cents": 2377701,
+            "settled_portfolio_cents": 3476218,
+            "earned_entitlement_cents": 3562932,
+            "project_cycle": 3,
+            "project_scope": 15,
+            "project_cores": [
+              12,
+              7,
+              31,
+              5
+            ],
+            "completed_contracts": 4,
+            "overdue_original_bills": [],
+            "credit": 636,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 3,
+            "game5_scope": 15
+          },
+          "skip": {
+            "cycle": 79,
+            "cash_cents": 2355911,
+            "settled_portfolio_cents": 3666428,
+            "earned_entitlement_cents": 3698596,
+            "project_cycle": 6,
+            "project_scope": 15,
+            "project_cores": [
+              14,
+              11,
+              57,
+              5
+            ],
+            "completed_contracts": 3,
+            "overdue_original_bills": [],
+            "credit": 639,
+            "pending_promotion": {},
+            "promotion_consumed": {
+              "2a358f46260be268d33ca52d19bdced1:crown_quill:first": "2a358f46260be268d33ca52d19bdced1:project:3",
+              "2a358f46260be268d33ca52d19bdced1:neon_circuit:first": "2a358f46260be268d33ca52d19bdced1:project:4"
+            },
+            "project_stage": "Game 5",
+            "game5_project_cycle": 6,
+            "game5_scope": 15
+          },
+          "cash_delta_starwave_minus_skip_cents": 21790,
+          "starwave_receipt_cents": 212000,
+          "settled_sales_delta_cents": -190210,
+          "other_cash_movement_delta_cents": 0,
+          "game5_work_cycle_delta_starwave_minus_skip": -3,
+          "game5_scope_delta": 0
+        }
+      ]
+    }
+  ],
+  "independent_checks": 32640,
+  "limitations": [
+    "These are three successful v12 foundations under one deterministic policy, not all specialties or player preferences.",
+    "Game 4 review variance is fixed by the inherited verifier hook in both arms; no release result is injected.",
+    "Matched-cycle cash includes a timing/work tradeoff and must be read beside settled sales, bills and Game 5 progress.",
+    "No advance sensitivity or final publisher tuning is approved by this study."
+  ]
+}

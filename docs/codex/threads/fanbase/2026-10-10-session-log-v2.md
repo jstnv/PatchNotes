@@ -1,0 +1,7 @@
+# Fanbase design session — 0.4 Review player feedback v2
+
+2026-10-10, America/Los_Angeles. Shared checkout `main` at `41c87c76fb4d3c06a5332d93f0e7b0997007475d`; concurrent source/shared-document edits preserved. Read CURRENT_STATE/TODO and the relevant Fanbase design/capture record; inspected branch/HEAD/status/diff, current `StudioFanbase` loss formula and both new user screenshots. Copied the images into this thread's own `captures/` folder with SHA-256 hashes. Added [bounded finding](2026-10-10-weak-release-player-feel-v1.md), a later-evidence pointer in the first capture review and the README index.
+
+The user reports Review0.4 and says the Fan loss “feels right.” The visible release list shows only this fourth title below5.0. Months54–57 lose207+279+109+22=617 Fans and other titles gain21+17+12+10=60; all rows reconcile895→338. At the current trial15% rule, `floor(895×15×46/1000)=617`, matching the displayed total. This is screenshot/formula consistency, not independently verified source or per-title journal identity. Earlier title “3” is now visibly Review9.3. No final coefficient, near-neutral rule or other numerical decision was inferred.
+
+Files changed: two copied PNGs under `docs/codex/threads/fanbase/captures/`, this thread's README and prior screenshot review, new finding and this log. `git diff --check` passed for the README; new and modified thread notes had no trailing whitespace, and copied image hashes matched their originals. No gameplay edit, TODO/Drive update, cross-thread message, merge, commit or push.

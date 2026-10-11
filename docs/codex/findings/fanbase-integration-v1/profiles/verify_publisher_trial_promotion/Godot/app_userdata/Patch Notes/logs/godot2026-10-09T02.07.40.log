@@ -1,0 +1,35 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: First-launch Buzz and Unknown Name freeze together
+PASS: First release below Neon threshold
+PASS: Native trial completion hand
+PASS: Native trial completion hand
+PASS: Crown banks separately floored whole points
+PASS: Failed launch preserves bank
+PASS: Old release callback cannot consume newly banked Promotion
+ERROR: FAIL: Previewed launch includes Promotion without consuming it
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] _run (res://scripts/debug/verify_publisher_trial_promotion.gd:43)
+PASS: Successful launch consumes exactly its award IDs
+ERROR: FAIL: History, sales and Promotion history share the frozen result
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] _run (res://scripts/debug/verify_publisher_trial_promotion.gd:46)
+PASS: Promotion participates in the frozen Neon threshold
+PASS: Native trial completion hand
+PASS: Native trial completion hand
+PASS: Later Neon award remains separate
+PASS: Duplicate second launch cannot consume a later award
+PASS: Next successful release consumes later award once
+ERROR: FAIL: Earlier releases remain frozen
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] _run (res://scripts/debug/verify_publisher_trial_promotion.gd:54)
+Publisher trial Promotion: 3 failures

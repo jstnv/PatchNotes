@@ -1,6 +1,12 @@
 # Fanbase and future-game Awareness
 
-Authority: “Fanbase and Future-Game Awareness” in the Sep30 design archive; current Tasks6,22 and accepted rent/lifespan authority. Status: DESIGN on main; a separate `codex/fanbase-on-main` implementation at `bd450a9` adds provisional monthly fans, launch Awareness and Fans HUD/history. It is not merged into main. Numerical rates remain unapproved.
+Authority: “Fanbase and Future-Game Awareness” in the Sep30 design archive; current Tasks6,22 and accepted rent/lifespan authority. Status: **implemented locally on current main, 2026-10-09, at ACTIVE/TRIAL scope**. Integration reuses the `bd450a9` branch and isolated quarter-Awareness trial, adapted to current Genre, Promotion, finance and typed checkpoints. Final numerical balance remains OPEN. [Implementation record](../logs/2026-10-09-fanbase-integration-v1.md).
+
+## Current-main integration, 2026-10-09
+
+RunState owns one persistent monthly ledger. Launch freezes Fans and `min(150, floor(Fans/4))`; organic/Marketing/Fan Awareness enters the existing Promotion/Traits path and sales conversion once. HUD history and immutable release details show that ledger. Strict checkpoint validation reconstructs expected accounting only for comparison and never reapplies it to live state. Unsupported pre-Fanbase revisions preserve their bytes and report incompatibility; no retroactive Fan grant or silent history migration.
+
+Focused behavior and eight fresh-process restores pass. Independent legal-route audit:5089 checks; Reviews5.4→0.4→4.1 at cycles12/16/28. The weak release launches with8 Fans, loses5 once at cycle18 alongside1 older-title gain, and adds no repeated weak loss. The later release freezes6 Fans→1 Awareness; final cash312412 cents. Textual release-ID ordering fixes a process-dependent ordering defect found by cold restarts. These results verify implementation, not final balance. Cult remains inactive; the completed T7 comparison proposes40Fans/1point without approving activation. The pre-education combined101-suite gate, export, package audit and headless startup passed. The current Education-inclusive104-suite gate, clean export,214-entry package audit and headless startup also pass; actual rendered/exported interaction is deferred overnight.
 
 ## Locked design
 
@@ -19,6 +25,8 @@ RunState should own studio total and per-release processed earned-unit/exposure 
 **ACTIVE/TRIAL gain shape, 2026-10-06:** Keep the branch's linear increase with Review above 5.0 for the next playable comparison. This is the user's chosen trial shape; the 8% scale, quality cap and other numerical parameters are not approved. The square-root alternative remains read-only comparison evidence, not the current trial rule. [Decision](../threads/fanbase/2026-10-06-linear-gain-trial-decision-v1.md).
 
 **LOCKED Fan Awareness direction / ACTIVE/TRIAL mapping, 2026-10-06:** Freeze the studio Fan count at launch and make its fan-derived Awareness contribution proportional over the intended playable range. For the next playable comparison, the user selected `min(150, floor(Fans/4))`: one fan contributes a quarter Awareness up to the 150 fan-Awareness cap. Total Awareness enters the existing Month 1 sales conversion once; do not multiply total Awareness or sales by Fans again. Zero Fans contributes zero fan Awareness, without disabling organic or Marketing Awareness. The exact ratio/cap/rounding are trial values, not final balance locks. The branch trial is implemented in isolated `codex/fanbase-quarter-trial` at bd450a9 plus two uncommitted files, verified2026-10-07; the original published branch is unchanged. [Direction](../threads/fanbase/2026-10-06-proportional-fan-awareness-decision-v1.md); [trial choice](../threads/fanbase/2026-10-06-quarter-awareness-trial-decision-v1.md).
+
+**LOCKED post-600 direction / OPEN numeric curve, 2026-10-10:** After the player's no-Cult run reached597 Fans, they selected continued launch Awareness benefit beyond600 Fans with diminishing returns. The current150 cap remains the ACTIVE/TRIAL runtime, not the intended final plateau. Preserve the frozen-launch/once-only sales mechanism and the below600 player-feel evidence. The tail's slope, threshold details, rounding, distant endpoint and possible later cap remain OPEN; no replacement gameplay or TODO task is authorized yet. [Direction decision](../threads/fanbase/2026-10-10-post-600-awareness-direction-decision-v1.md); [fixed-input candidate screen](../threads/fanbase/2026-10-10-post-600-taper-screen-v1.md).
 
 ## Candidate models and rationale
 

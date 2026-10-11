@@ -1,0 +1,312 @@
+{
+  "source_identity": "577f46fd83d5a1e2bd21d017c40eba0b20a543faf9c2301cd6316d48aa394533",
+  "policy_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+  "cohort_compatibility": {
+    "4417": {
+      "same_initial_rng": true,
+      "same_command_choices_and_cycles": true,
+      "different_legal_initial_states": true
+    },
+    "90210": {
+      "same_initial_rng": true,
+      "same_command_choices_and_cycles": true,
+      "different_legal_initial_states": true
+    }
+  },
+  "cases": [
+    {
+      "id": "control-4417",
+      "status": "completed",
+      "commands": 72,
+      "initial_cash_cents": 570000,
+      "final_cash_cents": 682628,
+      "cash_low_cents": 184000,
+      "transaction_cash_low_cents": 184000,
+      "max_overdue_cents": 0,
+      "first_financial_block_cycle": null,
+      "final_credit": 621,
+      "first_due_month": null,
+      "first_due_paid_cents": 0,
+      "first_due_interest_cents": 0,
+      "due_rows_count": 0,
+      "education_principal_paid_cents": 0,
+      "education_interest_paid_cents": 0,
+      "release_cycles": [
+        13,
+        26,
+        39
+      ],
+      "release_reviews": [
+        4.0,
+        5.2,
+        4.0
+      ],
+      "calendar_cash_cents": {
+        "24": 346251,
+        "26": 299048,
+        "28": 675585,
+        "30": 723159,
+        "36": 622837,
+        "39": 682628
+      },
+      "month_13": {
+        "opening_cash_cents": 346251,
+        "closing_cash_cents": 299048,
+        "sales_settled_cents": 2797,
+        "rent_due_cents": 50000,
+        "rent_paid_cents": 50000,
+        "interest_cents": 0,
+        "interest_paid_cents": 0,
+        "principal_paid_cents": 0,
+        "net_profit_cents": -47203
+      },
+      "credit_at_month_13": 612,
+      "state_digest": "c294a4bbb0aed1efd66dc4b61bde44f079249b67dd37f4f5c05a65c35f37ed83"
+    },
+    {
+      "id": "dropout-4417",
+      "status": "completed",
+      "commands": 72,
+      "initial_cash_cents": 580000,
+      "final_cash_cents": 643152,
+      "cash_low_cents": 194000,
+      "transaction_cash_low_cents": 194000,
+      "max_overdue_cents": 0,
+      "first_financial_block_cycle": null,
+      "final_credit": 621,
+      "first_due_month": 13,
+      "first_due_paid_cents": 7068,
+      "first_due_interest_cents": 3333,
+      "due_rows_count": 7,
+      "education_principal_paid_cents": 26673,
+      "education_interest_paid_cents": 22803,
+      "release_cycles": [
+        13,
+        26,
+        39
+      ],
+      "release_reviews": [
+        4.0,
+        5.2,
+        4.0
+      ],
+      "calendar_cash_cents": {
+        "24": 356251,
+        "26": 301980,
+        "28": 671449,
+        "30": 711955,
+        "36": 590429,
+        "39": 643152
+      },
+      "month_13": {
+        "opening_cash_cents": 356251,
+        "closing_cash_cents": 301980,
+        "sales_settled_cents": 2797,
+        "rent_due_cents": 50000,
+        "rent_paid_cents": 50000,
+        "interest_cents": 3333,
+        "interest_paid_cents": 3333,
+        "principal_paid_cents": 3735,
+        "net_profit_cents": -50536
+      },
+      "credit_at_month_13": 612,
+      "state_digest": "9aa356b4fa37723a24681bc60c8ac5c11017252bd997b7413d2b6db5c61b8b12"
+    },
+    {
+      "id": "graduate-4417",
+      "status": "completed",
+      "commands": 72,
+      "initial_cash_cents": 600000,
+      "final_cash_cents": 514717,
+      "cash_low_cents": 214000,
+      "transaction_cash_low_cents": 214000,
+      "max_overdue_cents": 0,
+      "first_financial_block_cycle": null,
+      "final_credit": 621,
+      "first_due_month": 13,
+      "first_due_paid_cents": 28273,
+      "first_due_interest_cents": 13333,
+      "due_rows_count": 7,
+      "education_principal_paid_cents": 106692,
+      "education_interest_paid_cents": 91219,
+      "release_cycles": [
+        13,
+        26,
+        39
+      ],
+      "release_reviews": [
+        4.0,
+        5.2,
+        4.0
+      ],
+      "calendar_cash_cents": {
+        "24": 376251,
+        "26": 300775,
+        "28": 649039,
+        "30": 668340,
+        "36": 483199,
+        "39": 514717
+      },
+      "month_13": {
+        "opening_cash_cents": 376251,
+        "closing_cash_cents": 300775,
+        "sales_settled_cents": 2797,
+        "rent_due_cents": 50000,
+        "rent_paid_cents": 50000,
+        "interest_cents": 13333,
+        "interest_paid_cents": 13333,
+        "principal_paid_cents": 14940,
+        "net_profit_cents": -60536
+      },
+      "credit_at_month_13": 612,
+      "state_digest": "722269e69660e39219aae738120dbe270521a6536a42b1ccd6adcb04478a5db0"
+    },
+    {
+      "id": "control-90210",
+      "status": "completed",
+      "commands": 72,
+      "initial_cash_cents": 570000,
+      "final_cash_cents": 730984,
+      "cash_low_cents": 234000,
+      "transaction_cash_low_cents": 234000,
+      "max_overdue_cents": 0,
+      "first_financial_block_cycle": null,
+      "final_credit": 624,
+      "first_due_month": null,
+      "first_due_paid_cents": 0,
+      "first_due_interest_cents": 0,
+      "due_rows_count": 0,
+      "education_principal_paid_cents": 0,
+      "education_interest_paid_cents": 0,
+      "release_cycles": [
+        13,
+        26,
+        39
+      ],
+      "release_reviews": [
+        5.8,
+        4.3,
+        5.3
+      ],
+      "calendar_cash_cents": {
+        "24": 621880,
+        "26": 581670,
+        "28": 817054,
+        "30": 836264,
+        "36": 676089,
+        "39": 730984
+      },
+      "month_13": {
+        "opening_cash_cents": 621880,
+        "closing_cash_cents": 581670,
+        "sales_settled_cents": 9790,
+        "rent_due_cents": 50000,
+        "rent_paid_cents": 50000,
+        "interest_cents": 0,
+        "interest_paid_cents": 0,
+        "principal_paid_cents": 0,
+        "net_profit_cents": -40210
+      },
+      "credit_at_month_13": 615,
+      "state_digest": "df3fe5bd165e8da7322f445d506b23b4db655cb4e362b133c6d6c8a81205caac"
+    },
+    {
+      "id": "dropout-90210",
+      "status": "completed",
+      "commands": 72,
+      "initial_cash_cents": 580000,
+      "final_cash_cents": 691508,
+      "cash_low_cents": 244000,
+      "transaction_cash_low_cents": 244000,
+      "max_overdue_cents": 0,
+      "first_financial_block_cycle": null,
+      "final_credit": 624,
+      "first_due_month": 13,
+      "first_due_paid_cents": 7068,
+      "first_due_interest_cents": 3333,
+      "due_rows_count": 7,
+      "education_principal_paid_cents": 26673,
+      "education_interest_paid_cents": 22803,
+      "release_cycles": [
+        13,
+        26,
+        39
+      ],
+      "release_reviews": [
+        5.8,
+        4.3,
+        5.3
+      ],
+      "calendar_cash_cents": {
+        "24": 631880,
+        "26": 584602,
+        "28": 812918,
+        "30": 825060,
+        "36": 643681,
+        "39": 691508
+      },
+      "month_13": {
+        "opening_cash_cents": 631880,
+        "closing_cash_cents": 584602,
+        "sales_settled_cents": 9790,
+        "rent_due_cents": 50000,
+        "rent_paid_cents": 50000,
+        "interest_cents": 3333,
+        "interest_paid_cents": 3333,
+        "principal_paid_cents": 3735,
+        "net_profit_cents": -43543
+      },
+      "credit_at_month_13": 615,
+      "state_digest": "3060395c0ee1014ae363329fb87046acfdfd7c0e75f4a302479b806ba3281678"
+    },
+    {
+      "id": "graduate-90210",
+      "status": "completed",
+      "commands": 72,
+      "initial_cash_cents": 600000,
+      "final_cash_cents": 563073,
+      "cash_low_cents": 264000,
+      "transaction_cash_low_cents": 264000,
+      "max_overdue_cents": 0,
+      "first_financial_block_cycle": null,
+      "final_credit": 624,
+      "first_due_month": 13,
+      "first_due_paid_cents": 28273,
+      "first_due_interest_cents": 13333,
+      "due_rows_count": 7,
+      "education_principal_paid_cents": 106692,
+      "education_interest_paid_cents": 91219,
+      "release_cycles": [
+        13,
+        26,
+        39
+      ],
+      "release_reviews": [
+        5.8,
+        4.3,
+        5.3
+      ],
+      "calendar_cash_cents": {
+        "24": 651880,
+        "26": 583397,
+        "28": 790508,
+        "30": 781445,
+        "36": 536451,
+        "39": 563073
+      },
+      "month_13": {
+        "opening_cash_cents": 651880,
+        "closing_cash_cents": 583397,
+        "sales_settled_cents": 9790,
+        "rent_due_cents": 50000,
+        "rent_paid_cents": 50000,
+        "interest_cents": 13333,
+        "interest_paid_cents": 13333,
+        "principal_paid_cents": 14940,
+        "net_profit_cents": -53543
+      },
+      "credit_at_month_13": 615,
+      "state_digest": "5cdf60183477d4ccc32cf780c17c349f4b882ee15fddc413769702b54f52ce41"
+    }
+  ]
+}

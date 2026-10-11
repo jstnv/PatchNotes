@@ -1,0 +1,233 @@
+{
+  "name": "Patch Notes symmetric connected card frames",
+  "version": 3,
+  "canvas": [
+    240,
+    336
+  ],
+  "origin": "top_left",
+  "design": "Continuous pixel-art bands with shared dividers and mirror-symmetric corner compartments.",
+  "godot_fields": {
+    "primary_score_value": {
+      "rect": [
+        10,
+        12,
+        40,
+        30
+      ],
+      "sample": "+7",
+      "font_size": 24
+    },
+    "primary_score_type": {
+      "rect": [
+        10,
+        46,
+        40,
+        16
+      ],
+      "sample": "GRAPHICS",
+      "font_size": 8
+    },
+    "name": {
+      "rect": [
+        70,
+        18,
+        100,
+        34
+      ],
+      "sample": "FEATURE NAME",
+      "font_size": 14
+    },
+    "secondary_score_value": {
+      "rect": [
+        190,
+        12,
+        40,
+        30
+      ],
+      "sample": "+3",
+      "font_size": 24
+    },
+    "secondary_score_type": {
+      "rect": [
+        190,
+        46,
+        40,
+        16
+      ],
+      "sample": "TECH",
+      "font_size": 8
+    },
+    "renewability_slot": {
+      "rect": [
+        10,
+        296,
+        42,
+        32
+      ],
+      "icon_rect": [
+        19,
+        300,
+        24,
+        24
+      ]
+    },
+    "department": {
+      "rect": [
+        70,
+        300,
+        100,
+        24
+      ],
+      "sample": "WORLD DESIGN",
+      "font_size": 14
+    },
+    "scope": {
+      "rect": [
+        188,
+        296,
+        42,
+        32
+      ],
+      "sample": "S2",
+      "font_size": 16
+    }
+  },
+  "assets": {
+    "card_frame_complete": {
+      "path": "assets/card_frame_complete.png",
+      "position": [
+        0,
+        0
+      ],
+      "size": [
+        240,
+        336
+      ]
+    },
+    "frames_overlay": {
+      "path": "assets/frames_overlay.png",
+      "position": [
+        0,
+        0
+      ],
+      "size": [
+        240,
+        336
+      ]
+    },
+    "card_frame": {
+      "path": "assets/card_frame.png",
+      "position": [
+        0,
+        0
+      ],
+      "size": [
+        240,
+        336
+      ]
+    },
+    "top_connected_frame": {
+      "path": "assets/top_connected_frame.png",
+      "position": [
+        5,
+        7
+      ],
+      "size": [
+        230,
+        60
+      ]
+    },
+    "bottom_connected_frame": {
+      "path": "assets/bottom_connected_frame.png",
+      "position": [
+        5,
+        291
+      ],
+      "size": [
+        230,
+        42
+      ]
+    },
+    "background": {
+      "path": "assets/background.png",
+      "position": [
+        0,
+        0
+      ],
+      "size": [
+        240,
+        336
+      ]
+    },
+    "renewable_icon": {
+      "path": "assets/renewable_icon.png",
+      "position": [
+        19,
+        300
+      ],
+      "size": [
+        24,
+        24
+      ]
+    },
+    "finite_icon": {
+      "path": "assets/finite_icon.png",
+      "position": [
+        19,
+        300
+      ],
+      "size": [
+        24,
+        24
+      ]
+    }
+  },
+  "trapezoids": {
+    "name": [
+      [
+        54,
+        10
+      ],
+      [
+        186,
+        10
+      ],
+      [
+        170,
+        64
+      ],
+      [
+        70,
+        64
+      ]
+    ],
+    "department": [
+      [
+        66,
+        294
+      ],
+      [
+        174,
+        294
+      ],
+      [
+        186,
+        330
+      ],
+      [
+        54,
+        330
+      ]
+    ]
+  },
+  "layer_order": [
+    "background",
+    "card artwork",
+    "card_frame_complete",
+    "selected renewability icon",
+    "Godot text"
+  ],
+  "note": "Use card_frame_complete alone, or card_frame plus frames_overlay, or card_frame plus the two row crops. Do not layer these alternatives together.",
+  "integration": "Coordinates are proposed replacements for the earlier asymmetric fields; no Godot project was modified."
+}

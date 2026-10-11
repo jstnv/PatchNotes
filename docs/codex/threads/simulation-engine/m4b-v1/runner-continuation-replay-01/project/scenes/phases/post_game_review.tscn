@@ -1,0 +1,262 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/phases/post_game_review.gd" id="1"]
+[ext_resource type="Theme" path="res://resources/ui/workspace_theme.tres" id="2"]
+
+[node name="PostGameReview" type="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+theme = ExtResource("2")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Layout" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Margin/Layout"]
+layout_mode = 2
+text = "Post Game Review"
+theme_override_font_sizes/font_size = 28
+
+[node name="Subtitle" type="Label" parent="Margin/Layout"]
+layout_mode = 2
+text = "Your game has been released. Explore its performance by category."
+unique_name_in_owner = true
+autowrap_mode = 3
+
+[node name="Categories" type="TabContainer" parent="Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Overview" type="ScrollContainer" parent="Margin/Layout/Categories"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Margin" type="MarginContainer" parent="Margin/Layout/Categories/Overview"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Rows" type="VBoxContainer" parent="Margin/Layout/Categories/Overview/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Margin/Layout/Categories/Overview/Margin/Rows"]
+layout_mode = 2
+text = "Overview"
+theme_override_font_sizes/font_size = 24
+
+[node name="ReviewLabel" type="Label" parent="Margin/Layout/Categories/Overview/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="ProductionLabel" type="Label" parent="Margin/Layout/Categories/Overview/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="ScopeLabel" type="Label" parent="Margin/Layout/Categories/Overview/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="AwarenessLabel" type="Label" parent="Margin/Layout/Categories/Overview/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="UnitsLabel" type="Label" parent="Margin/Layout/Categories/Overview/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="Core Performance" type="ScrollContainer" parent="Margin/Layout/Categories"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Margin" type="MarginContainer" parent="Margin/Layout/Categories/Core Performance"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Rows" type="VBoxContainer" parent="Margin/Layout/Categories/Core Performance/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Margin/Layout/Categories/Core Performance/Margin/Rows"]
+layout_mode = 2
+text = "Core Performance"
+theme_override_font_sizes/font_size = 24
+
+[node name="CoreDescription" type="Label" parent="Margin/Layout/Categories/Core Performance/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="GraphicsLabel" type="Label" parent="Margin/Layout/Categories/Core Performance/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="SoundLabel" type="Label" parent="Margin/Layout/Categories/Core Performance/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="TechnologyLabel" type="Label" parent="Margin/Layout/Categories/Core Performance/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="DesignLabel" type="Label" parent="Margin/Layout/Categories/Core Performance/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="Scope" type="ScrollContainer" parent="Margin/Layout/Categories"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Margin" type="MarginContainer" parent="Margin/Layout/Categories/Scope"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Rows" type="VBoxContainer" parent="Margin/Layout/Categories/Scope/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Margin/Layout/Categories/Scope/Margin/Rows"]
+layout_mode = 2
+text = "Scope"
+theme_override_font_sizes/font_size = 24
+
+[node name="ScopeDetailLabel" type="Label" parent="Margin/Layout/Categories/Scope/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="CyclesLabel" type="Label" parent="Margin/Layout/Categories/Scope/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="Marketing" type="ScrollContainer" parent="Margin/Layout/Categories"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Margin" type="MarginContainer" parent="Margin/Layout/Categories/Marketing"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Rows" type="VBoxContainer" parent="Margin/Layout/Categories/Marketing/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Margin/Layout/Categories/Marketing/Margin/Rows"]
+layout_mode = 2
+text = "Marketing"
+theme_override_font_sizes/font_size = 24
+
+[node name="MarketingDetailLabel" type="Label" parent="Margin/Layout/Categories/Marketing/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="LaunchMarketingLabel" type="Label" parent="Margin/Layout/Categories/Marketing/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="Sales" type="ScrollContainer" parent="Margin/Layout/Categories"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Margin" type="MarginContainer" parent="Margin/Layout/Categories/Sales"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Rows" type="VBoxContainer" parent="Margin/Layout/Categories/Sales/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Margin/Layout/Categories/Sales/Margin/Rows"]
+layout_mode = 2
+text = "Sales"
+theme_override_font_sizes/font_size = 24
+
+[node name="SalesUnitsLabel" type="Label" parent="Margin/Layout/Categories/Sales/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="SalesNetLabel" type="Label" parent="Margin/Layout/Categories/Sales/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="SalesNoteLabel" type="Label" parent="Margin/Layout/Categories/Sales/Margin/Rows"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="Footer" type="HBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+alignment = 2
+
+[node name="ContinueButton" type="Button" parent="Margin/Layout/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(230, 50)
+text = "Continue to Studio"

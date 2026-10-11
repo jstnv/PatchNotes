@@ -1,0 +1,187 @@
+[
+  {
+    "label": "store-prefix-01",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/simulate.py",
+      "run",
+      "--config",
+      "docs/codex/threads/simulation-engine/examples/store-prefix.json",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-prefix-01",
+      "--godot",
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--timeout",
+      "240"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 28.969000000040978
+  },
+  {
+    "label": "prepare-store-4417",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/prepare_store_study.py",
+      "--bundle",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-prefix-01",
+      "--case",
+      "action-4417",
+      "--feature",
+      "recorded_sounds",
+      "--target-release-count",
+      "2",
+      "--max-commands",
+      "100",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-4417-input.json"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 0.7810000000754371
+  },
+  {
+    "label": "store-4417-01",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/simulate.py",
+      "run",
+      "--config",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-4417-input.json",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-4417-01",
+      "--godot",
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--timeout",
+      "240"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 28.25
+  },
+  {
+    "label": "store-4417-research_now-replay-01",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/simulate.py",
+      "replay",
+      "--bundle",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-4417-01",
+      "--case",
+      "store-fa3b4a65d353005e62ef15ed-research_now",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-4417-research_now-replay-01",
+      "--godot",
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--timeout",
+      "240"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 26.93799999996554
+  },
+  {
+    "label": "store-4417-defer-replay-01",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/simulate.py",
+      "replay",
+      "--bundle",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-4417-01",
+      "--case",
+      "store-fa3b4a65d353005e62ef15ed-defer",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-4417-defer-replay-01",
+      "--godot",
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--timeout",
+      "240"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 27.234000000054948
+  },
+  {
+    "label": "prepare-store-90210",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/prepare_store_study.py",
+      "--bundle",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-prefix-01",
+      "--case",
+      "action-90210",
+      "--feature",
+      "recorded_sounds",
+      "--target-release-count",
+      "2",
+      "--max-commands",
+      "100",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-90210-input.json"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 0.6720000000204891
+  },
+  {
+    "label": "store-90210-01",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/simulate.py",
+      "run",
+      "--config",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-90210-input.json",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-90210-01",
+      "--godot",
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--timeout",
+      "240"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 27.968999999924563
+  },
+  {
+    "label": "store-90210-research_now-replay-01",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/simulate.py",
+      "replay",
+      "--bundle",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-90210-01",
+      "--case",
+      "store-933ed806579fae7187b37d3a-research_now",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-90210-research_now-replay-01",
+      "--godot",
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--timeout",
+      "240"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 25.844000000040978
+  },
+  {
+    "label": "store-90210-defer-replay-01",
+    "argv": [
+      "C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "tools/simulate.py",
+      "replay",
+      "--bundle",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-90210-01",
+      "--case",
+      "store-933ed806579fae7187b37d3a-defer",
+      "--output",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4c-v1\\store-90210-defer-replay-01",
+      "--godot",
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--timeout",
+      "240"
+    ],
+    "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes",
+    "exit": 0,
+    "elapsed_seconds": 25.48499999998603
+  }
+]

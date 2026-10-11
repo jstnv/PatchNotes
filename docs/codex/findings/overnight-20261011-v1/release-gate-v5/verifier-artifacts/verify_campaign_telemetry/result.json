@@ -1,0 +1,40 @@
+{
+	"checks": 374,
+	"comparisons": [
+		{
+			"case": "normal",
+			"commands": 36,
+			"final_state": "aec9b54178b4e81d769b27a51cc7ca1e27c1d2a2badc95d1506449e102a2b4be",
+			"samples": 37,
+			"status": "completed",
+			"tape_identity": "b35101da6cac5a6afeefa8fec2f6770867dcceaf2c901f507f00cef96f07ff6b"
+		},
+		{
+			"case": "rejected",
+			"commands": 1,
+			"final_state": "e2e6a6f80031fba9674994688d3b528ae7bb03f299e05718d1dc737662c579a7",
+			"samples": 2,
+			"status": "rejected_policy_action",
+			"tape_identity": "329e765b8b366da8b7835919b6b1963dbca3ba0e74c346eaaab158eee81b1dea"
+		},
+		{
+			"case": "malformed",
+			"commands": 0,
+			"final_state": "e2e6a6f80031fba9674994688d3b528ae7bb03f299e05718d1dc737662c579a7",
+			"samples": 1,
+			"status": "malformed_policy_decision",
+			"tape_identity": "0a9be5b44fade7f19e58a9a277840462b5cff47820bc274f7367c311e094d483"
+		},
+		{
+			"case": "bound",
+			"commands": 3,
+			"final_state": "3e52bb03ff773a5160e395abbc32743cf40e707e728038593014f6dc33299005",
+			"samples": 4,
+			"status": "command_bound",
+			"tape_identity": "4d80a8fdc908cd460f539766487ac2c245e4d2918469db5bbe2f873e5c7fa2a0"
+		}
+	],
+	"constructed_finance_fixtures": "Pure journal arithmetic only; no legal campaign or policy claim",
+	"failures": 0,
+	"ok": true
+}

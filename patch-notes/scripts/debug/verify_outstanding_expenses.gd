@@ -131,9 +131,13 @@ func _provenance_and_overflow() -> void:
 	var legacy := l.duplicate(true)
 	legacy.schema_version = 1
 	legacy.erase("credit")
+	legacy.erase("education") # Schema 1 predates education state, including an empty account.
 	for bill: Dictionary in legacy.obligations:
 		for key in ["bill_id", "source_id", "expense_type", "settled_cycle", "recovery_overdue_cycles"]: bill.erase(key)
 	check(F.upgrade_v1(legacy) == l, "Explicit v1 migration reconstructs existing rent identity without charging cash again")
+	var hybrid := legacy.duplicate(true)
+	hybrid.education = {}
+	check(F.upgrade_v1(hybrid).is_empty(), "V1 payload with a future education field rejects instead of silently discarding it")
 	legacy.obligations[0].due_cycle = 4
 	check(F.upgrade_v1(legacy).is_empty(), "V1 altered historical due fails migration")
 	check(B.create_bill(&"x", &"x", &"invalid", 2, 1).is_empty() and B.create_bill(&"", &"x", &"rent", 2, 1).is_empty(), "Unknown type or missing identity rejects")

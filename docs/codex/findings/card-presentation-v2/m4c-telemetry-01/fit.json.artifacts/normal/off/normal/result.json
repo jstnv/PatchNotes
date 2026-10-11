@@ -1,0 +1,788 @@
+{
+	"accepted_commands": 36,
+	"artifacts": {
+		"exact_case": "case.variant.json",
+		"final_state": "final_state.variant.json",
+		"initial": "initial.json",
+		"metrics": "metrics.json",
+		"readable_case": "case.json",
+		"result": "result.json",
+		"studio_checkpoint": "studio_checkpoint.json",
+		"tape": "replay.tape.json",
+		"telemetry": ""
+	},
+	"case_id": "normal",
+	"commands": 36,
+	"engine_version": "4.7.1-stable (official)",
+	"error": "",
+	"final_release_count": 2,
+	"final_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "-5470941584849989233"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "-1494648530554463480"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "-6988561839685724987"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "3896913945144747086"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "-173018135236761394"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "3783608572789497710"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4418"
+			},
+			"state": {
+				"integer": "-4952197244165530210"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4417"
+			},
+			"state": {
+				"integer": "6059727017067314275"
+			}
+		}
+	},
+	"final_run_cycle": 14,
+	"final_state": "6429c6b18d594dffeb1017a7cf4a5975974593cfee5b8b5743302a48172a3cc0",
+	"initial_release_count": 0,
+	"initial_rng": {
+		"alpha_deal": {
+			"seed": {
+				"integer": "4421"
+			},
+			"state": {
+				"integer": "-3769052622640144973"
+			}
+		},
+		"alpha_finalize": {
+			"seed": {
+				"integer": "4422"
+			},
+			"state": {
+				"integer": "2595083601206648032"
+			}
+		},
+		"beta_deal": {
+			"seed": {
+				"integer": "4423"
+			},
+			"state": {
+				"integer": "8959219825053441037"
+			}
+		},
+		"beta_insight": {
+			"seed": {
+				"integer": "4424"
+			},
+			"state": {
+				"integer": "-3123388024809317574"
+			}
+		},
+		"contract_deal": {
+			"seed": {
+				"integer": "4425"
+			},
+			"state": {
+				"integer": "3240748199037475431"
+			}
+		},
+		"design_deal": {
+			"seed": {
+				"integer": "4419"
+			},
+			"state": {
+				"integer": "1949419003375820633"
+			}
+		},
+		"design_finalize": {
+			"seed": {
+				"integer": "4420"
+			},
+			"state": {
+				"integer": "8313555227222613638"
+			}
+		},
+		"review": {
+			"seed": {
+				"integer": "4418"
+			},
+			"state": {
+				"integer": "-4414717220470972372"
+			}
+		},
+		"snapshot": {
+			"seed": {
+				"integer": "4417"
+			},
+			"state": {
+				"integer": "7667890629391786239"
+			}
+		}
+	},
+	"initial_run_cycle": 0,
+	"initial_state": "030d9836c7118e2e752a9ab9d0c66678f7a021056dd7898985a5d0755c962736",
+	"input_identity": "51ce01f62dbbabbb57bc19834cd57f25ffef1ad25adf4a32c008a08b67680973",
+	"last_choice": {
+		"type": "launch"
+	},
+	"max_commands": 100,
+	"ok": true,
+	"outcome": {
+		"calendar": {
+			"half": 1,
+			"label": "1980 · Month 8, First Half",
+			"month": 8,
+			"year": 1980
+		},
+		"cash_cents": 294482,
+		"employees": {
+			"employees": {},
+			"events": [],
+			"owner": "telemetry_fixture",
+			"schema_version": 1
+		},
+		"fans": 0,
+		"finance": {
+			"available": true,
+			"bank_loans": [],
+			"cash_cents": 294482,
+			"credit": {
+				"history": [
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 2,
+						"month": 1,
+						"operating_profit_cents": -85000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 4,
+						"month": 2,
+						"operating_profit_cents": -109000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 600,
+						"before": 600,
+						"change": 0,
+						"cycle": 6,
+						"month": 3,
+						"operating_profit_cents": -72000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 603,
+						"before": 600,
+						"change": 3,
+						"cycle": 8,
+						"month": 4,
+						"operating_profit_cents": 128321,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 3,
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": 3
+					},
+					{
+						"after": 603,
+						"before": 603,
+						"change": 0,
+						"cycle": 10,
+						"month": 5,
+						"operating_profit_cents": -19000,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 603,
+						"before": 603,
+						"change": 0,
+						"cycle": 12,
+						"month": 6,
+						"operating_profit_cents": -79329,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					},
+					{
+						"after": 603,
+						"before": 603,
+						"change": 0,
+						"cycle": 14,
+						"month": 7,
+						"operating_profit_cents": -39510,
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": 0,
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": 0
+					}
+				],
+				"last_processed_month": 7,
+				"policy_version": "typed_expenses_v1",
+				"score": 603
+			},
+			"credit_inputs": {
+				"completed_months": 7,
+				"late_months": 0,
+				"paid_on_time_months": 7
+			},
+			"education": {},
+			"financially_blocked": false,
+			"monthly_payroll_cents": 0,
+			"monthly_rent_cents": 50000,
+			"next_due_cycle": 16,
+			"outstanding_expenses": [],
+			"rows": [
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 485000,
+					"closing_cash_cents": 485000,
+					"feature_play_cents": 35000,
+					"financing_in_cents": 570000,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 1,
+					"net_profit_cents": -85000,
+					"opening_cash_cents": 0,
+					"operating_expenses_cents": 85000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -109000,
+					"closing_cash_cents": 376000,
+					"feature_play_cents": 59000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 2,
+					"net_profit_cents": -109000,
+					"opening_cash_cents": 485000,
+					"operating_expenses_cents": 109000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -72000,
+					"closing_cash_cents": 304000,
+					"feature_play_cents": 22000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 3,
+					"net_profit_cents": -72000,
+					"opening_cash_cents": 376000,
+					"operating_expenses_cents": 72000,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 100000,
+					"campaign_cents": 0,
+					"cash_change_cents": 128321,
+					"closing_cash_cents": 432321,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 4,
+					"net_profit_cents": 128321,
+					"opening_cash_cents": 304000,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 178321,
+					"other_expense_cents": 0,
+					"other_income_cents": 100000,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 78321,
+					"sales_settled_cents": 78321,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -19000,
+					"closing_cash_cents": 413321,
+					"feature_play_cents": 69000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 5,
+					"net_profit_cents": -19000,
+					"opening_cash_cents": 432321,
+					"operating_expenses_cents": 119000,
+					"operating_revenue_cents": 100000,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 100000,
+					"sales_settled_cents": 100000,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -79329,
+					"closing_cash_cents": 333992,
+					"feature_play_cents": 58000,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 6,
+					"net_profit_cents": -79329,
+					"opening_cash_cents": 413321,
+					"operating_expenses_cents": 108000,
+					"operating_revenue_cents": 28671,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 28671,
+					"sales_settled_cents": 28671,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": -39510,
+					"closing_cash_cents": 294482,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 7,
+					"net_profit_cents": -39510,
+					"opening_cash_cents": 333992,
+					"operating_expenses_cents": 50000,
+					"operating_revenue_cents": 10490,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": false,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 50000,
+					"rent_paid_cents": 50000,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 10490,
+					"sales_settled_cents": 10490,
+					"store_cents": 0
+				},
+				{
+					"beta_income_cents": 0,
+					"campaign_cents": 0,
+					"cash_change_cents": 0,
+					"closing_cash_cents": 294482,
+					"feature_play_cents": 0,
+					"financing_in_cents": 0,
+					"interest_cents": 0,
+					"interest_paid_cents": 0,
+					"miscellaneous_income_cents": 0,
+					"month": 8,
+					"net_profit_cents": 0,
+					"opening_cash_cents": 294482,
+					"operating_expenses_cents": 0,
+					"operating_revenue_cents": 0,
+					"other_expense_cents": 0,
+					"other_income_cents": 0,
+					"partial": true,
+					"payroll_due_cents": 0,
+					"payroll_paid_cents": 0,
+					"payroll_unpaid_cents": 0,
+					"playtest_cents": 0,
+					"principal_paid_cents": 0,
+					"publisher_income_cents": 0,
+					"rent_due_cents": 0,
+					"rent_paid_cents": 0,
+					"rent_unpaid_cents": 0,
+					"sales_net_earned_cents": 0,
+					"sales_settled_cents": 0,
+					"store_cents": 0
+				}
+			],
+			"total_overdue_cents": 0,
+			"unpaid_rent_cents": 0
+		},
+		"in_studio": true,
+		"owned_features": [
+			"text",
+			"sprites",
+			"4_color_palette",
+			"8_bit_sound",
+			"keyboard_and_mouse",
+			"controller",
+			"scrolling",
+			"menu_system",
+			"split_screen",
+			"multiple_endings",
+			"controls",
+			"enemies",
+			"power_ups",
+			"general_combat",
+			"levels",
+			"maps",
+			"exploration",
+			"sound_effects"
+		],
+		"phase": "studio",
+		"releases": [
+			{
+				"id": "telemetry_fixture:project:1",
+				"metadata": {
+					"base_name": "Telemetry game 1",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 7,
+					"release_title": "Telemetry game 1",
+					"release_year": 1980,
+					"review": {
+						"awareness": 101,
+						"competitor_id": "established_rival",
+						"competitor_target_cycle": 16,
+						"cores": [
+							22,
+							8,
+							22,
+							16
+						],
+						"development_cycles": 6,
+						"fan_awareness": 0,
+						"final_review": 2.1,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 0,
+						"launch_marketing": 1,
+						"production_rating": 3.57641893413009,
+						"projected_gross_cents": 224775,
+						"projected_net_cents": 157342,
+						"projected_units": 225,
+						"remaining_bugs": 4,
+						"required_scope": 30,
+						"scope": 25,
+						"scope_completion": 0.833333333333333,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 107539,
+					"base_name": "Telemetry game 1",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 2,
+					"earned_units": 311,
+					"entitlement_cents": 217482,
+					"exhausted": true,
+					"last_processed_run_cycle": 14,
+					"last_settlement_run_cycle": 14,
+					"later_enabled": true,
+					"launch_awareness": 101,
+					"market_bp": 10000,
+					"monthly_units": 8,
+					"organic_awareness_scaled": 107539,
+					"release_id": "telemetry_fixture:project:1",
+					"release_title": "Telemetry game 1",
+					"release_year": 1980,
+					"review_tenths": 21,
+					"settled_cents": 217482,
+					"total_earned_cycles": 7,
+					"total_units": 225
+				}
+			},
+			{
+				"id": "telemetry_fixture:project:2",
+				"metadata": {
+					"base_name": "Telemetry game 2",
+					"genre": "action",
+					"genre_ratios": [
+						30,
+						20,
+						30,
+						20
+					],
+					"release_cycle": 14,
+					"release_title": "Telemetry game 2",
+					"release_year": 1980,
+					"review": {
+						"awareness": 107,
+						"competitor_id": "",
+						"competitor_target_cycle": -1,
+						"cores": [
+							18,
+							9,
+							31,
+							15
+						],
+						"development_cycles": 6,
+						"fan_awareness": 0,
+						"final_review": 2.6,
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": 0,
+						"launch_marketing": 7,
+						"production_rating": 3.65668811593967,
+						"projected_gross_cents": 326673,
+						"projected_net_cents": 228671,
+						"projected_units": 327,
+						"remaining_bugs": 4,
+						"required_scope": 30,
+						"scope": 27,
+						"scope_completion": 0.9,
+						"standards": [
+							40,
+							26,
+							40,
+							26
+						]
+					},
+					"theme": "fantasy"
+				},
+				"sales": {
+					"active_awareness_scaled": 0,
+					"base_name": "Telemetry game 2",
+					"campaign_count": 0,
+					"campaign_months": {},
+					"earned_cycles": 0,
+					"earned_units": 0,
+					"entitlement_cents": 0,
+					"exhausted": false,
+					"last_processed_run_cycle": -1,
+					"last_settlement_run_cycle": -1,
+					"later_enabled": true,
+					"launch_awareness": 107,
+					"market_bp": 11500,
+					"monthly_units": 0,
+					"organic_awareness_scaled": 0,
+					"release_id": "telemetry_fixture:project:2",
+					"release_title": "Telemetry game 2",
+					"release_year": 1980,
+					"review_tenths": 26,
+					"settled_cents": 0,
+					"total_earned_cycles": 0,
+					"total_units": 327
+				}
+			}
+		],
+		"research_queue": []
+	},
+	"policy": {
+		"config": {
+			"genre": "action",
+			"hands": {
+				"alpha": {
+					"integer": "2"
+				},
+				"beta": {
+					"integer": "2"
+				},
+				"design": {
+					"integer": "2"
+				}
+			},
+			"name_prefix": "Telemetry game",
+			"selection": "features_first",
+			"theme": "fantasy"
+		},
+		"id": "finite-development-fixture",
+		"source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+		"version": "1"
+	},
+	"policy_identity_kind": "caller_declared_trusted_factory",
+	"productive_commands": 14,
+	"replayable": true,
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"schema_version": "1",
+	"source_identity": "13980fdeb9efabaeb070c8dddddcd8137982e3e073aa43ab87f7fdd1a57c4c4f",
+	"status": "completed",
+	"study": {
+		"arm": "normal",
+		"pair_id": "telemetry-equivalence"
+	},
+	"tape_identity": "f7c6d11562d4334908092c0d4a2dff7d6acd02b063b50f4cceee90961d5506da",
+	"target_release_count": 2,
+	"telemetry_sha256": ""
+}

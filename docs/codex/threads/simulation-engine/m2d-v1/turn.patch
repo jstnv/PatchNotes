@@ -1,0 +1,2389 @@
+--- before/patch-notes/scripts/first_game_tutorial.gd
++++ after/patch-notes/scripts/first_game_tutorial.gd
+@@ -87,12 +87,9 @@
+ 
+ 
+ func guaranteed_redraw(current: Array[CardData], selected: Array[CardView], passes: Array[CardData]) -> CardData:
+-	if stage != Stage.REDRAW_HAND or not second_pool_published or selected.size() != 1: return null
+-	if selected[0].card_data.primary_stat == second_stat: return null
+-	var matching := 0
+-	for card: CardData in current:
+-		if card.primary_stat == second_stat: matching += 1
+-	return _pass_for(passes, second_stat) if matching == 3 else null
++	var cards: Array[CardData] = []
++	for view in selected: cards.append(view.card_data)
++	return guaranteed_redraw_cards(current,cards,passes)
+ 
+ 
+ func record_successful_redraw() -> void:
+@@ -116,3 +113,12 @@
+ 	for card: CardData in passes:
+ 		if card.primary_stat == stat: return card
+ 	return null
++
++
++func guaranteed_redraw_cards(current: Array[CardData], selected: Array[CardData], passes: Array[CardData]) -> CardData:
++	if stage != Stage.REDRAW_HAND or not second_pool_published or selected.size() != 1: return null
++	if selected[0].primary_stat == second_stat: return null
++	var matching := 0
++	for card: CardData in current:
++		if card.primary_stat == second_stat: matching += 1
++	return _pass_for(passes, second_stat) if matching == 3 else null
+--- before/patch-notes/scripts/cards/card_database.gd
++++ after/patch-notes/scripts/cards/card_database.gd
+@@ -278,11 +278,10 @@
+ ## New projects retain their creation-time supply through all phases. A later
+ ## Studio purchase never changes a project that has already begun development.
+ func get_project_features_for_phase(project: ProjectState, phase: StringName) -> Array[CardData]:
+-	if project == null or not project.has_predevelopment_identity():
+-		return get_cards_by_phase_and_types(phase, [&"feature"] as Array[StringName])
+-	var result: Array[CardData] = []
+-	for id: StringName in project.get_feature_supply_ids():
+-		var card := get_card(id)
+-		if card != null and card.card_type == &"feature" and card.phase == phase:
+-			result.append(card)
+-	return result
++	return get_development_catalog().get_project_features_for_phase(project,phase)
++
++
++func get_development_catalog() -> RefCounted:
++	var additional: Array[CardData] = []
++	additional.assign(_store_cards.values())
++	return preload("res://scripts/simulation/development_catalog.gd").new(get_all_cards(),additional)
+--- before/patch-notes/scripts/debug/development_replay_cli.gd
++++ after/patch-notes/scripts/debug/development_replay_cli.gd
+@@ -0,0 +1,56 @@
++## Headless replay bootstrap for an explicit fresh-Studio recipe. This does not
++## deserialize saves or allow Continue outside the existing Studio checkpoint.
++extends SceneTree
++
++const Session := preload("res://scripts/simulation/development_session.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++
++func _initialize() -> void:
++	await process_frame
++	var inputs: Dictionary = {"recipe":OS.get_environment("PN_DEVELOPMENT_RECIPE"),"tape":OS.get_environment("PN_DEVELOPMENT_TAPE"),"output":OS.get_environment("PN_CARD_FRAME_OUTPUT")}
++	for argument in OS.get_cmdline_user_args():
++		var pair:=argument.trim_prefix("--").split("=",true,1)
++		if pair.size()==2 and inputs.has(pair[0]): inputs[pair[0]]=pair[1]
++	if inputs.recipe.is_empty() or inputs.tape.is_empty():
++		print("Usage: --headless --path patch-notes --script res://scripts/debug/development_replay_cli.gd -- --recipe=<fresh-studio.json> --tape=<tape.json> --output=<report.json>")
++		quit(2)
++		return
++	var recipe: Variant = JSON.parse_string(FileAccess.get_file_as_string(inputs.recipe))
++	var session:=create_fresh_session(recipe,root.get_node("CardDatabase"))
++	var report: Dictionary = {"ok":false,"error":"Invalid fresh-Studio recipe"}
++	if session!=null: report=Replay.replay(session,Replay.load_tape(inputs.tape))
++	print(JSON.stringify(report))
++	if not inputs.output.is_empty():
++		var output:=FileAccess.open(inputs.output,FileAccess.WRITE)
++		if output==null: quit(2); return
++		output.store_string(JSON.stringify(report,"\t"))
++	quit(0 if report.ok else 1)
++
++static func create_fresh_session(recipe: Variant,database: Node) -> RefCounted:
++	if not recipe is Dictionary or recipe.get("schema_version")!=1: return null
++	for field in ["project_id","studio_id","studio_name","game_name","genre","theme","specialty","competitor","forecast","seed"]:
++		if not recipe.get(field) is String or recipe[field].is_empty(): return null
++	if not recipe.seed.is_valid_int() or int(recipe.seed)<0 or int(recipe.seed)>ProjectState.MAX_SIGNED_INT-RunRandom.STREAMS.size(): return null
++	if not recipe.get("traits") is Array or not recipe.get("tutorial") is bool: return null
++	var scope: Variant = recipe.get("required_scope")
++	if (not scope is int and not scope is float) or not is_finite(float(scope)) or scope!=floor(float(scope)) or scope<1 or scope>1000000: return null
++	var traits: Array[StringName] = []
++	for trait_id: Variant in recipe.traits:
++		if not trait_id is String: return null
++		traits.append(StringName(trait_id))
++	var snapshots:=PrimitiveSnapshotDatabase.new()
++	if not snapshots.load_ledgers() or not snapshots.has_competitor(StringName(recipe.competitor)) or not snapshots.has_forecast(StringName(recipe.forecast)): return null
++	var run:=RunState.new()
++	run.initialize_cash(0)
++	if not run.create_studio_with_traits(recipe.studio_name,StringName(recipe.specialty),traits): return null
++	# Stable fresh-run identities, not saved-state mutation or migration.
++	run.set("_bank_run_id",StringName(recipe.studio_id))
++	run.set("_employees",EmployeeRoster.create(StringName(recipe.studio_id)))
++	var project:=ProjectState.new(int(scope))
++	project.set("_release_id",StringName(recipe.project_id))
++	if not project.initialize_snapshots(StringName(recipe.competitor),StringName(recipe.forecast)): return null
++	if not project.configure_predevelopment(recipe.game_name,StringName(recipe.genre),StringName(recipe.theme),run.get_owned_feature_ids()): return null
++	if recipe.tutorial and not run.begin_first_game_tutorial(project): return null
++	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed=int(recipe.seed)+RunRandom.STREAMS.find(id)
++	var session:=Session.new()
++	return session if session.initialize(project,run,database.get_development_catalog(),snapshots) else null
+--- before/patch-notes/scripts/debug/verify_development_protocol.gd
++++ after/patch-notes/scripts/debug/verify_development_protocol.gd
+@@ -0,0 +1,121 @@
++extends "res://scripts/debug/verify_design_command.gd"
++
++const Session := preload("res://scripts/simulation/development_session.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++var reentry_count:=0
++
++func make_session(seed_value: int = 4417) -> RefCounted:
++	var project:=ProjectState.new(300)
++	project.set("_release_id",&"protocol_project")
++	project.initialize_snapshots(&"fast_follower",&"market_surge")
++	var run:=RunState.new()
++	run.initialize_cash(0)
++	_expect(run.create_studio_with_traits("Protocol",&"action",[]),"Protocol studio")
++	run.set("_bank_run_id",&"protocol_studio")
++	run.set("_employees",EmployeeRoster.create(&"protocol_studio"))
++	_expect(project.configure_predevelopment("Protocol",&"action",&"fantasy",run.get_owned_feature_ids()),"Protocol project")
++	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed=seed_value+RunRandom.STREAMS.find(id)
++	var snapshots:=PrimitiveSnapshotDatabase.new()
++	snapshots.load_ledgers()
++	var session:=Session.new()
++	_expect(session.initialize(project,run,root.get_node("CardDatabase").get_development_catalog(),snapshots),"Protocol session")
++	return session
++
++func _initialize() -> void:
++	await process_frame
++	var session:=make_session()
++	var tape:=Replay.begin(session)
++	var empty_before:=Replay.state(session)
++	for bad in [{},{"schema_version":2},{"sequence":1},{"project_cycle":1.0},{"run_cycle":-1},{"project_id":"foreign"},{"project_id":{}},{"phase":"beta"},{"phase":[]},{"payload":[]},{"type":"unknown"}]:
++		var request: Dictionary = session.command(&"begin")
++		if bad.is_empty(): request={}
++		else: request.merge(bad,true)
++		var result: Dictionary = session.execute(request)
++		_expect(not result.ok and result.events.is_empty() and Replay.state(session)==empty_before,"Malformed/stale request is side-effect free")
++	var before_cycle: int = session.project.get_current_cycle()
++	_expect(Replay.record(session,tape,session.command(&"priorities",{"distribution":{0:40,1:20,2:20,3:20}})).ok,"Planning priority accepted")
++	_expect(session.project.get_current_cycle()==before_cycle,"Planning priorities are free")
++	var request: Dictionary = session.command(&"begin")
++	_expect(Replay.record(session,tape,request).ok,"Initial deal accepted")
++	var before:=Replay.state(session)
++	_expect(not Replay.record(session,tape,request).ok and Replay.state(session)==before,"Consumed command cannot repeat")
++	for ids in [[-1],[session.hand.candidate_ids[0],session.hand.candidate_ids[0]],[0.0]]:
++		_expect(not Replay.record(session,tape,session.command(&"redraw",{"candidate_ids":ids})).ok and Replay.state(session)==before,"Invalid instance selection preserves complete state")
++	# Run direct field changes only in a separate constructed failure fixture.
++	var broken:=make_session()
++	broken.hand._pass_definitions.clear()
++	var broken_before:=Replay.state(broken)
++	_expect(not broken.execute(broken.command(&"begin")).ok and Replay.state(broken)==broken_before,"Failed initial deal restores RNG and planning state")
++	# Reentrant commands from project signals cannot resolve twice.
++	session.project.cycle_changed.connect(func() -> void:
++		var inside:=Replay.state(session)
++		var rejected: Dictionary = session.execute(session.command(&"host_playtest"))
++		_expect(not rejected.ok and Replay.state(session)==inside,"Reentrant action rejected atomically")
++		reentry_count+=1)
++	for phase in range(3):
++		if phase>0:
++			_expect(Replay.record(session,tape,session.command(&"enter_next_phase")).ok,"Enter next phase")
++			var entered:=Replay.state(session)
++			_expect(not Replay.record(session,tape,session.command(&"enter_next_phase")).ok and Replay.state(session)==entered,"Repeated entry cannot mint redraws")
++			_expect(Replay.record(session,tape,session.command(&"begin")).ok,"Begin next phase")
++		var changed: Dictionary = {&"qa":40,&"marketing":30,&"insider":30} if phase==2 else {0:20,1:40,2:20,3:20}
++		_expect(Replay.record(session,tape,session.command(&"priorities",{"distribution":changed})).ok,"Active priority change")
++		for attempt in range(3):
++			var selected: Array[int] = session.hand.candidate_ids.slice(0,4)
++			_expect(Replay.record(session,tape,session.command(&"play",{"candidate_ids":selected})).ok,"Legal recorded hand")
++			if phase>0 and attempt==0:
++				_expect(Replay.record(session,tape,session.command(&"host_playtest")).ok,"Host Playtest recorded")
++				var pending:=Replay.state(session)
++				_expect(not Replay.record(session,tape,session.command(&"host_playtest")).ok and Replay.state(session)==pending,"Second pending playtest cannot charge twice")
++		var cycle: int = session.project.get_current_cycle()
++		var run_cycle: int = session.run.get_completed_run_cycles()
++		_expect(Replay.record(session,tape,session.command(&"request_exit")).ok,"Exit request")
++		if phase>0:
++			_expect(session.awaiting_confirmation,"Under-scope exit needs explicit confirmation")
++			var waiting:=Replay.state(session)
++			_expect(not Replay.record(session,tape,session.command(&"play",{"candidate_ids":session.hand.candidate_ids.slice(0,4)})).ok and Replay.state(session)==waiting,"Pending confirmation blocks effects")
++			_expect(Replay.record(session,tape,session.command(&"cancel_exit")).ok,"Cancel exit")
++			var canceled:=Replay.state(session)
++			_expect(not Replay.record(session,tape,session.command(&"confirm_exit")).ok and Replay.state(session)==canceled,"Cannot confirm canceled request")
++			_expect(Replay.record(session,tape,session.command(&"request_exit")).ok,"Request exit again")
++			_expect(Replay.record(session,tape,session.command(&"confirm_exit")).ok,"Confirm exit")
++		_expect(session.finalized and session.project.get_current_cycle()==cycle and session.run.get_completed_run_cycles()==run_cycle,"Finalization costs zero cycles")
++	_expect(reentry_count==14,"Exactly fourteen productive-cycle notifications")
++	var ended:=Replay.state(session)
++	_expect(not Replay.record(session,tape,session.command(&"enter_next_phase")).ok and Replay.state(session)==ended,"Beta boundary cannot enter Studio or refresh redraws")
++	var output:=OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	var path:=output+".tape.json" if not output.is_empty() else "user://development-tape.json"
++	_expect(Replay.save_tape(path,tape),"Tape writes")
++	var loaded:=Replay.load_tape(path)
++	_expect(loaded==tape,"Object-disabled tape preserves 64-bit counters, keys and typed arrays")
++	var replayed:=make_session()
++	var report:=Replay.replay(replayed,loaded)
++	_expect(report.ok and Replay.state(replayed)==ended,"Fresh session replays every accepted/rejected action and final state exactly")
++	var other:=make_session(4418)
++	var other_before:=Replay.state(other)
++	_expect(not Replay.replay(other,loaded).ok and Replay.state(other)==other_before,"Different initial RNG rejected before mutation")
++	var altered:=loaded.duplicate(true)
++	altered.source_identity="wrong"
++	var fresh:=make_session()
++	var fresh_before:=Replay.state(fresh)
++	_expect(not Replay.replay(fresh,altered).ok and Replay.state(fresh)==fresh_before,"Source mismatch rejected before mutation")
++	for field in ["schema_version","engine_version","rng_algorithm","initial_rng"]:
++		var incompatible:=loaded.duplicate(true)
++		incompatible[field]="invalid"
++		_expect(not Replay.replay(fresh,incompatible).ok and Replay.state(fresh)==fresh_before,"Replay version/RNG fence rejects before mutation")
++	altered=loaded.duplicate(true)
++	altered.steps[0].state="wrong"
++	var mismatch:=Replay.replay(fresh,altered)
++	_expect(not mismatch.ok and mismatch.step==0,"Replay identifies first divergent action")
++	var policy_session:=make_session()
++	var policy:=func(observation: Dictionary) -> Dictionary:
++		observation.candidates.clear()
++		return {"type":&"begin","payload":{}}
++	var bounded:=Replay.drive(policy_session,policy,1)
++	_expect(not bounded.ok and bounded.error=="Policy step bound reached" and policy_session.hand._candidate_cards.size()==7,"Policy observation is detached; explicit bound halts execution")
++	_expect(not Replay.drive(make_session(),func(_view: Dictionary) -> Dictionary: return {"type":&"play","payload":{}},10).ok,"Illegal policy action stops with evidence")
++	if not output.is_empty():
++		FileAccess.open(output+".report.json",FileAccess.WRITE).store_string(JSON.stringify({"replay":report,"steps":tape.steps.size(),"reentry_checks":reentry_count,"final_state":Replay.digest(ended)},"\t"))
++		FileAccess.open(output+".recipe.json",FileAccess.WRITE).store_string(JSON.stringify({"schema_version":1,"project_id":"protocol_project","studio_id":"protocol_studio","studio_name":"Protocol","game_name":"Protocol","genre":"action","theme":"fantasy","specialty":"action","competitor":"fast_follower","forecast":"market_surge","seed":"4417","traits":[],"tutorial":false,"required_scope":300},"\t"))
++	print("Development protocol and tape verification complete: %d steps"%tape.steps.size())
++	quit(1 if _failures else 0)
+--- before/patch-notes/scripts/debug/verify_development_replay.gd
++++ after/patch-notes/scripts/debug/verify_development_replay.gd
+@@ -0,0 +1,137 @@
++extends "res://scripts/debug/verify_design_command.gd"
++
++const PHASE_SCENES := [preload("res://scenes/phases/design_phase.tscn"), preload("res://scenes/phases/alpha_phase.tscn"), preload("res://scenes/phases/beta_phase.tscn")]
++const PHASE_NAMES := ["design", "alpha", "beta"]
++var route_events: Array = []
++
++func _initialize() -> void:
++	await process_frame
++	mode = OS.get_environment("PN_DEVELOPMENT_MODE")
++	var modes := [mode] if not mode.is_empty() else ["live", "headless"]
++	for selected_mode in modes:
++		mode = selected_mode
++		traces.clear()
++		await development_cases(root.get_node("CardDatabase"))
++	quit(1 if _failures else 0)
++
++func development_snapshot(phase: Object, index: int, project: ProjectState, run: RunState) -> Dictionary:
++	var result := {"project":freeze(project), "run":freeze(run), "candidates":freeze(phase.get("_candidate_cards")), "priorities":freeze(phase.call("get_priority_distribution"))}
++	if index < 2:
++		result.available = freeze(phase.get("_available_features"))
++		result.exhausted = freeze(phase.get("_exhausted_card_ids" if index==0 else "_exhausted_feature_ids"))
++	if index==1: result.pending = freeze(phase.get("_pending_playtest_categories"))
++	if index==2:
++		result.pending = freeze(phase.get("_pending_corrective_pass_ids"))
++		result.injected = []
++		if mode=="headless":
++			for id in phase.candidate_ids: result.injected.append(id in phase.injected_candidate_ids)
++		else:
++			for view in phase._candidate_views: result.injected.append(view in phase._injected_corrective_views)
++	return result
++
++func development_cases(database: Node) -> void:
++	var snapshots := PrimitiveSnapshotDatabase.new()
++	_expect(snapshots.load_ledgers(), "Replay snapshot ledger loads")
++	for seed_value in [1104,4417,90210]:
++		for scenario in ["normal", "tutorial", "lean", "under_scope"]:
++			var project := ProjectState.new(300 if scenario=="under_scope" else 30)
++			project.set("_release_id",&"development_replay_project")
++			project.initialize_snapshots(&"fast_follower",&"market_surge")
++			var run := RunState.new()
++			run.initialize_cash(0)
++			_expect(run.create_studio_with_traits("Replay",&"action",[&"lean_production"] if scenario=="lean" else []),"Replay studio setup")
++			run.set("_bank_run_id",&"development_replay_studio")
++			run.set("_employees",EmployeeRoster.create(&"development_replay_studio"))
++			_expect(project.configure_predevelopment("Replay",&"action",&"fantasy",run.get_owned_feature_ids()),"Replay project supply freezes")
++			if scenario=="tutorial": _expect(run.begin_first_game_tutorial(project),"Replay tutorial setup")
++			for id in RunRandom.STREAMS: run.random_streams.stream(id).seed=seed_value+RunRandom.STREAMS.find(id)
++			route_events=[]
++			for id in [&"values_changed",&"cycle_changed"]: project.connect(id,func() -> void: route_events.append(str(id)))
++			for id in [&"cash_changed",&"calendar_changed",&"redraws_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"publishers_changed",&"finance_changed",&"fans_changed",&"employees_changed"]: run.connect(id,func() -> void: route_events.append(str(id)))
++			var steps: Array = []
++			var session: RefCounted
++			if mode=="headless":
++				session=load("res://scripts/simulation/development_session.gd").new()
++				_expect(session.initialize(project,run,database.get_development_catalog(),snapshots),"Headless session initializes")
++			for index in range(3):
++				var phase: Object
++				var begun:=false
++				if mode=="headless":
++					if index>0: _expect(session.execute(session.command(&"enter_next_phase")).ok,"Headless phase entry")
++					phase=session.hand
++					route_events.clear()
++					begun=session.execute(session.command(&"begin")).ok
++				else:
++					phase = PHASE_SCENES[index].instantiate()
++					if mode=="oracle": phase.set_script(load(ProjectSettings.globalize_path("res://../docs/codex/threads/simulation-engine/m2d-v1/"+PHASE_NAMES[index]+"_phase_oracle.gd")))
++					if index==2: _expect(phase.setup(project,run,snapshots),"Replay Beta setup"); _expect(phase.authorize_launch(),"Replay launch authority")
++					else: phase.setup(project,run)
++					root.add_child(phase)
++					await process_frame
++					run.refresh_redraws()
++					route_events.clear()
++					begun = phase.call("begin_"+PHASE_NAMES[index])
++				_expect(begun,"Replay phase begins: "+PHASE_NAMES[index])
++				steps.append({"phase":index,"action":"begin","ok":begun,"state":development_snapshot(phase,index,project,run),"signals":route_events.duplicate()})
++				var actions: Array = ["redraw","priority","priority","play","playtest","playtest","play","redraw","play","playtest","exit"]
++				for action: String in actions:
++					route_events.clear()
++					var ok:=false
++					if mode=="headless":
++						var payload: Dictionary = {}
++						var kind:=StringName(action)
++						match action:
++							"redraw": payload={"candidate_ids":phase.candidate_ids.slice(0,1)}
++							"play": payload={"candidate_ids":phase.candidate_ids.slice(0,4)}
++							"priority": kind=&"priorities"; payload={"distribution":{&"qa":40,&"marketing":30,&"insider":30} if index==2 else {0:40,1:20,2:20,3:20}}
++							"playtest": kind=&"host_playtest"
++							"exit": kind=&"request_exit"
++						var result: Dictionary = session.execute(session.command(kind,payload))
++						ok=result.ok
++						if action=="exit":
++							if session.awaiting_confirmation: ok=session.execute(session.command(&"confirm_exit")).ok
++							_expect(ok and session.finalized,"Headless phase exits")
++					else:
++						phase.get_workspace().hand_motion.cancel()
++						var pool: Array = phase.get_node("%HandContainer").get_children()
++						phase._selected_card_views.clear()
++						match action:
++							"redraw":
++								phase._selected_card_views.assign(pool.slice(0,1))
++								ok=phase.redraw_selected_cards()
++							"priority": ok=phase.commit_priority_distribution({&"qa":40,&"marketing":30,&"insider":30} if index==2 else {0:40,1:20,2:20,3:20})
++							"play":
++								phase._selected_card_views.assign(pool.slice(0,4))
++								var before:=project.get_current_cycle()
++								if index==0: phase._on_play_card_pressed()
++								elif index==1: phase._on_play_alpha_hand_pressed()
++								else: phase.play_selected_hand()
++								ok=project.get_current_cycle()==before+1
++							"playtest":
++								if index>0: ok=phase.host_playtest()
++							"exit":
++								if index==0:
++									phase._on_proceed_to_alpha_pressed()
++									ok=project.has_design_bug_finalization()
++								elif index==1:
++									ok=phase.request_proceed_to_beta()
++									if phase._scope_warning_pending: phase._on_under_scope_confirmed(); ok=project.has_alpha_finalization()
++								else:
++									ok=phase.request_launch()
++									if phase._launch_confirmation_pending: ok=phase.confirm_launch_for_verification()
++								_expect(ok,"Replay exits "+PHASE_NAMES[index])
++						phase.get_workspace().hand_motion.cancel()
++					steps.append({"phase":index,"action":action,"ok":ok,"state":development_snapshot(phase,index,project,run),"signals":route_events.duplicate()})
++				if mode!="headless": phase.free()
++			traces.append({"seed":seed_value,"scenario":scenario,"steps":steps})
++	var digests: Array = []
++	for trace in traces: digests.append({"seed":trace.seed,"scenario":trace.scenario,"sha256":JSON.stringify(trace).sha256_text()})
++	var fixture:="res://scripts/debug/fixtures/development_replay_oracle_digests.json"
++	if mode!="oracle":
++		_expect(FileAccess.file_exists(fixture),"Pinned development oracle exists")
++		if FileAccess.file_exists(fixture): _expect(JSON.parse_string(JSON.stringify(digests))==JSON.parse_string(FileAccess.get_file_as_string(fixture)),mode+" development traces match original")
++	var output:=OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	if not output.is_empty():
++		FileAccess.open(output+"."+mode,FileAccess.WRITE).store_string(JSON.stringify(traces,"\t"))
++		FileAccess.open(output+"."+mode+".digests.json",FileAccess.WRITE).store_string(JSON.stringify(digests,"\t"))
++	print("Development replay: %d routes (%s)"%[traces.size(),mode])
+--- before/patch-notes/scripts/phases/alpha_phase.gd
++++ after/patch-notes/scripts/phases/alpha_phase.gd
+@@ -1,5 +1,7 @@
+ class_name AlphaPhase
+ extends Control
++
++const DevelopmentActions := preload("res://scripts/simulation/development_actions.gd")
+ 
+ const AlphaHandCommand := preload("res://scripts/simulation/alpha_hand_command.gd")
+ 
+@@ -121,12 +123,9 @@
+ func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
+ 	if not is_inside_tree(): return false
+ 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or not PriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+-	var commit := func() -> bool:
+-		if not _priority_allocation.set_distribution(distribution): return false
+-		_priority_draft = _priority_allocation.get_priority_distribution()
+-		_project_state.advance_cycle()
+-		return true
+-	if not _run_state.complete_productive_action(commit, 0, -1, &"", &"priority_change", _project_state.get_release_id()): return false
++	var publish:=func() -> void:
++		_priority_draft=_priority_allocation.get_priority_distribution()
++	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
+ 	_sync_priority_controls()
+ 	return true
+ 
+@@ -186,19 +185,14 @@
+ 
+ 
+ func host_playtest() -> bool:
+-	if not _can_host_playtest():
+-		return false
+-	var corrective_categories := _select_corrective_categories()
+-	if corrective_categories.size() != 2 or corrective_categories[0] == corrective_categories[1]:
+-		return false
+-	var commit := func() -> bool:
+-		_pending_playtest_categories.assign(corrective_categories)
+-		_project_state.advance_cycle()
+-		return true
+-	if not (_run_state.complete_productive_action(commit, 0, -1, &"", &"playtest", _project_state.get_release_id()) if _run_state != null else commit.call()): return false
+-	print("Host Playtest complete! One cycle advanced. Corrective Passes queued: %s" % _format_corrective_pass_names(_pending_playtest_categories))
++	if not _can_host_playtest(): return false
++	_hand_command_busy=true
++	var actions:=_capture_development_actions()
++	actions.hand._pending_playtest_categories=_pending_playtest_categories
++	var accepted: bool = actions.host_playtest()
++	_hand_command_busy=false
+ 	_update_host_playtest_action()
+-	return true
++	return accepted
+ 
+ 
+ func _on_host_playtest_pressed() -> void:
+@@ -270,106 +264,27 @@
+ 
+ 
+ func _build_alpha_feature_history(report_errors: bool = true) -> Dictionary:
+-	var card_database := get_node_or_null("/root/CardDatabase")
+-	if card_database == null:
+-		if report_errors:
+-			push_warning("Cannot finalize Alpha Feature history without CardDatabase.")
+-		return {&"valid": false}
+-	var definitions: Array[CardData] = []
+-	definitions.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_ALPHA))
+-	var eligible_ids: Dictionary[StringName, bool] = {}
+-	for card: CardData in definitions:
+-		if (
+-			card == null
+-			or card.id.is_empty()
+-			or card.phase != CardData.PHASE_ALPHA
+-			or card.card_type != &"feature"
+-			or card.renewable
+-			or eligible_ids.has(card.id)
+-		):
+-			if report_errors:
+-				push_warning("Cannot finalize invalid Alpha Feature definition history.")
+-			return {&"valid": false}
+-		eligible_ids[card.id] = true
+-	for exhausted_id: StringName in _exhausted_feature_ids:
+-		if not eligible_ids.has(exhausted_id):
+-			if report_errors:
+-				push_warning("Exhausted ID is not an eligible Alpha Feature: %s" % exhausted_id)
+-			return {&"valid": false}
+-
+-	var implemented_ids: Array[StringName] = []
+-	var unimplemented_ids: Array[StringName] = []
+-	for id: StringName in eligible_ids:
+-		if _exhausted_feature_ids.has(id):
+-			implemented_ids.append(id)
+-		else:
+-			unimplemented_ids.append(id)
+-	implemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
+-	unimplemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
+-	return {
+-		&"valid": true,
+-		&"implemented_ids": implemented_ids,
+-		&"unimplemented_ids": unimplemented_ids,
+-	}
++	return _capture_development_actions().boundary()._build_alpha_feature_history(report_errors)
+ 
+ 
+ func _calculate_alpha_finalization(stochastic_roll: float, variance_roll: float) -> Dictionary:
+-	if (
+-		_project_state == null
+-		or not is_finite(stochastic_roll)
+-		or stochastic_roll < 0.0
+-		or stochastic_roll >= 1.0
+-		or not is_finite(variance_roll)
+-		or variance_roll < 0.0
+-		or variance_roll >= 1.0
+-	):
+-		return {&"valid": false}
+-	var pressure := _project_state.get_accumulated_alpha_bug_pressure()
+-	if not is_finite(pressure) or pressure < 0.0:
+-		return {&"valid": false}
+-	var base := floori(pressure)
+-	var fraction := pressure - base
+-	var rounded := base + (1 if stochastic_roll < fraction else 0)
+-	var variance := _get_alpha_bug_variance(variance_roll)
+-	var generated := maxi(0, rounded + variance)
+-	return {
+-		&"valid": true,
+-		&"pressure": pressure,
+-		&"base": base,
+-		&"rounded": rounded,
+-		&"variance": variance,
+-		&"generated": generated,
+-	}
++	return _capture_development_actions().boundary()._calculate_alpha_finalization(stochastic_roll,variance_roll)
+ 
+ 
+ func _get_alpha_bug_variance(roll: float) -> int:
+-	if roll < BUG_VARIANCE_NEGATIVE_TWO_THRESHOLD:
+-		return -2
+-	if roll < BUG_VARIANCE_NEGATIVE_ONE_THRESHOLD:
+-		return -1
+-	if roll < BUG_VARIANCE_ZERO_THRESHOLD:
+-		return 0
+-	if roll < BUG_VARIANCE_POSITIVE_ONE_THRESHOLD:
+-		return 1
+-	return 2
++	return _capture_development_actions().boundary()._get_alpha_bug_variance(roll)
+ 
+ 
+ func _finalize_alpha(stochastic_roll: float, variance_roll: float) -> bool:
+ 	if not _can_proceed_to_beta():
+ 		return false
+-	var feature_history := _build_alpha_feature_history()
+-	if not feature_history.valid:
+-		return false
+-	var finalization := _calculate_alpha_finalization(stochastic_roll, variance_roll)
+-	if not finalization.valid:
+-		return false
+-	if not _project_state.finalize_alpha(
+-		finalization.generated,
+-		feature_history.implemented_ids,
+-		feature_history.unimplemented_ids,
+-	):
+-		return false
+-	var discarded_playtest := not _pending_playtest_categories.is_empty()
++	var discarded_playtest:=not _pending_playtest_categories.is_empty()
++	_hand_command_busy=true
++	var result: Dictionary = _capture_development_actions().finalize([stochastic_roll,variance_roll] as Array[float])
++	_hand_command_busy=false
++	if not result.ok: return false
++	var feature_history: Dictionary = result.history
++	var finalization: Dictionary = result.finalization
+ 	_pending_playtest_categories.clear()
+ 	_retire_alpha()
+ 	print(
+@@ -440,25 +355,7 @@
+ 
+ 
+ func _select_corrective_categories() -> Array[ProjectState.CoreScore]:
+-	if _project_state == null:
+-		return [] as Array[ProjectState.CoreScore]
+-	var categories: Array[ProjectState.CoreScore] = []
+-	categories.assign(ProjectState.CoreScore.values())
+-	var profile := PrimitiveReviewCalculator.get_project_profile(_project_state)
+-	if profile == null:
+-		return [] as Array[ProjectState.CoreScore]
+-	categories.sort_custom(func(a: ProjectState.CoreScore, b: ProjectState.CoreScore) -> bool:
+-		var a_score := float(_project_state.get_core_score(a)) / profile.get_standard(a)
+-		var b_score := float(_project_state.get_core_score(b)) / profile.get_standard(b)
+-		if a_score != b_score:
+-			return a_score < b_score
+-		var a_priority := get_priority(a)
+-		var b_priority := get_priority(b)
+-		if a_priority != b_priority:
+-			return a_priority > b_priority
+-		return a < b
+-	)
+-	return categories.slice(0, 2)
++	return _capture_development_actions().corrective_categories()
+ 
+ 
+ func _format_corrective_pass_names(categories: Array) -> String:
+@@ -493,30 +390,24 @@
+ 	if not _candidate_cards.is_empty():
+ 		push_warning("Cannot deal Alpha candidates while a pool is active.")
+ 		return false
+-	var had_pending_playtest := not _pending_playtest_categories.is_empty()
+-	var deal := (
+-		_build_corrective_candidate_definitions(get_priority_distribution(), controlled_rolls)
+-		if had_pending_playtest
+-		else _build_weighted_candidate_definitions(get_priority_distribution(), controlled_rolls)
+-	)
++	var actions:=_capture_development_actions()
++	var deal: Dictionary = actions.initial_plan(controlled_rolls)
+ 	if not deal.valid:
+ 		push_warning("Could not build a complete weighted Alpha candidate pool: %s" % deal.error)
+ 		return false
+-	_candidate_cards.assign(deal.cards)
++	actions.publish_initial(deal)
++	_candidate_cards.assign(actions.hand._candidate_cards)
++	_pending_playtest_categories.assign(actions.hand._pending_playtest_categories)
+ 	for card: CardData in _candidate_cards:
+ 		var card_view := CARD_VIEW_SCENE.instantiate() as CardView
+ 		card_view.set_card(card)
+ 		card_view.card_pressed.connect(_on_card_pressed)
+ 
+ 		%HandContainer.add_child(card_view)
+-	if had_pending_playtest:
+-		var injected_categories := _pending_playtest_categories.duplicate()
+-		_pending_playtest_categories.clear()
+-		print("Host Playtest corrective Passes injected and consumed: %s" % _format_corrective_pass_names(injected_categories))
++	_sync_command_tokens(actions.hand)
+ 	_update_host_playtest_action()
+ 	_update_proceed_action()
+ 	_refresh_redraw_controls()
+-	_command_revision += 1
+ 	return true
+ 
+ 
+@@ -534,49 +425,44 @@
+ 
+ func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
+ 	if not _can_redraw_selection(): return false
+-	var count := _selected_card_views.size()
+-	if not controlled_rolls.is_empty() and controlled_rolls.size() != count: return false
+-	for roll: float in controlled_rolls:
+-		if not is_finite(roll) or roll < 0.0 or roll >= 1.0: return false
+-	var rng_state := _deal_rng.state
+-	var plan := _plan_selected_redraw(controlled_rolls)
+-	if not plan.valid:
+-		_deal_rng.state = rng_state
+-		if not plan.failed_features.is_empty():
+-			%RedrawFeedbackLabel.text = "No more Feature cards"
+-			for view: CardView in plan.failed_features: view.shake_no()
+-		return false
+-	# Prepare every view before changing the pool, lifecycle, selection, or budget.
++	_hand_command_busy=true
++	var actions:=_capture_development_actions()
++	var slots:=_redraw_slots()
++	var selected:=_selected_card_views.duplicate()
+ 	var prepared: Array[CardView] = []
+-	for card: CardData in plan.cards:
+-		var replacement_view := CARD_VIEW_SCENE.instantiate() as CardView
+-		if replacement_view == null:
+-			for view: CardView in prepared: view.free()
+-			_deal_rng.state = rng_state
+-			return false
+-		replacement_view.set_card(card)
+-		replacement_view.card_pressed.connect(_on_card_pressed)
+-		prepared.append(replacement_view)
+-	var selected := _selected_card_views.duplicate()
+-	for index in range(count):
+-		var old_view: CardView = selected[index]
+-		var slot := old_view.get_index()
+-		var replacement: CardData = plan.cards[index]
+-
+-		_candidate_cards[slot] = replacement
+-
+-		%HandContainer.remove_child(old_view)
+-		old_view.queue_free()
+-		%HandContainer.add_child(prepared[index])
+-		%HandContainer.move_child(prepared[index], slot)
+-	_selected_card_views.clear()
+-	%RedrawFeedbackLabel.text = ""
+-	# One budget notification, after the complete pool and selection are committed.
+-	_run_state.consume_redraw(count)
++	var prepare:=func(cards: Array) -> bool:
++		for card: CardData in cards:
++			var view: CardView = CARD_VIEW_SCENE.instantiate() as CardView
++			if view==null: return false
++			view.set_card(card)
++			view.card_pressed.connect(_on_card_pressed)
++			prepared.append(view)
++		return true
++	var publish:=func(_plan: Dictionary) -> void:
++		_candidate_cards.assign(actions.hand._candidate_cards)
++
++		for index in range(slots.size()):
++			var old: CardView = selected[index]
++			%HandContainer.remove_child(old)
++			old.queue_free()
++			%HandContainer.add_child(prepared[index])
++			%HandContainer.move_child(prepared[index],slots[index])
++
++		_selected_card_views.clear()
++		_sync_command_tokens(actions.hand)
++	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish)
++	if not result.ok:
++		for view in prepared: view.free()
++		if not result.plan.failed_features.is_empty():
++			%RedrawFeedbackLabel.text="No more Feature cards"
++			for slot: int in result.plan.failed_features: (%HandContainer.get_child(slot) as CardView).shake_no()
++	else:
++		%RedrawFeedbackLabel.text=""
++		_sync_command_tokens(actions.hand)
++	_hand_command_busy=false
+ 	_update_play_action()
+ 	_refresh_redraw_controls()
+-	_command_revision += 1
+-	return true
++	return result.ok
+ 
+ 
+ func _on_redraw_pressed() -> void:
+@@ -595,49 +481,11 @@
+ 
+ 
+ func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
+-	var cards: Array[CardData] = []
+-	var reserved: Array[StringName] = []
+-	var failed_features: Array[CardView] = []
+-	var valid := true
+-	for index in range(_selected_card_views.size()):
+-		var view := _selected_card_views[index]
+-		var old_card := view.card_data
+-		var feature_entries: Array[Dictionary] = []
+-		var pass_entries: Array[Dictionary] = []
+-		for card: CardData in _available_features:
+-			if card.id == old_card.id or reserved.has(card.id): continue
+-			var already_visible := false
+-			for current: CardData in _candidate_cards:
+-				if current.id == card.id: already_visible = true
+-			if already_visible: continue
+-			var weight := _calculate_candidate_weight(card, get_priority_distribution())
+-			if weight > 0.0: feature_entries.append({&"card": card, &"weight": weight})
+-		for card: CardData in _pass_definitions:
+-			if card.id == old_card.id: continue
+-			var weight := _calculate_candidate_weight(card, get_priority_distribution())
+-			if weight > 0.0: pass_entries.append({&"card": card, &"weight": weight})
+-		feature_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+-		pass_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+-		var roll := controlled_rolls[index] if not controlled_rolls.is_empty() else _deal_rng.randf()
+-		var entries: Array[Dictionary] = []
+-		var weighted_roll := roll
+-		if not feature_entries.is_empty() and not pass_entries.is_empty():
+-			# Split one uniform roll by class, then use its remaining range for
+-			# priority-weighted selection within that class.
+-			entries = feature_entries if roll < 0.5 else pass_entries
+-			weighted_roll = roll * 2.0 if roll < 0.5 else (roll - 0.5) * 2.0
+-		elif not feature_entries.is_empty():
+-			entries = feature_entries
+-		else:
+-			entries = pass_entries
+-		var replacement := _select_weighted_entry(entries, weighted_roll)
+-		if replacement == null:
+-			valid = false
+-			if old_card.card_type == &"feature": failed_features.append(view)
+-		else:
+-			cards.append(replacement)
+-			if not replacement.renewable: reserved.append(replacement.id)
+-	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}
++	var plan: Dictionary = _capture_development_actions().redraw_plan(_redraw_slots(),controlled_rolls)
++	var failed: Array[CardView] = []
++	for slot: int in plan.failed_features: failed.append(%HandContainer.get_child(slot))
++	plan.failed_features=failed
++	return plan
+ 
+ 
+ func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE, excluded_ids: Array[StringName] = []) -> Dictionary:
+@@ -979,7 +827,7 @@
+ 	state.active = _phase_state == PhaseState.ACTIVE_DEVELOPMENT
+ 	state._pending_playtest_categories.assign(_pending_playtest_categories)
+ 	state.revision = _command_revision
+-	if is_inside_tree():
++	if is_inside_tree() and get_node_or_null("%HandContainer")!=null:
+ 		for view in %HandContainer.get_children():
+ 			if not view is CardView: continue
+ 			var id := view.get_instance_id()
+@@ -989,3 +837,25 @@
+ 			state.candidate_ids.append(_command_view_ids[id])
+ 	state.next_candidate_id = _command_next_id
+ 	return state
++
++
++func _capture_development_actions() -> RefCounted:
++	var actions:=DevelopmentActions.new()
++	actions.phase=&"alpha"
++	actions.hand=_capture_alpha_command()
++	var database:=get_node_or_null("/root/CardDatabase") if is_inside_tree() else null
++	if database!=null: actions.catalog=database.get_development_catalog()
++	actions.finalization_rng=_finalization_rng
++	return actions
++
++func _redraw_slots() -> Array[int]:
++	var slots: Array[int] = []
++	for view: CardView in _selected_card_views: slots.append(view.get_index())
++	return slots
++
++func _sync_command_tokens(state: RefCounted) -> void:
++	_command_revision=state.revision
++	_command_next_id=state.next_candidate_id
++	_command_view_ids.clear()
++	for index in range(%HandContainer.get_child_count()):
++		_command_view_ids[%HandContainer.get_child(index).get_instance_id()]=state.candidate_ids[index]
+--- before/patch-notes/scripts/phases/beta_phase.gd
++++ after/patch-notes/scripts/phases/beta_phase.gd
+@@ -1,5 +1,7 @@
+ class_name BetaPhase
+ extends Control
++
++const DevelopmentActions := preload("res://scripts/simulation/development_actions.gd")
+ 
+ const BetaHandCommand := preload("res://scripts/simulation/beta_hand_command.gd")
+ var _command_view_ids: Dictionary = {}
+@@ -20,7 +22,7 @@
+ const MARKETING_SPECIALIZATION_MULTIPLIER := BetaHandCommand.MARKETING_SPECIALIZATION_MULTIPLIER
+ const BALANCED_OPERATIONS_MULTIPLIER := BetaHandCommand.BALANCED_OPERATIONS_MULTIPLIER
+ const HOST_PLAYTEST_COST := 500
+-const HOST_PLAYTEST_COST_CENTS := 50000
++const HOST_PLAYTEST_COST_CENTS := DevelopmentActions.BETA_PLAYTEST_COST_CENTS
+ const PLAYTEST_RIVAL_PAYOUT_CENTS := BetaHandCommand.PLAYTEST_RIVAL_PAYOUT_CENTS
+ const CORE_SCORE_BY_STAT := BetaHandCommand.CORE_SCORE_BY_STAT
+ const PASS_ID_BY_CORE_SCORE := BetaHandCommand.PASS_ID_BY_CORE_SCORE
+@@ -142,12 +144,9 @@
+ func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
+ 	if not is_inside_tree(): return false
+ 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+-	var commit := func() -> bool:
+-		if not _priority_allocation.set_distribution(distribution): return false
+-		_priority_draft = _priority_allocation.get_distribution()
+-		_project_state.advance_cycle()
+-		return true
+-	if not _run_state.complete_productive_action(commit, 0, -1, &"", &"priority_change", _project_state.get_release_id()): return false
++	var publish:=func() -> void:
++		_priority_draft=_priority_allocation.get_distribution()
++	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
+ 	_sync_priority_controls()
+ 	_refresh_redraw_controls()
+ 	return true
+@@ -203,7 +202,9 @@
+ 		return false
+ 	var committed_snapshot: Dictionary = _priority_draft.duplicate()
+ 	var rng_state := _deal_rng.state
+-	var deal := _build_candidate_definitions(definitions, committed_snapshot, category_rolls, definition_rolls)
++	var actions:=_capture_development_actions()
++	actions.hand.priorities=committed_snapshot
++	var deal: Dictionary = actions.initial_plan(category_rolls,definition_rolls)
+ 	if not deal.valid:
+ 		_deal_rng.state = rng_state
+ 		push_warning("Could not build the initial Beta candidate pool: %s" % deal.error)
+@@ -225,7 +226,8 @@
+ 			prepared.free()
+ 		_deal_rng.state = rng_state
+ 		return false
+-	_candidate_cards.assign(deal.cards)
++	actions.publish_initial(deal)
++	_candidate_cards.assign(actions.hand._candidate_cards)
+ 	_candidate_views.assign(prepared_views)
+ 	for view: CardView in _candidate_views:
+ 		%HandContainer.add_child(view)
+@@ -239,7 +241,7 @@
+ 	_update_host_playtest_action()
+ 	_update_launch_action()
+ 	_refresh_redraw_controls()
+-	_command_revision += 1
++	_sync_command_tokens(actions.hand)
+ 	return true
+ 
+ 
+@@ -257,45 +259,42 @@
+ 
+ func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
+ 	if not _can_redraw_selection(): return false
+-	var count := _selected_card_views.size()
+-	if not controlled_rolls.is_empty() and controlled_rolls.size() != count: return false
+-	for roll: float in controlled_rolls:
+-		if not is_finite(roll) or roll < 0.0 or roll >= 1.0: return false
+-	var rng_state := _deal_rng.state
+-	var plan := _plan_selected_redraw(controlled_rolls)
+-	if not plan.valid:
+-		_deal_rng.state = rng_state
+-		return false
+-	# Prepare every view before changing the pool, lifecycle, selection, or budget.
++	_transaction_in_progress=true
++	var actions:=_capture_development_actions()
++	var slots:=_redraw_slots()
++	var selected:=_selected_card_views.duplicate()
+ 	var prepared: Array[CardView] = []
+-	for card: CardData in plan.cards:
+-		var replacement_view := _instantiate_card_view()
+-		if replacement_view == null:
+-			for view: CardView in prepared: view.free()
+-			_deal_rng.state = rng_state
+-			return false
+-		replacement_view.set_card(card)
+-		replacement_view.card_pressed.connect(_on_card_pressed)
+-		prepared.append(replacement_view)
+-	var selected := _selected_card_views.duplicate()
+-	for index in range(count):
+-		var old_view: CardView = selected[index]
+-		var slot := old_view.get_index()
+-		var replacement: CardData = plan.cards[index]
+-
+-		_candidate_cards[slot] = replacement
+-		_candidate_views[slot] = prepared[index]
+-		%HandContainer.remove_child(old_view)
+-		old_view.queue_free()
+-		%HandContainer.add_child(prepared[index])
+-		%HandContainer.move_child(prepared[index], slot)
+-	_selected_card_views.clear()
+-	# One budget notification, after the complete pool and selection are committed.
+-	_run_state.consume_redraw(count)
++	var prepare:=func(cards: Array) -> bool:
++		for card: CardData in cards:
++			var view: CardView = _instantiate_card_view()
++			if view==null: return false
++			view.set_card(card)
++			view.card_pressed.connect(_on_card_pressed)
++			prepared.append(view)
++		return true
++	var publish:=func(_plan: Dictionary) -> void:
++		_candidate_cards.assign(actions.hand._candidate_cards)
++
++		for index in range(slots.size()):
++			var old: CardView = selected[index]
++			%HandContainer.remove_child(old)
++			old.queue_free()
++			%HandContainer.add_child(prepared[index])
++			%HandContainer.move_child(prepared[index],slots[index])
++			_candidate_views[slots[index]]=prepared[index]
++		_selected_card_views.clear()
++		_sync_command_tokens(actions.hand)
++	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish)
++	if not result.ok:
++		for view in prepared: view.free()
++
++	else:
++
++		_sync_command_tokens(actions.hand)
++	_transaction_in_progress=false
+ 	_update_play_action()
+ 	_refresh_redraw_controls()
+-	_command_revision += 1
+-	return true
++	return result.ok
+ 
+ 
+ func _on_redraw_pressed() -> void:
+@@ -314,26 +313,11 @@
+ 
+ 
+ func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
+-	var cards: Array[CardData] = []
+-	var failed := {&"valid": false, &"cards": cards, &"failed_features": []}
+-	var database := get_node_or_null("/root/CardDatabase")
+-	if database == null or _project_state == null: return failed
+-	var definitions: Array[CardData] = []
+-	definitions.assign(database.call(&"get_cards_by_phase", CardData.PHASE_BETA))
+-	var reserved := _project_state.get_exhausted_beta_card_ids()
+-	for current: CardData in _candidate_cards:
+-		if not current.renewable and not reserved.has(current.id): reserved.append(current.id)
+-	for index in range(_selected_card_views.size()):
+-		var excluded := reserved.duplicate()
+-		excluded.append(_selected_card_views[index].card_data.id)
+-		var rolls: Array[float] = []
+-		if not controlled_rolls.is_empty(): rolls.append(controlled_rolls[index])
+-		var deal := _build_candidate_definitions(definitions, get_priority_distribution(), rolls, rolls, excluded, 1)
+-		if not deal.valid: return failed
+-		var replacement: CardData = deal.cards[0]
+-		cards.append(replacement)
+-		if not replacement.renewable: reserved.append(replacement.id)
+-	return {&"valid": true, &"cards": cards, &"failed_features": []}
++	var plan: Dictionary = _capture_development_actions().redraw_plan(_redraw_slots(),controlled_rolls)
++	var failed: Array[CardView] = []
++	for slot: int in plan.failed_features: failed.append(%HandContainer.get_child(slot))
++	plan.failed_features=failed
++	return plan
+ 
+ 
+ func _on_begin_beta_pressed() -> void:
+@@ -411,18 +395,7 @@
+ 
+ 
+ func _build_launch_warnings() -> Array[String]:
+-	var warnings: Array[String] = []
+-	var current_scope := _project_state.get_current_scope()
+-	var required_scope := _project_state.get_required_scope()
+-	if current_scope < required_scope:
+-		warnings.append("Project Scope is incomplete: %d / %d." % [current_scope, required_scope])
+-		warnings.append("Scope shortfall: %d." % (required_scope - current_scope))
+-	var known_bugs := _project_state.get_known_bugs()
+-	if known_bugs > 0:
+-		warnings.append("Known Bugs remaining: %d. Unresolved Known Bugs will remain at launch." % known_bugs)
+-	if _project_state.get_marketing_output() == 0:
+-		warnings.append("No Marketing activity has been completed. Launch reach may be reduced.")
+-	return warnings
++	return _capture_development_actions().boundary()._build_launch_warnings()
+ 
+ 
+ func _finalize_beta() -> bool:
+@@ -434,15 +407,11 @@
+ 		_launch_confirmation_pending = was_confirming
+ 		_update_all_actions()
+ 		return false
+-	var database := get_node_or_null("/root/CardDatabase")
+-	if database == null or not _validate_exhausted_beta_ids(database) or not _validate_feature_histories(database):
+-		_launch_confirmation_pending = was_confirming
+-		_update_all_actions()
+-		return false
+-	_transaction_in_progress = true
+-	if not _project_state.finalize_beta():
+-		_transaction_in_progress = false
+-		_launch_confirmation_pending = was_confirming
++	_transaction_in_progress=true
++	var result: Dictionary = _capture_development_actions().finalize()
++	if not result.ok:
++		_transaction_in_progress=false
++		_launch_confirmation_pending=was_confirming
+ 		_update_all_actions()
+ 		return false
+ 	_pending_corrective_pass_ids.clear()
+@@ -454,27 +423,11 @@
+ 
+ 
+ func _validate_exhausted_beta_ids(database: Node) -> bool:
+-	for id: StringName in _project_state.get_exhausted_beta_card_ids():
+-		var card: CardData = database.call(&"get_card", id)
+-		if card == null or card.phase != CardData.PHASE_BETA or card.renewable or not FINITE_IDS.has(id):
+-			return false
+-	return true
++	return _capture_development_actions().boundary()._validate_exhausted_beta_ids(database.get_development_catalog())
+ 
+ 
+ func _validate_feature_histories(database: Node) -> bool:
+-	var histories := [
+-		[_project_state.get_implemented_design_feature_ids(), _project_state.get_unimplemented_design_feature_ids(), CardData.PHASE_DESIGN],
+-		[_project_state.get_implemented_alpha_feature_ids(), _project_state.get_unimplemented_alpha_feature_ids(), CardData.PHASE_ALPHA],
+-	]
+-	for history: Array in histories:
+-		var seen: Dictionary[StringName, bool] = {}
+-		for collection: Array in [history[0], history[1]]:
+-			for id: StringName in collection:
+-				var card: CardData = database.call(&"get_card", id)
+-				if seen.has(id) or card == null or card.phase != history[2] or card.card_type != &"feature":
+-					return false
+-				seen[id] = true
+-	return true
++	return _capture_development_actions().boundary()._validate_feature_histories(database.get_development_catalog())
+ 
+ 
+ func _retire_beta_interface() -> void:
+@@ -496,30 +449,14 @@
+ func host_playtest() -> bool:
+ 	if not _can_host_playtest():
+ 		return false
+-	var pass_ids := _select_corrective_pass_ids()
+-	if pass_ids.size() != 2 or pass_ids[0] == pass_ids[1]:
+-		return false
+-	var database := get_node_or_null("/root/CardDatabase")
+-	if database == null:
+-		return false
+-	for id: StringName in pass_ids:
+-		var card: CardData = database.call(&"get_card", id)
+-		if not _is_valid_corrective_pass(card):
+-			return false
+-	_transaction_in_progress = true
+-	_update_play_action()
+-	_update_host_playtest_action()
+-	_update_launch_action()
+-	var commit := func() -> bool:
+-		_project_state.advance_cycle()
+-		_pending_corrective_pass_ids.assign(pass_ids)
+-		return true
+-	if not _run_state.complete_productive_action(commit, -HOST_PLAYTEST_COST_CENTS, -1, &"", &"playtest", _project_state.get_release_id()):
+-		_transaction_in_progress = false
+-		_update_play_action()
+-		_update_host_playtest_action()
+-		_update_launch_action()
+-		return false
++	_transaction_in_progress=true
++	var actions:=_capture_development_actions()
++	actions.hand._pending_corrective_pass_ids=_pending_corrective_pass_ids
++	if not actions.host_playtest():
++		_transaction_in_progress=false
++		_update_all_actions()
++		return false
++	var pass_ids:=_pending_corrective_pass_ids.duplicate()
+ 	var names := _format_pass_names(pass_ids)
+ 	%ActionFeedbackLabel.text = "Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: %s" % names
+ 	%ActionFeedbackLabel.visible = true
+@@ -626,22 +563,7 @@
+ 
+ 
+ func _select_corrective_pass_ids() -> Array[StringName]:
+-	if _project_state == null:
+-		return [] as Array[StringName]
+-	var categories: Array[ProjectState.CoreScore] = []
+-	categories.assign(ProjectState.CoreScore.values())
+-	var profile := PrimitiveReviewCalculator.get_project_profile(_project_state)
+-	if profile == null:
+-		return [] as Array[StringName]
+-	categories.sort_custom(func(a: ProjectState.CoreScore, b: ProjectState.CoreScore) -> bool:
+-		var a_score := float(_project_state.get_core_score(a)) / profile.get_standard(a)
+-		var b_score := float(_project_state.get_core_score(b)) / profile.get_standard(b)
+-		return a_score < b_score if a_score != b_score else a < b
+-	)
+-	var ids: Array[StringName] = []
+-	for category: ProjectState.CoreScore in categories.slice(0, 2):
+-		ids.append(PASS_ID_BY_CORE_SCORE[category])
+-	return ids
++	return _capture_development_actions().corrective_pass_ids()
+ 
+ 
+ func _is_valid_corrective_pass(card: CardData) -> bool:
+@@ -962,3 +884,25 @@
+ 		if view in _injected_corrective_views: state.injected_candidate_ids.append(_command_view_ids[id])
+ 	state.next_candidate_id = _command_next_id
+ 	return state
++
++
++func _capture_development_actions() -> RefCounted:
++	var actions:=DevelopmentActions.new()
++	actions.phase=&"beta"
++	actions.hand=_capture_beta_command()
++	var database:=get_node_or_null("/root/CardDatabase") if is_inside_tree() else null
++	if database!=null: actions.catalog=database.get_development_catalog()
++
++	return actions
++
++func _redraw_slots() -> Array[int]:
++	var slots: Array[int] = []
++	for view: CardView in _selected_card_views: slots.append(view.get_index())
++	return slots
++
++func _sync_command_tokens(state: RefCounted) -> void:
++	_command_revision=state.revision
++	_command_next_id=state.next_candidate_id
++	_command_view_ids.clear()
++	for index in range(%HandContainer.get_child_count()):
++		_command_view_ids[%HandContainer.get_child(index).get_instance_id()]=state.candidate_ids[index]
+--- before/patch-notes/scripts/phases/design_phase.gd
++++ after/patch-notes/scripts/phases/design_phase.gd
+@@ -1,5 +1,7 @@
+ class_name DesignPhase
+ extends Control
++
++const DevelopmentActions := preload("res://scripts/simulation/development_actions.gd")
+ 
+ const DesignHandCommand := preload("res://scripts/simulation/design_hand_command.gd")
+ const ProductionHand := preload("res://scripts/simulation/production_hand.gd")
+@@ -129,13 +131,9 @@
+ 		return false
+ 	if not PriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle():
+ 		return false
+-	var commit := func() -> bool:
+-		if not _priority_allocation.set_distribution(distribution): return false
+-		_priority_draft = _priority_allocation.get_priority_distribution()
+-		_project_state.advance_cycle()
+-		return true
+-	if not _run_state.complete_productive_action(commit, 0, -1, &"", &"priority_change", _project_state.get_release_id()):
+-		return false
++	var publish:=func() -> void:
++		_priority_draft=_priority_allocation.get_priority_distribution()
++	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
+ 	_sync_priority_controls()
+ 	return true
+ 
+@@ -270,8 +268,7 @@
+ 	if not _candidate_cards.is_empty():
+ 		push_warning("Cannot deal a new Design candidate pool while the current pool is active.")
+ 		return false
+-	var priority_snapshot := get_priority_distribution()
+-	var deal := _build_weighted_candidate_definitions(priority_snapshot, controlled_rolls)
++	var deal: Dictionary = _capture_development_actions().initial_plan(controlled_rolls)
+ 	if not deal.valid:
+ 		push_warning("Could not build a complete weighted Design candidate pool: %s" % deal.error)
+ 		return false
+@@ -280,11 +277,12 @@
+ 	return true
+ 
+ 
+-func _publish_refill(deal: Dictionary) -> void:
+-	_command_revision += 1
+-	_candidate_cards.append_array(deal.cards)
+-	for feature: CardData in deal.selected_features:
+-		_available_features.erase(feature)
++func _publish_refill(deal: Dictionary, resolved: RefCounted = null) -> void:
++	var actions:=_capture_development_actions()
++	if resolved==null: actions.publish_initial(deal)
++	else: actions.hand=resolved
++	_candidate_cards.assign(actions.hand._candidate_cards)
++	_available_features.assign(actions.hand._available_features)
+ 
+ 	for card in deal.cards:
+ 		var card_view: CardView = CARD_VIEW_SCENE.instantiate()
+@@ -292,8 +290,7 @@
+ 		card_view.card_pressed.connect(_on_card_pressed)
+ 
+ 		hand_container.add_child(card_view)
+-	if deal.has("tutorial_stat"):
+-		_get_first_game_tutorial().record_deal(deal.tutorial_stat)
++	_sync_command_tokens(actions.hand)
+ 	_refresh_redraw_controls()
+ 	refresh_workspace()
+ 
+@@ -312,54 +309,44 @@
+ 
+ func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
+ 	if not _can_redraw_selection(): return false
+-	var count := _selected_card_views.size()
+-	if not controlled_rolls.is_empty() and controlled_rolls.size() != count: return false
+-	for roll: float in controlled_rolls:
+-		if not is_finite(roll) or roll < 0.0 or roll >= 1.0: return false
+-	var rng_state := _deal_rng.state
+-	var plan := _plan_selected_redraw(controlled_rolls)
+-	if not plan.valid:
+-		_deal_rng.state = rng_state
+-		if not plan.failed_features.is_empty():
+-			%RedrawFeedbackLabel.text = "No more Feature cards"
+-			for view: CardView in plan.failed_features: view.shake_no()
+-		return false
+-	# Prepare every view before changing the pool, lifecycle, selection, or budget.
++	_hand_command_busy=true
++	var actions:=_capture_development_actions()
++	var slots:=_redraw_slots()
++	var selected:=_selected_card_views.duplicate()
+ 	var prepared: Array[CardView] = []
+-	for card: CardData in plan.cards:
+-		var replacement_view := CARD_VIEW_SCENE.instantiate() as CardView
+-		if replacement_view == null:
+-			for view: CardView in prepared: view.free()
+-			_deal_rng.state = rng_state
+-			return false
+-		replacement_view.set_card(card)
+-		replacement_view.card_pressed.connect(_on_card_pressed)
+-		prepared.append(replacement_view)
+-	var selected := _selected_card_views.duplicate()
+-	for index in range(count):
+-		var old_view: CardView = selected[index]
+-		var slot := old_view.get_index()
+-		var replacement: CardData = plan.cards[index]
+-		if replacement.card_type == &"feature":
+-			_available_features.erase(replacement)
+-		if old_view.card_data.card_type == &"feature":
+-			_return_feature_to_available(old_view.card_data)
+-		_candidate_cards[slot] = replacement
+-
+-		%HandContainer.remove_child(old_view)
+-		old_view.queue_free()
+-		%HandContainer.add_child(prepared[index])
+-		%HandContainer.move_child(prepared[index], slot)
+-	_selected_card_views.clear()
+-	%RedrawFeedbackLabel.text = ""
+-	if plan.get("guided_redraw", false):
+-		_get_first_game_tutorial().record_successful_redraw()
+-	# One budget notification, after the complete pool and selection are committed.
+-	_command_revision += 1
+-	_run_state.consume_redraw(count)
++	var prepare:=func(cards: Array) -> bool:
++		for card: CardData in cards:
++			var view: CardView = CARD_VIEW_SCENE.instantiate() as CardView
++			if view==null: return false
++			view.set_card(card)
++			view.card_pressed.connect(_on_card_pressed)
++			prepared.append(view)
++		return true
++	var publish:=func(_plan: Dictionary) -> void:
++		_candidate_cards.assign(actions.hand._candidate_cards)
++		_available_features.assign(actions.hand._available_features)
++		for index in range(slots.size()):
++			var old: CardView = selected[index]
++			%HandContainer.remove_child(old)
++			old.queue_free()
++			%HandContainer.add_child(prepared[index])
++			%HandContainer.move_child(prepared[index],slots[index])
++
++		_selected_card_views.clear()
++		_sync_command_tokens(actions.hand)
++	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish)
++	if not result.ok:
++		for view in prepared: view.free()
++		if not result.plan.failed_features.is_empty():
++			%RedrawFeedbackLabel.text="No more Feature cards"
++			for slot: int in result.plan.failed_features: (%HandContainer.get_child(slot) as CardView).shake_no()
++	else:
++		%RedrawFeedbackLabel.text=""
++		_sync_command_tokens(actions.hand)
++	_hand_command_busy=false
+ 	_update_play_button()
+ 	_refresh_redraw_controls()
+-	return true
++	return result.ok
+ 
+ 
+ func _on_redraw_pressed() -> void:
+@@ -378,54 +365,11 @@
+ 
+ 
+ func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
+-	var tutorial := _get_first_game_tutorial()
+-	if tutorial != null:
+-		var guided_card := tutorial.guaranteed_redraw(_candidate_cards, _selected_card_views, _pass_definitions)
+-		if guided_card != null:
+-			return {&"valid": true, &"cards": [guided_card] as Array[CardData], &"failed_features": [] as Array[CardView], &"guided_redraw": true}
+-	var cards: Array[CardData] = []
+-	var reserved: Array[StringName] = []
+-	var failed_features: Array[CardView] = []
+-	var valid := true
+-	for index in range(_selected_card_views.size()):
+-		var view := _selected_card_views[index]
+-		var old_card := view.card_data
+-		var feature_entries: Array[Dictionary] = []
+-		var pass_entries: Array[Dictionary] = []
+-		for card: CardData in _available_features:
+-			if card.id == old_card.id or reserved.has(card.id): continue
+-			var already_visible := false
+-			for current: CardData in _candidate_cards:
+-				if current.id == card.id: already_visible = true
+-			if already_visible: continue
+-			var weight := _calculate_candidate_weight(card, get_priority_distribution())
+-			if weight > 0.0: feature_entries.append({&"card": card, &"weight": weight})
+-		for card: CardData in _pass_definitions:
+-			if card.id == old_card.id: continue
+-			var weight := _calculate_candidate_weight(card, get_priority_distribution())
+-			if weight > 0.0: pass_entries.append({&"card": card, &"weight": weight})
+-		feature_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+-		pass_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+-		var roll := controlled_rolls[index] if not controlled_rolls.is_empty() else _deal_rng.randf()
+-		var entries: Array[Dictionary] = []
+-		var weighted_roll := roll
+-		if not feature_entries.is_empty() and not pass_entries.is_empty():
+-			# Split one uniform roll by class, then use its remaining range for
+-			# priority-weighted selection within that class.
+-			entries = feature_entries if roll < 0.5 else pass_entries
+-			weighted_roll = roll * 2.0 if roll < 0.5 else (roll - 0.5) * 2.0
+-		elif not feature_entries.is_empty():
+-			entries = feature_entries
+-		else:
+-			entries = pass_entries
+-		var replacement := _select_weighted_entry(entries, weighted_roll)
+-		if replacement == null:
+-			valid = false
+-			if old_card.card_type == &"feature": failed_features.append(view)
+-		else:
+-			cards.append(replacement)
+-			if not replacement.renewable: reserved.append(replacement.id)
+-	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}
++	var plan: Dictionary = _capture_development_actions().redraw_plan(_redraw_slots(),controlled_rolls)
++	var failed: Array[CardView] = []
++	for slot: int in plan.failed_features: failed.append(%HandContainer.get_child(slot))
++	plan.failed_features=failed
++	return plan
+ 
+ 
+ func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE) -> Dictionary:
+@@ -510,7 +454,7 @@
+ 	var refill: Dictionary = result.refill.duplicate()
+ 	# Tutorial state is committed by the resolver; publishing views must not repeat it.
+ 	refill.erase("tutorial_stat")
+-	_publish_refill(refill)
++	_publish_refill(refill,resolver)
+ 	_command_revision = resolver.revision
+ 	for index in range(hand_container.get_child_count()):
+ 		_command_view_ids[hand_container.get_child(index).get_instance_id()] = resolver.candidate_ids[index]
+@@ -531,26 +475,11 @@
+ 	if is_gameplay_input_blocked(): return
+ 	if _finalization_requested:
+ 		return
+-	var prior_rng := _finalization_rng.state
+-	var finalization := _calculate_design_finalization(
+-		_finalization_rng.randf(),
+-		_finalization_rng.randf(),
+-	)
+-	if not finalization.valid:
+-		_finalization_rng.state = prior_rng
+-		return
+-	var feature_history := _build_design_feature_history()
+-	if not feature_history.valid:
+-		_finalization_rng.state = prior_rng
+-		return
+-	if not _project_state.finalize_design_bugs(
+-		finalization.perfect_production,
+-		finalization.hidden_bugs,
+-		feature_history.implemented_ids,
+-		feature_history.unimplemented_ids,
+-	):
+-		_finalization_rng.state = prior_rng
+-		return
++	_hand_command_busy=true
++	var result: Dictionary = _capture_development_actions().finalize()
++	_hand_command_busy=false
++	if not result.ok: return
++	var finalization: Dictionary = result.finalization
+ 	_finalization_requested = true
+ 	%BeginDesignButton.disabled = true
+ 	proceed_to_alpha_button.disabled = true
+@@ -563,129 +492,27 @@
+ 
+ 
+ func _build_design_feature_history() -> Dictionary:
+-	var card_database := get_node("/root/CardDatabase")
+-	var definitions: Array[CardData] = []
+-	definitions.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_DESIGN))
+-	var eligible_ids: Dictionary[StringName, bool] = {}
+-	for card in definitions:
+-		if (
+-			card == null
+-			or card.id.is_empty()
+-			or card.phase != CardData.PHASE_DESIGN
+-			or card.card_type != &"feature"
+-			or card.renewable
+-			or eligible_ids.has(card.id)
+-		):
+-			push_warning("Cannot finalize invalid Design Feature definition history.")
+-			return {&"valid": false}
+-		eligible_ids[card.id] = true
+-	for exhausted_id: StringName in _exhausted_card_ids:
+-		if not eligible_ids.has(exhausted_id):
+-			push_warning("Exhausted ID is not an eligible Design Feature: %s" % exhausted_id)
+-			return {&"valid": false}
+-
+-	var implemented_ids: Array[StringName] = []
+-	var unimplemented_ids: Array[StringName] = []
+-	for id: StringName in eligible_ids:
+-		if _exhausted_card_ids.has(id):
+-			implemented_ids.append(id)
+-		else:
+-			unimplemented_ids.append(id)
+-	implemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
+-	unimplemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
+-	if not _is_valid_design_feature_history(implemented_ids, unimplemented_ids, definitions):
+-		return {&"valid": false}
+-	return {
+-		&"valid": true,
+-		&"implemented_ids": implemented_ids,
+-		&"unimplemented_ids": unimplemented_ids,
+-	}
++	return _capture_development_actions().boundary()._build_design_feature_history()
+ 
+ 
+ func _is_valid_design_feature_history(implemented_ids: Array, unimplemented_ids: Array, definitions: Array[CardData]) -> bool:
+-	var card_database := get_node("/root/CardDatabase")
+-	var expected_ids: Dictionary[StringName, bool] = {}
+-	for card in definitions:
+-		expected_ids[card.id] = true
+-	var seen: Dictionary[StringName, bool] = {}
+-	for raw_id: Variant in implemented_ids + unimplemented_ids:
+-		if typeof(raw_id) != TYPE_STRING and typeof(raw_id) != TYPE_STRING_NAME:
+-			return false
+-		var id := StringName(raw_id)
+-		if id.is_empty() or seen.has(id):
+-			return false
+-		var card: CardData = card_database.call(&"get_card", id)
+-		if card == null or card.phase != CardData.PHASE_DESIGN or card.card_type != &"feature" or card.renewable:
+-			return false
+-		seen[id] = true
+-	if seen.size() != expected_ids.size():
+-		return false
+-	for id: StringName in expected_ids:
+-		if not seen.has(id):
+-			return false
+-	return true
++	return _capture_development_actions().boundary()._is_valid_design_feature_history(implemented_ids,unimplemented_ids,definitions)
+ 
+ 
+ func _calculate_design_finalization(stochastic_roll: float, variance_roll: float) -> Dictionary:
+-	if (
+-		not is_finite(stochastic_roll)
+-		or stochastic_roll < 0.0
+-		or stochastic_roll >= 1.0
+-		or not is_finite(variance_roll)
+-		or variance_roll < 0.0
+-		or variance_roll >= 1.0
+-	):
+-		return {&"valid": false}
+-
+-	var perfect_production := _is_perfect_production()
+-	var accumulated_bug_pressure := _project_state.get_accumulated_bug_pressure()
+-	var adjusted_bug_pressure := accumulated_bug_pressure
+-	if perfect_production:
+-		adjusted_bug_pressure *= PERFECT_BUG_PRESSURE_MULTIPLIER
+-	var rounded_bug_base := floori(adjusted_bug_pressure)
+-	var fraction := adjusted_bug_pressure - rounded_bug_base
+-	if stochastic_roll < fraction:
+-		rounded_bug_base += 1
+-	var hidden_bugs := maxi(0, rounded_bug_base + _get_bug_variance(variance_roll))
+-	return {
+-		&"valid": true,
+-		&"perfect_production": perfect_production,
+-		&"adjusted_bug_pressure": adjusted_bug_pressure,
+-		&"hidden_bugs": hidden_bugs,
+-	}
++	return _capture_development_actions().boundary()._calculate_design_finalization(stochastic_roll,variance_roll)
+ 
+ 
+ func _is_perfect_production() -> bool:
+-	var scores: Dictionary[ProjectState.CoreScore, int] = {}
+-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
+-		scores[category] = _project_state.get_core_score(category)
+-	return _are_core_scores_perfect(scores)
++	return _capture_development_actions().boundary()._is_perfect_production()
+ 
+ 
+ func _are_core_scores_perfect(scores: Dictionary) -> bool:
+-	var total := 0
+-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
+-		total += scores.get(category, 0)
+-	var mean := total / 4.0
+-	var lower_bound := mean * (1.0 - PERFECT_PRODUCTION_THRESHOLD)
+-	var upper_bound := mean * (1.0 + PERFECT_PRODUCTION_THRESHOLD)
+-	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
+-		var score: int = scores.get(category, 0)
+-		if score < lower_bound or score > upper_bound:
+-			return false
+-	return true
++	return _capture_development_actions().boundary()._are_core_scores_perfect(scores)
+ 
+ 
+ func _get_bug_variance(roll: float) -> int:
+-	if roll < 0.08:
+-		return -2
+-	if roll < 0.25:
+-		return -1
+-	if roll < 0.75:
+-		return 0
+-	if roll < 0.92:
+-		return 1
+-	return 2
++	return _capture_development_actions().boundary()._get_bug_variance(roll)
+ 
+ 
+ func _return_feature_to_available(card: CardData) -> void:
+@@ -937,3 +764,25 @@
+ 			state.candidate_ids.append(_command_view_ids[id])
+ 	state.next_candidate_id = _command_next_id
+ 	return state
++
++
++func _capture_development_actions() -> RefCounted:
++	var actions:=DevelopmentActions.new()
++	actions.phase=&"design"
++	actions.hand=_capture_design_command()
++	var database:=get_node_or_null("/root/CardDatabase") if is_inside_tree() else null
++	if database!=null: actions.catalog=database.get_development_catalog()
++	actions.finalization_rng=_finalization_rng
++	return actions
++
++func _redraw_slots() -> Array[int]:
++	var slots: Array[int] = []
++	for view: CardView in _selected_card_views: slots.append(view.get_index())
++	return slots
++
++func _sync_command_tokens(state: RefCounted) -> void:
++	_command_revision=state.revision
++	_command_next_id=state.next_candidate_id
++	_command_view_ids.clear()
++	for index in range(%HandContainer.get_child_count()):
++		_command_view_ids[%HandContainer.get_child(index).get_instance_id()]=state.candidate_ids[index]
+--- before/patch-notes/scripts/simulation/development_actions.gd
++++ after/patch-notes/scripts/simulation/development_actions.gd
+@@ -0,0 +1,255 @@
++## Synchronous development operations. View allocation/publication callbacks are
++## trusted adapter plumbing; they must not resolve effects or consume RNG.
++extends RefCounted
++
++const Finalization := preload("res://scripts/simulation/development_finalization.gd")
++const BETA_PLAYTEST_COST_CENTS := 50000
++var hand: RefCounted
++var phase: StringName
++var catalog: RefCounted
++var finalization_rng: RandomNumberGenerator
++
++func boundary() -> RefCounted:
++	var result:=Finalization.new()
++	result._project_state=hand._project_state
++	result.catalog=catalog
++	if phase==&"design": result._exhausted_card_ids=hand._exhausted_card_ids
++	if phase==&"alpha": result._exhausted_feature_ids=hand._exhausted_feature_ids
++	return result
++
++func initial_plan(rolls: Array[float] = [], definition_rolls: Array[float] = []) -> Dictionary:
++	if not hand._candidate_cards.is_empty(): return {"valid":false}
++	if phase==&"beta":
++		if not hand._get_source_validation_error(hand._beta_definitions).is_empty(): return {"valid":false}
++		return hand._build_candidate_definitions(hand._beta_definitions,hand.priorities,rolls,definition_rolls)
++	if phase==&"alpha" and not hand._pending_playtest_categories.is_empty():
++		return hand._build_corrective_candidate_definitions(hand.priorities,rolls)
++	return hand._build_weighted_candidate_definitions(hand.priorities,rolls)
++
++func publish_initial(plan: Dictionary) -> void:
++	hand._candidate_cards.assign(plan.cards)
++	hand.candidate_ids.clear()
++	for card: CardData in plan.cards:
++		hand.candidate_ids.append(hand.next_candidate_id)
++		hand.next_candidate_id+=1
++	if phase==&"design":
++		for card: CardData in plan.selected_features: hand._available_features.erase(card)
++		if plan.has("tutorial_stat"): hand._get_first_game_tutorial().record_deal(plan.tutorial_stat)
++	elif phase==&"alpha": hand._pending_playtest_categories.clear()
++	hand.revision+=1
++
++func valid_redraw(slots: Array[int], rolls: Array[float]) -> bool:
++	if not hand.active or hand._run_state==null or not hand._run_state.can_consume_redraw(slots.size()): return false
++	if not rolls.is_empty() and rolls.size()!=slots.size(): return false
++	for roll in rolls:
++		if not is_finite(roll) or roll<0.0 or roll>=1.0: return false
++	var seen: Array[int] = []
++	for slot in slots:
++		if slot<0 or slot>=hand._candidate_cards.size() or slot in seen: return false
++		seen.append(slot)
++		if phase==&"beta":
++			if hand.candidate_ids[slot] in hand.injected_candidate_ids: return false
++		elif hand._candidate_cards[slot].card_type not in [&"feature",&"pass"]: return false
++	return true
++
++func redraw_plan(slots: Array[int], rolls: Array[float]) -> Dictionary:
++	if not valid_redraw(slots,rolls): return {"valid":false,"cards":[],"failed_features":[]}
++	if phase!=&"beta": return core_redraw_plan(slots,rolls)
++	var replacements: Array[CardData] = []
++	var reserved: Array[StringName] = hand._project_state.get_exhausted_beta_card_ids()
++	for card: CardData in hand._candidate_cards:
++		if not card.renewable and not reserved.has(card.id): reserved.append(card.id)
++	for index in range(slots.size()):
++		var excluded:=reserved.duplicate()
++		excluded.append(hand._candidate_cards[slots[index]].id)
++		var controlled: Array[float] = []
++		if not rolls.is_empty(): controlled.append(rolls[index])
++		var deal: Dictionary = hand._build_candidate_definitions(hand._beta_definitions,hand.priorities,controlled,controlled,excluded,1)
++		if not deal.valid: return {"valid":false,"cards":[],"failed_features":[]}
++		var card: CardData = deal.cards[0]
++		replacements.append(card)
++		if not card.renewable: reserved.append(card.id)
++	return {"valid":true,"cards":replacements,"failed_features":[]}
++
++func redraw(slots: Array[int], rolls: Array[float] = [], readiness: Callable = Callable(), publication: Callable = Callable()) -> Dictionary:
++	var before: int = hand._deal_rng.state
++	var plan:=redraw_plan(slots,rolls)
++	if not plan.valid or (readiness.is_valid() and not readiness.call(plan.cards)):
++		hand._deal_rng.state=before
++		return {"ok":false,"events":[],"plan":plan}
++	for index in range(slots.size()):
++		var slot:=slots[index]
++		var old: CardData = hand._candidate_cards[slot]
++		var replacement: CardData = plan.cards[index]
++		if phase==&"design":
++			if replacement.card_type==&"feature": hand._available_features.erase(replacement)
++			if old.card_type==&"feature" and not hand._exhausted_card_ids.has(old.id) and not hand._available_features.has(old): hand._available_features.append(old)
++		hand._candidate_cards[slot]=replacement
++		hand.candidate_ids[slot]=hand.next_candidate_id
++		hand.next_candidate_id+=1
++	if plan.get("guided_redraw",false): hand._get_first_game_tutorial().record_successful_redraw()
++	# The live adapter publishes the complete replacement pool before the one
++	# budget notification, matching the existing observable transaction boundary.
++	if publication.is_valid(): publication.call(plan)
++	hand._run_state.consume_redraw(slots.size())
++	hand.revision+=1
++	return {"ok":true,"events":[{"type":"redraw","slots":slots.duplicate()}],"plan":plan}
++
++static func commit_priorities(project: ProjectState, run: RunState, allocation: RefCounted, distribution: Dictionary, draft_publication: Callable = Callable()) -> bool:
++	var old: Dictionary = allocation.get_distribution() if allocation is BetaPriorityAllocation else allocation.get_priority_distribution()
++	var valid: bool = BetaPriorityAllocation.is_valid_distribution(distribution) if allocation is BetaPriorityAllocation else PriorityAllocation.is_valid_distribution(distribution)
++	if project==null or run==null or not valid or distribution==old or not project.can_advance_cycle() or not run.can_advance_calendar_cycle(): return false
++	var commit:=func() -> bool:
++		if not allocation.set_distribution(distribution): return false
++		if draft_publication.is_valid(): draft_publication.call()
++		project.advance_cycle()
++		return true
++	return run.complete_productive_action(commit,0,-1,&"",&"priority_change",project.get_release_id())
++
++func corrective_categories() -> Array[ProjectState.CoreScore]:
++	var project: ProjectState = hand._project_state
++	if project==null: return [] as Array[ProjectState.CoreScore]
++	var profile:=PrimitiveReviewCalculator.get_project_profile(project)
++	if profile==null: return [] as Array[ProjectState.CoreScore]
++	var categories: Array[ProjectState.CoreScore] = []
++	categories.assign(ProjectState.CoreScore.values())
++	categories.sort_custom(func(a: ProjectState.CoreScore,b: ProjectState.CoreScore) -> bool:
++		var a_score:=float(project.get_core_score(a))/profile.get_standard(a)
++		var b_score:=float(project.get_core_score(b))/profile.get_standard(b)
++		if a_score!=b_score: return a_score<b_score
++		if phase==&"alpha" and hand.priorities[a]!=hand.priorities[b]: return hand.priorities[a]>hand.priorities[b]
++		return a<b)
++	return categories.slice(0,2)
++
++func corrective_pass_ids() -> Array[StringName]:
++	var ids: Array[StringName] = []
++	for category in corrective_categories(): ids.append(hand.PASS_ID_BY_CORE_SCORE[category])
++	return ids
++
++func host_playtest() -> bool:
++	if phase not in [&"alpha",&"beta"] or not hand.active or not valid_pool(): return false
++	var project: ProjectState = hand._project_state
++	var run: RunState = hand._run_state
++	var pending: Array = hand._pending_playtest_categories if phase==&"alpha" else hand._pending_corrective_pass_ids
++	var cost:=BETA_PLAYTEST_COST_CENTS if phase==&"beta" else 0
++	if not pending.is_empty() or not project.can_advance_cycle(): return false
++	if run!=null and not run.can_complete_productive_cycle(-cost): return false
++	if phase==&"beta" and (run==null or not project.has_alpha_finalization() or not run.is_cash_initialized() or run.get_cash_cents()<cost): return false
++	var selected: Array = corrective_categories() if phase==&"alpha" else corrective_pass_ids()
++	if selected.size()!=2 or selected[0]==selected[1]: return false
++	if phase==&"beta":
++		for id: StringName in selected:
++			if not hand._is_valid_corrective_pass(catalog.get_card(id)): return false
++	var commit:=func() -> bool:
++		if phase==&"alpha": pending.assign(selected)
++		project.advance_cycle()
++		if phase==&"beta": pending.assign(selected)
++		return true
++	return run.complete_productive_action(commit,-cost,-1,&"",&"playtest",project.get_release_id()) if run!=null else commit.call()
++
++func valid_pool() -> bool:
++	if hand._candidate_cards.size()!=7: return false
++	if phase!=&"alpha": return true
++	var seen: Array[StringName] = []
++	for card: CardData in hand._candidate_cards:
++		if card==null: return false
++		if card.card_type==&"feature":
++			if not hand._get_feature_validation_error(card).is_empty() or not hand._available_features.has(card) or hand._exhausted_feature_ids.has(card.id) or card.id in seen: return false
++			seen.append(card.id)
++		elif card.card_type==&"pass":
++			if not hand._get_pass_validation_error(card).is_empty() or not hand._pass_definitions.has(card): return false
++		else: return false
++	return true
++
++func can_finalize() -> bool:
++	var project: ProjectState = hand._project_state
++	var run: RunState = hand._run_state
++	if project==null: return false
++	if phase==&"design": return not project.has_design_bug_finalization()
++	if not hand.active or not valid_pool(): return false
++	if phase==&"alpha":
++		var history: Dictionary = boundary()._build_alpha_feature_history(false)
++		return project.can_advance_cycle() and (run==null or run.can_transition_without_productive_cycle()) and not project.has_alpha_finalization() and history.valid and project.has_launch_feature_work(history.implemented_ids)
++	return project.has_launch_feature_work() and project.has_alpha_finalization() and not project.has_beta_finalization() and run!=null and run.is_cash_initialized() and hand._snapshot_database!=null and hand._snapshot_database.has_competitor(project.get_assigned_competitor_snapshot_id_for_authority()) and hand._snapshot_database.has_forecast(project.get_assigned_market_forecast_snapshot_id_for_authority())
++
++func finalize(controlled_rolls: Array[float] = []) -> Dictionary:
++	if not can_finalize(): return {"ok":false,"events":[]}
++	var rules:=boundary()
++	var project: ProjectState = hand._project_state
++	if phase==&"beta":
++		if not rules._validate_exhausted_beta_ids(catalog) or not rules._validate_feature_histories(catalog) or not project.finalize_beta(): return {"ok":false,"events":[]}
++		hand._pending_corrective_pass_ids.clear()
++		hand._candidate_cards.clear()
++		hand.candidate_ids.clear()
++		hand.injected_candidate_ids.clear()
++		hand.active=false
++		return {"ok":true,"events":[{"type":"beta_finalized"}]}
++	if not controlled_rolls.is_empty() and controlled_rolls.size()!=2: return {"ok":false,"events":[]}
++	var before:=finalization_rng.state
++	var first:=finalization_rng.randf() if controlled_rolls.is_empty() else controlled_rolls[0]
++	var second:=finalization_rng.randf() if controlled_rolls.is_empty() else controlled_rolls[1]
++	var history: Dictionary = rules._build_design_feature_history() if phase==&"design" else rules._build_alpha_feature_history()
++	var result: Dictionary = rules._calculate_design_finalization(first,second) if phase==&"design" else rules._calculate_alpha_finalization(first,second)
++	var ok:=false
++	if history.valid and result.valid:
++		ok=project.finalize_design_bugs(result.perfect_production,result.hidden_bugs,history.implemented_ids,history.unimplemented_ids) if phase==&"design" else project.finalize_alpha(result.generated,history.implemented_ids,history.unimplemented_ids)
++	if not ok:
++		finalization_rng.state=before
++		return {"ok":false,"events":[]}
++	if phase==&"design": hand.finalization_requested=true
++	else: hand._pending_playtest_categories.clear()
++	hand.active=false
++	return {"ok":true,"events":[{"type":str(phase)+"_finalized"}],"finalization":result,"history":history}
++
++
++func core_redraw_plan(slots: Array[int], controlled_rolls: Array[float]) -> Dictionary:
++	if phase == &"design":
++		var tutorial: FirstGameTutorial = hand._get_first_game_tutorial()
++		if tutorial != null:
++			var selected: Array[CardData] = []
++			for slot in slots: selected.append(hand._candidate_cards[slot])
++			var guided := tutorial.guaranteed_redraw_cards(hand._candidate_cards,selected,hand._pass_definitions)
++			if guided != null: return {"valid":true,"cards":[guided] as Array[CardData],"failed_features":[],"guided_redraw":true}
++	var cards: Array[CardData] = []
++	var reserved: Array[StringName] = []
++	var failed_features: Array[int] = []
++	var valid := true
++	for index in range(slots.size()):
++		var slot := slots[index]
++		var old_card: CardData = hand._candidate_cards[slot]
++		var feature_entries: Array[Dictionary] = []
++		var pass_entries: Array[Dictionary] = []
++		for card: CardData in hand._available_features:
++			if card.id == old_card.id or reserved.has(card.id): continue
++			var already_visible := false
++			for current: CardData in hand._candidate_cards:
++				if current.id == card.id: already_visible = true
++			if already_visible: continue
++			var weight: float = hand._calculate_candidate_weight(card, hand.get_priority_distribution())
++			if weight > 0.0: feature_entries.append({&"card": card, &"weight": weight})
++		for card: CardData in hand._pass_definitions:
++			if card.id == old_card.id: continue
++			var weight: float = hand._calculate_candidate_weight(card, hand.get_priority_distribution())
++			if weight > 0.0: pass_entries.append({&"card": card, &"weight": weight})
++		feature_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
++		pass_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
++		var roll: float = controlled_rolls[index] if not controlled_rolls.is_empty() else hand._deal_rng.randf()
++		var entries: Array[Dictionary] = []
++		var weighted_roll := roll
++		if not feature_entries.is_empty() and not pass_entries.is_empty():
++			# Split one uniform roll by class, then use its remaining range for
++			# priority-weighted selection within that class.
++			entries = feature_entries if roll < 0.5 else pass_entries
++			weighted_roll = roll * 2.0 if roll < 0.5 else (roll - 0.5) * 2.0
++		elif not feature_entries.is_empty():
++			entries = feature_entries
++		else:
++			entries = pass_entries
++		var replacement: CardData = hand._select_weighted_entry(entries, weighted_roll)
++		if replacement == null:
++			valid = false
++			if old_card.card_type == &"feature": failed_features.append(slot)
++		else:
++			cards.append(replacement)
++			if not replacement.renewable: reserved.append(replacement.id)
++	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}
+--- before/patch-notes/scripts/simulation/development_catalog.gd
++++ after/patch-notes/scripts/simulation/development_catalog.gd
+@@ -0,0 +1,36 @@
++## Immutable definition snapshot supplied by the existing CardDatabase loader.
++## Keeps primitive order separate from Store-only cards for legacy projects.
++extends RefCounted
++
++var cards: Dictionary[StringName,CardData] = {}
++var primitive: Array[CardData] = []
++
++func _init(base: Array[CardData] = [], additional: Array[CardData] = []) -> void:
++	primitive.assign(base)
++	for card in base + additional: cards[card.id] = card
++
++func get_card(id: StringName) -> CardData:
++	return cards.get(id)
++
++func get_cards_by_phase(phase: StringName) -> Array[CardData]:
++	var result: Array[CardData] = []
++	for card in primitive:
++		if card.phase==phase: result.append(card)
++	return result
++
++func get_project_features_for_phase(project: ProjectState, phase: StringName) -> Array[CardData]:
++	var result: Array[CardData] = []
++	if project==null or not project.has_predevelopment_identity():
++		for card in primitive:
++			if card.phase==phase and card.card_type==&"feature": result.append(card)
++	else:
++		for id in project.get_feature_supply_ids():
++			var card:=get_card(id)
++			if card!=null and card.phase==phase and card.card_type==&"feature": result.append(card)
++	return result
++
++func passes() -> Array[CardData]:
++	var result: Array[CardData] = []
++	for card in primitive:
++		if card.phase==CardData.PHASE_DESIGN and card.card_type==&"pass": result.append(card)
++	return result
+--- before/patch-notes/scripts/simulation/development_finalization.gd
++++ after/patch-notes/scripts/simulation/development_finalization.gd
+@@ -0,0 +1,266 @@
++## Development boundary rules shared by scenes and the replay runner.
++## The catalog is a RefCounted provider containing canonical immutable CardData.
++extends RefCounted
++
++const PERFECT_PRODUCTION_THRESHOLD := 0.05
++const PERFECT_BUG_PRESSURE_MULTIPLIER := 0.80
++const BUG_VARIANCE_NEGATIVE_TWO_THRESHOLD := 0.08
++const BUG_VARIANCE_NEGATIVE_ONE_THRESHOLD := 0.25
++const BUG_VARIANCE_ZERO_THRESHOLD := 0.75
++const BUG_VARIANCE_POSITIVE_ONE_THRESHOLD := 0.92
++const FINITE_IDS = preload("res://scripts/simulation/beta_hand_command.gd").FINITE_IDS
++var _project_state: ProjectState
++var _exhausted_card_ids: Dictionary[StringName,bool] = {}
++var _exhausted_feature_ids: Dictionary[StringName,bool] = {}
++var catalog: RefCounted
++
++func _build_design_feature_history() -> Dictionary:
++	var card_database := catalog
++	var definitions: Array[CardData] = []
++	definitions.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_DESIGN))
++	var eligible_ids: Dictionary[StringName, bool] = {}
++	for card in definitions:
++		if (
++			card == null
++			or card.id.is_empty()
++			or card.phase != CardData.PHASE_DESIGN
++			or card.card_type != &"feature"
++			or card.renewable
++			or eligible_ids.has(card.id)
++		):
++			push_warning("Cannot finalize invalid Design Feature definition history.")
++			return {&"valid": false}
++		eligible_ids[card.id] = true
++	for exhausted_id: StringName in _exhausted_card_ids:
++		if not eligible_ids.has(exhausted_id):
++			push_warning("Exhausted ID is not an eligible Design Feature: %s" % exhausted_id)
++			return {&"valid": false}
++
++	var implemented_ids: Array[StringName] = []
++	var unimplemented_ids: Array[StringName] = []
++	for id: StringName in eligible_ids:
++		if _exhausted_card_ids.has(id):
++			implemented_ids.append(id)
++		else:
++			unimplemented_ids.append(id)
++	implemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
++	unimplemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
++	if not _is_valid_design_feature_history(implemented_ids, unimplemented_ids, definitions):
++		return {&"valid": false}
++	return {
++		&"valid": true,
++		&"implemented_ids": implemented_ids,
++		&"unimplemented_ids": unimplemented_ids,
++	}
++
++
++func _is_valid_design_feature_history(implemented_ids: Array, unimplemented_ids: Array, definitions: Array[CardData]) -> bool:
++	var card_database := catalog
++	var expected_ids: Dictionary[StringName, bool] = {}
++	for card in definitions:
++		expected_ids[card.id] = true
++	var seen: Dictionary[StringName, bool] = {}
++	for raw_id: Variant in implemented_ids + unimplemented_ids:
++		if typeof(raw_id) != TYPE_STRING and typeof(raw_id) != TYPE_STRING_NAME:
++			return false
++		var id := StringName(raw_id)
++		if id.is_empty() or seen.has(id):
++			return false
++		var card: CardData = card_database.call(&"get_card", id)
++		if card == null or card.phase != CardData.PHASE_DESIGN or card.card_type != &"feature" or card.renewable:
++			return false
++		seen[id] = true
++	if seen.size() != expected_ids.size():
++		return false
++	for id: StringName in expected_ids:
++		if not seen.has(id):
++			return false
++	return true
++
++
++func _calculate_design_finalization(stochastic_roll: float, variance_roll: float) -> Dictionary:
++	if (
++		not is_finite(stochastic_roll)
++		or stochastic_roll < 0.0
++		or stochastic_roll >= 1.0
++		or not is_finite(variance_roll)
++		or variance_roll < 0.0
++		or variance_roll >= 1.0
++	):
++		return {&"valid": false}
++
++	var perfect_production := _is_perfect_production()
++	var accumulated_bug_pressure := _project_state.get_accumulated_bug_pressure()
++	var adjusted_bug_pressure := accumulated_bug_pressure
++	if perfect_production:
++		adjusted_bug_pressure *= PERFECT_BUG_PRESSURE_MULTIPLIER
++	var rounded_bug_base := floori(adjusted_bug_pressure)
++	var fraction := adjusted_bug_pressure - rounded_bug_base
++	if stochastic_roll < fraction:
++		rounded_bug_base += 1
++	var hidden_bugs := maxi(0, rounded_bug_base + _get_bug_variance(variance_roll))
++	return {
++		&"valid": true,
++		&"perfect_production": perfect_production,
++		&"adjusted_bug_pressure": adjusted_bug_pressure,
++		&"hidden_bugs": hidden_bugs,
++	}
++
++
++func _is_perfect_production() -> bool:
++	var scores: Dictionary[ProjectState.CoreScore, int] = {}
++	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
++		scores[category] = _project_state.get_core_score(category)
++	return _are_core_scores_perfect(scores)
++
++
++func _are_core_scores_perfect(scores: Dictionary) -> bool:
++	var total := 0
++	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
++		total += scores.get(category, 0)
++	var mean := total / 4.0
++	var lower_bound := mean * (1.0 - PERFECT_PRODUCTION_THRESHOLD)
++	var upper_bound := mean * (1.0 + PERFECT_PRODUCTION_THRESHOLD)
++	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
++		var score: int = scores.get(category, 0)
++		if score < lower_bound or score > upper_bound:
++			return false
++	return true
++
++
++func _get_bug_variance(roll: float) -> int:
++	if roll < 0.08:
++		return -2
++	if roll < 0.25:
++		return -1
++	if roll < 0.75:
++		return 0
++	if roll < 0.92:
++		return 1
++	return 2
++
++
++func _build_alpha_feature_history(report_errors: bool = true) -> Dictionary:
++	var card_database := catalog
++	if card_database == null:
++		if report_errors:
++			push_warning("Cannot finalize Alpha Feature history without CardDatabase.")
++		return {&"valid": false}
++	var definitions: Array[CardData] = []
++	definitions.assign(card_database.get_project_features_for_phase(_project_state, CardData.PHASE_ALPHA))
++	var eligible_ids: Dictionary[StringName, bool] = {}
++	for card: CardData in definitions:
++		if (
++			card == null
++			or card.id.is_empty()
++			or card.phase != CardData.PHASE_ALPHA
++			or card.card_type != &"feature"
++			or card.renewable
++			or eligible_ids.has(card.id)
++		):
++			if report_errors:
++				push_warning("Cannot finalize invalid Alpha Feature definition history.")
++			return {&"valid": false}
++		eligible_ids[card.id] = true
++	for exhausted_id: StringName in _exhausted_feature_ids:
++		if not eligible_ids.has(exhausted_id):
++			if report_errors:
++				push_warning("Exhausted ID is not an eligible Alpha Feature: %s" % exhausted_id)
++			return {&"valid": false}
++
++	var implemented_ids: Array[StringName] = []
++	var unimplemented_ids: Array[StringName] = []
++	for id: StringName in eligible_ids:
++		if _exhausted_feature_ids.has(id):
++			implemented_ids.append(id)
++		else:
++			unimplemented_ids.append(id)
++	implemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
++	unimplemented_ids.sort_custom(func(a: StringName, b: StringName) -> bool: return str(a) < str(b))
++	return {
++		&"valid": true,
++		&"implemented_ids": implemented_ids,
++		&"unimplemented_ids": unimplemented_ids,
++	}
++
++
++func _calculate_alpha_finalization(stochastic_roll: float, variance_roll: float) -> Dictionary:
++	if (
++		_project_state == null
++		or not is_finite(stochastic_roll)
++		or stochastic_roll < 0.0
++		or stochastic_roll >= 1.0
++		or not is_finite(variance_roll)
++		or variance_roll < 0.0
++		or variance_roll >= 1.0
++	):
++		return {&"valid": false}
++	var pressure := _project_state.get_accumulated_alpha_bug_pressure()
++	if not is_finite(pressure) or pressure < 0.0:
++		return {&"valid": false}
++	var base := floori(pressure)
++	var fraction := pressure - base
++	var rounded := base + (1 if stochastic_roll < fraction else 0)
++	var variance := _get_alpha_bug_variance(variance_roll)
++	var generated := maxi(0, rounded + variance)
++	return {
++		&"valid": true,
++		&"pressure": pressure,
++		&"base": base,
++		&"rounded": rounded,
++		&"variance": variance,
++		&"generated": generated,
++	}
++
++
++func _get_alpha_bug_variance(roll: float) -> int:
++	if roll < BUG_VARIANCE_NEGATIVE_TWO_THRESHOLD:
++		return -2
++	if roll < BUG_VARIANCE_NEGATIVE_ONE_THRESHOLD:
++		return -1
++	if roll < BUG_VARIANCE_ZERO_THRESHOLD:
++		return 0
++	if roll < BUG_VARIANCE_POSITIVE_ONE_THRESHOLD:
++		return 1
++	return 2
++
++
++func _build_launch_warnings() -> Array[String]:
++	var warnings: Array[String] = []
++	var current_scope := _project_state.get_current_scope()
++	var required_scope := _project_state.get_required_scope()
++	if current_scope < required_scope:
++		warnings.append("Project Scope is incomplete: %d / %d." % [current_scope, required_scope])
++		warnings.append("Scope shortfall: %d." % (required_scope - current_scope))
++	var known_bugs := _project_state.get_known_bugs()
++	if known_bugs > 0:
++		warnings.append("Known Bugs remaining: %d. Unresolved Known Bugs will remain at launch." % known_bugs)
++	if _project_state.get_marketing_output() == 0:
++		warnings.append("No Marketing activity has been completed. Launch reach may be reduced.")
++	return warnings
++
++
++func _validate_exhausted_beta_ids(database: RefCounted) -> bool:
++	for id: StringName in _project_state.get_exhausted_beta_card_ids():
++		var card: CardData = database.call(&"get_card", id)
++		if card == null or card.phase != CardData.PHASE_BETA or card.renewable or not FINITE_IDS.has(id):
++			return false
++	return true
++
++
++func _validate_feature_histories(database: RefCounted) -> bool:
++	var histories := [
++		[_project_state.get_implemented_design_feature_ids(), _project_state.get_unimplemented_design_feature_ids(), CardData.PHASE_DESIGN],
++		[_project_state.get_implemented_alpha_feature_ids(), _project_state.get_unimplemented_alpha_feature_ids(), CardData.PHASE_ALPHA],
++	]
++	for history: Array in histories:
++		var seen: Dictionary[StringName, bool] = {}
++		for collection: Array in [history[0], history[1]]:
++			for id: StringName in collection:
++				var card: CardData = database.call(&"get_card", id)
++				if seen.has(id) or card == null or card.phase != history[2] or card.card_type != &"feature":
++					return false
++				seen[id] = true
++	return true
++
++
+--- before/patch-notes/scripts/simulation/development_replay.gd
++++ after/patch-notes/scripts/simulation/development_replay.gd
+@@ -0,0 +1,108 @@
++## Versioned deterministic action tapes, supplied with an identical initialized
++## DevelopmentSession. No save migration, Studio restore or AI policy is implied.
++extends RefCounted
++
++const SCHEMA_VERSION := 1
++
++static func freeze(value: Variant) -> Variant:
++	if value is int: return {"integer":str(value)}
++	if value is float: return {"float_bits":var_to_bytes(value).hex_encode()}
++	if value is StringName: return str(value)
++	if value is RandomNumberGenerator: return {"seed":str(value.seed),"state":str(value.state)}
++	if value is CardData: return str(value.id)
++	if value is Array: return value.map(func(item: Variant) -> Variant: return freeze(item))
++	if value is Dictionary:
++		var result: Dictionary = {}
++		for key in value: result[str(key)]=freeze(value[key])
++		return result
++	if value is Object:
++		var result: Dictionary = {}
++		for property in value.get_property_list():
++			if property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE: result[property.name]=freeze(value.get(property.name))
++		return result
++	return value
++
++static func state(session: RefCounted) -> Dictionary:
++	var definitions: Array = []
++	for card: CardData in session.catalog.cards.values():
++		var fields: Dictionary = {}
++		for property in card.get_property_list():
++			if property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE: fields[property.name]=freeze(card.get(property.name))
++		definitions.append(fields)
++	return {"project":freeze(session.project),"run":freeze(session.run),"hand":freeze(session.hand),"phase":session.phase_index,"sequence":session.sequence,"confirmation":session.awaiting_confirmation,"finalized":session.finalized,"definitions":definitions,"snapshots":freeze(session.snapshots)}
++
++static func digest(value: Variant) -> String:
++	return JSON.stringify(freeze(value)).sha256_text()
++
++## Caller pins an external source manifest too. This runtime identity deliberately
++## includes every non-debug gameplay script and ledger; policy/test source is not
++## accepted as a substitute for the actual mechanics identity.
++static func source_identity() -> String:
++	var paths: Array[String] = []
++	_collect("res://scripts",paths)
++	_collect("res://data",paths)
++	paths.sort()
++	var rows: Array = []
++	for path in paths:
++		if path.begins_with("res://scripts/debug/"): continue
++		if path.ends_with(".gd") or path.ends_with(".json"):
++			rows.append([path,FileAccess.get_sha256(path)])
++	return JSON.stringify(rows).sha256_text()
++
++static func _collect(path: String,paths: Array[String]) -> void:
++	for file in DirAccess.get_files_at(path): paths.append(path.path_join(file))
++	for directory in DirAccess.get_directories_at(path): _collect(path.path_join(directory),paths)
++
++static func begin(session: RefCounted) -> Dictionary:
++	return {"schema_version":SCHEMA_VERSION,"engine_version":Engine.get_version_info().string,"rng_algorithm":RunRandom.ALGORITHM,"source_identity":source_identity(),"initial_state":digest(state(session)),"initial_rng":session.run.random_streams.snapshot(),"steps":[]}
++
++static func record(session: RefCounted,tape: Dictionary,request: Dictionary) -> Dictionary:
++	var result: Dictionary = session.execute(request)
++	tape.steps.append({"command":request.duplicate(true),"result":freeze(result),"state":digest(state(session))})
++	return result
++
++static func replay(session: RefCounted,tape: Dictionary) -> Dictionary:
++	for field in ["source_identity","engine_version","rng_algorithm","initial_state"]:
++		if not tape.get(field) is String: return {"ok":false,"error":"Malformed replay identity","step":-1}
++	if not tape.get("schema_version") is int or tape.get("schema_version")!=SCHEMA_VERSION or tape.get("source_identity")!=source_identity() or tape.get("engine_version")!=Engine.get_version_info().string or tape.get("rng_algorithm")!=RunRandom.ALGORITHM: return {"ok":false,"error":"Unsupported tape, runtime or source mismatch","step":-1}
++	if not tape.get("initial_rng") is Dictionary or tape.get("initial_rng")!=session.run.random_streams.snapshot(): return {"ok":false,"error":"Initial RNG mismatch","step":-1}
++	if tape.get("initial_state")!=digest(state(session)) or not tape.get("steps") is Array: return {"ok":false,"error":"Initial state mismatch","step":-1}
++	for step: Variant in tape.steps:
++		if not step is Dictionary or not step.get("command") is Dictionary or not step.get("result") is Dictionary or not step.get("state") is String: return {"ok":false,"error":"Malformed tape","step":-1}
++	var reports: Array = []
++	for index in range(tape.steps.size()):
++		var expected: Dictionary = tape.steps[index]
++		var result: Dictionary = session.execute(expected.command)
++		var actual:=digest(state(session))
++		if freeze(result)!=expected.result or actual!=expected.state:
++			return {"ok":false,"error":"Replay divergence","step":index,"expected":expected,"actual_result":freeze(result),"actual_state":actual}
++		reports.append({"step":index,"accepted":result.ok,"state":actual})
++	return {"ok":true,"steps":reports,"final_state":digest(state(session))}
++
++## JSON wrapper plus Godot's object-disabled Variant encoding preserves signed
++## 64-bit RNG states, dictionary key types and typed candidate arrays exactly.
++## Local trusted artifacts only; no Objects may be encoded or decoded.
++static func save_tape(path: String,tape: Dictionary) -> bool:
++	var file:=FileAccess.open(path,FileAccess.WRITE)
++	if file==null: return false
++	file.store_string(JSON.stringify({"format":"patch-notes-development-replay","version":SCHEMA_VERSION,"payload":Marshalls.raw_to_base64(var_to_bytes(tape))},"\t"))
++	return file.get_error()==OK
++
++static func load_tape(path: String) -> Dictionary:
++	var envelope: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
++	if not envelope is Dictionary or envelope.get("format")!="patch-notes-development-replay" or envelope.get("version")!=SCHEMA_VERSION or not envelope.get("payload") is String: return {}
++	var decoded: Variant = bytes_to_var(Marshalls.base64_to_raw(envelope.payload))
++	return decoded if decoded is Dictionary else {}
++
++## Interchangeable synchronous policies return {type,payload}; an explicit step
++## limit is required. No default policy, phase budget or competitor tuning.
++static func drive(session: RefCounted,policy: Callable,max_steps: int) -> Dictionary:
++	if not policy.is_valid() or max_steps<1: return {"ok":false,"error":"Policy and positive bound required"}
++	var tape:=begin(session)
++	for step in range(max_steps):
++		if session.phase_index==2 and session.finalized: return {"ok":true,"tape":tape}
++		var choice: Variant = policy.call(session.observation())
++		if not choice is Dictionary or (not choice.get("type") is String and not choice.get("type") is StringName) or not choice.get("payload",{}) is Dictionary: return {"ok":false,"error":"Malformed policy decision","step":step,"tape":tape}
++		var result:=record(session,tape,session.command(StringName(choice.type),choice.get("payload",{})))
++		if not result.ok: return {"ok":false,"error":"Policy action rejected","step":step,"tape":tape}
++	return {"ok":session.phase_index==2 and session.finalized,"error":"" if session.phase_index==2 and session.finalized else "Policy step bound reached","tape":tape}
+--- before/patch-notes/scripts/simulation/development_session.gd
++++ after/patch-notes/scripts/simulation/development_session.gd
+@@ -0,0 +1,171 @@
++## In-memory development session. Owns command freshness and phase lifecycle.
++## Inputs are validated canonical domain objects; this is not a save decoder.
++## Successful Beta exit ends here, before Launch/Review/Studio settlement.
++extends RefCounted
++
++const Actions := preload("res://scripts/simulation/development_actions.gd")
++const HAND_SCRIPTS := [preload("res://scripts/simulation/design_hand_command.gd"),preload("res://scripts/simulation/alpha_hand_command.gd"),preload("res://scripts/simulation/beta_hand_command.gd")]
++const PHASES: Array[StringName] = [&"design",&"alpha",&"beta"]
++var project: ProjectState
++var run: RunState
++var catalog: RefCounted
++var snapshots: PrimitiveSnapshotDatabase
++var hand: RefCounted
++var actions: RefCounted
++var phase_index := 0
++var sequence := 0
++var awaiting_confirmation := false
++var finalized := false
++var _busy := false
++
++func initialize(project_state: ProjectState,run_state: RunState,definitions: RefCounted,snapshot_definitions: PrimitiveSnapshotDatabase) -> bool:
++	if project!=null or project_state==null or run_state==null or definitions==null or snapshot_definitions==null or project_state.has_design_bug_finalization() or project_state.has_alpha_finalization() or project_state.has_beta_finalization(): return false
++	project=project_state
++	run=run_state
++	catalog=definitions
++	snapshots=snapshot_definitions
++	_create_phase()
++	return true
++
++func _create_phase() -> void:
++	hand=HAND_SCRIPTS[phase_index].new()
++	hand._project_state=project
++	hand._run_state=run
++	hand._deal_rng=run.random_streams.stream(StringName(str(PHASES[phase_index])+"_deal"))
++	if phase_index<2:
++		hand.priorities=PriorityAllocation.new().get_priority_distribution()
++		hand._available_features=catalog.get_project_features_for_phase(project,PHASES[phase_index])
++		hand._pass_definitions=catalog.passes()
++	else:
++		hand.priorities=BetaPriorityAllocation.new().get_distribution()
++		hand._snapshot_database=snapshots
++		hand._insight_rng=run.random_streams.stream(&"beta_insight")
++		hand._beta_definitions=catalog.get_cards_by_phase(&"beta")
++		for card: CardData in hand._beta_definitions+catalog.passes(): hand._definitions_by_id[card.id]=card
++	actions=Actions.new()
++	actions.hand=hand
++	actions.phase=PHASES[phase_index]
++	actions.catalog=catalog
++	if phase_index<2: actions.finalization_rng=run.random_streams.stream(StringName(str(PHASES[phase_index])+"_finalize"))
++	awaiting_confirmation=false
++	finalized=false
++	run.refresh_redraws()
++
++func command(kind: StringName,payload: Dictionary = {}) -> Dictionary:
++	return {"schema_version":1,"type":kind,"project_id":project.get_release_id(),"phase":PHASES[phase_index],"sequence":sequence,"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"payload":payload.duplicate(true)}
++
++func reject(reason: String) -> Dictionary:
++	return {"ok":false,"error":reason,"events":[]}
++
++func execute(request: Dictionary) -> Dictionary:
++	if _busy or project==null: return reject("Session unavailable")
++	for field in ["schema_version","sequence","project_cycle","run_cycle"]:
++		if not request.get(field) is int: return reject("Malformed command counter")
++	for field in ["type","phase","project_id"]:
++		if not request.get(field) is String and not request.get(field) is StringName: return reject("Malformed command identity")
++	if request.get("schema_version")!=1 or request.get("sequence")!=sequence or request.get("phase")!=PHASES[phase_index] or request.get("project_id")!=project.get_release_id() or request.get("project_cycle")!=project.get_current_cycle() or request.get("run_cycle")!=run.get_completed_run_cycles(): return reject("Stale or unsupported command")
++	if not request.get("type") is String and not request.get("type") is StringName: return reject("Malformed command type")
++	if not request.get("payload") is Dictionary: return reject("Malformed command payload")
++	_busy=true
++	var streams_before:=run.random_streams.snapshot()
++	var result:=_execute(StringName(request.type),request.payload)
++	if result.ok:
++		sequence+=1
++		result.sequence=sequence
++		result.rng_before=streams_before
++		result.rng_after=run.random_streams.snapshot()
++	_busy=false
++	return result
++
++func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
++	if kind==&"enter_next_phase":
++		if not finalized or phase_index>=2 or not payload.is_empty(): return reject("No next development phase")
++		phase_index+=1
++		_create_phase()
++		return {"ok":true,"events":[{"type":"phase_entered","phase":PHASES[phase_index]}]}
++	if finalized: return reject("Phase finalized")
++	if awaiting_confirmation:
++		if not payload.is_empty(): return reject("Unexpected confirmation payload")
++		if kind==&"cancel_exit":
++			awaiting_confirmation=false
++			return {"ok":true,"events":[{"type":"exit_canceled"}]}
++		if kind!=&"confirm_exit": return reject("Exit confirmation pending")
++		return _finish()
++	if kind in [&"cancel_exit",&"confirm_exit"]: return reject("No pending confirmation")
++	if kind==&"priorities":
++		var distribution: Variant = payload.get("distribution")
++		if payload.size()!=1 or not distribution is Dictionary: return reject("Malformed priorities")
++		var valid: bool = BetaPriorityAllocation.is_valid_distribution(distribution) if phase_index==2 else PriorityAllocation.is_valid_distribution(distribution)
++		if not valid or distribution==hand.priorities: return reject("Invalid or unchanged priorities")
++		if not hand.active:
++			hand.priorities=distribution.duplicate()
++			return {"ok":true,"events":[{"type":"priorities_planned"}]}
++		var allocation: RefCounted = BetaPriorityAllocation.new() if phase_index==2 else PriorityAllocation.new()
++		allocation.set_distribution(hand.priorities)
++		var publish:=func() -> void: hand.priorities=distribution.duplicate()
++		if not Actions.commit_priorities(project,run,allocation,distribution,publish): return reject("Priority change rejected")
++		return {"ok":true,"events":[{"type":"priorities_committed"},{"type":"productive_cycle"}]}
++	if kind==&"begin":
++		if hand.active or not payload.is_empty(): return reject("Phase already begun")
++		var before: int = hand._deal_rng.state
++		var plan: Dictionary = actions.initial_plan()
++		if not plan.valid:
++			hand._deal_rng.state=before
++			return reject("Initial deal rejected")
++		actions.publish_initial(plan)
++		hand.active=true
++		return {"ok":true,"events":[{"type":"initial_deal","candidate_ids":hand.candidate_ids.duplicate()}]}
++	if not hand.active: return reject("Phase not begun")
++	if kind in [&"play",&"redraw"]:
++		var ids: Variant = payload.get("candidate_ids")
++		if not ids is Array: return reject("Missing candidate tokens")
++		var slots: Array[int] = []
++		var typed_ids: Array[int] = []
++		for id in ids:
++			if not id is int or id in typed_ids or id not in hand.candidate_ids: return reject("Invalid candidate token")
++			typed_ids.append(id)
++			slots.append(hand.candidate_ids.find(id))
++		if kind==&"redraw":
++			if payload.size()!=1: return reject("Unexpected redraw payload")
++			return actions.redraw(slots)
++		var choice: Variant = payload.get("employee_priorities",{})
++		if not choice is Dictionary or payload.size()>(2 if payload.has("employee_priorities") else 1): return reject("Invalid employee choice")
++		if phase_index==2:
++			if not choice.is_empty(): return reject("No Beta employee choice")
++			return hand.execute(hand.command(typed_ids))
++		return hand.execute(hand.command(typed_ids,choice))
++	if not payload.is_empty(): return reject("Unexpected action payload")
++	if kind==&"host_playtest":
++		if not actions.host_playtest(): return reject("Playtest rejected")
++		return {"ok":true,"events":[{"type":"host_playtest"},{"type":"productive_cycle"}]}
++	if kind==&"request_exit":
++		if not actions.can_finalize(): return reject("Phase cannot finish")
++		var warnings: Array = []
++		if phase_index==1 and project.get_current_scope()<project.get_required_scope(): warnings.append("under_scope")
++		if phase_index==2: warnings=actions.boundary()._build_launch_warnings()
++		if not warnings.is_empty():
++			awaiting_confirmation=true
++			return {"ok":true,"events":[{"type":"exit_confirmation_requested","warnings":warnings}]}
++		return _finish()
++	return reject("Unknown action")
++
++func _finish() -> Dictionary:
++	var result: Dictionary = actions.finalize()
++	if result.ok:
++		finalized=true
++		awaiting_confirmation=false
++	return result
++
++## Policies receive only plain observations and return command payloads. No
++## default AI policy or balance/exit budget is implied by this interface.
++func observation() -> Dictionary:
++	var candidates: Array = []
++	for index in range(hand.candidate_ids.size()):
++		var card: CardData = hand._candidate_cards[index]
++		candidates.append({"token":hand.candidate_ids[index],"definition":str(card.id),"type":str(card.card_type),"primary_stat":str(card.primary_stat),"primary_value":card.primary_value,"secondary_stat":str(card.secondary_stat),"secondary_value":card.secondary_value,"scope":card.scope,"renewable":card.renewable,"beta_category":str(card.beta_category),"beta_value":card.beta_value,"qa_operation":str(card.qa_operation)})
++	var core: Dictionary = {}
++	for category in ProjectState.CoreScore.values(): core[category]=project.get_core_score(category)
++	var pending: Array = []
++	if phase_index==1: pending=hand._pending_playtest_categories.duplicate()
++	if phase_index==2: pending=hand._pending_corrective_pass_ids.duplicate()
++	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending}

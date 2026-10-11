@@ -1,0 +1,5 @@
+# v13 repair v3
+
+The first v13 attempt stopped on a parser error. [Repair v2](../repair-v2/README.md) parsed and launched Action Game 4 legally at cycle 75, but its partial Game 5 adapter omitted the native initial priority setup and stopped at cycle 76. Both earlier attempts remain intact. This revision changes only the analysis route's Game 5 entry to match the pinned native-v3 continuation: deal/finalization seeds `seed+2,000,003/+2,000,004`, initial `_priorities(project)` when required, then the same native Design hand policy until cycle 79. It removes the v2 manual post-hand priority change. [Protocol clarification](../PREDECLARATION.md#2026-10-09-protocol-clarification-after-adapter-failures).
+
+Use a distinct source copy, profiles and manifest. Run `prepare`, `import`, `parse`, then **Action/Starwave only** as the full-route gate. If it reaches cycles 75/77/79 with a valid ledger, run the other five predeclared arms. The [repair-v2 commands](../repair-v2/README.md) apply with `repair-v3` in the path. Each attempt writes an immutable native result, command/log and before/after source checks.

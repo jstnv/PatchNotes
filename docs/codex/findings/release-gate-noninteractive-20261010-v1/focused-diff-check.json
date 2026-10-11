@@ -1,0 +1,15 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "patch-notes/scripts/debug/verify_design_phase.gd",
+    "docs/codex/TODO.md",
+    "docs/codex/CURRENT_STATE.md",
+    "docs/codex/design/release-engineering.md"
+  ],
+  "exit": 0,
+  "stdout": "",
+  "stderr": "warning: in the working copy of 'patch-notes/scripts/debug/verify_design_phase.gd', CRLF will be replaced by LF the next time Git touches it\n"
+}

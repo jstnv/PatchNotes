@@ -1,0 +1,1359 @@
+{
+  "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+  "focused_suites": 9,
+  "live_campaign_boundaries": 94,
+  "batch_checks": 34,
+  "fresh_processes": 12,
+  "fresh_replayed_commands": 208,
+  "todo_unchanged": true,
+  "data_unchanged": true,
+  "changed_scripts": [
+    "patch-notes/scripts/debug/campaign_batch_cli.gd",
+    "patch-notes/scripts/debug/campaign_replay_cli.gd",
+    "patch-notes/scripts/debug/verify_campaign_batch.gd",
+    "patch-notes/scripts/debug/verify_campaign_live_parity.gd",
+    "patch-notes/scripts/simulation/campaign_batch.gd",
+    "patch-notes/scripts/simulation/finite_fixture_policy.gd",
+    "patch-notes/scripts/simulation/run_factory.gd"
+  ],
+  "pilot_measurements": [
+    {
+      "cohort": 10,
+      "release_horizon": 3,
+      "samples": 3,
+      "warmups": 1,
+      "commands_per_sample": 540,
+      "elapsed_seconds": [
+        16.514266,
+        16.415558,
+        16.616045
+      ],
+      "median_seconds": 16.514266,
+      "instrumented_commands_per_second": [
+        32.6990009728558,
+        32.8956225551395,
+        32.498708326801
+      ],
+      "median_commands_per_second": 32.6990009728558,
+      "worst_productive_command_us": 48493,
+      "peak_godot_static_bytes": 98133188,
+      "retained_object_deltas": [
+        0
+      ],
+      "total_artifact_bytes_including_warmup": 16416094,
+      "measurement_totals_us": {
+        "setup_us": 87903,
+        "policy_and_observation_us": 5255615,
+        "execute_and_trace_us": 41186152,
+        "finalization_us": 1642150,
+        "artifact_write_us": 319519
+      },
+      "hardware": {
+        "os": "Windows",
+        "processor": "13th Gen Intel(R) Core(TM) i7-13620H",
+        "processor_count": 16
+      },
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-pilot-10x3"
+    },
+    {
+      "cohort": 3,
+      "release_horizon": 10,
+      "samples": 3,
+      "warmups": 1,
+      "commands_per_sample": 540,
+      "elapsed_seconds": [
+        46.107886,
+        45.774954,
+        46.598726
+      ],
+      "median_seconds": 46.107886,
+      "instrumented_commands_per_second": [
+        11.7116625125689,
+        11.7968441868888,
+        11.5882996457886
+      ],
+      "median_commands_per_second": 11.7116625125689,
+      "worst_productive_command_us": 123153,
+      "peak_godot_static_bytes": 106111277,
+      "retained_object_deltas": [
+        0
+      ],
+      "total_artifact_bytes_including_warmup": 16191595,
+      "measurement_totals_us": {
+        "setup_us": 25470,
+        "policy_and_observation_us": 51360842,
+        "execute_and_trace_us": 85471002,
+        "finalization_us": 991948,
+        "artifact_write_us": 246208
+      },
+      "hardware": {
+        "os": "Windows",
+        "processor": "13th Gen Intel(R) Core(TM) i7-13620H",
+        "processor_count": 16
+      },
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-pilot-3x10"
+    },
+    {
+      "cohort": 50,
+      "release_horizon": 2,
+      "samples": 3,
+      "warmups": 1,
+      "commands_per_sample": 1800,
+      "elapsed_seconds": [
+        47.527171,
+        47.954862,
+        47.934005
+      ],
+      "median_seconds": 47.934005,
+      "instrumented_commands_per_second": [
+        37.8730726472232,
+        37.5352972551563,
+        37.5516295790431
+      ],
+      "median_commands_per_second": 37.5516295790431,
+      "worst_productive_command_us": 44647,
+      "peak_godot_static_bytes": 98133188,
+      "retained_object_deltas": [
+        0
+      ],
+      "total_artifact_bytes_including_warmup": 55238065,
+      "measurement_totals_us": {
+        "setup_us": 463366,
+        "policy_and_observation_us": 8993223,
+        "execute_and_trace_us": 120031243,
+        "finalization_us": 7134696,
+        "artifact_write_us": 1374734
+      },
+      "hardware": {
+        "os": "Windows",
+        "processor": "13th Gen Intel(R) Core(TM) i7-13620H",
+        "processor_count": 16
+      },
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-pilot-50x2"
+    }
+  ],
+  "checks": [
+    {
+      "suite": "verify_campaign_batch.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-batch-02"
+    },
+    {
+      "suite": "verify_campaign_live_parity.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-accepted-campaign-live-parity"
+    },
+    {
+      "suite": "verify_campaign_session.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-accepted-campaign-session"
+    },
+    {
+      "suite": "verify_campaign_continuation.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-accepted-campaign-continuation"
+    },
+    {
+      "suite": "verify_development_protocol.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-accepted-development-protocol"
+    },
+    {
+      "suite": "verify_development_replay.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-accepted-development-replay"
+    },
+    {
+      "suite": "verify_contract_extraction.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-accepted-contract-extraction"
+    },
+    {
+      "suite": "verify_checkpoint_runtime.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-accepted-checkpoint-runtime"
+    },
+    {
+      "suite": "verify_studio_checkpoint.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-accepted-studio-checkpoint"
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-live-4417-0",
+      "report": {
+        "final_state": "070fcc1ff22e4af6fa51982a3d8370df9e04a2130479923b9622202bfda3d4a3",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "7bbf47cd15a5df02ddbd9a38795197bae4bde6b1a3546410469dba60971716fb",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "521c83d648f4cf2de2f0754e1c34667eab0595fa1b98d63bb8fd36e54d59a893",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "1124b960166ae6eade732650eb4bc8f33f2b638a92a8ff100c1426cf7408a3cd",
+            "step": 2
+          },
+          {
+            "accepted": true,
+            "state": "3e9937c8efbfbf9288dbc469b85f72297a630ff9d0cba7c2fbff75e1454c92a2",
+            "step": 3
+          },
+          {
+            "accepted": true,
+            "state": "7369915d64f5b06cecdb87c4c9e46fd17a17e9e736dae3e4edefbaa12f4a94dd",
+            "step": 4
+          },
+          {
+            "accepted": true,
+            "state": "54c08809ab51ecedbb602f01550f5215ba58fc470acf56cc0cc3daf28e17f688",
+            "step": 5
+          },
+          {
+            "accepted": true,
+            "state": "91ee5f991377f7280ef8e2ab95a2da12eb341492ac72bda1bff56b3f2cca969b",
+            "step": 6
+          },
+          {
+            "accepted": true,
+            "state": "35d3691e275e4ab988b54a3d6a545c364e36ef61d3062b8725f3373c25b57d2c",
+            "step": 7
+          },
+          {
+            "accepted": true,
+            "state": "af12323a390c4bfcf4524b68781b5c1ceadbd26f3ab4979da5d6e11c56a05b31",
+            "step": 8
+          },
+          {
+            "accepted": true,
+            "state": "e19c5e509caf708758a7cc2b44a160faa299546570482aa9d9d7754cf016cb4f",
+            "step": 9
+          },
+          {
+            "accepted": true,
+            "state": "d5327548585ea1051fe7263fae88a9c37c2b36bf2e878087fb524ecb2f93a189",
+            "step": 10
+          },
+          {
+            "accepted": true,
+            "state": "b24c71af36c548b9e24f3fa11e8c6b44e58bfec1ac14b787c5cb43b0943e9fba",
+            "step": 11
+          },
+          {
+            "accepted": true,
+            "state": "5d49f5998f27d8b3b915a08f059d90cc95c011bbac0506ffcb9631bcb7de2ed4",
+            "step": 12
+          },
+          {
+            "accepted": true,
+            "state": "caf31e6da0dcb31cbb5c09e10d7ac3685fe004b4122593fd2882ef5e0baa7c21",
+            "step": 13
+          },
+          {
+            "accepted": true,
+            "state": "4ff2822a022fa52faa214dc3beb4e36f85c2686762ce50efb431a962a85edf77",
+            "step": 14
+          },
+          {
+            "accepted": true,
+            "state": "3ccb5d19677a9f67a64d57af4695d917dc629dd818f72333b02c10cbdc157403",
+            "step": 15
+          },
+          {
+            "accepted": true,
+            "state": "17aec6defe459242283fdb2b5757b3241be04a40ed99f9c04a6a85f84e69bb88",
+            "step": 16
+          },
+          {
+            "accepted": true,
+            "state": "777f17c65fd0f4da7fca9a1c4e74dd2c58113d79e4f26ae69eaeae0657fe26b0",
+            "step": 17
+          },
+          {
+            "accepted": true,
+            "state": "32a04d5f649c65f39f12ceeff42d1519b54f81437388bc6d31bf1e8d569210b0",
+            "step": 18
+          },
+          {
+            "accepted": true,
+            "state": "654ab489b05eed01c4f80a9e4597ffc42d9a9bbfae252a4c0c4d089f54e650a3",
+            "step": 19
+          },
+          {
+            "accepted": true,
+            "state": "ea296863b7af7fb3c414e7eadada46af6f055cf5f0e83e48ef442f5126772207",
+            "step": 20
+          },
+          {
+            "accepted": true,
+            "state": "484420dfa3448fe302b2624f7f9b325aca4f74723eaa787057bf17fcadb07bd2",
+            "step": 21
+          },
+          {
+            "accepted": true,
+            "state": "9de65275cf8596bfefe6de03e20d061b5804875ac61cd94287f3e322a7b39ab6",
+            "step": 22
+          },
+          {
+            "accepted": true,
+            "state": "9df0cd132b4ecc5e75643df16de97fee1126f51dd3d29d9d9d5e39f7523fb41d",
+            "step": 23
+          },
+          {
+            "accepted": true,
+            "state": "1a9243eb63469fae28ce70d491a907738aa9c33c0f4cab6357bc40528c4257b6",
+            "step": 24
+          },
+          {
+            "accepted": true,
+            "state": "b62c8c86a3944cd1c93e6fde7a92223a524e5828ea274dcd1d2067ce2cf4d325",
+            "step": 25
+          },
+          {
+            "accepted": true,
+            "state": "f414f8e77b698f466d82a216eea09aa441005922edd39516867ccf52a8fd2734",
+            "step": 26
+          },
+          {
+            "accepted": true,
+            "state": "14245e9184d16fc16041a12b1b3439281da9b5ffd02705ee8244d4d147ff211e",
+            "step": 27
+          },
+          {
+            "accepted": true,
+            "state": "070fcc1ff22e4af6fa51982a3d8370df9e04a2130479923b9622202bfda3d4a3",
+            "step": 28
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-live-4417-1",
+      "report": {
+        "final_state": "9b277aa4805fc6cd687f95f17b77bcda5cc37ca20aa82777cc0a5347be3edce8",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "59b6a4bcca5021b9382c56f5fb7a4ed7606a3e2ab1af041062258bca63b5a972",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "ae4e90a1817369c3f6ae2c1418cd4d23df978412d9395af4a2265891abdf486d",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "9b277aa4805fc6cd687f95f17b77bcda5cc37ca20aa82777cc0a5347be3edce8",
+            "step": 2
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-live-4417-2",
+      "report": {
+        "final_state": "aadf1260bcb7ad25fdd7037eaddab6b84e5638ab8c61b20e4bb3129407d972e2",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "7d136e7ee893432cb1d973da42d8db9d7ac20c9982673603cf4b9170009078ca",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "d8f5ce8746676d52d1f43d43b40494a1973f1402140a72654bfbab2aa2e32086",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "d5e8b0c965ec5707057b7e0e316eb800a5ffefade78b3083e488e9d0fcdf3517",
+            "step": 2
+          },
+          {
+            "accepted": true,
+            "state": "90a247398ebe33ce5ce7e257ac6d48723910be64b11dcdce74ee52d15382233f",
+            "step": 3
+          },
+          {
+            "accepted": true,
+            "state": "9ab1048bc832029666c6ffa365d409e4ac02f486bb0477e09c772adbec895958",
+            "step": 4
+          },
+          {
+            "accepted": true,
+            "state": "50991500b2b172d4a11c651d4caec9de506bb1408d12bf10302ce566b12cd1fa",
+            "step": 5
+          },
+          {
+            "accepted": true,
+            "state": "9d0acb46c73fc2ee81beb091be615ac9633e7947ea0a86d4561d1ee89fa68dd1",
+            "step": 6
+          },
+          {
+            "accepted": true,
+            "state": "c7f7d5a2c8bad31dc6b516c3bca6982e140409f13f4901850c23db5ab1c6281e",
+            "step": 7
+          },
+          {
+            "accepted": true,
+            "state": "ad287a3debae91c188a72eb77dce3515cd69c24aadf08cf4648748933d269608",
+            "step": 8
+          },
+          {
+            "accepted": true,
+            "state": "2eb78e7ee71e690f448b51dbca021b8c921edb57c9f61766b30f90e029d46766",
+            "step": 9
+          },
+          {
+            "accepted": true,
+            "state": "6492f4385f73fc7dcf12ac505ac2996a13ea914987d30f9edc43a0f8b9777fde",
+            "step": 10
+          },
+          {
+            "accepted": true,
+            "state": "5c20502a0462a370093d717b22d06998809b6af072cfbaafd89363437cda02d8",
+            "step": 11
+          },
+          {
+            "accepted": true,
+            "state": "20140e9c5dffc559ff9d5ed1d66e3c9ef35f79a7a7469871cf3c3bd2eba62c41",
+            "step": 12
+          },
+          {
+            "accepted": true,
+            "state": "b03a1cc48afe0981f02c1ab7b831329208dedf146d479625c60219f0ec8fae1d",
+            "step": 13
+          },
+          {
+            "accepted": true,
+            "state": "01d8e07f72456d3879b39eca065e5a9aef636fbc16752dc9cabba2be344c3154",
+            "step": 14
+          },
+          {
+            "accepted": true,
+            "state": "987df8beae901f5d27f1562603898017e952856549a7853be26a4076416bbcca",
+            "step": 15
+          },
+          {
+            "accepted": true,
+            "state": "6d827904cc509363276423891a66d8d49b67e4a6a8bdecd50fcf8b30c4cdc8d2",
+            "step": 16
+          },
+          {
+            "accepted": true,
+            "state": "a70197b844a6fc3ce7bcc82403efce8856511b8407b526c2864b75fa7275c613",
+            "step": 17
+          },
+          {
+            "accepted": true,
+            "state": "08bbb1fb2e80ca237d778d6ec408e7ea453af66bab5541b1f71ebf05a290c8d8",
+            "step": 18
+          },
+          {
+            "accepted": true,
+            "state": "b8700c8c768e9c4d8281f1b38af0fd7140ba003f0fa11c1c306b92404ef6828c",
+            "step": 19
+          },
+          {
+            "accepted": true,
+            "state": "e1b97e917071887ef9d34bf15afe39869aee6e3593e86cc59d21d290571245da",
+            "step": 20
+          },
+          {
+            "accepted": true,
+            "state": "6c7c76b7fcea5520813fb9603a2368393c4aeda6cca3ba297e46b5d76124ec78",
+            "step": 21
+          },
+          {
+            "accepted": true,
+            "state": "2bb054406310ff38670a5b3cd2337d4ef0404fcf4acbb20bdc5b0d389eab0723",
+            "step": 22
+          },
+          {
+            "accepted": true,
+            "state": "03a1762c1ccd253eb791cd586dd40c8b885ba0ad035df64a3877c8ed45737f4f",
+            "step": 23
+          },
+          {
+            "accepted": true,
+            "state": "aadf1260bcb7ad25fdd7037eaddab6b84e5638ab8c61b20e4bb3129407d972e2",
+            "step": 24
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-live-90210-0",
+      "report": {
+        "final_state": "ce7261c58b155634321396fce3aa429ad6d58c1eadf45c262ea7f9b5bc8f3e83",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "d5d64f35bec0f821c6e6902b5d626cc482f7fb575419b628f2c7e907d5ff257d",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "a65b76080f22c803a8d98c36f500bf35516221b303ba816a9cc3839baee51f7a",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "e66533faec225ef52166bb11701a596ee0b50a42d26bfb1a3d9afc9531adbf3d",
+            "step": 2
+          },
+          {
+            "accepted": true,
+            "state": "9a033ba8ecb413170f129487ae613b69fd66d66949aee7c5d2b4d8060e18d71d",
+            "step": 3
+          },
+          {
+            "accepted": true,
+            "state": "77b241d3d750fc6ace142e730aa8c6dcfc3c55359b1251a0bcf8476d84b9239a",
+            "step": 4
+          },
+          {
+            "accepted": true,
+            "state": "2daffde9691f5a593727311af19fb8ed89e17389508d54d0615c75787aecfdae",
+            "step": 5
+          },
+          {
+            "accepted": true,
+            "state": "91e1ab62ff312d19fc417343fd57cec1bee3a39e0a8d46d28bbc248222d6797c",
+            "step": 6
+          },
+          {
+            "accepted": true,
+            "state": "c665793964b98cc07d1e0ab3f2b95bb88a8a18231bb2a6b6d562c29e8a7a93c8",
+            "step": 7
+          },
+          {
+            "accepted": true,
+            "state": "bc2911e038e12ee27ac2832ff16b840166b9c76dc2d48393e5833670d0c678ff",
+            "step": 8
+          },
+          {
+            "accepted": true,
+            "state": "84777e9f8a922c16154518fe9966ae2a5cc15f903e42747f1cceb3af864652f4",
+            "step": 9
+          },
+          {
+            "accepted": true,
+            "state": "b3822c1c5a9b3214433a5b194d1fed7263b45e3c761a462f31d2d44404f21d20",
+            "step": 10
+          },
+          {
+            "accepted": true,
+            "state": "997daeaae10f0132a521f74dab54ad04c59c1bc36dbc2286f4b1dd2953eebc97",
+            "step": 11
+          },
+          {
+            "accepted": true,
+            "state": "279859cd5f72b8a1203d5fd7a4b76244e5e41d371c6bf63fddfe2becbeca7bbc",
+            "step": 12
+          },
+          {
+            "accepted": true,
+            "state": "04e683ee96fa23e0ae644cc8c1c632364a9c3dcd297c6770857e73a9e8b5eff7",
+            "step": 13
+          },
+          {
+            "accepted": true,
+            "state": "56cd0735b6f3816bfbe59a496c6d43ed245ba5ae23edc0e53ac412365476b90d",
+            "step": 14
+          },
+          {
+            "accepted": true,
+            "state": "634c244cefbe900739020eaa5eaf944ba0cf8072726820efa43c096fd8e7163c",
+            "step": 15
+          },
+          {
+            "accepted": true,
+            "state": "4ea60017c64d2fdd40e54de22da87ab8187a5868f739e886f42080bae1b64117",
+            "step": 16
+          },
+          {
+            "accepted": true,
+            "state": "bd603a522cd8b62097ea048023ffb0592d2c086b8ffd58d54cc93650e331036c",
+            "step": 17
+          },
+          {
+            "accepted": true,
+            "state": "b610fef817b8b29a31581fa068d3c795b6ad08dbc1564216b1bb830b32b39566",
+            "step": 18
+          },
+          {
+            "accepted": true,
+            "state": "45dec160dcd951af9cb0d226983aa2caa4327848fd1122daefe2184c9e265f0f",
+            "step": 19
+          },
+          {
+            "accepted": true,
+            "state": "1af21fd36df4c22cbf4e508b8c3cc836c5059c0c8c7e1c30db81e039fc13379e",
+            "step": 20
+          },
+          {
+            "accepted": true,
+            "state": "3c1b9f497f5942c862df2e4d6010d1f4a174e5d95a4c9088199053db60ca1f7e",
+            "step": 21
+          },
+          {
+            "accepted": true,
+            "state": "ad36a1636e34ff6de17355dd1730fb7144e351fc42fc176ffb432c10bdb76eba",
+            "step": 22
+          },
+          {
+            "accepted": true,
+            "state": "6f89be8968d0c47eb259a6f54f0f493de5f6ec2fd2c1e8d70fa39962353e113f",
+            "step": 23
+          },
+          {
+            "accepted": true,
+            "state": "19a060ad1fa76dff13dfb438b729411864a505c2e126c525ffecf8f8528e2622",
+            "step": 24
+          },
+          {
+            "accepted": true,
+            "state": "8585d741ec17164f503390b6302459cd81aa12f911aba4cd037656850fd66afe",
+            "step": 25
+          },
+          {
+            "accepted": true,
+            "state": "5948474fcc606f8bfda42e5fd2adadec339f88a49755622dad6176871ac3637e",
+            "step": 26
+          },
+          {
+            "accepted": true,
+            "state": "43f66f2fa0ed8525ad1a713afa64f3109befd52e1d177133911a637389a9d103",
+            "step": 27
+          },
+          {
+            "accepted": true,
+            "state": "ce7261c58b155634321396fce3aa429ad6d58c1eadf45c262ea7f9b5bc8f3e83",
+            "step": 28
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-live-90210-1",
+      "report": {
+        "final_state": "cb07d7bfe74ba8ef99e28041ef76e9fac9d657650ffa2f2e0fac19846bec5fcf",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "1e780ee676e22c11cff939287bec6adc690d2bbfb1711d9b3d6ffa570df778ef",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "615555a22bd618aa1d1be399164ff680deaf021579e5cf2e10c6e0092981bbd3",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "cb07d7bfe74ba8ef99e28041ef76e9fac9d657650ffa2f2e0fac19846bec5fcf",
+            "step": 2
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-live-90210-2",
+      "report": {
+        "final_state": "4da1a16d5307c6e183bd9d846002e79cfb0cf3878e5755d85f43758c1d728570",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "db464d2ab8eeb6916371aa980e2fbb742c11eef3d12ffc470f850e81a718c847",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "d7214004dcb566bc9459f19d5e6d045c83228c59394164e34dc148348c45b94d",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "34937c83d3281f7fb0021f9bba93ab1bc79282af2a33cebb15b5c1b33844a027",
+            "step": 2
+          },
+          {
+            "accepted": true,
+            "state": "63f227f24e3a3610b2f31e77f9d47aea95e56257d606dbd630d72ff2ccffa224",
+            "step": 3
+          },
+          {
+            "accepted": true,
+            "state": "aa7dc46c8defa4af02c6a279565c9cc56b4d15caf83272e9f26df101b993d688",
+            "step": 4
+          },
+          {
+            "accepted": true,
+            "state": "a3c247ed2cfe7717ba9ecd32982d66046b52e9630a85c8a864753b69afb2284a",
+            "step": 5
+          },
+          {
+            "accepted": true,
+            "state": "400b99cb03250b7cde2e5269f44d840b28ce1fced17a0fd0353e338979758012",
+            "step": 6
+          },
+          {
+            "accepted": true,
+            "state": "77e9998802551f80e373f918369067900cc246e71425e2584d78eee8c5dac45c",
+            "step": 7
+          },
+          {
+            "accepted": true,
+            "state": "42ff635f8ad3f9a464252afd6d1c8b652e701a912d57017a3f603f4e244b2913",
+            "step": 8
+          },
+          {
+            "accepted": true,
+            "state": "f9da64f9a3f329d6f8efa9fef2db47773d0575bc4842ceee6be606b05e70ed30",
+            "step": 9
+          },
+          {
+            "accepted": true,
+            "state": "968fc9a74be06bd9a601dfaf2330c50037de175754132e99424bdac40bbb845b",
+            "step": 10
+          },
+          {
+            "accepted": true,
+            "state": "1d93e2cfc903b984c2a13350b4452603f263a48c1847c4f007450c91be6d1a02",
+            "step": 11
+          },
+          {
+            "accepted": true,
+            "state": "94644fb97daa583ff9616e5cd3cf2abea888ec1c05480d97ef9707a8d939fddb",
+            "step": 12
+          },
+          {
+            "accepted": true,
+            "state": "ec5c839035feb380f42bffd599ad07a32d79ae6d4a7a8db7287389c3261deb70",
+            "step": 13
+          },
+          {
+            "accepted": true,
+            "state": "1e97318d19f5be22cf14c29cfd27b3bd554000874830b075ca8788d90803b6f3",
+            "step": 14
+          },
+          {
+            "accepted": true,
+            "state": "c858159c0618e6ecffc954dad5e372ad530d5f7862aa8f9548116597be31e09a",
+            "step": 15
+          },
+          {
+            "accepted": true,
+            "state": "7dd44de52a47ef8c3ffbeb57d0ba3fa90677af5e79eee7554f3819098bc7f3b6",
+            "step": 16
+          },
+          {
+            "accepted": true,
+            "state": "633b8545b698a963fb7183748c663895f01ce007ba98168f0a57dae5a40cb398",
+            "step": 17
+          },
+          {
+            "accepted": true,
+            "state": "384d88dda6594bef0db6cf7ce5f58088895bde553e97d9fbfe085177002f1862",
+            "step": 18
+          },
+          {
+            "accepted": true,
+            "state": "31bc302c23ee725ce499c1c28f338d334e9158288933b51961c8cf8918191cff",
+            "step": 19
+          },
+          {
+            "accepted": true,
+            "state": "360fb11ef46823d015a1df39f391b0b18e0d3e1d9ec55afbe99920310beeded4",
+            "step": 20
+          },
+          {
+            "accepted": true,
+            "state": "690c475c85843421ea173299da4d74a2a83d28546070d5fa38731dfc104ab317",
+            "step": 21
+          },
+          {
+            "accepted": true,
+            "state": "fe13c7f5f1899ba127ba5faad3f7b3274ae9df0df4cb12aae57d5b137cd157b6",
+            "step": 22
+          },
+          {
+            "accepted": true,
+            "state": "98eb376e56094d7ecf61289be9f2b2e37442ce9dc0e475fd2c70c569f97b9167",
+            "step": 23
+          },
+          {
+            "accepted": true,
+            "state": "4da1a16d5307c6e183bd9d846002e79cfb0cf3878e5755d85f43758c1d728570",
+            "step": 24
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-batch-first",
+      "report": {
+        "final_state": "dee583fb01188cf5bbc804841ddc41f6a750c33a3b64124314c533705d0e7403",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "ac04bf96f200c50cfbe32805b64f546dd0ccf3fdfd727426e7a0dba8bb1f64bb",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "732f31389461c2a53bbc5298a623a7080148c8722938e0787267dae0da8fdcc8",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "593b827a30d319e3cac3db1220be7b1b0c5dd137a6d669b78c15e1ccf4d2c213",
+            "step": 2
+          },
+          {
+            "accepted": true,
+            "state": "8979e856f8fa1aa4a57239276584e301de2716eca67d7f8d2add51b892776347",
+            "step": 3
+          },
+          {
+            "accepted": true,
+            "state": "1e71cdeac25df6fead0dbe35a6d140bfdac1b4fb0bd98694ebf2c152f20a8d53",
+            "step": 4
+          },
+          {
+            "accepted": true,
+            "state": "28bbb10b9c5f28c2eadeba0569213a007d6b25af5a3943062e2e714f4c38e0b3",
+            "step": 5
+          },
+          {
+            "accepted": true,
+            "state": "599e721e4f4b97ae8e0c6732d4cccaec0371eb754e0bca066e0da2db347a88a7",
+            "step": 6
+          },
+          {
+            "accepted": true,
+            "state": "acf1c89d263c9dd413dbfbeff479b51ba17cdd0c2af4a67049ba64ba8a1f2a94",
+            "step": 7
+          },
+          {
+            "accepted": true,
+            "state": "cefec0f9c8f855a3b7e131cb8eb304bf824bfd7e42cf39a9fab4b9162b2e8fb8",
+            "step": 8
+          },
+          {
+            "accepted": true,
+            "state": "81ca39d6126afa32da6f0d4c5d9f82b55b3b80ddeceba96923005e0953a7e579",
+            "step": 9
+          },
+          {
+            "accepted": true,
+            "state": "5dbb7bb3a9e2295671b906af1bb7df6fe0aeed302bc22b25eac0d628a9b119a1",
+            "step": 10
+          },
+          {
+            "accepted": true,
+            "state": "0da0d1a02eb167943898cac889995f7826d93e76c2f788e911ca53437921b8ec",
+            "step": 11
+          },
+          {
+            "accepted": true,
+            "state": "161d283516da271a87c8c43cdbe488a9711e72e88bca706619aeecad55942a30",
+            "step": 12
+          },
+          {
+            "accepted": true,
+            "state": "00d41f210076a5c90da19c61f71175e568cc47397b9d31de68989c3485a256a8",
+            "step": 13
+          },
+          {
+            "accepted": true,
+            "state": "37f51aa2019a642a5eb6e8ec8c3b296f2c1e26f184caced24ed6a7c5bea407a2",
+            "step": 14
+          },
+          {
+            "accepted": true,
+            "state": "45a73fa9bfe6e9a7e92304d36734ff9cb37e8aae14919e5a44cb2b71c2c338c0",
+            "step": 15
+          },
+          {
+            "accepted": true,
+            "state": "2d68960254ab8213584dfad854540526dd89a0132dadf9385d02889582bc7385",
+            "step": 16
+          },
+          {
+            "accepted": true,
+            "state": "e40403a5fe49bd3228087b4b3e9cc5c476b2161586d2cc2675a636d0834b80b3",
+            "step": 17
+          },
+          {
+            "accepted": true,
+            "state": "6537af17dc9a154953432ac9424f5406ccefa24c1e8371317b37ac411bdeec0c",
+            "step": 18
+          },
+          {
+            "accepted": true,
+            "state": "81f7d8d96e7814500164912ecfdff07db7297005ff8d325e2c21150bcc5dec64",
+            "step": 19
+          },
+          {
+            "accepted": true,
+            "state": "0ed83ab746a62d2212a9ed0e892f68107b3415c4fbf1b844c8a30bb21110df08",
+            "step": 20
+          },
+          {
+            "accepted": true,
+            "state": "03788d13fcee052f357c7a3a12462604187c65c76732a61c733e0d96689f2405",
+            "step": 21
+          },
+          {
+            "accepted": true,
+            "state": "b546be502279c7087721594170d6a11e5ee95ffa87e8a73f0ccab535c3396934",
+            "step": 22
+          },
+          {
+            "accepted": true,
+            "state": "4f1bfcad9df768992b23afe5f08d2878f63754db9385947e28ace0213d54deb0",
+            "step": 23
+          },
+          {
+            "accepted": true,
+            "state": "e81c7633d571c078a944068df797835d2fe96c5971f7ec190f75b12de1c37ba6",
+            "step": 24
+          },
+          {
+            "accepted": true,
+            "state": "0abb57b134f8a2be7839770819e8e84cf3342a6dbec8385af2c2a594b03ae8b4",
+            "step": 25
+          },
+          {
+            "accepted": true,
+            "state": "f8b41c5ea103b690891e34ba0807a915126fa7ebc45737bcbf2835d002c06e9c",
+            "step": 26
+          },
+          {
+            "accepted": true,
+            "state": "0186bbaf14d580f7cbc7521cf889d157d7796b8121a8057bb3f29862a39b39a1",
+            "step": 27
+          },
+          {
+            "accepted": true,
+            "state": "9f3babc9a768ba5330d3b36d842c7373d3c56b86c114f98b880100f72ae149cc",
+            "step": 28
+          },
+          {
+            "accepted": true,
+            "state": "e6a3725610007d0782cd1ef325a1affbbd5d786d22217bb739cf63efd48c29ca",
+            "step": 29
+          },
+          {
+            "accepted": true,
+            "state": "2c61f757c94c3f68a1d135af39266ac48f9e8f8ed76717e935490999e8a3b9c7",
+            "step": 30
+          },
+          {
+            "accepted": true,
+            "state": "f33f382f2b1a5120ea97d0e8bf51083c75960b82c9123f78f3323ed19d2e15ba",
+            "step": 31
+          },
+          {
+            "accepted": true,
+            "state": "0bb2f6e7702e3c7c42895c58719152341223781a159e1e150cc7d5a83fac4e38",
+            "step": 32
+          },
+          {
+            "accepted": true,
+            "state": "b1c0c722eb378f8dbf22e475aa22445959c4bde954bdeb450ae6ee3fea776f92",
+            "step": 33
+          },
+          {
+            "accepted": true,
+            "state": "25aba98eff2bbcdf94b9cea5300143337873a77662ec9ed4d9b67eed34a7283b",
+            "step": 34
+          },
+          {
+            "accepted": true,
+            "state": "dee583fb01188cf5bbc804841ddc41f6a750c33a3b64124314c533705d0e7403",
+            "step": 35
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-batch-second",
+      "report": {
+        "final_state": "4b7334fc1b8efbfeb2d8e211f331d9cb17f6274e2953b4d611cb38bdc57678f9",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "932acc41278029065b3a8a8ae26b535cc448a1d16f1130df807bd7d8dc6bbcb9",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "75edcf90d9a21360c519444386e24492fe1a3e22e18abf9d94fad684cb1962c0",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "aac4bb0d9a8f739c7602869eccc6a0c36a845d45c7804ced227828fad9fe15f1",
+            "step": 2
+          },
+          {
+            "accepted": true,
+            "state": "ff63d4032b95393c5b1e9773f48e5c01711281e169e2aadbb346a0467dd51da0",
+            "step": 3
+          },
+          {
+            "accepted": true,
+            "state": "65fb586b19026c124f5f4bf3b61f757a14e773ea909dfdf0124963546d176d4a",
+            "step": 4
+          },
+          {
+            "accepted": true,
+            "state": "93bf039ea380c334aa11b950fafa93798b732c1fb66982701ed9c4b48bffdfd0",
+            "step": 5
+          },
+          {
+            "accepted": true,
+            "state": "3e8a68d88a15ccf3379b7b5921bc8c36aebba2c0d7d06ccf1e17fe2a41ae7afa",
+            "step": 6
+          },
+          {
+            "accepted": true,
+            "state": "90b25f9801ae56a0aa0fe608977b5fa92725e0103cd3ce18e739fdce8f4fb198",
+            "step": 7
+          },
+          {
+            "accepted": true,
+            "state": "6a81faf294cd962ad033142a37f81187d2d13e7416fbb1f20eebba5b0362f64b",
+            "step": 8
+          },
+          {
+            "accepted": true,
+            "state": "56cc045417f2f304fadd30c55a1858de9334ee420e4d60278ea85a556f5f1d47",
+            "step": 9
+          },
+          {
+            "accepted": true,
+            "state": "86a3f5c07b58befc0c3fca91f618a24ef697be717aff1a4560b39a38d41cf785",
+            "step": 10
+          },
+          {
+            "accepted": true,
+            "state": "58cf21c5a83457e21e8d81fe5b1b620864bd9138773ac937a50a5eb5fe3ef8d9",
+            "step": 11
+          },
+          {
+            "accepted": true,
+            "state": "4363aaf3323b78c7a52137693147c5238b4ce2d5a1a123085e1eb74d70bc6c10",
+            "step": 12
+          },
+          {
+            "accepted": true,
+            "state": "63d38622c62924de24bc9c1fd6f624b9726cfc7a6386983ed7ea298ef891e168",
+            "step": 13
+          },
+          {
+            "accepted": true,
+            "state": "6ff8b98154ff589fb31db0edab6672014e408cd9a947242110a0a2745ee70986",
+            "step": 14
+          },
+          {
+            "accepted": true,
+            "state": "7dab38f77bb4b985dd7d238e92a2aba5d8649a2f1a02c351c113ad701d5de887",
+            "step": 15
+          },
+          {
+            "accepted": true,
+            "state": "fe91fff1a4ab8c36a30dfbc9368cde27f9e0629d945fd3cf4e854c114951a5fc",
+            "step": 16
+          },
+          {
+            "accepted": true,
+            "state": "e5eac5b868988cd182c0f24b0be7a949a26f0d12223399eb681b78f65a83058e",
+            "step": 17
+          },
+          {
+            "accepted": true,
+            "state": "ef2f4a88644c939442a03f4e3f172de0b3aca835462ef081ef7f50e327ecba20",
+            "step": 18
+          },
+          {
+            "accepted": true,
+            "state": "acb7076bb428ee3288506d22c69ba46a61b904950aee2be20bdf5c1ccf607b44",
+            "step": 19
+          },
+          {
+            "accepted": true,
+            "state": "70c18665b745a6d6ae6251906f380d3488a1ea687c0a8c2538e9060437608be5",
+            "step": 20
+          },
+          {
+            "accepted": true,
+            "state": "60e676461e2c07c7dcb8f8df2308c11e49f5d45742621e1bb7152b7e6c4aeba0",
+            "step": 21
+          },
+          {
+            "accepted": true,
+            "state": "6422e742dedaeb0bf71973d3cdb572f4bcf5aa8fdffd97ebc4319c0e6b741f1c",
+            "step": 22
+          },
+          {
+            "accepted": true,
+            "state": "f4d8ca4bbb884b20dfed5dc2da832b2bcf4718048e1d8bd5663c2966fb1585a7",
+            "step": 23
+          },
+          {
+            "accepted": true,
+            "state": "c3e9de72aa41aa6e72cb045ce9cbaeabb5ece775896eb3795f772345edd86fe5",
+            "step": 24
+          },
+          {
+            "accepted": true,
+            "state": "c7d294fd33f8efa43c1c4ee311768675a8001f246d3f545b0f88ab049a19ceaf",
+            "step": 25
+          },
+          {
+            "accepted": true,
+            "state": "ee5f5ad47f796e531b0116b49a7b4d6b082c5a7bd062e8ea00de71ff54fd04d6",
+            "step": 26
+          },
+          {
+            "accepted": true,
+            "state": "8f85404364958c11d912edbc7a24c03d8cfdc41903417219e8a46a443cf1564c",
+            "step": 27
+          },
+          {
+            "accepted": true,
+            "state": "3197c895487975e59a165b041e3296a5dd07fc7c986c60bad626ade0eecd53f9",
+            "step": 28
+          },
+          {
+            "accepted": true,
+            "state": "052a8d476caf0423cd86ce995019443a027fe184f015a90133001ac515df7027",
+            "step": 29
+          },
+          {
+            "accepted": true,
+            "state": "e15f360da52f8fdb3c522a6ef552fb8c4ffae52c56afde53dcc721b957e79f1f",
+            "step": 30
+          },
+          {
+            "accepted": true,
+            "state": "c4c2e5cc95522057a1e73ec04b479e0a6b44dba7459b2f5676240b32627f1ada",
+            "step": 31
+          },
+          {
+            "accepted": true,
+            "state": "a874b752044747a2b7312a6260e9553f0148a246519d7b32f1b3278a070fb0fe",
+            "step": 32
+          },
+          {
+            "accepted": true,
+            "state": "9e0122db4389fcb4ef5d4abc0b1eec04e544c0c23839a3b17df3366c08e825cb",
+            "step": 33
+          },
+          {
+            "accepted": true,
+            "state": "f83be36c60c34eb391b153d0c11f7cce3b97e24ac7a01cebcb6a4382523fb33e",
+            "step": 34
+          },
+          {
+            "accepted": true,
+            "state": "4b7334fc1b8efbfeb2d8e211f331d9cb17f6274e2953b4d611cb38bdc57678f9",
+            "step": 35
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-batch-checkpoint",
+      "report": {
+        "final_state": "e3df4ab4e8c4dd0e3756683f8700bd6afb28102e5b7fec9c0f9ee58207726112",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "b6877f78530c94739faca5c1d18d402bb18c5f9df83fa017779bfa28786fdc7d",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "cf24dac7ae55f3fcd1c3c5ea21dacee1e70d867954b2754bf9fdee559459b5d1",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "c7743b31ad462ea52356c65914a3bb7e22811a01cd5467efc39df24f5856bd25",
+            "step": 2
+          },
+          {
+            "accepted": true,
+            "state": "08ecc238c3f7b3f0de21b96d3a9ec17ec688d2d86678b4fccbb8b61e4d6de885",
+            "step": 3
+          },
+          {
+            "accepted": true,
+            "state": "9f2a18d26892ccd57279f8d5773f0508cbd642c3fdd50540c964da41a13007cb",
+            "step": 4
+          },
+          {
+            "accepted": true,
+            "state": "0b5947ed75895cd5eaee854754c7eaeb796135ae0e9454eb000759d87fb3f39c",
+            "step": 5
+          },
+          {
+            "accepted": true,
+            "state": "ce2cbca92fd374eb1f48489a76199cf52f371233df61947a338a5470cef3c247",
+            "step": 6
+          },
+          {
+            "accepted": true,
+            "state": "f9fbf1cc847c7ee4c269a12bb20eefd9022a9dd07dd03c5e1d8d5e3658c54f71",
+            "step": 7
+          },
+          {
+            "accepted": true,
+            "state": "5f82e6a6eb24051b6cc104ed00d4787e8365bac5409a2c5868b1a34def27e5f5",
+            "step": 8
+          },
+          {
+            "accepted": true,
+            "state": "c6c1b9c76f179de58e637c5c4e7ec9e1a03d40545c76d143020d3d10565e603d",
+            "step": 9
+          },
+          {
+            "accepted": true,
+            "state": "f429a3737db67fdb65115fddf0bc3901bdc0d78d3debafab9fbb4a18a8ddc01a",
+            "step": 10
+          },
+          {
+            "accepted": true,
+            "state": "be8e30ed94f0f792389aebde0bb0b51df62122497b321b8ed018926df733dad1",
+            "step": 11
+          },
+          {
+            "accepted": true,
+            "state": "d76136fac2aefb5ceb5e43be66c1390cbde0896b06a7bc25464994d1ea735522",
+            "step": 12
+          },
+          {
+            "accepted": true,
+            "state": "11aafa064d99d9a64201f15fa7e627657288f14bf763355f92c08a473af8c2c3",
+            "step": 13
+          },
+          {
+            "accepted": true,
+            "state": "f63c3c3872121ff8cfbbc61e0f17dc40a8526f4b18b296731c572dbcf4d3b559",
+            "step": 14
+          },
+          {
+            "accepted": true,
+            "state": "e8044f6cbce8aee812335c4637095f73f47ba778948ed19416f59886b0a9005d",
+            "step": 15
+          },
+          {
+            "accepted": true,
+            "state": "af8f786a6196357f2d7a59fb245688c6e70158c2d5978cbb63c1729d8ec1ea79",
+            "step": 16
+          },
+          {
+            "accepted": true,
+            "state": "e3df4ab4e8c4dd0e3756683f8700bd6afb28102e5b7fec9c0f9ee58207726112",
+            "step": 17
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-batch-bound",
+      "report": {
+        "final_state": "3ffe62dbeb1cf676b02803cc6735ba0f6fe47eee4106859a5ca351903eecacb3",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": true,
+            "state": "3c2aa4f73b67f5b50e440e3909d1b97cb05cddf121edc129c6b12bf5fe9e42dc",
+            "step": 0
+          },
+          {
+            "accepted": true,
+            "state": "953ae10f8b194ebba42d4b2493171c49a15e4e6f6bd8f512cf12f64674a5b15b",
+            "step": 1
+          },
+          {
+            "accepted": true,
+            "state": "3ffe62dbeb1cf676b02803cc6735ba0f6fe47eee4106859a5ca351903eecacb3",
+            "step": 2
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-batch-rejected",
+      "report": {
+        "final_state": "2214e6a526c24de61c19f32d1914f98c8ca2fd617e059990a6bbc7744b153262",
+        "ok": true,
+        "steps": [
+          {
+            "accepted": false,
+            "state": "2214e6a526c24de61c19f32d1914f98c8ca2fd617e059990a6bbc7744b153262",
+            "step": 0
+          }
+        ]
+      }
+    },
+    {
+      "suite": "campaign_replay_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-fresh-batch-malformed",
+      "report": {
+        "final_state": "18f9a3ff1686aa8aa17588db4ce4aa4e1a54f75c89ec37ea542087ff291e7d8f",
+        "ok": true,
+        "steps": []
+      }
+    },
+    {
+      "suite": "campaign_batch_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-pilot-10x3",
+      "cohort": 10,
+      "release_horizon": 3,
+      "warmups": 1,
+      "samples": 3,
+      "configuration": "docs/codex/threads/simulation-engine/m4-v1/m4-pilot-10x3.config.json"
+    },
+    {
+      "suite": "campaign_batch_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-pilot-3x10",
+      "cohort": 3,
+      "release_horizon": 10,
+      "warmups": 1,
+      "samples": 3,
+      "configuration": "docs/codex/threads/simulation-engine/m4-v1/m4-pilot-3x10.config.json"
+    },
+    {
+      "suite": "campaign_batch_cli.gd",
+      "evidence": "docs/codex/findings/card-presentation-v2/m4-pilot-50x2",
+      "cohort": 50,
+      "release_horizon": 2,
+      "warmups": 1,
+      "samples": 3,
+      "configuration": "docs/codex/threads/simulation-engine/m4-v1/m4-pilot-50x2.config.json"
+    }
+  ]
+}

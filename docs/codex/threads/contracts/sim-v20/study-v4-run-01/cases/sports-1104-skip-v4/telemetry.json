@@ -1,0 +1,4802 @@
+{
+	"final_state": "03362cfc599bb0fe03f2f537b992b62bdc09d81ba2bacd33a0b12dc6078e7631",
+	"initial_state": "1811386e9b18d0d5bdc09c035411b706c79c5ee7eeb5264907c98f864f1e7fe2",
+	"samples": [
+		{
+			"accepted": null,
+			"cash_cents": "168282",
+			"command_type": "",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "studio",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {},
+			"research_queue": [],
+			"run_cycle": 32,
+			"sequence": 56,
+			"state_digest": "1811386e9b18d0d5bdc09c035411b706c79c5ee7eeb5264907c98f864f1e7fe2",
+			"step": 0,
+			"transaction_cash_low_cents": "168282",
+			"transaction_count": 93,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "183282",
+			"command_type": "accept_contract",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "contract",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"kind": "publisher",
+					"quote": {
+						"cycle": 32,
+						"eligible": [
+							"text",
+							"sprites",
+							"4_color_palette",
+							"8_bit_sound",
+							"keyboard_and_mouse",
+							"controller",
+							"scrolling",
+							"menu_system",
+							"split_screen",
+							"multiple_endings",
+							"controls",
+							"enemies",
+							"power_ups",
+							"general_combat",
+							"levels",
+							"maps",
+							"sound_effects",
+							"music"
+						],
+						"finance_revision": 37,
+						"focus": -1,
+						"offer_id": "contracts-sidestreet-1104:crown_quill:first",
+						"publisher_id": "crown_quill",
+						"source_release_id": "contracts-sidestreet-1104:project:2",
+						"terms": {
+							"advance_cents": 15000,
+							"cash_cents": 192000,
+							"denominator": 66,
+							"promotion": 12,
+							"scope": 9
+						}
+					}
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 32,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 56,
+				"type": "accept_contract"
+			},
+			"research_queue": [],
+			"run_cycle": 32,
+			"sequence": 57,
+			"state_digest": "f91d9b99f493593f845c7f9351438339d6a5ca787f8c05daccdfd8fca83c9dd7",
+			"step": 1,
+			"transaction_cash_low_cents": "168282",
+			"transaction_count": 94,
+			"transactions_observed": 1
+		},
+		{
+			"accepted": true,
+			"cash_cents": "183282",
+			"command_type": "contract",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "contract",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"hand_count": 0,
+						"offer_id": "contracts-sidestreet-1104:crown_quill:first",
+						"payload": {},
+						"run_cycle": 32,
+						"schema_version": 1,
+						"sequence": 0,
+						"type": "begin"
+					}
+				},
+				"phase": "contract",
+				"project_id": "",
+				"run_cycle": 32,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 57,
+				"type": "contract"
+			},
+			"research_queue": [],
+			"run_cycle": 32,
+			"sequence": 58,
+			"state_digest": "7b4dcc225ad8a9009920938d5d3f77d2aa590823d7562a3dfd7b3ab9d15d3346",
+			"step": 2,
+			"transaction_cash_low_cents": "183282",
+			"transaction_count": 94,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "183282",
+			"command_type": "contract",
+			"error": "",
+			"fans": "0",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "contract",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"hand_count": 0,
+						"offer_id": "contracts-sidestreet-1104:crown_quill:first",
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"run_cycle": 32,
+						"schema_version": 1,
+						"sequence": 1,
+						"type": "play"
+					}
+				},
+				"phase": "contract",
+				"project_id": "",
+				"run_cycle": 32,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 58,
+				"type": "contract"
+			},
+			"research_queue": [],
+			"run_cycle": 33,
+			"sequence": 59,
+			"state_digest": "0a498156338da7e5b44292f0bdd27876c4bfa0cad9c8b83e3a331e89dbef46d6",
+			"step": 3,
+			"transaction_cash_low_cents": "183282",
+			"transaction_count": 96,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "835449",
+			"command_type": "contract",
+			"error": "",
+			"fans": "83",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "contract",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"hand_count": 1,
+						"offer_id": "contracts-sidestreet-1104:crown_quill:first",
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								7,
+								8
+							]
+						},
+						"run_cycle": 33,
+						"schema_version": 1,
+						"sequence": 2,
+						"type": "play"
+					}
+				},
+				"phase": "contract",
+				"project_id": "",
+				"run_cycle": 33,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 59,
+				"type": "contract"
+			},
+			"research_queue": [],
+			"run_cycle": 34,
+			"sequence": 60,
+			"state_digest": "61d1c2054acc0a766f32e4fe01591431af9b3c46f6ee551f5eae2f977168c962",
+			"step": 4,
+			"transaction_cash_low_cents": "183282",
+			"transaction_count": 101,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "835449",
+			"command_type": "dismiss_contract",
+			"error": "",
+			"fans": "83",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "studio",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {},
+				"phase": "contract",
+				"project_id": "",
+				"run_cycle": 34,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 60,
+				"type": "dismiss_contract"
+			},
+			"research_queue": [],
+			"run_cycle": 34,
+			"sequence": 61,
+			"state_digest": "a3ea708270123bb0e88e493eb052beebcab296a3eefd12b48ceaf6b6cd1328b9",
+			"step": 5,
+			"transaction_cash_low_cents": "835449",
+			"transaction_count": 101,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "835449",
+			"command_type": "begin_development",
+			"error": "",
+			"fans": "83",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"genre": "sports",
+					"name": "SideStreet Screen 3",
+					"theme": "fantasy"
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 34,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 61,
+				"type": "begin_development"
+			},
+			"research_queue": [],
+			"run_cycle": 35,
+			"sequence": 62,
+			"state_digest": "0d6525443c5c6e989ebd1636de077dad1273baa18d29525a2fcd25c844b2fda1",
+			"step": 6,
+			"transaction_cash_low_cents": "835449",
+			"transaction_count": 103,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "835449",
+			"command_type": "development",
+			"error": "",
+			"fans": "83",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 35,
+						"schema_version": 1,
+						"sequence": 0,
+						"type": "begin"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 35,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 62,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 35,
+			"sequence": 63,
+			"state_digest": "cb6ea969ebfb8a5f7e08eed1382355e4705be8b7c4dabac9fa545d0549c953c2",
+			"step": 7,
+			"transaction_cash_low_cents": "835449",
+			"transaction_count": 103,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "895099",
+			"command_type": "development",
+			"error": "",
+			"fans": "106",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								5
+							]
+						},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 35,
+						"schema_version": 1,
+						"sequence": 1,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 35,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 63,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 36,
+			"sequence": 64,
+			"state_digest": "0fa50e00e521ca872db1b68a8b2c60f8852d1f2b4d8f289d18b20d50d1c47ef3",
+			"step": 8,
+			"transaction_cash_low_cents": "795449",
+			"transaction_count": 108,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "870099",
+			"command_type": "development",
+			"error": "",
+			"fans": "106",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								6,
+								7,
+								8,
+								9
+							]
+						},
+						"phase": "design",
+						"project_cycle": 1,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 36,
+						"schema_version": 1,
+						"sequence": 2,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 36,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 64,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 37,
+			"sequence": 65,
+			"state_digest": "a79223562255aac002b1769940cb99fb6ee337d977a224bf3b80408feff51b83",
+			"step": 9,
+			"transaction_cash_low_cents": "870099",
+			"transaction_count": 110,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "911798",
+			"command_type": "development",
+			"error": "",
+			"fans": "122",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								11,
+								3,
+								4,
+								10
+							]
+						},
+						"phase": "design",
+						"project_cycle": 2,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 37,
+						"schema_version": 1,
+						"sequence": 3,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 37,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 65,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 38,
+			"sequence": 66,
+			"state_digest": "3dd07593984f1f9d3dc31579afc72aef872ae4eeb6d7c47546de28b3235df9e6",
+			"step": 10,
+			"transaction_cash_low_cents": "861099",
+			"transaction_count": 115,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "911798",
+			"command_type": "development",
+			"error": "",
+			"fans": "122",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "design",
+						"project_cycle": 3,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 38,
+						"schema_version": 1,
+						"sequence": 4,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 38,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 66,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 39,
+			"sequence": 67,
+			"state_digest": "62f6f446359f6a25e879d69368ae54a75845c98afb1d2c2dbb703da07b3daedc",
+			"step": 11,
+			"transaction_cash_low_cents": "911798",
+			"transaction_count": 117,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "929630",
+			"command_type": "development",
+			"error": "",
+			"fans": "132",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								16,
+								17,
+								18,
+								19
+							]
+						},
+						"phase": "design",
+						"project_cycle": 4,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 39,
+						"schema_version": 1,
+						"sequence": 5,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 39,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 67,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 40,
+			"sequence": 68,
+			"state_digest": "7a556e36804c0cb1a3d384ef11f7e299c0c70be9f8058774f0dbe7e5b384346d",
+			"step": 12,
+			"transaction_cash_low_cents": "911798",
+			"transaction_count": 122,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "929630",
+			"command_type": "development",
+			"error": "",
+			"fans": "132",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 5,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 40,
+						"schema_version": 1,
+						"sequence": 6,
+						"type": "request_exit"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 40,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 68,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 40,
+			"sequence": 69,
+			"state_digest": "2baf9144d4d82a6b83038f1ea7c64ed71248a414b2c700e048c7960b47f9ac8a",
+			"step": 13,
+			"transaction_cash_low_cents": "929630",
+			"transaction_count": 122,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "929630",
+			"command_type": "development",
+			"error": "",
+			"fans": "132",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 5,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 40,
+						"schema_version": 1,
+						"sequence": 7,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 40,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 69,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 40,
+			"sequence": 70,
+			"state_digest": "02aaef7b0129b74918cbd9bfab6447a92621218f4156a8dbf7eca93c6976e877",
+			"step": 14,
+			"transaction_cash_low_cents": "929630",
+			"transaction_count": 122,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "929630",
+			"command_type": "development",
+			"error": "",
+			"fans": "132",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 5,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 40,
+						"schema_version": 1,
+						"sequence": 8,
+						"type": "begin"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 40,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 70,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 40,
+			"sequence": 71,
+			"state_digest": "e856f44220f754ac95788dfe4bf4cc8202490372c538126eb1d63500af1ec840",
+			"step": 15,
+			"transaction_cash_low_cents": "929630",
+			"transaction_count": 122,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "891630",
+			"command_type": "development",
+			"error": "",
+			"fans": "132",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 5,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 40,
+						"schema_version": 1,
+						"sequence": 9,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 40,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 71,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 41,
+			"sequence": 72,
+			"state_digest": "034076e05ce6a9365819843ef27614364133206b34e357d7086325b74e5544a7",
+			"step": 16,
+			"transaction_cash_low_cents": "891630",
+			"transaction_count": 124,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "860085",
+			"command_type": "development",
+			"error": "",
+			"fans": "139",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								8
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 6,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 41,
+						"schema_version": 1,
+						"sequence": 10,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 41,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 72,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 42,
+			"sequence": 73,
+			"state_digest": "b0f764afe109fadc93945427bb33a710cc1a292de6d5dce2196220ff0a6320ec",
+			"step": 17,
+			"transaction_cash_low_cents": "860085",
+			"transaction_count": 129,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "856085",
+			"command_type": "development",
+			"error": "",
+			"fans": "139",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								9,
+								7,
+								10,
+								11
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 7,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 42,
+						"schema_version": 1,
+						"sequence": 11,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 42,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 73,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 43,
+			"sequence": 74,
+			"state_digest": "95b8b616d94525d170635a305e8a132199a4de41c9dc5e210ce287d17fa465f4",
+			"step": 18,
+			"transaction_cash_low_cents": "856085",
+			"transaction_count": 131,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "836854",
+			"command_type": "development",
+			"error": "",
+			"fans": "144",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 43,
+						"schema_version": 1,
+						"sequence": 12,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 43,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 74,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 44,
+			"sequence": 75,
+			"state_digest": "4cf57397898a7f3744b7f5728f967776884ef86a0fe9427072557188e0e7fdb7",
+			"step": 19,
+			"transaction_cash_low_cents": "836854",
+			"transaction_count": 136,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "836854",
+			"command_type": "development",
+			"error": "",
+			"fans": "144",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								16,
+								17,
+								18,
+								19
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 9,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 44,
+						"schema_version": 1,
+						"sequence": 13,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 44,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 75,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 45,
+			"sequence": 76,
+			"state_digest": "1427eaa939be0f0065a91d71da9174edca26a0e369170cc9d91fd1ef77f10e37",
+			"step": 20,
+			"transaction_cash_low_cents": "836854",
+			"transaction_count": 138,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "807134",
+			"command_type": "development",
+			"error": "",
+			"fans": "147",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								20,
+								21,
+								22,
+								23
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 10,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 45,
+						"schema_version": 1,
+						"sequence": 14,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 45,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 76,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 46,
+			"sequence": 77,
+			"state_digest": "1d82c44325865de734c5ed5f1a1cf5dc26e261f25d94e9b293c77a7793a64614",
+			"step": 21,
+			"transaction_cash_low_cents": "807134",
+			"transaction_count": 143,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "807134",
+			"command_type": "development",
+			"error": "",
+			"fans": "147",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 11,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 46,
+						"schema_version": 1,
+						"sequence": 15,
+						"type": "request_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 46,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 77,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 46,
+			"sequence": 78,
+			"state_digest": "1e64284027133a19dc0ad235e4cbfd592157e775d269cc42bd38f4aa86ca4419",
+			"step": 22,
+			"transaction_cash_low_cents": "807134",
+			"transaction_count": 143,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "807134",
+			"command_type": "development",
+			"error": "",
+			"fans": "147",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 11,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 46,
+						"schema_version": 1,
+						"sequence": 16,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 46,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 78,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 46,
+			"sequence": 79,
+			"state_digest": "9f3782ca570699f66cd16e1016103454f80f31de1f1711b009a2117ec486abb3",
+			"step": 23,
+			"transaction_cash_low_cents": "807134",
+			"transaction_count": 143,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "807134",
+			"command_type": "development",
+			"error": "",
+			"fans": "147",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 11,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 46,
+						"schema_version": 1,
+						"sequence": 17,
+						"type": "begin"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 46,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 79,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 46,
+			"sequence": 80,
+			"state_digest": "00b2a43295663dbe950c855d4fd722a48552fa8aee190b4fccf50ce54f7d142a",
+			"step": 24,
+			"transaction_cash_low_cents": "807134",
+			"transaction_count": 143,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "907134",
+			"command_type": "development",
+			"error": "",
+			"fans": "147",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 11,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 46,
+						"schema_version": 1,
+						"sequence": 18,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 46,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 80,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 47,
+			"sequence": 81,
+			"state_digest": "99705ad3afc9df5924cc88d681d5ed7669f2466345bd9a14888e656ba8a9361d",
+			"step": 25,
+			"transaction_cash_low_cents": "807134",
+			"transaction_count": 145,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "870420",
+			"command_type": "development",
+			"error": "",
+			"fans": "149",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 12,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 47,
+						"schema_version": 1,
+						"sequence": 19,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 47,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 81,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 48,
+			"sequence": 82,
+			"state_digest": "aef97564c2e1bea257f61cee810d1cecb8415d323a250933b829c2e2b5eba22c",
+			"step": 26,
+			"transaction_cash_low_cents": "870420",
+			"transaction_count": 150,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "870420",
+			"command_type": "development",
+			"error": "",
+			"fans": "149",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 13,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 48,
+						"schema_version": 1,
+						"sequence": 20,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 48,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 82,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 49,
+			"sequence": 83,
+			"state_digest": "e6f4ee1c3598a5cd7a7e8ba71ba64ea263abf5a19f2a0e5b974a176fbb8b7b85",
+			"step": 27,
+			"transaction_cash_low_cents": "870420",
+			"transaction_count": 152,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "829511",
+			"command_type": "development",
+			"error": "",
+			"fans": "151",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 14,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 49,
+						"schema_version": 1,
+						"sequence": 21,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 49,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 83,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 50,
+			"sequence": 84,
+			"state_digest": "8feeefb30034400b276bcbae2cba02b11583dd5223287efaa5ba2f625002f486",
+			"step": 28,
+			"transaction_cash_low_cents": "829511",
+			"transaction_count": 157,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "829511",
+			"command_type": "development",
+			"error": "",
+			"fans": "151",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								16,
+								17,
+								18,
+								19
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 15,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 50,
+						"schema_version": 1,
+						"sequence": 22,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 50,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 84,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 51,
+			"sequence": 85,
+			"state_digest": "026a2719cff4436bd7d2a7dfd6481319e3f48cf5c4a1940d09afbcfcf75b4776",
+			"step": 29,
+			"transaction_cash_low_cents": "829511",
+			"transaction_count": 159,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "785805",
+			"command_type": "development",
+			"error": "",
+			"fans": "152",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								20,
+								21,
+								22,
+								23
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 16,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 51,
+						"schema_version": 1,
+						"sequence": 23,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 51,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 85,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 52,
+			"sequence": 86,
+			"state_digest": "a544806044ecc3ce8a389b6c099be33b3078d5aece83a24d46301f03fe6b3e82",
+			"step": 30,
+			"transaction_cash_low_cents": "785805",
+			"transaction_count": 164,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "785805",
+			"command_type": "development",
+			"error": "",
+			"fans": "152",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 2,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 17,
+						"project_id": "contracts-sidestreet-1104:project:3",
+						"run_cycle": 52,
+						"schema_version": 1,
+						"sequence": 24,
+						"type": "request_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 52,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 86,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 52,
+			"sequence": 87,
+			"state_digest": "bcb05962b265bd690f34acd8b0df23876199e60cdf2f890b8837c64d577b1df5",
+			"step": 31,
+			"transaction_cash_low_cents": "785805",
+			"transaction_count": 164,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "785805",
+			"command_type": "launch",
+			"error": "",
+			"fans": "152",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "studio",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:3",
+				"run_cycle": 52,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 87,
+				"type": "launch"
+			},
+			"research_queue": [],
+			"run_cycle": 52,
+			"sequence": 88,
+			"state_digest": "4d570d0a49505cc2a3e49c8c746c6742a864d1e4748aaa71226eb767106c45e4",
+			"step": 32,
+			"transaction_cash_low_cents": "785805",
+			"transaction_count": 164,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "785805",
+			"command_type": "begin_development",
+			"error": "",
+			"fans": "152",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"genre": "sports",
+					"name": "SideStreet Screen 4",
+					"theme": "fantasy"
+				},
+				"phase": "studio",
+				"project_id": "",
+				"run_cycle": 52,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 88,
+				"type": "begin_development"
+			},
+			"research_queue": [],
+			"run_cycle": 53,
+			"sequence": 89,
+			"state_digest": "2d7468e91a44470fc0cd0b7f68d23b2c4bba8a9cb7da8be21523ed9ee697efe2",
+			"step": 33,
+			"transaction_cash_low_cents": "785805",
+			"transaction_count": 166,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "785805",
+			"command_type": "development",
+			"error": "",
+			"fans": "152",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 53,
+						"schema_version": 1,
+						"sequence": 0,
+						"type": "begin"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 53,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 89,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 53,
+			"sequence": 90,
+			"state_digest": "fcd2a70a4b8378e114b7e6c643a1582e13a4f4e75ba308c4dfa14cc3bac11f94",
+			"step": 34,
+			"transaction_cash_low_cents": "785805",
+			"transaction_count": 166,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1371727",
+			"command_type": "development",
+			"error": "",
+			"fans": "226",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								3,
+								4
+							]
+						},
+						"phase": "design",
+						"project_cycle": 0,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 53,
+						"schema_version": 1,
+						"sequence": 1,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 53,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 90,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 54,
+			"sequence": 91,
+			"state_digest": "ef677a68c4dfb4ef678c28ddb6f6d9b094ad427ea92f11cae77fd59c5d154d29",
+			"step": 35,
+			"transaction_cash_low_cents": "744805",
+			"transaction_count": 171,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1348727",
+			"command_type": "development",
+			"error": "",
+			"fans": "226",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								6,
+								8,
+								9,
+								2
+							]
+						},
+						"phase": "design",
+						"project_cycle": 1,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 54,
+						"schema_version": 1,
+						"sequence": 2,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 54,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 91,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 55,
+			"sequence": 92,
+			"state_digest": "9a9be35628d5c819db9c5b3b1a5b9aaa4c183f278cedf003494df95da8a92ba8",
+			"step": 36,
+			"transaction_cash_low_cents": "1348727",
+			"transaction_count": 173,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1504916",
+			"command_type": "development",
+			"error": "",
+			"fans": "254",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								13,
+								5,
+								7,
+								10
+							]
+						},
+						"phase": "design",
+						"project_cycle": 2,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 55,
+						"schema_version": 1,
+						"sequence": 3,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 55,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 92,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 56,
+			"sequence": 93,
+			"state_digest": "e3f592b09b2aa66c9388b517f4c42a7f10a13fc835af2636390743630bf9550a",
+			"step": 37,
+			"transaction_cash_low_cents": "1343727",
+			"transaction_count": 178,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1499916",
+			"command_type": "development",
+			"error": "",
+			"fans": "254",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								18,
+								11,
+								12,
+								14
+							]
+						},
+						"phase": "design",
+						"project_cycle": 3,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 56,
+						"schema_version": 1,
+						"sequence": 4,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 56,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 93,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 57,
+			"sequence": 94,
+			"state_digest": "07c9554f5d66149f048061f11c27d74c2908c6954dd450cae2b69edf766e4532",
+			"step": 38,
+			"transaction_cash_low_cents": "1499916",
+			"transaction_count": 180,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1586979",
+			"command_type": "development",
+			"error": "",
+			"fans": "272",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								15,
+								16,
+								17,
+								19
+							]
+						},
+						"phase": "design",
+						"project_cycle": 4,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 57,
+						"schema_version": 1,
+						"sequence": 5,
+						"type": "play"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 57,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 94,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 58,
+			"sequence": 95,
+			"state_digest": "e6076da283e8a3204401cd2208cf3dd1481af7da9c96601830e72ddfbc6cd8fa",
+			"step": 39,
+			"transaction_cash_low_cents": "1499916",
+			"transaction_count": 185,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1586979",
+			"command_type": "development",
+			"error": "",
+			"fans": "272",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "design",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 5,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 58,
+						"schema_version": 1,
+						"sequence": 6,
+						"type": "request_exit"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 58,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 95,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 58,
+			"sequence": 96,
+			"state_digest": "d583f02c408a1a6d92802c759afc73374649b7be2d156b370cff02586f33084c",
+			"step": 40,
+			"transaction_cash_low_cents": "1586979",
+			"transaction_count": 185,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1586979",
+			"command_type": "development",
+			"error": "",
+			"fans": "272",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "design",
+						"project_cycle": 5,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 58,
+						"schema_version": 1,
+						"sequence": 7,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "design",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 58,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 96,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 58,
+			"sequence": 97,
+			"state_digest": "2db76f20aa7bbf353f2dd335f08ea100f35849d9eccfe2a28afaf06f4b970a32",
+			"step": 41,
+			"transaction_cash_low_cents": "1586979",
+			"transaction_count": 185,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1586979",
+			"command_type": "development",
+			"error": "",
+			"fans": "272",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 5,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 58,
+						"schema_version": 1,
+						"sequence": 8,
+						"type": "begin"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 58,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 97,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 58,
+			"sequence": 98,
+			"state_digest": "8bac2b75f2c73bec737e72cdd8a6d698d8a1da29a0b4964a29a7615ef3f73bb2",
+			"step": 42,
+			"transaction_cash_low_cents": "1586979",
+			"transaction_count": 185,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1553979",
+			"command_type": "development",
+			"error": "",
+			"fans": "272",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 5,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 58,
+						"schema_version": 1,
+						"sequence": 9,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 58,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 98,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 59,
+			"sequence": 99,
+			"state_digest": "185da21d9f07c22e9f5c8393a6f8a83c1d487fb7529d1e2bf878dee8d24c0894",
+			"step": 43,
+			"transaction_cash_low_cents": "1553979",
+			"transaction_count": 187,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1565790",
+			"command_type": "development",
+			"error": "",
+			"fans": "284",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								10
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 6,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 59,
+						"schema_version": 1,
+						"sequence": 10,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 59,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 99,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 60,
+			"sequence": 100,
+			"state_digest": "d27f8eb03cfc758e7bb91a2dd6e9a1a759b2ab21889ad72bf1a8bfd567cd1e67",
+			"step": 44,
+			"transaction_cash_low_cents": "1526979",
+			"transaction_count": 192,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1556790",
+			"command_type": "development",
+			"error": "",
+			"fans": "284",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								13,
+								7,
+								8,
+								9
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 7,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 60,
+						"schema_version": 1,
+						"sequence": 11,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 60,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 100,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 61,
+			"sequence": 101,
+			"state_digest": "a126954cc0eaa4b4ed86471ce38b8bcedd0828e9d585439396a3f33b0317ec9f",
+			"step": 45,
+			"transaction_cash_low_cents": "1556790",
+			"transaction_count": 194,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1564831",
+			"command_type": "development",
+			"error": "",
+			"fans": "291",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								11,
+								12,
+								14,
+								15
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 8,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 61,
+						"schema_version": 1,
+						"sequence": 12,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 61,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 101,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 62,
+			"sequence": 102,
+			"state_digest": "78fd31642b83a2baa3ad528136bda1546bf42795b46e0497dfd1733191568508",
+			"step": 46,
+			"transaction_cash_low_cents": "1556790",
+			"transaction_count": 199,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1564831",
+			"command_type": "development",
+			"error": "",
+			"fans": "291",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								16,
+								17,
+								18,
+								19
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 9,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 62,
+						"schema_version": 1,
+						"sequence": 13,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 62,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 102,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 63,
+			"sequence": 103,
+			"state_digest": "387aec58baca287e2c18da7fc1553e82888fe5e7d3c374863a97ef95216a6d92",
+			"step": 47,
+			"transaction_cash_low_cents": "1564831",
+			"transaction_count": 201,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1551894",
+			"command_type": "development",
+			"error": "",
+			"fans": "296",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								20,
+								21,
+								22,
+								23
+							]
+						},
+						"phase": "alpha",
+						"project_cycle": 10,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 63,
+						"schema_version": 1,
+						"sequence": 14,
+						"type": "play"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 63,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 103,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 64,
+			"sequence": 104,
+			"state_digest": "cfc9d511ab6415e4defda77849769847549c37fe7a8a73984edf16acc212f479",
+			"step": 48,
+			"transaction_cash_low_cents": "1551894",
+			"transaction_count": 206,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1551894",
+			"command_type": "development",
+			"error": "",
+			"fans": "296",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "alpha",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 11,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 64,
+						"schema_version": 1,
+						"sequence": 15,
+						"type": "request_exit"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 64,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 104,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 64,
+			"sequence": 105,
+			"state_digest": "b63f8f3fc9a4228e463d598b835a8003d0d21567470ed8d7c79ab6d5621f4ae1",
+			"step": 49,
+			"transaction_cash_low_cents": "1551894",
+			"transaction_count": 206,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1551894",
+			"command_type": "development",
+			"error": "",
+			"fans": "296",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "alpha",
+						"project_cycle": 11,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 64,
+						"schema_version": 1,
+						"sequence": 16,
+						"type": "enter_next_phase"
+					}
+				},
+				"phase": "alpha",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 64,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 105,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 64,
+			"sequence": 106,
+			"state_digest": "df9c566359ee999350b7b6b1f643167b9452faebbeb2b8da426f8c13ccbb69d3",
+			"step": 50,
+			"transaction_cash_low_cents": "1551894",
+			"transaction_count": 206,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1551894",
+			"command_type": "development",
+			"error": "",
+			"fans": "296",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 11,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 64,
+						"schema_version": 1,
+						"sequence": 17,
+						"type": "begin"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 64,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 106,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 64,
+			"sequence": 107,
+			"state_digest": "2c0eb4e05a9ff96e94043e1bdeb7894cae206deff8ee6d216e8d556edecde3d3",
+			"step": 51,
+			"transaction_cash_low_cents": "1551894",
+			"transaction_count": 206,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1651894",
+			"command_type": "development",
+			"error": "",
+			"fans": "296",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								0,
+								1,
+								2,
+								3
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 11,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 64,
+						"schema_version": 1,
+						"sequence": 18,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 64,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 107,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 65,
+			"sequence": 108,
+			"state_digest": "9bca062e00cba33b34d341a3d594186e0bc51703e6fb88065e02d596eb114c87",
+			"step": 52,
+			"transaction_cash_low_cents": "1551894",
+			"transaction_count": 208,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1626370",
+			"command_type": "development",
+			"error": "",
+			"fans": "300",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								4,
+								5,
+								6,
+								7
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 12,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 65,
+						"schema_version": 1,
+						"sequence": 19,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 65,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 108,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 66,
+			"sequence": 109,
+			"state_digest": "6858502508d3b03b1c04d0a0d055e5ac4f2a3df632d9bcebe7efdd331d0aa922",
+			"step": 53,
+			"transaction_cash_low_cents": "1626370",
+			"transaction_count": 213,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1626370",
+			"command_type": "development",
+			"error": "",
+			"fans": "300",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								8,
+								9,
+								10,
+								11
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 13,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 66,
+						"schema_version": 1,
+						"sequence": 20,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 66,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 109,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 67,
+			"sequence": 110,
+			"state_digest": "60a47dad6a6fbd1bf0c8a9fb85cea93e5ca2a4c03c986c518d7f975112b3fb4c",
+			"step": 54,
+			"transaction_cash_low_cents": "1626370",
+			"transaction_count": 215,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1591754",
+			"command_type": "development",
+			"error": "",
+			"fans": "302",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								12,
+								13,
+								14,
+								15
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 14,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 67,
+						"schema_version": 1,
+						"sequence": 21,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 67,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 110,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 68,
+			"sequence": 111,
+			"state_digest": "d208eb2503a67b65556013075c4ed64e01d60c6436eec0bb6bf84d2d48e4c74e",
+			"step": 55,
+			"transaction_cash_low_cents": "1591754",
+			"transaction_count": 220,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1591754",
+			"command_type": "development",
+			"error": "",
+			"fans": "302",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								16,
+								17,
+								18,
+								19
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 15,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 68,
+						"schema_version": 1,
+						"sequence": 22,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 68,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 111,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 69,
+			"sequence": 112,
+			"state_digest": "7734141b7da47507a52ad6bbda8803b8a865867ea0baea5b6b65259571d5683b",
+			"step": 56,
+			"transaction_cash_low_cents": "1591754",
+			"transaction_count": 222,
+			"transactions_observed": 2
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1551544",
+			"command_type": "development",
+			"error": "",
+			"fans": "303",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {
+							"candidate_ids": [
+								20,
+								21,
+								22,
+								23
+							]
+						},
+						"phase": "beta",
+						"project_cycle": 16,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 69,
+						"schema_version": 1,
+						"sequence": 23,
+						"type": "play"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 69,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 112,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 70,
+			"sequence": 113,
+			"state_digest": "a6efdb005f849aafc6b17fd6f28c86b200ca4d3648815de5ec0b3296290651de",
+			"step": 57,
+			"transaction_cash_low_cents": "1551544",
+			"transaction_count": 227,
+			"transactions_observed": 5
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1551544",
+			"command_type": "development",
+			"error": "",
+			"fans": "303",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": false,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "beta",
+			"release_count": 3,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				}
+			],
+			"request": {
+				"payload": {
+					"request": {
+						"payload": {},
+						"phase": "beta",
+						"project_cycle": 17,
+						"project_id": "contracts-sidestreet-1104:project:4",
+						"run_cycle": 70,
+						"schema_version": 1,
+						"sequence": 24,
+						"type": "request_exit"
+					}
+				},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 70,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 113,
+				"type": "development"
+			},
+			"research_queue": [],
+			"run_cycle": 70,
+			"sequence": 114,
+			"state_digest": "257b8b2d05ccf97e0f7b178d3b326ef91e638014e742e4a371acbb1e5ec8b867",
+			"step": 58,
+			"transaction_cash_low_cents": "1551544",
+			"transaction_count": 227,
+			"transactions_observed": 0
+		},
+		{
+			"accepted": true,
+			"cash_cents": "1551544",
+			"command_type": "launch",
+			"error": "",
+			"fans": "303",
+			"finance_available": true,
+			"financially_blocked": false,
+			"in_studio": true,
+			"overdue_cents": "0",
+			"owned_features": [
+				"text",
+				"4_color_palette",
+				"8_bit_sound",
+				"keyboard_and_mouse",
+				"controller",
+				"scrolling",
+				"menu_system",
+				"split_screen",
+				"multiple_endings",
+				"controls",
+				"enemies",
+				"power_ups",
+				"maps",
+				"sound_effects",
+				"music",
+				"sprites",
+				"general_combat",
+				"levels"
+			],
+			"phase": "studio",
+			"release_count": 4,
+			"releases": [
+				{
+					"id": "contracts-sidestreet-1104:project:1",
+					"release_cycle": 12,
+					"review": 4.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:2",
+					"release_cycle": 32,
+					"review": 7.7
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:3",
+					"release_cycle": 52,
+					"review": 7.3
+				},
+				{
+					"id": "contracts-sidestreet-1104:project:4",
+					"release_cycle": 70,
+					"review": 6.6
+				}
+			],
+			"request": {
+				"payload": {},
+				"phase": "beta",
+				"project_id": "contracts-sidestreet-1104:project:4",
+				"run_cycle": 70,
+				"run_id": "contracts-sidestreet-1104",
+				"schema_version": 1,
+				"sequence": 114,
+				"type": "launch"
+			},
+			"research_queue": [],
+			"run_cycle": 70,
+			"sequence": 115,
+			"state_digest": "03362cfc599bb0fe03f2f537b992b62bdc09d81ba2bacd33a0b12dc6078e7631",
+			"step": 59,
+			"transaction_cash_low_cents": "1551544",
+			"transaction_count": 227,
+			"transactions_observed": 0
+		}
+	],
+	"sampling": "initial_and_after_each_executed_command",
+	"schema_version": "1",
+	"source_identity": "13980fdeb9efabaeb070c8dddddcd8137982e3e073aa43ab87f7fdd1a57c4c4f"
+}

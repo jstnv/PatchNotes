@@ -1,0 +1,9 @@
+# 2026-10-09 decision: stop Feature-shopping fit credit at each specialty Core target
+
+**Status:** **LOCKED shopping-fit cap; OPEN comparison math.** Authority: the user's choice **B** in this design thread on 2026-10-09, resolving the [excess-Core brief](2026-10-09-next-decision-v6.md).
+
+When a rival studio compares jointly attainable one-project Core mixes for Feature shopping, each Core contributes shopping-fit benefit only up to that studio's **permanent specialty** target for that Core. Core above its target earns **no additional shopping-fit credit and no direct penalty**. A legal candidate or mix is not rejected merely for overshooting one Core: improvements to other shortfalls and the whole four-Core vector still matter. A candidate targeting a positive shortfall must still strictly improve that shortfall; if another shortfall worsens, it must also strictly improve overall four-Core specialty fit under the [net-fit tradeoff ruling](2026-10-09-net-fit-tradeoff-decision-v1.md). Lost attainable coverage of another Core can worsen fit even though excess Core itself has no penalty.
+
+This cap governs only rival Feature-acquisition planning. A project's independent **Genre** continues to set its Review targets and the existing **ACTIVE/TRIAL** Review calculation retains its separate per-Core ratio cap of 1.25. This decision does not change legal Design/Alpha/Beta hands, Store ownership or acquisition, or Review scoring.
+
+Later A rulings count [equal proportional gaps](2026-10-09-equal-proportional-gap-decision-v1.md) and select the [best-overall legal mix first](2026-10-09-best-overall-legal-mix-decision-v1.md). Pre-target baseline ties, exact legal-mix search/arithmetic, cash/cycle assumptions, quote details, prerequisite lookahead and CPU method remain **OPEN**. No gameplay, PR, `TODO.md` or implementation handoff change follows.

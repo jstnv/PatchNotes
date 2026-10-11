@@ -1,6 +1,14 @@
 class_name BetaPhase
 extends Control
 
+const DevelopmentActions := preload("res://scripts/simulation/development_actions.gd")
+
+const BetaHandCommand := preload("res://scripts/simulation/beta_hand_command.gd")
+var _command_view_ids: Dictionary = {}
+var _command_next_id := 0
+var _command_revision := 0
+var _last_hand_command_result: Dictionary = {}
+
 var _workspace: PhaseWorkspace
 
 signal priorities_changed
@@ -8,27 +16,17 @@ signal launch_requested
 
 const CARD_VIEW_SCENE := preload("res://scenes/cards/card_view.tscn")
 const BETA_PRIORITY_ALLOCATION_SCRIPT := preload("res://scripts/phases/beta_priority_allocation.gd")
-const CANDIDATE_POOL_SIZE := 7
-const SELECTED_HAND_SIZE := 4
-const QA_SPECIALIZATION_MULTIPLIER := 1.5
-const MARKETING_SPECIALIZATION_MULTIPLIER := 1.5
-const BALANCED_OPERATIONS_MULTIPLIER := 1.25
+const CANDIDATE_POOL_SIZE := BetaHandCommand.CANDIDATE_POOL_SIZE
+const SELECTED_HAND_SIZE := BetaHandCommand.SELECTED_HAND_SIZE
+const QA_SPECIALIZATION_MULTIPLIER := BetaHandCommand.QA_SPECIALIZATION_MULTIPLIER
+const MARKETING_SPECIALIZATION_MULTIPLIER := BetaHandCommand.MARKETING_SPECIALIZATION_MULTIPLIER
+const BALANCED_OPERATIONS_MULTIPLIER := BetaHandCommand.BALANCED_OPERATIONS_MULTIPLIER
 const HOST_PLAYTEST_COST := 500
-const HOST_PLAYTEST_COST_CENTS := 50000
-const PLAYTEST_RIVAL_PAYOUT_CENTS := 100000
-const CORE_SCORE_BY_STAT := {
-	&"graphics": ProjectState.CoreScore.GRAPHICS,
-	&"sound": ProjectState.CoreScore.SOUND,
-	&"technology": ProjectState.CoreScore.TECHNOLOGY,
-	&"design": ProjectState.CoreScore.DESIGN,
-}
-const PASS_ID_BY_CORE_SCORE := {
-	ProjectState.CoreScore.GRAPHICS: &"graphics_pass",
-	ProjectState.CoreScore.SOUND: &"sound_pass",
-	ProjectState.CoreScore.TECHNOLOGY: &"technology_pass",
-	ProjectState.CoreScore.DESIGN: &"design_pass",
-}
-const FINITE_IDS: Array[StringName] = [&"press_interview", &"playtest_rival_games", &"study_competition", &"predict_market_trends"]
+const HOST_PLAYTEST_COST_CENTS := DevelopmentActions.BETA_PLAYTEST_COST_CENTS
+const PLAYTEST_RIVAL_PAYOUT_CENTS := BetaHandCommand.PLAYTEST_RIVAL_PAYOUT_CENTS
+const CORE_SCORE_BY_STAT := BetaHandCommand.CORE_SCORE_BY_STAT
+const PASS_ID_BY_CORE_SCORE := BetaHandCommand.PASS_ID_BY_CORE_SCORE
+const FINITE_IDS: Array[StringName] = BetaHandCommand.FINITE_IDS
 
 enum PhaseState { PLANNING, ACTIVE_DEVELOPMENT, FINALIZED }
 
@@ -146,12 +144,9 @@ func set_priority_distribution(distribution: Dictionary) -> bool:
 func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
 	if not is_inside_tree(): return false
 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
-	var commit := func() -> bool:
-		if not _priority_allocation.set_distribution(distribution): return false
-		_priority_draft = _priority_allocation.get_distribution()
-		_project_state.advance_cycle()
-		return true
-	if not _run_state.complete_productive_action(commit, 0, -1, &"", &"priority_change", _project_state.get_release_id()): return false
+	var publish:=func() -> void:
+		_priority_draft=_priority_allocation.get_distribution()
+	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
 	_sync_priority_controls()
 	_refresh_redraw_controls()
 	return true
@@ -207,7 +202,9 @@ func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float
 		return false
 	var committed_snapshot: Dictionary = _priority_draft.duplicate()
 	var rng_state := _deal_rng.state
-	var deal := _build_candidate_definitions(definitions, committed_snapshot, category_rolls, definition_rolls)
+	var actions:=_capture_development_actions()
+	actions.hand.priorities=committed_snapshot
+	var deal: Dictionary = actions.initial_plan(category_rolls,definition_rolls)
 	if not deal.valid:
 		_deal_rng.state = rng_state
 		push_warning("Could not build the initial Beta candidate pool: %s" % deal.error)
@@ -229,7 +226,8 @@ func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float
 			prepared.free()
 		_deal_rng.state = rng_state
 		return false
-	_candidate_cards.assign(deal.cards)
+	actions.publish_initial(deal)
+	_candidate_cards.assign(actions.hand._candidate_cards)
 	_candidate_views.assign(prepared_views)
 	for view: CardView in _candidate_views:
 		%HandContainer.add_child(view)
@@ -243,6 +241,7 @@ func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float
 	_update_host_playtest_action()
 	_update_launch_action()
 	_refresh_redraw_controls()
+	_sync_command_tokens(actions.hand)
 	return true
 
 
@@ -260,44 +259,42 @@ func _can_redraw_selection() -> bool:
 
 func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
 	if not _can_redraw_selection(): return false
-	var count := _selected_card_views.size()
-	if not controlled_rolls.is_empty() and controlled_rolls.size() != count: return false
-	for roll: float in controlled_rolls:
-		if not is_finite(roll) or roll < 0.0 or roll >= 1.0: return false
-	var rng_state := _deal_rng.state
-	var plan := _plan_selected_redraw(controlled_rolls)
-	if not plan.valid:
-		_deal_rng.state = rng_state
-		return false
-	# Prepare every view before changing the pool, lifecycle, selection, or budget.
+	_transaction_in_progress=true
+	var actions:=_capture_development_actions()
+	var slots:=_redraw_slots()
+	var selected:=_selected_card_views.duplicate()
 	var prepared: Array[CardView] = []
-	for card: CardData in plan.cards:
-		var replacement_view := _instantiate_card_view()
-		if replacement_view == null:
-			for view: CardView in prepared: view.free()
-			_deal_rng.state = rng_state
-			return false
-		replacement_view.set_card(card)
-		replacement_view.card_pressed.connect(_on_card_pressed)
-		prepared.append(replacement_view)
-	var selected := _selected_card_views.duplicate()
-	for index in range(count):
-		var old_view: CardView = selected[index]
-		var slot := old_view.get_index()
-		var replacement: CardData = plan.cards[index]
+	var prepare:=func(cards: Array) -> bool:
+		for card: CardData in cards:
+			var view: CardView = _instantiate_card_view()
+			if view==null: return false
+			view.set_card(card)
+			view.card_pressed.connect(_on_card_pressed)
+			prepared.append(view)
+		return true
+	var publish:=func(_plan: Dictionary) -> void:
+		_candidate_cards.assign(actions.hand._candidate_cards)
 
-		_candidate_cards[slot] = replacement
-		_candidate_views[slot] = prepared[index]
-		%HandContainer.remove_child(old_view)
-		old_view.queue_free()
-		%HandContainer.add_child(prepared[index])
-		%HandContainer.move_child(prepared[index], slot)
-	_selected_card_views.clear()
-	# One budget notification, after the complete pool and selection are committed.
-	_run_state.consume_redraw(count)
+		for index in range(slots.size()):
+			var old: CardView = selected[index]
+			%HandContainer.remove_child(old)
+			old.queue_free()
+			%HandContainer.add_child(prepared[index])
+			%HandContainer.move_child(prepared[index],slots[index])
+			_candidate_views[slots[index]]=prepared[index]
+		_selected_card_views.clear()
+		_sync_command_tokens(actions.hand)
+	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish)
+	if not result.ok:
+		for view in prepared: view.free()
+
+	else:
+
+		_sync_command_tokens(actions.hand)
+	_transaction_in_progress=false
 	_update_play_action()
 	_refresh_redraw_controls()
-	return true
+	return result.ok
 
 
 func _on_redraw_pressed() -> void:
@@ -316,26 +313,11 @@ func _refresh_redraw_controls() -> void:
 
 
 func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
-	var cards: Array[CardData] = []
-	var failed := {&"valid": false, &"cards": cards, &"failed_features": []}
-	var database := get_node_or_null("/root/CardDatabase")
-	if database == null or _project_state == null: return failed
-	var definitions: Array[CardData] = []
-	definitions.assign(database.call(&"get_cards_by_phase", CardData.PHASE_BETA))
-	var reserved := _project_state.get_exhausted_beta_card_ids()
-	for current: CardData in _candidate_cards:
-		if not current.renewable and not reserved.has(current.id): reserved.append(current.id)
-	for index in range(_selected_card_views.size()):
-		var excluded := reserved.duplicate()
-		excluded.append(_selected_card_views[index].card_data.id)
-		var rolls: Array[float] = []
-		if not controlled_rolls.is_empty(): rolls.append(controlled_rolls[index])
-		var deal := _build_candidate_definitions(definitions, get_priority_distribution(), rolls, rolls, excluded, 1)
-		if not deal.valid: return failed
-		var replacement: CardData = deal.cards[0]
-		cards.append(replacement)
-		if not replacement.renewable: reserved.append(replacement.id)
-	return {&"valid": true, &"cards": cards, &"failed_features": []}
+	var plan: Dictionary = _capture_development_actions().redraw_plan(_redraw_slots(),controlled_rolls)
+	var failed: Array[CardView] = []
+	for slot: int in plan.failed_features: failed.append(%HandContainer.get_child(slot))
+	plan.failed_features=failed
+	return plan
 
 
 func _on_begin_beta_pressed() -> void:
@@ -413,18 +395,7 @@ func _can_launch() -> bool:
 
 
 func _build_launch_warnings() -> Array[String]:
-	var warnings: Array[String] = []
-	var current_scope := _project_state.get_current_scope()
-	var required_scope := _project_state.get_required_scope()
-	if current_scope < required_scope:
-		warnings.append("Project Scope is incomplete: %d / %d." % [current_scope, required_scope])
-		warnings.append("Scope shortfall: %d." % (required_scope - current_scope))
-	var known_bugs := _project_state.get_known_bugs()
-	if known_bugs > 0:
-		warnings.append("Known Bugs remaining: %d. Unresolved Known Bugs will remain at launch." % known_bugs)
-	if _project_state.get_marketing_output() == 0:
-		warnings.append("No Marketing activity has been completed. Launch reach may be reduced.")
-	return warnings
+	return _capture_development_actions().boundary()._build_launch_warnings()
 
 
 func _finalize_beta() -> bool:
@@ -436,15 +407,11 @@ func _finalize_beta() -> bool:
 		_launch_confirmation_pending = was_confirming
 		_update_all_actions()
 		return false
-	var database := get_node_or_null("/root/CardDatabase")
-	if database == null or not _validate_exhausted_beta_ids(database) or not _validate_feature_histories(database):
-		_launch_confirmation_pending = was_confirming
-		_update_all_actions()
-		return false
-	_transaction_in_progress = true
-	if not _project_state.finalize_beta():
-		_transaction_in_progress = false
-		_launch_confirmation_pending = was_confirming
+	_transaction_in_progress=true
+	var result: Dictionary = _capture_development_actions().finalize()
+	if not result.ok:
+		_transaction_in_progress=false
+		_launch_confirmation_pending=was_confirming
 		_update_all_actions()
 		return false
 	_pending_corrective_pass_ids.clear()
@@ -456,27 +423,11 @@ func _finalize_beta() -> bool:
 
 
 func _validate_exhausted_beta_ids(database: Node) -> bool:
-	for id: StringName in _project_state.get_exhausted_beta_card_ids():
-		var card: CardData = database.call(&"get_card", id)
-		if card == null or card.phase != CardData.PHASE_BETA or card.renewable or not FINITE_IDS.has(id):
-			return false
-	return true
+	return _capture_development_actions().boundary()._validate_exhausted_beta_ids(database.get_development_catalog())
 
 
 func _validate_feature_histories(database: Node) -> bool:
-	var histories := [
-		[_project_state.get_implemented_design_feature_ids(), _project_state.get_unimplemented_design_feature_ids(), CardData.PHASE_DESIGN],
-		[_project_state.get_implemented_alpha_feature_ids(), _project_state.get_unimplemented_alpha_feature_ids(), CardData.PHASE_ALPHA],
-	]
-	for history: Array in histories:
-		var seen: Dictionary[StringName, bool] = {}
-		for collection: Array in [history[0], history[1]]:
-			for id: StringName in collection:
-				var card: CardData = database.call(&"get_card", id)
-				if seen.has(id) or card == null or card.phase != history[2] or card.card_type != &"feature":
-					return false
-				seen[id] = true
-	return true
+	return _capture_development_actions().boundary()._validate_feature_histories(database.get_development_catalog())
 
 
 func _retire_beta_interface() -> void:
@@ -498,30 +449,14 @@ func _retire_beta_interface() -> void:
 func host_playtest() -> bool:
 	if not _can_host_playtest():
 		return false
-	var pass_ids := _select_corrective_pass_ids()
-	if pass_ids.size() != 2 or pass_ids[0] == pass_ids[1]:
+	_transaction_in_progress=true
+	var actions:=_capture_development_actions()
+	actions.hand._pending_corrective_pass_ids=_pending_corrective_pass_ids
+	if not actions.host_playtest():
+		_transaction_in_progress=false
+		_update_all_actions()
 		return false
-	var database := get_node_or_null("/root/CardDatabase")
-	if database == null:
-		return false
-	for id: StringName in pass_ids:
-		var card: CardData = database.call(&"get_card", id)
-		if not _is_valid_corrective_pass(card):
-			return false
-	_transaction_in_progress = true
-	_update_play_action()
-	_update_host_playtest_action()
-	_update_launch_action()
-	var commit := func() -> bool:
-		_project_state.advance_cycle()
-		_pending_corrective_pass_ids.assign(pass_ids)
-		return true
-	if not _run_state.complete_productive_action(commit, -HOST_PLAYTEST_COST_CENTS, -1, &"", &"playtest", _project_state.get_release_id()):
-		_transaction_in_progress = false
-		_update_play_action()
-		_update_host_playtest_action()
-		_update_launch_action()
-		return false
+	var pass_ids:=_pending_corrective_pass_ids.duplicate()
 	var names := _format_pass_names(pass_ids)
 	%ActionFeedbackLabel.text = "Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: %s" % names
 	%ActionFeedbackLabel.visible = true
@@ -534,54 +469,41 @@ func host_playtest() -> bool:
 
 
 func play_selected_hand(insight_rolls: Array[int] = [], replacement_category_rolls: Array[float] = [], replacement_definition_rolls: Array[float] = []) -> bool:
-	if not _can_attempt_play():
-		return false
-	var deal_rng_state := _deal_rng.state
-	var insight_rng_state := _insight_rng.state
-	var preflight := _build_hand_preflight(insight_rolls, replacement_category_rolls, replacement_definition_rolls)
-	if not preflight.valid:
-		_deal_rng.state = deal_rng_state
-		_insight_rng.state = insight_rng_state
-		push_warning("Beta hand rejected: %s" % preflight.error)
-		return false
+	if not _can_attempt_play(): return false
 	_transaction_in_progress = true
-	_update_play_action()
-	_update_host_playtest_action()
-	_update_launch_action()
-	var resolved := [0, 0]
-	var commit := func() -> bool:
-		if not preflight.corrective_score_additions.is_empty():
-			_project_state.add_core_scores_and_scope(preflight.corrective_score_additions, 0)
-		for requested: int in preflight.search_requests:
-			resolved[0] += _project_state.discover_bugs(requested)
-		for requested: int in preflight.debug_requests:
-			resolved[1] += _project_state.fix_known_bugs(requested)
-		if preflight.marketing_gain > 0:
-			_project_state.add_marketing_output(preflight.marketing_gain)
-		if preflight.reveal_competitor:
-			_project_state.reveal_competitor_snapshot()
-		if preflight.reveal_forecast:
-			_project_state.reveal_market_forecast_snapshot()
-		_project_state.exhaust_beta_cards(preflight.finite_ids)
-		_project_state.advance_cycle()
+	_update_all_actions()
+	var resolver := _capture_beta_command()
+	var ids: Array[int] = []
+	for view in _selected_card_views: ids.append(_command_view_ids[view.get_instance_id()])
+	var prepared: Array[CardView] = []
+	var readiness := func(cards: Array) -> bool:
+		for card: CardData in cards:
+			var view := _instantiate_card_view()
+			if view == null: return false
+			view.set_card(card)
+			view.card_pressed.connect(_on_card_pressed)
+			prepared.append(view)
 		return true
-	if not _run_state.complete_productive_action(commit, preflight.cash_gain_cents, -1, &"", &"beta_income", _project_state.get_release_id()):
-		for view: CardView in preflight.next_views: view.free()
-		_deal_rng.state = deal_rng_state
-		_insight_rng.state = insight_rng_state
+	var result: Dictionary = resolver.execute(resolver.command(ids),insight_rolls,replacement_category_rolls,replacement_definition_rolls,readiness)
+	if not result.ok:
+		for view in prepared: view.free()
 		_transaction_in_progress = false
 		_update_all_actions()
+		push_warning("Beta hand rejected: %s" % result.error)
 		return false
-	_publish_replacement_pool(preflight.next_cards, preflight.next_views, preflight.injected_corrective_count)
-	if not preflight.consumed_pending_ids.is_empty():
-		_pending_corrective_pass_ids.clear()
+	var preflight: Dictionary = result.preflight
+	_publish_replacement_pool(preflight.next_cards,prepared,preflight.injected_corrective_count)
+	_pending_corrective_pass_ids.assign(resolver._pending_corrective_pass_ids)
+	_command_revision = resolver.revision
+	_command_next_id = resolver.next_candidate_id
+	_command_view_ids.clear()
+	for index in range(_candidate_views.size()): _command_view_ids[_candidate_views[index].get_instance_id()] = resolver.candidate_ids[index]
+	_last_hand_command_result = result
 	_refresh_known_bugs()
 	_refresh_insider_information()
-	_show_action_feedback(preflight, resolved[0], resolved[1])
+	_show_action_feedback(preflight,result.discovered,result.fixed)
 	_transaction_in_progress = false
-	_update_play_action()
-	_update_host_playtest_action()
-	_update_launch_action()
+	_update_all_actions()
 	return true
 
 
@@ -627,213 +549,25 @@ func _has_valid_active_pool() -> bool:
 	return true
 
 
-func _build_hand_preflight(insight_rolls: Array[int], replacement_category_rolls: Array[float], replacement_definition_rolls: Array[float]) -> Dictionary:
-	var card_database := get_node_or_null("/root/CardDatabase")
-	if card_database == null:
-		return _invalid_play("CardDatabase is unavailable.")
-	var competitor_id := _project_state.get_assigned_competitor_snapshot_id_for_authority()
-	var forecast_id := _project_state.get_assigned_market_forecast_snapshot_id_for_authority()
-	if not _snapshot_database.has_competitor(competitor_id) or not _snapshot_database.has_forecast(forecast_id):
-		return _invalid_play("Assigned project snapshots are missing or unknown.")
-	var groups := {&"search": [] as Array[CardData], &"debug": [] as Array[CardData], &"marketing": [] as Array[CardData], &"playtest": [] as Array[CardData], &"study": [] as Array[CardData], &"predict": [] as Array[CardData]}
-	var finite_ids: Array[StringName] = []
-	var selected_cards: Array[CardData] = []
-	var corrective_score_additions: Dictionary[ProjectState.CoreScore, int] = {}
-	for view: CardView in _selected_card_views:
-		var card := view.card_data
-		if card == null or card_database.call(&"get_card", card.id) != card:
-			return _invalid_play("A selected definition is not an authoritative Primitive Beta card.")
-		if _injected_corrective_views.has(view):
-			if not _is_valid_corrective_pass(card):
-				return _invalid_play("An injected corrective Pass is malformed.")
-			var category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[card.primary_stat]
-			corrective_score_additions[category] = corrective_score_additions.get(category, 0) + card.primary_value
-			selected_cards.append(card)
-			continue
-		if card.phase != CardData.PHASE_BETA or card.card_type != &"beta" or card.scope != 0:
-			return _invalid_play("A selected definition is not an authoritative Primitive Beta card.")
-		if not card.renewable:
-			if not FINITE_IDS.has(card.id) or finite_ids.has(card.id) or _project_state.is_beta_card_exhausted(card.id):
-				return _invalid_play("A selected finite definition is invalid or exhausted.")
-			finite_ids.append(card.id)
-		selected_cards.append(card)
-		match card.id:
-			&"search_for_bugs": groups.search.append(card)
-			&"debug": groups.debug.append(card)
-			&"sign_flippers", &"posters", &"press_release", &"press_interview": groups.marketing.append(card)
-			&"playtest_rival_games": groups.playtest.append(card)
-			&"study_competition": groups.study.append(card)
-			&"predict_market_trends": groups.predict.append(card)
-			_: return _invalid_play("A selected Beta definition has no base resolver.")
-	for category: ProjectState.CoreScore in corrective_score_additions:
-		if corrective_score_additions[category] > ProjectState.MAX_SIGNED_INT - _project_state.get_core_score(category):
-			return _invalid_play("Corrective Pass production would overflow.")
-	var hidden := _project_state.get_hidden_bugs()
-	var known := _project_state.get_known_bugs()
-	var qa_specialization := _qualifies_for_qa_specialization(selected_cards)
-	var marketing_specialization := _qualifies_for_marketing_specialization(selected_cards)
-	var balanced_operations := not qa_specialization and not marketing_specialization and _qualifies_for_balanced_operations(selected_cards)
-	var search_requests: Array[int] = []
-	for card: CardData in groups.search:
-		var final_value: float = card.beta_value * QA_SPECIALIZATION_MULTIPLIER if qa_specialization else card.beta_value
-		var request := int(floor((1.0 + final_value) + (hidden * 0.15 * final_value)))
-		if balanced_operations:
-			request = int(ceil(request * BALANCED_OPERATIONS_MULTIPLIER))
-		var actual := mini(request, hidden)
-		search_requests.append(request)
-		hidden -= actual
-		known += actual
-	var debug_requests: Array[int] = []
-	for card: CardData in groups.debug:
-		var final_value: float = card.beta_value * QA_SPECIALIZATION_MULTIPLIER if qa_specialization else card.beta_value
-		var request := int(floor(1.0 + final_value))
-		if balanced_operations:
-			request = int(ceil(request * BALANCED_OPERATIONS_MULTIPLIER))
-		debug_requests.append(request)
-		known -= mini(request, known)
-	var marketing_gain := 0
-	for card: CardData in groups.marketing:
-		marketing_gain += card.beta_value
-	if marketing_specialization:
-		marketing_gain = int(floor(marketing_gain * MARKETING_SPECIALIZATION_MULTIPLIER))
-	elif balanced_operations:
-		marketing_gain = int(ceil(marketing_gain * BALANCED_OPERATIONS_MULTIPLIER))
-	if marketing_gain > ProjectState.MAX_SIGNED_INT - _project_state.get_marketing_output():
-		return _invalid_play("Marketing Output would overflow.")
-	var cash_gain: int = groups.playtest.size() * 1000
-	var cash_gain_cents: int = groups.playtest.size() * PLAYTEST_RIVAL_PAYOUT_CENTS
-	if cash_gain_cents > RunState.MAX_SIGNED_INT - _run_state.get_cash_cents():
-		return _invalid_play("Run cash would overflow.")
-	var cursor := [0]
-	var competitor_revealed := _project_state.is_competitor_snapshot_revealed()
-	var forecast_revealed := _project_state.is_market_forecast_snapshot_revealed()
-	var rival_attempted := false
-	var rival_gained := false
-	var forecast_attempted := false
-	var forecast_gained := false
-	for card: CardData in groups.playtest:
-		if not competitor_revealed:
-			rival_attempted = true
-			var chance := card.beta_value * 10
-			if balanced_operations:
-				chance = mini(100, int(ceil(chance * BALANCED_OPERATIONS_MULTIPLIER)))
-			if _next_insight_roll(insight_rolls, cursor) < chance:
-				competitor_revealed = true
-				rival_gained = true
-	for card: CardData in groups.study:
-		if not competitor_revealed:
-			rival_attempted = true
-			var chance := card.beta_value * 15
-			if balanced_operations:
-				chance = mini(100, int(ceil(chance * BALANCED_OPERATIONS_MULTIPLIER)))
-			if _next_insight_roll(insight_rolls, cursor) < chance:
-				competitor_revealed = true
-				rival_gained = true
-	for card: CardData in groups.predict:
-		if not forecast_revealed:
-			forecast_attempted = true
-			var chance := card.beta_value * 15
-			if balanced_operations:
-				chance = mini(100, int(ceil(chance * BALANCED_OPERATIONS_MULTIPLIER)))
-			if _next_insight_roll(insight_rolls, cursor) < chance:
-				forecast_revealed = true
-				forecast_gained = true
-	if not insight_rolls.is_empty() and cursor[0] != insight_rolls.size():
-		return _invalid_play("Controlled insight rolls must match the rolls actually required.")
-	var projected_exhausted := _project_state.get_exhausted_beta_card_ids()
-	projected_exhausted.append_array(finite_ids)
-	for view: CardView in _candidate_views:
-		if view not in _selected_card_views and not view.card_data.renewable and view.card_data.id not in projected_exhausted:
-			projected_exhausted.append(view.card_data.id)
-	if not _project_state.can_advance_cycle():
-		return _invalid_play("The project cycle cannot advance safely.")
-	if not _run_state.can_complete_productive_cycle(cash_gain_cents):
-		return _invalid_play("The run calendar cannot advance safely.")
-	var definitions: Array[CardData] = []
-	definitions.assign(card_database.call(&"get_cards_by_phase", CardData.PHASE_BETA))
-	var replacement := _build_replacement_candidate_definitions(definitions, get_priority_distribution(), replacement_category_rolls, replacement_definition_rolls, projected_exhausted)
-	if not replacement.valid:
-		return _invalid_play("A complete replacement pool could not be prepared.")
-	var next_views: Array[CardView] = []
-	for card: CardData in replacement.cards:
-		var view := _instantiate_card_view()
-		if view == null:
-			for prepared: CardView in next_views:
-				prepared.free()
-			return _invalid_play("A complete replacement CardView pool could not be prepared.")
-		view.set_card(card)
-		view.card_pressed.connect(_on_card_pressed)
-
-		next_views.append(view)
-	return {&"valid": true, &"qa_specialization": qa_specialization, &"marketing_specialization": marketing_specialization, &"balanced_operations": balanced_operations, &"corrective_score_additions": corrective_score_additions, &"search_requests": search_requests, &"debug_requests": debug_requests, &"marketing_gain": marketing_gain, &"cash_gain": cash_gain, &"cash_gain_cents": cash_gain_cents, &"reveal_competitor": competitor_revealed and not _project_state.is_competitor_snapshot_revealed(), &"reveal_forecast": forecast_revealed and not _project_state.is_market_forecast_snapshot_revealed(), &"rival_attempted": rival_attempted, &"rival_gained": rival_gained, &"forecast_attempted": forecast_attempted, &"forecast_gained": forecast_gained, &"finite_ids": finite_ids, &"next_cards": replacement.cards, &"next_views": next_views, &"injected_corrective_count": replacement.injected_count, &"consumed_pending_ids": replacement.consumed_pending_ids}
-
 
 func _qualifies_for_qa_specialization(cards: Array[CardData]) -> bool:
-	if cards.size() < 2:
-		return false
-	for card: CardData in cards:
-		if card == null or card.beta_category != CardData.BETA_CATEGORY_QA:
-			return false
-	return true
+	return _capture_beta_command()._qualifies_for_qa_specialization(cards)
 
 
 func _qualifies_for_marketing_specialization(cards: Array[CardData]) -> bool:
-	if cards.size() < 2:
-		return false
-	for card: CardData in cards:
-		if card == null or card.beta_category != CardData.BETA_CATEGORY_MARKETING:
-			return false
-	return true
+	return _capture_beta_command()._qualifies_for_marketing_specialization(cards)
 
 
 func _qualifies_for_balanced_operations(cards: Array[CardData]) -> bool:
-	if cards.size() != SELECTED_HAND_SIZE:
-		return false
-	var counts := {
-		CardData.BETA_CATEGORY_QA: 0,
-		CardData.BETA_CATEGORY_MARKETING: 0,
-		CardData.BETA_CATEGORY_INSIDER: 0,
-	}
-	for card: CardData in cards:
-		if card == null or not counts.has(card.beta_category):
-			return false
-		counts[card.beta_category] += 1
-	for count: int in counts.values():
-		if count < 1 or count > 2:
-			return false
-	return true
+	return _capture_beta_command()._qualifies_for_balanced_operations(cards)
 
 
 func _select_corrective_pass_ids() -> Array[StringName]:
-	if _project_state == null:
-		return [] as Array[StringName]
-	var categories: Array[ProjectState.CoreScore] = []
-	categories.assign(ProjectState.CoreScore.values())
-	categories.sort_custom(func(a: ProjectState.CoreScore, b: ProjectState.CoreScore) -> bool:
-		var a_score := _project_state.get_core_score(a)
-		var b_score := _project_state.get_core_score(b)
-		return a_score < b_score if a_score != b_score else a < b
-	)
-	var ids: Array[StringName] = []
-	for category: ProjectState.CoreScore in categories.slice(0, 2):
-		ids.append(PASS_ID_BY_CORE_SCORE[category])
-	return ids
+	return _capture_development_actions().corrective_pass_ids()
 
 
 func _is_valid_corrective_pass(card: CardData) -> bool:
-	return (
-		card != null
-		and PASS_ID_BY_CORE_SCORE.values().has(card.id)
-		and card.phase == CardData.PHASE_DESIGN
-		and card.card_type == &"pass"
-		and card.renewable
-		and card.scope == 0
-		and CORE_SCORE_BY_STAT.has(card.primary_stat)
-		and PASS_ID_BY_CORE_SCORE[CORE_SCORE_BY_STAT[card.primary_stat]] == card.id
-		and card.primary_value == 2
-		and card.secondary_stat.is_empty()
-		and card.secondary_value == 0
-	)
+	return _capture_beta_command()._is_valid_corrective_pass(card)
 
 
 func _format_pass_names(ids: Array) -> String:
@@ -855,13 +589,7 @@ func _format_score_additions(additions: Dictionary) -> String:
 
 
 func _next_insight_roll(controlled: Array[int], cursor: Array) -> int:
-	if controlled.is_empty():
-		return _insight_rng.randi_range(0, 99)
-	if cursor[0] >= controlled.size() or controlled[cursor[0]] < 0 or controlled[cursor[0]] >= 100:
-		return 100
-	var roll := controlled[cursor[0]]
-	cursor[0] += 1
-	return roll
+	return _capture_beta_command()._next_insight_roll(controlled, cursor)
 
 
 func _instantiate_card_view() -> CardView:
@@ -922,123 +650,31 @@ func _show_action_feedback(result: Dictionary, discovered: int, fixed: int) -> v
 
 
 func _invalid_play(message: String) -> Dictionary:
-	return {&"valid": false, &"error": message}
+	return _capture_beta_command()._invalid_play(message)
 
 
 func _build_replacement_candidate_definitions(definitions: Array[CardData], priorities: Dictionary, category_rolls: Array[float], definition_rolls: Array[float], excluded_ids: Array[StringName]) -> Dictionary:
-	if _pending_corrective_pass_ids.is_empty():
-		var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, SELECTED_HAND_SIZE)
-		ordinary[&"injected_count"] = 0
-		ordinary[&"consumed_pending_ids"] = [] as Array[StringName]
-		return ordinary
-	if _pending_corrective_pass_ids.size() != 2 or _pending_corrective_pass_ids[0] == _pending_corrective_pass_ids[1]:
-		return _invalid_deal("A Beta Host Playtest correction requires two distinct Pass IDs.")
-	var database := get_node_or_null("/root/CardDatabase")
-	if database == null:
-		return _invalid_deal("CardDatabase is unavailable for corrective Pass injection.")
-	var cards: Array[CardData] = []
-	for id: StringName in _pending_corrective_pass_ids:
-		var pass_card: CardData = database.call(&"get_card", id)
-		if not _is_valid_corrective_pass(pass_card):
-			return _invalid_deal("A queued corrective Core Pass is unavailable.")
-		cards.append(pass_card)
-	var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, SELECTED_HAND_SIZE - cards.size())
-	if not ordinary.valid:
-		return ordinary
-	cards.append_array(ordinary.cards)
-	return {&"valid": true, &"cards": cards, &"injected_count": 2, &"consumed_pending_ids": _pending_corrective_pass_ids.duplicate()}
+	return _capture_beta_command()._build_replacement_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids)
 
 
 func _build_candidate_definitions(definitions: Array[CardData], priorities: Dictionary, category_rolls: Array[float] = [], definition_rolls: Array[float] = [], excluded_ids: Array[StringName] = [], candidate_count: int = CANDIDATE_POOL_SIZE) -> Dictionary:
-	if not BetaPriorityAllocation.is_valid_distribution(priorities):
-		return _invalid_deal("Invalid committed Beta priority distribution.")
-	if candidate_count < 1 or candidate_count > CANDIDATE_POOL_SIZE:
-		return _invalid_deal("Beta candidate count must be between one and seven.")
-	if (not category_rolls.is_empty() and category_rolls.size() != candidate_count) or (not definition_rolls.is_empty() and definition_rolls.size() != candidate_count):
-		return _invalid_deal("Controlled Beta deals require exactly %d category and definition rolls." % candidate_count)
-	for roll: float in category_rolls + definition_rolls:
-		if not is_finite(roll) or roll < 0.0 or roll >= 1.0:
-			return _invalid_deal("Controlled Beta rolls must be finite values in [0, 1).")
-	var available_by_category := _group_definitions(definitions, excluded_ids)
-	var selected: Array[CardData] = []
-	for slot in range(candidate_count):
-		var category_entries: Array[Dictionary] = []
-		for category: StringName in BetaPriorityAllocation.CATEGORIES:
-			var available: Array = available_by_category[category]
-			if not available.is_empty():
-				category_entries.append({&"value": category, &"weight": priorities[category]})
-		var category_roll := category_rolls[slot] if not category_rolls.is_empty() else _deal_rng.randf()
-		var category: StringName = _select_weighted_value(category_entries, category_roll)
-		if category.is_empty():
-			return _invalid_deal("No eligible Beta category for slot %d." % (slot + 1))
-		var definition_entries: Array[Dictionary] = []
-		var category_definitions: Array = available_by_category[category]
-		category_definitions.sort_custom(func(a: CardData, b: CardData) -> bool: return str(a.id) < str(b.id))
-		for card: CardData in category_definitions:
-			definition_entries.append({&"value": card, &"weight": _get_definition_weight(card)})
-		var definition_roll := definition_rolls[slot] if not definition_rolls.is_empty() else _deal_rng.randf()
-		var card := _select_weighted_value(definition_entries, definition_roll) as CardData
-		if card == null:
-			return _invalid_deal("No eligible Beta definition for slot %d." % (slot + 1))
-		selected.append(card)
-		if not card.renewable:
-			category_definitions.erase(card)
-	return {&"valid": true, &"cards": selected}
+	return _capture_beta_command()._build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, candidate_count)
 
 
 func _select_weighted_value(entries: Array[Dictionary], roll: float) -> Variant:
-	if not is_finite(roll) or roll < 0.0 or roll >= 1.0 or entries.is_empty():
-		return null
-	var total := 0.0
-	for entry: Dictionary in entries:
-		if not entry.has(&"value") or not entry.has(&"weight"):
-			return null
-		var weight := float(entry.weight)
-		if not is_finite(weight) or weight <= 0.0:
-			return null
-		total += weight
-	var target := roll * total
-	var cumulative := 0.0
-	for index in range(entries.size()):
-		cumulative += float(entries[index].weight)
-		if target < cumulative or index == entries.size() - 1:
-			return entries[index].value
-	return null
+	return _capture_beta_command()._select_weighted_value(entries, roll)
 
 
 func _group_definitions(definitions: Array[CardData], excluded_ids: Array[StringName] = []) -> Dictionary:
-	var grouped := {}
-	for category: StringName in BetaPriorityAllocation.CATEGORIES:
-		grouped[category] = [] as Array[CardData]
-	for card: CardData in definitions:
-		if not excluded_ids.has(card.id):
-			(grouped[card.beta_category] as Array[CardData]).append(card)
-	return grouped
+	return _capture_beta_command()._group_definitions(definitions, excluded_ids)
 
 
 func _get_definition_weight(card: CardData) -> float:
-	if card.beta_category == CardData.BETA_CATEGORY_QA and card.qa_operation == CardData.QA_OPERATION_DEBUG:
-		return 2.0
-	return 1.0
+	return _capture_beta_command()._get_definition_weight(card)
 
 
 func _get_source_validation_error(definitions: Array[CardData]) -> String:
-	if definitions.size() != 9:
-		return "Beta requires exactly nine Primitive definitions."
-	var counts := {CardData.BETA_CATEGORY_QA: 0, CardData.BETA_CATEGORY_MARKETING: 0, CardData.BETA_CATEGORY_INSIDER: 0}
-	var ids: Dictionary[StringName, bool] = {}
-	for card: CardData in definitions:
-		if card == null or card.id.is_empty() or card.phase != CardData.PHASE_BETA or card.card_type != &"beta" or not counts.has(card.beta_category) or card.beta_value < 0 or card.scope != 0 or ids.has(card.id):
-			return "Beta source definitions are malformed or duplicated."
-		if card.beta_category == CardData.BETA_CATEGORY_QA and not CardData.is_valid_qa_operation(card.qa_operation):
-			return "A QA source definition has an invalid operation."
-		if card.beta_category != CardData.BETA_CATEGORY_QA and not card.qa_operation.is_empty():
-			return "A non-QA source definition contains a QA operation."
-		ids[card.id] = true
-		counts[card.beta_category] += 1
-	if counts[CardData.BETA_CATEGORY_QA] != 2 or counts[CardData.BETA_CATEGORY_MARKETING] != 4 or counts[CardData.BETA_CATEGORY_INSIDER] != 3:
-		return "Beta source definitions do not match the locked category counts."
-	return ""
+	return _capture_beta_command()._get_source_validation_error(definitions)
 
 
 func _on_card_pressed(card_view: CardView) -> void:
@@ -1061,7 +697,7 @@ func _is_current_candidate_view(card_view: CardView) -> bool:
 
 
 func _invalid_deal(message: String) -> Dictionary:
-	return {&"valid": false, &"error": message, &"cards": [] as Array[CardData]}
+	return _capture_beta_command()._invalid_deal(message)
 
 
 func _refresh_known_bugs() -> void:
@@ -1217,3 +853,56 @@ func get_launch_readiness_text() -> String:
 	if _project_state != null and not _project_state.has_launch_feature_work():
 		return "Release requires a played Feature with positive Scope"
 	return "Launch available" if _can_launch() else "Launch unavailable"
+
+
+## Only immutable definitions and explicit instance tokens cross the command boundary.
+func _capture_beta_command() -> RefCounted:
+	var state := BetaHandCommand.new()
+	state._project_state = _project_state
+	state._run_state = _run_state
+	state._snapshot_database = _snapshot_database
+	state._deal_rng = _deal_rng
+	state._insight_rng = _insight_rng
+	state._candidate_cards.assign(_candidate_cards)
+	state._pending_corrective_pass_ids.assign(_pending_corrective_pass_ids)
+	state.priorities = get_priority_distribution()
+	state.active = _phase_state == PhaseState.ACTIVE_DEVELOPMENT
+	state.launch_confirmation_pending = _launch_confirmation_pending
+	state.revision = _command_revision
+	var database := get_node_or_null("/root/CardDatabase") if is_inside_tree() else null
+	if database != null:
+		state._beta_definitions.assign(database.get_cards_by_phase(CardData.PHASE_BETA))
+		for card in state._beta_definitions: state._definitions_by_id[card.id] = card
+		for id in PASS_ID_BY_CORE_SCORE.values(): state._definitions_by_id[id] = database.get_card(id)
+	for view in _candidate_views:
+		if not is_instance_valid(view): continue
+		var id := view.get_instance_id()
+		if not _command_view_ids.has(id):
+			_command_view_ids[id] = _command_next_id
+			_command_next_id += 1
+		state.candidate_ids.append(_command_view_ids[id])
+		if view in _injected_corrective_views: state.injected_candidate_ids.append(_command_view_ids[id])
+	state.next_candidate_id = _command_next_id
+	return state
+
+
+func _capture_development_actions() -> RefCounted:
+	var actions:=DevelopmentActions.new()
+	actions.phase=&"beta"
+	actions.hand=_capture_beta_command()
+	var database:=get_node_or_null("/root/CardDatabase") if is_inside_tree() else null
+	if database!=null: actions.catalog=database.get_development_catalog()
+
+	return actions
+
+func _redraw_slots() -> Array[int]:
+	var slots: Array[int] = []
+	for view: CardView in _selected_card_views: slots.append(view.get_index())
+	return slots
+
+func _sync_command_tokens(state: RefCounted) -> void:
+	_command_revision=state.revision
+	_command_next_id=state.next_candidate_id
+	_command_view_ids.clear()
+	for index in range(%HandContainer.get_child_count()):
+		_command_view_ids[%HandContainer.get_child(index).get_instance_id()]=state.candidate_ids[index]

@@ -1,0 +1,24 @@
+# Banking paid-Feature simulator session — 2026-10-11
+
+## Workspace and scope
+
+Read `docs/codex/CURRENT_STATE.md`, `TODO.md`, `README.md`, simulation-engine `USAGE.md`/`VARIANTS.md`, relevant Banking design/findings and current simulator/finance source first. At start and before final documentation, `main` HEAD was `41c87c76fb4d3c06a5332d93f0e7b0997007475d` with many pre-existing edits, including `docs/codex/TODO.md`, Banking records, gameplay and other threads. The worktree was preserved; `.codex-godot-temp` was untouched. No canonical gameplay, player save, commit, push, Drive or computer control action.
+
+Changed in this session: Banking-owned [plan](2026-10-11-spending-bank-study-plan-v1.md), policy/config versions under `simulations/`, retained run/replay/comparison bundles, private `simulators/education-bank-quote-v1/project/scripts/simulation/campaign_session.gd` observation, [finding](2026-10-11-spending-bank-finding-v1.md), [handoff](HANDOFF-SPENDING-BANK-v1.md), this log, Banking `README.md`/`HANDOFF.md`, and one minimal existing Banking DESIGN paragraph in `docs/codex/TODO.md`. Existing shared TODO entries were otherwise preserved. The private variant's original baseline archive/manifests remain untouched.
+
+## Commands and outcomes
+
+All `python` commands used the bundled `C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe`; all `--godot` commands used `C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe`. The [finding](2026-10-11-spending-bank-finding-v1.md) gives full invocations, version/source hashes, policies, measurements and evidence links.
+
+- `tools/simulate.py run --config .../spending-bank-prefix-v1.json --output .../spending-bank-canonical-prefix-v1 --godot <path> --timeout 240`: **FAIL before cases**, policy type inference.
+- Same with v2/new output: **FAIL at snapshot**, concurrent source change. v2r2/new output: **FAIL before cases**, incorrect copied-policy self-load path. v3/new output: **FAIL at snapshot**, concurrent source change. All four bundles retained. No seeds/bounds were changed.
+- Same with v3/output `spending-bank-canonical-prefix-v3r2`: **PASS 6/6** paid-Feature cases, 48 or 50 accepted commands, two releases at c13/c27.
+- `tools/simulator_variant.py create --id education-bank-quote-v1 --owner banking-system --output .../simulators/education-bank-quote-v1`: **PASS**; one observation-only private edit. `tools/simulate.py run --variant .../education-bank-quote-v1 --config .../spending-bank-prefix-v3.json --output .../spending-bank-variant-prefix-v1 --godot <path> --timeout 240`: **PASS 6/6**. All six final state digests/cash/command counts match canonical.
+- Same variant with `spending-bank-continuation-v1.json` into `spending-bank-variant-continuation-v1`: **2 completed no-loan controls; 2 intentional rejected Bank arms**. Bundle `ok=false` is retained. Both rejected requests left state/cash unchanged; no loan was issued. The two `tools/compare_simulations.py` reports verified paired initial state/RNG and correctly marked both pairs incomplete.
+- `tools/simulate.py replay` in new folders for `control-4417`, `dropout-4417`, `graduate-4417` from the variant prefix, and both Graduate rejected Bank cases from the continuation: **5/5 PASS** in separate processes; each verified recorded final state and all telemetry samples. Exact replay output paths are in the finding.
+- Private-variant Godot import, `verify_campaign_session.gd`, and `verify_finance_observation.gd` with a unique environment profile: **all exit 0**. [Logs](simulations/spending-bank-variant-verifiers-v1/result.json) report 81 campaign steps/55 reentrant checks and 108 finance checks/21 comparisons, zero failures. The root-certificate warning and ObjectDB exit warning were retained.
+- Final `git diff --check` scoped to the three tracked files edited here exited 0 (only line-ending conversion warnings); a separate check of the four new Markdown files found no missing relative links or trailing whitespace. Final branch/HEAD remained `main`/`41c87c76fb4d3c06a5332d93f0e7b0997007475d` with the shared worktree still dirty. No commit or push.
+
+## Follow-up and limits
+
+The current paid-Feature routes did not cause education arrears and could not qualify for a Bank loan: settled sales basis was below rent plus education obligations. The first game launched c13, so late first-game bankruptcy pressure remains untested here. The $5,700/$5,800/$6,000 current trait-select receipts are not a $5,500 baseline. The handoff asks for a distinct predeclared eligible-sales study or delayed-first-game study before any design ruling. Current LOCKED loan/education terms and ACTIVE/TRIAL credit values remain unchanged; exported visible acceptance is separate. No candidate adoption packet was generated because the only variant delta exposes a quote to the test policy and is not an approved gameplay addition.

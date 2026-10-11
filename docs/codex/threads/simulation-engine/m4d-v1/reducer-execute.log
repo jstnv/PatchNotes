@@ -1,0 +1,45 @@
+{
+  "format": "patch-notes-failure-reduction-v1",
+  "ok": true,
+  "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\simulation-engine\\m4d-v1\\reducer-original-run",
+  "case": "intentional-rejection-after-two",
+  "kind": "rejection",
+  "created_utc": "2026-10-11T10:22:38.146601+00:00",
+  "tool_sha256": "1b734f622302590839e511c8f85490729763d01f29f4d13776253b43fa514a37",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "input_hashes": {
+    "case.variant.json": "0c3633aa6824b5992490fa3724a4a0d1f17dd32ac49d6ddd81677b3ead8d977b",
+    "replay.tape.json": "d29235047801917e1a3e2f786533a314ed472f0498507ae5ef747abf7139faa3",
+    "result.json": "94a5bf4850de6b01293ab87470642beec4020b60ba00a2217d2fca12c89f0482"
+  },
+  "original_status": "rejected_policy_action",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "reduction": {
+    "attempts": [
+      {
+        "reproduced": true,
+        "start_step": 36
+      }
+    ],
+    "first_failure_step": 36,
+    "kind": "rejection",
+    "minimality": "Shortest reproducing suffix among preceding exact-restorable Studio boundaries; no arbitrary command deletion or global minimality claim",
+    "ok": true,
+    "original_commands": 37,
+    "reduced_commands": 1,
+    "reduced_failure_step": 0,
+    "removed_prefix_commands": 36,
+    "removed_tail_commands": 0,
+    "signature": {
+      "actual_result": "71aa11f84d07d0bb4031139e5b071b780ece453479e91b167049df3c81792f8f",
+      "actual_state": "731d673b2d380efba170547ff0be27eeda46ec8d4d663d8c5a400956794b2f9a",
+      "command_type": "intentional_reducer_rejection_fixture",
+      "detail": {
+        "error": "Unsupported Studio command"
+      },
+      "kind": "rejection",
+      "request_digest": "d34016c2dbb74426cb636c44c2ceefb9cf6e693168ecd11d2763107cc01b5762"
+    }
+  },
+  "fresh_process_confirmation": true
+}

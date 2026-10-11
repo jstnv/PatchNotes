@@ -1,6 +1,6 @@
 # Handoff: current-main Fanbase playable trial v1
 
-**Status: QUEUED in the internal TODO on 2026-10-09; NOT DISPATCHED.** This is a design handoff for the separate implementing thread. The user approved retaining the 15% loss coefficient as **ACTIVE/TRIAL** after the Review 4.3 / 93-Fan capture, then authorized the internal TODO update. This design thread has not implemented gameplay, merged, pushed or messaged the implementing thread. Coordinate a nonoverlapping gameplay slot before starting.
+**Status: implemented and verified locally by the implementing thread, 2026-10-09.** [Dated source, checks and limits](../../../logs/2026-10-09-fanbase-integration-v1.md). Twenty-one focused suites, eight fresh-process restores and5089 independent legal-route checks pass. Combined Starwave/export acceptance is separate. The following preserves the design handoff; the design thread itself did not implement, merge, push or message another thread. The15% loss coefficient remains **ACTIVE/TRIAL**, not final balance.
 
 ## Requested behavior
 

@@ -50,6 +50,6 @@ func _run() -> void:
 			await process_frame
 			expect(run.get_publisher_status(publisher).availability.contains("completed") and not run.get_pending_publisher_offer_ids().has(quote.offer_id), "Completed offer absent from chooser")
 			await show_state(run,publisher,"completed",size)
-			expect(run.get_publisher_status(PublisherCatalog.STARWAVE).availability.contains("No Starwave offer"),"Starwave remains profile-only")
+			expect(run.get_publisher_status(PublisherCatalog.STARWAVE).availability.contains("three distinct completed"),"Locked Starwave states its distinct completion gate")
 	print("Publisher browser states: %d failures" % failures)
 	quit(0 if failures == 0 else 1)

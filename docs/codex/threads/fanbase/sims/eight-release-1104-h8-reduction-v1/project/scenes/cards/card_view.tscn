@@ -1,0 +1,254 @@
+[gd_scene load_steps=10 format=3 uid="uid://nadfcbind1wc"]
+
+[ext_resource type="Script" path="res://scripts/cards/card_view.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/card_frame_kit/assets/background.png" id="2_background"]
+[ext_resource type="Texture2D" path="res://assets/card_frame_kit/assets/card_frame_complete.png" id="3_frame"]
+[ext_resource type="Texture2D" path="res://assets/card_frame_kit/assets/renewable_icon.png" id="4_renewable"]
+[ext_resource type="Texture2D" path="res://assets/card_frame_kit/assets/finite_icon.png" id="5_finite"]
+[sub_resource type="SystemFont" id="Font_card_readable"]
+multichannel_signed_distance_field = true
+
+[sub_resource type="StyleBoxEmpty" id="Card_no_focus_border"]
+
+[sub_resource type="Theme" id="Theme_card"]
+default_font = SubResource("Font_card_readable")
+default_font_size = 14
+Label/colors/font_color = Color(0.96, 0.97, 1, 1)
+Label/constants/outline_size = 0
+Label/constants/line_spacing = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_selection_outline"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.78, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+
+[node name="CardView" type="Control"]
+custom_minimum_size = Vector2(240, 336)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 240.0
+offset_bottom = 336.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+texture_filter = 1
+theme = SubResource("Theme_card")
+script = ExtResource("1_script")
+renewable_texture = ExtResource("4_renewable")
+nonrenewable_texture = ExtResource("5_finite")
+
+[node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 232.0
+offset_bottom = 328.0
+mouse_filter = 2
+texture = ExtResource("2_background")
+expand_mode = 1
+
+[node name="Artwork" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 232.0
+offset_bottom = 328.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CardFrame" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 240.0
+offset_bottom = 336.0
+mouse_filter = 2
+texture = ExtResource("3_frame")
+expand_mode = 1
+
+[node name="RenewabilitySlot" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 296.0
+offset_right = 52.0
+offset_bottom = 328.0
+mouse_filter = 2
+
+[node name="Renewability" type="TextureRect" parent="RenewabilitySlot"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 9.0
+offset_top = 4.0
+offset_right = 33.0
+offset_bottom = 28.0
+mouse_filter = 2
+texture = ExtResource("5_finite")
+expand_mode = 1
+
+[node name="CardName" type="Label" parent="."]
+texture_filter = 2
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 70.0
+offset_top = 18.0
+offset_right = 170.0
+offset_bottom = 52.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 14
+text = "CARD NAME"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="PrimaryScore" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 12.0
+offset_right = 50.0
+offset_bottom = 62.0
+mouse_filter = 2
+
+[node name="PrimaryScoreValue" type="Label" parent="PrimaryScore"]
+texture_filter = 2
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 40.0
+offset_bottom = 30.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 20
+text = "+0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="PrimaryScoreType" type="Label" parent="PrimaryScore"]
+texture_filter = 2
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 34.0
+offset_right = 40.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 8
+text = "PRIMARY"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="SecondaryScore" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 190.0
+offset_top = 12.0
+offset_right = 230.0
+offset_bottom = 62.0
+mouse_filter = 2
+
+[node name="SecondaryScoreValue" type="Label" parent="SecondaryScore"]
+texture_filter = 2
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 40.0
+offset_bottom = 30.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 20
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="SecondaryScoreType" type="Label" parent="SecondaryScore"]
+texture_filter = 2
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 34.0
+offset_right = 40.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 8
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Scope" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 188.0
+offset_top = 296.0
+offset_right = 230.0
+offset_bottom = 328.0
+mouse_filter = 2
+
+[node name="ScopeValue" type="Label" parent="Scope"]
+texture_filter = 2
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 42.0
+offset_bottom = 32.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "S0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Department" type="Label" parent="."]
+texture_filter = 2
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 70.0
+offset_top = 300.0
+offset_right = 170.0
+offset_bottom = 324.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 14
+text = "DEPARTMENT"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="InputButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 240.0
+offset_bottom = 336.0
+mouse_filter = 0
+theme_type_variation = &"CardInput"
+theme_override_styles/focus = SubResource("Card_no_focus_border")
+focus_mode = 0
+flat = true
+
+[node name="SelectionOutline" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 240.0
+offset_bottom = 336.0
+mouse_filter = 2
+visible = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_selection_outline")

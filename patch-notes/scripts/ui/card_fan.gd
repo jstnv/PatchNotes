@@ -168,17 +168,35 @@ func arrange(immediate := false) -> void:
 	_refresh_selection_input()
 	var cards := ordered_cards()
 	var count := cards.size()
+	var visible_width := minf(size.x, get_viewport_rect().size.x - global_position.x - 16.0)
 	var factor := clampf((size.y - 100.0) / CARD_SIZE.y, 0.45, 0.76)
 	var spacing := minf(124.0, (size.x - CARD_SIZE.x * factor - 70.0) / maxf(1, count - 1))
+	var upper := cards.filter(func(card): return card.is_selected())
+	var lower := cards.filter(func(card): return not card.is_selected())
+	# Separate groups diagonally: preserve readable card scale instead of
+	# shrinking two complete rows into the same short viewport.
+	var upper_factor := minf(0.68, maxf(0.4, (size.y - 48.0) / CARD_SIZE.y))
+	var lower_factor := minf(0.65, upper_factor)
+	var upper_width: float = upper.size() * CARD_SIZE.x * upper_factor + maxi(0, upper.size() - 1) * 16.0
+	var lower_spacing := minf(90.0, maxf(0.0, (visible_width - upper_width - 64.0 - CARD_SIZE.x * lower_factor) / maxf(1, lower.size() - 1)))
+	var lower_width: float = CARD_SIZE.x * lower_factor + maxi(0, lower.size() - 1) * lower_spacing
+	var left: float = (visible_width - upper_width - 32.0 - lower_width) / 2.0
 	for i in range(count):
 		var card := cards[i]
 		if card == null: continue
 		var offset := i - (count - 1) / 2.0
 		var spread := offset / maxf(1.0, (count - 1) / 2.0)
 		var center := Vector2(size.x / 2.0 + spacing * offset, size.y / 2.0 + 24.0 + spread * spread * 16.0)
-		if card.is_selected(): center.y -= 48.0
+		if not upper.is_empty():
+			factor = upper_factor if card.is_selected() else lower_factor
+			var row: Array = upper if card.is_selected() else lower
+			var row_offset: float = row.find(card) - (row.size() - 1) / 2.0
+			spread = row_offset / maxf(1.0, (row.size() - 1) / 2.0)
+			var row_spacing := CARD_SIZE.x * factor + 16.0 if card.is_selected() else lower_spacing
+			var row_center := left + upper_width / 2.0 if card.is_selected() else left + upper_width + 32.0 + lower_width / 2.0
+			center = Vector2(row_center + row_spacing * row_offset, 18.0 + CARD_SIZE.y * factor / 2.0 if card.is_selected() else size.y - 18.0 - CARD_SIZE.y * factor / 2.0)
 		var target := center - CARD_SIZE / 2.0
-		var angle := spread * deg_to_rad(9.0)
+		var angle := spread * deg_to_rad(3.0 if not upper.is_empty() else 9.0)
 		card.size = CARD_SIZE
 		card.pivot_offset = CARD_SIZE / 2.0
 		card.z_index = i + (20 if card.is_selected() else 0)

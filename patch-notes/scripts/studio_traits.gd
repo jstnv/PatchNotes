@@ -1,7 +1,7 @@
 class_name StudioTraits
 extends RefCounted
 
-## Historical v1 stays inactive; new Studios use the canonical v2 roster.
+## Historical versions retain their effects; new selections use version 8.
 ## Unapproved prices never participate in the active point/cash calculation.
 const VERSION := 1
 const STARTING_POINTS := 4
@@ -21,18 +21,18 @@ const SECONDARIES := {
 
 const TRAITS := {
 	&"family_funding": {"name":"Family Funding", "positive":true, "price":"2 points", "description":"Active: $300 separate startup funding."},
-	&"cult_following": {"name":"Cult Following", "positive":true, "price":"Preview", "description":"Inactive preview; seed size and price pending."},
+	&"cult_following": {"name":"Cult Following", "positive":true, "price":"1 point (trial)", "description":"Trial: 20 starting Fans once. Ordinary gains and losses apply."},
 	&"publisher_connections": {"name":"Publisher Connections", "positive":true, "price":"1 point", "description":"Active: first Ironclad advance $550; remaining pool $1,850. Full payout stays $2,400."},
 	&"resourceful": {"name":"Resourceful", "positive":true, "price":"1 point", "description":"Active: up to $100 off the first paid Store acquisition per release window. Research saving applies to the final installment; down payment unchanged."},
 	&"lean_production": {"name":"Lean Production", "positive":true, "price":"2 points", "description":"Active: 10% off paid Primitive hands; up to $100 per project."},
 	&"studio_buzz": {"name":"Studio Buzz", "positive":true, "price":"1 point", "description":"Active: +3 Awareness on every launch."},
-	&"college_dropout": {"name":"College Dropout", "positive":false, "price":"Preview", "description":"Education debt deferred; no points or bills."},
-	&"graduate": {"name":"Graduate", "positive":false, "price":"Preview", "description":"Education debt deferred; no points or bills."},
+	&"college_dropout": {"name":"College Dropout", "positive":false, "price":"Grants 2 points", "description":"$5,000 education debt; no cash deposit. 12 months grace, then 95 × $70.68 and $71.11 final."},
+	&"graduate": {"name":"Graduate", "positive":false, "price":"Grants 6 points", "description":"$20,000 education debt; no cash deposit. 12 months grace, then 95 × $282.73 and $283.28 final."},
 	&"expensive_lease": {"name":"Expensive Lease", "positive":false, "price":"Grants 2 points", "description":"Active: $515 rent every month from month 1."},
 	&"unknown_name": {"name":"Unknown Name", "positive":false, "price":"Grants 2 points", "description":"Active: -10 Awareness on first successful launch, floored at zero."}}
 
-static func evaluate_traits(chosen: Array, version: int = 5) -> Dictionary:
-	if version not in [3,4,5]: return {"valid":false,"reason":"Unsupported trait version."}
+static func evaluate_traits(chosen: Array, version: int = 8) -> Dictionary:
+	if version not in [3,4,5,6,7,8]: return {"valid":false,"reason":"Unsupported trait version."}
 	var seen := {}
 	var positive := 0
 	var negative := 0
@@ -54,12 +54,20 @@ static func evaluate_traits(chosen: Array, version: int = 5) -> Dictionary:
 	spent += 1 if version >= 4 and seen.has(&"resourceful") else 0
 	spent += 2 if seen.has(&"lean_production") else 0
 	spent += 1 if version >= 5 and seen.has(&"publisher_connections") else 0
+	spent += 1 if version >= 7 and seen.has(&"cult_following") else 0
 	var refunded := 2 if seen.has(&"unknown_name") or seen.has(&"expensive_lease") else 0
+	if version >= 6:
+		if seen.has(&"college_dropout"): refunded += 2
+		if seen.has(&"graduate"): refunded += 6
 	var active: Array[StringName] = []
 	for id: StringName in [&"family_funding", &"studio_buzz", &"unknown_name", &"lean_production", &"expensive_lease"]:
 		if seen.has(id): active.append(id)
 	if version >= 4 and seen.has(&"resourceful"): active.append(&"resourceful")
 	if version >= 5 and seen.has(&"publisher_connections"): active.append(&"publisher_connections")
+	if version >= 6:
+		for id: StringName in [&"college_dropout",&"graduate"]:
+			if seen.has(id): active.append(id)
+	if version >= 7 and seen.has(&"cult_following"): active.append(&"cult_following")
 	var remaining := STARTING_POINTS - spent + refunded
 	if remaining < 0: return {"valid":false, "reason":"Not enough build points."}
 	return {"valid":true, "reason":"", "version":version, "trait_ids":ids,
@@ -118,3 +126,11 @@ static func launch_awareness(selection: Dictionary, raw: int, first_release: boo
 	var bonus := 3 if is_active(selection, &"studio_buzz") else 0
 	if raw > 9223372036854775807 - bonus: return -1
 	return maxi(0, raw + bonus - (10 if first_release and is_active(selection, &"unknown_name") else 0))
+
+
+static func starting_fans(selection: Dictionary) -> int:
+	if not is_active(selection, &"cult_following"): return 0
+	match selection.get("version", 0):
+		7: return 40
+		8: return 20
+	return 0

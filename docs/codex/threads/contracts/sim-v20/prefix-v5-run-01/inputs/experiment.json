@@ -1,0 +1,115 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/debug/experiment_policy/supplied_policy.gd",
+    "id": "contracts-sidestreet-neighbor-prefix",
+    "version": "5",
+    "source_identity": "ba7869ac9f1f020c7a980d52b503fc7156d1d1dea5d2345131ef7f6f8e9d821e"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "sports-1105-prefix-v5",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "contracts-sidestreet-v5-1105",
+          "studio_name": "SideStreet v5 1105",
+          "specialty": "sports",
+          "traits": [],
+          "seed": "1105"
+        }
+      },
+      "max_commands": 180,
+      "target_release_count": 2,
+      "telemetry": true,
+      "policy": {
+        "config": {
+          "mode": "prefix",
+          "starter_ids": [
+            "sprites",
+            "general_combat",
+            "levels"
+          ],
+          "development_first": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "SideStreet Screen",
+            "selection": "features_first",
+            "hands": {
+              "design": 3,
+              "alpha": 4,
+              "beta": 4
+            }
+          },
+          "development_later": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "SideStreet Screen",
+            "selection": "features_first",
+            "hands": {
+              "design": 5,
+              "alpha": 6,
+              "beta": 6
+            }
+          }
+        },
+        "id": "contracts-sidestreet-neighbor-prefix",
+        "version": "5",
+        "source_identity": "ba7869ac9f1f020c7a980d52b503fc7156d1d1dea5d2345131ef7f6f8e9d821e"
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "sports-1106-prefix-v5",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "contracts-sidestreet-v5-1106",
+          "studio_name": "SideStreet v5 1106",
+          "specialty": "sports",
+          "traits": [],
+          "seed": "1106"
+        }
+      },
+      "max_commands": 180,
+      "target_release_count": 2,
+      "telemetry": true,
+      "policy": {
+        "config": {
+          "mode": "prefix",
+          "starter_ids": [
+            "sprites",
+            "general_combat",
+            "levels"
+          ],
+          "development_first": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "SideStreet Screen",
+            "selection": "features_first",
+            "hands": {
+              "design": 3,
+              "alpha": 4,
+              "beta": 4
+            }
+          },
+          "development_later": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "SideStreet Screen",
+            "selection": "features_first",
+            "hands": {
+              "design": 5,
+              "alpha": 6,
+              "beta": 6
+            }
+          }
+        },
+        "id": "contracts-sidestreet-neighbor-prefix",
+        "version": "5",
+        "source_identity": "ba7869ac9f1f020c7a980d52b503fc7156d1d1dea5d2345131ef7f6f8e9d821e"
+      }
+    }
+  ]
+}

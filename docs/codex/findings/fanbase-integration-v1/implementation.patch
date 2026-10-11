@@ -1,0 +1,448 @@
+diff --git a/patch-notes/scripts/awareness/primitive_awareness_calculator.gd b/patch-notes/scripts/awareness/primitive_awareness_calculator.gd
+index f30f51b..ffe4dfb 100644
+--- a/patch-notes/scripts/awareness/primitive_awareness_calculator.gd
++++ b/patch-notes/scripts/awareness/primitive_awareness_calculator.gd
+@@ -1,11 +1,10 @@
+ class_name PrimitiveAwarenessCalculator
+ extends RefCounted
+ 
+-const FORMULA_ID := &"primitive_awareness_v1"
++const FORMULA_ID := &"primitive_awareness_fan_trial_v1"
+ const BASIS_POINTS_PER_ONE := 10000
+ const MONTH_ONE_LAUNCH_MARKETING_DECAY_BASIS_POINTS := 10000
+ const ORGANIC_AWARENESS := 100
+-const EXISTING_FANS := 0
+ const FAN_VISIBILITY_BASIS_POINTS := 2500
+ const MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS := 10000
+ const AWARENESS_SCALE := 200
+@@ -20,7 +19,10 @@ static func calculate(project_state: ProjectState, run_state: RunState = null) -
+ 	var launch_marketing := marketing_output
+ 	# Month one is exactly 100%, so integer Marketing Output remains exact.
+ 	var current_launch_marketing := launch_marketing
+-	var fan_awareness := 0
++	var existing_fans := run_state.get_fans() if run_state != null else 0
++	if existing_fans < 0: return null
++	var fan_awareness := StudioFanbase.awareness_for(existing_fans)
++	if current_launch_marketing > ProjectState.MAX_SIGNED_INT - ORGANIC_AWARENESS - fan_awareness: return null
+ 	var total_awareness := ORGANIC_AWARENESS + current_launch_marketing + fan_awareness
+ 	if run_state != null:
+ 		var promotion := run_state.get_pending_promotion()
+@@ -31,6 +33,6 @@ static func calculate(project_state: ProjectState, run_state: RunState = null) -
+ 	var awareness_multiplier := 1.0 + (float(total_awareness) / float(AWARENESS_SCALE))
+ 	if not is_finite(awareness_multiplier):
+ 		return null
+-	var result := AwarenessResult.new(FORMULA_ID, marketing_output, launch_marketing, MONTH_ONE_LAUNCH_MARKETING_DECAY_BASIS_POINTS, current_launch_marketing, ORGANIC_AWARENESS, EXISTING_FANS, FAN_VISIBILITY_BASIS_POINTS, MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS, fan_awareness, total_awareness, AWARENESS_SCALE, awareness_multiplier)
++	var result := AwarenessResult.new(FORMULA_ID, marketing_output, launch_marketing, MONTH_ONE_LAUNCH_MARKETING_DECAY_BASIS_POINTS, current_launch_marketing, ORGANIC_AWARENESS, existing_fans, FAN_VISIBILITY_BASIS_POINTS, MONTH_ONE_FAN_LAUNCH_DECAY_BASIS_POINTS, fan_awareness, total_awareness, AWARENESS_SCALE, awareness_multiplier)
+ 	if run_state!=null: result._promotion_awards = run_state.get_pending_promotion_awards()
+ 	return result
+diff --git a/patch-notes/scripts/debug/verify_genre_checkpoint.gd b/patch-notes/scripts/debug/verify_genre_checkpoint.gd
+index ea30b3f..d31f36f 100644
+--- a/patch-notes/scripts/debug/verify_genre_checkpoint.gd
++++ b/patch-notes/scripts/debug/verify_genre_checkpoint.gd
+@@ -40,28 +40,30 @@ func _run() -> void:
+ 	var current := adapter.capture(run)
+ 	expect(not current.is_empty(), "Capture historical fixture under current schema: " + adapter.error)
+ 	if current.is_empty(): quit(1); return
++	var pre_fanbase := current.duplicate(true)
++	pre_fanbase.content_revision = adapter.previous_revision()
++	expect(pre_fanbase.content_revision != current.content_revision, "Fanbase revision is explicit")
++	expect(adapter.hydrate(pre_fanbase) == null and adapter.error == "INCOMPATIBLE_CONTENT_OR_RNG", "Pre-Fanbase content rejects without synthesizing historical Fans")
++	# The historical Review fixture remains frozen inside the current Fan schema.
+ 	var previous := current.duplicate(true)
+-	previous.content_revision = adapter.previous_revision()
+-	expect(previous.content_revision != current.content_revision, "Review revision is explicit")
+-	expect(adapter.validate(previous).is_empty(), "Exact immediately previous content revision remains compatible")
+ 	var restored := adapter.hydrate(previous)
+-	expect(restored != null, "Hydrate prior revision without recalculation: " + adapter.error)
++	expect(restored != null, "Hydrate current Fanbase schema without recalculation: " + adapter.error)
+ 	if restored == null: quit(1); return
+ 	var recaptured := adapter.capture(restored)
+ 	var expected_current := previous.duplicate(true)
+ 	expected_current.content_revision = adapter.revision()
+-	expect(recaptured == expected_current, "Recapture differs only in content revision")
++	expect(recaptured == expected_current, "Recapture preserves exact current schema")
+ 	expect(restored.get_release_metadata(id) == history and restored.get_released_game_sales(id) == sales, "Historical Review, targets and sales are byte-equivalent typed values")
+ 	expect(history.review.standards == [33,33,33,33] and history.review.final_review == 7.7 and history.review.production_rating == 8.0, "Historical equal-33 standards and old final Review remain frozen")
+ 	var malformed := previous.duplicate(true)
+ 	malformed.run.cash_cents = str(run.get_cash_cents() + 1)
+-	expect(adapter.hydrate(malformed) == null, "Previous revision still enforces all finance provenance validation")
++	expect(adapter.hydrate(malformed) == null, "Current schema still enforces all finance provenance validation")
+ 	var unknown := previous.duplicate(true)
+ 	unknown.content_revision = "unrelated-review-revision"
+ 	expect(adapter.hydrate(unknown) == null and adapter.error == "INCOMPATIBLE_CONTENT_OR_RNG", "Unknown revision remains incompatible")
+ 	var wrong_rng := previous.duplicate(true)
+ 	wrong_rng.rng_algorithm = "unknown-rng"
+-	expect(adapter.hydrate(wrong_rng) == null, "Previous revision cannot bypass RNG compatibility")
++	expect(adapter.hydrate(wrong_rng) == null, "Current schema cannot bypass RNG compatibility")
+ 
+ 	# A separate hydrated fixture supplies the new project; it does not mutate
+ 	# the coordinator's historical save fixture or disguise an unsaved project.
+@@ -103,14 +105,14 @@ func _run() -> void:
+ 		return
+ 	root.add_child(coordinator)
+ 	var saved := coordinator.store.save(previous)
+-	expect(saved.status == &"saved", "Real store writes valid previous-revision generation")
++	expect(saved.status == &"saved", "Real store writes valid current-schema generation")
+ 	if saved.status != &"saved": coordinator.store.release_writer(); quit(1); return
+ 	var path: String = saved.path
+ 	var old_hash := FileAccess.get_sha256(path)
+ 	var old_files := DirAccess.get_files_at(coordinator.store.directory)
+-	expect(coordinator.store.inspect().payload == previous, "Store inspection returns exact previous payload")
++	expect(coordinator.store.inspect().payload == previous, "Store inspection returns exact current payload")
+ 	var continued := coordinator.load_current()
+-	expect(continued != null, "Real coordinator Continues prior revision")
++	expect(continued != null, "Real coordinator Continues current Fanbase schema")
+ 	if continued == null: coordinator.store.release_writer(); quit(1); return
+ 	coordinator.entered_studio(true)
+ 	await process_frame
+diff --git a/patch-notes/scripts/debug/verify_primitive_awareness.gd b/patch-notes/scripts/debug/verify_primitive_awareness.gd
+index b124ee4..8cb9d63 100644
+--- a/patch-notes/scripts/debug/verify_primitive_awareness.gd
++++ b/patch-notes/scripts/debug/verify_primitive_awareness.gd
+@@ -39,7 +39,7 @@ func _verify_formula_examples() -> void:
+ 	for marketing: int in examples:
+ 		var state := _launch_state(marketing)
+ 		var result := PrimitiveAwarenessCalculator.calculate(state)
+-		_expect(result != null and result.get_formula_id() == &"primitive_awareness_v1", "Marketing %d produces the locked profile" % marketing)
++		_expect(result != null and result.get_formula_id() == PrimitiveAwarenessCalculator.FORMULA_ID, "Marketing %d produces the locked profile" % marketing)
+ 		_expect(result.get_marketing_output_used() == marketing and result.get_launch_marketing() == marketing and result.get_current_launch_marketing() == marketing, "Marketing %d converts exactly through month-one Launch Marketing" % marketing)
+ 		_expect(result.get_launch_marketing_decay_basis_points() == 10000 and result.get_organic_awareness() == 100 and result.get_existing_fans() == 0 and result.get_fan_awareness() == 0, "Marketing %d uses exact Primitive constants" % marketing)
+ 		_expect(result.get_total_awareness() == examples[marketing][0] and _equal(result.get_awareness_multiplier(), examples[marketing][1]), "Marketing %d produces exact Total Awareness and multiplier" % marketing)
+diff --git a/patch-notes/scripts/debug/verify_publisher_trial_promotion.gd b/patch-notes/scripts/debug/verify_publisher_trial_promotion.gd
+index 8dd49e6..68f0840 100644
+--- a/patch-notes/scripts/debug/verify_publisher_trial_promotion.gd
++++ b/patch-notes/scripts/debug/verify_publisher_trial_promotion.gd
+@@ -39,11 +39,12 @@ func _run() -> void:
+ 	var pending := run.get_pending_promotion_awards()
+ 	expect(not run.register_release(ProjectState.new(30)) and pending==run.get_pending_promotion_awards(),"Failed launch preserves bank")
+ 	expect(run.register_release(first) and pending==run.get_pending_promotion_awards(),"Old release callback cannot consume newly banked Promotion")
++	var expected_second := 125 + mini(150,run.get_fans()/4)
+ 	var second := finished(run,"Second",14)
+-	expect(second.get_awareness_result().get_total_awareness()==125 and run.get_pending_promotion_awards()==pending,"Previewed launch includes Promotion without consuming it")
++	expect(second.get_awareness_result().get_total_awareness()==expected_second and run.get_pending_promotion_awards()==pending,"Previewed launch includes Promotion without consuming it")
+ 	expect(run.register_release(second) and run.get_pending_promotion_awards().is_empty(),"Successful launch consumes exactly its award IDs")
+ 	var id := second.get_release_id()
+-	expect(run.get_release_metadata(id).review.awareness==125 and run.get_released_game_sales(id).launch_awareness==125 and run.get_release_promotion(id)==8,"History, sales and Promotion history share the frozen result")
++	expect(run.get_release_metadata(id).review.awareness==expected_second and run.get_released_game_sales(id).launch_awareness==expected_second and run.get_release_promotion(id)==8,"History, sales and Promotion history share the frozen result")
+ 	expect(run.get_unlocked_publisher_ids().has(PublisherCatalog.NEON_CIRCUIT),"Promotion participates in the frozen Neon threshold")
+ 	var neon := finish_contract(run,PublisherCatalog.NEON_CIRCUIT)
+ 	expect(neon!=null and run.get_pending_promotion()==neon.get_result().get_promotion(),"Later Neon award remains separate")
+@@ -51,6 +52,6 @@ func _run() -> void:
+ 	expect(run.register_release(second) and later==run.get_pending_promotion_awards(),"Duplicate second launch cannot consume a later award")
+ 	var third := finished(run,"Third",0)
+ 	expect(run.register_release(third) and run.get_pending_promotion()==0,"Next successful release consumes later award once")
+-	expect(run.get_release_metadata(first.get_release_id()).review.awareness==118 and run.get_release_metadata(id).review.awareness==125,"Earlier releases remain frozen")
++	expect(run.get_release_metadata(first.get_release_id()).review.awareness==118 and run.get_release_metadata(id).review.awareness==expected_second,"Earlier releases remain frozen")
+ 	print("Publisher trial Promotion: %d failures" % failures)
+ 	quit(0 if failures==0 else 1)
+diff --git a/patch-notes/scripts/persistence/checkpoint_schema.gd b/patch-notes/scripts/persistence/checkpoint_schema.gd
+index 8091573..fd405cb 100644
+--- a/patch-notes/scripts/persistence/checkpoint_schema.gd
++++ b/patch-notes/scripts/persistence/checkpoint_schema.gd
+@@ -88,7 +88,7 @@ static func sales() -> Dictionary:
+ 	return result
+ 
+ static func metadata() -> Dictionary:
+-	var review := fields("scope required_scope development_cycles remaining_bugs awareness launch_marketing projected_units projected_gross_cents projected_net_cents")
++	var review := fields("scope required_scope development_cycles remaining_bugs awareness launch_marketing launch_fans fan_awareness projected_units projected_gross_cents projected_net_cents")
+ 	review.merge(fields("final_review production_rating scope_completion", "float"))
+ 	review.cores = array_of("uint")
+ 	review.standards = array_of("uint")
+@@ -125,5 +125,6 @@ static func root() -> Dictionary:
+ 	run.lean_savings = map_of("id","uint")
+ 	run.first_game_tutorial = optional({"stage":"uint","first_stat":"id","second_stat":"id","first_pool_published":"bool","second_pool_published":"bool"})
+ 	run.studio_finance = finance()
++	run.fanbase = StudioFanbase.schema()
+ 	run.employees = employees()
+ 	return {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":run,"rng":map_of("id",{"seed":"int","state":"int"})}
+diff --git a/patch-notes/scripts/persistence/studio_checkpoint.gd b/patch-notes/scripts/persistence/studio_checkpoint.gd
+index 4b82397..94aa347 100644
+--- a/patch-notes/scripts/persistence/studio_checkpoint.gd
++++ b/patch-notes/scripts/persistence/studio_checkpoint.gd
+@@ -2,9 +2,9 @@ class_name StudioCheckpoint
+ extends RefCounted
+ 
+ const BUILD := "studio-checkpoint-runtime-v1"
+-const PREVIOUS_RULES := "finance5-bank1-employees1-traits5-sales1-contracts3-research1"
+-const RULES := PREVIOUS_RULES + "-review2"
+-const FIELDS := ["_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
++const PREVIOUS_RULES := "finance5-bank1-employees1-traits5-sales1-contracts3-research1-review2"
++const RULES := PREVIOUS_RULES + "-fanbase1"
++const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
+ var error := ""
+ var _revision := ""
+ var _previous_revision := ""
+@@ -68,13 +68,12 @@ func _contract(state: ContractState) -> Variant:
+ 	return {"publisher_connections":state._publisher_connections,"contract_id":state._contract_id,"offer_id":state._offer_id,"source_release_id":state._source_release_id,"eligible":state._eligible_feature_ids,"scope":state._scope,"cores":state._core_half_units,"hands":state._successful_hands,"exhausted":state._exhausted_feature_ids,"priorities":state._priorities,"upfront":state._upfront_committed,"paid":state._payout_committed,"trial_terms":state._trial_terms,"neon_focus":state._neon_focus,"result":{"scope":result._scope,"cores":result._core_half_units,"numerator":result._completion_numerator,"payout":result._payout_cents,"remainder":result._remainder_cents,"upfront":result._upfront_cents,"denominator":result._denominator,"promotion":result._promotion}}
+ 
+ func validate(payload: Dictionary) -> String:
++	# Pre-Fanbase saves lack exact exposure provenance. Preserve unsupported
++	# bytes instead of inventing Fans or replaying old sales.
++	if payload.get("content_revision", "") != revision() or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
+ 	var codec := CheckpointCodec.new()
+ 	var value: Variant = codec.decode(payload,CheckpointSchema.root())
+ 	if not codec.error.is_empty(): return codec.error
+-	# The immediately preceding format has identical fields and data. Frozen
+-	# releases stay authoritative; no active project is saved. Reading is passive,
+-	# and the next normal Studio checkpoint records the current revision.
+-	if value.content_revision not in [revision(), previous_revision()] or value.rng_algorithm != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
+ 	if value.checkpoint_kind != "studio" or value.sequence < 1: return "Invalid checkpoint boundary"
+ 	var r: Dictionary = value.run
+ 	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
+@@ -125,6 +124,7 @@ func validate(payload: Dictionary) -> String:
+ 			if not r.owned_features.has(feature) or not r.credited_projects[id][feature]: return "Invalid familiarity Feature"
+ 			counts[feature] = int(counts.get(feature,0))+1
+ 	if counts != r.familiarity: return "Familiarity count mismatch"
++	if not StudioFanbase.validate(r.fanbase, r.released_games, r.release_metadata, r.completed_run_cycles): return "Invalid Fanbase provenance"
+ 	if r.released_games.keys() != r.release_metadata.keys(): return "Release order/identity mismatch"
+ 	for id: StringName in r.released_games:
+ 		var sales: Dictionary = r.released_games[id]
+diff --git a/patch-notes/scripts/phases/main_menu.gd b/patch-notes/scripts/phases/main_menu.gd
+index e4a172c..8828d6f 100644
+--- a/patch-notes/scripts/phases/main_menu.gd
++++ b/patch-notes/scripts/phases/main_menu.gd
+@@ -63,7 +63,7 @@ func _ready() -> void:
+ 	resume.disabled = checkpoint_info.status != &"valid"
+ 	if not resume.disabled:
+ 		var saved: Dictionary = checkpoint_info.payload.run
+-		resume.text = "Continue — %s · %d, Month %d" % [saved.studio_name,1980+int(saved.completed_run_cycles)/24,(int(saved.completed_run_cycles)/2)%12+1]
++		resume.text = "Continue — %s · %d, Month %d" % [saved.studio_name,1980+int(saved.completed_run_cycles)/24,int(saved.completed_run_cycles)/2+1]
+ 	resume.pressed.connect(func(): continue_requested.emit())
+ 	layout.add_child(resume)
+ 	var recovery := Button.new()
+diff --git a/patch-notes/scripts/phases/post_game_review.gd b/patch-notes/scripts/phases/post_game_review.gd
+index 22b92ed..00e1b23 100644
+--- a/patch-notes/scripts/phases/post_game_review.gd
++++ b/patch-notes/scripts/phases/post_game_review.gd
+@@ -30,7 +30,7 @@ func setup_release_snapshot(metadata: Dictionary, sales: Dictionary) -> bool:
+ 	%ScopeDetailLabel.text = "Delivered Scope: %d / %d\nScope Completion: %.1f%%" % [data.scope, data.required_scope, data.scope_completion * 100.0]
+ 	%CyclesLabel.text = "Development Time: %d cycles · Remaining Bugs: %d" % [data.development_cycles, data.remaining_bugs]
+ 	%MarketingDetailLabel.text = %AwarenessLabel.text
+-	%LaunchMarketingLabel.text = "Launch Marketing: %d" % data.launch_marketing
++	%LaunchMarketingLabel.text = "Launch Marketing: %d\nFans at launch: %d · Fan Awareness: %d" % [data.launch_marketing, data.launch_fans, data.fan_awareness]
+ 	%SalesUnitsLabel.text = "Projected Month 1 Units: %d · Lifetime earned: %d" % [data.projected_units, sales.earned_units]
+ 	%SalesNetLabel.text = "Projected Gross: %s · Projected Net: %s\nEarned Gross: %s · Earned Net: %s · Paid: %s" % [CashFormatter.format_exact_cents(data.projected_gross_cents), CashFormatter.format_exact_cents(data.projected_net_cents), CashFormatter.format_exact_cents(sales.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS), CashFormatter.format_exact_cents(sales.entitlement_cents), CashFormatter.format_exact_cents(sales.settled_cents)]
+ 	%SalesNoteLabel.text = "Month 1 gross is before the platform share. Later sales continue by release age; earned net settles at calendar-month boundaries."
+@@ -61,7 +61,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> bool:
+ 	%ScopeDetailLabel.text = "Delivered Scope: %d / %d\nScope Completion: %.1f%%" % [project_state.get_current_scope(), project_state.get_required_scope(), review.get_scope_completion() * 100.0]
+ 	%CyclesLabel.text = "Development Time: %d cycles" % project_state.get_current_cycle()
+ 	%MarketingDetailLabel.text = %AwarenessLabel.text
+-	%LaunchMarketingLabel.text = "Launch Marketing: %d" % project_state.get_awareness_result().get_launch_marketing()
++	%LaunchMarketingLabel.text = "Launch Marketing: %d\nFans at launch: %d · Fan Awareness: %d" % [project_state.get_awareness_result().get_launch_marketing(), project_state.get_awareness_result().get_existing_fans(), project_state.get_awareness_result().get_fan_awareness()]
+ 	%SalesUnitsLabel.text = %UnitsLabel.text
+ 	%SalesNetLabel.text = "Projected Month 1 Net: %s" % CashFormatter.format_exact_cents(project_state.get_month_one_sales_revenue_result().get_projected_month_one_net_cents())
+ 	%SalesNoteLabel.text = "This is a forecast. Sales are earned as time advances and paid at calendar-month boundaries."
+diff --git a/patch-notes/scripts/project_state.gd b/patch-notes/scripts/project_state.gd
+index b02de02..84e7842 100644
+--- a/patch-notes/scripts/project_state.gd
++++ b/patch-notes/scripts/project_state.gd
+@@ -602,7 +602,7 @@ func get_awareness_result() -> AwarenessResult:
+ func commit_awareness_result(result: AwarenessResult) -> bool:
+ 	if not _has_beta_finalization or _review_result == null or _awareness_result != null or result == null:
+ 		return false
+-	if result.get_formula_id() != &"primitive_awareness_v1" or result.get_marketing_output_used() != _marketing_output or result.get_total_awareness() < 0 or not is_finite(result.get_awareness_multiplier()):
++	if result.get_formula_id() != PrimitiveAwarenessCalculator.FORMULA_ID or result.get_marketing_output_used() != _marketing_output or result.get_total_awareness() < 0 or not is_finite(result.get_awareness_multiplier()):
+ 		return false
+ 	_awareness_result = result
+ 	values_changed.emit()
+diff --git a/patch-notes/scripts/run_state.gd b/patch-notes/scripts/run_state.gd
+index 69f8d7d..3112517 100644
+--- a/patch-notes/scripts/run_state.gd
++++ b/patch-notes/scripts/run_state.gd
+@@ -11,6 +11,7 @@ signal sales_changed
+ signal contracts_changed
+ signal publishers_changed
+ signal finance_changed
++signal fans_changed
+ signal employees_changed
+ 
+ const CENTS_PER_DOLLAR := 100
+@@ -55,6 +56,14 @@ var _starter_selection_confirmed := false
+ var _first_tutorial_project_id: StringName
+ var _first_game_tutorial: FirstGameTutorial
+ var _studio_finance: Dictionary = {}
++var _fanbase: Dictionary = StudioFanbase.create()
++
++func get_fans() -> int: return int(_fanbase.fans)
++
++func get_fanbase_history() -> Array: return _fanbase.months.duplicate(true)
++
++func get_fanbase_snapshot() -> Dictionary: return _fanbase.duplicate(true)
++
+ var _bank_run_id: StringName = &""
+ var _employees: Dictionary = EmployeeRoster.create(&"")
+ var random_streams := RunRandom.new()
+@@ -763,7 +772,7 @@ func can_register_release(project: ProjectState) -> bool:
+ 			return false
+ 		var metadata: Dictionary = _release_metadata[id]
+ 		return metadata.base_name == project.get_base_name() and metadata.genre == project.get_genre_id() and metadata.theme == project.get_theme_id() and metadata.genre_ratios == project.get_genre_ratios() and _released_games[id].get("review_tenths", -1) == expected_record.get("review_tenths", -1) and _released_games[id].get("launch_awareness", -1) == expected_record.get("launch_awareness", -1) and _released_games[id].get("market_bp", -1) == expected_record.get("market_bp", -1)
+-	return project.get_awareness_result().get_promotion_awards()==get_pending_promotion_awards()
++	return project.get_awareness_result().get_promotion_awards()==get_pending_promotion_awards() and project.get_awareness_result().get_existing_fans()==get_fans()
+ 
+ 
+ func _create_release_sales_record(project: ProjectState) -> Dictionary:
+@@ -786,10 +795,13 @@ func register_release(project: ProjectState) -> bool:
+ 	var year := get_current_year()
+ 	var title := _resolve_release_title(project.get_base_name(), year)
+ 	var record := _create_release_sales_record(project)
++	var next_fans := StudioFanbase.register_release(_fanbase, record, project.get_awareness_result().get_existing_fans())
++	if next_fans.is_empty(): return false
+ 	record.base_name = project.get_base_name()
+ 	record.release_title = title
+ 	record.release_year = year
+ 	_released_games[id] = record
++	_fanbase = next_fans
+ 	_release_metadata[id] = {"base_name": project.get_base_name(), "genre": project.get_genre_id(),
+ 		"theme": project.get_theme_id(), "genre_ratios": project.get_genre_ratios(),
+ 		"release_title": title, "release_year": year, "release_cycle": _completed_run_cycles,
+@@ -802,6 +814,7 @@ func register_release(project: ProjectState) -> bool:
+ 		_sidestreet_entitlements[id] = {"offer_id": StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID, id]), "state": null}
+ 	_refresh_publisher_unlocks()
+ 	sales_changed.emit()
++	fans_changed.emit()
+ 	return true
+ 
+ func _capture_release_review(project: ProjectState) -> Dictionary:
+@@ -820,6 +833,7 @@ func _capture_release_review(project: ProjectState) -> Dictionary:
+ 		"required_scope": project.get_required_scope(), "development_cycles": project.get_current_cycle(),
+ 		"cores": cores, "standards": standards, "remaining_bugs": project.get_remaining_bugs(),
+ 		"awareness": awareness.get_total_awareness(), "launch_marketing": awareness.get_launch_marketing(),
++		"launch_fans": awareness.get_existing_fans(), "fan_awareness": awareness.get_fan_awareness(),
+ 		"projected_units": units.get_final_units_sold(), "projected_gross_cents": revenue.get_projected_month_one_gross_cents(),
+ 		"projected_net_cents": revenue.get_projected_month_one_net_cents(),
+ 		"forecast_id": context.get_forecast_id_for_authority() if context.was_forecast_revealed_at_launch() else &"",
+@@ -1192,6 +1206,8 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
+ 		if release_earned < 0 or release_earned > MAX_SIGNED_INT - earned: return {}
+ 		earned += release_earned
+ 		next_records[id] = next
++	var fan_plan := StudioFanbase.plan(_fanbase, _released_games, next_records, _completed_run_cycles + 1)
++	if fan_plan.is_empty(): return {}
+ 	if payable > MAX_SIGNED_INT - cash_after_action:
+ 		return {}
+ 	var finance_plan: Dictionary = {}
+@@ -1200,7 +1216,7 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
+ 			finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
+ 		finance_plan = StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles + 1, _cash_cents, direct_cash_delta_cents, finance_kind, earned, payable, true, source_id)
+ 		if finance_plan.is_empty(): return {}
+-	return {"records": next_records, "payable": payable, "finance": finance_plan}
++	return {"records": next_records, "payable": payable, "finance": finance_plan, "fans": fan_plan}
+ 
+ 
+ ## The direct-effects callback must be synchronous and atomic on false, using
+@@ -1245,6 +1261,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
+ 	_completed_run_cycles += 1
+ 	_available_redraws = mini(MAX_REDRAWS, _available_redraws + 1)
+ 	_released_games = plan.records
++	var previous_fans := get_fans()
++	_fanbase = plan.fans
+ 	if plan.payable > 0:
+ 		add_cash_cents(plan.payable)
+ 	if not plan.finance.is_empty():
+@@ -1269,6 +1287,8 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
+ 		contracts_changed.emit()
+ 	if not _released_games.is_empty():
+ 		sales_changed.emit()
++	if get_fans() != previous_fans or _completed_run_cycles % 2 == 0:
++		fans_changed.emit()
+ 	calendar_changed.emit()
+ 	if _employees != employees_before: employees_changed.emit()
+ 	_publishing_cycle = false
+diff --git a/patch-notes/scripts/ui/gameplay_hud.gd b/patch-notes/scripts/ui/gameplay_hud.gd
+index 956e58d..2a95e39 100644
+--- a/patch-notes/scripts/ui/gameplay_hud.gd
++++ b/patch-notes/scripts/ui/gameplay_hud.gd
+@@ -8,6 +8,8 @@ var stats: Array[Label] = []
+ var footer: Label
+ var footer_panel: PanelContainer
+ var cash_button: Button
++var fans_button: Button
++var fans_dialog: AcceptDialog
+ var studio_finances: StudioFinances
+ var settings_menu: DemoSettingsMenu
+ var settings_button: Button
+@@ -89,6 +91,12 @@ func _ready() -> void:
+ 	settings_button.text = "Settings"
+ 	settings_button.pressed.connect(show_settings)
+ 	footer_row.add_child(settings_button)
++	fans_button = Button.new()
++	fans_button.name = "FansButton"
++	fans_button.custom_minimum_size.x = 96
++	fans_button.text = "Fans: 0"
++	fans_button.pressed.connect(show_fans)
++	footer_row.add_child(fans_button)
+ 	cash_button = Button.new()
+ 	cash_button.name = "CashButton"
+ 	cash_button.custom_minimum_size.x = 148
+@@ -96,6 +104,11 @@ func _ready() -> void:
+ 	cash_button.tooltip_text = "Open Studio Finances: actual monthly revenue, costs, rent and available cash. Browsing is free."
+ 	cash_button.pressed.connect(show_finances)
+ 	footer_row.add_child(cash_button)
++	fans_dialog = AcceptDialog.new()
++	fans_dialog.name = "FanHistory"
++	fans_dialog.title = "Studio Fans"
++	fans_dialog.dialog_autowrap = true
++	add_child(fans_dialog)
+ 	studio_finances = StudioFinances.new()
+ 	studio_finances.name = "StudioFinances"
+ 	add_child(studio_finances)
+@@ -121,6 +134,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
+ 		if run.calendar_changed.is_connected(refresh): run.calendar_changed.disconnect(refresh)
+ 		if run.features_changed.is_connected(refresh): run.features_changed.disconnect(refresh)
+ 		if run.finance_changed.is_connected(refresh): run.finance_changed.disconnect(refresh)
++		if run.fans_changed.is_connected(refresh): run.fans_changed.disconnect(refresh)
+ 	project = project_state
+ 	run = run_state
+ 	if project != null:
+@@ -131,12 +145,14 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
+ 		run.calendar_changed.connect(refresh)
+ 		run.features_changed.connect(refresh)
+ 		run.finance_changed.connect(refresh)
++		run.fans_changed.connect(refresh)
+ 	studio_finances.bind_run(run)
+ 	refresh()
+ 
+ func set_phase(controller: Control) -> void:
+ 	settings_menu.close()
+ 	studio_finances.close()
++	fans_dialog.hide()
+ 	_presented_scores.clear()
+ 	for pulse in _score_pulses:
+ 		if is_instance_valid(pulse): pulse.queue_free()
+@@ -212,6 +228,17 @@ func show_finances() -> bool:
+ 	return studio_finances.open(return_label)
+ 
+ 
++func show_fans() -> void:
++	if run == null or phase is MainMenu: return
++	var rows: Array = run.get_fanbase_history()
++	var lines: Array[String] = ["Current Fans: %d" % run.get_fans(), "Fans change at monthly sales boundaries."]
++	for index in range(maxi(0, rows.size() - 12), rows.size()):
++		var row: Dictionary = rows[index]
++		lines.append("Month %d: %d + %d - %d = %d" % [row.month, row.starting, row.gained, row.lost, row.ending])
++	fans_dialog.dialog_text = "\n".join(lines)
++	fans_dialog.popup_centered(Vector2i(440, 340))
++
++
+ func show_current_tip() -> void:
+ 	var tip := _guidance_for_current_state()
+ 	if tip.is_empty(): return
+@@ -337,6 +364,8 @@ func _production_guidance() -> Dictionary:
+ func refresh() -> void:
+ 	if run == null:
+ 		cash_button.disabled = true
++		fans_button.disabled = true
++		fans_button.text = "Fans: —"
+ 		cash_button.text = "Cash: —"
+ 		footer.text = "Date: —     |     Cycle: —     |     Next Bill: —"
+ 		return
+@@ -399,6 +428,10 @@ func _show_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
+ 
+ func _refresh_footer() -> void:
+ 	var cents := run.get_cash_cents()
++	fans_button.text = "Fans: %d" % run.get_fans()
++	fans_button.disabled = phase is MainMenu or not is_instance_valid(phase)
++	var fan_history: Array = run.get_fanbase_history()
++	fans_button.tooltip_text = "Monthly Fan history. No monthly boundary yet." if fan_history.is_empty() else "Month %d · +%d gained · -%d lost · %d total" % [fan_history[-1].month, fan_history[-1].gained, fan_history[-1].lost, fan_history[-1].ending]
+ 	cash_button.text = "Cash: %s" % (CashFormatter.format_exact_cents(cents) if cents >= 0 else "—")
+ 	cash_button.disabled = phase is MainMenu or not is_instance_valid(phase)
+ 	var finances := run.get_studio_finance_report()

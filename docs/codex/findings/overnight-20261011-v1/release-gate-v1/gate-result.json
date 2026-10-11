@@ -1,0 +1,36 @@
+{
+  "source_head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v1",
+  "automated_pass": false,
+  "release_ready": false,
+  "remaining": [
+    "Exported legal Bank/exit/Continue/installment/payoff/two-game interaction",
+    "Approved asset/license set and audible music/SFX acceptance"
+  ],
+  "checks": [],
+  "headless_automated_pass": false,
+  "graphical_startup_deferred": false,
+  "test_writer_port": 47733,
+  "checkpoint_writer_instrumentation": {
+    "enabled": true,
+    "port": 47733,
+    "helper_sha256": "3168c82e1aa55e876c1f7050b44d741c071dc359872df31984045f48d9a4d147",
+    "wrappers": {
+      "verify_alpha_command": {
+        "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\overnight-20261011-v1\\release-gate-v1\\checkpoint-wrappers\\verify_alpha_command.gd",
+        "sha256": "5076ea9d4a24d3bee76e5c11058831b98a94dc7759e45508b5bb7fa8d8f522ee",
+        "original": "res://scripts/debug/verify_alpha_command.gd",
+        "original_sha256": "3b627dffb73318bd9c3482c78d8b812963ca117897d703289bd87ee1bb9046e0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "scope": "Per-verifier inheritance wrappers replace only pristine CheckpointCoordinator stores before use; isolated user profiles remain mandatory.",
+    "limits": [
+      "Real TCP collision/release semantics retained on47733; production62741 is not acquired or tested by instrumented coordinators.",
+      "Existing verifier-specific writer overrides remain under their original verifier control.",
+      "No runtime/package modification; exported smoke is uninstrumented main-menu startup, not save/Continue acceptance."
+    ]
+  },
+  "failure": "verify_alpha_command"
+}

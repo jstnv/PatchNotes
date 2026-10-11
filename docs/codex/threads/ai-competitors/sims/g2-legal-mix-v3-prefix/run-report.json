@@ -1,0 +1,133 @@
+{
+  "format": "patch-notes-isolated-simulation-v1",
+  "mode": "run",
+  "ok": true,
+  "created_utc": "2026-10-11T11:49:27.090175+00:00",
+  "runner_sha256": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI",
+  "output": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\g2-legal-mix-v3-prefix",
+  "godot_executable": "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "git": {
+    "branch": "main",
+    "head": "41c87c76fb4d3c06a5332d93f0e7b0997007475d",
+    "dirty": true
+  },
+  "variant": {
+    "id": "g2-legal-mix-v3",
+    "owner": "ai-competitors",
+    "status": "CANDIDATE",
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g2-legal-mix-v3",
+    "metadata_sha256": "61973ea4f78aeb8acf1430ebd1bf38a98ffcaa0a4373dd3864536d15fbd9b864",
+    "base_identity": "577f46fd83d5a1e2bd21d017c40eba0b20a543faf9c2301cd6316d48aa394533",
+    "creation_identity": "b7a9ca81d5fa51a860961e2845f87128b23b050843bc53547d5657870c5f2f41",
+    "candidate_identity": "fcdb89546cbbb852f7c81bc1d315b6a40214ce2730357359408040fd04028063",
+    "canonical_identity": "4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df",
+    "canonical_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "baseline_drift": true,
+    "delta": [
+      {
+        "path": "scripts/debug/g2_legal_mix_reference_v2.gd",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "a438a0410fa595337763298e89d378a8be36fcd95cbd855052fdd7f5ae6e0040"
+      },
+      {
+        "path": "scripts/debug/verify_g2_legal_mix.gd",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "46737dd574e0774ffdc01e6d1d95565558f6d72afedb2ffd591c7c2beb46d9b3"
+      },
+      {
+        "path": "scripts/debug/verify_g2_legal_mix.gd.uid",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "5551c32ef8f698d36da3ece6260c262649da0242f689d6da3a0c3d910cf4a9f2"
+      },
+      {
+        "path": "scripts/simulation/g2_legal_mix.gd",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "681299f930564dcb2b5f78f445b54cd3afcf8a933ef70314e8b5cccb8909aa1c"
+      },
+      {
+        "path": "scripts/simulation/g2_legal_mix.gd.uid",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "2f500310dcefede8172aae7ea2f67d613e0bf8fbc3aacb44047fba23d75a7fd6"
+      }
+    ],
+    "canonical_delta": [
+      {
+        "path": "scripts/debug/campaign_stress_suite.gd",
+        "change": "modified",
+        "before_sha256": "3c6567cb60e71c334a3522ddc8e10a15d7c33ab68db5ce148b75d9e6ccaa1c00",
+        "after_sha256": "cf6f26627f82509e9e3f83f5981bb47a7128c1b8d726483d4703b96cf25e84c7"
+      },
+      {
+        "path": "scripts/debug/verify_cult_following.gd",
+        "change": "modified",
+        "before_sha256": "d792d3a30665326bb2778c2649b6e5db0b6961360f324f487be22c8a0207f4a5",
+        "after_sha256": "3d5b1115ff4474bc6df7cdc8b7c8b9b581debd9b46278ba7ac0ccbefa40edbb5"
+      },
+      {
+        "path": "scripts/debug/verify_studio_traits.gd",
+        "change": "modified",
+        "before_sha256": "c06a2141ce35abed298c223764e3e8f035807997e4aa2eb57e8745ef73db3afd",
+        "after_sha256": "5e4e47a19318a0068884a321aea2a32344c124646c6d26ab3c8ba6d2679deada"
+      },
+      {
+        "path": "scripts/persistence/studio_checkpoint.gd",
+        "change": "modified",
+        "before_sha256": "bfe3adf0a9dd60efd9fbca1ff466ba820a3feafb87aaf14330b7a57372f5c21a",
+        "after_sha256": "c7fef1376f04f0fa6fc0225f529acd67fd6f990173bfd518ef86347d068d3c42"
+      },
+      {
+        "path": "scripts/studio_traits.gd",
+        "change": "modified",
+        "before_sha256": "a71790586f497b48a4238e18d19da9f68561a346f0b309342e481defb82501e4",
+        "after_sha256": "10721bfc791bfb194afb6404846705ff0484bdaae7dd3acc537f9ddb5debf483"
+      }
+    ],
+    "lineage": [
+      {
+        "id": "g2-legal-mix-v1",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g2-legal-mix-v1",
+        "metadata_sha256": "faaaf9776b6585857099e0300cb9206808ede0027b7cd7c9a097fb014641825b",
+        "source_identity": "30eccc5b0d1f7f9b0ed33c5f701245b2d33ea06f73d973262ece12d35b2e3dee"
+      },
+      {
+        "id": "g2-legal-mix-v2",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g2-legal-mix-v2",
+        "metadata_sha256": "0a65c34a78dfad339a774a59cf46977aa35c0b7078b9f05d8079f42f36b19262",
+        "source_identity": "b7a9ca81d5fa51a860961e2845f87128b23b050843bc53547d5657870c5f2f41"
+      }
+    ]
+  },
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "finite-development-fixture",
+    "version": "1",
+    "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00"
+  },
+  "case_count": 1,
+  "input_hashes": {
+    "experiment.json": "c178231c39f8c9f2ac4e292ee04c2658b066a88f5ed37e2c67f967490a79fe42",
+    "requested.json": "fa80d1afb258a0a9e739d83f81d2905fa666e8d686e48fd2914116141ab44aed"
+  },
+  "frozen_source_identity": "e3346bfcd9a2b5c64dda6d1df61bf7a0ef2cdfc92edaf42717eea930754ad81d",
+  "results": [
+    {
+      "case_id": "g2-prefix-4417",
+      "ok": true,
+      "status": "completed",
+      "commands": 18,
+      "final_run_cycle": 7,
+      "final_release_count": 1
+    }
+  ]
+}

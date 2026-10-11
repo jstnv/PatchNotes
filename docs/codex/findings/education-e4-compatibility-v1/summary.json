@@ -1,0 +1,87 @@
+{
+  "passed": true,
+  "processes": 16,
+  "native_checks": 975,
+  "records": [
+    {
+      "name": "v3-college_dropout-migrate",
+      "mode": "migrate",
+      "checks": 15
+    },
+    {
+      "name": "v3-college_dropout-verify",
+      "mode": "verify",
+      "checks": 98
+    },
+    {
+      "name": "v3-graduate-migrate",
+      "mode": "migrate",
+      "checks": 15
+    },
+    {
+      "name": "v3-graduate-verify",
+      "mode": "verify",
+      "checks": 98
+    },
+    {
+      "name": "v4-college_dropout-migrate",
+      "mode": "migrate",
+      "checks": 15
+    },
+    {
+      "name": "v4-college_dropout-verify",
+      "mode": "verify",
+      "checks": 98
+    },
+    {
+      "name": "v4-graduate-migrate",
+      "mode": "migrate",
+      "checks": 15
+    },
+    {
+      "name": "v4-graduate-verify",
+      "mode": "verify",
+      "checks": 98
+    },
+    {
+      "name": "v5-college_dropout-migrate",
+      "mode": "migrate",
+      "checks": 15
+    },
+    {
+      "name": "v5-college_dropout-verify",
+      "mode": "verify",
+      "checks": 98
+    },
+    {
+      "name": "v5-graduate-migrate",
+      "mode": "migrate",
+      "checks": 15
+    },
+    {
+      "name": "v5-graduate-verify",
+      "mode": "verify",
+      "checks": 98
+    },
+    {
+      "name": "v5-ordinary-migrate",
+      "mode": "migrate",
+      "checks": 15
+    },
+    {
+      "name": "v5-ordinary-verify",
+      "mode": "verify",
+      "checks": 98
+    },
+    {
+      "name": "rejections",
+      "mode": "reject",
+      "checks": 99
+    },
+    {
+      "name": "recovery-cold",
+      "mode": "verify_recovery",
+      "checks": 85
+    }
+  ]
+}

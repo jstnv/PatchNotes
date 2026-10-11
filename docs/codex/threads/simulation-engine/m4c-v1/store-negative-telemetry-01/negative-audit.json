@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "expected_exit": 1,
+  "actual_exit": 1,
+  "expected_error": "Telemetry sample differs at step 1",
+  "caught_expected_failure": "negative-telemetry failed (1); see negative-telemetry.log and negative-telemetry.command.json",
+  "mutated_sample": 1,
+  "field": "cash_cents",
+  "original_value": "328000",
+  "altered_value": "328001",
+  "unchanged_sample_state_digest": "f22c2de8ee42576f9a8f8dca4d5ac0ef5ca615ad5575649e1ba0febca17e2ece",
+  "original_telemetry_sha256": "e863ae50889c14758412947a639db444d237e27a2e91167c12370830505e7a2d",
+  "negative_telemetry_sha256": "54645a3b7baf888c8e975cc1d25e175454d3d1115bfc497ede95ff08da460751",
+  "original_bundle_unchanged": true,
+  "private_source_unchanged": true,
+  "scope": "Direct frozen-project CLI intentionally bypasses artifact hash validation only for this negative fixture, so semantic replay must detect the incorrect value."
+}

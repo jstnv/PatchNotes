@@ -1,0 +1,15 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: Isolated restart writer
+PASS: Separate process finds valid saved generation
+PASS: Actual Continue enters Studio
+PASS: Cold Continue restores all typed fields, receipt, Fan exposure and future RNG exactly
+PASS: No offer reissue or duplicate completion after restart
+PASS: Corrupt hands rejects whole restore without touching good generation
+PASS: Corrupt identity rejects whole restore without touching good generation
+PASS: Corrupt terms rejects whole restore without touching good generation
+PASS: Corrupt receipt rejects whole restore without touching good generation
+STARWAVE RESTART continued failures=0
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)

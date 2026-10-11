@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\contracts-starwave-v13-source-copy",
+    "--script",
+    "res://scripts/debug/matched_continuation.gd",
+    "--",
+    "--specialty=action",
+    "--seed=1104",
+    "--arm=starwave",
+    "--input=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sim-v13\\inputs\\action-1104.payload.json",
+    "--out=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sim-v13\\action-1104-starwave\\matched-route.json"
+  ],
+  "exit": 1,
+  "timeout": false,
+  "profile": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\contracts-starwave-v13-profiles\\action-1104-starwave-fp1uppro",
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"cycle\" variable because the value doesn't have a set type.",
+    "ERROR: Failed to load script \"res://scripts/debug/matched_continuation.gd\" with error \"Parse error\"."
+  ],
+  "source_manifest_sha256": "7e87f8b31d60a90c8bae8a73b1d09ef1ae8bc00d92e0dae1f3de32341ae9beea",
+  "runner_sha256": "dc3f323960dd3442957867afe601e1d401079ecb77edc70ddc904ea73db53ad0",
+  "analysis_scripts_sha256": {
+    "cross_specialty_base.gd": "b2346ef2c58efcef192edeef45335f1536a89038010cc8d247cfd96ef2c4b70f",
+    "matched_continuation.gd": "85941f5104e6e04fe97008b462e2591fa816983bd5c7c18c1ea679bcaed4313d"
+  },
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "log": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sim-v13\\action-1104-starwave\\godot.log"
+}

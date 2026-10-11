@@ -1,0 +1,1480 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+PASS: Seven cards form an outward fan (1152)
+PASS: Selected cards extend above the fan and remain raised
+PASS: Four selected cards disable all remaining candidates
+PASS: Native fan pointer cannot select a disabled fifth card
+PASS: Native pointer routing selects the visible foreground card in an overlapping fan
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:105)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:105)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Native specialization commits once before visual playback
+PASS: Presentation owns keyboard focus while the hand resolves
+PASS: Next-pool guidance waits until the current hand presentation finishes
+PASS: Scoreboard holds old value and target while committed candidates are hidden
+PASS: Repeated UI callbacks during animation cannot replay or redraw
+PASS: Unselected candidates shrink and lower while the selected hand centers
+PASS: Specialization header stays hidden during base scoring
+PASS: First bounce updates the scoreboard and exposes a +2 base indicator
+PASS: Specialization header stays hidden during base scoring
+PASS: Specialization header stays hidden during base scoring
+PASS: Specialization header stays hidden during base scoring
+PASS: Specialization header appears with the first bonus
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Cards bounce left to right only after the previous card lands, independent of click order
+PASS: Left-to-right bounces maintain140 BPM
+PASS: Left-to-right bounces maintain140 BPM
+PASS: Left-to-right bounces maintain140 BPM
+PASS: Four bonus bounces form one specialization cycle at4:1
+PASS: Exactly three surviving instances return from the bottom in their previous order
+PASS: Specialization bonuses reveal once per card, left to right
+PASS: Final score bonuses proceed directly to the group slide
+PASS: Exactly four new instances enter from the top one at a time
+PASS: Playback totals exactly match native resolution and makes no extra state changes
+PASS: Guidance becomes available again when the retained pool is playable
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] <anonymous lambda> (res://scripts/phases/design_phase.gd:332)
+       [4] redraw (res://scripts/simulation/development_actions.gd:93)
+       [5] redraw_selected_cards (res://scripts/phases/design_phase.gd:337)
+       [6] play (res://scripts/ui/hand_presentation.gd:130)
+       [7] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:173)
+       [9] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Animated redraw preserves the exact one-card budget and zero-cycle/cash rules
+PASS: Redrawn hand slides right after centering
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Redraw returns to the fan without altering unaffected cards or scores
+PASS: Retained cards lead; replacement follows, without changing authoritative slots
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _production (res://scripts/debug/verify_card_motion.gd:186)
+       [6] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [7] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+PASS: Rejected hand starts no animation and preserves selection and state
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] _replace_design_with_alpha (res://scripts/gameplay.gd:235)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:191)
+       [9] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [10] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:789)
+       [8] open (res://scripts/ui/priority_overlay.gd:115)
+       [9] open_priority_overlay (res://scripts/phases/alpha_phase.gd:776)
+       [10] set_phase (res://scripts/ui/gameplay_hud.gd:195)
+       [11] _replace_design_with_alpha (res://scripts/gameplay.gd:237)
+       [12] _production (res://scripts/debug/verify_card_motion.gd:191)
+       [13] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [14] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+PASS: Native Design-to-Alpha transition succeeds with the new workspace
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] begin_alpha (res://scripts/phases/alpha_phase.gd:175)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [9] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [10] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:789)
+       [8] _close (res://scripts/ui/priority_overlay.gd:159)
+       [9] commit_draft (res://scripts/ui/priority_overlay.gd:149)
+       [10] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [11] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [12] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _install (res://scripts/debug/verify_card_motion.gd:50)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:194)
+       [8] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [9] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] _on_card_pressed (res://scripts/phases/alpha_phase.gd:539)
+       [8] _on_input_button_pressed (res://scripts/cards/card_view.gd:160)
+       [9] _production (res://scripts/debug/verify_card_motion.gd:196)
+       [10] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] _on_card_pressed (res://scripts/phases/alpha_phase.gd:539)
+       [8] _on_input_button_pressed (res://scripts/cards/card_view.gd:160)
+       [9] _production (res://scripts/debug/verify_card_motion.gd:196)
+       [10] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] _on_card_pressed (res://scripts/phases/alpha_phase.gd:539)
+       [8] _on_input_button_pressed (res://scripts/cards/card_view.gd:160)
+       [9] _production (res://scripts/debug/verify_card_motion.gd:196)
+       [10] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] add_alpha_production (res://scripts/project_state.gd:215)
+       [6] <anonymous lambda> (res://scripts/simulation/alpha_hand_command.gd:108)
+       [7] complete_productive_action (res://scripts/run_state.gd:1266)
+       [8] _execute (res://scripts/simulation/alpha_hand_command.gd:125)
+       [9] execute (res://scripts/simulation/alpha_hand_command.gd:40)
+       [10] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:584)
+       [11] play (res://scripts/ui/hand_presentation.gd:130)
+       [12] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [13] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [14] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] advance_cycle (res://scripts/project_state.gd:773)
+       [6] <anonymous lambda> (res://scripts/simulation/alpha_hand_command.gd:122)
+       [7] complete_productive_action (res://scripts/run_state.gd:1266)
+       [8] _execute (res://scripts/simulation/alpha_hand_command.gd:125)
+       [9] execute (res://scripts/simulation/alpha_hand_command.gd:40)
+       [10] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:584)
+       [11] play (res://scripts/ui/hand_presentation.gd:130)
+       [12] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [13] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [14] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)
+       [4] play (res://scripts/ui/hand_presentation.gd:130)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)
+       [4] play (res://scripts/ui/hand_presentation.gd:130)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)
+       [4] play (res://scripts/ui/hand_presentation.gd:130)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+Alpha Specialization hit: Graphics Specialization! Added scores: Graphics +12
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] play (res://scripts/ui/hand_presentation.gd:164)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Alpha uses native scoring with the shared animation
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] _restore_presented_scores (res://scripts/ui/phase_workspace.gd:172)
+       [6] _clear (res://scripts/ui/hand_presentation.gd:431)
+       [7] cancel (res://scripts/ui/hand_presentation.gd:402)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:200)
+       [9] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] _clear (res://scripts/ui/hand_presentation.gd:435)
+       [6] cancel (res://scripts/ui/hand_presentation.gd:402)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:200)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Animation cancellation restores the authoritative scoreboard without rollback or replay
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] add_scope (res://scripts/project_state.gd:790)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:202)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] finalize_alpha (res://scripts/project_state.gd:553)
+       [6] finalize (res://scripts/simulation/development_actions.gd:195)
+       [7] _finalize_alpha (res://scripts/phases/alpha_phase.gd:283)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:203)
+       [9] settle (res://scripts/debug/verify_card_motion.gd:17)
+Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 8; implemented 0; unimplemented 14
+PASS: Native Alpha-to-Beta transition remains available
+Beta hand resolved: Marketing Specialization! Card Value ×1.50 | Marketing Output gained: 6 | Cycle advanced: 1
+PASS: Beta Marketing specialization commits its true output while display waits for bounces
+PASS: Beta displays Marketing gain without inventing Core gains
+Beta hand resolved: QA Specialization! Card Value ×1.50 | Bugs discovered: 7 | Known Bugs fixed: 4 | Cycle advanced: 1
+PASS: QA visual order keeps Known Bugs nonnegative and ends at native Search-before-Debug totals
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/card-presentation-v2/m2d-check-verify_card_motion/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+PASS: Store focus starts from the current overview without jumping or enabling purchase input
+PASS: Selecting an outer Store node smoothly zooms toward it before revealing details (1152)
+PASS: Completed camera focus starts the separate menu animation
+PASS: Store details progressively slide and fade in
+PASS: Finished Store details restore pointer and keyboard input
+PASS: Details slide right from the node border and finish on its right
+PASS: Focused node and right-hand menu fit onscreen
+PASS: Rapid selection cancels the previous camera/menu animation
+PASS: Outside dismissal cancels pending zoom/menu callbacks
+PASS: Store animations are entirely passive
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:77)
+PASS: Seven cards form an outward fan (900)
+PASS: Selected cards extend above the fan and remain raised
+PASS: Four selected cards disable all remaining candidates
+PASS: Native fan pointer cannot select a disabled fifth card
+PASS: Native pointer routing selects the visible foreground card in an overlapping fan
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:105)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:105)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Native specialization commits once before visual playback
+PASS: Presentation owns keyboard focus while the hand resolves
+PASS: Next-pool guidance waits until the current hand presentation finishes
+PASS: Scoreboard holds old value and target while committed candidates are hidden
+PASS: Repeated UI callbacks during animation cannot replay or redraw
+PASS: Unselected candidates shrink and lower while the selected hand centers
+PASS: Specialization header stays hidden during base scoring
+PASS: First bounce updates the scoreboard and exposes a +2 base indicator
+PASS: Specialization header stays hidden during base scoring
+PASS: Specialization header stays hidden during base scoring
+PASS: Specialization header stays hidden during base scoring
+PASS: Specialization header appears with the first bonus
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Cards bounce left to right only after the previous card lands, independent of click order
+PASS: Left-to-right bounces maintain140 BPM
+PASS: Left-to-right bounces maintain140 BPM
+PASS: Left-to-right bounces maintain140 BPM
+PASS: Four bonus bounces form one specialization cycle at4:1
+PASS: Exactly three surviving instances return from the bottom in their previous order
+PASS: Specialization bonuses reveal once per card, left to right
+PASS: Final score bonuses proceed directly to the group slide
+PASS: Exactly four new instances enter from the top one at a time
+PASS: Playback totals exactly match native resolution and makes no extra state changes
+PASS: Guidance becomes available again when the retained pool is playable
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] <anonymous lambda> (res://scripts/phases/design_phase.gd:332)
+       [4] redraw (res://scripts/simulation/development_actions.gd:93)
+       [5] redraw_selected_cards (res://scripts/phases/design_phase.gd:337)
+       [6] play (res://scripts/ui/hand_presentation.gd:130)
+       [7] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:173)
+       [9] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Animated redraw preserves the exact one-card budget and zero-cycle/cash rules
+PASS: Redrawn hand slides right after centering
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Redraw returns to the fan without altering unaffected cards or scores
+PASS: Retained cards lead; replacement follows, without changing authoritative slots
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _production (res://scripts/debug/verify_card_motion.gd:186)
+       [6] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [7] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+PASS: Rejected hand starts no animation and preserves selection and state
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] bind_states (res://scripts/ui/phase_workspace.gd:202)
+       [6] _ready (res://scripts/phases/alpha_phase.gd:86)
+       [7] _replace_design_with_alpha (res://scripts/gameplay.gd:235)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:191)
+       [9] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [10] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:789)
+       [8] open (res://scripts/ui/priority_overlay.gd:115)
+       [9] open_priority_overlay (res://scripts/phases/alpha_phase.gd:776)
+       [10] set_phase (res://scripts/ui/gameplay_hud.gd:195)
+       [11] _replace_design_with_alpha (res://scripts/gameplay.gd:237)
+       [12] _production (res://scripts/debug/verify_card_motion.gd:191)
+       [13] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [14] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+PASS: Native Design-to-Alpha transition succeeds with the new workspace
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'exploration': res://assets/artwork/exploration.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: Artwork not found for card 'music': res://assets/artwork/music.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)
+       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)
+       [5] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [7] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [8] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] begin_alpha (res://scripts/phases/alpha_phase.gd:175)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [9] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [10] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] refresh_overlay_actions (res://scripts/phases/alpha_phase.gd:789)
+       [8] _close (res://scripts/ui/priority_overlay.gd:159)
+       [9] commit_draft (res://scripts/ui/priority_overlay.gd:149)
+       [10] _production (res://scripts/debug/verify_card_motion.gd:193)
+       [11] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [12] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _install (res://scripts/debug/verify_card_motion.gd:50)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:194)
+       [8] _clear (res://scripts/ui/hand_presentation.gd:436)
+       [9] _finish_return (res://scripts/ui/hand_presentation.gd:326)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] _on_card_pressed (res://scripts/phases/alpha_phase.gd:539)
+       [8] _on_input_button_pressed (res://scripts/cards/card_view.gd:160)
+       [9] _production (res://scripts/debug/verify_card_motion.gd:196)
+       [10] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] _on_card_pressed (res://scripts/phases/alpha_phase.gd:539)
+       [8] _on_input_button_pressed (res://scripts/cards/card_view.gd:160)
+       [9] _production (res://scripts/debug/verify_card_motion.gd:196)
+       [10] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:756)
+       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:547)
+       [7] _on_card_pressed (res://scripts/phases/alpha_phase.gd:539)
+       [8] _on_input_button_pressed (res://scripts/cards/card_view.gd:160)
+       [9] _production (res://scripts/debug/verify_card_motion.gd:196)
+       [10] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] add_alpha_production (res://scripts/project_state.gd:215)
+       [6] <anonymous lambda> (res://scripts/simulation/alpha_hand_command.gd:108)
+       [7] complete_productive_action (res://scripts/run_state.gd:1266)
+       [8] _execute (res://scripts/simulation/alpha_hand_command.gd:125)
+       [9] execute (res://scripts/simulation/alpha_hand_command.gd:40)
+       [10] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:584)
+       [11] play (res://scripts/ui/hand_presentation.gd:130)
+       [12] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [13] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [14] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] advance_cycle (res://scripts/project_state.gd:773)
+       [6] <anonymous lambda> (res://scripts/simulation/alpha_hand_command.gd:122)
+       [7] complete_productive_action (res://scripts/run_state.gd:1266)
+       [8] _execute (res://scripts/simulation/alpha_hand_command.gd:125)
+       [9] execute (res://scripts/simulation/alpha_hand_command.gd:40)
+       [10] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:584)
+       [11] play (res://scripts/ui/hand_presentation.gd:130)
+       [12] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [13] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [14] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)
+       [4] play (res://scripts/ui/hand_presentation.gd:130)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)
+       [4] play (res://scripts/ui/hand_presentation.gd:130)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)
+       [4] play (res://scripts/ui/hand_presentation.gd:130)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)
+       [4] play (res://scripts/ui/hand_presentation.gd:130)
+       [5] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+Alpha Specialization hit: Graphics Specialization! Added scores: Graphics +12
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] play (res://scripts/ui/hand_presentation.gd:164)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:197)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Alpha uses native scoring with the shared animation
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] _restore_presented_scores (res://scripts/ui/phase_workspace.gd:172)
+       [6] _clear (res://scripts/ui/hand_presentation.gd:431)
+       [7] cancel (res://scripts/ui/hand_presentation.gd:402)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:200)
+       [9] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] _clear (res://scripts/ui/hand_presentation.gd:435)
+       [6] cancel (res://scripts/ui/hand_presentation.gd:402)
+       [7] _production (res://scripts/debug/verify_card_motion.gd:200)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Animation cancellation restores the authoritative scoreboard without rollback or replay
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] add_scope (res://scripts/project_state.gd:790)
+       [6] _production (res://scripts/debug/verify_card_motion.gd:202)
+       [7] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: A complete Alpha action requires four current candidate instances.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:336)
+       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:677)
+       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)
+       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:797)
+       [4] refresh (res://scripts/ui/phase_workspace.gd:207)
+       [5] finalize_alpha (res://scripts/project_state.gd:553)
+       [6] finalize (res://scripts/simulation/development_actions.gd:195)
+       [7] _finalize_alpha (res://scripts/phases/alpha_phase.gd:283)
+       [8] _production (res://scripts/debug/verify_card_motion.gd:203)
+       [9] settle (res://scripts/debug/verify_card_motion.gd:17)
+Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 8; implemented 0; unimplemented 14
+PASS: Native Alpha-to-Beta transition remains available
+Beta hand resolved: Marketing Specialization! Card Value ×1.50 | Marketing Output gained: 6 | Cycle advanced: 1
+PASS: Beta Marketing specialization commits its true output while display waits for bounces
+PASS: Beta displays Marketing gain without inventing Core gains
+Beta hand resolved: QA Specialization! Card Value ×1.50 | Bugs discovered: 7 | Known Bugs fixed: 4 | Cycle advanced: 1
+PASS: QA visual order keeps Known Bugs nonnegative and ends at native Search-before-Debug totals
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/card-presentation-v2/m2d-check-verify_card_motion/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+PASS: Store focus starts from the current overview without jumping or enabling purchase input
+PASS: Selecting an outer Store node smoothly zooms toward it before revealing details (900)
+PASS: Completed camera focus starts the separate menu animation
+PASS: Store details progressively slide and fade in
+PASS: Finished Store details restore pointer and keyboard input
+PASS: Details slide right from the node border and finish on its right
+PASS: Focused node and right-hand menu fit onscreen
+PASS: Rapid selection cancels the previous camera/menu animation
+PASS: Outside dismissal cancels pending zoom/menu callbacks
+PASS: Store animations are entirely passive
+PASS: Paid fixture uses the named-Studio economy and native Action ownership
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:325)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:325)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:325)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:325)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:325)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:142)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:325)
+PASS: Seeded native draw provides a paid Feature hand without fixture replacement
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:334)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:334)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:334)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:334)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:334)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:334)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _paid_hand (res://scripts/debug/verify_card_motion.gd:334)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _paid_hand (res://scripts/debug/verify_card_motion.gd:334)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Paid animated hand spends the exact native quote once and keeps the one-cent remainder
+PASS: Animated Feature play grants normal familiarity and finite exhaustion exactly once
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:350)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:350)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:350)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'local_leaderboards': res://assets/artwork/local_leaderboards.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:350)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] play (res://scripts/ui/hand_presentation.gd:113)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _paid_hand (res://scripts/debug/verify_card_motion.gd:350)
+       [6] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Unaffordable native hand preserves cash, cycles, redraws and selection without an animation
+PASS: Presentation allocation retains exact totals near the signed-integer limit
+WARNING: Artwork not found for card 'character_backstories': res://assets/artwork/character_backstories.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:314)
+       [5] _ready (res://scripts/phases/contract_phase.gd:65)
+       [6] _contract (res://scripts/debug/verify_card_motion.gd:382)
+       [7] _verify (res://scripts/debug/verify_card_motion.gd:61)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:358)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:314)
+       [5] _ready (res://scripts/phases/contract_phase.gd:65)
+       [6] _contract (res://scripts/debug/verify_card_motion.gd:382)
+       [7] _verify (res://scripts/debug/verify_card_motion.gd:61)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:358)
+WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:314)
+       [5] _ready (res://scripts/phases/contract_phase.gd:65)
+       [6] _contract (res://scripts/debug/verify_card_motion.gd:382)
+       [7] _verify (res://scripts/debug/verify_card_motion.gd:61)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:358)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:314)
+       [5] _ready (res://scripts/phases/contract_phase.gd:65)
+       [6] _contract (res://scripts/debug/verify_card_motion.gd:382)
+       [7] _verify (res://scripts/debug/verify_card_motion.gd:61)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:358)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:314)
+       [5] _ready (res://scripts/phases/contract_phase.gd:65)
+       [6] _contract (res://scripts/debug/verify_card_motion.gd:382)
+       [7] _verify (res://scripts/debug/verify_card_motion.gd:61)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:358)
+WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:314)
+       [5] _ready (res://scripts/phases/contract_phase.gd:65)
+       [6] _contract (res://scripts/debug/verify_card_motion.gd:382)
+       [7] _verify (res://scripts/debug/verify_card_motion.gd:61)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:358)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:314)
+       [5] _ready (res://scripts/phases/contract_phase.gd:65)
+       [6] _contract (res://scripts/debug/verify_card_motion.gd:382)
+       [7] _verify (res://scripts/debug/verify_card_motion.gd:61)
+       [8] _paid_hand (res://scripts/debug/verify_card_motion.gd:358)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+   at: _set_size (scene/gui/control.cpp:1519)
+   GDScript backtrace (most recent call first):
+       [0] _contract (res://scripts/debug/verify_card_motion.gd:383)
+       [1] _verify (res://scripts/debug/verify_card_motion.gd:61)
+       [2] _paid_hand (res://scripts/debug/verify_card_motion.gd:358)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:427)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:203)
+       [7] _contract (res://scripts/debug/verify_card_motion.gd:392)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:427)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:203)
+       [7] _contract (res://scripts/debug/verify_card_motion.gd:392)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:427)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:203)
+       [7] _contract (res://scripts/debug/verify_card_motion.gd:392)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:501)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:427)
+       [5] play (res://scripts/ui/hand_presentation.gd:130)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:203)
+       [7] _contract (res://scripts/debug/verify_card_motion.gd:392)
+       [8] settle (res://scripts/debug/verify_card_motion.gd:17)
+PASS: Contract commits hand once before presentation
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:147)
+       [1] refresh (res://scripts/cards/card_view.gd:96)
+       [2] _ready (res://scripts/cards/card_view.gd:33)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:301)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:63)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+PASS: Contract returns the exact three duplicate Pass instances and deals only four new ones
+PASS: Contract animation preserves half-unit Specialization totals
+PASS: Contract commits hand once before presentation
+PASS: Contract completion waits until final hand finishes its visual sequence
+PASS: Contract animation preserves half-unit Specialization totals
+PASS: Final bounce reveals native completion with exactly two productive cycles
+PASS: Contract presentation leaves the frozen released project untouched
+Card motion verification: 0 failures
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

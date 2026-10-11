@@ -38,6 +38,14 @@ var _research_button: Button
 var _research_quote: Dictionary = {}
 var _admission_dialog: ConfirmationDialog
 
+class PoolSummaryLabel extends Label:
+	func _make_custom_tooltip(for_text: String) -> Object:
+		var label := Label.new()
+		label.custom_minimum_size.x = minf(480, get_viewport_rect().size.x - 48)
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.text = for_text
+		return label
+
 static func score_label(stat: StringName) -> String:
 	return "Tech" if stat == &"technology" else str(stat).capitalize()
 
@@ -61,10 +69,10 @@ func setup(run: RunState) -> void:
 	close.text = "Close Store"
 	close.pressed.connect(hide)
 	header.add_child(close)
-	_owned_summary = Label.new()
+	_owned_summary = PoolSummaryLabel.new()
 	_owned_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_owned_summary.add_theme_font_size_override("font_size", 14)
-	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Play cost is once per owned Feature in a project; Passes are free. Later Store Features have no defined play price yet."
+	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Play cost is once per owned Feature in a project; Passes are free. Later Store Features have no defined play price yet.\n\nOwned Features join games started after you acquire them. Each game keeps the Feature supply it started with. Ownership does not guarantee a draw or play."
 	layout.add_child(_owned_summary)
 	_spending_advice = Label.new()
 	_spending_advice.name = "SpendingAdvice"
@@ -150,18 +158,10 @@ func _refresh() -> void:
 			if not reserve.affordable:
 				status += " · Need cash"
 			color = Color("244b70") if reserve.can_purchase else Color("674c24")
-		if not offer.is_empty() and not offer.owned:
-			status = "Available" if offer.unlocked else "Locked"
-			color = Color("244b70") if offer.unlocked else Color("343943")
-			if offer.unlocked and not offer.affordable:
-				status = "Available • Need cash"
-				color = Color("674c24")
-			if _run.needs_starter_selection():
-				status = "After first game"
-				color = Color("343943")
 		var research := _run.get_feature_research_quote(id)
-		if not _run.needs_starter_selection() and not _run.owns_feature(id):
-			status = "Research head" if research.head else "Queued" if research.queued else "Locked" if not research.unlocked else "Queue available" if research.can_admit else "Queue - Need cash / clear bills"
+		if not _run.owns_feature(id) and (not offer.is_empty() or not _run.needs_starter_selection()):
+			status = queue_status(research)
+			color = Color("244b70") if research.can_admit or research.queued else Color("674c24")
 		var card: CardData = get_node("/root/CardDatabase").get_card(id)
 		button.text = card.card_name + "\n" + status
 		(button.get_node("MapStatus") as Label).text = status
@@ -177,6 +177,9 @@ func _refresh() -> void:
 			button.tooltip_text += "\nPrimitive %s · %s" % ["starter" if reserve.initial else "reserve", CashFormatter.format_exact_cents(reserve.price_cents)]
 		else:
 			button.tooltip_text += "\nOwned Primitive Feature"
+		if not _run.owns_feature(id) and (not offer.is_empty() or not _run.needs_starter_selection()):
+			var blocks := queue_block_reasons(research)
+			if not blocks.is_empty(): button.tooltip_text += "\n" + "\n".join(blocks)
 		for style_name: String in ["normal", "hover", "pressed", "focus"]:
 			var style := StyleBoxFlat.new()
 			style.bg_color = color.lightened(0.12) if style_name == "hover" else color
@@ -187,6 +190,37 @@ func _refresh() -> void:
 			button.add_theme_stylebox_override(style_name, style)
 	_tree.queue_redraw()
 	_show_details()
+
+
+func queue_block_reasons(quote: Dictionary) -> Array[String]:
+	# Explain the live quote; never substitute full-card affordability for its deposit.
+	var reasons: Array[String] = []
+	if quote.is_empty(): return ["Feature queue unavailable; check Finances."]
+	if quote.queued or _run.owns_feature(quote.feature_id): return reasons
+	if _run.needs_starter_selection(): reasons.append("Available after first game")
+	if not quote.unlocked:
+		var offer := _run.get_feature_store_offer(quote.feature_id)
+		reasons.append("Locked — " + str(offer.get("prerequisite", "Prerequisite required")))
+	if quote.cash_cents < quote.down_cents:
+		reasons.append("Need %s to queue" % CashFormatter.format_exact_cents(quote.down_cents))
+	var finance := _run.get_financial_block_reason()
+	if finance.begins_with("Unpaid bills:"):
+		reasons.append("Clear overdue bills to queue")
+	elif not finance.is_empty() or not _run.is_cash_initialized():
+		reasons.append("Feature queue unavailable; check Finances.")
+	return reasons
+
+
+func queue_status(quote: Dictionary) -> String:
+	if quote.is_empty(): return "Queue unavailable"
+	if quote.head: return "Research head"
+	if quote.queued: return "Queued"
+	if quote.can_admit: return "Queue available"
+	var reasons := queue_block_reasons(quote)
+	if reasons.is_empty(): return "Queue unavailable"
+	if reasons[0].begins_with("Locked —"): return "Locked"
+	if reasons[0].begins_with("Feature queue unavailable"): return "Queue unavailable"
+	return reasons[0]
 
 
 func _summarize_owned_features() -> Dictionary:
@@ -311,6 +345,9 @@ func _purchase() -> void:
 	_admission_dialog = ConfirmationDialog.new()
 	_admission_dialog.title = "Queue Feature research?"
 	_admission_dialog.dialog_text = "Pay %s now (0 cycles). This down payment is irreversible.\nNo cancellation or reordering. Ownership begins only after research finishes.\nNext installment at current familiarity: %s; 1 productive cycle.\nFuture familiarity can change the remaining price." % [CashFormatter.format_exact_cents(quote.down_cents),CashFormatter.format_exact_cents(quote.due_cents)]
+	_admission_dialog.dialog_text += "\n\nAfter research completes, the Feature can enter games you start later. It is not guaranteed to be drawn or played."
+	_admission_dialog.get_label().custom_minimum_size.x = minf(560, get_viewport_rect().size.x - 100)
+	_admission_dialog.get_label().autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_admission_dialog.confirmed.connect(func():
 		_run.admit_feature_research(quote)
 		_refresh())
