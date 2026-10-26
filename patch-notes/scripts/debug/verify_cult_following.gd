@@ -9,6 +9,8 @@ func make_run(ids: Array, version: int = 8) -> RunState:
 	var run := RunState.new()
 	run.initialize_cash_cents(0)
 	check(run._commit_studio_creation("Cult trial", &"action", StudioTraits.evaluate_traits(ids, version)), "Creation")
+	# Historical trait fixtures also predate founding-roster metadata.
+	if version < 8: run._founding_roster_version = 1
 	return run
 func _run() -> void:
 	var adapter := StudioCheckpoint.new()
@@ -16,7 +18,7 @@ func _run() -> void:
 		var run := make_run(ids)
 		var fans := 20 if ids.has(&"cult_following") else 0
 		check(run.get_fans() == fans, "Seed in ordinary counter")
-		check(run.get_studio_traits().version == 8 and StudioFanbase.awareness_for(run.get_fans()) == (5 if fans > 0 else 0), "New version8 seed uses ordinary quarter-Fan Awareness")
+		check(run.get_studio_traits().version == 8 and StudioFanbase.awareness_for(run.get_fans()) == (5 if fans > 0 else 0), "Explicit version8 fixture seed uses ordinary quarter-Fan Awareness")
 		check(run.get_cash_cents() == 550000 + run.get_studio_traits().point_cash_cents + run.get_studio_traits().family_funding_cents, "Exact startup finance")
 		if ids == [&"cult_following"]: check(run.get_cash_cents() == 565000 and run.get_studio_traits().spent_points == 1, "Cult one point / 5650")
 		var payload := adapter.capture(run)
@@ -27,7 +29,7 @@ func _run() -> void:
 			bad.run.fanbase[field] = "999"
 			check(not adapter.validate(bad).is_empty(), "Reject injected " + field)
 		var bad := payload.duplicate(true)
-		bad.run.studio_traits.version = "9"
+		bad.run.studio_traits.version = "10"
 		check(not adapter.validate(bad).is_empty(), "Reject unknown version")
 		bad = payload.duplicate(true); bad.content_revision = adapter._rules_revision(StudioCheckpoint.PRE_CULT_RULES)
 		check(not adapter.validate(bad).is_empty(), "New traits cannot masquerade as old content")
@@ -45,13 +47,35 @@ func _run() -> void:
 		check(old.get_fans() == 40 and StudioTraits.starting_fans(old.get_studio_traits()) == 40 and StudioFanbase.awareness_for(old.get_fans()) == 10, "Version7 retains original forty-Fan seed and Awareness")
 		var payload := adapter.capture(old)
 		check(not payload.is_empty(), "Version7 selection can be saved under current rules")
+		var search: Dictionary = payload.run.contract_search.duplicate(true)
+		payload.run.erase("contract_search") # Construct the real pre-Search shape.
+		var relationships: Dictionary = payload.run.publisher_relationships.duplicate(true)
+		payload.run.erase("publisher_relationships") # Construct the actual pre-P1 shape.
+		check(payload.run.commission_deals == [] and payload.run.sidestreet_briefs == [], "Historical Cult fixture has no P2/P3 activity")
+		payload.run.erase("commission_deals")
+		payload.run.erase("sidestreet_briefs")
+		for field: String in ["support_deals","support_rights","support_assessments"]:
+			check(payload.run[field] == [],"Historical Cult fixture has no P4 activity: "+field)
+			payload.run.erase(field)
 		payload.content_revision = adapter._rules_revision(StudioCheckpoint.PRE_CULT20_RULES)
 		var restored := adapter.hydrate(payload)
 		var expected := payload.duplicate(true); expected.content_revision = adapter.revision()
+		expected.run.contract_search = search
+		expected.run.publisher_relationships = relationships
+		expected.run.commission_deals = []
+		expected.run.sidestreet_briefs = []
+		for field: String in ["support_deals","support_rights","support_assessments"]: expected.run[field] = []
 		check(restored != null and adapter.capture(restored) == expected, "Old Cult revision preserves the complete saved state without restamping traits")
+		for field: String in ["commission_deals", "sidestreet_briefs","support_deals","support_rights","support_assessments"]:
+			var mixed := payload.duplicate(true); mixed.run[field] = []
+			check(not adapter.validate(mixed).is_empty(), "Historical revision rejects added P2/P3 field: " + field)
 		var bad := payload.duplicate(true); bad.run.studio_traits.version = "8"
 		check(not adapter.validate(bad).is_empty(), "Old content rejects retroactive version8")
 		bad.content_revision = adapter.revision()
+		bad.run.publisher_relationships = relationships # Keep the trait-provenance negative isolated.
+		bad.run.commission_deals = []
+		bad.run.sidestreet_briefs = []
+		for field: String in ["support_deals","support_rights","support_assessments"]: bad.run[field] = []
 		check(not adapter.validate(bad).is_empty(), "Forty-Fan provenance rejects version8 even under current content")
 		bad = payload.duplicate(true); bad.content_revision = adapter._rules_revision(StudioCheckpoint.PRE_CULT_RULES)
 		check(not adapter.validate(bad).is_empty(), "Active version7 cannot masquerade as inactive Cult content")
@@ -59,6 +83,14 @@ func _run() -> void:
 		var old := make_run([&"cult_following"],version)
 		check(old.get_fans() == 0 and old.get_cash_cents() == 570000 and not StudioTraits.is_active(old.get_studio_traits(), &"cult_following"), "Historical Cult stays preview")
 		var payload := adapter.capture(old)
+		payload.run.erase("contract_search") # Historical previews predate Search.
+		payload.run.erase("publisher_relationships") # Historical previews predate P1.
+		check(payload.run.commission_deals == [] and payload.run.sidestreet_briefs == [], "Historical preview fixture has no P2/P3 activity")
+		payload.run.erase("commission_deals")
+		payload.run.erase("sidestreet_briefs")
+		for field: String in ["support_deals","support_rights","support_assessments"]:
+			check(payload.run[field] == [],"Historical preview fixture has no P4 activity: "+field)
+			payload.run.erase(field)
 		payload.content_revision = adapter._rules_revision(StudioCheckpoint.PRE_CULT_RULES)
 		var restored := adapter.hydrate(payload)
 		check(restored != null and restored.get_fans() == 0 and restored.get_cash_cents() == 570000, "Old revision preserves previews")
@@ -68,7 +100,7 @@ func _run() -> void:
 		var bad := payload.duplicate(true); bad.run.studio_traits.version = "7"
 		check(not adapter.validate(bad).is_empty(), "Reject retroactive version activation")
 	var fresh := RunState.new(); fresh.initialize_cash_cents(0)
-	for invalid: Array in [[&"cult_following", &"cult_following"], [&"cult_following", &"studio_buzz", &"family_funding"], [&"cult_following", &"graduate", &"unknown_name"]]:
+	for invalid: Array in [[&"cult_following", &"cult_following"], [&"cult_following", &"studio_buzz", &"family_funding", &"lean_production"], [&"cult_following", &"graduate", &"college_dropout"]]:
 		check(not fresh.create_studio_with_traits("Bad", &"action", invalid) and fresh.get_fans() == 0 and fresh.get_cash_cents() == 0 and fresh.get_studio_traits().is_empty(), "Invalid confirmation atomic")
 	# Constructed domain cases isolate neutrality and loss; native routes supply legal launches.
 	for seed in [20,40]:

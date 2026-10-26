@@ -1,0 +1,24 @@
+# UI design system — 2026-10-25
+
+Direct user implementation brief: contemporary minimalist retro-tech identity; approved nine-color palette and Chakra Petch / IBM Plex Sans / IBM Plex Mono; reusable folders and stack navigation; full-screen Studio Creation and complementary Main Menu. Preserve gameplay, all actions, traits, specialty rosters, validation, keyboard/mouse and existing resolutions. The previous icon-only hold is superseded for this UI pass.
+
+## Implementation decisions
+
+- Keep one canonical `workspace_theme.tres`, with named color tokens and font/style variations. Headings/tabs/buttons use Chakra Petch; body uses Plex Sans; numerical metadata uses Plex Mono. Bundle authentic licensed fonts and full license text/provenance. Keep the full existing logo artwork.
+- Add small reusable folder surface/header/tab/sidebar/document primitives. Existing trait evaluator and all creation validation remain authoritative. Studio Name stays above tabs; fixed footer keeps points/cash and Create Studio visible. Selected/Available and positive/negative lists retain independent scrolling.
+- Extend `MenuTransitions` with a bounded navigation stack; do not create another transition controller. Main Menu owns one stack instance, while the existing global entrance watcher skips managed views. Push slides a folder in from the right for0.24s; pop reverses it. Disable GUI interaction during unsafe transitions, reject duplicate navigation, restore valid focus and release owned input locks on teardown. An explicit animation bypass produces the same state synchronously.
+- Main Menu is the root. Studio Creation, How to Play and Settings are destinations. Tabs do not push. Existing overlay open/close APIs retain ordinary gameplay/pause behavior; title navigation optionally supplies the same stack.
+- Back/Esc preserves the live setup draft, active tab, scroll and attention state. Resume setup reopens it. Explicit confirmed Discard clears it; initial New Run replacement confirmation remains. Creating Studio commits once and discards navigation with the menu; Back cannot reach a completed creation.
+- Use generous viewport margins and a compact left navigation; a full wordmark with ample room remains primary branding. No unrelated menu layout overhaul, scoring/simulation/finance changes or new gameplay action.
+
+## Acceptance
+
+Actual stack depth/direction/duplicate and teardown/bypass tests; draft/name/Genre/trait/attention/scroll/focus preservation; all eight unchanged specialty rosters; invalid/negative balance and one-time creation; existing replacement modal, guide/settings/Continue/quit behavior. Headless focused regressions and native pointer/keyboard captures at1152×648 and1280×720; inspect bounds, readability and all three tabs. Pin source and cold-check exact preceding Studio/world/RNG when runtime identity changes. Font attribution and packaging checks are separate from final human/audible/release acceptance.
+
+## Implemented and verified locally
+
+2026-10-25 Settings motion correction: bounded folder hosts retain responsive sizing/top margins while the existing title stack owns horizontal motion. Clear that ownership and restore layout/focus/input on completion or teardown. This fixes Container layout canceling Settings' already-wired push/pop without creating another transition system or changing0.24s duration. [Native rendered trajectories, focused checks and package](../findings/title-settings-motion-20261025-v1/README.md).
+
+2026-10-25 side-padding correction: shared automatic menu entrances must capture their resting X only after Container layout settles, invalidate superseded requests and honor current padding after resize/completion. Preserve existing authored horizontal/vertical insets rather than compensating with larger margins. The actual Contract completion route now installs the same watcher as Gameplay in its verifier; shared panel reopen/resize/teardown regressions cover the timing race. [Source, native captures and focused evidence](../findings/menu-padding-20261025-v1/README.md).
+
+2026-10-25: Foundation/reference screens complete.20 distinct maintained suites have passing receipts on identical production source; final focused89/89 headless and105/105 native, guided115/115. Fourteen native captures include both supported sizes and all setup tabs. Prior editor/Paper Icon worlds retain exact saved state/RNG. [Source, component/file contract, fonts, captures, retained failures and limits](../findings/ui-design-system-20261025-v1/README.md). No new EXE or unrelated menu migration is implied.

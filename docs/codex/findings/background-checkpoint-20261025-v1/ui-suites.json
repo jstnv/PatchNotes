@@ -1,0 +1,70 @@
+[
+  {
+    "name": "verify_new_save_loading",
+    "ok": true,
+    "seconds": 3.922,
+    "errors": []
+  },
+  {
+    "name": "verify_save_tutorial_invitation",
+    "ok": true,
+    "seconds": 8.297,
+    "errors": []
+  },
+  {
+    "name": "verify_continue_loading",
+    "ok": false,
+    "seconds": 7.172,
+    "errors": [
+      "ERROR: Rival Gameplay: Continue does not rewrite generation bytes or repeat settlements",
+      "ERROR: Rival Gameplay: Continue does not rewrite generation bytes or repeat settlements",
+      "ERROR: Rival Gameplay: Corrupt save after preview never attaches partial restored state",
+      "SCRIPT ERROR: Invalid access to property or key 'visible' on a base object of type 'Nil'.",
+      "ERROR: Node not found: \"ContinueLoading\" (relative to \"/root/@Control@1454\").",
+      "SCRIPT ERROR: Invalid access to property or key 'stage_label' on a base object of type 'null instance'.",
+      "ERROR: Attempting to make child window exclusive, but the parent window already has another exclusive child. This window: /root/@Control@1762/@ConfirmationDialog@2067, parent window: /root, current exclusive child window: /root/@Control@1454/@ConfirmationDialog@1759",
+      "ERROR: Rival Gameplay: Canceling corrupt-save recovery still allows explicitly requested New Run"
+    ]
+  },
+  {
+    "name": "verify_pause_menu",
+    "ok": false,
+    "seconds": 13.297,
+    "errors": [
+      "ERROR: Rival Gameplay: Escape opens Pause",
+      "ERROR: Rival Gameplay: Resume owns initial focus",
+      "ERROR: Rival Gameplay: Gameplay Timer is frozen",
+      "ERROR: Rival Gameplay: Music and grid keep running with full pause treatment",
+      "ERROR: Rival Gameplay: Reverse Tab wraps inside Pause",
+      "ERROR: Rival Gameplay: Arrow navigation reaches Settings",
+      "ERROR: Rival Gameplay: Settings opens while game remains paused",
+      "ERROR: Rival Gameplay: Settings owns Tab while paused",
+      "ERROR: Rival Gameplay: Audio settings can be saved while paused",
+      "ERROR: Rival Gameplay: Display preview can start while paused",
+      "ERROR: Rival Gameplay: Timed display revert still processes while paused",
+      "ERROR: Rival Gameplay: Settings restores Pause focus",
+      "ERROR: Rival Gameplay: Resume restores gameplay focus",
+      "ERROR: Rival Gameplay: Timer and music grid continue after Resume",
+      "ERROR: Rival Gameplay: Failed flush keeps game and opens usable recovery",
+      "ERROR: Can't use get_node() with absolute paths from outside the active scene tree.",
+      "SCRIPT ERROR: Invalid call. Nonexistent function 'use_synergy_presenter' in base 'Nil'."
+    ]
+  },
+  {
+    "name": "verify_contract_search_ui",
+    "ok": true,
+    "seconds": 9.516,
+    "errors": []
+  },
+  {
+    "name": "verify_gameplay_transition",
+    "ok": false,
+    "seconds": 3.843,
+    "errors": [
+      "ERROR: Failed to instantiate scene state of \"\", node count is 0. Make sure the PackedScene resource is valid.",
+      "ERROR: Could not instantiate a valid AlphaPhase placeholder.",
+      "ERROR: Failed to instantiate scene state of \"\", node count is 0. Make sure the PackedScene resource is valid.",
+      "ERROR: Could not instantiate a valid BetaPhase placeholder."
+    ]
+  }
+]

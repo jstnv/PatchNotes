@@ -1,0 +1,22 @@
+# AI Competitors held-plan session — 2026-10-11
+
+## Workspace and scope
+
+- Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f` at start and source capture; shared worktree dirty. At start the tracked edit was `docs/codex/design/feature-store-progression.md`. Later concurrent TODO, Fanbase and Contracts documentation edits were preserved. No canonical `patch-notes/` gameplay, `.codex-godot-temp`, player saves, computer UI, commit or push was changed by this session.
+- Continued the AI Competitors design thread under the prior user authorization for bounded headless studies and private simulator versions. The question was whether a single held development allowance restores a comparable owned-pool baseline across the current Store screen. The [plan](2026-10-11-g2-held-plan-study-plan-v1.md) was saved before execution.
+- Created [private variant `g2-held-plan-v1`](simulators/g2-held-plan-v1/variant.json) from v3; the only new candidate code edit was its private verifier's explicit held-cash input/unfunded return. Saved [input config](2026-10-11-g2-held-plan-prefix-v1.json), [finding](2026-10-11-g2-held-plan-finding-v1.md), [candidate decision and alternatives](2026-10-11-g2-held-plan-candidate-decision-v1.md). Updated this thread's README/working notes plus cross-system `docs/codex/DECISIONS.md`, current state and a minimal DESIGN-review paragraph in TODO item 22. Other edits were not overwritten.
+
+## Exact checks and outcomes
+
+- `tools/simulator_variant.py create --id g2-held-plan-v1 --owner ai-competitors --from-variant .../g2-legal-mix-v3 --output .../g2-held-plan-v1` succeeded; original baseline, ancestry and creation identity are retained in `variant.json`.
+- `tools/simulate.py run --variant .../g2-held-plan-v1 --config .../2026-10-11-g2-held-plan-prefix-v1.json --output .../sims/g2-held-plan-prefix-v1 --timeout 240` succeeded: seeds 4417/90210, one legal release, 18 commands and cycle 7 each. Two separate `tools/simulate.py replay` runs passed 36 command states and 38 telemetry samples total. Full paths/Godot arguments and identities are in the [finding](2026-10-11-g2-held-plan-finding-v1.md) and [run report](sims/g2-held-plan-prefix-v1/run-report.json).
+- Frozen-project private verifier unit/reference mode passed 105 checks. Twenty-two Store process records passed: 16 completed legal Research plus exact before/after search, six retained parent-locked admissions, zero timeout or failed process. The [aggregate audit](sims/g2-held-plan-checks-v1/aggregate.json) found zero input-state/RNG, held-cash, owned-pool, baseline, search-completeness or funding mismatches. At the held 60,000-cent control, all completed rows used Core 14/2/14/20 as the same baseline. Four fresh acquisition replays passed two commands each; [replay summary](sims/g2-held-plan-checks-v1/replay-summary.json). Per-process exact arguments, profiles, logs and result JSON remain in the check folders.
+- Targeted Markdown local-link check of the three new study/decision/finding records found zero missing links. No full canonical gameplay suite was run because this candidate did not change canonical source and its private edit only changes the verifier.
+
+## Limits and next work
+
+The 60,000-cent/1/1 allowance is an experimental control, not AI balance. Neither an actual pre-admission reserve guard nor full rent/payroll/Bank/education due accounting is proved. F5 runtime ranking, F6 prerequisite progression, 2/2–3/3 exact search, canonical source drift reconciliation, G1a roster/migration, G4/G5 and market Review effects remain OPEN. The TODO entry remains **DESIGN review needed**, with no adoption packet or implementation queue. Next study should settle a cash/due protocol from current-source liability cases before selecting a numerical AI plan.
+
+## Same-day negative-control addendum
+
+After the first finding, a [separate predeclared control](2026-10-11-g2-held-plan-unfunded-control-plan-v1.md) reused its frozen variant/checkpoints at a **100,000-cent negative-control** allowance for Save Files only. Two private processes passed: post-Research after-dues cash 62,321/80,713 cents caused `held_plan_unfunded`, with legal two-command acquisition tapes and no baseline/after/rank. One acquisition tape replayed in a fresh process. [Exact commands, failures and remaining boundary](2026-10-11-g2-held-plan-unfunded-control-finding-v1.md). The original 60,000-cent screen was not rerun or changed; no gameplay value was approved.

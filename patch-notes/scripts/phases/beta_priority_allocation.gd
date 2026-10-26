@@ -3,7 +3,8 @@ extends RefCounted
 
 signal allocation_changed
 
-const MIN_PRIORITY := 5
+const MIN_PRIORITY := 10
+const SAVED_MIN_PRIORITY := 5
 const MAX_PRIORITY := 50
 const PRIORITY_STEP := 5
 const REQUIRED_TOTAL_PRIORITY := 100
@@ -49,7 +50,14 @@ static func is_valid_distribution(distribution: Dictionary) -> bool:
 		if not distribution.has(category) or typeof(distribution[category]) != TYPE_INT:
 			return false
 		var value: int = distribution[category]
-		if value < MIN_PRIORITY or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
+		if value < SAVED_MIN_PRIORITY or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
 			return false
 		total += value
 	return total == REQUIRED_TOTAL_PRIORITY
+
+
+static func is_valid_new_distribution(distribution: Dictionary) -> bool:
+	if not is_valid_distribution(distribution): return false
+	for amount: int in distribution.values():
+		if amount < MIN_PRIORITY: return false
+	return true

@@ -129,7 +129,7 @@ func commit_priority_distribution(distribution: Dictionary = _priority_draft) ->
 		return set_priority_distribution(distribution)
 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested or _project_state == null or _run_state == null:
 		return false
-	if not PriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle():
+	if not PriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle():
 		return false
 	var publish:=func() -> void:
 		_priority_draft=_priority_allocation.get_priority_distribution()
@@ -155,7 +155,7 @@ func get_available_priority() -> int:
 
 
 func set_priority_distribution(distribution: Dictionary) -> bool:
-	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_distribution(distribution): return false
+	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_new_distribution(distribution): return false
 	if not _priority_allocation.set_distribution(distribution): return false
 	_priority_draft = _priority_allocation.get_priority_distribution()
 	_sync_priority_controls()
@@ -166,7 +166,7 @@ func begin_design() -> bool:
 	if is_gameplay_input_blocked(): return false
 	if _phase_state != PhaseState.PLANNING or _finalization_requested:
 		return false
-	if not PriorityAllocation.is_valid_distribution(_priority_draft) or not _priority_allocation.set_distribution(_priority_draft) or not _initialize_design_lifecycle():
+	if not PriorityAllocation.is_valid_new_distribution(_priority_draft) or not _priority_allocation.set_distribution(_priority_draft) or not _initialize_design_lifecycle():
 		push_warning("Could not begin Design because the initial weighted candidate pool could not be dealt.")
 		return false
 	_phase_state = PhaseState.ACTIVE_DEVELOPMENT
@@ -227,8 +227,8 @@ func _sync_priority_controls() -> void:
 	%DesignPriorityValue.text = str(values[ProjectState.CoreScore.DESIGN])
 	var total := 0
 	for amount: int in values.values(): total += amount
-	%DesignAvailablePriority.text = "Available Priority: %d" % (PriorityAllocation.MAX_TOTAL_PRIORITY - total)
-	%CommitPrioritiesButton.disabled = _finalization_requested or not PriorityAllocation.is_valid_distribution(values) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
+	%DesignAvailablePriority.text = "%d/100" % total
+	%CommitPrioritiesButton.disabled = _finalization_requested or not PriorityAllocation.is_valid_new_distribution(values) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
 	_syncing_priority_controls = false
 
 
@@ -339,7 +339,7 @@ func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
 		for view in prepared: view.free()
 		if not result.plan.failed_features.is_empty():
 			%RedrawFeedbackLabel.text="No more Feature cards"
-			for slot: int in result.plan.failed_features: (%HandContainer.get_child(slot) as CardView).shake_no()
+			for slot: int in result.plan.failed_features: (%HandContainer.card_views()[slot] as CardView).shake_no()
 	else:
 		%RedrawFeedbackLabel.text=""
 		_sync_command_tokens(actions.hand)
@@ -367,7 +367,7 @@ func _refresh_redraw_controls() -> void:
 func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
 	var plan: Dictionary = _capture_development_actions().redraw_plan(_redraw_slots(),controlled_rolls)
 	var failed: Array[CardView] = []
-	for slot: int in plan.failed_features: failed.append(%HandContainer.get_child(slot))
+	for slot: int in plan.failed_features: failed.append(%HandContainer.card_views()[slot])
 	plan.failed_features=failed
 	return plan
 
@@ -395,7 +395,7 @@ func _get_weighted_definition_validation_error(card: CardData, expected_type: St
 func _clear_candidate_pool() -> void:
 	_clear_selection()
 	_candidate_cards.clear()
-	for child in hand_container.get_children():
+	for child in hand_container.card_views():
 		hand_container.remove_child(child)
 		child.queue_free()
 
@@ -449,18 +449,18 @@ func _on_play_card_pressed() -> void:
 		hand_container.remove_child(view)
 		view.queue_free()
 	_candidate_cards.clear()
-	for view in hand_container.get_children():
+	for view in hand_container.card_views():
 		if view is CardView: _candidate_cards.append(view.card_data)
 	var refill: Dictionary = result.refill.duplicate()
 	# Tutorial state is committed by the resolver; publishing views must not repeat it.
 	refill.erase("tutorial_stat")
 	_publish_refill(refill,resolver)
 	_command_revision = resolver.revision
-	for index in range(hand_container.get_child_count()):
-		_command_view_ids[hand_container.get_child(index).get_instance_id()] = resolver.candidate_ids[index]
+	for index in range(hand_container.card_views().size()):
+		_command_view_ids[hand_container.card_views()[index].get_instance_id()] = resolver.candidate_ids[index]
 	_command_next_id = resolver.next_candidate_id
 	var current_views := {}
-	for view in hand_container.get_children(): current_views[view.get_instance_id()] = _command_view_ids[view.get_instance_id()]
+	for view in hand_container.card_views(): current_views[view.get_instance_id()] = _command_view_ids[view.get_instance_id()]
 	_command_view_ids = current_views
 	_last_hand_command_result = result
 	_hand_command_busy = false
@@ -702,7 +702,7 @@ func is_initial_priority_planning() -> bool:
 
 
 func can_initialize_priorities() -> bool:
-	return is_inside_tree() and _phase_state == PhaseState.PLANNING and not _finalization_requested and PriorityAllocation.is_valid_distribution(_priority_draft)
+	return is_inside_tree() and _phase_state == PhaseState.PLANNING and not _finalization_requested and PriorityAllocation.is_valid_new_distribution(_priority_draft)
 
 
 func open_priority_overlay() -> bool:
@@ -711,6 +711,7 @@ func open_priority_overlay() -> bool:
 
 func reset_priority_draft() -> void:
 	_priority_draft = get_priority_distribution()
+	for key in _priority_draft: _priority_draft[key] = maxi(10,_priority_draft[key])
 	_sync_priority_controls()
 
 
@@ -726,11 +727,11 @@ func get_employee_hand_status() -> Dictionary:
 	if _run_state == null or _project_state == null: return {}
 	var roster := _run_state.get_employees()
 	var base := _validate_and_calculate_base_action()
-	return {"hired":not roster.employees.is_empty(),"available":EmployeeRoster.available(roster,_project_state.get_release_id()),"qualifying":base.get("valid",false) and EmployeeRoster.matches(EmployeeRoster.card_facts(base.get("cards",[])))}
+	return {"hired":roster.employees.values().any(func(e):return e.type==&"production"),"available":EmployeeRoster.available(roster,_project_state.get_release_id()),"qualifying":base.get("valid",false) and EmployeeRoster.matches(EmployeeRoster.card_facts(base.get("cards",[])))}
 
 
 func play_hand_with_employee_plan(distribution: Dictionary) -> bool:
-	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution(): return false
+	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution(): return false
 	var before := _project_state.get_current_cycle()
 	_employee_priority_choice = distribution.duplicate()
 	_on_play_card_pressed()
@@ -755,9 +756,9 @@ func _capture_design_command() -> RefCounted:
 	state.finalization_requested = _finalization_requested
 	state.revision = _command_revision
 	if is_instance_valid(hand_container):
-		for view in hand_container.get_children():
+		for view in hand_container.card_views():
 			if not view is CardView: continue
-			var id := view.get_instance_id()
+			var id: int = view.get_instance_id()
 			if not _command_view_ids.has(id):
 				_command_view_ids[id] = _command_next_id
 				_command_next_id += 1
@@ -777,12 +778,12 @@ func _capture_development_actions() -> RefCounted:
 
 func _redraw_slots() -> Array[int]:
 	var slots: Array[int] = []
-	for view: CardView in _selected_card_views: slots.append(view.get_index())
+	for view: CardView in _selected_card_views: slots.append(%HandContainer.card_views().find(view))
 	return slots
 
 func _sync_command_tokens(state: RefCounted) -> void:
 	_command_revision=state.revision
 	_command_next_id=state.next_candidate_id
 	_command_view_ids.clear()
-	for index in range(%HandContainer.get_child_count()):
-		_command_view_ids[%HandContainer.get_child(index).get_instance_id()]=state.candidate_ids[index]
+	for index in range(%HandContainer.card_views().size()):
+		_command_view_ids[%HandContainer.card_views()[index].get_instance_id()]=state.candidate_ids[index]

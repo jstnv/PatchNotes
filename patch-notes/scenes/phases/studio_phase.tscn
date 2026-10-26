@@ -31,6 +31,7 @@ theme_override_constants/separation = 16
 
 [node name="Heading" type="PanelContainer" parent="Dashboard/Layout"]
 layout_mode = 2
+visible = false
 
 [node name="Title" type="Label" parent="Dashboard/Layout/Heading"]
 layout_mode = 2
@@ -78,19 +79,6 @@ tooltip_text = "Not available yet."
 [node name="Right" type="VBoxContainer" parent="Dashboard/Layout/MenuCenter/Menu"]
 layout_mode = 2
 theme_override_constants/separation = 12
-
-[node name="StoreHint" type="PanelContainer" parent="Dashboard/Layout/MenuCenter/Menu/Right"]
-layout_mode = 2
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(270, 0)
-
-[node name="StoreHintText" type="Label" parent="Dashboard/Layout/MenuCenter/Menu/Right/StoreHint"]
-custom_minimum_size = Vector2(250, 0)
-layout_mode = 2
-unique_name_in_owner = true
-autowrap_mode = 3
-text = "Tip: Visit the Feature Store before your first game."
 
 [node name="FeatureStoreButton" type="Button" parent="Dashboard/Layout/MenuCenter/Menu/Right"]
 layout_mode = 2

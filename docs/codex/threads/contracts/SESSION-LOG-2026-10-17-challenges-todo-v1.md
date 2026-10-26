@@ -1,0 +1,9 @@
+# Contracts challenge TODO intake
+
+2026-10-17 (America/Los_Angeles). `main` at HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; the shared worktree and `docs/codex/TODO.md` were already dirty. The user explicitly requested adding relevant Contracts work to the internal TODO. The existing TODO had no challenge entry.
+
+Changed `docs/codex/TODO.md` with one **DESIGN review needed** entry directly after the implemented Contracts definition foundation. It links the [approved structural direction](CHALLENGES-DECISION-2026-10-17-v1.md), [private scorer evidence](CHALLENGES-FINDINGS-2026-10-17-v1.md) and [proposed implementation tasks](CHALLENGES-HANDOFF-2026-10-17-v1.md). It names the candidate $100/+4 Promotion pilot as unapproved, records exact decisions and acceptance still needed, and requires a full private reward/save prototype plus source-pinned handoff before canonical integration. Updated this thread's `README.md`, `HANDOFF.md`, and decision record to match queue status. No other TODO entry, central design, `CURRENT_STATE.md`, canonical gameplay code, tests, assets or configuration was intentionally changed in this pass.
+
+Verification: the new TODO heading occurs once; all three linked thread records and v3 variant manifest exist; `git diff --check -- docs/codex/TODO.md` passed. No gameplay test or new simulation was run in this documentation-only pass; the already recorded v3 evidence is 31 scorer assertions and an 85-command route/replay with 85/85 current-control state parity. No commit, push, simulator adoption or implementation occurred.
+
+Follow-up: review publisher assignment, attainable thresholds/fades, combination, cash/Promotion caps and partial rounding, then freeze result/checkpoint compatibility terms. Only after explicit ACTIVE/TRIAL approval should a new variant implement the complete bonus path and a sealed adoption packet be queued for PN Implementation.

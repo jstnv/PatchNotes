@@ -8,9 +8,77 @@ from pathlib import Path
 import argparse,hashlib,importlib.util,json,os,re,runpy,shutil,socket,subprocess,sys,tempfile,datetime
 
 REPO=Path(__file__).resolve().parents[1]
+
+COLD_PRODUCERS={
+ 'verify_founder_victory_cold':'verify_legacy_world',
+ 'verify_alpha_shop_pack_cold':'verify_alpha_shop_pack',
+ 'verify_market_release_index_cold':'verify_market_release_index',
+ 'verify_world_restore_file':'verify_legacy_world',
+}
+
+def verifier_jobs():
+ """Discover checks, but schedule every evidence consumer after its producer."""
+ paths={p.stem:p for p in (REPO/'patch-notes/scripts/debug').glob('verify_*.gd')}
+ for cold,producer in COLD_PRODUCERS.items():
+  if cold not in paths:paths[cold]=paths[producer]
+ ordered=[];seen=set()
+ def add(name):
+  if name in seen:return
+  if name in COLD_PRODUCERS:add(COLD_PRODUCERS[name])
+  seen.add(name);ordered.append((name,paths[name]))
+ for name in sorted(paths):add(name)
+ return ordered
+
+def verifier_environment(output,name):
+ """Only consume a successful producer's artifact from this exact gate run."""
+ env={'PN_INDEX_COLD':'','PN_ALPHA_PACK_COLD':'','PN_OLD_WORLD_FRAME':'','PN_GAMEPLAY_PRIOR_SAVES':''}
+ producer=COLD_PRODUCERS.get(name)
+ artifact=output/'verifier-artifacts'/(producer or name)/'result.json'
+ if producer:
+  record=json.loads((output/(producer+'.command.json')).read_text())
+  if record.get('exit')!=0 or record.get('errors') or not artifact.is_file():
+   raise RuntimeError('Missing successful artifact-producing verifier: '+producer)
+ if name=='verify_alpha_shop_pack_cold':env['PN_ALPHA_PACK_COLD']='1'
+ if name=='verify_market_release_index_cold':env['PN_INDEX_COLD']='1'
+ if name=='verify_gameplay_tree':
+  fixture=REPO/'tools/fixtures/gameplay_parents_pre_change_v1.json'
+  manifest=json.loads(fixture.with_suffix('.provenance.json').read_text())
+  if sha(fixture)!=manifest['sha256']:raise RuntimeError('Gameplay parent fixture hash changed')
+  env['PN_GAMEPLAY_PRIOR_SAVES']=str(fixture)
+ if name=='verify_queue_source_migration':
+  fixture=REPO/'tools/fixtures/queue_migration_pre_alpha_v1.json'
+  manifest=json.loads(fixture.with_suffix('.provenance.json').read_text())
+  if sha(fixture)!=manifest['sha256']:raise RuntimeError('Migration fixture hash changed')
+  env['PN_OLD_WORLD_FRAME']=str(fixture)
+ env['PN_CARD_FRAME_OUTPUT']=str(artifact)
+ return env
 def load(name,path):
  spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def continuation_profile(output,producer):
+ """A cold-process consumer must use its successful producer's isolated save."""
+ record=json.loads((output/(producer+'.command.json')).read_text())
+ if record.get('exit')!=0 or record.get('errors') or not record.get('profile'):
+  raise RuntimeError('Missing successful profile-producing verifier: '+producer)
+ profile=Path(record['profile']).resolve()
+ if not profile.is_relative_to((output/'profiles').resolve()) or not all((profile/key).is_dir() for key in ('APPDATA','LOCALAPPDATA')):
+  raise RuntimeError('Refusing non-isolated or missing continuation profile')
+ return profile
+
+def verifier_arguments(output,name,script):
+ args=['--script',script]
+ if name=='verify_world_restore_file':
+  source=output/'verifier-artifacts/verify_legacy_world/result.json'
+  destination=output/'verifier-artifacts'/name/'result.json'
+  if not source.is_file():raise RuntimeError('Missing world restore producer artifact')
+  args.extend(['--',str(source),str(destination)])
+ return args
+
+def verifier_timeout(name):
+ # This finite 96-cycle calendar fixture now also advances the real trial world.
+ # Keep its bound explicit; do not raise every verifier's limit.
+ return 1200 if name=='verify_sidestreet_scope_and_year' else 240
 
 def verifier_has_initializer(path):
  # Some older verifiers schedule _run from _init and do not implement the
@@ -118,7 +186,7 @@ def main():
   report.pop('blocked',None)
   checks=load('checks',REPO/'docs/codex/findings/checkpoint-runtime-v1/run_checks.py')
   checks.HERE=out;checks.GODOT=str(args.godot.resolve());checks.PROFILE=out/'profiles'
-  source={str(p.relative_to(REPO/'patch-notes')):sha(p) for base in ['scripts','scenes','data'] for p in (REPO/'patch-notes'/base).rglob('*') if p.is_file()}
+  source={str(p.relative_to(REPO/'patch-notes')):sha(p) for base in ['scripts','queries','scenes','data'] for p in (REPO/'patch-notes'/base).rglob('*') if p.is_file()}
   if args.resume:
    original=json.loads((out/'source.json').read_text())
    added=set(source)-set(original)
@@ -126,8 +194,8 @@ def main():
    report['import_generated_uid_files']=sorted(added)
   (out/'source.json').write_text(json.dumps(source,indent=2))
   checks.run('import',['--editor','--import','--quit'])
-  for path in sorted((REPO/'patch-notes/scripts/debug').glob('verify_*.gd')):
-   evidence=out/'verifier-artifacts'/path.stem
+  for name,path in verifier_jobs():
+   evidence=out/'verifier-artifacts'/name
    evidence.mkdir(parents=True,exist_ok=True)
    os.environ['PN_CARD_FRAME_OUTPUT']=str(evidence/'result.json')
    script='res://scripts/debug/'+path.name
@@ -137,13 +205,15 @@ def main():
     if cached is not None and cached!=metadata:raise RuntimeError('Cannot reuse changed wrapper: '+path.stem)
     report['checkpoint_writer_instrumentation']['wrappers'][path.stem]=metadata
     script=str(wrapper);record()
-   if path.stem in report['checks']:
-    prior=json.loads((out/(path.stem+'.command.json')).read_text())
-    if prior['exit'] or prior['errors']:raise RuntimeError('Invalid cached result '+path.stem)
+   if name in report['checks']:
+    prior=json.loads((out/(name+'.command.json')).read_text())
+    if prior['exit'] or prior['errors']:raise RuntimeError('Invalid cached result '+name)
     continue
-   checks.run(path.stem,['--script',script])
-   report.setdefault('verifier_evidence',{})[path.stem]=str(evidence)
-   report['checks'].append(path.stem);record()
+   os.environ.update(verifier_environment(out,name))
+   profile=continuation_profile(out,'verify_rival_gameplay_activation') if path.stem=='verify_rival_gameplay_cold_continue' else None
+   checks.run(name,verifier_arguments(out,name,script),timeout=verifier_timeout(name),profile=profile)
+   report.setdefault('verifier_evidence',{})[name]=str(evidence)
+   report['checks'].append(name);record()
   exporter=load('exporter',REPO/'docs/codex/findings/export-queue-v3/export.py');exporter.OUT=out
   saved=sys.argv;sys.argv=['export.py','--godot',str(args.godot.resolve())]
   try:exporter.main()

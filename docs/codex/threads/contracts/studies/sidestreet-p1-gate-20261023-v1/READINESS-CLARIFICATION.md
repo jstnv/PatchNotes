@@ -1,0 +1,3 @@
+# Commission readiness metric clarification
+
+2026-10-23, before candidate outcomes were inspected. Reading the current offer/finance specification clarified that Scope30 is an illustrative prepared-project quote, not a universal commission requirement. The pilot must freeze the positive required Scope from its legal project configuration. Retain the predeclared literal30 screen as a labeled historical illustration, and additionally report each actual release's Scope versus its frozen required Scope with Review>=6.0. Neither shadow metric simulates accepting a commission, transferring sales ownership or receiving its fee. No route, seed, command limit or candidate rule changes result from this clarification.

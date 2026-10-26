@@ -241,7 +241,8 @@ func refresh() -> void:
 		if phase_name == "Beta":
 			progress.text += " · " + phase.get_launch_readiness_text()
 		elif phase_name == "Alpha" and not phase.call("_has_launch_feature_work"):
-			progress.text += " · Play a Feature with Scope before Beta (Passes alone are not enough)."
+			progress.text += "\nPlay a Feature before Beta."
+			progress.tooltip_text = "Play a Feature with positive Scope before Beta. Passes alone are not enough."
 	presentation_changed.emit()
 
 
@@ -297,12 +298,10 @@ func get_selected_production_synergy() -> Dictionary:
 		var card: CardData = view.card_data
 		if card == null or not CORE_BY_STAT.has(card.primary_stat): return {}
 		cards.append(card)
-		var primary: ProjectState.CoreScore = CORE_BY_STAT[card.primary_stat]
-		score_additions[primary] = score_additions.get(primary, 0) + card.primary_value
-		if not card.secondary_stat.is_empty():
-			if not CORE_BY_STAT.has(card.secondary_stat): return {}
-			var secondary: ProjectState.CoreScore = CORE_BY_STAT[card.secondary_stat]
-			score_additions[secondary] = score_additions.get(secondary, 0) + card.secondary_value
+		for entry in card.core_contributions():
+			if not CORE_BY_STAT.has(entry.stat): return {}
+			var category: ProjectState.CoreScore = CORE_BY_STAT[entry.stat]
+			score_additions[category] = score_additions.get(category, 0) + int(entry.value)
 		has_feature = has_feature or card.card_type == &"feature"
 	var base := {"cards": cards, "score_additions": score_additions, "has_feature": has_feature}
 	return phase.call("_calculate_final_action_production", base)

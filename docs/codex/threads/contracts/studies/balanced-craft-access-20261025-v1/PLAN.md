@@ -1,0 +1,16 @@
+# Current roster Crown access baseline — fixed plan
+
+2026-10-25. [Approved terms](../../BALANCED-CRAFT-APPROVAL-2026-10-25-v1.md). Contract Search is still queued/absent at intake. This study measures current existing behavior before any new Brief or Search prototype. It cannot measure paid-search affordability or Crown Brief settlement.
+
+## Hypothesis and limits
+
+Two simple finite visible-card policies may reveal which new root-first specialties can reach Crown's existing released Review7 gate within four games, and whether ordinary production exhausts cash beforehand. This is a baseline screen, not an optimal-play or impossibility claim. No cash Contracts, Research, Bank, Traits, employees, redraws or priority changes; these restrictions deliberately isolate fresh roster supply and simple play. No claim about a normal fully assisted career from a failure here.
+
+- Snapshot current canonical source into a named immutable-baseline thread variant `balanced-craft-access-20261025-v1`; no project edits. Preserve original baseline/ancestry and all concurrent canonical changes.
+- All eight specialties in current `studio_specialties_v3.json`; seeds **4417,4521**. Two arms: existing `finite_fixture_policy.gd` visible_order and features_first; each plays exactly two hands in Design/Alpha/Beta using existing legality. Same Studio ID/name, specialty, seed, no Traits and recipe within each pair. Fantasy theme. No injected money/cards/standing/unlocks or old checkpoint reuse.
+- **32 cases**, target four total releases, **160 commands per case**, telemetry enabled. One runner, **600seconds import and experiment limit** as enforced by documented runner. No seed changes, rescue arms or budget extensions for weak results. Keep all rejected, incomplete and timed-out cases. Initial exact state/RNG equality must be checked before any paired conclusion.
+- Measurements: founding roster version/pool, initial cash, completed releases/cycles, actual released Reviews and first Crown unlock, end/minimum cash, recorded arrears/debt where exposed, first rejected command/reason and Studio-boundary availability. Unavailable finance fields are unknown, not zero. Preserve raw tapes/telemetry and source identities.
+- Replays: first lexicographic complete case and first rejected case, if present, otherwise two different complete pairs. Reproduce failure via documented reducer for first rejected case, max1000commands/240seconds; retain unsuccessful reduction. Same-source Studio continuation from first completed case if one exists, target one additional release and40commands/240seconds; exact initial state/RNG must match prior boundary. The continuation is persistence coverage, not an extension of the main horizon.
+- Stop main arms at four releases,160commands, first rejected action or runner timeout. Do not run a surrogate paid wait, fake Search receipt or fabricated Crown offer. No claimed three-cycle affordability proof without actual Search/Brief commands.
+
+Write source-pinned findings, approval status and a minimal TODO handoff. Re-read shared TODO before editing, preserve other entries, especially Search and Employees. No canonical code/test/asset/config writes, player saves, computer control, commits/pushes or cross-chat dispatch.

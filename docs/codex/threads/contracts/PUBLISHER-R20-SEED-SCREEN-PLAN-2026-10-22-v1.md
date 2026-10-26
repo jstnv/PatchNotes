@@ -1,0 +1,19 @@
+# Two-full-Brief current-market seed screen — predeclaration
+
+2026-10-22 (America/Los_Angeles). **PROPOSED bounded read-only screen.** The fixed Sports/1104 [older-source run](sims/publisher-r20-progression-20261022-v1/experiment-report.json) reached one full SideStreet Brief and a second distinct offer, then **rejected** because its second visible hand had no four-card set that could end at exact Scope 10 and each Core at least 3. The [same-route current-market run](PUBLISHER-R20-PROGRESSION-PLAN-2026-10-22-v2.md) is separate and retained. This screen explores whether the proposed R20 gate is legally attainable through two release-paced full Briefs in other preselected fresh starts; it does not overwrite either failure or approve the terms.
+
+## Fixed cases, policy and limits
+
+- Current-market private variant [publisher-progression-market-v1](simulators/publisher-progression-market-v1/variant.json), not canonical gameplay. Preserve its ancestry; pin actual candidate and runner hashes from the output. The variant contains candidate Brief/Reputation only; no commission/support mechanic is invoked.
+- Exactly eight fresh Sports starts, seeds **1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112**, with no traits and otherwise byte-identical recipe/policy config from [Sports/1104 v1](publisher-r20-progression-v1.json): `sprites/general_combat/levels`, Sports/Fantasy, Game1 Design3/Alpha5/Beta4, later Games Design2/Alpha2/Beta2. Unique Studio/case IDs substitute the listed seed. No checkpoint or player save is reused. Equal seed across source revisions is not a matched-state claim.
+- Unchanged [v1 observation-only policy](publisher_r20_progression_policy_v1.gd). It plays legal visible four-card combinations, no redraws/research/Bank/injected cash, requires two distinct source-release-linked offers, exact Scope10/each Core3 on each two-hand Brief, and stops on missing visible combinations. A policy rejection is retained; no hidden reroll or seed replacement. The first Brief must award R1000, the second R2000, then one more legal game launch returns to Studio.
+- Each case targets **three releases**, max **300 commands**; outer study limit eight cases, 360 seconds for the experiment process after import. Stop after the preselected cases or process timeout. Do not expand the seed list or budgets silently if all fail.
+- Record all case statuses, accepted commands, release/cycle counts, first/second offer IDs, visible cards and grades, cash/arrears/Credit, standing events, Studio checkpoint, source identity and exact tape. Replay any completed R20 route in a fresh process. A failing/rejected case remains a failing/rejected case even if another seed succeeds.
+
+Build [versioned config](publisher-r20-market-seed-screen-v1.json) by deep copying the single v1 case eight times in seed order, changing only `case_id`, `initial.recipe.studio_id`, `initial.recipe.studio_name` and `initial.recipe.seed`. The JSON itself is the exact input and must be saved before running. Verify the output folder is unused, then run:
+
+```powershell
+& 'C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' tools/simulate.py run --variant docs/codex/threads/contracts/simulators/publisher-progression-market-v1 --config docs/codex/threads/contracts/publisher-r20-market-seed-screen-v1.json --output docs/codex/threads/contracts/sims/publisher-r20-market-seed-screen-20261022-v1 --godot 'C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --timeout 360
+```
+
+This is a feasibility screen, not a fair-use probability estimate, balance pass or matched economic comparison. Full commission access still needs a same-revision saved Studio state and an actual game-deal prototype. If all eight fail, report the sampled constraint and leave the R20 pilot access unresolved; do not infer a universal impossibility.

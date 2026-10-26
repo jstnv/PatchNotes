@@ -1,7 +1,10 @@
 class_name EmployeePlanningDialog
 extends ConfirmationDialog
 var phase: Control
-var inputs: Array[SpinBox] = []
+var inputs: Array[VSlider] = []
+var budget_feedback: PriorityBudgetFeedback
+var total_label: Label
+var chart: PriorityInfluenceChart
 var explanation: Label
 var previous: Dictionary = {}
 
@@ -24,14 +27,23 @@ func _ready() -> void:
 		var label := Label.new()
 		label.text = title_text
 		column.add_child(label)
-		var input := SpinBox.new()
-		input.min_value = 5
+		var input := VSlider.new()
+		input.min_value = 10
 		input.max_value = 50
 		input.step = 5
-		input.custom_minimum_size.x = 125
+		input.custom_minimum_size = Vector2(32,120)
+		input.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		column.add_child(input)
 		inputs.append(input)
 		input.value_changed.connect(func(_value): _refresh())
+	chart = PriorityInfluenceChart.new()
+	row.add_child(chart)
+	chart.bind_controls(inputs,PriorityInfluenceChart.CORE_NAMES,PriorityInfluenceChart.CORE_COLORS)
+	budget_feedback = PriorityBudgetFeedback.new()
+	add_child(budget_feedback)
+	budget_feedback.bind_controls(inputs)
+	total_label = Label.new()
+	body.add_child(total_label)
 	confirmed.connect(_commit)
 
 func open_for(value: Control) -> void:
@@ -45,7 +57,7 @@ func open_for(value: Control) -> void:
 	for card: CardData in base.cards: names.append(card.card_name)
 	explanation.text = "Selected hand: %s\n\nChange priorities (total 100) and commit this matching hand. The new weights apply to its normal replacements. Card effects, hand cost and one cycle are unchanged. This spends this project's one Specialist use." % ", ".join(names)
 	_refresh()
-	popup_centered(Vector2i(600,310))
+	popup_centered(Vector2i(720,420))
 
 func _distribution() -> Dictionary:
 	var value := {}
@@ -54,7 +66,11 @@ func _distribution() -> Dictionary:
 
 func _refresh() -> void:
 	var value := _distribution()
-	get_ok_button().disabled = value == previous or not PriorityAllocation.is_valid_distribution(value)
+	if total_label != null:
+		var total := 0
+		for amount: int in value.values(): total += amount
+		total_label.text = "%d/100" % total
+	get_ok_button().disabled = value == previous or not PriorityAllocation.is_valid_new_distribution(value)
 
 func _commit() -> void:
 	if not is_instance_valid(phase): return

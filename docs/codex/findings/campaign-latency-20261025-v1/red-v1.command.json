@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_campaign_latency.gd"
+  ],
+  "exit": 5,
+  "seconds": 2.61,
+  "private_output": "C:\\Users\\64jus\\AppData\\Local\\Packages\\sandbox.{408e4607-7fec-4a21-823b-a2f659e7eafe}\\AC\\Temp\\pn-campaign-latency-20261025-v1\\red-v1",
+  "script_sha256": "93b870c1e27de88c53862e616a9c7dc83d0496c29bebe8ee1fe7e734985dfd45",
+  "result": {
+    "checks": 129,
+    "failures": 5,
+    "measurements": {
+      "cycle": 96,
+      "original_validation_us": 12934,
+      "repeated_validation_us": 25358
+    },
+    "ok": false
+  },
+  "errors": [
+    "ERROR: FAIL: Repeated unchanged-history reads avoid the growing replay cost",
+    "ERROR: FAIL: One transaction's signals do not each rebuild the map synchronously",
+    "ERROR: FAIL: One signal burst produces exactly one current Store refresh",
+    "ERROR: FAIL: Hidden Store does not rebuild during development",
+    "ERROR: FAIL: Reopening refreshes immediately from authoritative state"
+  ]
+}

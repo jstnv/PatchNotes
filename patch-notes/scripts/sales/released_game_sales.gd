@@ -1,6 +1,8 @@
 class_name ReleasedGameSales
 extends RefCounted
 
+const Market := preload("res://scripts/market/market_transaction_trial.gd")
+
 ## Pure, checked cumulative calculations. Returned records are value snapshots.
 ## Two-argument fixtures intentionally retain the original Month 1-only model.
 static func create(release_id: StringName, total_units: Variant, review_tenths: int = -1,
@@ -21,7 +23,7 @@ static func create(release_id: StringName, total_units: Variant, review_tenths: 
 		"later_enabled": later_enabled, "review_tenths": review_tenths,
 		"launch_awareness": launch_awareness, "market_bp": market_bp,
 		"campaign_count": 0, "campaign_months": {}, "organic_awareness_scaled": 0,
-		"active_awareness_scaled": 0, "monthly_units": 0}
+		"active_awareness_scaled": 0, "monthly_units": 0, "market_factors": {}}
 	return record if is_valid(record) else {}
 
 
@@ -34,9 +36,18 @@ static func is_valid(record: Dictionary) -> bool:
 			return false
 	if not record.has("release_id") or typeof(record.release_id) != TYPE_STRING_NAME or record.release_id.is_empty():
 		return false
-	if typeof(record.get("exhausted")) != TYPE_BOOL or typeof(record.get("later_enabled")) != TYPE_BOOL or typeof(record.get("campaign_months")) != TYPE_DICTIONARY:
+	if typeof(record.get("exhausted")) != TYPE_BOOL or typeof(record.get("later_enabled")) != TYPE_BOOL or typeof(record.get("campaign_months")) != TYPE_DICTIONARY or typeof(record.get("market_factors")) != TYPE_DICTIONARY:
 		return false
 	var age_cycles: int = record.total_earned_cycles
+	var age_months: int = age_cycles / 2 + age_cycles % 2
+	if record.market_factors.size()!=age_months: return false
+	for age_month in range(1,age_months+1):
+		if not record.market_factors.has(age_month): return false
+		var factor: Variant=record.market_factors[age_month]
+		if not Market.valid_factor(factor): return false
+		if not factor.historical and factor.snapshot_id!="market-0-neutral":
+			var first_cycle: int=record.last_processed_run_cycle-age_cycles+1+(age_month-1)*2
+			if factor.cycle_start!=first_cycle-first_cycle%2: return false
 	if age_cycles < 0 or record.earned_cycles != mini(2, age_cycles) or record.exhausted != (age_cycles >= 2):
 		return false
 	if record.last_processed_run_cycle < -1 or record.last_settlement_run_cycle < -1 or record.last_settlement_run_cycle > record.last_processed_run_cycle:
@@ -78,6 +89,8 @@ static func get_projection(record: Dictionary) -> Dictionary:
 	var organic := 0
 	var active := 0
 	var units: int = record.total_units
+	if next_age_month==1 and record.market_factors.has(1):
+		units=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(units,record.market_factors[1].factor_bp,10000)
 	if not record.later_enabled and age_cycles >= 2:
 		units = 0
 	if record.later_enabled and next_age_month >= 2:
@@ -114,9 +127,10 @@ static func get_projection(record: Dictionary) -> Dictionary:
 
 
 static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
-		campaign_this_cycle: bool = false) -> Dictionary:
+		campaign_this_cycle: bool = false, factor_bp: int = 10000, snapshot_id: String = "market-0-neutral", factor_details: Dictionary = {}) -> Dictionary:
 	if not is_valid(record) or run_cycle <= record.last_processed_run_cycle or run_cycle < 0:
 		return {}
+	if factor_bp<7000 or factor_bp>10000 or snapshot_id.is_empty(): return {}
 	if campaign_this_cycle and not can_campaign(record):
 		return {}
 	var result := record.duplicate(true)
@@ -128,11 +142,16 @@ static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 		result.total_earned_cycles = mini(2, result.total_earned_cycles + 1)
 	result.earned_cycles = mini(2, result.total_earned_cycles)
 	result.exhausted = result.earned_cycles == 2
+	var age_month: int=result.total_earned_cycles/2+result.total_earned_cycles%2
+	if result.total_earned_cycles%2==1:
+		var frozen := Market.neutral_factor() if factor_details.is_empty() else factor_details.duplicate(true)
+		if frozen.factor_bp!=factor_bp or frozen.snapshot_id!=snapshot_id or not Market.valid_factor(frozen): return {}
+		result.market_factors[age_month]=frozen
+	elif not result.market_factors.has(age_month): return {}
 	if result.total_earned_cycles <= 2:
 		var projection := PrimitiveMonthOneSalesRevenueCalculator.calculate_for_total_units(result.total_units)
-		result.earned_units = projection.get_cumulative_units()[result.earned_cycles - 1]
+		result.earned_units = PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(projection.get_cumulative_units()[result.earned_cycles - 1],int(result.market_factors[1].factor_bp),10000)
 	else:
-		var age_month: int = result.total_earned_cycles / 2 + result.total_earned_cycles % 2
 		if result.total_earned_cycles % 2 == 1:
 			var organic := LaterMonthSalesCalculator.month_two_organic_scaled(result.launch_awareness) if age_month == 2 else LaterMonthSalesCalculator.next_organic_scaled(record.organic_awareness_scaled, result.review_tenths)
 			if organic < 0:
@@ -141,7 +160,8 @@ static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 			if boost < 0 or organic > ProjectState.MAX_SIGNED_INT - boost:
 				return {}
 			var active: int = organic + boost
-			var units := LaterMonthSalesCalculator.monthly_units(result.review_tenths, active, result.market_bp)
+			var base_units := LaterMonthSalesCalculator.monthly_units(result.review_tenths, active, result.market_bp)
+			var units := PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(base_units,int(result.market_factors[age_month].factor_bp),10000)
 			if units < 0:
 				return {}
 			# Do not commit a first half that cannot finish its age month.
@@ -174,7 +194,7 @@ static func _recalculate(record: Dictionary) -> Dictionary:
 		return {}
 	var age_cycles: int = record.total_earned_cycles
 	var month_one_cycles := mini(2, age_cycles)
-	var units: int = projection.get_cumulative_units()[month_one_cycles - 1] if month_one_cycles > 0 else 0
+	var units: int = PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(projection.get_cumulative_units()[month_one_cycles - 1],int(record.market_factors[1].factor_bp),10000) if month_one_cycles > 0 else 0
 	var organic := 0
 	var active := 0
 	var monthly := 0
@@ -194,8 +214,6 @@ static func _recalculate(record: Dictionary) -> Dictionary:
 		var campaign_index := 0
 		var age_month := 2
 		while age_month <= last_age_month:
-			# After organic Awareness reaches zero, empty future months cannot
-			# earn units. Jump to the next accepted campaign or the end.
 			if age_month > 2 and organic == 0 and not campaign_months.has(age_month):
 				if campaign_index >= campaign_ages.size():
 					active = 0
@@ -215,7 +233,8 @@ static func _recalculate(record: Dictionary) -> Dictionary:
 				active += boost
 				campaign_count += 1
 				campaign_index += 1
-			monthly = LaterMonthSalesCalculator.monthly_units(record.review_tenths, active, record.market_bp)
+			var base_monthly := LaterMonthSalesCalculator.monthly_units(record.review_tenths, active, record.market_bp)
+			monthly = PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(base_monthly,int(record.market_factors[age_month].factor_bp),10000)
 			if monthly < 0:
 				return {}
 			var earned_month: int = monthly if age_month < last_age_month or age_cycles % 2 == 0 else monthly / 2

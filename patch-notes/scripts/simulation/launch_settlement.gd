@@ -3,6 +3,7 @@
 extends RefCounted
 
 const STAGES := ["review", "awareness", "launch_market_context", "units_sold", "month_one_sales_revenue"]
+const Fence := preload("res://scripts/simulation/transaction_projection.gd")
 var project_state: ProjectState
 var run_state: RunState
 var _snapshot_database: PrimitiveSnapshotDatabase
@@ -20,40 +21,49 @@ func _init(project: ProjectState, run: RunState, snapshots: PrimitiveSnapshotDat
 ## Preflight all stages against a detached project and a private review stream.
 ## No signals or RNG changes reach the authoritative objects on rejection.
 func can_settle() -> bool:
-	if project_state == null or run_state == null or _snapshot_database == null or not project_state.is_launch_ready(): return false
-	if _controlled_review_roll < -1 or _controlled_review_roll >= 100: return false
-	if run_state._productive_cycle_in_progress or run_state._publishing_cycle: return false
+	return not plan().is_empty()
+
+## Results and RNG are private until every destination view has prepared.
+func plan() -> Dictionary:
+	if _busy or project_state == null or run_state == null or _snapshot_database == null or not project_state.is_launch_ready() or _review_rng == null: return {}
+	if _controlled_review_roll < -1 or _controlled_review_roll >= 100 or run_state._productive_cycle_in_progress or run_state._publishing_cycle: return {}
 	var draft := ProjectState.new(project_state.get_required_scope())
-	for property in project_state.get_property_list():
-		if property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
-			var value: Variant = project_state.get(property.name)
-			draft.set(property.name, value.duplicate(true) if value is Array or value is Dictionary else value)
-	var probe := get_script().new(draft, run_state, _snapshot_database, _controlled_review_roll) as RefCounted
+	Fence.copy_fields(project_state,draft)
+	var probe := get_script().new(draft,run_state,_snapshot_database,_controlled_review_roll) as RefCounted
 	probe._review_rng = RandomNumberGenerator.new()
 	probe._review_rng.seed = _review_rng.seed
 	probe._review_rng.state = _review_rng.state
-	for stage in STAGES:
-		if not probe.call("_ensure_" + stage + "_result"): return false
-	if not run_state.can_register_release(draft): return false
-	if draft.get_release_id() in run_state.get_released_game_ids(): return true
-	return not StudioFanbase.register_release(run_state._fanbase, run_state._create_release_sales_record(draft), draft.get_awareness_result().get_existing_fans()).is_empty()
+	var frozen: Dictionary = probe.freeze_results()
+	if not frozen.ok: return {}
+	var registration := run_state.plan_release(draft)
+	if registration.is_empty(): return {}
+	return {"project_before":Fence.authority(project_state),"draft":draft,"registration":registration,"review_before":_review_rng.state,"review_after":probe._review_rng.state,"controlled_before":_controlled_review_roll,"controlled_after":probe._controlled_review_roll,"events":frozen.events}
+
+func commit(prepared: Dictionary) -> Dictionary:
+	if _busy or prepared.is_empty(): return {"ok":false,"error":"Release preflight rejected","events":[]}
+	_busy = true
+	# Revalidate after the only fallible external guard, including presentation
+	# mutations to the detached draft or to authoritative Project/Run state.
+	var allowed := run_state.can_mutate_checkpoint()
+	if not allowed or prepared.project_before != Fence.authority(project_state) or prepared.review_before != _review_rng.state or prepared.controlled_before != _controlled_review_roll or not run_state.can_commit_release_plan(prepared.draft,prepared.registration):
+		_busy = false
+		return {"ok":false,"error":"Release changed during preparation","events":[]}
+	run_state.commit_release_fields(prepared.registration)
+	Fence.copy_fields(prepared.draft,project_state)
+	_review_rng.state = prepared.review_after
+	_controlled_review_roll = prepared.controlled_after
+	var events: Array = prepared.events.duplicate(true)
+	if prepared.registration.changed: events.append({"type":"release_registered","release_id":project_state.get_release_id()})
+	if not prepared.events.is_empty(): project_state.values_changed.emit()
+	run_state.publish_release_plan(prepared.registration)
+	_busy = false
+	return {"ok":true,"error":"","events":events}
 
 func settle() -> Dictionary:
-	if _busy or not can_settle() or not run_state.can_mutate_checkpoint(): return {"ok":false,"error":"Release preflight rejected","events":[]}
-	_busy = true
-	var frozen := freeze_results()
-	if not frozen.ok:
-		_busy = false
-		return frozen
-	var events: Array = frozen.events
-	var registered := project_state.get_release_id() in run_state.get_released_game_ids()
-	var ok := run_state.register_release(project_state)
-	if ok and not registered: events.append({"type":"release_registered","release_id":project_state.get_release_id()})
-	_busy = false
-	return {"ok":ok,"error":"" if ok else "Registration rejected during publication","events":events}
+	return commit(plan())
 
-## Also used by Gameplay before it validates the destination views. Keeping this
-## staged adapter preserves its existing retry behavior after view failure.
+## Calculator adapter for detached plans and explicit legacy verifier helpers.
+## Playable release uses plan/commit; it never freezes the live project early.
 func freeze_results() -> Dictionary:
 	var events: Array = []
 	for stage in STAGES:

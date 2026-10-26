@@ -47,6 +47,7 @@ func go() -> void:
 	var settings: DemoSettingsMenu = hud.settings_menu
 	var menu: MainMenu = game.get("_active_phase")
 	var baseline := state(run)
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/Settings").grab_focus()
 	await key(KEY_ENTER)
 	check(settings.is_open() and root.gui_get_focus_owner() == settings.mode, "Keyboard Enter opens Settings and moves visible focus inside")
@@ -112,8 +113,10 @@ func go() -> void:
 	settings.settings_path = saved_path
 	await key(KEY_ESCAPE)
 	check(not settings.is_open() and state(run) == baseline, "Escape returns focus and all settings actions preserve run")
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	await key(KEY_ESCAPE)
+	menu.navigation.animate=false
 	check(menu.get_node("CenterContainer/MenuLayout/StartGame").visible and state(run) == baseline, "Escape backs out of Studio setup without creating a run")
 	var reload := DemoSettingsMenu.new()
 	root.add_child(reload)

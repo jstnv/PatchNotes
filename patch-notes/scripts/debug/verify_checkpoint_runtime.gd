@@ -54,6 +54,7 @@ func _run() -> void:
 	coordinator.store.fault = &"before_rename"
 	expect(run.add_cash_cents(123),"Committed action before injected I/O failure")
 	await process_frame
+	expect(not await coordinator.wait_saved(),"Injected background I/O failure completes before recovery assertions")
 	expect(not coordinator.failure.is_empty() and run.get_cash_cents()==cash+123,"Save failure preserves committed memory")
 	expect(not run.add_cash_cents(7),"Failed save blocks further mutations")
 	expect(not game._begin_next_project(game._active_phase,"Blocked",&"action",&"fantasy"),"Failed save blocks departure")

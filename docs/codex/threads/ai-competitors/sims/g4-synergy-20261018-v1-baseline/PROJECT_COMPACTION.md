@@ -1,0 +1,3 @@
+# Storage compaction
+
+The successful v1 baseline's frozen `project/` copy was removed after its eight case results, tape files, telemetry, source manifests and logs were retained. The unchanged source is preserved in `../../simulators/g4-synergy-20261018-v1/project/` and its `base-source.zip`; `variant-creation-manifest.json` and `snapshot-manifest.json` record the identities. The run's 43,607,205-byte `git-provenance.json` is preserved losslessly as `git-provenance.json.gz` (decompressed SHA-256 `ca6ced2caa010f9206588960ba37962189d6d8b3e084b8b61e665df46fc7937c`). Direct `simulate.py replay` from this compacted baseline bundle needs that exact source copy restored first. The paired v3 bundle retains its frozen project for direct replay.

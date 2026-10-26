@@ -1,0 +1,20 @@
+# Crown CB2b — versioned design review handoff
+
+2026-10-25. **DESIGN review; no canonical adoption approved.** [Findings](CROWN-TWOHAND-FINDINGS-2026-10-25-v1.md), [fixed plan](studies/crown-twohand-20261025-v1/PLAN.md), [source/verification](studies/crown-twohand-20261025-v1/closeout.json). User approved this private planning experiment with unchanged rewards and parked redraws. Crown numerical/activation terms remain OPEN; existing rules and SideStreet ACTIVE/TRIAL unchanged.
+
+| Item | Status | Task / acceptance / dependency |
+|---|---|---|
+| CB2b experiment | **implemented and verified — private research only** | Six matched cases654 accepted commands; stronger two-hand choices earn12.50R vs10R per start. Full/zero outcomes, exact controls,2135 model/actual assertions, paired checks, two replays and cold Studio Continue retained. NoR20 or reduced zero rate. |
+| Retain expected-grade comparator | **proposed** | Use the pinned `policy.gd` mean arm for subsequent authorized Crown studies. Accept exact public-pool source law/no hidden RNG, fixed bounds, legal fresh prefixes for different mechanics, no reward/redraw changes. Do not install as canonical/default AI or player assistance. Downside adds no observed benefit. |
+| Crown player-facing planning specification | **proposed** | Define understandable preview of current Cores/Scope, completion versus balance penalty, retained cards and final reward. Clearly distinguish present guarantees from hypothetical future cards; no hidden optimality claim. Depends on review of Crown terms; no UI implementation queued by this entry. Human understanding remains untested despite stronger computer planning. |
+| CB3 structural adoption acceptance | **proposed; gated** | Keep prior lifecycle/source/terms snapshots, requested-versus-credited cap, atomic rejection/duplicate restoration, separate cash counts, owner/publisher isolation, named prospective predecessor migration, populated active-rival handling, UI/projections and Studio-only Continue requirements. Explicitly rebase against current source before new tests. Existing research does not close these gates. |
+| CB4 activation / later commissions/support | **proposed; held** | Requires explicit numerical/activation approval and CB3; later deals require separate approval/evidence. Do not promiseR20 after three Briefs. No reward or redraw changes authorized here. |
+| Internal review routing | **handed off — DESIGN review only** | [Publication receipt](studies/crown-twohand-20261025-v1/publication.json) confirms a single Crown TODO paragraph changed and other bytes preserved; no QUEUED implementation, chat dispatch, commit or push. |
+
+## Exact delta and ancestry
+
+Child `simulators/crown-twohand-planning-20261025-v1` is byte-identical in project content to CB2 parent; **zero new runtime/schema/reward delta**. External supplied policy adds only first-hand mean/downside model plus diagnostic logs, preserving final-hand greedy and inherited development policy. [Policy/input hashes](studies/crown-twohand-20261025-v1/policy-pins.json), [independent review](studies/crown-twohand-20261025-v1/REVIEW.md).
+
+Canonical baseline `0ac7ab3da4ac7499a56a5eb9bfd0690422157e73910516ebffc77b40e12c163b`, unchanged parent/child candidate `f3e470f5e7f2f22eb1af8e3fdabe5d72457421ae3115f4020395c5467abdb3ad`, executed mechanics `4b817896b436bc0770640a0422cfc8757e76fdf33375adce26c96572a805f18a`, captured Git HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f` on dirty `main`. Current canonical drift retained; no silent current-source claim. Original thirteen-path CB2 runtime prototype remains in the [prior sealed review packet](handoffs/crown-brief-pilot-20261025-v3/HANDOFF.md), which is not an adoption-ready migration or approval. Do not create a second runtime patch for this policy-only experiment or adopt the failed prior partial packet.
+
+Recommendation: keep rewards and park redraws; retain modest planning improvement as evidence, then review planning presentation and the existing Crown adoption specification. Broad accessibility, required reputation pacing, numerical approval and human clarity are genuine unresolved design gates.

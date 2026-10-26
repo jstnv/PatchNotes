@@ -85,6 +85,17 @@ func _execute(request: Dictionary, insight_rolls: Array[int], replacement_catego
 		_deal_rng.state = deal_before
 		_insight_rng.state = insight_before
 		return reject(preflight.error)
+	var selected: Array=[]
+	for id: int in selected_ids:selected.append(_candidate_cards[candidate_ids.find(id)])
+	var search_total:=0;var debug_total:=0
+	for amount: int in preflight.search_requests:search_total+=amount
+	for amount: int in preflight.debug_requests:debug_total+=amount
+	var expected_discovered:=mini(_project_state.get_hidden_bugs(),search_total)
+	var expected_fixed:=mini(_project_state.get_known_bugs()+expected_discovered,debug_total)
+	var employee_plan:=_run_state.plan_qa_beta_hand(_project_state,selected,expected_discovered,expected_fixed)
+	if employee_plan.is_empty():
+		_deal_rng.state=deal_before;_insight_rng.state=insight_before
+		return reject("QA progress plan rejected")
 	if readiness.is_valid() and not readiness.call(preflight.next_cards.duplicate()):
 		_deal_rng.state = deal_before
 		_insight_rng.state = insight_before
@@ -92,6 +103,7 @@ func _execute(request: Dictionary, insight_rolls: Array[int], replacement_catego
 	var events: Array[Dictionary] = []
 	var resolved := [0,0]
 	var commit := func() -> bool:
+		if not _run_state.can_commit_employee_hand(employee_plan):return false
 		if not preflight.corrective_score_additions.is_empty():
 			if not _project_state.add_core_scores_and_scope(preflight.corrective_score_additions,0): return false
 			events.append({"type":"corrective_production","scores":preflight.corrective_score_additions.duplicate()})
@@ -112,6 +124,7 @@ func _execute(request: Dictionary, insight_rolls: Array[int], replacement_catego
 		if preflight.reveal_forecast:
 			_project_state.reveal_market_forecast_snapshot()
 			events.append({"type":"forecast_revealed"})
+		_run_state.commit_employee_hand(employee_plan)
 		_project_state.exhaust_beta_cards(preflight.finite_ids)
 		for id in preflight.finite_ids: events.append({"type":"finite_exhausted","id":id})
 		_project_state.advance_cycle()

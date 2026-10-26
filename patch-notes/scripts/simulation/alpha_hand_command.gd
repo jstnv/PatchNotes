@@ -110,6 +110,8 @@ func _execute(request: Dictionary) -> Dictionary:
 		if not employee_priorities.is_empty(): priorities = employee_priorities.duplicate()
 		if _run_state != null:
 			_run_state.commit_employee_hand(employee_plan)
+			var found:=_project_state.discover_bugs(employee_plan.get("qa_discoveries",0))
+			if found>0:events.append({"type":"employee_search","actual":found})
 			_run_state.commit_lean_saving(_project_state.get_release_id(), lean_before, lean_saving)
 		for card in selected:
 			if card.card_type == &"feature" and not card.renewable:
@@ -166,11 +168,9 @@ func calculate_base(selected: Array[CardData]) -> Dictionary:
 			return _invalid_action(validation_error)
 
 		cards.append(card)
-		var primary_category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[card.primary_stat]
-		score_additions[primary_category] = score_additions.get(primary_category, 0) + card.primary_value
-		if not card.secondary_stat.is_empty():
-			var secondary_category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[card.secondary_stat]
-			score_additions[secondary_category] = score_additions.get(secondary_category, 0) + card.secondary_value
+		for entry in card.core_contributions():
+			var category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[entry.stat]
+			score_additions[category] = score_additions.get(category, 0) + int(entry.value)
 		scope_amount += card.scope
 		if card.card_type == &"feature":
 			alpha_bug_pressure += _calculate_feature_alpha_bug_pressure(card)
@@ -302,6 +302,7 @@ func _get_pass_validation_error(card: CardData) -> String:
 	return _get_printed_score_validation_error(card)
 
 func _get_printed_score_validation_error(card: CardData) -> String:
+	if not card.ordered_runtime_error().is_empty(): return card.ordered_runtime_error()
 	if not CORE_SCORE_BY_STAT.has(card.primary_stat) or card.primary_value < 0:
 		return "Candidate '%s' has an invalid primary score." % card.id
 	if card.secondary_stat.is_empty():
@@ -327,9 +328,7 @@ func _calculate_provisional_core_scores(base_additions: Dictionary) -> Dictionar
 	return provisional_scores
 
 func _calculate_feature_alpha_bug_pressure(card: CardData) -> float:
-	var raw_score := card.primary_value
-	if not card.secondary_stat.is_empty():
-		raw_score += card.secondary_value
+	var raw_score := card.printed_core_total()
 	return (float(raw_score) * float(card.scope)) / ALPHA_BUG_PRESSURE_DENOMINATOR
 
 func _invalid_action(message: String) -> Dictionary:

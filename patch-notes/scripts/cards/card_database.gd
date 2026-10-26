@@ -70,6 +70,7 @@ func load_cards(path: String) -> void:
 
 
 func _create_card(entry: Dictionary) -> CardData:
+	if not validate_card_definition(entry).is_empty(): return null
 	var phase := StringName(entry.get("phase", ""))
 	if not CardData.is_valid_phase(phase):
 		push_warning("Skipping card entry with invalid phase: %s" % phase)
@@ -88,6 +89,7 @@ func _create_card(entry: Dictionary) -> CardData:
 
 	card.secondary_stat = StringName(entry.get("secondary_stat", ""))
 	card.secondary_value = entry.get("secondary_value", 0)
+	if entry.has("core_contributions") and not card.set_core_contributions(entry.core_contributions): return null
 
 	card.scope = entry.get("scope", 0)
 	card.renewable = entry.get("renewable", false)
@@ -108,6 +110,12 @@ func validate_card_definition(entry: Dictionary) -> String:
 	var phase := StringName(entry["phase"])
 	if not CardData.is_valid_phase(phase):
 		return "card '%s' has invalid phase '%s'" % [entry["id"], phase]
+	if entry.has("core_contributions"):
+		if phase not in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA]: return "Ordered Core contributions require Design or Alpha"
+		for key in ["primary_stat", "primary_value", "secondary_stat", "secondary_value"]:
+			if entry.has(key): return "Ordered and legacy Core fields cannot be mixed"
+		var reason := CardData.ordered_contributions_error(entry.core_contributions)
+		if not reason.is_empty(): return reason
 	var beta_keys := [&"beta_category", &"beta_value", &"qa_operation"]
 	if phase != CardData.PHASE_BETA:
 		for key: StringName in beta_keys:

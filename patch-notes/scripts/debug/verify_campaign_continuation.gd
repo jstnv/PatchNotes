@@ -15,7 +15,7 @@ func game(session: RefCounted,title: String) -> void:
 	for phase_index in range(3):
 		if phase_index > 0: dev(session,&"enter_next_phase")
 		dev(session,&"begin")
-		for hand_index in range(2): dev(session,&"play",{"candidate_ids":session.development.hand.candidate_ids.slice(0,4)})
+		for hand_index in range(4 if title=="First" else 2): dev(session,&"play",{"candidate_ids":session.development.hand.candidate_ids.slice(0,4)})
 		dev(session,&"request_exit")
 		if session.development.awaiting_confirmation: dev(session,&"confirm_exit")
 	act(session,&"launch")
@@ -56,7 +56,13 @@ func money(session: RefCounted,kind: StringName,method: StringName,quote: Dictio
 	var signals := watch(session.run)
 	var expected: bool = native.call(method,quote)
 	act(session,kind,{"quote":quote},accepted)
-	expect(expected == accepted and Replay.freeze(native) == Replay.freeze(session.run) and signals == expected_signals,"Command matches direct Run transaction and signal order: "+str(kind))
+	var direct_state: Dictionary = Replay.freeze(native)
+	var command_state: Dictionary = Replay.freeze(session.run)
+	# The native comparator was reconstructed from a Studio DTO; temporary
+	# market transaction scratch is deliberately absent after hydration.
+	direct_state.erase("_market_committed_candidate")
+	command_state.erase("_market_committed_candidate")
+	expect(expected == accepted and direct_state == command_state and signals == expected_signals,"Command matches direct Run transaction and signal order: "+str(kind))
 	financial_comparisons += 1
 
 func restore(envelope: Dictionary,source: RefCounted) -> RefCounted:
@@ -79,7 +85,7 @@ func _initialize() -> void:
 	money(session,&"hire",&"hire_production_specialist",{},false)
 	act(session,&"admit_research",{"quote":session.run.get_feature_research_quote(&"save_files")})
 	complete_contract(session,{"kind":&"ironclad"})
-	bank = session.quote_bank(50000,24)
+	bank = session.quote_bank(150000,24)
 	money(session,&"bank_borrow",&"accept_bank_loan",bank)
 	money(session,&"bank_borrow",&"accept_bank_loan",bank,false)
 	var prefix: Dictionary = tape

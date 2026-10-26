@@ -79,7 +79,7 @@ static func installment(contract: Dictionary, number: int) -> Dictionary:
 		"interest_cents": interest, "payment_cents": principal + interest}
 
 
-static func eligibility(ledger: Dictionary, rent: int, obligations: int = 0) -> Dictionary:
+static func eligibility_v1(ledger: Dictionary, rent: int, obligations: int = 0) -> Dictionary:
 	var result := {"eligible": false, "reason": "Two completed months with positive settled sales are required.",
 		"older_sales_cents": 0, "latest_sales_cents": 0, "basis_cents": 0,
 		"rent_cents": rent, "obligations_cents": obligations, "capacity_cents": 0}
@@ -127,8 +127,8 @@ static func maximum_principal(capacity: int, months: Variant, cycle: int, cash: 
 	return best
 
 
-static func quote(ledger: Dictionary, principal: Variant, months: Variant, run_id: StringName, rent: int, obligations: int = 0) -> Dictionary:
-	var result := eligibility(ledger, rent, obligations)
+static func quote_v1(ledger: Dictionary, principal: Variant, months: Variant, run_id: StringName, rent: int, obligations: int = 0) -> Dictionary:
+	var result := eligibility_v1(ledger, rent, obligations)
 	result["accepted"] = false
 	result["maximum_principal_cents"] = maximum_principal(result.capacity_cents, months, ledger.last_cycle, ledger.cash_cents) if result.eligible else 0
 	var terms := schedule(principal, months, ledger.last_cycle)
@@ -147,6 +147,83 @@ static func quote(ledger: Dictionary, principal: Variant, months: Variant, run_i
 	result["revision"] = revision
 	result.accepted = true
 	result.reason = "Quote ready. Acceptance adds financing without advancing time."
+	return result
+
+
+## Version two shares the conservative surplus across all outstanding loans.
+## Financing and publisher support never enter the settled-sales basis.
+static func eligibility(ledger: Dictionary, rent: int, obligations: int = 0) -> Dictionary:
+	var result := {"eligible":false,"reason":"Insufficient settled-sales capacity.",
+		"older_sales_cents":0,"latest_sales_cents":0,"basis_cents":0,
+		"rent_cents":rent,"obligations_cents":obligations,"capacity_cents":0,
+		"minimum_principal_cents":_multiply(rent,3),"bank_commitments_cents":0,"arrears_cents":0}
+	if rent <= 0 or result.minimum_principal_cents < MIN_PRINCIPAL or obligations < 0 or rent > MAX_INT-obligations: return result
+	for loan: Dictionary in ledger.get("bank_loans",[]):
+		if not loan.closed:
+			result.bank_commitments_cents = _sum(result.bank_commitments_cents,loan.schedule.maximum_installment_cents)
+			if result.bank_commitments_cents < 0: return result
+	for bill: Dictionary in ledger.get("obligations",[]):
+		result.arrears_cents = _sum(result.arrears_cents,bill.unpaid_cents)
+		if result.arrears_cents < 0: return result
+	var completed: int = int(ledger.last_cycle)/2
+	if completed >= 2 and ledger.monthly_rows.size() >= completed:
+		var older: int = ledger.monthly_rows[completed-2].sales_settled_cents
+		var latest: int = ledger.monthly_rows[completed-1].sales_settled_cents
+		result.older_sales_cents = older
+		result.latest_sales_cents = latest
+		if older > 0 and latest > 0:
+			result.basis_cents = mini(latest,older/2+latest/2+(older%2+latest%2)/2)
+	result.capacity_cents = maxi(0,maxi(0,int(result.basis_cents)-rent-obligations)/4-int(result.bank_commitments_cents))
+	result.eligible = result.capacity_cents > 0
+	return result
+
+
+static func quote(ledger: Dictionary, principal: Variant, months: Variant, run_id: StringName, rent: int, obligations: int = 0) -> Dictionary:
+	var result := eligibility(ledger,rent,obligations)
+	result.merge({"rules_version":2,"accepted":false,"maximum_principal_cents":0,
+		"requested_principal_cents":0,"recovery_cents":0,"net_proceeds_cents":0,
+		"adjusted":false,"floor_facility":false})
+	if typeof(principal)!=TYPE_INT or principal<=0 or typeof(months)!=TYPE_INT or months<1 or run_id.is_empty():
+		result.reason = "Enter a positive exact-cent amount and a positive whole-month term."
+		return result
+	result.requested_principal_cents = principal
+	if result.minimum_principal_cents < MIN_PRINCIPAL or result.bank_commitments_cents < 0 or result.arrears_cents < 0: return result
+	var minimum: int = result.minimum_principal_cents
+	var maximum := maximum_principal(result.capacity_cents,months,ledger.last_cycle,ledger.cash_cents)
+	var floor_terms := schedule(minimum,months,ledger.last_cycle)
+	var facility_used := false
+	for action: Dictionary in ledger.get("actions",[]):
+		var operation: Dictionary = action.get("operation",{})
+		if operation.get("type")==&"accept" and operation.get("quote",{}).get("floor_facility",false): facility_used=true
+	# A bounded recovery facility, not an unlimited replacement income stream.
+	# Its full principal remains owed with the ordinary positive interest rate.
+	if maximum < minimum and not facility_used and ledger.cash_cents < minimum and not floor_terms.is_empty() and minimum <= MAX_INT-int(ledger.cash_cents):
+		maximum = minimum
+		result.capacity_cents = floor_terms.maximum_installment_cents
+		result.floor_facility = true
+	result.maximum_principal_cents = maximum
+	if maximum < minimum:
+		result.eligible = false
+		result.reason = "No qualified loan covers the three-rent minimum. Existing Bank payments reserve capacity; the cash-poor recovery facility is available once per Studio."
+		return result
+	var adjusted := clampi(principal,minimum,maximum)
+	var terms := schedule(adjusted,months,ledger.last_cycle)
+	if terms.is_empty():
+		result.reason = "The term cannot be represented safely by an exact-cent schedule."
+		return result
+	result.schedule = terms
+	result.eligible = true
+	result.accepted = true
+	result.adjusted = adjusted != principal
+	result.recovery_cents = mini(adjusted,result.arrears_cents)
+	result.net_proceeds_cents = adjusted-int(result.recovery_cents)
+	result.run_id = run_id
+	result.loan_id = StringName("%s:bank:%d"%[run_id,ledger.get("bank_loans",[]).size()+1])
+	result.revision = ledger.actions.size()
+	result.quote_id = StringName("%s:quote:%d:%d:%d"%[run_id,result.revision,adjusted,months])
+	result.reason = "One-time recovery facility: three months of rent. Ordinary interest and repayment apply." if result.floor_facility else "Qualified quote ready."
+	if result.adjusted: result.reason += " Requested amount automatically adjusted."
+	result.reason += " Overdue bills are deducted from proceeds; acceptance advances no time."
 	return result
 
 

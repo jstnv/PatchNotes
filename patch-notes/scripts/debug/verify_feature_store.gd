@@ -39,7 +39,7 @@ func _verify() -> void:
 	expect(run.get_feature_familiarity(&"text") == 7 and run.get_feature_store_offer(&"colored_text").price_cents == 32500, "Seven projects retain credits but discount caps at 50 percent")
 	before = run.get_cash_cents()
 	expect(ResearchTestActions.acquire(run,&"colored_text") and run.get_cash_cents() == before - 48750 and run.get_completed_run_cycles() == 2, "Purchase uses current discounted price and one cycle")
-	expect(run.get_feature_store_offer(&"save_files").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").unlocked, "Roots and three-Gameplay ownership gate have no discount")
+	expect(run.get_feature_store_offer(&"save_files").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").discount_percent == 0 and not run.get_feature_store_offer(&"difficulty_levels").unlocked, "Roots have no discount; Difficulty needs its two named parents")
 	var eligible: Array = db.get_owned_features_for_phase(run, &"design")
 	expect(eligible.size() == 15 and db.get_card(&"colored_text").primary_value == 2 and db.get_card(&"save_files").scope == 2, "Narrow supply API includes purchased authentic ledger definitions")
 	var store := FeatureStore.new()
@@ -49,7 +49,7 @@ func _verify() -> void:
 	store.set("_selected", &"branching_nodes")
 	store.call("_show_details")
 	var detail: Label = store.get("_details")
-	expect(detail.text.contains("Own Save Files") and store._map.price.text.contains("$1500.00"), "Branch detail shows prerequisite and exact price")
+	expect(store._buy.tooltip_text.contains("Save Files") and store._buy.text.contains("$750.00"), "Prerequisite is on action hover; exact admission price is on button")
 	if "--capture-store" in OS.get_cmdline_user_args():
 		store.call("_refresh")
 		await process_frame
@@ -134,10 +134,9 @@ func _verify_tree_ui() -> void:
 	expect(store.visible and not studio.get_node("%Dashboard").visible, "Studio button opens tree")
 	var nodes: Dictionary = store.get("_nodes")
 	var edges: Array = store.get("_edges")
-	expect(nodes.size() == 38 and edges.size() == 10, "Full ledger has 38 nodes and nine parent edges plus Gameplay gate")
+	expect(nodes.size() == 42 and edges.size() == 28, "Full ledger has 42 nodes and twenty-eight same-tree parent edges")
 	var lane_by_id: Dictionary = store.get("_lane_by_id")
-	var lane_buttons: Dictionary = store.get("_lane_buttons")
-	expect(lane_by_id.size() == nodes.size() and lane_buttons.size() == 5, "Every ledger Feature appears once across five browsable lanes")
+	expect(lane_by_id.size() == nodes.size() and store._map.category_regions.size() == 5, "Every ledger Feature appears once across five browsable lanes")
 	for entry: Dictionary in FeatureStoreCatalog.entries():
 		var parent := StringName(entry.purchase_parent)
 		if not parent.is_empty():
@@ -147,14 +146,14 @@ func _verify_tree_ui() -> void:
 	expect(_child_is_outward(store, nodes[&"save_files"], nodes[&"branching_nodes"], &"Technology & Tools") and edges.has([&"save_files", &"branching_nodes"]) and not edges.any(func(edge: Array): return edge[1] == &"save_files"), "Save Files is an independent root with an upward child")
 	store.call("_select_lane", &"Gameplay")
 	var tree: Control = store.get("_tree")
-	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and _child_is_outward(store, tree.get_node("GameplayGate"), nodes[&"difficulty_levels"], &"Gameplay"), "Difficulty retains distinct Gameplay ownership gate inward of its node")
-	expect(lane_buttons[&"Gameplay"].focus_mode == Control.FOCUS_ALL and nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL, "Lane and node navigation are keyboard/controller focusable")
+	expect(edges.has([&"turn_based_combat", &"difficulty_levels"]) and edges.has([&"scripted_ai", &"difficulty_levels"]) and tree.get_node_or_null("GameplayGate") == null, "Difficulty has both named parent arrows and no count gate")
+	expect(nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL and store._scroll.focus_mode == Control.FOCUS_ALL, "Map and node navigation are keyboard/controller focusable")
 	expect(nodes[&"colored_text"].text.contains("Need $325.00 to queue") and nodes[&"branching_nodes"].text.contains("Locked"), "Deposit-short and locked node states are distinct")
 	store.call("_select_lane", &"Visuals")
 	store.call("_select_node", &"colored_text")
 	expect(store.get("_buy").disabled, "One-cent-short UI disables purchase")
 	run.record_resolved_feature(ProjectState.new(30), &"text", &"design")
-	expect(store._map.price.text.contains("$292.50") and store.get("_buy").disabled, "Live familiarity discount refreshes details and affordability")
+	expect(store._buy.tooltip_text.contains("10%") and store._buy.text.contains("$325.00") and store.get("_buy").disabled, "Live familiarity discount refreshes details and affordability")
 	run.add_cash(10000)
 	store.call("_select_lane", &"Technology & Tools")
 	store.call("_select_node", &"save_files")
@@ -165,7 +164,7 @@ func _verify_tree_ui() -> void:
 	expect(nodes[&"save_files"].text.contains("Owned") and nodes[&"branching_nodes"].text.contains("Queue available"), "Purchase updates root and reveals available child")
 	expect(not nodes[&"save_files"].text.contains("$") and not nodes[&"save_files"].tooltip_text.contains("$") and not store.get("_details").text.contains("price"), "Owned node, tooltip and detail hide acquisition prices immediately")
 	expect(store._map.price.text.is_empty(), "Owned popup has no acquisition price")
-	expect(not nodes[&"branching_nodes"].text.contains("$") and nodes[&"branching_nodes"].tooltip_text.contains("Base:"), "Map stays price-free; unowned tooltip retains its quote")
+	expect(not nodes[&"branching_nodes"].text.contains("$") and not nodes[&"branching_nodes"].tooltip_text.contains("Base:") and nodes[&"branching_nodes"].tooltip_text.contains("Play cost"), "Map stays acquisition-price-free; node hover shows play cost")
 	var scroll: ScrollContainer = store.get("_scroll")
 	scroll.scroll_horizontal = 200
 	await process_frame
@@ -224,7 +223,7 @@ func _verify_tree_ui() -> void:
 	await process_frame
 
 func _child_is_outward(store: FeatureStore, parent: Control, child: Control, lane: StringName) -> bool:
-	var parent_rect := parent.get_rect() if parent == store._gate else store._map.node_footprint(parent)
+	var parent_rect := store._map.node_footprint(parent)
 	var child_rect := store._map.node_footprint(child)
 	var direction: Vector2 = store._map.CATEGORY_DIRECTIONS[lane]
 	if direction == Vector2.LEFT: return child_rect.end.x < parent_rect.position.x

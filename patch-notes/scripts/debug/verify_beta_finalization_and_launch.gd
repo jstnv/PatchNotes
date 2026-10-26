@@ -142,6 +142,8 @@ func _verify_gameplay_transition() -> void:
 	_expect(state.has_units_sold_result() and state.get_units_sold_result().get_sales_period() == &"month_1", "Gameplay commits Month 1 units sold exactly once from prior launch results")
 	_expect(state.has_month_one_sales_revenue_result() and state.get_month_one_sales_revenue_result().get_earned_sales_cycle_count() == 0, "Gameplay commits the projected Month 1 sales/revenue foundation without earning sales at Launch")
 	_expect(not active.get_node("%SummaryPanel").visible and active.get_node_or_null("%ContinueButton") == null, "Studio needs no continuation confirmation and starts with release stats hidden")
+	_expect(run.get_released_game_ids().size()==1 and not active.get_node("%PostGameSummaries").disabled and active.get_node("%StartNextGame").text=="Produce Next Game", "First committed launch immediately enables history and labels the next game correctly")
+	_expect(run.is_primitive_contract_offer_available() and not active.get_node("%Contracts").disabled, "First committed launch immediately enables the legally available Contract offer")
 	active.open_summary()
 	var text := (active.get_node("%ReviewLabel") as Label).text + (active.get_node("%EarnedLabel") as Label).text
 	_expect(not text.contains("Hidden") and not text.contains("Remaining") and text.contains("Final Review:") and text.contains("Earned: 0"), "Post Game Summaries opens the committed results")

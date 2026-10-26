@@ -52,3 +52,4 @@ When the user approves a rule, record the decision and rationale in a new versio
 - [Post-600 hold and exact-5.0 capture disposition](2026-10-11-post-600-hold-and-neutrality-v1.md): user puts the numerical taper choice on hold; existing checks cover exact 5.0 neutrality, so no new simulation is needed now.
 - [Current trial closeout assessment](2026-10-11-fanbase-trial-closeout-assessment-v1.md): no further Fanbase design decision blocks the playable trial; final numbers and the post600 taper remain open.
 - [Headless eight-release Fanbase finding](2026-10-11-headless-fanbase-eight-release-finding-v1.md): same-start legal routes record two Review4.9 losses with existing Fans, one 600-Fan cap crossing, financial rejections and a retained timeout; no numerical approval.
+- [Near-neutral trial disposition](2026-10-11-near-neutral-trial-disposition-v1.md): delegated design judgment closes the Review4.9 trial review with no code delta or final numerical lock.

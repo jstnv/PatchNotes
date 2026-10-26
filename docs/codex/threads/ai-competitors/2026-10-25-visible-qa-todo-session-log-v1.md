@@ -1,0 +1,7 @@
+# AI Competitors TODO intake — 2026-10-25
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f` at intake and close. Read `CURRENT_STATE.md`, `TODO.md`, shared README, the source-pinned visible-QA finding and its disposition; inspected branch, HEAD, status and the TODO diff footprint before editing. The worktree was already broadly dirty, including the shared TODO; all pre-existing edits and `.codex-godot-temp` were preserved.
+
+Changed only `docs/codex/TODO.md` in this continuation: added one dated item 22 DESIGN review record linking the paired finding and rejected candidate disposition. The entry reports the 6.0+ Review gains, one delayed rival publication, increased player units in both worlds, the still ACTIVE/TRIAL two-hand Beta and OPEN next gates. It queues no gameplay adoption. No canonical source, variant, save, commit or push changed.
+
+Checks: targeted `rg` confirmed the new TODO entry at line 308; `git diff --numstat -- docs/codex/TODO.md` showed `238\t27` after the edit, including the pre-existing diff; `git diff --check -- docs/codex/TODO.md` returned no diagnostics. The source finding and disposition remain untracked thread-owned records from the preceding study. No simulation was run for this documentation-only intake. Follow-up: design review of same-duration public QA value versus separately justified longer Beta with population/cadence and cash/CPU checks.

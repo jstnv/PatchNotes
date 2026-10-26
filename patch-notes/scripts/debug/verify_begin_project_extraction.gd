@@ -15,6 +15,20 @@ func mechanics(run: RunState,project: ProjectState) -> Dictionary:
 	snapshot.erase("_seen_tutorial_topics")
 	return {"run":snapshot,"project":Replay.freeze(project)}
 
+func historical_project(snapshot: Dictionary, current: bool) -> Dictionary:
+	var result := snapshot.duplicate(true)
+	var p: Dictionary = result.project
+	if current:
+		var standards := [20,13,40,59] # Locked Puzzle Genre targets.
+		expect(p._market_snapshot_id == "market-0-neutral" and p._market_standards == Replay.freeze(standards),"Current Begin freezes exact neutral Puzzle standards")
+		expect(p._market_details == Replay.freeze({"snapshot_id":"market-0-neutral","cycle_start":0,"standards":standards,"base":standards,"recent_count":0,"density_lift":0,"benchmark_lifts":[0,0,0,0],"historical":false}),"Current Begin retains complete neutral provenance")
+	else:
+		expect(p._market_snapshot_id == "" and p._market_standards.is_empty() and p._market_details.is_empty(),"Original Begin oracle predates market metadata")
+	p._market_snapshot_id = ""
+	p._market_standards = []
+	p._market_details = {}
+	return result
+
 func _initialize() -> void:
 	await process_frame
 	var original: Script = load(ProjectSettings.globalize_path("res://../docs/codex/threads/simulation-engine/m3a-v1/gameplay_oracle.gd"))
@@ -52,7 +66,8 @@ func _initialize() -> void:
 					game.free()
 				results.append(mechanics(session.run,project))
 				await process_frame
-			expect(results[0] == results[1] and results[1] == results[2],"Original/live/headless Begin parity")
+			expect(results[1] == results[2],"Current live/headless Begin state and RNG match exactly")
+			expect(historical_project(results[0],false) == historical_project(results[1],true),"Original Begin matches except independently checked market provenance")
 			traces.append({"seed":seed_value,"controlled":controlled,"original":results[0],"live":results[1],"headless":results[2]})
 	var output := OS.get_environment("PN_CARD_FRAME_OUTPUT")
 	if not output.is_empty(): FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(traces,"\t"))

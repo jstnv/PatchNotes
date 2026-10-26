@@ -1,0 +1,53 @@
+extends SceneTree
+var checks := 0
+var failures := 0
+func _initialize() -> void: _run.call_deferred()
+func expect(ok: bool, label: String) -> void:
+	checks += 1
+	print("PASS: " if ok else "FAIL: ", label)
+	if not ok: failures += 1
+func _run() -> void:
+	if not FileAccess.file_exists("res://scripts/tutorial/guided_production_model.gd"):
+		expect(false,"Optional scripted practice tutorial model exists")
+		quit(1); return
+	var script: Script = load("res://scripts/tutorial/guided_production_model.gd")
+	var model: RefCounted = script.new()
+	expect(model.start(root.get_node("CardDatabase").get_development_catalog()),"Practice initializes from real card definitions")
+	var original: Dictionary = model.snapshot()
+	expect(model.pool.size()==4,"First draw pool is exactly one four-card hand")
+	expect(not model.play([0,0,1,2]).ok and model.snapshot()==original,"Duplicate selection cannot advance or mutate practice")
+	var mixed: Dictionary = model.play([0,1,2,3])
+	expect(mixed.ok and mixed.specialization_stat.is_empty() and not mixed.balanced_production,"First mixed hand has no synergy")
+	expect(model.project.get_current_scope()==1 and model.project.get_core_score(0)==3,"Printed Core and Scope are separate")
+	var after: Dictionary = model.snapshot()
+	expect(not model.play([0,1,2,3]).ok and model.snapshot()==after,"Already-resolved lesson cannot resolve twice")
+	expect(model.next_lesson(),"Continue after first hand")
+	var balanced: Dictionary = model.play([0,1,2,3])
+	expect(balanced.ok and balanced.balanced_production,"Next hand triggers actual Balanced Production")
+	expect(balanced.scores=={0:2,1:2,2:2,3:2} and balanced.scope==1,"Balanced shares original total without changing Scope")
+	expect(model.next_lesson(),"Continue to Specialization")
+	var specialized: Dictionary = model.play([0,1,2,3])
+	expect(specialized.ok and specialized.specialization_stat==&"graphics" and specialized.scores[0]==20,"Specialization uses real ×1.5 category rounding")
+	expect(model.next_lesson() and model.pool.size()==7,"Three other candidates are added for redraw lesson")
+	var before_redraw: Dictionary = model.snapshot()
+	expect(not model.play([0,1,2,3]).ok and not model.redraw([0]).ok and model.snapshot()==before_redraw,"Cannot bypass or redraw the wrong tutorial card")
+	var cycle: int = model.project.get_current_cycle()
+	var bank: int = model.run.get_available_redraws()
+	expect(model.redraw([3]).ok and model.pool[3].id==&"graphics_pass","Scripted Sound→Graphics redraw")
+	expect(model.project.get_current_cycle()==cycle and model.run.get_available_redraws()==bank-1,"Redraw costs one practice redraw and no productive cycle")
+	expect(not model.redraw([3]).ok,"Scripted redraw cannot be consumed twice")
+	expect(model.play([0,1,2,3]).ok,"Redrawn hand plays a matching synergy")
+	expect(model.next_lesson(),"Enter Alpha")
+	var alpha: Dictionary = model.play([0,1,2,3])
+	expect(alpha.ok and alpha.scope==5 and model.project.has_design_bug_finalization(),"Alpha expands Core/Scope after Design")
+	expect(model.next_lesson() and model.project.has_alpha_finalization() and model.project.get_hidden_bugs()==8,"Beta begins with labelled scripted eight-Bug example")
+	var marketing: Dictionary = model.play([0,1,2,3])
+	expect(marketing.ok and model.project.get_marketing_output()==7,"Actual Beta Marketing specialization produces seven Marketing Output")
+	expect(model.next_lesson(),"Continue to Search")
+	expect(model.play([0,1,2,3]).ok and model.project.get_hidden_bugs()==0 and model.project.get_known_bugs()==8 and model.project.get_fixed_bugs()==0,"Search reveals but does not fix Bugs")
+	expect(model.next_lesson(),"Continue to Debug")
+	expect(model.play([0,1,2,3]).ok and model.project.get_known_bugs()==0 and model.project.get_fixed_bugs()==8,"Debug fixes Known Bugs through actual Beta command")
+	expect(model.next_lesson() and model.complete,"Practice completes without launching a release")
+	expect(model.run.get_released_game_ids().is_empty(),"Practice never registers a release")
+	print("Guided tutorial model: %d checks, %d failures"%[checks,failures])
+	quit(failures)

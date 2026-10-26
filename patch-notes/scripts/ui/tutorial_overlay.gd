@@ -2,6 +2,7 @@ class_name TutorialOverlay
 extends CanvasLayer
 
 signal closed
+signal practice_requested
 
 const TOPICS := {
 	&"main_menu": [
@@ -53,11 +54,13 @@ var body_label: Label
 var back_button: Button
 var next_button: Button
 var skip_button: Button
+var practice_button: Button
 var page_index := 0
 var previous_focus: Control
 
 
 func _ready() -> void:
+	add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
 	layer = 30
 	visible = false
 	shade = ColorRect.new()
@@ -91,6 +94,11 @@ func _ready() -> void:
 	body_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body_label.add_theme_font_size_override("font_size", 18)
 	content.add_child(body_label)
+	practice_button = Button.new()
+	practice_button.text = "Play guided production tutorial"
+	practice_button.custom_minimum_size.y = 40
+	practice_button.pressed.connect(func(): close(); practice_requested.emit())
+	content.add_child(practice_button)
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
 	content.add_child(actions)
@@ -116,6 +124,7 @@ func _ready() -> void:
 func open(context: StringName = &"design") -> void:
 	topic = context if TOPICS.has(context) else &"design"
 	pages = TOPICS[topic]
+	practice_button.visible = topic == &"studio"
 	previous_focus = get_viewport().gui_get_focus_owner()
 	page_index = 0
 	visible = true

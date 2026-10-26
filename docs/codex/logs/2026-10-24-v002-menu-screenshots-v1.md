@@ -1,0 +1,7 @@
+# v0.02 menu screenshots — 2026-10-24
+
+User requested screenshots of Main Menu, How to Play and Studio creation. Read CURRENT_STATE/TODO and relevant menu/guide source; inspected branch/HEAD/status/diff. Shared dirty `main` remains at `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; canonical project and `.codex-godot-temp` unchanged. No commit/push.
+
+Ran `python -X utf8 docs/codex/findings/v002-menu-captures-20261024-v1/run.py`: **PASS**, native OpenGL exit0/errors0, three1280×720 PNGs. Godot loads the exact shipped v0.02 embedded EXE as its main pack, SHA256 `8a3f4d6dca58e8935ea76d41941c9dd1c8e387ce53d82fa094df80ca7533ecf2`; the external SceneTree capture harness navigates actual menu buttons using pointer events. This is native rendering of the shipped package, not OS-window computer control or direct EXE interaction. All three images were visually inspected.
+
+[Capture receipt/hashes](../findings/v002-menu-captures-20261024-v1/result.json), [Main Menu](../findings/v002-menu-captures-20261024-v1/main-menu.png), [How to Play](../findings/v002-menu-captures-20261024-v1/how-to-play.png), [Studio creation](../findings/v002-menu-captures-20261024-v1/studio-creation.png). Uses an isolated empty profile, so Continue is disabled and the Studio form has no selections. No Studio was created/committed and no player saves were accessed. Raw logs/profile: `C:/Users/64jus/AppData/Local/Temp/pn-v002-menu-captures-20261024-v1/`.

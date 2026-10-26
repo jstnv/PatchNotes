@@ -1,0 +1,28 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_campaign_latency.gd"
+  ],
+  "exit": 2,
+  "seconds": 2.688,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\publication-green-v2",
+  "script_sha256": "a8fc11451b08f06f12c9e605ad106570e1edd7c684a7cdaa3472900a29508d48",
+  "result": {
+    "checks": 147,
+    "failures": 2,
+    "measurements": {
+      "cycle": 96,
+      "original_validation_us": 12132,
+      "repeated_validation_us": 913
+    },
+    "ok": false
+  },
+  "errors": [
+    "ERROR: FAIL: An atomic write validates its identical DTO once, including readback and cleanup",
+    "ERROR: FAIL: A subsequent publication validates its old and new DTO once each"
+  ]
+}

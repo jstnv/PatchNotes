@@ -16,6 +16,8 @@ var contract: RefCounted
 var sequence := 0
 var in_studio := true
 var _busy := false
+var _commission_request: Dictionary = {}
+var _support_request: Dictionary = {}
 
 func initialize(run_state: RunState, definitions: RefCounted, snapshot_definitions: PrimitiveSnapshotDatabase) -> bool:
 	if run != null or run_state == null or definitions == null or snapshot_definitions == null or not run_state.is_cash_initialized() or run_state._bank_run_id.is_empty() or run_state.get_studio_name().is_empty() or run_state.get_active_contract() != null: return false
@@ -52,6 +54,8 @@ func execute(request: Dictionary) -> Dictionary:
 	var before := run.random_streams.snapshot()
 	var result := _execute(StringName(request.type),request.payload)
 	if result.ok:
+		if StringName(request.type) != &"quote_commission": _commission_request = {}
+		if StringName(request.type) != &"quote_support": _support_request = {}
 		sequence += 1
 		result.sequence = sequence
 		result.rng_before = before
@@ -85,19 +89,29 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 		run.refresh_redraws()
 		result.events.append({"type":"studio_entered","release_id":development.project.get_release_id()})
 		return result
-	if kind in [&"hire",&"accept_contract"]:
+	if kind in [&"hire",&"course",&"search_contracts",&"accept_contract"]:
 		var result := StudioActions.execute(run,kind,payload,true)
 		if result.ok and kind == &"accept_contract":
 			contract = Contract.new(result.state,run,catalog)
 			result.erase("state")
 			in_studio = false
 		return result
+	if kind in [&"quote_commission",&"quote_support"]:
+		if payload.size() != 3: return reject("Malformed quote request")
+		for key: String in ["name","genre","theme"]:
+			if not payload.get(key) is String and not payload.get(key) is StringName: return reject("Malformed quote choice")
+		var quote := run.get_support_quote(str(payload.name),StringName(payload.genre),StringName(payload.theme)) if kind == &"quote_support" else run.get_commission_quote(str(payload.name),StringName(payload.genre),StringName(payload.theme))
+		if quote.is_empty(): return reject("Commission unavailable")
+		var choice := {"name":str(payload.name),"genre":str(payload.genre),"theme":str(payload.theme)}
+		if kind == &"quote_support": _support_request = choice
+		else: _commission_request = choice
+		return {"ok":true,"events":[{"type":"support_quoted" if kind == &"quote_support" else "commission_quoted","quote":quote}]}
 	if kind == &"begin_development":
 		for field in ["name","genre","theme"]:
 			if not payload.get(field) is String and not payload.get(field) is StringName: return reject("Missing project choice")
 		var priorities: Variant = payload.get("priorities",{})
-		if not priorities is Dictionary or (not priorities.is_empty() and not PriorityAllocation.is_valid_distribution(priorities)) or payload.size() != (4 if payload.has("priorities") else 3): return reject("Invalid priorities or project payload")
-		var result := BeginProject.execute(run,snapshots,str(payload.name),StringName(payload.genre),StringName(payload.theme))
+		if not priorities is Dictionary or (not priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(priorities)) or not payload.get("commission_quote",{}) is Dictionary or not payload.get("support_quote",{}) is Dictionary or payload.size() != 3 + int(payload.has("priorities")) + int(payload.has("commission_quote")) + int(payload.has("support_quote")): return reject("Invalid priorities or project payload")
+		var result := BeginProject.execute(run,snapshots,str(payload.name),StringName(payload.genre),StringName(payload.theme),Callable(),[],payload.get("commission_quote",{}),payload.get("support_quote",{}))
 		if not result.ok: return reject(result.error)
 		development = Development.new()
 		development.initialize(result.project,run,catalog,snapshots)
@@ -124,6 +138,10 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 	return reject("Unsupported Studio command")
 
 func observation() -> Dictionary:
+	var commission_quote := {}
+	var support_quote := {}
+	if in_studio and not _support_request.is_empty(): support_quote = run.get_support_quote(_support_request.name,StringName(_support_request.genre),StringName(_support_request.theme))
+	if in_studio and not _commission_request.is_empty(): commission_quote = run.get_commission_quote(_commission_request.name,StringName(_commission_request.genre),StringName(_commission_request.theme))
 	var releases: Array = []
 	for id in run.get_released_game_ids():
 		releases.append({"id":id,"metadata":run.get_release_metadata(id),"sales":run.get_released_game_sales(id),"campaign":run.get_post_launch_campaign_offer(id)})
@@ -134,7 +152,7 @@ func observation() -> Dictionary:
 		for id in ids:
 			var quote := run.get_feature_research_quote(id)
 			if not quote.is_empty(): quotes.append(quote)
-	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"releases":releases,"studio_actions":StudioActions.observation(run),"contract":{} if contract == null else contract.observation(),"development":{} if in_studio or contract != null else development.observation()}
+	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"releases":releases,"studio_actions":StudioActions.observation(run),"publisher_relationships":run.get_publisher_relationships(),"commission_quote":commission_quote,"support_quote":support_quote,"support_history":run.get_support_history(),"commission_deals":run.get_commission_deals(),"contract":{} if contract == null else contract.observation(),"development":{} if in_studio or contract != null else development.observation()}
 
 func quote_bank(principal_cents: Variant,months: Variant) -> Dictionary:
 	return run.get_bank_quote(principal_cents,months) if run != null else {}
@@ -165,7 +183,13 @@ func _replay_state_with_context(objects: Dictionary) -> Dictionary:
 		definitions.append(fields)
 	# Completed presentation objects are not Studio authority. Continue has always
 	# discarded them; canonical Studio replay state must do the same.
-	return {"kind":"campaign_v2","run":Replay._freeze(run,objects),"sequence":sequence,"studio":in_studio,"development":{} if development == null or in_studio or contract != null else Replay._state(development,objects),"contract":{} if contract == null or in_studio else Replay._freeze(contract,objects),"definitions":definitions,"snapshots":Replay._freeze(snapshots,objects)}
+	# The committed-candidate scratch only bridges the synchronous player/world
+	# transaction. The saved world.market owns its durable snapshot. Do not let
+	# scratch discarded by Continue change a campaign's authoritative digest.
+	var run_state: Dictionary = Replay._freeze(run,objects)
+	run_state.erase("_market_committed_candidate")
+	objects[run] = run_state.duplicate(true) # Nested hand/Contract Run references use the same projection.
+	return {"kind":"campaign_v2","commission_request":_commission_request.duplicate(true),"support_request":_support_request.duplicate(true),"run":run_state,"sequence":sequence,"studio":in_studio,"development":{} if development == null or in_studio or contract != null else Replay._state(development,objects),"contract":{} if contract == null or in_studio else Replay._freeze(contract,objects),"definitions":definitions,"snapshots":Replay._freeze(snapshots,objects)}
 
 ## Simulation checkpoint envelope. The inner payload is exactly the existing
 ## Studio codec, not an active-project save format. Sequence is a command count,
@@ -175,8 +199,11 @@ func export_checkpoint() -> Dictionary:
 	var adapter := StudioCheckpoint.new()
 	var payload := adapter.capture(run)
 	if payload.is_empty(): return {}
-	var envelope := {"schema_version":"1","kind":"campaign_studio","source_identity":Replay.source_identity(),"engine_version":Engine.get_version_info().string,"rng_algorithm":RunRandom.ALGORITHM,"accepted_sequence":str(sequence),"studio_payload":payload}
+	var envelope := {"schema_version":"1","kind":"campaign_studio","source_identity":Replay.source_identity(),"engine_version":Engine.get_version_info().string,"rng_algorithm":RunRandom.ALGORITHM,"accepted_sequence":str(sequence),"studio_payload":payload,"commission_request":_commission_request.duplicate(true)}
 	envelope.integrity = Replay.digest(envelope)
+	# Added before re-hashing; old named current envelopes may omit empty support.
+	envelope.support_request = _support_request.duplicate(true)
+	envelope.integrity = Replay.digest(_without_integrity(envelope))
 	return envelope
 
 func restore_checkpoint(envelope: Dictionary,definitions: RefCounted,snapshot_definitions: PrimitiveSnapshotDatabase) -> bool:
@@ -190,6 +217,21 @@ func restore_checkpoint(envelope: Dictionary,definitions: RefCounted,snapshot_de
 	if not codec.error.is_empty(): return false
 	var restored := StudioCheckpoint.new().hydrate(envelope.studio_payload)
 	if restored == null: return false
+	var pending: Variant = envelope.get("commission_request",{})
+	if not pending is Dictionary or (not pending.is_empty() and pending.size() != 3): return false
+	if not pending.is_empty():
+		for key: String in ["name","genre","theme"]:
+			if not pending.get(key) is String: return false
+		if restored.get_commission_quote(pending.name,StringName(pending.genre),StringName(pending.theme)).is_empty(): return false
+	var support_pending: Variant = envelope.get("support_request",{})
+	if not support_pending is Dictionary or (not support_pending.is_empty() and support_pending.size() != 3): return false
+	if not support_pending.is_empty():
+		for key: String in ["name","genre","theme"]:
+			if not support_pending.get(key) is String: return false
+		if restored.get_support_quote(support_pending.name,StringName(support_pending.genre),StringName(support_pending.theme)).is_empty(): return false
+	# Publish metadata only after every part of the envelope has passed.
+	_commission_request = pending.duplicate(true)
+	_support_request = support_pending.duplicate(true)
 	run = restored
 	catalog = definitions
 	snapshots = snapshot_definitions
@@ -197,6 +239,11 @@ func restore_checkpoint(envelope: Dictionary,definitions: RefCounted,snapshot_de
 	in_studio = true
 	# No initialize(), refresh, seed override, release registration or reward.
 	return true
+
+static func _without_integrity(value: Dictionary) -> Dictionary:
+	var result := value.duplicate(true)
+	result.erase("integrity")
+	return result
 
 func save_checkpoint(path: String) -> bool:
 	var envelope := export_checkpoint()

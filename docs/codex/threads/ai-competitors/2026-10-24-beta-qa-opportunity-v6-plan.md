@@ -1,0 +1,3 @@
+# Rival Beta QA opportunity: typed clock-adapter repair — pre-run, 2026-10-24
+
+The frozen v5 smoke failed during Godot import with a private-policy parse error: GDScript could not infer the type of `defer_until_next_world_cycle` from `Object.cycle`. Preserve that failed import. Create v6 from v5 and explicitly type the Boolean, reading `int(market_world.get("cycle"))`; change no policy rule, test threshold, seed or bound. Then repeat the [v5 declared study](2026-10-24-beta-qa-opportunity-v5-plan.md) with new smoke/world output folders. Retain any further failure; successful compilation alone does not approve the QA rule.

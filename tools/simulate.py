@@ -18,8 +18,8 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_ROOTS = {"scripts", "scenes", "data", "assets", "resources", "autoload"}
-SOURCE_SUFFIXES = {".gd", ".uid", ".tscn", ".tres", ".res", ".json", ".png", ".svg", ".jpg", ".jpeg", ".webp", ".ogg", ".wav", ".mp3", ".ttf", ".otf", ".gdshader", ".gdshaderinc", ".import", ".txt", ".md", ".csv", ".bin"}
+SOURCE_ROOTS = {"scripts", "scenes", "data", "assets", "resources", "autoload", "queries"}
+SOURCE_SUFFIXES = {".gd", ".uid", ".tscn", ".tres", ".res", ".json", ".png", ".ico", ".svg", ".jpg", ".jpeg", ".webp", ".ogg", ".wav", ".mp3", ".ttf", ".otf", ".gdshader", ".gdshaderinc", ".import", ".txt", ".md", ".csv", ".bin"}
 ROOT_FILES = {"project.godot", "icon.svg", "icon.svg.import"}
 FORMAT = "patch-notes-isolated-simulation-v1"
 
@@ -169,15 +169,25 @@ def run_process(label: str, argv: list[str], output: Path, environment: dict[str
     return command
 
 
-def git_provenance(repo: Path) -> dict:
+def git_provenance(repo: Path, evidence: Path | None = None) -> dict:
     result = {}
     for label, arguments in (("branch", ["branch", "--show-current"]), ("head", ["rev-parse", "HEAD"]), ("status", ["status", "--porcelain=v1", "--untracked-files=all"]), ("diff", ["diff", "--binary", "HEAD", "--", "patch-notes", "tools/simulate.py"])):
         try:
+            if evidence is not None and label in {"status", "diff"}:
+                # Large shared worktrees may contain extensive generated
+                # evidence and binary edits. Retain exact bytes on disk rather
+                # than buffering them all alongside an executing Godot world.
+                artifact = evidence / ("git-status.txt" if label == "status" else "source.diff.patch")
+                with artifact.open("xb") as stream:
+                    process = subprocess.run(["git", *arguments], cwd=repo, stdout=stream, stderr=subprocess.PIPE, timeout=30)
+                result[label] = {"artifact": artifact.name, "bytes": artifact.stat().st_size, "sha256": sha(artifact), "exit": process.returncode}
+                continue
             process = subprocess.run(["git", *arguments], cwd=repo, capture_output=True, timeout=30)
             result[label] = process.stdout.decode("utf-8", errors="replace").strip() if process.returncode == 0 else {"error": process.stderr.decode("utf-8", errors="replace")}
         except (OSError, subprocess.TimeoutExpired) as error:
             result[label] = {"error": str(error)}
-    result["dirty"] = bool(result["status"]) if isinstance(result["status"], str) else None
+    status = result["status"]
+    result["dirty"] = bool(status) if isinstance(status, str) else (bool(status["bytes"]) if isinstance(status, dict) and status.get("exit") == 0 else None)
     return result
 
 
@@ -253,9 +263,10 @@ def execute_run(args: argparse.Namespace, output: Path, godot: Path, environment
     reject_links(args.repo / "patch-notes")
     source = (args.repo / "patch-notes").resolve()
     project = output / "project"
-    provenance = git_provenance(args.repo)
+    provenance = git_provenance(args.repo, output)
     diff = provenance.pop("diff")
-    (output / "source.diff.patch").write_text(diff if isinstance(diff, str) else json.dumps(diff), encoding="utf-8")
+    if not isinstance(diff, dict) or diff.get("artifact") != "source.diff.patch":
+        (output / "source.diff.patch").write_text(diff if isinstance(diff, str) else json.dumps(diff), encoding="utf-8")
     write_json(output / "git-provenance.json", provenance)
     report["git"] = {key: provenance[key] for key in ("branch", "head", "dirty")}
     if getattr(args, "variant", None):

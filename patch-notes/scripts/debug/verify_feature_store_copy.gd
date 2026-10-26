@@ -44,7 +44,7 @@ func _verify() -> void:
 		var quote := run.get_feature_research_quote(&"colored_text")
 		check(store.queue_block_reasons(quote) == ["Need $325.00 to queue"], "Exact one-cent-short deposit reason")
 		store._select_node(&"branching_nodes")
-		check(store._map.shopping_details.text.contains("Locked — Own Save Files") and store._map.shopping_details.text.contains("Need $750.00 to queue"), "Details retain simultaneous prerequisite and deposit blocks")
+		check(store._buy.text.contains("Missing: Save Files") and store._buy.tooltip_text.contains("Need $750.00 to queue"), "Details retain simultaneous prerequisite and deposit blocks")
 		reject(run, &"branching_nodes")
 		reject(run, &"colored_text")
 		await create_timer(0.65).timeout
@@ -76,7 +76,7 @@ func _verify() -> void:
 		var next_project := PrimitivePredevelopment.prepare_project("After ownership", &"action", &"fantasy", run)
 		check(not old_project.get_feature_supply_ids().has(&"colored_text") and not queued_project.get_feature_supply_ids().has(&"colored_text") and next_project.get_feature_supply_ids().has(&"colored_text"), "Ownership updates only projects begun afterwards")
 		store._select_node(&"colored_text")
-		check(store._details.text.contains("Owned") and store._buy.disabled, "Completed research displays Owned")
+		check(store._buy.text.to_lower().contains("owned") and store._buy.disabled, "Completed research displays Owned")
 		await create_timer(0.65).timeout
 		var tooltip: Control = store._owned_summary._make_custom_tooltip(store._owned_summary.tooltip_text)
 		var panel := PanelContainer.new()
@@ -108,7 +108,7 @@ func _verify() -> void:
 		gated._completed_run_cycles = 2
 		gated._cash_cents = 0
 		store._select_node(&"branching_nodes")
-		check(store._map.shopping_details.text.contains("Clear overdue bills to queue") and store.queue_block_reasons(gated.get_feature_research_quote(&"branching_nodes")).size() == 3, "All three prerequisite/deposit/overdue blockers are listed")
+		check(store._buy.tooltip_text.contains("Clear overdue bills to queue") and store.queue_block_reasons(gated.get_feature_research_quote(&"branching_nodes")).size() == 3, "All three prerequisite/deposit/overdue blockers are listed")
 		reject(gated, &"branching_nodes")
 		await create_timer(0.65).timeout
 		await shot("overdue-%d" % dimensions.x)

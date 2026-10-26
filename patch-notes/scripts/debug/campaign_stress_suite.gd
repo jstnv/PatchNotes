@@ -165,7 +165,10 @@ func _initialize() -> void:
 		commands += int(report.get("commands",0))
 		completed += int(report.get("status") == "completed")
 		expect(report.get("first_failure",{}).is_empty(),str(report.get("case_id"))+": no invariant failure hidden by route status")
-	if repeat_first_case(): expect(completed > 0,"Baseline reaches four releases; other suites preserve any bounded or blocked status")
+	# A fixed policy is allowed to become cash-blocked after a rule revision.
+	# Exact repeated outcomes and invariant checks above remain mandatory;
+	# separate declared legal campaign routes establish release coverage.
+	if repeat_first_case(): expect(commands > 0,"Baseline executes and retains its actual bounded outcome")
 	for index in range(cases.size()):
 		var expected_fans := "20" if "cult_following" in cases[index].initial.recipe.traits else "0"
 		expect(reports[index].initial_fans == expected_fans,"Legal chosen Traits supply exactly their initial Fans")

@@ -1,0 +1,44 @@
+# Exact old-source market migration through Coordinator/Store — private finding, 2026-10-18
+
+## Disposition
+
+**CANDIDATE proof for one named source, no canonical adoption.** The [predeclared plan](2026-10-18-market-coordinator-study-plan-v1.md) extended the [v18 whole-pair adapter](2026-10-18-market-migration-finding-v1.md) inside a private v19 project. The normal `StudioCheckpointStore.inspect()` and `CheckpointCoordinator.load_current()` path accepts the three exact old Studio/world pairs, leaves the old generation unchanged on pure Continue, publishes a new generation after one legal committed cycle, and restores it in a fresh process. Fault and explicit backup recovery paths passed. Numeric market terms remain **OPEN/TRIAL**. The production Coordinator, Store and gameplay files were not edited.
+
+## Source and fixtures
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`, dirty shared checkout. [v19 metadata](simulators/market-migration-coordinator-20261018-v19/variant.json) retains v18 candidate ancestry `dac892ef6487ec911ba6fd47ecfcbe434a861add29b99c4b7febe80b7dd2601d` and original base `89d52a809a9f25613ecc7e269f28914d9c7edc8f4849aee31393170996cdc82c`; frozen v19 candidate identity is `76c2e739fd1559e03f101fbdac05b8b765cd9aebf12b252c32e4777821004e1a`. The [run report](sims/market-migration-coordinator-player-20261018-v19/run-report.json) records current canonical identity `db2ee523f02e117044d2abd072786e19b9b191cb6805e155d66506e2cbe045d2` and `baseline_drift=true`. Godot 4.7.1 SHA-256 remains pinned in the run report. The old-source `checkpoint_codec.gd` and v19 `checkpoint_codec.gd` bytes have the same SHA-256, `ED5497FB7510C8B1BB571E4410CD7EE7A1FE0F8BAB015DF8219F2ADCE9AEB7A3`.
+
+The old legal seed-4417 cycle-7, 8 and 10 source files were copied unchanged from the prior old-source fixture profile into the [isolated input profile](sims/market-migration-coordinator-input-20261018-v19/profile/). Their SHA-256 hashes are respectively `47C6000D8D8850DEBBC62AFEF799B28AD48CBE8CD0E5D42E9CF69519D8233715`, `D473454365CE6D83DB461654FF65751DA0286C7C95B901BBDC854CB81032FE54` and `06B918D993FE12B26CD6FCE931B710A2EA9B7008F303C04CD24719CCD9CB811B`. Each fixture is a committed player/world pair produced and validated by the old codec, carrying world source `f8f130c6a3e6b7d27710e11a56b445ea6c73d9dbc26ca26a8501ca2cf7ca32de`. The v19 verifier constructed a generation-1 envelope around that actual old payload using the byte-identical envelope codec. It did not fabricate an old save from current gameplay.
+
+Private changes are confined to [v19 `project/`](simulators/market-migration-coordinator-20261018-v19/project/): Coordinator recognition of that exact old world source, in-memory whole-pair upgrade before Store validation and again before hydrate, and a focused verifier. The v18 direct verifier remains in the private project under `verify_market_migration_direct_v18.gd`; its prior outputs remain the comparison evidence. The ordinary Store implementation is unchanged. A `TestStore` supplies an isolated writer port instead of the production fixed port.
+
+## Runs and outcomes
+
+From repo root in PowerShell, with new output folders and isolated profiles:
+
+```powershell
+$py='C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
+$godot='C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe'
+& $py tools/simulate.py run --variant docs/codex/threads/ai-competitors/simulators/market-migration-coordinator-20261018-v19 --config docs/codex/threads/ai-competitors/2026-10-17-foundation-smoke-v1.json --output docs/codex/threads/ai-competitors/sims/market-migration-coordinator-player-20261018-v19 --godot $godot --timeout 240
+& $py docs/codex/threads/ai-competitors/run_rival_verifier_v2.py --bundle docs/codex/threads/ai-competitors/sims/market-migration-coordinator-player-20261018-v19 --output docs/codex/threads/ai-competitors/sims/market-migration-coordinator-focused-20261018-v19 --godot $godot --script verify_rival_world_foundation.gd --profile docs/codex/threads/ai-competitors/sims/market-migration-coordinator-input-20261018-v19/profile --test-port 47870 --timeout 240
+& $py docs/codex/threads/ai-competitors/run_rival_verifier_v2.py --bundle docs/codex/threads/ai-competitors/sims/market-migration-coordinator-player-20261018-v19 --output docs/codex/threads/ai-competitors/sims/market-migration-coordinator-cold-20261018-v19 --godot $godot --script verify_rival_world_foundation.gd --profile docs/codex/threads/ai-competitors/sims/market-migration-coordinator-input-20261018-v19/profile --test-port 47871 --timeout 240
+& $py tools/simulate.py replay --bundle docs/codex/threads/ai-competitors/sims/market-migration-coordinator-player-20261018-v19 --case foundation-legal-action-4417 --output docs/codex/threads/ai-competitors/sims/market-migration-coordinator-player-replay-20261018-v19 --godot $godot --timeout 240
+```
+
+The exact Godot argv, external timeouts, exits and errors are retained in each `rival-verifier.command.json`; both verifier processes exited 0 with no parsed errors. The focused [log](sims/market-migration-coordinator-focused-20261018-v19/rival-verifier.log) reports **90/0** over three old pairs, a separate cycle-10 interrupted save, a separate cycle-10 corrupt-current recovery and two invalid input cases. The [cold log](sims/market-migration-coordinator-cold-20261018-v19/rival-verifier.log) reports **21/0** in a fresh Godot process for five saved Store paths and exact current-source player/world recapture digests. The player-only fresh recipe [run](sims/market-migration-coordinator-player-20261018-v19/run-report.json) completed 18/18 legal commands and its [replay](sims/market-migration-coordinator-player-replay-20261018-v19/replay-report.json) matched 18/18. That control is a current-source simulation route; it does **not** exercise old player-only save migration.
+
+| Boundary | Result |
+|---|---|
+| Pure Continue | All cycle-7/8/10 generation-1 envelopes validate via Store and hydrate via Coordinator; no generation-2 file is written and the old generation SHA-256 remains unchanged. The restored committed market snapshot matches the v18 adapter result. |
+| Committed transition | One legal player zero-work cycle and one ordinary rival world advance then save generation 2. Store validates the combined pair; the world source is the frozen v19 source and its month/cycle matches. Cycle-7→8, 8→9 and 10→11 cold digests match first-process recapture. |
+| Interrupted publication | `before_rename` leaves generation 1 current; a second action is blocked. Retry saves generation 2 once, with the same recapture digest as the unaffected cycle-10 case. |
+| Corrupt current | A deliberately broken generation 2 is `invalid`; normal Continue and ordinary save refuse it, while the generation-1 backup is exposed. Explicit `recover_backup()` publishes generation 3 from the old payload, retains both original and corrupt bytes, and restores the earlier cycle-10 world with no extra month. A cold process repeats that restore. |
+| Rejections | An unknown old world source and an old world missing an earned-sale field do not validate or hydrate. Their generation-1 bytes remain unchanged. |
+
+The fixture and Store file hashes plus all five cold expected digests remain in the isolated [input profile](sims/market-migration-coordinator-input-20261018-v19/profile/). All v19 runs used the declared seed, policy, fixture cycles, 50-command player cap, 240-second process limit and private writer ports. No v19 run failed or timed out; earlier v11–v17 migration failures remain in the v18 finding. Godot printed six ObjectDB exit warnings in each verifier process; no gameplay error was parsed.
+
+## Limits and next review
+
+This proves the existing Coordinator/Store classes can support an exact named-source migration in a private project. The test instantiated Coordinator directly rather than driving a Gameplay scene or exported Main Menu. Its old envelope was constructed from old-codec-validated payload with byte-identical envelope code; it was not an original exported save file. The private adapter validates the upgraded current schema but does not independently run a complete old-schema decoder at load time. That deserves implementation review before adoption.
+
+The old player-only case with earned sales, source `3e0d3958…`, the remaining presentation sources, Founder v1/v2 and former-player ownership, mixed old save histories, normal UI recovery, exported Continue and canonical source drift remain **OPEN/NOT RUN** here. This finding does not select the trial Review/sales coefficients or prove rival challenge. Keep item 22 at **DESIGN review needed** until the other source families and player-only path are reconciled; no versioned adoption handoff or QUEUED implementation entry follows from this exact-source proof alone.

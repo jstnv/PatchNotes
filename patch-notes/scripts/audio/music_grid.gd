@@ -1,9 +1,11 @@
 class_name MusicGrid
 extends RefCounted
 
-const STEP := 60.0 / 140.0
-const STEPS_PER_LOOP := 64
+const Map := preload("res://scripts/audio/theme_map.gd")
+const STEP := Map.STEP
+const STEPS_PER_LOOP := Map.STEPS_PER_LOOP
 var seconds := 0.0
+var mix_seconds := 0.0
 var loops := 0
 var previous_position := -1.0
 
@@ -21,6 +23,7 @@ func sample(position: float, loops: int, length: float, since_mix: float, latenc
 	# The WAV is rounded to a whole sample. Map its endpoint to exactly 64
 	# subdivisions, preventing that sub-sample error accumulating each loop.
 	var scale_to_grid := STEPS_PER_LOOP * STEP / length
+	mix_seconds = maxf(mix_seconds, (loops * length + position + since_mix) * scale_to_grid)
 	var heard := (loops * length + position + since_mix - latency) * scale_to_grid
 	seconds = maxf(seconds, maxf(0.0, heard)) # Audio-thread jitter never rewinds.
 	return seconds

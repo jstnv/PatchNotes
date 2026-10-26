@@ -45,6 +45,7 @@ static func create_fresh_session(recipe: Variant,database: Node) -> RefCounted:
 	if not run.create_studio_with_traits(recipe.studio_name,StringName(recipe.specialty),traits): return null
 	# Stable fresh-run identities, not saved-state mutation or migration.
 	run.set("_bank_run_id",StringName(recipe.studio_id))
+	run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
 	run.set("_employees",EmployeeRoster.create(StringName(recipe.studio_id)))
 	var project:=ProjectState.new(int(scope))
 	project.set("_release_id",StringName(recipe.project_id))

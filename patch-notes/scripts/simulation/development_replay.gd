@@ -55,11 +55,16 @@ static func source_identity() -> String:
 	var paths: Array[String] = []
 	_collect("res://scripts",paths)
 	_collect("res://data",paths)
+	# Exported packs contain compiled scripts/remaps instead of source .gd files.
+	# Hash the actual executable inputs in either format. Build identities remain
+	# distinct; this does not imply automatic editor/export save compatibility.
+	for path in ["res://queries/market_release_index.gd","res://queries/market_release_index.gdc","res://queries/market_release_index.gd.remap"]:
+		if FileAccess.file_exists(path): paths.append(path)
 	paths.sort()
 	var rows: Array = []
 	for path in paths:
 		if path.begins_with("res://scripts/debug/"): continue
-		if path.ends_with(".gd") or path.ends_with(".json"):
+		if path.ends_with(".gd") or path.ends_with(".gdc") or path.ends_with(".gd.remap") or path.ends_with(".json"):
 			rows.append([path,FileAccess.get_sha256(path)])
 	return JSON.stringify(rows).sha256_text()
 

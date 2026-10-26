@@ -10,6 +10,7 @@ const SNAPSHOT_DATABASE_SCRIPT := preload("res://scripts/market/primitive_snapsh
 const REQUIRED_SCOPE := 30
 const LaunchSettlement := preload("res://scripts/simulation/launch_settlement.gd")
 const BeginProject := preload("res://scripts/simulation/begin_project.gd")
+const RivalTrial := preload("res://scripts/market/rival_trial.gd")
 
 var project_state: ProjectState
 var run_state: RunState
@@ -21,25 +22,81 @@ var _review_rng := RandomNumberGenerator.new()
 var _controlled_review_roll := -1
 var active_contract_state: ContractState
 var checkpoints: CheckpointCoordinator
+var rival_world: RivalWorld
 var _save_label: Label
 var _save_failure_dialog: AcceptDialog
 var _quit_dialog: ConfirmationDialog
 var _return_checkpoint_dialog: ConfirmationDialog
 var _recovery_dialog: ConfirmationDialog
 var _loading_checkpoint := false
+var _save_navigation_pending := false
 var _session_quit: Button
 var _startup_panel: PanelContainer
+var pause_menu: PauseMenu
+var guided_tutorial: GuidedProductionTutorial
+var _onboarding := OnboardingPreferences.new()
 
 func _ready() -> void:
+	get_node("Background").color=FolderUI.color(&"background")
 	add_child(MenuTransitions.new())
 	if run_state == null:
 		run_state = RunState.new()
 		checkpoints = CheckpointCoordinator.new()
+		checkpoints.background_saves = true
 		add_child(checkpoints)
 		checkpoints.attach(run_state)
 		checkpoints.status_changed.connect(_checkpoint_status)
 		_build_checkpoint_controls()
 	_start_gameplay()
+	_build_pause_menu()
+	%GameplayHUD.tutorial_overlay.practice_requested.connect(_start_guided_practice)
+
+func _build_pause_menu() -> void:
+	pause_menu = PauseMenu.new()
+	pause_menu.can_pause = func():
+		return guided_tutorial == null and is_instance_valid(_active_phase) and not _active_phase is MainMenu and _startup_panel == null and not _transition_in_progress and not _loading_checkpoint and not _save_navigation_pending and not _checkpoint_dialog_visible()
+	pause_menu.settings_open = %GameplayHUD.settings_menu.is_open
+	pause_menu.guide_open = %GameplayHUD.how_to_play.is_open
+	pause_menu.settings_requested.connect(%GameplayHUD.show_settings)
+	pause_menu.how_to_play_requested.connect(%GameplayHUD.show_how_to_play)
+	pause_menu.main_menu_requested.connect(_request_main_menu)
+	pause_menu.main_menu_confirmed.connect(_return_to_main_menu)
+	add_child(pause_menu)
+
+func _resume_from_pause() -> void:
+	if is_instance_valid(pause_menu) and pause_menu.is_open():
+		%GameplayHUD.settings_menu.close()
+		%GameplayHUD.how_to_play.close()
+		pause_menu.close()
+
+func _request_main_menu() -> void:
+	if not pause_menu.is_open() or _save_navigation_pending: return
+	if checkpoints != null and checkpoints.in_studio:
+		_save_navigation_pending=true
+		var saved: bool=await checkpoints.wait_saved()
+		_save_navigation_pending=false
+		if not saved:
+			_resume_from_pause()
+			_checkpoint_status()
+			return
+		_return_to_main_menu()
+		return
+	var destination := "There is no saved Studio to continue."
+	if checkpoints != null:
+		var info := checkpoints.store.inspect()
+		if info.status == &"valid":
+			destination = "Continue will return to %s, cycle %s." % [info.payload.run.studio_name, info.payload.run.completed_run_cycles]
+	pause_menu.confirm_main_menu("Progress since your last Studio checkpoint will be lost. " + destination)
+
+func _return_to_main_menu() -> void:
+	if not pause_menu.is_open(): return
+	# A fresh scene releases the old writer and all pending presentation callbacks.
+	# Never save development/active Contract progress as a Studio checkpoint.
+	_resume_from_pause()
+	var error := get_tree().change_scene_to_file("res://scenes/gameplay.tscn")
+	if error != OK:
+		pause_menu.open()
+		pause_menu.message.text = "Could not open Main Menu. Your current game is still here."
 
 func _start_gameplay() -> void:
 	var data_error := StartupDataCheck.inspect(get_node_or_null("/root/CardDatabase"))
@@ -57,6 +114,7 @@ func _start_gameplay() -> void:
 		push_error("Could not initialize the Primitive project snapshots.")
 		_show_startup_failure("Could not initialize the Primitive project snapshots.")
 		return
+	if checkpoints != null: checkpoints.rival_catalog = get_node("/root/CardDatabase").get_development_catalog()
 	if not run_state.is_cash_initialized() and not run_state.initialize_cash(0):
 		push_error("Could not initialize the prototype run with $0 Studio cash.")
 		return
@@ -66,12 +124,12 @@ func _start_gameplay() -> void:
 		if run_state.get_studio_name().is_empty():
 			var main_menu := MainMenu.new()
 			if checkpoints != null: main_menu.checkpoint_info = checkpoints.store.inspect()
-			main_menu.continue_requested.connect(_continue_checkpoint)
+			main_menu.continue_requested.connect(_present_checkpoint_load)
 			main_menu.recovery_requested.connect(_show_checkpoint_recovery)
 			main_menu.quit_requested.connect(_request_quit)
-			main_menu.studio_created.connect(_on_studio_created.bind(main_menu))
-			main_menu.tutorial_requested.connect(%GameplayHUD.show_tutorial)
-			main_menu.settings_requested.connect(%GameplayHUD.show_settings)
+			main_menu.studio_created.connect(_present_studio_creation.bind(main_menu))
+			main_menu.tutorial_requested.connect(func(): %GameplayHUD.show_how_to_play(main_menu.navigation))
+			main_menu.settings_requested.connect(func(): %GameplayHUD.show_settings(main_menu.navigation))
 			%PhaseRoot.add_child(main_menu)
 			_active_phase = main_menu
 			%GameplayHUD.set_phase(main_menu)
@@ -135,19 +193,65 @@ func _show_startup_failure(reason: String) -> void:
 		if label == "Retry": button.grab_focus.call_deferred()
 
 func _on_studio_created(name: String, specialty: StringName, trait_ids: Array, source: MainMenu) -> void:
-	if _transition_in_progress or source != _active_phase or source.get_parent() != %PhaseRoot:
+	# Synchronous fixture/tool entry, like _continue_checkpoint.
+	if _transition_in_progress or _loading_checkpoint or source != _active_phase or source.get_parent() != %PhaseRoot:
 		return
+	if _commit_new_studio(name,specialty,trait_ids,source): checkpoints.flush()
+
+func _present_studio_creation(name: String, specialty: StringName, trait_ids: Array, source: MainMenu) -> void:
+	if _transition_in_progress or _loading_checkpoint or not is_instance_valid(source) or source != _active_phase or source.get_parent() != %PhaseRoot: return
+	_transition_in_progress = true
+	var overlay := preload("res://scripts/ui/continue_loading.gd").new()
+	add_child(overlay)
+	overlay.name = "NewStudioLoading"
+	overlay.show_new_studio(name)
+	await overlay.cover()
+	if not is_instance_valid(source) or source != _active_phase:
+		overlay.free()
+		_transition_in_progress = false
+		return
+	overlay.stage_label.text = "Creating and saving Studio…"
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not _commit_new_studio(name,specialty,trait_ids,source):
+		overlay.free()
+		_transition_in_progress = false
+		return
+	await checkpoints.wait_saved()
+	overlay.stage_label.text = "Opening tutorial invitation…" if checkpoints.failure.is_empty() else "Opening Studio…"
+	# Prepare the invitation under the cover, avoiding a dashboard flash.
+	if checkpoints.failure.is_empty():
+		_create_guided_tutorial()
+		guided_tutorial.set_process_input(false)
+		overlay._surface.grab_focus()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await overlay.reveal()
+	overlay.free()
+	_transition_in_progress = false
+	if guided_tutorial != null:
+		guided_tutorial.set_process_input(true)
+		guided_tutorial.new_button.grab_focus()
+
+func _commit_new_studio(name: String, specialty: StringName, trait_ids: Array, source: MainMenu) -> bool:
 	if not run_state.create_studio_with_traits(name, specialty, trait_ids):
 		source.show_error("Enter a valid name and Genre specialty; check the trait limits.")
-		return
+		return false
+	rival_world = RivalTrial.create_world(run_state,checkpoints.rival_catalog)
+	if rival_world == null or not checkpoints.attach_rivals(rival_world,checkpoints.rival_catalog):
+		_show_startup_failure("Trial rivals could not be initialized. This new Studio was not saved.")
+		return false
+	_connect_rival_calendar()
 	if checkpoints != null: checkpoints.replace_on_save = checkpoints.store.inspect().status != &"empty"
-	_enter_initial_studio()
+	return _enter_initial_studio()
 
-func _enter_initial_studio(restored: bool = false) -> void:
+func _enter_initial_studio(restored: bool = false) -> bool:
 	var studio := STUDIO_PHASE_SCENE.instantiate() as StudioPhase
 	if studio == null or not studio.setup(null, run_state, _snapshot_database):
 		push_error("Could not open the new Studio.")
-		return
+		if studio != null: studio.free()
+		return false
+	studio.set_rival_world(rival_world)
 	studio.contract_requested.connect(_on_contract_requested)
 	studio.development_requested.connect(_on_development_requested)
 	%PhaseRoot.add_child(studio)
@@ -159,6 +263,86 @@ func _enter_initial_studio(restored: bool = false) -> void:
 		previous.queue_free()
 	if not restored: run_state.refresh_redraws()
 	if checkpoints != null: checkpoints.entered_studio(restored)
+	_offer_guided_tutorial.call_deferred()
+	return true
+
+func _offer_guided_tutorial(opened_save: bool = false) -> void:
+	if guided_tutorial != null or not _active_phase is StudioPhase or _transition_in_progress or _loading_checkpoint: return
+	if opened_save or not _onboarding.read().answered: _create_guided_tutorial()
+
+func _create_guided_tutorial() -> void:
+	guided_tutorial = GuidedProductionTutorial.new()
+	add_child(guided_tutorial)
+	guided_tutorial.choice.connect(_on_tutorial_choice)
+	guided_tutorial.finished.connect(_close_guided_tutorial)
+	_active_phase.hide()
+	%GameplayHUD.hide()
+	if _session_quit != null: _session_quit.hide()
+
+func _on_tutorial_choice(experienced: bool, accepted: bool) -> void:
+	_onboarding.answer(experienced)
+	if accepted: _start_guided_practice()
+	else: _close_guided_tutorial(false)
+
+func _start_guided_practice() -> bool:
+	if not _active_phase is StudioPhase or _transition_in_progress or _loading_checkpoint or _checkpoint_dialog_visible(): return false
+	if guided_tutorial == null: _create_guided_tutorial()
+	if not guided_tutorial.start_practice():
+		_close_guided_tutorial(false)
+		return false
+	get_node("/root/Soundtrack").request_theme(&"main")
+	return true
+
+func _close_guided_tutorial(completed: bool) -> void:
+	if guided_tutorial == null: return
+	if completed: _onboarding.finish()
+	var previous := guided_tutorial
+	guided_tutorial = null
+	previous.hide()
+	previous.queue_free()
+	if _active_phase is StudioPhase:
+		_active_phase.show()
+		%GameplayHUD.show()
+		if _session_quit != null: _session_quit.show()
+		_active_phase.get_node("%StartNextGame").grab_focus()
+	get_node("/root/Soundtrack").request_theme(&"studio",true)
+
+func _connect_rival_calendar() -> void:
+	if rival_world == null: return
+	if not run_state.calendar_changed.is_connected(_advance_rival_calendar):
+		run_state.calendar_changed.connect(_advance_rival_calendar)
+
+## Foundation API for a future approved ownership UI. Formation and offers
+## must already exist; no valuation, free Studio or mandate is fabricated.
+func commit_ownership_offer(offer_id: String) -> bool:
+	if not _active_phase is StudioPhase or checkpoints==null or rival_world==null or _transition_in_progress: return false
+	if not preload("res://scripts/legacy/legacy_world.gd").commit(rival_world,offer_id,true): return false
+	checkpoints.pending=true
+	checkpoints.flush()
+	return true
+
+func handoff_founder_operator(target_id: StringName) -> bool:
+	if not _active_phase is StudioPhase or checkpoints==null or rival_world==null or _transition_in_progress or not checkpoints.in_studio: return false
+	if not checkpoints.before_departure(): return false
+	var prior := run_state
+	if not preload("res://scripts/legacy/legacy_world.gd").handoff(rival_world,target_id,true): return false
+	if prior.calendar_changed.is_connected(_advance_rival_calendar): prior.calendar_changed.disconnect(_advance_rival_calendar)
+	run_state=rival_world.player
+	project_state=null
+	_review_rng=run_state.random_streams.stream(&"review")
+	checkpoints.attach(run_state)
+	checkpoints.attach_rivals(rival_world,checkpoints.rival_catalog)
+	_connect_rival_calendar()
+	%GameplayHUD.setup(null,run_state)
+	_enter_initial_studio(true)
+	checkpoints.pending=true
+	checkpoints.flush()
+	return true
+
+func _advance_rival_calendar() -> void:
+	if rival_world == null or checkpoints == null or not checkpoints.failure.is_empty(): return
+	var report: Dictionary = rival_world.advance_committed_player_cycle(RivalTrial.policies(rival_world),RivalTrial.ZERO_STEPS)
+	if not report.ok: checkpoints._failed("Trial rival world stopped: " + str(report.get("reason","Unknown world error")))
 
 
 ## Verifier/new-project injection boundary. Controlled rolls use the locked
@@ -288,27 +472,34 @@ func _replace_beta_with_launch(source_beta_phase: Control, launch_scene: PackedS
 	_transition_in_progress = true
 	var settlement := LaunchSettlement.new(project_state,run_state,_snapshot_database,_controlled_review_roll)
 	settlement._review_rng = _review_rng
-	var frozen := settlement.freeze_results()
-	_controlled_review_roll = settlement._controlled_review_roll
-	if not frozen.ok:
-		push_error("Could not prepare the Primitive launch results: " + frozen.error)
+	var prepared := settlement.plan()
+	if prepared.is_empty():
+		push_error("Could not prepare the Primitive launch results.")
 		_transition_in_progress = false
 		return false
 	# Validate committed launch results, then enter Studio and register the
 	# permanent release identity in the same zero-cycle launch boundary.
 	var launch_phase := launch_scene.instantiate() if launch_scene != null else null
-	if not launch_phase is LaunchPhase or not launch_phase.setup(project_state, run_state, _snapshot_database):
+	if not launch_phase is LaunchPhase or not launch_phase.setup(prepared.draft, run_state, _snapshot_database):
 		push_error("Could not validate the Launch result presentation.")
 		if launch_phase != null: launch_phase.queue_free()
 		_transition_in_progress = false
 		return false
 	launch_phase.free()
 	var studio_phase := STUDIO_PHASE_SCENE.instantiate() as StudioPhase
-	if studio_phase == null or not studio_phase.setup(project_state, run_state, _snapshot_database):
+	if studio_phase == null or not studio_phase.setup(prepared.draft, run_state, _snapshot_database,true):
 		push_error("Could not enter Studio after launch.")
 		if studio_phase != null: studio_phase.queue_free()
 		_transition_in_progress = false
 		return false
+	var committed := settlement.commit(prepared)
+	if not committed.ok:
+		studio_phase.free()
+		_transition_in_progress = false
+		return false
+	_controlled_review_roll = settlement._controlled_review_roll
+	studio_phase._project_state = project_state
+	studio_phase.set_rival_world(rival_world)
 	studio_phase.contract_requested.connect(_on_contract_requested)
 	studio_phase.development_requested.connect(_on_development_requested)
 	%PhaseRoot.add_child(studio_phase)
@@ -352,6 +543,7 @@ func _on_contract_completion_dismissed(source_contract: ContractPhase) -> void:
 		if studio_phase != null: studio_phase.queue_free()
 		_transition_in_progress = false
 		return
+	studio_phase.set_rival_world(rival_world)
 	studio_phase.contract_requested.connect(_on_contract_requested)
 	studio_phase.development_requested.connect(_on_development_requested)
 	%PhaseRoot.add_child(studio_phase)
@@ -366,6 +558,12 @@ func _on_contract_completion_dismissed(source_contract: ContractPhase) -> void:
 
 
 func _on_development_requested(source_studio: Control, base_name: String, genre: StringName, theme_id: StringName) -> void:
+	if _save_navigation_pending: return
+	if checkpoints!=null and checkpoints.background_saves and checkpoints.is_saving():
+		_save_navigation_pending=true
+		var saved: bool=await checkpoints.wait_saved()
+		_save_navigation_pending=false
+		if not saved or not is_instance_valid(source_studio): return
 	_begin_next_project(source_studio, base_name, genre, theme_id)
 
 
@@ -375,14 +573,15 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 	if _transition_in_progress or not is_instance_valid(source_studio) or source_studio != _active_phase or source_studio.get_parent() != %PhaseRoot:
 		return false
 	var initial_priorities: Dictionary = source_studio.get_predevelopment_priorities() if source_studio.has_method("get_predevelopment_priorities") else {}
-	if not initial_priorities.is_empty() and not PriorityAllocation.is_valid_distribution(initial_priorities):
+	if not initial_priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(initial_priorities):
 		source_studio.show_development_error("Allocate exactly 100 priority points.")
 		return false
 	var validation := PrimitivePredevelopment.validation_error(base_name, genre, theme_id)
 	if not validation.is_empty():
 		source_studio.show_development_error(validation)
 		return false
-	if not run_state.can_complete_productive_cycle():
+	var support_quote: Dictionary = source_studio.get_predevelopment_support_quote() if source_studio.has_method("get_predevelopment_support_quote") else {}
+	if not run_state.can_complete_productive_cycle(int(support_quote.get("funding_cents",0))):
 		source_studio.show_development_error(run_state.get_financial_block_reason() if not run_state.get_financial_block_reason().is_empty() else "Development could not begin because the calendar or sales state is invalid.")
 		return false
 	if run_state.next_project_serial == RunState.MAX_SIGNED_INT: return false
@@ -397,7 +596,8 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 		prepared.append(view)
 		if checkpoints != null: checkpoints.in_studio = false
 		return true
-	var result := BeginProject.execute(run_state,_snapshot_database,base_name,genre,theme_id,readiness,_controlled_snapshot_rolls)
+	var commission_quote: Dictionary = source_studio.get_predevelopment_commission_quote() if source_studio.has_method("get_predevelopment_commission_quote") else {}
+	var result := BeginProject.execute(run_state,_snapshot_database,base_name,genre,theme_id,readiness,_controlled_snapshot_rolls,commission_quote,support_quote)
 	if not result.ok:
 		if checkpoints != null: checkpoints.in_studio = true
 		for view in prepared: view.free()
@@ -469,14 +669,17 @@ func _build_checkpoint_controls() -> void:
 	layer.layer = 80
 	add_child(layer)
 	var panel := VBoxContainer.new()
+	panel.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
 	panel.position = Vector2(-248,-72)
 	panel.custom_minimum_size = Vector2(236,32)
 	layer.add_child(panel)
 	_save_label = Label.new()
 	var status_row := HBoxContainer.new()
+	status_row.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	panel.add_child(status_row)
 	_save_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_save_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	_save_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_row.add_child(_save_label)
 	_session_quit = Button.new()
@@ -489,8 +692,7 @@ func _build_checkpoint_controls() -> void:
 	_save_failure_dialog.dialog_text = "Your last action happened, but it has not been saved.\nRetry to continue, return to your last saved Studio, or quit without saving."
 	_save_failure_dialog.dialog_hide_on_ok = false
 	_save_failure_dialog.get_ok_button().text = "Retry save"
-	_save_failure_dialog.confirmed.connect(func():
-		if checkpoints.retry(): _save_failure_dialog.hide())
+	_save_failure_dialog.confirmed.connect(_retry_checkpoint_save)
 	_save_failure_dialog.add_button("Return to saved Studio",false,"return").pressed.connect(func():
 		_save_failure_dialog.hide()
 		_confirm_return_checkpoint())
@@ -505,13 +707,14 @@ func _build_checkpoint_controls() -> void:
 
 func _checkpoint_status() -> void:
 	if _save_label == null: return
-	_save_label.text = "Studio saved" if checkpoints.failure.is_empty() else "Not saved"
+	_save_label.text = "Not saved" if not checkpoints.failure.is_empty() else ("Saving Studio…" if checkpoints.is_saving() else "Studio saved")
 	_session_quit.visible = not run_state.get_studio_name().is_empty()
 	_save_label.tooltip_text = checkpoints.failure
 	if checkpoints.failure.is_empty(): _save_failure_dialog.hide()
 	# load_current can emit failure synchronously. Continue owns that failure's
 	# recovery prompt; opening a second exclusive window here would collide.
 	elif not _loading_checkpoint and not _checkpoint_dialog_visible():
+		_resume_from_pause()
 		_save_failure_dialog.popup_centered(Vector2i(640,200))
 
 func _checkpoint_dialog_visible() -> bool:
@@ -527,10 +730,15 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST: _request_quit()
 
 func _request_quit() -> void:
+	if _loading_checkpoint or _save_navigation_pending: return
+	_resume_from_pause()
 	if checkpoints==null:
 		get_tree().quit()
 		return
-	if checkpoints.in_studio and checkpoints.failure.is_empty(): checkpoints.flush()
+	if checkpoints.in_studio and checkpoints.failure.is_empty():
+		_save_navigation_pending=true
+		await checkpoints.wait_saved()
+		_save_navigation_pending=false
 	if (_active_phase is MainMenu) or (checkpoints.in_studio and checkpoints.failure.is_empty()):
 		get_tree().quit()
 		return
@@ -541,6 +749,13 @@ func _request_quit() -> void:
 	_hide_checkpoint_dialogs()
 	_quit_dialog.popup_centered()
 	_quit_dialog.get_cancel_button().grab_focus()
+
+func _retry_checkpoint_save() -> void:
+	if _save_navigation_pending: return
+	_save_navigation_pending=true
+	var saved: bool=await checkpoints.retry_background()
+	_save_navigation_pending=false
+	if saved: _save_failure_dialog.hide()
 
 func _confirm_return_checkpoint() -> void:
 	_hide_checkpoint_dialogs()
@@ -554,6 +769,7 @@ func _confirm_return_checkpoint() -> void:
 	dialog.get_cancel_button().grab_focus()
 
 func _continue_checkpoint() -> void:
+	# Synchronous debug/tool entry. Player-facing signals use the staged overlay.
 	if checkpoints==null or _transition_in_progress or _loading_checkpoint: return
 	_hide_checkpoint_dialogs()
 	_loading_checkpoint = true
@@ -562,14 +778,64 @@ func _continue_checkpoint() -> void:
 	if restored==null:
 		_show_checkpoint_recovery()
 		return
+	if _finish_checkpoint_load(restored): _offer_guided_tutorial.call_deferred(true)
+
+func _present_checkpoint_load() -> void:
+	if checkpoints == null or _transition_in_progress or _loading_checkpoint: return
+	_loading_checkpoint = true
+	_hide_checkpoint_dialogs()
+	var overlay := preload("res://scripts/ui/continue_loading.gd").new()
+	add_child(overlay)
+	if _active_phase is MainMenu:
+		overlay.show_checkpoint(_active_phase.checkpoint_info.get("payload", {}))
+	else:
+		overlay.show_checkpoint(checkpoints.last_payload)
+	await overlay.cover()
+	var operation := checkpoints.begin_load()
+	while not operation.done:
+		overlay.stage_label.text = operation.label()
+		# process_frame resumes before drawing: two yields guarantee a rendered
+		# frame at each real stage before its synchronous validation/hydration.
+		await get_tree().process_frame
+		await get_tree().process_frame
+		operation.advance()
+		if operation.inspected.get("status") == &"valid":
+			overlay.show_checkpoint(operation.inspected.payload)
+	if operation.restored == null:
+		overlay.free()
+		_loading_checkpoint = false
+		_show_checkpoint_recovery()
+		return
+	overlay.stage_label.text = "Opening Studio…"
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not _finish_checkpoint_load(operation.restored):
+		overlay.free()
+		_loading_checkpoint = false
+		checkpoints.failure = "Could not open the saved Studio."
+		_show_checkpoint_recovery()
+		return
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await overlay.reveal()
+	overlay.free()
+	_loading_checkpoint = false
+	if is_instance_valid(_active_phase):
+		var start := _active_phase.get_node_or_null("%StartNextGame") as Control
+		if start != null: start.grab_focus()
+	_offer_guided_tutorial.call_deferred(true)
+
+func _finish_checkpoint_load(restored: RunState) -> bool:
 	run_state = restored
+	rival_world = checkpoints.rival_world
+	_connect_rival_calendar()
 	project_state = null
 	active_contract_state = null
 	_review_rng = run_state.random_streams.stream(&"review")
 	_controlled_review_roll = -1
 	_controlled_snapshot_rolls.clear()
 	%GameplayHUD.setup(null,run_state)
-	_enter_initial_studio(true)
+	return _enter_initial_studio(true)
 
 func _show_checkpoint_recovery() -> void:
 	if checkpoints==null: return
@@ -583,7 +849,7 @@ func _show_checkpoint_recovery() -> void:
 	dialog.dialog_text = "The saved Studio could not be loaded: %s.\nYour checkpoint files have been preserved." % reason
 	dialog.get_ok_button().text = "Retry"
 	add_child(dialog)
-	dialog.confirmed.connect(_continue_checkpoint)
+	dialog.confirmed.connect(_present_checkpoint_load)
 	var location := dialog.add_button("Open save folder",false,"folder")
 	location.pressed.connect(func(): OS.shell_open(checkpoints.store.directory))
 	if info.has("backup") and info.status!=&"incompatible":
@@ -594,7 +860,7 @@ func _show_checkpoint_recovery() -> void:
 			var result := checkpoints.store.recover_backup()
 			if result.status==&"saved":
 				dialog.hide()
-				_continue_checkpoint()
+				_present_checkpoint_load()
 			else: dialog.dialog_text = "Recovery failed: "+str(result.get("reason",result.status)))
 	dialog.popup_centered(Vector2i(580,220))
 	dialog.get_cancel_button().grab_focus()

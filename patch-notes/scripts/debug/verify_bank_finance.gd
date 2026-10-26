@@ -1,5 +1,7 @@
 extends SceneTree
-const F := preload("res://scripts/finance/studio_finance_ledger.gd")
+## Frozen Bank1 journal oracle. Current Bank2 recovery/qualification is covered
+## separately by verify_usability_bank and the live Bank integration verifier.
+const F := preload("res://scripts/persistence/pre_usability/finance.gd")
 const B := preload("res://scripts/finance/bank_loan.gd")
 var checks := 0
 var failures := 0

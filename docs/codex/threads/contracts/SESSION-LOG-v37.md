@@ -1,0 +1,7 @@
+# Contracts session log v37 — Crown second-launch check
+
+2026-10-11 (America/Los_Angeles). Started on `main` HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; read `CURRENT_STATE.md`, `TODO.md`, `README.md`, simulator usage/versions, current Contracts finding and handoff, then inspected branch/HEAD/status/diff. Preserved other threads' dirty files and `.codex-godot-temp`.
+
+Predeclared [v12 plan](PLAN-v12-current-crown-no-reuse.md) and [input](study-v12-current-crown-no-reuse.json). Used the existing v11/v12 legal Action/Cult20 seed4417 policy unchanged; only raised target to four releases and command ceiling to125. Isolated [run](sim-v26/current-crown-no-reuse-run-01/run-report.json) completed85 accepted commands/four releases at cycle34, and [fresh replay](sim-v26/current-crown-no-reuse-replay-01/replay-report.json) matched85/85 and final state. First70/70 replay digests match the prior v11 replay. [Finding v27](FINDINGS-v27-current-crown-no-reuse.md) records source identities, exact commands, Game3 12-point Crown consumption and Game4 zero reuse, finance and limits. [C5 handoff v3](HANDOFF-C5-CROWN-ROUTE-v3.md) updates the current-build acceptance recipe.
+
+Changed only Contracts thread-owned plans/input/findings/handoff/index/session docs and a minimal C5 TODO link update after fresh reread. No gameplay, test, asset, configuration, commit, push, cross-thread message or exported interaction. C5 remains PARTIAL pending the full ordinary-input both-size/keyboard/Continue/rollback matrix; final balance remains OPEN.

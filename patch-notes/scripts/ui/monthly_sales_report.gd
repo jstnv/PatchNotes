@@ -102,6 +102,10 @@ func refresh() -> void:
 		_totals.text = "Monthly history unavailable: the stored release provenance could not be reconciled."
 		return
 	_totals.text = "Lifetime: %d units · Gross %s · Net %s · Paid %s · Unpaid %s" % [_report.units, _money(_report.gross_cents), _money(_report.net_cents), _money(_report.settled_cents), _money(_report.unpaid_cents)]
+	if _report.get("owner",&"studio") == &"publisher":
+		_totals.text = "Publisher-owned · RAW TITLE: %d units · net %s · paid %s\nStudio sales entitlement / paid / unpaid: $0.00. Table and slices below are raw title sales." % [_report.units,_money(_report.net_cents),_money(_report.settled_cents)]
+	elif _report.has("support"):
+		_totals.text = "Supported Studio-owned title · RAW TITLE: %d units · net %s\nStudio entitlement %s · paid %s · recoup %s / %s. Table and slices below show raw title sales." % [_report.units,_money(_report.net_cents),_money(_report.studio_net_cents),_money(_report.studio_settled_cents),_money(_report.support.rights.publisher_recoup_cents),_money(_report.support.terms.budget_cents)]
 	var root := _table.create_item()
 	var selection: TreeItem
 	for row: Dictionary in _report.rows:
@@ -120,7 +124,7 @@ func refresh() -> void:
 		_detail.text = "No sales earned yet. Month 1 earns over the next two productive actions; launch itself pays nothing."
 	var forecast: Dictionary = _report.forecast
 	if not forecast.is_empty():
-		_forecast.text = "Forecast only · Age month %d, next half %d · %d units for the full age month.\nForecast units are not earned cash. Paid columns exclude campaign fees and other Studio spending." % [forecast.next_age_month, forecast.next_age_cycle, forecast.projected_month_units]
+		_forecast.text = "Forecast only · Age month %d, next half %d · %d units for the full age month.\nNew age months are before future crowding. Existing halves reuse their frozen factor. Paid columns exclude expenses." % [forecast.next_age_month, forecast.next_age_cycle, forecast.projected_month_units]
 
 
 func _show_month() -> void:
@@ -130,6 +134,9 @@ func _show_month() -> void:
 	var lines: Array[String] = ["Age month %d · %d / 2 earning halves · %s" % [row.age_month, row.earned_halves, "Partial actual earnings" if row.earned_halves < 2 else "Complete"],
 		"Organic Awareness %.4f · Active Awareness %.4f · %s" % [row.organic_awareness_scaled / 10000.0, row.active_awareness_scaled / 10000.0, "Campaign #%d (*)" % row.campaign_number if row.campaign else "No campaign"]]
 	if row.units == 0 and row.earned_halves == 2: lines.append("Dormant this month: zero units. Future campaigns may revive this title.")
+	var market: Dictionary=row.market
+	lines.append("Market trial: %d Genre-only · %d Theme-only · %d matching pair → %.0f%% units (floor 70%%)." % [market.genre_only,market.theme_only,market.pair,market.factor_bp/100.0])
+	lines.append("Frozen for both earning halves · snapshot Month %d%s" % [int(market.cycle_start)/2+1," · historical neutral earnings preserved" if market.historical else ""])
 	for slice: Dictionary in row.slices:
 		lines.append("Half %d · %s · +%d units · net +%s" % [slice.half, _calendar(slice.run_cycle), slice.units, _money(slice.net_cents)])
 	for payment: Dictionary in row.payments:

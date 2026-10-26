@@ -58,7 +58,10 @@ func _run()->void:
 					selected.append(str(cards[i].id));(phase._candidate_row.get_children()[i] as CardView).input_button.pressed.emit()
 				verify(phase._play_selected_hand(),"Restored native hand %d"%(number+1))
 				trace.hands.append({"draw":_ids(cards),"selected":selected,"after":_state(game),"rng":run.random_streams.snapshot()})
-			verify(run.get_pending_promotion_awards()==banked and not run._promotion_awards.has(starwave),"Existing award survives every hand and completion")
+			var expected_banked: Dictionary = banked.duplicate(true)
+			if state.is_completed() and state.get_result().get_bonus_promotion()>0:
+				expected_banked[starwave] = state.get_result().get_bonus_promotion()
+			verify(run.get_pending_promotion_awards()==expected_banked,"Existing and earned challenge Promotion survive hands and completion")
 			verify(game.checkpoints.store.inspect().payload==baseline and FileAccess.get_sha256(initial.path)==digest,"Acceptance/hands/completion before dismissal do not save")
 			if mode=="complete":
 				phase._completion_panel.find_child("DismissCompletionButton",true,false).pressed.emit()

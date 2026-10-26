@@ -67,6 +67,7 @@ func _run() -> void:
 		var pending:=adapter.capture(run)
 		expect(not pending.is_empty(),"Pending Starwave checkpoint validates: "+adapter.error)
 		var banked:=run.get_pending_promotion_awards()
+		var expected_banked: Dictionary = banked.duplicate(true)
 		var quote:=offer_for(run,PublisherCatalog.STARWAVE)
 		var before:=snapshot(run)
 		run._refresh_publisher_unlocks()
@@ -110,17 +111,19 @@ func _run() -> void:
 			expect(run.get_completed_run_cycles()==cash_cycle+1,"Exactly one cycle per successful hand")
 			var action:Dictionary=run._studio_finance.actions[actions_before]
 			expect(action.source_id==state.get_offer_id() and action.direct_delta==(state.get_result().get_payout_cents() if hand==2 else 0),"Only final hand earns exact receipt")
-			expect(run.get_pending_promotion_awards()==banked and not run._promotion_awards.has(state.get_offer_id()),"Existing Promotion preserved without Starwave entry")
+			if hand==2 and state.get_result().get_bonus_promotion()>0:
+				expected_banked[state.get_offer_id()] = state.get_result().get_bonus_promotion()
+			expect(run.get_pending_promotion_awards()==expected_banked,"Earlier awards and earned Starwave bonus persist")
 			if hand<2:
 				expect(phase.get_candidate_cards().slice(0,3)==retained,"Three unselected cards retained")
 				expect(adapter.capture(run).is_empty(),"Unfinished Contract cannot checkpoint")
-			expect(phase._status_label.text.contains("/ 3") and phase._status_label.text.contains("No Promotion"),"Phase exposes count and cash-only terms")
+			expect(phase._status_label.text.contains("/ 3") and phase._status_label.text.contains("Challenge:"),"Phase exposes hand count and trial challenge")
 		expect(run.get_completed_contract_count()==4 and state.is_completed(),"Three-hand completion counts once")
 		before=snapshot(run,state)
 		expect(not phase._play_selected_hand() and before==snapshot(run,state),"Duplicate completion is inert")
-		expect(phase._completion_stats.text.contains("No Promotion"),"Result copy states no award")
+		expect(phase._completion_stats.text.contains("Challenge grade") and phase._completion_stats.text.contains("Bonus:"),"Result copy separates trial challenge reward")
 		var restored:=roundtrip(run,"Completed Starwave with priority action")
-		expect(restored!=null and restored.get_completed_contract_count()==4 and restored.get_pending_promotion_awards()==banked,"Restore preserves completion and earlier Promotion")
+		expect(restored!=null and restored.get_completed_contract_count()==4 and restored.get_pending_promotion_awards()==expected_banked,"Restore preserves completion and challenge Promotion")
 		var payload:=adapter.capture(run)
 		var broken:=payload.duplicate(true)
 		for pair in broken.run.publisher_offers:

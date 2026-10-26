@@ -1,0 +1,18 @@
+# AI Competitors G4 quote performance study — 2026-10-18
+
+Repository `main` at `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`, shared dirty worktree. Read `CURRENT_STATE.md`, `TODO.md`, `README.md`, simulation `USAGE.md`/`VARIANTS.md`, item 22 and the prior G4 plan/finding/review before edits. Inspected branch, HEAD, status, diff, DevelopmentSession, RunState, finance and world source. Preserved all existing edits and `.codex-godot-temp`. No canonical gameplay, player-save, Drive, commit or push action.
+
+## Changed files and scope
+
+- Thread-owned [predeclared plan](../threads/ai-competitors/2026-10-18-g4-quote-performance-plan-v1.md), [finding](../threads/ai-competitors/2026-10-18-g4-quote-performance-finding-v1.md) and [DESIGN review](../threads/ai-competitors/2026-10-18-g4-quote-performance-design-review-v1.md).
+- New private simulator versions `g4-current-hand-20261018-v4` (one-file per-price observation cache) and `v5` (two-file shared release/Fan preflight and exact per-price finance), each with preserved baseline/ancestry. Only their `project/` source was edited. New analysis-only quote-parity and eight-rival timing verifiers/wrappers live under the AI thread; all simulator runs and analysis outputs use new `sims/g4-quote-*` folders.
+- [Sealed v5 review packet](../threads/ai-competitors/handoffs/g4-current-hand-quote-performance-20261018-v1/HANDOFF.md): two changed files, original baseline preserved, zero recorded current-overlap conflicts at capture. Its generated `READY_FOR_IMPLEMENTATION_REVIEW` label is archival; the decision is DESIGN and adoption remains blocked.
+- Updated the AI thread README and minimal TODO item 22 follow-up to point to the review packet. No implementation was queued; other TODO entries were preserved.
+
+## Checks and limits
+
+The [finding](../threads/ai-competitors/2026-10-18-g4-quote-performance-finding-v1.md) gives source identities, exact reproduction commands, all outputs and timing tables. Same fresh Action/Adventure × `4417`/`90210` Studio recipes and 45-command/one-release/240-second bounds completed 4/4 on v1, v3, v4 and v5. V3/v4 and v3/v5 external captures each matched 72 steps and 560 exact quotes; observation state/RNG and selected receipts agree. Focused quote checks passed 207/0 on v4 and v5. Maintained v4/v5 two-rival world checks passed 118/0 over 20 cycles; v5 trace equals v1. V5 Studio checkpoint check reported zero failures and 93 PASS lines; campaign session reported zero failures, 81 steps/55 reentrant checks. Two v5 fresh-process 18-step replays passed with telemetry verification. Eight-rival/12-cycle source-fenced fixtures all produced the same final state/RNG, eight releases and 223,661-byte encoded world payload.
+
+First-release observation time met the provisional ≤1.5× v1 screen in all four cases, but repeated eight-rival elapsed-time pairs were mixed; the nearby control→v5 pair measured 1.75× total and 1.71× p95. This does not approve a CPU/population limit. The legal low-cash/arrears unavailable quote case and reason field were **NOT RUN / OPEN**; no actual receipt was checked for every unselected quote. No current-study rejection or timeout needed reduction. Passing checks do not approve rival choice quality, market pressure, numerical balance or canonical integration.
+
+Next work: resolve exact unavailable reason/negative-state parity and a stable population budget, then separately compare benefit-aware legal hand choices against current and cheapest controls. Reconcile shared source drift and run integrated checks before any future adoption. Item 22 remains PARTIAL, active market effects DESIGN/OPEN.

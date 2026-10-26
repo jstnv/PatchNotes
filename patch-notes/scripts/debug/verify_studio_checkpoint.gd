@@ -32,6 +32,9 @@ func _run() -> void:
 	var quote := run.get_bank_quote(50000,12)
 	expect(quote.get("accepted",false) and run.accept_bank_loan(quote),"Accept loan")
 	roundtrip(run,"Accepted loan")
+	var second:=PrimitivePredevelopment.prepare_project("Second payroll prerequisite",&"action",&"fantasy",run)
+	_finish_project(second,run)
+	expect(run.register_release(second),"Synthetic second-release payroll prerequisite")
 	var hire := run.get_production_hire_quote()
 	expect(not hire.is_empty() and run.hire_production_specialist(hire),"Hire Specialist")
 	roundtrip(run,"Payroll contract")
@@ -50,6 +53,7 @@ func _run() -> void:
 			var plan := contract.plan_hand(cards)
 			expect(commit_native_hand(run,contract,cards,plan.remainder_cents),"Native completed Contract hand")
 		roundtrip(run,"Completed Ironclad")
+		expect(run.search_contracts(run.get_contract_search_quote(&"sidestreet",&"cash")),"Paid Search supplies new repeatable SideStreet work")
 		var offer := run.get_next_sidestreet_offer()
 		var side := run.accept_sidestreet_offer(offer.offer_id)
 		for i in range(2):

@@ -9,6 +9,7 @@ signal selection_changed
 
 var card_data: CardData
 var _selected: bool = false
+var third_score: Label
 
 @onready var artwork_fallback: TextureRect = %Background
 @onready var artwork: TextureRect = %Artwork
@@ -28,6 +29,18 @@ var _selected: bool = false
 
 
 func _ready() -> void:
+	third_score = Label.new()
+	third_score.name = "ThirdCoreScore"
+	third_score.position = Vector2(64, 72)
+	third_score.size = Vector2(112, 28)
+	third_score.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	third_score.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	third_score.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	third_score.add_theme_color_override("font_color", Color("f8f8f2"))
+	var backing := StyleBoxFlat.new()
+	backing.bg_color = Color("202832")
+	third_score.add_theme_stylebox_override("normal", backing)
+	add_child(third_score)
 	input_button.pressed.connect(_on_input_button_pressed)
 	selection_outline.visible = _selected
 	refresh()
@@ -70,6 +83,7 @@ func refresh() -> void:
 	# A reused view must not retain text from an earlier two-score card.
 	secondary_score_value.text = ""
 	secondary_score_type.text = ""
+	third_score.hide()
 	if card_data.phase == CardData.PHASE_BETA:
 		_refresh_beta_data()
 		_refresh_renewability()
@@ -86,6 +100,10 @@ func refresh() -> void:
 	if has_secondary_score:
 		secondary_score_value.text = "+%d" % card_data.secondary_value
 		_fit_label(secondary_score_type, _score_name(card_data.secondary_stat), 11, 9)
+	var entries := card_data.core_contributions()
+	if entries.size() == 3:
+		third_score.show()
+		_fit_label(third_score, "+%d %s" % [entries[2].value, _score_name(entries[2].stat)], 14, 10)
 
 	scope_value.text = "S%d" % card_data.scope
 	_fit_label(department_label, _display_name(card_data.department), 14, 10)
@@ -128,9 +146,9 @@ func _refresh_card_tooltip() -> void:
 			CardData.BETA_CATEGORY_MARKETING: synergy = "Synergy: four Marketing cards trigger Marketing Specialization, boosting combined Marketing Output."
 			CardData.BETA_CATEGORY_INSIDER: synergy = "Synergy: a 2/1/1 QA, Marketing and Insider mix earns Balanced Operations."
 	else:
-		detail = "%s · %d Scope · +%d %s" % ["Feature" if card_data.card_type == &"feature" else "Pass", card_data.scope, card_data.primary_value, _display_name(card_data.primary_stat)]
-		if not card_data.secondary_stat.is_empty():
-			detail += " · +%d %s" % [card_data.secondary_value, _display_name(card_data.secondary_stat)]
+		detail = "%s · %d Scope" % ["Feature" if card_data.card_type == &"feature" else "Pass", card_data.scope]
+		for entry in card_data.core_contributions():
+			detail += " · +%d %s" % [entry.value, _display_name(entry.stat)]
 		synergy = "Synergy: the first score is primary. Four cards with primary %s trigger Specialization; secondary scores do not decide the match." % _display_name(card_data.primary_stat)
 	var department := _display_name(card_data.department)
 	if card_data.phase == CardData.PHASE_BETA and not card_data.qa_operation.is_empty():

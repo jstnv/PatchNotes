@@ -23,6 +23,7 @@ func _run() -> void:
 		menu.studio_created.connect(func(_name, _genre, _traits): commits += 1)
 		await settle()
 		var layout := menu.get_node("CenterContainer/MenuLayout")
+		menu.navigation.animate=false
 		layout.get_node("StartGame").pressed.emit()
 		await settle()
 		menu._submit()
@@ -53,8 +54,9 @@ func _run() -> void:
 		menu._show_review()
 		menu._submit()
 		check(menu._needs_attention(&"traits") and commits == 0, "Invalid trait build blocks Play even after viewing Overview")
-		layout.get_node("StudioSetup/Back").pressed.emit()
-		check(menu._secondary_ids().is_empty() and menu._name_input.text.is_empty() and menu._specialty.selected == 0 and commits == 0, "Cancel clears draft without creation")
+		menu.discard_setup()
+		check(menu._secondary_ids().is_empty() and menu._name_input.text.is_empty() and menu._specialty.selected == 0 and commits == 0, "Explicit discard clears draft without creation")
+		menu.navigation.animate=false
 		layout.get_node("StartGame").pressed.emit()
 		menu._name_input.text = "Ready Studio"
 		menu._specialty.select(1)
@@ -78,6 +80,7 @@ func _run() -> void:
 	replacement.checkpoint_info = {"status": &"corrupt"}
 	root.add_child(replacement)
 	await settle()
+	replacement.navigation.animate=false
 	replacement.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	check(replacement._replace_dialog.visible and not replacement._setup.visible, "Existing checkpoint still requires replacement confirmation")
 	replacement._replace_dialog.canceled.emit()

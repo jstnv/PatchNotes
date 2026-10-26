@@ -14,12 +14,15 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 
 ## System documents
 
+- [Shared UI identity, folder components and navigation](design/ui-design-system.md)
 - [Headless simulation: isolated runs, paired studies/reports, custom policies, replay and Studio continuation](threads/simulation-engine/USAGE.md)
 - [Design-thread simulator versions and TODO adoption handoffs](threads/simulation-engine/VARIANTS.md)
 - [Simulation Engine implementation and evidence](threads/simulation-engine/README.md)
 - [Studio Traits design thread working folder](threads/studio-traits/)
 - [Core loop and Studio](design/core-and-studio.md)
+- [Optional guided production practice](design/guided-production-tutorial.md)
 - [AI Competitors design thread](threads/ai-competitors/README.md)
+- [Founder Legacy & Corporate Ownership design thread](threads/founder-legacy-ownership/README.md)
 - [Economy and banking](design/economy-banking.md)
 - [Banking System design thread workspace](threads/banking-system/README.md)
 - [Sales and game lifespan](design/game-lifespan.md)

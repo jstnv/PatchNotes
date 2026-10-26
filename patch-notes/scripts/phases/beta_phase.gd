@@ -125,7 +125,7 @@ func _exit_tree() -> void:
 
 
 func set_priority_distribution(distribution: Dictionary) -> bool:
-	if _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_distribution(distribution):
+	if _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(distribution):
 		return false
 	if _phase_state == PhaseState.ACTIVE_DEVELOPMENT:
 		if _run_state != null:
@@ -143,7 +143,7 @@ func set_priority_distribution(distribution: Dictionary) -> bool:
 
 func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
 	if not is_inside_tree(): return false
-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
 	var publish:=func() -> void:
 		_priority_draft=_priority_allocation.get_distribution()
 	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
@@ -189,7 +189,7 @@ func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float
 	if is_gameplay_input_blocked(): return false
 	if _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization():
 		return false
-	if not BetaPriorityAllocation.is_valid_distribution(_priority_draft):
+	if not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft):
 		return false
 	var database := get_node_or_null("/root/CardDatabase")
 	if database == null:
@@ -247,7 +247,7 @@ func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float
 
 func _can_redraw_selection() -> bool:
 	if is_gameplay_input_blocked(): return false
-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _run_state == null or _transaction_in_progress or _launch_confirmation_pending or not _run_state.can_consume_redraw(_selected_card_views.size()):
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _run_state == null or _transaction_in_progress or _launch_confirmation_pending or (not _capture_development_actions().can_swap(_redraw_slots()) and not _run_state.can_consume_redraw(_selected_card_views.size())):
 		return false
 	var seen: Array[CardView] = []
 	for view: CardView in _selected_card_views:
@@ -303,7 +303,7 @@ func _on_redraw_pressed() -> void:
 
 func _refresh_redraw_controls() -> void:
 	if not is_node_ready(): return
-	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
+	%RedrawButton.text = "Swap" if _capture_development_actions().can_swap(_redraw_slots()) else "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
 	%RedrawButton.disabled = not _can_redraw_selection()
 	if not %RedrawButton.disabled:
 		var rolls: Array[float] = []
@@ -315,7 +315,7 @@ func _refresh_redraw_controls() -> void:
 func _plan_selected_redraw(controlled_rolls: Array[float]) -> Dictionary:
 	var plan: Dictionary = _capture_development_actions().redraw_plan(_redraw_slots(),controlled_rolls)
 	var failed: Array[CardView] = []
-	for slot: int in plan.failed_features: failed.append(%HandContainer.get_child(slot))
+	for slot: int in plan.failed_features: failed.append(%HandContainer.card_views()[slot])
 	plan.failed_features=failed
 	return plan
 
@@ -540,7 +540,7 @@ func _can_host_playtest() -> bool:
 
 
 func _has_valid_active_pool() -> bool:
-	if not is_node_ready() or _candidate_cards.size() != CANDIDATE_POOL_SIZE or _candidate_views.size() != CANDIDATE_POOL_SIZE or %HandContainer.get_child_count() != CANDIDATE_POOL_SIZE:
+	if not is_node_ready() or _candidate_cards.size() != CANDIDATE_POOL_SIZE or _candidate_views.size() != CANDIDATE_POOL_SIZE or %HandContainer.card_views().size() != CANDIDATE_POOL_SIZE:
 		return false
 	for index in range(CANDIDATE_POOL_SIZE):
 		var view := _candidate_views[index]
@@ -801,15 +801,15 @@ func _sync_priority_controls(reset_draft: bool = true) -> void:
 	var total := 0
 	for value: int in _priority_draft.values():
 		total += value
-	%PriorityTotal.text = "Priority Total: %d / 100" % total
-	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_distribution(_priority_draft) or (_phase_state != PhaseState.PLANNING and _priority_draft == get_priority_distribution()) or _transaction_in_progress or _launch_confirmation_pending
+	%PriorityTotal.text = "%d/100" % total
+	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft) or (_phase_state != PhaseState.PLANNING and _priority_draft == get_priority_distribution()) or _transaction_in_progress or _launch_confirmation_pending
 	_syncing_priority_controls = false
 
 
 func _update_begin_action() -> void:
 	if not is_node_ready():
 		return
-	%BeginBetaButton.disabled = _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization() or not BetaPriorityAllocation.is_valid_distribution(_priority_draft)
+	%BeginBetaButton.disabled = _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization() or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft)
 
 
 func get_workspace() -> PhaseWorkspace:
@@ -833,7 +833,7 @@ func is_initial_priority_planning() -> bool:
 
 
 func can_initialize_priorities() -> bool:
-	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and _project_state.has_alpha_finalization() and not _launch_confirmation_pending and not _transaction_in_progress and BetaPriorityAllocation.is_valid_distribution(_priority_draft)
+	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and _project_state.has_alpha_finalization() and not _launch_confirmation_pending and not _transaction_in_progress and BetaPriorityAllocation.is_valid_new_distribution(_priority_draft)
 
 
 func open_priority_overlay() -> bool:
@@ -842,7 +842,8 @@ func open_priority_overlay() -> bool:
 
 func reset_priority_draft() -> void:
 	_priority_draft = get_priority_distribution()
-	_sync_priority_controls()
+	for key in _priority_draft: _priority_draft[key] = maxi(10,_priority_draft[key])
+	_sync_priority_controls(false)
 
 
 func refresh_overlay_actions() -> void:
@@ -897,12 +898,12 @@ func _capture_development_actions() -> RefCounted:
 
 func _redraw_slots() -> Array[int]:
 	var slots: Array[int] = []
-	for view: CardView in _selected_card_views: slots.append(view.get_index())
+	for view: CardView in _selected_card_views: slots.append(%HandContainer.card_views().find(view))
 	return slots
 
 func _sync_command_tokens(state: RefCounted) -> void:
 	_command_revision=state.revision
 	_command_next_id=state.next_candidate_id
 	_command_view_ids.clear()
-	for index in range(%HandContainer.get_child_count()):
-		_command_view_ids[%HandContainer.get_child(index).get_instance_id()]=state.candidate_ids[index]
+	for index in range(%HandContainer.card_views().size()):
+		_command_view_ids[%HandContainer.card_views()[index].get_instance_id()]=state.candidate_ids[index]

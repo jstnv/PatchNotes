@@ -1,5 +1,5 @@
 class_name FeatureStore
-extends PanelContainer
+extends Control
 
 var _map: FeatureStoreMap
 var _run: RunState
@@ -18,14 +18,12 @@ const LANE_MEMBERS := {
 	&"Visuals": [&"text", &"colored_text", &"sprites", &"animated_sprites", &"4_color_palette", &"8_color_palette", &"scrolling", &"multi_directional_scrolling"],
 	&"Audio": [&"8_bit_sound", &"recorded_sounds", &"8_bit_music", &"16_bit_music", &"sound_effects", &"music"],
 	&"Technology & Tools": [&"keyboard_and_mouse", &"controller", &"menu_system", &"split_screen", &"save_files", &"branching_nodes"],
-	&"Gameplay": [&"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"difficulty_levels"],
-	&"Story & World": [&"simple_story", &"dialogue", &"character_backstories", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets"],
+	&"Gameplay": [&"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"turn_based_combat", &"character_classes", &"difficulty_levels"],
+	&"Story & World": [&"simple_story", &"dialogue", &"branching_dialogue", &"character_backstories", &"character_development", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets"],
 }
 var _lane_by_id: Dictionary = {}
-var _lane_buttons: Dictionary = {}
 var _lane_scroll: Dictionary = {}
 var _active_lane: StringName = &"Visuals"
-var _gate: Label
 var _lane_heading: Label
 var _details: Label
 var _cash: Label
@@ -37,79 +35,141 @@ var _research_list: OptionButton
 var _research_button: Button
 var _research_quote: Dictionary = {}
 var _admission_dialog: ConfirmationDialog
+var _header: HBoxContainer
+var _body: PanelContainer
+var _close: Button
+var _debug: Button
+var _debug_popup: PanelContainer
+var _debug_notes: Label
+var _debug_scroll: ScrollContainer
+var _toolbar: VBoxContainer
+var _refresh_queued := false
+
+class DebugButton extends Button:
+	func _make_custom_tooltip(for_text: String) -> Object:
+		return FeatureStore.notes_tooltip(for_text, get_viewport_rect().size.x)
 
 class PoolSummaryLabel extends Label:
 	func _make_custom_tooltip(for_text: String) -> Object:
-		var label := Label.new()
-		label.custom_minimum_size.x = minf(480, get_viewport_rect().size.x - 48)
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.text = for_text
-		return label
+		return FeatureStore.notes_tooltip(for_text, get_viewport_rect().size.x)
+
+static func notes_tooltip(for_text: String, viewport_width: float) -> Label:
+	var label := Label.new()
+	label.custom_minimum_size.x = minf(480, viewport_width - 48)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.text = for_text
+	return label
 
 static func score_label(stat: StringName) -> String:
 	return "Tech" if stat == &"technology" else str(stat).capitalize()
 
 
+static func transparent_button(button: BaseButton) -> void:
+	# Duplicate local styles: shared Theme and popup/menu surfaces stay intact.
+	for state in ["normal", "disabled", "hover", "pressed", "hover_pressed"]:
+		var source := button.get_theme_stylebox(state) as StyleBoxFlat
+		if source == null: continue
+		var style := source.duplicate() as StyleBoxFlat
+		style.bg_color.a = 0.0
+		button.add_theme_stylebox_override(state, style)
+
+
 func setup(run: RunState) -> void:
 	_run = run
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var margin := MarginContainer.new()
-	for side: String in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 24)
-	add_child(margin)
-	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 12)
-	margin.add_child(layout)
-	var header := HBoxContainer.new()
-	layout.add_child(header)
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_header = HBoxContainer.new()
+	_header.name = "StoreHeader"
+	_header.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	_header.offset_left = 16
+	_header.offset_right = -16
+	_header.add_theme_constant_override("separation", 24)
+	_header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_header)
 	_cash = Label.new()
-	_cash.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(_cash)
-	var close := Button.new()
-	close.text = "Close Store"
-	close.pressed.connect(hide)
-	header.add_child(close)
+	_cash.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	_cash.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	_header.add_child(_cash)
 	_owned_summary = PoolSummaryLabel.new()
+	_owned_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_owned_summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_owned_summary.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	_owned_summary.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	_owned_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_owned_summary.add_theme_font_size_override("font_size", 14)
-	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Play cost is once per owned Feature in a project; Passes are free. Later Store Features have no defined play price yet.\n\nOwned Features join games started after you acquire them. Each game keeps the Feature supply it started with. Ownership does not guarantee a draw or play."
-	layout.add_child(_owned_summary)
-	_spending_advice = Label.new()
-	_spending_advice.name = "SpendingAdvice"
-	_spending_advice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_spending_advice.add_theme_font_size_override("font_size", 14)
-	layout.add_child(_spending_advice)
-	var queue_bar := HBoxContainer.new()
-	layout.add_child(queue_bar)
+	_header.add_child(_owned_summary)
+	# Autowrapped labels can briefly request tall bounds during viewport resize.
+	_header.minimum_size_changed.connect(func(): _header.offset_bottom = _header.get_combined_minimum_size().y)
+	_body = PanelContainer.new()
+	_body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_body.offset_top = 50
+	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_body)
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side: String in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 16)
+	_body.add_child(margin)
+	var map_host := Control.new()
+	map_host.name = "StoreMapHost"
+	map_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	map_host.custom_minimum_size.y = 150
+	margin.add_child(map_host)
+	var layout := VBoxContainer.new()
+	_toolbar = layout
+	layout.name = "StoreToolbar"
+	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	layout.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	layout.add_theme_constant_override("separation", 12)
+	map_host.add_child(layout)
+	var actions := HBoxContainer.new()
+	actions.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
 	_research_list = OptionButton.new()
+	_research_list.fit_to_longest_item = false
+	_research_list.custom_minimum_size.x = 100
 	_research_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_research_list.item_selected.connect(func(index: int): _select_node(_research_list.get_item_metadata(index)))
-	queue_bar.add_child(_research_list)
+	actions.add_child(_research_list)
 	_research_button = Button.new()
 	_research_button.text = "Research"
 	_research_button.pressed.connect(func():
 		var quote := _research_quote.duplicate(true)
 		if _run.research_feature(quote): _refresh())
-	queue_bar.add_child(_research_button)
-	var lanes := HBoxContainer.new()
-	lanes.add_theme_constant_override("separation", 8)
-	layout.add_child(lanes)
-	for lane: StringName in LANE_ORDER:
-		var lane_button := Button.new()
-		lane_button.text = str(lane)
-		lane_button.toggle_mode = true
-		lane_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		lane_button.focus_mode = Control.FOCUS_ALL
-		lane_button.pressed.connect(_select_lane.bind(lane))
-		lanes.add_child(lane_button)
-		_lane_buttons[lane] = lane_button
+	actions.add_child(_research_button)
+	_debug = DebugButton.new()
+	_debug.name = "StoreDebug"
+	_debug.text = "Debug"
+	_debug.pressed.connect(_toggle_debug)
+	actions.add_child(_debug)
+	_close = Button.new()
+	_close.name = "CloseStore"
+	_close.text = "Close Store"
+	_close.pressed.connect(hide)
+	actions.add_child(_close)
+	for button: BaseButton in [_research_list, _research_button, _debug, _close]:
+		transparent_button(button)
+	_build_debug_popup()
+	resized.connect(_position_debug)
+	visibility_changed.connect(func():
+		if not visible: _debug_popup.hide())
+	_spending_advice = Label.new()
+	_spending_advice.name = "SpendingAdvice"
+	_spending_advice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_spending_advice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_spending_advice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_spending_advice.add_theme_font_size_override("font_size", 14)
+	layout.add_child(_spending_advice)
 	_map = FeatureStoreMap.new()
 	add_child(_map)
-	_map.configure(self, layout)
-	_run.features_changed.connect(_refresh)
-	_run.cash_changed.connect(_refresh)
-	_run.sales_changed.connect(_refresh)
-	_run.calendar_changed.connect(_refresh, CONNECT_DEFERRED)
+	_map.configure(self, layout, map_host)
+	_run.features_changed.connect(_request_refresh)
+	_run.cash_changed.connect(_request_refresh)
+	_run.sales_changed.connect(_request_refresh)
+	_run.calendar_changed.connect(_request_refresh)
 	_refresh()
 
 
@@ -118,9 +178,30 @@ func open_store() -> void:
 	show()
 
 
+func _request_refresh() -> void:
+	# A committed transaction publishes several signals. Rebuild once after all
+	# of them, using its final state; a hidden Store refreshes when next opened.
+	if _refresh_queued or not is_visible_in_tree(): return
+	_refresh_queued = true
+	_flush_refresh.call_deferred()
+
+
+func _flush_refresh() -> void:
+	if not _refresh_queued: return
+	_refresh_queued = false
+	if is_visible_in_tree(): _refresh()
+
+
 func _refresh() -> void:
+	_refresh_queued = false
 	# Deferred run signals can arrive after Studio has been detached for departure.
 	if not is_inside_tree() or _tree == null:
+		return
+	var graph := FeatureStoreCatalog.graph(_run._feature_definitions, _run._feature_offers)
+	if graph.has("error"):
+		_cash.text = "Feature Store unavailable: " + str(graph.error)
+		_research_button.disabled = true
+		_map.popup.hide()
 		return
 	_cash.text = "Feature Store"
 	_research_list.clear()
@@ -137,14 +218,11 @@ func _refresh() -> void:
 	_research_button.disabled = _research_quote.is_empty() or not _research_quote.can_research
 	_research_button.text = "Research" if _research_quote.is_empty() else "Research %s - 1 cycle" % CashFormatter.format_exact_cents(_research_quote.due_cents)
 	_research_button.tooltip_text = "Only the first queued Feature receives research. No automatic progress or due bills."
-	if _run.needs_starter_selection():
-		var pool := _run.get_starter_pool_summary()
-		_cash.text += "\nFirst-game pool: %d Scope · Optional Primitive purchases cost 0 cycles" % pool.scope
 	var owned := _summarize_owned_features()
-	_owned_summary.text = "OWNED POOL  •  Scope %d  •  Core Score %d\n" % [owned.scope, owned.total_score]
-	_owned_summary.text += "Graphics %d · Sound %d · Tech %d · Design %d  •  Play once: %s" % [owned.graphics, owned.sound, owned.technology, owned.design, CashFormatter.format_exact_cents(owned.known_play_cost_cents)]
-	if owned.unpriced_count > 0:
-		_owned_summary.text += "\n+ %d Store Feature%s with play cost TBD" % [owned.unpriced_count, "" if owned.unpriced_count == 1 else "s"]
+	_owned_summary.text = "OWNED POOL  ·  Scope %d  ·  Graphics %d · Sound %d · Tech %d · Design %d" % [owned.scope, owned.graphics, owned.sound, owned.technology, owned.design]
+	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Known play cost once per owned Feature: %s; Passes are free.\n\nOwned Features join games started after you acquire them. Each game keeps the Feature supply it started with. Ownership does not guarantee a draw or play." % CashFormatter.format_exact_cents(owned.known_play_cost_cents)
+	if _run.needs_starter_selection():
+		_owned_summary.tooltip_text += "\n\nFirst-game pool: optional Primitive purchases cost 0 cycles."
 	if _nodes.is_empty():
 		_build_tree()
 	for id: StringName in _nodes:
@@ -155,6 +233,7 @@ func _refresh() -> void:
 		var color := Color("244b3d")
 		if not reserve.is_empty() and not reserve.owned:
 			status = "Starter · 0 cycles" if reserve.initial else "Reserve · 1 cycle"
+			if not reserve.unlocked: status = "Locked · parent required"
 			if not reserve.affordable:
 				status += " · Need cash"
 			color = Color("244b70") if reserve.can_purchase else Color("674c24")
@@ -165,21 +244,10 @@ func _refresh() -> void:
 		var card: CardData = get_node("/root/CardDatabase").get_card(id)
 		button.text = card.card_name + "\n" + status
 		(button.get_node("MapStatus") as Label).text = status
-		var department := "No department" if card.department.is_empty() else str(card.department).replace("_", " ").capitalize()
-		button.tooltip_text = "%s · %s · %s\nDepartment: %s · Scope %d · +%d %s" % [card.card_name, str(card.phase).capitalize(), str(_lane_by_id[id]), department, card.scope, card.primary_value, score_label(card.primary_stat)]
-		if card.secondary_value != 0:
-			button.tooltip_text += " · +%d %s" % [card.secondary_value, score_label(card.secondary_stat)]
-		if not offer.is_empty() and offer.owned:
-			button.tooltip_text += "\nOwned Feature\nPrerequisite: %s" % offer.prerequisite
-		elif not offer.is_empty():
-			button.tooltip_text += "\nPrerequisite: %s\nBase: %s. Queue down payment: %s (0 cycles).\nNext research installment: %s (1 cycle); %d%% familiarity now." % [offer.prerequisite,CashFormatter.format_exact_cents(research.base_cents),CashFormatter.format_exact_cents(research.down_cents),CashFormatter.format_exact_cents(research.due_cents),research.discount_percent]
-		elif not reserve.is_empty() and not reserve.owned:
-			button.tooltip_text += "\nPrimitive %s · %s" % ["starter" if reserve.initial else "reserve", CashFormatter.format_exact_cents(reserve.price_cents)]
-		else:
-			button.tooltip_text += "\nOwned Primitive Feature"
-		if not _run.owns_feature(id) and (not offer.is_empty() or not _run.needs_starter_selection()):
-			var blocks := queue_block_reasons(research)
-			if not blocks.is_empty(): button.tooltip_text += "\n" + "\n".join(blocks)
+		button.tooltip_text = card.card_name + " · Scope %d" % card.scope
+		for entry in card.core_contributions(): button.tooltip_text += " · +%d %s" % [entry.value,score_label(entry.stat)]
+		var single: Array[CardData] = [card]
+		button.tooltip_text += "\nPlay cost: " + ("TBD" if _run._feature_offers.has(id) else CashFormatter.format_exact_cents(_run.primitive_feature_hand_cost_cents(single)))
 		for style_name: String in ["normal", "hover", "pressed", "focus"]:
 			var style := StyleBoxFlat.new()
 			style.bg_color = color.lightened(0.12) if style_name == "hover" else color
@@ -200,6 +268,7 @@ func queue_block_reasons(quote: Dictionary) -> Array[String]:
 	if _run.needs_starter_selection(): reasons.append("Available after first game")
 	if not quote.unlocked:
 		var offer := _run.get_feature_store_offer(quote.feature_id)
+		if offer.is_empty(): offer = _run.get_primitive_reserve_offer(quote.feature_id)
 		reasons.append("Locked — " + str(offer.get("prerequisite", "Prerequisite required")))
 	if quote.cash_cents < quote.down_cents:
 		reasons.append("Need %s to queue" % CashFormatter.format_exact_cents(quote.down_cents))
@@ -234,9 +303,7 @@ func _summarize_owned_features() -> Dictionary:
 		if card == null or card.card_type != &"feature":
 			continue
 		scope += card.scope
-		scores[card.primary_stat] += card.primary_value
-		if not card.secondary_stat.is_empty():
-			scores[card.secondary_stat] += card.secondary_value
+		for entry in card.core_contributions(): scores[entry.stat] += int(entry.value)
 		if _run.get_feature_store_offer(id).is_empty():
 			priced_cards.append(card)
 		else:
@@ -248,7 +315,9 @@ func _summarize_owned_features() -> Dictionary:
 
 
 func _build_tree() -> void:
-	var entries := FeatureStoreCatalog.starting_features() + FeatureStoreCatalog.entries()
+	var entries: Array = _run._feature_definitions.values()
+	var graph := FeatureStoreCatalog.graph(_run._feature_definitions, _run._feature_offers)
+	if graph.has("error"): return
 	var children: Dictionary = {}
 	for lane: StringName in LANE_ORDER:
 		for id: StringName in LANE_MEMBERS[lane]:
@@ -257,13 +326,15 @@ func _build_tree() -> void:
 	for entry: Dictionary in entries:
 		var id := StringName(entry.id)
 		assert(_lane_by_id.has(id), "Feature missing Store lane: " + str(id))
-		var parent := StringName(entry.get("purchase_parent", ""))
-		if int(entry.get("gameplay_features_required", 0)) > 0:
-			parent = &"gameplay_gate"
+		var parents: Array = graph.parents[id]
+		var parent: StringName = parents[0] if not parents.is_empty() else &""
 		if not parent.is_empty():
 			if not children.has(parent): children[parent] = []
 			children[parent].append(id)
-			_edges.append([parent, id])
+		# Layout follows the first parent only. Every same-tree AND parent gets
+		# its own real connector; cross-tree gates retain their inspect links.
+		for required: StringName in parents:
+			if _lane_by_id[required] == _lane_by_id[id]: _edges.append([required, id])
 		var button := Button.new()
 		button.size = NODE_SIZE
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -274,15 +345,8 @@ func _build_tree() -> void:
 		_tree.add_child(button)
 		_nodes[id] = button
 		_map.decorate(button, get_node("/root/CardDatabase").get_card(id))
+		if parents.size() > 1: _map.decorate_and_gate(button, parents)
 	assert(_nodes.size() == _lane_by_id.size(), "Store lane map does not match ledger")
-	_gate = Label.new()
-	_gate.name = "GameplayGate"
-	_gate.text = "OWN ANY 3 DISTINCT\nGAMEPLAY FEATURES\nOwnership gate • no discount"
-	_gate.size = Vector2(180, 100)
-	_gate.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_gate.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_gate.add_theme_font_size_override("font_size", 14)
-	_tree.add_child(_gate)
 	_lane_heading = Label.new()
 	_lane_heading.position = Vector2(16, 8)
 	_tree.add_child(_lane_heading)
@@ -296,28 +360,28 @@ func _layout_lane(children: Dictionary) -> void:
 func _select_lane(lane: StringName) -> void:
 	_active_lane = lane
 	_map.navigate(lane)
-	for key: StringName in _lane_buttons:
-		_lane_buttons[key].button_pressed = key == lane
 
 
 func _draw_connections() -> void:
 	_map.draw_core()
 	for edge: Array in _edges:
-		var parent: Control = _gate if edge[0] == &"gameplay_gate" else _nodes[edge[0]]
+		var parent: Control = _nodes[edge[0]]
 		var child: Control = _nodes[edge[1]]
-		var parent_rect := parent.get_rect() if parent == _gate else _map.node_footprint(parent)
+		var parent_rect := _map.node_footprint(parent)
 		var child_rect := _map.node_footprint(child)
 		var direction := (child_rect.get_center() - parent_rect.get_center()).normalized()
 		var start := _map.edge_port(parent_rect, direction)
 		var end := _map.edge_port(child_rect, -direction)
 		var offer := _run.get_feature_store_offer(edge[1])
-		var color := Color("7ed6be") if offer.unlocked else Color("8993a5")
+		if offer.is_empty(): offer = _run.get_primitive_reserve_offer(edge[1])
+		var color := Color("7ed6be") if offer.get("unlocked", false) else Color("8993a5")
 		_tree.draw_line(start, end, color, 3, true)
 		var across := direction.orthogonal() * 6.0
 		_tree.draw_colored_polygon(PackedVector2Array([end, end - direction * 9.0 + across, end - direction * 9.0 - across]), color)
 
 
 func _select_node(id: StringName) -> void:
+	_debug_popup.hide()
 	_selected = id
 	_refresh()
 	_map.focus_selection(id)
@@ -327,11 +391,75 @@ func _show_details() -> void:
 	_refresh_spending_advice()
 
 
+# The shared top HUD now contains the chart; Store content begins below it.
+func get_menu_transition_content() -> Control:
+	return _body.get_child(0)
+
+
 func _refresh_spending_advice() -> void:
 	var advice := _run.get_feature_spending_advice(_selected)
-	_spending_advice.text = FeatureSpendingGuidance.message(advice)
-	_spending_advice.tooltip_text = FeatureSpendingGuidance.explanation(advice)
-	_spending_advice.add_theme_color_override("font_color", Color("e9c46a") if advice.get("below_reserve", false) else Color("bdd5cf"))
+	# Unknown prototype prices live in Debug; an actual shortfall stays prominent.
+	_spending_advice.text = "Next game: known costs may leave too little cash. Check itemized costs before buying." if advice.get("below_reserve", false) else ""
+	_spending_advice.visible = not _spending_advice.text.is_empty()
+	_spending_advice.tooltip_text = FeatureSpendingGuidance.explanation(advice) if not _spending_advice.text.is_empty() else ""
+	_spending_advice.add_theme_color_override("font_color", Color("e9c46a"))
+	var owned := _summarize_owned_features()
+	var notes := "Prototype pricing\nKnown owned-pool play cost: %s\n%d Store Feature%s with play cost TBD. Later Store Features have no defined play price yet; unknown fees are not zero-cost promises." % [CashFormatter.format_exact_cents(owned.known_play_cost_cents), owned.unpriced_count, "" if owned.unpriced_count == 1 else "s"]
+	notes += "\n\n" + FeatureSpendingGuidance.message(advice) + "\n\n" + FeatureSpendingGuidance.explanation(advice)
+	_debug.tooltip_text = notes + "\n\nClick Debug to keep these notes open."
+	_debug_notes.text = notes
+
+
+func _build_debug_popup() -> void:
+	_debug_popup = PanelContainer.new()
+	_debug_popup.name = "StoreDebugNotes"
+	_debug_popup.add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
+	add_child(_debug_popup)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 8)
+	_debug_popup.add_child(box)
+	_debug_scroll = ScrollContainer.new()
+	_debug_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	box.add_child(_debug_scroll)
+	_debug_notes = Label.new()
+	_debug_notes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_debug_notes.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_debug_notes.add_theme_font_size_override("font_size", 14)
+	_debug_scroll.add_child(_debug_notes)
+	var dismiss := Button.new()
+	dismiss.text = "Close Debug"
+	dismiss.pressed.connect(_close_debug)
+	box.add_child(dismiss)
+	_debug_popup.hide()
+
+
+func _position_debug() -> void:
+	if not is_instance_valid(_debug_popup): return
+	_debug_scroll.custom_minimum_size = Vector2(minf(520, size.x - 64), minf(320, size.y - 220))
+	_debug_popup.reset_size()
+	_debug_popup.position = Vector2(size.x - _debug_popup.size.x - 16, _close.get_global_rect().end.y - global_position.y + 8)
+
+
+func _toggle_debug() -> void:
+	if _debug_popup.visible:
+		_close_debug()
+		return
+	_map.dismiss()
+	_debug_popup.show()
+	_debug_popup.move_to_front()
+	_position_debug()
+	_debug_popup.get_child(0).get_child(1).grab_focus()
+
+
+func _close_debug() -> void:
+	_debug_popup.hide()
+	_debug.grab_focus()
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if is_visible_in_tree() and _debug_popup.visible and event.is_action_pressed("ui_cancel"):
+		_close_debug()
+		get_viewport().set_input_as_handled()
 
 
 func _purchase() -> void:

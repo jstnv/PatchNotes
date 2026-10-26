@@ -54,7 +54,8 @@ func go() -> void:
 	check(a.known_play_cost_cents == run.primitive_feature_hand_cost_cents(owned) and a.owned_feature_count == owned.size(), "Budget charges exactly the owned pool, not every purchasable branch")
 	var reserve_id: StringName
 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
-		if not run.owns_feature(StringName(entry.id)):
+		# This single-purchase fixture needs an available root/owned parent.
+		if run.get_primitive_reserve_offer(StringName(entry.id)).get("can_purchase", false):
 			reserve_id = StringName(entry.id)
 			break
 	var extra: Array[CardData] = [db.get_card(reserve_id)]
@@ -141,7 +142,7 @@ func verify_ui(run: RunState, id: StringName, label: String) -> void:
 		var before := state(run)
 		store._select_node(id)
 		await create_timer(0.6).timeout
-		check(not store._spending_advice.text.is_empty() and root.get_visible_rect().encloses(store._spending_advice.get_global_rect()), "Spending advice visible at " + str(size))
+		check(not store._debug.tooltip_text.is_empty() and root.get_visible_rect().encloses(store._debug.get_global_rect()), "Diagnostic advice accessible at " + str(size))
 		check(not store._spending_advice.text.contains("23") and not store._spending_advice.text.contains("average"), "Internal average is not a player-facing stat")
 		check(root.get_visible_rect().encloses(store._buy.get_global_rect()) and not store._buy.disabled, "Advisory leaves reachable legal Purchase at " + str(size))
 		if "--capture" in OS.get_cmdline_user_args():
@@ -149,7 +150,7 @@ func verify_ui(run: RunState, id: StringName, label: String) -> void:
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(OUT + "/rendered/%s-%d.png" % [label, size.x])
 		store._map.dismiss()
-		check(store._spending_advice.text.begins_with("Next game"), "Closing details restores owned-only budget")
+		check(store._debug.tooltip_text.contains(FeatureSpendingGuidance.message(run.get_feature_spending_advice())), "Closing details restores owned-only diagnostic budget")
 		store.hide()
 		store.open_store()
 		check(state(run) == before, "Browse/reopen/animate has zero transactions")

@@ -1,0 +1,9 @@
+# Contracts foundation session v2
+
+2026-10-17 (America/Los_Angeles). Repository `main` HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; dirty shared worktree before and after. The user selected **extensible contract framework** and deferred balance. This supersedes the scope question left open in [audit session v1](SESSION-LOG-2026-10-17-foundation-audit-v1.md).
+
+Thread-owned changes: [decision](FOUNDATION-DECISION-2026-10-17-v1.md), [plan](FOUNDATION-PLAN-2026-10-17-v1.md), [finding](FOUNDATION-FINDINGS-2026-10-17-v1.md), private [candidate](simulators/contracts-foundation-v1/variant.json) and [sealed handoff](handoffs/contracts-foundation-v1/HANDOFF.md), plus README/HANDOFF index updates. One minimal [TODO](../../TODO.md) queue entry was added after a fresh read. No canonical `patch-notes/` source, asset or configuration was edited by this thread; no commit or push was made.
+
+Checks: five affected focused suites 429/429 PASS and new registry verifier 31/31 PASS, zero named failures, with exact logs in [finding](FOUNDATION-FINDINGS-2026-10-17-v1.md). Candidate `simulate.py run` passed four releases/85 accepted commands and exact fresh-process replay passed 85/85 steps; all 85 state digests match the retained prior canonical-source route. Two earlier runner attempts were rejected by canonical drift during snapshot and retained; a direct pre-profile Godot check crashed before verifier output. Godot exit ObjectDB warnings are retained. No exported UI/human acceptance or final balance claim.
+
+Follow-up: PN Implementation reviews the packet and adopts the bounded definition layer in the single canonical gameplay slot, reconciling concurrent source changes; reruns integrated checks, then updates shared design/state/TODO authority with actual adoption status. C5 exported acceptance remains PARTIAL and separate. New Contract types and numerical decisions remain OPEN.

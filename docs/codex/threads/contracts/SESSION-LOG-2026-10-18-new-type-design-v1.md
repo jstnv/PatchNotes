@@ -1,0 +1,8 @@
+# First new Contract type design start — 2026-10-18
+
+- Branch/HEAD: `main` at `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; shared worktree already dirty. No commit or push.
+- Scope: read-only source review and **PROPOSED** first new type. The user said to get started after the implemented challenge pilot; this is not approval of a new gameplay rule or balance value.
+- Changed: created [source feasibility v1](NEW-TYPE-SOURCE-REVIEW-2026-10-18-v1.md) and [proposal v1](NEW-TYPE-PROPOSAL-2026-10-18-v1.md); updated this thread's `README.md` and `HANDOFF.md`. Shared TODO, design authority, gameplay, tests, assets and configuration were not edited.
+- Read-only checks: inspected branch/HEAD/status/diff and the current Contract definition, offer/chooser, settlement and checkpoint paths; recorded eight working-file SHA256 identities. `git -c core.whitespace=cr-at-eol diff --check -- docs/codex/threads/contracts/README.md docs/codex/threads/contracts/HANDOFF.md` PASS; both new design files exist with no trailing whitespace. No headless simulation or gameplay test was run because the contract purpose and lifecycle remain undecided.
+- Finding: a non-publisher one-hand cash brief is the recommended first vertical slice. The definition registry requires a publisher ID and offer/checkpoint paths enumerate existing publisher families, so a new entry alone cannot implement it. Preserve current Starwave qualification unless separately approved.
+- Follow-up: select the first type and its promise, then decide offer cadence, publisher-count effect, score/challenge and old-save policy. Predeclare and run bounded legal-route/economy checks before proposing trial numbers or a canonical handoff. The shared TODO remains untouched for this unapproved candidate.

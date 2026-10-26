@@ -1,0 +1,29 @@
+# G1a two-studio cohort opening study — predeclared 2026-10-11
+
+**Status: bounded private candidate experiment; no balance or cohort approval.** [Candidate content](2026-10-11-g1a-cohort-trial-proposal-v1.md) is OPEN. This plan was written before the run. Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`, with a dirty shared worktree. Canonical gameplay and player saves remain untouched.
+
+## Question and hypothesis
+
+Can each proposed Action and Adventure incumbent bootstrap a typed frozen archive, completed extra Primitive ownership, empty queue/familiarity and legal trait-backed resources on the **current** runtime, then make a first live 1980 release through accepted Design, Alpha, Beta and launch actions? Hypothesis: both are legal and their archives survive Studio-only Continue without entering live release, finance or Fan ledgers. Independent campaigns cannot prove simultaneous world scheduling; that is a separate stop gate.
+
+## Source and version
+
+Create `simulators/g1a-cohort-current-v1` with `tools/simulator_variant.py create --id g1a-cohort-current-v1 --owner ai-competitors` from current canonical source. Port only the seven exact changed paths from the sealed implementation-owned [corrected G1a packet](../../findings/overnight-20261011-v1/g1a-corrected-handoff-v2/HANDOFF.md) into this thread-owned private `project/`, after checking every modified current file against that packet's base hash and every copied file against its candidate hash. The sealed packet's base is `4162c70c12bf3d6af7587e5879759b54b127280c4ff224f4970ed7f8c2b895df`, corrected candidate `38749eaf2397fece0c120c3ffcb454c73fd90ac4cf9e7dec4b5f287769a5abbb`. Record the new canonical/variant source identities and drift. Never edit the packet, previous variants or canonical project. Any hash mismatch stops this revision; do not overwrite an overlapping current gameplay change.
+
+## Cases and policy
+
+Use the existing private `res://scripts/simulation/finite_fixture_policy.gd`, declared ID `finite-development-fixture`, version `1`, `selection=features_first`, Design 3 / Alpha 5 / Beta 2 productive hands. This is a test driver, not the approved G4 AI policy. Four control recipes have no incumbent extension; four candidates add the exact proposal archive/extra-owned IDs. Each pair uses the same legal version-8 `family_funding` + `cult_following` traits, Studio ID, specialty, policy, theme, seed and 60-command/one-live-release horizon. Seeds `4417` and `90210` are fixed for Action and Adventure, producing eight cases. Action project's Theme is Science Fiction; Adventure's is Fantasy. The archive titles/years/Reviews and extra IDs are exactly the proposal. Controls intentionally have different initial ownership/archive from candidates; equal seeds are **not** equal starting states or causal Review estimates.
+
+All cases start at January 1980 cycle 0 with trait-backed $5,850 and 20 Fans, no pre-start live games, no Bank/Contracts/employees/courses, no Store admission, and no arbitrary cash/Fan grants. Candidate archives each have two distinct pre-1980 IDs and Reviews in integer tenths. Candidate extras are existing parentless Primitive Features absent from the corresponding free specialty roster. Run one shared eight-case batch; each case is an **independent** campaign.
+
+## Measurements, bounds and stopping
+
+For each case record initialization/command status, exact initial cash/Fans/owned count, queue/familiarity, archive/live count, start state/RNG digest, accepted Design/Alpha/Beta/launch tape, first live Review/Core/Scope/Bugs, end cycle/cash/Fans/arrears, and Studio checkpoint availability. Require archive IDs absent from live release, sales, Fanbase, finance and news fields where exposed. Capture output source identity and process logs. Run with a new output folder, 240-second process timeout, max 60 commands and target one live release. Stop after the eight declared cases regardless of Review; retain rejected/incomplete/timed-out cases. A missing first release is an incomplete case, not a prompt to switch seeds or increase budget.
+
+Replay one completed Action and one completed Adventure candidate in separate fresh processes, and one control if coverage permits, using the frozen bundle. If a recorded command rejects unexpectedly, run the documented reducer for that retained case in a new output folder. Run the corrected focused archive verifier against the private candidate in an isolated profile if the batch imports cleanly. Use Studio-only Continue on one completed candidate to test another live release and archive persistence; predeclare its derived continuation case and bound before running it.
+
+No paired reporter will be used for control versus candidate because their initial states differ. Do not compare this new version's outcomes to the earlier v2 source as if mechanics were identical. The current correction may still be source-compatible, but a legal shared-world scheduler, old-save migration, visible archive UI, G2/G4 AI policy and G5 performance are outside this bounded opening study.
+
+## Continuation addendum — before continuation execution
+
+Select the completed `cohort-adventure-candidate-4417` Studio checkpoint from the declared batch, not an active-phase state. Use `prepare-continuation.py` without editing checkpoint bytes to create case `cohort-adventure-candidate-4417-next`, absolute target two live releases, at most 60 **additional** commands, the same finite fixture policy and a 240-second run limit. Do not add a purchase or change seed/hands. Require archive IDs/years/Reviews unchanged at the second Studio checkpoint and absent from live release/finance/Fan records. If the continuation does not release within bounds, retain that result and stop; do not substitute another seed. Replay a completed continuation once in a fresh process.

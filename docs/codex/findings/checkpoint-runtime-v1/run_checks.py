@@ -8,10 +8,15 @@ PROJECT=REPO/'patch-notes'
 PROFILE=Path(r'C:\Users\64jus\Downloads\Patch Notes Design Folder\checkpoint-runtime-20261007')
 GODOT=r'C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe'
 
-def run(name,args,timeout=240):
+def run(name,args,timeout=240,profile=None):
     env=os.environ.copy()
     PROFILE.mkdir(parents=True,exist_ok=True)
-    unique=Path(tempfile.mkdtemp(prefix=name+"-",dir=PROFILE))
+    if profile is None:
+        unique=Path(tempfile.mkdtemp(prefix=name+"-",dir=PROFILE))
+    else:
+        unique=Path(profile).resolve()
+        if not unique.is_relative_to(PROFILE.resolve()) or not unique.is_dir():
+            raise ValueError('Continuation profile must be an existing isolated test profile')
     for k in ('APPDATA','LOCALAPPDATA'):
         p=unique/k;p.mkdir(parents=True,exist_ok=True);env[k]=str(p)
     command=[GODOT,'--headless','--path',str(PROJECT),*args]
@@ -29,7 +34,7 @@ def run(name,args,timeout=240):
         if line in errors:
             errors.remove(line)
             classified.append(line)
-    record={'command':command,'exit':result.returncode,'errors':errors,'expected_negative_probe_errors':classified}
+    record={'command':command,'profile':str(unique.resolve()),'exit':result.returncode,'errors':errors,'expected_negative_probe_errors':classified}
     (HERE/(name+'.command.json')).write_text(json.dumps(record,indent=2))
     print(name,result.returncode,output[-700:] if errors or result.returncode else [x for x in output.splitlines() if 'failures' in x][-2:],flush=True)
     if result.returncode or errors:raise RuntimeError(name)

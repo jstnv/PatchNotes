@@ -5,6 +5,7 @@ var project: ProjectState
 var run: RunState
 var phase: Control
 var stats: Array[Label] = []
+var scoreboard: ProductionScoreboard
 var footer: Label
 var footer_panel: PanelContainer
 var cash_button: Button
@@ -13,9 +14,12 @@ var fans_dialog: AcceptDialog
 var studio_finances: StudioFinances
 var settings_menu: DemoSettingsMenu
 var settings_button: Button
+var sales_hud: SalesRevenueHUD
+var header_title: Label
 var change_priorities: Button
 var synergy_notification: SynergyNotification
 var tutorial_overlay: TutorialOverlay
+var how_to_play: HowToPlayGuide
 var tutorial_button: Button
 var contextual_tip: ContextualTip
 var tip_button: Button
@@ -28,7 +32,7 @@ var _score_pulses: Array[Label] = []
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	theme = preload("res://resources/ui/workspace_theme.tres")
-	var header := PanelContainer.new()
+	var header := ProductionScoreboard.new()
 	header.name = "PersistentHeader"
 	header.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	header.offset_left = 16
@@ -36,25 +40,10 @@ func _ready() -> void:
 	header.offset_top = 12
 	header.offset_bottom = 78
 	add_child(header)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 18)
-	header.add_child(row)
-	for text: String in ["Employees\n—", "Graphics\n0", "Sound\n0", "Technology\n0", "Design\n0", "Scope\n0 / 30", "Bug Pressure\n0.00"]:
-		var item := Label.new()
-		item.text = text
-		item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(item)
-		stats.append(item)
-	for index in range(4):
-		stats[index + 1].mouse_filter = Control.MOUSE_FILTER_PASS
-		stats[index + 1].tooltip_text = [
-			"Graphics measures visual quality. Cards add Graphics points.\nHigher Core scores improve production quality at Review.",
-			"Sound measures audio quality. Cards add Sound points.\nHigher Core scores improve production quality at Review.",
-			"Technology measures the quality of your technical systems.\nCards add Technology points. Higher Core scores improve\nproduction quality at Review.",
-			"Design measures gameplay quality. Cards add Design points.\nHigher Core scores improve production quality at Review.",
-		][index]
-	stats[5].mouse_filter = Control.MOUSE_FILTER_PASS
-	stats[5].tooltip_text = "Scope measures how much game you have built.\nFeature cards add their printed Scope. Core scores measure quality.\nSynergies increase Core gains without increasing Scope."
+	scoreboard = header
+	var row := header.row
+	header_title = header.header_title
+	stats = header.stats
 	change_priorities = Button.new()
 	change_priorities.name = "ChangePrioritiesButton"
 	change_priorities.text = "Change Priorities"
@@ -118,12 +107,18 @@ func _ready() -> void:
 	tutorial_overlay = TutorialOverlay.new()
 	tutorial_overlay.name = "TutorialOverlay"
 	add_child(tutorial_overlay)
+	how_to_play = HowToPlayGuide.new()
+	how_to_play.name = "HowToPlayGuide"
+	add_child(how_to_play)
 	contextual_tip = ContextualTip.new()
 	contextual_tip.name = "ContextualTip"
 	add_child(contextual_tip)
 	settings_menu = DemoSettingsMenu.new()
 	settings_menu.name = "SettingsMenu"
 	add_child(settings_menu)
+	sales_hud = SalesRevenueHUD.new()
+	row.add_child(sales_hud)
+	sales_hud.visibility_changed.connect(_layout_sales_hud)
 
 func setup(project_state: ProjectState, run_state: RunState) -> void:
 	if project != null:
@@ -147,9 +142,16 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 		run.finance_changed.connect(refresh)
 		run.fans_changed.connect(refresh)
 	studio_finances.bind_run(run)
+	sales_hud.bind_run(run)
 	refresh()
 
 func set_phase(controller: Control) -> void:
+	# Only successful visible phase changes cue music; browsing overlays do not.
+	var soundtrack := get_node_or_null("/root/Soundtrack")
+	if soundtrack != null:
+		var studio_music := controller is StudioPhase or controller is PostGameReview or controller is FirstProjectSetup
+		var from_title := is_instance_valid(phase) and phase is MainMenu
+		soundtrack.request_theme(&"studio" if studio_music else &"main", studio_music and from_title)
 	settings_menu.close()
 	studio_finances.close()
 	fans_dialog.hide()
@@ -158,7 +160,6 @@ func set_phase(controller: Control) -> void:
 		if is_instance_valid(pulse): pulse.queue_free()
 	_score_pulses.clear()
 	_guidance_ready = false
-	if contextual_tip != null: contextual_tip.dismiss()
 	if is_instance_valid(phase) and phase.has_signal("tutorial_context_changed") and phase.tutorial_context_changed.is_connected(set_tutorial_context):
 		phase.tutorial_context_changed.disconnect(set_tutorial_context)
 	if is_instance_valid(phase) and phase.has_method("get_workspace"):
@@ -176,11 +177,15 @@ func set_phase(controller: Control) -> void:
 	phase = controller
 	var release_menu := phase is StudioPhase or phase is PostGameReview or phase is ContractPhase or phase is FirstProjectSetup or phase is MainMenu
 	get_node("PersistentFooter").visible = not (phase is MainMenu)
-	get_node("PersistentHeader").visible = not release_menu
+	get_node("PersistentHeader").visible = not (phase is MainMenu)
+	header_title.visible = release_menu and not (phase is MainMenu)
+	for item: Label in stats: item.visible = not release_menu
+	change_priorities.visible = not release_menu
+	if header_title.visible and run != null:
+		header_title.text = "%s · %d" % [run.get_studio_name(), run.get_current_year()]
 	if phase is MainMenu: contextual_tip.dismiss()
-	var phase_root := get_parent().get_node_or_null("%PhaseRoot") as Control
-	if phase_root != null:
-		phase_root.offset_top = 12.0 if release_menu else 88.0
+	sales_hud.set_context(not phase is MainMenu)
+	_layout_sales_hud()
 	synergy_notification.visible = not release_menu
 	if phase.has_method("get_workspace"):
 		phase.get_workspace().use_synergy_presenter(synergy_notification)
@@ -205,17 +210,33 @@ func set_phase(controller: Control) -> void:
 	elif phase is MainMenu: context = &"main_menu"
 	set_tutorial_context(context)
 
+func _layout_sales_hud() -> void:
+	# The chart is part of the same persistent top panel as phase information.
+	var phase_root := get_parent().get_node_or_null("%PhaseRoot") as Control
+	if phase_root != null:
+		phase_root.offset_top = 0.0 if phase is MainMenu else (88.0 if get_node("PersistentHeader").visible else 12.0)
+		phase_root.offset_bottom = 0.0 if phase is MainMenu else -52.0
+		# Layout containers should not swallow the chart's mouse tooltips.
+		phase_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if phase is StudioPhase:
+			phase.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 
 func set_tutorial_context(context: StringName) -> void:
 	tutorial_context = context
+	_layout_sales_hud()
 	tutorial_overlay.close()
-	contextual_tip.dismiss()
 	_guidance_ready = true
 	_refresh_guidance()
 
 func show_tutorial() -> void:
 	contextual_tip.dismiss()
 	tutorial_overlay.open(tutorial_context)
+
+func show_how_to_play(navigation_host: MenuTransitions = null) -> void:
+	contextual_tip.dismiss()
+	tutorial_overlay.close()
+	how_to_play.open(navigation_host)
 
 
 func show_finances() -> bool:
@@ -251,18 +272,18 @@ func _show_synergy_help(title: String, body: String) -> void:
 
 func _refresh_guidance() -> void:
 	if not _guidance_ready or run == null or contextual_tip == null: return
+	contextual_tip.dock_below_menu_controls(phase is StudioPhase and tutorial_context==&"contract")
 	var tip := _guidance_for_current_state()
 	if tip.is_empty():
 		tip_button.disabled = true
 		tip_button.tooltip_text = "No tip for this screen."
-		contextual_tip.dismiss()
 		return
 	tip_button.disabled = false
 	tip_button.tooltip_text = "%s\n%s" % [tip.title, tip.body]
 	if _current_tip_key == tip.key: return
 	_current_tip_key = tip.key
-	contextual_tip.dismiss()
-	if run.visit_guidance_tip(StringName(tip.key)):
+	# A changing hand must not erase guidance the player is still reading.
+	if not contextual_tip.panel.visible and run.visit_guidance_tip(StringName(tip.key)):
 		contextual_tip.show_tip(tip.title, tip.body)
 
 
@@ -275,13 +296,13 @@ func _guidance_for_current_state() -> Dictionary:
 		elif phase is ContractPhase: motion = phase.hand_motion
 	if motion != null and (motion.capturing or motion.busy): return {}
 	match tutorial_context:
-		&"main_menu":
+		&"main_menu", &"market":
 			return {}
 		&"predevelopment":
 			return {"key": "predevelopment_setup", "title": "Plan your game", "body": "Name the game, choose a Genre and Theme, and allocate 100 initial Design priority points. Editing is free; Begin Development advances one cycle and deals the first hand."}
 		&"studio":
 			if run != null and run.needs_starter_selection():
-				return {"key": "studio_first_store", "title": "Explore your starting pool", "body": "Your specialty granted your first Features. Visit the Store for optional additions: initial Primitive purchases cost cash and zero cycles. A B game needs 30 played Scope."}
+				return {}
 			return {"key": "studio_between_games", "title": "Choose your next step", "body": "Browse release summaries, the Feature Store or Contracts for free. Produce Next Game starts a fresh project with your owned Features."}
 		&"feature_store":
 			if run != null and run.needs_starter_selection():
@@ -301,8 +322,13 @@ func _guidance_for_current_state() -> Dictionary:
 						return {"key": "contract_specialization", "title": "Contract Specialization ready", "body": "All four cards share a primary Core label. This contract hand earns ×1.5 Core gains; printed Scope stays the same. Playing it advances one cycle."}
 					return {"key": "contract_ready", "title": "Contract hand ready", "body": "Play four cards to advance one cycle. Contract Features are finite; Passes can return in later draws."}
 				if state != null and state.get_successful_hand_count() > 0:
-					return {"key": "contract_final_hand", "title": "One hand left", "body": "Choose four cards for the final hand. Match all four primary Core labels for ×1.5 Core gains. The contract pays after two successful hands."}
-			return {"key": "contract_choose", "title": "Build a contract hand", "body": "Select four of seven cards. Matching all four primary Core labels gives a ×1.5 Core synergy. Priorities weight later draws; redraws use the shared budget."}
+					var remaining := state.get_required_hands() - state.get_successful_hand_count()
+					if remaining == 1:
+						return {"key": "contract_final_hand", "title": "One hand left", "body": "Choose four cards for the final hand. Matching all four primary Core labels gives ×1.5 Core gains. Completion cash and any challenge bonus are paid after this hand."}
+					return {"key": "contract_progress", "title": "%d hands left" % remaining, "body": "Keep building toward the targets and challenge. Completion cash is paid only after the final required hand."}
+				return {"key": "contract_choose", "title": "Build a contract hand", "body": "Select four of seven cards. Matching all four primary Core labels gives a ×1.5 Core synergy. Priorities weight later draws; redraws use the shared budget."}
+			if run.get_pending_contract_choices().is_empty():
+				return {"key":"contract_search","title":"Find work","body":"Choose a work type, then search for one lasting offer. A successful search costs one productive cycle; browsing is free. Rent and other bills continue."}
 			return {"key": "contract_offer", "title": "Inspect the offer", "body": "Review its targets and reward before accepting. Opening details and accepting cost no cycles or cash."}
 		&"design", &"alpha", &"beta":
 			return _production_guidance()
@@ -369,27 +395,20 @@ func refresh() -> void:
 		cash_button.text = "Cash: —"
 		footer.text = "Date: —     |     Cycle: —     |     Next Bill: —"
 		return
+	if header_title.visible:
+		header_title.text = "%s · %d" % [run.get_studio_name(), run.get_current_year()]
 	if project == null:
 		change_priorities.disabled = true
 		_refresh_footer()
 		_refresh_guidance()
 		return
-	var profile := PrimitiveReviewCalculator.get_project_profile(project)
-	for index in range(4):
-		var category: String = ["Graphics", "Sound", "Technology", "Design"][index]
-		var score: int = _presented_scores.get(HandPresentation.CORE[index], project.get_core_score(index))
-		var target := project.get_review_result().get_standard(index) if project.has_review_result() else profile.get_standard(index) if profile != null else 0
-		stats[index + 1].text = category + "\n" + ("%d / %d" % [score, target] if target > 0 else str(score))
-		stats[index + 1].tooltip_text = "%s score / this project's target.\nMeeting all four targets gives 8/10 production quality.\n125%% of each target gives 10/10.\nScope, Bugs and variance determine the final Review." % category
-	stats[0].text = "Marketing\n%d" % _presented_scores.get(&"marketing", project.get_marketing_output()) if phase is BetaPhase else "Employees\n—"
-	stats[5].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", project.get_current_scope()), project.get_required_scope()]
-	stats[5].tooltip_text = "Scope measures how much game you have built: %d of the %d target.\nFeature cards add their printed Scope. Reaching the target completes\nScope for Review; Core quality is judged separately.\nSynergies do not increase Scope." % [project.get_current_scope(), project.get_required_scope()]
-	if is_instance_valid(phase) and (phase is BetaPhase or phase is StudioPhase or phase is PostGameReview or phase is ContractPhase):
-		var fixed: int = _presented_scores.get(&"fixed", project.get_fixed_bugs())
-		var known: int = maxi(0, int(_presented_scores.get(&"discovered", project.get_known_bugs() + project.get_fixed_bugs())) - fixed)
-		stats[6].text = "Known / Fixed\n%d / %d" % [known, fixed]
-	else:
-		stats[6].text = "Bug Pressure\n%.2f" % (project.get_accumulated_alpha_bug_pressure() if is_instance_valid(phase) and phase is AlphaPhase else project.get_accumulated_bug_pressure())
+	var context: StringName = &"design"
+	if phase is BetaPhase: context = &"beta"
+	elif phase is AlphaPhase: context = &"alpha"
+	elif phase is StudioPhase: context = &"studio"
+	elif phase is PostGameReview: context = &"review"
+	elif phase is ContractPhase: context = &"contract"
+	scoreboard.render(project,context,_presented_scores)
 	change_priorities.disabled = not is_instance_valid(phase) or not phase.has_method("can_edit_priorities") or not phase.can_edit_priorities()
 	if is_instance_valid(phase) and phase.has_method("get_workspace") and phase.get_workspace().hand_motion != null and phase.get_workspace().hand_motion.busy: change_priorities.disabled = true
 	change_priorities.tooltip_text = "Begin the phase to edit priorities." if change_priorities.disabled else "Stage a new allocation for future draws."
@@ -452,7 +471,7 @@ func _refresh_footer() -> void:
 	cash_button.tooltip_text = "Studio Finances · Available cash %s\n%s" % [CashFormatter.format_exact_cents(cents), run.get_financial_block_reason() if finances.get("financially_blocked", false) else "Monthly earnings, settled cash, expenses and rent. Opening and browsing are free."]
 
 
-func show_settings() -> void:
+func show_settings(navigation_host: MenuTransitions = null) -> void:
 	contextual_tip.dismiss()
 	tutorial_overlay.close()
-	settings_menu.open()
+	settings_menu.open(navigation_host)

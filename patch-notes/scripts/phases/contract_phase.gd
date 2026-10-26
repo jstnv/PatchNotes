@@ -39,6 +39,8 @@ var _score_values: Array[Label] = []
 var _change_priorities: Button
 var _priority_modal: CanvasLayer
 var _priority_chart: PriorityInfluenceChart
+var _priority_total: Label
+var _priority_budget: PriorityBudgetFeedback
 var _completion_modal: CanvasLayer
 
 
@@ -102,12 +104,13 @@ func _build_ui() -> void:
 	header_row.add_child(_change_priorities)
 	layout.add_child(_title)
 	_status_label = Label.new()
+	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(_status_label)
 	_scores_label = Label.new()
 	_scores_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_scores_label.hide()
 	layout.add_child(_scores_label)
-	var priority_row := VBoxContainer.new()
+	var priority_row := HBoxContainer.new()
 	priority_row.add_theme_constant_override("separation", 10)
 	priority_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	priority_row.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -120,33 +123,49 @@ func _build_ui() -> void:
 	priority_title.add_theme_font_size_override("font_size", 24)
 	priority_content.add_child(priority_title)
 	var help := Label.new()
-	help.text = "Future draws only · total 100 · 5–50 in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
+	help.text = "Future draws only · 10–50% in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
 	priority_content.add_child(help)
 	var priority_body := HBoxContainer.new()
 	priority_body.add_theme_constant_override("separation", 24)
 	priority_content.add_child(priority_body)
 	priority_body.add_child(priority_row)
 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
-		var box := HBoxContainer.new()
+		var box := VBoxContainer.new()
 		box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var label := Label.new()
 		label.text = PriorityInfluenceChart.CORE_NAMES[category]
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size",14)
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		label.add_theme_color_override("font_color", PriorityInfluenceChart.CORE_COLORS[category])
 		box.add_child(label)
-		var input := SpinBox.new()
+		var input := VSlider.new()
 		input.min_value = PriorityAllocation.MIN_PRIORITY
 		input.max_value = PriorityAllocation.MAX_PRIORITY
 		input.step = PriorityAllocation.PRIORITY_STEP
+		input.value = 25
+		input.custom_minimum_size = Vector2(32,140)
+		input.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		input.tooltip_text = "Weight future %s contract draws. All four priorities must total 100." % _category_name(category)
 		input.value_changed.connect(func(value: float): _priority_draft[category] = int(value); _refresh_actions())
 		box.add_child(input)
+		var amount := Label.new()
+		amount.text = "25"
+		amount.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		box.add_child(amount)
+		input.value_changed.connect(func(value: float): amount.text = str(int(value)))
 		_priority_inputs[category] = input
 		priority_row.add_child(box)
 	_priority_chart = PriorityInfluenceChart.new()
 	priority_body.add_child(_priority_chart)
 	_priority_chart.bind_controls(_priority_inputs.values(), PriorityInfluenceChart.CORE_NAMES, PriorityInfluenceChart.CORE_COLORS)
+	_priority_budget = PriorityBudgetFeedback.new()
+	_priority_modal.add_child(_priority_budget)
+	_priority_budget.bind_controls(_priority_inputs.values())
+	_priority_total = Label.new()
+	priority_content.add_child(_priority_total)
 	_commit_button = Button.new()
+	_commit_button.disabled = true
 	_commit_button.text = "Commit Priorities (1 cycle)"
 	_commit_button.tooltip_text = "A valid changed allocation costs one cycle and affects later draws, not the current hand."
 	_commit_button.pressed.connect(func():
@@ -163,16 +182,15 @@ func _build_ui() -> void:
 		_change_priorities.grab_focus())
 	priority_actions.add_child(cancel)
 	_priority_modal.hide()
-	var pool_title := Label.new()
-	pool_title.text = "Contract Draw — select exactly four cards"
-	layout.add_child(pool_title)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	layout.add_child(scroll)
 	_candidate_row = CardFan.new()
-	_candidate_row.custom_minimum_size.y = 280
+	# Selection guidance is already in the status. Reserve room for challenge
+	# and Starwave payout lines above the fan without covering the footer HUD.
+	_candidate_row.custom_minimum_size.y = 240
 	scroll.add_child(_candidate_row)
 	var actions := HBoxContainer.new()
 	layout.add_child(actions)
@@ -275,14 +293,14 @@ func open_priority_overlay() -> void:
 	_sync_priority_inputs()
 	_refresh_actions()
 	_priority_modal.show()
-	(_priority_inputs[ProjectState.CoreScore.GRAPHICS] as SpinBox).get_line_edit().grab_focus()
+	(_priority_inputs[ProjectState.CoreScore.GRAPHICS] as VSlider).grab_focus()
 
 
 func _build_completion_panel() -> void:
 	_completion_modal = CanvasLayer.new()
 	_completion_modal.layer = 30
 	add_child(_completion_modal)
-	var content := _modal_content(_completion_modal, Vector2(560, 360))
+	var content := _modal_content(_completion_modal, Vector2(560, 420))
 	_completion_panel = content.get_parent() as PanelContainer
 	_completion_panel.hide()
 	_completion_modal.hide()
@@ -340,7 +358,7 @@ func can_edit_priorities() -> bool:
 
 
 func set_priority_draft(distribution: Dictionary) -> bool:
-	if not PriorityAllocation.is_valid_distribution(distribution):
+	if not PriorityAllocation.is_valid_new_distribution(distribution):
 		return false
 	_priority_draft = distribution.duplicate()
 	_sync_priority_inputs()
@@ -369,7 +387,7 @@ func redraw_selected_cards(category_rolls: Array[float] = [], definition_rolls: 
 	var session := _capture_contract()
 	var old_views := _selected_views.duplicate()
 	var slots: Array[int] = []
-	for view in old_views: slots.append(view.get_index())
+	for view in old_views: slots.append(_candidate_row.card_views().find(view))
 	var prepared: Array[CardView] = []
 	var readiness := func(replacements: Array[CardData]) -> bool:
 		for card in replacements: prepared.append(_make_card_view(card))
@@ -437,7 +455,7 @@ func _draw_one(type_filter: StringName, reserved_features: Dictionary, category_
 
 func _publish_candidate_pool(cards: Array[CardData], retain_unselected := false) -> void:
 	_candidate_cards.clear()
-	for child in _candidate_row.get_children():
+	for child in _candidate_row.card_views():
 		if not child is CardView: continue
 		if retain_unselected and child not in _selected_views:
 			_candidate_cards.append(child.card_data)
@@ -459,7 +477,7 @@ func _make_card_view(card: CardData) -> CardView:
 
 
 func _on_card_pressed(view: CardView) -> void:
-	if _state.is_completed() or hand_motion.busy or _priority_modal.visible or view not in _candidate_row.get_children(): return
+	if _state.is_completed() or hand_motion.busy or _priority_modal.visible or view not in _candidate_row.card_views(): return
 	if _selected_views.has(view):
 		_selected_views.erase(view)
 		view.set_selected(false)
@@ -482,9 +500,17 @@ func _show_completion() -> void:
 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.DESIGN)), _format_half(_state.get_core_target(3)),
 		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_upfront_cents()),
 		CashFormatter.format_exact_cents(result.get_completion_payment_cents()), CashFormatter.format_exact_cents(result.get_payout_cents())]
-	if _state.get_contract_id()==PublisherTrialTerms.STARWAVE:
+	if not _state.get_challenge_terms().is_empty():
+		_completion_stats.text += "\nChallenge grade: %.1f%% · Bonus: %s and %d Promotion" % [float(result.get_challenge_grade_bp()) / 100.0, CashFormatter.format_exact_cents(result.get_bonus_cash_cents()), result.get_bonus_promotion()]
+	if _state.get_contract_id() == ContractDefinitions.SIDESTREET_BRIEF:
+		var brief := PublisherRelationshipBrief.result(_state)
+		var credited := 0
+		for event: Dictionary in _run._publisher_relationships.events:
+			if event.source_id == _state.get_offer_id(): credited = event.credited_reputation_bp
+		_completion_stats.text = "SideStreet Reputation Brief complete\nCompletion: %.2f%% · Promise: %.0f%%\nRequested Reputation: +%.2f · Credited: +%.2f (cap 100)\nCash: $0.00 · Promotion: 0 · Investment: 0\nTwo productive cycles; ordinary rent, payroll and Bank service applied.\nCurrent SideStreet Reputation: %.2f / 100\nAt Reputation 20, search for a commission invitation in Contracts, then prepare it." % [brief.completion_bp/100.0,brief.promise_bp/100.0,brief.raw_award_bp/100.0,credited/100.0,_run.get_publisher_relationships()[&"sidestreet"].reputation_bp/100.0]
+	if _state.get_contract_id()==PublisherTrialTerms.STARWAVE and _state.get_challenge_terms().is_empty():
 		_completion_stats.text += "\nNo Promotion from this Contract. Existing awards are unchanged."
-	elif not _state._trial_terms.is_empty(): _completion_stats.text += "\nPromotion earned: %d Awareness for the next successful launch" % result.get_promotion()
+	elif result.get_promotion()>0: _completion_stats.text += "\nTotal Promotion: %d Awareness for the next successful launch" % result.get_promotion()
 	_selected_views.clear()
 	_candidate_row.hide()
 	_priority_modal.hide()
@@ -496,11 +522,14 @@ func _show_completion() -> void:
 func _refresh_all() -> void:
 	if _state == null: return
 	_status_label.text = "Hands remaining: %d / %d · Select exactly four cards" % [maxi(0, _state.get_required_hands() - _state.get_successful_hand_count()), _state.get_required_hands()]
+	if not _state.get_challenge_terms().is_empty():
+		_status_label.text += "\n" + ContractChallenges.description(_state.get_contract_id())
+		if _state.get_contract_id() in [ContractDefinitions.SIDESTREET,ContractDefinitions.SIDESTREET_BRIEF]: _status_label.text += " Successful redraws: %d" % _state.get_challenge_redraws()
 	if _state.get_contract_id()==PublisherTrialTerms.STARWAVE:
 		var cores := {}
 		for category in range(4): cores[category] = _state.get_core_score_half_units(category)
 		var earned := _state.calculate_for_state(_state.get_scope(),cores)
-		_status_label.text += "\nCash at current completion: %s · Paid after hand 3 · No Promotion" % CashFormatter.format_exact_cents(earned.get("remainder_cents",0))
+		_status_label.text += "\nBase cash at current completion: %s · Paid after hand 3" % CashFormatter.format_exact_cents(earned.get("remainder_cents",0))
 	for i in range(4):
 		_score_values[i].text = "%s\n%s / %s" % [["Graphics", "Sound", "Tech", "Design"][i], _format_half(_presented_scores.get(HandPresentation.CORE[i], _state.get_core_score_half_units(i))), _format_half(_state.get_core_target(i))]
 	_score_values[4].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", _state.get_scope()), _state.get_scope_target()]
@@ -512,6 +541,10 @@ func _refresh_all() -> void:
 
 
 func _refresh_actions() -> void:
+	if _priority_total != null:
+		var total := 0
+		for input: Range in _priority_inputs.values(): total += int(input.value)
+		_priority_total.text = "%d/100" % total
 	if _state == null: return
 	var animating := hand_motion != null and hand_motion.busy
 	_change_priorities.disabled = animating or not can_edit_priorities()
@@ -532,8 +565,12 @@ func _selected_cards() -> Array[CardData]:
 
 func _sync_priority_inputs() -> void:
 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
-		(_priority_inputs[category] as SpinBox).set_value_no_signal(_priority_draft[category])
+		var input: VSlider = _priority_inputs[category]
+		input.set_value_no_signal(maxi(PriorityAllocation.MIN_PRIORITY,_priority_draft[category]))
+		_priority_draft[category] = int(input.value)
+		(input.get_parent().get_child(2) as Label).text = str(int(input.value))
 	_priority_chart.refresh_from_controls()
+	_priority_budget.refresh()
 
 
 func _format_half(half_units: int) -> String:
@@ -552,7 +589,7 @@ func _capture_contract() -> RefCounted:
 	session.next_id = _command_next_id
 	session.sequence = _command_sequence
 	if _candidate_row != null:
-		for child in _candidate_row.get_children():
+		for child in _candidate_row.card_views():
 			if not child is CardView: continue
 			if not _command_ids.has(child.get_instance_id()):
 				_command_ids[child.get_instance_id()] = session.next_id
@@ -564,7 +601,7 @@ func _capture_contract() -> RefCounted:
 func _sync_contract_tokens(session: RefCounted) -> void:
 	_command_ids.clear()
 	var index := 0
-	for child in _candidate_row.get_children():
+	for child in _candidate_row.card_views():
 		if not child is CardView: continue
 		_command_ids[child.get_instance_id()] = session.candidate_ids[index]
 		index += 1

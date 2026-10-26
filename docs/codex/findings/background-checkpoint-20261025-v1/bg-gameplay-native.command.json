@@ -1,0 +1,38 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_background_gameplay.gd"
+  ],
+  "exit": 2,
+  "seconds": 15.547,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\bg-gameplay-native",
+  "script_sha256": "b19605e1f53f705210d4ebee2bfe571a7db69ddcaed2fac429dba895158f2e21",
+  "owned_child_pid": 32072,
+  "aborted": false,
+  "result": {
+    "checks": 24,
+    "failures": 2,
+    "ok": false,
+    "rows": [
+      {
+        "frames": 14,
+        "max_frame_gap_ms": 514.238,
+        "save_wall_ms": 2207.782,
+        "size": "(1152, 648)"
+      },
+      {
+        "frames": 5,
+        "max_frame_gap_ms": 307.501,
+        "save_wall_ms": 877.712,
+        "size": "(1280, 720)"
+      }
+    ]
+  },
+  "errors": [
+    "ERROR: FAIL: Real Studio frames advance without the former multi-second save stall",
+    "ERROR: FAIL: Real Studio frames advance without the former multi-second save stall"
+  ]
+}

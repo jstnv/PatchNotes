@@ -1,0 +1,32 @@
+# AI Competitors: no-Research extra-hand project plan — 2026-10-23
+
+**COMPLETE bounded private study; both proposed extra-hand rules remain DESIGN/OPEN and are not recommended for adoption.** The actual two-incumbent world, current 2/2/2 hands, synergy choices and active AI market remain ACTIVE/TRIAL. No canonical gameplay was edited.
+
+## Question, source and legal setup
+
+The [pre-run plan](2026-10-23-no-research-project-plan-v1.md) asked whether an extra legal production hand where visible Genre-normalized Core was still below 1.0 could improve rival challenge without a Research month. A kept current two hands per phase. B allowed one third Design hand; C allowed one third Alpha hand. The existing synergy selector chose actual legal four-card hands. The extra hand paid ordinary cycle/cash costs and changed no Store, Genre/Theme, market coefficients or player policy. The 1.0 gate is a trial condition, not approved hand/exit math.
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`, shared dirty worktree preserved. The [control variant](simulators/no-research-plan-control-20261023-v1/variant.json) and [candidate variant](simulators/no-research-plan-candidate-20261023-v1/variant.json) share original baseline identity `42ef00919a6af975d5e779030583189b0077130de1ab416350c0cf202c158847`; candidate identity `ba1da24dc44a7d59942ef742584671f7c00487819c02a296523dfc76529724e7`. The only private project delta is `scripts/market/rival_trial.gd`. Frozen gameplay replay identities were `026fcaf5c59c1a01cceeeea7262a8711705269488bb911afd27ca53214b47e3a` control and `eb00479a5de7908617fb812707340abbbf25365dc9d00b067bc1e557eb580189` candidate; Godot executable SHA-256 `323f9c4cc5db674e98815cdd8e69da007d5efc779abedc8c0e42883b7fdea12a`. No baseline drift was reported at candidate freeze. Exact [commands and diagnostic failures](no-research-plan-study-20261023-v1/COMMANDS.md) and [corrected matched analysis](no-research-plan-study-20261023-v1/analysis-v2.json) are retained.
+
+Seeds **4417/4418** each founded a fresh legal Action/Fantasy player and the two current incumbents. Each A/B/C world completed **144 player commands, eight player releases and cycle 56**, within the declared 210-command/64-cycle/480-second bounds. A and B/C within each seed had identical complete initial state and typed RNG. Candidate A 4417 matched the unchanged control's initial state/RNG, final state and rival releases exactly despite different source identities; no checkpoint was transplanted across revisions. Both B/C arms played **seven distinct extra hands per rival** in the selected phase over each seed, through legal normal commands. The trace observes each selected hand twice across adjacent calendar steps; unique project/phase/sequence keys establish the actual count. All observed cash minima stayed positive; final outstanding bills were empty.
+
+## Fixed-horizon outcomes
+
+| Seed | Arm | Arcade releases / Review-tenths sum / best | Wayfinder releases / sum / best | Player earned units vs A | Player settled cash vs A |
+| --- | --- | --- | --- | ---: | ---: |
+| 4417 | A | 8 / 190 / 37 | 8 / 217 / 37 | baseline | baseline |
+| 4417 | B: extra Design | 7 / 205 / 44 | 7 / 233 / 43 | **+44** | **+$307.68** |
+| 4417 | C: extra Alpha | 7 / 239 / 45 | 7 / 239 / 43 | **+44** | **+$307.68** |
+| 4418 | A | 8 / 221 / 32 | 8 / 170 / 28 | baseline | baseline |
+| 4418 | B: extra Design | 7 / 226 / 39 | 7 / 216 / 39 | **+51** | **+$356.64** |
+| 4418 | C: extra Alpha | 7 / 259 / 42 | 7 / 205 / 35 | **+51** | **+$356.64** |
+
+Both candidates raised each rival's Review sum despite one fewer publication per studio by cycle 56. No actual new release reached the **7.0 strong-Core gate**; the best was **4.5**. B/C player paid units also rose **+11/+17** and Fans remained unchanged. Player Review changes were identical between B and C for each seed: `[0,+0.2,0,+0.2,-0.1,0,-0.2,0]` against A. Final player earned units, paid units, settled cash and Reviews are source-matched Studio checkpoint totals. The same B/C player totals despite different rival Review sums suggest cadence and market timing dominate this chosen route; that is an inference, not a general rule. We did not isolate each monthly market factor or alternate player policy. Increased player sales/cash means neither candidate demonstrates a harder player market here.
+
+The unchanged control world passed **15,174** assertions; candidate A passed **15,174** per seed; B/C passed **13,652** per seed. Each had legal stale-command rejection and market/Fan/finance audits. [B 4417 fresh replay](sims/no-research-plan-4417-B-replay-v1/world-run.json) and [C 4418 fresh replay](sims/no-research-plan-4418-C-replay-v1/world-run.json) passed **144 exact interleaved steps** and **13,736** assertions each; [C 4418 Studio-only Continue](sims/no-research-plan-4418-C-restore-v1/world-run.json) passed eight restore assertions. Recorded world process CPU was **56–74 seconds** in candidate arms; this two-rival observation is not a population CPU budget. One read-only analysis invocation failed on string-encoded checkpoint cash/Fans before an integer-conversion fix. The first successful analysis then double-counted duplicated policy trace rows as extra hands. Corrected v2 analysis deduplicates project/phase/sequence; the original analysis remains retained. Neither correction changed a world result, seed, policy, source or simulator output. Both are documented in [COMMANDS.md](no-research-plan-study-20261023-v1/COMMANDS.md).
+
+## Disposition and remaining work
+
+**Do not queue either extra-hand candidate.** They legally improve individual rival quality, but cost two rival publications per matched world, leave all Reviews below 7.0 and increase player sales/cash. A longer horizon or different player strategy could change the tradeoff; this study does not claim global balance.
+
+Next DESIGN question: preserve the six-hand calendar while shifting one Beta hand to Alpha (`2/3/1`) or Design (`3/2/1`), and measure whether Core gains survive the lost QA/Bug work. This is an **OPEN comparison proposal**, not an approved rule. A shortfall-aware choice within the existing hands is another option if a legal primitive-pool selection can actually change decisions. Store ranking, entrants, later Genre/Theme choices, following-month high-Review news, leaderboard, population CPU limits and final market coefficients remain OPEN. No sealed adoption handoff, TODO implementation queue, commit or push follows from this finding.

@@ -15,6 +15,7 @@ func _run() -> void:
 	elif mode == "old":
 		run = RunState.new(); run.initialize_cash_cents(0)
 		expect(run._commit_studio_creation("Historical preview",&"action",StudioTraits.evaluate_traits([&"cult_following"],6)),"Historical fixture")
+		run._founding_roster_version = 1
 		var payload := c.adapter.capture(run)
 		payload.content_revision = c.adapter._rules_revision(StudioCheckpoint.PRE_CULT_RULES)
 		expect(c.store.save(payload).status == &"saved","Save supported prior revision")

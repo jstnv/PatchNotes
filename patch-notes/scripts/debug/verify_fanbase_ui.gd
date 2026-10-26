@@ -30,7 +30,7 @@ func _run() -> void:
 		menu.checkpoint_info={"status":&"valid","payload":{"run":{"studio_name":"Calendar fixture","completed_run_cycles":"28"}}}
 		root.add_child(menu)
 		await process_frame
-		expect(menu.get_node("CenterContainer/MenuLayout/Continue").text.contains("1981, Month 15"),"Continue uses global month consistent with Studio after year rollover")
+		expect(menu.find_child("SavedStudio",true,false).text.contains("1981, Month 15"),"Continue uses global month consistent with Studio after year rollover")
 		menu.queue_free()
 		await process_frame
 	print("Fanbase UI: %d failures"%failures)

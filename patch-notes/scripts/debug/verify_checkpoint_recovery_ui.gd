@@ -25,6 +25,10 @@ func escape() -> void:
 	Input.parse_input_event(event)
 	await process_frame
 
+func settle_continue(game: Control) -> void:
+	while game._loading_checkpoint: await process_frame
+	await process_frame
+
 func _run() -> void:
 	for size in [Vector2i(1152,648),Vector2i(1280,720)]:
 		var game: Control = load("res://scenes/gameplay.tscn").instantiate()
@@ -50,6 +54,10 @@ func _run() -> void:
 		expect(not game._quit_dialog.visible and game.checkpoints.store.inspect().payload==baseline.payload,"Keyboard Cancel preserves run checkpoint")
 		game._continue_checkpoint()
 		await process_frame
+		# Explicitly Skip the save-opening invitation before recovery testing.
+		if game.guided_tutorial != null:
+			game.guided_tutorial.experienced_button.pressed.emit()
+			game.guided_tutorial.skip_button.pressed.emit()
 		# Hold the real isolated TCP writer lease while Continue tries to acquire it.
 		var owner: StudioCheckpointStore = game.checkpoints.store
 		game.checkpoints.store = ContendingStore.new(owner.directory,owner.validator)
@@ -62,7 +70,7 @@ func _run() -> void:
 			# Test the real AcceptDialog OK-button callback ordering.
 			var recovery: AcceptDialog = game.get_children()[-1]
 			recovery.get_ok_button().pressed.emit()
-			await process_frame
+			await settle_continue(game)
 		game._checkpoint_status()
 		expect(visible_dialogs(game).size()==1,"Repeated status does not compete with recovery")
 		var recovery_count := 0
@@ -79,7 +87,7 @@ func _run() -> void:
 		owner.release_writer()
 		var recovery: AcceptDialog = game.get_children()[-1]
 		recovery.get_ok_button().pressed.emit()
-		await process_frame
+		await settle_continue(game)
 		expect(visible_dialogs(game).is_empty() and game.checkpoints.failure.is_empty(),"Retry after lease release restores Studio without stale dialogs")
 		expect(game.checkpoints.store.inspect().payload==baseline.payload,"All failed retries preserve the saved generation")
 		# A duplicate valid generation creates a backup without a gameplay grant.

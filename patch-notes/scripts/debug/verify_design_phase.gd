@@ -16,6 +16,13 @@ const EXPECTED_PASS_STATS := {
 
 var _failures := 0
 
+# Frozen extraction digests intentionally describe the historical v2 roster.
+# Current-v3 campaigns are independently covered by live/headless parity checks.
+func historical_v2_roster(run: RunState) -> void:
+	run._owned_features.clear()
+	for id in StudioSpecialties.preview(&"action", 2).ids: run._owned_features[id] = true
+	run._founding_roster_version = 2
+
 
 func _initialize() -> void:
 	var database := CARD_DATABASE_SCRIPT.new()
@@ -142,7 +149,7 @@ func _verify_design_priorities(design_phase: DesignPhase, project_state: Project
 	_expect(design_phase.set_priority(ProjectState.CoreScore.GRAPHICS, 50), "Over-budget increase is handled safely")
 	_expect(_priority_values(design_phase) == [35, 15, 25, 25], "Over-budget increase clamps to the highest fitting value without redistribution")
 	_expect(design_phase.set_priority(ProjectState.CoreScore.TECHNOLOGY, -10), "Below-range numeric request clamps safely")
-	_expect(_priority_values(design_phase) == [35, 15, 5, 25] and design_phase.get_available_priority() == 20, "Below-range request clamps to 5 and changes no other category")
+	_expect(_priority_values(design_phase) == [35, 15, 10, 25] and design_phase.get_available_priority() == 15, "Below-range request clamps to 10 and changes no other category")
 	_expect(design_phase.set_priority(ProjectState.CoreScore.DESIGN, 27.5), "Numeric non-step request normalizes safely")
 	_expect(design_phase.get_priority(ProjectState.CoreScore.DESIGN) == 30, "Exact half-step snaps upward to 30")
 	_verify_priority_distribution(design_phase, categories, "Design allocations preserve bounds, steps, and budget")
@@ -336,7 +343,7 @@ func _card_ids(cards: Array) -> Array[StringName]:
 func _verify_priority_controls(phase: DesignPhase, categories: Array[ProjectState.CoreScore]) -> void:
 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
 		var slider := phase.get_node("%%%s" % node_name) as VSlider
-		_expect(slider != null and slider.min_value == 5.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 5-50 bounds in five-point steps" % node_name)
+		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 10-50 bounds in five-point steps" % node_name)
 	var priority_panel := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
 	var priority_columns := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel/PriorityLayout").get_children().filter(func(child: Node): return child is VBoxContainer)
 	_expect(priority_panel.size.x <= 1008.0 and priority_panel.size.y >= 72.0, "Compact Design priority panel fits the established phase width")
@@ -363,7 +370,7 @@ func _verify_priority_control_values(phase: DesignPhase) -> void:
 	var labels := [phase.get_node("%GraphicsPriorityValue"), phase.get_node("%SoundPriorityValue"), phase.get_node("%TechnologyPriorityValue"), phase.get_node("%DesignPriorityValue")]
 	for index in range(values.size()):
 		_expect(int(sliders[index].value) == values[index] and labels[index].text == str(values[index]), "Design priority slider and label %d match internal state" % index)
-	_expect(phase.get_node("%DesignAvailablePriority").text == "Available Priority: %d" % phase.get_available_priority(), "Design available-priority display derives from allocation state")
+	_expect(phase.get_node("%DesignAvailablePriority").text == "%d/100" % (100-phase.get_available_priority()), "Design available-priority display derives from allocation state")
 
 
 func _priority_values(phase: Node) -> Array[int]:
@@ -1308,9 +1315,55 @@ func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "a
 	var historical := trace.duplicate(true)
 	for step: Dictionary in historical.steps:
 		for boundary in boundaries:
+			var roster_state: Dictionary = step[boundary].run
+			_expect(roster_state._contract_search.receipts.is_empty() and roster_state._contract_search.offers.is_empty() and roster_state._contract_search.legacy_offers.is_empty() and roster_state._contract_search.intro_offer_id=="", "Historical hand oracle has no Contract Search activity")
+			roster_state.erase("_contract_search")
+			# P1 adds dormant storage only. Keep historical digests immutable and
+			# assert exact empty ownership/no active commit before omitting it.
+			_expect(roster_state._publisher_relationships == {"version":{"integer":"1"},"owner":roster_state._bank_run_id,"events":[]} and not roster_state._relationship_commit_in_progress, "Historical oracle has only dormant Studio-owned P1 state")
+			for field in ["_publisher_relationships","_relationship_commit_in_progress"]: roster_state.erase(field)
+			# P2/P3 adds empty deal storage and idle transaction scratch to these
+			# hand-only fixtures. Require the exact idle state before omitting it
+			# from the detached historical digest; retain every raw trace field.
+			_expect(roster_state._commission_deals == {} and roster_state._sidestreet_briefs == {} and roster_state._cycle_plan == {} and roster_state._pending_relationship_plan == {} and roster_state._preparing_project == false, "Historical oracle has only empty P2/P3 storage and idle transaction scratch")
+			for field in ["_commission_deals","_sidestreet_briefs","_cycle_plan","_pending_relationship_plan","_preparing_project"]: roster_state.erase(field)
+			_expect(roster_state._support_deals == {} and roster_state._support_rights == {} and roster_state._support_assessments == {}, "Historical oracle has only empty P4 storage")
+			for field in ["_support_deals","_support_rights","_support_assessments"]: roster_state.erase(field)
+			# These historical hand fixtures have no published titles or world
+			# provider. Current market metadata must remain explicitly neutral;
+			# only then can the detached pre-market digest omit the new fields.
+			var project_state: Dictionary = step[boundary].project
+			_expect(project_state._market_standards.is_empty() and project_state._market_snapshot_id == "" and project_state._market_details.is_empty(), "Historical oracle project has no market standards")
+			_expect(roster_state._market_provider is Callable and not roster_state._market_provider.is_valid() and roster_state._released_games.is_empty(), "Historical hand oracle has no world provider or releases")
+			var market: Dictionary = roster_state._market_committed_candidate
+			_expect(market.is_empty() or market == {"version":{"integer":"2"},"cycle_start":{"integer":"0"},"id":"market-0-neutral","facts":[]}, "Historical hand oracle candidate is neutral transaction scratch")
+			for field in ["_market_standards","_market_snapshot_id","_market_details"]: project_state.erase(field)
+			for field in ["_market_provider","_market_committed_candidate"]: roster_state.erase(field)
+			_expect(roster_state._studio_specialty == "action" and roster_state._founding_roster_version == {"integer":"2"}, "Historical oracle uses the unchanged Action roster with explicit v2 provenance")
+			roster_state.erase("_founding_roster_version")
+			# Difficulty's approved Store gate changed after these hand oracles.
+			# These fixtures never own, draw or purchase it; translate only its
+			# acquisition metadata in the detached historical comparison.
+			_expect(not roster_state._owned_features.has("difficulty_levels") and not step[boundary].get("candidates", []).has("difficulty_levels") and not step[boundary].get("available", []).has("difficulty_levels"), "Historical oracle has no Difficulty Levels gameplay")
+			for field in ["_feature_definitions", "_feature_offers"]:
+				var gate: Dictionary = roster_state[field].difficulty_levels
+				_expect(gate.purchase_parent == "turn_based_combat" and gate.purchase_parents == ["turn_based_combat", "scripted_ai"] and gate.gameplay_features_required == {"float_bits":var_to_bytes(0.0).hex_encode()}, "Historical oracle translates only the approved Difficulty gate")
+				gate.erase("purchase_parents")
+				gate.purchase_parent = ""
+				gate.gameplay_features_required = {"float_bits":var_to_bytes(3.0).hex_encode()}
 			var traits: Dictionary = step[boundary].run._studio_traits
-			_expect(traits.version == {"integer": "8"} and not traits.trait_ids.has("cult_following"), "Historical oracle comparison permits only v8 non-Cult version metadata")
+			var oracle_traits := StudioTraits.evaluate_traits(traits.trait_ids,8)
+			_expect(traits.version in [{"integer":"8"},{"integer":"9"}] and oracle_traits.valid and not traits.trait_ids.has("cult_following"), "Historical oracle permits only old-cap-valid non-Cult version metadata; no count/effect change")
 			traits.version = {"integer": "7"}
+			# Handoff 012 later added four Store definitions. These extraction
+			# fixtures neither own nor draw them. Preserve the original digest
+			# by removing only their catalog metadata from this detached copy.
+			# Current live/headless captures and the pack verifier retain them.
+			for id: String in ["turn_based_combat", "character_classes", "character_development", "branching_dialogue"]:
+				var state: Dictionary = step[boundary]
+				_expect(not state.run._owned_features.has(id) and not state.get("available", []).has(id) and not state.get("candidates", []).has(id), "Historical oracle excludes only unowned unused Alpha shop metadata")
+				state.run._feature_definitions.erase(id)
+				state.run._feature_offers.erase(id)
 	return JSON.stringify(historical).sha256_text()
 
 

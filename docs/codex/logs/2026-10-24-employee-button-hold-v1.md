@@ -1,0 +1,13 @@
+# Temporarily block the Employees button — 2026-10-24
+
+Direct user request: “also, lets block off the employee button for now.” Read CURRENT_STATE/TODO, relevant Employees design and source; inspected branch/HEAD/status/diff. Shared dirty `main` at `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; inherited edits and `.codex-godot-temp` preserved. No commit/push.
+
+`scripts/phases/studio_phase.gd` now keeps the existing visible Employees button disabled in `_ready`, with “Temporarily unavailable.” The scene already had `disabled=true`; setup had overridden it. The internal panel and employee/simulator/training/payroll rules remain unchanged. This is a player button hold, not removal of existing employees. TODO and Employees design record the hold; reopening awaits later user direction.
+
+Because non-debug presentation scripts participate in active-world fingerprints, `scripts/market/rival_world_checkpoint.gd` adds only the exact preceding runtime identity `1a65c871916b3b42eef25df2684c5f2e7ef1087565563864c55f41158c39019b` to its presentation-only compatibility list. Paired Studio revisions and complete world validation remain required; no save-schema change.
+
+Focused isolated check and source pin: [driver](../findings/employee-button-20261024-v1/run.py), [probe](../findings/employee-button-20261024-v1/probe.gd), [receipt](../findings/employee-button-20261024-v1/result.json), [source](../findings/employee-button-20261024-v1/source.json). The actual preceding immutable source restores a legal two-release player/rival fixture and recaptures it under its own identity. A fresh final-source process checks exact cold restore, unknown-source rejection, disabled/visible button, actual mouse/Enter input, adjacent enabled actions and unchanged complete Studio state/RNG at1152×648 and1280×720. Raw evidence is outside OneDrive at `C:/Users/64jus/AppData/Local/Temp/pn-employee-button-20261024-v2/`. The initial probe constructor compile error is retained separately under `.../pn-employee-button-20261024-v1/`; fixed by reconstructing Studio with `setup(null, saved_run, snapshots)` rather than creating a new project.
+
+No computer control, refreshed export or full-suite claim; this reversible button change uses the focused entry/save check. Existing direct-signal internal employee verifiers can still exercise the retained panel even when the player button is disabled.
+
+**Result: PASS,11/11 assertions, engine exit0/errors0; canonical source unchanged during verification.** Final runtime identity `8c8ef44726aae9dbd4a7967f8a750702a0ab5887f582b7880d65a77cb0f74944`. Actual pointer/Enter activation remains blocked at both sizes; complete prior saved state/RNG stays exact. Driver Python compilation and scoped whitespace checks PASS.

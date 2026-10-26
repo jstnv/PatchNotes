@@ -82,9 +82,7 @@ func _draw() -> void:
 			var anchor := origin + Vector2.from_angle(angle + sweep / 2.0) * radius * 0.65
 			draw_string(font, anchor + Vector2(-extent.x / 2.0, 5), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("15161b") if i < _colors.size() else ink)
 		angle += sweep
-	var status := "100 points allocated"
-	if total < 100: status = "%d points unallocated" % (100 - total)
-	elif total > 100: status = "%d / 100 · Over budget" % total
+	var status := "%d/100" % total
 	_centered_text(font, status, 190, 13, ink if is_equal_approx(total, 100) else Color("ffc779"))
 	_centered_text(font, "Relative shares" if total > 100 else "Future draws · not scores", 207, 11, Color("aaaab6"))
 

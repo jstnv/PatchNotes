@@ -33,7 +33,7 @@ func _run() -> void:
 	starter.create_studio_with_traits("Starter",&"action",[&"resourceful"])
 	var chosen: StringName
 	for item: Dictionary in FeatureStoreCatalog.starting_features():
-		if not starter.owns_feature(StringName(item.id)): chosen=StringName(item.id); break
+		if starter.get_primitive_reserve_offer(StringName(item.id)).can_purchase: chosen=StringName(item.id); break
 	var offer := starter.get_primitive_reserve_offer(chosen)
 	expect(offer.price_cents==offer.base_price_cents-10000 and starter.purchase_starter_feature(chosen) and starter.resourceful_saving(10000)==0,"Initial purchase consumes same saving window")
 	roundtrip(starter,"Resourceful initial purchase")
@@ -84,7 +84,7 @@ func _run() -> void:
 	run._owned_features.erase(&"enemies")
 	run._owned_features.erase(&"power_ups")
 	run._owned_features.erase(&"general_combat")
-	expect(not run.get_feature_research_quote(&"difficulty_levels").can_admit,"Unmet distinct Gameplay ownership gate remains enforced")
+	expect(not run.get_feature_research_quote(&"difficulty_levels").can_admit,"Unmet two-parent Difficulty gate remains enforced")
 	run = fresh([&"resourceful"])
 	run.admit_feature_research(run.get_feature_research_quote(&"colored_text"))
 	run.research_feature(run.get_feature_research_quote(&"colored_text"))

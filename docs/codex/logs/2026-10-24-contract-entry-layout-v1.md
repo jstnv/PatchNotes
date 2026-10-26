@@ -1,0 +1,9 @@
+# Contract entry layout session — 2026-10-24
+
+- Request: fix the weird layout immediately after accepting a Contract, as shown in the user's screenshot.
+- Context: read CURRENT_STATE/TODO, repository conventions and publisher presentation source; dirty shared `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`. Preserved all earlier edits and `.codex-godot-temp`. No commit/push/export.
+- Root cause: initial container sizing changes during a staggered card entrance; layout skips entering cards, then completion never requests final sizing. Reproduced at both supported native sizes.
+- Runtime files: `patch-notes/scripts/ui/card_fan.gd` (settled entrance sort and bounded tooltip), `patch-notes/scripts/market/rival_world_checkpoint.gd` (exact P2/P3 presentation predecessor/source pairing). Added maintained `verify_card_fan_entry_layout.gd`/UID and the compact linked finding/harnesses/manifests/captures.
+- Checks: regression RED30/14→final38/0, tooltip RED32/2, eight final-source maintained suites pass, four actual prior editor/compiled worlds32/0, native1152×648/1280×720 entry/tooltip geometry and exact unchanged Run/RNG pass. Source review found no actionable issue. Full receipts, exact commands, missing-job runner issue, initial harness parse errors and warning limits are in the [finding](../findings/contract-entry-layout-20261024-v1/README.md).
+- Final mechanics identity `d4065bc10fd797b32405c507044bc2349b339c2d2a5b2a5c414817d17bc398d9`; native isolated project matches canonical bytes. Five maintained tests differ only by the subsequently copied generated debug UID; their runtime bytes match exactly.
+- Follow-up: restart the game to load the correction. Broader safe-close task is complete (eight byte-exact generations, last Studio “The Jooce”,cycle14, writer released). P2/P3 direct release EXE interaction remains pending, followed by approved P4 implementation. No P4 mechanics were added during this correction.

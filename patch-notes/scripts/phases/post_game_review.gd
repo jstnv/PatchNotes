@@ -16,12 +16,14 @@ func setup_release_snapshot(metadata: Dictionary, sales: Dictionary) -> bool:
 	var data: Dictionary = metadata.get("review", {})
 	if data.is_empty() or sales.is_empty(): return false
 	%Subtitle.text = "%s · Released %d" % [metadata.get("release_title", "Game"), metadata.get("release_year", 0)]
+	if metadata.get("owner",&"studio") == &"publisher": %Subtitle.text += " · Publisher-owned commission; Studio sales income $0"
 	%ReviewLabel.text = "Final Review: %.1f / 10.0" % data.final_review
 	%ProductionLabel.text = "Production Rating: %.2f" % data.production_rating
 	%ScopeLabel.text = "Scope Completion: %.1f%%" % (data.scope_completion * 100.0)
 	%AwarenessLabel.text = "Awareness: %d" % data.awareness
 	%UnitsLabel.text = "Projected Month 1 Units: %d" % data.projected_units
 	%CoreDescription.text = "Final scores / this release's saved targets. Meeting all four targets gives 8/10 production; 125% of each gives 10/10."
+	%CoreDescription.text += "\n"+preload("res://scripts/market/market_transaction_trial.gd").describe(data.get("market",{}))
 	var labels: Array[Label] = [%GraphicsLabel, %SoundLabel, %TechnologyLabel, %DesignLabel]
 	var names := ["Graphics", "Sound", "Technology", "Design"]
 	for index in range(4):
@@ -34,6 +36,7 @@ func setup_release_snapshot(metadata: Dictionary, sales: Dictionary) -> bool:
 	%SalesUnitsLabel.text = "Projected Month 1 Units: %d · Lifetime earned: %d" % [data.projected_units, sales.earned_units]
 	%SalesNetLabel.text = "Projected Gross: %s · Projected Net: %s\nEarned Gross: %s · Earned Net: %s · Paid: %s" % [CashFormatter.format_exact_cents(data.projected_gross_cents), CashFormatter.format_exact_cents(data.projected_net_cents), CashFormatter.format_exact_cents(sales.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS), CashFormatter.format_exact_cents(sales.entitlement_cents), CashFormatter.format_exact_cents(sales.settled_cents)]
 	%SalesNoteLabel.text = "Month 1 gross is before the platform share. Later sales continue by release age; earned net settles at calendar-month boundaries."
+	if metadata.get("owner",&"studio") == &"publisher": %SalesNoteLabel.text = "Raw title forecast and earnings; publisher owns all sales. Studio entitlement / paid / unpaid: $0.00. Commission fee is a separate publisher receipt."
 	_set_reveal_targets(data.scope_completion * 100.0, data.production_rating, data.remaining_bugs, data.awareness, data.final_review)
 	return true
 
@@ -54,6 +57,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> bool:
 	var labels: Array[Label] = [%GraphicsLabel, %SoundLabel, %TechnologyLabel, %DesignLabel]
 	var names := ["Graphics", "Sound", "Technology", "Design"]
 	%CoreDescription.text = "Final scores / this release's saved targets. Meeting all four targets gives 8/10 production; 125% of each gives 10/10."
+	%CoreDescription.text += "\n"+preload("res://scripts/market/market_transaction_trial.gd").describe(project_state.get_market_details())
 	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
 		var score := project_state.get_core_score(category)
 		var standard := review.get_standard(category)
@@ -65,6 +69,8 @@ func setup(project_state: ProjectState, run_state: RunState) -> bool:
 	%SalesUnitsLabel.text = %UnitsLabel.text
 	%SalesNetLabel.text = "Projected Month 1 Net: %s" % CashFormatter.format_exact_cents(project_state.get_month_one_sales_revenue_result().get_projected_month_one_net_cents())
 	%SalesNoteLabel.text = "This is a forecast. Sales are earned as time advances and paid at calendar-month boundaries."
+	var commission_text := preload("res://scripts/contracts/commission_presentation.gd").result_text(run_state,project_state.get_release_id())
+	if not commission_text.is_empty(): %SalesNoteLabel.text = commission_text
 	_set_reveal_targets(review.get_scope_completion() * 100.0, review.get_production_rating(), project_state.get_remaining_bugs(), project_state.get_awareness_result().get_total_awareness(), review.get_final_review())
 	return true
 

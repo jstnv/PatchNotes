@@ -52,18 +52,16 @@ func _verify() -> void:
 	quit(0 if failures == 0 else 1)
 
 func _verify_year_labels() -> void:
+	# A constructed calendar/UI fixture, not a rival solvency or legal campaign
+	# study. Use the supported player-only entry path; ordinary rival campaigns
+	# have separate bounded record/replay and distress coverage.
+	var run := RunState.new()
+	run.initialize_cash_cents(0)
+	check(run.create_studio_with_traits("Calendar Studio",&"action",[]),"Named player-only calendar fixture initializes")
 	var game := load("res://scenes/gameplay.tscn").instantiate() as Control
+	game.run_state = run
 	root.add_child(game)
 	await process_frame
-	var menu: MainMenu = game.get("_active_phase")
-	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
-	(menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName") as LineEdit).text = "Calendar Studio"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
-	menu.call("_open_folder", &"traits")
-	menu.call("_show_review")
-	menu.call("_confirm_studio")
-	var run: RunState = game.run_state
 	# Synthetic year-label fixture: explicitly funded, not a played route.
 	check(run.add_cash_cents(3000000, &"financing_in"), "Calendar fixture funds its actual rent obligations")
 	var studio: StudioPhase = game.get("_active_phase")
@@ -74,7 +72,7 @@ func _verify_year_labels() -> void:
 			check(advanced, "Shared productive boundary advances")
 			if not advanced: break # Never hang if a future obligation rejects.
 		var year: int = 1980 + cycle / 24
-		check(run.get_current_year() == year and hud.footer.text.contains(str(year)) and studio.get_node("Dashboard/Layout/Heading/Title").text.contains(str(year)), "Cycle %d shows year %d in Studio and shared HUD" % [cycle, year])
+		check(run.get_current_year() == year and hud.footer.text.contains(str(year)) and hud.header_title.text.contains(str(year)), "Cycle %d shows year %d in Studio and shared HUD" % [cycle, year])
 		var before := snapshot(run, [])
 		studio.get_node("%FeatureStoreButton").pressed.emit()
 		(studio.get("_feature_store") as FeatureStore).hide()
@@ -84,7 +82,7 @@ func _verify_year_labels() -> void:
 		root.content_scale_size = resolution
 		await process_frame
 		await process_frame
-		var title := studio.get_node("Dashboard/Layout/Heading/Title") as Label
+		var title := hud.header_title
 		check(title.is_visible_in_tree() and title.get_global_rect().end.x <= resolution.x, "Studio year heading fits %s" % resolution)
 		var font := hud.footer.get_theme_font("font")
 		var year_prefix := hud.footer.text.substr(0, hud.footer.text.find("1984") + 4)
@@ -123,11 +121,12 @@ func _verify_studio_purchase_years() -> void:
 		var hud := GameplayHUD.new()
 		root.add_child(hud)
 		hud.setup(project, run)
+		hud.set_phase(studio)
 		var ok := false
 		if action == "store": ok = ResearchTestActions.acquire(run,&"save_files")
 		elif action == "reserve": ok = ResearchTestActions.acquire(run,&"sprites")
 		else: ok = run.purchase_post_launch_campaign(project.get_release_id(), 95)
-		check(ok and run.get_completed_run_cycles() == 96 and hud.footer.text.contains("1984") and studio.get_node("Dashboard/Layout/Heading/Title").text.contains("1984"), action + " updates both year labels at its successful boundary")
+		check(ok and run.get_completed_run_cycles() == 96 and hud.footer.text.contains("1984") and hud.header_title.text.contains("1984"), action + " updates both year labels at its successful boundary")
 		var before := snapshot(run, [project])
 		studio.setup(project, run, snapshots)
 		check(snapshot(run, [project]) == before and hud.footer.text.contains("1984"), "Reconstructed Studio reads the same year without a cycle")

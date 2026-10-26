@@ -12,6 +12,8 @@ func make_session(seed_value: int = 4417) -> RefCounted:
 	run.initialize_cash(0)
 	_expect(run.create_studio_with_traits("Protocol",&"action",[]),"Protocol studio")
 	run.set("_bank_run_id",&"protocol_studio")
+	run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
+	run._contract_search = RunState.ContractSearch.create(run._bank_run_id)
 	run.set("_employees",EmployeeRoster.create(&"protocol_studio"))
 	_expect(project.configure_predevelopment("Protocol",&"action",&"fantasy",run.get_owned_feature_ids()),"Protocol project")
 	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed=seed_value+RunRandom.STREAMS.find(id)

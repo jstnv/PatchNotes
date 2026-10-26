@@ -1,0 +1,257 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-pause-menu/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+PAUSE_PRECONDITIONS { "can_pause": false, "guided": false, "settings": false, "guide": false, "owners": [] }
+PAUSE_PRECONDITIONS { "can_pause": false, "guided": true, "settings": false, "guide": false, "owners": ["/root/Gameplay/@CanvasLayer@303"] }
+PAUSE_PRECONDITIONS { "can_pause": true, "guided": false, "settings": false, "guide": false, "owners": [] }
+PAUSE_PRECONDITIONS { "can_pause": true, "guided": false, "settings": false, "guide": false, "owners": [] }
+PAUSE_PRECONDITIONS { "can_pause": true, "guided": false, "settings": false, "guide": false, "owners": [] }
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-pause-menu/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+PAUSE_PRECONDITIONS { "can_pause": true, "guided": false, "settings": false, "guide": false, "owners": [] }
+PAUSE_PRECONDITIONS { "can_pause": true, "guided": false, "settings": false, "guide": false, "owners": [] }
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-pause-menu/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+PAUSE_PRECONDITIONS { "can_pause": true, "guided": false, "settings": false, "guide": false, "owners": [] }
+PAUSE_PRECONDITIONS { "can_pause": true, "guided": false, "settings": false, "guide": false, "owners": [] }
+ERROR: Rival Gameplay: Escape opens Pause
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:147)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Resume owns initial focus
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:148)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Gameplay Timer is frozen
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:152)
+ERROR: Rival Gameplay: Music and grid keep running with full pause treatment
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:153)
+ERROR: Rival Gameplay: Reverse Tab wraps inside Pause
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:155)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Arrow navigation reaches Settings
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:158)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Settings opens while game remains paused
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:161)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Settings owns Tab while paused
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:163)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Audio settings can be saved while paused
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:166)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Display preview can start while paused
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:170)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Timed display revert still processes while paused
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:174)
+ERROR: Rival Gameplay: Settings restores Pause focus
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:177)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Resume restores gameplay focus
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:180)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Rival Gameplay: Timer and music grid continue after Resume
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_pause_and_settings (res://scripts/debug/verify_pause_menu.gd:183)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:146)
+       [8] _initialize (res://scripts/debug/verify_pause_menu.gd:41)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:146)
+       [8] _initialize (res://scripts/debug/verify_pause_menu.gd:41)
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:146)
+       [8] _initialize (res://scripts/debug/verify_pause_menu.gd:41)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:276)
+       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:264)
+       [6] begin_design (res://scripts/phases/design_phase.gd:169)
+       [7] commit_draft (res://scripts/ui/priority_overlay.gd:146)
+       [8] _initialize (res://scripts/debug/verify_pause_menu.gd:41)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _initialize (res://scripts/debug/verify_pause_menu.gd:46)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _initialize (res://scripts/debug/verify_pause_menu.gd:46)
+WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _initialize (res://scripts/debug/verify_pause_menu.gd:46)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [5] _initialize (res://scripts/debug/verify_pause_menu.gd:46)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _initialize (res://scripts/debug/verify_pause_menu.gd:46)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _initialize (res://scripts/debug/verify_pause_menu.gd:46)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_refill (res://scripts/phases/design_phase.gd:292)
+       [4] _on_play_card_pressed (res://scripts/phases/design_phase.gd:457)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/ui/phase_workspace.gd:161)
+       [7] _initialize (res://scripts/debug/verify_pause_menu.gd:46)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:317)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:64)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:317)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:64)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _return_fan (res://scripts/ui/hand_presentation.gd:317)
+       [4] advance_music (res://scripts/ui/hand_presentation.gd:64)
+       [5] _process (res://scripts/ui/hand_presentation.gd:56)
+ERROR: Rival Gameplay: Failed flush keeps game and opens usable recovery
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_save_failure (res://scripts/debug/verify_pause_menu.gd:195)
+       [2] key (res://scripts/debug/verify_pause_menu.gd:128)
+ERROR: Can't use get_node() with absolute paths from outside the active scene tree.
+   at: get_node_or_null (scene/main/node.cpp:1910)
+   GDScript backtrace (most recent call first):
+       [0] set_phase (res://scripts/ui/gameplay_hud.gd:150)
+       [1] _begin_next_project (res://scripts/gameplay.gd:616)
+       [2] check_save_failure (res://scripts/debug/verify_pause_menu.gd:201)
+SCRIPT ERROR: Invalid call. Nonexistent function 'use_synergy_presenter' in base 'Nil'.
+   at: GameplayHUD.set_phase (res://scripts/ui/gameplay_hud.gd:191)
+   GDScript backtrace (most recent call first):
+       [0] set_phase (res://scripts/ui/gameplay_hud.gd:191)
+       [1] _begin_next_project (res://scripts/gameplay.gd:616)
+       [2] check_save_failure (res://scripts/debug/verify_pause_menu.gd:201)

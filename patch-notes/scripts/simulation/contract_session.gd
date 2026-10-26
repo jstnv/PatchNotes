@@ -74,6 +74,7 @@ func _execute(kind: StringName,payload: Dictionary,readiness: Callable,publicati
 	if plan.is_empty() or not _run.can_complete_productive_cycle(plan.remainder_cents): return reject("Contract hand rejected")
 	var before := _rng.state
 	var replacements: Array[CardData] = []
+	var expected_cycle := _run.get_completed_run_cycles()
 	if not plan.completing:
 		var reserved: Dictionary = {}
 		for id: StringName in plan.exhausted_ids: reserved[id] = true
@@ -84,7 +85,7 @@ func _execute(kind: StringName,payload: Dictionary,readiness: Callable,publicati
 			_rng.state = before
 			return reject("Contract refill rejected")
 	var commit := func() -> bool: return _run.commit_contract_hand(_state,selected,plan.remainder_cents)
-	if not _run.complete_productive_action(commit,plan.remainder_cents,_run.get_completed_run_cycles(),&"",&"publisher_receipt" if plan.remainder_cents > 0 else &"contract_hand",_state.get_offer_id()):
+	if not _run.complete_productive_action(commit,plan.remainder_cents,expected_cycle,&"",&"publisher_receipt" if plan.remainder_cents > 0 else &"contract_hand",_state.get_offer_id()):
 		_rng.state = before
 		return reject("Contract cycle rejected")
 	if not plan.completing:
@@ -156,6 +157,7 @@ func redraw(slots: Array[int],category_rolls: Array[float] = [],definition_rolls
 		_rng.state = before
 		return reject("Redraw presentation unavailable")
 	var publish := func() -> void:
+		_state.record_successful_redraw(count)
 		for index in range(count):
 			cards[slots[index]] = replacements[index]
 			candidate_ids[slots[index]] = next_id
@@ -173,7 +175,9 @@ func observation() -> Dictionary:
 		candidates.append({"token":candidate_ids[index],"definition":card.id,"primary_stat":card.primary_stat,"primary_value":card.primary_value,"secondary_stat":card.secondary_stat,"secondary_value":card.secondary_value,"scope":card.scope,"renewable":card.renewable})
 	var scores: Dictionary = {}
 	for category in range(4): scores[category] = _state.get_core_score_half_units(category)
-	return {"offer_id":_state.get_offer_id(),"hand_count":_state.get_successful_hand_count(),"required_hands":_state.get_required_hands(),"run_cycle":_run.get_completed_run_cycles(),"sequence":sequence,"candidates":candidates,"completed":_state.is_completed(),"priorities":_state.get_priority_distribution(),"scope":_state.get_scope(),"core_half_units":scores}
+	return {"offer_id":_state.get_offer_id(),"hand_count":_state.get_successful_hand_count(),"required_hands":_state.get_required_hands(),"run_cycle":_run.get_completed_run_cycles(),"sequence":sequence,"candidates":candidates,"completed":_state.is_completed(),"priorities":_state.get_priority_distribution(),"scope":_state.get_scope(),"core_half_units":scores,
+		"challenge_terms":_state.get_challenge_terms(),"successful_redraws":_state.get_challenge_redraws(),
+		"challenge_preview":ContractChallenges.reward(_state.get_challenge_terms(),_state.get_scope(),scores,_state.get_challenge_redraws())}
 
 
 func _build_candidate_pool(extra_exhausted: Dictionary = {}, category_rolls: Array[float] = [], definition_rolls: Array[float] = [], candidate_count: int = CANDIDATE_COUNT) -> Array[CardData]:

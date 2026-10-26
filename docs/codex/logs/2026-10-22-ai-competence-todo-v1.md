@@ -1,0 +1,6 @@
+# AI Competitors competence TODO update — 2026-10-22
+
+- Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`. The worktree was already dirty; existing source/docs and `.codex-godot-temp` were preserved. No canonical gameplay, commit or push.
+- Read `CURRENT_STATE.md`, `TODO.md`, `README.md` and the [bounded market exposure finding](../findings/market-exposure-20261022-v1/README.md). Inspected branch/HEAD/status/diff before editing and re-read item 22's boundary immediately before the insertion.
+- Queue edit: added one DESIGN review entry to `docs/codex/TODO.md` after the completed exposure study. It records 96 low-Review rival releases, narrow Genre/Theme coverage and the current selector's base-target observation gap; it requests a matched legal market-aware choice comparison with exit, solvency and CPU/save limits before any implementation handoff. Trial coefficients, hand counts, leaderboard and other queue entries remain unchanged.
+- Checks: read back the inserted paragraph and neighboring item 23 boundary; `git diff --check -- docs/codex/TODO.md` PASS. Gameplay tests and simulator runs NOT RUN for this documentation-only update. No policy/value approval or release-readiness claim.

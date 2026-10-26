@@ -13,6 +13,7 @@ var title_label: Label
 var commit_button: Button
 var initial_setup := false
 var priority_chart: PriorityInfluenceChart
+var budget_feedback: PriorityBudgetFeedback
 const INITIAL_FOOTER_REVEAL := 46.0
 
 func configure(controller: Control, priority_panel: Control, commit: Button) -> void:
@@ -80,6 +81,9 @@ func configure(controller: Control, priority_panel: Control, commit: Button) -> 
 	priority_chart = PriorityInfluenceChart.new()
 	columns.add_child(priority_chart)
 	priority_chart.bind_controls(sliders, names, colors)
+	budget_feedback = PriorityBudgetFeedback.new()
+	add_child(budget_feedback)
+	budget_feedback.bind_controls(sliders)
 	feedback = Label.new()
 	feedback.name = "PriorityFeedback"
 	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -121,7 +125,7 @@ func open() -> bool:
 
 func _help_text(phase_name: String) -> String:
 	if initial_setup and phase_name in ["Design", "Alpha"]:
-		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTech (systems), and Design (gameplay). Scope is how much you build.\nPriorities weight future cards, not scores. Total 100 · 5–50 · steps of 5.\nBegin %s is free." % phase_name
+		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTech (systems), and Design (gameplay). Scope is how much you build.\nPriorities weight future cards, not scores. Total 100 · 10–50 · steps of 5.\nBegin %s is free." % phase_name
 	if initial_setup:
 		return "Higher priorities make that category more likely in future draws and redraws.\nSet the initial %s allocation · total 100 · 5-point steps.\nBeginning the phase is free." % phase_name
 	return "Higher priorities make that category more likely in future draws and redraws.\nThe current pool and your scores stay the same. Total 100 · 5-point steps.\nCommit a changed allocation: 1 cycle and one redraw restored (up to 4). Cancel: free."
@@ -149,7 +153,7 @@ func commit_draft() -> bool:
 		_close()
 		return true
 	if not phase.commit_priority_distribution():
-		feedback.text = "Use a changed allocation totaling 100; each value must be 5–50."
+		feedback.text = "Use a changed allocation totaling 100; each value must be 10–50."
 		return false
 	_close()
 	return true

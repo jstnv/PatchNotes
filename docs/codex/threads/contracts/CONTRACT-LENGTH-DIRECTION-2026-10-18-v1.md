@@ -1,0 +1,27 @@
+# Contract length — two-hand direction
+
+2026-10-18 (America/Los_Angeles). **User-preferred design direction; exact new-type rules remain PROPOSED/OPEN.** The user said one hand feels too tough for a Contract and proposed two hands, with more rewarding Contracts taking more hands. This supersedes the **one-hand assumption** in the earlier [independent cash brief direction](NEW-TYPE-DIRECTION-2026-10-18-v1.md) and [SideStreet Relationship Brief proposal v1](SIDESTREET-RELATIONSHIP-BRIEF-PROPOSAL-2026-10-18-v1.md). It does not undo the selected independent-client *type*, approve a payout, or change any existing publisher Contract. The [one-hand feasibility finding](SIDESTREET-RELATIONSHIP-BRIEF-FINDINGS-2026-10-18-v1.md) remains evidence about legal individual hands, not a viable two-hand scoring specification.
+
+## Current implementation and source boundary
+
+At `main` HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f` with pre-existing shared edits, current `ContractDefinitions` declares two required hands for Ironclad, SideStreet, Crown and Neon, and three for Starwave. `contract_definitions.gd` SHA256 `FE44F875AF7670BEEE5039CBCD2D3746C89D5345EB6E9427AB96AA5015E81E94`; `contract_state.gd` SHA256 `7178F7011C0780000885CB774CC83C7B05FE988BAB8A7F31969EB32C78A80375`. The [publisher authority](../../design/publishers-contracts.md), SHA256 `728A4FBE2CA4C12BC44FC8DF810F84FF872F1BB38B982E50C09F441F0A249F4E`, says each committed hand costs one productive cycle and current two-hand SideStreet settles at hand2. Existing values and hand counts remain ACTIVE/TRIAL or LOCKED at their recorded boundaries; this note changes no code.
+
+The [v6](sims/sidestreet-brief-observation-v6-run-01/run-report.json) and [v8](sims/sidestreet-brief-observation-v8-run-01/run-report.json) read-only Sports/1104 runs share frozen source identity `16e64de61956ddc24b52a1e8dccc3509562236acf59538eb9deae0fe45965a43`, identical source manifests, equal starting Studio/RNG states and four successful 61-command/two-release fresh-process replays. Their current two-hand SideStreet results are:
+
+| First-hand Scope | Final two-hand Scope | Inferred second-hand Scope | Final Core half-units G/S/T/D | Current completion | Current no-redraw/Scope challenge |
+|---:|---:|---:|---|---:|---:|
+| 7 | 13 | 6 | 6/20/32/16 | 90/96 | 7500 bp |
+| 8 | 13 | 5 | 6/20/32/16 | 90/96 | 7500 bp |
+| 5 | 12 | 7 | 6/20/30/16 | 90/96 | 10000 bp |
+| 5 | 12 | 7 | 6/20/30/16 | 90/96 | 10000 bp |
+
+The second-hand Scope is final minus logged first-hand Scope. The first hand previously called a one-hand “miss” at Scope8 becomes a **partial** final two-hand challenge at Scope13 under current SideStreet terms. Thus the one-hand Scope<=6/7/>=8 grade and Scope5/Core2 completion formula must not be copied into a two-hand Brief. Existing two-hand completion itself is 90/96 in all four cases; a future reputation scoring target needs its own reachability screen. These are current cash Contract runs; no new type, reputation award or additional rent comparison was simulated in this turn.
+
+## Recommended design shape for new types
+
+- **Two hands as the normal minimum** for the independent cash brief and a SideStreet Relationship Brief. Acceptance and browsing remain zero-cycle candidates; each committed hand consumes one productive cycle. Display hand count and expected time before acceptance. A completed result settles once after the final hand.
+- **Three hands for a deliberately premium offer** with a meaningfully better *expected net* reward at comparable difficulty. Cash, Promotion, publisher standing and progress are different reward dimensions; the player should see the terms, not infer them from hand count. One extra hand also postpones game development and incurs a cycle of expenses, so a larger gross cap alone is insufficient evidence of a better deal. Consider an acceptance advance or milestone cash for a longer job only after rent/credit and liquidity tests; no amount is selected here.
+- **Four or more hands remain OPEN/deferred.** Longer jobs increase card-pool exhaustion and time cost. Test pacing, viable card choices and financial survival before adding that tier. Do not increase the count of current publisher Contracts or derive it automatically from a cash threshold.
+- Make `required_hands` an authored, versioned term frozen at acceptance. Score a multi-hand objective from the **committed aggregate** at the completing hand, with per-hand progress shown along the way. Do not apply a one-hand failure label or multiply a penalty once per hand. Redraw policy and target difficulty must be checked for each length so a longer offer is not accidentally more punitive.
+
+The hand-count ladder is a design principle, **not** a formula that assigns rewards or an approval of the two-hand Relationship Brief's Scope/Core targets. For that Brief, the next bounded study should compare aggregate two-hand targets (using the existing SideStreet Scope12/four-Scope fade as a familiar control), no-redraw exposure, eligible four-card sequences and full/partial/missed outcomes across legal draws. Report extra cycles and rent/credit alongside reward potential. A private variant should then test the actual new offer and once-only settlement before any implementation handoff. The selected independent-client type needs the same two-hand recalibration. No shared TODO entry or gameplay edit follows from this preference alone.

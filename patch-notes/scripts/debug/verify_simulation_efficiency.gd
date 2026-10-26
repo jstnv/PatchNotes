@@ -20,6 +20,18 @@ func expect(ok: bool,message: String) -> void:
 func compare(session: RefCounted) -> void:
 	var old_state := Original.state(session)
 	var new_state := Replay.state(session)
+	expect(session._commission_request == {} and new_state.commission_request == {}, "Historical optimization route has no pending commission request")
+	old_state.commission_request = {}
+	expect(session._support_request == {} and new_state.support_request == {}, "Historical optimization route has no pending support request")
+	old_state.support_request = {}
+	# Current durable campaign state excludes only transaction scratch added
+	# after the optimization oracle. Keep the independent raw projection intact.
+	expect(old_state.run._market_committed_candidate == Replay.freeze(session.run._market_committed_candidate) and not new_state.run.has("_market_committed_candidate"),"Only actual transient market scratch is excluded from durable campaign projection")
+	old_state.run.erase("_market_committed_candidate")
+	if not old_state.development.is_empty():
+		old_state.development.run.erase("_market_committed_candidate")
+		old_state.development.hand._run_state.erase("_market_committed_candidate")
+	if not old_state.contract.is_empty(): old_state.contract._run.erase("_market_committed_candidate")
 	expect(JSON.stringify(old_state) == JSON.stringify(new_state),"Canonical state matches independent pre-optimization projection")
 	expect(Original.digest(old_state) == Replay.digest(new_state),"Exact state digest unchanged")
 

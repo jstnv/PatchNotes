@@ -247,13 +247,18 @@ func _store(width: int) -> void:
 	root.add_child(game)
 	await process_frame
 	var menu: MainMenu = game.get("_active_phase")
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Motion Test Studio"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
+		menu._replace_dialog.hide()
+		menu._replace_dialog.confirmed.emit()
+	menu._name_input.text = "Motion Test Studio"
+	menu._specialty.select(1)
+	menu._play.pressed.emit()
 	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	var run: RunState = game.run_state
 	var studio: StudioPhase = game.get("_active_phase")
 	studio.get_node("%FeatureStoreButton").pressed.emit()

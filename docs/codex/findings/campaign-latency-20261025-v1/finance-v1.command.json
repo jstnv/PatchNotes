@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_campaign_latency.gd"
+  ],
+  "exit": 4,
+  "seconds": 2.718,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\finance-v1",
+  "script_sha256": "8f5b5822668fe3d694e6723cd133b0d087af71d234726b124a6075490c483704",
+  "result": {
+    "checks": 131,
+    "failures": 4,
+    "measurements": {
+      "cycle": 96,
+      "original_validation_us": 14761,
+      "repeated_validation_us": 895
+    },
+    "ok": false
+  },
+  "errors": [
+    "ERROR: FAIL: One transaction's signals do not each rebuild the map synchronously",
+    "ERROR: FAIL: One signal burst produces exactly one current Store refresh",
+    "ERROR: FAIL: Hidden Store does not rebuild during development",
+    "ERROR: FAIL: Reopening refreshes immediately from authoritative state"
+  ]
+}

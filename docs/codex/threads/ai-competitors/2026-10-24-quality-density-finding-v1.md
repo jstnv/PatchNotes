@@ -1,0 +1,39 @@
+# AI Competitors: shorter legal plans with broader visible-hand choice — 2026-10-24
+
+**COMPLETE bounded DESIGN finding; candidates rejected, no gameplay adoption or balance approval.** The [pre-run plan](2026-10-24-quality-density-plan-v1.md) tested whether better selection could make at least ten-cycle rivals score generally in the 6s/7s while maintaining market challenge. Both candidates improved individual Reviews and still made the player's fixed-horizon market easier. The declared stop condition ended the study after seed 4417; seed 4418 was **NOT RUN**, not a favorable missing result.
+
+## Source and cases
+
+The frozen variant report flags **canonical baseline drift**: current shared `patch-notes/` has changed since the variant's original baseline (canonical project identity `06587dea359014f9d0cc502814d49fb5dd45f2d424b87d0e3fce380099d10218` at smoke capture). A/B/C still compare the same frozen v4 rules and matched starts; these results cannot be copied into current canonical gameplay without a new reconciliation and legal retest.
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; shared dirty worktree and `.codex-godot-temp` preserved. [Private v4 variant](simulators/rival-quality-density-20261024-v4/variant.json) forks v3 with original canonical baseline identity `ea4a095970c0893d0af20b85236d9be9f171177bc39cebc7deacabd03a91a18d`, v3 parent identity `edb756438db848e7f13cdbbe8c6e35c13cd92bc3ad11140d749e307747398852`, and frozen gameplay replay identity `97b6937f1352dd0adeb1dab2a69818ae508ce30efd3b213ebc8d8e93dc10cdc7`. Godot 4.7.1 SHA-256 `323f9c4cc5db674e98815cdd8e69da007d5efc779abedc8c0e42883b7fdea12a`. Only private `project/scripts/market/rival_trial.gd` changed. It adds an optional best-visible-four Design/Alpha search using the existing public Core/Scope/known-Bug proxy and conservative affordability estimate. The hand command decides actual legality/cost. The ordinary `policies(world)` remains 2/2/2. The selector uses base Genre targets because the current public development observation does not expose frozen market standards.
+
+The [isolated runner smoke](sims/rival-quality-density-smoke-20261024-v1/run-report.json) passed one legal source-fenced case at cycle 7. Three [matched active-world runs](sims/rival-quality-density-audit-20261024-v1.json) used the actual two-incumbent January cohort and the same legal Action/Fantasy player route, seed 4417, eight player releases/144 commands through cycle 56. A is the current 2/2/2 selector; B is 3/5/2 plus best-visible-four (11 cycles/title); C is 4/6/2 plus best-visible-four (13 cycles/title). All use the same frozen v4 source, full initial state and typed RNG. No cash/Feature injection, market coefficient, Review formula, Genre/Theme, calendar, player policy or canonical gameplay rule changed.
+
+## Result
+
+| Arm | Rival titles by cycle 56 | Rival Reviews, tenths | Player earned units | Player settled cash | World CPU |
+| --- | ---: | --- | ---: | ---: | ---: |
+| A: 2/2/2 | 16 | Arcade 15,37,24,22,23,30,15,24; Wayfinder 16,27,37,32,33,27,25,20 | 1,737 | baseline | 87.1 s |
+| B: 3/5/2 | 10 | Arcade 46,59,46,47,53; Wayfinder 37,50,61,52,63 | 1,883 (+146) | +$1,020.97 | 68.5 s |
+| C: 4/6/2 | 8 | Arcade 57,67,44,45; Wayfinder 45,59,73,63 | 1,903 (+166) | +$1,160.82 | 80.5 s |
+
+All three completed with zero reported failures, respectively **15,174 / 11,054 / 9,974** world assertions. The [read-only audit](sims/rival-quality-density-audit-20261024-v1.json) passes complete worlds, exact equal starts/source and minimum-cycle checks. B had only **2 of 10** Reviews at 6.0 or above; C had **3 of 8**. They therefore miss the user's usual 6–7 target, even though C has a 7.3 outlier. B lost six actual publications and C lost eight. At the same player horizon, player paid units rose +71 in both candidates and Fans were unchanged; player Reviews are retained in the audit. Positive rival cash and no final outstanding bills rule out insolvency as the observed cause on this route. B's lowest sampled rival cash was $2,070; C's was $1,530. Candidate checkpoint sizes were 716,814 and 689,830 bytes versus A's 802,941; two-rival CPU and checkpoint observations are not population limits.
+
+First C releases had Arcade Core `[36,29,37,31]`, Scope 31, six Bugs and Review 5.7 against Action base `[40,26,40,26]`; Wayfinder Core `[31,26,22,35]`, Scope 29, eight Bugs and Review 4.5 against Adventure base `[33,26,20,53]`. Later C titles also included Review 4.4/4.5 despite sufficient cash. The large Adventure Design shortfall and residual Bugs support **inference**, not proof, that visible-hand ranking alone cannot reliably deliver the desired quality with this current owned pool and plan. Frozen market standards may be higher than base targets; the current selector cannot see them, which further limits any recommendation to adopt it.
+
+[B's exact fresh-process world replay](sims/rival-quality-density-4417-B-replay-20261024-v1/world-run.json) passed 144 interleaved steps and 11,138 assertions, including exact final checkpoint SHA. A, B and C original run/checkpoint/tape/log/command outputs are retained in separate folders. The one-line read-only summary command initially had a Python `-c` syntax error; it made no changes, and subsequent PowerShell/checked audit supplied the figures above. No simulation failure or timeout was discarded.
+
+## Disposition
+
+**Reject B and C for adoption.** A selector-only change does not meet either the typical 6–7 Review goal or the market-challenge gate here. The next private study should isolate legally owned Feature/Core supply and Bug control at a 10–13-cycle plan, with exact market-target information available to the AI only through a reviewed public observation. If a quality plan passes, separately test the minimum additional actual rivals/entrant timing needed to restore recent-title density and fixed-horizon player pressure, plus CPU/save costs. A nominal arithmetic estimate is not a legal entrant rule. Store acquisition costs, authored cohort resources, entrant identity/history, hand/exit thresholds, Genre/Theme variation, market window/coefficients, high-Review news, leaderboard and population CPU remain **OPEN**. No adoption handoff or implementation entry is ready.
+
+## Reproduction
+
+```powershell
+& 'C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' tools/simulate.py run --variant docs/codex/threads/ai-competitors/simulators/rival-quality-density-20261024-v4 --config docs/codex/threads/ai-competitors/six-hand-phase-study-20261023-v1/smoke.json --output docs/codex/threads/ai-competitors/sims/rival-quality-density-smoke-20261024-v1 --godot 'C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64.exe' --timeout 240
+& 'C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' docs/codex/threads/ai-competitors/six-hand-phase-study-20261023-v1/run_world.py --bundle docs/codex/threads/ai-competitors/sims/rival-quality-density-smoke-20261024-v1 --output docs/codex/threads/ai-competitors/sims/rival-quality-density-4417-B-20261024-v1 --godot 'C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64.exe' --source 97b6937f1352dd0adeb1dab2a69818ae508ce30efd3b213ebc8d8e93dc10cdc7 --route action-fantasy --seed 4417 --candidate 1 --arm B
+& 'C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' docs/codex/threads/ai-competitors/2026-10-24-quality-density-audit-v1.py
+```
+
+For A use `--arm A --candidate 0` and a distinct A output; for C use `--arm C --candidate 1` and a distinct C output. Outputs are immutable: use new paths for reproduction. The archived `*.command.json` files contain every exact argv and process status, including the B replay. The runner's isolated copy/profile and source fences must remain intact.

@@ -1,0 +1,35 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/profile_campaign_actions.gd"
+  ],
+  "exit": 1,
+  "seconds": 4.562,
+  "private_output": "C:\\Users\\64jus\\AppData\\Local\\Packages\\sandbox.{92eac56f-759d-45d9-aeec-3b2c70d7d902}\\AC\\Temp\\pn-campaign-latency-20261025-v1\\actions-before-v2",
+  "script_sha256": "649a97e81932fc1accbaae43a63cbe9f576277873323a8861b3467ad7488bd02",
+  "result": {
+    "commands": 0,
+    "failures": [
+      "Private world checkpoint: Publish generation"
+    ],
+    "ok": false,
+    "source_identity": "ce24d2a07703a664edd86574b2c678666f9307c5160710a62ce55603c7a74692",
+    "timings": [
+      {
+        "cycle": 0,
+        "releases": 0,
+        "save_ms": 1790.56,
+        "studio_mount_ms": 9.307,
+        "validation_ms": 1319.136,
+        "validator_calls": 2
+      }
+    ]
+  },
+  "errors": [
+    "ERROR: Private world checkpoint: Publish generation"
+  ]
+}

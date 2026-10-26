@@ -33,7 +33,8 @@ func release(total_units: int = 0, scope: int = 30, required_scope: int = 30) ->
 
 
 func new_run(cents: int = 0) -> RunState:
-	var run := RunState.new()
+	# Historical release-paced backlog, not prospective acquisition behavior.
+	var run := preload("res://scripts/debug/legacy_cash_offer_fixture.gd").new()
 	run.initialize_cash_cents(cents)
 	return run
 
@@ -130,10 +131,21 @@ func _verify_early_offer_and_studio() -> void:
 	var passive := snapshot(run, [game])
 	studio.get_node("%Contracts").pressed.emit()
 	var detail := studio.get_node("ContractDetail") as PanelContainer
+	var offer := run.get_next_sidestreet_offer()
+	var chooser := detail.find_child("ContractChooser", true, false) as OptionButton
+	var cash_index := -1
+	var brief := run.get_sidestreet_brief_offer()
+	var brief_index := -1
+	for index in range(chooser.item_count):
+		if chooser.get_item_metadata(index) == offer.offer_id: cash_index = index
+		if not brief.is_empty() and chooser.get_item_metadata(index) == brief.offer_id: brief_index = index
+	check(cash_index >= 0 and brief_index >= 0 and cash_index != brief_index, "Separate Reputation Brief and cash Contract are offered")
+	if cash_index >= 0:
+		chooser.select(cash_index)
+		chooser.item_selected.emit(cash_index)
 	check(detail.visible and (detail.find_child("ContractDetailText", true, false) as Label).text.contains("SideStreet Games"), "Studio displays SideStreet cash-only detail")
 	(detail.find_child("CloseContractDetailButton", true, false) as Button).pressed.emit()
 	check(snapshot(run, [game]) == passive, "Offer browsing and dismissal preserve cash, calendar, redraws and sales")
-	var offer := run.get_next_sidestreet_offer()
 	var state := run.accept_sidestreet_offer(offer.offer_id)
 	check(state != null and state.get_contract_id() == ContractState.SIDESTREET_CONTRACT_ID and state.get_source_release_id() == game.get_release_id() and run.owns_contract_state(state), "Acceptance creates separate release-linked ContractState")
 	check(snapshot(run, [game]) == passive and run.accept_sidestreet_offer(offer.offer_id) == null, "Acceptance costs zero cash and cycles; duplicate acceptance rejects")

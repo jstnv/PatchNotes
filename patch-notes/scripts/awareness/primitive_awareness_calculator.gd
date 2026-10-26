@@ -17,6 +17,10 @@ static func calculate(project_state: ProjectState, run_state: RunState = null) -
 	if marketing_output < 0 or marketing_output > ProjectState.MAX_SIGNED_INT - ORGANIC_AWARENESS:
 		return null
 	var launch_marketing := marketing_output
+	if run_state != null:
+		var support := run_state.get_support_marketing(project_state)
+		if support < 0 or launch_marketing > ProjectState.MAX_SIGNED_INT-ORGANIC_AWARENESS-support: return null
+		launch_marketing += support
 	# Month one is exactly 100%, so integer Marketing Output remains exact.
 	var current_launch_marketing := launch_marketing
 	var existing_fans := run_state.get_fans() if run_state != null else 0

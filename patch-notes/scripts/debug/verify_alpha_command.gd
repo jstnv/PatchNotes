@@ -48,7 +48,10 @@ func run_cases(database: Node) -> void:
 			var run := RunState.new()
 			run.initialize_cash(0)
 			_expect(run.create_studio_with_traits("M2b", &"action", [&"lean_production"] if scenario == "lean" else []), "Studio fixture initializes")
+			historical_v2_roster(run)
 			run.set("_bank_run_id", &"m2b_studio")
+			run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
+			run._contract_search = RunState.ContractSearch.create(run._bank_run_id)
 			run.set("_employees", EmployeeRoster.create(&"m2b_studio"))
 			if scenario in ["employee", "employee_choice"]:
 				var roster := EmployeeRoster.hire(run.get_employees(), &"employee_a", 0)

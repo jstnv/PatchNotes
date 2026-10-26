@@ -1,0 +1,9 @@
+# Concurrent source change at publication
+
+2026-10-25. The first `final_check.py` run failed its strict assertion that current canonical hashes still equaled the experiment baseline. Earlier `source-before.json` and `source-after.json` match at434971b9525f09fab3fa0846ed094f53d6ee778f76ae8b97740a136c7b0fda3f, covering the measured study and verification setup. This initial failed publication guard is retained here; it is not a gameplay/test failure.
+
+`inspect_drift.py` found one added untracked file: `patch-notes/scripts/debug/profile_campaign_latency.gd`, SHA256f34bb941ff28ae0f64f6e16d05eb830a0881409cdb2c2536fa8bb15e1544ce16. Current full canonical identity became9705a69e6a486a4cbca3411eaddcadda2fbe61ee487f883c5887ee50e14bf476. See `source-at-publication.json` for the full manifest/delta. The frozen candidate has zero delta and retains the original identity.
+
+Read-only inspection found a standalone SceneTree CPU diagnostic with no class_name and no references in project.godot or other scripts (`rg -n profile_campaign_latency ...` returned no references). It was added concurrently, is not part of these simulation snapshots, and was neither created, executed, edited nor removed by this study. Its synthetic diagnostic accounting is unrelated to the legal economic campaigns reported here. All previously present canonical files still match; gameplay remains unchanged by this thread.
+
+The final publication check now asserts exact frozen candidate/policy/plan and discovery-selection hashes, preserves shared TODO/index bytes, and explicitly reports the observed added diagnostic rather than claiming full canonical identity stayed unchanged. Any other canonical change still fails the guard. No new campaign was necessary to assess an unreferenced diagnostic outside the frozen experiment. Future adoption must re-read current source.

@@ -30,7 +30,7 @@ func _run()->void:
 		await process_frame
 		var detail:Label=studio._contract_detail.find_child("ContractDetailText",true,false)
 		var accept:Button=studio._contract_detail.find_child("AcceptContractButton",true,false)
-		expect(detail.text.contains("Three production hands") and detail.text.contains("$2,240.00") and detail.text.contains("No Promotion"),"Chooser has exact approved cash-only terms")
+		expect(detail.text.contains("Three production hands") and detail.text.contains("$2,240.00") and detail.text.contains("No base Promotion") and detail.text.contains("separate challenge"),"Chooser distinguishes base cash from challenge reward")
 		expect(Rect2(Vector2.ZERO,Vector2(dimensions)).encloses(accept.get_global_rect()),"Chooser acceptance fits supported viewport")
 		expect(before==snapshot(run),"Chooser changes no cash/time/RNG or offer")
 		accept.grab_focus()
@@ -54,7 +54,7 @@ func _run()->void:
 		await process_frame
 		var dismiss:Button=phase._completion_panel.find_child("DismissCompletionButton",true,false)
 		expect(phase._completion_modal.visible and Rect2(Vector2.ZERO,Vector2(dimensions)).encloses(phase._completion_panel.get_global_rect()),"Completed result fits viewport")
-		expect(phase._completion_stats.text.contains("No Promotion"),"Result distinguishes cash-only reward")
+		expect(phase._completion_stats.text.contains("Challenge grade") and phase._completion_stats.text.contains("Bonus:"),"Result distinguishes challenge reward")
 		await click(dismiss.get_global_rect().get_center())
 		expect(game._active_phase is StudioPhase,"Mouse dismiss returns to Studio")
 		expect(run.get_publisher_status(PublisherCatalog.STARWAVE).availability.contains("completed"),"Browser reports completed first offer")

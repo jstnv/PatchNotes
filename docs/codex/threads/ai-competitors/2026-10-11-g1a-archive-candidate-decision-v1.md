@@ -1,6 +1,6 @@
 # 2026-10-11 G1a incumbent archive candidate decision v1
 
-**Status: CANDIDATE FOR DESIGN REVIEW.** The 2026-10-09 [frozen-history decision](2026-10-09-incumbent-history-decision-v1.md) is LOCKED. This record selects a private prototype representation and evidence packet; it does **not** approve an incumbent cohort, numerical advantage, save migration, UI or canonical gameplay change.
+**Historical candidate: the typed archive and explicit opening snapshot are now LOCKED qualitatively by the [design-review rulings](2026-10-11-design-review-rulings-v1.md); the private code and all cohort values remain unadopted.** The 2026-10-09 [frozen-history decision](2026-10-09-incumbent-history-decision-v1.md) is LOCKED. This record describes a private prototype representation and evidence packet; it does **not** approve an incumbent cohort, numerical advantage, save migration, UI or canonical gameplay change.
 
 ## Recommended representation
 

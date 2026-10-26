@@ -1,6 +1,7 @@
 class_name RunState
 extends RefCounted
 
+const ContractSearch := preload("res://scripts/contracts/contract_search.gd")
 const MAX_SIGNED_INT: int = 9223372036854775807
 
 signal cash_changed
@@ -35,10 +36,16 @@ var _feature_purchase_in_progress := false
 var _feature_research: Array = []
 var _resourceful_claims: Dictionary = {}
 var _released_games: Dictionary = {}
+## Private trial runtime provider. The shared world owns the committed month.
+var _market_provider: Callable = Callable()
+var _market_committed_candidate: Dictionary = {}
 var _release_metadata: Dictionary = {}
 var _productive_cycle_in_progress := false
 var _committing_cycle_cash := false
 var _publishing_cycle := false
+var _preparing_project := false
+var _cycle_plan: Dictionary = {}
+var _pending_relationship_plan: Dictionary = {}
 var _primitive_contract: ContractState
 var _ironclad_completion_committed := false
 var _sidestreet_entitlements: Dictionary = {}
@@ -49,6 +56,7 @@ var _pending_publisher_notifications: Array[StringName] = []
 var _seen_tutorial_topics: Dictionary = {}
 var _studio_name := ""
 var _studio_specialty: StringName = &""
+var _founding_roster_version := 1 # Missing historical metadata means the original grant.
 var _studio_traits: Dictionary = {}
 var _lean_savings: Dictionary = {}
 var _first_studio_economy := false
@@ -66,6 +74,7 @@ func get_fanbase_snapshot() -> Dictionary: return _fanbase.duplicate(true)
 
 var _bank_run_id: StringName = &""
 var _employees: Dictionary = EmployeeRoster.create(&"")
+var _contract_search: Dictionary = ContractSearch.create(&"")
 var random_streams := RunRandom.new()
 var next_project_serial := 1
 var checkpoint_mutations_allowed := true
@@ -74,9 +83,44 @@ var checkpoint_before_mutation: Callable
 var _publisher_offers: Dictionary = {}
 var _promotion_awards: Dictionary = {}
 var _promotion_consumed: Dictionary = {}
+const RelationshipLedger := preload("res://scripts/contracts/publisher_relationships.gd")
+const RelationshipRules := preload("res://scripts/contracts/publisher_relationship_rules.gd")
+const Commission := preload("res://scripts/contracts/publisher_commission_trial.gd")
+const Support := preload("res://scripts/contracts/publisher_support.gd")
+var _support_deals: Dictionary = {}
+var _support_rights: Dictionary = {}
+var _support_assessments: Dictionary = {}
+var _commission_deals: Dictionary = {}
+var _sidestreet_briefs: Dictionary = {}
+var _publisher_relationships: Dictionary = {}
+var _relationship_commit_in_progress := false
+signal publisher_relationships_changed
+
+func get_publisher_relationships() -> Dictionary:
+	var resolver := func(request: Dictionary) -> Dictionary: return RelationshipRules.resolve(self,request)
+	return RelationshipLedger.reconstruct(_publisher_relationships,_bank_run_id,_completed_run_cycles,resolver)
+
+## Internal producer seam; P1 has no enabled producer. No UI-provided amounts.
+func commit_publisher_relationship_event(request: Dictionary) -> bool:
+	if _relationship_commit_in_progress or _productive_cycle_in_progress or _publishing_cycle or _committing_cycle_cash or _feature_purchase_in_progress or get_active_contract() != null: return false
+	_relationship_commit_in_progress = true
+	if not can_mutate_checkpoint():
+		_relationship_commit_in_progress = false
+		return false
+	var resolver := func(source: Dictionary) -> Dictionary: return RelationshipRules.resolve(self,source)
+	var planned := RelationshipLedger.plan(_publisher_relationships,_bank_run_id,request,_completed_run_cycles,resolver)
+	if planned.is_empty():
+		_relationship_commit_in_progress = false
+		return false
+	if planned.changed:
+		_publisher_relationships = planned.ledger
+		publisher_relationships_changed.emit()
+	_relationship_commit_in_progress = false
+	return true
+
 
 func can_mutate_checkpoint() -> bool:
-	return checkpoint_mutations_allowed and (not checkpoint_before_mutation.is_valid() or checkpoint_before_mutation.call())
+	return not _preparing_project and checkpoint_mutations_allowed and (not checkpoint_before_mutation.is_valid() or checkpoint_before_mutation.call())
 
 
 ## Arm only at the successful first-project creation boundary, never on a view.
@@ -160,9 +204,12 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 	_first_studio_economy = true
 	_studio_name = cleaned
 	_studio_specialty = specialty
+	_founding_roster_version = StudioSpecialties.ROSTER_VERSION
 	_studio_finance = finance
 	_bank_run_id = proposed_run_id
 	_employees = EmployeeRoster.create(_bank_run_id)
+	_contract_search = ContractSearch.create(_bank_run_id)
+	_publisher_relationships = RelationshipLedger.create(_bank_run_id)
 	fans_changed.emit()
 	cash_changed.emit()
 	features_changed.emit()
@@ -178,8 +225,9 @@ func get_studio_finance_report() -> Dictionary:
 ## Detached read bundle with the same gates as the individual public getters.
 ## Ledger validation is shared only within this synchronous observation.
 func get_studio_action_finance_observation() -> Dictionary:
-	var include_hire: bool = _first_studio_economy and not _released_games.is_empty() and EmployeeRoster.valid(_employees) and _employees.employees.is_empty()
-	return StudioFinanceLedger.action_observation(_studio_finance, _completed_run_cycles, _cash_cents, _bank_run_id, include_hire)
+	var result:=StudioFinanceLedger.action_observation(_studio_finance,_completed_run_cycles,_cash_cents,_bank_run_id,false)
+	result.hire_quote=get_production_hire_quote()
+	return result
 
 
 func get_outstanding_expenses() -> Dictionary:
@@ -283,14 +331,14 @@ func get_feature_spending_advice(purchase_id: StringName = &"") -> Dictionary:
 ## Current quotes only. Never purchases or assumes an ancestor is already owned.
 func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
 	var path := {"available":true,"steps":[],"price_cents":0,"cycles":0,"requirements":[]}
-	var pending: Array[StringName] = []
-	var seen: Dictionary = {}
-	while not id.is_empty():
-		if seen.has(id) or not _feature_definitions.has(id): return {"available":false,"reason":"Acquisition quote unavailable for this Feature."}
-		seen[id] = true
-		pending.push_front(id)
-		var offer := get_feature_store_offer(id)
-		id = StringName(offer.get("parent", &""))
+	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
+	if graph.has("error"): return {"available":false,"reason":graph.error}
+	var needed_parents: Dictionary = graph.parents.duplicate(true)
+	# A direct grant or legacy-owned child never incurs retroactive parent costs.
+	for owned: StringName in _owned_features: needed_parents[owned] = []
+	var traversal := FeatureStoreCatalog.ordered_ancestors([] if id.is_empty() else [id], needed_parents)
+	if traversal.has("error"): return {"available":false,"reason":traversal.error}
+	var pending: Array[StringName] = traversal.order
 	var saving_available := resourceful_saving(10000) > 0
 	for feature: StringName in pending:
 		var offer := get_feature_store_offer(feature)
@@ -318,9 +366,9 @@ func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
 		path.steps.append({"id":feature,"name":offer.name,"owned":owned,"price_cents":cost,"cycles":cycles,"status":status,"research":research})
 		path.price_cents += cost
 		path.cycles += cycles
-		if not primitive and not owned:
-			if needs_starter_selection() and not path.requirements.has("Later Features require the first game's completion."): path.requirements.append("Later Features require the first game's completion.")
-			if not offer.unlocked and StringName(offer.parent).is_empty(): path.requirements.append(offer.prerequisite)
+		if not owned:
+			if not primitive and needs_starter_selection() and not path.requirements.has("Later Features require the first game's completion."): path.requirements.append("Later Features require the first game's completion.")
+			if not offer.unlocked and not path.requirements.has(offer.prerequisite): path.requirements.append(offer.prerequisite)
 	return path
 
 
@@ -338,6 +386,9 @@ func get_studio_name() -> String:
 
 func get_studio_specialty() -> StringName:
 	return _studio_specialty
+
+func get_founding_roster_version() -> int:
+	return _founding_roster_version
 
 
 func uses_first_studio_economy() -> bool:
@@ -364,6 +415,14 @@ func get_starter_pool_summary() -> Dictionary:
 func get_primitive_reserve_offer(id: StringName) -> Dictionary:
 	if not _first_studio_economy or not _feature_definitions.has(id) or _feature_offers.has(id):
 		return {}
+	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
+	if graph.has("error"): return {}
+	var parents: Array = graph.parents[id]
+	var missing: Array[StringName] = []
+	var names: Array[String] = []
+	for parent: StringName in parents:
+		names.append(str(_feature_definitions[parent].name))
+		if not owns_feature(parent): missing.append(parent)
 	var entry: Dictionary = _feature_definitions[id]
 	var scope := int(entry.scope)
 	if scope < 1 or scope > 3:
@@ -374,7 +433,10 @@ func get_primitive_reserve_offer(id: StringName) -> Dictionary:
 	if initial: price -= resourceful_saving(price)
 	return {"id": id, "name": entry.name, "phase": entry.phase, "scope": scope,
 		"base_price_cents":base_price,"price_cents": price, "owned": owns_feature(id), "affordable": _cash_initialized and _cash_cents >= price,
-		"initial": initial, "can_purchase": not owns_feature(id) and _cash_initialized and _cash_cents >= price}
+		"parents": parents, "missing_parents": missing, "unlocked": missing.is_empty(),
+		"prerequisite": "Own " + " AND ".join(names) if not names.is_empty() else "Primitive reserve",
+		"grant_exception": owns_feature(id) and not missing.is_empty(),
+		"initial": initial, "can_purchase": not owns_feature(id) and missing.is_empty() and _cash_initialized and _cash_cents >= price}
 
 
 func purchase_starter_feature(id: StringName) -> bool:
@@ -493,28 +555,39 @@ func record_resolved_feature(project: ProjectState, id: StringName, phase: Strin
 
 
 func get_feature_store_offer(id: StringName) -> Dictionary:
-	if not _feature_offers.has(id):
-		return {}
+	if not _feature_offers.has(id): return {}
+	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
+	if graph.has("error"): return {}
 	var entry: Dictionary = _feature_offers[id]
-	var parent := StringName(entry.purchase_parent)
-	var required := int(entry.gameplay_features_required)
+	var parents: Array = graph.parents[id]
+	var parent: StringName = parents[0] if not parents.is_empty() else &""
+	var missing: Array[StringName] = []
+	var contributions: Array = []
+	var names: Array[String] = []
+	var credits := 0
+	for required_parent: StringName in parents:
+		var count := get_feature_familiarity(required_parent)
+		var parent_name := str(_feature_definitions[required_parent].name)
+		credits += count
+		names.append(parent_name)
+		if not owns_feature(required_parent): missing.append(required_parent)
+		contributions.append({"id":required_parent,"name":parent_name,"owned":owns_feature(required_parent),"credits":count})
+	var required := int(entry.get("gameplay_features_required", 0))
 	var gameplay_owned := 0
 	for owned_id: StringName in _owned_features:
-		if _feature_definitions[owned_id].get("department", "") == "gameplay":
-			gameplay_owned += 1
-	var unlocked := (parent.is_empty() or owns_feature(parent)) and gameplay_owned >= required
-	var discount := mini(get_feature_familiarity(parent), 5) * 10 if not parent.is_empty() and required == 0 else 0
+		if _feature_definitions[owned_id].get("department", "") == "gameplay": gameplay_owned += 1
+	var unlocked := missing.is_empty() and gameplay_owned >= required
+	var discount := mini(credits, 5) * 10
 	var base_price := int(entry.base_price_cents)
-	var price: int = (base_price / 100) * (100 - discount)
+	# Exact integer cents, without multiplying a potentially large base first.
+	var price: int = (base_price / 100) * (100 - discount) + ((base_price % 100) * (100 - discount)) / 100
 	var prerequisite := "New root"
-	if not parent.is_empty():
-		prerequisite = "Own " + str(_feature_definitions[parent].name)
-	elif required > 0:
-		prerequisite = "Own %d distinct Gameplay Features (%d owned)" % [required, gameplay_owned]
-	return {"id": id, "name": entry.name, "parent": parent, "prerequisite": prerequisite,
-		"owned": owns_feature(id), "unlocked": unlocked, "base_price_cents": base_price,
-		"discount_percent": discount, "price_cents": price,
-		"affordable": _cash_initialized and _cash_cents >= price}
+	if not parents.is_empty(): prerequisite = "Own " + " AND ".join(names)
+	elif required > 0: prerequisite = "Own %d distinct Gameplay Features (%d owned)" % [required, gameplay_owned]
+	return {"id":id,"name":entry.name,"parent":parent,"parents":parents.duplicate(),"missing_parents":missing,
+		"parent_contributions":contributions,"parent_credits":credits,"prerequisite":prerequisite,
+		"owned":owns_feature(id),"unlocked":unlocked,"base_price_cents":base_price,
+		"discount_percent":discount,"price_cents":price,"affordable":_cash_initialized and _cash_cents >= price}
 
 
 func purchase_feature(id: StringName) -> bool:
@@ -533,6 +606,7 @@ func get_feature_research_queue() -> Array:
 
 
 func get_feature_research_quote(id: StringName) -> Dictionary:
+	if FeatureStoreCatalog.graph(_feature_definitions, _feature_offers).has("error"): return {}
 	var offer := get_feature_store_offer(id)
 	var primitive := offer.is_empty()
 	if primitive: offer = get_primitive_reserve_offer(id)
@@ -555,7 +629,7 @@ func get_feature_research_quote(id: StringName) -> Dictionary:
 	for installment: Dictionary in entry.get("payments",[]): paid += int(installment.paid_cents)
 	var pending := get_feature_research_queue()
 	var head: bool = queued and not pending.is_empty() and pending[0].feature_id == id
-	var unlocked: bool = primitive or offer.get("unlocked",false)
+	var unlocked: bool = offer.get("unlocked",false)
 	return {"feature_id":id,"entry_id":StringName("%s:research:%s" % [_bank_run_id,id]),
 		"base_cents":base,"down_cents":arithmetic.down_cents,"due_cents":arithmetic.due_cents-saving,"saving_cents":saving,
 		"nominal_cents":arithmetic.nominal_cents,"discount_percent":discount,"actions":actions,"completed":done,
@@ -787,10 +861,108 @@ func advance_calendar_cycle() -> bool:
 	return complete_productive_action()
 
 
+func has_pending_commission() -> bool:
+	for deal: Dictionary in _commission_deals.values():
+		if deal.result == null: return true
+	return false
+
+func has_unlaunched_support() -> bool:
+	for id: StringName in _support_deals:
+		if not _released_games.has(id): return true
+	return false
+
+func get_support_quote(base_name: String = "", genre: StringName = &"", theme: StringName = &"") -> Dictionary:
+	if _preparing_project or not checkpoint_mutations_allowed or not _first_studio_economy or not _unlocked_publishers.has(&"sidestreet") or _released_games.is_empty() or _bank_run_id.is_empty() or next_project_serial == MAX_SIGNED_INT or get_active_contract() != null or has_pending_commission() or has_unlaunched_support() or _productive_cycle_in_progress or _publishing_cycle or _feature_purchase_in_progress or _relationship_commit_in_progress: return {}
+	if not PrimitivePredevelopment.validation_error(base_name,genre,theme).is_empty() or get_publisher_relationships().is_empty(): return {}
+	var source: StringName = get_released_game_ids()[-1]
+	var eligible := Support.eligibility(Support.data(self),_support_deals,_publisher_relationships.events.size(),_completed_run_cycles,source)
+	if eligible.is_empty(): return {}
+	var amounts := Support.amounts(eligible.acceptance_investment_bp)
+	if amounts.is_empty() or not can_complete_productive_cycle(amounts.funding_cents): return {}
+	var prepared := PrimitivePredevelopment.prepare_project(base_name,genre,theme,self)
+	if prepared == null: return {}
+	var id := StringName("%s:project:%d" % [_bank_run_id,next_project_serial])
+	var quote := {"version":1,"studio_id":_bank_run_id,"publisher_id":&"sidestreet","quote_id":StringName(str(id)+":support"),"project_id":id,"source_release_id":source,"accept_cycle":_completed_run_cycles,"relationship_boundary":_publisher_relationships.events.size(),"finance_revision":_studio_finance.actions.size(),"base_name":base_name.strip_edges(),"genre":genre,"theme":theme}
+	quote.merge(eligible)
+	quote.required_scope = prepared.get_required_scope()
+	quote.merge(amounts)
+	return quote
+
+func can_bind_support_quote(quote: Dictionary, project: ProjectState) -> bool:
+	return project != null and Support.valid_terms(quote,_bank_run_id) and project.get_release_id() == quote.project_id and project.get_required_scope() == quote.required_scope and quote == get_support_quote(project.get_base_name(),project.get_genre_id(),project.get_theme_id())
+
+func _bind_support(quote: Dictionary) -> bool:
+	if not _productive_cycle_in_progress or _publishing_cycle or has_unlaunched_support() or has_pending_commission() or _support_deals.has(quote.project_id) or _commission_deals.has(quote.project_id): return false
+	_support_deals[quote.project_id] = quote.duplicate(true)
+	return true
+
+func get_support_marketing(project: ProjectState) -> int:
+	return int(_support_deals[project.get_release_id()].marketing_points) if project != null and _support_deals.has(project.get_release_id()) else 0
+
+func get_support_history() -> Dictionary:
+	return {"deals":_support_deals.duplicate(true),"rights":_support_rights.duplicate(true),"assessments":_support_assessments.duplicate(true)}
+
+func get_commission_quote(base_name: String = "", genre: StringName = &"", theme: StringName = &"") -> Dictionary:
+	if has_unlaunched_support(): return {}
+	if base_name.is_empty() or _bank_run_id.is_empty() or not _first_studio_economy or _released_games.is_empty() or has_pending_commission() or get_active_contract() != null or _productive_cycle_in_progress or _publishing_cycle or _feature_purchase_in_progress or _relationship_commit_in_progress or next_project_serial == MAX_SIGNED_INT: return {}
+	if not PrimitivePredevelopment.validation_error(base_name,genre,theme).is_empty(): return {}
+	var standing := get_publisher_relationships()
+	if standing.is_empty() or standing[&"sidestreet"].reputation_bp < 2000: return {}
+	var invitation:=ContractSearch.invitation(self)
+	if invitation.is_empty():return {}
+	var project := PrimitivePredevelopment.prepare_project(base_name,genre,theme,self)
+	if project == null or project.get_required_scope() <= 0: return {}
+	var id := StringName("%s:project:%d" % [_bank_run_id,next_project_serial])
+	return {"version":2,"search_offer_id":invitation.offer_id,"studio_id":_bank_run_id,"publisher_id":&"sidestreet","quote_id":StringName(str(id)+":commission"),"project_id":id,"source_release_id":get_released_game_ids()[-1],"accept_cycle":_completed_run_cycles,"base_name":project.get_base_name(),"genre":genre,"theme":theme,"required_scope":project.get_required_scope(),"fee_cents":Commission.FEE,"review_target_tenths":60,"owner":&"publisher"}
+
+func can_bind_commission_quote(quote: Dictionary, project: ProjectState) -> bool:
+	if project == null or not Commission.valid_terms(quote,_bank_run_id): return false
+	return quote == get_commission_quote(project.get_base_name(),project.get_genre_id(),project.get_theme_id()) and project.get_release_id() == quote.project_id and project.get_required_scope() == quote.required_scope
+
+func _bind_commission(quote: Dictionary) -> bool:
+	if not _productive_cycle_in_progress or _publishing_cycle or has_pending_commission() or _commission_deals.has(quote.project_id): return false
+	if quote.get("version")==2:
+		var invitation:=ContractSearch.invitation(self)
+		if invitation.is_empty() or invitation.offer_id!=quote.search_offer_id:return false
+		_contract_search.offers[quote.search_offer_id].project_id=quote.project_id
+	_commission_deals[quote.project_id] = {"terms":quote.duplicate(true),"result":null}
+	return true
+
+func _plan_commission_release(project: ProjectState) -> Dictionary:
+	var id := project.get_release_id()
+	if not _commission_deals.has(id): return {"applicable":false}
+	var deal: Dictionary = _commission_deals[id].duplicate(true)
+	if deal.result != null: return {}
+	var meta := {"base_name":project.get_base_name(),"genre":project.get_genre_id(),"theme":project.get_theme_id(),"release_cycle":_completed_run_cycles,"review":_capture_release_review(project),"owner":&"publisher","publisher_id":&"sidestreet","commission_quote_id":deal.terms.quote_id}
+	deal.result = Commission.result(deal.terms,meta,id)
+	if deal.result.is_empty(): return {}
+	var finance := StudioFinanceLedger.plan(_studio_finance,_completed_run_cycles,_cash_cents,deal.result.fee_paid_cents,&"publisher_receipt",0,0,false,deal.terms.quote_id)
+	if finance.is_empty(): return {}
+	var staged := Commission.data(self).duplicate(true)
+	staged.commission_deals[id] = deal
+	staged.release_metadata[id] = meta
+	staged.released_games[id] = _create_release_sales_record(project)
+	staged.studio_finance = finance.ledger
+	var request := Commission.request_for(staged,id)
+	if request.is_empty(): return {}
+	var resolver := func(source: Dictionary) -> Dictionary:
+		return Commission.resolve(staged,source) if source.get("kind") == Commission.KIND else RelationshipRules.resolve(self,source)
+	var relationship := RelationshipLedger.plan(_publisher_relationships,_bank_run_id,request,_completed_run_cycles,resolver)
+	if relationship.is_empty(): return {}
+	return {"applicable":true,"deal":deal,"finance":finance.ledger,"relationships":relationship.ledger}
+
+func get_commission_deals() -> Dictionary:
+	return _commission_deals.duplicate(true)
+
+
 func can_register_release(project: ProjectState) -> bool:
 	if _productive_cycle_in_progress or project == null or not _cash_initialized or not project.is_launch_ready() or not project.has_month_one_sales_revenue_result():
 		return false
 	var id := project.get_release_id()
+	if _support_deals.has(id):
+		var terms: Dictionary = _support_deals[id]
+		if not Support.valid_terms(terms,_bank_run_id) or _commission_deals.has(id) or project.get_required_scope() != terms.required_scope or project.get_base_name() != terms.base_name or project.get_genre_id() != terms.genre or project.get_theme_id() != terms.theme:
+			return false
 	var projection := project.get_month_one_sales_revenue_result()
 	var checked := PrimitiveMonthOneSalesRevenueCalculator.calculate_for_total_units(projection.get_total_month_one_units())
 	if id.is_empty() or checked == null or checked.get_projected_month_one_net_cents() != projection.get_projected_month_one_net_cents():
@@ -803,6 +975,7 @@ func can_register_release(project: ProjectState) -> bool:
 			return false
 		var metadata: Dictionary = _release_metadata[id]
 		return metadata.base_name == project.get_base_name() and metadata.genre == project.get_genre_id() and metadata.theme == project.get_theme_id() and metadata.genre_ratios == project.get_genre_ratios() and _released_games[id].get("review_tenths", -1) == expected_record.get("review_tenths", -1) and _released_games[id].get("launch_awareness", -1) == expected_record.get("launch_awareness", -1) and _released_games[id].get("market_bp", -1) == expected_record.get("market_bp", -1)
+	if _plan_commission_release(project).is_empty(): return false
 	return project.get_awareness_result().get_promotion_awards()==get_pending_promotion_awards() and project.get_awareness_result().get_existing_fans()==get_fans()
 
 
@@ -814,7 +987,53 @@ func _create_release_sales_record(project: ProjectState) -> Dictionary:
 		project.get_launch_market_context_result().get_forecast_multiplier_basis_points())
 
 
+## Release planning reuses the arithmetic owner on detached containers. The
+## resulting field set is committed before Project or Run observers can fire.
+const RELEASE_FIELDS := ["_released_games","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs"]
+
+func plan_release(project: ProjectState) -> Dictionary:
+	if _publishing_cycle or _productive_cycle_in_progress or not can_register_release(project): return {}
+	var fence := preload("res://scripts/simulation/transaction_projection.gd")
+	var probe := RunState.new()
+	fence.copy_fields(self,probe)
+	probe.checkpoint_before_mutation = Callable()
+	probe.studio_departure_guard = Callable()
+	probe.set_block_signals(true)
+	if not probe._register_release_unpublished(project): return {}
+	var fields := {}
+	for field: String in RELEASE_FIELDS: fields[field] = probe.get(field)
+	return {"before":fence.authority(self),"project":fence.authority(project),"fields":fields,"changed":not _released_games.has(project.get_release_id()),"cash_changed":probe._cash_cents != _cash_cents,"finance_changed":probe._studio_finance != _studio_finance,"standing_changed":probe._publisher_relationships != _publisher_relationships,"publishers_changed":probe._unlocked_publishers != _unlocked_publishers}
+
+func can_commit_release_plan(project: ProjectState, plan: Dictionary) -> bool:
+	var fence := preload("res://scripts/simulation/transaction_projection.gd")
+	return not plan.is_empty() and not _publishing_cycle and not _productive_cycle_in_progress and plan.before == fence.authority(self) and plan.project == fence.authority(project)
+
+## Internal infallible seam: caller validates the plan immediately beforehand.
+func commit_release_fields(plan: Dictionary) -> void:
+	_publishing_cycle = true
+	for field: String in RELEASE_FIELDS: set(field,plan.fields[field])
+
+func publish_release_plan(plan: Dictionary) -> void:
+	if plan.changed:
+		if plan.cash_changed: cash_changed.emit()
+		if plan.finance_changed: finance_changed.emit()
+		if plan.standing_changed: publisher_relationships_changed.emit()
+		if plan.publishers_changed: publishers_changed.emit()
+		contracts_changed.emit()
+		sales_changed.emit()
+		fans_changed.emit()
+	_publishing_cycle = false
+
 func register_release(project: ProjectState) -> bool:
+	if _publishing_cycle or _productive_cycle_in_progress: return false
+	if not can_mutate_checkpoint(): return false
+	var plan := plan_release(project)
+	if not can_commit_release_plan(project,plan): return false
+	commit_release_fields(plan)
+	publish_release_plan(plan)
+	return true
+
+func _register_release_unpublished(project: ProjectState) -> bool:
 	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle:
 		return false
@@ -823,6 +1042,8 @@ func register_release(project: ProjectState) -> bool:
 	var id := project.get_release_id()
 	if _released_games.has(id):
 		return true
+	var commission := _plan_commission_release(project)
+	if commission.is_empty(): return false
 	var year := get_current_year()
 	var title := _resolve_release_title(project.get_base_name(), year)
 	var record := _create_release_sales_record(project)
@@ -831,21 +1052,38 @@ func register_release(project: ProjectState) -> bool:
 	record.base_name = project.get_base_name()
 	record.release_title = title
 	record.release_year = year
+	var cash_before := _cash_cents
+	var publishers_before := _unlocked_publishers.duplicate()
+	var was_blocked := is_blocking_signals()
+	_publishing_cycle = true
+	set_block_signals(true)
 	_released_games[id] = record
+	if _support_deals.has(id): _support_rights[id] = Support.empty_rights()
 	_fanbase = next_fans
 	_release_metadata[id] = {"base_name": project.get_base_name(), "genre": project.get_genre_id(),
 		"theme": project.get_theme_id(), "genre_ratios": project.get_genre_ratios(),
 		"release_title": title, "release_year": year, "release_cycle": _completed_run_cycles,
 		"review": _capture_release_review(project)}
+	if commission.applicable:
+		_commission_deals[id] = commission.deal
+		_studio_finance = commission.finance
+		_cash_cents = _studio_finance.cash_cents
+		_publisher_relationships = commission.relationships
+		_release_metadata[id].merge({"owner":&"publisher","publisher_id":&"sidestreet","commission_quote_id":commission.deal.terms.quote_id})
 	for offer_id: StringName in project.get_awareness_result().get_promotion_awards():
 		_promotion_consumed[offer_id] = id
 	# Qualification is captured only on the first committed registration. Existing
 	# entitlements (including legacy under-Scope offers) are never re-evaluated.
-	if project.get_current_scope() >= project.get_required_scope():
-		_sidestreet_entitlements[id] = {"offer_id": StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID, id]), "state": null}
 	_refresh_publisher_unlocks()
+	set_block_signals(was_blocked)
+	if _cash_cents != cash_before: cash_changed.emit()
+	if commission.applicable:
+		finance_changed.emit()
+		publisher_relationships_changed.emit()
+	if _unlocked_publishers != publishers_before: publishers_changed.emit()
 	sales_changed.emit()
 	fans_changed.emit()
+	_publishing_cycle = false
 	return true
 
 func _capture_release_review(project: ProjectState) -> Dictionary:
@@ -859,7 +1097,7 @@ func _capture_release_review(project: ProjectState) -> Dictionary:
 	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
 		cores.append(project.get_core_score(category))
 		standards.append(review.get_standard(category))
-	return {"final_review": review.get_final_review(), "production_rating": review.get_production_rating(),
+	var frozen := {"final_review": review.get_final_review(), "production_rating": review.get_production_rating(),
 		"scope_completion": review.get_scope_completion(), "scope": project.get_current_scope(),
 		"required_scope": project.get_required_scope(), "development_cycles": project.get_current_cycle(),
 		"cores": cores, "standards": standards, "remaining_bugs": project.get_remaining_bugs(),
@@ -871,6 +1109,8 @@ func _capture_release_review(project: ProjectState) -> Dictionary:
 		"forecast_multiplier": context.get_forecast_multiplier_text() if context.was_forecast_revealed_at_launch() else "",
 		"competitor_id": context.get_competitor_id_for_authority() if context.was_competitor_revealed_at_launch() else &"",
 		"competitor_target_cycle": context.get_competitor_target_cycle() if context.was_competitor_revealed_at_launch() else -1}
+	if not project.get_market_details().is_empty(): frozen.market=project.get_market_details()
+	return frozen
 
 
 func get_released_game_sales(release_id: StringName) -> Dictionary:
@@ -881,11 +1121,23 @@ func get_released_game_monthly_report(release_id: StringName) -> Dictionary:
 	if not _release_metadata.has(release_id) or not _released_games.has(release_id): return {}
 	var release_cycle: Variant = _release_metadata[release_id].get("release_cycle", null)
 	if typeof(release_cycle) != TYPE_INT or release_cycle < 0: return {}
-	return ReleasedGameMonthlyReport.build(_released_games[release_id], release_cycle)
+	var report := ReleasedGameMonthlyReport.build(_released_games[release_id], release_cycle)
+	if report.is_empty(): return {}
+	var publisher_owned := _commission_deals.has(release_id)
+	report.owner = &"publisher" if publisher_owned else &"studio"
+	report.studio_net_cents = 0 if publisher_owned else report.net_cents
+	report.studio_settled_cents = 0 if publisher_owned else report.settled_cents
+	if _support_deals.has(release_id):
+		var rights: Dictionary = _support_rights[release_id]
+		report.studio_net_cents = rights.studio_earned_cents
+		report.studio_settled_cents = rights.studio_settled_cents
+		report.support = {"terms":_support_deals[release_id].duplicate(true),"rights":rights.duplicate(true),"assessment":_support_assessments.get(release_id,{}).duplicate(true)}
+	return report
 
 
 ## An offer is anchored to the current release-age cycle, not the calendar month.
 func get_post_launch_campaign_offer(release_id: StringName) -> Dictionary:
+	if _commission_deals.has(release_id): return {}
 	if not _released_games.has(release_id):
 		return {}
 	var record: Dictionary = _released_games[release_id]
@@ -956,7 +1208,7 @@ func accept_primitive_contract() -> ContractState:
 		return null
 	var accepted := ContractState.new(_primitive_contract_eligible_ids())
 	accepted._publisher_connections = StudioTraits.is_active(_studio_traits,&"publisher_connections")
-	if not accepted.commit_upfront():
+	if not accepted.freeze_challenge() or not accepted.commit_upfront():
 		return null
 	# Block observers until both ownership and the exact-cent guarantee commit.
 	var was_blocked := is_blocking_signals()
@@ -978,6 +1230,9 @@ func get_primitive_contract() -> ContractState:
 
 
 func get_active_contract() -> ContractState:
+	for offer: Dictionary in _sidestreet_briefs.values():
+		var brief: ContractState = offer.state
+		if brief != null and not brief.is_completed(): return brief
 	for offer: Dictionary in _publisher_offers.values():
 		var state: ContractState = offer.state
 		if state!=null and not state.is_completed(): return state
@@ -991,6 +1246,8 @@ func get_active_contract() -> ContractState:
 
 
 func owns_contract_state(state: ContractState) -> bool:
+	for offer: Dictionary in _sidestreet_briefs.values():
+		if offer.state == state and state != null: return true
 	for offer: Dictionary in _publisher_offers.values():
 		if offer.state==state and state!=null: return true
 	if state == null:
@@ -1003,13 +1260,53 @@ func owns_contract_state(state: ContractState) -> bool:
 	return false
 
 
+func get_sidestreet_brief_offer() -> Dictionary:
+	if not _unlocked_publishers.has(PublisherCatalog.SIDESTREET): return {}
+	for offer: Dictionary in _sidestreet_briefs.values():
+		if offer.state == null:
+			return {"offer_id":offer.offer_id,"publisher_id":PublisherCatalog.SIDESTREET,
+				"source_release_id":offer.source_release_id,"required_hands":2,
+				"cash_cents":0,"advance_cents":0,"promotion":0}
+	return {}
+
+
+func accept_sidestreet_brief(offer_id: StringName) -> ContractState:
+	if not can_mutate_checkpoint() or _publishing_cycle or _productive_cycle_in_progress: return null
+	if studio_departure_guard.is_valid() and not studio_departure_guard.call(): return null
+	var offered := get_sidestreet_brief_offer()
+	if offered.is_empty() or offered.offer_id != offer_id or get_active_contract() != null: return null
+	var accepted := ContractState.new(_primitive_contract_eligible_ids(),ContractDefinitions.SIDESTREET_BRIEF,offer_id,offered.source_release_id)
+	if not accepted.freeze_challenge() or not accepted.commit_upfront(): return null
+	_sidestreets_brief_set_state(offer_id,accepted)
+	contracts_changed.emit()
+	return accepted
+
+
+func _sidestreets_brief_set_state(offer_id: StringName, state: ContractState) -> void:
+	var offer: Dictionary = _sidestreet_briefs[offer_id]
+	offer.state = state
+	_sidestreet_briefs[offer_id] = offer
+
+
+func _issue_sidestreet_brief(source_release_id: StringName) -> void:
+	if not _contract_search.intro_offer_id.is_empty():return
+	if source_release_id.is_empty() or not _released_games.has(source_release_id): return
+	for offer: Dictionary in _sidestreet_briefs.values():
+		if offer.state == null or not offer.state.is_completed() or offer.source_release_id == source_release_id: return
+	var offer_id := StringName("%s:sidestreet-brief:%s" % [_bank_run_id,source_release_id])
+	if _sidestreet_briefs.has(offer_id): return
+	_sidestreet_briefs[offer_id] = {"offer_id":offer_id,"source_release_id":source_release_id,"state":null}
+	_contract_search.intro_offer_id=offer_id
+	contracts_changed.emit()
+
+
 func get_next_sidestreet_offer() -> Dictionary:
 	if not _unlocked_publishers.has(PublisherCatalog.SIDESTREET):
 		return {}
 	for release_id: StringName in _sidestreet_entitlements:
 		var entitlement: Dictionary = _sidestreet_entitlements[release_id]
 		if entitlement.state == null:
-			return {"offer_id": entitlement.offer_id, "release_id": release_id}
+			return {"offer_id":entitlement.offer_id,"release_id":&"","entitlement_id":release_id} if not ContractSearch.source(self,entitlement.offer_id,&"cash").is_empty() else {"offer_id":entitlement.offer_id,"release_id":release_id}
 	return {}
 
 
@@ -1038,11 +1335,12 @@ func accept_sidestreet_offer(offer_id: StringName) -> ContractState:
 		return null
 	var release_id: StringName = next.release_id
 	var accepted := ContractState.new(_primitive_contract_eligible_ids(), ContractState.SIDESTREET_CONTRACT_ID, offer_id, release_id)
-	if not accepted.commit_upfront():
+	if not accepted.freeze_challenge() or not accepted.commit_upfront():
 		return null
-	var entitlement: Dictionary = _sidestreet_entitlements[release_id]
+	var key: StringName=next.get("entitlement_id",release_id)
+	var entitlement: Dictionary = _sidestreet_entitlements[key]
 	entitlement.state = accepted
-	_sidestreet_entitlements[release_id] = entitlement
+	_sidestreet_entitlements[key] = entitlement
 	contracts_changed.emit()
 	return accepted
 
@@ -1065,13 +1363,18 @@ func commit_contract_hand(state: ContractState, cards: Array[CardData], expected
 		return false
 	if plan.completing and _publisher_offers.has(state.get_offer_id()) and _promotion_awards.has(state.get_offer_id()): return false
 	if state.get_contract_id() == ContractState.SIDESTREET_CONTRACT_ID and plan.completing:
-		if _sidestreet_results.has(state.get_offer_id()) or not _sidestreet_entitlements.has(state.get_source_release_id()):
+		if _sidestreet_results.has(state.get_offer_id()) or _cash_entitlement_key(state.get_offer_id()).is_empty():
 			return false
-		var entitlement: Dictionary = _sidestreet_entitlements[state.get_source_release_id()]
+		var entitlement: Dictionary = _sidestreet_entitlements[_cash_entitlement_key(state.get_offer_id())]
 		if entitlement.offer_id != state.get_offer_id() or entitlement.state != state:
 			return false
+	var relationship := {"applicable":false}
+	if plan.completing and state.get_contract_id() == ContractDefinitions.SIDESTREET_BRIEF:
+		relationship = _plan_finishing_brief(state,cards,expected_payment_cents)
+		if relationship.is_empty(): return false
 	if not state.commit_hand(cards, expected_payment_cents):
 		return false
+	if relationship.applicable: _pending_relationship_plan = relationship.ledger
 	if state.is_completed():
 		_pending_contract_completion = state
 	return true
@@ -1082,8 +1385,9 @@ func _record_paid_contract_completion() -> void:
 	if state == null:
 		return
 	_pending_contract_completion = null
+	if state.get_contract_id() == ContractDefinitions.SIDESTREET_BRIEF: return
 	if _publisher_offers.has(state.get_offer_id()):
-		if state.get_contract_id()!=PublisherTrialTerms.STARWAVE:
+		if state.get_contract_id()!=PublisherTrialTerms.STARWAVE or state.get_result().get_promotion() > 0:
 			_promotion_awards[state.get_offer_id()] = state.get_result().get_promotion()
 		return
 	if state == _primitive_contract:
@@ -1096,6 +1400,9 @@ func _record_paid_contract_completion() -> void:
 	_sidestreet_results[state.get_offer_id()] = {"offer_id": state.get_offer_id(), "release_id": state.get_source_release_id(),
 		"scope": result.get_scope(), "core_half_units": cores, "completion_numerator": result.get_completion_numerator(),
 		"payout_cents": result.get_payout_cents()}
+	var searched:=ContractSearch.source(self,state.get_offer_id(),&"cash")
+	if not searched.is_empty():_sidestreet_results[state.get_offer_id()].search_receipt_id=searched.receipt_id
+	if result.get_promotion() > 0: _promotion_awards[state.get_offer_id()] = result.get_promotion()
 
 
 func get_completed_contract_count() -> int:
@@ -1170,6 +1477,8 @@ func _refresh_publisher_unlocks() -> bool:
 		if _unlocked_publishers.has(id) or not _meets_publisher_requirement(id):
 			continue
 		_unlocked_publishers[id] = true
+		if id == PublisherCatalog.SIDESTREET and not _released_games.is_empty():
+			_issue_sidestreet_brief(_released_games.keys()[-1])
 		if id in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT,PublisherCatalog.STARWAVE]:
 			var offer_id := StringName("%s:%s:first" % [_bank_run_id,id])
 			var source: StringName
@@ -1214,27 +1523,53 @@ func can_complete_productive_cycle(direct_cash_delta_cents: int = 0, campaign_re
 func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: StringName = &"", finance_kind: StringName = &"", source_id: StringName = &"") -> Dictionary:
 	if _productive_cycle_in_progress or _feature_purchase_in_progress or _pending_contract_completion != null or _completed_run_cycles < 0 or _completed_run_cycles == MAX_SIGNED_INT or _available_redraws < 0 or _available_redraws > MAX_REDRAWS:
 		return {}
-	if not campaign_release_id.is_empty() and (direct_cash_delta_cents != -POST_LAUNCH_CAMPAIGN_COST_CENTS or not _released_games.has(campaign_release_id) or not ReleasedGameSales.can_campaign(_released_games[campaign_release_id])):
+	if not campaign_release_id.is_empty() and (direct_cash_delta_cents != -POST_LAUNCH_CAMPAIGN_COST_CENTS or not _released_games.has(campaign_release_id) or not ReleasedGameSales.can_campaign(_released_games[campaign_release_id]) or _commission_deals.has(campaign_release_id)):
 		return {}
 	if direct_cash_delta_cents != 0 and not _cash_initialized:
 		return {}
 	if direct_cash_delta_cents < -_cash_cents or direct_cash_delta_cents > MAX_SIGNED_INT - _cash_cents:
 		return {}
 	var cash_after_action := _cash_cents + direct_cash_delta_cents
+	var market: Dictionary = preload("res://scripts/market/market_transaction_trial.gd").neutral()
+	if _market_provider.is_valid():
+		market = _market_provider.call(_bank_run_id,_completed_run_cycles+1)
+		if not preload("res://scripts/market/market_transaction_trial.gd").valid(market): return {}
 	var next_records: Dictionary = {}
 	var payable := 0
 	var earned := 0
+	var support_rights := _support_rights.duplicate(true)
+	var support_assessments := _support_assessments.duplicate(true)
 	for id: StringName in _released_games:
 		if not _cash_initialized or not _released_games[id] is Dictionary or _released_games[id].get("release_id") != id:
 			return {}
-		var next := ReleasedGameSales.next_cycle(_released_games[id], _completed_run_cycles + 1, will_next_cycle_cross_month_boundary(), id == campaign_release_id)
+		var factor: Dictionary=preload("res://scripts/market/market_transaction_trial.gd").neutral_factor()
+		if _market_provider.is_valid():
+			if not _release_metadata.has(id): return {}
+			var metadata: Dictionary=_release_metadata[id]
+			factor=preload("res://scripts/market/market_transaction_trial.gd").sales_factor(market,str(_bank_run_id),str(id),str(metadata.genre),str(metadata.theme))
+			if factor.is_empty(): return {}
+		var next := ReleasedGameSales.next_cycle(_released_games[id], _completed_run_cycles + 1, will_next_cycle_cross_month_boundary(), id == campaign_release_id, int(factor.factor_bp), str(factor.snapshot_id),factor)
 		if next.is_empty():
 			return {}
+		if _commission_deals.has(id):
+			next_records[id] = next
+			continue
 		var release_payable: int = next.settled_cents - _released_games[id].settled_cents
+		var release_earned: int = next.entitlement_cents - _released_games[id].entitlement_cents
+		if _support_deals.has(id):
+			if not support_rights.has(id): return {}
+			var old: Dictionary = support_rights[id]
+			var rights := Support.advance_rights(_support_deals[id].budget_cents,old,next.entitlement_cents,next.total_earned_cycles,will_next_cycle_cross_month_boundary())
+			if rights.is_empty(): return {}
+			release_payable = rights.studio_settled_cents-old.studio_settled_cents
+			release_earned = rights.studio_earned_cents-old.studio_earned_cents
+			support_rights[id] = rights
+			if next.total_earned_cycles == 6:
+				if support_assessments.has(id): return {}
+				support_assessments[id] = Support.assessment(roundi(float(_release_metadata[id].review.final_review)*10.0),next.earned_units)
 		if release_payable > MAX_SIGNED_INT - payable:
 			return {}
 		payable += release_payable
-		var release_earned: int = next.entitlement_cents - _released_games[id].entitlement_cents
 		if release_earned < 0 or release_earned > MAX_SIGNED_INT - earned: return {}
 		earned += release_earned
 		next_records[id] = next
@@ -1248,7 +1583,23 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 			finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
 		finance_plan = StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles + 1, _cash_cents, direct_cash_delta_cents, finance_kind, earned, payable, true, source_id)
 		if finance_plan.is_empty(): return {}
-	return {"records": next_records, "payable": payable, "finance": finance_plan, "fans": fan_plan}
+	var relationships := _publisher_relationships.duplicate(true)
+	if support_assessments != _support_assessments:
+		var prospective := RunState.new()
+		preload("res://scripts/simulation/transaction_projection.gd").copy_fields(self,prospective)
+		prospective._completed_run_cycles += 1
+		prospective._released_games = next_records
+		prospective._support_rights = support_rights
+		prospective._support_assessments = support_assessments
+		prospective._studio_finance = finance_plan.ledger
+		for id: StringName in support_assessments:
+			if _support_assessments.has(id): continue
+			var request := Support.request_for(prospective,id)
+			var resolver := func(source: Dictionary) -> Dictionary: return RelationshipRules.resolve(prospective,source)
+			var award := RelationshipLedger.plan(relationships,_bank_run_id,request,prospective._completed_run_cycles,resolver)
+			if award.is_empty(): return {}
+			relationships = award.ledger
+	return {"records":next_records,"payable":payable,"finance":finance_plan,"fans":fan_plan,"market":market,"support_rights":support_rights,"support_assessments":support_assessments,"relationships":relationships}
 
 
 ## The direct-effects callback must be synchronous and atomic on false, using
@@ -1259,6 +1610,7 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 ## Direct effects -> income/spend -> calendar/sales settlement -> due rent and
 ## oldest arrears -> report -> notifications. No await can split this boundary.
 func complete_productive_action(direct_effects: Callable = Callable(), direct_cash_delta_cents: int = 0, expected_cycle: int = -1, campaign_release_id: StringName = &"", finance_kind: StringName = &"", source_id: StringName = &"") -> bool:
+	if _publishing_cycle or _productive_cycle_in_progress: return false
 	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle:
 		return false
@@ -1272,34 +1624,43 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	var familiarity_before := _familiarity.duplicate()
 	var ownership_before := _owned_features.duplicate()
 	var publishers_before := _unlocked_publishers.duplicate()
+	var relationships_before := _publisher_relationships.duplicate(true)
 	var completed_contracts_before := get_completed_contract_count()
 	var employees_before := _employees.duplicate(true)
+	var briefs_before := _sidestreet_briefs.duplicate(true)
+	_cycle_plan = plan
+	_pending_relationship_plan = {}
 	_productive_cycle_in_progress = true
 	# Publish run notifications only after cash and sales have committed together.
 	var was_blocked := is_blocking_signals()
 	set_block_signals(true)
 	if direct_effects.is_valid() and not direct_effects.call():
 		_pending_contract_completion = null
+		_cycle_plan = {}
+		_pending_relationship_plan = {}
 		set_block_signals(was_blocked)
 		_productive_cycle_in_progress = false
 		return false
 	_committing_cycle_cash = true
-	if direct_cash_delta_cents > 0:
-		add_cash_cents(direct_cash_delta_cents)
-	elif direct_cash_delta_cents < 0:
-		spend_cash_cents(-direct_cash_delta_cents)
-	# Cash is now committed; only then publish a distinct completion record.
+	# The outer guard and finance plan already validated every cent. Public cash
+	# methods would re-enter a fallible save guard after direct effects committed.
+	_cash_cents = plan.finance.cash_cents if not plan.finance.is_empty() else cash_before + direct_cash_delta_cents + int(plan.payable)
 	_record_paid_contract_completion()
 	_completed_run_cycles += 1
 	_available_redraws = mini(MAX_REDRAWS, _available_redraws + 1)
 	_released_games = plan.records
+	_support_rights = plan.support_rights
+	_support_assessments = plan.support_assessments
+	_publisher_relationships = plan.relationships
+	_market_committed_candidate = plan.market.duplicate(true)
 	var previous_fans := get_fans()
 	_fanbase = plan.fans
-	if plan.payable > 0:
-		add_cash_cents(plan.payable)
 	if not plan.finance.is_empty():
-		spend_cash_cents(plan.finance.bills_paid_cents)
 		_studio_finance = plan.finance.ledger
+	_sync_employee_raises()
+	if not _pending_relationship_plan.is_empty(): _publisher_relationships = _pending_relationship_plan
+	_pending_relationship_plan = {}
+	_cycle_plan = {}
 	_refresh_publisher_unlocks()
 	_committing_cycle_cash = false
 	set_block_signals(was_blocked)
@@ -1315,7 +1676,9 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 		features_changed.emit()
 	if _unlocked_publishers != publishers_before:
 		publishers_changed.emit()
-	if get_completed_contract_count() != completed_contracts_before:
+	if _publisher_relationships != relationships_before:
+		publisher_relationships_changed.emit()
+	if get_completed_contract_count() != completed_contracts_before or _sidestreet_briefs != briefs_before or _publisher_relationships != relationships_before:
 		contracts_changed.emit()
 	if not _released_games.is_empty():
 		sales_changed.emit()
@@ -1331,26 +1694,75 @@ func get_employees() -> Dictionary:
 	return _employees.duplicate(true)
 
 
-func get_production_hire_quote() -> Dictionary:
-	if not _first_studio_economy or _released_games.is_empty() or not EmployeeRoster.valid(_employees) or not _employees.employees.is_empty(): return {}
-	return StudioFinanceLedger.hire_quote(_studio_finance,_bank_run_id)
+## Public policy/menu facts omit mechanical RNG and unresolved Design searches.
+func get_employee_observation() -> Dictionary:
+	var result:=get_employees()
+	result.erase("events")
+	for employee: Dictionary in result.get("employees",{}).values():
+		if employee.type==&"qa":
+			employee.erase("rng_seed");employee.erase("rng_state");employee.erase("pending_design")
+	return result
 
+func get_employee_hire_quote(role: StringName) -> Dictionary:
+	if not uses_employee_trial():
+		if role!=&"production" or not _first_studio_economy or _released_games.is_empty() or not EmployeeRoster.valid(_employees) or not _employees.employees.is_empty():return {}
+		return StudioFinanceLedger.hire_quote(_studio_finance,_bank_run_id)
+	if not _first_studio_economy or _released_games.size()<2 or not EmployeeRoster.valid(_employees): return {}
+	if _employees.employees.values().any(func(e):return e.type==role):return {}
+	return StudioFinanceLedger.specialist_hire_quote(_studio_finance,_bank_run_id,role)
 
-func hire_production_specialist(quote: Dictionary) -> bool:
-	if not can_mutate_checkpoint(): return false
-	if not _bank_action_available() or quote.is_empty() or quote != get_production_hire_quote(): return false
+func get_production_hire_quote() -> Dictionary: return get_employee_hire_quote(&"production")
+
+func hire_production_specialist(quote: Dictionary) -> bool: return hire_specialist(quote)
+
+func hire_specialist(quote: Dictionary) -> bool:
+	if not can_mutate_checkpoint() or not _bank_action_available() or quote.is_empty() or quote!=get_employee_hire_quote(quote.get("role",&"production")): return false
 	var finance := StudioFinanceLedger.hire_employee(_studio_finance,quote,_bank_run_id)
-	var roster := EmployeeRoster.hire(_employees,quote.employee_id,_completed_run_cycles)
+	var roster := EmployeeRoster.hire_specialist(_employees,quote.role,_completed_run_cycles) if uses_employee_trial() else EmployeeRoster.hire(_employees,quote.employee_id,_completed_run_cycles)
 	if finance.is_empty() or roster.is_empty(): return false
-	_studio_finance = finance.ledger
-	_cash_cents = finance.cash_cents
-	_employees = roster
-	_publishing_cycle = true
-	cash_changed.emit()
-	finance_changed.emit()
-	employees_changed.emit()
-	_publishing_cycle = false
+	_studio_finance=finance.ledger;_cash_cents=finance.cash_cents;_employees=roster
+	_publishing_cycle=true;cash_changed.emit();finance_changed.emit();employees_changed.emit();_publishing_cycle=false
 	return true
+
+func get_qa_course_quote(course: StringName) -> Dictionary:
+	if not uses_employee_trial() or not EmployeeRoster.valid(_employees) or not _first_studio_economy or _released_games.size()<2 or course not in [&"mixed",&"pure"] or _cash_cents<15000 or StudioFinanceLedger.get_unpaid(_studio_finance)!=0: return {}
+	for e: Dictionary in _employees.employees.values():
+		if e.type==&"qa" and not e.courses.has(course):
+			return {"type":&"course","employee_id":e.employee_id,"course":course,"receipt_id":StringName("%s:course:%s"%[e.employee_id,course]),"revision":_studio_finance.actions.size(),"fee_cents":15000,"rules_version":2}
+	return {}
+
+func purchase_qa_course(quote: Dictionary) -> bool:
+	if not can_mutate_checkpoint() or not _bank_action_available() or quote.is_empty() or quote!=get_qa_course_quote(quote.get("course",&"")): return false
+	var roster:=EmployeeRoster.buy_course(_employees,quote.employee_id,quote.course,_completed_run_cycles)
+	var finance:=StudioFinanceLedger.course_payment(_studio_finance,quote)
+	if roster.is_empty() or finance.is_empty(): return false
+	_employees=roster;_studio_finance=finance.ledger;_cash_cents=finance.cash_cents
+	_publishing_cycle=true;cash_changed.emit();finance_changed.emit();employees_changed.emit();_publishing_cycle=false
+	return true
+
+## Prospective schedules retain every already-issued $10 bill and payment.
+func migrate_employee_wages() -> void:
+	if not uses_employee_trial():return
+	for payroll: Dictionary in _studio_finance.employees:
+		if StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT)>=100000: continue
+		var receipt:=StringName("%s:wages-v2"%payroll.employee_id)
+		var step:=StudioFinanceLedger.schedule_payroll(_studio_finance,payroll.employee_id,100000,payroll.first_due_cycle+payroll.issued*2,receipt)
+		assert(not step.is_empty(),"Validated legacy payroll migration must succeed")
+		_studio_finance=step.ledger
+
+func _sync_employee_raises() -> void:
+	# Non-economy scenarios have no payroll journal; ordinary profiles retain
+	# their original employee rules while the new wage package is held.
+	if not uses_employee_trial():return
+	for payroll: Dictionary in _studio_finance.employees:
+		var e: Dictionary=_employees.employees.get(payroll.employee_id,{})
+		if e.get("type")!=&"qa": continue
+		var desired:=EmployeeRoster.qa_wage(e)
+		if StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT)>=desired: continue
+		var due:=2*(_completed_run_cycles/2+2)
+		var step:=StudioFinanceLedger.schedule_payroll(_studio_finance,e.employee_id,desired,due,StringName("%s:raise:%d"%[e.employee_id,desired]))
+		assert(not step.is_empty(),"Committed QA raise must schedule once")
+		_studio_finance=step.ledger
 
 
 func plan_employee_hand(project: ProjectState, phase: StringName, cards: Array, before: Dictionary, proposed: Dictionary = {}) -> Dictionary:
@@ -1358,7 +1770,19 @@ func plan_employee_hand(project: ProjectState, phase: StringName, cards: Array, 
 	if _employees.employees.is_empty(): return {"before":_employees.duplicate(true),"after":_employees.duplicate(true),"cycle":_completed_run_cycles} if proposed.is_empty() else {}
 	var roster := EmployeeRoster.plan_hand(_employees,project.get_release_id(),phase,project.get_current_cycle(),_completed_run_cycles,cards,before,proposed)
 	if roster.is_empty(): return {}
-	return {"before":_employees.duplicate(true),"after":roster,"cycle":_completed_run_cycles}
+	var discoveries:=0
+	var first_stat: StringName=cards[0].primary_stat
+	var specialization: bool=cards.all(func(card):return card.primary_stat==first_stat)
+	var count: int=cards.filter(func(card):return card.card_type==&"feature").size() if specialization else 0
+	if count>0:
+		for e: Dictionary in roster.employees.values():
+			if e.type!=&"qa" or not e.trained: continue
+			var rng:=RandomNumberGenerator.new();rng.seed=e.rng_seed;rng.state=e.rng_state
+			for i in range(count):
+				if rng.randi_range(1,100)<=EmployeeRoster.QA.PROC_PERCENT: discoveries+=1
+			roster=EmployeeRoster.qa_proc(roster,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles,phase,count)
+			if roster.is_empty():return {}
+	return {"before":_employees.duplicate(true),"after":roster,"cycle":_completed_run_cycles,"qa_discoveries":discoveries if phase==&"alpha" else 0}
 
 
 func can_commit_employee_hand(plan: Dictionary) -> bool:
@@ -1409,11 +1833,13 @@ func get_release_promotion(release: StringName) -> int:
 func get_pending_contract_choices() -> Array[Dictionary]:
 	var choices: Array[Dictionary] = []
 	if get_active_contract()!=null: return choices
+	var brief := get_sidestreet_brief_offer()
+	if not brief.is_empty(): choices.append({"offer_id":brief.offer_id,"label":"SideStreet — Reputation Brief (no cash)"})
 	if is_primitive_contract_offer_available(): choices.append({"offer_id":ContractState.CONTRACT_ID,"label":"Ironclad Interactive"})
 	if _unlocked_publishers.has(PublisherCatalog.SIDESTREET):
 		for release: StringName in _sidestreet_entitlements:
 			var offer: Dictionary = _sidestreet_entitlements[release]
-			if offer.state==null: choices.append({"offer_id":offer.offer_id,"label":"SideStreet — "+get_released_game_display_name(release)})
+			if offer.state==null: choices.append({"offer_id":offer.offer_id,"label":"SideStreet — Found cash work" if not ContractSearch.source(self,offer.offer_id,&"cash").is_empty() else "SideStreet — "+get_released_game_display_name(release)})
 	for id: StringName in get_pending_publisher_offer_ids():
 		choices.append({"offer_id":id,"label":PublisherCatalog.name_for(_publisher_offers[id].publisher_id)})
 	return choices
@@ -1435,7 +1861,7 @@ func accept_publisher_contract(quote: Dictionary) -> ContractState:
 	var eligible: Array[StringName] = []
 	eligible.assign(quote.eligible)
 	var accepted := ContractState.new(eligible,kind,quote.offer_id,quote.source_release_id)
-	if not accepted.freeze_trial(quote.focus) or not accepted.commit_upfront(): return null
+	if not accepted.freeze_trial(quote.focus) or not accepted.freeze_challenge() or not accepted.commit_upfront(): return null
 	var was_blocked := is_blocking_signals()
 	set_block_signals(true)
 	_publisher_offers[quote.offer_id].state = accepted
@@ -1456,4 +1882,111 @@ func accept_publisher_contract(quote: Dictionary) -> ContractState:
 func commit_lean_saving(project_id: StringName, expected_saved: int, saving: int) -> bool:
 	if not _productive_cycle_in_progress or project_id.is_empty() or int(_lean_savings.get(project_id, 0)) != expected_saved or saving < 0 or saving > 10000 - expected_saved: return false
 	if saving > 0: _lean_savings[project_id] = expected_saved + saving
+	return true
+
+## Resolve prospective committed facts before touching the real Contract hand.
+## The actual central cycle plan supplies the exact second-hand finance action.
+func _plan_finishing_brief(state: ContractState, cards: Array[CardData], payment: int) -> Dictionary:
+	if _cycle_plan.is_empty() or _cycle_plan.finance.is_empty() or not _sidestreet_briefs.has(state.get_offer_id()): return {}
+	var projection := preload("res://scripts/simulation/transaction_projection.gd")
+	var finishing := ContractState.new()
+	projection.copy_fields(state,finishing)
+	if not finishing.commit_hand(cards,payment) or not finishing.is_completed(): return {}
+	var prospective := RunState.new()
+	projection.copy_fields(self,prospective)
+	prospective._sidestreet_briefs[state.get_offer_id()].state = finishing
+	prospective._completed_run_cycles += 1
+	prospective._studio_finance = _cycle_plan.finance.ledger
+	prospective._released_games = _cycle_plan.records
+	prospective._support_rights = _cycle_plan.support_rights
+	prospective._support_assessments = _cycle_plan.support_assessments
+	prospective._publisher_relationships = _cycle_plan.relationships
+	var request := RelationshipRules.request_for(prospective,state.get_offer_id())
+	if request.is_empty(): return {}
+	var resolver := func(source: Dictionary) -> Dictionary: return RelationshipRules.resolve(prospective,source)
+	var planned := RelationshipLedger.plan(prospective._publisher_relationships,_bank_run_id,request,prospective._completed_run_cycles,resolver)
+	return {} if planned.is_empty() else {"applicable":true,"ledger":planned.ledger}
+
+func plan_qa_beta_hand(project: ProjectState,cards: Array,discovered: int,fixed: int) -> Dictionary:
+	var before:=_employees.duplicate(true)
+	if not _employees.employees.values().any(func(e):return e.type==&"qa"):
+		return {"before":before,"after":before.duplicate(true),"cycle":_completed_run_cycles}
+	var search: int=cards.filter(func(c):return c.id==&"search_for_bugs").size()
+	var debug: int=cards.filter(func(c):return c.id==&"debug").size()
+	var state:=EmployeeRoster.qa_beta_hand(_employees,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles+1,search,debug,discovered,fixed)
+	return {} if state.is_empty() else {"before":before,"after":state,"cycle":_completed_run_cycles}
+
+
+func resolve_qa_design_leads(project: ProjectState) -> int:
+	var pending:=0
+	var has_leads:=false
+	for e: Dictionary in _employees.employees.values():
+		if e.type==&"qa":
+			has_leads=has_leads or e.pending_design.has(project.get_release_id())
+			pending+=int(e.pending_design.get(project.get_release_id(),0))
+	if not has_leads:return 0
+	var found:=project.discover_bugs(pending)
+	var state:=EmployeeRoster.qa_finalize(_employees,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles)
+	assert(not state.is_empty());_employees=state
+	return found
+
+func _cash_entitlement_key(offer_id: StringName) -> StringName:
+	for key: StringName in _sidestreet_entitlements:
+		if _sidestreet_entitlements[key].offer_id==offer_id:return key
+	return &""
+
+func can_browse_contract_search() -> bool:
+	return _first_studio_economy and _unlocked_publishers.has(&"sidestreet")
+
+func contract_search_blocker(publisher: StringName,work: StringName) -> String:
+	if publisher!=&"sidestreet" or work not in ContractSearch.WORK_TYPES:return "No approved search template"
+	if not can_browse_contract_search():return "Unlock SideStreet first"
+	if get_active_contract()!=null or has_pending_commission() or has_unlaunched_support():return "Finish your active work first"
+	if ContractSearch.pending(self,work):return "Existing work of this type is still pending"
+	var standing:=get_publisher_relationships()
+	if standing.is_empty():return "Relationship history unavailable"
+	if work==&"commission":
+		if standing[&"sidestreet"].reputation_bp<2000:return "Requires SideStreet Reputation 20"
+		if _released_games.is_empty():return "Requires a released game"
+	if _productive_cycle_in_progress or _publishing_cycle or _preparing_project or not can_mutate_checkpoint():return "Studio action unavailable"
+	if not can_complete_productive_cycle():return "Cannot afford the next productive cycle and due bills"
+	return ""
+
+func get_contract_search_quote(publisher: StringName,work: StringName) -> Dictionary:
+	if not contract_search_blocker(publisher,work).is_empty() or _contract_search.receipts.size()>=MAX_SIGNED_INT-1:return {}
+	return {"rules_version":1,"owner":_bank_run_id,"publisher_id":publisher,"work":work,"template_id":ContractSearch.template(work),"terms":ContractSearch.terms(work),"ordinal":_contract_search.receipts.size()+1,"before_cycle":_completed_run_cycles,"finance_revision":_studio_finance.actions.size(),"relationship_revision":_publisher_relationships.events.size(),"standing_bp":get_publisher_relationships()[publisher].reputation_bp}
+
+func search_contracts(quote: Dictionary) -> bool:
+	if typeof(quote.get("publisher_id"))!=TYPE_STRING_NAME or typeof(quote.get("work"))!=TYPE_STRING_NAME:return false
+	if quote.is_empty() or quote!=get_contract_search_quote(quote.get("publisher_id",&""),quote.get("work",&"")):return false
+	if studio_departure_guard.is_valid() and not studio_departure_guard.call():return false
+	var plan:=ContractSearch.plan(_contract_search,quote)
+	var initial:=_contract_search.duplicate(true)
+	var commit:=func() -> bool:
+		if _contract_search!=initial:return false
+		_contract_search=plan.state
+		if quote.work==&"cash":_sidestreet_entitlements[plan.offer_id]={"offer_id":plan.offer_id,"state":null}
+		elif quote.work==&"brief":_sidestreet_briefs[plan.offer_id]={"offer_id":plan.offer_id,"source_release_id":&"","state":null}
+		return true
+	if not complete_productive_action(commit,0,_completed_run_cycles,&"",&"contract_search",plan.receipt.receipt_id):return false
+	_publishing_cycle=true
+	contracts_changed.emit()
+	_publishing_cycle=false
+	return true
+
+func get_contract_search_catalog() -> Array:
+	var rows: Array=[]
+	for work: StringName in ContractSearch.WORK_TYPES:
+		rows.append({"publisher_id":&"sidestreet","work":work,"terms":ContractSearch.terms(work),"blocker":contract_search_blocker(&"sidestreet",work),"quote":get_contract_search_quote(&"sidestreet",work)})
+	return rows
+
+func get_contract_search_state() -> Dictionary:return _contract_search.duplicate(true)
+
+## Explicit isolated-simulation opt-in. No player UI enables an economically held trial.
+func uses_employee_trial() -> bool:return EmployeeRoster.trial_active(_employees)
+func activate_employee_trial() -> bool:
+	if not can_mutate_checkpoint() or _productive_cycle_in_progress or _publishing_cycle:return false
+	var next:=EmployeeRoster.activate_trial(_employees,_completed_run_cycles)
+	if next.is_empty():return false
+	_employees=next;migrate_employee_wages()
 	return true

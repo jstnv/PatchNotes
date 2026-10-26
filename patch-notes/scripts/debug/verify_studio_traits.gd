@@ -41,11 +41,11 @@ func _run() -> void:
 		canonical.initialize_cash_cents(0)
 		check(canonical.create_studio_with_traits("Canonical", &"action", chosen), "Canonical optional choices accepted: " + str(chosen))
 		var snap := canonical.get_studio_traits()
-		check(snap.version == 8 and not snap.has("background_id") and snap.trait_ids.size() == chosen.size() and canonical.get_cash_cents() == 550000 + snap.point_cash_cents + snap.family_funding_cents, "Versioned selection contains only canonical trait identities; approved effects paired with point accounting")
+		check(snap.version == 9 and not snap.has("background_id") and snap.trait_ids.size() == chosen.size() and canonical.get_cash_cents() == 550000 + snap.point_cash_cents + snap.family_funding_cents, "Versioned selection contains only canonical trait identities; approved effects paired with point accounting")
 		check(canonical.get_fans() == (20 if chosen.has(&"cult_following") else 0), "New optional Cult selection seeds twenty ordinary Fans once")
 		var committed := state(canonical)
 		check(not canonical.create_studio_with_traits("Again", &"action", []) and state(canonical) == committed, "Canonical confirmation pays only once")
-	for invalid: Array in [[&"family_funding", &"cult_following", &"studio_buzz"], [&"graduate", &"unknown_name"], [&"family_funding", &"family_funding"], [&"student_loan"], [null]]:
+	for invalid: Array in [[&"family_funding", &"publisher_connections", &"resourceful", &"lean_production", &"studio_buzz"], [&"graduate", &"college_dropout"], [&"family_funding", &"family_funding"], [&"student_loan"], [null]]:
 		check(not StudioTraits.evaluate_traits(invalid).valid, "Canonical invalid list rejects: " + str(invalid))
 	for resolution: Vector2i in [Vector2i(1152,648), Vector2i(1280,720)]:
 		await verify_ui(resolution)
@@ -78,6 +78,7 @@ func verify_ui(resolution: Vector2i) -> void:
 	var before := state(run)
 	var menu: MainMenu = game.get("_active_phase")
 	var layout := menu.get_node("CenterContainer/MenuLayout")
+	menu.navigation.animate=false
 	layout.get_node("StartGame").pressed.emit()
 	if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
 		menu._replace_dialog.hide()
@@ -92,22 +93,23 @@ func verify_ui(resolution: Vector2i) -> void:
 	menu.get("_trait_checks")[&"studio_buzz"].button_pressed = true
 	menu.get("_trait_checks")[&"college_dropout"].button_pressed = true
 	menu.get("_trait_checks")[&"lean_production"].button_pressed = true
-	check(menu._needs_attention(&"traits") and menu.get("_trait_error").text.contains("at most"), "Over-cap UI explains and blocks invalid build")
+	check(not menu._needs_attention(&"traits") and menu.call("_secondary_ids").size()==4 and menu.get("_trait_error").text.is_empty(), "Uncapped positive Traits remain legal when points cover them")
 	menu.get("_trait_checks")[&"lean_production"].button_pressed = false
 	menu.call("_refresh_traits")
 	await settle()
-	for path in ["StudioSetup/EnterStudio", "StudioSetup/Back"]:
-		var rect: Rect2 = layout.get_node(path).get_global_rect()
-		check(rect.position.y >= 0 and rect.end.y <= resolution.y - 45 and rect.end.x <= resolution.x, "Trait footer stays above HUD: " + path)
+	for control: Button in [menu._play,menu._back]:
+		var rect: Rect2 = control.get_global_rect()
+		check(rect.position.y >= 0 and rect.end.y <= resolution.y - 20 and rect.end.x <= resolution.x, "Creation controls fit viewport: " + control.name)
 	await capture("traits")
 	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	await settle()
-	check(menu.get("_review").text.contains("Cult Following") and menu.get("_review").text.contains("Action") and menu.get("_review").text.contains(CashFormatter.format_exact_cents(570000)), "Confirmation identifies background, Genre and actual cash")
-	check(menu.call("_selection").version == 8 and menu.get("_review").text.contains("Starting Fans: 20") and not menu.get("_review").text.contains("Starting Fans: 40") and menu.get("_review").text.contains("ordinary gains/losses"), "Overview states new version8 twenty-Fan seed and trial loss rule")
+	check(menu._overview_lists[true].get_children().any(func(node): return node.text=="Cult Following") and menu.get("_review").text.contains("Action") and menu.get("_review").text.contains(CashFormatter.format_exact_cents(570000)), "Confirmation identifies background, Genre and actual cash")
+	check(menu.call("_selection").version == 9 and menu.get("_review").text.contains("Starting Fans: 20") and not menu.get("_review").text.contains("Starting Fans: 40") and menu.get("_review").text.contains("ordinary gains/losses"), "Overview states new version9 twenty-Fan seed and trial loss rule")
 	await capture("confirmation")
-	layout.get_node("StudioSetup/Back").pressed.emit()
-	check(state(run) == before and menu.call("_secondary_ids").is_empty(), "Cancel resets uncommitted choices and pays nothing")
+	menu.discard_setup()
+	check(state(run) == before and menu.call("_secondary_ids").is_empty(), "Explicit discard resets uncommitted choices and pays nothing")
+	menu.navigation.animate=false
 	layout.get_node("StartGame").pressed.emit()
 	if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
 		menu._replace_dialog.hide()
@@ -120,6 +122,7 @@ func verify_ui(resolution: Vector2i) -> void:
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
 	menu.call("_confirm_studio")
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	await settle()
 	var studio: StudioPhase = game.get("_active_phase")
 	check(run.get_cash_cents() == 590000 and studio.get_node("Dashboard/Layout/StudioIdentity").text.contains("Family Funding") and studio.get_node("Dashboard/Layout/StudioIdentity").text.contains("Action"), "Studio displays committed identity; duplicate callback paid once")

@@ -1,0 +1,38 @@
+# AI rival employee payroll shadow — 2026-10-25
+
+## Status and question
+
+**COMPLETE read-only design finding; employee hiring by AI rivals remains OPEN.** The user asked how eventual AI rivals might fare with the selected employee package. This note applies prospective hire fees and base payroll to two existing, source-pinned rival worlds. It does **not** simulate employee actions or change rival decisions, so it cannot establish a viable or optimal AI hiring policy. No employee cost or benefit is active in these worlds.
+
+The employee [trial direction](2026-10-25-qa-courses-wages-direction-v1.md) is $100 hire fee and $1,000 per in-game month for each employee, available after the Studio's second release. The existing [first-full-month rule](2026-10-06-trial-package-decision-v1.md) puts first payday at hire cycle `c+2` for even `c`, or `c+3` for odd `c`, then every two productive cycles. A QA course costs $150 per challenge; completed QA challenges raise monthly pay by $100 each. Those course costs, raises and employee benefits are **excluded** here. The shadow is therefore an optimistic cost floor for trained QA.
+
+## Frozen evidence and method
+
+- [AI Beta shadow finding](../ai-competitors/2026-10-25-beta-shadow-runway-finding-v1.md) pins the unchanged two-hand control gameplay identity `5da7bc70f45fc63d33e6f5293e77338992038810b84a2c964ff47aff7a2b1a64`. The [4417](../ai-competitors/sims/rival-beta-shadow-4417-20261025-v1/world-report.json) and [4418](../ai-competitors/sims/rival-beta-shadow-4418-20261025-v1/world-report.json) legal worlds each reach cycle 56 and include two active incumbent Studios. Their adjacent `world-report.json.checkpoint.json` files contain actual release cycles and monthly finance journals. The current rival policy pays $500 rent per month, with zero payroll, no Bank loan and inactive education.
+- For each Studio, start at its **own** second release and subtract $100 per hypothetical hire from every subsequent `rival_progress` cash snapshot. Subtract $1,000 per hire on each first-full-month payday through that snapshot. Compare one hire and two simultaneous hires. All arithmetic is exact cents; no income, spending, card, title, market or policy result is recomputed.
+- Cross-check the checkpoint's `studio_finance.monthly_rows` from first hypothetical payday through the fixed horizon. The four careers have 16–18 such monthly rows, each with zero actual payroll; summed net earned sales equal summed settled sales in each career. These are real **baseline** sales receipts, not salary-funded continuations.
+
+| Seed / rival | Releases by cycle 56 | Cash after Game 2 | First payday | One hire: first negative shadow | Two hires: first negative shadow | Post-hire baseline settled sales / rent |
+| --- | --- | ---: | ---: | --- | --- | ---: |
+| 4417 Arcade Foundry | 13, 24, 35, 46, 56 | $5,630.20 | 26 | cycle 44, −$1,271.08 | cycle 34, −$1,277.16 | $14,090.88 / $8,000 |
+| 4417 Wayfinder Works | 10, 20, 31, 42, 52 | $4,411.74 | 22 | cycle 30, −$381.48 | cycle 26, −$466.17 | $22,377.58 / $9,000 |
+| 4418 Arcade Foundry | 11, 21, 30, 41, 51 | $3,335.45 | 24 | cycle 34, −$148.98 | cycle 27, −$104.22 | $12,734.24 / $8,500 |
+| 4418 Wayfinder Works | 11, 21, 30, 42, 52 | $6,371.74 | 24 | cycle 38, −$63.10 | cycle 30, −$1,161.77 | $15,524.45 / $8,500 |
+
+At the first negative snapshot, the unchanged baseline could not also have paid the proposed wages and retained the same cash. The actual game cannot carry negative cash through these points: it would have to change, defer, or reject an action or bill, likely altering later releases and sales. The later arithmetic balance after a breach is **not** a playable forecast. One hire breaches in all four observed paths; two simultaneous hires breach by or before Game 3 in all four. This is a counterexample to unconditional after-Game-2 hiring, not proof that every employee policy fails. It uses only four careers in two matched worlds, a fixed player route, and employees that produce no additional value.
+
+## Timing sensitivity and design implication
+
+A second read-only timing overlay moved a **single** $1,000 hire to each rival's third, fourth or fifth release, keeping the same baseline sales and $100 fee. A hire after Game 3 breached by cycle 56 in three of four careers; after Game 4 breached in one of four; after Game 5 breached in none. The late cases expose too few payroll months to demonstrate recurring support. Adding a second hire after Game 4 to an employee already hired after Game 2 cannot rescue any of the four first-hire paths; all four first-hire paths had already breached before Game 4. Do not turn these sensitivities into a fixed unlock or reserve threshold.
+
+The [earlier rival runway finding](../ai-competitors/2026-10-24-qa-frequency-runway-finding-v1.md) shows why a rigid full-project cash reservation is also unsuitable: some real titles complete through settled portfolio sales despite a negative no-future-income start margin. For employees, the AI should preflight **actual next bills and legal actions**, then test a disclosed, bounded runway estimate against recurring sales and project spending. Its policy must account for the value it actually earns from training, Feature synergy, QA Bug discovery or shared Feature Store research. Research half-steps carry their own Store payment at each proc; they are not free wage offsets. Current worlds provide no observed employee benefit or training rate. In particular, QA's three pure Search plus three pure Debug hands and later project arming hand cannot be assumed from the current short Beta policy.
+
+## Next bounded candidate, not an implementation approval
+
+Build a **private employee-thread simulator variant** only when a gameplay study is authorized within this thread's scope; preserve the frozen AI control and canonical project. Match the same founding state, typed RNG, player route and horizon across: no hire; one QA or Production hire after own Game 2; simultaneous QA+Production; and a policy that may defer hiring based on visible finance. Include a trained-QA arm only when courses, committed challenge hands, wage raises and actual benefit uses are all represented. Keep the rival's hire choice legal and independently financed; never grant free Core or assume a completed challenge.
+
+For each rival and player, report exact release cycles, Reviews/Bugs, qualifying Feature re-triggers, QA challenge/course/swap progress, research half-steps and Store charges, monthly earned versus settled sales, rent/payroll and other due bills, first payday, cash lows and overdue blocks, next-project affordability, title count and player market exposure. Compare through several months after the last observed hire, not just the hire snapshot. Audit deterministic replay and saved finance identity before proposing an AI employee rule. Any candidate is **DESIGN/OPEN** until its source-pinned behavior and economic gate are reviewed; this note makes no TODO request.
+
+## Local session record
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f` at inspection. Read `CURRENT_STATE.md`, `TODO.md`, repository provenance/rules, employee and AI local design/findings, both frozen world reports and checkpoint finance journals. Existing shared worktree changes and `.codex-godot-temp` were preserved. Checks: read-only exact-cent PowerShell overlays for one/two hires and delayed single-hire timing; monthly earned/settled/rent/payroll sums checked against checkpoint rows. No new simulator run; no gameplay, test, AI thread, shared TODO or Drive edits; no commit or push. Follow-up: run an actual private rival hiring candidate only after the employee policy and scope are ready, then compare matched legal worlds.

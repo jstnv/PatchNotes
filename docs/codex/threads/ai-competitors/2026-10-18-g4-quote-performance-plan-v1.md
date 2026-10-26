@@ -1,0 +1,37 @@
+# G4 exact hand quote performance — predeclared study, 2026-10-18
+
+**Status: DESIGN experiment.** This is a private simulator study of the read-only current Design/Alpha hand quote. It approves neither a rival choice policy nor a population CPU limit, market effect or canonical implementation. The finite legal rival-project direction and current trial world remain unchanged.
+
+## Question and hypotheses
+
+The quote-only v3 produces 35 four-card quotes per active seven-card Design/Alpha observation. It calls the full productive-cycle planner for each choice and raised measured policy-plus-observation work 2.14–3.50 times over the frozen control on four first-release routes. This study asks whether exact quote work can be reduced while retaining every quote and state/RNG/action result.
+
+- H1: Within one observation, identical exact direct Feature prices have identical productive-cycle preflight inputs. A cache keyed by the integer price can reduce planner calls without changing quote content.
+- H2, conditional on H1 falling short of the performance gate: monthly release sales and Fan plans are invariant across the candidate prices. A private shared-preflight refactor can compute those once, then run the existing exact cost-dependent finance planner separately for each distinct price. Do not subtract price from a zero-cost cash result: bill service, arrears and overflow can change outcomes.
+- A failure or incomplete run is retained. Neither a faster quote nor route parity demonstrates that the rival makes challenging games.
+
+## Source, controls, cases and limits
+
+Repository at plan time: `main` HEAD `0132c4dab398`, shared dirty working tree. Preserve all existing edits and `.codex-godot-temp`. Use private ancestry `g4-current-hand-20261018-v3` for a new `v4` cost-cache variant, editing only its `project/` source. If a shared-preflight revision is needed, create a new `v5` from v4. Preserve the original v1 baseline, v3 and their recorded identities. No canonical gameplay edits.
+
+Run the existing frozen v1 and v3 variants again as contemporaneous controls and each new candidate under the documented isolated `tools/simulate.py run --variant` runner with new output folders. Use `2026-10-18-g4-current-hand-control-v1.json`: Action and Adventure, seeds 4417 and 90210, fresh legal January Studio recipes with `family_funding` and `cult_following`, Fantasy project Theme, specialty-matched Genre, `features_first`, two hands per Design/Alpha/Beta, legal exits, no Store/redraw/Bank action. These are Studio routes, not complete incumbent cohorts. Each case targets one release, at most 45 commands and 240 seconds per process. Do not import a checkpoint across revisions. Compare full fresh starting state/RNG, accepted command tape and final state/RNG rather than assuming equal seeds establish compatibility.
+
+The candidate may only change quote computation. It must return the same 35 ordered quotes and fields as v3 for every sampled legal hand, with the same current-cycle meaning; observation must leave state and RNG unchanged. The v1 control has no quote field, so compare its nonquote observation and full gameplay outcomes separately. `features_first` remains a control policy, not the proposed AI.
+
+## Measurements and gates
+
+For each of the four cases, retain start/final state and RNG hashes, accepted/rejected commands, release Review and date, cash/arrears, quote count and unique exact cost count per Design/Alpha hand, and `policy_and_observation_us`. Compare v1, v3, v4 and conditional v5 case by case. Record Godot/Python/source identities and both process elapsed and in-run timing; process wall time alone is not a CPU conclusion under concurrent host load.
+
+The provisional engineering target for this study is **at most 1.5 times the matched v1 policy-plus-observation time in each of four cases**, while preserving quote parity. This is a screening target, not an approved population budget. If v4 fails it, retain v4 and try v5. If v5 fails, stop adoption and record the measured bottleneck; do not silently reduce quote coverage or alter seeds/bounds. Record median and maximum ratios as well as each case, including a v3 comparison. Before any implementation queue, a separate two-to-eight-rival population measurement must establish a real world-cycle CPU/memory budget.
+
+Run the existing 207-check focused quote verifier on each successful new frozen candidate. Add an independent quote parity check against v3 on the same four freshly regenerated legal hands, including all 35 fields, not only the selected receipt. Verify selected quote cost and next cash against accepted actual receipts, repeated-observation purity and unavailable preflight states where legally constructible. Keep a failed or blocked edge probe as explicit coverage, not a pass. Run the maintained 20-cycle actual two-rival world verifier on the fastest passing candidate with an isolated profile, and compare its trace with v1/v3. Replay Action/4417 and Adventure/90210 in fresh processes. Use the documented reducer for a reproducible rejected command or invariant failure; never relabel a rejected case as success.
+
+Stop if initial recipe/state/RNG parity fails, a quote differs from v3 without an explained correction, state/RNG changes during observation, a selected receipt differs, or world/replay behavior diverges. Preserve every completed, failed, incomplete and timed-out output. A new candidate needs its own source-pinned finding and, only if reviewable, a sealed versioned handoff. The TODO entry remains DESIGN review until design authority and population CPU acceptance are settled.
+
+**OPEN:** final population and latency limits, unavailable-quote reason API, exact rival hand objective, liquidity/dues horizon, action counts and exits, entrant rules, capability math, player challenge and market values.
+
+## Population signal addendum before a v5 revision
+
+The initial v4 four-route screening met the 1.5-times observation target and all 560 compared quotes matched v3. An analysis-only eight-rival/12-cycle fixture then exposed additional cost after live releases: single-run world-advance totals were 1.95 seconds for v1, 7.74 for v3 and 6.20 for v4; all three had equal final world/RNG digests and eight legal releases. Thus v4 improved v3 but is not yet a convincing population answer. This addendum is recorded **before** any v5 source edit or run.
+
+Run one further v4 and v1 eight-rival fixture in that order, each in a new isolated output, to estimate host/run-order variation; keep the original three measurements. Then create v5 from v4 and factor the price-independent next-cycle release sales and Fanbase plan once per observation while retaining exact per-price `StudioFinanceLedger.plan` and the normal productive commit semantics. Compare every quote against v3 and selected receipts as above, four fresh legal routes, and one eight-rival/12-cycle fixture. Preserve the same seeds, policies and limits. The provisional population screen for v5 is at most **1.5 times v1** for both total measured world-advance time and p95 cycle time in a nearby run, with exact state/RNG/release parity and comparable saved payload bytes. Because host elapsed time is noisy, a marginal pass or failure requires one same-order repeat; no population limit is approved by this screen. If v5 cannot pass or the result is ambiguous, retain it at DESIGN review and report the bottleneck without queuing canonical adoption.

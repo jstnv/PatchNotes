@@ -5,7 +5,7 @@
 Design-thread acceptance only. Branch `main`, HEAD `41c87c76fb4d3c06a5332d93f0e7b0997007475d`; the shared dirty worktree was preserved. No gameplay, shared TODO, commit or push change. This continues the [2026-10-09 exported session](2026-10-09-export-acceptance-session-v1.md) on its hash-matched, dedicated-profile build. The earlier Computer Use stop ended that turn; the user explicitly requested this retry.
 
 ## Actual exported route
-
+ 
 1. The previous isolated game process had exited. A clean launch showed `Continue — Education native route · 1982, Month 28`. Continue restored the genuine Studio at cycle 54 with $16,402.47 cash, active College Dropout education debt, active $500 Bank loan and credit 621. The prior unsaved Design hand had rolled back to the saved Studio checkpoint.
 2. Finances quoted $4,412.86 remaining education principal, $0 due interest and $0 already-due rent/payroll/Bank bills. The confirmation quoted $4,412.86 total, one zero-cycle action and waiver of future education interest. Confirming left cycle 54 unchanged, cash $11,989.61, Education **Closed**, $0 principal remaining, $5,000 principal paid and $473.06 interest already paid. The Bank's $500/12-month loan remained active with first $46.67 installment due at cycle 56; credit remained 621.
 3. Quit from the saved Studio exited normally. A fresh process launched, Continue restored cycle 54 and $11,989.61. Finances retained the $4,412.86 principal repayment in the partial month-28 report; Education remained Closed with the previous paid education bills and their original due dates/history visible. The separate Bank loan remained active with the same schedule and credit 621. The game was then closed from the saved Studio.

@@ -1,0 +1,41 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--main-pack",
+    "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Builds\\Patch Notes v0.03 - Smooth Saves\\Patch Notes v0.03 - Smooth Saves.exe",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes\\scripts\\debug\\verify_background_gameplay.gd"
+  ],
+  "exit": 1,
+  "seconds": 23.062,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\bg-built-native",
+  "script_sha256": "379d17df7520dfe7863108043d66fb1babc94ade44ad0aa3e0a42353c6baa722",
+  "owned_child_pid": 5900,
+  "aborted": false,
+  "result": {
+    "checks": 26,
+    "failures": 1,
+    "ok": false,
+    "rows": [
+      {
+        "baseline_max_frame_gap_ms": 262.842,
+        "frames": 9,
+        "kickoff_ms": 12.52,
+        "max_frame_gap_ms": 560.938,
+        "save_wall_ms": 1883.681,
+        "size": "(1152, 648)"
+      },
+      {
+        "baseline_max_frame_gap_ms": 516.341,
+        "frames": 7,
+        "kickoff_ms": 11.105,
+        "max_frame_gap_ms": 252.786,
+        "save_wall_ms": 762.332,
+        "size": "(1280, 720)"
+      }
+    ]
+  },
+  "errors": [
+    "ERROR: FAIL: Save frame gaps remain within twice the measured native baseline or150ms"
+  ]
+}

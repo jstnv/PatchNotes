@@ -1,0 +1,144 @@
+class_name CheckpointCoordinator
+extends Node
+
+signal status_changed
+var adapter := StudioCheckpoint.new()
+var store: StudioCheckpointStore
+var run: RunState
+var rival_world: RivalWorld
+var rival_catalog: RefCounted
+var in_studio := false
+var pending := false
+var failure := ""
+var last_payload: Dictionary = {}
+var replace_on_save := false
+var _migration_input := ""
+var _migration_output: Dictionary = {}
+var _publishing_source_identity := ""
+
+func _init() -> void:
+	store = StudioCheckpointStore.new("user://saves/studio",_validate_payload)
+
+func _validate_payload(payload: Dictionary) -> String:
+	var candidate := _market_compatible_payload(payload)
+	if candidate.is_empty(): return "Invalid pre-market migration payload"
+	if not candidate.has("rival_world"): return adapter.validate(candidate)
+	if not candidate.rival_world is Dictionary: return "Malformed rival world field"
+	var player_payload := candidate.duplicate(true)
+	player_payload.erase("rival_world")
+	var restored := adapter.hydrate(player_payload)
+	if restored==null: return adapter.error
+	if rival_catalog==null: return "Rival definitions unavailable for validation"
+	var codec: RefCounted=load("res://scripts/market/rival_world_checkpoint.gd").new()
+	if codec.restore(candidate.rival_world,player_payload,restored,rival_catalog,_publishing_source_identity)==null: return codec.error
+	return ""
+
+func _market_compatible_payload(payload: Dictionary) -> Dictionary:
+	if payload.get("content_revision")==adapter.revision(): return payload.duplicate(true)
+	var key:=JSON.stringify(payload).sha256_text()
+	if key==_migration_input and not _migration_output.is_empty(): return _migration_output.duplicate(true)
+	var migration: RefCounted=load("res://scripts/market/market_save_migration_trial.gd").new()
+	if not payload.has("rival_world"):
+		var player_only: Dictionary=migration.upgrade_store_player(payload)
+		if not player_only.is_empty() and migration.error.is_empty():
+			_migration_input=key;_migration_output=player_only.duplicate(true)
+		return player_only
+	if not payload.rival_world is Dictionary or payload.rival_world.has("market"): return payload.duplicate(true)
+	var player := payload.duplicate(true)
+	player.erase("rival_world")
+	var upgraded: Dictionary=migration.upgrade_pair(player,payload.rival_world,rival_catalog)
+	if upgraded.is_empty(): return {}
+	var combined: Dictionary=upgraded.player
+	combined.rival_world=upgraded.world
+	_migration_input=key;_migration_output=combined.duplicate(true)
+	return combined
+
+func attach_rivals(world: RivalWorld, definitions: RefCounted) -> bool:
+	if world == null or definitions == null or world.player != run or world.cycle != run.get_completed_run_cycles(): return false
+	rival_world = world
+	rival_catalog = definitions
+	return true
+
+func attach(value: RunState) -> void:
+	if run!=null:
+		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"publisher_relationships_changed"]:
+			if run.is_connected(name,_changed): run.disconnect(name,_changed)
+		run.studio_departure_guard = Callable()
+		run.checkpoint_before_mutation = Callable()
+	run = value
+	run.studio_departure_guard = before_departure
+	run.checkpoint_before_mutation = before_mutation
+	for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"publisher_relationships_changed"]:
+		run.connect(name,_changed)
+
+func _changed() -> void:
+	if not in_studio: return
+	pending = true
+	flush.call_deferred()
+
+func entered_studio(restored: bool = false) -> void:
+	in_studio = true
+	pending = not restored
+	if pending: flush()
+	else: status_changed.emit()
+
+func before_departure() -> bool:
+	if not in_studio: return false
+	return flush()
+
+func before_mutation() -> bool:
+	if not failure.is_empty(): return false
+	if not in_studio or run._productive_cycle_in_progress or run._publishing_cycle or run._feature_purchase_in_progress or run._committing_cycle_cash: return true
+	return flush()
+
+func flush() -> bool:
+	if not in_studio or run==null: return failure.is_empty()
+	if run.get_active_contract()!=null: return failure.is_empty()
+	if not pending: return failure.is_empty()
+	var payload := adapter.capture(run)
+	if payload.is_empty(): return _failed(adapter.error)
+	if rival_world != null:
+		var world_codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
+		var saved_world: Dictionary = world_codec.capture(rival_world)
+		if saved_world.is_empty(): return _failed("Rival world checkpoint: " + world_codec.error)
+		payload["rival_world"] = saved_world
+	# Guidance acknowledgments ride along only on a committed action. Repeated
+	# callbacks with identical state never create another generation.
+	if payload==last_payload:
+		pending = false
+		return true
+	# capture() just computed this fingerprint from executable resources. Reuse
+	# it only during this synchronous publication; later inspections/Continue
+	# compute their own identity. Never derive this authority from disk input.
+	_publishing_source_identity = str(payload.get("rival_world",{}).get("source_identity",""))
+	var result := store.replace_run(payload) if replace_on_save else store.save(payload)
+	_publishing_source_identity = ""
+	if result.status!=&"saved": return _failed(str(result.get("reason",result.status)))
+	last_payload = payload
+	replace_on_save = false
+	pending = false
+	failure = ""
+	run.checkpoint_mutations_allowed = true
+	status_changed.emit()
+	return true
+
+func _failed(reason: String) -> bool:
+	failure = reason
+	run.checkpoint_mutations_allowed = false
+	status_changed.emit()
+	return false
+
+func retry() -> bool:
+	pending = true
+	return flush()
+
+func load_current() -> RunState:
+	var operation := begin_load()
+	while not operation.done: operation.advance()
+	return operation.restored
+
+func begin_load() -> RefCounted:
+	return preload("res://scripts/persistence/checkpoint_load.gd").new(self)
+
+func _exit_tree() -> void:
+	store.release_writer()

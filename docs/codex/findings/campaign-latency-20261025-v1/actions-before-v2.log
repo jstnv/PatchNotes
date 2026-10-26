@@ -1,0 +1,13 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+{"cycle":0,"releases":0,"save_ms":1790.56,"studio_mount_ms":9.307,"validation_ms":1319.136,"validator_calls":2}
+Campaign action diagnostic: 0 commands; 1 failures
+ERROR: Private world checkpoint: Publish generation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/profile_campaign_actions.gd:31)
+       [1] measure (res://scripts/debug/profile_campaign_actions.gd:39)
+       [2] _initialize (res://scripts/debug/profile_campaign_actions.gd:89)
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

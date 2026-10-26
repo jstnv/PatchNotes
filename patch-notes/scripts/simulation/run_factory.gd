@@ -22,7 +22,12 @@ static func create_fresh_session(recipe: Variant, definitions: RefCounted) -> Re
 	run._studio_finance = _replace_identity(run._studio_finance,generated,stable)
 	run._bank_run_id = StringName(stable)
 	run._employees = EmployeeRoster.create(StringName(stable))
+	run._contract_search=RunState.ContractSearch.create(StringName(stable))
+	run._publisher_relationships = RunState.RelationshipLedger.create(StringName(stable))
 	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = int(recipe.seed)+RunRandom.STREAMS.find(id)
+	if recipe.has("employee_trial"):
+		if not recipe.employee_trial is bool:return null
+		if recipe.employee_trial and not run.activate_employee_trial():return null
 	var snapshots := PrimitiveSnapshotDatabase.new()
 	if not snapshots.load_ledgers(): return null
 	var session := Session.new()

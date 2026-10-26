@@ -1,0 +1,20 @@
+# Contract-run challenges: proposed implementation handoff
+
+2026-10-17 (America/Los_Angeles). **DESIGN REVIEW NEEDED. No task below is handed off or implemented.** User-approved direction is in [the decision record](CHALLENGES-DECISION-2026-10-17-v1.md); the [private finding](CHALLENGES-FINDINGS-2026-10-17-v1.md) supports only the scorer and current-rule isolation. Do not copy the [v3 candidate](simulators/contracts-challenges-v3/README.md) wholesale into canonical gameplay.
+
+| Item | Status | Task and acceptance |
+|---|---|---|
+| Challenge terms | **proposed** | Review publisher assignment, thresholds, fade curves, combination rule, bonus cash and Promotion caps, and whether partial grades award both currencies proportionally. Record an explicit ACTIVE/TRIAL decision. Ironclad stays challenge-free. Preserve all existing base rewards. |
+| Runtime tracker | **proposed** | Version challenge definitions; freeze the selected challenge with accepted Contract terms; count only successful Contract redraws; grade committed final Scope and four Core totals after the last required hand. Reject stale/duplicate or malformed events without changing tracker, RNG, cash or time. Future challenge kinds use the same evaluator interface. |
+| Separate bonus settlement | **proposed** | Compute bonus cash in exact cents and bonus Promotion with specified integer rounding and caps. Post each at the normal completion transaction stage once. Record base and bonus separately in finance, result and keyed Promotion history, including SideStreet and Starwave, whose current base Promotion is zero. Challenge misses cannot reduce existing advance, completion cash, or base Promotion. Prove zero/partial/full grade and single application through launch consumption. |
+| Persistence and migration | **proposed** | Extend result/checkpoint schemas and validators for versioned challenge state, grade and both bonus components. Define how in-progress and completed pre-challenge Contracts load: old completed results retain their original settlement, and no resume path grants a retroactive bonus. Rejected restore must roll back atomically; Studio-only Continue remains. Test cold restart before acceptance, mid-Contract, after completion, and after Promotion use. |
+| Player presentation | **proposed** | On offer/acceptance show the challenge, observable target, bonus caps and base rewards separately. During the run show the current challenge condition and redraw status. On completion show final grade, each failed condition, base payout/Promotion and earned bonus cash/Promotion. Check both supported sizes, keyboard/controller routes and exported build clarity. |
+| Adoption evidence | **proposed** | Fork a new private variant from v3 after trial terms are approved. Run affected focused suites, genuine legal full/partial/missed challenge routes, same-start current-rule control where applicable, fresh-process exact replays, completion transaction/finance checks, old-save migration and rollback. Retain failures/timeouts. Generate a source-pinned variant handoff; reconcile canonical drift in the single implementation slot. |
+
+## Shared queue disposition
+
+The user's 2026-10-17 request added one [DESIGN review needed entry](../../TODO.md) for this package. This gives the queue a precise review brief but does not approve candidate values, seal a simulator adoption packet or dispatch canonical gameplay work.
+
+## Dependencies and stop conditions
+
+The current [publisher definitions](../../../../patch-notes/scripts/contracts/contract_definitions.gd) and [result/checkpoint path](../../../../patch-notes/scripts/persistence/studio_checkpoint.gd) are authority for existing behavior. The exact numerical trial terms are still OPEN. The private scorer does not settle either bonus currency. Do not add a QUEUED **implementation** item to the shared TODO or mark this handoff approved until a full rule and save compatibility plan are reviewed. A simulator pass alone cannot approve balance or exported presentation.

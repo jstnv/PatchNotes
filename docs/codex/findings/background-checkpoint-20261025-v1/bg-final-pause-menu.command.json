@@ -1,0 +1,306 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\background-checkpoint-20261025-v1\\wrappers\\bg-final-pause-menu\\verify_pause_menu.gd"
+  ],
+  "exit": 0,
+  "seconds": 13.64,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\bg-final-pause-menu",
+  "script_sha256": "49e030de30f76aea3d09be1a40ad82e3636a4f7e0397bc2aa0108af05d600435",
+  "owned_child_pid": 28340,
+  "aborted": false,
+  "result": {
+    "card_traces": [
+      [
+        {
+          "beat_index": -1.0,
+          "event": "music_resume",
+          "index": -1,
+          "lateness_seconds": 0.0,
+          "msec": 6083,
+          "music_seconds": 3.43673221981741,
+          "resume_seconds": 3.6389098618481,
+          "scheduled_seconds": -0.428571428571429,
+          "skipped_beats": 2
+        },
+        {
+          "beat_index": -1.0,
+          "event": "centered",
+          "index": -1,
+          "lateness_seconds": 0.0,
+          "msec": 6476,
+          "music_seconds": 3.8271848069551,
+          "scheduled_seconds": -0.428571428571429
+        },
+        {
+          "beat_index": 9.0,
+          "event": "rise",
+          "index": 0,
+          "lateness_seconds": 0.0045459610440135,
+          "msec": 6511,
+          "music_seconds": 3.86168881818687,
+          "scheduled_seconds": 3.85714285714286
+        },
+        {
+          "beat_index": 9.5,
+          "event": "score",
+          "index": 0,
+          "lateness_seconds": 0.00419333165676417,
+          "msec": 6727,
+          "music_seconds": 4.07562190308534,
+          "scheduled_seconds": 4.07142857142857
+        },
+        {
+          "beat_index": 10.0,
+          "event": "grounded",
+          "index": 0,
+          "lateness_seconds": 0.00313889659062383,
+          "msec": 6939,
+          "music_seconds": 4.28885318230491,
+          "scheduled_seconds": 4.28571428571429
+        },
+        {
+          "beat_index": 10.0,
+          "event": "rise",
+          "index": 1,
+          "lateness_seconds": 0.003167896600063,
+          "msec": 6939,
+          "music_seconds": 4.28888218231435,
+          "scheduled_seconds": 4.28571428571429
+        },
+        {
+          "beat_index": 10.5,
+          "event": "score",
+          "index": 1,
+          "lateness_seconds": 0.00531026802498857,
+          "msec": 7158,
+          "music_seconds": 4.50531026802499,
+          "scheduled_seconds": 4.5
+        },
+        {
+          "beat_index": 11.0,
+          "event": "grounded",
+          "index": 1,
+          "lateness_seconds": 0.00637411248750297,
+          "msec": 7373,
+          "music_seconds": 4.72065982677322,
+          "scheduled_seconds": 4.71428571428571
+        },
+        {
+          "beat_index": 11.0,
+          "event": "rise",
+          "index": 2,
+          "lateness_seconds": 0.00640211249661693,
+          "msec": 7373,
+          "music_seconds": 4.72068782678233,
+          "scheduled_seconds": 4.71428571428571
+        },
+        {
+          "beat_index": 11.5,
+          "event": "score",
+          "index": 2,
+          "lateness_seconds": 0.0118717293283623,
+          "msec": 7595,
+          "music_seconds": 4.94044315789979,
+          "scheduled_seconds": 4.92857142857143
+        },
+        {
+          "beat_index": 12.0,
+          "event": "grounded",
+          "index": 2,
+          "lateness_seconds": 0.00310104742669104,
+          "msec": 7801,
+          "music_seconds": 5.14595819028383,
+          "scheduled_seconds": 5.14285714285714
+        },
+        {
+          "beat_index": 12.0,
+          "event": "rise",
+          "index": 3,
+          "lateness_seconds": 0.00311404743092236,
+          "msec": 7801,
+          "music_seconds": 5.14597119028806,
+          "scheduled_seconds": 5.14285714285714
+        },
+        {
+          "beat_index": 12.5,
+          "event": "score",
+          "index": 3,
+          "lateness_seconds": 0.00807789316296947,
+          "msec": 8020,
+          "music_seconds": 5.36522075030583,
+          "scheduled_seconds": 5.35714285714286
+        },
+        {
+          "beat_index": 13.0,
+          "event": "grounded",
+          "index": 3,
+          "lateness_seconds": 0.00696950785343553,
+          "msec": 8236,
+          "music_seconds": 5.57839807928201,
+          "scheduled_seconds": 5.57142857142857
+        },
+        {
+          "beat_index": 13.0,
+          "event": "exit_bounce",
+          "index": 0,
+          "lateness_seconds": 0.00699450786157385,
+          "msec": 8236,
+          "music_seconds": 5.57842307929015,
+          "scheduled_seconds": 5.57142857142857
+        },
+        {
+          "beat_index": 14.0,
+          "event": "exit_grounded",
+          "index": 0,
+          "lateness_seconds": 0.000909670950412611,
+          "msec": 8657,
+          "music_seconds": 6.00090967095041,
+          "scheduled_seconds": 6.0
+        },
+        {
+          "beat_index": 14.0,
+          "event": "exit_bounce",
+          "index": 1,
+          "lateness_seconds": 0.000922670954644822,
+          "msec": 8657,
+          "music_seconds": 6.00092267095464,
+          "scheduled_seconds": 6.0
+        },
+        {
+          "beat_index": 15.0,
+          "event": "exit_grounded",
+          "index": 1,
+          "lateness_seconds": 0.00589513174076473,
+          "msec": 9091,
+          "music_seconds": 6.43446656031219,
+          "scheduled_seconds": 6.42857142857143
+        },
+        {
+          "beat_index": 15.0,
+          "event": "exit_bounce",
+          "index": 2,
+          "lateness_seconds": 0.00592813175150742,
+          "msec": 9091,
+          "music_seconds": 6.43449956032294,
+          "scheduled_seconds": 6.42857142857143
+        },
+        {
+          "beat_index": 16.0,
+          "event": "exit_grounded",
+          "index": 2,
+          "lateness_seconds": 0.00323482255568663,
+          "msec": 9519,
+          "music_seconds": 6.86037767969854,
+          "scheduled_seconds": 6.85714285714286
+        },
+        {
+          "beat_index": 16.0,
+          "event": "exit_bounce",
+          "index": 3,
+          "lateness_seconds": 0.00326482256545191,
+          "msec": 9519,
+          "music_seconds": 6.86040767970831,
+          "scheduled_seconds": 6.85714285714286
+        },
+        {
+          "beat_index": 17.0,
+          "event": "exit_grounded",
+          "index": 3,
+          "lateness_seconds": 0.00555728247917564,
+          "msec": 9954,
+          "music_seconds": 7.29127156819346,
+          "scheduled_seconds": 7.28571428571429
+        },
+        {
+          "beat_index": 17.0,
+          "event": "exit_slide",
+          "index": -1,
+          "lateness_seconds": 0.00557828248601133,
+          "msec": 9954,
+          "music_seconds": 7.2912925682003,
+          "scheduled_seconds": 7.28571428571429
+        },
+        {
+          "beat_index": -1.0,
+          "event": "return_from_bottom",
+          "index": 0,
+          "lateness_seconds": 0.0,
+          "msec": 10394,
+          "music_seconds": 7.73022693614972,
+          "scheduled_seconds": -0.428571428571429
+        },
+        {
+          "beat_index": -1.0,
+          "event": "return_from_bottom",
+          "index": 1,
+          "lateness_seconds": 0.0,
+          "msec": 10394,
+          "music_seconds": 7.7302809361673,
+          "scheduled_seconds": -0.428571428571429
+        },
+        {
+          "beat_index": -1.0,
+          "event": "return_from_bottom",
+          "index": 2,
+          "lateness_seconds": 0.0,
+          "msec": 10394,
+          "music_seconds": 7.73031293617771,
+          "scheduled_seconds": -0.428571428571429
+        },
+        {
+          "beat_index": -1.0,
+          "event": "deal",
+          "index": 3,
+          "lateness_seconds": 0.0,
+          "msec": 10595,
+          "music_seconds": 7.93170849038362,
+          "scheduled_seconds": -0.428571428571429
+        },
+        {
+          "beat_index": -1.0,
+          "event": "deal",
+          "index": 4,
+          "lateness_seconds": 0.0,
+          "msec": 10809,
+          "music_seconds": 8.14603904880014,
+          "scheduled_seconds": -0.428571428571429
+        },
+        {
+          "beat_index": -1.0,
+          "event": "deal",
+          "index": 5,
+          "lateness_seconds": 0.0,
+          "msec": 11023,
+          "music_seconds": 8.35784113300492,
+          "scheduled_seconds": -0.428571428571429
+        },
+        {
+          "beat_index": -1.0,
+          "event": "deal",
+          "index": 6,
+          "lateness_seconds": 0.0,
+          "msec": 11237,
+          "music_seconds": 8.5730198896956,
+          "scheduled_seconds": -0.428571428571429
+        },
+        {
+          "beat_index": -1.0,
+          "event": "fan_restored",
+          "index": -1,
+          "lateness_seconds": 0.0,
+          "msec": 11451,
+          "music_seconds": 8.78420397369921,
+          "scheduled_seconds": -0.428571428571429
+        }
+      ]
+    ],
+    "checks": 65,
+    "failures": 0
+  },
+  "errors": []
+}

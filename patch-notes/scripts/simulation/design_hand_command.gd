@@ -164,14 +164,17 @@ func calculate_base(cards: Array[CardData]) -> Dictionary:
 			&"secondary_category": ProjectState.CoreScore.GRAPHICS,
 			&"secondary_value": card.secondary_value,
 		}
-		score_additions[primary_category] = score_additions.get(primary_category, 0) + card.primary_value
+		for entry in card.core_contributions():
+			var category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[entry.stat]
+			score_additions[category] = score_additions.get(category, 0) + int(entry.value)
 		total_scope += card.scope
 		has_feature = has_feature or card.card_type == &"feature"
 
 		if contribution.has_secondary:
 			var secondary_category: ProjectState.CoreScore = CORE_SCORE_BY_STAT[card.secondary_stat]
 			contribution.secondary_category = secondary_category
-			score_additions[secondary_category] = score_additions.get(secondary_category, 0) + card.secondary_value
+		if card.core_contributions().size() == 3:
+			contribution[&"core_contributions"] = card.core_contributions()
 		contributions.append(contribution)
 		if card.card_type == &"feature":
 			action_bug_pressure += _calculate_feature_bug_pressure(card)
@@ -291,13 +294,12 @@ func _get_weighted_definition_validation_error(card: CardData, expected_type: St
 
 
 func _calculate_feature_bug_pressure(card: CardData) -> float:
-	var total_printed_raw_score := card.primary_value
-	if not card.secondary_stat.is_empty():
-		total_printed_raw_score += card.secondary_value
+	var total_printed_raw_score := card.printed_core_total()
 	return (float(total_printed_raw_score) * float(card.scope)) / BUG_PRESSURE_DENOMINATOR
 
 
 func _get_card_validation_error(card: CardData) -> String:
+	if not card.ordered_runtime_error().is_empty(): return card.ordered_runtime_error()
 	if card.primary_stat.is_empty():
 		return "Card '%s' has no primary stat." % card.id
 	if not CORE_SCORE_BY_STAT.has(card.primary_stat):

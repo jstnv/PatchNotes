@@ -65,7 +65,7 @@ func _verify() -> void:
 		await create_timer(0.3).timeout
 		studio=game.get("_active_phase")
 		before=run_snapshot(run,project)
-		expect(run.is_sidestreet_offer_available(),"Completed Ironclad exposes legitimate SideStreet fixture offer")
+		expect(not run.get_sidestreet_brief_offer().is_empty(),"Completed Ironclad exposes the original SideStreet Brief")
 		studio.get_node("%Contracts").pressed.emit()
 		await create_timer(0.3).timeout
 		var side:Control=studio.get("_contract_detail")
@@ -138,6 +138,7 @@ func _verify_studio_menus(game:Control,studio:StudioPhase,run:RunState,project:P
 func _verify_main_setup(resolution:Vector2i) -> void:
 	var menu:=MainMenu.new()
 	root.add_child(menu)
+	menu.navigation.animate=false
 	menu.find_child("StartGame",true,false).pressed.emit()
 	await create_timer(0.3).timeout
 	var back:Button=menu.find_child("Back",true,false)

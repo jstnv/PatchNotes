@@ -43,6 +43,37 @@ class ComparisonTests(unittest.TestCase):
     def tearDown(self):
         self.temporary.cleanup()
 
+    def test_identity_includes_executed_market_query_and_ignores_other_queries(self):
+        manifest = {
+            "scripts/rules.gd": digest("rules"),
+            "scripts/debug/probe.gd": digest("debug"),
+            "data/terms.json": digest("terms"),
+            "queries/market_release_index.gd": digest("market"),
+            "queries/presentation.gd": digest("ui"),
+            "queries/market_release_index.gd.uid": digest("uid"),
+        }
+        rows = [["res://" + key, manifest[key]] for key in sorted(manifest)
+                if key in {"scripts/rules.gd", "data/terms.json", "queries/market_release_index.gd"}]
+        expected = hashlib.sha256(json.dumps(rows, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
+        self.assertEqual(compare.mechanics_identity(manifest), expected)
+        changed = {**manifest, "queries/market_release_index.gd": digest("changed market")}
+        self.assertNotEqual(compare.mechanics_identity(changed), expected)
+        self.assertEqual(compare.mechanics_identity({**manifest, "queries/presentation.gd": digest("changed UI")}), expected)
+
+    def test_older_query_presence_does_not_rewrite_frozen_identity_definition(self):
+        replay = self.project / "scripts/simulation/development_replay.gd"
+        replay.parent.mkdir(parents=True)
+        replay.write_text('extends RefCounted\n# Original source set: scripts and data.\n', encoding="utf-8")
+        query = self.project / "queries/market_release_index.gd"
+        query.parent.mkdir()
+        query.write_text('extends RefCounted\n', encoding="utf-8")
+        manifest = simulate.source_hashes(self.project)
+        without_query = {key: value for key, value in manifest.items() if key != "queries/market_release_index.gd"}
+        self.assertEqual(compare.mechanics_identity(manifest, self.project), compare.mechanics_identity(without_query))
+        replay.write_text('extends RefCounted\nconst QUERY = "res://queries/market_release_index.gd"\n', encoding="utf-8")
+        manifest = simulate.source_hashes(self.project)
+        self.assertEqual(compare.mechanics_identity(manifest, self.project), compare.mechanics_identity(manifest))
+
     def samples(self, name):
         # Same-cycle final command after Launch must not replace the first
         # post-launch sample in the release-milestone comparison.

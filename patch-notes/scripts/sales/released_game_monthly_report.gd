@@ -18,7 +18,7 @@ static func build(record: Dictionary, release_cycle: int) -> Dictionary:
 		var cycle := release_cycle + offset + 1
 		var first_half := offset % 2 == 0
 		var campaign: bool = first_half and record.campaign_months.has(month)
-		var next := ReleasedGameSales.next_cycle(replay, cycle, cycle % 2 == 0, campaign)
+		var next := ReleasedGameSales.next_cycle(replay, cycle, cycle % 2 == 0, campaign, record.market_factors[month].factor_bp, record.market_factors[month].snapshot_id, record.market_factors[month])
 		if next.is_empty(): return {}
 		if first_half:
 			rows.append({"age_month": month, "earned_halves": 0, "units": 0, "gross_cents": 0,
@@ -26,7 +26,7 @@ static func build(record: Dictionary, release_cycle: int) -> Dictionary:
 				"organic_awareness_scaled": record.launch_awareness * 10000 if month == 1 else next.organic_awareness_scaled,
 				"active_awareness_scaled": record.launch_awareness * 10000 if month == 1 else next.active_awareness_scaled,
 				"campaign": campaign, "campaign_number": next.campaign_count if campaign else 0,
-				"slices": [], "payments": []})
+				"market": record.market_factors[month].duplicate(true), "slices": [], "payments": []})
 		var row: Dictionary = rows[-1]
 		var units: int = next.earned_units - replay.earned_units
 		var net: int = next.entitlement_cents - replay.entitlement_cents

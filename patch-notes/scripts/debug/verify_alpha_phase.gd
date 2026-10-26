@@ -71,7 +71,7 @@ func _initialize() -> void:
 	_expect(alpha.set_priority(ProjectState.CoreScore.GRAPHICS, 50), "Over-budget request is handled safely")
 	_expect(_values(alpha) == [35, 15, 25, 25], "Over-budget request clamps to the highest fitting value")
 	_expect(alpha.set_priority(ProjectState.CoreScore.TECHNOLOGY, -100), "Below-range numeric request is normalized")
-	_expect(_values(alpha) == [35, 15, 5, 25] and alpha.get_available_priority() == 20, "Below-range request clamps to 5 without redistribution")
+	_expect(_values(alpha) == [35, 15, 10, 25] and alpha.get_available_priority() == 15, "Below-range request clamps to 10 without redistribution")
 	_expect(alpha.set_priority(ProjectState.CoreScore.DESIGN, 27.5), "Non-step numeric request is normalized")
 	_expect(alpha.get_priority(ProjectState.CoreScore.DESIGN) == 30, "Exact half-step snaps upward")
 	_expect(alpha.set_priority(ProjectState.CoreScore.TECHNOLOGY, 12.4), "Numeric request below half-step normalizes")
@@ -729,7 +729,7 @@ func _instance_ids(views: Array) -> Array[int]:
 func _verify_controls(alpha: AlphaPhase) -> void:
 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
 		var slider := alpha.get_node("%%%s" % node_name) as VSlider
-		_expect(slider != null and slider.min_value == 5.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 5-50 bounds in five-point steps" % node_name)
+		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 10-50 bounds in five-point steps" % node_name)
 	var panel := alpha.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
 	_expect(panel.size.x <= 1008.0 and panel.size.y <= 463.0, "Corrected Alpha allocation panel fits the established phase bounds")
 	_verify_distribution(alpha, "Initial Alpha allocation uses the complete budget")
@@ -742,7 +742,7 @@ func _verify_control_values(alpha: AlphaPhase) -> void:
 	var labels := [alpha.get_node("%GraphicsPriorityValue"), alpha.get_node("%SoundPriorityValue"), alpha.get_node("%TechnologyPriorityValue"), alpha.get_node("%DesignPriorityValue")]
 	for index in range(CATEGORIES.size()):
 		_expect(int(sliders[index].value) == values[index] and labels[index].text == str(values[index]), "Alpha slider and allocation label %d match internal state" % index)
-	_expect(alpha.get_node("%AvailablePriority").text == "Available Priority: %d" % alpha.get_available_priority(), "Alpha available-priority label derives from allocation state")
+	_expect(alpha.get_node("%AvailablePriority").text == "%d/100" % (100-alpha.get_available_priority()), "Alpha available-priority label derives from allocation state")
 
 
 func _verify_distribution(alpha: AlphaPhase, description: String) -> void:

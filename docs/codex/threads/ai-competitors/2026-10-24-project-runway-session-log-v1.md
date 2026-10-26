@@ -1,0 +1,9 @@
+# AI Competitors project runway session — 2026-10-24
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`. Shared worktree was already dirty across repository docs, scenes and game code; those edits and `.codex-godot-temp` were preserved. No commit, push, canonical gameplay edit or simulator run was made.
+
+**Changed thread-owned files:** `2026-10-24-project-runway-ledger-v1.md`, `README.md`, `working-notes.md`, and this session log. The user's new request selects the qualitative Design/Alpha cost/count and project runway direction. All numeric, UI, forecast and exception rules remain OPEN. `CURRENT_STATE.md`, `DECISIONS.md` and `TODO.md` were read for authority but not changed because this is not an implementation-ready handoff.
+
+**Source checks:** inspected `ProjectState`, `DevelopmentCatalog`, `DevelopmentSession`, Design/Alpha hand commands, `RunState` Feature cost and productive transaction, `StudioFinanceLedger`, `FeatureSpendingGuidance`, `RivalTrial`, and `RivalWorld`. Confirmed frozen project supply, phase-specific Feature pools, four-card real hand selection, current exact cash preflight, two-cycle month end, current known typed dues, and the existing player next-project guidance boundary. The design record's example was checked at start cycles 0 and 1: a seven-action lower-bound route crosses three and four rent dues respectively. This was a source/document review, **not** a runtime verification of a new policy.
+
+**Follow-up:** create a new thread-owned shadow-ledger simulator variant with a declared plan and independent outputs. Validate event-derived counters, unknown prices, exact due chronology, state/RNG parity, fresh replay and Studio-only Continue before comparing any admission policy. Later decision needed if a negative forecast is ever meant to justify skipping a currently legal affordable visible Feature.

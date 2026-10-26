@@ -1,0 +1,7 @@
+# Contracts foundation decision v1
+
+2026-10-17 (America/Los_Angeles). **APPROVED structural scope:** the user selected an **extensible contract framework** and set balance work aside. Implement a code-owned, versioned definition layer for the five current publisher Contracts, preserving their existing rules and player outcomes. The implementing thread owns adoption into the authoritative game after reviewing the private candidate and current integration drift.
+
+The first adoption should centralize current Contract IDs, titles, publishers, hand counts, targets, score profiles, rewards and persisted trial terms; provide detached definitions and reject unknown or malformed requests. Preserve the existing public `ContractState` and `PublisherTrialTerms` interfaces, Ironclad's dynamic Publisher Connections advance, offer gates, hand eligibility, finance timing, Promotion behavior and checkpoint schema. Existing five-offer LOCKED/ACTIVE/TRIAL numerical status in [publishers-contracts](../../design/publishers-contracts.md) remains unchanged.
+
+**OPEN:** new contract types, terms, score formulas, new offers, data-driven/modded definitions, save format changes, and final balance. This decision authorizes a reusable foundation, not any new commercial mechanic. [Plan](FOUNDATION-PLAN-2026-10-17-v1.md) records the bounded private experiment; findings and handoff report actual evidence and acceptance limits.

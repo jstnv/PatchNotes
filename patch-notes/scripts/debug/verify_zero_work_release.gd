@@ -37,6 +37,7 @@ func install(phase: Control, ids: Array[StringName]) -> void:
 	phase.refresh_workspace()
 
 func _run() -> void:
+	root.size = Vector2i(1280, 720)
 	# Direct state reconstruction: arbitrary Scope, Pass IDs and unknown IDs cannot qualify.
 	for ids in [[], [&"graphics_pass"], [&"unknown"], [&"text"], [&"colored_text"]]:
 		var project := ProjectState.new(30)
@@ -51,13 +52,15 @@ func _run() -> void:
 	root.add_child(game)
 	await process_frame
 	var menu: MainMenu = game.get("_active_phase")
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Release Guard"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu._name_input.text = "Release Guard"
+	menu._specialty.select(1)
+	menu._play.pressed.emit()
 	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	for number in range(2):
 		var studio: StudioPhase = game.get("_active_phase")
 		check(game.call("_begin_next_project", studio, "Guard %d" % number, &"action", &"fantasy"), "Begin first/later project")
@@ -72,14 +75,23 @@ func _run() -> void:
 			alpha.call("_on_under_scope_confirmed")
 		check(snapshot(game, alpha) == before, "Failed attempts preserve cash, cycles, RNG, cards, redraws, release ID and prior sales")
 		check(alpha.get_workspace().progress.text.contains("Play a Feature"), "Visible player-facing reason")
-		install(alpha, [&"graphics_pass", &"sound_pass", &"technology_pass", &"design_pass", &"enemies", &"power_ups", &"general_combat"])
+		await process_frame
+		await process_frame
+		await create_timer(0.30).timeout
+		var regions: Rect2 = alpha.get_workspace().get_node("Regions").get_global_rect()
+		check(regions.position.x >= alpha.global_position.x - 1.0 and regions.end.x <= alpha.get_global_rect().end.x + 1.0, "Zero-work explanation does not push actions beyond the viewport width")
+		var finite_id: StringName=&""
+		for candidate: CardData in alpha._available_features:
+			if candidate.scope>0:finite_id=candidate.id;break
+		check(not finite_id.is_empty(),"Current founding roster supplies an owned finite Alpha Feature")
+		install(alpha, [&"graphics_pass", &"sound_pass", &"technology_pass", &"design_pass", finite_id, &"graphics_pass", &"sound_pass"])
 		for i in range(4): alpha.get_node("%HandContainer").get_child(i).card_pressed.emit(alpha.get_node("%HandContainer").get_child(i))
 		alpha.get_node("%PlayAlphaHandButton").pressed.emit()
 		alpha.get_workspace().hand_motion.cancel()
 		check(game.project_state.get_current_cycle() == 1 and game.project_state.get_current_scope() == 0, "Pass-only hand really commits without Feature Scope")
 		before = snapshot(game, alpha)
 		check(not alpha.request_proceed_to_beta() and snapshot(game, alpha) == before, "Pass-only project cannot release or earn sales")
-		install(alpha, [&"enemies", &"sound_pass", &"technology_pass", &"design_pass", &"power_ups", &"general_combat", &"graphics_pass"])
+		install(alpha, [finite_id, &"sound_pass", &"technology_pass", &"design_pass", &"graphics_pass", &"graphics_pass", &"sound_pass"])
 		for i in range(4): alpha.get_node("%HandContainer").get_child(i).card_pressed.emit(alpha.get_node("%HandContainer").get_child(i))
 		before = snapshot(game, alpha)
 		check(not alpha.request_proceed_to_beta() and snapshot(game, alpha) == before, "Merely selecting a finite Feature is insufficient")

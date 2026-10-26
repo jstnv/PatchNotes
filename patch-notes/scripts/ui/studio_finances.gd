@@ -28,12 +28,15 @@ var amount_input: LineEdit
 var term_input: LineEdit
 var accept_button: Button
 var payoff_button: Button
+var loan_selector: OptionButton
+var _selected_loan: StringName = &""
 var quote_details: RichTextLabel
 var _quote: Dictionary = {}
 var _payoff: Dictionary = {}
 var _schedule_page := 0
 var _confirm: ConfirmationDialog
 var _confirmation_kind: StringName = &""
+var _confirmation_payload: Dictionary = {}
 var education_details: RichTextLabel
 var education_payoff_button: Button
 var _education_payoff: Dictionary = {}
@@ -44,17 +47,26 @@ func _ready() -> void:
 	visible = false
 	var shade := ColorRect.new()
 	shade.name = "FinanceInputBlocker"
-	shade.color = Color(0.02, 0.015, 0.025, 0.9)
+	# Block underlying controls across the viewport, but keep the persistent
+	# top HUD visually present. The chart belongs to that existing header.
+	shade.color = Color.TRANSPARENT
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(shade)
+	var backdrop := ColorRect.new()
+	backdrop.name = "FinanceShade"
+	backdrop.color = Color(0.02, 0.015, 0.025, 0.9)
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop.offset_top = 88
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	shade.add_child(backdrop)
 	dialog = PanelContainer.new()
 	dialog.name = "StudioFinancesDialog"
 	dialog.theme = preload("res://resources/ui/workspace_theme.tres")
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dialog.offset_left = 28
 	dialog.offset_right = -28
-	dialog.offset_top = 24
+	dialog.offset_top = 88
 	dialog.offset_bottom = -64
 	shade.add_child(dialog)
 	_content = MarginContainer.new()
@@ -111,7 +123,7 @@ func _ready() -> void:
 	education_details.scroll_active = true
 	education_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	education_page.add_child(education_details)
-	_label("Actual studio months · Sales revenue uses earned net after the 70% share, applied once. Cash settled is shown separately.", monthly)
+	_label("Actual Studio months · Sales is Studio entitlement after platform share and support recoup. Commission sales are excluded; commission fees are publisher receipts. Support funding is nonoperating financing, excluded from profit and Bank income. Cash settled is separate.", monthly)
 	month_table = Tree.new()
 	month_table.name = "FinanceMonthlyRows"
 	month_table.columns = 6
@@ -138,7 +150,7 @@ func _ready() -> void:
 	_label("Loan amount $", controls).autowrap_mode = TextServer.AUTOWRAP_OFF
 	amount_input = LineEdit.new()
 	amount_input.name = "BankAmount"
-	amount_input.text = "500.00"
+	amount_input.text = "1500.00"
 	amount_input.custom_minimum_size.x = 140
 	controls.add_child(amount_input)
 	_label("Months", controls).autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -169,6 +181,11 @@ func _ready() -> void:
 	_bank_page.add_child(quote_details)
 	var pages := HBoxContainer.new()
 	_bank_page.add_child(pages)
+	loan_selector = OptionButton.new()
+	loan_selector.name = "ActiveLoanSelection"
+	loan_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	loan_selector.item_selected.connect(_select_active_loan)
+	pages.add_child(loan_selector)
 	for direction in [-1,1]:
 		var button := Button.new()
 		button.text = "Previous payments" if direction < 0 else "Next payments"
@@ -187,6 +204,7 @@ func _ready() -> void:
 	_confirm.title = "Confirm Bank transaction"
 	_confirm.dialog_autowrap = true
 	_confirm.confirmed.connect(_confirm_transaction)
+	_confirm.canceled.connect(_cancel_confirmation)
 	add_child(_confirm)
 	_set_page(&"finances")
 
@@ -223,9 +241,9 @@ func open(return_label: String = "Back to Game") -> bool:
 
 
 func close() -> void:
+	_cancel_confirmation()
 	if not visible: return
 	visible = false
-	_confirm.hide()
 	if _entrance != null: _entrance.kill()
 	if is_instance_valid(_previous_focus) and _previous_focus.is_inside_tree() and _previous_focus.is_visible_in_tree():
 		_previous_focus.grab_focus()
@@ -249,6 +267,7 @@ func back() -> void:
 
 
 func _set_page(value: StringName) -> void:
+	_cancel_confirmation()
 	page = value
 	_title.text = "Visit Bank" if page == &"bank" else "Studio Finances"
 	_finance_page.visible = page == &"finances"
@@ -267,17 +286,23 @@ func refresh() -> void:
 	var available := bool(report.get("available", false))
 	_quote = {}
 	_payoff = {}
-	_confirm.hide()
+	_cancel_confirmation()
 	accept_button.disabled = true
 	payoff_button.disabled = true
 	quote_details.text = "Enter an amount and term, then preview the exact quote."
+	loan_selector.clear()
+	var selected_index := 0
 	if available:
 		for loan: Dictionary in report.get("bank_loans", []):
-			if not loan.closed:
-				_payoff = run.get_bank_payoff_quote(loan.loan_id)
-				_quote = {"schedule": loan.schedule, "reason": "Active loan: " + String(loan.loan_id)}
-				payoff_button.disabled = _payoff.is_empty()
-				_show_quote()
+			if loan.closed: continue
+			var index := loan_selector.item_count
+			loan_selector.add_item("Loan %d · %s · %d months" % [index+1,_money(loan.schedule.principal_cents),loan.schedule.term_months])
+			loan_selector.set_item_metadata(index,loan.loan_id)
+			if loan.loan_id == _selected_loan: selected_index = index
+	loan_selector.visible = loan_selector.item_count > 0
+	if loan_selector.item_count > 0:
+		loan_selector.select(selected_index)
+		_select_active_loan(selected_index)
 	var cash: int = report.get("cash_cents", run.get_cash_cents() if run != null else -1)
 	var due: int = report.get("next_due_cycle", 0)
 	var arrears: int = report.get("unpaid_rent_cents", 0)
@@ -331,6 +356,8 @@ func _show_month() -> void:
 			"Cash: %s opening → %s closing · Change: %s" % [_money(row.get("opening_cash_cents", 0)), _money(row.get("closing_cash_cents", 0)), _money(row.get("cash_change_cents", 0))],
 			"Rent payments belong to the payment month; unpaid rent belongs to its original due month.",
 			"Earned revenue and settled cash use different timing. Financing is not revenue; principal is not an expense."]
+		if row.has("ownership_in_cents"):
+			lines.append("Ownership transfers: %s received; %s paid. Excluded from operating profit." % [_money(row.ownership_in_cents),_money(row.ownership_out_cents)])
 		month_detail.text = "\n".join(lines)
 		return
 
@@ -421,10 +448,30 @@ static func _money(cents: int) -> String:
 	return CashFormatter.format_exact_cents(cents)
 
 
+func _select_active_loan(index: int) -> void:
+	if index < 0 or index >= loan_selector.item_count: return
+	_cancel_confirmation()
+	_selected_loan = loan_selector.get_item_metadata(index)
+	accept_button.disabled = true
+	_schedule_page = 0
+	for loan: Dictionary in report.get("bank_loans",[]):
+		if loan.loan_id != _selected_loan or loan.closed: continue
+		_payoff = run.get_bank_payoff_quote(_selected_loan)
+		_quote = {"schedule":loan.schedule,"reason":"Active loan: " + String(_selected_loan)}
+		payoff_button.disabled = _payoff.is_empty()
+		_show_quote()
+		return
+
 func _invalidate_quote(_text: String) -> void:
 	_quote = {}
 	accept_button.disabled = true
-	_confirm.hide()
+	_cancel_confirmation()
+
+
+func _cancel_confirmation() -> void:
+	_confirmation_kind = &""
+	_confirmation_payload = {}
+	if _confirm != null: _confirm.hide()
 
 
 func _preview_quote() -> void:
@@ -441,6 +488,10 @@ func _show_quote() -> void:
 		lines.append("Settled sales: older %s · latest %s · conservative basis %s" % [_money(_quote.older_sales_cents),_money(_quote.latest_sales_cents),_money(_quote.basis_cents)])
 		lines.append("Monthly rent %s · Other required obligations %s · Payment capacity %s" % [_money(_quote.rent_cents),_money(_quote.obligations_cents),_money(_quote.capacity_cents)])
 		lines.append("Maximum principal for this term: %s" % _money(_quote.maximum_principal_cents))
+	if _quote.get("rules_version")==2:
+		lines.append("Minimum: %s (three monthly rents) · Existing Bank payment reserve: %s" % [_money(_quote.minimum_principal_cents),_money(_quote.bank_commitments_cents)])
+		if _quote.get("accepted",false):
+			lines.append("Requested %s → Qualified %s · Overdue deduction %s · Cash received %s" % [_money(_quote.requested_principal_cents),_money(_quote.schedule.principal_cents),_money(_quote.recovery_cents),_money(_quote.net_proceeds_cents)])
 	if _quote.has("schedule"):
 		var terms: Dictionary = _quote.schedule
 		lines.append("%s over %d months · 1%% monthly · Total interest %s · Total repayment %s" % [_money(terms.principal_cents),terms.term_months,_money(terms.total_interest_cents),_money(terms.total_payment_cents)])
@@ -457,7 +508,9 @@ func _confirm_accept() -> void:
 	if not visible or page != &"bank" or not _quote.get("accepted", false): return
 	_confirm.title = "Confirm Bank transaction"
 	_confirmation_kind = &"accept"
+	_confirmation_payload = _quote.duplicate(true)
 	_confirm.dialog_text = "Borrow %s over %d months? Total scheduled interest: %s. First payment is due at cycle %d. No time passes on acceptance." % [_money(_quote.schedule.principal_cents),_quote.schedule.term_months,_money(_quote.schedule.total_interest_cents),_quote.schedule.first_due_cycle]
+	_confirm.dialog_text += "\nOverdue bills paid from proceeds: %s. Cash received: %s. The full principal remains owed." % [_money(_quote.get("recovery_cents",0)),_money(_quote.get("net_proceeds_cents",_quote.schedule.principal_cents))]
 	_confirm.popup_centered(Vector2i(520,180))
 
 
@@ -465,20 +518,24 @@ func _confirm_payoff() -> void:
 	if not visible or page != &"bank" or _payoff.is_empty(): return
 	_confirm.title = "Confirm Bank transaction"
 	_confirmation_kind = &"payoff"
+	_confirmation_payload = _payoff.duplicate(true)
 	_confirm.dialog_text = "Pay %s to close this loan? This includes outstanding principal and due unpaid interest. Already-due rent and payroll bills must also be covered and are paid first. Future interest is waived." % _money(_payoff.total_cents)
 	_confirm.popup_centered(Vector2i(520,180))
 
 
 func _confirm_transaction() -> void:
+	var kind := _confirmation_kind
+	var payload := _confirmation_payload.duplicate(true)
+	_cancel_confirmation()
 	if not visible or run == null: return
-	if _confirmation_kind == &"education_payoff":
+	if kind == &"education_payoff":
 		if page != &"finances": return
-		var education_ok := run.pay_off_education(_education_payoff)
+		var education_ok := run.pay_off_education(payload)
 		refresh()
 		if not education_ok: education_details.text += "\nPayoff rejected: quote changed or cash is insufficient. No time passed."
 		return
-	if page != &"bank": return
-	var ok := run.accept_bank_loan(_quote) if _confirmation_kind == &"accept" else run.pay_off_bank_loan(_payoff)
+	if page != &"bank" or kind not in [&"accept", &"payoff"]: return
+	var ok := run.accept_bank_loan(payload) if kind == &"accept" else run.pay_off_bank_loan(payload)
 	refresh()
 	if not ok: quote_details.text = "Transaction rejected. Cash or finance state changed, funds are insufficient, or another action is in progress. Preview again."
 
@@ -511,6 +568,7 @@ func _update_education(available: bool) -> void:
 func _confirm_education_payoff() -> void:
 	if not visible or page != &"finances" or _education_payoff.is_empty(): return
 	_confirmation_kind = &"education_payoff"
+	_confirmation_payload = _education_payoff.duplicate(true)
 	_confirm.title = "Confirm education payoff"
 	_confirm.dialog_text = "Pay %s of already-due rent, payroll and Bank bills, then %s to close education debt? Total cash required: %s. This is one zero-cycle action; future education interest is waived." % [_money(_education_payoff.other_due_cents),_money(_education_payoff.total_cents),_money(_education_payoff.required_cash_cents)]
 	_confirm.popup_centered(Vector2i(520,220))

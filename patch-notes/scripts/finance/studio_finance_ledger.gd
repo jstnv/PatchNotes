@@ -9,13 +9,23 @@ const Education := preload("res://scripts/finance/education_debt.gd")
 const Bills := preload("res://scripts/finance/outstanding_expenses.gd")
 const MAX_INT: int = 9223372036854775807
 const MONTHLY_RENT_CENTS := 50000
+## Repeated read-only quotes/checkpoint checks share exact validated bytes.
+## Nine bounded entries cover a player and the checkpoint's maximum eight rivals.
+## Variant encoding preserves types: Dictionary equality alone would also match
+## an invalid float for an integer, or String for StringName. Never trust a
+## revision counter, mutable Dictionary reference, or a hash alone.
+const VALIDATED_JOURNAL_LIMIT := 9
+const VALIDATED_JOURNAL_BYTES := 4 * 1024 * 1024
+static var _validated_journals: Array[PackedByteArray] = []
+static var _validated_journal_bytes := 0
+static var _validation_lock := Mutex.new()
 const EXPENSE_FIELDS := {
 	&"feature_play": "feature_play_cents", &"store": "store_cents",
 	&"campaign": "campaign_cents", &"playtest": "playtest_cents",
 	&"other_expense": "other_expense_cents", &"principal_paid": "principal_paid_cents",
 	&"interest": "interest_cents"}
-const INCOME_KINDS: Array[StringName] = [&"publisher_receipt", &"beta_income", &"other_income", &"financing_in"]
-const FREE_KINDS: Array[StringName] = [&"development", &"priority_change", &"contract_hand", &"calendar"]
+const INCOME_KINDS: Array[StringName] = [&"publisher_receipt", &"beta_income", &"other_income", &"financing_in", &"publisher_support"]
+const FREE_KINDS: Array[StringName] = [&"development", &"priority_change", &"contract_hand", &"calendar", &"contract_search"]
 const NONNEGATIVE_ROW_FIELDS: Array[String] = ["opening_cash_cents", "closing_cash_cents",
 	"sales_net_earned_cents", "sales_settled_cents", "other_income_cents", "publisher_income_cents",
 	"beta_income_cents", "miscellaneous_income_cents", "feature_play_cents",
@@ -58,7 +68,10 @@ static func bank_quote(ledger: Dictionary, principal: Variant, months: Variant, 
 	return _bank_quote_unchecked(ledger,principal,months,run_id)
 
 static func _bank_quote_unchecked(ledger: Dictionary, principal: Variant, months: Variant, run_id: StringName) -> Dictionary:
-	var reserve := Education.overlap_reserve(ledger.education,Bank.schedule(principal,months,ledger.last_cycle))
+	# Education overlap depends on dates, not requested principal. An oversized
+	# request that is auto-adjusted must still reserve the real education dues.
+	var dates := Bank.schedule(maxi(Bank.MIN_PRINCIPAL,months),months,ledger.last_cycle) if typeof(months)==TYPE_INT and months>0 else {}
+	var reserve := Education.overlap_reserve(ledger.education,dates)
 	var payroll := _monthly_payroll(ledger)
 	if reserve > MAX_INT-payroll: return {}
 	return Bank.quote(ledger,principal,months,run_id,ledger.monthly_rent_cents,payroll+reserve)
@@ -90,7 +103,7 @@ static func pay_off_education(ledger: Dictionary, quote: Dictionary) -> Dictiona
 
 
 static func accept_loan(ledger: Dictionary, quote: Dictionary, run_id: StringName) -> Dictionary:
-	if not _is_valid(ledger) or quote.get("run_id") != run_id or typeof(quote.get("loan_id")) != TYPE_STRING_NAME: return {}
+	if typeof(quote.get("rules_version")) != TYPE_INT or quote.rules_version != 2 or not _is_valid(ledger) or quote.get("run_id") != run_id or typeof(quote.get("loan_id")) != TYPE_STRING_NAME: return {}
 	var operation := {"type": &"accept", "quote": quote.duplicate(true)}
 	if typeof(quote.get("schedule")) != TYPE_DICTIONARY: return {}
 	var principal: Variant = quote.schedule.get("principal_cents")
@@ -129,6 +142,24 @@ static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, del
 	if operation.get("type") == &"education_payoff":
 		var expected := _education_payoff_unchecked(ledger)
 		return not expected.is_empty() and operation == expected and ledger.cash_cents >= expected.required_cash_cents and delta == 0 and kind == &"calendar" and source_id == expected.account_id
+	if operation.get("type") == &"hire_v2":
+		if typeof(operation.get("run_id"))!=TYPE_STRING_NAME or typeof(operation.get("role"))!=TYPE_STRING_NAME: return false
+		var expected := specialist_hire_quote(ledger,operation.run_id,operation.role,false)
+		return not expected.is_empty() and operation==expected and delta==-10000 and kind==&"other_expense" and source_id==expected.employee_id
+	if operation.get("type") == &"payroll_schedule":
+		if operation.keys().size()!=7 or operation.get("rules_version")!=2 or typeof(operation.get("employee_id"))!=TYPE_STRING_NAME or typeof(operation.get("receipt_id"))!=TYPE_STRING_NAME or operation.receipt_id.is_empty(): return false
+		if operation.get("revision")!=ledger.actions.size() or typeof(operation.get("wage_cents"))!=TYPE_INT or operation.wage_cents not in [100000,110000,120000] or typeof(operation.get("effective_cycle"))!=TYPE_INT or operation.effective_cycle<=ledger.last_cycle or operation.effective_cycle%2!=0: return false
+		for action: Dictionary in ledger.actions:
+			if action.get("operation",{}).get("receipt_id",&"")==operation.receipt_id: return false
+		for e: Dictionary in ledger.employees:
+			if e.employee_id==operation.employee_id: return delta==0 and kind==&"calendar" and source_id==e.employee_id
+		return false
+	if operation.get("type") == &"course":
+		if operation.keys().size()!=7 or operation.get("rules_version")!=2 or operation.get("fee_cents")!=15000 or operation.get("revision")!=ledger.actions.size() or operation.get("course") not in [&"mixed",&"pure"]: return false
+		if typeof(operation.get("employee_id"))!=TYPE_STRING_NAME or operation.get("receipt_id")!=StringName("%s:course:%s"%[operation.employee_id,operation.course]): return false
+		for action: Dictionary in ledger.actions:
+			if action.get("operation",{}).get("receipt_id",&"")==operation.receipt_id: return false
+		return ledger.employees.any(func(e): return e.employee_id==operation.employee_id) and delta==-15000 and kind==&"other_expense" and source_id==operation.receipt_id
 	if operation.get("type") == &"hire":
 		if typeof(operation.get("run_id")) != TYPE_STRING_NAME: return false
 		var expected := _hire_quote_unchecked(ledger,operation.run_id)
@@ -137,7 +168,15 @@ static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, del
 		if typeof(operation.get("quote")) != TYPE_DICTIONARY: return false
 		var quote: Dictionary = operation.quote
 		if typeof(quote.get("schedule")) != TYPE_DICTIONARY or typeof(quote.get("run_id")) != TYPE_STRING_NAME: return false
-		var expected := _bank_quote_unchecked(ledger,quote.schedule.get("principal_cents"),quote.schedule.get("term_months"),quote.run_id)
+		var expected: Dictionary
+		if not quote.has("rules_version"):
+			var reserve := Education.overlap_reserve(ledger.education,Bank.schedule(quote.schedule.get("principal_cents"),quote.schedule.get("term_months"),ledger.last_cycle))
+			var payroll := _monthly_payroll(ledger)
+			if reserve > MAX_INT-payroll: return false
+			expected = Bank.quote_v1(ledger,quote.schedule.get("principal_cents"),quote.schedule.get("term_months"),quote.run_id,ledger.monthly_rent_cents,payroll+reserve)
+		elif quote.get("rules_version") == 2:
+			expected = _bank_quote_unchecked(ledger,quote.get("requested_principal_cents"),quote.schedule.get("term_months"),quote.run_id)
+		else: return false
 		return expected.get("accepted", false) and quote == expected and delta == expected.schedule.principal_cents and kind == &"financing_in" and source_id == expected.loan_id
 	if operation.get("type") == &"payoff":
 		if typeof(operation.get("loan_id")) != TYPE_STRING_NAME: return false
@@ -232,6 +271,7 @@ static func _new_row(month: int, opening: int) -> Dictionary:
 
 
 static func _kind_valid(kind: StringName, delta: int) -> bool:
+	if kind == &"ownership_transfer": return delta != 0
 	if delta < 0: return EXPENSE_FIELDS.has(kind)
 	if delta > 0: return kind in INCOME_KINDS
 	return EXPENSE_FIELDS.has(kind) or kind in INCOME_KINDS or kind in FREE_KINDS
@@ -262,11 +302,15 @@ static func _update_totals(row: Dictionary) -> bool:
 	for key: String in ["sales_settled_cents", "other_income_cents", "financing_in_cents"]:
 		if row[key] > MAX_INT - receipts: return false
 		receipts += int(row[key])
+	if int(row.get("ownership_in_cents",0)) > MAX_INT-receipts: return false
+	receipts += int(row.get("ownership_in_cents",0))
 	var outflows := 0
 	for key: String in ["feature_play_cents", "store_cents", "campaign_cents", "playtest_cents",
 			"other_expense_cents", "rent_paid_cents", "principal_paid_cents", "interest_paid_cents", "payroll_paid_cents"]:
 		if row[key] > MAX_INT - outflows: return false
 		outflows += int(row[key])
+	if int(row.get("ownership_out_cents",0)) > MAX_INT-outflows: return false
+	outflows += int(row.get("ownership_out_cents",0))
 	# Subtract totals first so opening + lifetime turnover need not overflow.
 	var movement := receipts - outflows
 	if movement < -int(row.opening_cash_cents) or movement > MAX_INT - int(row.opening_cash_cents): return false
@@ -322,7 +366,7 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	var payroll_due := 0
 	if productive:
 		for employee: Dictionary in ledger.employees:
-			if cycle == employee.first_due_cycle + employee.issued * 2: payroll_due += int(employee.wage_cents)
+			if cycle == employee.first_due_cycle + employee.issued * 2: payroll_due += payroll_wage(employee,cycle)
 	if payroll_due > MAX_INT - old_unpaid - rent_due - bank_due: return {}
 	var total_due := old_unpaid + rent_due + bank_due + payroll_due
 	var education_due := {}
@@ -335,8 +379,13 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	var next: Dictionary = ledger.duplicate(true) if copy_source else ledger
 	if not operation.is_empty():
 		if productive or not _bank_operation_valid(ledger, operation, direct_delta, kind, source_id): return {}
-		if operation.type == &"hire":
+		if operation.type in [&"hire",&"hire_v2"]:
 			next.employees.append({"employee_id":operation.employee_id,"wage_cents":operation.wage_cents,"hire_cycle":cycle,"first_due_cycle":operation.first_due_cycle,"issued":0})
+		if operation.type == &"payroll_schedule":
+			for e: Dictionary in next.employees:
+				if e.employee_id==operation.employee_id:
+					if not e.has("wage_changes"): e.wage_changes=[]
+					e.wage_changes.append({"cycle":operation.effective_cycle,"wage_cents":operation.wage_cents,"receipt_id":operation.receipt_id})
 		if operation.type == &"education_open": next.education = Education.create(operation.run_id,operation.trait_id)
 		if operation.type == &"accept":
 			next.bank_loans.append({"loan_id": operation.quote.loan_id, "run_id": operation.quote.run_id, "quote_id": operation.quote.quote_id, "schedule": operation.quote.schedule.duplicate(true), "issued": 0, "principal_paid_cents": 0, "interest_paid_cents": 0, "closed": false, "closed_cycle": -1, "early_payoff": false})
@@ -347,13 +396,20 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	if rows[-1].month != month: return {}
 	var row: Dictionary = rows[-1]
 	if row.closing_cash_cents != cash_before: return {}
-	if direct_delta < 0:
+	if kind == &"ownership_transfer":
+		# Capital changes cash and ownership, never operating profit or debt.
+		if productive or source_id.is_empty(): return {}
+		if not row.has("ownership_in_cents"):
+			row.ownership_in_cents = 0
+			row.ownership_out_cents = 0
+		if not _add(row,"ownership_in_cents" if direct_delta > 0 else "ownership_out_cents",absi(direct_delta)): return {}
+	elif direct_delta < 0:
 		if not _add(row, EXPENSE_FIELDS[kind], -direct_delta): return {}
 		if kind == &"interest" and not _add(row, "interest_paid_cents", -direct_delta): return {}
 	elif direct_delta > 0:
-		if not _add(row, "financing_in_cents" if kind == &"financing_in" else "other_income_cents", direct_delta): return {}
+		if not _add(row, "financing_in_cents" if kind in [&"financing_in",&"publisher_support"] else "other_income_cents", direct_delta): return {}
 		var income_field := "publisher_income_cents" if kind == &"publisher_receipt" else ("beta_income_cents" if kind == &"beta_income" else "miscellaneous_income_cents")
-		if kind != &"financing_in" and not _add(row, income_field, direct_delta): return {}
+		if kind not in [&"financing_in",&"publisher_support"] and not _add(row, income_field, direct_delta): return {}
 	_append_transaction(next, cycle, month, kind, absi(direct_delta), direct_delta, cash_before, cash, source_id)
 	if sales_earned > 0:
 		if not _add(row, "sales_net_earned_cents", sales_earned): return {}
@@ -369,11 +425,12 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	if payroll_due > 0:
 		for employee: Dictionary in next.employees:
 			if cycle != employee.first_due_cycle + employee.issued * 2: continue
-			var bill := Bills.create_bill(StringName("%s:payroll:%d" % [employee.employee_id,month]),employee.employee_id,&"payroll",cycle,employee.wage_cents)
+			var wage := payroll_wage(employee,cycle)
+			var bill := Bills.create_bill(StringName("%s:payroll:%d" % [employee.employee_id,month]),employee.employee_id,&"payroll",cycle,wage)
 			next.obligations.append(bill)
 			employee.issued += 1
-			if not _add(row,"payroll_due_cents",employee.wage_cents): return {}
-			_append_transaction(next,cycle,month,&"payroll_due",employee.wage_cents,0,cash,cash,employee.employee_id,month)
+			if not _add(row,"payroll_due_cents",wage): return {}
+			_append_transaction(next,cycle,month,&"payroll_due",wage,0,cash,cash,employee.employee_id,month)
 	if bank_due > 0:
 		for loan: Dictionary in next.bank_loans:
 			if loan.closed or loan.issued >= loan.schedule.term_months: continue
@@ -487,6 +544,27 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 ## Compare every derived field against the complete atomic-action journal.
 ## Reconstructed menus cannot invent missing money, months, or obligations.
 static func _is_valid(ledger: Dictionary) -> bool:
+	var key := var_to_bytes(ledger)
+	if key.size() > VALIDATED_JOURNAL_BYTES: return _validate_journal(ledger)
+	_validation_lock.lock()
+	var index := _validated_journals.find(key)
+	if index >= 0:
+		_validated_journals.remove_at(index)
+		_validated_journals.append(key)
+		_validation_lock.unlock()
+		return true
+	_validation_lock.unlock()
+	if not _validate_journal(ledger): return false
+	_validation_lock.lock()
+	if not _validated_journals.has(key):
+		_validated_journals.append(key)
+		_validated_journal_bytes += key.size()
+	while _validated_journals.size() > VALIDATED_JOURNAL_LIMIT or _validated_journal_bytes > VALIDATED_JOURNAL_BYTES:
+		_validated_journal_bytes -= _validated_journals.pop_front().size()
+	_validation_lock.unlock()
+	return true
+
+static func _validate_journal(ledger: Dictionary) -> bool:
 	for key: String in ["schema_version", "initial_cash_cents", "last_cycle", "cash_cents", "unsettled_sales_net_cents"]:
 		if typeof(ledger.get(key)) != TYPE_INT or ledger[key] < 0: return false
 	if ledger.schema_version != SCHEMA_VERSION: return false
@@ -561,7 +639,7 @@ static func upgrade_v5(legacy: Dictionary) -> Dictionary:
 
 static func _monthly_payroll(ledger: Dictionary) -> int:
 	var monthly := 0
-	for employee: Dictionary in ledger.employees: monthly += int(employee.wage_cents)
+	for employee: Dictionary in ledger.employees: monthly += payroll_wage(employee,MAX_INT)
 	return monthly
 
 
@@ -579,3 +657,24 @@ static func hire_quote(ledger: Dictionary, run_id: StringName) -> Dictionary:
 static func hire_employee(ledger: Dictionary, quote: Dictionary, run_id: StringName) -> Dictionary:
 	if not _is_valid(ledger) or quote.get("run_id") != run_id or typeof(quote.get("employee_id")) != TYPE_STRING_NAME: return {}
 	return _apply(ledger,ledger.last_cycle,ledger.cash_cents,-10000,&"other_expense",0,0,false,quote.employee_id,true,quote)
+
+## New rules are journal operations; historical $10 hires replay unchanged.
+static func payroll_wage(e: Dictionary, cycle: int) -> int:
+	var amount: int=e.wage_cents
+	for change: Dictionary in e.get("wage_changes",[]):
+		if change.cycle<=cycle: amount=change.wage_cents
+	return amount
+static func specialist_hire_quote(ledger: Dictionary, owner: StringName, role: StringName, validate: bool = true) -> Dictionary:
+	if validate and not _is_valid(ledger): return {}
+	if owner.is_empty() or role not in [&"production",&"qa"] or _unpaid_unchecked(ledger)!=0 or ledger.cash_cents<10000: return {}
+	var id:=StringName("%s:%s:1"%[owner,role])
+	for e: Dictionary in ledger.employees:
+		if e.employee_id==id or (role==&"production" and not str(e.employee_id).contains(":qa:")): return {}
+	var cycle: int=ledger.last_cycle
+	if cycle>MAX_INT-3:return {}
+	return {"type":&"hire_v2","run_id":owner,"role":role,"employee_id":id,"revision":ledger.actions.size(),"fee_cents":10000,"wage_cents":100000,"hire_cycle":cycle,"first_due_cycle":cycle+2+cycle%2}
+static func schedule_payroll(ledger: Dictionary, id: StringName, wage: int, effective: int, receipt: StringName) -> Dictionary:
+	var operation: Dictionary={"type":&"payroll_schedule","employee_id":id,"wage_cents":wage,"effective_cycle":effective,"receipt_id":receipt,"revision":ledger.actions.size(),"rules_version":2}
+	return _apply(ledger,ledger.last_cycle,ledger.cash_cents,0,&"calendar",0,0,false,id,true,operation) if _is_valid(ledger) else {}
+static func course_payment(ledger: Dictionary, quote: Dictionary) -> Dictionary:
+	return _apply(ledger,ledger.last_cycle,ledger.cash_cents,-15000,&"other_expense",0,0,false,quote.get("receipt_id",&""),true,quote) if _is_valid(ledger) else {}

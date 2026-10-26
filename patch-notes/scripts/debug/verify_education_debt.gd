@@ -64,7 +64,8 @@ func _run() -> void:
 			check(F.pay_off_education(partial,q).is_empty() and partial==before,"Unaffordable arrears payoff is atomic")
 			partial = step(partial)
 			check(F.get_blocking_unpaid(partial)==0 and F.get_unpaid(partial)>0,"Education-only arrears permit productive continuation")
-			check(not F.bank_quote(partial,50000,12,&"education-test").accepted,"Education arrears disqualify new Bank borrowing")
+			var recovery:=F.bank_quote(partial,150000,12,&"education-test")
+			check(recovery.accepted and recovery.recovery_cents==mini(F.get_unpaid(partial),recovery.schedule.principal_cents),"Education arrears are deducted from a qualified recovery loan")
 			cases[String(id)+"-partial-"+str(cash)] = partial
 	_verify_payoff()
 	_verify_bank()

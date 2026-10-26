@@ -27,7 +27,7 @@ func legacy_observation(run: RunState) -> Dictionary:
 	for id: StringName in run.get_pending_publisher_offer_ids():
 		var quote := run.get_publisher_contract_offer(id)
 		if not quote.is_empty(): offers.append({"kind":&"publisher","quote":quote})
-	return {"finance":finance,"employees":run.get_employees(),"hire_quote":run.get_production_hire_quote(),"education_payoff_quote":run.get_education_payoff_quote(),"bank_payoff_quotes":payoffs,"contract_offers":offers}
+	return {"finance":finance,"employees":run.get_employee_observation(),"hire_quote":run.get_production_hire_quote(),"education_payoff_quote":run.get_education_payoff_quote(),"bank_payoff_quotes":payoffs,"contract_offers":offers,"contract_search":run.get_contract_search_catalog(),"search_history":run.get_contract_search_state(),"hire_quotes":[run.get_employee_hire_quote(&"production"),run.get_employee_hire_quote(&"qa")],"course_quotes":[run.get_qa_course_quote(&"mixed"),run.get_qa_course_quote(&"pure")]}
 
 func compare(run: RunState, label: String) -> Dictionary:
 	var before: Variant = Replay.freeze(run)
@@ -51,6 +51,7 @@ func fixture(ledger: Dictionary) -> RunState:
 	# A release-presence marker isolates the hiring getter's existing gate. It is
 	# never offered to campaign execution or represented as a legal release route.
 	run._released_games[&"presence_probe"] = {}
+	run._released_games[&"second_presence_probe"] = {}
 	return run
 
 func step(ledger: Dictionary, earned: int = 0) -> Dictionary:

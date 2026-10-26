@@ -1,0 +1,49 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-continue-loading/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-continue-loading/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-continue-loading/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-continue-loading/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-continue-loading/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+CHECKPOINT_WRITER_ISOLATED port=47733 directory=C:/Users/64jus/Downloads/Patch Notes Design Folder/Performance/20261025/bg-ui-continue-loading/APPDATA/Godot/app_userdata/Patch Notes/saves/studio
+CONTINUE_LOADING {"audio_driver":"Dummy","audio_samples":[],"audio_trace":[{"heard_seconds":1.74589961887144,"loops":0,"playing":true,"raw_seconds":1.67200005054474,"size":[1152,648],"stage":"Checking saved Studio…"},{"heard_seconds":2.03919368573454,"loops":0,"playing":true,"raw_seconds":1.95200002193451,"size":[1152,648],"stage":"Restoring Studio…"},{"heard_seconds":2.04691205178005,"loops":0,"playing":true,"raw_seconds":2.04533338546753,"size":[1152,648],"stage":"Restoring market…"},{"heard_seconds":2.18481134099287,"loops":0,"playing":true,"raw_seconds":2.13866662979126,"size":[1152,648],"stage":"Preparing Studio…"},{"heard_seconds":2.19171234323929,"loops":0,"playing":true,"raw_seconds":2.13866662979126,"size":[1152,648],"stage":"Opening Studio…"},{"heard_seconds":2.72784698715315,"loops":0,"playing":true,"raw_seconds":2.69600009918213,"size":[1280,720],"stage":"Checking saved Studio…"},{"heard_seconds":3.01528834030382,"loops":0,"playing":true,"raw_seconds":2.97333335876465,"size":[1280,720],"stage":"Restoring Studio…"},{"heard_seconds":3.02217734254634,"loops":0,"playing":true,"raw_seconds":2.97333335876465,"size":[1280,720],"stage":"Restoring market…"},{"heard_seconds":3.16866811729817,"loops":0,"playing":true,"raw_seconds":3.16000008583069,"size":[1280,720],"stage":"Preparing Studio…"},{"heard_seconds":3.1755771195472,"loops":0,"playing":true,"raw_seconds":3.16000008583069,"size":[1280,720],"stage":"Opening Studio…"}],"captures":[],"checks":143,"failures":4,"load_timings_ms":[],"stages":["Checking saved Studio…","Restoring Studio…","Restoring market…","Preparing Studio…","Opening Studio…"],"viewports":[{"initial_render_pixels":[1152.0,648.0],"requested":[1152,648],"window":[1152,648]},{"initial_render_pixels":[1423.0,801.0],"requested":[1280,720],"window":[1280,720]}]}
+ERROR: Rival Gameplay: Continue does not rewrite generation bytes or repeat settlements
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] _initialize (res://scripts/debug/verify_continue_loading.gd:94)
+ERROR: Rival Gameplay: Continue does not rewrite generation bytes or repeat settlements
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] _initialize (res://scripts/debug/verify_continue_loading.gd:94)
+ERROR: Rival Gameplay: Corrupt save after preview never attaches partial restored state
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_stale_preview_and_failure (res://scripts/debug/verify_continue_loading.gd:145)
+       [2] wait_loading (res://scripts/debug/verify_continue_loading.gd:127)
+SCRIPT ERROR: Invalid access to property or key 'visible' on a base object of type 'Nil'.
+   at: check_stale_preview_and_failure (res://scripts/debug/verify_continue_loading.gd:146)
+   GDScript backtrace (most recent call first):
+       [0] check_stale_preview_and_failure (res://scripts/debug/verify_continue_loading.gd:146)
+       [1] wait_loading (res://scripts/debug/verify_continue_loading.gd:127)
+ERROR: Node not found: "ContinueLoading" (relative to "/root/@Control@1454").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] check_teardown (res://scripts/debug/verify_continue_loading.gd:170)
+SCRIPT ERROR: Invalid access to property or key 'stage_label' on a base object of type 'null instance'.
+   at: check_teardown (res://scripts/debug/verify_continue_loading.gd:170)
+   GDScript backtrace (most recent call first):
+       [0] check_teardown (res://scripts/debug/verify_continue_loading.gd:170)
+ERROR: Attempting to make child window exclusive, but the parent window already has another exclusive child. This window: /root/@Control@1762/@ConfirmationDialog@2067, parent window: /root, current exclusive child window: /root/@Control@1454/@ConfirmationDialog@1759
+   at: _set_transient_exclusive_child (scene/main/window.cpp:1160)
+   GDScript backtrace (most recent call first):
+       [0] _show_checkpoint_recovery (res://scripts/gameplay.gd:865)
+       [1] _present_checkpoint_load (res://scripts/gameplay.gd:807)
+ERROR: Rival Gameplay: Canceling corrupt-save recovery still allows explicitly requested New Run
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] check_new_run_after_cancel (res://scripts/debug/verify_continue_loading.gd:208)

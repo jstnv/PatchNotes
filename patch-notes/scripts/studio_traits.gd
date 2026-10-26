@@ -1,7 +1,7 @@
 class_name StudioTraits
 extends RefCounted
 
-## Historical versions retain their effects; new selections use version 8.
+## Historical versions retain their effects; new selections use version 9.
 ## Unapproved prices never participate in the active point/cash calculation.
 const VERSION := 1
 const STARTING_POINTS := 4
@@ -20,19 +20,19 @@ const SECONDARIES := {
 	&"unknown_name": {"name": "Unknown Name", "positive": false, "price": "Refund pending", "description": "Proposed early Awareness penalty; refund and duration pending."}}
 
 const TRAITS := {
-	&"family_funding": {"name":"Family Funding", "positive":true, "price":"2 points", "description":"Active: $300 separate startup funding."},
-	&"cult_following": {"name":"Cult Following", "positive":true, "price":"1 point (trial)", "description":"Trial: 20 starting Fans once. Ordinary gains and losses apply."},
-	&"publisher_connections": {"name":"Publisher Connections", "positive":true, "price":"1 point", "description":"Active: first Ironclad advance $550; remaining pool $1,850. Full payout stays $2,400."},
-	&"resourceful": {"name":"Resourceful", "positive":true, "price":"1 point", "description":"Active: up to $100 off the first paid Store acquisition per release window. Research saving applies to the final installment; down payment unchanged."},
-	&"lean_production": {"name":"Lean Production", "positive":true, "price":"2 points", "description":"Active: 10% off paid Primitive hands; up to $100 per project."},
-	&"studio_buzz": {"name":"Studio Buzz", "positive":true, "price":"1 point", "description":"Active: +3 Awareness on every launch."},
-	&"college_dropout": {"name":"College Dropout", "positive":false, "price":"Grants 2 points", "description":"$5,000 education debt; no cash deposit. 12 months grace, then 95 × $70.68 and $71.11 final."},
-	&"graduate": {"name":"Graduate", "positive":false, "price":"Grants 6 points", "description":"$20,000 education debt; no cash deposit. 12 months grace, then 95 × $282.73 and $283.28 final."},
-	&"expensive_lease": {"name":"Expensive Lease", "positive":false, "price":"Grants 2 points", "description":"Active: $515 rent every month from month 1."},
-	&"unknown_name": {"name":"Unknown Name", "positive":false, "price":"Grants 2 points", "description":"Active: -10 Awareness on first successful launch, floored at zero."}}
+	&"family_funding": {"name":"Family Funding", "positive":true, "points":2, "active_from_version":3, "active_order":0, "price":"2 points", "description":"Active: $300 separate startup funding."},
+	&"cult_following": {"name":"Cult Following", "positive":true, "points":1, "active_from_version":7, "active_order":9, "price":"1 point (trial)", "description":"Trial: 20 starting Fans once. Ordinary gains and losses apply."},
+	&"publisher_connections": {"name":"Publisher Connections", "positive":true, "points":1, "active_from_version":5, "active_order":6, "price":"1 point", "description":"Active: first Ironclad advance $550; remaining pool $1,850. Full payout stays $2,400."},
+	&"resourceful": {"name":"Resourceful", "positive":true, "points":1, "active_from_version":4, "active_order":5, "price":"1 point", "description":"Active: up to $100 off the first paid Store acquisition per release window. Research saving applies to the final installment; down payment unchanged."},
+	&"lean_production": {"name":"Lean Production", "positive":true, "points":2, "active_from_version":3, "active_order":3, "price":"2 points", "description":"Active: 10% off paid Primitive hands; up to $100 per project."},
+	&"studio_buzz": {"name":"Studio Buzz", "positive":true, "points":1, "active_from_version":3, "active_order":1, "price":"1 point", "description":"Active: +3 Awareness on every launch."},
+	&"college_dropout": {"name":"College Dropout", "positive":false, "points":2, "active_from_version":6, "active_order":7, "price":"Grants 2 points", "description":"$5,000 education debt; no cash deposit. 12 months grace, then 95 × $70.68 and $71.11 final."},
+	&"graduate": {"name":"Graduate", "positive":false, "points":6, "active_from_version":6, "active_order":8, "price":"Grants 6 points", "description":"$20,000 education debt; no cash deposit. 12 months grace, then 95 × $282.73 and $283.28 final."},
+	&"expensive_lease": {"name":"Expensive Lease", "positive":false, "points":2, "active_from_version":3, "active_order":4, "price":"Grants 2 points", "description":"Active: $515 rent every month from month 1."},
+	&"unknown_name": {"name":"Unknown Name", "positive":false, "points":2, "active_from_version":3, "active_order":2, "price":"Grants 2 points", "description":"Active: -10 Awareness on first successful launch, floored at zero."}}
 
-static func evaluate_traits(chosen: Array, version: int = 8) -> Dictionary:
-	if version not in [3,4,5,6,7,8]: return {"valid":false,"reason":"Unsupported trait version."}
+static func evaluate_traits(chosen: Array, version: int = 9) -> Dictionary:
+	if version not in [3,4,5,6,7,8,9]: return {"valid":false,"reason":"Unsupported trait version."}
 	var seen := {}
 	var positive := 0
 	var negative := 0
@@ -44,35 +44,32 @@ static func evaluate_traits(chosen: Array, version: int = 8) -> Dictionary:
 		seen[key] = true
 		if TRAITS[key].positive: positive += 1
 		else: negative += 1
-	if positive > 2 or negative > 1:
+	if version < 9 and (positive > 2 or negative > 1):
 		return {"valid":false, "reason":"Choose at most two positives and one negative."}
 	var ids: Array[StringName] = []
 	for id: StringName in TRAITS:
 		if seen.has(id): ids.append(id)
-	var spent := 2 if seen.has(&"family_funding") else 0
-	spent += 1 if seen.has(&"studio_buzz") else 0
-	spent += 1 if version >= 4 and seen.has(&"resourceful") else 0
-	spent += 2 if seen.has(&"lean_production") else 0
-	spent += 1 if version >= 5 and seen.has(&"publisher_connections") else 0
-	spent += 1 if version >= 7 and seen.has(&"cult_following") else 0
-	var refunded := 2 if seen.has(&"unknown_name") or seen.has(&"expensive_lease") else 0
-	if version >= 6:
-		if seen.has(&"college_dropout"): refunded += 2
-		if seen.has(&"graduate"): refunded += 6
+	var spent := 0
+	var refunded := 0
 	var active: Array[StringName] = []
-	for id: StringName in [&"family_funding", &"studio_buzz", &"unknown_name", &"lean_production", &"expensive_lease"]:
-		if seen.has(id): active.append(id)
-	if version >= 4 and seen.has(&"resourceful"): active.append(&"resourceful")
-	if version >= 5 and seen.has(&"publisher_connections"): active.append(&"publisher_connections")
-	if version >= 6:
-		for id: StringName in [&"college_dropout",&"graduate"]:
-			if seen.has(id): active.append(id)
-	if version >= 7 and seen.has(&"cult_following"): active.append(&"cult_following")
+	for id: StringName in TRAITS:
+		if not seen.has(id): continue
+		var definition: Dictionary = TRAITS[id]
+		if version < int(definition.active_from_version): continue
+		if definition.positive: spent += int(definition.points)
+		else: refunded += int(definition.points)
+		active.append(id)
+	active.sort_custom(func(left: StringName, right: StringName) -> bool:
+		return int(TRAITS[left].active_order) < int(TRAITS[right].active_order))
 	var remaining := STARTING_POINTS - spent + refunded
-	if remaining < 0: return {"valid":false, "reason":"Not enough build points."}
-	return {"valid":true, "reason":"", "version":version, "trait_ids":ids,
-		"effects_mode":&"approved_effects_v1", "active_ids":active, "starting_points":4,
-		"spent_points":spent, "refunded_points":refunded, "remaining_points":remaining, "point_cash_cents":cash_for_points(remaining),
+	if version < 9 and remaining < 0: return {"valid":false, "reason":"Not enough build points."}
+	var reason := ""
+	if remaining < 0: reason = "Negative point balance. Check Traits before playing."
+	if version >= 9 and seen.has(&"graduate") and seen.has(&"college_dropout"):
+		reason = "Choose one education history: Graduate or College Dropout."
+	return {"valid":reason.is_empty(), "reason":reason, "version":version, "trait_ids":ids,
+		"effects_mode":&"approved_effects_v1", "active_ids":active, "starting_points":STARTING_POINTS,
+		"spent_points":spent, "refunded_points":refunded, "remaining_points":remaining, "point_cash_cents":cash_for_points(maxi(0,remaining)),
 		"family_funding_cents":30000 if seen.has(&"family_funding") else 0}
 
 
@@ -132,5 +129,5 @@ static func starting_fans(selection: Dictionary) -> int:
 	if not is_active(selection, &"cult_following"): return 0
 	match selection.get("version", 0):
 		7: return 40
-		8: return 20
+		8,9: return 20
 	return 0

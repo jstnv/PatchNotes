@@ -16,7 +16,7 @@ func _capture(name: String) -> void:
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("res://design-logs/" + name + ".png")
 
-func _finish_project(project: ProjectState) -> void:
+func _finish_project(project: ProjectState, owner: RunState = null) -> void:
 	var snapshots := PrimitiveSnapshotDatabase.new()
 	snapshots.load_ledgers()
 	var scores: Dictionary[ProjectState.CoreScore, int] = {0: 30, 1: 30, 2: 30, 3: 30}
@@ -26,7 +26,7 @@ func _finish_project(project: ProjectState) -> void:
 	project.finalize_alpha(0, [], [])
 	project.finalize_beta()
 	project.commit_review_result(PrimitiveReviewCalculator.calculate(project, 50))
-	project.commit_awareness_result(PrimitiveAwarenessCalculator.calculate(project))
+	project.commit_awareness_result(PrimitiveAwarenessCalculator.calculate(project,owner))
 	project.commit_launch_market_context_result(PrimitiveLaunchMarketContextCalculator.calculate(project, snapshots))
 	project.commit_units_sold_result(PrimitiveUnitsSoldCalculator.calculate(project))
 	project.commit_month_one_sales_revenue_result(PrimitiveMonthOneSalesRevenueCalculator.calculate(project))
@@ -40,17 +40,19 @@ func _run() -> void:
 	var menu: MainMenu = game.get("_active_phase")
 	expect(menu != null and run.get_cash_cents() == 0 and game.project_state == null, "New run opens main menu without project or charge")
 	await _capture("main-menu")
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
-	var input: LineEdit = menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName")
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	var input: LineEdit = menu._name_input
+	menu._specialty.select(1)
+	menu._play.pressed.emit()
 	expect(run.get_studio_name().is_empty() and run.get_completed_run_cycles() == 0, "Blank studio name rejects for free")
 	input.text = "  North Star  "
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu._specialty.select(1)
+	menu._play.pressed.emit()
 	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	var studio: StudioPhase = game.get("_active_phase")
 	expect(studio != null and run.get_studio_name() == "North Star" and run.get_completed_run_cycles() == 0 and run.get_cash_cents() == 570000 and game.project_state == null, "Studio name commits once, grants initial funding, and enters empty Studio for free")
 	expect(run.finalize_starter_selection(), "History fixture closes the first-game purchase window before released projects")

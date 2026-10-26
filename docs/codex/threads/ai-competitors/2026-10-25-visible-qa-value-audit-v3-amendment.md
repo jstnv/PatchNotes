@@ -1,0 +1,5 @@
+# Visible QA audit v3 amendment — 2026-10-25
+
+The first v2 paired audit passed legality/source checks and correctly reported per-arm title counts, Reviews and player units. Its standalone `accepted_beta_hands` totals are **not an equal-project comparison** when seed 4417's candidate has nine completed rival releases versus the control's ten. The 20→20 totals mix one missing baseline title with extra candidate hands. The v2 output remains retained, but do not infer zero extra hands from it.
+
+Re-read the same frozen world reports in a new v3 audit. Match project IDs published in **both** arms, compare accepted Beta hands by project/unique sequence, and list control-only/candidate-only releases and right-censored active projects separately. Report matched Review changes separately from each arm's population mean. Keep original source/RNG, release-count, player-sales and exploratory success checks unchanged. Write a new output path; no simulator rerun, seed or bound change follows this analysis correction.

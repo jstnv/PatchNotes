@@ -1,0 +1,5 @@
+# Explicit current-source two-hand opening control — 2026-10-23
+
+**Pre-run correction and DESIGN evidence plan.** The prior opening screen's A fixture was 3/5/2, not the live rival 2/2/2 policy. Run four matched legal 2/2/2 `features_first` openings from the same January Action/Adventure recipes and seeds 4417/90210. This controls hand count and starting state under the same source, but its `features_first` card selector is **not** the live rival synergy/Beta selector. The user's actual seven-cycle playtest and retained interleaved world study remain the real-policy observations. Do not relabel this fixture as world behavior.
+
+Target one release per case, 60 commands maximum and 240-second isolated import/experiment timeout. Record accepted hand counts, initial state/RNG/source parity to the 3/5/2–5/7/3 screen, Review/Core/Scope/Bugs, release cycle, cash low and dues. Retain all failures. If source changed since the prior bundle, preserve the case but make no numerical cross-source assertion. Do not modify canonical gameplay, seeds, state or budgets. Exact replay of the longer ceiling arm is separate.

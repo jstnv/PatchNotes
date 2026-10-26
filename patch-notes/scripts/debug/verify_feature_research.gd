@@ -21,7 +21,7 @@ func _run() -> void:
 	var free_before := run.get_completed_run_cycles()
 	var starter: StringName
 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
-		if not run.owns_feature(StringName(entry.id)):
+		if run.get_primitive_reserve_offer(StringName(entry.id)).can_purchase:
 			starter = StringName(entry.id)
 			break
 	check(run.purchase_starter_feature(starter) and run.owns_feature(starter) and run.get_completed_run_cycles()==free_before,"Initial Primitive purchase stays instant")
@@ -36,7 +36,7 @@ func _run() -> void:
 	var second: StringName
 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
 		var id := StringName(entry.id)
-		if not run.owns_feature(id): second = id; break
+		if run.get_feature_research_quote(id).can_admit: second = id; break
 	check(run.admit_feature_research(run.get_feature_research_quote(second)),"Distinct Primitive reserve queues behind head")
 	before = snap(run)
 	check(not run.research_feature(run.get_feature_research_quote(second)) and snap(run)==before,"FIFO blocks non-head without mutation")

@@ -1,0 +1,30 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+SCRIPT ERROR: Invalid call. Nonexistent function 'duplicate' in base 'RefCounted (CardData)'.
+   at: CheckpointCoordinator.attach_rivals (res://scripts/persistence/checkpoint_coordinator.gd:147)
+   GDScript backtrace (most recent call first):
+       [0] attach_rivals (res://scripts/persistence/checkpoint_coordinator.gd:147)
+       [1] _initialize (res://scripts/debug/verify_background_checkpoint.gd:58)
+ERROR: FAIL: Real player/world are bound
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_background_checkpoint.gd:24)
+       [1] _initialize (res://scripts/debug/verify_background_checkpoint.gd:58)
+ERROR: FAIL: Paused tree still completes latest durable save
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_background_checkpoint.gd:24)
+       [1] _initialize (res://scripts/debug/verify_background_checkpoint.gd:74)
+       [2] wait_saved (res://scripts/persistence/checkpoint_coordinator.gd:93)
+ERROR: FAIL: Final generation validates independently
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_background_checkpoint.gd:24)
+       [1] _initialize (res://scripts/debug/verify_background_checkpoint.gd:77)
+       [2] wait_saved (res://scripts/persistence/checkpoint_coordinator.gd:93)
+SCRIPT ERROR: Invalid access to property or key 'payload' on a base object of type 'Dictionary'.
+   at: _initialize (res://scripts/debug/verify_background_checkpoint.gd:78)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://scripts/debug/verify_background_checkpoint.gd:78)
+       [1] wait_saved (res://scripts/persistence/checkpoint_coordinator.gd:93)

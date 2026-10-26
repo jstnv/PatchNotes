@@ -23,6 +23,8 @@ static func inspect(database: Node, overrides: Dictionary = {}) -> String:
 	for path in ["res://data/card_ledger.json","res://data/feature_store_ledger.json"]:
 		var errors: Array = database.validate_card_definitions(parsed[path])
 		if not errors.is_empty(): return "Invalid card definitions: " + path + " (" + str(errors[0]) + ")"
+	var graph_error := FeatureStoreCatalog.validate_entries(parsed["res://data/card_ledger.json"], parsed[FeatureStoreCatalog.PATH])
+	if not graph_error.is_empty(): return "Invalid Feature prerequisites: " + graph_error
 	var pre: Dictionary = parsed[PrimitivePredevelopment.PATH]
 	for kind in ["genres","themes"]:
 		if not pre.get(kind) is Array or pre[kind].is_empty(): return "Missing pre-development choices: " + kind

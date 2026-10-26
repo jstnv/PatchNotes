@@ -14,13 +14,38 @@ SPEC.loader.exec_module(simulate)
 
 
 class SimulatorRunnerTests(unittest.TestCase):
+    def test_large_git_evidence_is_retained_without_buffering_in_result(self):
+        output = self.root / "git-evidence"
+        output.mkdir()
+        import subprocess
+        status = b"?? generated-evidence/\n"
+        block = b"binary evidence\n" * 65536
+        def fake_git(command, **options):
+            if "status" in command or "diff" in command:
+                self.assertNotIn("capture_output", options)
+                stream = options["stdout"]
+                if "status" in command:
+                    stream.write(status)
+                else:
+                    for _ in range(8): stream.write(block)
+                return subprocess.CompletedProcess(command, 0, stderr=b"")
+            value = b"main" if "branch" in command else b"0" * 40
+            return subprocess.CompletedProcess(command, 0, stdout=value, stderr=b"")
+        with patch.object(simulate.subprocess, "run", fake_git):
+            result = simulate.git_provenance(self.root, output)
+        self.assertTrue(result["dirty"])
+        self.assertEqual((output / "git-status.txt").read_bytes(), status)
+        self.assertEqual((output / "source.diff.patch").stat().st_size, len(block) * 8)
+        self.assertEqual(result["diff"]["sha256"], simulate.sha(output / "source.diff.patch"))
+        self.assertLess(len(json.dumps(result)), 1024)
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name)
         self.project = self.root / "source"
         self.project.mkdir()
         (self.project / "project.godot").write_text("config_version=5\n", encoding="utf-8")
-        for name in ("scripts/rule.gd", "data/cards.json", "assets/font.ttf.import", ".godot/cache.bin", ".codex-godot-temp/keep.gd", "design-logs/keep.md", "analysis/keep.gd"):
+        for name in ("scripts/rule.gd", "data/cards.json", "assets/font.ttf.import", "assets/branding/logo.ico", ".godot/cache.bin", ".codex-godot-temp/keep.gd", "design-logs/keep.md", "analysis/keep.gd"):
             path = self.project / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("retained source", encoding="utf-8")
@@ -30,7 +55,7 @@ class SimulatorRunnerTests(unittest.TestCase):
 
     def test_snapshot_excludes_cache_analysis_and_preserves_import_settings(self):
         manifest = simulate.copy_snapshot(self.project, self.root / "copy")
-        self.assertEqual(set(manifest), {"project.godot", "scripts/rule.gd", "data/cards.json", "assets/font.ttf.import"})
+        self.assertEqual(set(manifest), {"project.godot", "scripts/rule.gd", "data/cards.json", "assets/font.ttf.import", "assets/branding/logo.ico"})
         self.assertTrue((self.project / ".codex-godot-temp/keep.gd").is_file())
         simulate.check_snapshot(self.root / "copy", manifest)
 
@@ -43,6 +68,13 @@ class SimulatorRunnerTests(unittest.TestCase):
         with patch.object(simulate.shutil, "copy2", side_effect=copy_then_edit):
             with self.assertRaisesRegex(RuntimeError, "Source changed"):
                 simulate.copy_snapshot(self.project, self.root / "copy")
+
+    def test_read_only_query_is_included_in_external_source_manifest(self):
+        query = self.project / "queries/market_release_index.gd"
+        query.parent.mkdir()
+        query.write_text("extends RefCounted", encoding="utf-8")
+        manifest = simulate.copy_snapshot(self.project, self.root / "copy")
+        self.assertEqual(manifest["queries/market_release_index.gd"], simulate.sha(query))
 
     def test_snapshot_detects_missing_or_added_source(self):
         manifest = simulate.source_hashes(self.project)

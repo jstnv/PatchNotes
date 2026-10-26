@@ -1,0 +1,30 @@
+# Longer legal market exposure study — predeclaration, 2026-10-22
+
+**DESIGN evidence only. Source-matched mechanical adoption confirmed by the implementation thread before execution on 2026-10-22.** Bank and all other gameplay rules remain unchanged. This study does not approve final market values, rival policies or leaderboard implementation.
+
+Execution source is `5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536`. The implementation thread reports five exact record/replay pairs, clean 331-entry export, compiled-source record/replay and graphical Gameplay Continue at both sizes. Direct release-EXE mouse verification remains separately incomplete because the computer-control tool selected the wrong window; no final human acceptance is inherited by this study.
+
+## Question and fixed protocol
+
+Measure the actual exposure of ordinary player projects and sales to the current two real incumbent Studios beyond the previous three-release acceptance horizon. Attribute immediate Review and sales/Fan-gain effects at fixed factual inputs; do not present an imagined neutral campaign as an observed alternate outcome.
+
+- Canonical source: `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`, with preexisting dirty work. Each run requires the explicitly approved exact `DevelopmentReplay.source_identity()` given above, records it before/after, and fails on drift.
+- Eight fresh recipes: Action/War, Action/Fantasy, Puzzle/War and Puzzle/Fantasy, each at seeds `4417` and `4418`. Studio ID is `market-exposure-<route>-<seed>`; this also deterministically seeds the two current incumbents through the production factory. Across routes these are separate worlds, not equal-RNG matched comparisons. Fixed-state counterfactuals provide attribution.
+- Traits: `cult_following`; all ordinary factory cash, pools, benefits and founding state. No injected scores, cash, Fans, dates, debt, releases, traits or ownership.
+- Player policy: choose the recipe Genre/Theme at each project; Feature-first then token-order four-card hand; two productive hands per Design/Alpha/Beta phase, normal exit/confirmation/launch. No redraw, Store, Bank, Contract, Employee or campaign spending. Actual canonical incumbent policy remains active and unchanged.
+- Per record: target six completed player releases; at most 180 commands, 48 productive cycles (24 months), and 180 wall seconds in Godot. External timeout is 210 seconds. Stop at first illegal policy command, failed invariant, unexpected source drift, reached bound, or sixth Studio release. Record failure instead of changing the policy or factory state to force a result.
+- One fresh-process exact replay per successful record, same bounds. Verify identical player/rival command results, state and RNG at every recorded step. No retry with replacement seeds. Harness repairs, if needed, receive new output tags and retain earlier failures.
+- Source pinning, ordinary old-save Continue and corrupt/backup migration are inherited only as separately cited adoption evidence. This fresh-campaign study does not itself repeat or establish old-save acceptance.
+
+## Counterfactual boundary
+
+1. **Review:** for each actual player release, recompute the Review equation from the exact Core scores, Scope, required Scope, remaining Bugs and variance modifier. First reproduce the actual frozen standards result. Then substitute only the fixed Genre base standards. This isolates the target effect at the same completed project; it does not alter a project or claim the player would have chosen the same actions in another economy.
+2. **Sales:** retain every actual title's frozen launch units, actual Review, launch Awareness, launch market multiplier, real elapsed cycles and campaign decisions. Rebuild its cumulative ledger three ways through the pure sales calculator: actual saved factors; factors recomputed from each saved monthly snapshot after removing rival facts while retaining the player's other titles; and fully neutral factors. Actual replay must equal the factual sales record. Report exact earned units and entitlement/settled cents at the observed horizon. This is an **ordered marginal removal**: remove rivals first while retaining own-title crowding, then remove own titles. The 70% floor and integer rounding mean the split is conditional on that order, not a unique additive causal share. Do not fold the Review counterfactual into these sales comparisons.
+3. **Fans:** calculate cumulative settled gain targets from each sales counterfactual using the actual title's launch-Fan reserve and frozen Review. Check actual targets against the ledger. Neutral loss exposure is unchanged by market crowding. These are direct fixed-launch-input gain differences, not an alternative full Studio Fan history; later launch Awareness and reserve remain factual.
+4. Record actual player/rival publication metadata and recent-snapshot membership, project target frequency, exclusive Genre/Theme/pair buckets, factor floors, expiry, exact financial/Fan ledgers, per-command and per-world wall timings, actual process CPU, serialized Studio/world save bytes and Godot memory. Observation/replay/checkpoint overhead remains separate from production world timing.
+
+## Interpretation and deferred work
+
+The cohort contains two fixed-specialty incumbents with fixed Fantasy choices and no Store purchases. Sparse/low-quality output and lack of Genre overlap can limit challenge independently of the market formula. Six releases are a bounded longer sample, not a long-run balance or population-cap proof. Store/Core planning, entrants, following-month news, trial coefficients, challenge thresholds and any new policy remain OPEN. The leaderboard's eligibility, units versus revenue metric, period, ties, update timing, ownership-transfer handling and UI placement remain OPEN; no leaderboard is implemented or selected here.
+
+Estimated wall time is 10–20 minutes for eight records and eight replays based on the prior 21-second three-release record and expected growth; this is a scheduling estimate, not a performance result.

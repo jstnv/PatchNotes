@@ -1,0 +1,11 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+{"checks":1,"failures":1,"frames":0,"max_frame_gap_ms":0.0,"ok":false}
+ERROR: FAIL: Coordinator supports an owned background save lifecycle
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_background_checkpoint.gd:24)
+       [1] _initialize (res://scripts/debug/verify_background_checkpoint.gd:45)
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

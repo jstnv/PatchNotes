@@ -1,0 +1,34 @@
+# AI Competitors: legal Beta redraw at fixed thirteen-cycle cadence — 2026-10-24
+
+**COMPLETE bounded DESIGN finding; quality improves, adoption not ready.** The [pre-run plan](2026-10-24-beta-redraw-plan-v1.md) tested spending existing redraws when a Beta deal lacked visible Search or Debug. The candidate kept every rival release month and improved Reviews in two matched worlds, but still left seven of sixteen titles below 6.0 and did not change the player's fixed-horizon market outcome. The two-redraw rule remains **OPEN**.
+
+## Source and comparison
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; broad shared dirty worktree and `.codex-godot-temp` preserved. [Private v10 variant](simulators/rival-beta-redraw-20261024-v10/variant.json) forks the [current-source v9](simulators/rival-core-review-audit-20261024-v9/variant.json), preserving original canonical baseline `975b3be9228c938032cce307c8410b4d57d03c77df9880b86f63e325807d05eb`. Only its private `project/scripts/market/rival_trial.gd` policy changed. Frozen replay source identity `d0259099fad2ed07e5239f32baab24bf4e7a898f18b49f3770741e2ed2cda71c`; Godot 4.7.1 SHA-256 `323f9c4cc5db674e98815cdd8e69da007d5efc779abedc8c0e42883b7fdea12a`. Any later canonical source change requires a new reconciliation, not a cross-source parity claim.
+
+Both arms use the same actual Arcade/Wayfinder cohort, permanent specialties, owned Features, cash, player Action/Fantasy route and thirteen productive-cycle 4/6/2 project plan with best-visible-four Design/Alpha selection. A uses current Beta choice without redraw. B makes at most two **legal one-card, zero-cycle** Beta redraws per project when its visible pool lacks Search or Debug, the public budget allows it, and a renewable expendable card is present. It then uses the same current Beta selector and exits by productive project cycle, so redraws cannot count as production hands. This is a diagnostic AI policy, not an approved rule. No Store purchase, cash/score/RNG injection, extra rival, Review or market coefficient changed. The [isolated smoke](sims/rival-beta-redraw-smoke-20261024-v10/run-report.json) passed 18 legal commands/cycle 7.
+
+Seed 4417 and then seed 4418 A/B were run sequentially under the declared 210 player-command, eight player-release/cycle-64, twelve zero-step and 480-second bounds. All four worlds completed 144 player commands, eight player releases and 9,974 checks with zero reported failures. The [read-only audit](sims/rival-beta-redraw-audit-20261024-v10.json) confirms equal full initial state, typed RNG and source within each seed, plus **identical rival publication cycles** in A/B: each studio releases at 13, 26, 39 and 52. New v10 A exactly reproduces the prior v9 thirteen-cycle Reviews on both seeds, though replay identities differ.
+
+| Seed | A 6.0+ / 8 | B 6.0+ / 8 | Review sum, tenths A→B | Legal redraws | Remaining Bugs sum A→B | Player earned units/cash delta |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 4417 | 3 | 4 | 453→457 | 12 | 41→40 | 0 / $0 |
+| 4418 | 2 | 5 | 441→465 | 14 | 49→38 | 0 / $0 |
+
+Across the sixteen rival releases, 6.0+ rises **5→9**, Review average **5.59→5.76**, and remaining Bugs **90→78**. B's Reviews by publication order were 4417 `5.7, 4.8, 6.3, 6.2, 4.4, 7.1, 4.9, 6.3` and 4418 `5.5, 6.1, 6.4, 4.6, 6.5, 6.0, 5.3, 6.1`. Improvements are uneven: some titles lose Review or gain Bugs, and one 7.0+ title exists in each 4417 arm. On both seeds, player earned/paid units, settled/final cash and Fans are **identical** A/B at the fixed horizon. Same title count/Genre/Theme and no additional strong 7.0+ benchmark leave the player's measured market challenge unchanged. The thirteen-cycle route remains much sparser than ACTIVE/TRIAL 2/2/2, as the [v9 diagnosis](2026-10-24-core-review-current-source-finding-v1.md) shows.
+
+World CPU A/B was 52.6/68.1 seconds on 4417 and 57.8/61.8 seconds on 4418. Shared-host noise and two-rival scope prevent a population CPU conclusion; checkpoint bytes and per-title Core/Scope/Bugs are in the audit. [B seed 4418 exact fresh-process replay](sims/rival-beta-redraw-4418-B-replay-20261024-v10/world-run.json) passed 144 commands and 10,058 checks with the expected final checkpoint. Original [4417 A](sims/rival-beta-redraw-4417-A-20261024-v10/world-run.json), [4417 B](sims/rival-beta-redraw-4417-B-20261024-v10/world-run.json), [4418 A](sims/rival-beta-redraw-4418-A-20261024-v10/world-run.json), [4418 B](sims/rival-beta-redraw-4418-B-20261024-v10/world-run.json) runs retain tapes, command records, logs and checkpoints. Studio-only Continue was **NOT RUN** because B did not pass the player-challenge gate; the read-only source-pinned exact replay is the bounded reliability check here.
+
+## Disposition
+
+**Do not queue v10 as a rival challenge policy.** Legal, selective Beta redraw helps Review reliability without spending extra productive cycles, so retain it as a candidate ingredient. It does not by itself achieve consistent 6–7 Reviews or affect the player's measured sales/cash on these routes, and the thirteen-cycle two-rival world loses half the existing rival publications. The next DESIGN gate should combine quality with actual recent-title density on a source-matched legal roster/entrant route, while screening CPU and save cost. Exact redraw budget, Beta choice, Store/Core policy, entrant identities/resources/timing, later Genre/Theme, final market coefficients, news and leaderboard remain **OPEN**. A simulation pass is not balance approval.
+
+## Representative reproduction
+
+```powershell
+& 'C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' tools/simulate.py run --variant docs/codex/threads/ai-competitors/simulators/rival-beta-redraw-20261024-v10 --config docs/codex/threads/ai-competitors/six-hand-phase-study-20261023-v1/smoke.json --output docs/codex/threads/ai-competitors/sims/rival-beta-redraw-smoke-20261024-v10 --godot 'C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64.exe' --timeout 240
+& 'C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' docs/codex/threads/ai-competitors/six-hand-phase-study-20261023-v1/run_world.py --bundle docs/codex/threads/ai-competitors/sims/rival-beta-redraw-smoke-20261024-v10 --output docs/codex/threads/ai-competitors/sims/rival-beta-redraw-4418-B-20261024-v10 --godot 'C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64.exe' --source d0259099fad2ed07e5239f32baab24bf4e7a898f18b49f3770741e2ed2cda71c --route action-fantasy --seed 4418 --candidate 1 --arm B
+& 'C:\Users\64jus\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' docs/codex/threads/ai-competitors/2026-10-24-beta-redraw-audit-v1.py
+```
+
+Use new output paths for any rerun. The archived `world.command.json` files and the replay result pin the exact commands and process status.

@@ -1,6 +1,7 @@
 ## One authoritative Studio -> fresh Design transaction. Scene preparation is
 ## an optional synchronous readiness callback; no UI is needed by simulation.
 extends RefCounted
+const Fence := preload("res://scripts/simulation/transaction_projection.gd")
 
 static func initialize_snapshots(project: ProjectState, run: RunState, snapshots: PrimitiveSnapshotDatabase, controlled: Array[int] = []) -> bool:
 	var has_competitor := project.has_competitor_snapshot()
@@ -18,20 +19,53 @@ static func initialize_snapshots(project: ProjectState, run: RunState, snapshots
 		return false
 	return true
 
-static func execute(run: RunState, snapshots: PrimitiveSnapshotDatabase, base_name: String, genre: StringName, theme: StringName, readiness: Callable = Callable(), controlled: Array[int] = []) -> Dictionary:
+static func execute(run: RunState, snapshots: PrimitiveSnapshotDatabase, base_name: String, genre: StringName, theme: StringName, readiness: Callable = Callable(), controlled: Array[int] = [], commission_quote: Dictionary = {}, support_quote: Dictionary = {}) -> Dictionary:
 	var error := PrimitivePredevelopment.validation_error(base_name,genre,theme)
 	if not error.is_empty(): return {"ok":false,"error":error}
-	if run == null or snapshots == null or run.next_project_serial == RunState.MAX_SIGNED_INT or not run.can_complete_productive_cycle(): return {"ok":false,"error":"Development cannot begin"}
+	if run == null or snapshots == null or run.next_project_serial == RunState.MAX_SIGNED_INT: return {"ok":false,"error":"Development cannot begin"}
+	if run.has_pending_commission() or run.has_unlaunched_support() or (not commission_quote.is_empty() and not support_quote.is_empty()): return {"ok":false,"error":"Game deal already active"}
+	var frozen_support := support_quote.duplicate(true)
+	if not frozen_support.is_empty() and frozen_support != run.get_support_quote(base_name,genre,theme): return {"ok":false,"error":"Support quote rejected"}
+	var funding: int = int(frozen_support.get("funding_cents",0))
+	if not run.can_complete_productive_cycle(funding): return {"ok":false,"error":"Development cannot begin"}
+	var frozen_commission := commission_quote.duplicate(true)
+	var expected_cycle := run.get_completed_run_cycles()
+	var expected_serial := run.next_project_serial
 	var before := run.random_streams.snapshot()
 	var next := PrimitivePredevelopment.prepare_project(base_name,genre,theme,run)
 	if next != null and not run._bank_run_id.is_empty(): next._release_id = StringName("%s:project:%d" % [run._bank_run_id,run.next_project_serial])
-	if next == null or not initialize_snapshots(next,run,snapshots,controlled) or (readiness.is_valid() and not readiness.call(next)):
+	if not frozen_commission.is_empty() and not run.can_bind_commission_quote(frozen_commission,next): return {"ok":false,"error":"Commission quote rejected"}
+	if not frozen_support.is_empty() and not run.can_bind_support_quote(frozen_support,next): return {"ok":false,"error":"Support project rejected"}
+	var market: Dictionary=preload("res://scripts/market/market_transaction_trial.gd").neutral()
+	if run._market_provider.is_valid(): market=run._market_provider.call(run._bank_run_id,run.get_completed_run_cycles()+1)
+	var targets: Dictionary=preload("res://scripts/market/market_transaction_trial.gd").targets(market,str(run._bank_run_id),genre)
+	if next == null or targets.is_empty() or not next.freeze_market_standards(str(targets.snapshot_id),targets.standards,targets) or not initialize_snapshots(next,run,snapshots,controlled):
 		run.random_streams.restore(before)
 		return {"ok":false,"error":"Could not prepare the new project"}
-	if not run.complete_productive_action(Callable(),0,-1,&"",&"development",next.get_release_id()):
+	var prepared := Fence.authority(next)
+	var context := Fence.authority(run)
+	if readiness.is_valid():
+		run._preparing_project = true
+		var ready: bool = readiness.call(next)
+		run._preparing_project = false
+		if not ready or prepared != Fence.authority(next) or context != Fence.authority(run):
+			run.random_streams.restore(before)
+			return {"ok":false,"error":"Prepared project changed during readiness"}
+	if not frozen_commission.is_empty() and not run.can_bind_commission_quote(frozen_commission,next):
+		run.random_streams.restore(before)
+		return {"ok":false,"error":"Prepared commission changed"}
+	if not frozen_support.is_empty() and not run.can_bind_support_quote(frozen_support,next):
+		run.random_streams.restore(before)
+		return {"ok":false,"error":"Prepared support changed"}
+	var bind := func() -> bool:
+		if run.get_completed_run_cycles() != expected_cycle or run.next_project_serial != expected_serial or prepared != Fence.authority(next) or context != Fence.authority(run): return false
+		if not frozen_commission.is_empty() and not run._bind_commission(frozen_commission): return false
+		if not frozen_support.is_empty() and not run._bind_support(frozen_support): return false
+		run.next_project_serial += 1
+		return true
+	if not run.complete_productive_action(bind,funding,expected_cycle,&"",RunState.Support.FUNDING_KIND if not frozen_support.is_empty() else &"development",frozen_support.quote_id if not frozen_support.is_empty() else next.get_release_id()):
 		run.random_streams.restore(before)
 		return {"ok":false,"error":"Development cycle rejected"}
-	run.next_project_serial += 1
 	if run.needs_starter_selection():
 		run.begin_first_game_tutorial(next)
 		run.finalize_starter_selection()

@@ -32,6 +32,9 @@ func _run() -> void:
 			expect(run.register_release(first),"Frozen sales fixture registers")
 			for i in range(4): expect(run.complete_productive_action(),"Native sales settlement")
 			expect(run.accept_bank_loan(run.get_bank_quote(50000,12)),"Native accepted Bank loan")
+			var second:=PrimitivePredevelopment.prepare_project("Second payroll fixture",&"action",&"fantasy",run)
+			_finish_project(second,run)
+			expect(run.register_release(second),"Second synthetic release permits payroll")
 			expect(run.hire_production_specialist(run.get_production_hire_quote()),"Native payroll hire")
 		"installment":
 			for i in range(3): expect(run.complete_productive_action(),"Native dated installment and payroll")

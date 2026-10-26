@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_campaign_latency.gd"
+  ],
+  "exit": 1,
+  "seconds": 2.922,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\state-proof-red-v1",
+  "script_sha256": "98b11fb62ad282044f8810c204f036b8de0756f7a4c7ef595604eff14c69d8e8",
+  "result": {
+    "checks": 153,
+    "failures": 1,
+    "measurements": {
+      "cycle": 96,
+      "original_validation_us": 11992,
+      "repeated_validation_us": 858
+    },
+    "ok": false
+  },
+  "errors": [
+    "ERROR: FAIL: Identical proven state in a new valid generation does not reconstruct its entire history"
+  ]
+}

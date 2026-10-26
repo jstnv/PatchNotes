@@ -8,6 +8,8 @@ const WAVE_SPACING := 0.62
 const SELECTION_LIMIT := 4
 enum Organization { NONE, CATEGORY, SCOPE }
 var beta_sort_only := false
+## Narrow practice workspaces can fit both separated groups without cropping.
+var fit_groups_to_width := false
 var _organization := Organization.NONE
 var _wave_time := 0.0
 var _poses: Dictionary = {}
@@ -63,6 +65,14 @@ func organize_by_primary() -> void:
 	for card in cards:
 		if card not in _visual_order: _visual_order.append(card)
 	arrange()
+
+## Logical candidate order excludes tooltip windows and other presentation nodes.
+## Visual organization can differ, so do not use ordered_cards() for game tokens.
+func card_views() -> Array[CardView]:
+	var result: Array[CardView] = []
+	for child in get_children():
+		if child is CardView: result.append(child)
+	return result
 
 func ordered_cards() -> Array[CardView]:
 	var result: Array[CardView] = []
@@ -161,6 +171,14 @@ func _gui_input(event: InputEvent) -> void:
 			_pressed = null
 		accept_event()
 
+func _make_custom_tooltip(for_text: String) -> Object:
+	var label := Label.new()
+	label.custom_minimum_size.x = minf(440.0, get_viewport_rect().size.x - 48.0)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.text = for_text
+	return label
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_SORT_CHILDREN and is_inside_tree(): arrange()
 
@@ -176,11 +194,18 @@ func arrange(immediate := false) -> void:
 	# Separate groups diagonally: preserve readable card scale instead of
 	# shrinking two complete rows into the same short viewport.
 	var upper_factor := minf(0.68, maxf(0.4, (size.y - 48.0) / CARD_SIZE.y))
+	var group_gap := 32.0
+	if fit_groups_to_width and not upper.is_empty():
+		group_gap = 0.0 if lower.is_empty() else 32.0
+		var slots := upper.size() + (0 if lower.is_empty() else 1)
+		var reserved := 24.0 + group_gap + maxi(0,upper.size()-1)*16.0
+		upper_factor = minf(upper_factor,maxf(0.2,(visible_width-reserved)/(CARD_SIZE.x*slots)))
 	var lower_factor := minf(0.65, upper_factor)
 	var upper_width: float = upper.size() * CARD_SIZE.x * upper_factor + maxi(0, upper.size() - 1) * 16.0
 	var lower_spacing := minf(90.0, maxf(0.0, (visible_width - upper_width - 64.0 - CARD_SIZE.x * lower_factor) / maxf(1, lower.size() - 1)))
 	var lower_width: float = CARD_SIZE.x * lower_factor + maxi(0, lower.size() - 1) * lower_spacing
-	var left: float = (visible_width - upper_width - 32.0 - lower_width) / 2.0
+	if fit_groups_to_width and lower.is_empty(): lower_width = 0.0
+	var left: float = (visible_width - upper_width - group_gap - lower_width) / 2.0
 	for i in range(count):
 		var card := cards[i]
 		if card == null: continue
@@ -193,7 +218,7 @@ func arrange(immediate := false) -> void:
 			var row_offset: float = row.find(card) - (row.size() - 1) / 2.0
 			spread = row_offset / maxf(1.0, (row.size() - 1) / 2.0)
 			var row_spacing := CARD_SIZE.x * factor + 16.0 if card.is_selected() else lower_spacing
-			var row_center := left + upper_width / 2.0 if card.is_selected() else left + upper_width + 32.0 + lower_width / 2.0
+			var row_center := left + upper_width / 2.0 if card.is_selected() else left + upper_width + group_gap + lower_width / 2.0
 			center = Vector2(row_center + row_spacing * row_offset, 18.0 + CARD_SIZE.y * factor / 2.0 if card.is_selected() else size.y - 18.0 - CARD_SIZE.y * factor / 2.0)
 		var target := center - CARD_SIZE / 2.0
 		var angle := spread * deg_to_rad(3.0 if not upper.is_empty() else 9.0)
@@ -219,7 +244,11 @@ func arrange(immediate := false) -> void:
 				_tweens[card] = entry
 				entry.tween_interval(i * 0.045)
 				entry.tween_method(_set_base_position.bind(card), start, target, 0.34)
-				entry.tween_callback(func(): card.remove_meta("fan_entering"))
+				entry.tween_callback(func():
+					card.remove_meta("fan_entering")
+					# Parent containers can resize the fan during its staggered entrance.
+					# Settle finished cards against those bounds without skipping other entries.
+					queue_sort())
 		else:
 			var tween := create_tween().set_parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 			_tweens[card] = tween

@@ -1,0 +1,13 @@
+# Retained closeout checker failure
+
+2026-10-25. Initial `python closeout.py` exited1 with `ValueError: study declaration must be an object` at `comparison.load_case(...,'cold-next')`. Root cause: that helper requires a paired-study `study.pair_id/arm`; the standalone cold Continue case validly declares neither. The actual isolated run exited0 and its exact restored state/RNG matched before this checker call.
+
+Correction is confined to the audit script: keep `load_bundle` source/runtime/input checks; validate result equality against the experiment report, exact materialized case input, telemetry SHA256 and all `validate_samples` invariants directly. Do not add fake pairing metadata or change any recorded artifact. No seed, policy, budget, source or simulation rerun. Re-run closeout and retain this failure alongside final receipt.
+
+The first source-packet seal also rejected with `Evidence must be a run from this candidate version`. Inspection of `simulator_variant.evidence_reference` shows its supported evidence mode is `run`, not `replay`. The wrapper incorrectly supplied the replay bundles too. Its command/exit/log remain retained; no output packet was created. Second attempt uses a new v2 output and only the four matching run bundles; the thread's manifest and findings retain all four verified replay references. No source/evidence edits or reruns.
+
+The v2 packet attempt then failed its final concurrency guard: `Source or metadata changed while producing handoff`. Concurrent canonical UI work was active; candidate evidence remains unchanged. The partial v2 directory is retained and **must not be used as a sealed/adoptable handoff**, despite its preliminary generated heading. A fresh v3 attempt is separate; only an exit0 final receipt may be linked as sealed. No canonical writes or attempt to pause another thread.
+
+The v3 packet completed with13changes,4matching run references and0overlapping canonical paths. All four replay references remain in the thread manifest/finding.
+
+Publication wrote the three intended paragraphs, then its checker hit Windows cp1252 decoding and CR-at-EOL warnings. The prepend was corrected to preserve original newline style; every byte outside the two inserted status paragraphs and replaced Crown TODO paragraph was verified against saved pre-edit bytes. No unrelated whitespace normalization was performed. Final `git -c core.whitespace=cr-at-eol diff --check` passes (command-local option only), UTF-8 diagnostic decoding is explicit,28links resolve and all study Python files parse. `publication.json` is the final success receipt; do not rerun the original publication mutations.

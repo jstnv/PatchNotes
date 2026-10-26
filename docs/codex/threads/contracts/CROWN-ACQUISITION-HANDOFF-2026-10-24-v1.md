@@ -1,0 +1,26 @@
+# Crown acquisition routes — design review handoff v1
+
+2026-10-24. **DESIGN review; no canonical gameplay adoption requested.**
+
+Authority: user-authorized bounded investigation, [predeclared plan](CROWN-ACQUISITION-PLAN-2026-10-24-v1.md). Evidence: [findings](CROWN-ACQUISITION-FINDINGS-2026-10-24-v1.md), [paired outcomes and component diagnostics](studies/crown-acquisition-20261024-v1/analysis.json), [exact verification](studies/crown-acquisition-20261024-v1/verification.json), [retained artifact hashes](studies/crown-acquisition-20261024-v1/evidence-manifest.json).
+
+## Exact delta and authority boundary
+
+The Contracts-owned `crown-acquisition-v1` simulator starts from dirty canonical `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`, baseline `1338299b4fc7b6e4462609b9458a6b39e2c205854705795fa9d7bd53427a62e2`. Its only project addition is the historical debug helper `scripts/debug/crown_access_legacy_v1.gd`. The external [policy](studies/crown-acquisition-20261024-v1/policy.gd) makes legal campaign decisions; it does not change prices, supply, scores, rewards, saves or prerequisites.
+
+Relative to CP1c, both arms recognize the existing zero play fee for later Store cards. The candidate alone reconsiders affordable purchases at subsequent Studio visits, limits completion to one acquisition per release window, ranks useful Scope per quoted cash-and-Research-rent expense, and stops at owned Scope30. Exact selection and reserve rules are in the plan and policy. This policy is a test instrument and is not approved default player guidance or rival AI.
+
+Current Crown cash gate remains released Review7.0; current publisher values remain ACTIVE/TRIAL. SideStreet P2/P3/P4 retain their separately accepted bounded implementation. Crown relationship activation/terms and predecessor migration remain OPEN, and CP2 reward changes remain held. No finding here approves a new rule or resolves the earlier private Crown save-schema boundary.
+
+## Proposed next tasks
+
+| Item | Status | Action and acceptance criteria | Dependencies |
+|---|---|---|---|
+| CA1 acquisition evidence review | **proposed** | Review every paired outcome, actual paid research/draw/play, first Crown release and calendar, component diagnostics, failures and common-calendar cash. Retain legal witnesses without presenting the cheapest-Scope heuristic as universally optimal. Keep acquisition reserve/choice values experimental. | Completed finding and source/runtime/replay checks linked above. |
+| CA1b owned-Feature utilization | **proposed** | First test bounded completion-aware stopping with the same acquisition policy. Simulation4522 Game6 owns Scope30 but plays28; `4_color_palette` and `sound_effects` are still visible at their respective phase exits. Predeclare at most one extra affordable legal four-card hand per Design/Alpha while below required Scope, compare unchanged control/QA/redraw/rewards, and measure added rent, Bugs, actual Core/Scope/Review, calendar and cash. Validate the full hand's legality; the visible card alone is not acceptance evidence. Do not turn this experimental player policy into a canonical hand-limit or default-AI change. | [Exact supply/played-card audit](studies/crown-acquisition-20261024-v1/supply-diagnostic.json); fresh compatible starts, unchanged purchases and campaign gates. |
+| CA1c selective Core-aware acquisition | **proposed** | In a separate comparison, test purchases targeting the weakest actual released Core-to-frozen-standard ratios, especially Puzzle Sound. Retain the faster no-purchase Action witness as a control: buying Secrets delayed its seed4522 unlock from Game3/cycle39 to Game4/cycle54 and reduced ending cash. Screen current Music and other eligible Primitive/Store options using exact legal quotes and prerequisites. Keep release/hand/redraw/QA policy and gate/rewards fixed within this comparison; predeclare seeds, reserves, purchase limits and failures. Require actual acquisition and played-card exposure, compare Review components and calendar/release cash separately, and retain misses. Do not assume a hypothetical Core addition proves a reachable release. | CA1 and owned-Feature utilization findings; fresh legal starts if mechanics change. No new catalog/card/stat/price is required to run this follow-up. |
+| CA2 Crown relationship-route revalidation | **proposed** | Once access coverage is accepted, regenerate legal access in a separately versioned Crown relationship candidate. Record any deliberately narrower cohort, then test Brief pacing and strict checkpoint migration/ownership/settlement. Keep relationship terms and activation explicit design decisions; do not import incompatible CA1 checkpoints or rewrite source identities. | CA1/CA1b/CA1c evidence or explicit approval of narrower coverage; separate relationship authority and supported migration design. |
+
+## Implementation-thread handling
+
+Keep the existing Crown entry in **DESIGN review**, with this packet linked. No shared gameplay change, default-AI adoption, new Store content, lower Review gate or revised rewards is queued by this study. The implementation thread owns any future canonical integration after authority and acceptance criteria are concrete. No chat dispatch, commit or push is implied.

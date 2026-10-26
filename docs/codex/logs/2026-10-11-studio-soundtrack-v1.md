@@ -1,0 +1,9 @@
+# Studio soundtrack implementation — 2026-10-11
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`. Inspected CURRENT_STATE/TODO/README, source, branch/status/diff and original soundtrack sources. Existing dirty design-thread edits and `.codex-godot-temp` preserved. User authorized Studio theme integration with matching key and a reusable music map.
+
+Implemented D-minor Studio Smooth resynthesis, common70BPM/eight-bar/64-subdivision map, synchronized WAV playback, next-bar/one-quarter-note fade, phase cues, pause/cancel/reversal handling and focused verification. Changed `patch-notes/scripts/audio/{music_grid,soundtrack}.gd`, added `{theme_map,theme_blend}.gd`, bound cues in `scripts/ui/gameplay_hud.gd`, updated `data/audio_credits.json`, adjusted `verify_soundtrack_sync.gd`, added `verify_studio_soundtrack.gd`, Studio WAV/MIDI/provenance, and `tools/audio/` renderer/source snapshots. Persisted the presentation contract in core-and-studio/DECISIONS and implementation status in CURRENT_STATE. TODO and gameplay rules unchanged.
+
+Results: new long suite7,417/0 failures, WASAPI6,415/0, existing soundtrack3,503/0; Gameplay transition, Beta launch, Pre-Development and settings suites pass. Render checks432 MIDI note events, exact unchanged timing/drums, matching frame count, no clipping, seam threshold and byte-identical rebuild. Existing main A/B hashes unchanged. Clean export281-entry package audit and isolated EXE startup pass. [Exact commands, source pin, artifacts, retained initial failures and limits](../findings/studio-theme-20261011-v1/README.md).
+
+Remaining: human audible mix/transition/device review. Gain scheduling is frame-quantized; uninterrupted shared WAV phase and card-grid timing are verified, not sample-accurate fade delivery during a stalled main thread. No computer control, player-save writes, full release gate, commit or push in this task.

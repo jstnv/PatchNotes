@@ -1,0 +1,105 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\campaign-latency-20261025-v1\\wrappers\\pass3-finance-observation\\verify_finance_observation.gd"
+  ],
+  "exit": 0,
+  "seconds": 1.984,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\pass3-finance-observation",
+  "script_sha256": "15d830bbec074b809133ffee32cbe3411a8ec34b11870b85b3ef96f702cd7250",
+  "result": {
+    "checks": 108,
+    "comparisons": [
+      {
+        "case": "valid_base",
+        "digest": "3f35455ee0995b3af7a9b6d781b8a59111180958db39bfc0aab5f47e65fb4c06"
+      },
+      {
+        "case": "no_economy",
+        "digest": "9a1701b61a206f83c96365c5b4057b8cbed5d8ef3073a049d27a7b5c15d2942f"
+      },
+      {
+        "case": "no_release",
+        "digest": "c7b8f13fc577ab97144d4504dcee664f088fbe80e34048d23c64f9b6dfe8afb8"
+      },
+      {
+        "case": "invalid_roster",
+        "digest": "4fadcf348162a99a88c8339e01ca69f97ecb8b7c4c0cd81a1f6e3ea344724fb9"
+      },
+      {
+        "case": "hired_roster",
+        "digest": "09986da678245f3aefcf88ff9f8843c7a2ab73d83b3aac57341f1ab921ad95d3"
+      },
+      {
+        "case": "empty_run_id",
+        "digest": "9a1701b61a206f83c96365c5b4057b8cbed5d8ef3073a049d27a7b5c15d2942f"
+      },
+      {
+        "case": "busy_and_checkpoint_blocked",
+        "digest": "ab1a33a88b5c7e1266c78abf7668d1db520737b5c0139162094370169e405e59"
+      },
+      {
+        "case": "open_bank_loan",
+        "digest": "f3d0c71e310640b166c1d9aeed165ba94703419e55f1a8592495d4f08a1c6875"
+      },
+      {
+        "case": "closed_bank_loan",
+        "digest": "e516a78cd6fbbaead967c14593abadaac12cd2261d17966bafdf9f57da9ddb3a"
+      },
+      {
+        "case": "partial_bank_due",
+        "digest": "6440cba99131dd81ad340b9677fd925292bf628d393a6611f93726ede9654df0"
+      },
+      {
+        "case": "payroll_due_paid",
+        "digest": "babcf8f5fadc0b689e85153c81c66f44548eda0bf9b82ef13ada7c677db192af"
+      },
+      {
+        "case": "education_and_bank",
+        "digest": "7ddea4da32c5da8f0043e2b8836ea95971fb4e0d335a46198d2e40ee580c3a6f"
+      },
+      {
+        "case": "cash_mismatch",
+        "digest": "72d2d21256b5b4178f9f60f8cbbe748f0079bb700dbbf86a23ffc241db1344ec"
+      },
+      {
+        "case": "cycle_mismatch",
+        "digest": "72d2d21256b5b4178f9f60f8cbbe748f0079bb700dbbf86a23ffc241db1344ec"
+      },
+      {
+        "case": "invalid_empty",
+        "digest": "77e2366270e0c9c9a154fc0031c3bd6ce34a4ef4a84aa57d62733cfc860aa896"
+      },
+      {
+        "case": "invalid_schema",
+        "digest": "77e2366270e0c9c9a154fc0031c3bd6ce34a4ef4a84aa57d62733cfc860aa896"
+      },
+      {
+        "case": "invalid_cash",
+        "digest": "77e2366270e0c9c9a154fc0031c3bd6ce34a4ef4a84aa57d62733cfc860aa896"
+      },
+      {
+        "case": "invalid_action",
+        "digest": "77e2366270e0c9c9a154fc0031c3bd6ce34a4ef4a84aa57d62733cfc860aa896"
+      },
+      {
+        "case": "invalid_rows",
+        "digest": "77e2366270e0c9c9a154fc0031c3bd6ce34a4ef4a84aa57d62733cfc860aa896"
+      },
+      {
+        "case": "after_detached_mutation",
+        "digest": "7ddea4da32c5da8f0043e2b8836ea95971fb4e0d335a46198d2e40ee580c3a6f"
+      },
+      {
+        "case": "after_new_receipt",
+        "digest": "329ccc7fd389cd006ce6e0ed299bd0d70f92679d66e9bd94b34130409c8d4e36"
+      }
+    ],
+    "failures": 0
+  },
+  "errors": []
+}

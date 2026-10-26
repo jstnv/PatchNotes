@@ -1,0 +1,9 @@
+# Contracts session log — Publisher Reputation formulas
+
+2026-10-18 (America/Los_Angeles).
+
+- Branch/HEAD: `main` at `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`. Inspected status and a scoped diff before edits. Shared worktree was already extensively dirty; all existing edits and `.codex-godot-temp` were preserved. No commit or push.
+- Request: develop candidate formulas for future reputation-bearing publisher Contracts. Read `CURRENT_STATE.md`, `TODO.md`, `README.md`, current publishers/Contracts design and thread boundary/new-type direction. No current Publisher Reputation runtime or approved numerical rule was found.
+- Thread-owned changes: created [predeclaration](PUBLISHER-REPUTATION-FORMULA-PLAN-2026-10-18-v1.md), [arithmetic calculator](PUBLISHER-REPUTATION-FORMULA-CALC-2026-10-18-v1.ps1), [grid](PUBLISHER-REPUTATION-GRID-2026-10-18-v1.csv), [projections](PUBLISHER-REPUTATION-PROJECTIONS-2026-10-18-v1.json) and [findings](PUBLISHER-REPUTATION-FORMULA-FINDINGS-2026-10-18-v1.md); updated this folder's `README.md` and `HANDOFF.md`. No shared TODO, design authority, gameplay, tests, assets or configuration edit.
+- Exact check: `& 'docs/codex/threads/contracts/PUBLISHER-REPUTATION-FORMULA-CALC-2026-10-18-v1.ps1'` — **PASS**; pinned matrix SHA256, 25 declared arithmetic cases, ten existing verifier projections, range/monotonicity/zero/max audit. No headless game run, seeds or legal Brief route because the first reputation promise and ledger are not defined.
+- Recommendation: candidate weakest-score formula with once-only publisher-specific award and no retroactive gains. The point maximum and precision, per-publisher ledger, cadence, effects and first Relationship Brief remain **OPEN**. The completed arithmetic is not balance approval or implementation evidence. A separate Publishers design owner and coordinated Contracts handoff remain proposed.

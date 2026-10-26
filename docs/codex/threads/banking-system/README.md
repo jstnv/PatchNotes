@@ -67,3 +67,30 @@ The [education activation handoff](2026-10-09-education-activation-handoff-v1.md
 - [Paid-Feature/Bank design handoff v1](HANDOFF-SPENDING-BANK-v1.md): DESIGN review needed; no gameplay adoption candidate.
 - [Paid-Feature/Bank session log, 2026-10-11](2026-10-11-spending-bank-session-v1.md): source status, exact commands and retained failures.
 - [Eligible-sales TODO contribution, 2026-10-11](2026-10-11-eligible-sales-todo-session-v1.md): queues the next Banking-owned design study without assigning gameplay to the running implementation thread.
+- [Eligible-sales study plan, 2026-10-11](2026-10-11-eligible-sales-study-plan-v1.md): fixed legal routes, comparison, seeds and limits before execution.
+- [Eligible-sales finding, 2026-10-11](2026-10-11-eligible-sales-finding-v1.md): four eligible quotes and four matched pairs; borrowing improved cash but did not change actions in this funded route.
+- [Eligible-sales design handoff v1](HANDOFF-ELIGIBLE-SALES-v1.md): bounded study complete; high-sales/low-cash usefulness is the next DESIGN question, with no gameplay adoption.
+- [Eligible-sales session log, 2026-10-11](2026-10-11-eligible-sales-session-v1.md): source state, exact checks, verifier packaging limit and follow-up.
+- [Liquidity usefulness plan, 2026-10-11](2026-10-11-liquidity-study-plan-v1.md): fixed high-sales/low-cash Store admissions and no-loan/$500/$1,000 comparison.
+- [Liquidity usefulness finding, 2026-10-11](2026-10-11-liquidity-finding-v1.md): loans unlocked queued Research, but all declared game-two continuations stopped before release.
+- [Liquidity design handoff v1](HANDOFF-LIQUIDITY-v1.md): no adoption candidate; next DESIGN study must protect a game-two cash reserve.
+- [Liquidity session log, 2026-10-11](2026-10-11-liquidity-session-v1.md): source identity, retained failures, replays, verifiers and limits.
+- [Reserve route plans v1/v2, 2026-10-11](2026-10-11-reserve-route-plan-v1.md): legal low-cash fork and separately declared one/two-hand production comparisons.
+- [Reserve route finding, 2026-10-11](2026-10-11-reserve-route-finding-v1.md): one queued Research enabled by borrowing; weak one-hand Reviews, a $500 two-hand arrears stop and a later/lower-quality $1,000 release.
+- [Reserve route design handoff v1](HANDOFF-RESERVE-ROUTE-v1.md): no gameplay adoption; meaningful-quality card draw/play and post-release sales remain DESIGN work.
+- [Reserve route session log, 2026-10-11](2026-10-11-reserve-route-session-v1.md): source state, exact checks, retained failures and next design dependency.
+- [Larger-offer plan, 2026-10-11](2026-10-11-larger-offer-plan-v1.md): predeclared selected $2,500 quote and four-hand legal comparison in a new private simulator version.
+- [Larger-offer finding, 2026-10-11](2026-10-11-larger-offer-finding-v1.md): all six arms stopped before game two; $2,500 extended actions to c26 but accrued rent/Bank and Graduate education arrears.
+- [Larger-offer design handoff v1](HANDOFF-LARGER-OFFER-v1.md): no gameplay adoption; meaningful-quality route and actual draw/play/sales benefit remain DESIGN work.
+- [Larger-offer session log, 2026-10-11](2026-10-11-larger-offer-session-v1.md): v4 lineage, source parity, exact checks, retained rejections and limits.
+- [Three-hand decision plan, 2026-10-11](2026-10-11-three-hand-decision-plan-v1.md): fixed legal low-cash forks, three-hand policies, comparison arms and limits before execution.
+- [Post-launch settlement plan, 2026-10-11](2026-10-11-three-hand-settlement-plan-v1.md): one-cycle continuation from completed second-release checkpoints.
+- [Three-hand finding, 2026-10-11](2026-10-11-three-hand-decision-finding-v1.md): source-pinned six-arm screen, matched comparisons, replays, reduced failures and actual c28 sales/debt.
+- [Selectable-loan trial disposition, 2026-10-11](2026-10-11-selectable-loan-trial-disposition-v1.md): delegated ACTIVE/TRIAL ruling to retain current selectable Bank rules without a new numerical change.
+- [Selectable-loan implementation handoff v1](HANDOFF-SELECTABLE-LOAN-TRIAL-v1.md): no canonical adoption delta; existing exported and human acceptance remain separate.
+- [Selectable-loan decision session, 2026-10-11](2026-10-11-selectable-loan-decision-session-v1.md): source state, exact checks, files, evidence limits and follow-up.
+- [Distressed-finance exported acceptance handoff v1](HANDOFF-DISTRESSED-FINANCE-ACCEPTANCE-v1.md): queued Bank/Education late, partial, payoff, Continue, migration and quote-comprehension checks; no gameplay delta.
+- [Distressed-finance TODO contribution, 2026-10-11](2026-10-11-distressed-finance-todo-session-v1.md): user-authorized shared-list update, source status and documentation checks.
+- [Foundation scope audit, 2026-10-17](2026-10-17-foundation-scope-audit-v1.md): current integrated Banking components and the clarification needed before a new foundation change.
+- [Bank confirmation hardening, 2026-10-17](2026-10-17-confirmation-hardening-v1.md): one-shot displayed-quote confirmation for Bank and education, focused checks and remaining exported acceptance.
+- [Current capability audit, 2026-10-17](2026-10-17-current-capability-audit-v1.md): loan/education actions present in source, remaining B7 acceptance, and a current check attempt blocked by a Contracts dependency compile error.

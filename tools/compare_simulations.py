@@ -62,9 +62,15 @@ def read(bundle: Path, relative: str) -> dict:
     return object_value(simulate.read_json(artifact(bundle, relative)), relative)
 
 
-def mechanics_identity(manifest: dict) -> str:
+def mechanics_identity(manifest: dict, project: Path | None = None) -> str:
+    # Match DevelopmentReplay.source_identity's executed market query exactly.
+    # Pre-market bundles may contain the neutral inspection query without
+    # including it in Replay's rules identity. Honor their frozen definition.
+    replay = project / "scripts/simulation/development_replay.gd" if project else None
+    include_query = replay is None or not replay.is_file() or "res://queries/market_release_index.gd" in replay.read_text(encoding="utf-8")
     rows = [["res://" + key, manifest[key]] for key in sorted(manifest)
-            if (key.startswith("scripts/") or key.startswith("data/"))
+            if (key.startswith("scripts/") or key.startswith("data/")
+                or (include_query and key == "queries/market_release_index.gd"))
             and not key.startswith("scripts/debug/") and key.endswith((".gd", ".json"))]
     return hashlib.sha256(json.dumps(rows, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
 
@@ -98,7 +104,7 @@ def load_bundle(bundle: Path) -> dict:
     require(simulate.sha(policy_path) == declaration.get("source_identity"), "Frozen policy hash mismatch")
     summary = read(bundle, "experiment-report.json")
     require(isinstance(summary.get("results"), list), "Missing retained case results")
-    return {"report": report, "config": config, "summary": summary, "source_identity": mechanics_identity(manifest), "manifest_identity": frozen_identity}
+    return {"report": report, "config": config, "summary": summary, "source_identity": mechanics_identity(manifest, bundle / "project"), "manifest_identity": frozen_identity}
 
 
 def validate_samples(telemetry: dict, result: dict) -> list[dict]:

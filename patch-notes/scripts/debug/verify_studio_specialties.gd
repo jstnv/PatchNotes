@@ -13,7 +13,7 @@ func snapshot(run: RunState) -> Array:
 	return [run.get_studio_name(), run.get_studio_specialty(), run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.needs_starter_selection()]
 
 func _run() -> void:
-	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v1.json"))
+	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v3.json"))
 	for genre: String in fixtures:
 		var run := RunState.new()
 		run.initialize_cash_cents(0)
@@ -59,29 +59,31 @@ func _verify_ui() -> void:
 	await process_frame
 	var run: RunState = game.run_state
 	var menu: MainMenu = game.get("_active_phase")
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
-	var setup := menu.get_node("CenterContainer/MenuLayout/StudioSetup")
-	var name_input := setup.get_node("StudioName") as LineEdit
-	var choice := setup.get_node("FolderContent/genre/Genre/StudioSpecialty") as OptionButton
+	var setup := menu._setup
+	var name_input := menu._name_input as LineEdit
+	var choice := menu._specialty as OptionButton
 	name_input.text = "Genre Studio"
 	var before := snapshot(run)
-	setup.get_node("EnterStudio").pressed.emit()
+	menu._play.pressed.emit()
 	check(snapshot(run) == before and not setup.get_node("ErrorLabel").text.is_empty(), "Menu requires explicit specialty")
 	for index in range(1, 9):
 		choice.select(index)
 		choice.item_selected.emit(index)
 		var preview := StudioSpecialties.preview(choice.get_item_metadata(index))
 		check(menu.get("_emphasis").text.contains(str(preview.scope) + " printed Scope") and menu.get("_preview").text.contains(", ".join(preview.names)), "Menu previews exact full roster and emphasis")
-	setup.get_node("Back").pressed.emit()
-	check(snapshot(run) == before and choice.selected == 0, "Cancel clears uncommitted choice without granting")
+	menu.discard_setup()
+	check(snapshot(run) == before and choice.selected == 0, "Explicit discard clears uncommitted choice without granting")
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	name_input.text = "Genre Studio"
 	choice.select(1)
 	choice.item_selected.emit(1)
 	await process_frame
 	await process_frame
-	var enter := setup.get_node("EnterStudio") as Button
-	check(enter.get_global_rect().end.y < 602 and setup.get_global_rect().position.y >= 0 and setup.get_global_rect().end.x <= 1152, "Roster preview and confirmation fit 1152x648 above HUD")
+	var enter := menu._play as Button
+	check(root.get_visible_rect().encloses(enter.get_global_rect()) and root.get_visible_rect().encloses(menu._folder_surface.get_global_rect()) and setup.get_global_rect().position.y >= 20 and setup.get_global_rect().end.x <= 1132, "Roster preview and confirmation fit the full-screen 1152x648 setup folder")
 	if "--capture" in OS.get_cmdline_user_args():
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://design-logs/task25-v1/studio-specialty-1152.png")
@@ -89,16 +91,17 @@ func _verify_ui() -> void:
 	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
+	menu.call("_confirm_studio")
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids().size() == 18, "Menu commits exactly one specialty")
 	before = snapshot(run)
-	enter.pressed.emit()
-	check(snapshot(run) == before, "Stale confirmation callback does not grant again")
+	check(snapshot(run) == before, "Duplicate confirmation does not grant again")
 	var studio: StudioPhase = game.get("_active_phase")
 	check(not game.call("_begin_next_project", studio, "", &"puzzle", &"fantasy") and snapshot(run) == before and run.needs_starter_selection(), "Failed first start preserves optional zero-cycle purchase window")
 	check(game.call("_begin_next_project", studio, "Puzzle Game", &"puzzle", &"fantasy") and game.project_state.get_genre_id() == &"puzzle" and run.get_studio_specialty() == &"action", "Successful nonmatching first game commits independent Genre")
 	check(not run.needs_starter_selection() and run.get_completed_run_cycles() == 1 and run.get_cash_cents() == 570000, "First-project boundary closes initial window with usual cost")
-	var offer := run.get_primitive_reserve_offer(&"simple_story")
-	check(not offer.initial and ResearchTestActions.acquire(run,&"simple_story") and run.get_cash_cents() == 490000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
-	check(not game.project_state.get_feature_supply_ids().has(&"simple_story") and PrimitivePredevelopment.prepare_project("Next", &"racing", &"fantasy", run).get_feature_supply_ids().has(&"simple_story"), "New ownership feeds next supply without changing current frozen supply")
+	var offer := run.get_primitive_reserve_offer(&"dialogue")
+	check(not offer.initial and ResearchTestActions.acquire(run,&"dialogue") and run.get_cash_cents() == 490000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
+	check(not game.project_state.get_feature_supply_ids().has(&"dialogue") and PrimitivePredevelopment.prepare_project("Next", &"racing", &"fantasy", run).get_feature_supply_ids().has(&"dialogue"), "New ownership feeds next supply without changing current frozen supply")
 	game.queue_free()
 	await process_frame

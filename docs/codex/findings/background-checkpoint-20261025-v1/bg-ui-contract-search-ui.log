@@ -1,0 +1,408 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: Legal introductory Ironclad completes
+PASS: Last introductory Brief completes
+PASS: Legal Studio has no pending offers
+PASS: Actual native window matches requested supported size
+PASS: Contracts remains accessible with an empty offer list
+PASS: Actual pointer opens empty Search catalog
+PASS: Browsing is free and cannot accept nonexistent work
+PASS: Search control fits supported viewport: ContractSearchWork
+PASS: Search control fits supported viewport: ContractSearchButton
+PASS: Search control fits supported viewport: ContractSearchStatus
+PASS: Search control fits supported viewport: CloseContractDetailButton
+PASS: Pointer Search commits one ordinary cycle and one offer
+PASS: Pending discovered work blocks duplicate Search and enables acceptance
+PASS: Accept enters ordinary playable Contract scene
+PASS: Two played hands finish searched work with no duplicate cycle/effect
+PASS: Completing the last offer keeps Search reachable
+PASS: No new release is needed to search again
+PASS: Keyboard Back returns to Studio
+PASS: Restored empty Studio retains Search availability
+PASS: Legal introductory Ironclad completes
+PASS: Last introductory Brief completes
+PASS: Legal Studio has no pending offers
+PASS: Actual native window matches requested supported size
+PASS: Contracts remains accessible with an empty offer list
+PASS: Actual pointer opens empty Search catalog
+PASS: Browsing is free and cannot accept nonexistent work
+PASS: Search control fits supported viewport: ContractSearchWork
+PASS: Search control fits supported viewport: ContractSearchButton
+PASS: Search control fits supported viewport: ContractSearchStatus
+PASS: Search control fits supported viewport: CloseContractDetailButton
+PASS: Pointer Search commits one ordinary cycle and one offer
+PASS: Pending discovered work blocks duplicate Search and enables acceptance
+PASS: Accept enters ordinary playable Contract scene
+PASS: Two played hands finish searched work with no duplicate cycle/effect
+PASS: Completing the last offer keeps Search reachable
+PASS: No new release is needed to search again
+PASS: Keyboard Back returns to Studio
+PASS: Restored empty Studio retains Search availability
+CONTRACT_SEARCH_UI checks=38 failures=0
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:339)
+       [5] _ready (res://scripts/phases/contract_phase.gd:72)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:529)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:452)
+       [8] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:339)
+       [5] _ready (res://scripts/phases/contract_phase.gd:72)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:529)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:452)
+       [8] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:339)
+       [5] _ready (res://scripts/phases/contract_phase.gd:72)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:529)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:452)
+       [8] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:339)
+       [5] _ready (res://scripts/phases/contract_phase.gd:72)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:529)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:452)
+       [8] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:437)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [7] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:437)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [7] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:437)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [7] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:437)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [7] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:339)
+       [5] _ready (res://scripts/phases/contract_phase.gd:72)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:529)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:452)
+       [8] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:339)
+       [5] _ready (res://scripts/phases/contract_phase.gd:72)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:529)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:452)
+       [8] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:339)
+       [5] _ready (res://scripts/phases/contract_phase.gd:72)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:529)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:452)
+       [8] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _initialize_presentation (res://scripts/phases/contract_phase.gd:339)
+       [5] _ready (res://scripts/phases/contract_phase.gd:72)
+       [6] _on_contract_requested (res://scripts/gameplay.gd:529)
+       [7] _accept_contract (res://scripts/phases/studio_phase.gd:452)
+       [8] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:437)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [7] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:437)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [7] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:437)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [7] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] _publish_candidate_pool (res://scripts/phases/contract_phase.gd:468)
+       [4] _play_selected_hand (res://scripts/phases/contract_phase.gd:437)
+       [5] play (res://scripts/ui/hand_presentation.gd:143)
+       [6] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [7] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)
+       [1] refresh (res://scripts/cards/card_view.gd:114)
+       [2] _ready (res://scripts/cards/card_view.gd:46)
+       [3] play (res://scripts/ui/hand_presentation.gd:126)
+       [4] _present_action (res://scripts/phases/contract_phase.gd:226)
+       [5] click (res://scripts/debug/verify_contract_search_ui.gd:16)
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

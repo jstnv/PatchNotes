@@ -1,6 +1,7 @@
 class_name EmployeeRoster
 extends RefCounted
 const SCHEMA_VERSION := 1
+const QA := preload("res://scripts/employees/qa_employee_rules.gd")
 
 static func create(owner: StringName) -> Dictionary:
 	return {"schema_version":SCHEMA_VERSION,"owner":owner,"employees":{},"events":[]}
@@ -28,16 +29,17 @@ static func plan_hand(state: Dictionary, project_id: StringName, phase: StringNa
 	var facts := card_facts(cards)
 	if facts.size() != 4 or project_id.is_empty() or project_cycle < 0 or run_cycle < 0 or phase not in [&"design",&"alpha"]: return {}
 	var changed := not proposed.is_empty()
-	if changed and (not PriorityAllocation.is_valid_distribution(proposed) or proposed == before): return {}
+	if changed and (not PriorityAllocation.is_valid_new_distribution(proposed) or proposed == before): return {}
 	return _apply(state,{"type":&"hand","project_id":project_id,"phase":phase,"project_cycle":project_cycle,"cycle":run_cycle,"cards":facts,"before":before.duplicate(),"proposed":proposed.duplicate()})
 
 static func available(state: Dictionary, project_id: StringName) -> bool:
 	if not valid(state): return false
 	for employee: Dictionary in state.employees.values():
-		if employee.trained and employee.projects.get(project_id,{}).get("used_action",&"").is_empty(): return true
+		if employee.type == &"production" and employee.trained and employee.projects.get(project_id,{}).get("used_action",&"").is_empty(): return true
 	return false
 
 static func _apply(state: Dictionary, event: Dictionary) -> Dictionary:
+	if event.get("type") in [&"employee_trial",&"hire_specialist",&"course",&"qa_beta",&"qa_proc",&"qa_finalize",&"qa_swap"]: return QA.apply(state,event)
 	var next := state.duplicate(true)
 	if event.get("type") == &"hire":
 		if typeof(event.get("employee_id")) != TYPE_STRING_NAME or event.employee_id.is_empty() or typeof(event.get("cycle")) != TYPE_INT or event.cycle < 0 or next.employees.has(event.employee_id): return {}
@@ -61,6 +63,7 @@ static func _apply(state: Dictionary, event: Dictionary) -> Dictionary:
 		var used := false
 		for id: StringName in next.employees:
 			var employee: Dictionary = next.employees[id]
+			if employee.type != &"production": continue
 			if event.cycle < employee.hire_cycle: return {}
 			var progress: Dictionary = employee.projects.get(event.project_id,{"trained_action":&"","used_action":&"","actions":[]})
 			if action in progress.actions: return {}
@@ -85,3 +88,26 @@ static func valid(state: Dictionary) -> bool:
 		rebuilt = _apply(rebuilt,event)
 		if rebuilt.is_empty(): return false
 	return rebuilt == state
+
+static func hire_specialist(state: Dictionary, role: StringName, cycle: int) -> Dictionary:
+	return _apply(state,{"type":&"hire_specialist","role":role,"cycle":cycle}) if valid(state) else {}
+static func buy_course(state: Dictionary, id: StringName, course: StringName, cycle: int) -> Dictionary:
+	return _apply(state,{"type":&"course","employee_id":id,"course":course,"cycle":cycle,"fee_cents":15000}) if valid(state) else {}
+static func qa_beta_hand(state: Dictionary, project: StringName, project_cycle: int, cycle: int, search: int, debug: int, discovered: int, fixed: int) -> Dictionary:
+	return _apply(state,{"type":&"qa_beta","project_id":project,"project_cycle":project_cycle,"cycle":cycle,"search":search,"debug":debug,"discovered":discovered,"fixed":fixed}) if valid(state) else {}
+static func qa_wage(e: Dictionary) -> int: return QA.wage(e)
+static func qa_swap_available(state: Dictionary, project: StringName) -> bool: return valid(state) and QA.available(state,project)
+static func qa_swap(state: Dictionary, project: StringName, project_cycle: int, cycle: int) -> Dictionary:
+	return _apply(state,{"type":&"qa_swap","project_id":project,"project_cycle":project_cycle,"cycle":cycle}) if valid(state) else {}
+static func qa_proc(state: Dictionary, project: StringName, project_cycle: int, cycle: int, phase: StringName, features: int) -> Dictionary:
+	return _apply(state,{"type":&"qa_proc","project_id":project,"project_cycle":project_cycle,"cycle":cycle,"phase":phase,"features":features,"rules_version":1,"chance_percent":QA.PROC_PERCENT}) if valid(state) else {}
+static func qa_finalize(state: Dictionary, project: StringName, project_cycle: int, cycle: int) -> Dictionary:
+	return _apply(state,{"type":&"qa_finalize","project_id":project,"project_cycle":project_cycle,"cycle":cycle}) if valid(state) else {}
+
+static func trial_active(state: Dictionary) -> bool:
+	# Earlier private v2 prototypes already have explicit new-role/course events.
+	for event: Dictionary in state.get("events",[]):
+		if event.get("type") in [&"employee_trial",&"hire_specialist",&"course"]:return true
+	return false
+static func activate_trial(state: Dictionary,cycle: int) -> Dictionary:
+	return {} if not valid(state) or trial_active(state) else _apply(state,{"type":&"employee_trial","cycle":cycle,"rules_version":2})

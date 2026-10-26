@@ -1,0 +1,11 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+{"checks":153,"failures":1,"measurements":{"cycle":96,"original_validation_us":11992,"repeated_validation_us":858},"ok":false}
+ERROR: FAIL: Identical proven state in a new valid generation does not reconstruct its entire history
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_campaign_latency.gd:53)
+       [1] _initialize (res://scripts/debug/verify_campaign_latency.gd:113)
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

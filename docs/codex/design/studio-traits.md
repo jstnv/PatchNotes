@@ -2,9 +2,13 @@
 
 Authority: user-approved T1–T3 handoffs captured in [TODO](../TODO.md), superseding historical required-background and capped conversion rules. [Implementation evidence](../findings/2026-10-07-traits-implementation-v1.md).
 
+**2026-10-17 foundation disposition:** The user set Studio Traits balance work aside and requested a structural registry foundation. The [thread decision](../../../patch-notes/design-logs/threads/studio-traits/2026-10-17-trait-foundation-decision-v1.md) and [candidate handoff](../../../patch-notes/design-logs/threads/studio-traits/2026-10-17-trait-foundation-adoption-handoff-v1.md) specify the existing trait point/activation definitions without changing any values. PN Implementation [adopted the registry locally](../findings/queue-execution-20261017-v2/README.md); TODO now records IMPLEMENTED. Previous final-balance questions remain OPEN but **DEFERRED**; player reviews remain PENDING.
+
 ## LOCKED structure / implemented locally
 
-Optional unified list: at most two positive and one negative. No required company background or new background_id. Required permanent Genre specialty is free and grants only its roster. Canonical versioned selections retain chosen/active IDs, points and once-only financing amounts; newly confirmed Studios now use version8. Saved versions keep their original effects. Legacy version1 backgrounds and version2 inactive previews remain inactive; no retroactive effects. Supported checkpoint reconstruction and fresh-process restores are verified in the dated implementation records; historical v3–v5 education previews remain inactive as specified below.
+**2026-10-24 direct user ruling — IMPLEMENTED locally:** new version9 selections have **no positive/negative count cap**. Negative draft balances remain visible and block Play; Overview directs the player to Traits. Selected/Available lists show names only, positives before negatives, with hover descriptions/point prices. The point/startup-cash-bonus footer stays outside scrolling. Overview has independently scrolling positive and negative columns. Graduate and College Dropout remain alternative education histories; selecting one replaces the other. Existing point prices, cash conversion and effects remain ACTIVE/TRIAL without numerical rebalance. Version9 inherits the20-Fan Cult effect and active education schedules. [Source, native and migration evidence](../findings/usability-20261024-v1/README.md).
+
+The former two-positive/one-negative cap remains part of saved versions3–8 and is superseded for new Studios. No required background; the permanent Genre specialty is free and grants only its roster. Chosen/active IDs, point accounting and once-only financing remain versioned. Saved effects are preserved; legacy backgrounds/inactive education previews acquire no retrospective activation.
 
 ## ACTIVE/TRIAL effects
 
@@ -47,3 +51,7 @@ Version5 new selections charge one positive point ($5,650 Publisher-only startup
 ## Cult Following T8 local implementation — 2026-10-10
 
 New version7 creation charges one point and atomically seeds40 ordinary Fans; Cult-only cash is$5,650. The Overview shows starting Fans and trial loss terms. Versions3–6 preserve inactive Cult, points, cash and Fan history. Checkpoint replay derives its seed from validated traits.17 focused suites,20 fresh-process checks and a776-check legal paired-route audit pass; both supported UI sizes pass headless layout/copy checks. [Evidence](../findings/cult-following-t8-v1/README.md). Exported interaction, visual human inspection and long-run balance remain separate.
+
+## Registry foundation adoption — 2026-10-17
+
+**IMPLEMENTED locally; effects and values unchanged.** Point amounts, first active saved versions and historical ordering now derive from the existing registry. All665 version3–8 snapshots remain byte-identical; control campaigns and current-source checkpoint/replay checks pass. [Evidence](../findings/queue-execution-20261017-v2/README.md). No trait migration or new effect; deferred balance work remains deferred.

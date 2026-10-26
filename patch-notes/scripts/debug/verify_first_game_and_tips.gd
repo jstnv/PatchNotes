@@ -15,6 +15,12 @@ func snapshot(run: RunState) -> Array:
 	return [run.get_completed_run_cycles(), run.get_cash_cents(), run.get_available_redraws(), run.get_owned_feature_ids(), run.get_released_game_ids()]
 
 func _run() -> void:
+	create_timer(90).timeout.connect(func(): push_error("First-game tips verifier timeout"); quit(2))
+	# Use the same real writer lease on a private test port when provided.
+	if not OS.get_environment("PN_CHECKPOINT_TEST_PORT").is_empty():
+		node_added.connect(func(node: Node):
+			if node is CheckpointCoordinator:
+				node.store = preload("res://scripts/debug/verify_rival_gameplay_activation.gd").TestStore.new("user://saves/studio",node._validate_payload))
 	root.size = Vector2i(1152, 648)
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 	root.add_child(game)
@@ -24,20 +30,24 @@ func _run() -> void:
 	var hud: GameplayHUD = game.get_node("%GameplayHUD")
 	expect(game.project_state == null and menu != null and run.get_cash_cents() == 0, "New run waits at main menu without creating a project")
 	var menu_before := snapshot(run)
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/HowToPlay").pressed.emit()
-	expect(hud.tutorial_overlay.visible and hud.tutorial_overlay.topic == &"main_menu" and snapshot(run) == menu_before, "Main-menu How to Play opens the separate tutorial for free")
+	expect(hud.how_to_play.is_open() and not hud.tutorial_overlay.visible and snapshot(run) == menu_before, "Main-menu How to Play opens the complete folder guide for free")
+	hud.how_to_play.close()
 	hud.tutorial_overlay.close()
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
-	var studio_input: LineEdit = menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName")
+	var studio_input: LineEdit = menu._name_input
 	studio_input.text = "First Studio"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	menu._specialty.select(1)
+	menu._play.pressed.emit()
 	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	var studio: StudioPhase = game.get("_active_phase")
 	expect(studio != null and run.get_studio_name() == "First Studio" and run.get_cash_cents() == 570000 and run.get_owned_feature_ids().size() == 18, "Naming studio funds $5,500 + $200 point cash and grants the free Action roster")
-	expect(studio.get_node("%StoreHint").visible and not studio.get_node("%StartNextGame").disabled, "First Studio offers an inline Store hint without a blocking selection menu")
+	expect(studio.get_node_or_null("%StoreHint") == null and not studio.get_node("%StartNextGame").disabled, "First Studio leaves production available without unsolicited Store advice")
 	var before := snapshot(run)
 	expect(run.needs_starter_selection() and before[0] == 0 and before[1] == 570000, "Starter purchases remain open until the first project begins")
 	studio.get_node("%StartNextGame").pressed.emit()
@@ -69,6 +79,10 @@ func _run() -> void:
 		root.get_texture().get_image().save_png("res://design-logs/first-game-setup.png")
 	overlay.begin_button.pressed.emit()
 	var project: ProjectState = game.project_state
+	if project == null:
+		expect(false,"First project did not start; checkpoint status: "+game.checkpoints.failure)
+		quit(1)
+		return
 	expect(project != null and project.get_base_name() == "First Game" and project.get_genre_id() == &"role_playing" and project.get_theme_id() == &"mystery", "First project locks chosen identity")
 	expect(run.get_completed_run_cycles() == 1 and project.get_current_cycle() == 0 and run.get_cash_cents() == 570000 and run.get_available_redraws() == 4, "Begin costs exactly one run cycle, project zero, no cash, redraw four")
 	expect(not run.needs_starter_selection(), "Successful first-project commit closes the starter purchase window")

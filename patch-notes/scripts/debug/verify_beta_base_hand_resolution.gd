@@ -166,7 +166,7 @@ func _verify_insight_boundaries() -> void:
 func _verify_lifecycle_and_replacement() -> void:
 	var fixture := await _make_beta([&"press_interview", &"study_competition", &"search_for_bugs", &"debug"], 3)
 	var beta: BetaPhase = fixture.beta
-	var priorities := {&"qa": 50, &"marketing": 45, &"insider": 5}
+	var priorities := {&"qa": 50, &"marketing": 40, &"insider": 10}
 	beta.set_priority_distribution(priorities)
 	var before_views: Array = beta.get("_candidate_views").duplicate()
 	_expect(beta.play_selected_hand([29] as Array[int]), "Finite and renewable mixed hand resolves")

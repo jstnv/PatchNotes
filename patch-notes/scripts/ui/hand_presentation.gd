@@ -57,6 +57,7 @@ func _process(_delta: float) -> void:
 
 func advance_music(now: float) -> void:
 	if not _music_driven or not busy: return
+	if now < _music_cursor: return # Hold every pose, including bonus labels, until rejoin.
 	var elapsed := maxf(0.0, now - _music_cursor)
 	_music_cursor = maxf(_music_cursor, now)
 	if elapsed > 0.0 and _tween != null and _tween.is_valid():
@@ -67,6 +68,16 @@ func advance_music(now: float) -> void:
 		effect.label.position.y = lerpf(90.0, 65.0, minf(1.0, age / (BEAT_SECONDS / 2.0)))
 		effect.label.modulate.a = 1.0 - clampf((age - BEAT_SECONDS / 2.0) / BEAT_SECONDS, 0.0, 1.0)
 
+func _rejoin_music_grid(skipped_beats: int) -> void:
+	if not busy or not _music_driven: return
+	var shift := skipped_beats * BEAT_SECONDS
+	_music_cursor += shift
+	_first_beat += skipped_beats
+	for effect in _bonus_labels: effect.started += shift
+	trace.append({"index": -1, "event": "music_resume", "skipped_beats": skipped_beats,
+		"msec": Time.get_ticks_msec(), "beat_index": -1.0, "scheduled_seconds": -BEAT_SECONDS,
+		"music_seconds": _music_seconds(), "resume_seconds": _music_cursor, "lateness_seconds": 0.0})
+
 
 func note_specialization(header: Callable, balanced := false) -> void:
 	if capturing:
@@ -75,6 +86,7 @@ func note_specialization(header: Callable, balanced := false) -> void:
 		_specialization_header = header
 
 func _ready() -> void:
+	get_node("/root/Soundtrack").presentation_resumed.connect(_rejoin_music_grid)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	z_index = 100
 	focus_mode = Control.FOCUS_ALL
@@ -91,8 +103,9 @@ func _sound_player(path: String, volume: float) -> AudioStreamPlayer:
 	add_child(player)
 	return player
 
-func _gui_input(_event: InputEvent) -> void:
-	if busy: accept_event()
+func _gui_input(event: InputEvent) -> void:
+	# Block gameplay gestures during motion, but let the global Pause action through.
+	if busy and not event.is_action("ui_cancel"): accept_event()
 
 func play(kind: String, fan: Control, selected: Array, action: Callable, snapshot: Callable, update: Callable, restore: Callable) -> bool:
 	if busy or selected.is_empty() or not action.is_valid() or not snapshot.is_valid(): return false
@@ -178,7 +191,10 @@ static func _weight(card: CardData, key: StringName) -> int:
 	if key == &"marketing": return card.beta_value if card.beta_category == CardData.BETA_CATEGORY_MARKETING else 0
 	if key == &"fixed": return card.beta_value if card.qa_operation == &"debug" else 0
 	if key == &"discovered": return card.beta_value if card.qa_operation == &"search" else 0
-	return (card.primary_value if card.primary_stat == key else 0) + (card.secondary_value if card.secondary_stat == key else 0)
+	var total := 0
+	for entry in card.core_contributions():
+		if entry.stat == key: total += int(entry.value)
+	return total
 
 static func build_timeline(cards: Array[CardData], before: Dictionary, after: Dictionary) -> Array[Dictionary]:
 	# Allocate the already-resolved hand gain by cumulative printed contribution.

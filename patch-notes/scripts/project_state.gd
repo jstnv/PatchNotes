@@ -58,6 +58,9 @@ var _base_name := ""
 var _genre_id: StringName
 var _theme_id: StringName
 var _genre_ratios: Array[int] = []
+var _market_standards: Array[int] = []
+var _market_snapshot_id := ""
+var _market_details: Dictionary = {}
 var _feature_supply_ids: Array[StringName] = []
 
 
@@ -78,6 +81,21 @@ func get_genre_id() -> StringName: return _genre_id
 func get_theme_id() -> StringName: return _theme_id
 ## Legacy Genre proportions retained for identity validation and save compatibility.
 func get_genre_ratios() -> Array[int]: return _genre_ratios.duplicate()
+func get_market_standards() -> Array[int]: return _market_standards.duplicate()
+func get_market_snapshot_id() -> String: return _market_snapshot_id
+func get_market_details() -> Dictionary: return _market_details.duplicate(true)
+
+func freeze_market_standards(source_id: String, standards: Array, details: Dictionary = {}) -> bool:
+	if not has_predevelopment_identity() or not _market_standards.is_empty() or source_id.is_empty() or standards.size()!=4: return false
+	var base: Array=PrimitiveReviewCalculator.GENRE_TARGETS.get(_genre_id,[])
+	if base.size()!=4: return false
+	for i in range(4):
+		if not standards[i] is int or standards[i]<base[i] or standards[i]>base[i]+8: return false
+	if not details.is_empty() and (not preload("res://scripts/market/market_transaction_trial.gd").valid_details(details,_genre_id) or details.snapshot_id!=source_id or details.standards!=standards): return false
+	_market_details=details.duplicate(true)
+	_market_standards.assign(standards)
+	_market_snapshot_id=source_id
+	return true
 func get_feature_supply_ids() -> Array[StringName]: return _feature_supply_ids.duplicate()
 
 

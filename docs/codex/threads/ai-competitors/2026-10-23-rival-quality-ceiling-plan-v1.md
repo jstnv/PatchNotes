@@ -1,0 +1,7 @@
+# Rival quality legal ceiling probe — 2026-10-23
+
+**Pre-run DESIGN/OPEN plan.** The matched current-source opening screen found 5/7/3 legal hands at cycle 16 yielded Action 5.4/6.9 and Adventure 4.5/5.0. Test whether more actual Alpha Core production can reach the user's 6–7 Review target with the same January owned pool, before proposing new Features, cash or Review changes.
+
+Use the same four legal Action/Adventure incumbent recipes and seeds 4417/90210, unchanged `features_first` fixture, Genre/Theme, source and founding resources. The sole new plan is 5 Design / 11 Alpha / 3 Beta hands. This is a deliberately expensive ceiling probe, not an adoption candidate or minimum ten-cycle policy. Every hand, phase exit and launch must go through legal commands. No cash, Feature, time or Review injection.
+
+Target one release per case; max 60 commands; 240-second isolated import/experiment bound. Record Review, Core, Scope, Bugs, release cycle, cash low/launch cash, dues, legal status, source and RNG. Retain failures. Stop after four cases; do not vary seeds, limits or hand counts to rescue failures. If even this plan leaves Adventure below 6 in both seeds or cannot finish solvently, conclude that more hands alone do not establish the requested two-rival quality. Do not queue gameplay; next work would need a private source-pinned Feature/selection/finance candidate and interleaved world validation. Replays of a representative successful route should check determinism.

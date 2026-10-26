@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import difflib
+import subprocess
 import hashlib
 import importlib.util
 import json
@@ -147,7 +148,19 @@ def create(args: argparse.Namespace) -> dict:
         sim.write_json(output / "base-manifest.json", base)
         archive(output / "project", output / "base-source.zip", base)
     sim.write_json(output / "creation-manifest.json", creation)
-    provenance = sim.git_provenance(args.repo)
+    # Variants retain only branch/HEAD/dirty Git metadata. Their complete source
+    # bytes are already archived and hashed above. Do not materialize an unused
+    # binary diff and every generated evidence path in memory in this step.
+    provenance = {}
+    for key, command in (("branch", ["branch", "--show-current"]),
+                         ("head", ["rev-parse", "HEAD"]),
+                         ("dirty", ["status", "--porcelain=v1", "--untracked-files=normal"])):
+        try:
+            result = subprocess.run(["git", *command], cwd=args.repo, capture_output=True, timeout=30)
+            value = result.stdout.decode("utf8", errors="replace").strip()
+            provenance[key] = (bool(value) if key == "dirty" else value) if result.returncode == 0 else None
+        except (OSError, subprocess.TimeoutExpired):
+            provenance[key] = None
     metadata = {"format": FORMAT, "status": "CANDIDATE", "id": args.id, "owner": args.owner.strip(), "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "canonical_project": str(canonical), "base_identity": identity(base), "creation_identity": identity(creation), "lineage": lineage, "canonical_git": {key: provenance[key] for key in ("branch", "head", "dirty")}, "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"}
     sim.write_json(output / "variant.json", metadata)
     sim.write_json(output / "integrity.json", {name: sim.sha(output / name) for name in PROTECTED})

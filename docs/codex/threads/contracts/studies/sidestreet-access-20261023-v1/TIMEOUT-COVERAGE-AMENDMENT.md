@@ -1,0 +1,7 @@
+# Operational amendment — complete fixed coverage after process timeout
+
+2026-10-23, before a candidate gameplay timeout. Current measured throughput is about30 seconds per98-command take case under concurrent implementation/load, so a24-case batch may exceed its600-second process cap. Canonical controls already pass; the first completed candidate case is retained. This amendment is motivated by measured runtime, not changing an unfavorable outcome.
+
+Keep each original process limit600 seconds and each case's160-command/four-release limit. If a batch times out, retain every complete, rejected, partial and unstarted case status. Do not rerun complete or rejected cases. Regenerate only cases without a final result from the exact original configuration and unchanged legal recipe/policy in new output folders, at most eight cases per batch. No checkpoint identity editing, no new seeds, no altered rules or strategy, no extra in-game horizon.
+
+Allow at most four additional runner invocations (maximum15 including the setup-retry amendment's11); these are coverage recovery only. A partly executed case may restart from its original legal recipe, but the original timed-out attempt remains explicitly incomplete and is never counted as a second successful case. If the bounded recovery also fails, report missing coverage without a replacement seed. Replay selection uses the final retained result for each original case; all original failures remain linked separately.

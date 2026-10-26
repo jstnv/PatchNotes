@@ -1,0 +1,10 @@
+# Two-hand rival exit implementation plan — 2026-10-24
+
+**Authority:** [locked stopping decision](2026-10-24-two-hand-exit-retirement-decision-v1.md) and [sealed candidate review](handoffs/feature-maximal-current-20261024-v2-evidence.md). User authorized canonical implementation in this thread on 2026-10-24. Keep Beta's two-hand trial, cohort, market values, Review math and QA policy unchanged.
+
+1. Add a focused authoritative-session verifier that fails against the fixed two-hand rule. It checks maximum currently visible legal affordable Feature count per Design/Alpha choice, including a choice after two productive hands; ordinary exit when none can play; cash-blocked and short-pool fallbacks; disabled-G4 tie behavior; and an explicit blocked result if exit is unavailable. Run it on an isolated current-source snapshot and retain the red result.
+2. Integrate the production part of the private v19 candidate into `rival_trial.gd`, correcting the `uses_synergy_trial` tie boundary. Preserve exact hand legality and cost from the session/RunState. Make blocked policy results explicit at the world boundary only if the focused test proves the existing generic response insufficient. Run the verifier green.
+3. Run affected maintained rival/world/market and Studio-only cold Continue checks on a fresh isolated source snapshot. Run a bounded fresh world replay and representative population CPU/save measure if the existing runner can cover them without changing policy values. Record failures as well as passes.
+4. Re-read TODO, update item 22 and CURRENT_STATE to the level evidence supports, and write a dated source-pinned implementation log. Do not commit, push, export or infer final balance/release readiness.
+
+**Review risks:** an unaffordable visible Feature, fewer than four candidates, illegal phase exit, G4-disabled former-player/richer-Store Studio, a phase refill after hand two, and world actions that must not consume two productive cycles. Use no artificial phase/project cycle cap or future-income gate.

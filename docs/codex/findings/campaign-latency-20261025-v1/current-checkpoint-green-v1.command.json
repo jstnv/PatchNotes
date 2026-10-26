@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_campaign_latency.gd"
+  ],
+  "exit": 3,
+  "seconds": 2.812,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\current-checkpoint-green-v1",
+  "script_sha256": "ce68e30d62ae50168e3860f6d6c7dfdaded0e9e173f9b538f3bb1638d7947b06",
+  "result": {
+    "checks": 136,
+    "failures": 3,
+    "measurements": {
+      "cycle": 96,
+      "original_validation_us": 12506,
+      "repeated_validation_us": 856
+    },
+    "ok": false
+  },
+  "errors": [
+    "ERROR: FAIL: Current validation does not hash historical rule sets",
+    "ERROR: FAIL: Current hydration does not hash historical rule sets",
+    "ERROR: FAIL: Current decoding directly uses the current strict schema"
+  ]
+}

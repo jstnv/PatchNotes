@@ -1,0 +1,5 @@
+# Funded Debug Beta v2 amendment — 2026-10-25
+
+The v1 smoke passed and seed 4417 world completed, but the candidate made zero extra Beta plays. Source inspection found an unreachable guard: `StudioFinanceLedger.report()` has no `run_cycle` field, so `finance.get("run_cycle",-2)` always mismatches the public `current.run_cycle`. The shadow harness had correctly checked `view.run_cycle` against `session.run.get_completed_run_cycles()` separately. Preserve v1 source and run as a **rejected ineffective revision**; it is not evidence against the Beta hypothesis.
+
+Fork a new `rival-funded-debug-beta-20261025-v2` private version from v1. Change only that one guard to compare `current.run_cycle` with `session.run.get_completed_run_cycles()`. All hypotheses, seeds, bounds, controls and measurements in [the v1 pre-run plan](2026-10-25-funded-debug-beta-plan-v1.md) stay fixed. Use new smoke/world/replay/output folders. Stop on a failed source, legal action or starting-state check and retain failures. This correction remains DESIGN/TRIAL, with numerical values OPEN.

@@ -1,12 +1,11 @@
 class_name ContextualTip
 extends CanvasLayer
 
-const DISPLAY_SECONDS := 8.0
-
 var panel: PanelContainer
 var title_label: Label
 var body_label: Label
 var dismiss_button: Button
+var lower_dock := false
 var timer: Timer
 
 
@@ -52,20 +51,16 @@ func _ready() -> void:
 	body_label.add_theme_font_size_override("font_size", 14)
 	content.add_child(body_label)
 	panel.hide()
+	get_viewport().size_changed.connect(_place)
 
-	timer = Timer.new()
-	timer.name = "TipTimer"
-	timer.one_shot = true
-	timer.wait_time = DISPLAY_SECONDS
-	timer.timeout.connect(dismiss)
-	add_child(timer)
+	# Guidance remains readable until the player closes it. Keep the nullable
+	# timer field for older presentation probes; no expiry is scheduled.
 
 
 func show_tip(title: String, body: String) -> void:
 	title_label.text = title
 	body_label.text = body
 	panel.show()
-	timer.start()
 
 
 func dismiss() -> void:
@@ -73,3 +68,10 @@ func dismiss() -> void:
 		timer.stop()
 	if panel != null:
 		panel.hide()
+
+func dock_below_menu_controls(value: bool) -> void:
+	lower_dock=value;_place()
+func _place() -> void:
+	if panel==null:return
+	var top:=maxf(300.0,get_viewport().get_visible_rect().size.y-290.0) if lower_dock else 154.0
+	panel.offset_top=top;panel.offset_bottom=top+106.0

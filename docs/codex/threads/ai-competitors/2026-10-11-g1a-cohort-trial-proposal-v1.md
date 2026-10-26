@@ -1,0 +1,32 @@
+# G1a January incumbent cohort — trial proposal, 2026-10-11
+
+**Status: CANDIDATE content for a bounded legal-opening study; every name, count and value below remains OPEN.** The [item 22 review](2026-10-11-item22-design-review-v1.md) locks completed prerequisite-consistent ownership, empty Research and a separate frozen archive. This proposal fills those fields for a testable pair. It is not an authored final cast, AI policy, balance approval or implementation handoff.
+
+## Source-matched starting conditions
+
+At `main` HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`, the [specialty rules](../../../../patch-notes/scripts/studio_specialties.gd) grant 18 Action or 19 Adventure Primitive Features. The [card ledger](../../../../patch-notes/data/card_ledger.json) contains all six proposed extra Primitive IDs below; the later [Store ledger](../../../../patch-notes/data/feature_store_ledger.json) is not involved. None of the six extras has a later Store research-parent gate. Both proposed Studios use the current legal version-8 `family_funding` plus `cult_following` trait pair: three spent points, one unspent point converted to $50, $300 Family financing, $5,500 base, **$5,850 opening cash and 20 ordinary Fans**. These are current-source trial values, not an independent historical-resource award. Their ledger, RNG, Fans, ownership and titles must each be separate.
+
+| Candidate studio | Specialty / first live project Genre | Additional completed Primitive ownership beyond free roster | Frozen historical archive, with valid Genre / Theme / year / Review | January trial snapshot |
+|---|---|---|---|---|
+| Arcade Foundry (`incumbent-arcade-foundry`) | Action / Action | `music`, `dialogue`, `secrets` | `arcade-history-1977` *Circuit Clash*, Action / Science Fiction / 1977 / 7.2; `arcade-history-1979` *Skyline Siege*, Action / War / 1979 / 7.8 | $5,850; 20 Fans; 21 completed owned IDs; empty research and familiarity; no live release |
+| Wayfinder Works (`incumbent-wayfinder-works`) | Adventure / Adventure | `sprites`, `8_bit_music`, `music` | `wayfinder-history-1976` *The Lantern Road*, Adventure / Fantasy / 1976 / 7.1; `wayfinder-history-1979` *Atlas of Ash*, Adventure / Mystery / 1979 / 7.6 | $5,850; 20 Fans; 22 completed owned IDs; empty research and familiarity; no live release |
+
+The source's current [Theme IDs](../../../../patch-notes/data/primitive_predevelopment.json) cover Science Fiction, War, Fantasy and Mystery. Historical Reviews are **authored archive display data only**: they confer no live Core, Store familiarity, Fans, sales, release count or following-month news. The first 1980 titles still require actual legal Design, Alpha, Beta and launch resolution. The two archived games per Studio supply visible history; their 7.x Reviews are placeholders, not a claimed simulation outcome.
+
+The Action extra set matches the earlier [private G1a fixture](2026-10-11-g1a-archive-finding-v1.md), which made two legal first releases and persisted that archive in one Studio continuation. The Adventure set and simultaneous two-studio world are **untested**. Equal trial cash/Fans isolates specialty and extra-owned-pool effects in a first comparison; it does not prove the cohort has a strong enough 1980 Review advantage or distinguish two studios economically. A later authored-resource variant may be justified by evidence, with finance/Fan provenance specified before adoption.
+
+## Why this trial shape
+
+- Two studios give distinct Action and Adventure Core targets and starter rosters while keeping the first shared-calendar and save-state surface small. One Action-only Studio would repeat the existing fixture and miss a second Genre; a larger cast would multiply unmeasured AI/CPU work before a legal world exists.
+- Existing Primitive extras avoid unknown future-era metadata, FIFO installments and parent-ownership ambiguity at the January boundary. They expand actual eligible project supply without pretending a queued card was already playable.
+- Identical legal trait starts avoid inventing cash or Fan receipts and let an initial test compare the added Features explicitly. Alternative unequal authored endowments remain **OPEN**; the current legal-trait snapshot is an experiment control, not a claim that historical Studios always started like a 1980 player.
+- Zero familiarity avoids treating old titles as unobserved committed card plays. The alternative is an explicit per-card prior-use ledger with credible historical provenance, which is outside this first trial.
+
+## Required evidence before a cohort ruling or TODO adoption entry
+
+1. Rebase the corrected [private archive packet](../../findings/overnight-20261011-v1/G1A-RESULT.md) onto a new thread-owned current-source variant without overwriting its original baseline. Validate every candidate ID, current trait version, exact owned union, zero queue/familiarity and atomic rejection of invalid histories. Recheck current Store parent rules because a two-parent change is queued separately.
+2. Predeclare matched legal Action and Adventure controls/candidates, seeds, finite fixture policy, commands, time and stopping limits before any run. Match actual state/RNG compatibility; identical seed alone is insufficient. Show each first post-start release's accepted Design, Alpha, Beta and launch tape, Review, cash/Fans/arrears and checkpoint. Replay representative cases in fresh processes and retain failures.
+3. Test both Studios in one shared calendar with independent finance, Fans, RNG, archived IDs, live release IDs and exact-once monthly settlement. Restore Studio-only Continue and verify the archive never enters live sales, Fanbase, world release history or news. The existing single-Studio candidate does not cover this.
+4. Specify trusted old-save migration separately: preserve frozen primitive competitor snapshots and the source/RNG/integrity fence. The prior v3 cross-source envelope rejection is **not** a migration pass. Decide whether an existing mid-run save receives prospective rivals at a committed boundary, and never backdate an invented January 1980 cohort into a later saved world.
+
+After those results, choose whether to retain this cohort, revise its resources/Features/archive, or defer it. G2/G3 planned hands and Store math, G4 action policy, G5 threshold/CPU and market effects on Reviews remain separate **OPEN** gates. No `TODO.md` status change follows from this proposal alone.

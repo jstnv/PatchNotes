@@ -32,6 +32,14 @@
       "frames": 14400,
       "channels": 1,
       "sample_bytes": 2
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/crunch_time_studio_smooth_D_minor.wav",
+      "sha256": "7a549919f30ccce1d243b85ff761423fb7f8a2e742d387aae1804e03c86b902c",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
     }
   ],
   "source": "User-supplied Crunch Time Prototype 01 / Tempo_70 WAV",
@@ -42,7 +50,7 @@
     "Final release clearance/attribution review",
     "Audible card tap/whoosh mix preference"
   ],
-  "note": "Version A defaults on Music bus; B selectable via audio/soundtrack/prototype_variant. MP3 previews are not shipped.",
+  "note": "Version A defaults on Music bus; B selectable via audio/soundtrack/prototype_variant. Studio Smooth shares the main harmonic/time map and uses an aligned next-bar crossfade. MP3 previews are not shipped.",
   "card_sfx": {
     "source": "Original procedural synthesis; no external samples",
     "cues": {
@@ -50,5 +58,11 @@
       "card_whoosh.wav": "played/redrawn hand removal"
     },
     "provenance": "assets/audio/card_sfx/PROVENANCE.md"
+  },
+  "studio_theme": {
+    "source": "User-supplied Studio Smooth preview, matched byte-for-byte to original local synthesis project",
+    "adaptation": "Pitched MIDI notes restored +2 semitones from C minor to main-theme D minor, then resynthesized at unchanged 70 BPM; drums and note timing retained. Original preview preserved.",
+    "time_map": "crunch-time-d-minor-70-v1",
+    "provenance": "assets/audio/crunch_time_70/STUDIO_THEME.md"
   }
 }

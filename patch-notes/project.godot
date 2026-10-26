@@ -11,14 +11,19 @@ config_version=5
 [application]
 
 config/name="Patch Notes"
+config/version="0.03"
 run/main_scene="uid://bjuqd0td2mtbm"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://assets/branding/patch_notes_paper.png"
+config/windows_native_icon="res://assets/branding/patch_notes_paper.ico"
+
+[audio]
+
+soundtrack/prototype_variant="A"
 
 [autoload]
 
 Soundtrack="*res://scripts/audio/soundtrack.gd"
-
 CardDatabase="*uid://xkdhybxtvj6a"
 
 [display]
@@ -35,7 +40,3 @@ window/stretch/aspect="expand"
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
-
-[audio]
-
-soundtrack/prototype_variant="A"

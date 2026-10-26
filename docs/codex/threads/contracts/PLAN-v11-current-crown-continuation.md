@@ -1,0 +1,11 @@
+# Current-source Crown cash/Promotion continuation v11
+
+2026-10-11 (America/Los_Angeles). A new fresh-start read-only run following the [v10c Action/Cult20 seed4417 legal Crown access](sim-v24/current-action-crown-run-03/run-report.json). The source-pinned Game2 endpoint has Review7.1, a pending Crown offer, $0 cash, $6.84 unpaid original rent and `financially_blocked=true`. It replayed exactly in a fresh process. No old checkpoint is transplanted into a changed policy project.
+
+## Hypothesis and declared choices
+
+Using the same seed4417, Cult20, Action/Fantasy, 3/2/1 Game1, legal Ironclad, actual Recorded Sounds quote and 5/3/5 Game2 policy, Crown's zero-cycle $150 acceptance advance may clear the $6.84 rent remainder and allow two legal four-card Contract hands. Then a minimal one-hand-per-phase Game3 may consume the earned Crown Promotion on the next successful launch. Copy v10c's public-observation policy and change only post-Game2 behavior: accept an observed Crown quote once, select the first four visible Contract candidates for each hand, dismiss, then develop/launch Game3 with 1 Design/1 Alpha/1 Beta hand. No borrow, hire, cash injection, state editing, free wait, hidden future state or numerical rule change. This run does not optimize Crown's payout or Game3 Review.
+
+One case, seed4417, fresh legal recipe, max **100 commands**, target **three releases**, timeout **240 seconds**, explicit isolated source. Stop after this case. Preserve any rejected action, command bound or timeout. Measure Game2 Review/gate/cash/arrears, exact Crown acceptance and completion receipts, intervening sales/rent, Contract fraction and Promotion, Studio checkpoint state, Game3 frozen Awareness/Promotion consumption and ending finance. Require a fresh-process exact replay if the case completes; if it stops after Crown but before Game3, report partial coverage without calling Promotion verified. Compare the Game1–2 prefix measurements to v10c; do not treat equal seeds as state parity without actual digest or action comparison.
+
+This is headless finance/reachability evidence and a potential exported-input recipe. It cannot close C5's visible both-size keyboard, result, Continue or rollback matrix, and it cannot approve final publisher balance or change SideStreet's approved retention.

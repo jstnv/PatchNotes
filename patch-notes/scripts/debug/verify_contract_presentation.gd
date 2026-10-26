@@ -2,6 +2,8 @@ extends "res://scripts/debug/verify_balanced_primitive_contract.gd"
 
 
 func _verify() -> void:
+	# Gameplay installs this watcher; standalone presentation checks must too.
+	root.add_child(MenuTransitions.new())
 	snapshots.load_ledgers()
 	database = root.get_node("CardDatabase")
 	for resolution in [Vector2i(1152, 648), Vector2i(1280, 720), Vector2i(1600, 900)]:
@@ -43,7 +45,12 @@ func _verify() -> void:
 				expect(phase.get("_candidate_row").visible and phase.get_selected_candidate_views().is_empty(), "Second pool is visible and selectable")
 		await process_frame
 		var panel: PanelContainer = phase.get("_completion_panel")
+		await create_timer(MenuTransitions.ENTRANCE_SECONDS + 0.12).timeout
 		var rect := panel.get_global_rect()
+		var content := panel.get_child(0) as Control
+		var surface := panel.get_theme_stylebox("panel")
+		expect(is_equal_approx(content.position.x, surface.get_content_margin(SIDE_LEFT)), "Completion entrance retains authored left padding")
+		expect(is_equal_approx(panel.size.x-content.get_rect().end.x, surface.get_content_margin(SIDE_RIGHT)), "Completion entrance retains matching right padding")
 		expect(phase.get("_completion_modal").visible and not phase.get("_candidate_row").visible, "Completion replaces exhausted hand above gameplay")
 		expect(Rect2(Vector2.ZERO, Vector2(resolution)).encloses(rect), "Completion fits viewport at %s" % resolution)
 		expect(rect.get_center().distance_to(Vector2(resolution) / 2.0) < 2, "Completion is centered")

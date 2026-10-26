@@ -43,7 +43,13 @@ static func get_project_profile(project: ProjectState) -> ReviewStandardProfile:
 	if entry.is_empty() or saved.size() != 4: return null
 	for index in range(4):
 		if saved[index] != int(entry.ratios[index]): return null
-	return get_genre_profile(project.get_genre_id())
+	var frozen: Array[int]=project.get_market_standards()
+	if frozen.is_empty(): return get_genre_profile(project.get_genre_id())
+	if frozen.size()!=4 or project.get_market_snapshot_id().is_empty(): return null
+	var standards: Dictionary[ProjectState.CoreScore,int]={}
+	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
+		standards[category]=frozen[category]
+	return ReviewStandardProfile.new(StringName("market_targets_trial_v2:"+str(project.get_genre_id())+":"+project.get_market_snapshot_id()),standards)
 
 
 static func calculate(project_state: ProjectState, variance_roll: Variant) -> ReviewResult:

@@ -1,0 +1,65 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/profile_campaign_actions.gd"
+  ],
+  "exit": 0,
+  "seconds": 9.36,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\actions-final-v2",
+  "script_sha256": "649a97e81932fc1accbaae43a63cbe9f576277873323a8861b3467ad7488bd02",
+  "result": {
+    "commands": 72,
+    "failures": [],
+    "ok": true,
+    "source_identity": "a9fc590fc07a3f938b17b6ed95dd58a91b9fee44206343c7334c6c92d58de2fe",
+    "timings": [
+      {
+        "cycle": 0,
+        "releases": 0,
+        "save_ms": 441.204,
+        "studio_mount_ms": 6.181,
+        "validation_ms": 58.968,
+        "validator_calls": 1
+      },
+      {
+        "cycle": 7,
+        "releases": 1,
+        "save_ms": 393.137,
+        "studio_mount_ms": 4.017,
+        "validation_ms": 138.568,
+        "validator_calls": 2
+      },
+      {
+        "cycle": 14,
+        "queue_ms": 761.335,
+        "releases": 2,
+        "research_ms": 851.375,
+        "save_ms": 587.35,
+        "studio_mount_ms": 3.182,
+        "validation_ms": 241.027,
+        "validator_calls": 3
+      },
+      {
+        "cycle": 22,
+        "releases": 3,
+        "save_ms": 885.622,
+        "studio_mount_ms": 3.056,
+        "validation_ms": 369.114,
+        "validator_calls": 3
+      },
+      {
+        "cycle": 29,
+        "releases": 4,
+        "save_ms": 1150.92,
+        "studio_mount_ms": 3.186,
+        "validation_ms": 483.302,
+        "validator_calls": 3
+      }
+    ]
+  },
+  "errors": []
+}

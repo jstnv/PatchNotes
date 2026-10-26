@@ -36,7 +36,10 @@ func run_cases(database: Node) -> void:
 			var run := RunState.new()
 			run.initialize_cash(0)
 			_expect(run.create_studio_with_traits("M2c", &"action", []), "Studio fixture initializes")
+			historical_v2_roster(run)
 			run.set("_bank_run_id", &"m2c_studio")
+			run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
+			run._contract_search = RunState.ContractSearch.create(run._bank_run_id)
 			run.set("_employees", EmployeeRoster.create(&"m2c_studio"))
 			for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = seed_value + RunRandom.STREAMS.find(id)
 			var phase: Object

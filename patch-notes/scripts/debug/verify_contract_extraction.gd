@@ -83,6 +83,7 @@ func _run() -> void:
 				for hand in range(2):
 					var plan := iron.plan_hand(passes())
 					expect(commit_native_hand(base,iron,passes(),plan.remainder_cents),"Ironclad unlocks SideStreet")
+			if publisher==&"sidestreet":expect(base.search_contracts(base.get_contract_search_quote(&"sidestreet",&"cash")),"Paid Search finds SideStreet comparison work")
 			base.refresh_redraws()
 			for id in RunRandom.STREAMS: base.random_streams.stream(id).seed = seed_value+RunRandom.STREAMS.find(id)
 			var dto := StudioCheckpoint.new().capture(base)
@@ -111,6 +112,10 @@ func _run() -> void:
 			for view in views:
 				select_slots(view,[5,1])
 				expect(view.redraw_selected_cards(),"Scene redraw preserves click order")
+			# Keep the sealed pre-extraction draw oracle unchanged. It predates
+			# the approved challenge counter; adapt only that additive metadata.
+			# Live/headless still compare their complete unmodified states.
+			states[0].record_successful_redraw(2)
 			expect(engine.execute(engine.command(&"redraw",{"candidate_ids":[engine.candidate_ids[5],engine.candidate_ids[1]]})).ok,"Headless redraw")
 			compare_all(runs,states,views,engine,signals,"redraw")
 			for hand in range(states[2].get_required_hands()):

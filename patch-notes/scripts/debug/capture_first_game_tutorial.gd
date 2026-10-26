@@ -48,13 +48,15 @@ func _run() -> void:
 		root.size = viewport_size
 		root.content_scale_size = viewport_size
 		var main: MainMenu = game.get("_active_phase")
+		main.navigation.animate=false
 		main.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 		main._name_input.text = "First Steps Studio"
-		main.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-		main.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+		main._specialty.select(1)
+		main._play.pressed.emit()
 		main.call("_open_folder", &"traits")
 		main.call("_show_review")
 		main.call("_confirm_studio")
+		await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 		var studio: Control = game.get("_active_phase")
 		if not game.call("_begin_next_project", studio, "Learning the Ropes", &"action", &"fantasy"):
 			push_error("Real first project did not start")

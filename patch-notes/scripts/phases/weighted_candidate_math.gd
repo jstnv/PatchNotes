@@ -5,13 +5,11 @@ extends RefCounted
 static func calculate_printed_score_weight(card: CardData, priority_snapshot: Dictionary, core_score_by_stat: Dictionary) -> float:
 	if card == null or not core_score_by_stat.has(card.primary_stat):
 		return -1.0
-	var primary_category: ProjectState.CoreScore = core_score_by_stat[card.primary_stat]
-	var weight := float(priority_snapshot.get(primary_category, 0) * card.primary_value)
-	if not card.secondary_stat.is_empty():
-		if not core_score_by_stat.has(card.secondary_stat):
-			return -1.0
-		var secondary_category: ProjectState.CoreScore = core_score_by_stat[card.secondary_stat]
-		weight += float(priority_snapshot.get(secondary_category, 0) * card.secondary_value)
+	if not card.ordered_runtime_error().is_empty(): return -1.0
+	var weight := 0.0
+	for entry in card.core_contributions():
+		if not core_score_by_stat.has(entry.stat): return -1.0
+		weight += float(priority_snapshot.get(core_score_by_stat[entry.stat], 0) * int(entry.value))
 	return weight
 
 

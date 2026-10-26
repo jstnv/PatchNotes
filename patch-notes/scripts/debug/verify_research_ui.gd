@@ -14,7 +14,7 @@ func _run() -> void:
 		store._select_node(&"colored_text")
 		await create_timer(0.8).timeout
 		expect(snapshot(run)==before,"Browsing is passive")
-		expect(store._map.price.text.contains("Down payment") and store._map.price.text.contains("Resourceful"),"Detail explains split cost and saving")
+		expect(store._map.price.text.is_empty() and store._buy.text.contains("$325.00") and store._buy.text.contains("down"),"Split-cost admission amount appears on action button")
 		var details_rect := store._map.popup.get_global_rect()
 		expect(details_rect.position.y>=0 and details_rect.end.y<=resolution.y and details_rect.end.x<=resolution.x,"Research detail fits viewport")
 		if "--capture" in OS.get_cmdline_user_args():

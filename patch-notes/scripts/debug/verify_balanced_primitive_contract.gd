@@ -220,7 +220,7 @@ func _verify_two_hand_completion() -> void:
 	expect(dismissed[0] == 1 and run_snapshot(run, project) == completed_snapshot, "Completion dismissal is passive")
 	var return_studio := load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
 	root.add_child(return_studio)
-	expect(return_studio.setup(project, run, snapshots) and not run.is_primitive_contract_offer_available() and run.is_sidestreet_offer_available() and not return_studio.get_node("%Contracts").disabled, "Studio re-entry preserves Ironclad completion and exposes the newly unlocked release-linked SideStreet offer")
+	expect(return_studio.setup(project, run, snapshots) and not run.is_primitive_contract_offer_available() and not run.get_sidestreet_brief_offer().is_empty() and not return_studio.get_node("%Contracts").disabled, "Studio re-entry preserves Ironclad completion and exposes the original SideStreet Brief and paid-search access")
 	expect(run_snapshot(run, project) == completed_snapshot and project_snapshot(project) == frozen, "Studio reconstruction preserves cash, calendar, redraws, sales and frozen project")
 	return_studio.queue_free()
 	phase.queue_free()

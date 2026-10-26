@@ -2,10 +2,10 @@ extends "res://scripts/debug/verify_education_debt.gd"
 var vectors := {}
 
 func _run() -> void:
-	var l:=fixture(&"college_dropout")
+	var l:=fixture(&"graduate")
 	for i in range(4): l=step(l,0,200000 if i%2 else 0)
 	l=step(l)
-	for pair in [[9,0],[10,7068],[105,7111]]:
+	for pair in [[9,0],[10,28273],[105,28328]]:
 		var q:=F.bank_quote(l,50000,pair[0],&"education-test")
 		check(q.schedule.first_due_cycle==8 and q.obligations_cents==pair[1],"Odd acceptance reserves actual first-full-month overlap")
 	var quote:=F.bank_quote(l,50000,12,&"education-test")

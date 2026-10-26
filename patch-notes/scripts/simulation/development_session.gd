@@ -27,7 +27,7 @@ func initialize(project_state: ProjectState,run_state: RunState,definitions: Ref
 	_create_phase()
 	return true
 
-func _create_phase() -> void:
+func _create_phase(refresh: bool = true) -> void:
 	hand=HAND_SCRIPTS[phase_index].new()
 	hand._project_state=project
 	hand._run_state=run
@@ -49,7 +49,7 @@ func _create_phase() -> void:
 	if phase_index<2: actions.finalization_rng=run.random_streams.stream(StringName(str(PHASES[phase_index])+"_finalize"))
 	awaiting_confirmation=false
 	finalized=false
-	run.refresh_redraws()
+	if refresh: run.refresh_redraws()
 
 func command(kind: StringName,payload: Dictionary = {}) -> Dictionary:
 	return {"schema_version":1,"type":kind,"project_id":project.get_release_id(),"phase":PHASES[phase_index],"sequence":sequence,"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"payload":payload.duplicate(true)}
@@ -95,7 +95,7 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 	if kind==&"priorities":
 		var distribution: Variant = payload.get("distribution")
 		if payload.size()!=1 or not distribution is Dictionary: return reject("Malformed priorities")
-		var valid: bool = BetaPriorityAllocation.is_valid_distribution(distribution) if phase_index==2 else PriorityAllocation.is_valid_distribution(distribution)
+		var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution) if phase_index==2 else PriorityAllocation.is_valid_new_distribution(distribution)
 		if not valid or distribution==hand.priorities: return reject("Invalid or unchanged priorities")
 		if not hand.active:
 			hand.priorities=distribution.duplicate()
@@ -163,9 +163,14 @@ func observation() -> Dictionary:
 	for index in range(hand.candidate_ids.size()):
 		var card: CardData = hand._candidate_cards[index]
 		candidates.append({"token":hand.candidate_ids[index],"definition":str(card.id),"type":str(card.card_type),"primary_stat":str(card.primary_stat),"primary_value":card.primary_value,"secondary_stat":str(card.secondary_stat),"secondary_value":card.secondary_value,"scope":card.scope,"renewable":card.renewable,"beta_category":str(card.beta_category),"beta_value":card.beta_value,"qa_operation":str(card.qa_operation)})
+		if card.core_contributions().size() == 3: candidates[-1]["core_contributions"] = card.core_contributions()
 	var core: Dictionary = {}
 	for category in ProjectState.CoreScore.values(): core[category]=project.get_core_score(category)
 	var pending: Array = []
 	if phase_index==1: pending=hand._pending_playtest_categories.duplicate()
 	if phase_index==2: pending=hand._pending_corrective_pass_ids.duplicate()
-	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending}
+	var swaps: Array[int]=[]
+	if phase_index==2:
+		for index in range(hand.candidate_ids.size()):
+			if actions.can_swap([index] as Array[int]):swaps.append(hand.candidate_ids[index])
+	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize(),"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending,"swap_candidate_ids":swaps}

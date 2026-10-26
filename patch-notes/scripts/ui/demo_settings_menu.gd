@@ -18,10 +18,13 @@ var reset_button: Button
 var deadline := 0.0
 var previewing := false
 var _return_focus: Control
+var _navigation: MenuTransitions
 var _syncing := false
 var _startup_error := ""
 
 func _ready() -> void:
+	# Display confirmation/revert and input must work inside the pause menu.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 120
 	var loaded := DemoSettingsStore.read_settings(settings_path)
 	committed = loaded.values
@@ -32,19 +35,32 @@ func _ready() -> void:
 	panel.hide()
 
 func _build() -> void:
+	var host := FolderUI.SurfaceHost.new()
+	host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(host)
 	panel = PanelContainer.new()
 	panel.name = "SettingsPanel"
 	panel.theme = preload("res://resources/ui/workspace_theme.tres")
+	panel.theme_type_variation=&"FolderPanel"
+	panel.set_meta("bounded_folder",true)
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(panel)
+	panel.offset_left=20; panel.offset_top=20; panel.offset_right=-20; panel.offset_bottom=-20
+	host.add_child(panel)
+	var folder := VBoxContainer.new()
+	folder.add_theme_constant_override("separation",12)
+	panel.add_child(folder)
+	var header := FolderUI.header(folder,"Settings","Display and audio preferences",close)
+	back_button=header.get_node("Back")
 	var center := CenterContainer.new()
-	panel.add_child(center)
+	center.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	folder.add_child(center)
 	var box := VBoxContainer.new()
 	box.custom_minimum_size.x = 640
-	box.add_theme_constant_override("separation", 10)
+	box.add_theme_constant_override("separation", 6)
 	center.add_child(box)
 	var title := Label.new()
 	title.text = "Settings"
+	title.hide()
 	title.add_theme_font_size_override("font_size", 28)
 	box.add_child(title)
 	var guide := Label.new()
@@ -111,7 +127,8 @@ func _build() -> void:
 		draft = DemoSettingsStore.defaults()
 		_sync()
 		status.text = "Default values selected. Apply to save them.")
-	back_button = _button(box, "Back", "Back (discard unapplied changes)", close)
+	back_button.tooltip_text="Discard unapplied changes and return to the previous menu."
+	title.theme_type_variation=&"HeadingLabel"
 
 func _button(parent: Node, id: String, caption: String, action: Callable) -> Button:
 	var button := Button.new()
@@ -122,14 +139,17 @@ func _button(parent: Node, id: String, caption: String, action: Callable) -> But
 	parent.add_child(button)
 	return button
 
-func open() -> void:
-	if is_open(): return
+func open(navigation_host: MenuTransitions = null) -> void:
+	if is_open() or (navigation_host != null and navigation_host.busy): return
+	_navigation=navigation_host
 	_return_focus = get_viewport().gui_get_focus_owner()
 	draft = committed.duplicate(true)
 	_sync()
 	panel.show()
 	status.text = _startup_error
-	mode.grab_focus()
+	if _navigation != null:
+		if not _navigation.push(panel,mode,_finish_close): _finish_close()
+	else: mode.grab_focus()
 
 func is_open() -> bool:
 	return panel != null and panel.visible
@@ -212,6 +232,13 @@ func revert_display() -> void:
 
 func close() -> void:
 	if not is_open(): return
+	if is_instance_valid(_navigation) and _navigation.is_top(panel):
+		_navigation.pop()
+		return
+	_finish_close()
+
+func _finish_close() -> void:
+	_navigation=null
 	if previewing: revert_display()
 	panel.hide()
 	if is_instance_valid(_return_focus) and _return_focus.is_visible_in_tree(): _return_focus.grab_focus()
@@ -231,6 +258,9 @@ func _focusable() -> Array[Control]:
 
 func _input(event: InputEvent) -> void:
 	if not is_open(): return
+	if is_instance_valid(_navigation) and _navigation.busy:
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("ui_cancel"):
 		if previewing: revert_display()
 		else: close()

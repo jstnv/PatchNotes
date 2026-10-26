@@ -17,7 +17,7 @@ func check(value: bool, message: String) -> void:
 
 func run() -> void:
 	var music := root.get_node("Soundtrack")
-	check(music.player.stream is AudioStreamWAV and music.player.bus == &"Music", "WAV on Music bus")
+	check(music.player.stream is AudioStreamSynchronized and music.player.stream.get_sync_stream(0) is AudioStreamWAV and music.player.bus == &"Music", "Synchronized WAVs on Music bus")
 	var length: float = music.player.stream.get_length()
 	check(absf(length - 27.4285625) < 0.0001, "70 BPM eight-bar sample length")
 	var grid := Grid.new()
@@ -58,7 +58,7 @@ func run() -> void:
 	await create_timer(0.05).timeout
 	var tree_stopped: float = music.presentation_seconds()
 	await create_timer(0.1).timeout
-	check(music.presentation_seconds() == tree_stopped, "SceneTree pause freezes clock")
+	check(music.presentation_seconds() > tree_stopped and not music.player.stream_paused, "SceneTree pause keeps the music clock advancing")
 	paused = false
 	await create_timer(0.2).timeout
 	check(music.presentation_seconds() > tree_stopped, "SceneTree resume advances clock")
@@ -106,7 +106,7 @@ func sequence(count: int, bonus: bool, frame_step: float) -> void:
 		if bonus: motion.note_specialization(Callable())
 	check(motion.play("play", fan, selected, action, func(): return state.duplicate(), Callable(), Callable()), "Accepted visual sequence")
 	var expected: int = state[&"graphics"]
-	# The music cursor does not move during pause, even if many render frames pass.
+	# A stationary injected transport clock never advances visual events.
 	for i in range(10): motion.advance_music(fake_time)
 	check(motion.trace.is_empty(), "No events while clock is stationary")
 	var deadline := fake_time + (count * 3 + 4) * Grid.STEP

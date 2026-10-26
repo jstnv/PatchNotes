@@ -2,11 +2,15 @@ class_name PublisherBrowser
 extends PanelContainer
 
 signal closed
+signal commission_requested
+signal support_requested
 
 var _run: RunState
 var _list: ItemList
 var _details: RichTextLabel
 var _selected_id: StringName
+var _commission_button: Button
+var _support_button: Button
 
 
 func _ready() -> void:
@@ -49,6 +53,18 @@ func _ready() -> void:
 	_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	columns.add_child(_details)
+	_commission_button = Button.new()
+	_commission_button.name = "PrepareSideStreetCommission"
+	_commission_button.text = "Prepare SideStreet commission"
+	_commission_button.custom_minimum_size.y = 44
+	_commission_button.pressed.connect(func(): commission_requested.emit())
+	layout.add_child(_commission_button)
+	_support_button = Button.new()
+	_support_button.name = "PrepareSideStreetSupport"
+	_support_button.text = "Prepare SideStreet support"
+	_support_button.custom_minimum_size.y = 44
+	_support_button.pressed.connect(func(): support_requested.emit())
+	layout.add_child(_support_button)
 	if _run != null:
 		_refresh()
 
@@ -111,3 +127,14 @@ func _on_selected(index: int) -> void:
 	_details.text = "%s\n\n%s\n\nPrerequisite: %s\n\n%s\n\n%s" % [
 		status.name, "Unlocked" if status.unlocked else "Locked", status.requirement,
 		status.personality, availability]
+	var relationships := _run.get_publisher_relationships()
+	var standing: Dictionary = relationships.get(_selected_id,{"reputation_bp":0,"investment_bp":0})
+	_details.text += "\n\nReputation %.2f / 100 · Investment %.2f / 100" % [standing.reputation_bp/100.0,standing.investment_bp/100.0]
+	_commission_button.visible = _selected_id == PublisherCatalog.SIDESTREET
+	_support_button.visible = _selected_id == PublisherCatalog.SIDESTREET
+	_support_button.disabled = _run.get_support_quote("Support preview",&"sports",&"fantasy").is_empty()
+	if _selected_id == PublisherCatalog.SIDESTREET:
+		_details.text += "\n\nSupport: Investment15+. Studio-owned title, upfront funding and launch marketing, title-only capped20% recoup through earning cycle24. Assessment at earning cycle6: Review7.0 AND1,000 units. Renew after a new qualifying support success or full commission; a miss alone does not renew."
+	_commission_button.disabled = standing.reputation_bp < 2000 or _run.has_pending_commission() or _run.get_active_contract() != null or _run.get_released_game_ids().is_empty() or _run.ContractSearch.invitation(_run).is_empty()
+	if _selected_id == PublisherCatalog.SIDESTREET:
+		_details.text += "\nReputation Briefs are separate from cash Contracts: two hands, up to 10 Reputation, no cash or Promotion. Find repeatable work through Contracts → Search. Each successful search costs one productive cycle.\nAt Reputation 20 with a released game, search for a commission invitation, then prepare it. Access does not spend standing. Choose its name, Genre and Theme to see exact Scope and terms.\nFull delivery pays $6,000 and requests +15 Reputation / +15 Investment, capped independently. Publisher owns sales; raw units and Fans remain.\nInvestment15 unlocks the optional support package above, subject to earned renewal and legal funded-start checks."

@@ -19,6 +19,8 @@ The output directory must be new. Existing directories are never reused or delet
 
 ## Inputs and policy contract
 
+**SideStreet P4,2026-10-24:** the current authoritative campaign supports `quote_support` with `{name, genre, theme}`, followed by `begin_development` carrying the exact returned `support_quote`. Studio observations expose `support_quote` and `support_history`; legal policy must choose quote inputs first and preserve the frozen quote. Investment/renewal availability is earned through the existing runtime, not invented in the recipe. Funding/Marketing, title recoup and assessment happen through normal Begin/launch/productive commands; do not apply them again in a policy. Player checkpoint input remains Studio-only. [Approved terms and accepted source/coverage](../../findings/publisher-p4-20261024-v1/README.md). Default rival policy is unchanged; candidate policy revisions retain the normal isolated-variant contract.
+
 Copy either [finite-fixture.json](examples/finite-fixture.json) or [custom-policy.json](examples/custom-policy.json) into your thread folder. `schema_version` is the string `"1"`. Specify one policy declaration and an explicit `cases` array; seeds are decimal **strings** to preserve 64-bit values. Every case needs a unique safe `case_id`, one `initial.recipe` or `initial.checkpoint`, `max_commands`, an absolute `target_release_count`, and `policy.config`.
 
 - `recipe` requires schema version **number** 1, stable Studio ID/name, permanent specialty, explicit trait IDs and a seed string. It creates a legal current-rules Studio; it does not grant arbitrary money, cards or scores.
@@ -34,6 +36,8 @@ Policies implement `static func factory(config: Dictionary) -> Callable`. The re
 Policies are **trusted local executable code**, not sandboxed plug-ins. They must not load the live workspace, player saves, use network services, mutate rules, or inspect hidden future state. The runner isolates ordinary project and `user://` paths; it cannot restrict malicious GDScript or prove that an arbitrary policy uses only its observation.
 
 ## Exact replay
+
+2026-10-22 maintenance: campaign replay projections omit only RunState's transient `_market_committed_candidate` transaction scratch. Durable `world.market` history, every other persisted field, RNG and raw trace remain compared; Studio-only Continue is unchanged. Old canonical tapes still require their matching source revision. `compare_simulations.py` determines the mechanics file set from each bundle's frozen replay source: current bundles include the executed `queries/market_release_index.gd`, while older scripts/data-only identities remain valid. Frozen variant projects and outputs are not rewritten. [Regression evidence and scope](../../findings/overnight-market-20261022-v1/SIMULATOR.md).
 
 ```powershell
 python tools/simulate.py replay --bundle docs/codex/threads/my-system/sims/first-run --case action-4417 --output docs/codex/threads/my-system/sims/first-replay --timeout 240

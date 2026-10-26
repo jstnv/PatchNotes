@@ -71,7 +71,7 @@ func _verify_successful_transition(database: Node, scope: int, selection_count: 
 	_expect(gameplay.get("_active_phase") == alpha_phase and alpha_phase.get("_project_state") == gameplay.project_state, "Alpha receives Gameplay's existing ProjectState instance")
 	_expect(alpha_phase.get_node("PhaseLayout/AlphaLabel").text == "Alpha Phase", "Alpha priority phase visibly identifies itself")
 	_expect(alpha_phase.get_priority_distribution().values().reduce(func(total: int, value: int) -> int: return total + value, 0) == 100 and alpha_phase.get_available_priority() == 0, "Transitioned Alpha initializes its independent 25 / 25 / 25 / 25 allocation")
-	_expect(alpha_phase.get_node("%GraphicsPriority") is VSlider and alpha_phase.get_node("%AvailablePriority").text == "Available Priority: 0", "Corrected Alpha allocation controls appear after the real transition")
+	_expect(alpha_phase.get_node("%GraphicsPriority") is VSlider and alpha_phase.get_node("%AvailablePriority").text == "100/100", "Corrected Alpha allocation controls appear after the real transition")
 	_expect(alpha_phase.get("_phase_state") == AlphaPhase.PhaseState.PLANNING and alpha_phase.get("_candidate_cards").is_empty(), "Transitioned Alpha begins in Planning with zero candidates")
 	_expect(alpha_phase.get_node("%BeginAlphaButton").visible and alpha_phase.get_node("%PlayAlphaHandButton").disabled, "Transitioned Alpha exposes Begin Alpha and no resolution action")
 	_expect(design_phase.get_parent() == null, "Finalized Design is removed from PhaseRoot")

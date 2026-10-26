@@ -1,0 +1,10 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.18 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU
+
+Loaded 40 cards.
+{"checks":26,"failures":1,"ok":false,"rows":[{"baseline_max_frame_gap_ms":262.842,"frames":9,"kickoff_ms":12.52,"max_frame_gap_ms":560.938,"save_wall_ms":1883.681,"size":"(1152, 648)"},{"baseline_max_frame_gap_ms":516.341,"frames":7,"kickoff_ms":11.105,"max_frame_gap_ms":252.786,"save_wall_ms":762.332,"size":"(1280, 720)"}]}
+ERROR: FAIL: Save frame gaps remain within twice the measured native baseline or150ms
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/patch-notes/scripts/debug/verify_background_gameplay.gd:18)
+       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/patch-notes/scripts/debug/verify_background_gameplay.gd:79)

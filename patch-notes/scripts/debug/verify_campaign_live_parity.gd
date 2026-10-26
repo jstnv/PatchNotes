@@ -176,6 +176,12 @@ func full_project(title: String,extras := false) -> void:
 			compare("Host playtest")
 		play()
 		if failures: return
+		# Four legal first-release hands per phase supply the new three-rent
+		# underwriting floor; this is an explicit verifier policy, not rival AI.
+		if title=="First":
+			for extra in 2:
+				play()
+				if failures:return
 		exit_phase()
 		await process_frame
 		if failures: return
@@ -184,8 +190,10 @@ func hire() -> void:
 	clear_signals()
 	var quote: Dictionary = session.run.get_production_hire_quote()
 	game._active_phase._open_employees()
-	game._active_phase._employees_panel.hide()
-	game._active_phase._employees_panel.confirmed.emit()
+	game._active_phase._employees_panel.request_purchase(&"hire",game.run_state.get_production_hire_quote())
+	game._active_phase._employees_panel.confirmation.hide()
+	game._active_phase._employees_panel.confirmation.confirmed.emit()
+	game._active_phase._employees_panel.close()
 	act(&"hire",{"quote":quote})
 	compare("Hire through employee panel")
 
@@ -246,10 +254,10 @@ func bank(payoff: bool) -> void:
 		quote = session.run.get_bank_payoff_quote(session.run.get_studio_finance_snapshot().bank_loans[0].loan_id)
 		menu._confirm_payoff()
 	else:
-		menu.amount_input.text = "500.00"
+		menu.amount_input.text = "1500.00"
 		menu.term_input.text = "24"
 		menu._preview_quote()
-		quote = session.quote_bank(50000,24)
+		quote = session.quote_bank(150000,24)
 		menu._confirm_accept()
 	menu._confirm.hide()
 	menu._confirm.confirmed.emit()
@@ -302,11 +310,10 @@ func _initialize() -> void:
 	for seed_value in [4417,90210]:
 		route_id = "campaign_"+str(seed_value)
 		segment = 0
-		var recipe := {"schema_version":1,"studio_id":route_id,"studio_name":"Live parity","specialty":"action","traits":[],"seed":str(seed_value)}
+		var recipe := {"schema_version":1,"studio_id":route_id,"employee_trial":true,"studio_name":"Live parity","specialty":"action","traits":[],"seed":str(seed_value)}
 		var coordinator := start_route(recipe)
 		await full_project("First")
 		if failures: break
-		hire()
 		store_action(true)
 		contract()
 		if failures: break
@@ -325,6 +332,7 @@ func _initialize() -> void:
 		store_action(false)
 		await full_project("Second",true)
 		if failures: break
+		hire()
 		bank(true)
 		await process_frame
 		expect(coordinator.flush(),"Second release persists")

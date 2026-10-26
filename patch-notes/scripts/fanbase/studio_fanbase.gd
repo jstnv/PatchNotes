@@ -143,7 +143,10 @@ static func validate(state: Dictionary, records: Dictionary, metadata: Dictionar
 			for id: StringName in current:
 				var age: int = current[id].total_earned_cycles + 1
 				var campaign: bool = age >= 3 and age % 2 == 1 and records[id].campaign_months.has(age / 2 + 1)
-				next[id] = ReleasedGameSales.next_cycle(current[id], boundary, boundary % 2 == 0, campaign)
+				var age_month: int=age/2+age%2
+				var source_factor: Variant=records[id].market_factors.get(age_month,{})
+				if not source_factor is Dictionary or source_factor.is_empty(): return false
+				next[id] = ReleasedGameSales.next_cycle(current[id], boundary, boundary % 2 == 0, campaign,int(source_factor.factor_bp),str(source_factor.snapshot_id),source_factor)
 				if next[id].is_empty(): return false
 			rebuilt = plan(rebuilt, current, next, boundary)
 			if rebuilt.is_empty(): return false

@@ -7,8 +7,13 @@ var detail_label: Label
 var timer: Timer
 var _popup: Tween
 var _started := 0.0
+var _music_cursor := 0.0
 
 func _ready() -> void:
+	get_node("/root/Soundtrack").presentation_resumed.connect(func(beats: int):
+		if is_instance_valid(banner) and banner.visible:
+			_started += beats * HandPresentation.BEAT_SECONDS
+			_music_cursor += beats * HandPresentation.BEAT_SECONDS)
 	layer = 10
 	banner = PanelContainer.new()
 	banner.name = "SynergyBanner"
@@ -48,10 +53,14 @@ func show_message(title: String, detail: String) -> void:
 	banner.scale = Vector2.ONE * 0.8
 	banner.modulate.a = 0.0
 	_started = get_node("/root/Soundtrack").presentation_seconds()
+	_music_cursor = _started
 
 func _process(_delta: float) -> void:
 	if not is_instance_valid(banner) or not banner.visible: return
-	var elapsed: float = get_node("/root/Soundtrack").presentation_seconds() - _started
+	var now: float = get_node("/root/Soundtrack").presentation_seconds()
+	if now < _music_cursor: return
+	_music_cursor = now
+	var elapsed := now - _started
 	var progress := clampf(elapsed / (HandPresentation.BEAT_SECONDS / 2.0), 0.0, 1.0)
 	banner.scale = Vector2.ONE * lerpf(0.8, 1.0, 1.0 - pow(1.0 - progress, 3.0))
 	banner.modulate.a = progress

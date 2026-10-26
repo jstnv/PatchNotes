@@ -18,16 +18,18 @@ func _run() -> void:
 		root.add_child(game)
 		await process_frame
 		var menu: MainMenu = game.get("_active_phase")
+		menu.navigation.animate=false
 		menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 		if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
 			menu._replace_dialog.hide()
 			menu._replace_dialog.confirmed.emit()
-		menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName").text = "Navigation Test"
-		menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-		menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+		menu._name_input.text = "Navigation Test"
+		menu._specialty.select(1)
+		menu._play.pressed.emit()
 		menu.call("_open_folder", &"traits")
 		menu.call("_show_review")
 		menu.call("_confirm_studio")
+		await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 		run = game.run_state
 		var studio: StudioPhase = game.get("_active_phase")
 		studio.get_node("%FeatureStoreButton").pressed.emit()
@@ -98,14 +100,14 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	expect(store._details.text.contains("Graphics") and store._owned_summary.text.contains("Graphics") and store._owned_summary.text.contains("Sound") and store._owned_summary.text.contains("Tech") and store._owned_summary.text.contains("Design"), "Details and totals spell out Core categories")
 	_key(KEY_LEFT)
 	await process_frame
-	expect(store._selected == &"colored_text" and root.gui_get_focus_owner() == store._nodes[&"colored_text"], "Left selects and focuses outward Visuals child")
-	expect(store._details.text.contains("2 Graphics · 1 Scope") and map.popup.visible, "Arrow selection opens correct details")
+	expect(store._selected == &"scrolling" and root.gui_get_focus_owner() == store._nodes[&"scrolling"], "Left selects and focuses outward Visuals child")
+	expect(store._details.text.begins_with("Scrolling\n") and map.popup.visible, "Arrow selection opens correct details")
 	_key(KEY_RIGHT)
 	expect(store._selected == &"text", "Right returns to inward Visuals parent")
-	_key(KEY_DOWN)
-	expect(store._selected == &"sprites", "Down chooses next root on the adjacent track")
 	_key(KEY_UP)
-	expect(store._selected == &"text", "Up returns to previous root")
+	expect(store._selected == &"4_color_palette", "Up follows the inner root axis to 4-Color Palette")
+	_key(KEY_DOWN)
+	expect(store._selected == &"text", "Down returns to Text on the inner root axis")
 	var top: StringName = &"text"
 	for id: StringName in store._nodes:
 		if store._nodes[id].position.y < store._nodes[top].position.y: top = id
@@ -117,6 +119,12 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	expect(not map.popup.visible, "Escape dismisses keyboard-opened details")
 	_key(KEY_RIGHT)
 	expect(store._selected == &"text", "Arrow browsing resumes from focused node after dismissal")
+	for zoom: float in [0.75,1.00010396295693,1.5]:
+		map.set_zoom(zoom)
+		map._focus_node(&"colored_text")
+		_key(KEY_ESCAPE)
+		_key(KEY_RIGHT)
+		expect(store._selected == &"text", "Equal-distance inward tie prefers parent at zoom " + str(zoom))
 	# Actual GUI button routing, not direct calls to _input: drags must not click.
 	await _reset_view()
 	at = text.get_global_rect().get_center()
@@ -137,8 +145,9 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	_mouse(blank - Vector2(30, 20), false, MOUSE_BUTTON_MIDDLE)
 	expect(_offset() == pan_start + Vector2i(160, 100), "Existing middle-button pan remains available")
 	_mouse(blank, true)
-	_motion(blank + Vector2(2000, 2000), Vector2(2000, 2000))
-	_mouse(blank + Vector2(2000, 2000), false)
+	var to_origin := Vector2(_offset()) + map.canvas.size
+	_motion(blank + to_origin, to_origin)
+	_mouse(blank + to_origin, false)
 	expect(_offset() == Vector2i.ZERO, "Panning clamps at map origin")
 	# Focus must reveal off-screen nodes at both low and high zoom.
 	for scale_value in [0.5, 1.5]:
@@ -215,6 +224,34 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	expect(tutorial.page_index == 1, "Tutorial Next Tip remains clickable above map")
 	_key(KEY_ESCAPE)
 	expect(not tutorial.visible, "Escape closes Tutorial overlay")
-	_key(KEY_DOWN)
-	expect(store._selected == &"sprites", "Map arrow navigation resumes after closing Tutorial")
+	_key(KEY_UP)
+	expect(store._selected == &"4_color_palette", "Map arrow navigation resumes after closing Tutorial")
 	expect(_snapshot() == before, "All navigation remains zero-cost")
+	await _verify_hovered_escape()
+	expect(_snapshot() == before, "Tooltip, details and Pause navigation remain zero-cost")
+
+func _verify_hovered_escape() -> void:
+	# Input.parse_input_event includes GUI tooltip cancellation; push_input alone
+	# missed the actual exported mouse-hover regression.
+	store._select_lane(&"Story & World")
+	await create_timer(0.7).timeout
+	store._map._focus_node(&"character_backstories")
+	await create_timer(0.7).timeout
+	var hover := InputEventMouseMotion.new()
+	hover.position = store._nodes[&"character_backstories"].get_global_rect().get_center()
+	hover.global_position = hover.position
+	Input.parse_input_event(hover)
+	await create_timer(1.0).timeout
+	for step in range(3):
+		var event := InputEventKey.new()
+		event.keycode = KEY_ESCAPE
+		event.physical_keycode = KEY_ESCAPE
+		event.pressed = true
+		Input.parse_input_event(event)
+		await process_frame
+		event = event.duplicate()
+		event.pressed = false
+		Input.parse_input_event(event)
+		await process_frame
+		expect(paused == (step == 1), "Hovered Store details dismiss, next Escape pauses, third resumes: %d" % step)
+		if step == 0: expect(not store._map.popup.visible, "First Escape dismisses hovered details")

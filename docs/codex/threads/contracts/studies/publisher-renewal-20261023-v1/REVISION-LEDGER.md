@@ -1,0 +1,17 @@
+# Retained attempts
+
+- Baseline run `publisher-renewal-baseline-20261023-v1`: completed15 commands, cycle83/release7, ending checkpoint absent. Expected save acceptance failure reproduced.
+- `baseline-replay`: launched before the baseline snapshot was complete; failed for missing snapshot-manifest.json. No gameplay replay occurred. Retry `baseline-replay2` is separate, same input/budget.
+- Private renewal v1 edit: `implement.py` used Python's Windows default decoding. First run_state rewrite encoded already-decoded UTF-8 bytes incorrectly; the next read raised UnicodeDecodeError (cp1252 byte0x9d, position81433). This is a tooling failure, not game evidence. No canonical file was edited.
+- `prefix` invocation on incomplete v1 was interrupted with Ctrl-C before acceptance. Its partial folder and command receipt are retained; it is not a completed simulation. Do not reuse its files or claim its source tested.
+- Fork renewal v2 from v1 to preserve ancestry. Restore only this experiment's five edited paths from the unchanged historical support parent and apply the same scoped patch with explicit UTF-8. Recreate helper in v2. V1 remains unchanged as failed preparation evidence. Corrected prefix uses distinct `prefix2` name; original plan's seed, policies and bounds unchanged.
+
+All attempts count toward the14-invocation ceiling. No approved support numbers or canonical activation follows.
+
+## Cold-state diagnostic
+
+The second-support checkpoint passes exact typed payload roundtrip and43 focused checks; its15-command tape replays exactly. The follow-on case legally restores and advances, with identical initial RNG, but a manual assertion comparing the previous final replay-state digest to the next initial digest failed. This assertion is retained as an unresolved raw-session comparison until the final audit investigates it. The historical parent replay projection includes `_market_committed_candidate`; current canonical replay already excludes that transaction scratch. Do not change the old candidate's source, checkpoints, hashes or RNG to hide the mismatch. Extend the already planned fourth focused audit to compare every raw state field, identify exact differences, and require whole exported Studio envelope equality on all six continuation boundaries. This adds no campaign or budget, and does not treat arbitrary missing state as acceptable.
+
+Resolution: the final third-deal audit passed74 checks. Every one of the six raw-session differences is exactly `/run/_market_committed_candidate`; all exported Studio envelopes are byte-value-equivalent after typed hydrate/export, and all RNG boundaries agree. Original raw hashes remain different and preserved. Analysis records those raw mismatches separately and checks saved-envelope identity plus the explicit diagnostic. No checkpoint/replay compatibility fence, candidate projection, or gameplay rule was changed to make the hashes agree.
+
+- Corrected prefix2 passed77 commands and a valid checkpoint; its focused constructed/restore audit passed17 checks. The subsequent commission capture stopped with `Canonical source changed while recording drift; retry in a new output`. No commission gameplay executed. Retry commission2 uses the identical declared case, seed, checkpoint, policy and bound. Shared canonical edits belong to other work and are preserved. This consumes the remaining planned capture-retry allowance within14 total invocations.

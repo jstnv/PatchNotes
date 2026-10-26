@@ -17,12 +17,15 @@ for _ in range(count):
  assert item_flags==0,(name,item_flags)
  payload=data[base+offset:base+offset+size]
  assert len(payload)==size and hashlib.md5(payload).digest()==md5,name
+ if name=='res://project.binary':
+  assert len(payload)>=8 and payload.startswith(b'ECFG'), 'Invalid exported project.binary header'
  files[name]={'bytes':size,'sha256':hashlib.sha256(payload).hexdigest(),'md5_valid':True}
+assert 'res://project.binary' in files, 'Missing exported project.binary'
 for name in files:
  rel=name.removeprefix('res://')
  assert not any(part in rel.split('/') for part in ['analysis','design-logs','debug','builds','.codex-godot-temp']),name
  assert not rel.endswith(('.md','.py','.zip','.txt')),name
- assert rel.startswith(('scripts/','scenes/','assets/','data/','resources/','.godot/')) or rel in ['icon.svg','icon.svg.import','project.binary'],name
+ assert rel.startswith(('scripts/','scenes/','assets/','data/','resources/','queries/','.godot/')) or rel in ['icon.svg','icon.svg.import','project.binary'],name
 missing=[]
 for name in m['included']:
  if name.endswith('.uid') or name in ['project.godot','export_presets.cfg']:continue

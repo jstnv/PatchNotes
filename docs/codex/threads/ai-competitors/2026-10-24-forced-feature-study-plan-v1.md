@@ -1,0 +1,22 @@
+# Forced-Feature rival study plan — 2026-10-24
+
+**Status: pre-run DESIGN experiment, not gameplay adoption.** User authority: [LOCKED visible-Feature stopping rule](2026-10-24-feature-exhaustion-exit-decision-v1.md) and the direct 2026-10-24 request to run headless rivals without a project-cycle limit or easier Review/Core awards. Current [Scope-exit audit](2026-10-24-scope-aware-exit-finding-v1.md) found 32/32 under Scope and 29/32 Alpha exit deals with a positive-Scope Feature, without proving those cards were all playable.
+
+## Hypothesis and comparisons
+
+Hypothesis: requiring the two incumbent rivals to play every currently visible **legal and currently affordable** Design/Alpha Feature before phase exit will increase achieved Scope and their actual Reviews under the unchanged formula. It may also lengthen development, reduce published-title density, or run out of cash. A legal exit may still be under Scope when no Feature hand is playable. No minimum or maximum Design/Alpha/project productive-cycle count is imposed on the candidate.
+
+- **A, current control:** the frozen source's ordinary two-hand-per-phase rival policy.
+- **B, forced Feature:** same opening cohort, cash, owned Features, Genre/Theme, Design/Alpha card supply, Beta policy (two productive hands), QA and Review/market formulas. In Design/Alpha, inspect only the current visible seven candidates. Enumerate legal four-card hands using current project eligibility and exact current-hand cost. Choose a hand containing the largest feasible number of Features; among those, use the current visible Core/Scope proxy and stable token tie. Play one real hand on each rival opportunity, then reevaluate after refill. If no legal affordable hand includes a Feature, request the ordinary legal phase exit; preserve the normal confirmation and blocked-state outcome. No hidden-deck search, free scores, cash injection, bonus Core, pass-only farming or scripted release.
+
+Use a new thread-owned variant from current canonical source, with only its private `project/scripts/market/rival_trial.gd` changed and its original baseline/ancestry retained. `policies(world)` remains unchanged for A; the opt-in candidate policy is called only by the isolated world study. If exact quote/legality cannot be obtained for the visible hand without changing authoritative card rules, record that as a design blocker instead of guessing a legal result.
+
+## Legal starts and bounds
+
+Run existing isolated two-incumbent world harness on Action/Fantasy player route at seeds **4417 and 4418**, A then B for each seed. Each pair must match full founding state, typed RNG and frozen gameplay source before comparing results. No player or rival save is edited. The observation horizon is eight legal player releases by player cycle 64, with at most 210 player commands, twelve zero-cycle rival actions per committed player cycle and 480 seconds per process. These are test-harness/resource bounds, **not** project-cycle limits. A B project that remains active at the horizon is right-censored, not treated as a release or a failure to attain Scope. Retain blocked, timed-out and incomplete cases; do not change seeds, bounds or project policy silently.
+
+## Measurements and stop
+
+For every real rival release and in-progress project: Design/Alpha/Beta productive hands, total project cycles, Scope versus 30, four Core values, remaining Bugs, frozen market standards, actual Review, cash, playable/blocked Feature exit reason, publication cycle and ownership. At the fixed player horizon compare rival release count and age/Genre/Theme exposure, player earned/paid units, settled cash and Fans. Record source manifests, actual command and process CPU, checkpoint size, exact state/RNG replay and Studio-only Continue where the completed routes support it.
+
+Run a legal smoke through `tools/simulate.py run --variant`, then the isolated world runner against that frozen bundle. Stop early for a candidate legality or source fence failure and retain its output. If B yields no complete releases by the fixed horizon, report the censored active state and run no Review claim. If the first matched pair is complete and clearly disproves the Scope/Review hypothesis, the second declared pair may be marked NOT RUN with its stop reason; do not select a replacement seed. A successful B will receive a fresh-process replay, with the other B replayed if it changes the conclusion. Passing simulations do not approve rival balance, cycle budget, cash planning, publication density or CPU limits.

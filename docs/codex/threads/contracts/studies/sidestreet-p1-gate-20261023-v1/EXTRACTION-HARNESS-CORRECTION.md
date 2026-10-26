@@ -1,0 +1,5 @@
+# Retained extraction-verifier failure and isolated retry
+
+The600second `checks-v1/contract-extraction` invocation timed out after the verifier failed to load `res://../docs/codex/threads/simulation-engine/m3b-v1/contract_phase_oracle.gd`, then called `.new()` on null. The ordinary project snapshot does not include that external historical oracle. Its preceding20 PASS assertions do not establish a full suite pass. This is a harness dependency failure; no campaign source or gameplay failure is inferred.
+
+Before retry: create a new private snapshot under `extraction-v2`, copy the exact read-only historical oracle into its expected private sibling `docs/...` path, hash it, retain the same maintained verifier and600second timeout. No candidate source, existing output or original oracle changes. This correction does not consume another gameplay revision. Native failure reduction is not supported by the campaign tape reducer: the missing-script exception has no offending recorded campaign command to reduce.

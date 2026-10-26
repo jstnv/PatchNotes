@@ -1,0 +1,21 @@
+# QA courses and employee wages — 2026-10-25
+
+## User direction and status
+
+**USER-SELECTED ACTIVE/TRIAL package; NOT IMPLEMENTED:** Queue the QA Specialist for implementation review through a course-purchase menu. One **$150 course per QA challenge** enables that challenge's tracker and future progress. Purchasing a course does not complete its challenge or grant its specialty benefit. The two courses are independent and may be purchased separately. Count only qualifying committed hands after that employee purchases the corresponding course; earlier hands do not retroactively fill the tracker. The two QA challenge criteria, rewards, project arming and Swap interaction remain in the [two-challenge decision](2026-10-25-qa-two-challenges-decision-v4.md), [synergy search design](2026-10-25-qa-synergy-search-design-v2.md) and [Swap control ruling](2026-10-25-qa-swap-redraw-control-v5.md).
+
+**USER-SELECTED ACTIVE/TRIAL finance:** Starting wage is **$1,000 per employee per in-game month for all employee types**, superseding the playable Production Specialist's temporary $10 wage for the intended new package. The **two QA challenges** each add **$100/month** to that QA employee's wage upon completion, once each. A QA employee therefore owes $1,000 before challenge completion, $1,100 after either one, or $1,200 after both; purchasing a course or making partial challenge progress adds no wage. These are trial gameplay values, not final economy balance. The existing local source still has one Production Specialist at $10/month.
+
+**USER-SELECTED employee entry:** QA and Production hiring are available in Studio **after Game 2** with the existing **$100 one-time hiring fee**; the Production Specialist's older after-Game-1 unlock is superseded for new play. The earlier first-slice course timing already approved optional Studio enrollment after Game 2 at zero productive cycles, with raises beginning in the expense month after enrollment and no change to an issued bill. For challenge-earned raises, use the same prospective expense-month principle as an implementation default: the completion event starts the next expense month; never rewrite an issued payroll bill. Exact month/bill mapping and old-save migration need focused verification in the handoff.
+
+The user has directed the internal TODO update and identified QA as ready for an implementation task. The existing Employees button is still disabled in source. Reopening it belongs to the coordinated QA/employee package after its player-facing actions and checks are ready. The earlier economic-readiness criterion remains an acceptance gate: demonstrate recurring support for at least $1,000 monthly pay with actual earned and settled sales, rent, other due bills, cash lows, overlapping releases and next-game affordability. The prior low-wage studies do not provide that proof. A failed gate should be reported rather than represented as a passed balance result.
+
+## Remaining decisions and boundaries
+
+- The user subsequently selected **25% per qualifying Feature replay** for the mixed-hand challenge's Design/Alpha Bug-search benefit, with at most one actual Hidden Bug discovered per successful roll. This is an ACTIVE/TRIAL value, not final balance. See the [dated proc confirmation](2026-10-25-qa-proc-trial-confirmation-v1.md).
+- Multiple QA employee stacking, course availability after dismissal/rehire, and the precise persistent identity/version migration remain implementation details. Preserve prior issued payroll and challenge history; no retroactive course progress or raises.
+- Shared employee-assisted Store research has separate selected qualitative direction and unresolved accounting/UI details. This QA task does not silently approve its implementation.
+
+## Source and session boundary
+
+Branch `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f` at inspection. Read CURRENT_STATE, TODO, Employees design, thread rulings, first-slice trial authority, implementation finding, current hire/payroll/menu source and the button-hold log. Existing shared worktree edits were preserved. This is a design/TODO preparation record, not gameplay implementation or economic proof. No Google Drive, gameplay/test edit, simulator run, commit or push.

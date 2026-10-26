@@ -1,0 +1,3 @@
+# Beta runway input audit v2 parser amendment — 2026-10-25
+
+The [v1 plan](2026-10-25-beta-runway-input-audit-plan-v1.md) and [retained incomplete result](sims/rival-beta-runway-input-audit-20261025-v1.json) used an integer expectation for `report.seed`; the saved report schema stores decimal seeds as strings. The source identity and completion fields matched, but the v1 parser stopped before evaluating any exit. V2 changes **only** the seed comparison to `str(seed)`. Keep the same two files, every exit, reserve scenarios, bound and stopping conditions; write a new output file. No result-based seed, threshold or policy change is permitted.

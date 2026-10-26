@@ -40,7 +40,10 @@ func development_cases(database: Node) -> void:
 			var run := RunState.new()
 			run.initialize_cash(0)
 			_expect(run.create_studio_with_traits("Replay",&"action",[&"lean_production"] if scenario=="lean" else []),"Replay studio setup")
+			historical_v2_roster(run)
 			run.set("_bank_run_id",&"development_replay_studio")
+			run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
+			run._contract_search = RunState.ContractSearch.create(run._bank_run_id)
 			run.set("_employees",EmployeeRoster.create(&"development_replay_studio"))
 			_expect(project.configure_predevelopment("Replay",&"action",&"fantasy",run.get_owned_feature_ids()),"Replay project supply freezes")
 			if scenario=="tutorial": _expect(run.begin_first_game_tutorial(project),"Replay tutorial setup")
@@ -132,6 +135,15 @@ func development_cases(database: Node) -> void:
 		if FileAccess.file_exists(fixture): _expect(JSON.parse_string(JSON.stringify(digests))==JSON.parse_string(FileAccess.get_file_as_string(fixture)),mode+" development traces match original")
 	var output:=OS.get_environment("PN_CARD_FRAME_OUTPUT")
 	if not output.is_empty():
-		FileAccess.open(output+"."+mode,FileAccess.WRITE).store_string(JSON.stringify(traces,"\t"))
+		# Keep the complete JSON array without allocating a second, whole-run
+		# pretty-printed copy on hosts running concurrent simulator threads.
+		var file := FileAccess.open(output+"."+mode,FileAccess.WRITE)
+		_expect(file != null,"Development trace output opens")
+		if file != null:
+			file.store_string("[")
+			for index in range(traces.size()):
+				if index > 0: file.store_string(",\n")
+				file.store_string(JSON.stringify(traces[index],"\t"))
+			file.store_string("]")
 		FileAccess.open(output+"."+mode+".digests.json",FileAccess.WRITE).store_string(JSON.stringify(digests,"\t"))
 	print("Development replay: %d routes (%s)"%[traces.size(),mode])

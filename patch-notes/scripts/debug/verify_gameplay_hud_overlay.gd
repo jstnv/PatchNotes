@@ -28,7 +28,8 @@ func _run() -> void:
 		var phase: Control = game.get("_active_phase")
 		check(hud.tutorial_context == StringName(title.to_lower()), title + ": real transition selects relevant guidance")
 		if title != "Design":
-			check(not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, title + ": priority dialog shows its own help without a hidden toast")
+			check(not hud.tutorial_overlay.visible and hud.tip_button.disabled and hud.contextual_tip.layer<phase.get_workspace().overlay.layer, title + ": priority dialog has its own help; persistent tips stay beneath it")
+			hud.contextual_tip.dismiss_button.pressed.emit()
 		check(phase.get("_project_state") == project and phase.get("_run_state") == run, title + ": authoritative identities persist")
 		check(hud.get_node("PersistentHeader") == header and hud.footer == footer, title + ": persistent regions are not rebuilt")
 		check(phase.get_workspace().phase_title.text.begins_with(title), title + ": phase panel updates")
@@ -84,7 +85,7 @@ func verify_tutorial(hud: GameplayHUD, project: ProjectState, run: RunState, des
 	check(not tutorial.visible and not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Design entry shows priority-dialog help without opening a tutorial menu or hidden toast")
 	check(hud.contextual_tip.layer < design.get_workspace().overlay.layer and hud.contextual_tip.panel.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Inline tip stays beneath the priority modal and lets card input pass through")
 	check(hud.contextual_tip.panel.offset_top > hud.synergy_notification.banner.offset_bottom, "Inline tip sits below synergy notifications")
-	check(hud.contextual_tip.timer.wait_time == 8.0 and hud.contextual_tip.timer.one_shot, "Inline tip has a bounded lifetime")
+	check(hud.contextual_tip.timer == null or hud.contextual_tip.timer.is_stopped(), "Inline tip has no automatic expiry")
 	hud.tutorial_button.pressed.emit()
 	check(tutorial.visible and tutorial.topic == &"design", "Tutorial button opens the separate Design reference menu")
 	check(tutorial.pages.size() == 3, "Design has three relevant tips")
@@ -191,7 +192,7 @@ func verify_overlay(hud: GameplayHUD, phase: Control, project: ProjectState, run
 		check(overlay.dialog.is_ancestor_of(root.gui_get_focus_owner()), title + ": keyboard focus stays inside modal")
 	for index in range(names.size()):
 		var slider := phase.get_node("%" + names[index]) as VSlider
-		check(slider.value == priorities.values()[index] and slider.min_value == 5 and slider.max_value == 50 and slider.step == 5, title + ": controls initialize committed values and constraints")
+		check(slider.value == priorities.values()[index] and slider.min_value == 10 and slider.max_value == 50 and slider.step == 5, title + ": controls initialize committed values and constraints")
 	views[5].card_pressed.emit(views[5])
 	check(phase.get_selected_candidate_views() == selection and not phase.redraw_selected_cards(), title + ": modal blocks candidate and redraw input")
 	var play_name: String = {"Design": "PlayCardButton", "Alpha": "PlayAlphaHandButton", "Beta": "PlayHandButton"}[title]

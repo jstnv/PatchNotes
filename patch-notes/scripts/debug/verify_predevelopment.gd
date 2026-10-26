@@ -83,6 +83,9 @@ func _verify_flow() -> void:
 	root.size = Vector2i(1152, 648)
 	var run := RunState.new()
 	run.initialize_cash_cents(220001)
+	# This constructed legacy-finance fixture predates named Studios. Market
+	# standards now require a stable owner ID even without a rival world.
+	run._bank_run_id = &"predevelopment-fixture"
 	ResearchTestActions.acquire(run,&"save_files")
 	run.spend_cash_cents(1)
 	for i in range(22): run.advance_calendar_cycle() # Store node purchase already spent the first cycle.

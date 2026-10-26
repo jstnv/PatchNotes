@@ -1,0 +1,15 @@
+# Market save v29 handoff — focused evidence companion, 2026-10-18
+
+**DESIGN review needed; no canonical adoption.** The [sealed source packet](market-save-review-20261018-v1/HANDOFF.md) contains the exact v29 candidate delta, hashes, design record and one matching `tools/simulate.py` run bundle. Its candidate identity is `30508dba9e2d25cd701519defe814bc064759ceaf51eac4a59aa041ba1b932bd`; the packet reports baseline drift and one overlapping canonical path, `scripts/market/rival_world_checkpoint.gd`. Review the [full dated finding](../2026-10-18-market-full-restore-migration-finding-v1.md) and [predeclared plan](../2026-10-18-market-semantic-preflight-plan-v1.md) with the packet. Do not apply its OPEN/TRIAL market coefficients as approved gameplay.
+
+| Same frozen v29 source; 240-second process bounds | Result and retained evidence |
+|---|---|
+| Fresh seed-4417 player control and replay | [18/18 run](../sims/market-migration-full-restore-player-20261018-v29/run-report.json); [18/18 replay](../sims/market-migration-full-restore-replay-20261018-v29/run-report.json). |
+| Old world-only/Founder Store, valid and corrupt cases | [73/0 focused](../sims/market-migration-full-restore-historical-focused-20261018-v29/rival-verifier.log); [51/0 cold](../sims/market-migration-full-restore-historical-cold-20261018-v29/rival-verifier.log). Corrupt release history, Founder owner, missing active hand card and an old project key substitution reject at inspection; original bytes persist. |
+| Old worldless player Store with earned sales | [26/0 focused](../sims/market-migration-full-restore-player-store-focused-20261018-v29/rival-verifier.log); [7/0 cold](../sims/market-migration-full-restore-player-store-cold-20261018-v29/rival-verifier.log). |
+| f8 whole-pair Coordinator, publication and recovery | [90/0 focused](../sims/market-migration-full-restore-coordinator-focused-20261018-v29/rival-verifier.log); [21/0 cold](../sims/market-migration-full-restore-coordinator-cold-20261018-v29/rival-verifier.log). |
+| Retained rejected precursor | [v27 56/59](../sims/market-migration-semantic-audit-focused-20261018-v27/rival-verifier.log): Founder mutation inspected valid, then Continue rejected. Its world-only control had a verifier sequence mismatch; v28/v29 corrected it. |
+
+The focused wrapper command records beside each log pin the player run bundle, Godot process, profile, output, exit and `source_unchanged=true`. They are not run bundles accepted by `simulator_variant.py handoff`, so the sealed packet references the same-source player run while this companion preserves the focused evidence links.
+
+**Remaining acceptance:** Reconcile the current canonical source; run normal Store/Coordinator coverage for `200a…`, `fd7e…` and `ac944…`; test an original-old-executable Store generation, Founder finance mismatch, raw root/row corruption, current Gameplay/exported Continue and longer recovery. Keep market numbers, UI and balance **OPEN**. The implementation thread can review this delta but should not adopt active market effects without a separate numerical design ruling.

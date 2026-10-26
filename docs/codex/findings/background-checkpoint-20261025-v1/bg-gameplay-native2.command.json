@@ -1,0 +1,39 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_background_gameplay.gd"
+  ],
+  "exit": 0,
+  "seconds": 22.516,
+  "private_output": "C:\\Users\\64jus\\Downloads\\Patch Notes Design Folder\\Performance\\20261025\\bg-gameplay-native2",
+  "script_sha256": "379d17df7520dfe7863108043d66fb1babc94ade44ad0aa3e0a42353c6baa722",
+  "owned_child_pid": 33052,
+  "aborted": false,
+  "result": {
+    "checks": 26,
+    "failures": 0,
+    "ok": true,
+    "rows": [
+      {
+        "baseline_max_frame_gap_ms": 521.537,
+        "frames": 14,
+        "kickoff_ms": 16.087,
+        "max_frame_gap_ms": 524.488,
+        "save_wall_ms": 2109.041,
+        "size": "(1152, 648)"
+      },
+      {
+        "baseline_max_frame_gap_ms": 261.684,
+        "frames": 9,
+        "kickoff_ms": 15.028,
+        "max_frame_gap_ms": 262.146,
+        "save_wall_ms": 756.9,
+        "size": "(1280, 720)"
+      }
+    ]
+  },
+  "errors": []
+}

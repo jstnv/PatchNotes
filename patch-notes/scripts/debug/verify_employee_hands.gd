@@ -14,7 +14,7 @@ func _run() -> void:
 	snapshots.load_ledgers()
 	var run := named()
 	check(run.get_production_hire_quote().is_empty(),"No hire before Game1")
-	check(run.register_release(_released_project(751)),"Hire prerequisite fixture release")
+	check(run.register_release(_released_project(751)) and run.register_release(_released_project(752)),"Two-release hire prerequisite fixture")
 	var quote := run.get_production_hire_quote()
 	var before := snapshot(run)
 	check(not quote.is_empty() and snapshot(run)==before,"Hire browsing is passive")

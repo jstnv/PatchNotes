@@ -17,6 +17,7 @@ func fresh(recipe: Dictionary) -> RefCounted:
 func act(session: RefCounted,kind: StringName,payload: Dictionary = {},accepted: bool = true) -> Dictionary:
 	var before := Replay.state(session)
 	var result := Replay.record(session,tape,session.command(kind,payload))
+	if result.ok != accepted: print("CAMPAIGN_REJECT_DETAIL ",request_for_diagnostic(session,kind,payload)," ",result)
 	expect(result.ok == accepted,"Expected acceptance for "+str(kind))
 	if not result.ok: expect(Replay.state(session) == before and result.events.is_empty(),"Rejection preserves state and all RNG: "+str(kind))
 	return result
@@ -62,7 +63,11 @@ func _initialize() -> void:
 			if phase_index > 0: dev(session,&"enter_next_phase")
 			dev(session,&"begin")
 			for hand_index in range(2):
-				dev(session,&"play",{"candidate_ids":session.development.hand.candidate_ids.slice(0,4)})
+				# Root-first v3 has less aggregate printed supply; use a legal visible
+				# Features-first fixture policy rather than silently expecting solvency from first-four.
+				var candidates: Array=session.development.observation().candidates.duplicate(true)
+				candidates.sort_custom(func(a,b):return a.type=="feature" if (a.type=="feature")!=(b.type=="feature") else a.token<b.token)
+				dev(session,&"play",{"candidate_ids":candidates.slice(0,4).map(func(c):return int(c.token))})
 			dev(session,&"request_exit")
 			if session.development.awaiting_confirmation: dev(session,&"confirm_exit")
 		var before_launch: Array = [session.run.get_cash_cents(),session.run.get_completed_run_cycles(),session.development.project.get_current_cycle()]
@@ -136,3 +141,6 @@ func _initialize() -> void:
 	expect(not observed.ok and observed.error == "Policy step bound reached" and driven.development.hand.active,"Policy can construct legal development commands from observation alone")
 	print("Campaign session verification: %d failures; %d steps; %d reentrant checks" % [failures,tape.steps.size(),reentry_checks])
 	quit(1 if failures else 0)
+
+func request_for_diagnostic(session: RefCounted,kind: StringName,payload: Dictionary) -> Dictionary:
+	return {"kind":kind,"payload":payload,"phase":session.phase(),"run_cycle":session.run.get_completed_run_cycles(),"cash_cents":session.run.get_cash_cents()}

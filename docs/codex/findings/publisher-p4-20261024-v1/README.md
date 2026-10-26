@@ -1,0 +1,39 @@
+# SideStreet P4 support and renewal — 2026-10-24
+
+**COMPLETE locally at the approved bounded ACTIVE/TRIAL scope.** Approved bounded trial from [adoption v1](../../threads/contracts/PUBLISHER-P4-ADOPTION-2026-10-24-v1.md). The preceding [P2/P3 actual EXE acceptance](../sidestreet-p2-p3-20261024-exe-v1/README.md) finished before this integration. Shared dirty `main`, HEAD `0132c4dab398a2a94dbeae3caa68a36505fbfa4f`; existing changes and `.codex-godot-temp` preserved. No commit, push or release-readiness claim.
+
+## Authority and implementation
+
+The sealed historical packet was inspected, not transplanted: its old scalar relationship state and inherited mechanics do not replace current P1/P2/P3. [Frozen predecessor provenance](predecessor-source.json) pins the accepted validators and the limited class/reference adaptations used for prospective migration.
+
+- `contracts/publisher_support.gd` owns frozen package arithmetic, title-only cumulative recoup, assessment and P1-ordinal renewal. I15 gives $700 cash and five launch Marketing points in an $875 total budget. Review at least7.0 and1,000 actual units at earning cycle6 requests +10 Investment; success at the cap remains a recorded qualifying event. Recoup ends after earning cycle24 or the full budget, with no residual debt.
+- `RunState`, `simulation/begin_project.gd`, release/productive planning and the existing P1 ledger commit funding, rights, assessments and standing coherently. Quote/Back/rejected starts are passive. Support is mutually exclusive with a commissioned game on that project; the Studio owns supported sales.
+- Finance distinguishes nonoperating support cash from sales/profit/Bank underwriting. Actual raw title sales, Fans, Studio entitlement, recoup and cash settlement remain separate. Existing Bank rules are unchanged.
+- Typed current player and active-rival saves reconstruct every deal, historical standing/qualification boundary, funding action, assessment and right. Exact named P2/P3 predecessors initialize empty Support fields without backfilled rewards. Unknown/mismatched source/rules reject. Player Continue remains Studio-only.
+- Publisher browser, predevelopment confirmation, Studio results, Market, Monthly Sales, Finance, How to Play and the simulator share the same committed facts. Default rival decision policy is unchanged; the populated-world harness declares its own legal policy and Bank bridge.
+
+## Current recorded checks
+
+| Check | Recorded result and limit |
+| --- | --- |
+| Legal repeated route |241 commands: first Support success, repeat miss, full commission recovery, third Support; seven saved boundaries and exact replay in a new session. Independent-process replay passes in editor and actual PCK; every persisted field/RNG matches across all seven editor/PCK boundaries. |
+| Targeted rejection |36/0 after two RED-proven fixes: malformed metadata no longer partially changes a session, and a supported release rejects modified name/Genre/Theme/Scope before authoritative publication or RNG. |
+| Named predecessor migration |63/0 across four actual old populated editor/PCK worlds and the earned actual P2/P3 EXE generation. All gameplay/RNG fields match; only prospective empty storage/content/source metadata change. Store-allocated generation10 is explicitly retained when comparing a fresh capture, whose proposal is sequence1. |
+| Native UI/disk |54/0,24 full live/headless comparisons at1152×648 and1280×720: Publisher availability, frozen quote/Back, unchanged disk bytes, funding, short three-phase development, Marketing once, Studio-owned result and disk Continue. Scripted scene callbacks, not release EXE input or human comprehension. |
+| Populated Founder/active-rival world |19/0, including independently owned Support, active DTO, Scope forgery rejection, blocked active-project operator handoff and exact completed/operator world restore. Failed legal budget/policy attempts remain retained. |
+| Arithmetic/constructed edges |Positive earning cycles23/24/25 and both calendar settlement alignments, cumulative cents/cap, Review-only and units-only misses; constructed cap100 success/miss and journal-valid funded overdue recovery/insufficient funding. These are not played cap/overdue campaigns. |
+| Broad regression |First177-suite matrix:168 pass,9 fail on maintained historical projections missing the new empty fields. Historical oracle digests and frozen fixtures remain unchanged. The corrected fresh177-suite matrix passes. Only two final presentation-string files differ; exact substitutions are fenced and six final-source affected suites pass. |
+
+## Evidence and reproduction
+
+Bulky immutable projects, profiles, tapes and builds remain under `C:/Users/64jus/AppData/Local/Temp/pn-p4-execution-20261024-v1/`. `check.py` creates a fresh project/profile; `--route`, `--world`, `--probe` and `--native` select explicitly bounded acceptance. `replay.py` uses a separate OS process/profile. `build.py` exports current source through the existing audited wrapper; `compiled.py` runs pinned harnesses against that actual PCK. `launch.py` launches an unmodified release EXE against an isolated legal slot. Neither compiled-PCK scripting nor native callbacks are labeled actual EXE interaction.
+
+Retained failures include missing-authority RED checks, metadata/release-guard RED, a fixture cleanup resource cycle, unsuccessful legal world budgets/policies and the unnormalized disk-sequence comparison. A reordered source-map forgery was already rejected; its passing negative test is not evidence of a demonstrated runtime defect.
+
+Final [source](source.json), [34-file adoption delta](adoption-delta.json), [verification](verification.json), [external artifact hashes](external-artifacts.json) and [dated session closeout](../../logs/2026-10-24-publisher-p4-closeout-v1.md) are sealed. Editor identity: `22f504d07fd73970dda3d8746e0cf23ca741afc1436acd5ff3f1630787933036`; compiled identity: `6fffe610efd5a29e99f6b6359091f470f56f182814179328c91f6c8ffb5b92cc`. Clean371-entry export, payload/runtime audit, both startups, source/PCK native54/0 with24 comparisons each, populated-world19/0, migration63/0 and edge92/0 checks pass.
+
+Actual unmodified EXE quote/Back/Begin, one first-four hand per phase, weak launch, older-title campaign and two cold Continues pass. Both earned boundaries match reference gameplay/finance/Support/rights/sales/RNG; only tutorial/notification acknowledgments differ. Both cold restores match all saved fields/RNG exactly. Three EXEs exit0; eight original player generations remain byte-exact and writer62741 is released. Finance visibly distinguishes the$700 financing from sales. The original latest generation126 also validates read-only with no Support backfill.
+
+[Native quote,1152](support-quote-1152.png) · [Native result,1280](support-result-1280.png) · [Actual earned recoup](support-earned-recoup-1152.png) · [Actual funding/Finance](support-funding-finance-1152.png) · [Actual cold result,1280](support-cold-1280.png). Desktop captures are DPI-scaled; size coverage refers to verified in-game settings.
+
+The attempted packaged debug CLI was correctly absent; the successful independent compiled replay uses an external frozen bootstrap and shipped Replay/Factory. Compiled native inheritance is similarly frozen externally. The misspelled browser-suite selection retains its false aggregate; five executed suites pass there and the correctly named omitted suite passes separately at the identical final source. Neither failure receipt is rewritten. Guide timing now correctly uses earning cycles6/24. Independent review has no remaining findings. Human comprehension, target-device/audio/license acceptance, broader publishers/tiers/P5, default rival support policy and final balance remain OPEN.

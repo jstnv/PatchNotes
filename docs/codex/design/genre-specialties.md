@@ -1,5 +1,9 @@
 # Genre specialties
 
+**2026-10-18 market trial selected, canonical implementation QUEUED:** The [AI Competitors trial decision](../threads/ai-competitors/2026-10-18-market-density-trial-decision-v1.md) adds a project-frozen same-Genre publication lift (+2 per recent other-studio release, cap+4) and a separate strong-Core benchmark (Review≥7.0, cap+8), taking the larger per category. The [private v31 finding](../threads/ai-competitors/2026-10-18-market-density-trial-finding-v1.md) verifies a real rival release raises a later legal Action project's targets to `[42,28,42,28]`; the current game still uses the base table below until reconciled adoption. Trial numbers, a completed player Review under pressure and long-run balance remain OPEN.
+
+**2026-10-17 future market direction, not implemented:** The user wants recent actual rival releases to affect future four-Core Review standards. The existing Genre target table below remains the ACTIVE/TRIAL runtime baseline. The [AI Competitors market record](../threads/ai-competitors/2026-10-17-market-pressure-direction-v1.md) recommends a project-frozen, same-Genre market lift, with arithmetic and compatibility OPEN; released Reviews must remain frozen.
+
 ## Genre-dependent base rating — ACTIVE/TRIAL, implemented locally 2026-10-08
 
 The user approved implementation after reviewing the two simulation screens and the target/UI/save behavior. New project Reviews use this target table (Graphics / Sound / Technology / Design), totaling132 per Genre:
@@ -49,3 +53,28 @@ Deduplicate union IDs. Membership is frozen to the currently authored27 Primitiv
 No inherent Core multiplier, Review/Awareness/Genre-Fit bonus or trait-point charge. Matching+3/+5/+7 Awareness studies are unapproved extra effects. Initial optional purchases have no artificial card/Scope/$4,000 cap besides spendable cash; after departure ordinary reserve timing applies.
 
 All automatic rosters are below required30 Scope, so first-release SideStreet requires additional bought AND played Scope; ownership alone is insufficient. Different specialty and project Genres must remain legal. Tests include deterministic eight-roster fixtures, exact-once identity/ownership, optional purchase/rejection, next-project supply and matching/nonmatching Genre. Durable save must restore chosen ID/owned membership without constructor re-grant. See [Store](feature-store-progression.md), [Traits](studio-traits.md), [evidence](../findings/current-balance-evidence.md).
+
+## Future-start founding rosters v2 — historical, IMPLEMENTED locally 2026-10-18
+
+The table above describes the **historical v1** founding membership; its counts and Scope also hold for v2. After the Primitive Store branches were implemented, the user approved [Feature Pools Decision 017](../../../patch-notes/design-logs/feature-pools/decision-017-future-specialty-levels-swap-2026-10-18.md): new Strategy, Simulation and Sports Studios receive `levels` instead of `maps`. The other five exact rosters, common six, named signatures, and specialty/project-Genre separation stay unchanged. This is an explicit exception to the Technology-favored membership rule; simply rebuilding that union would grant Maps again. The three new rosters retain 17/26, 16/24 and 15/24 Feature-count/Scope respectively, with printed Technology −2 and Design +2 each. [The eight-roster review](../findings/queue-20261018-v1/SPECIALTY-REVIEW.md) records the exact IDs and parent-closure comparison.
+
+For those future starts, Maps becomes an optional child of owned Levels at its existing $450 Primitive base price. Initial optional buying remains zero cycles and uses the live discounted quote; later acquisition follows current Research. Existing Studios and older saves keep their exact owned Features and founding v1 provenance, without retroactive grants, removals or recalculation. The creation preview must state the v2 exception and show its actual count/Scope. [Handoff017](../../../patch-notes/design-logs/feature-pools/handoff-017-future-specialty-levels-swap-implementation-2026-10-18.md) is implemented with explicit saved version2; absent historical metadata remains v1, without regrant. [Source and verification](../findings/queue-20261018-v2/README.md):239 roster/version checks,42 native checks, exact real prior-save restoration and fresh campaigns pass. The original four gates close for the affected v2 starts; newer parent gates retain legitimate granted-child exceptions, so this is not a claim that every roster is fully ancestor-closed. Final balance and human understanding remain OPEN.
+
+## New founding rosters v3 — root-first replacements,2026-10-25
+
+Direct user ruling: starting pools must follow the Store roots; **replace** skipped-ahead grants with earlier branch nodes rather than grant missing parents in addition. Applies to new Studios only. Existing v1/v2 ownership, paid acquisitions, project supply and RNG remain exact on restore. The codec records3 for new grants; absent historical metadata still means1.
+
+Membership is an explicit fixed patch of the historical v2 roster, independently checked against the full current AND-parent graph. Move back along the authored first-parent branch; deduplicate an earlier node already owned. Preserve the existing27 Primitive grant boundary: do not grant later Store High Scores or Branching Dialogue whose play prices remain OPEN. Walk past them to approved earlier Primitive nodes. Valid connected branches already in the pool stay intact. All eight new pools own Sound Effects; Adventure/Role-Playing/Puzzle no longer start with8-Bit Sound, which remains an optional acquisition after Sound Effects. No familiarity is credited by ownership.
+
+| Specialty | Features | Printed Scope | Printed Core G/S/T/D |
+|---|---:|---:|---|
+| Action |18|27|21/9/30/12|
+| Adventure |17|22|14/4/17/19|
+| Role-Playing |17|23|14/3/22/18|
+| Strategy |17|25|10/8/28/19|
+| Simulation |15|21|8/8/25/14|
+| Puzzle |17|23|11/3/27/18|
+| Sports |15|22|8/15/25/12|
+| Racing |16|24|18/8/27/12|
+
+The old common-six/signature union remains historical authority for v1/v2, not a requirement to regrant advanced v3 cards. Exact replacements/fixtures and acceptance are recorded in [root-first findings](../findings/root-first-rosters-20261025-v1/README.md). Preview/Overview report the actual new names/count/Scope. Card values, Genre scoring targets, prices, Research and specialization mechanics are unchanged. Lower aggregate supply is a structural consequence, not a balance approval; final balance and human understanding remain OPEN.

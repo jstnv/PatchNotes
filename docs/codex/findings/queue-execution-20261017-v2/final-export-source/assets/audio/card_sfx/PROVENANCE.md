@@ -1,0 +1,1 @@
+Original procedural card tap (90ms) and filtered-noise whoosh (300ms), created for Patch Notes on 2026-10-10. No external samples. Mono 48kHz PCM16. User requested cues; audible mix preference pending. Generator: docs/codex/findings/card-presentation-v2/generate_sfx.py.

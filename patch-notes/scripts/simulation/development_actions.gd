@@ -38,6 +38,15 @@ func publish_initial(plan: Dictionary) -> void:
 	elif phase==&"alpha": hand._pending_playtest_categories.clear()
 	hand.revision+=1
 
+func can_swap(slots: Array[int]) -> bool:
+	if phase!=&"beta" or not hand.active or hand.launch_confirmation_pending or hand._run_state==null or not hand._run_state.can_mutate_checkpoint() or slots.size()!=1: return false
+	var slot:=slots[0]
+	if slot<0 or slot>=hand._candidate_cards.size() or hand.candidate_ids[slot] in hand.injected_candidate_ids: return false
+	var old: CardData=hand._candidate_cards[slot]
+	if old.id not in [&"search_for_bugs",&"debug"] or not EmployeeRoster.qa_swap_available(hand._run_state.get_employees(),hand._project_state.get_release_id()): return false
+	var opposite: CardData=hand._definitions_by_id.get(&"debug" if old.id==&"search_for_bugs" else &"search_for_bugs")
+	return opposite!=null and opposite.beta_value==old.beta_value
+
 func valid_redraw(slots: Array[int], rolls: Array[float]) -> bool:
 	if not hand.active or hand._run_state==null or not hand._run_state.can_consume_redraw(slots.size()): return false
 	if not rolls.is_empty() and rolls.size()!=slots.size(): return false
@@ -53,6 +62,9 @@ func valid_redraw(slots: Array[int], rolls: Array[float]) -> bool:
 	return true
 
 func redraw_plan(slots: Array[int], rolls: Array[float]) -> Dictionary:
+	if can_swap(slots):
+		var old: CardData=hand._candidate_cards[slots[0]]
+		return {"valid":true,"cards":[hand._definitions_by_id[&"debug" if old.id==&"search_for_bugs" else &"search_for_bugs"]] as Array[CardData],"failed_features":[],"swap":true}
 	if not valid_redraw(slots,rolls): return {"valid":false,"cards":[],"failed_features":[]}
 	if phase!=&"beta": return core_redraw_plan(slots,rolls)
 	var replacements: Array[CardData] = []
@@ -77,6 +89,11 @@ func redraw(slots: Array[int], rolls: Array[float] = [], readiness: Callable = C
 	if not plan.valid or (readiness.is_valid() and not readiness.call(plan.cards)):
 		hand._deal_rng.state=before
 		return {"ok":false,"events":[],"plan":plan}
+	if plan.get("swap",false):
+		var run: RunState=hand._run_state
+		var roster:=EmployeeRoster.qa_swap(run.get_employees(),hand._project_state.get_release_id(),hand._project_state.get_current_cycle(),run.get_completed_run_cycles())
+		if roster.is_empty():return {"ok":false,"events":[],"plan":plan}
+		run._employees=roster
 	for index in range(slots.size()):
 		var slot:=slots[index]
 		var old: CardData = hand._candidate_cards[slot]
@@ -91,13 +108,14 @@ func redraw(slots: Array[int], rolls: Array[float] = [], readiness: Callable = C
 	# The live adapter publishes the complete replacement pool before the one
 	# budget notification, matching the existing observable transaction boundary.
 	if publication.is_valid(): publication.call(plan)
-	hand._run_state.consume_redraw(slots.size())
+	if not plan.get("swap",false): hand._run_state.consume_redraw(slots.size())
+	else: hand._run_state.employees_changed.emit()
 	hand.revision+=1
-	return {"ok":true,"events":[{"type":"redraw","slots":slots.duplicate()}],"plan":plan}
+	return {"ok":true,"events":[{"type":"qa_swap" if plan.get("swap",false) else "redraw","slots":slots.duplicate()}],"plan":plan}
 
 static func commit_priorities(project: ProjectState, run: RunState, allocation: RefCounted, distribution: Dictionary, draft_publication: Callable = Callable()) -> bool:
 	var old: Dictionary = allocation.get_distribution() if allocation is BetaPriorityAllocation else allocation.get_priority_distribution()
-	var valid: bool = BetaPriorityAllocation.is_valid_distribution(distribution) if allocation is BetaPriorityAllocation else PriorityAllocation.is_valid_distribution(distribution)
+	var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution) if allocation is BetaPriorityAllocation else PriorityAllocation.is_valid_new_distribution(distribution)
 	if project==null or run==null or not valid or distribution==old or not project.can_advance_cycle() or not run.can_advance_calendar_cycle(): return false
 	var commit:=func() -> bool:
 		if not allocation.set_distribution(distribution): return false
@@ -196,7 +214,9 @@ func finalize(controlled_rolls: Array[float] = []) -> Dictionary:
 	if not ok:
 		finalization_rng.state=before
 		return {"ok":false,"events":[]}
-	if phase==&"design": hand.finalization_requested=true
+	if phase==&"design":
+		hand.finalization_requested=true
+		if hand._run_state!=null: hand._run_state.resolve_qa_design_leads(project)
 	else: hand._pending_playtest_categories.clear()
 	hand.active=false
 	return {"ok":true,"events":[{"type":str(phase)+"_finalized"}],"finalization":result,"history":history}

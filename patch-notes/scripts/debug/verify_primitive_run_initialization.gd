@@ -27,13 +27,15 @@ func _verify_normal_prototype_run() -> void:
 	var run: RunState = gameplay.run_state
 	_expect(gameplay.project_state == null and gameplay.get("_active_phase") is MainMenu, "Normal startup waits at main menu")
 	var menu: MainMenu = gameplay.get("_active_phase")
+	menu.navigation.animate=false
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
-	(menu.get_node("CenterContainer/MenuLayout/StudioSetup/StudioName") as LineEdit).text = "Test Studio"
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/FolderContent/genre/Genre/StudioSpecialty").select(1)
-	menu.get_node("CenterContainer/MenuLayout/StudioSetup/EnterStudio").pressed.emit()
+	(menu._name_input as LineEdit).text = "Test Studio"
+	menu._specialty.select(1)
+	menu._play.pressed.emit()
 	menu.call("_open_folder", &"traits")
 	menu.call("_show_review")
 	menu.call("_confirm_studio")
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(gameplay)
 	var studio: StudioPhase = gameplay.get("_active_phase")
 	_expect(studio != null and run.get_studio_name() == "Test Studio" and run.get_completed_run_cycles() == 0, "Studio identity commits before the first game without a cycle")
 	_expect(run.get_cash() == 5700 and run.get_owned_feature_ids().size() == 18, "Named first Studio receives funding and the Action roster")

@@ -22,6 +22,12 @@ func _capture(name: String) -> void:
 	DirAccess.make_dir_recursive_absolute(folder)
 	root.get_texture().get_image().save_png(folder.path_join(name + ".png"))
 
+func check_shared_chart(hud: GameplayHUD, menu_name: String) -> void:
+	var header: Control = hud.get_node("PersistentHeader")
+	var has_market: bool = hud.sales_hud.model.get("market_count",0) > 0
+	check(header.visible and hud.sales_hud.visible == has_market and (not has_market or header.get_global_rect().encloses(hud.sales_hud.get_global_rect())), menu_name + " keeps the market chart inside the shared top HUD when sales exist")
+	check(hud.sales_hud.get_theme_stylebox("panel") is StyleBoxEmpty, menu_name + " adds no chart border")
+
 func _run() -> void:
 	root.size = Vector2i(1152, 648)
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
@@ -63,9 +69,23 @@ func _run() -> void:
 	await create_timer(3.4).timeout
 	check(not launch_review.reveal_running and launch_review.get_node("%ReviewLabel").text == "Final Review: %.1f / 10.0" % state.get_review_result().get_final_review(), "Reveal finishes on exact committed Review")
 	check(launch_review.get("_bugs_label").text == "Bugs Remaining: %d" % state.get_remaining_bugs(), "Bugs reveal shows actual remaining Bugs")
+	check_shared_chart(hud, "Launch Review")
 	await _capture("launch-reveal")
 	launch_review.get_node("%ContinueButton").pressed.emit()
 	check(studio.get_node("%Dashboard").visible and not launch_review.visible, "Launch review Continue opens dashboard")
+	await _settle()
+	for window_size in [Vector2i(1152, 648), Vector2i(1280, 720)]:
+		root.size = window_size
+		studio.open_detailed_review(true)
+		await _settle()
+		studio._review_view.get_node("%ContinueButton").pressed.emit()
+		await _settle()
+		# MenuTransitions slides content for 0.24 seconds; assert resting bounds.
+		await create_timer(0.30).timeout
+		for path in ["Dashboard", "Dashboard/Layout/Heading", "Dashboard/Layout/StudioIdentity"]:
+			var element: Control = studio.get_node(path)
+			check(studio.get_global_rect().grow(1.0).encloses(element.get_global_rect()), "Post-review Studio element fits at %s: %s (workspace %s, element %s)" % [window_size, path, studio.get_global_rect(), element.get_global_rect()])
+	root.size = Vector2i(1152, 648)
 	hud.contextual_tip.dismiss()
 	check(studio != null and launch_before == [run.get_cash_cents(), run.get_completed_run_cycles(), state.get_current_cycle()], "Launch automatically enters Studio at zero cash and cycle cost")
 	var sales_before := run.get_released_game_sales(state.get_release_id())
@@ -76,6 +96,7 @@ func _run() -> void:
 	check(hud.tutorial_context == &"review" and not hud.tutorial_overlay.visible, "Reopening Detailed Review retains Review guidance context without repeating a dismissed tip")
 	hud.contextual_tip.dismiss()
 	check(review != null and review.get_node("%Categories").get_tab_count() == 5, "Review offers five performance categories")
+	check_shared_chart(hud, "Detailed Review")
 	var before := [run.get_cash_cents(), run.get_completed_run_cycles(), state.get_current_cycle(), state.get_review_result()]
 	for window_size in [Vector2i(1152, 648), Vector2i(900, 600)]:
 		root.size = window_size
@@ -98,12 +119,13 @@ func _run() -> void:
 	await _settle()
 	check(game.get("_active_phase") == studio and studio.get_node("%SummaryPanel").visible and not review.visible, "Detailed Review returns to the same Studio summary")
 	studio.close_summary()
-	check(studio != null and not hud.get_node("PersistentHeader").visible and hud.footer_panel.is_visible_in_tree(), "Studio hides the top HUD and keeps the bottom HUD")
+	check(studio != null and hud.get_node("PersistentHeader").visible and hud.footer_panel.is_visible_in_tree(), "Studio shares the top HUD with the sales chart and keeps the bottom HUD")
 	check(studio.get_node("%Dashboard").visible and not studio.get_node("%SummaryPanel").visible and not studio.get_node("%ReviewLabel").is_visible_in_tree(), "Dashboard contains menu buttons, with release statistics hidden")
 	await _capture("studio")
 	studio.get_node("%PostGameSummaries").pressed.emit()
 	await _settle()
 	check(studio.get_node("%SummaryPanel").is_visible_in_tree() and not studio.get_node("%Dashboard").visible and studio.get_node("%ReviewLabel").is_visible_in_tree(), "Post Game Summaries opens the release statistics")
+	check_shared_chart(hud, "Post Game Summaries")
 	await _capture("summary")
 	studio.get_node("%CloseSummaryButton").pressed.emit()
 	check(studio.get_node("%Dashboard").visible and not studio.get_node("%SummaryPanel").visible, "Back to Studio restores the menu")
@@ -113,6 +135,7 @@ func _run() -> void:
 	check(hud.tutorial_context == &"feature_store" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Feature Store entry presents inline tree guidance")
 	hud.contextual_tip.dismiss()
 	check(studio.get_global_rect().encloses(store.get_global_rect()), "Feature Store fits inside the Studio workspace")
+	check_shared_chart(hud, "Feature Store")
 	await _capture("store")
 	store.hide()
 	check(hud.tutorial_context == &"studio" and not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible, "Returning to Studio restores its context without repeated guidance")

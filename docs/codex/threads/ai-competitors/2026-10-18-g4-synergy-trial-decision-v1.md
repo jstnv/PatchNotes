@@ -1,0 +1,22 @@
+# G4 rival synergy policy — trial design decision, 2026-10-18
+
+**Decision: select the cleaned v6 combined hand selector for an ACTIVE/TRIAL implementation handoff limited to the current two incumbent rivals and their present Primitive owned pools.** This is the user's requested small competence improvement, not final AI balance or proof that rivals challenge players. Canonical gameplay remains unchanged in this design thread.
+
+## Selected behavior
+
+- Keep the existing finite two legal Design, two Alpha and two Beta hands, ordinary phase exits, first-project specialty Genre, Fantasy Theme and separate rival resources. Those counts/content remain **ACTIVE/TRIAL**, not newly locked numbers.
+- For each visible Design/Alpha deal, compare the legal four-card sets using actual Production Hand specialization or Balanced Production arithmetic and Genre-normalized Core/Scope potential. Select a synergistic set only if its projected Review strictly beats the current Feature-first hand and its conservative Primitive play-cost bound does not exceed that hand or current cash. Preserve the current hand otherwise. Actual command validation and payment remain authoritative; this is an AI screen, not a new player rule.
+- For each visible Beta deal, compare all legal four-card sets for all-QA Search+Debug or 2/1/1 Balanced Operations Search+Debug. Use the resolver's Search-then-Debug arithmetic against visible known Bugs and hypothetical hidden counts 0 through required Scope. Change from the current token-first hand only if remaining Bugs are no worse at every hypothetical count and strictly better at some; maximize summed reduction, then Marketing output, Insider payout and stable token order. Hidden Bugs are never read by the AI. Corrective Pass hands fall back to current selection.
+- Keep the market's effect on Reviews, Genre/Theme saturation, Store planning and future leaderboards in their separate OPEN design slices. This decision changes rival choices only.
+
+## Why this choice
+
+The [dated finding](2026-10-18-g4-synergy-competence-finding-v1.md) pins the versions and all outcomes. The full candidate improved first Review in all eight matched legal starts versus current Feature-first (+0.1 in seven, +0.3 in one), with the same first-launch cash/Fans. In two own-checkpoint second releases, Adventure improved 1.7→1.9 and Puzzle matched 2.2 after Design/Alpha selection alone had fallen to 2.0. The activated two-rival world passed 118/118 assertions and raised two of four rival Reviews by 0.4, tying the other two. V6's source-cleanup parity and fresh replays preserve these results.
+
+Alternatives retained: current token-first has no synergy evaluation; Design/Alpha selection alone improved only two first games and hurt one second game; a 50-point Core draw focus lost first Review in two of eight and is **rejected for this trial**; a simple cheapest-affordable current-hand choice previously lowered Review substantially. Beta-only without production selection was not isolated, so it is not independently approved. More hands/redraws, different Beta priorities and Store-driven choices remain **OPEN**.
+
+## Trial boundary and implementation acceptance
+
+The [v6 handoff](handoffs/g4-synergy-trial-20261018-v1/HANDOFF.md) is a source-pinned review packet, not automatic adoption. The implementation thread must reconcile current canonical drift, integrate only the three runtime policy files/edits (the debug wrapper is evidence tooling), preserve old-save/Continue behavior, run Design/Alpha/Beta focused checks and actual two-rival world checks, replay matched legal routes, and measure policy/world cost under the current build. If its source or cohort differs, regenerate legal prefixes and evaluate the difference; do not transplant old checkpoints across identities. No additional rival population or final CPU ceiling is selected by this trial. The observed v6 eight-route mean policy+observation time is about 40.8 ms versus 35.3 ms for reference, and the 20-cycle verifier took 83.75 s versus 85.11 s; these are noisy, differently scoped diagnostics. Population CPU limits, richer Feature costs, cash distress, later Genre/Theme choice, entrants, player challenge and balance remain **OPEN**.
+
+For later manual playtests, explicitly inspect visible synergy patterns and their resolved Core/Scope or Bug effect before choosing a hand. A high printed Feature total by itself is insufficient evidence that the hand gives the best Review.

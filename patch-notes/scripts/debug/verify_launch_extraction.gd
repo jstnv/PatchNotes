@@ -15,6 +15,8 @@ func fixture(seed_value: int, scenario: int) -> Dictionary:
 	run.create_studio_with_traits("Launch parity",&"action",[&"studio_buzz",&"unknown_name"] if scenario == 2 else [])
 	run._bank_run_id = &"launch_parity"
 	run._employees = EmployeeRoster.create(&"launch_parity")
+	run._contract_search = RunState.ContractSearch.create(&"launch_parity")
+	run._publisher_relationships = RunState.RelationshipLedger.create(&"launch_parity")
 	run._fanbase = StudioFanbase.create(597 if scenario == 2 else 93)
 	if scenario == 2: run._promotion_awards[&"prior_offer"] = 8
 	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = seed_value + RunRandom.STREAMS.find(id)
@@ -44,16 +46,25 @@ func _initialize() -> void:
 	for seed_value in [1104,4417,90210]:
 		for scenario in range(3):
 			var outcomes: Array = []
-			for mode in ["original","live","headless"]:
+			for mode in ["original","legacy_helpers","headless"]:
 				var f := fixture(seed_value,scenario)
 				var events: Array = []
 				f.project.values_changed.connect(func() -> void: events.append("project_values"))
+				var coherent: Array = []
+				if mode == "headless":
+					var run_ref: WeakRef = weakref(f.run)
+					var project_ref: WeakRef = weakref(f.project)
+					f.project.values_changed.connect(func() -> void:
+						var observed_run: RunState = run_ref.get_ref()
+						var observed_project: ProjectState = project_ref.get_ref()
+						coherent.append(observed_run.get_released_game_ids().has(observed_project.get_release_id()) and observed_project.has_month_one_sales_revenue_result() and observed_run.get_pending_promotion_awards().is_empty() and not observed_run.complete_productive_action()))
 				for signal_name in ["sales_changed","fans_changed","publishers_changed","redraws_changed"]:
 					f.run.connect(signal_name,func() -> void: events.append(signal_name))
 				var before := [f.run.get_cash_cents(),f.run.get_completed_run_cycles(),f.project.get_current_cycle()]
 				if mode == "headless":
 					var settlement := Launch.new(f.project,f.run,f.snapshots)
 					expect(settlement.settle().ok,"Headless settlement")
+					expect(coherent == [true],"Project result observer sees complete registered release, consumed Promotion and rejects reentry")
 				else:
 					var game: Control = oracle.new() if mode == "original" else load("res://scripts/gameplay.gd").new()
 					game.project_state = f.project
@@ -68,8 +79,13 @@ func _initialize() -> void:
 				var frozen := capture(f,events)
 				expect(Launch.new(f.project,f.run,f.snapshots).settle().ok and frozen == capture(f,events),"Duplicate settlement changes no result, award, RNG or notification")
 				outcomes.append(frozen)
-			expect(outcomes[0] == outcomes[1] and outcomes[1] == outcomes[2],"Original/live/headless exact launch parity")
-			traces.append({"seed":seed_value,"scenario":scenario,"original":outcomes[0],"live":outcomes[1],"headless":outcomes[2]})
+			expect(outcomes[0] == outcomes[1],"Original and explicit legacy result-helper compatibility")
+			expect(outcomes[1].project == outcomes[2].project and outcomes[1].run == outcomes[2].run,"Atomic release preserves every original Project/Run/RNG field")
+			# Approved adoption changes five partial result signals into one coherent
+			# notification. Keep exact subsequent Run notification ordering.
+			expect(outcomes[1].events.slice(0,5) == ["project_values","project_values","project_values","project_values","project_values"],"Retained oracle exposes its original five result steps")
+			expect(outcomes[2].events == ["project_values"] + outcomes[1].events.slice(5),"One atomic Project notification precedes the unchanged ordered Run notifications")
+			traces.append({"seed":seed_value,"scenario":scenario,"original":outcomes[0],"legacy_helpers":outcomes[1],"headless":outcomes[2]})
 	# Deliberately constructed invalid state: reject before any freeze/RNG/event.
 	for failure_kind in ["snapshot","awareness","fanbase","checkpoint"]:
 		var f := fixture(4417,2)

@@ -1,0 +1,13 @@
+# Contracts session — 2026-10-25 Puzzle Research
+
+User authorized Puzzle Research, keeping rewards. Main HEAD0132c4dab398a2a94dbeae3caa68a36505fbfa4f; current state/TODO, design, relevant prior findings and simulator conventions read. Branch/worktree/status/diff captured. Shared edits and .codex-godot-temp preserved.
+
+Changed: thread-owned simulator fork (zero runtime delta), `studies/puzzle-research-20261025-v1/`, [PUZZLE-RESEARCH-FINDINGS-2026-10-25-v1.md](PUZZLE-RESEARCH-FINDINGS-2026-10-25-v1.md), [PUZZLE-RESEARCH-HANDOFF-2026-10-25-v1.md](PUZZLE-RESEARCH-HANDOFF-2026-10-25-v1.md), README/HANDOFF, this session log and the single existing Crown DESIGN TODO paragraph. All other TODO bytes preserved.
+
+Commands: `run.py setup`, `run.py discover`, `analyze.py`, `confirm.py`, `analyze.py`, `verify.py`, `run.py source`, `report.py`, `closeout.py`, final publication checks. Exact argv/exits and full source/policy/plan pins are in the study folder; raw sources/saves/logs outside OneDrive in Downloads/Patch Notes Design Folder/Simulator Evidence/Contracts/puzzle-research-20261025-v1. The discovery analysis is frozen separately and its hash matches selection.json.
+
+PASS:12 complete campaigns with no arrears; unchanged$900/two-action Research and six paid Searches; original two baselines exactly reproduce; four state/RNG groups and eight exact shared prefixes; selected4417/4418 fresh replays; Studio Continue to fifth release; source/policy/ownership checks. No rejected/incomplete/timed-out cases; reducer NOT APPLICABLE. Retained ObjectDB exit warnings, no engine errors in study import/run logs. No native/UI/export tests claimed.
+
+Result: Sprites route earns Crown4/4 against baseline3/4, but confirmation is1 cycle earlier and20 later; final cash is lower in all4 matched comparisons. Recommendation: retain as additional fixture, no universal purchase mandate or balance change. Open: actual paid Brief affordability at these earlier starts, preview/activation decision, migration/world/UI/export/human gates. No canonical gameplay changes, commits, pushes, Drive mutation or cross-chat message.
+
+Publication correction: initial final-check canonical equality assertion failed because another task added `scripts/debug/profile_campaign_latency.gd`. Read-only inspection found no runtime references; the frozen variant and all pre-existing canonical files remain exact. Preserved the diagnostic, recorded `source-at-publication.json` and [source note](studies/puzzle-research-20261025-v1/PUBLICATION-SOURCE-NOTE.md), and revised the final guard to report this specific diagnostic drift explicitly. No silent baseline replacement or re-execution under new source.
