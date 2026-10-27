@@ -1,0 +1,15 @@
+# Rival prelude cost and save-footprint screen — pre-run plan, 2026-10-26
+
+**Status: DESIGN diagnostic.** The legal-shadow run suggests that a six-cycle rival prelude could shorten the wait for new titles, while the present checkpoint rejects installing that state at January. Before choosing a per-save tape replay or a template system, measure the existing two-rival trial's *legal work cost* within a source-pinned process. This is not a benchmark of an actual pre-1980 bootstrap, which has not been built.
+
+## Fixed cases and hypothesis
+
+- **H1:** Six actual shared cycles of current trial rival decisions have a bounded, measurable in-process time and encoded world-checkpoint footprint; timing can inform whether a future per-save legal prelude needs a template. Do not use the full Godot process/import duration as rival CPU time.
+- Seeds **4417/4418**, independent fresh-process 4417 repeat. Action/no-trait fixed player recipe, two current trial rivals, current `RivalTrial` policy, player clock advanced with the maintained verifier's zero-direct-delta legal productive action. This dummy player route measures clock/AI work, not a normal player challenge.
+- Run exactly **24 shared cycles** or stop on first failure. Cap at 48 rival productive turns per seed, with current `Trial.ZERO_STEPS` per-turn zero-action guard. Record per-cycle player advancement and rival advancement elapsed microseconds, aggregates for cycles 1–6 and 7–24, every actual release/Review, blocked turns, and source/player/world RNG digests.
+- At cycles **0, 6, 24**, capture valid player Studio and rival world checkpoints. Measure checkpoint generation time and JSON UTF-8 byte count; verify capture leaves player/world/RNG unchanged. A checkpoint that cannot be captured, a rejected legal action, a timeout or digest change is a retained failure. Checkpoint bytes are a relative encoded-footprint proxy, not an actual disk generation or cold Continue.
+- A new private variant derives from `opening-prestart-shadow-20261026-v1` and adds only one diagnostic script. `tools/simulate.py run --variant` first freezes it with the same independent 100-command/one-release smoke, then the shared-world diagnostic runs in a fresh copied project/profile. Every call has a 240-second process cap and a unique output directory. Replay the smoke in another fresh process; retain rejected/incomplete/timed-out cases. Do not change seeds, policy, cycles or budget after results.
+
+## Interpretation and stopping
+
+These numbers are tied to the frozen earlier trial, two rivals and this machine/load. They exclude new date-origin logic, normalization proof, authored resource grants, real save writes, rendered UI and additional rivals. Concurrent repo work may change canonical gameplay; record source identities and drift, never compare equal seeds across revisions as equal starting states. If six-cycle work is fast, that merely keeps per-save replay plausible; it does not approve an implementation or CPU cap. Frozen historical titles must remain outside all measured active market and post-start Fans/sales.

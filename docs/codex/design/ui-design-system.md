@@ -1,5 +1,7 @@
 # UI design system — 2026-10-25
 
+**2026-10-27 title audio visualizer — IMPLEMENTED locally as a prototype.** A transparent24-band cyan spectrum with orange peak markers occupies unused space to the right of the existing title column. Theme fonts/colors, log-frequency ticks and a small test caption complement the wordmark; controls retain their positions, input and focus. Size within the available gutter and omit the decoration in insufficiently narrow/short viewports. Actual Music-bus FFT drives movement; no random/beat-faked motion. Mute/zero volume settles to a quiet graph. Setup, guide, Settings and gameplay release the owned analyzer; returning title recreates one. Preserve soundtrack transport/mix, pause reverb and navigation. [Source, native preview, checks and limits](../logs/2026-10-27-menu-visualizer-v1.md).
+
 Direct user implementation brief: contemporary minimalist retro-tech identity; approved nine-color palette and Chakra Petch / IBM Plex Sans / IBM Plex Mono; reusable folders and stack navigation; full-screen Studio Creation and complementary Main Menu. Preserve gameplay, all actions, traits, specialty rosters, validation, keyboard/mouse and existing resolutions. The previous icon-only hold is superseded for this UI pass.
 
 ## Implementation decisions

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_beta_finalization_and_launch.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 5.922,
+  "errors": [],
+  "tail": [
+    "PASS: Gameplay commits launch market context exactly once from frozen state",
+    "PASS: Gameplay commits Month 1 units sold exactly once from prior launch results",
+    "PASS: Gameplay commits the projected Month 1 sales/revenue foundation without earning sales at Launch",
+    "PASS: Studio needs no continuation confirmation and starts with release stats hidden",
+    "PASS: First committed launch immediately enables history and labels the next game correctly",
+    "PASS: First committed launch immediately enables the legally available Contract offer",
+    "PASS: Post Game Summaries opens the committed results",
+    "Beta finalization and Launch-boundary verification passed.",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "policy.gd",
+    "id": "queue-review-canonical-cash18",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "action-4417-three-releases",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "queue-review-4417",
+          "studio_name": "Queue review",
+          "specialty": "action",
+          "traits": [],
+          "seed": "4417"
+        }
+      },
+      "max_commands": 400,
+      "target_release_count": 3,
+      "telemetry": true,
+      "policy": {
+        "config": {
+          "specialty": "action",
+          "ratios": [
+            30,
+            20,
+            30,
+            20
+          ],
+          "first_hands": 2,
+          "cash_searches": 18
+        }
+      }
+    }
+  ]
+}

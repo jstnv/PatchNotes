@@ -1,5 +1,7 @@
 # 2026-10-09 decision: first rival project Genre
 
+**SUPERSEDED 2026-10-26:** The [later direct Genre/Core fit ruling](2026-10-26-rival-genre-core-selection-decision-v1.md) replaces the mandatory specialty Genre for the first playable project. The rule below is retained as historical authority only.
+
 **Status: LOCKED first-slice G4 opening choice; later Genre policy OPEN.** The user selected the recommended initial project Genre after the [finite project-policy brief](2026-10-09-ai-project-policy-options-v1.md).
 
 For each incumbent's **first actual post-January-1980 project** and each later entrant's **first playable project**, choose its permanent studio specialty as that project's Genre. Create and play the project through normal predevelopment, Design, Alpha, Beta and Review rules. The specialty still grants only its approved owned starter roster and is not an inherent Core, Review, Awareness or income bonus. Its pre-1980 historical titles remain frozen archive records and are not retroactively assigned by this policy.

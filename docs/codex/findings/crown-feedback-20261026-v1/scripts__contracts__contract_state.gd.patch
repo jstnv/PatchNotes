@@ -1,0 +1,43 @@
+--- current/scripts/contracts/contract_state.gd
+
++++ private/scripts/contracts/contract_state.gd
+
+@@ -3,6 +3,7 @@
+
+ 
+ const CONTRACT_ID := ContractDefinitions.IRONCLAD
+ const SIDESTREET_CONTRACT_ID := ContractDefinitions.SIDESTREET
++const CROWN_BRIEF_ID := ContractDefinitions.CROWN_BRIEF
+ const SIDESTREET_BRIEF_ID := ContractDefinitions.SIDESTREET_BRIEF
+ const SIDESTREET_INVESTMENT_CENTS := 120000
+ const REQUIRED_HANDS := 2
+@@ -134,7 +135,7 @@
+
+ 
+ 
+ func record_successful_redraw(count: int) -> void:
+-	if _contract_id not in [SIDESTREET_CONTRACT_ID, SIDESTREET_BRIEF_ID]: return
++	if _contract_id not in [SIDESTREET_CONTRACT_ID, SIDESTREET_BRIEF_ID, CROWN_BRIEF_ID]: return
+ 	assert(count > 0 and _challenge_redraws <= ContractChallenges.MAX_INPUT - count)
+ 	_challenge_redraws += count
+ 
+@@ -302,7 +303,7 @@
+
+ 	if _contract_id in [PublisherTrialTerms.CROWN,PublisherTrialTerms.NEON,PublisherTrialTerms.STARWAVE]:
+ 		if _trial_terms!=PublisherTrialTerms.terms(_contract_id): return {}
+ 		return PublisherTrialTerms.completion(_contract_id,scope,cores,_neon_focus)
+-	if _contract_id in [SIDESTREET_CONTRACT_ID,SIDESTREET_BRIEF_ID,CONTRACT_ID]:
++	if _contract_id in [SIDESTREET_CONTRACT_ID,SIDESTREET_BRIEF_ID,CROWN_BRIEF_ID,CONTRACT_ID]:
+ 		var calculated := ContractDefinitions.evaluate(_contract_id,scope,cores,-1,get_advance_cents())
+ 		if calculated.is_empty(): return {}
+ 		return {"numerator":calculated.numerator,"denominator":calculated.denominator,"remainder_cents":calculated.remainder_cents,"payout_cents":calculated.payout_cents}
+@@ -310,7 +311,7 @@
+
+ 
+ func get_advance_cents() -> int:
+ 	if not _trial_terms.is_empty(): return _trial_terms.advance_cents
+-	return 0 if _contract_id in [SIDESTREET_CONTRACT_ID,SIDESTREET_BRIEF_ID] else GUARANTEED_UPFRONT_CENTS + (15000 if _publisher_connections else 0)
++	return 0 if _contract_id in [SIDESTREET_CONTRACT_ID,SIDESTREET_BRIEF_ID,CROWN_BRIEF_ID] else GUARANTEED_UPFRONT_CENTS + (15000 if _publisher_connections else 0)
+ 
+ func get_scope_target() -> int: return ContractDefinitions.scope_target(_contract_id)
+ 

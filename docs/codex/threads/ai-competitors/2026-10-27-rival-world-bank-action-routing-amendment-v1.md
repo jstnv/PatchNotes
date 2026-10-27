@@ -1,0 +1,7 @@
+# Rival-world Bank action routing amendment — predeclared, 2026-10-27
+
+The F cash-poor Beta policy failed before Bank2: private `rival_world.gd::_choice` has a whitelist that omits `bank_borrow`, returns `{}`, and records `No legal policy choice`. F seed4417 failed at cycle19 after one release; seed4423 failed at cycle19 with none. Keep those failed outputs. No debt was incurred through this rejected route.
+
+**G question:** With the same F policy and legal fresh starts, does allowing the existing `bank_borrow` command through the private RivalWorld action whitelist produce accepted recovery loans, complete the seven-hand projects, and avoid the cycle19 failure? Create child G, adding only `bank_borrow` to the private world whitelist. Do not change Bank2 rules, quote contents, cash, Reviews, supply, roster, market, horizon, seeds, or policy. The runtime command still validates the exact quote; a denial or rejection is an observed result. `bank_borrow` is zero-cycle and remains inside the existing 12-step work limit. The policy may be economically harmful later.
+
+Run one legal-action smoke (max50 commands), then fresh seeds 4417/4423 over 24 cycles with the same 240-second isolated bounds. Measure Reviews/cycles, release count, blocked/failures, process exit, cash, debt and whether accepted actions include borrowing. Preserve all outputs. If completed, cold-repeat seed4423 using a new output; otherwise stop without changing this version. This is a simulator routing diagnostic, not implementation approval.

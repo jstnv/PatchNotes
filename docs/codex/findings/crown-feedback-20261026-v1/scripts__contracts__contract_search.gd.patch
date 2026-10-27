@@ -1,0 +1,88 @@
+--- current/scripts/contracts/contract_search.gd
+
++++ private/scripts/contracts/contract_search.gd
+
+@@ -5,17 +5,21 @@
+
+ static func create(owner: StringName) -> Dictionary:return {"version":VERSION,"owner":owner,"receipts":[],"offers":{},"legacy_offers":{},"intro_offer_id":&""}
+ static func data(run: Variant) -> Dictionary:
+ 	if run is Dictionary:return run
+-	return {"bank_run_id":run._bank_run_id,"completed_run_cycles":run._completed_run_cycles,"contract_search":run._contract_search,"studio_finance":run._studio_finance,"publisher_relationships":run._publisher_relationships,"sidestreet_entitlements":run._sidestreet_entitlements,"sidestreet_briefs":run._sidestreet_briefs,"release_metadata":run._release_metadata,"commission_deals":run._commission_deals,"unlocked_publishers":run._unlocked_publishers}
+-static func terms(work: StringName) -> Dictionary:
++	return {"bank_run_id":run._bank_run_id,"completed_run_cycles":run._completed_run_cycles,"contract_search":run._contract_search,"studio_finance":run._studio_finance,"publisher_relationships":run._publisher_relationships,"sidestreet_entitlements":run._sidestreet_entitlements,"sidestreet_briefs":run._sidestreet_briefs,"crown_briefs":run._crown_briefs,"release_metadata":run._release_metadata,"commission_deals":run._commission_deals,"unlocked_publishers":run._unlocked_publishers}
++static func supported(publisher: StringName,work: StringName) -> bool:
++	return (publisher==&"sidestreet" and work in WORK_TYPES) or (publisher==&"crown_quill" and work==&"brief")
++static func terms(work: StringName,publisher: StringName=&"sidestreet") -> Dictionary:
++	if publisher==&"crown_quill":
++		return {"version":1,"required_hands":2,"scope":9,"core_target":4,"cash_cents":0,"review_target_tenths":0,"reputation_gate_bp":0,"owner":&"studio"} if work==&"brief" else {}
+ 	if work not in WORK_TYPES:return {}
+ 	return {"version":1,"required_hands":0 if work==&"commission" else 2,"scope":12 if work==&"cash" else (10 if work==&"brief" else 0),"core_target":6 if work==&"cash" else (3 if work==&"brief" else 0),"cash_cents":120000 if work==&"cash" else (600000 if work==&"commission" else 0),"review_target_tenths":60 if work==&"commission" else 0,"reputation_gate_bp":2000 if work==&"commission" else 0,"owner":&"publisher" if work==&"commission" else &"studio"}
+-static func template(work: StringName) -> StringName:return StringName("sidestreet-%s-v1"%work)
+-static func source(run: Variant, offer_id: StringName, work: StringName) -> Dictionary:
++static func template(work: StringName,publisher: StringName=&"sidestreet") -> StringName:return StringName("%s-%s-v1"%[publisher,work])
++static func source(run: Variant, offer_id: StringName, work: StringName,publisher: StringName=&"sidestreet") -> Dictionary:
+ 	var d:=data(run);var state: Dictionary=d.get("contract_search",{})
+ 	var offer: Dictionary=state.get("offers",{}).get(offer_id,{})
+-	if offer.is_empty() or offer.get("work")!=work or offer.get("publisher_id")!=&"sidestreet":return {}
++	if offer.is_empty() or offer.get("work")!=work or offer.get("publisher_id")!=publisher:return {}
+ 	for receipt: Dictionary in state.get("receipts",[]):
+-		if receipt.get("receipt_id")==offer.get("receipt_id") and receipt.get("offer_id")==offer_id and receipt.get("work")==work:return receipt.duplicate(true)
++		if receipt.get("receipt_id")==offer.get("receipt_id") and receipt.get("offer_id")==offer_id and receipt.get("work")==work and receipt.get("publisher_id")==publisher:return receipt.duplicate(true)
+ 	return {}
+ static func invitation(run: Variant) -> Dictionary:
+ 	var d:=data(run)
+@@ -23,8 +27,12 @@
+
+ 		var offer: Dictionary=d.contract_search.offers[id]
+ 		if offer.work==&"commission" and offer.project_id.is_empty():return {"offer_id":id,"receipt":source(d,id,&"commission")}
+ 	return {}
+-static func pending(run: Variant, work: StringName) -> bool:
++static func pending(run: Variant, work: StringName,publisher: StringName=&"sidestreet") -> bool:
+ 	var d:=data(run)
++	if publisher==&"crown_quill":
++		for offer: Dictionary in d.crown_briefs.values():
++			if offer.state==null or (not offer.state.is_completed() if offer.state is ContractState else offer.state.hands<2):return true
++		return false
+ 	if work==&"cash":
+ 		for offer: Dictionary in d.sidestreet_entitlements.values():
+ 			if offer.state==null or (not offer.state.is_completed() if offer.state is ContractState else offer.state.hands<2):return true
+@@ -67,7 +75,7 @@
+
+ 	for i in range(state.receipts.size()):
+ 		var r: Dictionary=state.receipts[i]
+ 		var id:=StringName("%s:contract-search:%d"%[state.owner,i+1])
+-		if r.owner!=state.owner or r.ordinal!=i+1 or r.receipt_id!=id or r.offer_id!=StringName(str(id)+":offer") or r.publisher_id!=&"sidestreet" or r.work not in WORK_TYPES or r.template_id!=template(r.work) or r.terms!=terms(r.work) or r.rules_version!=VERSION or r.cycle!=r.before_cycle+1 or r.cycle>d.completed_run_cycles:return false
++		if r.owner!=state.owner or r.ordinal!=i+1 or r.receipt_id!=id or r.offer_id!=StringName(str(id)+":offer") or not supported(r.publisher_id,r.work) or not d.unlocked_publishers.has(r.publisher_id) or r.template_id!=template(r.work,r.publisher_id) or r.terms!=terms(r.work,r.publisher_id) or r.rules_version!=VERSION or r.cycle!=r.before_cycle+1 or r.cycle>d.completed_run_cycles:return false
+ 		if not state.offers.has(r.offer_id):return false
+ 		var o: Dictionary=state.offers[r.offer_id]
+ 		if o.receipt_id!=id or o.work!=r.work or o.publisher_id!=r.publisher_id:return false
+@@ -84,13 +92,14 @@
+
+ 			if e.cycle>r.before_cycle:return false
+ 			if e.publisher_id==r.publisher_id:standing+=int(e.credited_reputation_bp)
+ 		if standing!=r.standing_bp or standing<r.terms.reputation_gate_bp:return false
+-		if prior_by_work.has(r.work) and not completed_before(d,prior_by_work[r.work],r.work,r.before_cycle):return false
++		var work_key:=StringName("%s:%s"%[r.publisher_id,r.work])
++		if prior_by_work.has(work_key) and not completed_before(d,prior_by_work[work_key],r.work,r.before_cycle):return false
+ 		# Legacy backlog is preserved and must finish before same-type discovery.
+-		if r.work in [&"cash",&"brief"]:
++		if r.publisher_id==&"sidestreet" and r.work in [&"cash",&"brief"]:
+ 			var legacy: Dictionary=d.sidestreet_entitlements if r.work==&"cash" else d.sidestreet_briefs
+ 			for old_offer: Dictionary in legacy.values():
+ 				if source(d,old_offer.offer_id,r.work).is_empty() and not completed_before(d,old_offer.offer_id,r.work,r.before_cycle):return false
+-		prior_by_work[r.work]=r.offer_id
++		prior_by_work[work_key]=r.offer_id
+ 		if r.work==&"commission":
+ 			var had_release:=false
+ 			for meta: Dictionary in d.release_metadata.values():
+@@ -102,7 +111,8 @@
+
+ 			if r.work==&"cash":
+ 				if not d.sidestreet_entitlements.has(r.offer_id) or d.sidestreet_entitlements[r.offer_id].offer_id!=r.offer_id:return false
+ 			else:
+-				if not d.sidestreet_briefs.has(r.offer_id) or not d.sidestreet_briefs[r.offer_id].source_release_id.is_empty():return false
++				var briefs: Dictionary=d.crown_briefs if r.publisher_id==&"crown_quill" else d.sidestreet_briefs
++				if not briefs.has(r.offer_id) or not briefs[r.offer_id].source_release_id.is_empty():return false
+ 		expected_sources[id]=true
+ 	for a: Dictionary in d.studio_finance.actions:
+ 		if a.kind==&"contract_search" and not expected_sources.has(a.source_id):return false

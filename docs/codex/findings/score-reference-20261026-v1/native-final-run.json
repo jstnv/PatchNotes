@@ -1,0 +1,41 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_score_floats.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80",
+    "--",
+    "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/score-reference-20261026-v1/native-final"
+  ],
+  "exit": 3221225477,
+  "elapsed_seconds": 15.031,
+  "errors": [
+    "ERROR: Parameter \"mem\" is null.",
+    "ERROR: Parameter \"mem_new\" is null.",
+    "ERROR: Condition \"err\" is true. Returning: err",
+    "ERROR: Can't convert image to PNG.",
+    "ERROR: Parameter \"mem\" is null.",
+    "ERROR: Parameter \"mem_new\" is null."
+  ],
+  "tail": [
+    "   GDScript backtrace (most recent call first):",
+    "       [0] shot (res://scripts/debug/verify_score_floats.gd:55)",
+    "ERROR: Parameter \"mem\" is null.",
+    "   at: alloc_static (core/os/memory.cpp:104)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] shot (res://scripts/debug/verify_score_floats.gd:55)",
+    "ERROR: Parameter \"mem_new\" is null.",
+    "   at: _alloc_exact (./core/templates/cowdata.h:476)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] shot (res://scripts/debug/verify_score_floats.gd:55)"
+  ]
+}

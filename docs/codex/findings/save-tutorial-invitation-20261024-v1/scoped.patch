@@ -1,0 +1,96 @@
+--- before/scripts/gameplay.gd
++++ after/scripts/gameplay.gd
+@@ -221,9 +221,9 @@
+ 	_offer_guided_tutorial.call_deferred()
+ 	return true
+ 
+-func _offer_guided_tutorial() -> void:
++func _offer_guided_tutorial(opened_save: bool = false) -> void:
+ 	if guided_tutorial != null or not _active_phase is StudioPhase or _transition_in_progress or _loading_checkpoint: return
+-	if not _onboarding.read().answered: _create_guided_tutorial()
++	if opened_save or not _onboarding.read().answered: _create_guided_tutorial()
+ 
+ func _create_guided_tutorial() -> void:
+ 	guided_tutorial = GuidedProductionTutorial.new()
+@@ -715,7 +715,7 @@
+ 	if restored==null:
+ 		_show_checkpoint_recovery()
+ 		return
+-	_finish_checkpoint_load(restored)
++	if _finish_checkpoint_load(restored): _offer_guided_tutorial.call_deferred(true)
+ 
+ func _present_checkpoint_load() -> void:
+ 	if checkpoints == null or _transition_in_progress or _loading_checkpoint: return
+@@ -760,7 +760,7 @@
+ 	if is_instance_valid(_active_phase):
+ 		var start := _active_phase.get_node_or_null("%StartNextGame") as Control
+ 		if start != null: start.grab_focus()
+-	_offer_guided_tutorial.call_deferred()
++	_offer_guided_tutorial.call_deferred(true)
+ 
+ func _finish_checkpoint_load(restored: RunState) -> bool:
+ 	run_state = restored
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -11,6 +11,7 @@
+ # Prerequisite link presentation only. Actual preceding editor/PCK worlds retain
+ # every field/RNG; admit only these identities with the current content revision.
+ const USABILITY_PRESENTATION_SOURCES := [
++	"6800a07e9c01c2aa0476d8251afdfc3f0f3c61ad5989ff2c99bcd813d1c2ae65", # Before offering the optional tutorial on every save opening.
+ 	"b8785b47ebb32a94fbf1dbbf682b015be4171259a8ce9631a2df9fc93f7a6205", # Before shared tutorial/live scoreboard layout.
+ 	"8c8ef44726aae9dbd4a7967f8a750702a0ab5887f582b7880d65a77cb0f74944", # Before optional standalone tutorial.
+ 	"57d64e0f6a00e04918e78445f0d46caf212a900c367d4b14d794d0a9c85e0d83", # Actual v0.02 embedded Windows build.
+--- before/scripts/debug/verify_checkpoint_recovery_ui.gd
++++ after/scripts/debug/verify_checkpoint_recovery_ui.gd
+@@ -54,6 +54,10 @@
+ 		expect(not game._quit_dialog.visible and game.checkpoints.store.inspect().payload==baseline.payload,"Keyboard Cancel preserves run checkpoint")
+ 		game._continue_checkpoint()
+ 		await process_frame
++		# Explicitly Skip the save-opening invitation before recovery testing.
++		if game.guided_tutorial != null:
++			game.guided_tutorial.experienced_button.pressed.emit()
++			game.guided_tutorial.skip_button.pressed.emit()
+ 		# Hold the real isolated TCP writer lease while Continue tries to acquire it.
+ 		var owner: StudioCheckpointStore = game.checkpoints.store
+ 		game.checkpoints.store = ContendingStore.new(owner.directory,owner.validator)
+--- before/scripts/debug/verify_pause_menu.gd
++++ after/scripts/debug/verify_pause_menu.gd
+@@ -31,6 +31,7 @@
+ 	expect(game.checkpoints.store.inspect().payload == saved, "Returning from Studio does not create an extra save")
+ 	game._continue_checkpoint()
+ 	await process_frame
++	await skip_save_invitation()
+ 	expect(game._active_phase is StudioPhase and game.run_state.get_studio_name() == "Pause test Studio", "Title Continue restores saved Studio")
+ 	# Play a real hand, then pause while its committed result is being presented.
+ 	expect(game._begin_next_project(game._active_phase, "Pause project", &"action", &"fantasy"), "Legal development begins")
+@@ -85,6 +86,7 @@
+ 	expect(game.checkpoints.store.inspect().payload == saved, "Mid-development return preserves exact Studio checkpoint")
+ 	game._continue_checkpoint()
+ 	await process_frame
++	await skip_save_invitation()
+ 	expect(game.project_state == null and game.run_state.get_completed_run_cycles() == 0, "Continue rolls back unsaved hand and departure cycles")
+ 	expect(game.checkpoints.store.inspect().payload == saved, "Continue does not rewrite or pay anything twice")
+ 	await check_save_failure()
+@@ -99,6 +101,14 @@
+ 	if not output.is_empty(): FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures,"card_traces":traces},"\t"))
+ 	print("PAUSE_MENU checks=%d failures=%d" % [checks,failures])
+ 	quit(0 if failures == 0 else 1)
++
++func skip_save_invitation() -> void:
++	var view: GuidedProductionTutorial = game.guided_tutorial
++	expect(view != null and view.asking, "Save restore offers the optional tutorial before pause testing")
++	if view != null:
++		view.experienced_button.pressed.emit()
++		view.skip_button.pressed.emit()
++	await process_frame
+ 
+ func key(code: Key, shift := false) -> void:
+ 	var event := InputEventKey.new()
+@@ -190,6 +200,7 @@
+ 	game._quit_dialog.hide()
+ 	game._continue_checkpoint()
+ 	await process_frame
++	await skip_save_invitation()
+ 
+ func check_prior_world() -> void:
+ 	var path := OS.get_environment("PN_PAUSE_PRIOR_WORLD")

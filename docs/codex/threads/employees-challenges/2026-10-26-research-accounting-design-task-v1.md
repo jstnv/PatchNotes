@@ -1,0 +1,28 @@
+# Employee Research accounting — design task, 2026-10-26
+
+**Status: DESIGN / OPEN details; NOT QUEUED for gameplay implementation.** The user requested this task be added to the internal To Do List before the next design pass. Keep decisions and any later handoff in this thread's folder.
+
+## Selected boundary
+
+Employee boosts occur only on successfully committed active Store Research actions. The first two assigned employees each contribute one paid half-step per action; each later assigned employee contributes one on every second eligible action. Apply manual progress to the FIFO head, then eligible staff steps through Features already queued before the action, including third and later entries. If the manual action and required bills are affordable, commit each affordable staff step in order and stop before the first unaffordable one; preserve the manual action and earlier paid steps. No queue target means no progress or charge. The calendar advances one whole cycle. [Taper](2026-10-26-research-taper-decision-v1.md) · [FIFO chain](2026-10-26-research-fifo-chain-decision-v1.md) · [affordable prefix](2026-10-26-research-partial-affordability-decision-v1.md).
+
+Store admission, base down payment, existing familiarity/Resourceful pricing, bill service and future-project supply remain the baseline in [Feature Store design](../../design/feature-store-progression.md) and [economy design](../../design/economy-banking.md). The Employees menu is already open after Game 2 under the existing ACTIVE/TRIAL QA/Production/payroll package; this task does not revisit hiring wages or imply that employee Research is implemented.
+
+## Design work before an implementation handoff
+
+1. Specify the unpaid Store share for each half-step in integer cents, including odd-cent remainder, a current one-cycle node, and a hypothetical multi-cycle node. Decide when familiarity and Resourceful discounts are sampled and whether earlier completions in the same action alter later quotes. Preserve previous payments and ownership only on completion.
+2. Define one preflight/commit plan for mandatory manual installment, required due bills and optional staff steps. State the exact ordering relative to monthly earned/settled sales and rent, payroll, Bank and education service. Show how a preview quotes the mandatory charge, maximum optional charge and affordable stopping point without relying on later same-cycle income. Define stale-quote, rejected-action and duplicate-action behavior.
+3. Apply the selected hire-order step sequence, second-action first pulse, continuous committed-action counting across rank changes, removal reset and Continue persistence. Decide the assignment limit separately; no new cap is implied by the taper.
+4. Specify Store/Employees UI wording, persistent queue/payment/cadence identities and save migration. Produce a source-pinned implementation handoff with focused acceptance cases: zero/one/two/three-plus staff, multi-entry FIFO carry, partial affordability, due-bill boundary, discounts/rounding, one whole calendar cycle, rejection, exact replay and cold Continue. Only then consider an implementation queue entry in one coordinated gameplay slot.
+
+## Current source context and completion condition
+
+At inspection: branch `main`, HEAD `087df09d653858b72c6e2dc344352237433dd3ac`; the shared worktree has concurrent uncommitted edits, including `patch-notes/scripts/run_state.gd` and `docs/codex/TODO.md`. Current `RunState.get_feature_research_quote`, `research_feature`, `_plan_productive_cycle` and `complete_productive_action` form the Store quote/action preflight boundary. Reinspect and pin actual source when preparing the implementation handoff; this design task does not approve a source delta.
+
+Done for this **design** task means the open choices above have explicit rulings, examples and a reviewable handoff with dependencies and acceptance criteria. No simulation result or TODO entry alone approves new gameplay, wages, balance or release status.
+
+**2026-10-26 progress:** [Bill-payment protection](2026-10-26-research-bill-protection-decision-v1.md), [opt-in duty/skipped-action cadence/Resourceful final-unit cap](2026-10-26-research-duty-cadence-resourceful-decisions-v1.md), [same-rate price parity](2026-10-26-research-half-unit-price-decision-v1.md), [hire order/assignment reset/Continue persistence](2026-10-26-research-staff-order-persistence-decision-v1.md), and [second-action pulse/continuous counter through rank changes](2026-10-26-research-cadence-phase-decision-v1.md) are now user-selected. The [source-informed accounting proposal](2026-10-26-research-accounting-proposal-v1.md) still recommends changed-rate cent math, a composite Store action, cost preview and save representation. Those remaining recommendations are OPEN; this design task is still active and no gameplay adoption handoff is ready.
+
+## Session record
+
+2026-10-26, branch `main`, HEAD `087df09d653858b72c6e2dc344352237433dd3ac` at inspection. Read `CURRENT_STATE.md` and the live `TODO.md` first, then local rules/design, prior Research decisions, targeted current source and worktree diff. Changed only this task note, this thread's `README.md` and `working-notes.md`, and one minimal entry in `docs/codex/TODO.md`. The TODO already contained concurrent uncommitted edits, which were preserved. Targeted `git diff --check` on the three tracked edited documents passed; the task link exists and the new note has no trailing whitespace. No gameplay/tests/simulation, Google Drive, commit or push. Next work is the open design specification above; its implementation handoff remains blocked on those decisions.

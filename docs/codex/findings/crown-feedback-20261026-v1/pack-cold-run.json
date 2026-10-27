@@ -1,0 +1,39 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\simulators\\crown-feedback-20261026-v1\\project",
+    "--audio-driver",
+    "Dummy",
+    "--headless",
+    "--main-pack",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/crown-feedback-20261026-v1/exports/crown-feedback-private.pck",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/crown-feedback-20261026-v1/cold_replay.gd",
+    "--",
+    "--fixture=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/crown-feedback-20261026-v1/pack-flow-artifacts"
+  ],
+  "exit": 1,
+  "seconds": 4.062,
+  "errors": [
+    "ERROR: FAIL: Independent process replays every command/state/RNG step",
+    "ERROR: FAIL: Cold Studio equals exact replayed state and RNG"
+  ],
+  "tail": [
+    "",
+    "Loaded 40 cards.",
+    "ERROR: FAIL: Independent process replays every command/state/RNG step",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/crown-feedback-20261026-v1/cold_replay.gd:10)",
+    "       [1] go (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/crown-feedback-20261026-v1/cold_replay.gd:25)",
+    "ERROR: FAIL: Cold Studio equals exact replayed state and RNG",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/crown-feedback-20261026-v1/cold_replay.gd:10)",
+    "       [1] go (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/crown-feedback-20261026-v1/cold_replay.gd:29)",
+    "CROWN_COLD_REPLAY checks=6 failures=2",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

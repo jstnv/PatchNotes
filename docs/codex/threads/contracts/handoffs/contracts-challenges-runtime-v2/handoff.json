@@ -1,0 +1,311 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-18T08:22:57.744357+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "contracts-challenges-runtime-v2",
+    "owner": "contracts",
+    "created_utc": "2026-10-18T08:18:02.346019+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "89d52a809a9f25613ecc7e269f28914d9c7edc8f4849aee31393170996cdc82c",
+    "creation_identity": "91f4394bad033863e2505232636e72332bb486284d04e84667274b2dcf86db2c",
+    "lineage": [
+      {
+        "id": "contracts-challenges-runtime-v1",
+        "owner": "contracts",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\simulators\\contracts-challenges-runtime-v1",
+        "metadata_sha256": "084ac535eb437377e2ef2024b234b967ac49ce360dd839a9551f2eb1d7c88c97",
+        "source_identity": "91f4394bad033863e2505232636e72332bb486284d04e84667274b2dcf86db2c"
+      }
+    ],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "Activate the approved trial SideStreet, Crown, Neon and Starwave challenges with acceptance-frozen terms, grade-based separate cash and Promotion reward, result/checkpoint provenance and visible offer/hand/result copy; preserve Ironclad and base rewards.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\CHALLENGES-TRIAL-DECISION-2026-10-18-v1.md",
+    "sha256": "3f50997587a85deeff2b3fb5fc1b59a9b0f6023d4fd4395dcb74dd192946bebe",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Reconcile current canonical source; preserve base formulas and once-only settlement, successful SideStreet redraw history, rejected-command cash/RNG, accepted term freeze, old completed Contract saves and forged-bonus rejection.",
+    "Verify full/partial/miss grading, all four challenged publishers, keyed next-successful-launch Promotion, Studio-only Continue, both supported UI sizes and exported presentation.",
+    "Refresh changed Starwave and Promotion expectations, run affected integrated checks and a legal four-release campaign with exact fresh-process replay; record remaining release and balance limits."
+  ],
+  "base_identity": "89d52a809a9f25613ecc7e269f28914d9c7edc8f4849aee31393170996cdc82c",
+  "candidate_identity": "4b40ea139ffe2040b344dc9dffdfd9133b8672910434d126f7a5c3ce05bc5b8b",
+  "canonical_identity": "8bd8dd308be71df3dba3a5c3b46cbd4fa6a59c131b61535fc61dd7d8611404fb",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "queries/market_release_index.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9edab76e6637e239669d8df1a31f706ab53f770e1d394217b63c23e9ad53db3f"
+    },
+    {
+      "path": "scripts/contracts/contract_challenges.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "6be5f579db1cc556522ffd00d772fccd3ee1282a9eef0d423448af6bf54114a9"
+    },
+    {
+      "path": "scripts/contracts/contract_challenges.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "aa86b03d11d3add4c13479a41480ce599d82ba7e6dc7c3b6476b529835d81890"
+    },
+    {
+      "path": "scripts/contracts/contract_result.gd",
+      "change": "modified",
+      "before_sha256": "99c8b66275027712db4d96ff6dae7ca38628305213fef07f538f37bfd6c75697",
+      "after_sha256": "e0bef347077fd68ef2e3ae2c6650cbb5ebfe4452404b4cb05943c31abdfc785d"
+    },
+    {
+      "path": "scripts/contracts/contract_state.gd",
+      "change": "modified",
+      "before_sha256": "e181f6de333b6a349053a348229838bc38704f706e46c940778a363034ec8f8c",
+      "after_sha256": "7178f7011c0780000885cb774cc83c7b05fe988bab8a7f31969eb32c78a80375"
+    },
+    {
+      "path": "scripts/debug/starwave_restart_probe.gd",
+      "change": "modified",
+      "before_sha256": "40925fa89d2088adf123e459f6a6fedf19c7f8ac98a7cb2f9ab6f5f0736755de",
+      "after_sha256": "8cc0d0f2fed3ab8ff6ecfc737fd31001b1a596b6ce5e67fc3916656017e1abb3"
+    },
+    {
+      "path": "scripts/debug/verify_alpha_pack_ui.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "42a2a817efb767d1499a8e8024ca4092d3cab1e1dd8b4f6fcadad9d1b3f0ceb6"
+    },
+    {
+      "path": "scripts/debug/verify_alpha_shop_pack.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "61cfc2d01c95117883487ffdd04c41fba51ca4374ef007b75e5ccce757ed4eef"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_publishers.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "cdedae414467ea96f9d0222b09d47755c88141f9f386d979b2970a133276f3db"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_publishers.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d0dea88df49e6f2e8d9d253ba6c4f9e8a167731109538bc97baabcc703ba16d3"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_runtime.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "90bb98af3a3328c4f548ecd6e61692ec8dba71312c47490cd3386da122c3696d"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_runtime.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a80500e94350f0b54e0da643f6a6c539fd2a6806e365edd8d272d84fe715c3a0"
+    },
+    {
+      "path": "scripts/debug/verify_market_release_index.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "e37ed65fc5e4b0704a862b06d89f5ef35164204659bcfc524efad8f069d4a356"
+    },
+    {
+      "path": "scripts/debug/verify_publisher_trial_promotion.gd",
+      "change": "modified",
+      "before_sha256": "d3605d138b2a1bc7ea69f434187a351fddecd7779bd9789d45b50e42be539163",
+      "after_sha256": "c0311835f1353071a719ef521f5a0fecae4d1c23ad5a7aee8b22e7fed4554073"
+    },
+    {
+      "path": "scripts/debug/verify_queue_source_migration.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d0dc3a6795eaa09809b159a6aa778939b4cba66ab0f826755860c04e82dd007a"
+    },
+    {
+      "path": "scripts/debug/verify_starwave.gd",
+      "change": "modified",
+      "before_sha256": "b1a4c9568c91206c9cc7a071e6872e2162dd5a3c5b91cb62d99cd0fc49090cb9",
+      "after_sha256": "d89347e5826662643a28103117ae4578a58992b954467952632ad8e9def592e3"
+    },
+    {
+      "path": "scripts/debug/verify_starwave_ui.gd",
+      "change": "modified",
+      "before_sha256": "e4f1d209c13eb8832df453744af5d04bc45b1cdae84d886d5bd3d9eb5ad8802c",
+      "after_sha256": "75bbb8f94963a6cbef9cea0445dd8d9a403cf7c81dca3ab0617b8e8b72458c9e"
+    },
+    {
+      "path": "scripts/debug/verify_victory_commit.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "178f42b6f778f2e84cb39722b177699754580eaf9e4792e296bdf6c79814da2f"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_schema.gd",
+      "change": "modified",
+      "before_sha256": "6b9b51ad0f3fdd2e34bf48c6653bec84b69f2edbf4b14e9dd1bbea04384cc520",
+      "after_sha256": "a8ee25255c3a99fe1b296c908f219f0d50e3f2cf7349da965a5536d3697f9c68"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "0386e1ed3ffad19d01b22ef791dd0918a3bae25a48fc972e707b2ef6f323c5cd",
+      "after_sha256": "f1c994c6e7059e9f28d757d28f8a40f507d2e068c20ef7b0d85f636e9fca52c8"
+    },
+    {
+      "path": "scripts/phases/contract_phase.gd",
+      "change": "modified",
+      "before_sha256": "09fe2ac465c3f35b277037c58f23f7cfd55ebd0213167815a2d43ea293254ed4",
+      "after_sha256": "87fffa0f25191b7ee14c3b3acedc0b5a1f7bb6742d0ab4d3bf3b6971cec51bd0"
+    },
+    {
+      "path": "scripts/phases/studio_phase.gd",
+      "change": "modified",
+      "before_sha256": "2387ad32ee6cb71972a4e25316901967b69c9811fd1aea2ba462705108eee671",
+      "after_sha256": "d1157ec1b6036728381c062085d901597c149274d2485e70f2c8407a5a420546"
+    },
+    {
+      "path": "scripts/run_state.gd",
+      "change": "modified",
+      "before_sha256": "8352dee38ef666e7133cdb6bac94536f6b97b775146fbd200c89de278490bc30",
+      "after_sha256": "6dc55651c23fb38b3843d5d9fd436c2d3c65845b3f63df62374231f1c67a8cac"
+    },
+    {
+      "path": "scripts/simulation/contract_session.gd",
+      "change": "modified",
+      "before_sha256": "75e8d628ef1f72ac8d139c136ad18751c93f1c546d04de3d72f6218783f94539",
+      "after_sha256": "ae7c7f00e8b6e524aab9b2df54c537c0c061dcde7f2fd54d2513258fd5f3f2f5"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "assets/audio/crunch_time_70/STUDIO_THEME.md",
+      "change": "modified",
+      "before_sha256": "aaa326af09614b3859ed72e28a4e666bf650e996da4e47e49c71babd268df9f1",
+      "after_sha256": "b3f5493f9d42e09cb3ee15cb57813fc8b06871dd4027060a9f465375f465d441"
+    },
+    {
+      "path": "queries/market_release_index.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9edab76e6637e239669d8df1a31f706ab53f770e1d394217b63c23e9ad53db3f"
+    },
+    {
+      "path": "scripts/audio/soundtrack.gd",
+      "change": "modified",
+      "before_sha256": "83265987c5619263dd58fb5468d95afa4289bef0382432ede57d2c6676d82d60",
+      "after_sha256": "0ff9377d07d4a2887a3d7d991fbad5afb780a2675d624e5236b54e2da7817784"
+    },
+    {
+      "path": "scripts/audio/theme_blend.gd",
+      "change": "modified",
+      "before_sha256": "1fe04a712c689c0166a86dc12bd55e48730087d1c3b804b265fa4b3ba1318316",
+      "after_sha256": "2e6c08eb5ce2d337167e67127cce299f0b2b4a1b434d92917600c9cbb052e6c5"
+    },
+    {
+      "path": "scripts/debug/verify_alpha_pack_ui.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "42a2a817efb767d1499a8e8024ca4092d3cab1e1dd8b4f6fcadad9d1b3f0ceb6"
+    },
+    {
+      "path": "scripts/debug/verify_alpha_shop_pack.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "61cfc2d01c95117883487ffdd04c41fba51ca4374ef007b75e5ccce757ed4eef"
+    },
+    {
+      "path": "scripts/debug/verify_market_release_index.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "e37ed65fc5e4b0704a862b06d89f5ef35164204659bcfc524efad8f069d4a356"
+    },
+    {
+      "path": "scripts/debug/verify_queue_source_migration.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d0dc3a6795eaa09809b159a6aa778939b4cba66ab0f826755860c04e82dd007a"
+    },
+    {
+      "path": "scripts/debug/verify_studio_soundtrack.gd",
+      "change": "modified",
+      "before_sha256": "ea37982a7c92c3b6b8989c574691b243471590b9f47541da34b91f0f0dd0b2c0",
+      "after_sha256": "2ace4ff9a561d12cbd65326eaf931de191a301a38ae6531c49834f2ef1159187"
+    },
+    {
+      "path": "scripts/debug/verify_victory_commit.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "178f42b6f778f2e84cb39722b177699754580eaf9e4792e296bdf6c79814da2f"
+    },
+    {
+      "path": "scripts/market/rival_world_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "40b7221fa02df425681c34ba0bfd6750452d3e522e8ed6be63953b8977b0d7d8",
+      "after_sha256": "44f4cea0693d03188967c00774867c2b6b07b64b4c1fa5b08cee4aaa1d373c15"
+    },
+    {
+      "path": "scripts/ui/gameplay_hud.gd",
+      "change": "modified",
+      "before_sha256": "1a2467f6c4f4b7cab4f5150cd2a23b395ed7cddc6f7547feb57e5ca7cf8173f1",
+      "after_sha256": "336a5fc8cc311dcbc197cfb12d221c20ddceee0b1ed34002c6938b62bdb9974e"
+    }
+  ],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sims\\challenges-runtime-v2-final-run-01",
+      "ok": true,
+      "error": null,
+      "source_identity": "4b40ea139ffe2040b344dc9dffdfd9133b8672910434d126f7a5c3ce05bc5b8b",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "ae88482ae97c92885072ea523c0f8870fe8f17e72f44eba770246d01cff4a09b",
+        "cases/action-cult20-4417-crown-no-reuse/case.json": "14f34db81abe6f21f7b458e2c2d215d75586b7fcac1b99686747afa9fc544b28",
+        "cases/action-cult20-4417-crown-no-reuse/case.variant.json": "71936ee8b4962dab93296dd40a3370aa0fb78e816a135540eeb14db0623ae5ca",
+        "cases/action-cult20-4417-crown-no-reuse/final_state.variant.json": "f2e559e5eafdb16d77fd56977b3d4a0102b1270b2a13921d4d609543cccddbff",
+        "cases/action-cult20-4417-crown-no-reuse/initial.json": "54cb2dd90aca029e4ecb4f875f32beffa34dcb768e9ab057991257fc9c309594",
+        "cases/action-cult20-4417-crown-no-reuse/metrics.json": "d98d14068bbdfcfa517754e915501acd55e4367c88bccea4a6d741f10fb25826",
+        "cases/action-cult20-4417-crown-no-reuse/replay.tape.json": "459fcdc47bec527b94a10d9e269e20f77f4ae214549cc7d515af07de67c51e41",
+        "cases/action-cult20-4417-crown-no-reuse/result.json": "bd6fecec5bf3635bef28bbc861f0cd8544d156e91dd12b3e994ef4c5f0f991ec",
+        "cases/action-cult20-4417-crown-no-reuse/studio_checkpoint.json": "77f3cb69adae97bdefb753a5f95f3693683dc3e880118fbabe1270a3e22a2aeb",
+        "experiment-report.json": "2c3d64442db5ff143a24f180a4340cc12799ae40a0de1901233159bef49068d3",
+        "experiment.command.json": "9773d6f40dfc8448e79444695895a24bd16ab360b1b8277b5f1b526f4c3397ef",
+        "experiment.log": "7c9de38b2ddd2108d049b7f82d6e47fe3726c994c2f1474b13ea12a0385f0f85",
+        "git-provenance.json": "4caeceb6b80f7bd112feaae788a3da18826a70f6d645538c6c0056500e251504",
+        "godot-version.command.json": "3b06849817f55aa9a44abd19db1eccfd93bad5186082e491d482fdfdef838e96",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "cd0eb47d58f80083c49cd4ebff020044c6f41a110c328fa2766c588b1bcc7986",
+        "import.command.json": "5ed553a4b031fbdffa352f62996359dbe5c6ca93a3b2edbf41a1dd7dad2f01cc",
+        "import.log": "18d914dc53d73913b4d03f6a26b6f01d57b491e038767f2eae7c01e227f97fff",
+        "inputs/experiment.json": "e6e6e6886a3512e02bb394cbd269755852e367c198ab612f8df731527c7db5e8",
+        "inputs/requested.json": "ab89e5698c651971ba842edba85c5c9e6c2baf92d7bf6e38541b22a78ebaaa18",
+        "run-report.json": "7f0313c63cd286bf06150c1ef8f76ffae55de3302a4f54c4e1d81979da787271",
+        "runner.py": "65bdf6c5eb4a47af829283a0b07d4b78ad45e8a95139607b96a613d6ffbf9193",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "25d80e15e1c826e840baf9425b3c46a8c6ebcc79f3e4fc71ef2c0e826271bc42",
+        "source.diff.patch": "ee3d59b4b56435cd6219e430d0848b96ff3aed412111d98e2fe9058ed3e5ffc5",
+        "variant-base-manifest.json": "1c46f2432e47fcbf59b14b0139e5c3dbda16a332b5bd50dd383800dec0c58427",
+        "variant-creation-manifest.json": "d09470f514bb626ebbc25d19a4c5b4bf2fcdac5f7c9e320146c8d83634e1ea46",
+        "variant-integrity.json": "78357058dc61131031abd1965d8c9d767b049efdd5e17e3f43201b41e22b057f",
+        "variant-provenance.json": "e0cb69b8dba4b34cc2d59af85c70facc039a225d7a1edbe452f8d4f1c8da8637",
+        "variant-variant.json": "5507ef83465617f93a53f9ad6cfed6d3ada15b49356a2f34dedcee2b17c0662b",
+        "workspace-source-manifest.json": "5fabea37b1ad5dfd3cc7ffcb3d3387a5e72de63c0488df3474149ec991c24b63"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

@@ -1,0 +1,894 @@
+{
+  "parents": {
+    "16_bit_music": [
+      "8_bit_music"
+    ],
+    "4_color_palette": [],
+    "8_bit_music": [
+      "music"
+    ],
+    "8_bit_sound": [
+      "sound_effects"
+    ],
+    "8_color_palette": [
+      "4_color_palette"
+    ],
+    "animated_sprites": [
+      "sprites"
+    ],
+    "branching_dialogue": [
+      "dialogue",
+      "branching_nodes"
+    ],
+    "branching_nodes": [
+      "save_files"
+    ],
+    "character_backstories": [
+      "simple_story"
+    ],
+    "character_classes": [
+      "general_combat",
+      "save_files"
+    ],
+    "character_development": [
+      "character_backstories",
+      "save_files"
+    ],
+    "colored_text": [
+      "text"
+    ],
+    "controller": [],
+    "controls": [],
+    "dialogue": [
+      "simple_story"
+    ],
+    "difficulty_levels": [
+      "turn_based_combat",
+      "scripted_ai"
+    ],
+    "enemies": [
+      "lives_system"
+    ],
+    "exploration": [
+      "levels"
+    ],
+    "general_combat": [
+      "enemies"
+    ],
+    "high_scores": [
+      "score_system"
+    ],
+    "keyboard_and_mouse": [],
+    "levels": [],
+    "lives_system": [],
+    "local_leaderboards": [
+      "high_scores"
+    ],
+    "maps": [
+      "levels"
+    ],
+    "menu_system": [],
+    "multi_directional_scrolling": [
+      "scrolling"
+    ],
+    "multiple_endings": [
+      "branching_dialogue"
+    ],
+    "music": [],
+    "power_ups": [],
+    "recorded_sounds": [
+      "8_bit_sound"
+    ],
+    "save_files": [],
+    "score_system": [],
+    "scripted_ai": [
+      "enemies"
+    ],
+    "scrolling": [
+      "text"
+    ],
+    "secrets": [
+      "exploration"
+    ],
+    "simple_story": [],
+    "sound_effects": [],
+    "split_screen": [],
+    "sprites": [
+      "4_color_palette"
+    ],
+    "text": [],
+    "turn_based_combat": [
+      "general_combat"
+    ]
+  },
+  "rosters": {
+    "action": {
+      "added": [
+        "lives_system",
+        "simple_story"
+      ],
+      "before": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects"
+      ],
+      "before_totals": {
+        "core": [
+          21,
+          9,
+          32,
+          16
+        ],
+        "count": 18,
+        "scope": 29
+      },
+      "missing": {
+        "enemies": "lives_system",
+        "multiple_endings": "branching_dialogue"
+      },
+      "proposed": [
+        "text",
+        "levels",
+        "scrolling",
+        "controls",
+        "controller",
+        "keyboard_and_mouse",
+        "lives_system",
+        "enemies",
+        "4_color_palette",
+        "sprites",
+        "sound_effects",
+        "8_bit_sound",
+        "exploration",
+        "maps",
+        "simple_story",
+        "power_ups",
+        "menu_system",
+        "split_screen"
+      ],
+      "proposed_totals": {
+        "core": [
+          21,
+          9,
+          30,
+          12
+        ],
+        "count": 18,
+        "scope": 27
+      },
+      "removed": [
+        "multiple_endings",
+        "general_combat"
+      ],
+      "steps": [
+        {
+          "remove": "multiple_endings",
+          "replace": [
+            "dialogue"
+          ]
+        },
+        {
+          "remove": "enemies",
+          "replace": [
+            "lives_system"
+          ]
+        },
+        {
+          "remove": "general_combat",
+          "replace": [
+            "enemies"
+          ]
+        },
+        {
+          "remove": "dialogue",
+          "replace": [
+            "simple_story"
+          ]
+        }
+      ]
+    },
+    "adventure": {
+      "added": [
+        "enemies",
+        "sound_effects"
+      ],
+      "before": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "local_leaderboards",
+        "split_screen",
+        "score_system",
+        "lives_system",
+        "simple_story",
+        "dialogue",
+        "character_backstories",
+        "multiple_endings",
+        "controls",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "secrets"
+      ],
+      "before_totals": {
+        "core": [
+          12,
+          7,
+          15,
+          29
+        ],
+        "count": 19,
+        "scope": 26
+      },
+      "missing": {
+        "8_bit_sound": "sound_effects",
+        "general_combat": "enemies",
+        "local_leaderboards": "high_scores",
+        "multiple_endings": "branching_dialogue"
+      },
+      "proposed": [
+        "text",
+        "levels",
+        "controls",
+        "controller",
+        "keyboard_and_mouse",
+        "lives_system",
+        "enemies",
+        "4_color_palette",
+        "sound_effects",
+        "secrets",
+        "exploration",
+        "maps",
+        "character_backstories",
+        "simple_story",
+        "dialogue",
+        "score_system",
+        "split_screen"
+      ],
+      "proposed_totals": {
+        "core": [
+          14,
+          4,
+          17,
+          19
+        ],
+        "count": 17,
+        "scope": 22
+      },
+      "removed": [
+        "8_bit_sound",
+        "local_leaderboards",
+        "multiple_endings",
+        "general_combat"
+      ],
+      "steps": [
+        {
+          "remove": "8_bit_sound",
+          "replace": [
+            "sound_effects"
+          ]
+        },
+        {
+          "remove": "local_leaderboards",
+          "replace": [
+            "score_system"
+          ]
+        },
+        {
+          "remove": "multiple_endings",
+          "replace": [
+            "dialogue"
+          ]
+        },
+        {
+          "remove": "general_combat",
+          "replace": [
+            "enemies"
+          ]
+        }
+      ]
+    },
+    "puzzle": {
+      "added": [
+        "enemies",
+        "sound_effects",
+        "exploration"
+      ],
+      "before": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "local_leaderboards",
+        "split_screen",
+        "score_system",
+        "lives_system",
+        "simple_story",
+        "dialogue",
+        "character_backstories",
+        "multiple_endings",
+        "controls",
+        "general_combat",
+        "levels",
+        "secrets"
+      ],
+      "before_totals": {
+        "core": [
+          8,
+          6,
+          25,
+          29
+        ],
+        "count": 19,
+        "scope": 27
+      },
+      "missing": {
+        "8_bit_sound": "sound_effects",
+        "general_combat": "enemies",
+        "local_leaderboards": "high_scores",
+        "multiple_endings": "branching_dialogue",
+        "secrets": "exploration"
+      },
+      "proposed": [
+        "text",
+        "levels",
+        "scrolling",
+        "controls",
+        "controller",
+        "keyboard_and_mouse",
+        "lives_system",
+        "enemies",
+        "4_color_palette",
+        "sound_effects",
+        "exploration",
+        "character_backstories",
+        "simple_story",
+        "dialogue",
+        "menu_system",
+        "score_system",
+        "split_screen"
+      ],
+      "proposed_totals": {
+        "core": [
+          11,
+          3,
+          27,
+          18
+        ],
+        "count": 17,
+        "scope": 23
+      },
+      "removed": [
+        "8_bit_sound",
+        "local_leaderboards",
+        "multiple_endings",
+        "general_combat",
+        "secrets"
+      ],
+      "steps": [
+        {
+          "remove": "8_bit_sound",
+          "replace": [
+            "sound_effects"
+          ]
+        },
+        {
+          "remove": "local_leaderboards",
+          "replace": [
+            "score_system"
+          ]
+        },
+        {
+          "remove": "multiple_endings",
+          "replace": [
+            "dialogue"
+          ]
+        },
+        {
+          "remove": "general_combat",
+          "replace": [
+            "enemies"
+          ]
+        },
+        {
+          "remove": "secrets",
+          "replace": [
+            "exploration"
+          ]
+        }
+      ]
+    },
+    "racing": {
+      "added": [
+        "lives_system",
+        "simple_story"
+      ],
+      "before": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "levels",
+        "maps",
+        "sound_effects"
+      ],
+      "before_totals": {
+        "core": [
+          20,
+          8,
+          32,
+          11
+        ],
+        "count": 16,
+        "scope": 26
+      },
+      "missing": {
+        "enemies": "lives_system",
+        "multiple_endings": "branching_dialogue"
+      },
+      "proposed": [
+        "text",
+        "levels",
+        "scrolling",
+        "controls",
+        "controller",
+        "keyboard_and_mouse",
+        "lives_system",
+        "4_color_palette",
+        "sprites",
+        "sound_effects",
+        "8_bit_sound",
+        "maps",
+        "simple_story",
+        "power_ups",
+        "menu_system",
+        "split_screen"
+      ],
+      "proposed_totals": {
+        "core": [
+          18,
+          8,
+          27,
+          12
+        ],
+        "count": 16,
+        "scope": 24
+      },
+      "removed": [
+        "multiple_endings",
+        "enemies"
+      ],
+      "steps": [
+        {
+          "remove": "multiple_endings",
+          "replace": [
+            "dialogue"
+          ]
+        },
+        {
+          "remove": "enemies",
+          "replace": [
+            "lives_system"
+          ]
+        },
+        {
+          "remove": "dialogue",
+          "replace": [
+            "simple_story"
+          ]
+        }
+      ]
+    },
+    "role_playing": {
+      "added": [
+        "enemies",
+        "sound_effects",
+        "exploration"
+      ],
+      "before": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "menu_system",
+        "local_leaderboards",
+        "split_screen",
+        "score_system",
+        "lives_system",
+        "simple_story",
+        "dialogue",
+        "character_backstories",
+        "multiple_endings",
+        "controls",
+        "general_combat",
+        "levels",
+        "maps",
+        "secrets"
+      ],
+      "before_totals": {
+        "core": [
+          11,
+          6,
+          20,
+          29
+        ],
+        "count": 19,
+        "scope": 27
+      },
+      "missing": {
+        "8_bit_sound": "sound_effects",
+        "general_combat": "enemies",
+        "local_leaderboards": "high_scores",
+        "multiple_endings": "branching_dialogue",
+        "secrets": "exploration"
+      },
+      "proposed": [
+        "text",
+        "levels",
+        "controls",
+        "controller",
+        "keyboard_and_mouse",
+        "lives_system",
+        "enemies",
+        "4_color_palette",
+        "sound_effects",
+        "exploration",
+        "maps",
+        "character_backstories",
+        "simple_story",
+        "dialogue",
+        "menu_system",
+        "score_system",
+        "split_screen"
+      ],
+      "proposed_totals": {
+        "core": [
+          14,
+          3,
+          22,
+          18
+        ],
+        "count": 17,
+        "scope": 23
+      },
+      "removed": [
+        "8_bit_sound",
+        "local_leaderboards",
+        "multiple_endings",
+        "general_combat",
+        "secrets"
+      ],
+      "steps": [
+        {
+          "remove": "8_bit_sound",
+          "replace": [
+            "sound_effects"
+          ]
+        },
+        {
+          "remove": "local_leaderboards",
+          "replace": [
+            "score_system"
+          ]
+        },
+        {
+          "remove": "multiple_endings",
+          "replace": [
+            "dialogue"
+          ]
+        },
+        {
+          "remove": "general_combat",
+          "replace": [
+            "enemies"
+          ]
+        },
+        {
+          "remove": "secrets",
+          "replace": [
+            "exploration"
+          ]
+        }
+      ]
+    },
+    "simulation": {
+      "added": [
+        "lives_system",
+        "simple_story"
+      ],
+      "before": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "local_leaderboards",
+        "split_screen",
+        "score_system",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "levels",
+        "sound_effects"
+      ],
+      "before_totals": {
+        "core": [
+          10,
+          8,
+          30,
+          15
+        ],
+        "count": 16,
+        "scope": 24
+      },
+      "missing": {
+        "enemies": "lives_system",
+        "local_leaderboards": "high_scores",
+        "multiple_endings": "branching_dialogue"
+      },
+      "proposed": [
+        "text",
+        "levels",
+        "scrolling",
+        "controls",
+        "controller",
+        "keyboard_and_mouse",
+        "lives_system",
+        "4_color_palette",
+        "sound_effects",
+        "8_bit_sound",
+        "simple_story",
+        "power_ups",
+        "menu_system",
+        "score_system",
+        "split_screen"
+      ],
+      "proposed_totals": {
+        "core": [
+          8,
+          8,
+          25,
+          14
+        ],
+        "count": 15,
+        "scope": 21
+      },
+      "removed": [
+        "local_leaderboards",
+        "multiple_endings",
+        "enemies"
+      ],
+      "steps": [
+        {
+          "remove": "local_leaderboards",
+          "replace": [
+            "score_system"
+          ]
+        },
+        {
+          "remove": "multiple_endings",
+          "replace": [
+            "dialogue"
+          ]
+        },
+        {
+          "remove": "enemies",
+          "replace": [
+            "lives_system"
+          ]
+        },
+        {
+          "remove": "dialogue",
+          "replace": [
+            "simple_story"
+          ]
+        }
+      ]
+    },
+    "sports": {
+      "added": [
+        "lives_system",
+        "simple_story"
+      ],
+      "before": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "levels",
+        "sound_effects",
+        "music"
+      ],
+      "before_totals": {
+        "core": [
+          10,
+          15,
+          30,
+          11
+        ],
+        "count": 15,
+        "scope": 24
+      },
+      "missing": {
+        "enemies": "lives_system",
+        "multiple_endings": "branching_dialogue"
+      },
+      "proposed": [
+        "text",
+        "levels",
+        "scrolling",
+        "controls",
+        "controller",
+        "keyboard_and_mouse",
+        "lives_system",
+        "4_color_palette",
+        "sound_effects",
+        "8_bit_sound",
+        "music",
+        "simple_story",
+        "power_ups",
+        "menu_system",
+        "split_screen"
+      ],
+      "proposed_totals": {
+        "core": [
+          8,
+          15,
+          25,
+          12
+        ],
+        "count": 15,
+        "scope": 22
+      },
+      "removed": [
+        "multiple_endings",
+        "enemies"
+      ],
+      "steps": [
+        {
+          "remove": "multiple_endings",
+          "replace": [
+            "dialogue"
+          ]
+        },
+        {
+          "remove": "enemies",
+          "replace": [
+            "lives_system"
+          ]
+        },
+        {
+          "remove": "dialogue",
+          "replace": [
+            "simple_story"
+          ]
+        }
+      ]
+    },
+    "strategy": {
+      "added": [
+        "simple_story"
+      ],
+      "before": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "score_system",
+        "lives_system",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "sound_effects"
+      ],
+      "before_totals": {
+        "core": [
+          10,
+          8,
+          30,
+          20
+        ],
+        "count": 17,
+        "scope": 26
+      },
+      "missing": {
+        "multiple_endings": "branching_dialogue"
+      },
+      "proposed": [
+        "text",
+        "levels",
+        "scrolling",
+        "controls",
+        "controller",
+        "keyboard_and_mouse",
+        "general_combat",
+        "lives_system",
+        "enemies",
+        "4_color_palette",
+        "sound_effects",
+        "8_bit_sound",
+        "simple_story",
+        "power_ups",
+        "menu_system",
+        "score_system",
+        "split_screen"
+      ],
+      "proposed_totals": {
+        "core": [
+          10,
+          8,
+          28,
+          19
+        ],
+        "count": 17,
+        "scope": 25
+      },
+      "removed": [
+        "multiple_endings"
+      ],
+      "steps": [
+        {
+          "remove": "multiple_endings",
+          "replace": [
+            "dialogue"
+          ]
+        },
+        {
+          "remove": "dialogue",
+          "replace": [
+            "simple_story"
+          ]
+        }
+      ]
+    }
+  }
+}

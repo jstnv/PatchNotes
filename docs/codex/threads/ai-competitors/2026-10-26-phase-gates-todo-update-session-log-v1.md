@@ -1,0 +1,6 @@
+# Rival phase-gates TODO update — 2026-10-26
+
+- **Branch/HEAD:** `main`, `087df09d653858b72c6e2dc344352237433dd3ac`. The shared worktree had pre-existing edits, including canonical `rival_trial.gd`; they and `.codex-godot-temp` were preserved.
+- **Changed this turn:** `docs/codex/TODO.md` item 22 next-work paragraph. It now pairs whole-supply Design/Alpha Feature exhaustion with the hard full-Scope Alpha/release gate, names concrete blocked/hidden/empty/short-cash cases, and keeps search, affordability, recovery and numerical outcomes OPEN. Existing item 22 rulings and all other queue entries were preserved. No source, simulator, commit or push.
+- **Checks:** Read `CURRENT_STATE.md`, `TODO.md`, `README.md` and the dated whole-supply decision; inspected branch, HEAD, scoped status and TODO diff before the edit. Re-read item 22 immediately before its minimal edit. `git -c core.whitespace=cr-at-eol diff --check -- docs/codex/TODO.md` **PASS**; Git reported only an LF/CRLF conversion warning. `rg -n "2026-10-26 next work|whole-supply phase gate|full-Scope release invariant" docs/codex/TODO.md -m 3` found the coordinated entries.
+- **Follow-up:** Source-matched private design study and versioned handoff are required before queuing canonical implementation. No gameplay behavior or balance approval is claimed by this TODO edit.

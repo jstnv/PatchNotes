@@ -1,0 +1,196 @@
+--- base/scripts/debug/verify_two_parent_prototype.gd
++++ candidate/scripts/debug/verify_two_parent_prototype.gd
+@@ -0,0 +1,93 @@
++## Experiment 009 private mechanics fixtures. Not a canonical verification suite.
++extends SceneTree
++
++var failures := 0
++var passes := 0
++
++func _initialize() -> void:
++	call_deferred("_verify")
++
++func check(ok: bool, label: String) -> void:
++	if ok:
++		passes += 1
++		print("PASS: " + label)
++	else:
++		failures += 1
++		push_error("FAIL: " + label)
++
++func _verify() -> void:
++	var locked := RunState.new()
++	locked.initialize_cash_cents(500000)
++	_inject_test_parent(locked)
++	locked._owned_features.erase(&"8_bit_music")
++	var blocked := locked.get_feature_store_offer(&"recorded_sounds")
++	check(not blocked.unlocked and blocked.missing_parents == ["8-Bit Music"] and blocked.parents.size() == 2, "Second parent is a visible AND gate")
++	var blocked_quote := locked.get_feature_research_quote(&"recorded_sounds")
++	check(not blocked_quote.can_admit and not locked.admit_feature_research(blocked_quote) and locked.get_cash_cents() == 500000 and locked.get_completed_run_cycles() == 0, "Missing parent rejects admission without mutation")
++	locked._feature_research.append({"id":&"test:music","feature_id":&"8_bit_music","base_cents":45000,"actions":1,"admitted_cycle":0,"payments":[]})
++	check(not locked.get_feature_store_offer(&"recorded_sounds").unlocked, "Queued parent remains unowned")
++	locked._owned_features[&"8_bit_music"] = true
++	check(locked.get_feature_store_offer(&"recorded_sounds").unlocked, "Both owned parents unlock child")
++
++	var poor := RunState.new()
++	poor.initialize_cash_cents(84999)
++	_inject_test_parent(poor)
++	var poor_quote := poor.get_feature_research_quote(&"recorded_sounds")
++	check(poor_quote.down_cents == 85000 and not poor_quote.can_admit and not poor.admit_feature_research(poor_quote), "One-cent-short down payment rejects")
++	check(poor.get_cash_cents() == 84999 and poor.get_feature_research_queue().is_empty(), "Rejected down payment preserves cash and queue")
++
++	var run := RunState.new()
++	run.initialize_cash_cents(500000)
++	_inject_test_parent(run)
++	var before := run.get_feature_research_quote(&"recorded_sounds")
++	check(before.unlocked and before.down_cents == 85000 and before.due_cents == 85000 and before.discount_percent == 0, "Both owned with zero credits uses half-base payments")
++	check(run.admit_feature_research(before) and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 0, "Admission charges base-half and no cycle")
++	var project := ProjectState.new(30)
++	check(run.record_resolved_feature(project,&"8_bit_sound",&"design") and run.record_resolved_feature(project,&"8_bit_music",&"design"), "Both named parents earn credits in one project")
++	check(not run.record_resolved_feature(project,&"8_bit_sound",&"design") and run.get_feature_familiarity(&"8_bit_sound") == 1, "Same parent cannot earn twice in one project")
++	var later := run.get_feature_research_quote(&"recorded_sounds")
++	check(later.discount_percent == 20 and later.down_cents == 85000 and later.due_cents == 68000 and later.paid_cents == 85000, "Mid-research credits discount only the unpaid installment")
++	check(run.research_feature(later) and run.owns_feature(&"recorded_sounds") and run.get_cash_cents() == 347000 and run.get_completed_run_cycles() == 1, "One successful research action pays discounted due and grants ownership")
++	for index in range(3):
++		var another := ProjectState.new(30)
++		run.record_resolved_feature(another,&"8_bit_sound",&"design")
++		run.record_resolved_feature(another,&"8_bit_music",&"design")
++	check(run.get_feature_familiarity(&"8_bit_sound") == 4 and run.get_feature_familiarity(&"8_bit_music") == 4 and run.get_feature_store_offer(&"recorded_sounds").discount_percent == 50, "Eight total parent credits retain history but share one 50% cap")
++	check(not run.record_resolved_feature(ProjectState.new(30),&"8_bit_music",&"contract"), "Contract use grants no parent credit")
++
++	var single := RunState.new()
++	single.initialize_cash_cents(500000)
++	check(single.get_feature_store_offer(&"colored_text").price_cents == 65000 and single.get_feature_store_offer(&"difficulty_levels").discount_percent == 0, "Current single-parent and Gameplay count quotes retain baseline")
++	single.record_resolved_feature(ProjectState.new(30),&"text",&"design")
++	check(single.get_feature_store_offer(&"colored_text").price_cents == 58500 and single.get_feature_research_quote(&"colored_text").down_cents == 32500 and single.get_feature_research_quote(&"colored_text").due_cents == 29250, "Single-parent familiarity still discounts only its installment")
++
++	var graph := RunState.new()
++	graph.initialize_cash_cents(0)
++	check(graph.create_studio_with_traits("Graph Fixture",&"action",[]), "Acquisition-path fixture starts as a legal Action Studio")
++	_add_node(graph,&"test_p1",[&"text"])
++	_add_node(graph,&"test_p2",[&"text"])
++	_add_node(graph,&"test_child",[&"test_p1",&"test_p2"])
++	var path := graph.get_feature_acquisition_quote(&"test_child")
++	var ids: Array = path.steps.map(func(step: Dictionary) -> StringName: return step.id)
++	check(path.available and ids == [&"text",&"test_p1",&"test_p2",&"test_child"], "Converged parent path counts shared ancestor once")
++	_add_node(graph,&"test_bad",[&"text",&"text"])
++	check(graph.get_feature_store_offer(&"test_bad").is_empty(), "Duplicate named parent rejects quote")
++	_add_node(graph,&"test_missing",[&"unknown_parent"])
++	check(graph.get_feature_store_offer(&"test_missing").is_empty(), "Unknown named parent rejects quote")
++	_add_node(graph,&"test_cycle_a",[&"test_cycle_b"])
++	_add_node(graph,&"test_cycle_b",[&"test_cycle_a"])
++	check(not graph.get_feature_acquisition_quote(&"test_cycle_a").available, "Cycle rejects acquisition path")
++
++	print("Two-parent prototype: %d passes, %d failures" % [passes,failures])
++	quit(failures)
++
++func _add_node(run: RunState,id: StringName,parents: Array[StringName]) -> void:
++	var entry := {"id":str(id),"name":str(id),"type":"feature","phase":"design","department":"", "purchase_parent":str(parents[0]),"purchase_parents":parents.map(func(value: StringName) -> String: return str(value)),"gameplay_features_required":0,"base_price_cents":65000}
++	run._feature_definitions[id] = entry
++	run._feature_offers[id] = entry
++
++func _inject_test_parent(run: RunState) -> void:
++	var entry: Dictionary = run._feature_offers[&"recorded_sounds"].duplicate(true)
++	entry["purchase_parents"] = ["8_bit_sound","8_bit_music"]
++	run._feature_definitions[&"recorded_sounds"] = entry
++	run._feature_offers[&"recorded_sounds"] = entry
+--- base/scripts/run_state.gd
++++ candidate/scripts/run_state.gd
+@@ -284,13 +284,28 @@
+ func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
+ 	var path := {"available":true,"steps":[],"price_cents":0,"cycles":0,"requirements":[]}
+ 	var pending: Array[StringName] = []
+-	var seen: Dictionary = {}
+-	while not id.is_empty():
+-		if seen.has(id) or not _feature_definitions.has(id): return {"available":false,"reason":"Acquisition quote unavailable for this Feature."}
+-		seen[id] = true
+-		pending.push_front(id)
+-		var offer := get_feature_store_offer(id)
+-		id = StringName(offer.get("parent", &""))
++	var visiting: Dictionary = {}
++	var visited: Dictionary = {}
++	var stack: Array = [{"id":id,"expanded":false}]
++	while not stack.is_empty():
++		var item: Dictionary = stack.pop_back()
++		var feature := StringName(item.id)
++		if feature.is_empty(): continue
++		if item.expanded:
++			visiting.erase(feature)
++			visited[feature] = true
++			pending.append(feature)
++			continue
++		if visited.has(feature): continue
++		if visiting.has(feature) or not _feature_definitions.has(feature): return {"available":false,"reason":"Acquisition quote unavailable for this Feature."}
++		visiting[feature] = true
++		stack.append({"id":feature,"expanded":true})
++		if _feature_offers.has(feature):
++			var node_offer := get_feature_store_offer(feature)
++			if node_offer.is_empty(): return {"available":false,"reason":"Acquisition quote unavailable for this Feature."}
++			var parents: Array = node_offer.parents
++			for index in range(parents.size()-1,-1,-1):
++				stack.append({"id":parents[index],"expanded":false})
+ 	var saving_available := resourceful_saving(10000) > 0
+ 	for feature: StringName in pending:
+ 		var offer := get_feature_store_offer(feature)
+@@ -320,7 +335,7 @@
+ 		path.cycles += cycles
+ 		if not primitive and not owned:
+ 			if needs_starter_selection() and not path.requirements.has("Later Features require the first game's completion."): path.requirements.append("Later Features require the first game's completion.")
+-			if not offer.unlocked and StringName(offer.parent).is_empty(): path.requirements.append(offer.prerequisite)
++			if not offer.unlocked and not path.requirements.has(offer.prerequisite): path.requirements.append(offer.prerequisite)
+ 	return path
+ 
+ 
+@@ -496,22 +511,46 @@
+ 	if not _feature_offers.has(id):
+ 		return {}
+ 	var entry: Dictionary = _feature_offers[id]
+-	var parent := StringName(entry.purchase_parent)
++	var parents: Array[StringName] = []
++	if entry.has("purchase_parents"):
++		if not entry.purchase_parents is Array or entry.purchase_parents.is_empty(): return {}
++		for raw_parent: Variant in entry.purchase_parents:
++			if not raw_parent is String or raw_parent.is_empty(): return {}
++			var named_parent := StringName(raw_parent)
++			if named_parent == id or parents.has(named_parent) or not _feature_definitions.has(named_parent): return {}
++			parents.append(named_parent)
++		if not StringName(entry.get("purchase_parent", "")).is_empty() and StringName(entry.purchase_parent) != parents[0]: return {}
++	else:
++		var old_parent := StringName(entry.get("purchase_parent", ""))
++		if not old_parent.is_empty():
++			if old_parent == id or not _feature_definitions.has(old_parent): return {}
++			parents.append(old_parent)
++	var parent := parents[0] if not parents.is_empty() else &""
+ 	var required := int(entry.gameplay_features_required)
+ 	var gameplay_owned := 0
+ 	for owned_id: StringName in _owned_features:
+ 		if _feature_definitions[owned_id].get("department", "") == "gameplay":
+ 			gameplay_owned += 1
+-	var unlocked := (parent.is_empty() or owns_feature(parent)) and gameplay_owned >= required
+-	var discount := mini(get_feature_familiarity(parent), 5) * 10 if not parent.is_empty() and required == 0 else 0
++	var unlocked := gameplay_owned >= required
++	var credits := 0
++	var parent_names: Array[String] = []
++	var missing_names: Array[String] = []
++	for named_parent: StringName in parents:
++		var parent_name := str(_feature_definitions[named_parent].name)
++		parent_names.append(parent_name)
++		if not owns_feature(named_parent):
++			unlocked = false
++			missing_names.append(parent_name)
++		credits += get_feature_familiarity(named_parent)
++	var discount := mini(credits, 5) * 10 if not parents.is_empty() and required == 0 else 0
+ 	var base_price := int(entry.base_price_cents)
+ 	var price: int = (base_price / 100) * (100 - discount)
+ 	var prerequisite := "New root"
+-	if not parent.is_empty():
+-		prerequisite = "Own " + str(_feature_definitions[parent].name)
++	if not parents.is_empty():
++		prerequisite = "Own " + " and ".join(parent_names)
+ 	elif required > 0:
+ 		prerequisite = "Own %d distinct Gameplay Features (%d owned)" % [required, gameplay_owned]
+-	return {"id": id, "name": entry.name, "parent": parent, "prerequisite": prerequisite,
++	return {"id": id, "name": entry.name, "parent": parent, "parents":parents,"missing_parents":missing_names,"parent_credits":credits,"prerequisite": prerequisite,
+ 		"owned": owns_feature(id), "unlocked": unlocked, "base_price_cents": base_price,
+ 		"discount_percent": discount, "price_cents": price,
+ 		"affordable": _cash_initialized and _cash_cents >= price}

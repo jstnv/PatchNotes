@@ -13,7 +13,7 @@ func snapshot(run: RunState) -> Array:
 	return [run.get_studio_name(), run.get_studio_specialty(), run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.needs_starter_selection()]
 
 func _run() -> void:
-	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v3.json"))
+	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v4.json"))
 	for genre: String in fixtures:
 		var run := RunState.new()
 		run.initialize_cash_cents(0)
@@ -93,7 +93,7 @@ func _verify_ui() -> void:
 	menu.call("_confirm_studio")
 	menu.call("_confirm_studio")
 	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
-	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids().size() == 18, "Menu commits exactly one specialty")
+	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids() == StudioSpecialties.preview(&"action").ids, "Menu commits exactly one specialty")
 	before = snapshot(run)
 	check(snapshot(run) == before, "Duplicate confirmation does not grant again")
 	var studio: StudioPhase = game.get("_active_phase")

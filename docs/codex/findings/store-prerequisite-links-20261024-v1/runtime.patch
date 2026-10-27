@@ -1,0 +1,247 @@
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -7,6 +7,12 @@
+ const USABILITY_PREDECESSOR_SOURCES := [
+ 	"22f504d07fd73970dda3d8746e0cf23ca741afc1436acd5ff3f1630787933036",
+ 	"6fffe610efd5a29e99f6b6359091f470f56f182814179328c91f6c8ffb5b92cc",
++]
++# Prerequisite link presentation only. Actual preceding editor/PCK worlds retain
++# every field/RNG; admit only these identities with the current content revision.
++const USABILITY_PRESENTATION_SOURCES := [
++	"6b39be120a228132e8cd78b6c00194fc95f734430ee485901d3479d20b61d315",
++	"123a714caaa52bc8b9bf150620d7bbbf178263078a397e9d91373e6fff0b67c9",
+ ]
+ const Development := preload("res://scripts/simulation/development_session.gd")
+ const Replay := preload("res://scripts/simulation/development_replay.gd")
+@@ -251,7 +257,7 @@
+ 	var commission_predecessor: bool = predecessor_source in COMMISSION_PREDECESSOR_SOURCES
+ 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
+ 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
+-	var source_ok: bool = predecessor_source==Replay.source_identity() or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
++	var source_ok: bool = predecessor_source==Replay.source_identity() or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+ 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
+ 	if commission_predecessor: paired_revision = StudioCheckpoint.CommissionPrevious.new().revision()
+ 	if support_predecessor: paired_revision = StudioCheckpoint.SupportPrevious.new().revision()
+--- before/scripts/ui/feature_store_map.gd
++++ after/scripts/ui/feature_store_map.gd
+@@ -7,7 +7,13 @@
+ var tree: Control
+ var popup: PanelContainer
+ var guidance_scroll: ScrollContainer
+-var parent_links: VBoxContainer
++var parent_links: Control
++var _parent_tween: Tween
++var _parents_expanded := false
++var _parent_focus_requested := false
++var _parent_revision := 0
++const PARENT_GAP := 12.0
++const PARENT_BUTTON_GAP := 8.0
+ var shopping_details: Label
+ var price: RichTextLabel
+ var _missing_targets: Array[StringName] = []
+@@ -129,8 +135,12 @@
+ 	var guidance_content := VBoxContainer.new()
+ 	guidance_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ 	guidance_scroll.add_child(guidance_content)
+-	parent_links = VBoxContainer.new()
+-	guidance_content.add_child(parent_links)
++	# A sibling overlay unfolds to the right, without growing the detail panel.
++	parent_links = Control.new()
++	parent_links.name = "PrerequisiteLinks"
++	parent_links.mouse_filter = Control.MOUSE_FILTER_IGNORE
++	add_child(parent_links)
++	parent_links.hide()
+ 	details.add_child(guidance_scroll)
+ 	shopping_details = Label.new()
+ 	shopping_details.name = "ShoppingDetails"
+@@ -504,6 +514,7 @@
+ 	_scroll_after_layout(Vector2.ZERO, _view_revision)
+ 
+ func dismiss() -> void:
++	_close_parent_links()
+ 	_stop_focus_animation()
+ 	if not store._selected.is_empty() and store._nodes.has(store._selected) and is_instance_valid(store._nodes[store._selected]):
+ 		var button: Button = store._nodes[store._selected]
+@@ -516,6 +527,7 @@
+ 	store._refresh_spending_advice()
+ 
+ func show_details() -> void:
++	_close_parent_links()
+ 	store._buy.disabled = true
+ 	price.text = ""
+ 	_missing_targets.clear()
+@@ -572,22 +584,89 @@
+ 	if _missing_targets.is_empty():
+ 		store._purchase()
+ 		return
+-	if _missing_targets.size() == 1:
+-		_focus_node(_missing_targets[0])
++	if _parents_expanded:
++		_close_parent_links()
+ 		return
+-	# An AND gate offers both parents, rather than picking an arbitrary branch.
+-	for child in parent_links.get_children(): parent_links.remove_child(child); child.queue_free()
++	_parents_expanded = true
++	_parent_focus_requested = store._buy.has_focus()
++	_parent_revision += 1
+ 	for id: StringName in _missing_targets:
+ 		var link := Button.new()
+ 		link.text = store._run._feature_definitions[id].name
+ 		link.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ 		link.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
++		link.mouse_filter = Control.MOUSE_FILTER_IGNORE
++		link.focus_mode = Control.FOCUS_NONE
++		link.modulate.a = 0.0
+ 		link.pressed.connect(_focus_node.bind(id))
+ 		parent_links.add_child(link)
+-	guidance_scroll.custom_minimum_size.y = 90
+-	guidance_scroll.show()
+-	popup.reset_size()
+-	position_details.call_deferred()
++	_layout_parent_links()
++	# Reuse the existing camera framing so the selected card, panel, links and
++	# entrance overshoot all have room, including at the outer map edges.
++	focus_selection(store._selected)
++
++func _close_parent_links() -> void:
++	_parent_revision += 1
++	_parents_expanded = false
++	_parent_focus_requested = false
++	if _parent_tween != null and _parent_tween.is_valid(): _parent_tween.kill()
++	if parent_links == null: return
++	parent_links.hide()
++	for child in parent_links.get_children():
++		parent_links.remove_child(child)
++		child.queue_free()
++	if store._buy != null: store._buy.focus_neighbor_right = NodePath()
++
++func _layout_parent_links() -> void:
++	var count := parent_links.get_child_count()
++	if count == 0: return
++	var card_width: float = store._nodes[store._selected].get_global_rect().size.x
++	var room := _map_rect().size.x - popup.size.x - card_width - PARENT_GAP * 3.0 - MenuTransitions.ENTRANCE_DISTANCE
++	var width := floorf(clampf((room - PARENT_BUTTON_GAP * (count - 1)) / count, 96.0, 160.0))
++	var height := maxf(40.0, store._buy.size.y)
++	for button: Button in parent_links.get_children():
++		button.size.x = width
++		height = maxf(height, button.get_combined_minimum_size().y)
++	for index in count:
++		var button: Button = parent_links.get_child(index)
++		button.position = Vector2(index * (width + PARENT_BUTTON_GAP), 0)
++		button.size = Vector2(width, height)
++		var previous: Control = store._buy if index == 0 else parent_links.get_child(index - 1)
++		button.focus_neighbor_left = button.get_path_to(previous)
++		previous.focus_neighbor_right = previous.get_path_to(button)
++	parent_links.size = Vector2(count * width + (count - 1) * PARENT_BUTTON_GAP, height)
++
++func _parent_width() -> float:
++	return parent_links.size.x + PARENT_GAP + MenuTransitions.ENTRANCE_DISTANCE if _parents_expanded else 0.0
++
++func _position_parent_links() -> void:
++	if not _parents_expanded: return
++	parent_links.global_position = Vector2(popup.get_global_rect().end.x + PARENT_GAP, store._buy.global_position.y)
++
++func _reveal_parent_links() -> void:
++	if not _parents_expanded or not popup.visible: return
++	_layout_parent_links()
++	position_details()
++	_position_parent_links()
++	parent_links.show()
++	var revision := _parent_revision
++	_parent_tween = create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
++	for index in parent_links.get_child_count():
++		var button: Button = parent_links.get_child(index)
++		var destination := button.position.x
++		button.position.x += MenuTransitions.ENTRANCE_DISTANCE
++		_parent_tween.tween_property(button, "position:x", destination, MenuTransitions.ENTRANCE_SECONDS).set_delay(index * 0.05)
++		_parent_tween.tween_property(button, "modulate:a", 1.0, MenuTransitions.ENTRANCE_SECONDS).set_delay(index * 0.05)
++	_parent_tween.chain().tween_callback(func():
++		if revision != _parent_revision or not _parents_expanded: return
++		for button: Button in parent_links.get_children():
++			button.mouse_filter = Control.MOUSE_FILTER_STOP
++			button.focus_mode = Control.FOCUS_ALL
++		# Camera framing temporarily disables the action. Restore its keyboard
++		# focus only if the user has not moved focus elsewhere during entrance.
++		if _parent_focus_requested and get_viewport().gui_get_focus_owner() == null:
++			store._buy.grab_focus()
++		_parent_focus_requested = false)
+ 
+ func position_details() -> void:
+ 	if focusing or (_menu_tween != null and _menu_tween.is_running()): return
+@@ -595,10 +674,14 @@
+ 	var node_rect: Rect2 = store._nodes[store._selected].get_global_rect()
+ 	var limits := store._body.get_global_rect().grow(-8)
+ 	var point := Vector2(node_rect.end.x + 12, node_rect.position.y)
+-	if point.x + popup.size.x > limits.end.x: point.x = node_rect.position.x - popup.size.x - 12
+-	point.x = clampf(point.x, limits.position.x, maxf(limits.position.x, limits.end.x - popup.size.x))
+-	point.y = clampf(point.y, limits.position.y, maxf(limits.position.y, limits.end.y - popup.size.y))
++	var width := popup.size.x + _parent_width()
++	if point.x + width > limits.end.x and not _parents_expanded: point.x = node_rect.position.x - popup.size.x - 12
++	point.x = clampf(point.x, limits.position.x, maxf(limits.position.x, limits.end.x - width))
++	var height := popup.size.y
++	if _parents_expanded: height = maxf(height, store._buy.global_position.y - popup.global_position.y + parent_links.size.y)
++	point.y = clampf(point.y, limits.position.y, maxf(limits.position.y, limits.end.y - height))
+ 	popup.global_position = point
++	_position_parent_links()
+ 
+ func _map_rect() -> Rect2:
+ 	var rect := scroll.get_global_rect()
+@@ -651,7 +734,7 @@
+ 	final_zoom = maxf(0.6, final_zoom)
+ 	# Leave room on the right for the detail menu, including at outermost nodes.
+ 	_focus_padding = view_size / 2.0
+-	var target: Vector2 = store._nodes[id].get_rect().get_center() + Vector2((popup.size.x + 20.0) / (2.0 * final_zoom), 15.0)
++	var target: Vector2 = store._nodes[id].get_rect().get_center() + Vector2((popup.size.x + _parent_width() + 20.0) / (2.0 * final_zoom), 15.0)
+ 	_focus_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+ 	_focus_tween.tween_method(func(weight: float): _camera_frame(lerpf(old_zoom, final_zoom, weight), old_center.lerp(target, weight)), 0.0, 1.0, 0.30)
+ 	_focus_tween.tween_callback(_finish_focus.bind(id, final_zoom, target, _view_revision))
+@@ -691,7 +774,8 @@
+ 	_menu_tween.tween_property(popup, "modulate:a", 1.0, 0.20)
+ 	_menu_tween.chain().tween_callback(func():
+ 		store._buy.mouse_filter = Control.MOUSE_FILTER_STOP
+-		store._buy.focus_mode = Control.FOCUS_ALL)
++		store._buy.focus_mode = Control.FOCUS_ALL
++		_reveal_parent_links())
+ 
+ func _reveal_node(id: StringName) -> void:
+ 	_view_revision += 1
+@@ -761,7 +845,7 @@
+ 			if not clicked.is_empty(): _focus_node(clicked)
+ 			get_viewport().set_input_as_handled()
+ 			return
+-		var over_menu := popup.visible and popup.modulate.a > 0.05 and popup.get_global_rect().has_point(event.position)
++		var over_menu := (popup.visible and popup.modulate.a > 0.05 and popup.get_global_rect().has_point(event.position)) or (parent_links.is_visible_in_tree() and parent_links.get_global_rect().grow(MenuTransitions.ENTRANCE_DISTANCE).has_point(event.position))
+ 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT and not over_menu: dismiss()
+ 		if over_menu or not _map_rect().has_point(event.position): return
+ 		if event.pressed and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_MIDDLE]:
+@@ -790,7 +874,7 @@
+ 		get_viewport().set_input_as_handled()
+ 	elif event is InputEventKey and event.pressed and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed:
+ 		var directions := {KEY_LEFT: Vector2.LEFT, KEY_RIGHT: Vector2.RIGHT, KEY_UP: Vector2.UP, KEY_DOWN: Vector2.DOWN}
+-		if popup.visible and popup.is_ancestor_of(focused) and not event.is_action_pressed("ui_cancel"): return
++		if popup.visible and focused != null and (popup.is_ancestor_of(focused) or parent_links.is_ancestor_of(focused)) and not event.is_action_pressed("ui_cancel"): return
+ 		if directions.has(event.keycode):
+ 			_cancel_drag()
+ 			navigate_direction(directions[event.keycode])
+--- before/scripts/ui/menu_transitions.gd
++++ after/scripts/ui/menu_transitions.gd
+@@ -4,6 +4,8 @@
+ ## Visual-only entrance on the existing menus. No delayed gameplay callbacks.
+ const MENUS := ["main_menu.gd", "predevelopment_overlay.gd", "feature_store.gd", "publisher_browser.gd", "post_game_review.gd", "monthly_sales_report.gd"]
+ const PANELS := ["Dashboard", "SummaryPanel", "PriorityDialog", "TutorialDialog", "ContractCompletion", "ContractDetail", "ContractPriorities", "ContractModal"]
++const ENTRANCE_DISTANCE := 44.0
++const ENTRANCE_SECONDS := 0.24
+ var _motions: Dictionary = {}
+ 
+ func _ready() -> void:
+@@ -46,8 +48,8 @@
+ 		visual = menu.get_menu_transition_content()
+ 	# Layout may still settle vertically after opening. Never tween/restore its Y.
+ 	var rest_x := visual.position.x
+-	visual.position.x = rest_x + 44
++	visual.position.x = rest_x + ENTRANCE_DISTANCE
+ 	var tween: Tween = menu.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+ 	_motions[menu] = {"tween": tween, "rest_x": rest_x, "visual": visual}
+-	tween.tween_property(visual, "position:x", rest_x, 0.24)
++	tween.tween_property(visual, "position:x", rest_x, ENTRANCE_SECONDS)
+ 	tween.tween_callback(func(): _motions.erase(menu))

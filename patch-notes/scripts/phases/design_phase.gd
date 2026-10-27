@@ -468,7 +468,7 @@ func _on_play_card_pressed() -> void:
 	if not final_action.specialization_stat.is_empty():
 		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production ×1.50")
 	elif final_action.balanced_production:
-		_workspace.show_synergy("Balanced Production!", "Hand total shared across four categories")
+		_workspace.show_synergy("Balanced Production!", "1.25× Core total shared across four categories")
 
 
 func _on_proceed_to_alpha_pressed() -> void:

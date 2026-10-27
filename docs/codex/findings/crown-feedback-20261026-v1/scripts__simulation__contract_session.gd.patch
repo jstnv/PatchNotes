@@ -1,0 +1,34 @@
+--- current/scripts/simulation/contract_session.gd
+
++++ private/scripts/simulation/contract_session.gd
+
+@@ -176,7 +176,7 @@
+
+ 	var scores: Dictionary = {}
+ 	for category in range(4): scores[category] = _state.get_core_score_half_units(category)
+ 	return {"offer_id":_state.get_offer_id(),"hand_count":_state.get_successful_hand_count(),"required_hands":_state.get_required_hands(),"run_cycle":_run.get_completed_run_cycles(),"sequence":sequence,"candidates":candidates,"completed":_state.is_completed(),"priorities":_state.get_priority_distribution(),"scope":_state.get_scope(),"core_half_units":scores,
+-		"challenge_terms":_state.get_challenge_terms(),"successful_redraws":_state.get_challenge_redraws(),
++		"challenge_terms":_state.get_challenge_terms(),"successful_redraws":_state.get_challenge_redraws(),"available_redraws":_run.get_available_redraws(),"planning_pool":planning_pool(),
+ 		"challenge_preview":ContractChallenges.reward(_state.get_challenge_terms(),_state.get_scope(),scores,_state.get_challenge_redraws())}
+ 
+ 
+@@ -236,3 +236,18 @@
+
+ 	return definitions[mini(floori(definition_roll * definitions.size()), definitions.size() - 1)]
+ 
+ 
++
++
++# Detached public owned/eligible definitions for observation-only planning.
++# No random stream, future draw or mutable CardData reference is exposed.
++func planning_pool() -> Array:
++	var result: Array = []
++	var ids: Array = []
++	for id in _state.get_eligible_feature_ids():
++		if not _state.is_feature_exhausted(id): ids.append(id)
++	ids.append_array(ContractState.PASS_IDS)
++	for id in ids:
++		var card: CardData = catalog.get_card(id)
++		if card == null: continue
++		result.append({"definition":card.id,"card_type":card.card_type,"primary_stat":card.primary_stat,"primary_value":card.primary_value,"secondary_stat":card.secondary_stat,"secondary_value":card.secondary_value,"scope":card.scope,"renewable":card.renewable})
++	return result

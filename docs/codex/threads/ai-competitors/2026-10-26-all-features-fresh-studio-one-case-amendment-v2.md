@@ -1,0 +1,3 @@
+# One-case protocol correction, 2026-10-26
+
+The v1 run completed but its stress policy called the whole-supply selector with `enabled=false`. In this source that flag also disables `BetaChoice.pick`, contrary to the declared current Beta QA choice. The retained v1 result is a valid no-QA-selector observation, not the declared competent policy. Before running again, make a child variant changing only that argument to `true`; keep Adventure seed4417, all 42 owned Features, fresh cash, current Review table, one-release target, 180-command and 240-second bounds. The corrected run is the final one-case result. Keep both bundles and do not substitute a seed, cash grant or score target.

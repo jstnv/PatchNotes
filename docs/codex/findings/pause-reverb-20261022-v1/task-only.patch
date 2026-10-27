@@ -1,0 +1,197 @@
+--- before/scripts/audio/soundtrack.gd
++++ current/scripts/audio/soundtrack.gd
+@@ -8,7 +8,7 @@
+ const A := Map.MAIN_A
+ const B := Map.MAIN_B
+ const PAUSE_FADE := 0.3
+-const PAUSE_CUTOFF_HZ := 650.0
++const PAUSE_REVERB_WET := 0.38
+ var player: AudioStreamPlayer
+ var themes: AudioStreamSynchronized
+ var grid := Grid.new()
+@@ -18,7 +18,6 @@
+ var manually_paused := false
+ var last_sample_usec := 0
+ var _applied_weight := -1.0
+-var pause_filter: AudioEffectLowPassFilter
+ var pause_reverb: AudioEffectReverb
+ var pause_weight := 0.0
+ var _tree_was_paused := false
+@@ -80,11 +79,6 @@
+ 
+ func _build_pause_effects() -> void:
+ 	# Music only: settings continue to own bus volume/mute; SFX stays separate.
+-	pause_filter = AudioEffectLowPassFilter.new()
+-	pause_filter.db = AudioEffectFilter.FILTER_24DB
+-	# Very low resonance damps the passband too: across the steep filter it
+-	# removed much of the bass/melody, making continuing playback sound stopped.
+-	pause_filter.resonance = 0.5
+ 	pause_reverb = AudioEffectReverb.new()
+ 	pause_reverb.room_size = 0.65
+ 	pause_reverb.damping = 0.45
+@@ -92,18 +86,17 @@
+ 	pause_reverb.predelay_feedback = 0.2
+ 	pause_reverb.spread = 0.8
+ 	var bus := AudioServer.get_bus_index(&"Music")
+-	AudioServer.add_bus_effect(bus, pause_filter)
+ 	AudioServer.add_bus_effect(bus, pause_reverb)
+ 	_apply_pause_effects()
+ 
+ func _apply_pause_effects() -> void:
+-	pause_filter.cutoff_hz = exp(lerpf(log(20000.0), log(PAUSE_CUTOFF_HZ), pause_weight))
+-	pause_reverb.dry = lerpf(1.0, 0.8, pause_weight)
+-	pause_reverb.wet = 0.38 * pause_weight
++	# Keep the full original track; pause changes only the room's wet signal.
++	pause_reverb.dry = 1.0
++	pause_reverb.wet = PAUSE_REVERB_WET * pause_weight
+ 	var bus := AudioServer.get_bus_index(&"Music")
+ 	if bus < 0: return
+ 	for i in range(AudioServer.get_bus_effect_count(bus)):
+-		if AudioServer.get_bus_effect(bus, i) in [pause_filter, pause_reverb]:
++		if AudioServer.get_bus_effect(bus, i) == pause_reverb:
+ 			AudioServer.set_bus_effect_enabled(bus, i, pause_weight > 0.0)
+ 
+ func begin_gameplay_pause() -> void:
+@@ -156,7 +149,7 @@
+ 	var bus := AudioServer.get_bus_index(&"Music")
+ 	if bus >= 0:
+ 		for i in range(AudioServer.get_bus_effect_count(bus) - 1, -1, -1):
+-			if AudioServer.get_bus_effect(bus, i) in [pause_filter, pause_reverb]:
++			if AudioServer.get_bus_effect(bus, i) == pause_reverb:
+ 				AudioServer.remove_bus_effect(bus, i)
+ 
+ func presentation_seconds() -> float:
+--- before/scripts/ui/how_to_play_content.gd
++++ current/scripts/ui/how_to_play_content.gd
+@@ -69,7 +69,7 @@
+ 		]),
+ 		_section("controls", "Controls", "Navigate safely and keep your place.", [
+ 			_page("navigation", "Mouse & keyboard", "Choose folders above, then topics on the left.", "Click a folder or topic to read it. Tab and Shift+Tab move through the guide's controls. Left/Right moves between top folders; Up/Down moves through the topic list. Enter or Space activates a focused button.\n\nScroll long pages with the wheel, the scrollbar, or Page Up / Page Down. Escape closes the guide and restores focus to the button that opened it.\n\nIn play, click cards to select them and inspect the displayed hand before committing. Hover card fields and HUD values for extra detail."),
+-			_page("pause", "Pause & Settings", "Escape pauses play while the music keeps going with a muffled room sound.", "Resume continues the current state and returns to the normal music mix. Card animations rejoin the music rhythm. How to Play opens this reference while the game stays paused; closing it returns to Pause. Settings also works while paused.\n\nSettings controls window mode, window size and Master, Music and SFX levels. Display changes require confirmation and can revert if you do not keep them.\n\nMain Menu may ask you to discard work since the last Studio checkpoint. Cancel returns to Pause without losing that work."),
++			_page("pause", "Pause & Settings", "Escape pauses play while the music keeps going at your chosen volume with room reverb.", "Resume continues the current state and returns to the normal music mix. Card animations rejoin the music rhythm. How to Play opens this reference while the game stays paused; closing it returns to Pause. Settings also works while paused.\n\nSettings controls window mode, window size and Master, Music and SFX levels. Display changes require confirmation and can revert if you do not keep them.\n\nMain Menu may ask you to discard work since the last Studio checkpoint. Cancel returns to Pause without losing that work."),
+ 			_page("continue", "Saving & Continue", "Continue restores the last committed Studio checkpoint.", "The game saves at committed Studio boundaries, including supported Studio actions and returns after release or Contract completion.\n\nDevelopment and active Contract hands are not mid-phase saves. Leaving during them discards progress since that checkpoint, including an unsaved Contract advance. Returning to Main Menu explains the rollback before you confirm.\n\nContinue restores the saved state without replaying payouts or earning offline sales. New Run warns before replacing an existing saved Studio."),
+ 			_page("help", "Tips & this guide", "Use short hints in play and the full reference when you need it.", "The footer Tip button explains the current situation. Tutorial opens short context-specific phase tips. This How to Play guide is available from Main Menu and Pause.\n\nBrowsing this reference is free: it does not spend redraws, advance the calendar, change priorities or mark a training challenge complete.\n\nFor exact transaction amounts, use the game's current quote and result screen. This guide explains how to read those choices."),
+ 		]),
+--- before/scripts/market/rival_world_checkpoint.gd
++++ current/scripts/market/rival_world_checkpoint.gd
+@@ -38,6 +38,12 @@
+ # Exact pre-synergy-policy world. Saved hands/RNG/outcomes are preserved;
+ # only future rival decisions use the approved current-cohort trial selector.
+ const COMPATIBLE_PRE_SYNERGY_SOURCES := ["bf8d5157c91dd608456d66470d61e4927edb283401ef001c93b3a62d34b9aa6f"]
++# Reverb-only pause presentation: exact preceding editor/compiled market1
++# builds, with unchanged persisted rules. All current field checks still run.
++const COMPATIBLE_MARKET_PRESENTATION_SOURCES := [
++	"5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
++	"d259a6545d3802f5a2493f96547d9e10ad26984f4342270724232a3764fbec72",
++]
+ const MAX_RIVALS := 8
+ const PROJECT_INTS := ["_current_scope","_hidden_bugs","_known_bugs","_fixed_bugs","_marketing_output","_alpha_hidden_bugs_generated","_required_scope","_current_cycle"]
+ const PROJECT_FLOATS := ["_accumulated_bug_pressure","_accumulated_alpha_bug_pressure"]
+@@ -208,7 +214,7 @@
+ 
+ func _read(payload: Dictionary, player_payload: Dictionary) -> Dictionary:
+ 	error = ""
+-	var source_ok: bool = payload.get("source_identity")==Replay.source_identity()
++	var source_ok: bool = payload.get("source_identity")==Replay.source_identity() or payload.get("source_identity") in COMPATIBLE_MARKET_PRESENTATION_SOURCES
+ 	if payload.size()!=7+int(payload.has("legacy"))+int(payload.has("market_origin")) or payload.get("schema_version")!="1" or not source_ok or payload.get("rng_algorithm")!=RunRandom.ALGORITHM or not payload.get("studios") is Array or not payload.get("history") is Array or not payload.get("market") is Dictionary:
+ 		error = "INCOMPATIBLE_RIVAL_WORLD_SOURCE_OR_SCHEMA"
+ 		return {}
+--- before/scripts/debug/verify_pause_music.gd
++++ current/scripts/debug/verify_pause_music.gd
+@@ -25,9 +25,10 @@
+ 	var sfx := AudioServer.get_bus_index(&"SFX")
+ 	var sfx_effects := AudioServer.get_bus_effect_count(sfx)
+ 	var volume := AudioServer.get_bus_volume_db(bus)
++	var player_volume: float = music.player.volume_db
+ 	var playback: int = 0
+-	check(AudioServer.get_bus_effect(bus, 0) == music.pause_filter and AudioServer.get_bus_effect(bus, 1) == music.pause_reverb, "Low-pass then reverb are on Music")
+-	check(not AudioServer.is_bus_effect_enabled(bus, 0) and not AudioServer.is_bus_effect_enabled(bus, 1), "Unpaused sound bypasses both effects")
++	check(AudioServer.get_bus_effect_count(bus) == 1 and AudioServer.get_bus_effect(bus, 0) == music.pause_reverb, "Only room reverb is on Music")
++	check(not AudioServer.is_bus_effect_enabled(bus, 0), "Unpaused sound bypasses reverb")
+ 	# Actual backend crosses the WAV wrap while paused and changes arrangement.
+ 	music.player.seek(Map.LENGTH - 0.15)
+ 	playback = music.player.get_stream_playback().get_instance_id()
+@@ -46,13 +47,14 @@
+ 	paused = true
+ 	await create_timer(0.1).timeout
+ 	check(music.pause_weight > 0 and music.pause_weight < 1, "Pause treatment fades in")
++	check(music.pause_reverb.dry == 1.0 and music.player.volume_db == player_volume and AudioServer.get_bus_volume_db(bus) == volume, "Fade-in preserves full dry signal and music gain")
+ 	var before: float = music.presentation_seconds()
+ 	await create_timer(1.0).timeout
+ 	check(music.presentation_seconds() > before + 0.7 and music.grid.loops >= 1, "Pause clock crosses real loop boundary")
+-	check(music.pause_weight == 1.0 and not music.player.stream_paused, "Fully filtered audio transport keeps playing")
+-	check(is_equal_approx(music.pause_filter.cutoff_hz, 650.0) and is_equal_approx(music.pause_reverb.wet, 0.38), "Bathroom filter reaches intended endpoints")
++	check(music.pause_weight == 1.0 and not music.player.stream_paused, "Reverberant audio transport keeps playing")
++	check(music.pause_reverb.dry == 1.0 and is_equal_approx(music.pause_reverb.wet, 0.38), "Bathroom reverb preserves dry level and reaches intended wetness")
+ 	check(music.blend.weight == 1.0 and music.player.get_stream_playback().get_instance_id() == playback, "Studio transition completes during pause without restart")
+-	check(AudioServer.get_bus_effect_count(sfx) == sfx_effects and AudioServer.get_bus_volume_db(bus) == volume, "Effect leaves SFX and volume settings alone")
++	check(AudioServer.get_bus_effect_count(sfx) == sfx_effects and AudioServer.get_bus_volume_db(bus) == volume and music.player.volume_db == player_volume, "Effect leaves SFX and music gain alone")
+ 	await create_timer(0.2).timeout
+ 	check(banner.banner.scale == scale_before, "Synergy popup pose remains frozen")
+ 	paused = false
+@@ -62,10 +64,10 @@
+ 	check(is_equal_approx(banner._started - banner_started, resumes[0] * Map.STEP), "Popup uses the identical hand grid shift")
+ 	check(banner.banner.scale.x >= scale_before.x and banner.banner.modulate.a >= alpha_before, "Partly visible popup never rewinds on rejoin")
+ 	await create_timer(0.4).timeout
+-	check(music.pause_weight == 0 and not AudioServer.is_bus_effect_enabled(bus, 0) and not AudioServer.is_bus_effect_enabled(bus, 1), "Resume restores dry, unfiltered audio")
++	check(music.pause_weight == 0 and not AudioServer.is_bus_effect_enabled(bus, 0) and music.pause_reverb.dry == 1.0, "Resume clears reverb with original dry level intact")
+ 	banner.queue_free()
+ 	# Rapid pause toggles, low FPS and settings changes cannot duplicate effects,
+-	# restart playback, or leave the filter latched on after scene/menu teardown.
++	# restart playback, or leave reverb latched on after scene/menu teardown.
+ 	Engine.max_fps = 5
+ 	for i in range(3):
+ 		paused = true
+@@ -80,7 +82,7 @@
+ 		check(music.pause_weight == 0 and AudioServer.is_bus_mute(bus), "Resume preserves saved mute and clears treatment")
+ 	Engine.max_fps = 0
+ 	DemoSettingsStore.apply_audio(DemoSettingsStore.defaults())
+-	check(music.player.get_stream_playback().get_instance_id() == playback and AudioServer.get_bus_effect_count(bus) == 2, "Repeated pauses reuse playback and effects")
++	check(music.player.get_stream_playback().get_instance_id() == playback and AudioServer.get_bus_effect_count(bus) == 1, "Repeated pauses reuse playback and reverb")
+ 	await verify_dsp(bus)
+ 	for count in [1, 4, 7]:
+ 		for bonus in [false, true]:
+@@ -211,11 +213,12 @@
+ 		for i in range(peak_at + 4800, samples.size()): tail += samples[i].length_squared()
+ 		measurements.append({"filtered": filtered, "peak": peak, "tail_energy": tail, "samples": samples.size()})
+ 	check(measurements[0].peak > 0.05, "Actual mixer capture contains test impulse")
+-	check(measurements[1].peak < measurements[0].peak * 0.2, "Low-pass smooths the impulse transient")
+-	check(measurements[1].tail_energy > maxf(0.000001, measurements[0].tail_energy * 10), "Filtered Music has a measurable room reverb tail")
++	check(absf(measurements[1].peak / measurements[0].peak - 1.0) < 0.02, "Paused reverb preserves the dry impulse peak without attenuation")
++	check(measurements[1].tail_energy > maxf(0.000001, measurements[0].tail_energy * 10), "Paused Music adds a measurable room reverb tail")
+ 	traces.append({"dsp": measurements})
+ 	paused = false
+ 	await create_timer(0.4).timeout
+ 	music.player.volume_db = 0
+ 	probe.queue_free()
+-	AudioServer.remove_bus_effect(bus, 2)
++	for i in range(AudioServer.get_bus_effect_count(bus) - 1, -1, -1):
++		if AudioServer.get_bus_effect(bus, i) == capture: AudioServer.remove_bus_effect(bus, i)
+--- before/scripts/debug/verify_pause_audibility.gd
++++ current/scripts/debug/verify_pause_audibility.gd
+@@ -14,6 +14,9 @@
+ 	prefs.Music = 13
+ 	DemoSettingsStore.apply_audio(prefs)
+ 	var bus := AudioServer.get_bus_index(&"Music")
++	var original_volume := AudioServer.get_bus_volume_db(bus)
++	var original_player_volume: float = music.player.volume_db
++	expect(AudioServer.get_bus_effect_count(bus) == 1 and AudioServer.get_bus_effect(bus, 0) == music.pause_reverb, "Pause uses only reverb, without a low-pass filter")
+ 	var pre := AudioEffectCapture.new()
+ 	var post := AudioEffectCapture.new()
+ 	var output := AudioEffectCapture.new()
+@@ -49,11 +52,12 @@
+ 			rows.append({"theme":theme,"raw":music.player.get_playback_position(),"clock":music.presentation_seconds(),"paused":paused,"stream_paused":music.player.stream_paused,"pre":a,"post":b,"output":c,"gain_db":b.db-a.db})
+ 			expect(paused and game_state() == frozen, "Gameplay frozen")
+ 			expect(not music.player.stream_paused and music.player.get_stream_playback().get_instance_id() == identity, "Continuous transport identity")
++			expect(music.pause_reverb.dry == 1.0 and AudioServer.get_bus_volume_db(bus) == original_volume and music.player.volume_db == original_player_volume, "Pause preserves dry signal and chosen music gain")
+ 		var gain := sqrt(filtered_power/maxf(source_power, 0.000000001))
+ 		levels.append({"theme":theme,"rms_ratio":gain,"attenuation_db":linear_to_db(gain)})
+-		# Keep the muffled song within 6 dB of its dry level over a full phrase.
+-		# A merely nonzero capture previously accepted almost inaudible playback.
+-		expect(source_power > 0.001 and gain >= 0.5, "Paused %s remains audible relative to the dry song: %.2f dB" % [theme,linear_to_db(gain)])
++		# Wet reflections can change summed RMS; allow small capture/phase variance,
++		# but no material song attenuation. Dry unity is checked separately above.
++		expect(source_power > 0.001 and gain >= 0.95, "Paused %s retains the dry song level with room reverb: %.2f dB" % [theme,linear_to_db(gain)])
+ 		await key(KEY_ESCAPE)
+ 		await create_timer(0.5).timeout
+ 		expect(not paused and music.pause_weight == 0.0, "Resume clears pause treatment")

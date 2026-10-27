@@ -12,7 +12,11 @@ func expect(ok: bool,message: String) -> void:
 		push_error("FAIL: "+message)
 
 func fresh(recipe: Dictionary) -> RefCounted:
-	return Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
+	var session: RefCounted = Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
+	# Explicit synthetic finance fixture for fixed-path mechanics/replay coverage,
+	# not a legal income command or an early-game solvency/balance assertion.
+	if session != null: expect(session.run.add_cash(20000),"Controlled campaign fixture funding")
+	return session
 
 func act(session: RefCounted,kind: StringName,payload: Dictionary = {},accepted: bool = true) -> Dictionary:
 	var before := Replay.state(session)

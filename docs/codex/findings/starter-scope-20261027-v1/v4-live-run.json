@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://../docs/codex/findings/starter-scope-20261027-v1/live_first_games.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 19.11,
+  "errors": [],
+  "tail": [
+    "       [6] finalize (res://scripts/simulation/development_actions.gd:213)",
+    "       [7] _finalize_alpha (res://scripts/phases/alpha_phase.gd:283)",
+    "       [8] _finalize_with_run_rng (res://scripts/phases/alpha_phase.gd:812)",
+    "       [9] _on_under_scope_confirmed (res://scripts/phases/alpha_phase.gd:231)",
+    "       [10] exit_phase (res://scripts/debug/verify_campaign_live_parity.gd:141)",
+    "       [11] full_project (res://scripts/debug/verify_campaign_live_parity.gd:185)",
+    "Alpha completed! Pressure 0.8333; stochastic result 1; variance +0; Alpha Hidden Bugs 1; total Hidden Bugs 3; implemented 3; unimplemented 0",
+    "Beta hand resolved: Bugs discovered: 2 | Known Bugs fixed: 2 | Marketing Output gained: 1 | Cycle advanced: 1",
+    "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 4 | Finite cards exhausted: press_interview | Cycle advanced: 1",
+    "SCOPE12_LIVE_PARITY comparisons=120 genres=8 failures=0"
+  ]
+}

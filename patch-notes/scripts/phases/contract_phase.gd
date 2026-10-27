@@ -24,6 +24,7 @@ var _initial_definition_rolls: Array[float] = []
 
 var _candidate_row: CardFan
 var hand_motion: HandPresentation
+var _score_synergy: SynergyNotification
 var _presented_scores: Dictionary = {}
 var _status_label: Label
 var _scores_label: Label
@@ -123,7 +124,7 @@ func _build_ui() -> void:
 	priority_title.add_theme_font_size_override("font_size", 24)
 	priority_content.add_child(priority_title)
 	var help := Label.new()
-	help.text = "Future draws only · 10–50% in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
+	help.text = "Future draws only · 10–75% in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
 	priority_content.add_child(help)
 	var priority_body := HBoxContainer.new()
 	priority_body.add_theme_constant_override("separation", 24)
@@ -207,6 +208,8 @@ func _build_ui() -> void:
 	_feedback_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	actions.add_child(_feedback_label)
 	_build_completion_panel()
+	_score_synergy = SynergyNotification.new()
+	add_child(_score_synergy)
 	hand_motion = HandPresentation.new()
 	add_child(hand_motion)
 	var organize := Button.new()
@@ -227,29 +230,23 @@ func _present_action(kind: String, action: Callable) -> void:
 		if _state.is_completed(): _completion_modal.hide()
 
 func _score_snapshot() -> Dictionary:
-	var values := {&"scope": _state.get_scope(), "_cycle": _run.get_completed_run_cycles(), "_redraws": _run.get_available_redraws()}
+	var values := {&"scope": _state.get_scope(), "_cycle": _run.get_completed_run_cycles(), "_redraws": _run.get_available_redraws(), "_score_divisor": 2}
 	for i in range(4): values[HandPresentation.CORE[i]] = _state.get_core_score_half_units(i)
 	return values
 
 func _display_scores(values: Dictionary, deltas: Dictionary) -> void:
 	_presented_scores = values.duplicate()
 	_refresh_all()
-	var parts: Array[String] = []
-	for key: StringName in deltas:
-		if deltas[key] == 0: continue
-		parts.append("+%s %s" % [str(deltas[key]) if key == &"scope" else _format_half(deltas[key]), str(key).capitalize()])
-	if parts.is_empty(): return
-	var pulse := Label.new()
-	pulse.text = " · ".join(parts)
-	pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pulse.z_index = 200
-	pulse.add_theme_color_override("font_color", Color("f5ce69"))
-	add_child(pulse)
-	pulse.global_position = _score_values[0].global_position + Vector2(0, 20)
-	var tween := pulse.create_tween().set_parallel()
-	tween.tween_property(pulse, "position:y", pulse.position.y - 16.0, 0.55)
-	tween.tween_property(pulse, "modulate:a", 0.0, 0.55)
-	tween.chain().tween_callback(pulse.queue_free)
+	for index in range(5):
+		var key: StringName = HandPresentation.CORE[index] if index < 4 else &"scope"
+		if int(deltas.get(key, 0)) != 0: ProductionScoreboard.animate_number(_score_values[index])
+
+func _show_score_synergy(stat: StringName) -> void:
+	_score_synergy.banner.offset_left = -220
+	_score_synergy.banner.offset_right = 220
+	_score_synergy.banner.offset_top = maxf(160.0, get_global_rect().end.y - 112.0)
+	_score_synergy.banner.offset_bottom = _score_synergy.banner.offset_top + 62
+	_score_synergy.show_message("%s Specialization!" % str(stat).capitalize(), "Core ×1.5 · Scope stays printed")
 
 func _restore_scores() -> void:
 	_presented_scores.clear()
@@ -432,6 +429,8 @@ func _play_selected_hand() -> bool:
 		_command_busy = false
 		_feedback_label.text = _run.get_financial_block_reason()
 		return false
+	var stat: StringName = result.events[0].plan.specialization_stat
+	if not stat.is_empty(): hand_motion.note_specialization(_show_score_synergy.bind(stat))
 	if _state.is_completed(): _show_completion()
 	else:
 		_publish_candidate_pool(result.replacements,true)

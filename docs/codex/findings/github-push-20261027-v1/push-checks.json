@@ -1,0 +1,181 @@
+[
+  {
+    "name": "verify_menu_visualizer",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 5.922,
+    "tail": [
+      "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+      "",
+      "Loaded 40 cards.",
+      "MENU_VISUALIZER checks=116 failures=0 peak=0.645897",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  {
+    "name": "verify_root_first_rosters",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 2.641,
+    "tail": [
+      "PASS: V4 exact saved-state/RNG round trip: racing",
+      "PASS: No passive or repeat grant: racing",
+      "PASS: Root sound and no free advanced/crossover branch: racing",
+      "PASS: New project uses the exact granted pool: racing",
+      "PASS: New reduced founding pools still initialize the incumbent world",
+      "PASS: Existing separate incumbent bonuses keep every named parent: incumbent-arcade-foundry",
+      "PASS: Existing separate incumbent bonuses keep every named parent: incumbent-wayfinder-works",
+      "ROOT_FIRST_ROSTERS checks=229 failures=0",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  {
+    "name": "verify_score_floats",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 2.375,
+    "tail": [
+      "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+      "",
+      "Loaded 40 cards.",
+      "SCORE_FLOATS checks=385 failures=0",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  {
+    "name": "verify_balanced_boost",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 1.047,
+    "tail": [
+      "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+      "",
+      "Loaded 40 cards.",
+      "BALANCED_BOOST checks=1309 failures=0",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  {
+    "name": "verify_employee_click",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 8.75,
+    "tail": [
+      "CLICK_TARGET Employees at=(751.0, 375.0) hovered=Employees:<Button#169584102378>",
+      "CLICK_TARGET Back at=(68.5, 149.0) hovered=Back:<Button#180673841696>",
+      "CLICK_TARGET Employees at=(751.0, 375.0) hovered=Employees:<Button#169584102378>",
+      "OPEN_PRECONDITIONS { \"allowed\": true, \"trial\": false, \"publishing\": false, \"failure\": \"\", \"button_rect\": [P: (680.0, 384.0), S: (270.0, 54.0)], \"studio_size\": (1280.0, 580.0) }",
+      "CLICK_TARGET Employees at=(815.0, 411.0) hovered=Employees:<Button#259392539315>",
+      "CLICK_TARGET Back at=(68.5, 149.0) hovered=Back:<Button#262462770133>",
+      "CLICK_TARGET Employees at=(815.0, 411.0) hovered=Employees:<Button#259392539315>",
+      "CLICK_TARGET Back at=(68.5, 149.0) hovered=Back:<Button#267915364769>",
+      "CLICK_TARGET Employees at=(815.0, 411.0) hovered=Employees:<Button#259392539315>",
+      "EMPLOYEE_CLICK checks=64 failures=0"
+    ]
+  },
+  {
+    "name": "verify_save_notification",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 9.985,
+    "tail": [
+      "PASS: Success notification disappears automatically",
+      "PASS: A durable status refresh neither reopens the toast nor changes save data",
+      "PASS: In-flight saves do not announce success or expire early",
+      "PASS: Failure remains visible rather than fading as a success",
+      "PASS: A later success replaces the failure cleanly",
+      "PASS: Notification animation completes while the game is paused",
+      "PASS: All presentation checks preserve the actual checkpoint",
+      "Save notification: 36 checks, 0 failures",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  {
+    "name": "verify_pause_motion",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 5.469,
+    "tail": [
+      "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+      "",
+      "Loaded 40 cards.",
+      "PAUSE_MOTION checks=33 failures=0",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  {
+    "name": "verify_bank_presentation",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 3.563,
+    "tail": [
+      "PASS: Breakdown remains inside the menu at (1280, 720)",
+      "PASS: Back restores Bank, Financial history and button focus",
+      "PASS: Reading payment details changes no state or quote",
+      "PASS: Acceptance still confirms the exact displayed quote",
+      "PASS: Confirmed borrowing still creates one loan",
+      "PASS: Main summary uses a readable loan label instead of an internal ID",
+      "PASS: Financial history stays visible with an active loan",
+      "Bank presentation: 0 failures",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  {
+    "name": "verify_priority_influence",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 4.844,
+    "tail": [
+      "PASS: Contract edited: complete pie accounts for every slice",
+      "PASS: Contract priority menu retains a Cancel button",
+      "PASS: Contract cancellation reset: chart exists",
+      "PASS: Contract cancellation reset: chart follows displayed draft values",
+      "PASS: Contract cancellation reset: chart retains the true allocated total",
+      "PASS: Contract cancellation reset: slice proportions are correct",
+      "PASS: Contract cancellation reset: complete pie accounts for every slice",
+      "PASS: Contract Cancel closes the priority menu",
+      "PASS: Contract chart editing and cancellation preserve frozen release, sales, cash, calendar, redraws, hands and candidates",
+      "Priority influence verification: 306 checks, 0 failures"
+    ]
+  },
+  {
+    "name": "verify_soundtrack_sync",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 2.891,
+    "tail": [
+      "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+      "",
+      "Loaded 40 cards.",
+      "BACKEND Dummy position=0.27331250905991 loops=0 length=27.4285625 time=27.728668035319",
+      "Soundtrack sync: 3503 checks, 0 failures",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  {
+    "name": "verify_checkpoint_codec",
+    "exit": 0,
+    "errors": [],
+    "elapsed_seconds": 0.953,
+    "tail": [
+      "PASS: Corrupt payload rejected before typed hydration",
+      "PASS: Future envelope preserved as incompatible",
+      "PASS: Repeated typed map identity rejected",
+      "PASS: Missing/extra record fields reject",
+      "PASS: Objects cannot enter typed fields",
+      "PASS: Bounded nesting",
+      "Checkpoint codec: 46 checks, 0 failures",
+      "Loaded 40 cards.",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  }
+]

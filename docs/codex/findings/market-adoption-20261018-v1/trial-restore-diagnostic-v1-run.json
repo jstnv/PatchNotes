@@ -1,0 +1,29 @@
+{
+  "elapsed_seconds": 9.543796300014947,
+  "process_cpu_seconds": 6.09375,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/diagnose_trial_restore.gd"
+  ],
+  "exit": 1,
+  "errors": [
+    "ERROR: Rival trial: Continue preserves full Action session",
+    "ERROR: Rival trial: Continue preserves full Adventure session"
+  ],
+  "tail": [
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/diagnose_trial_restore.gd:79)",
+    "ERROR: Rival trial: Continue preserves full Adventure session",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/diagnose_trial_restore.gd:24)",
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/diagnose_trial_restore.gd:80)",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

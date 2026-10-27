@@ -1,0 +1,34 @@
+{
+  "elapsed_seconds": 142.1681438999949,
+  "process_cpu_seconds": 74.15625,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\exposure.gd",
+    "--",
+    "--output=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\replay-action-war-4418-v2.json",
+    "--route=action-war",
+    "--seed=4418",
+    "--source=5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+    "--mode=replay",
+    "--input=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\action-war-4418-v2.json.tape.json"
+  ],
+  "exit": 0,
+  "timed_out": false,
+  "errors": [],
+  "tail": [
+    "MARKET_ACCEPTANCE_STEP route=action-war step=104 cycle=41 action_us=92260 world_us=690719 hash_us=1122414 cash=337800 fans=3",
+    "MARKET_ACCEPTANCE_STEP route=action-war step=105 cycle=42 action_us=129976 world_us=1935119 hash_us=528163 cash=398290 fans=3",
+    "MARKET_ACCEPTANCE_STEP route=action-war step=106 cycle=42 action_us=6484 world_us=0 hash_us=463342 cash=398290 fans=3",
+    "MARKET_ACCEPTANCE_STEP route=action-war step=107 cycle=42 action_us=10712 world_us=0 hash_us=583937 cash=398290 fans=3",
+    "MARKET_ACCEPTANCE_STEP route=action-war step=108 cycle=42 action_us=113560 world_us=0 hash_us=316861 cash=398290 fans=3",
+    "MARKET_ACCEPTANCE route=action-war checks=7359 failures=0 coverage={\"age_month_reuse\":153,\"completed_pressured_player\":5,\"disjoint\":0,\"expired_facts\":864,\"genre_only\":54,\"own_other_title\":46,\"pair\":46,\"rejected_atomic\":0,\"strong_player_release\":0,\"strong_player_to_rival\":0,\"theme_only\":0}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

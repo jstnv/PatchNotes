@@ -1,0 +1,167 @@
+[
+  {
+    "name": "import",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "exit": 0,
+    "errors": [],
+    "summary": []
+  },
+  {
+    "name": "verify_gameplay_hud_overlay",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--script",
+      "res://scripts/debug/verify_gameplay_hud_overlay.gd"
+    ],
+    "exit": 0,
+    "errors": [],
+    "summary": [
+      "Gameplay HUD and priority overlay verification passed."
+    ]
+  },
+  {
+    "name": "verify_design_phase",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--script",
+      "res://scripts/debug/verify_design_phase.gd"
+    ],
+    "exit": 0,
+    "errors": [],
+    "summary": [
+      "DesignPhase verification passed."
+    ]
+  },
+  {
+    "name": "verify_alpha_phase",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--script",
+      "res://scripts/debug/verify_alpha_phase.gd"
+    ],
+    "exit": 0,
+    "errors": [],
+    "summary": [
+      "Alpha priority verification passed."
+    ]
+  },
+  {
+    "name": "verify_beta_phase",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--script",
+      "res://scripts/debug/verify_beta_phase.gd"
+    ],
+    "exit": 1,
+    "errors": [
+      "ERROR: Attempt to open script 'res://scripts/debug/verify_beta_phase.gd' resulted in error 'File not found'.",
+      "ERROR: Failed loading resource: res://scripts/debug/verify_beta_phase.gd.",
+      "ERROR: Can't load script: res://scripts/debug/verify_beta_phase.gd"
+    ],
+    "summary": []
+  },
+  {
+    "name": "verify_beta_base_hand_resolution",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--script",
+      "res://scripts/debug/verify_beta_base_hand_resolution.gd"
+    ],
+    "exit": 0,
+    "errors": [],
+    "summary": [
+      "       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:223)",
+      "       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:230)",
+      "       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:236)",
+      "       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:238)",
+      "Beta base hand resolution verification passed."
+    ]
+  },
+  {
+    "name": "verify_three_core",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--script",
+      "res://scripts/debug/verify_three_core.gd"
+    ],
+    "exit": 0,
+    "errors": [],
+    "summary": [
+      "Three-Core foundation: 0 failures"
+    ]
+  },
+  {
+    "name": "render-1152",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--script",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\capture_workspace.gd"
+    ],
+    "exit": 0,
+    "errors": [],
+    "summary": [
+      "Gameplay HUD and priority overlay verification passed."
+    ]
+  },
+  {
+    "name": "render-1280",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\project",
+      "--script",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-remainder-20261017-v1\\capture_workspace.gd"
+    ],
+    "exit": 0,
+    "errors": [],
+    "summary": [
+      "Gameplay HUD and priority overlay verification passed."
+    ]
+  }
+]

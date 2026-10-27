@@ -1,5 +1,9 @@
 # Genre specialties
 
+**2026-10-27 starting-pool nerf — IMPLEMENTED locally, user-directed.** New Studios use founding-roster version4: every specialty grants exactly12 printed Scope, with the common six roots and a fixed connected subset of its historical v3 pool. Existing saves retain all ownership, purchases and RNG; historical1/2/3 previews stay frozen. Individual card values, prices, starting cash, project Scope requirements, Review targets and AI policy are unchanged. [Exact pools and evidence](#new-founding-rosters-v4--twelve-scope2026-10-27).
+
+**2026-10-26 AI opening direction — design only:** [Eight 1977 specialist rivals](../threads/ai-competitors/2026-10-26-eight-genre-1977-opening-direction-v1.md) use provisional lower scoring profiles until the [first actual 6.0–7.0 release in each Genre generates its persistent standard](../threads/ai-competitors/2026-10-26-first-release-generates-genre-standards-decision-v2.md) from recorded four-Core output. The exact bootstrap profiles, transform, timing, later progression and player impact remain OPEN. The ACTIVE/TRIAL 1980 target table below is unchanged.
+
 **2026-10-18 market trial selected, canonical implementation QUEUED:** The [AI Competitors trial decision](../threads/ai-competitors/2026-10-18-market-density-trial-decision-v1.md) adds a project-frozen same-Genre publication lift (+2 per recent other-studio release, cap+4) and a separate strong-Core benchmark (Review≥7.0, cap+8), taking the larger per category. The [private v31 finding](../threads/ai-competitors/2026-10-18-market-density-trial-finding-v1.md) verifies a real rival release raises a later legal Action project's targets to `[42,28,42,28]`; the current game still uses the base table below until reconciled adoption. Trial numbers, a completed player Review under pressure and long-run balance remain OPEN.
 
 **2026-10-17 future market direction, not implemented:** The user wants recent actual rival releases to affect future four-Core Review standards. The existing Genre target table below remains the ACTIVE/TRIAL runtime baseline. The [AI Competitors market record](../threads/ai-competitors/2026-10-17-market-pressure-direction-v1.md) recommends a project-frozen, same-Genre market lift, with arithmetic and compatibility OPEN; released Reviews must remain frozen.
@@ -78,3 +82,22 @@ Membership is an explicit fixed patch of the historical v2 roster, independently
 | Racing |16|24|18/8/27/12|
 
 The old common-six/signature union remains historical authority for v1/v2, not a requirement to regrant advanced v3 cards. Exact replacements/fixtures and acceptance are recorded in [root-first findings](../findings/root-first-rosters-20261025-v1/README.md). Preview/Overview report the actual new names/count/Scope. Card values, Genre scoring targets, prices, Research and specialization mechanics are unchanged. Lower aggregate supply is a structural consequence, not a balance approval; final balance and human understanding remain OPEN.
+
+## New founding rosters v4 — twelve Scope,2026-10-27
+
+Direct user ruling: nerf each genre's starting pool to a total of **12 Scope**. This supersedes the v3 automatic grant size for new Studios only. Keep the common six (`text`, `4_color_palette`, `sound_effects`, `keyboard_and_mouse`, `controller`, `controls`), totaling6 Scope. Each row below adds6 Scope, with no duplicates or missing named parents. All grants are strict subsets of that genre's v3 roster; there are no newly free Store or TBD nodes.
+
+| Specialty | Additional Features | Count | Scope | Printed Core G/S/T/D |
+|---|---|---:|---:|---|
+| Action | Sprites, Levels, Exploration, Simple Story |10|12|16/3/8/5|
+| Adventure | Levels, Exploration, Simple Story, Dialogue, Character Backstories |11|12|9/3/8/9|
+| Role-Playing | Menu System, Simple Story, Dialogue, Character Backstories, Score System |11|12|5/2/13/9|
+| Strategy | Levels, Menu System, Lives System, Score System |10|12|8/2/13/7|
+| Simulation | Scrolling, Menu System, Lives System, Score System |10|12|5/2/20/5|
+| Puzzle | Levels, Exploration, Simple Story, Dialogue, Score System |11|12|9/3/8/9|
+| Sports | Music, Levels, Lives System, Power Ups |10|12|8/10/9/5|
+| Racing | Sprites, Levels, Scrolling |9|12|15/2/15/3|
+
+Membership is fixed, not random truncation or a future auto-grant rule. The live creator and deterministic factory use the same preview authority. Creation/Overview display actual count, names and12 printed Scope. No familiarity is granted. Historical saved versions1/2/3 hydrate their exact stored ownership, including optional purchases, without trimming/regranting; current-format metadata additionally accepts4. Incumbent rivals inherit the smaller genre base while retaining their separate existing bonus Features, archives, funding and policies. The Action subset retains the parent paths used by those unchanged bonuses.
+
+Eight unfunded finite2/2/2-hand first-release routes and exact replays pass, as do120 matching-Genre scene/headless boundaries through Continue. Those routes play10–12 Scope against the unchanged30 requirement; this is a deliberate smaller supply and bounded functionality evidence, not final economy/Review/AI balance approval. One broader fixture's fixed Bank loan no longer qualifies from a fresh v4 route; Bank rules remain unchanged. The existing Bank/payroll matrix explicitly uses its historical v3 foundation while new-start coverage uses v4. [Source, checks, retained failures and limits](../logs/2026-10-27-starter-scope-v1.md).

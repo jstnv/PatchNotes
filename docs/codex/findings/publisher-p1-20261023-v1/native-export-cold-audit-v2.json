@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--main-pack",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\publisher-p1-20261023-v1\\export-clean\\patch-notes-demo-20261007-2c2vbqwg\\demo\\Patch Notes Demo.pck",
+    "--headless",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\publisher-p1-20261023-v1\\audit_disk.gd",
+    "--",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\publisher-p1-20261023-v1\\native-export-audited.frame.json"
+  ],
+  "exit": 0,
+  "errors": [],
+  "extra_environment": {},
+  "summary": [
+    "PASS: actual cold disk generation validates",
+    "PASS: cold coordinator hydrates player and active world",
+    "PASS: all existing player gameplay and RNG fields preserved",
+    "PASS: all existing rivals, market, ownership and RNG fields preserved",
+    "PASS: relationship ledger stays with exact Studio and remains dormant",
+    "PASS: relationship ledger stays with exact Studio and remains dormant",
+    "PASS: relationship ledger stays with exact Studio and remains dormant",
+    "P1 cold disk checks=7 failures=0"
+  ]
+}

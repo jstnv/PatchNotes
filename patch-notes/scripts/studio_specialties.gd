@@ -1,12 +1,25 @@
 class_name StudioSpecialties
 extends RefCounted
 
-## Authority §63 (historical v1/v2),2026-10-25 root-first replacements (v3).
+## Historical v1/v2, root-first v3;2026-10-27 twelve-Scope new starts (v4).
 ## Fixed Primitive membership: future cards and Store ancestors never auto-grant.
-const ROSTER_VERSION := 3
+const ROSTER_VERSION := 4
+const STARTING_SCOPE := 12
 const LEVELS_SWAP := [&"strategy", &"simulation", &"sports"]
 const COMMON_IDS: Array[StringName] = [&"text", &"4_color_palette", &"8_bit_sound", &"keyboard_and_mouse", &"controller", &"controls"]
 const ROOT_FIRST_COMMON_IDS: Array[StringName] = [&"text", &"4_color_palette", &"sound_effects", &"keyboard_and_mouse", &"controller", &"controls"]
+## Fixed subsets of v3. Keep roots/parents, common six and genre identity;
+## do not prune by RNG or grant future catalog additions automatically.
+const SCOPE_12_EXTRAS := {
+	&"action": ["sprites", "levels", "exploration", "simple_story"],
+	&"adventure": ["levels", "exploration", "simple_story", "dialogue", "character_backstories"],
+	&"role_playing": ["menu_system", "simple_story", "dialogue", "character_backstories", "score_system"],
+	&"strategy": ["levels", "menu_system", "lives_system", "score_system"],
+	&"simulation": ["scrolling", "menu_system", "lives_system", "score_system"],
+	&"puzzle": ["levels", "exploration", "simple_story", "dialogue", "score_system"],
+	&"sports": ["music", "levels", "lives_system", "power_ups"],
+	&"racing": ["sprites", "levels", "scrolling"],
+}
 const ROOT_FIRST_PATCHES := {
 	&"action": {"remove":["multiple_endings","general_combat"],"add":["lives_system","simple_story"]},
 	&"adventure": {"remove":["8_bit_sound","local_leaderboards","multiple_endings","general_combat"],"add":["enemies","sound_effects"]},
@@ -31,7 +44,7 @@ const RULES := {
 
 static func preview(specialty: StringName, roster_version: int = ROSTER_VERSION) -> Dictionary:
 	var genre := PrimitivePredevelopment.find_entry("genres", specialty)
-	if roster_version not in [1, 2, 3] or not RULES.has(specialty) or genre.is_empty(): return {}
+	if roster_version not in [1, 2, 3, 4] or not RULES.has(specialty) or genre.is_empty(): return {}
 	var rule: Dictionary = RULES[specialty]
 	var swap := roster_version >= 2 and specialty in LEVELS_SWAP
 	var ids: Array[StringName] = []
@@ -47,11 +60,17 @@ static func preview(specialty: StringName, roster_version: int = ROSTER_VERSION)
 			ids.append(StringName(card.id))
 			names.append(str(card.name))
 			scope += int(card.scope)
-	if roster_version == 3:
+	if roster_version >= 3:
 		var patch: Dictionary = ROOT_FIRST_PATCHES[specialty]
 		for id in patch.remove: ids.erase(StringName(id))
 		for id in patch.add:
 			if not ids.has(StringName(id)): ids.append(StringName(id))
+		if roster_version == 4:
+			var allowed: Array[StringName] = ROOT_FIRST_COMMON_IDS.duplicate()
+			for id in SCOPE_12_EXTRAS[specialty]:
+				if not ids.has(StringName(id)): return {}
+				allowed.append(StringName(id))
+			ids = ids.filter(func(id: StringName): return allowed.has(id))
 		# Recompute only presentation totals from actual fixed membership.
 		names.clear()
 		scope=0
@@ -61,10 +80,14 @@ static func preview(specialty: StringName, roster_version: int = ROSTER_VERSION)
 			if not PRIMITIVE_IDS.has(str(id)) or not definitions.has(id): return {}
 			names.append(str(definitions[id].name))
 			scope+=int(definitions[id].scope)
-	for id in ROOT_FIRST_COMMON_IDS if roster_version == 3 else COMMON_IDS:
+	for id in ROOT_FIRST_COMMON_IDS if roster_version >= 3 else COMMON_IDS:
 		if not ids.has(StringName(id)): return {}
 	if roster_version < 3:
 		for id in rule.signature:
 			if not ids.has(StringName(id)): return {}
+	if roster_version == 4 and scope != STARTING_SCOPE: return {}
+	var note := "Starts with connected Primitive parent paths. Later Features are optional Store purchases or research."
+	if roster_version == 4: note = "Starts with 12 printed Scope and connected Primitive parent paths."
+	elif roster_version < 3: note = "Starts with Levels instead of Maps. Maps is an optional Store purchase unlocked by Levels." if swap else ""
 	return {"id": specialty, "name": genre.name, "ids": ids, "names": names, "scope": scope, "count": ids.size(), "emphasis": rule.emphasis,
-		"roster_version":roster_version,"note":"Starts with connected Primitive parent paths. Later Features are optional Store purchases or research." if roster_version == 3 else ("Starts with Levels instead of Maps. Maps is an optional Store purchase unlocked by Levels." if swap else "")}
+		"roster_version":roster_version,"note":note}

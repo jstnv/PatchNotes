@@ -1,0 +1,28 @@
+{
+  "elapsed_seconds": 123.38161430001492,
+  "process_cpu_seconds": 108.65625,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-adoption-20261018-v1\\migration.gd",
+    "--",
+    "--case=prior-world"
+  ],
+  "exit": 0,
+  "errors": [],
+  "tail": [
+    "MIGRATION_CHECK 26 PASS write failure preserves committed generations",
+    "MIGRATION_CHECK 27 PASS write failure retains exact latest state",
+    "MIGRATION_CHECK 28 PASS damaged latest yields validated backup without automatic restore",
+    "MIGRATION_CHECK 29 PASS explicit detached backup recovery publishes new generation",
+    "MIGRATION_CHECK 30 PASS damaged evidence retained",
+    "MIGRATION_CHECK 31 PASS recovery exact player accounting",
+    "MIGRATION_CHECK 32 PASS original source file unchanged",
+    "MARKET_MIGRATION prior-world run checks=32 failures=0"
+  ]
+}

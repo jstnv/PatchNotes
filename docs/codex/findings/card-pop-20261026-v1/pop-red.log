@@ -1,0 +1,16 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+ERROR: FAIL: Music-sampled card spark effect exists
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_card_pop.gd:7)
+       [1] go (res://scripts/debug/verify_card_pop.gd:10)
+ERROR: FAIL: Scoring cards have a charge and scale-pop bounce
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_card_pop.gd:7)
+       [1] go (res://scripts/debug/verify_card_pop.gd:12)
+CARD_POP checks=2 failures=2
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

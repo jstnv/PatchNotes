@@ -11,6 +11,8 @@ var _database: Node
 
 
 func _initialize() -> void:
+	# Historical Insider coverage; ordinary runs keep the temporary hold.
+	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
 	_database = CARD_DATABASE_SCRIPT.new()
 	_database.name = "CardDatabase"
 	root.add_child(_database)
@@ -33,7 +35,7 @@ func _verify_priority_allocator() -> void:
 	_expect(allocation.set_distribution(_distribution(50, 25, 25)), "Exact-total step-aligned Beta allocation is accepted")
 	_expect(emissions[0] == 1 and allocation.get_distribution() == _distribution(50, 25, 25), "Valid allocation commits atomically and emits once")
 	for invalid: Dictionary in [
-		_distribution(35, 35, 25), _distribution(55, 25, 20), _distribution(0, 50, 50),
+		_distribution(35, 35, 25), _distribution(80, 10, 10), _distribution(0, 50, 50),
 		_distribution(34, 36, 30), {CardData.BETA_CATEGORY_QA: 35.0, CardData.BETA_CATEGORY_MARKETING: 35, CardData.BETA_CATEGORY_INSIDER: 30},
 		{CardData.BETA_CATEGORY_QA: NAN, CardData.BETA_CATEGORY_MARKETING: 35, CardData.BETA_CATEGORY_INSIDER: 30},
 		{CardData.BETA_CATEGORY_QA: "35", CardData.BETA_CATEGORY_MARKETING: 35, CardData.BETA_CATEGORY_INSIDER: 30},

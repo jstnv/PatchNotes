@@ -1,0 +1,375 @@
+--- base/scripts/debug/verify_founder_foundation.gd
++++ candidate/scripts/debug/verify_founder_foundation.gd
+@@ -0,0 +1,74 @@
++extends SceneTree
++
++const Ownership := preload("res://scripts/legacy/ownership_book.gd")
++const Founder := preload("res://scripts/legacy/founder_profile.gd")
++const Codec := preload("res://scripts/legacy/legacy_codec.gd")
++var checks := 0
++var failures := 0
++
++func _initialize() -> void:
++	_verify_ownership()
++	_verify_founder()
++	print("Founder foundation verification: %d checks, %d failures" % [checks, failures])
++	quit(0 if failures == 0 else 1)
++
++func check(ok: bool, label: String) -> void:
++	checks += 1
++	if not ok:
++		failures += 1
++		push_error("FAIL: " + label)
++
++func _verify_ownership() -> void:
++	var initial := Ownership.create("old", {"founder:person": 600000, "outside:pool": 400000})
++	var books := {"old": initial}
++	check(Ownership.valid_world(books) and Ownership.controller(initial) == "founder:person", "Initial cap table and majority")
++	var offer := {"studio_id":"old", "tx_id":"sale-1", "expected_revision":0, "seller":"founder:person", "buyer":"studio:buyer", "units":100000, "price_cents":250000, "seller_consented":true}
++	check(Ownership.plan_secondary(books, offer).is_empty(), "Missing corporate buyer cannot enter ownership graph")
++	books["buyer"] = Ownership.create("buyer", {"founder:rival":1000000})
++	var before := books.duplicate(true)
++	check(Ownership.plan_secondary(books, offer.merged({"seller_consented":false}, true)).is_empty(), "Founder refusal transfers nothing")
++	var result := Ownership.plan_secondary(books, offer)
++	check(not result.is_empty() and result.controller_after == "" and result.issued_units == 1000000, "Exact 50 percent has no controller")
++	check(books == before and result.cash_legs == [{"holder":"studio:buyer", "delta_cents":-250000}, {"holder":"founder:person", "delta_cents":250000}], "Planning leaves input intact and identifies external settlement")
++	var sold: Dictionary = result.books
++	check(Ownership.plan_secondary(sold, offer).is_empty(), "Duplicate or stale sale rejected")
++	var other := {"studio_id":"old", "tx_id":"sale-2", "expected_revision":0, "seller":"outside:pool", "buyer":"studio:buyer", "units":400000, "price_cents":500000, "seller_consented":true}
++	var other_result := Ownership.plan_secondary(books, other)
++	check(other_result.controller_after == "founder:person" and other_result.books.old.holders["founder:person"] == 600000, "Other shareholder sale preserves founder majority")
++	var primary := {"studio_id":"old", "tx_id":"issue-1", "expected_revision":0, "buyer":"studio:buyer", "investment_cents":250000, "pre_money_cents":1000000, "affirmative_units":600000}
++	var issued := Ownership.plan_primary(books, primary)
++	check(not issued.is_empty() and issued.new_units == 250000 and issued.post_money_cents == 1250000 and issued.controller_after == "", "Paid primary issuance dilutes majority with correct post money")
++	check(issued.cash_legs[1] == {"holder":"studio:old", "delta_cents":250000} and books == before, "Primary proceeds belong to target Studio and planning is pure")
++	check(Ownership.plan_primary(books, primary.merged({"affirmative_units":500000}, true)).is_empty(), "Exactly half cannot authorize issuance")
++	check(Ownership.plan_primary(books, primary.merged({"pre_money_cents":0}, true)).is_empty(), "Zero pre money cannot use ordinary issue formula")
++	var cycle_request := {"studio_id":"buyer", "tx_id":"cycle-1", "expected_revision":0, "seller":"founder:rival", "buyer":"studio:old", "units":1, "price_cents":1, "seller_consented":true}
++	check(Ownership.plan_secondary(other_result.books, cycle_request).is_empty(), "Corporate ownership cycles rejected")
++	check(Ownership.create("bad", {"studio:bad":1}).is_empty(), "Self ownership rejected")
++	var one_unit := Ownership.create("small", {"founder:person": 500001, "outside:pool": 499999})
++	check(Ownership.controller(one_unit) == "founder:person", "One unit above half controls")
++	var one_cent := {"studio_id":"old", "tx_id":"rounding", "expected_revision":0, "buyer":"outside:new", "investment_cents":1, "pre_money_cents":2000000, "affirmative_units":600000}
++	check(Ownership.plan_primary(books, one_cent).is_empty(), "Half-unit banker rounding cannot issue zero shares")
++	var restored_book: Dictionary = Codec.decode_book(JSON.parse_string(JSON.stringify(Codec.encode_book(initial))))
++	check(Ownership.valid(restored_book) and Ownership.controller(restored_book) == "founder:person", "Cap table survives exact JSON checkpoint round trip")
++	var corrupted := Codec.encode_book(initial)
++	corrupted.holders["founder:person"] = "600000.0"
++	check(Codec.decode_book(corrupted).is_empty(), "Inexact share encoding rejected")
++
++func _verify_founder() -> void:
++	var profile := Founder.create("person", "old", 0)
++	check(Founder.valid(profile) and profile.active_studio_id == "old", "Founder initially operates one Studio")
++	check(Founder.request_departure(profile, "old", "voluntary", false).is_empty(), "Voluntary departure waits for safe boundary")
++	var pending := Founder.request_departure(profile, "old", "voluntary", true)
++	check(not pending.is_empty() and Founder.finish_departure(pending, 4, false).is_empty(), "Pending role cannot hand off in active phase")
++	var departed := Founder.finish_departure(pending, 4, true)
++	check(Founder.valid(departed) and departed.active_studio_id.is_empty() and departed.operated_periods[0].exit_reason == "voluntary", "Career records departure without a wallet")
++	check(Founder.activate(profile, "new", 4, true, true).is_empty(), "Second manual Studio rejected")
++	var migrated := Founder.activate(departed, "new", 4, true, true)
++	check(Founder.valid(migrated) and migrated.active_studio_id == "new" and migrated.career_studio_ids == ["old", "new"], "Funded existing Studio can become sole manual operator")
++	check(Founder.activate(departed, "free", 4, false, true).is_empty(), "Nonexistent free Studio cannot be activated")
++	var achieved := Founder.record_milestone(migrated, "first-acquisition")
++	check(achieved.milestone_ids == ["first-acquisition"] and Founder.record_milestone(achieved, "first-acquisition").is_empty(), "Milestones are once only")
++	var financed := Founder.record_financing(achieved, "new", "package-1", 4, 10000, 5000)
++	check(financed.financing_summaries.size() == 1 and not financed.has("cash_cents") and Founder.record_financing(financed, "new", "package-1", 4, 10000, 5000).is_empty(), "Financing history is nonspendable and idempotent")
++	var restored_profile: Dictionary = Codec.decode_founder(JSON.parse_string(JSON.stringify(Codec.encode_founder(financed))))
++	check(Founder.valid(restored_profile) and restored_profile.active_studio_id == "new", "Founder career survives exact JSON checkpoint round trip")
+--- base/scripts/debug/verify_founder_foundation.gd.uid
++++ candidate/scripts/debug/verify_founder_foundation.gd.uid
+@@ -0,0 +1 @@
++uid://hb34crgb6u8u
+--- base/scripts/legacy/founder_profile.gd
++++ candidate/scripts/legacy/founder_profile.gd
+@@ -0,0 +1,74 @@
++## Founder career metadata. Studio money, debt, IP and employees are never here.
++extends RefCounted
++
++static func create(founder_id: String, first_studio_id: String, cycle: int) -> Dictionary:
++	if founder_id.is_empty() or first_studio_id.is_empty() or cycle < 0: return {}
++	return {"schema_version": 1, "founder_id": founder_id, "active_studio_id": first_studio_id,
++		"career_studio_ids": [first_studio_id], "operated_periods": [{"studio_id": first_studio_id, "start_cycle": cycle, "end_cycle": -1, "exit_reason": ""}],
++		"milestone_ids": [], "reputation_events": [], "financing_summaries": [], "pending_departure": {}}
++
++static func valid(profile: Dictionary) -> bool:
++	if profile.get("schema_version") != 1 or typeof(profile.get("founder_id")) != TYPE_STRING or profile.founder_id.is_empty(): return false
++	if typeof(profile.get("active_studio_id")) != TYPE_STRING or typeof(profile.get("career_studio_ids")) != TYPE_ARRAY or typeof(profile.get("operated_periods")) != TYPE_ARRAY: return false
++	if typeof(profile.get("milestone_ids")) != TYPE_ARRAY or typeof(profile.get("reputation_events")) != TYPE_ARRAY or typeof(profile.get("financing_summaries")) != TYPE_ARRAY or typeof(profile.get("pending_departure")) != TYPE_DICTIONARY: return false
++	var open_count := 0
++	for period in profile.operated_periods:
++		if not period is Dictionary or typeof(period.get("studio_id")) != TYPE_STRING or period.studio_id.is_empty(): return false
++		if typeof(period.get("start_cycle")) != TYPE_INT or typeof(period.get("end_cycle")) != TYPE_INT or typeof(period.get("exit_reason")) != TYPE_STRING: return false
++		if period.start_cycle < 0 or period.end_cycle < -1 or (period.end_cycle >= 0 and period.end_cycle < period.start_cycle): return false
++		if period.end_cycle == -1:
++			open_count += 1
++			if period.studio_id != profile.active_studio_id: return false
++	if open_count != (0 if profile.active_studio_id.is_empty() else 1): return false
++	for studio_id in profile.career_studio_ids:
++		if typeof(studio_id) != TYPE_STRING or studio_id.is_empty(): return false
++	if not profile.active_studio_id.is_empty() and not profile.career_studio_ids.has(profile.active_studio_id): return false
++	var seen := {}
++	for milestone in profile.milestone_ids:
++		if typeof(milestone) != TYPE_STRING or milestone.is_empty() or seen.has(milestone): return false
++		seen[milestone] = true
++	if not profile.pending_departure.is_empty():
++		if profile.pending_departure.get("studio_id") != profile.active_studio_id or typeof(profile.pending_departure.get("reason")) != TYPE_STRING: return false
++	return true
++
++static func request_departure(profile: Dictionary, studio_id: String, reason: String, at_safe_boundary: bool) -> Dictionary:
++	if not valid(profile) or profile.active_studio_id != studio_id or reason.is_empty() or not profile.pending_departure.is_empty(): return {}
++	if reason == "voluntary" and not at_safe_boundary: return {}
++	var next := profile.duplicate(true)
++	next.pending_departure = {"studio_id": studio_id, "reason": reason}
++	return next
++
++static func finish_departure(profile: Dictionary, cycle: int, at_safe_boundary: bool) -> Dictionary:
++	if not valid(profile) or not at_safe_boundary or cycle < 0 or profile.pending_departure.is_empty(): return {}
++	var next := profile.duplicate(true)
++	var last: Dictionary = next.operated_periods.back()
++	if last.studio_id != next.active_studio_id or last.end_cycle != -1 or cycle < last.start_cycle: return {}
++	last.end_cycle = cycle
++	last.exit_reason = next.pending_departure.reason
++	next.operated_periods[next.operated_periods.size() - 1] = last
++	next.active_studio_id = ""
++	next.pending_departure = {}
++	return next if valid(next) else {}
++
++static func activate(profile: Dictionary, studio_id: String, cycle: int, studio_exists: bool, at_safe_boundary: bool) -> Dictionary:
++	if not valid(profile) or not profile.active_studio_id.is_empty() or not profile.pending_departure.is_empty() or not studio_exists or not at_safe_boundary or studio_id.is_empty() or cycle < 0: return {}
++	var next := profile.duplicate(true)
++	next.active_studio_id = studio_id
++	if not next.career_studio_ids.has(studio_id): next.career_studio_ids.append(studio_id)
++	next.operated_periods.append({"studio_id": studio_id, "start_cycle": cycle, "end_cycle": -1, "exit_reason": ""})
++	return next if valid(next) else {}
++
++static func record_milestone(profile: Dictionary, milestone_id: String) -> Dictionary:
++	if not valid(profile) or milestone_id.is_empty() or profile.milestone_ids.has(milestone_id): return {}
++	var next := profile.duplicate(true)
++	next.milestone_ids.append(milestone_id)
++	return next
++
++static func record_financing(profile: Dictionary, studio_id: String, package_id: String, cycle: int, loan_cents: int, equity_cents: int) -> Dictionary:
++	if not valid(profile) or studio_id.is_empty() or package_id.is_empty() or cycle < 0 or loan_cents < 0 or equity_cents < 0: return {}
++	for item in profile.financing_summaries:
++		if item.get("package_id") == package_id: return {}
++	var next := profile.duplicate(true)
++	next.financing_summaries.append({"studio_id": studio_id, "package_id": package_id, "cycle": cycle,
++		"loan_cents": loan_cents, "equity_cents": equity_cents})
++	return next
+--- base/scripts/legacy/founder_profile.gd.uid
++++ candidate/scripts/legacy/founder_profile.gd.uid
+@@ -0,0 +1 @@
++uid://bj8t70c3cweg6
+--- base/scripts/legacy/legacy_codec.gd
++++ candidate/scripts/legacy/legacy_codec.gd
+@@ -0,0 +1,57 @@
++## Lossless JSON-facing codec for founder and cap-table metadata.
++## The enclosing world checkpoint still needs its own atomic save/rollback.
++extends RefCounted
++
++const Ownership := preload("res://scripts/legacy/ownership_book.gd")
++const Founder := preload("res://scripts/legacy/founder_profile.gd")
++
++static func encode_book(book: Dictionary) -> Dictionary:
++	if not Ownership.valid(book): return {}
++	var holders := {}
++	for holder in book.holders: holders[holder] = str(book.holders[holder])
++	return {"schema_version":1, "studio_id":book.studio_id, "revision":str(book.revision),
++		"issued_units":str(book.issued_units), "holders":holders, "transaction_ids":book.transaction_ids.duplicate()}
++
++static func decode_book(payload: Dictionary) -> Dictionary:
++	if payload.get("schema_version") != 1 or typeof(payload.get("holders")) != TYPE_DICTIONARY or typeof(payload.get("transaction_ids")) != TYPE_ARRAY: return {}
++	var revision := _integer(payload.get("revision"))
++	var issued := _integer(payload.get("issued_units"))
++	if revision < 0 or issued <= 0: return {}
++	var holders := {}
++	for holder in payload.holders:
++		var units := _integer(payload.holders[holder])
++		if units <= 0: return {}
++		holders[holder] = units
++	var book := {"studio_id":payload.get("studio_id"), "revision":revision, "issued_units":issued,
++		"holders":holders, "transaction_ids":payload.transaction_ids.duplicate(true)}
++	return book if Ownership.valid(book) else {}
++
++static func encode_founder(profile: Dictionary) -> Dictionary:
++	if not Founder.valid(profile): return {}
++	var copy := profile.duplicate(true)
++	for period in copy.operated_periods:
++		period.start_cycle = str(period.start_cycle)
++		period.end_cycle = str(period.end_cycle)
++	for item in copy.financing_summaries:
++		for field in ["cycle", "loan_cents", "equity_cents"]: item[field] = str(item[field])
++	return copy
++
++static func decode_founder(payload: Dictionary) -> Dictionary:
++	if payload.get("schema_version") != 1 or typeof(payload.get("operated_periods")) != TYPE_ARRAY or typeof(payload.get("financing_summaries")) != TYPE_ARRAY: return {}
++	var copy := payload.duplicate(true)
++	for period in copy.operated_periods:
++		if not period is Dictionary: return {}
++		period.start_cycle = _integer(period.get("start_cycle"))
++		period.end_cycle = _integer(period.get("end_cycle"))
++		if period.start_cycle < 0 or period.end_cycle < -1: return {}
++	for item in copy.financing_summaries:
++		if not item is Dictionary: return {}
++		for field in ["cycle", "loan_cents", "equity_cents"]:
++			item[field] = _integer(item.get(field))
++			if item[field] < 0: return {}
++	return copy if Founder.valid(copy) else {}
++
++static func _integer(value: Variant) -> int:
++	if typeof(value) != TYPE_STRING or value.is_empty() or not value.is_valid_int(): return -2
++	var parsed := int(value)
++	return parsed if str(parsed) == value else -2
+--- base/scripts/legacy/legacy_codec.gd.uid
++++ candidate/scripts/legacy/legacy_codec.gd.uid
+@@ -0,0 +1 @@
++uid://djnwc7yevvtr
+--- base/scripts/legacy/ownership_book.gd
++++ candidate/scripts/legacy/ownership_book.gd
+@@ -0,0 +1,142 @@
++## Pure corporate ownership planner. A plan is not a committed transaction:
++## its cash legs must be settled with Studio finance in the same world commit.
++extends RefCounted
++
++const MAX_INT: int = 9223372036854775807
++
++static func create(studio_id: String, holders: Dictionary) -> Dictionary:
++	var book := {"studio_id": studio_id, "revision": 0, "issued_units": 0, "holders": holders.duplicate(true), "transaction_ids": []}
++	for units in holders.values():
++		if typeof(units) != TYPE_INT or units < 0 or units > MAX_INT - book.issued_units: return {}
++		book.issued_units += units
++	return book if valid(book) else {}
++
++static func valid(book: Dictionary) -> bool:
++	if typeof(book.get("studio_id")) != TYPE_STRING or book.studio_id.is_empty(): return false
++	if typeof(book.get("revision")) != TYPE_INT or book.revision < 0: return false
++	if typeof(book.get("issued_units")) != TYPE_INT or book.issued_units <= 0: return false
++	if typeof(book.get("holders")) != TYPE_DICTIONARY or typeof(book.get("transaction_ids")) != TYPE_ARRAY: return false
++	var total := 0
++	for holder in book.holders:
++		if typeof(holder) != TYPE_STRING or not _valid_holder(holder) or holder == "studio:" + book.studio_id: return false
++		var units: Variant = book.holders[holder]
++		if typeof(units) != TYPE_INT or units <= 0 or units > MAX_INT - total: return false
++		total += units
++	var seen := {}
++	for tx_id in book.transaction_ids:
++		if typeof(tx_id) != TYPE_STRING or tx_id.is_empty() or seen.has(tx_id): return false
++		seen[tx_id] = true
++	return total == book.issued_units
++
++static func valid_world(books: Dictionary) -> bool:
++	for studio_id in books:
++		if typeof(studio_id) != TYPE_STRING or typeof(books[studio_id]) != TYPE_DICTIONARY: return false
++		if not valid(books[studio_id]) or books[studio_id].studio_id != studio_id: return false
++		for holder in books[studio_id].holders:
++			if holder.begins_with("studio:") and not books.has(holder.substr(7)): return false
++	var visiting := {}
++	var visited := {}
++	for studio_id in books:
++		if not _acyclic(studio_id, books, visiting, visited): return false
++	return true
++
++static func controller(book: Dictionary) -> String:
++	if not valid(book): return ""
++	for holder in book.holders:
++		if book.holders[holder] > book.issued_units / 2: return holder
++	return ""
++
++static func plan_secondary(books: Dictionary, request: Dictionary) -> Dictionary:
++	if not valid_world(books) or not _common_request(request): return {}
++	if not books.has(request.studio_id) or _transaction_used(books, request.tx_id): return {}
++	for field in ["seller", "buyer", "units", "price_cents", "seller_consented"]:
++		if not request.has(field): return {}
++	if typeof(request.seller) != TYPE_STRING or typeof(request.buyer) != TYPE_STRING or not _valid_holder(request.seller) or not _valid_holder(request.buyer) or request.seller == request.buyer: return {}
++	if typeof(request.units) != TYPE_INT or typeof(request.price_cents) != TYPE_INT or typeof(request.seller_consented) != TYPE_BOOL: return {}
++	if request.units <= 0 or request.price_cents <= 0 or not request.seller_consented: return {}
++	var original: Dictionary = books[request.studio_id]
++	if not _fresh(original, request) or int(original.holders.get(request.seller, 0)) < request.units: return {}
++	var candidate: Dictionary = original.duplicate(true)
++	candidate.holders[request.seller] -= request.units
++	if candidate.holders[request.seller] == 0: candidate.holders.erase(request.seller)
++	var prior: int = candidate.holders.get(request.buyer, 0)
++	if prior > MAX_INT - request.units: return {}
++	candidate.holders[request.buyer] = prior + request.units
++	candidate.revision += 1
++	candidate.transaction_ids.append(request.tx_id)
++	var new_world := books.duplicate(true)
++	new_world[request.studio_id] = candidate
++	if not valid_world(new_world): return {}
++	return {"books": new_world, "cash_legs": _secondary_legs(request), "transaction_id": request.tx_id,
++		"target_studio_id": request.studio_id, "issued_units": candidate.issued_units,
++		"controller_before": controller(original), "controller_after": controller(candidate)}
++
++static func plan_primary(books: Dictionary, request: Dictionary) -> Dictionary:
++	if not valid_world(books) or not _common_request(request): return {}
++	if not books.has(request.studio_id) or _transaction_used(books, request.tx_id): return {}
++	for field in ["buyer", "investment_cents", "pre_money_cents", "affirmative_units"]:
++		if not request.has(field): return {}
++	if typeof(request.buyer) != TYPE_STRING or not _valid_holder(request.buyer): return {}
++	for field in ["investment_cents", "pre_money_cents", "affirmative_units"]:
++		if typeof(request[field]) != TYPE_INT: return {}
++	if request.investment_cents <= 0 or request.pre_money_cents <= 0: return {}
++	var original: Dictionary = books[request.studio_id]
++	if not _fresh(original, request) or request.affirmative_units <= original.issued_units / 2 or request.affirmative_units > original.issued_units: return {}
++	if original.issued_units > MAX_INT / request.investment_cents: return {}
++	var numerator: int = original.issued_units * request.investment_cents
++	var units := _round_nearest_even(numerator, request.pre_money_cents)
++	if units <= 0 or units > MAX_INT - original.issued_units or request.investment_cents > MAX_INT - request.pre_money_cents: return {}
++	var candidate: Dictionary = original.duplicate(true)
++	var prior: int = candidate.holders.get(request.buyer, 0)
++	if prior > MAX_INT - units: return {}
++	candidate.holders[request.buyer] = prior + units
++	candidate.issued_units += units
++	candidate.revision += 1
++	candidate.transaction_ids.append(request.tx_id)
++	var new_world := books.duplicate(true)
++	new_world[request.studio_id] = candidate
++	if not valid_world(new_world): return {}
++	return {"books": new_world, "cash_legs": _primary_legs(request), "transaction_id": request.tx_id,
++		"target_studio_id": request.studio_id, "new_units": units, "pre_money_cents": request.pre_money_cents,
++		"post_money_cents": request.pre_money_cents + request.investment_cents,
++		"controller_before": controller(original), "controller_after": controller(candidate)}
++
++static func _common_request(request: Dictionary) -> bool:
++	for field in ["studio_id", "tx_id", "expected_revision"]:
++		if not request.has(field): return false
++	return typeof(request.studio_id) == TYPE_STRING and not request.studio_id.is_empty() and typeof(request.tx_id) == TYPE_STRING and not request.tx_id.is_empty() and typeof(request.expected_revision) == TYPE_INT
++
++static func _fresh(book: Dictionary, request: Dictionary) -> bool:
++	return book.revision == request.expected_revision and not book.transaction_ids.has(request.tx_id)
++
++static func _transaction_used(books: Dictionary, tx_id: String) -> bool:
++	for book in books.values():
++		if book.transaction_ids.has(tx_id): return true
++	return false
++
++static func _valid_holder(holder: String) -> bool:
++	for prefix in ["founder:", "studio:", "outside:"]:
++		if holder.begins_with(prefix) and holder.length() > prefix.length(): return true
++	return false
++
++static func _acyclic(studio_id: String, books: Dictionary, visiting: Dictionary, visited: Dictionary) -> bool:
++	if visiting.has(studio_id): return false
++	if visited.has(studio_id): return true
++	visiting[studio_id] = true
++	for holder in books[studio_id].holders:
++		if holder.begins_with("studio:") and not _acyclic(holder.substr(7), books, visiting, visited): return false
++	visiting.erase(studio_id)
++	visited[studio_id] = true
++	return true
++
++static func _round_nearest_even(numerator: int, denominator: int) -> int:
++	var quotient: int = numerator / denominator
++	var remainder: int = numerator % denominator
++	if remainder > denominator / 2 or (denominator % 2 == 0 and remainder == denominator / 2 and quotient % 2 == 1): return quotient + 1
++	return quotient
++
++static func _secondary_legs(request: Dictionary) -> Array:
++	return [{"holder": request.buyer, "delta_cents": -request.price_cents}, {"holder": request.seller, "delta_cents": request.price_cents}]
++
++static func _primary_legs(request: Dictionary) -> Array:
++	return [{"holder": request.buyer, "delta_cents": -request.investment_cents}, {"holder": "studio:" + request.studio_id, "delta_cents": request.investment_cents}]
+--- base/scripts/legacy/ownership_book.gd.uid
++++ candidate/scripts/legacy/ownership_book.gd.uid
+@@ -0,0 +1 @@
++uid://cl2i28r7lbasb

@@ -1,5 +1,7 @@
 # Cash-funded rival Beta duration — 2026-10-25
 
+**SUPERSEDED IN PART, 2026-10-26:** The [later user direction](2026-10-26-beta-qa-marketing-loan-direction-v1.md) keeps funded, useful Beta work and QA before Marketing, but directs rivals to consider legal Bank loans. The no-new-loan restriction in this record no longer governs future AI policy. Its historical study and unresolved runway questions remain evidence.
+
 **Later 2026-10-25 priority:** The [full-Scope / QA-then-Marketing decision](2026-10-25-full-scope-qa-marketing-decision-v1.md) requires AI Scope completion before Beta and selects useful Search→Debug Bug reduction ahead of bankroll-funded Marketing. This cash-runway record still governs the no-new-loan and finite-opportunity design boundary; its numerical reserve and hand allowance remain OPEN.
 
 **SELECTED qualitative direction from the user; numerical policy and adoption OPEN.** Rivals should tailor Beta duration to money the studio can actually use without taking a new loan. This refines the earlier proportional-to-Design/Alpha suggestion: prior production effort can define the size of a Beta opportunity, while cash and known bills determine whether the studio can afford to use it. It does not approve a hand count, reserve, QA threshold, Marketing valuation, financing rule, or canonical gameplay change. The current fixed two-hand Beta policy remains **ACTIVE/TRIAL** pending a source-pinned candidate and review.

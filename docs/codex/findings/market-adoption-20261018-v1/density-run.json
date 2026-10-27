@@ -1,0 +1,26 @@
+{
+  "elapsed_seconds": 11.315052499994636,
+  "process_cpu_seconds": 9.984375,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_market_density_trial.gd"
+  ],
+  "exit": 0,
+  "errors": [],
+  "tail": [
+    "MARKET_TRANSACTION_CYCLE cycle=7 snapshot=market-v2-6-4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945 facts=0 releases=2",
+    "MARKET_TRANSACTION_CYCLE cycle=8 snapshot=market-v2-8-18079e4baed852ed6cb6f3cd72c7a6a9c793cd56b4137c15577df400d5f75c83 facts=2 releases=2",
+    "MARKET_TRANSACTION_CYCLE cycle=9 snapshot=market-v2-8-18079e4baed852ed6cb6f3cd72c7a6a9c793cd56b4137c15577df400d5f75c83 facts=2 releases=2",
+    "MARKET_TRANSACTION_CYCLE cycle=10 snapshot=market-v2-10-18079e4baed852ed6cb6f3cd72c7a6a9c793cd56b4137c15577df400d5f75c83 facts=2 releases=2",
+    "MARKET_DENSITY_REAL cycle=10 count=1 targets=[42, 28, 42, 28]",
+    "MARKET_TRANSACTION checks=122 failures=0 cycles=11 releases=2",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

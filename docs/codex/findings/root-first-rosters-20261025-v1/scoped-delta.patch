@@ -1,0 +1,784 @@
+--- previous/scripts/studio_specialties.gd
++++ current/scripts/studio_specialties.gd
+@@ -1,10 +1,22 @@
+ class_name StudioSpecialties
+ extends RefCounted
+ 
+-## Authority §63: fixed Primitive membership; future cards never auto-grant.
+-const ROSTER_VERSION := 2
++## Authority §63 (historical v1/v2),2026-10-25 root-first replacements (v3).
++## Fixed Primitive membership: future cards and Store ancestors never auto-grant.
++const ROSTER_VERSION := 3
+ const LEVELS_SWAP := [&"strategy", &"simulation", &"sports"]
+ const COMMON_IDS: Array[StringName] = [&"text", &"4_color_palette", &"8_bit_sound", &"keyboard_and_mouse", &"controller", &"controls"]
++const ROOT_FIRST_COMMON_IDS: Array[StringName] = [&"text", &"4_color_palette", &"sound_effects", &"keyboard_and_mouse", &"controller", &"controls"]
++const ROOT_FIRST_PATCHES := {
++	&"action": {"remove":["multiple_endings","general_combat"],"add":["lives_system","simple_story"]},
++	&"adventure": {"remove":["8_bit_sound","local_leaderboards","multiple_endings","general_combat"],"add":["enemies","sound_effects"]},
++	&"role_playing": {"remove":["8_bit_sound","local_leaderboards","multiple_endings","general_combat","secrets"],"add":["enemies","sound_effects","exploration"]},
++	&"strategy": {"remove":["multiple_endings"],"add":["simple_story"]},
++	&"simulation": {"remove":["local_leaderboards","multiple_endings","enemies"],"add":["lives_system","simple_story"]},
++	&"puzzle": {"remove":["8_bit_sound","local_leaderboards","multiple_endings","general_combat","secrets"],"add":["enemies","sound_effects","exploration"]},
++	&"sports": {"remove":["multiple_endings","enemies"],"add":["lives_system","simple_story"]},
++	&"racing": {"remove":["multiple_endings","enemies"],"add":["lives_system","simple_story"]},
++}
+ const PRIMITIVE_IDS := ["text", "sprites", "4_color_palette", "8_bit_sound", "8_bit_music", "keyboard_and_mouse", "controller", "scrolling", "menu_system", "local_leaderboards", "split_screen", "score_system", "lives_system", "simple_story", "dialogue", "character_backstories", "multiple_endings", "controls", "enemies", "power_ups", "general_combat", "levels", "maps", "exploration", "secrets", "sound_effects", "music"]
+ const RULES := {
+ 	&"action": {"cores": ["graphics", "technology"], "signature": ["general_combat"], "emphasis": "Graphics + Tech (30% each)"},
+@@ -19,9 +31,9 @@
+ 
+ static func preview(specialty: StringName, roster_version: int = ROSTER_VERSION) -> Dictionary:
+ 	var genre := PrimitivePredevelopment.find_entry("genres", specialty)
+-	if roster_version not in [1, 2] or not RULES.has(specialty) or genre.is_empty(): return {}
++	if roster_version not in [1, 2, 3] or not RULES.has(specialty) or genre.is_empty(): return {}
+ 	var rule: Dictionary = RULES[specialty]
+-	var swap := roster_version == 2 and specialty in LEVELS_SWAP
++	var swap := roster_version >= 2 and specialty in LEVELS_SWAP
+ 	var ids: Array[StringName] = []
+ 	var names: Array[String] = []
+ 	var scope := 0
+@@ -35,9 +47,24 @@
+ 			ids.append(StringName(card.id))
+ 			names.append(str(card.name))
+ 			scope += int(card.scope)
+-	for id in COMMON_IDS:
++	if roster_version == 3:
++		var patch: Dictionary = ROOT_FIRST_PATCHES[specialty]
++		for id in patch.remove: ids.erase(StringName(id))
++		for id in patch.add:
++			if not ids.has(StringName(id)): ids.append(StringName(id))
++		# Recompute only presentation totals from actual fixed membership.
++		names.clear()
++		scope=0
++		var definitions := {}
++		for card: Dictionary in FeatureStoreCatalog.starting_features(): definitions[StringName(card.id)]=card
++		for id in ids:
++			if not PRIMITIVE_IDS.has(str(id)) or not definitions.has(id): return {}
++			names.append(str(definitions[id].name))
++			scope+=int(definitions[id].scope)
++	for id in ROOT_FIRST_COMMON_IDS if roster_version == 3 else COMMON_IDS:
+ 		if not ids.has(StringName(id)): return {}
+-	for id in rule.signature:
+-		if not ids.has(StringName(id)): return {}
++	if roster_version < 3:
++		for id in rule.signature:
++			if not ids.has(StringName(id)): return {}
+ 	return {"id": specialty, "name": genre.name, "ids": ids, "names": names, "scope": scope, "count": ids.size(), "emphasis": rule.emphasis,
+-		"roster_version":roster_version,"note":"Starts with Levels instead of Maps. Maps is an optional Store purchase unlocked by Levels." if swap else ""}
++		"roster_version":roster_version,"note":"Starts with connected Primitive parent paths. Later Features are optional Store purchases or research." if roster_version == 3 else ("Starts with Levels instead of Maps. Maps is an optional Store purchase unlocked by Levels." if swap else "")}
+--- previous/scripts/persistence/studio_checkpoint.gd
++++ current/scripts/persistence/studio_checkpoint.gd
+@@ -169,7 +169,7 @@
+ 	var resolver := func(request: Dictionary) -> Dictionary: return RunState.RelationshipRules.resolve(r,request)
+ 	if RunState.RelationshipLedger.reconstruct(r.publisher_relationships,r.bank_run_id,r.completed_run_cycles,resolver).is_empty(): return "Invalid publisher relationship provenance"
+ 	var roster_version: int = r.get("founding_roster_version",1)
+-	if roster_version not in [1,2]: return "Invalid founding roster version"
++	if roster_version not in [1,2,3]: return "Invalid founding roster version"
+ 	if r.has("founding_roster_version") and payload.content_revision != revision(): return "Invalid historical founding roster metadata"
+ 	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
+ 	if r.studio_name.is_empty() or r.studio_name != r.studio_name.strip_edges() or r.studio_name.length()>80 or StudioSpecialties.preview(r.studio_specialty).is_empty(): return "Invalid Studio identity"
+--- previous/scripts/market/rival_world_checkpoint.gd
++++ current/scripts/market/rival_world_checkpoint.gd
+@@ -4,6 +4,11 @@
+ extends RefCounted
+ 
+ const Session := preload("res://scripts/simulation/campaign_session.gd")
++## New grants change prospectively; existing world ownership/RNG is retained.
++const ROOT_FIRST_PREDECESSOR_SOURCES := [
++	"874feab75c9d0221fc22dce1ac844a812f8a610bd58c12e203f9080c9c370392", # Pre-v3 editor.
++	"57da40e29af0d492f12109030c79b549e64814faaeefba0528ce195dfc0baeac", # Actual Studio Fix EXE.
++]
+ const USABILITY_PREDECESSOR_SOURCES := [
+ 	"22f504d07fd73970dda3d8746e0cf23ca741afc1436acd5ff3f1630787933036",
+ 	"6fffe610efd5a29e99f6b6359091f470f56f182814179328c91f6c8ffb5b92cc",
+@@ -265,7 +270,7 @@
+ 	var commission_predecessor: bool = predecessor_source in COMMISSION_PREDECESSOR_SOURCES
+ 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
+ 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
+-	var source_ok: bool = predecessor_source==Replay.source_identity() or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
++	var source_ok: bool = predecessor_source==Replay.source_identity() or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+ 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
+ 	if commission_predecessor: paired_revision = StudioCheckpoint.CommissionPrevious.new().revision()
+ 	if support_predecessor: paired_revision = StudioCheckpoint.SupportPrevious.new().revision()
+--- previous/scripts/ui/feature_store.gd
++++ current/scripts/ui/feature_store.gd
+@@ -42,6 +42,7 @@
+ var _debug_popup: PanelContainer
+ var _debug_notes: Label
+ var _debug_scroll: ScrollContainer
++var _toolbar: VBoxContainer
+ 
+ class DebugButton extends Button:
+ 	func _make_custom_tooltip(for_text: String) -> Object:
+@@ -60,6 +61,16 @@
+ 
+ static func score_label(stat: StringName) -> String:
+ 	return "Tech" if stat == &"technology" else str(stat).capitalize()
++
++
++static func transparent_button(button: BaseButton) -> void:
++	# Duplicate local styles: shared Theme and popup/menu surfaces stay intact.
++	for state in ["normal", "disabled", "hover", "pressed", "hover_pressed"]:
++		var source := button.get_theme_stylebox(state) as StyleBoxFlat
++		if source == null: continue
++		var style := source.duplicate() as StyleBoxFlat
++		style.bg_color.a = 0.0
++		button.add_theme_stylebox_override(state, style)
+ 
+ 
+ func setup(run: RunState) -> void:
+@@ -91,15 +102,28 @@
+ 	_body = PanelContainer.new()
+ 	_body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ 	_body.offset_top = 50
++	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	add_child(_body)
+ 	var margin := MarginContainer.new()
++	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	for side: String in ["left", "right", "top", "bottom"]:
+ 		margin.add_theme_constant_override("margin_" + side, 16)
+ 	_body.add_child(margin)
++	var map_host := Control.new()
++	map_host.name = "StoreMapHost"
++	map_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
++	map_host.custom_minimum_size.y = 150
++	margin.add_child(map_host)
+ 	var layout := VBoxContainer.new()
++	_toolbar = layout
++	layout.name = "StoreToolbar"
++	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
++	layout.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
++	layout.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+ 	layout.add_theme_constant_override("separation", 12)
+-	margin.add_child(layout)
++	map_host.add_child(layout)
+ 	var actions := HBoxContainer.new()
++	actions.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	actions.alignment = BoxContainer.ALIGNMENT_END
+ 	actions.add_theme_constant_override("separation", 8)
+ 	layout.add_child(actions)
+@@ -125,19 +149,22 @@
+ 	_close.text = "Close Store"
+ 	_close.pressed.connect(hide)
+ 	actions.add_child(_close)
++	for button: BaseButton in [_research_list, _research_button, _debug, _close]:
++		transparent_button(button)
+ 	_build_debug_popup()
+ 	resized.connect(_position_debug)
+ 	visibility_changed.connect(func():
+ 		if not visible: _debug_popup.hide())
+ 	_spending_advice = Label.new()
+ 	_spending_advice.name = "SpendingAdvice"
++	_spending_advice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	_spending_advice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ 	_spending_advice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ 	_spending_advice.add_theme_font_size_override("font_size", 14)
+ 	layout.add_child(_spending_advice)
+ 	_map = FeatureStoreMap.new()
+ 	add_child(_map)
+-	_map.configure(self, layout)
++	_map.configure(self, layout, map_host)
+ 	_run.features_changed.connect(_refresh)
+ 	_run.cash_changed.connect(_refresh)
+ 	_run.sales_changed.connect(_refresh)
+--- previous/scripts/ui/feature_store_map.gd
++++ current/scripts/ui/feature_store_map.gd
+@@ -51,14 +51,16 @@
+ var _menu_tween: Tween
+ var focusing := false
+ 
+-func configure(owner_store: FeatureStore, layout: VBoxContainer) -> void:
++func configure(owner_store: FeatureStore, layout: VBoxContainer, map_host: Control) -> void:
+ 	store = owner_store
+ 	var toolbar := HBoxContainer.new()
++	toolbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	layout.add_child(toolbar)
+ 	for caption in ["−", "+", "Show all"]:
+ 		var button := Button.new()
+ 		button.text = caption
+ 		toolbar.add_child(button)
++		FeatureStore.transparent_button(button)
+ 		if caption == "Show all": button.pressed.connect(fit_map)
+ 		elif caption == "+": button.pressed.connect(func(): set_zoom(zoom * 1.25))
+ 		else: button.pressed.connect(func(): set_zoom(zoom / 1.25))
+@@ -69,6 +71,7 @@
+ 	help.add_theme_font_size_override("font_size", 12)
+ 	toolbar.add_child(help)
+ 	var legend := HBoxContainer.new()
++	legend.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	legend.add_theme_constant_override("separation", 16)
+ 	layout.add_child(legend)
+ 	var legend_title := Label.new()
+@@ -87,7 +90,10 @@
+ 	scroll.follow_focus = false
+ 	scroll.focus_mode = Control.FOCUS_ALL
+ 	scroll.custom_minimum_size.y = 150
+-	layout.add_child(scroll)
++	# The map occupies the whole body; the transparent toolbar is a sibling above it.
++	map_host.add_child(scroll)
++	map_host.move_child(scroll, 0)
++	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ 	canvas = Control.new()
+ 	canvas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ 	canvas.size_flags_vertical = Control.SIZE_EXPAND_FILL
+@@ -400,7 +406,19 @@
+ 
+ func _center_canvas() -> void:
+ 	if tree != null:
+-		tree.position = _focus_padding + (canvas.size - bounds * zoom - _focus_padding * 2.0).max(Vector2.ZERO) / 2.0
++		var inset := Vector2(0, _toolbar_height())
++		tree.position = inset + _focus_padding + (canvas.size - inset - bounds * zoom - _focus_padding * 2.0).max(Vector2.ZERO) / 2.0
++
++func _toolbar_height() -> float:
++	return store._toolbar.size.y + 12.0
++
++func _camera_center() -> Vector2:
++	return (_map_rect().size + Vector2(0, _toolbar_height())) / 2.0
++
++func _over_toolbar_control(point: Vector2) -> bool:
++	for control in store._toolbar.find_children("*", "BaseButton", true, false):
++		if control.is_visible_in_tree() and control.get_global_rect().has_point(point): return true
++	return false
+ 
+ func _move_category(lane: StringName, offset: Vector2) -> void:
+ 	for id: StringName in store.LANE_MEMBERS[lane]: store._nodes[id].position += offset
+@@ -484,13 +502,13 @@
+ 	_cancel_drag()
+ 	dismiss()
+ 	_view_revision += 1
+-	if anchor.x < 0: anchor = _map_rect().size / 2.0
++	if anchor.x < 0: anchor = _camera_center()
+ 	var previous := zoom
+ 	var previous_origin := tree.position
+ 	zoom = clampf(value, 0.025, 2.0)
+ 	var offset := Vector2(scroll.scroll_horizontal, scroll.scroll_vertical)
+ 	tree.scale = Vector2.ONE * zoom
+-	canvas.custom_minimum_size = bounds * zoom + _focus_padding * 2.0
++	canvas.custom_minimum_size = bounds * zoom + _focus_padding * 2.0 + Vector2(0, _toolbar_height())
+ 	canvas.size = canvas.custom_minimum_size.max(_map_rect().size)
+ 	_center_canvas()
+ 	zoom_label.text = "%d%%" % roundi(zoom * 100)
+@@ -510,7 +528,7 @@
+ 
+ func fit_map() -> void:
+ 	_focus_padding = Vector2.ZERO
+-	set_zoom(minf((scroll.size.x - 20) / bounds.x, (scroll.size.y - 20) / bounds.y))
++	set_zoom(minf((scroll.size.x - 20) / bounds.x, (scroll.size.y - _toolbar_height() - 20) / bounds.y))
+ 	_scroll_after_layout(Vector2.ZERO, _view_revision)
+ 
+ func dismiss() -> void:
+@@ -672,7 +690,9 @@
+ 	if focusing or (_menu_tween != null and _menu_tween.is_running()): return
+ 	if store._selected.is_empty() or not store.is_visible_in_tree(): return
+ 	var node_rect: Rect2 = store._nodes[store._selected].get_global_rect()
+-	var limits := store._body.get_global_rect().grow(-8)
++	var limits := _map_rect().grow(-8)
++	limits.position.y += _toolbar_height()
++	limits.size.y -= _toolbar_height()
+ 	var point := Vector2(node_rect.end.x + 12, node_rect.position.y)
+ 	var width := popup.size.x + _parent_width()
+ 	if point.x + width > limits.end.x and not _parents_expanded: point.x = node_rect.position.x - popup.size.x - 12
+@@ -728,8 +748,9 @@
+ 	store._buy.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	store._buy.focus_mode = Control.FOCUS_NONE
+ 	var view_size := _map_rect().size
++	view_size.y -= _toolbar_height()
+ 	var old_zoom := zoom
+-	var old_center := (Vector2(scroll.scroll_horizontal, scroll.scroll_vertical) + view_size / 2.0 - tree.position) / zoom
++	var old_center := (Vector2(scroll.scroll_horizontal, scroll.scroll_vertical) + _camera_center() - tree.position) / zoom
+ 	var final_zoom := minf(1.25, (view_size.y - 24.0) / (LABEL_OFFSET.y + LABEL_SIZE.y))
+ 	final_zoom = maxf(0.6, final_zoom)
+ 	# Leave room on the right for the detail menu, including at outermost nodes.
+@@ -753,10 +774,10 @@
+ func _camera_frame(value: float, world_center: Vector2) -> void:
+ 	zoom = value
+ 	tree.scale = Vector2.ONE * zoom
+-	canvas.custom_minimum_size = bounds * zoom + _focus_padding * 2.0
++	canvas.custom_minimum_size = bounds * zoom + _focus_padding * 2.0 + Vector2(0, _toolbar_height())
+ 	canvas.size = canvas.custom_minimum_size.max(_map_rect().size)
+ 	_center_canvas()
+-	var offset := world_center * zoom + tree.position - _map_rect().size / 2.0
++	var offset := world_center * zoom + tree.position - _camera_center()
+ 	scroll.scroll_horizontal = roundi(offset.x)
+ 	scroll.scroll_vertical = roundi(offset.y)
+ 	zoom_label.text = "%d%%" % roundi(zoom * 100)
+@@ -845,6 +866,8 @@
+ 			if not clicked.is_empty(): _focus_node(clicked)
+ 			get_viewport().set_input_as_handled()
+ 			return
++		# _input precedes GUI dispatch: never steal a toolbar button's gesture.
++		if _over_toolbar_control(event.position): return
+ 		var over_menu := (popup.visible and popup.modulate.a > 0.05 and popup.get_global_rect().has_point(event.position)) or (parent_links.is_visible_in_tree() and parent_links.get_global_rect().grow(MenuTransitions.ENTRANCE_DISTANCE).has_point(event.position))
+ 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT and not over_menu: dismiss()
+ 		if over_menu or not _map_rect().has_point(event.position): return
+--- previous/scripts/debug/verify_root_first_rosters.gd
++++ current/scripts/debug/verify_root_first_rosters.gd
+@@ -0,0 +1,44 @@
++extends SceneTree
++const Factory := preload("res://scripts/simulation/run_factory.gd")
++var checks := 0
++var failures := 0
++func _initialize() -> void: _run.call_deferred()
++func expect(ok: bool,label: String) -> void:
++	checks+=1
++	print("PASS: " if ok else "FAIL: ",label)
++	if not ok:failures+=1
++func _run() -> void:
++	var fixture_path := "res://scripts/debug/fixtures/studio_specialties_v3.json"
++	for arg in OS.get_cmdline_user_args():
++		if arg.begins_with("--input="): fixture_path = arg.trim_prefix("--input=")
++	var fixtures: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(fixture_path))
++	var catalog=root.get_node("CardDatabase").get_development_catalog()
++	var schema := StudioCheckpoint.new()
++	var graph := FeatureStoreCatalog.graph(RunState.new()._feature_definitions,RunState.new()._feature_offers)
++	assert(not graph.has("error"))
++	for genre: String in fixtures:
++		var session=Factory.create_fresh_session({"schema_version":1,"studio_id":"root-"+genre,"studio_name":"Root Studio","specialty":genre,"traits":[],"seed":"4417"},catalog)
++		var run: RunState=session.run
++		var view := StudioSpecialties.preview(StringName(genre))
++		var ids: Array=view.ids.map(func(id):return str(id));ids.sort()
++		expect(view.roster_version==3 and run.get_founding_roster_version()==3,"New starts use explicit v3: "+genre)
++		expect(ids==fixtures[genre].ids and view.scope==fixtures[genre].scope and view.count==fixtures[genre].count,"Independent exact v3 roster/count/Scope: "+genre)
++		for id: StringName in run.get_owned_feature_ids():
++			expect(graph.parents[id].all(func(parent):return run.owns_feature(parent)),"Every owned starting node has all named parents: "+genre+"/"+str(id))
++			expect(run.get_feature_familiarity(id)==0,"Starting grants never credit plays: "+genre+"/"+str(id))
++		var saved := schema.capture(run)
++		var restored := schema.hydrate(saved)
++		expect(not saved.is_empty() and saved.run.founding_roster_version=="3" and restored!=null and schema.capture(restored)==saved,"V3 exact saved-state/RNG round trip: "+genre)
++		var prior := saved.duplicate(true)
++		StudioSpecialties.preview(StringName(genre))
++		expect(not run.set_studio_name("Duplicate",&"action") and schema.capture(run)==prior,"No passive or repeat grant: "+genre)
++		expect(run.owns_feature(&"sound_effects") and not run.owns_feature(&"multiple_endings") and not run.owns_feature(&"save_files"),"Root sound and no free advanced/crossover branch: "+genre)
++		var project:=PrimitivePredevelopment.prepare_project("Root supply",StringName(genre),&"fantasy",run)
++		expect(project.get_feature_supply_ids()==run.get_owned_feature_ids(),"New project uses the exact granted pool: "+genre)
++		if genre in ["adventure","role_playing","puzzle"]:
++			expect(not run.owns_feature(&"8_bit_sound") and run.get_primitive_reserve_offer(&"8_bit_sound").unlocked,"Sound Effects starts the path to unowned 8-Bit Sound: "+genre)
++			var cash:=run.get_cash_cents();var cycle:=run.get_completed_run_cycles()
++			var quote:=run.get_primitive_reserve_offer(&"8_bit_sound")
++			expect(run.purchase_starter_feature(&"8_bit_sound") and run.get_cash_cents()==cash-int(quote.price_cents) and run.get_completed_run_cycles()==cycle,"Existing child purchase price/timing remain intact: "+genre)
++	print("ROOT_FIRST_ROSTERS checks=%d failures=%d"%[checks,failures])
++	quit(failures)
+--- previous/scripts/debug/verify_store_transparent_toolbar.gd
++++ current/scripts/debug/verify_store_transparent_toolbar.gd
+@@ -0,0 +1,63 @@
++extends SceneTree
++var checks := 0
++var failures := 0
++var output := ""
++func _initialize() -> void: _run.call_deferred()
++func expect(ok: bool, label: String) -> void:
++	checks += 1
++	if not ok: failures += 1
++	print("PASS: " if ok else "FAIL: ", label)
++func settle() -> void:
++	for i in range(4): await process_frame
++func click(point: Vector2) -> void:
++	for pressed in [true, false]:
++		var event := InputEventMouseButton.new()
++		event.position = point; event.global_position = point
++		event.button_index = MOUSE_BUTTON_LEFT; event.pressed = pressed
++		root.push_input(event, true)
++func _run() -> void:
++	for arg in OS.get_cmdline_user_args():
++		if arg.begins_with("--out="): output = arg.trim_prefix("--out=")
++	for resolution in [Vector2i(900,600), Vector2i(1280,720), Vector2i(1920,1080)]:
++		root.size = resolution; root.content_scale_size = resolution
++		var run := RunState.new()
++		run.initialize_cash_cents(0)
++		assert(run.create_studio_with_traits("Transparent Store", &"adventure", []))
++		run.finalize_starter_selection()
++		assert(run.spend_cash_cents(run.get_cash_cents() - 1))
++		var before := StudioCheckpoint.new().capture(run)
++		var store := FeatureStore.new()
++		store.theme = load("res://resources/ui/workspace_theme.tres")
++		store.setup(run); root.add_child(store); store.open_store()
++		await settle()
++		var rect := store._scroll.get_global_rect()
++		expect(rect.encloses(store._research_button.get_global_rect()), "Map continues behind research controls " + str(resolution))
++		expect(rect.encloses(store._spending_advice.get_global_rect()), "Map continues behind budget advice")
++		var controls: Array[BaseButton] = [store._research_list,store._research_button,store._close,store._debug]
++		for button in store.find_children("*","Button",true,false):
++			if button.text in ["−", "+", "Show all"]: controls.append(button)
++		for button in controls:
++			for state in ["normal", "disabled"]:
++				var style := button.get_theme_stylebox(state) as StyleBoxFlat
++				expect(style != null and style.bg_color.a == 0, "Transparent " + state + " fill: " + button.text)
++			var hover := button.get_theme_stylebox("hover") as StyleBoxFlat
++			expect(hover != null and hover.border_color.a > 0,"Hover cue retained: " + button.text)
++		var old_zoom := store._map.zoom
++		var plus := controls.filter(func(button): return button.text == "+")[0] as Button
++		click(plus.get_global_rect().get_center()); await settle()
++		expect(store._map.zoom > old_zoom and not store._map.dragging,"Pointer reaches zoom through overlay without map gesture")
++		click(store._debug.get_global_rect().get_center()); await settle()
++		expect(store._debug_popup.visible, "Pointer reaches Debug above map")
++		store._debug_popup.hide()
++		store._map.navigate(&"Audio"); await settle()
++		expect(store._nodes[&"sound_effects"].get_node("MapStatus").text == "Owned", "Root Sound Effects is owned")
++		expect(not run.owns_feature(&"8_bit_sound") and run.get_primitive_reserve_offer(&"8_bit_sound").unlocked, "8-Bit Sound remains an optional unlocked child")
++		if DisplayServer.get_name() != "headless" and not output.is_empty():
++			await RenderingServer.frame_post_draw
++			root.get_texture().get_image().save_png(output.path_join("store-overlay-%d.png" % resolution.x))
++		expect(StudioCheckpoint.new().capture(run) == before, "Overlay browsing preserves complete state and RNG")
++		click(store._close.get_global_rect().get_center()); await settle()
++		expect(not store.visible, "Pointer reaches Close Store above map")
++		store.queue_free(); await settle()
++	print("TRANSPARENT_TOOLBAR checks=%d failures=%d" % [checks, failures])
++	quit(failures)
+--- previous/scripts/debug/fixtures/studio_specialties_v3.json
++++ current/scripts/debug/fixtures/studio_specialties_v3.json
+@@ -0,0 +1,230 @@
++{
++  "action": {
++    "ids": [
++      "4_color_palette",
++      "8_bit_sound",
++      "controller",
++      "controls",
++      "enemies",
++      "exploration",
++      "keyboard_and_mouse",
++      "levels",
++      "lives_system",
++      "maps",
++      "menu_system",
++      "power_ups",
++      "scrolling",
++      "simple_story",
++      "sound_effects",
++      "split_screen",
++      "sprites",
++      "text"
++    ],
++    "core": [
++      21,
++      9,
++      30,
++      12
++    ],
++    "count": 18,
++    "scope": 27
++  },
++  "adventure": {
++    "ids": [
++      "4_color_palette",
++      "character_backstories",
++      "controller",
++      "controls",
++      "dialogue",
++      "enemies",
++      "exploration",
++      "keyboard_and_mouse",
++      "levels",
++      "lives_system",
++      "maps",
++      "score_system",
++      "secrets",
++      "simple_story",
++      "sound_effects",
++      "split_screen",
++      "text"
++    ],
++    "core": [
++      14,
++      4,
++      17,
++      19
++    ],
++    "count": 17,
++    "scope": 22
++  },
++  "puzzle": {
++    "ids": [
++      "4_color_palette",
++      "character_backstories",
++      "controller",
++      "controls",
++      "dialogue",
++      "enemies",
++      "exploration",
++      "keyboard_and_mouse",
++      "levels",
++      "lives_system",
++      "menu_system",
++      "score_system",
++      "scrolling",
++      "simple_story",
++      "sound_effects",
++      "split_screen",
++      "text"
++    ],
++    "core": [
++      11,
++      3,
++      27,
++      18
++    ],
++    "count": 17,
++    "scope": 23
++  },
++  "racing": {
++    "ids": [
++      "4_color_palette",
++      "8_bit_sound",
++      "controller",
++      "controls",
++      "keyboard_and_mouse",
++      "levels",
++      "lives_system",
++      "maps",
++      "menu_system",
++      "power_ups",
++      "scrolling",
++      "simple_story",
++      "sound_effects",
++      "split_screen",
++      "sprites",
++      "text"
++    ],
++    "core": [
++      18,
++      8,
++      27,
++      12
++    ],
++    "count": 16,
++    "scope": 24
++  },
++  "role_playing": {
++    "ids": [
++      "4_color_palette",
++      "character_backstories",
++      "controller",
++      "controls",
++      "dialogue",
++      "enemies",
++      "exploration",
++      "keyboard_and_mouse",
++      "levels",
++      "lives_system",
++      "maps",
++      "menu_system",
++      "score_system",
++      "simple_story",
++      "sound_effects",
++      "split_screen",
++      "text"
++    ],
++    "core": [
++      14,
++      3,
++      22,
++      18
++    ],
++    "count": 17,
++    "scope": 23
++  },
++  "simulation": {
++    "ids": [
++      "4_color_palette",
++      "8_bit_sound",
++      "controller",
++      "controls",
++      "keyboard_and_mouse",
++      "levels",
++      "lives_system",
++      "menu_system",
++      "power_ups",
++      "score_system",
++      "scrolling",
++      "simple_story",
++      "sound_effects",
++      "split_screen",
++      "text"
++    ],
++    "core": [
++      8,
++      8,
++      25,
++      14
++    ],
++    "count": 15,
++    "scope": 21
++  },
++  "sports": {
++    "ids": [
++      "4_color_palette",
++      "8_bit_sound",
++      "controller",
++      "controls",
++      "keyboard_and_mouse",
++      "levels",
++      "lives_system",
++      "menu_system",
++      "music",
++      "power_ups",
++      "scrolling",
++      "simple_story",
++      "sound_effects",
++      "split_screen",
++      "text"
++    ],
++    "core": [
++      8,
++      15,
++      25,
++      12
++    ],
++    "count": 15,
++    "scope": 22
++  },
++  "strategy": {
++    "ids": [
++      "4_color_palette",
++      "8_bit_sound",
++      "controller",
++      "controls",
++      "enemies",
++      "general_combat",
++      "keyboard_and_mouse",
++      "levels",
++      "lives_system",
++      "menu_system",
++      "power_ups",
++      "score_system",
++      "scrolling",
++      "simple_story",
++      "sound_effects",
++      "split_screen",
++      "text"
++    ],
++    "core": [
++      10,
++      8,
++      28,
++      19
++    ],
++    "count": 17,
++    "scope": 25
++  }
++}
+--- previous/scripts/debug/verify_studio_specialties.gd
++++ current/scripts/debug/verify_studio_specialties.gd
+@@ -13,7 +13,7 @@
+ 	return [run.get_studio_name(), run.get_studio_specialty(), run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.needs_starter_selection()]
+ 
+ func _run() -> void:
+-	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v2.json"))
++	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v3.json"))
+ 	for genre: String in fixtures:
+ 		var run := RunState.new()
+ 		run.initialize_cash_cents(0)
+@@ -99,8 +99,8 @@
+ 	check(not game.call("_begin_next_project", studio, "", &"puzzle", &"fantasy") and snapshot(run) == before and run.needs_starter_selection(), "Failed first start preserves optional zero-cycle purchase window")
+ 	check(game.call("_begin_next_project", studio, "Puzzle Game", &"puzzle", &"fantasy") and game.project_state.get_genre_id() == &"puzzle" and run.get_studio_specialty() == &"action", "Successful nonmatching first game commits independent Genre")
+ 	check(not run.needs_starter_selection() and run.get_completed_run_cycles() == 1 and run.get_cash_cents() == 570000, "First-project boundary closes initial window with usual cost")
+-	var offer := run.get_primitive_reserve_offer(&"simple_story")
+-	check(not offer.initial and ResearchTestActions.acquire(run,&"simple_story") and run.get_cash_cents() == 490000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
+-	check(not game.project_state.get_feature_supply_ids().has(&"simple_story") and PrimitivePredevelopment.prepare_project("Next", &"racing", &"fantasy", run).get_feature_supply_ids().has(&"simple_story"), "New ownership feeds next supply without changing current frozen supply")
++	var offer := run.get_primitive_reserve_offer(&"dialogue")
++	check(not offer.initial and ResearchTestActions.acquire(run,&"dialogue") and run.get_cash_cents() == 490000 and run.get_completed_run_cycles() == 2, "Unowned Primitive costs one cycle and the boundary pays rent")
++	check(not game.project_state.get_feature_supply_ids().has(&"dialogue") and PrimitivePredevelopment.prepare_project("Next", &"racing", &"fantasy", run).get_feature_supply_ids().has(&"dialogue"), "New ownership feeds next supply without changing current frozen supply")
+ 	game.queue_free()
+ 	await process_frame
+--- previous/scripts/debug/verify_studio_roster_versions.gd
++++ current/scripts/debug/verify_studio_roster_versions.gd
+@@ -1,6 +1,15 @@
+ extends "res://scripts/debug/verify_primitive_branches.gd"
+ const WorldCodec := preload("res://scripts/market/rival_world_checkpoint.gd")
+ const Trial := preload("res://scripts/market/rival_trial.gd")
++
++func historical_v2(genre: StringName) -> RunState:
++	# Explicit constructed historical fixture, not today's once-only grant.
++	# Actual preceding-source worlds are checked separately with cold files.
++	var run: RunState=fresh(genre).run
++	run._owned_features.clear()
++	for id in StudioSpecialties.preview(genre,2).ids:run._owned_features[id]=true
++	run._founding_roster_version=2
++	return run
+ 
+ func core(ids: Array) -> Dictionary:
+ 	var result := {"graphics":0,"sound":0,"technology":0,"design":0}
+@@ -20,7 +29,7 @@
+ 	var exceptions := {}
+ 	for genre: String in old:
+ 		var v1 := StudioSpecialties.preview(StringName(genre),1)
+-		var v2 := StudioSpecialties.preview(StringName(genre))
++		var v2 := StudioSpecialties.preview(StringName(genre),2)
+ 		var ids1: Array = v1.ids.map(func(id): return str(id)); ids1.sort()
+ 		var ids2: Array = v2.ids.map(func(id): return str(id)); ids2.sort()
+ 		check(ids1 == old[genre].ids and ids2 == current[genre].ids,"independent exact roster fixtures " + genre)
+@@ -31,8 +40,8 @@
+ 			expected[expected.find(&"maps")] = &"levels"
+ 			c1.technology -= 2; c1.design += 2
+ 		check(v2.ids == expected and c1 == c2,"exact ordered swap and Core delta only " + genre)
+-		var run: RunState = fresh(StringName(genre)).run
+-		check(run.get_owned_feature_ids() == v2.ids and run.get_founding_roster_version() == 2,"fresh v2 grant " + genre)
++		var run := historical_v2(StringName(genre))
++		check(run.get_owned_feature_ids() == v2.ids and run.get_founding_roster_version() == 2,"explicit historical v2 fixture " + genre)
+ 		for child: StringName in [&"dialogue", &"character_backstories", &"maps", &"exploration"]:
+ 			check(not run.owns_feature(child) or run.owns_feature(FeatureStoreCatalog.PRIMITIVE_PARENTS[child]),"original four parent gates closed " + genre + "/" + str(child))
+ 		exceptions[genre] = []
+@@ -43,7 +52,7 @@
+ 		check(not payload.is_empty() and payload.run.founding_roster_version == "2","explicit persisted v2 " + genre)
+ 		var restored := codec.hydrate(payload)
+ 		check(restored != null and restored.get_founding_roster_version() == 2 and codec.capture(restored) == payload,"v2 exact checkpoint round trip " + genre)
+-		for invalid in ["0","3","2.5",2,null]:
++		for invalid in ["0","4","2.5",2,null]:
+ 			var malformed := payload.duplicate(true); malformed.run.founding_roster_version = invalid
+ 			check(codec.hydrate(malformed) == null,"invalid version rejects " + str(invalid))
+ 		var before := state(run)
+@@ -94,7 +103,7 @@
+ 	world.advance_committed_player_cycle(Trial.policies(world),12)
+ 	var player := codec.capture(session.run)
+ 	var world_saved := WorldCodec.new().capture(world)
+-	check(not player.is_empty() and not world_saved.is_empty(),"v2 active-world save")
++	check(not player.is_empty() and not world_saved.is_empty(),"current active-world save")
+ 	if not OS.get_environment("PN_CARD_FRAME_OUTPUT").is_empty():
+ 		FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT"),FileAccess.WRITE).store_string(JSON.stringify({"source":Replay.source_identity(),"player":player,"world":world_saved,"newer_gate_grant_exceptions":exceptions,"checks":checks,"failures":failures},"\t"))
+ 	print("STUDIO_ROSTER_VERSIONS checks=%d failures=%d"%[checks,failures])
+--- previous/scripts/debug/verify_design_phase.gd
++++ current/scripts/debug/verify_design_phase.gd
+@@ -15,6 +15,13 @@
+ }
+ 
+ var _failures := 0
++
++# Frozen extraction digests intentionally describe the historical v2 roster.
++# Current-v3 campaigns are independently covered by live/headless parity checks.
++func historical_v2_roster(run: RunState) -> void:
++	run._owned_features.clear()
++	for id in StudioSpecialties.preview(&"action", 2).ids: run._owned_features[id] = true
++	run._founding_roster_version = 2
+ 
+ 
+ func _initialize() -> void:
+--- previous/scripts/debug/verify_design_command.gd
++++ current/scripts/debug/verify_design_command.gd
+@@ -49,6 +49,7 @@
+ 			var run := RunState.new()
+ 			run.initialize_cash(0)
+ 			_expect(run.create_studio_with_traits("M2a", &"action", [&"lean_production"] if scenario == "lean" else []), "Studio fixture initializes")
++			historical_v2_roster(run)
+ 			run.set("_bank_run_id", &"m2a_studio")
+ 			run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
+ 			run.set("_employees", EmployeeRoster.create(&"m2a_studio"))
+--- previous/scripts/debug/verify_alpha_command.gd
++++ current/scripts/debug/verify_alpha_command.gd
+@@ -48,6 +48,7 @@
+ 			var run := RunState.new()
+ 			run.initialize_cash(0)
+ 			_expect(run.create_studio_with_traits("M2b", &"action", [&"lean_production"] if scenario == "lean" else []), "Studio fixture initializes")
++			historical_v2_roster(run)
+ 			run.set("_bank_run_id", &"m2b_studio")
+ 			run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
+ 			run.set("_employees", EmployeeRoster.create(&"m2b_studio"))
+--- previous/scripts/debug/verify_beta_command.gd
++++ current/scripts/debug/verify_beta_command.gd
+@@ -36,6 +36,7 @@
+ 			var run := RunState.new()
+ 			run.initialize_cash(0)
+ 			_expect(run.create_studio_with_traits("M2c", &"action", []), "Studio fixture initializes")
++			historical_v2_roster(run)
+ 			run.set("_bank_run_id", &"m2c_studio")
+ 			run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
+ 			run.set("_employees", EmployeeRoster.create(&"m2c_studio"))

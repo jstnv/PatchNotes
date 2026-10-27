@@ -1,0 +1,96 @@
+{
+  "alpha_handoff_pins": [
+    {
+      "file": "card_ledger.json",
+      "handoff_pin": "0f093b0ba907043120c3e6e529511322e6e0b99358adf6d69c80d5c174cfc83c",
+      "pin_length": 64,
+      "baseline_matches": [
+        [
+          "data/card_ledger.json",
+          "0f093b0ba907043120c3e6e529511322e6e0b99358adf6d69c80d5c174cfc83c"
+        ]
+      ],
+      "exact": true
+    },
+    {
+      "file": "feature_store_ledger.json",
+      "handoff_pin": "547a1cbc408ac263f3cf3a9e96e8667f33993e211bbb492937716c7df414cf",
+      "pin_length": 62,
+      "baseline_matches": [
+        [
+          "data/feature_store_ledger.json",
+          "547a1cbc408ac263f3cf3c3a9e96e8667f33993e211bbb492937716c7df414cf"
+        ]
+      ],
+      "exact": false
+    },
+    {
+      "file": "card_data.gd",
+      "handoff_pin": "a77cf773d3591fe9ba07aca3a258aee5d1027da45f6ecd70c46187f4b9ba1d1a",
+      "pin_length": 64,
+      "baseline_matches": [
+        [
+          "scripts/cards/card_data.gd",
+          "a77cf773d3591fe9ba07aca3a258aee5d1027da45f6ecd70c46187f4b9ba1d1a"
+        ]
+      ],
+      "exact": true
+    },
+    {
+      "file": "card_database.gd",
+      "handoff_pin": "2b08963e39e206085658c03c1f003ef048ba63d78cc71da11ff581d4d5521540",
+      "pin_length": 64,
+      "baseline_matches": [
+        [
+          "scripts/cards/card_database.gd",
+          "2b08963e39e206085658c03c1f003ef048ba63d78cc71da11ff581d4d5521540"
+        ]
+      ],
+      "exact": true
+    },
+    {
+      "file": "feature_store_catalog.gd",
+      "handoff_pin": "01f10357af592115db8ba39af812eb8790758b465d8c0a07127ae998d386e22d",
+      "pin_length": 64,
+      "baseline_matches": [
+        [
+          "scripts/cards/feature_store_catalog.gd",
+          "01f10357af592115db8ba39af812eb8790758b465d8c0a07127ae998d386e22d"
+        ]
+      ],
+      "exact": true
+    },
+    {
+      "file": "run_state.gd",
+      "handoff_pin": "8352dee38ef666e7133cdb6bac94536f6b97b775146fbd200c89de278490bc30",
+      "pin_length": 64,
+      "baseline_matches": [
+        [
+          "scripts/run_state.gd",
+          "8352dee38ef666e7133cdb6bac94536f6b97b775146fbd200c89de278490bc30"
+        ]
+      ],
+      "exact": true
+    },
+    {
+      "file": "feature_store_map.gd",
+      "handoff_pin": "3c085ba8eec2aece9546a193dc0f5c05f6cda2f9f9a45b260d60566d42579135",
+      "pin_length": 64,
+      "baseline_matches": [
+        [
+          "scripts/ui/feature_store_map.gd",
+          "3c085ba8eec2aece9546a193dc0f5c05f6cda2f9f9a45b260d60566d42579135"
+        ]
+      ],
+      "exact": true
+    }
+  ],
+  "authored_catalog_sha256": "7abb61ce205ab9471342bc092059c408f66a49b547011ddb19b61142fd3f9ab4",
+  "exact_printed_rows_verified": [
+    "turn_based_combat",
+    "character_classes",
+    "character_development",
+    "branching_dialogue"
+  ],
+  "note": "Malformed abbreviated handoff hashes are retained as evidence, not treated as verified SHA-256 pins. Intake snapshot and exact candidate before-hashes are authoritative reconciliation evidence."
+}

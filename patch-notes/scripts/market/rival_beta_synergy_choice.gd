@@ -51,6 +51,7 @@ static func _assess(cards: Array) -> Dictionary:
 			if finite.has(definition): return {}
 			finite[definition] = true
 		var category := str(card.get("beta_category", ""))
+		if not BetaPriorityAllocation.category_enabled(StringName(category)): return {}
 		if not counts.has(category): return {}
 		counts[category] += 1
 		var value := int(card.get("beta_value", -1))

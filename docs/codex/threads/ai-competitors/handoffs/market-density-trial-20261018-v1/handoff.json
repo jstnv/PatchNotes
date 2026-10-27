@@ -1,0 +1,1181 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-19T03:20:42.385955+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "ai-market-density-20261018-v31",
+    "owner": "ai-competitors",
+    "created_utc": "2026-10-19T02:54:48.046052+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "89d52a809a9f25613ecc7e269f28914d9c7edc8f4849aee31393170996cdc82c",
+    "creation_identity": "5a4fe680df36fd7846a259d0ea00b20139a05e7aa082a32617b6a01285230208",
+    "lineage": [
+      {
+        "id": "ai-market-transaction-control-20261018-v1",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-control-20261018-v1",
+        "metadata_sha256": "7423f4bd61d462ddddd8cbf66df076a0655bb707a6b11a27bd395dc404c6f99d",
+        "source_identity": "89d52a809a9f25613ecc7e269f28914d9c7edc8f4849aee31393170996cdc82c"
+      },
+      {
+        "id": "ai-market-transaction-snapshot-20261018-v1",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-snapshot-20261018-v1",
+        "metadata_sha256": "dd8b87602399e19b926770770437e47f919d1db7cc8ef2da40a593fd5fd503bc",
+        "source_identity": "6ba05558259d17395260c308e0a1213fa6eb0cc95ad096421dda595663bc39bf"
+      },
+      {
+        "id": "ai-market-transaction-snapshot-20261018-v2",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-snapshot-20261018-v2",
+        "metadata_sha256": "2baeea537564468e9baa3ec8c7a5d66c743ed439a3b969822b473876d1fbed34",
+        "source_identity": "9350564aaf12882b246d26e30c85a9cb98deb77dd30ae0130cd1350840c0aa04"
+      },
+      {
+        "id": "ai-market-transaction-snapshot-20261018-v3",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-snapshot-20261018-v3",
+        "metadata_sha256": "cb88c1b8dc3271d8deaad47bafe71539938dcaf7a39f194edb61a207a0c4d23d",
+        "source_identity": "e0d93ab78971ef54b6d81ca3da42b40b3e89ed6eee9bdbf111e5beab3a159f0f"
+      },
+      {
+        "id": "ai-market-transaction-snapshot-20261018-v4",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-snapshot-20261018-v4",
+        "metadata_sha256": "32d8d48b3699ac9e2ec8fbfb18b635a8b8fb8ef95ea585d147eba02de41a84e5",
+        "source_identity": "9a7f86de4b6406ded3b620fd63f6e285077033fc45de5d04bcbab123be9ca199"
+      },
+      {
+        "id": "ai-market-transaction-ledger-20261018-v5",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-ledger-20261018-v5",
+        "metadata_sha256": "0c40cb7f2678c092427e2393a032ac12fe98843f318bc1081c39b0ba96275110",
+        "source_identity": "2691092598787a89e7fe86732e54a29f089535dadd44ec4da2e46f238b3d9bce"
+      },
+      {
+        "id": "ai-market-transaction-ledger-20261018-v6",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-ledger-20261018-v6",
+        "metadata_sha256": "5717542af1b6cb7ff30ac884b390dee55509ade0ceb524a14f1c706b63568e2d",
+        "source_identity": "0c5349a4777f76393834de477313007774b1abb80752e3a1637cfca37492397d"
+      },
+      {
+        "id": "ai-market-transaction-ledger-20261018-v7",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-ledger-20261018-v7",
+        "metadata_sha256": "692dc79138da3a96914d0e5b542ec2b2ea6f1eb1caa9bf7e39eaab8d88357cac",
+        "source_identity": "eca5a0e129a46aee6f8aeaf34e8aa0b71dcc994f361bb076a8f0421d7f813f90"
+      },
+      {
+        "id": "ai-market-transaction-ledger-20261018-v8",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-ledger-20261018-v8",
+        "metadata_sha256": "033f280040440f6e7e9c97873e968e988f30270444ef50fd784872b4a8b050f0",
+        "source_identity": "ca42cf9dadea7c21f8b28ea3243d7fda049a93317ce8f4eb8d854b2b7b8d5729"
+      },
+      {
+        "id": "ai-market-transaction-review-20261018-v9",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-review-20261018-v9",
+        "metadata_sha256": "39b17b76d48c7e88186a589c0ec1368413fdad04e123abbe9da5c3df90697030",
+        "source_identity": "31a368df30108a57ce923e04860cfde88ac99d1c70c757bf99810d918d38fa00"
+      },
+      {
+        "id": "ai-market-transaction-provenance-20261018-v10",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-transaction-provenance-20261018-v10",
+        "metadata_sha256": "cd30a500cc54644f9d8e0a3de850f7c8c808ef6b75d727fa6c44d269c4950b60",
+        "source_identity": "17aff46ed01f6ba63a5480e3e79d52b2b70bbcbc659e2f71f6c6686906a1d539"
+      },
+      {
+        "id": "ai-market-migration-pair-20261018-v11",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-pair-20261018-v11",
+        "metadata_sha256": "c9e0ee2bb22b59a2d77add0a92c336c57495026dd8a0dad7b1a2b48707f12300",
+        "source_identity": "5137f6c473297e260893b20627489ab6f8d44b65493e94240d10417f08ab0b51"
+      },
+      {
+        "id": "ai-market-migration-pair-20261018-v12",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-pair-20261018-v12",
+        "metadata_sha256": "5a57b151d567d6a7221c30bada27dec3e31a7ef112afe6a01e22cd0f11142ed4",
+        "source_identity": "519dd962dff58e5eda7df88dbb47ff57df49a113f02b4fd22cbbff38cadf17a9"
+      },
+      {
+        "id": "ai-market-migration-pair-20261018-v13",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-pair-20261018-v13",
+        "metadata_sha256": "44f9160d28bc979aa0def6114456d7bbaa26c9f41513c40952a4c2fee63e23d9",
+        "source_identity": "1511308a4b94a0daf53decc03696c4edad546306132fd252d4f758fe0e35e734"
+      },
+      {
+        "id": "ai-market-migration-pair-20261018-v14",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-pair-20261018-v14",
+        "metadata_sha256": "67bd3d573d7fd5473fca93fad68030a8c83d4cec53ffed04e34e5bd18b37459d",
+        "source_identity": "4922e35b20c6568348f2317c40c281a8a161008365e13f6aebd6ba9f3e7f2517"
+      },
+      {
+        "id": "ai-market-migration-pair-20261018-v15",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-pair-20261018-v15",
+        "metadata_sha256": "68af1876b8cf00622d49c08306da7afa5d2014eb2abe3cc5265c91c63f9173ca",
+        "source_identity": "8e14f0f5e6aa8f39ff0a7d28bfe79d39c8b160e9a61ffd35e72a4e8924a20b05"
+      },
+      {
+        "id": "ai-market-migration-pair-20261018-v16",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-pair-20261018-v16",
+        "metadata_sha256": "b64278c964adf8e628dbb60e739f7daa39b453e6020b7ed86d65ea9f942266cb",
+        "source_identity": "e20629b0f763a6280abccdf3355347e8276bcda018184b5ad47949aaafe98478"
+      },
+      {
+        "id": "ai-market-migration-pair-20261018-v17",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-pair-20261018-v17",
+        "metadata_sha256": "e8d9b89b516ff500a2fc83e0d159ffae21216734d157433cfb0e5ce0a423d978",
+        "source_identity": "a8e1f863d1de2e6bb135bbfaf17b584b5a4d86ea1e17eb0bbc9733bcbc6d6568"
+      },
+      {
+        "id": "ai-market-migration-pair-20261018-v18",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-pair-20261018-v18",
+        "metadata_sha256": "b2cfccf963c3b934d3ece5beb1346633cce7ae7a9712f378b8ed24836011ca29",
+        "source_identity": "dac892ef6487ec911ba6fd47ecfcbe434a861add29b99c4b7febe80b7dd2601d"
+      },
+      {
+        "id": "ai-market-migration-founder-f8-20261018-v19",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-founder-f8-20261018-v19",
+        "metadata_sha256": "dba6af631abec74f6884463fbbbc2755ab91102a6f24f940f88779b31c9b213d",
+        "source_identity": "ba415f639505b011febd6ceba0579e09c087009ee9d036bdf19c7cd27189765e"
+      },
+      {
+        "id": "ai-market-migration-founder-f8-20261018-v20",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-founder-f8-20261018-v20",
+        "metadata_sha256": "9131b34b80bb0cbb732ade414c23bf61f71e23d3c1992230437520a6de763d3e",
+        "source_identity": "04fe7a6499944b69260f0725211776281f70d2b1e1fb1f8c300d117b8183f6d1"
+      },
+      {
+        "id": "ai-market-migration-presentation-20261018-v21",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-presentation-20261018-v21",
+        "metadata_sha256": "49a2c978241a7d5c8711030d101565f8dd940c80d65728943b572769d4e3a7f0",
+        "source_identity": "032890a6f6d0bb1fadcea435cad1ce7f7d65dcb7cb1211bdc413233736882d4e"
+      },
+      {
+        "id": "ai-market-migration-historical-20261018-v22",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-historical-20261018-v22",
+        "metadata_sha256": "92c4a9704853d6782c9a24412eb646f1f80f8fc8ce5def0e45c9be194fce9094",
+        "source_identity": "1e10239634ec960d2f40305587764c504c581f957b7511b689ac9e6abe427d1b"
+      },
+      {
+        "id": "ai-market-migration-historical-20261018-v23",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-historical-20261018-v23",
+        "metadata_sha256": "de93d41846887b20526d78354c689c25396f9fe635a3f569fe2bd49b97ad9c06",
+        "source_identity": "131ee92076af6fb64a07c06a060aa56becb7019eb6119b2c3ceb17a6f7cd7de4"
+      },
+      {
+        "id": "ai-market-migration-integrated-20261018-v24",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-integrated-20261018-v24",
+        "metadata_sha256": "7aaf82c461699724c9672c4c362db1bbe511f49fdb6eff2ae6d349940e866c32",
+        "source_identity": "2ff343d94c9e31afb70639f595acb15409c733bdf24f8f96529438b4b5a9019f"
+      },
+      {
+        "id": "ai-market-migration-integrated-status-20261018-v25",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-integrated-20261018-v25-status",
+        "metadata_sha256": "fcbd2b2c855133c80c1f2422b9d0639422694be7f288b3f67d667c23a80c28c8",
+        "source_identity": "7e6cb33e30f5b2d0c134192d76ef17dd1084567011f6c415ecf54dc533f5f691"
+      },
+      {
+        "id": "ai-market-migration-integrated-verifier-20261018-v26",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-integrated-20261018-v26-verifier",
+        "metadata_sha256": "7fed359dcf6978514975f3add3d137fa6570134138a04050e2da69466f7a6c7e",
+        "source_identity": "8e01eaac6721e0a92c1eecf76dd3f651a7f3aa389169ca2423172fe77d8a5b6d"
+      },
+      {
+        "id": "ai-market-migration-semantic-audit-20261018-v27",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-semantic-20261018-v27-audit",
+        "metadata_sha256": "22e9decae27cb1582da96caad008dae2d5036fbe486755d0cd5d6413715e5eab",
+        "source_identity": "3ceea962652e4cff83c8f63bc49abe40efc47371b72f3431214c306b08a82dca"
+      },
+      {
+        "id": "ai-market-migration-semantic-preflight-20261018-v28",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-semantic-20261018-v28-preflight",
+        "metadata_sha256": "7793652eef7e813dc2651736df0e9898c2866e334172c3e0663cc58dec8038a1",
+        "source_identity": "71cbb9e1d90ce0fde42289171c336d37af00f435caca3df1305bf8bade421885"
+      },
+      {
+        "id": "ai-market-migration-full-restore-20261018-v29",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-migration-full-restore-20261018-v29",
+        "metadata_sha256": "a6a007c3ae48cb1aa2aa37db2730f6c7c363cfef77c027c80f390f36504e38ff",
+        "source_identity": "30508dba9e2d25cd701519defe814bc064759ceaf51eac4a59aa041ba1b932bd"
+      },
+      {
+        "id": "ai-market-density-20261018-v30",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-density-20261018-v30",
+        "metadata_sha256": "6a9793a86feeaa43c55473eb6947b0fdf3a64f201449e398ff363f322a7ca82d",
+        "source_identity": "5a4fe680df36fd7846a259d0ea00b20139a05e7aa082a32617b6a01285230208"
+      }
+    ],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "ACTIVE/TRIAL actual-release market: one month snapshot, same-Genre population and strong-Core Review targets, exclusive Genre/Theme/pair sales buckets, saved frozen ledgers and named old-save migration; reconcile against current source and add visible explanations.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\2026-10-18-market-density-trial-decision-v1.md",
+    "sha256": "3faabf2f005f63435da34c2ccb5524271a1a0f7f1e4f103def5c889198167b71",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Real prior-month rival release changes a later legal player project frozen four-Core Review targets; rejected action changes neither snapshot nor ledger.",
+    "Genre-only, Theme-only and pair crowding use exclusive counts, exact age-month units/cents/Fans, deterministic replay and cold Studio Continue.",
+    "Current-source Store/world migration preserves original old saves, rejects corrupted or unknown sources, and passes graphical/exported Continue plus CPU/save bounds.",
+    "Pre-Development, active Review and monthly sales details explain frozen base, lifts, bucket counts and factor; final coefficients remain trial."
+  ],
+  "base_identity": "89d52a809a9f25613ecc7e269f28914d9c7edc8f4849aee31393170996cdc82c",
+  "candidate_identity": "ee2f33ac564f088eed8d816dc012539b16318e0938f97a06fd1d845a5de2d477",
+  "canonical_identity": "e2f6a3a128e50bbd36bbdff1557d6a5ff981ea92c2273b857c1d76bc100a2721",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "scripts/debug/verify_market_coordinator_integrated.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2ffe7e0a6e76f9f164de8617df9fd6f74a76ed7ead01afc05647be5c96c0332b"
+    },
+    {
+      "path": "scripts/debug/verify_market_density_trial.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fde49ed41c8e12f79973b885cad112a7c944fb631d9c89b8e707fe3f5b6046fb"
+    },
+    {
+      "path": "scripts/debug/verify_market_founder_f8.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0d209602e7b9544db5a713b41a7695c97072a0b159bc9a1e50f8c3b57a07e2bf"
+    },
+    {
+      "path": "scripts/debug/verify_market_historical_sources.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d24c352bb4caea12b4d48eb930960a55c5ec7cda8aa3fd91af181502a6e81575"
+    },
+    {
+      "path": "scripts/debug/verify_market_player_store_integrated.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "25040d8a751596b4ce0442c24a1e44d1e9e5cf1d1f1821768f52312432ff31cb"
+    },
+    {
+      "path": "scripts/debug/verify_market_source_family.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "922d5fce0f493ffc6971de91487e1b093d5a88e904cefcf3dbeaced62ab6f134"
+    },
+    {
+      "path": "scripts/debug/verify_rival_world_foundation.gd",
+      "change": "modified",
+      "before_sha256": "7099b44b1ff5e8ab4b4641687cdae4c6e34099d367d0f9e517e6643ca6e7d516",
+      "after_sha256": "b27f7c99a62270c8da62e7ec0ca982d604258d23c1bd05840477730ab5f5b486"
+    },
+    {
+      "path": "scripts/fanbase/studio_fanbase.gd",
+      "change": "modified",
+      "before_sha256": "566846ebf61e4d1b944276d9aaeacb06ecd316c71d5b7a944412db1247d06b36",
+      "after_sha256": "22e5073a01a9e057da153919bea72d4f0290187ad3f83e39ac41402e9911b865"
+    },
+    {
+      "path": "scripts/market/legacy_pre_market_fanbase.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5feb6862b77eea23ed47301b930447c922e36256eaf416b408be104634ac3efe"
+    },
+    {
+      "path": "scripts/market/legacy_pre_market_sales.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "26b1e1460eac84817840afd83c9dc4b26d423c92767e3cb7c0ca2ba20322e7ad"
+    },
+    {
+      "path": "scripts/market/legacy_pre_market_schema.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7c58889d405e07dd0c55771b23ab42aee3aa6a0a16e05e1a1fc6a47c974e5a62"
+    },
+    {
+      "path": "scripts/market/legacy_pre_market_studio_validator.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "4672e9c15bb4a73a59fdcb73760c5378000ead640d6547718f1a4f54d6fc2b68"
+    },
+    {
+      "path": "scripts/market/market_save_migration_trial.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "10983dfad0593bf3cc791798821e80e0686e928de9f33ba6f239b39ffd659172"
+    },
+    {
+      "path": "scripts/market/market_transaction_trial.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "172784f695199c5d5a8a5be7f4776ffc7ba9abd917f884eba2e59db34c8cc092"
+    },
+    {
+      "path": "scripts/market/rival_world.gd",
+      "change": "modified",
+      "before_sha256": "9f9ad490ba6caa07812342321f22c999cc574e33f435699f5b8ceb773a6b1986",
+      "after_sha256": "8dfa222decd9e0f41df18cbb30c314f187d4cd4e9ca58ae86da13c0efc98e0e5"
+    },
+    {
+      "path": "scripts/market/rival_world_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "40b7221fa02df425681c34ba0bfd6750452d3e522e8ed6be63953b8977b0d7d8",
+      "after_sha256": "5796c851b22aa5c76856500f16b67421f99a092efcf2c86fa415caf9e69c9a6e"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_coordinator.gd",
+      "change": "modified",
+      "before_sha256": "0ed77e3b1bee498ee63a70e81bc370036e256cb888e7138ac046ce077dc8d374",
+      "after_sha256": "1ecc3be5372cb74d0b844f888d0b84b65de2beaef95501bf916ae816578d70f5"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_schema.gd",
+      "change": "modified",
+      "before_sha256": "6b9b51ad0f3fdd2e34bf48c6653bec84b69f2edbf4b14e9dd1bbea04384cc520",
+      "after_sha256": "5ff3649f7ec1142248d00de41fa7cbf3d807bf66c9395b8cce6cc49533537a65"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "0386e1ed3ffad19d01b22ef791dd0918a3bae25a48fc972e707b2ef6f323c5cd",
+      "after_sha256": "27fd36d5bb2955f95d349386f1590e0c971b2e4de98d9015ea68470928406417"
+    },
+    {
+      "path": "scripts/project_state.gd",
+      "change": "modified",
+      "before_sha256": "747e87f7e245b2ff6d1233e9888cf07b0b3fb61873ca953105a9b227ca1d8041",
+      "after_sha256": "5a59a2c08fe9cc5f0b0b34567d19624abf943c911447a8a6d78cc1a3f282bc00"
+    },
+    {
+      "path": "scripts/review/primitive_review_calculator.gd",
+      "change": "modified",
+      "before_sha256": "abc0b809d253035ea07c3133dc82c568ffd0f32a43f352ec50c479d0b3081846",
+      "after_sha256": "b06b4cff867f7f527058943bf50792be3d767faebf244fdc0c84d3e7d4f0dee2"
+    },
+    {
+      "path": "scripts/run_state.gd",
+      "change": "modified",
+      "before_sha256": "8352dee38ef666e7133cdb6bac94536f6b97b775146fbd200c89de278490bc30",
+      "after_sha256": "a72debf525d34f1686fc347d4d6a9f6b17b44abc44ffa588ff5378fb9ad35b3d"
+    },
+    {
+      "path": "scripts/sales/released_game_sales.gd",
+      "change": "modified",
+      "before_sha256": "4d8418b023557cffae670794c9a881d936a2dcbf0eb457d85438c8bfce014739",
+      "after_sha256": "bc9ae609aa31512ffb1fa5840ac94996dffad06ceb4140de90afb7e6b49e0178"
+    },
+    {
+      "path": "scripts/simulation/begin_project.gd",
+      "change": "modified",
+      "before_sha256": "4a23b56999c31e663ab5afb87293d219ed3127c3056b64808c11ba02bd24ebee",
+      "after_sha256": "0d0bac612e5f67f1aab810514d38baf677b6b9a05dbbcedb687d48c65e379726"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "assets/audio/crunch_time_70/STUDIO_THEME.md",
+      "change": "modified",
+      "before_sha256": "aaa326af09614b3859ed72e28a4e666bf650e996da4e47e49c71babd268df9f1",
+      "after_sha256": "b3f5493f9d42e09cb3ee15cb57813fc8b06871dd4027060a9f465375f465d441"
+    },
+    {
+      "path": "data/feature_store_ledger.json",
+      "change": "modified",
+      "before_sha256": "a2e42e9c683c04b37ec7dd68650244f799fe7296d0eeca6d55e75ad2c1e70f93",
+      "after_sha256": "0f4bd970b66333fd5f5d5358571ac428dc0b60fd8fe410e2381af1d214521c4e"
+    },
+    {
+      "path": "queries/market_release_index.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9edab76e6637e239669d8df1a31f706ab53f770e1d394217b63c23e9ad53db3f"
+    },
+    {
+      "path": "scripts/audio/soundtrack.gd",
+      "change": "modified",
+      "before_sha256": "83265987c5619263dd58fb5468d95afa4289bef0382432ede57d2c6676d82d60",
+      "after_sha256": "20144741148007e48d0c02f11c1669727f4df8b9aed2a888871bfb169da96dc0"
+    },
+    {
+      "path": "scripts/audio/theme_blend.gd",
+      "change": "modified",
+      "before_sha256": "1fe04a712c689c0166a86dc12bd55e48730087d1c3b804b265fa4b3ba1318316",
+      "after_sha256": "2e6c08eb5ce2d337167e67127cce299f0b2b4a1b434d92917600c9cbb052e6c5"
+    },
+    {
+      "path": "scripts/cards/feature_store_catalog.gd",
+      "change": "modified",
+      "before_sha256": "01f10357af592115db8ba39af812eb8790758b465d8c0a07127ae998d386e22d",
+      "after_sha256": "a164e6dbaf50569c6c1c3a801d974343d0e039747a53f6e361554fa29aeb662c"
+    },
+    {
+      "path": "scripts/contracts/contract_challenges.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "6be5f579db1cc556522ffd00d772fccd3ee1282a9eef0d423448af6bf54114a9"
+    },
+    {
+      "path": "scripts/contracts/contract_challenges.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "aa86b03d11d3add4c13479a41480ce599d82ba7e6dc7c3b6476b529835d81890"
+    },
+    {
+      "path": "scripts/contracts/contract_result.gd",
+      "change": "modified",
+      "before_sha256": "99c8b66275027712db4d96ff6dae7ca38628305213fef07f538f37bfd6c75697",
+      "after_sha256": "e0bef347077fd68ef2e3ae2c6650cbb5ebfe4452404b4cb05943c31abdfc785d"
+    },
+    {
+      "path": "scripts/contracts/contract_state.gd",
+      "change": "modified",
+      "before_sha256": "e181f6de333b6a349053a348229838bc38704f706e46c940778a363034ec8f8c",
+      "after_sha256": "7178f7011c0780000885cb774cc83c7b05fe988bab8a7f31969eb32c78a80375"
+    },
+    {
+      "path": "scripts/debug/capture_contract_challenges.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "218cad18993ce10c78509385bb8858b6be73039af56a8d029556e2f1135a1fde"
+    },
+    {
+      "path": "scripts/debug/capture_contract_challenges.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "88eb9c09e5f7ad1af45e2dca59a7edee202ac83c588436faa606c6f79e9e59fe"
+    },
+    {
+      "path": "scripts/debug/capture_how_to_play.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a03fe26425cca7d3900cfd16a3965e49461bf320125718b4896dcfea0c0015f4"
+    },
+    {
+      "path": "scripts/debug/capture_how_to_play.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "04658d3861f6f6e4cdd97aa2ea0fa21cfb7d8227121a5bef9aa6a6f127c8dc25"
+    },
+    {
+      "path": "scripts/debug/capture_pause_menu.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a95ff229e628509b7597ca585c0d06fc2654e14dbc09eedc3d24bcfcf1e4c1b2"
+    },
+    {
+      "path": "scripts/debug/capture_pause_menu.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "e78289f489f09fee958bf9a98f1b19c7ca4e0b56c395e60dd5f474bf88af1d12"
+    },
+    {
+      "path": "scripts/debug/capture_primitive_branches.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "45f1d0b369f8e96654addaf681921b3ee74c365b08cd17094aab065eba7fca32"
+    },
+    {
+      "path": "scripts/debug/capture_primitive_branches.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "626306933dfd26d084c358a05b01ceceeaa0b1b764ca68967d2d92aec1a44e16"
+    },
+    {
+      "path": "scripts/debug/capture_sales_hud.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0107eae2bc162b651ebd545c6bd629554b649b39ba1e0e93f35ed22817b06bb8"
+    },
+    {
+      "path": "scripts/debug/capture_sales_hud.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "f10e6a7a62aeabe47e2a3c851ebd2440d7c01f85801f88371098add9daa57ec0"
+    },
+    {
+      "path": "scripts/debug/capture_store_cones.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "15b2feafc54f36baece39ff422048edda98de44e83f2e1a4bc13c0af13c7787c"
+    },
+    {
+      "path": "scripts/debug/capture_store_cones.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "6b372160254ccdec69d209d4f11c2dc962bee191f680e390c0cf5d5f9db21038"
+    },
+    {
+      "path": "scripts/debug/capture_store_hud.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c50b16cce42be2b8022b9fc278ecf841065d2afffffb187a3a8a7ca184ef3307"
+    },
+    {
+      "path": "scripts/debug/capture_store_hud.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "1b5010158f8502cee763f498b04d120969bbbc50797b49335308e0d2880f9891"
+    },
+    {
+      "path": "scripts/debug/contract_challenge_cold_probe.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0748f24e9967af2430b5d0be1ac59573b113f1ad78535d27bab8be82dc1c1032"
+    },
+    {
+      "path": "scripts/debug/contract_challenge_cold_probe.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7ca4928c284003d8359bcc26190f60a06cb7d4026f373e206ef78864bbd1629b"
+    },
+    {
+      "path": "scripts/debug/contract_challenge_restore_probe.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "bd4a9efb7a4fe3d4366b45a863cba55f225431e4a0a94bc4f893de555dde8ba1"
+    },
+    {
+      "path": "scripts/debug/contract_challenge_restore_probe.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ecf3f580372844764eed7b6c7ad23d851fac7cdada4a717eff55c2c0afc0e055"
+    },
+    {
+      "path": "scripts/debug/cult_restart_probe.gd",
+      "change": "modified",
+      "before_sha256": "7119daab238b23d02714fde6cdefa69a5aa888e9174ff8dc59a2d46e4951a7a0",
+      "after_sha256": "161e56664a67f4961e236e2fc7242cc99a50449c44d8ec01d342d48e4f5882c3"
+    },
+    {
+      "path": "scripts/debug/fixtures/studio_specialties_v2.json",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d7cbf93bfbe1afd85816ffffc6f3ea91c12e5473f2a2c97b36d5c9923ced7773"
+    },
+    {
+      "path": "scripts/debug/primitive_branch_cold_probe.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "519841a949e99f1fb5e9697b2056c68c9abbd818a81625d05c83d68e38fa6e27"
+    },
+    {
+      "path": "scripts/debug/primitive_branch_cold_probe.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "4d0217a1e66160fddcea1ddd1a1b24029cfe2d2327318f72ed22f2f84fc144d1"
+    },
+    {
+      "path": "scripts/debug/starwave_restart_probe.gd",
+      "change": "modified",
+      "before_sha256": "40925fa89d2088adf123e459f6a6fedf19c7f8ac98a7cb2f9ab6f5f0736755de",
+      "after_sha256": "8cc0d0f2fed3ab8ff6ecfc737fd31001b1a596b6ce5e67fc3916656017e1abb3"
+    },
+    {
+      "path": "scripts/debug/verify_alpha_pack_ui.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "42a2a817efb767d1499a8e8024ca4092d3cab1e1dd8b4f6fcadad9d1b3f0ceb6"
+    },
+    {
+      "path": "scripts/debug/verify_alpha_shop_pack.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "61cfc2d01c95117883487ffdd04c41fba51ca4374ef007b75e5ccce757ed4eef"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_matrix.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b77b5f3238016f79795eed5f5fa06afeeadb2f9cf952d75135417709fc0a4194"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_matrix.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "790a0db33c3b2e85c2d39d8fb196c94050e6c33fd773db455a34f7ee5f9da5a4"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_publishers.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "88328ef340d111e6101e887655a2fb679f913079f32823c4c542a10cee7c0a5f"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_publishers.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d0dea88df49e6f2e8d9d253ba6c4f9e8a167731109538bc97baabcc703ba16d3"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_runtime.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "90bb98af3a3328c4f548ecd6e61692ec8dba71312c47490cd3386da122c3696d"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_runtime.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a80500e94350f0b54e0da643f6a6c539fd2a6806e365edd8d272d84fe715c3a0"
+    },
+    {
+      "path": "scripts/debug/verify_contract_extraction.gd",
+      "change": "modified",
+      "before_sha256": "f8bd76a6aa0daa62163c8d66658105a86003bba5f3d1fda89fd6a8bc4e17208d",
+      "after_sha256": "68ca58f47b764e94bc452e6d9358781e9ccaebf6f8ab2d0e9d03f1ce31e3c676"
+    },
+    {
+      "path": "scripts/debug/verify_cult_following.gd",
+      "change": "modified",
+      "before_sha256": "3d5b1115ff4474bc6df7cdc8b7c8b9b581debd9b46278ba7ac0ccbefa40edbb5",
+      "after_sha256": "25a5caa5c10dc38be50e4244f2e1ce83082cb8817dca639a18dc7889e98236f1"
+    },
+    {
+      "path": "scripts/debug/verify_design_phase.gd",
+      "change": "modified",
+      "before_sha256": "6df499accb2d9393ca9d0d2c4dd5444ce565197edb974dfc2561b60399021c8b",
+      "after_sha256": "23c21c60c2f61ebe740cbffbece6d0cadbb4ab1e6af02a12daecd4d032a2f1fc"
+    },
+    {
+      "path": "scripts/debug/verify_feature_research.gd",
+      "change": "modified",
+      "before_sha256": "4fd0781650807a59769c65d45f174216d0ee10e215a0fda6e358a7ce67260843",
+      "after_sha256": "84571dc3ad9bd922c2d49602ef2d32cea5d8784cc08c1d676bd2f3773d4ed130"
+    },
+    {
+      "path": "scripts/debug/verify_feature_spending_guidance.gd",
+      "change": "modified",
+      "before_sha256": "60926d6c8ba34cd27b67034fb999e07d46b99dd7480f8793083e26bc1d123f46",
+      "after_sha256": "1fa2bc4813aee6078c67676ed87be9ca1ca48cb433793854cfe3c927b41b4666"
+    },
+    {
+      "path": "scripts/debug/verify_feature_store.gd",
+      "change": "modified",
+      "before_sha256": "8097e767d613118a99b6fec784830ef2f486f56bb2fa610aaba01d881bf545b5",
+      "after_sha256": "86c7d607a04b438ff951512f8649fb0b35a16854f8cff8aa09144748aa277241"
+    },
+    {
+      "path": "scripts/debug/verify_feature_store_navigation.gd",
+      "change": "modified",
+      "before_sha256": "572e0ec7251a10542a61d2c14af28f4a27d21710599d5a0f0b1c224333110859",
+      "after_sha256": "91f23939f35dd8e7ba5fdb9b37cf127fa65587188c26ad13c0c12f3f87507071"
+    },
+    {
+      "path": "scripts/debug/verify_feature_store_radial.gd",
+      "change": "modified",
+      "before_sha256": "d85e5e1439fe36e9a380a1adc65b48953ac89ba4daad2cbc262e916ac1fdabb4",
+      "after_sha256": "f1dd6df668313954974475eb71a3a23ec3dc3451c57a3f3e14aa8292d083f20f"
+    },
+    {
+      "path": "scripts/debug/verify_first_game_and_tips.gd",
+      "change": "modified",
+      "before_sha256": "56e3890f24b035e82868f7be304b6e162edccd55ce8e984e99bd771739af8835",
+      "after_sha256": "ca2b3662486cc30c7979f8013507cd5dedac4fd11b478f3596419cc664c5c8da"
+    },
+    {
+      "path": "scripts/debug/verify_gameplay_tree.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "30f9d34be66e38db79f4fc1dd78cf8ae74dea37ede11c79a7154d0ea04b75048"
+    },
+    {
+      "path": "scripts/debug/verify_gameplay_tree.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7ab9f0efa9807f373b84980aa851f25446e51f16b421d396a9b1bb4865d03321"
+    },
+    {
+      "path": "scripts/debug/verify_how_to_play.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "565059fe3bffd520e5120a2e3aa3d57d5313309bf78952f7270bdb646f0396ba"
+    },
+    {
+      "path": "scripts/debug/verify_how_to_play.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0a9b9e6b8ab4be8f9aae1ccaa51cbdf929dc7833849e32ad047c2feb55cf5a52"
+    },
+    {
+      "path": "scripts/debug/verify_market_release_index.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "e37ed65fc5e4b0704a862b06d89f5ef35164204659bcfc524efad8f069d4a356"
+    },
+    {
+      "path": "scripts/debug/verify_pause_audibility.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "adc9da63cd8d79fa2e1461d8f3e4340dfaffd5e39e1a7174624865e02033b21d"
+    },
+    {
+      "path": "scripts/debug/verify_pause_audibility.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fd372f33303bd0ff855077cf76c1f72972c46a9c0b6e67b7886045e0220786dd"
+    },
+    {
+      "path": "scripts/debug/verify_pause_menu.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5171250d5ef558f15f2917aeb05264202fbe2006ea69755d72bde26f3e28c627"
+    },
+    {
+      "path": "scripts/debug/verify_pause_menu.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a4902f6f1c843c73c819d31f990dc06a8faf8c5ad693d6ebdb056ab09c127f87"
+    },
+    {
+      "path": "scripts/debug/verify_pause_music.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "8c401ef0224b16b29611d86522de92111dffc21abc9efea09fd002c74c5f6b0e"
+    },
+    {
+      "path": "scripts/debug/verify_pause_music.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "14f97cedf0442575b71e2a9d1c69f0bbd85a67e90b4addbdc535bc203979a103"
+    },
+    {
+      "path": "scripts/debug/verify_pause_track.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "06a97d2274589154929cf67fee7bde027d4a269000893cae271000f213054af6"
+    },
+    {
+      "path": "scripts/debug/verify_pause_track.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c37fbd146cf6196b44c6f5ba7baa844107c24f55a19673a113757179f281f27d"
+    },
+    {
+      "path": "scripts/debug/verify_pause_track_continuity.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ab7201207e395732f9456328b248a32359c43b0955304b29bc8f7241bdcf7e9e"
+    },
+    {
+      "path": "scripts/debug/verify_pause_track_continuity.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0d6ac3aeaf06e76143254e815caab9b04258cb9696cbd8b89d822db429972677"
+    },
+    {
+      "path": "scripts/debug/verify_primitive_branches.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "39ffe11936e20f781396ac1f64b4ca2dfa0999dd84a1e0dfbab4fd1ac3e5e01e"
+    },
+    {
+      "path": "scripts/debug/verify_primitive_branches.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "bcda2e4e4c437a9388885f93b9784859dc482c320aa7656d666da5b56f0bb41d"
+    },
+    {
+      "path": "scripts/debug/verify_publisher_trial_promotion.gd",
+      "change": "modified",
+      "before_sha256": "d3605d138b2a1bc7ea69f434187a351fddecd7779bd9789d45b50e42be539163",
+      "after_sha256": "4c45e89e76320b4e9d7db969212f99c79bcd4f83a43c026cc77d43324403e198"
+    },
+    {
+      "path": "scripts/debug/verify_queue_source_migration.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d0dc3a6795eaa09809b159a6aa778939b4cba66ab0f826755860c04e82dd007a"
+    },
+    {
+      "path": "scripts/debug/verify_research_integration.gd",
+      "change": "modified",
+      "before_sha256": "b6ba75444e0fb96cde69107c0585dbe0b483adde54b0b2d83700ccbf22e13f83",
+      "after_sha256": "01e33fe640a8363f6b19872a898c0fc0adeefdcd08ba4c2c29c0e9486948b357"
+    },
+    {
+      "path": "scripts/debug/verify_rival_synergy.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "df39b7060e4917439e4e3f53eb6a53d175433604b40af2e7f369c93e1668f63c"
+    },
+    {
+      "path": "scripts/debug/verify_rival_synergy.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "556a262caaf35ec3dde4e08e1a805f7a250ea0db18c5173814299caf0ae0a3be"
+    },
+    {
+      "path": "scripts/debug/verify_sales_revenue_hud.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d118c40e2da414d2de6f0a31212f28d88ed0a79dc1f5d73d4c4bc3ab789e0b93"
+    },
+    {
+      "path": "scripts/debug/verify_sales_revenue_hud.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "54805704cd5f6af948518e323836a325191a33ed880d21224160517f701981f5"
+    },
+    {
+      "path": "scripts/debug/verify_soundtrack_sync.gd",
+      "change": "modified",
+      "before_sha256": "bde5aec25d2e6291811dea15d7925a3704ea090d87059cbe5fc8134e2a8fdf85",
+      "after_sha256": "ab27819927a44d7317ac55f000f174d21ff13dacf285e4b93254eb2b8ff6b9f0"
+    },
+    {
+      "path": "scripts/debug/verify_starwave.gd",
+      "change": "modified",
+      "before_sha256": "b1a4c9568c91206c9cc7a071e6872e2162dd5a3c5b91cb62d99cd0fc49090cb9",
+      "after_sha256": "d89347e5826662643a28103117ae4578a58992b954467952632ad8e9def592e3"
+    },
+    {
+      "path": "scripts/debug/verify_starwave_ui.gd",
+      "change": "modified",
+      "before_sha256": "e4f1d209c13eb8832df453744af5d04bc45b1cdae84d886d5bd3d9eb5ad8802c",
+      "after_sha256": "75bbb8f94963a6cbef9cea0445dd8d9a403cf7c81dca3ab0617b8e8b72458c9e"
+    },
+    {
+      "path": "scripts/debug/verify_store_cone_parents.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fc1a9c212285e667415c206a888ac3ed6d754edbf0e6888cccf2e73f9899f744"
+    },
+    {
+      "path": "scripts/debug/verify_store_cone_parents.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5e67efad5eb00a4d6b24704c9afeddb8c6c162cbe63bbb493a22d7921b3b33c6"
+    },
+    {
+      "path": "scripts/debug/verify_store_hud.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "1092ee49b34bf53ea43362b13b126b92dc2ea2f26bd5f5f85899919d623c862e"
+    },
+    {
+      "path": "scripts/debug/verify_store_hud.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "42b021549c6d819b16310dd17614d79a5ec5bb45d81bdb7a6b72577753990f2d"
+    },
+    {
+      "path": "scripts/debug/verify_store_shopping_guidance.gd",
+      "change": "modified",
+      "before_sha256": "ec2502ba8090e9d311a42ae9f065b83a8ab8848363f62a85d4cf1c94501adc87",
+      "after_sha256": "096c154c69bfca13f4236bddb9ade702dccd482a959bff370bdac070c7df8056"
+    },
+    {
+      "path": "scripts/debug/verify_studio_roster_versions.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "e602c2dbdcfa3f5aaff7bf676009e28bb16c07853ea728b3510b4c8410cb474a"
+    },
+    {
+      "path": "scripts/debug/verify_studio_roster_versions.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "898741d564cd467fe59d395486ea093f46a14af95c0f11035e7968f00f2936f2"
+    },
+    {
+      "path": "scripts/debug/verify_studio_soundtrack.gd",
+      "change": "modified",
+      "before_sha256": "ea37982a7c92c3b6b8989c574691b243471590b9f47541da34b91f0f0dd0b2c0",
+      "after_sha256": "8f777810e941a4478f7761a279f89ff5a61d8cfccbb0ed76fe44849c30fc0d79"
+    },
+    {
+      "path": "scripts/debug/verify_studio_specialties.gd",
+      "change": "modified",
+      "before_sha256": "0c8cdb47449281a8f54d66acf5cfc3288214775bfc107c3e29ec40b80b940b44",
+      "after_sha256": "2220b6605dbc214fa821d9effc04b48437343351c54881974cb34976cd7f23ec"
+    },
+    {
+      "path": "scripts/debug/verify_victory_commit.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "178f42b6f778f2e84cb39722b177699754580eaf9e4792e296bdf6c79814da2f"
+    },
+    {
+      "path": "scripts/debug/verify_world_restore_file.gd",
+      "change": "modified",
+      "before_sha256": "b14c3385403950a3ecc11fc26aa32c181602de68f91e59be89bb83082dbb4adc",
+      "after_sha256": "83b95c11fb1d82717fa9e57dbe5ed7ca1784b986331a6f49b217b31422cf2c11"
+    },
+    {
+      "path": "scripts/gameplay.gd",
+      "change": "modified",
+      "before_sha256": "7ade2b07ea7993fcefa0e73decbd96b91c95a575b09e6aca7bc59c879850eca4",
+      "after_sha256": "a2ebe0d9fb4e3128c55a481bd1c3dbf9b0e0148eb100753467f9db98e2df8abe"
+    },
+    {
+      "path": "scripts/market/rival_beta_synergy_choice.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "57b8e0f8d762f905a1a773cc99e37bf458e3b02c872d8fc0b36dcd895ec0769d"
+    },
+    {
+      "path": "scripts/market/rival_beta_synergy_choice.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "069b5d777221deede78084a16d942f9bac23595ec309dd2db4d485b3dd0363e6"
+    },
+    {
+      "path": "scripts/market/rival_synergy_choice.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d1b0a77f5a919125c0769ada008827ee8dbd018d90effa570e1a268c3bdbfb00"
+    },
+    {
+      "path": "scripts/market/rival_synergy_choice.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "79c9e605bb0094578751dba3637c1b5f521ef6bb8da77b842d641b7d310d2584"
+    },
+    {
+      "path": "scripts/market/rival_trial.gd",
+      "change": "modified",
+      "before_sha256": "f7ca64f80c18b23258840c24b111001056b277088c822791f0ee61392db4ae07",
+      "after_sha256": "349321ce91dc25f8a5926b5b3d612cafd64fe1062cae1f8bf83d7d5d6ff34767"
+    },
+    {
+      "path": "scripts/market/rival_world_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "40b7221fa02df425681c34ba0bfd6750452d3e522e8ed6be63953b8977b0d7d8",
+      "after_sha256": "6194aa33230bb10f177c3fe8d3ce7bab013ac8654de80a46a5e68c92050dd7c6"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_schema.gd",
+      "change": "modified",
+      "before_sha256": "6b9b51ad0f3fdd2e34bf48c6653bec84b69f2edbf4b14e9dd1bbea04384cc520",
+      "after_sha256": "775f688c84524cbe1b3707251487971a5f25ed77a6b62dcb0c763bfa33192ba5"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "0386e1ed3ffad19d01b22ef791dd0918a3bae25a48fc972e707b2ef6f323c5cd",
+      "after_sha256": "a0d6660e0e6a149264c6d1fbf1a515563a678e107de944dcbc2ce03387cd1ad9"
+    },
+    {
+      "path": "scripts/phases/contract_phase.gd",
+      "change": "modified",
+      "before_sha256": "09fe2ac465c3f35b277037c58f23f7cfd55ebd0213167815a2d43ea293254ed4",
+      "after_sha256": "a5be5cfc7a865e15dfc2e5c84583d764e0bd1cdaba2e29801c364b0b2b6266a2"
+    },
+    {
+      "path": "scripts/phases/main_menu.gd",
+      "change": "modified",
+      "before_sha256": "8c90745d8ff3f8e7ed1858a868689d7a46f2bf450a6844d293c2a7444cd7dcf5",
+      "after_sha256": "392bd195323b06afd1a50c94832ee4f5cc8e14d6cfe48a18ea7cebb43e9bbe92"
+    },
+    {
+      "path": "scripts/phases/studio_phase.gd",
+      "change": "modified",
+      "before_sha256": "2387ad32ee6cb71972a4e25316901967b69c9811fd1aea2ba462705108eee671",
+      "after_sha256": "fde82e339b30265fcba366f071fa13395e99a97ee22ca811f86ca0d1f32b486c"
+    },
+    {
+      "path": "scripts/run_state.gd",
+      "change": "modified",
+      "before_sha256": "8352dee38ef666e7133cdb6bac94536f6b97b775146fbd200c89de278490bc30",
+      "after_sha256": "34e1dcc0c0ce18c7ddc9d95d2bde161191a619e098e46101ec4d9f0944444388"
+    },
+    {
+      "path": "scripts/simulation/contract_session.gd",
+      "change": "modified",
+      "before_sha256": "75e8d628ef1f72ac8d139c136ad18751c93f1c546d04de3d72f6218783f94539",
+      "after_sha256": "48748b9e002db776ac38149e26b572ea1b2965a30370ee1ee33067dff8fce1ae"
+    },
+    {
+      "path": "scripts/studio_specialties.gd",
+      "change": "modified",
+      "before_sha256": "d617066c2585da1ab9c59d0c3ce3ebb20406a3136effca337231eefa01ffebdf",
+      "after_sha256": "640a418c8a75f26b8fc1322d5adf77e249355cc88a9dab82f9c620839f0f828e"
+    },
+    {
+      "path": "scripts/ui/demo_settings_menu.gd",
+      "change": "modified",
+      "before_sha256": "f9ea35816c7c567ed38d1757c5ba0f7005d6e09ca1a2b7311be23d878a5249f0",
+      "after_sha256": "860355e73aa2b15402613b70582f9f4728628af5dc51e95656e3cda015d526f4"
+    },
+    {
+      "path": "scripts/ui/feature_store.gd",
+      "change": "modified",
+      "before_sha256": "ac31527cae87873e5edc9efba378ff3d30f538b9819cbbc7d37b3c65a57ae417",
+      "after_sha256": "0b0b4b6ca85962ba04a0b694f3bd3ce30d634cc3cc631ce9b4e849bf39bbed03"
+    },
+    {
+      "path": "scripts/ui/feature_store_map.gd",
+      "change": "modified",
+      "before_sha256": "a0ee2caeacd307a0ba32dd136f419977b55737561c462c8f9a252d6a9e40bee9",
+      "after_sha256": "dde23ea9767c9464ba2db69992318126f133a00101b4cac2bd705325df02f4e7"
+    },
+    {
+      "path": "scripts/ui/gameplay_hud.gd",
+      "change": "modified",
+      "before_sha256": "1a2467f6c4f4b7cab4f5150cd2a23b395ed7cddc6f7547feb57e5ca7cf8173f1",
+      "after_sha256": "b2a11d1aee6138f6cf70795b767bc0d22627d40c8e293cdd658894f0564aa8a5"
+    },
+    {
+      "path": "scripts/ui/hand_presentation.gd",
+      "change": "modified",
+      "before_sha256": "de2a2383bcc057e8d86e1375434bef61bd7d059910781dc496fed0f7b93990e8",
+      "after_sha256": "67fc9db83da7cc84ba9e0d1524b7aee9d5a5fd30cb257f743e4e0d027e66ad95"
+    },
+    {
+      "path": "scripts/ui/how_to_play_content.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "44cda97f92f7cf268272d4b2666fcf780e27c75a18ac5f6564b11fcbea62ac6f"
+    },
+    {
+      "path": "scripts/ui/how_to_play_content.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9a1829b00d7df6391fb6edff386ae373b1f46d66dcafb3f34f3e6f568ae9e788"
+    },
+    {
+      "path": "scripts/ui/how_to_play_guide.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "f3cf7233522a7485642895da106dfd493cbd0fceb4eb3be205adc618f46d92f7"
+    },
+    {
+      "path": "scripts/ui/how_to_play_guide.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "170e1988aead79fa73dd167127730dc9eddc6334c3d0146b7efac399f418cbed"
+    },
+    {
+      "path": "scripts/ui/menu_transitions.gd",
+      "change": "modified",
+      "before_sha256": "b4612e41c53e5aa450b12853e88d0a8e9348db46e22fca2823b88828aa28dc31",
+      "after_sha256": "241f323d5cc45549b4af6f7776a2f41317d028f497cb26ee44411fc4a2b30960"
+    },
+    {
+      "path": "scripts/ui/pause_menu.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9b86ce90d23726783430e6cd7a556dfbc6e0da1382fff58c697b0d9f80045893"
+    },
+    {
+      "path": "scripts/ui/pause_menu.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d8f6270f84522c7ec4fba8ead2948638cc0ef2bd95e438f55bc756e6062ca434"
+    },
+    {
+      "path": "scripts/ui/sales_revenue_hud.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "f451c32721f39ca46239ce2ca8651b285090e0f0197831b9b1bdd697831110d2"
+    },
+    {
+      "path": "scripts/ui/sales_revenue_hud.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "baa07b0ae65b0619621d51c082712ff3233bdac5f05fd09d1abee482f53099b4"
+    },
+    {
+      "path": "scripts/ui/sales_revenue_model.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7155d2e1e28b90e984d87ef0f626fd9218effd5fcb5c2f7960fc0e2cc6dad3a5"
+    },
+    {
+      "path": "scripts/ui/sales_revenue_model.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ebe48d19c981891aa5e27ac9de1f5a001875c9cad307f9d99518da091fdacd0e"
+    },
+    {
+      "path": "scripts/ui/synergy_notification.gd",
+      "change": "modified",
+      "before_sha256": "4dea45aea9082f483fd86381706544192c3d93c32b2e45c9e0be3feff50cde06",
+      "after_sha256": "282b426232ddf37c4b3a0cd06476c053a226329c3f11011bdb5025795c296303"
+    },
+    {
+      "path": "scripts/ui/tutorial_overlay.gd",
+      "change": "modified",
+      "before_sha256": "54eeb5b5716b719a4ea6fa786b0251a6cc999733635147c3d06103df179e4f02",
+      "after_sha256": "5f22381681700211026a290e7483f87bf7643401809c5c663993a29737f99578"
+    }
+  ],
+  "conflicts_requiring_review": [
+    "scripts/market/rival_world_checkpoint.gd",
+    "scripts/persistence/checkpoint_schema.gd",
+    "scripts/persistence/studio_checkpoint.gd",
+    "scripts/run_state.gd"
+  ],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\market-density-v31-player-20261018-v1",
+      "ok": true,
+      "error": null,
+      "source_identity": "ee2f33ac564f088eed8d816dc012539b16318e0938f97a06fd1d845a5de2d477",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "f07516eea09b369e47653b7a998d0925887b0b98e0cf63ab2e307e375e2b27e2",
+        "cases/foundation-legal-action-4417/case.json": "946aee350f030c89c9c27371261b9545c947fe02197ffb088612ccecd8435101",
+        "cases/foundation-legal-action-4417/case.variant.json": "77903405dec17c00599f96b3e26e8a87c57baa6b396e10006a7229bd516327a6",
+        "cases/foundation-legal-action-4417/final_state.variant.json": "6a57a80308b1c939aca3db37be5bf6d0e545744882fc9f34270e7614de46c224",
+        "cases/foundation-legal-action-4417/initial.json": "27ebb7b736e0e9bc34629da0f4004ddc199c5c2afe630535a6a9754e15a53ba8",
+        "cases/foundation-legal-action-4417/metrics.json": "c43c23ad10e7686a620ab2cf30a0379a7e4cbd571b0758dc5426f6287cd10728",
+        "cases/foundation-legal-action-4417/replay.tape.json": "a605cc83090f3c90538214124f80911fb56547e0add515f025500cc585190c96",
+        "cases/foundation-legal-action-4417/result.json": "6133ce7053f529cc74ebfcddb07a676bd4aad9a64941a54493a93f741711d568",
+        "cases/foundation-legal-action-4417/studio_checkpoint.json": "5c94db3a313f8434e2fb4c7b62b77b4968215ab675291fa9fcdba78ab8b87a4d",
+        "experiment-report.json": "fb6efa888aa3abead31dac022fb8a0f3b2164cee19c035a460e49a38abd0bce8",
+        "experiment.command.json": "0efb0a280aa5a0aeda6984e594ac314f08bc29e4bbf05af3f16ec5ca32175aa1",
+        "experiment.log": "7c9de38b2ddd2108d049b7f82d6e47fe3726c994c2f1474b13ea12a0385f0f85",
+        "git-provenance.json": "e93e5dd64526735c231962e95e2a99de719abcd8387567f1445d7c0ba7a7438c",
+        "godot-version.command.json": "82d7a3ae68a430c659c70c222a1f8c903a173cdf5971cfa1416a0f3a8ed4ab28",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "8c983be0a0bcea565c7a30f99955c2547a4fee53cdd16717be8786d551a254ac",
+        "import.command.json": "271cabb41d46c1abdd1504c93b4f8410f023e62fab75b94252ea4790583973f3",
+        "import.log": "356a95c9c4cfaf1b6e1de440586ba0ff1f22dc90fd14bfcdb473496796435ebc",
+        "inputs/experiment.json": "b5769d65b3e1da8351a3fe029da1200aa256d3b2d19d831276812edf0d029a74",
+        "inputs/requested.json": "1530f1cb7d7549606fddf9222ee1ceb35e656d4c4dddae966c922261cda93ad7",
+        "run-report.json": "ab137a98b00f3401247bad81d0d138df3816314b5963adcbf39d369966d115b1",
+        "runner.py": "65bdf6c5eb4a47af829283a0b07d4b78ad45e8a95139607b96a613d6ffbf9193",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "7dacc1167e8cbf07db2565b5fd284f8eccb10067cb6341a1404f626134fcabcc",
+        "source.diff.patch": "004c6b18be5feb5b39755bf1381e2466656405ed0adc3e8ad4dd0e3cf5659569",
+        "variant-base-manifest.json": "1c46f2432e47fcbf59b14b0139e5c3dbda16a332b5bd50dd383800dec0c58427",
+        "variant-creation-manifest.json": "935e49716397b551bfbfa2e1034c42f2731a9d6f8f582acc1e0e29152c31f27c",
+        "variant-integrity.json": "23fe27969df5b3be844e6abac1c9a4cd78515f50c91e6e9517205f3c2bb9ec17",
+        "variant-provenance.json": "43c7fc854a56e55502609e6a1283e916747a6a069c0942666da2e6883313c0be",
+        "variant-variant.json": "225b906168b21a32f53d627954afc3b051da16ad4eadd2131cb206aa861ea369",
+        "workspace-source-manifest.json": "3d92a20f465ecbe506e5a2637bdcc2765f69458006c199c2d28df9bdedeeeb5a"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

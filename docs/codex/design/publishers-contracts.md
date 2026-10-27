@@ -1,5 +1,7 @@
 # Publishers and Contracts
 
+**2026-10-26 Crown feedback — approved private implementation complete.** Exact selected-hand provisional/final grade and cap credit, a final-hand-only current-card zero warning, and a quiet reminder after two consecutive zero-requested Brief awards are implemented and verified in an isolated current-source candidate. Positive requested/cap-zero credit resets the derived count; incomplete history is unavailable; R100 suppresses proactive advice. No durable streak field or reward change. Normal catalog exposure and named canonical migration remain separate adoption gates. [Implementation, tests and source](../logs/2026-10-26-crown-feedback-v1.md).
+
 ## Contract presentation correction — 2026-10-24
 
 Initial hands settle to final parent bounds after staggered entrance; bounded wrapped card tooltips retain all details. Eight focused suites, actual prior-world restoration and both-size native entry checks pass. [Source and evidence](../findings/contract-entry-layout-20261024-v1/README.md). Presentation and exact source-compatibility update only; Contract rules, rewards, timing and Studio-only Continue are unchanged.

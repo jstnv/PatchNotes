@@ -1,0 +1,28 @@
+--- current/scripts/simulation/studio_actions.gd
+
++++ private/scripts/simulation/studio_actions.gd
+
+@@ -31,6 +31,12 @@
+
+ 				# Accept that exact row, but never silently discard altered terms.
+ 				if payload.size()==3 and (not payload.has("quote") or payload.quote!=run.get_sidestreet_brief_offer()): return reject("Brief quote changed")
+ 				state = run.accept_sidestreet_brief(StringName(payload.offer_id))
++			&"crown_brief":
++				if payload.size() not in [2,3] or (not payload.get("offer_id") is String and not payload.get("offer_id") is StringName): return reject("Brief ID required")
++				# Observations expose the detached quote alongside the command ID.
++				# Accept that exact row, but never silently discard altered terms.
++				if payload.size()==3 and (not payload.has("quote") or payload.quote!=run.get_crown_brief_offer()): return reject("Brief quote changed")
++				state = run.accept_crown_brief(StringName(payload.offer_id))
+ 			&"publisher":
+ 				if payload.size() != 2 or not payload.get("quote") is Dictionary: return reject("Publisher quote required")
+ 				state = run.accept_publisher_contract(payload.quote)
+@@ -44,6 +50,8 @@
+
+ static func observation(run: RunState) -> Dictionary:
+ 	var money := run.get_studio_action_finance_observation()
+ 	var offers: Array = []
++	var crown_brief := run.get_crown_brief_offer()
++	if not crown_brief.is_empty() and run.get_active_contract()==null: offers.append({"kind":&"crown_brief","offer_id":crown_brief.offer_id,"quote":crown_brief})
+ 	var brief := run.get_sidestreet_brief_offer()
+ 	if not brief.is_empty() and run.get_active_contract()==null: offers.append({"kind":&"sidestreet_brief","offer_id":brief.offer_id,"quote":brief})
+ 	if run.is_primitive_contract_offer_available(): offers.append({"kind":&"ironclad"})

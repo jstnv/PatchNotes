@@ -1,0 +1,28 @@
+{
+  "elapsed_seconds": 14.642348599998513,
+  "process_cpu_seconds": 12.828125,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-adoption-20261018-v1\\migration.gd",
+    "--",
+    "--case=world-v1"
+  ],
+  "exit": 0,
+  "errors": [],
+  "tail": [
+    "MIGRATION_CHECK 22 PASS normal Continue exact world hands/identity/RNG",
+    "MIGRATION_CHECK 23 PASS next ordinary pending Studio commit",
+    "MIGRATION_CHECK 24 PASS new content published only at following generation",
+    "MIGRATION_CHECK 25 PASS old generation preserved through first upgraded commit",
+    "MIGRATION_CHECK 26 PASS new generation carries current revision",
+    "MIGRATION_CHECK 27 PASS original source file unchanged",
+    "MIGRATION_CHECK 28 PASS runtime source unchanged during check",
+    "MARKET_MIGRATION world-v1 run checks=28 failures=0"
+  ]
+}

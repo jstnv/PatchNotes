@@ -1,0 +1,24 @@
+--- current/scripts/contracts/contract_challenges.gd
+
++++ private/scripts/contracts/contract_challenges.gd
+
+@@ -19,7 +19,7 @@
+
+ static func terms_for_contract(contract_id: StringName) -> Dictionary:
+ 	var specs := specs_for_contract(contract_id)
+ 	if specs.is_empty(): return {}
+-	var relationship_only := contract_id == ContractDefinitions.SIDESTREET_BRIEF
++	var relationship_only := contract_id in [ContractDefinitions.SIDESTREET_BRIEF,ContractDefinitions.CROWN_BRIEF]
+ 	return {"version":VERSION,"specs":specs,"cash_cap_cents":0 if relationship_only else BONUS_CASH_CENTS,"promotion_cap":0 if relationship_only else BONUS_PROMOTION}
+ 
+ 
+@@ -55,7 +55,7 @@
+
+ 			return [{"version": VERSION, "kind": NO_REDRAWS}, {"version": VERSION, "kind": SCOPE_CEILING, "maximum": 12, "fade_excess": 4}]
+ 		ContractDefinitions.SIDESTREET_BRIEF:
+ 			return [{"version": VERSION, "kind": NO_REDRAWS}, {"version": VERSION, "kind": SCOPE_CEILING, "maximum": 10, "fade_excess": 2}]
+-		ContractDefinitions.CROWN:
++		ContractDefinitions.CROWN, ContractDefinitions.CROWN_BRIEF:
+ 			return [{"version": VERSION, "kind": BALANCED_CORES, "allowed_gap": 4, "fade_gap": 8}]
+ 		ContractDefinitions.NEON:
+ 			return [{"version": VERSION, "kind": CORE_SCOPE_RATIO, "core_units": 3, "scope_units": 1}]

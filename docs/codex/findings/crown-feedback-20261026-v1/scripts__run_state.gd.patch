@@ -1,0 +1,170 @@
+--- current/scripts/run_state.gd
+
++++ private/scripts/run_state.gd
+
+@@ -92,6 +92,7 @@
+
+ var _support_assessments: Dictionary = {}
+ var _commission_deals: Dictionary = {}
+ var _sidestreet_briefs: Dictionary = {}
++var _crown_briefs: Dictionary = {}
+ var _publisher_relationships: Dictionary = {}
+ var _relationship_commit_in_progress := false
+ signal publisher_relationships_changed
+@@ -989,7 +990,7 @@
+
+ 
+ ## Release planning reuses the arithmetic owner on detached containers. The
+ ## resulting field set is committed before Project or Run observers can fire.
+-const RELEASE_FIELDS := ["_released_games","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs"]
++const RELEASE_FIELDS := ["_released_games","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs","_crown_briefs"]
+ 
+ func plan_release(project: ProjectState) -> Dictionary:
+ 	if _publishing_cycle or _productive_cycle_in_progress or not can_register_release(project): return {}
+@@ -1230,6 +1231,9 @@
+
+ 
+ 
+ func get_active_contract() -> ContractState:
++	for offer: Dictionary in _crown_briefs.values():
++		var brief: ContractState = offer.state
++		if brief != null and not brief.is_completed(): return brief
+ 	for offer: Dictionary in _sidestreet_briefs.values():
+ 		var brief: ContractState = offer.state
+ 		if brief != null and not brief.is_completed(): return brief
+@@ -1246,6 +1250,8 @@
+
+ 
+ 
+ func owns_contract_state(state: ContractState) -> bool:
++	for offer: Dictionary in _crown_briefs.values():
++		if offer.state == state and state != null: return true
+ 	for offer: Dictionary in _sidestreet_briefs.values():
+ 		if offer.state == state and state != null: return true
+ 	for offer: Dictionary in _publisher_offers.values():
+@@ -1369,8 +1375,8 @@
+
+ 		if entitlement.offer_id != state.get_offer_id() or entitlement.state != state:
+ 			return false
+ 	var relationship := {"applicable":false}
+-	if plan.completing and state.get_contract_id() == ContractDefinitions.SIDESTREET_BRIEF:
+-		relationship = _plan_finishing_brief(state,cards,expected_payment_cents)
++	if plan.completing and state.get_contract_id() in [ContractDefinitions.SIDESTREET_BRIEF,ContractDefinitions.CROWN_BRIEF]:
++		relationship = _plan_finishing_crown_brief(state,cards,expected_payment_cents) if state.get_contract_id()==ContractDefinitions.CROWN_BRIEF else _plan_finishing_brief(state,cards,expected_payment_cents)
+ 		if relationship.is_empty(): return false
+ 	if not state.commit_hand(cards, expected_payment_cents):
+ 		return false
+@@ -1385,7 +1391,7 @@
+
+ 	if state == null:
+ 		return
+ 	_pending_contract_completion = null
+-	if state.get_contract_id() == ContractDefinitions.SIDESTREET_BRIEF: return
++	if state.get_contract_id() in [ContractDefinitions.SIDESTREET_BRIEF,ContractDefinitions.CROWN_BRIEF]: return
+ 	if _publisher_offers.has(state.get_offer_id()):
+ 		if state.get_contract_id()!=PublisherTrialTerms.STARWAVE or state.get_result().get_promotion() > 0:
+ 			_promotion_awards[state.get_offer_id()] = state.get_result().get_promotion()
+@@ -1939,10 +1945,10 @@
+
+ 	return _first_studio_economy and _unlocked_publishers.has(&"sidestreet")
+ 
+ func contract_search_blocker(publisher: StringName,work: StringName) -> String:
+-	if publisher!=&"sidestreet" or work not in ContractSearch.WORK_TYPES:return "No approved search template"
+-	if not can_browse_contract_search():return "Unlock SideStreet first"
++	if not ContractSearch.supported(publisher,work):return "No approved search template"
++	if not can_browse_contract_search() or not _unlocked_publishers.has(publisher):return "Unlock publisher first"
+ 	if get_active_contract()!=null or has_pending_commission() or has_unlaunched_support():return "Finish your active work first"
+-	if ContractSearch.pending(self,work):return "Existing work of this type is still pending"
++	if ContractSearch.pending(self,work,publisher):return "Existing work of this type is still pending"
+ 	var standing:=get_publisher_relationships()
+ 	if standing.is_empty():return "Relationship history unavailable"
+ 	if work==&"commission":
+@@ -1954,7 +1960,7 @@
+
+ 
+ func get_contract_search_quote(publisher: StringName,work: StringName) -> Dictionary:
+ 	if not contract_search_blocker(publisher,work).is_empty() or _contract_search.receipts.size()>=MAX_SIGNED_INT-1:return {}
+-	return {"rules_version":1,"owner":_bank_run_id,"publisher_id":publisher,"work":work,"template_id":ContractSearch.template(work),"terms":ContractSearch.terms(work),"ordinal":_contract_search.receipts.size()+1,"before_cycle":_completed_run_cycles,"finance_revision":_studio_finance.actions.size(),"relationship_revision":_publisher_relationships.events.size(),"standing_bp":get_publisher_relationships()[publisher].reputation_bp}
++	return {"rules_version":1,"owner":_bank_run_id,"publisher_id":publisher,"work":work,"template_id":ContractSearch.template(work,publisher),"terms":ContractSearch.terms(work,publisher),"ordinal":_contract_search.receipts.size()+1,"before_cycle":_completed_run_cycles,"finance_revision":_studio_finance.actions.size(),"relationship_revision":_publisher_relationships.events.size(),"standing_bp":get_publisher_relationships()[publisher].reputation_bp}
+ 
+ func search_contracts(quote: Dictionary) -> bool:
+ 	if typeof(quote.get("publisher_id"))!=TYPE_STRING_NAME or typeof(quote.get("work"))!=TYPE_STRING_NAME:return false
+@@ -1966,7 +1972,9 @@
+
+ 		if _contract_search!=initial:return false
+ 		_contract_search=plan.state
+ 		if quote.work==&"cash":_sidestreet_entitlements[plan.offer_id]={"offer_id":plan.offer_id,"state":null}
+-		elif quote.work==&"brief":_sidestreet_briefs[plan.offer_id]={"offer_id":plan.offer_id,"source_release_id":&"","state":null}
++		elif quote.work==&"brief":
++			var briefs: Dictionary=_crown_briefs if quote.publisher_id==&"crown_quill" else _sidestreet_briefs
++			briefs[plan.offer_id]={"offer_id":plan.offer_id,"source_release_id":&"","state":null}
+ 		return true
+ 	if not complete_productive_action(commit,0,_completed_run_cycles,&"",&"contract_search",plan.receipt.receipt_id):return false
+ 	_publishing_cycle=true
+@@ -1978,6 +1986,7 @@
+
+ 	var rows: Array=[]
+ 	for work: StringName in ContractSearch.WORK_TYPES:
+ 		rows.append({"publisher_id":&"sidestreet","work":work,"terms":ContractSearch.terms(work),"blocker":contract_search_blocker(&"sidestreet",work),"quote":get_contract_search_quote(&"sidestreet",work)})
++	rows.append({"publisher_id":&"crown_quill","work":&"brief","terms":ContractSearch.terms(&"brief",&"crown_quill"),"blocker":contract_search_blocker(&"crown_quill",&"brief"),"quote":get_contract_search_quote(&"crown_quill",&"brief")})
+ 	return rows
+ 
+ func get_contract_search_state() -> Dictionary:return _contract_search.duplicate(true)
+@@ -1991,3 +2000,56 @@
+
+ 	_employees=next;migrate_employee_wages()
+ 	_publishing_cycle=true;finance_changed.emit();employees_changed.emit();_publishing_cycle=false
+ 	return true
++
++func get_crown_brief_offer() -> Dictionary:
++	if not _unlocked_publishers.has(PublisherCatalog.CROWN_QUILL): return {}
++	for offer: Dictionary in _crown_briefs.values():
++		if offer.state == null:
++			return {"offer_id":offer.offer_id,"publisher_id":PublisherCatalog.CROWN_QUILL,
++				"source_release_id":offer.source_release_id,"required_hands":2,
++				"cash_cents":0,"advance_cents":0,"promotion":0}
++	return {}
++
++
++
++func accept_crown_brief(offer_id: StringName) -> ContractState:
++	if not can_mutate_checkpoint() or _publishing_cycle or _productive_cycle_in_progress: return null
++	if studio_departure_guard.is_valid() and not studio_departure_guard.call(): return null
++	var offered := get_crown_brief_offer()
++	if offered.is_empty() or offered.offer_id != offer_id or get_active_contract() != null: return null
++	var accepted := ContractState.new(_primitive_contract_eligible_ids(),ContractDefinitions.CROWN_BRIEF,offer_id,offered.source_release_id)
++	if not accepted.freeze_challenge() or not accepted.commit_upfront(): return null
++	_crowns_brief_set_state(offer_id,accepted)
++	contracts_changed.emit()
++	return accepted
++
++
++
++func _crowns_brief_set_state(offer_id: StringName, state: ContractState) -> void:
++	var offer: Dictionary = _crown_briefs[offer_id]
++	offer.state = state
++	_crown_briefs[offer_id] = offer
++
++
++
++func _plan_finishing_crown_brief(state: ContractState, cards: Array[CardData], payment: int) -> Dictionary:
++	if _cycle_plan.is_empty() or _cycle_plan.finance.is_empty() or not _crown_briefs.has(state.get_offer_id()): return {}
++	var projection := preload("res://scripts/simulation/transaction_projection.gd")
++	var finishing := ContractState.new()
++	projection.copy_fields(state,finishing)
++	if not finishing.commit_hand(cards,payment) or not finishing.is_completed(): return {}
++	var prospective := RunState.new()
++	projection.copy_fields(self,prospective)
++	prospective._crown_briefs[state.get_offer_id()].state = finishing
++	prospective._completed_run_cycles += 1
++	prospective._studio_finance = _cycle_plan.finance.ledger
++	prospective._released_games = _cycle_plan.records
++	prospective._support_rights = _cycle_plan.support_rights
++	prospective._support_assessments = _cycle_plan.support_assessments
++	prospective._publisher_relationships = _cycle_plan.relationships
++	var request := preload("res://scripts/contracts/crown_relationship_rules.gd").request_for(prospective,state.get_offer_id())
++	if request.is_empty(): return {}
++	var resolver := func(source: Dictionary) -> Dictionary: return RelationshipRules.resolve(prospective,source)
++	var planned := RelationshipLedger.plan(prospective._publisher_relationships,_bank_run_id,request,prospective._completed_run_cycles,resolver)
++	return {} if planned.is_empty() else {"applicable":true,"ledger":planned.ledger}
++

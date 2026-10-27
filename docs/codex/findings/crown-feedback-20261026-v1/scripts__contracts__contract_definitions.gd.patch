@@ -1,0 +1,33 @@
+--- current/scripts/contracts/contract_definitions.gd
+
++++ private/scripts/contracts/contract_definitions.gd
+
+@@ -6,6 +6,7 @@
+
+ const VERSION := 1
+ const IRONCLAD := &"balanced_primitive_contract_v1"
+ const SIDESTREET := &"sidestreet_cash_contract_v1"
++const CROWN_BRIEF := &"crown_relationship_brief_candidate_v1"
+ const SIDESTREET_BRIEF := &"sidestreet_relationship_brief_trial_v1"
+ const CROWN := &"crown_quill_primitive_trial_v1"
+ const NEON := &"neon_circuit_primitive_trial_v1"
+@@ -14,7 +15,7 @@
+
+ 
+ 
+ static func built_in_ids() -> Array[StringName]:
+-	return [IRONCLAD, SIDESTREET, SIDESTREET_BRIEF, CROWN, NEON, STARWAVE]
++	return [IRONCLAD, SIDESTREET, SIDESTREET_BRIEF, CROWN_BRIEF, CROWN, NEON, STARWAVE]
+ 
+ 
+ static func definition(id: StringName) -> Dictionary:
+@@ -27,6 +28,8 @@
+
+ 		SIDESTREET_BRIEF:
+ 			# Private pilot: relationship-only. Cash/Promotion terms remain open.
+ 			common.merge({"publisher_id": &"sidestreet", "title": "SideStreet Relationship Brief", "cash_cents": 0, "advance_cents": 0, "promotion": 0, "denominator": 64, "scope_target": 10, "core_target": 6, "score": _score(10, 4, 6, 1)}, true)
++		CROWN_BRIEF:
++			common.merge({"publisher_id": &"crown_quill", "title": "Crown Reputation Brief (candidate)", "cash_cents": 0, "advance_cents": 0, "promotion": 0, "denominator": 66, "scope_target": 9, "core_target": 8, "score": _score(9, 2, 8, 1, 8, 2)}, true)
+ 		CROWN:
+ 			common.merge({"publisher_id": &"crown_quill", "title": "Crown & Quill Contract", "cash_cents": 192000, "advance_cents": 15000, "promotion": 12, "denominator": 66, "scope_target": 9, "core_target": 8, "score": _score(9, 2, 8, 1, 8, 2), "stored_terms": {"scope": 9, "cash_cents": 192000, "advance_cents": 15000, "promotion": 12, "denominator": 66}}, true)
+ 		NEON:

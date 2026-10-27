@@ -1,0 +1,754 @@
+{
+  "date": "2026-10-26",
+  "head": "087df09d653858b72c6e2dc344352237433dd3ac",
+  "branch": "main",
+  "source_sha256": {
+    "patch-notes/scripts/phases/priority_allocation.gd": "06886594b49e965176f388dfccb9be347e0857c749e7b36954a34e6b49d62b0c",
+    "patch-notes/scripts/phases/beta_priority_allocation.gd": "5440e155f0e533f1e685614df22dd02a341356711c4a300e5cdfbdab26dba9c0",
+    "patch-notes/scripts/phases/beta_phase.gd": "3d6a0daa180b64a60c440fd0bf94e9abde79dafefac8253858d8b0917587cbb6",
+    "patch-notes/scripts/phases/contract_phase.gd": "4c0dd4e311df8fbd43289d57b7e2560777c44b0cee058c95362ff4faef96f95f",
+    "patch-notes/scripts/simulation/beta_hand_command.gd": "667c3f6569a0d424884096a16db972480b43619788856dbe45b18ecb520fbab7",
+    "patch-notes/scripts/simulation/finite_fixture_policy.gd": "a84c2ea93ec2ada637874de67e0782afba0c1168aa05bdc471864110b6a9b0aa",
+    "patch-notes/scripts/market/rival_trial.gd": "dab541a08cd1483fc556f9e57d7590d7379254970659ed12ccad08851116a2c0",
+    "patch-notes/scripts/market/rival_beta_synergy_choice.gd": "41fc37bb2741e3f5f271dd9a7bf50272186119d7048c105bf3642dc9885d85da",
+    "patch-notes/scripts/market/rival_world_checkpoint.gd": "9c32cd7b3dbbedf9525105d2d07287865f5314b0e4a8c45c70073be98a11d383",
+    "patch-notes/scripts/ui/priority_overlay.gd": "360661bbed3b7d8e8612e9ca21cc58d8653cf8996a173e6b00aef815a68a4a0c",
+    "patch-notes/scripts/ui/predevelopment_overlay.gd": "aa4db8275bdaaf579c3ddbd823e8c0de672ddad7007c3735c6bb4974f7b423a7",
+    "patch-notes/scripts/ui/employee_planning_dialog.gd": "acbd1ddc10e7549593fa49f6f538d0cf44e9d2067d252ded687bc0b4a0667cf8",
+    "patch-notes/scripts/ui/phase_workspace.gd": "8d437704bdda38f54fea5add61e892662dbcde6cf99d282e479447053389b072",
+    "patch-notes/scripts/ui/how_to_play_content.gd": "96b10a9435fc51d6a0ab555ef8276cdeaeb125e519b97de66f1df914da705715",
+    "patch-notes/scripts/ui/tutorial_overlay.gd": "d7d9d7408b37dedee2ba3f8da7abee721b534daf5b1d0fc4968776dced6a31f0",
+    "patch-notes/scenes/phases/design_phase.tscn": "df85fea2bac7eb10a92523d20218cf75ad53a7a6d50bd85be552c649a6d36d96",
+    "patch-notes/scenes/phases/alpha_phase.tscn": "f53c2377be25a32b1ff994202e5be5e6322546f268efb22f85a35569cab77b3c",
+    "patch-notes/scenes/phases/beta_phase.tscn": "d0247012eeda4d9384db72e78e7ed58815a55da8a9cd441c4b653829969a2714",
+    "patch-notes/scripts/debug/verify_insider_hold.gd": "cd815926586552e23e759c263bea678fd2a11f39e90d982e8e8ddae9cf431861",
+    "patch-notes/scripts/debug/verify_beta_planning.gd": "94de82bc2101b49782c5e929e53be947bfd3a5cd46f156b60901c82965687f45",
+    "patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd": "05fe6178f2624ac967103792a03a13a8d5e0d30aa915cb19aa3ef75af8f5193e",
+    "patch-notes/scripts/debug/verify_beta_balanced_operations.gd": "8b3c581e663264a0003a99e520f7ad89ea39ac79343daf5b9893840ef7196dbb",
+    "patch-notes/scripts/debug/verify_beta_marketing_insider_state.gd": "be4b941713eb45ac851fa5e0f017f654d92e8cabc00e267257b5c338e1dc573e",
+    "patch-notes/scripts/debug/verify_run_finance_and_beta_insider_state.gd": "a8e0e0d08a96b919568a4a81aefe1c0f88c14009ad5c00dcecc9dc092f6ff02e",
+    "patch-notes/scripts/debug/verify_beta_qa_specialization.gd": "7a042ceab93b3d998a440118a54452c0ac0a28c737387d6e7c84d64c34316fb0",
+    "patch-notes/scripts/debug/verify_beta_command.gd": "a53a55dbb9fce02ce7b7e42fc623549c1770621656c55dd35cdac88537a933cc",
+    "patch-notes/scripts/debug/verify_beta_finalization_and_launch.gd": "b52a3ab98a507ab7c91f14b63bd8839da4556ce7bf844aa27b37d08c05d4ee9e",
+    "patch-notes/scripts/debug/verify_beta_host_playtest.gd": "e0524e9d9a951c776dd0c63c1eb250215e65ba02882b4aa84129a935a7756ae6",
+    "patch-notes/scripts/debug/verify_priority_influence.gd": "2f801c68ce7789026fa44646e4e7ef07019e4de779d533985c83c9074d3639d1",
+    "patch-notes/scripts/debug/verify_campaign_session.gd": "e8c1a1d77d12506d83c2572cf82e428722021f2dcda3b7a052280747e9c31e6e"
+  },
+  "predecessor_source": "f479c5b654d756972e5cb822756328ae3fae7eff2fdf66eb4e7badf967d20311",
+  "baseline_sha256": "0b23dfccca0ad5c6e24eafcf2c315e9becabcef432c6887c523a55c1392abce7",
+  "runs": {
+    "baseline-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-transition-20261026-v1/restore.gd",
+        "--",
+        "--capture"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.516,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "BASELINE_SOURCE f479c5b654d756972e5cb822756328ae3fae7eff2fdf66eb4e7badf967d20311",
+        "PAUSE_RESTORE checks=2 failures=0"
+      ]
+    },
+    "beta-balanced-legacy-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_balanced_operations.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 3.157,
+      "errors": [],
+      "tail": [
+        "   GDScript backtrace (most recent call first):",
+        "       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:492)",
+        "       [1] _verify_atomicity (res://scripts/debug/verify_beta_balanced_operations.gd:161)",
+        "       [2] _make_beta (res://scripts/debug/verify_beta_balanced_operations.gd:52)",
+        "PASS: Forced replacement failure rejects a qualifying Balanced hand",
+        "PASS: Rejected action never displays a synergy notification",
+        "PASS: Rejected Balanced hand preserves all observed state and selection",
+        "Beta Balanced Operations verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "beta-base-legacy-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_base_hand_resolution.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.0,
+      "errors": [],
+      "tail": [
+        "WARNING: Beta hand rejected: Output preparation rejected",
+        "   at: push_warning (core/variant/variant_utility.cpp:1033)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:492)",
+        "       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:240)",
+        "       [2] _make_beta (res://scripts/debug/verify_beta_base_hand_resolution.gd:50)",
+        "PASS: Forced CardView preparation failure is atomic",
+        "Beta base hand resolution verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "beta-command-legacy-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_command.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 31.688,
+      "errors": [],
+      "tail": [
+        "PASS: Historical oracle translates only the approved Difficulty gate",
+        "PASS: Historical oracle translates only the approved Difficulty gate",
+        "PASS: Historical oracle permits only old-cap-valid non-Cult version metadata; no count/effect change",
+        "PASS: Historical oracle excludes only unowned unused Alpha shop metadata",
+        "PASS: Historical oracle excludes only unowned unused Alpha shop metadata",
+        "PASS: Historical oracle excludes only unowned unused Alpha shop metadata",
+        "PASS: Historical oracle excludes only unowned unused Alpha shop metadata",
+        "PASS: Pinned Beta oracle digests exist",
+        "PASS: headless complete Beta trace matches original",
+        "Beta command trace capture: 84 scenarios (headless)"
+      ]
+    },
+    "beta-finance-legacy-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_run_finance_and_beta_insider_state.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.11,
+      "errors": [],
+      "tail": [
+        "       [8] _verify_gameplay_ownership (res://scripts/debug/verify_run_finance_and_beta_insider_state.gd:130)",
+        "Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 0; implemented 0; unimplemented 14",
+        "PASS: Run-state transition fixture finalizes Alpha",
+        "PASS: Gameplay retains the exact run-state instance across Design, Alpha, and Beta",
+        "PASS: ProjectState does not store run cash",
+        "PASS: BetaPhase does not store run cash",
+        "PASS: CardData and CardView do not store run cash",
+        "Run finance and Beta Insider state verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "beta-host-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_host_playtest.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 3.391,
+      "errors": [],
+      "tail": [
+        "PASS: One corrective Pass can resolve with three ordinary Beta cards",
+        "PASS: Selected corrective Pass applies exactly +2",
+        "PASS: Unselected corrective Pass applies no effect",
+        "PASS: Unplayed corrective Pass retains its instance and corrective eligibility",
+        "Beta hand resolved: Corrective Pass gains: Sound +2 | Known Bugs fixed: 0 | Marketing Output gained: 2 | Cycle advanced: 1",
+        "PASS: Retained corrective Pass remains playable in the following hand",
+        "PASS: Retained corrective Pass grants its +2 exactly once when played",
+        "Beta Host Playtest verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "beta-launch-legacy-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_finalization_and_launch.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.922,
+      "errors": [],
+      "tail": [
+        "PASS: Gameplay commits launch market context exactly once from frozen state",
+        "PASS: Gameplay commits Month 1 units sold exactly once from prior launch results",
+        "PASS: Gameplay commits the projected Month 1 sales/revenue foundation without earning sales at Launch",
+        "PASS: Studio needs no continuation confirmation and starts with release stats hidden",
+        "PASS: First committed launch immediately enables history and labels the next game correctly",
+        "PASS: First committed launch immediately enables the legally available Contract offer",
+        "PASS: Post Game Summaries opens the committed results",
+        "Beta finalization and Launch-boundary verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "beta-marketing-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_marketing_specialization.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.578,
+      "errors": [],
+      "tail": [
+        "   at: push_warning (core/variant/variant_utility.cpp:1033)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:492)",
+        "       [1] _verify_overflow_rollback (res://scripts/debug/verify_beta_marketing_specialization.gd:101)",
+        "       [2] _make_beta (res://scripts/debug/verify_beta_marketing_specialization.gd:39)",
+        "PASS: Specialized Marketing overflow rejects",
+        "PASS: Rejected hand preserves all authoritative state and selection",
+        "Beta Marketing Specialization verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "beta-planning-legacy-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_planning.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.141,
+      "errors": [],
+      "tail": [
+        "PASS: Beta CardView shows the complete fitted name with original tooltip",
+        "PASS: Beta CardView shows printed Beta value without fake production",
+        "PASS: Beta CardView shows its fitted category",
+        "PASS: Beta CardView hides fake secondary production and Scope anatomy",
+        "PASS: Beta CardView shows the matching lifecycle icon",
+        "PASS: Beta CardView retains full lifecycle explanation",
+        "PASS: Finite dealing and display advance no cycle",
+        "Beta planning and selection verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "beta-qa-legacy-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_qa_specialization.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.875,
+      "errors": [],
+      "tail": [
+        "   at: push_warning (core/variant/variant_utility.cpp:1033)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:492)",
+        "       [1] _verify_atomic_failure (res://scripts/debug/verify_beta_qa_specialization.gd:144)",
+        "       [2] _make_beta (res://scripts/debug/verify_beta_qa_specialization.gd:48)",
+        "PASS: Forced replacement failure rejects specialized hand",
+        "PASS: Failed specialized preflight preserves Bugs, cycle, and selection",
+        "Beta QA Specialization verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "beta-state-legacy-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_beta_marketing_insider_state.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.5,
+      "errors": [],
+      "tail": [
+        "PASS: Beta dealing succeeds with Marketing and Insider candidates",
+        "PASS: Active Beta priorities remain editable through a valid atomic distribution",
+        "PASS: Begin, dealing, display, selection, deselection, and priority editing change no Marketing Output, Bugs, cycles, or project data",
+        "PASS: Marketing cards are not resolved by planning or selection",
+        "PASS: Unsupported intelligence payloads and finance ownership are not fabricated",
+        "PASS: Beta reconstruction reads and preserves authoritative state",
+        "PASS: State foundation leaves the 40-card ledger and nine Beta definitions unchanged",
+        "Beta Marketing and Insider state-foundation verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "campaign-funded-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_campaign_session.gd"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 8.453,
+      "errors": [
+        "ERROR: FAIL: Expected acceptance for development",
+        "ERROR: FAIL: Next project starts",
+        "ERROR: FAIL: Three complete projects reached Studio"
+      ],
+      "tail": [
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)",
+        "       [1] _initialize (res://scripts/debug/verify_campaign_session.gd:51)",
+        "ERROR: FAIL: Three complete projects reached Studio",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)",
+        "       [1] _initialize (res://scripts/debug/verify_campaign_session.gd:104)",
+        "Campaign session verification: 3 failures; 55 steps; 26 reentrant checks"
+      ]
+    },
+    "campaign-funded-v2-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_campaign_session.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 14.469,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "Campaign session verification: 0 failures; 81 steps; 42 reentrant checks",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "campaign-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_campaign_session.gd"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 9.969,
+      "errors": [
+        "ERROR: FAIL: Expected acceptance for development",
+        "ERROR: FAIL: Next project starts",
+        "ERROR: FAIL: Three complete projects reached Studio"
+      ],
+      "tail": [
+        "       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)",
+        "       [1] _initialize (res://scripts/debug/verify_campaign_session.gd:49)",
+        "ERROR: FAIL: Three complete projects reached Studio",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)",
+        "       [1] _initialize (res://scripts/debug/verify_campaign_session.gd:102)",
+        "Campaign session verification: 3 failures; 55 steps; 26 reentrant checks",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "cold-restore-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-transition-20261026-v1/restore.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 7.235,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "PAUSE_RESTORE checks=10 failures=0"
+      ]
+    },
+    "guided-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_guided_tutorial_ui.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 54.922,
+      "errors": [],
+      "tail": [
+        "PASS: Skip remembers the choice without creating a practice project",
+        "PASS: Skip preserves the Studio and saves",
+        "PASS: Unwritable preferences cannot trap the player in the invitation",
+        "PASS: Preference failure never changes real Studio saves",
+        "PASS: Cold scene enters the actual Main Menu",
+        "PASS: First-time Continue offers the invitation after the loading overlay closes",
+        "PASS: Pointer Exit fixture has an active presentation",
+        "PASS: Pointer Exit stays accessible during animation",
+        "PASS: Pointer cancellation preserves all restored state, RNG and generation bytes",
+        "Guided tutorial UI: 115 checks, 0 failures"
+      ]
+    },
+    "hold-complete-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_insider_hold.gd"
+      ],
+      "exit": 2,
+      "elapsed_seconds": 4.375,
+      "errors": [
+        "ERROR: FAIL: Rival policy skips retained disabled Insider cards",
+        "ERROR: FAIL: Headless fixture policy skips retained disabled Insider cards"
+      ],
+      "tail": [
+        "PASS: Contract slider reaches 75",
+        "PASS: Contract slider reaches 75",
+        "PASS: Contract slider reaches 75",
+        "PASS: Specialist slider reaches 75",
+        "PASS: Specialist slider reaches 75",
+        "PASS: Specialist slider reaches 75",
+        "PASS: Specialist slider reaches 75",
+        "INSIDER_HOLD checks=82 failures=2",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "hold-complete-v2-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_insider_hold.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.032,
+      "errors": [],
+      "tail": [
+        "PASS: Core planning slider reaches 75",
+        "PASS: Contract slider reaches 75",
+        "PASS: Contract slider reaches 75",
+        "PASS: Contract slider reaches 75",
+        "PASS: Contract slider reaches 75",
+        "PASS: Specialist slider reaches 75",
+        "PASS: Specialist slider reaches 75",
+        "PASS: Specialist slider reaches 75",
+        "PASS: Specialist slider reaches 75",
+        "INSIDER_HOLD checks=82 failures=0"
+      ]
+    },
+    "hold-final-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_insider_hold.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.688,
+      "errors": [],
+      "tail": [
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "INSIDER_HOLD checks=71 failures=0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "hold-green-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_insider_hold.gd"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 3.11,
+      "errors": [
+        "ERROR: FAIL: Live/headless state, cash and RNG match"
+      ],
+      "tail": [
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "INSIDER_HOLD checks=71 failures=1",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "hold-green-v2-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_insider_hold.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.375,
+      "errors": [],
+      "tail": [
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "INSIDER_HOLD checks=71 failures=0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "hold-parity-probe-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_insider_hold.gd"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 2.156,
+      "errors": [
+        "ERROR: FAIL: Live/headless state, cash and RNG match"
+      ],
+      "tail": [
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "PASS: Core planning slider reaches 75",
+        "INSIDER_HOLD checks=71 failures=1",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "priorities-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_usability_priorities.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.265,
+      "errors": [],
+      "tail": [
+        "PASS: Second over-budget crossing restarts at zero",
+        "PASS: Contract has four priority controls",
+        "PASS: Contract uses ten-percent vertical slider",
+        "PASS: Contract uses ten-percent vertical slider",
+        "PASS: Contract uses ten-percent vertical slider",
+        "PASS: Contract uses ten-percent vertical slider",
+        "PASS: Contract uses the shared influence pie chart",
+        "Usability priorities: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "priority-chart-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_priority_influence.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.109,
+      "errors": [],
+      "tail": [
+        "PASS: Contract cancellation reset: chart exists",
+        "PASS: Contract cancellation reset: chart follows displayed draft values",
+        "PASS: Contract cancellation reset: chart retains the true allocated total",
+        "PASS: Contract cancellation reset: slice proportions are correct",
+        "PASS: Contract cancellation reset: complete pie accounts for every slice",
+        "PASS: Contract Cancel closes the priority menu",
+        "PASS: Contract chart editing and cancellation preserve frozen release, sales, cash, calendar, redraws, hands and candidates",
+        "Priority influence verification: 306 checks, 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "priority-native-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/insider-hold-20261026-v1/capture.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 7.359,
+      "errors": [],
+      "tail": [
+        "PASS: Contract cancellation reset: chart exists",
+        "PASS: Contract cancellation reset: chart follows displayed draft values",
+        "PASS: Contract cancellation reset: chart retains the true allocated total",
+        "PASS: Contract cancellation reset: slice proportions are correct",
+        "PASS: Contract cancellation reset: complete pie accounts for every slice",
+        "PASS: Contract Cancel closes the priority menu",
+        "PASS: Contract chart editing and cancellation preserve frozen release, sales, cash, calendar, redraws, hands and candidates",
+        "Priority influence verification: 316 checks, 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "rivals-run": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_rival_trial_activation.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 25.86,
+      "errors": [],
+      "tail": [
+        "RIVAL_TRIAL_CYCLE cycle=14 phase=design active=true hand=7 revision=1 blocked= releases=2",
+        "RIVAL_TRIAL_CYCLE cycle=15 phase=design active=true hand=7 revision=2 blocked= releases=2",
+        "RIVAL_TRIAL_CYCLE cycle=16 phase=design active=true hand=7 revision=3 blocked= releases=2",
+        "RIVAL_TRIAL_CYCLE cycle=17 phase=design active=true hand=7 revision=4 blocked= releases=2",
+        "RIVAL_TRIAL_CYCLE cycle=18 phase=alpha active=true hand=7 revision=1 blocked= releases=2",
+        "RIVAL_TRIAL_CYCLE cycle=19 phase=alpha active=true hand=7 revision=2 blocked= releases=2",
+        "RIVAL_TRIAL_CYCLE cycle=20 phase=alpha active=true hand=7 revision=3 blocked= releases=2",
+        "RIVAL_TRIAL_ACTIVATION checks=120 failures=0 cycles=20 restore_at=0 releases=2",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    }
+  },
+  "default_insider_setting": false,
+  "committed": false,
+  "pushed": false,
+  "export_rebuilt": false
+}

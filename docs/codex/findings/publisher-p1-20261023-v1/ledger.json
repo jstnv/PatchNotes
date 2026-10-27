@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--headless",
+    "--script",
+    "res://scripts/debug/verify_publisher_relationships.gd"
+  ],
+  "exit": 0,
+  "errors": [],
+  "summary": [
+    "PASS: invalid credit bound rejects [0, 10001]",
+    "PASS: float counter rejects",
+    "PASS: nonzero fixture typed JSON roundtrip",
+    "PASS: fixture credits rejected by production resolver",
+    "PASS: P1 enables no award producer",
+    "PASS: detached event cannot mutate planned history",
+    "PASS: observation cannot mutate history",
+    "PASS: legal Studio creation",
+    "PASS: new Studio checkpoint captures: ",
+    "PASS: new Studio has five zero relationships and no events",
+    "PASS: RunState observation detached",
+    "PASS: disabled event preserves full runtime and RNG",
+    "PASS: reentrant producer rejects",
+    "PASS: checkpoint mutation fence preserved",
+    "PASS: native full checkpoint roundtrip exact",
+    "PASS: wrong owner rejects without damaging live Studio",
+    "PASS: malformed event payload rejects",
+    "PASS: current revision cannot omit relationship ledger",
+    "PASS: unknown content revision rejects",
+    "P1 checks=40 failures=0"
+  ]
+}

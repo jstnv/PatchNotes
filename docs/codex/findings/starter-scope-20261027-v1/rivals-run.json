@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_rival_trial_activation.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 18.438,
+  "errors": [],
+  "tail": [
+    "RIVAL_TRIAL_CYCLE cycle=14 phase=alpha active=true hand=7 revision=3 blocked= releases=3",
+    "RIVAL_TRIAL_CYCLE cycle=15 phase=beta active=true hand=7 revision=1 blocked= releases=3",
+    "RIVAL_TRIAL_CYCLE cycle=16 phase=beta active=true hand=7 revision=2 blocked= releases=3",
+    "RIVAL_TRIAL_CYCLE cycle=17 phase=studio active=false hand=0 revision=-1 blocked= releases=4",
+    "RIVAL_TRIAL_CYCLE cycle=18 phase=design active=true hand=7 revision=1 blocked= releases=4",
+    "RIVAL_TRIAL_CYCLE cycle=19 phase=design active=true hand=7 revision=2 blocked= releases=4",
+    "RIVAL_TRIAL_CYCLE cycle=20 phase=alpha active=true hand=7 revision=1 blocked= releases=4",
+    "RIVAL_TRIAL_ACTIVATION checks=120 failures=0 cycles=20 restore_at=0 releases=4",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

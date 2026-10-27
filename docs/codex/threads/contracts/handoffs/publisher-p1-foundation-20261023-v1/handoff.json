@@ -1,0 +1,183 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-23T18:33:11.372713+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "publisher-relationships-foundation-v2",
+    "owner": "contracts",
+    "created_utc": "2026-10-23T18:25:52.032071+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "c6335182cad1b0fe9ade502fa8c7ac31a7a364d27be5f0a8e27415eb01f48a4a",
+    "creation_identity": "bf4694c304df180eee92db75218f00aa998a574429ef9d2b2d227ad77deca298",
+    "lineage": [
+      {
+        "id": "publisher-relationships-foundation-v1",
+        "owner": "contracts",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\simulators\\publisher-relationships-foundation-v1",
+        "metadata_sha256": "0a992768347796bb3d08d03fe68858f713e0cd978c7d40b253b2df8c707ba6b2",
+        "source_identity": "bf4694c304df180eee92db75218f00aa998a574429ef9d2b2d227ad77deca298"
+      }
+    ],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "DESIGN review only: dormant per-Studio publisher relationship event ledger, strict zero migration and typed persistence. No enabled awards, offers or balance adoption. Read PUBLISHER-P1-FINDINGS-2026-10-23-v1.md and supplemental evidence-index.json in studies/publisher-p1-20261023-v1 before adoption.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\PUBLISHER-P1-FOUNDATION-SPEC-2026-10-23-v1.md",
+    "sha256": "67d1d37f33ead67a997fbbbfba5707014e4ca3e5dea07369fffcc8ad69db857c",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Record a separate P1 structural adoption ruling; keep all P2-P4 values and gameplay producers proposed.",
+    "Preserve exact current Contract cash, Promotion, challenges, RNG and gameplay; repeat affected canonical checks after reconciliation.",
+    "Validate ledger owner, ordered events, source-kind uniqueness, idempotency, clipping and no retroactive awards; current production resolver rejects every award.",
+    "Verify exact predecessor player and active-rival world migration, unknown source rejection, current Studio checkpoints and populated Founder ownership isolation.",
+    "Complete native main-menu cold disk Continue, generation preservation, export acceptance and applicable old-world cases; do not infer these from retained DTO cold restores.",
+    "Keep pure nonzero fixture credits separate from production evidence; future producer must validate both live and decoded committed facts and test exactly-once settlement and observer reentry."
+  ],
+  "base_identity": "c6335182cad1b0fe9ade502fa8c7ac31a7a364d27be5f0a8e27415eb01f48a4a",
+  "candidate_identity": "83765c5752a09e1b6630923d25c5829b40491df17ea323adf948c1d321268b98",
+  "canonical_identity": "c6335182cad1b0fe9ade502fa8c7ac31a7a364d27be5f0a8e27415eb01f48a4a",
+  "baseline_drift": false,
+  "changes": [
+    {
+      "path": "scripts/contracts/pre_relationships/schema.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "47198705a7b1ada35471eab26552f1408727388d43b7f41c286ccb39b7ce19cf"
+    },
+    {
+      "path": "scripts/contracts/pre_relationships/studio.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2febdaff813b7ae90157c4921912328a8cec6851f522838e074a8ece457dea0d"
+    },
+    {
+      "path": "scripts/contracts/publisher_relationship_rules.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "f3623bbb6fa161ebc6fdef85b94dc7d6eeca950f2ec8f38c8316d6e0551138af"
+    },
+    {
+      "path": "scripts/contracts/publisher_relationships.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "3505d16c760e109d47a9ff63af20b2ba20bfa9ed4cc917d59f57eee696500235"
+    },
+    {
+      "path": "scripts/debug/verify_contract_challenge_publishers.gd",
+      "change": "modified",
+      "before_sha256": "25c40cc1502427f091ac3dbd4a80d1ed887a46700d6d0e6c1b1cd06777be67cb",
+      "after_sha256": "bb84d8b972fc63322626427f21717a8b7e23a2e75386bdc3876f5d652d7e528a"
+    },
+    {
+      "path": "scripts/debug/verify_publisher_relationships.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7b6bbf2125939fd86f3cbb585b0f10dc0db79e7b32671a14d75f7ba814582a62"
+    },
+    {
+      "path": "scripts/market/market_save_migration_trial.gd",
+      "change": "modified",
+      "before_sha256": "96d0b43ee9e91634cc0013c117a97beefa56c4ec74c218e90ea8bcc84a403e2b",
+      "after_sha256": "f86f07b9c5d0f230823bfa2f25a07509e750ae1f5a56fa3a7b4da61a21afd48f"
+    },
+    {
+      "path": "scripts/market/rival_world_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "2ae2281ffe259fe03a74c830dffee1b7089e221d0522c90ef9c7332b70abcb2a",
+      "after_sha256": "25d43a8ba147d74c967b44f0c8165c1673ea530fa2f50882f2d879e517b6ea85"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_coordinator.gd",
+      "change": "modified",
+      "before_sha256": "bb4ff91373a457720406ba343490513b9bbe027d43b98a4c5a7857ca57fdb16f",
+      "after_sha256": "42bd8b4dd8ec2d5a48673806be53dfb5149c7cb01e5ff56d8a0083b0e8e480f7"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_schema.gd",
+      "change": "modified",
+      "before_sha256": "f3aa3d0d60986db32954653772235a42176bf27840b26eeb6d39b20debe2a6bf",
+      "after_sha256": "8d92d0cc2b134b6f9ffb1eb8dbfffc176d9988b8d4afe26a5e55f981d3c53140"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "38d534d5e620f838836bd7722c61ddf79e68bd663794f960a04469b617b49ba6",
+      "after_sha256": "e6a8d3982f0d01c01139b8dd321a87d5e5b381b4d161c8df414fc7d1005ece04"
+    },
+    {
+      "path": "scripts/run_state.gd",
+      "change": "modified",
+      "before_sha256": "af4a6e2eeda2015337bf3f0f666a5136719edd4154b141416bef8f5e50b8a464",
+      "after_sha256": "02cd761a986dc774a2ceda985c3cb75c8254f2ed4e7bad267de973371f8d38bd"
+    },
+    {
+      "path": "scripts/simulation/run_factory.gd",
+      "change": "modified",
+      "before_sha256": "76506099a511ea047295d96c4367cc217dfb000af4862d7f9bc69fbcbcac42e8",
+      "after_sha256": "888c3646937a49f03a2f9f65b9156c109dd49e784b4b1e2a6d047207a07c2595"
+    }
+  ],
+  "canonical_changes_since_base": [],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sims\\publisher-p1-candidate-20261023-v2",
+      "ok": true,
+      "error": null,
+      "source_identity": "83765c5752a09e1b6630923d25c5829b40491df17ea323adf948c1d321268b98",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "c370e3740334f269315a1f00f8f0e3bead120a385c757cd70ca6e2e24bbc5916",
+        "cases/action-4417/case.json": "cd5336df6c0696b8bd654e733aa494f6d172b281ebc65ab25b5293ccda66577e",
+        "cases/action-4417/case.variant.json": "f3297bda497cb3df5912531c191eb59e9363e5253b91ef83a9a5752f3a977cb4",
+        "cases/action-4417/final_state.variant.json": "4f5d98906e950d9bdecac22fff6c36b5601c897bf6b370e5cd17a9ec3fab325c",
+        "cases/action-4417/initial.json": "a9f56412d0ee771285b5296c63582638d4e196c41dff69e2cd694a58861515a8",
+        "cases/action-4417/metrics.json": "cc487874e6bc066c8af5c228ebe119b1e5dfdbfaa5688abf8e4c2127ffe90154",
+        "cases/action-4417/replay.tape.json": "0efa41ce2d2ba55fdf738212c593be6457e8154102f275dd9c195125d1063e10",
+        "cases/action-4417/result.json": "41a0d058f9d3a505ebfdf9d1fee53de31ec8fbc4107d246cbaf1227e52dae6ac",
+        "cases/action-4417/studio_checkpoint.json": "9cf37099407f865f26e11e7b6a0c744b2a9ebed37ee8317168e180258a819710",
+        "cases/sports-1112/case.json": "1324cbe0b7ac83fd072dfcac4dc147e26e035f35e4d71cf1f4b79ed0ab816b4e",
+        "cases/sports-1112/case.variant.json": "241b38290090505a5fb8825c0ce09b71beba9f606c45715e80c4f51eaa748b96",
+        "cases/sports-1112/final_state.variant.json": "c40c39c7afe0a166d2562e7c6b40e542506dba6dfee4a989198004d25ab67681",
+        "cases/sports-1112/initial.json": "33194ac5475c1c642f928c95737c2f1b2635e2aa3caa7565f7df1f9e9258a514",
+        "cases/sports-1112/metrics.json": "030ce728e844b4e46044726b1e140216be155b954a977fc6368582dcf8b9db32",
+        "cases/sports-1112/replay.tape.json": "9a751e35d76b8da0a3603d496106e9d462cedf0052b24cadd1f01b3534178111",
+        "cases/sports-1112/result.json": "2e6a13a1111922b65d1c8409fb63fca898720c7699ed344b342cd593182ddbbc",
+        "cases/sports-1112/studio_checkpoint.json": "f227e8c96bbdb5dfae8ef32d44404a0797c5ea06297904ba4164c35a15bd08a7",
+        "experiment-report.json": "753d8a1fe42ccdbdccf721d5e1c27fa29412d82d3613e843ac98136229669bd4",
+        "experiment.command.json": "ae15cdda031b8e781e40578aef0a52ff57e4c5996720ff4ab6c9d879618aec92",
+        "experiment.log": "8ba9dab8b6a612b9b31e78936bbd2a5d86bd524ff4459cba9b6ca9b5f26b2e9a",
+        "git-provenance.json": "e3339708f378aeac03cce687ddd65596ff7242ce3ef0df94a868800bbf6f4fa7",
+        "godot-version.command.json": "81f272adb0ae8e46205e7a0f9adf5408c2035c5da56d20202a75c834520c4236",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "550b3af8d2c5fb031c6d248279a51cbf9d30b0d7333c10bcf1a77179d90dfbe3",
+        "import.command.json": "b79e94097b314f931d0a7b1acc8a91ab01e0ea0209674eb6a086897364f5e5e5",
+        "import.log": "1ed18d75b8610e624512c379f331c2892399aa01f89736ae248ef6d50487868a",
+        "inputs/experiment.json": "a058bc86749740faa2edda25130eb0c12214ce33c8926f98d5a60b7783069eea",
+        "inputs/requested.json": "5657c15e829b65ac5541dfbf93d994a8062dd6974b0eea3c488bc9933866b7e0",
+        "run-report.json": "551bd2d388c3e5c96fdd50219d0dc7f790c0156d615fefdb2f2aba70d2b1e23c",
+        "runner.py": "65bdf6c5eb4a47af829283a0b07d4b78ad45e8a95139607b96a613d6ffbf9193",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "5b0006cbc9b6e3abfac5d26b324c39f649699510c8df6f4a010abeeb967c59fe",
+        "source.diff.patch": "8abca5e1bf28fdac060ae3d4dcc1680f0ccbcd5b067bbeb59386e353bbb7ad36",
+        "variant-base-manifest.json": "c370e3740334f269315a1f00f8f0e3bead120a385c757cd70ca6e2e24bbc5916",
+        "variant-creation-manifest.json": "87f8461b1666b8bb8726bc4a7aaaa4527b80ba7e0c8f30c07fc6aba9c97a8571",
+        "variant-integrity.json": "7fe4969b18a3f1a693beb75398c2253cd4bedc96e60f08d8234d6786b5683cd7",
+        "variant-provenance.json": "e719d42bc03a657378075cd719ace7019c150be85a478ce47382407fe032c659",
+        "variant-variant.json": "a5e9c779a420a123a8089bfc30203ae753977ddfe8b1c62d07ba3e31c5470448",
+        "workspace-source-manifest.json": "6db131b377d4fe214a74061e08ee28723c61bdf8da5123f41b387e3edefee63b"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

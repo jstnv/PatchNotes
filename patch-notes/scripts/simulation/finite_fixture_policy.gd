@@ -38,6 +38,8 @@ func choose(view: Dictionary) -> Dictionary:
 	var key := "%s:%s" % [view.project_id,current.phase]
 	if int(_hands.get(key,0)) >= int(_config.hands[current.phase]): return _development(view,&"request_exit")
 	var cards: Array = current.candidates.duplicate(true)
+	if current.phase == "beta":
+		cards = cards.filter(func(card): return card.type != "beta" or BetaPriorityAllocation.category_enabled(StringName(card.beta_category)))
 	if _config.selection == "features_first":
 		cards.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
 			if (a.type == "feature") != (b.type == "feature"): return a.type == "feature"

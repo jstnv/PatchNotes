@@ -1,0 +1,127 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-17T10:01:15.151694+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "studio-traits-foundation-v1",
+    "owner": "studio-traits",
+    "created_utc": "2026-10-17T09:54:08.827159+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "9ed255239a2dd365858be840af05b6d72053525be6bb43add3eb0847865d9b55",
+    "creation_identity": "9ed255239a2dd365858be840af05b6d72053525be6bb43add3eb0847865d9b55",
+    "lineage": [],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "Centralize each existing Studio Trait point amount, activation version and active-ID order in its registry definition; preserve behavior and saved-version reconstruction.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes\\design-logs\\threads\\studio-traits\\2026-10-17-trait-foundation-decision-v1.md",
+    "sha256": "3047729d515d106e8be2bd570cea08137267d84a9df3ff7cce4b0da4d2b5a19a",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Reconcile only scripts/studio_traits.gd into current canonical source; treat the private snapshot driver as analysis-only.",
+    "All 665 historical selection snapshots across saved versions 3-8 match exactly, including invalid choices.",
+    "Focused trait, Cult and checkpoint checks pass; legal two-release route matches initial/final state, RNG, finance and telemetry; fresh-process replay passes."
+  ],
+  "base_identity": "9ed255239a2dd365858be840af05b6d72053525be6bb43add3eb0847865d9b55",
+  "candidate_identity": "e982f016f1fb3260ce61786b8351d9420f1ddce46801f6c4dc27236c56302a4b",
+  "canonical_identity": "3735422611d3fd368a41394239536924062967184dfb43e578af351d2f7a3f91",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "scripts/debug/trait_foundation_snapshot_v1.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "8a443efc17355dcd7d34fe78bbbde51cf4a0ad68b3c39fa0438edc75265552f4"
+    },
+    {
+      "path": "scripts/debug/trait_foundation_snapshot_v1.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d6ad1f6b86c7e9227a38c051b8b3bb912259c6672d1303283a570c5eb1a7d397"
+    },
+    {
+      "path": "scripts/studio_traits.gd",
+      "change": "modified",
+      "before_sha256": "10721bfc791bfb194afb6404846705ff0484bdaae7dd3acc537f9ddb5debf483",
+      "after_sha256": "966b1c97501b81825845d13a53146392dc60694090be43e43781b40e8fcd50cf"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "scripts/debug/verify_rival_world_foundation.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "17dada377f1ddad5b32061720d673a68f6420f3b347e21d8c2a35adaf3036c72"
+    },
+    {
+      "path": "scripts/market/rival_world.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c191de82348794e6c48377ac10b045bb3d314dd1600c36816d9e255b1cff14f1"
+    }
+  ],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\studio-traits\\sims\\foundation-candidate-v1",
+      "ok": true,
+      "error": null,
+      "source_identity": "e982f016f1fb3260ce61786b8351d9420f1ddce46801f6c4dc27236c56302a4b",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "614120377dad8ebaa9b29353a9046a7850e05dc938679373b830f82825a81fbb",
+        "cases/foundation-4417-control/case.json": "600be84debc394c59a866a2b3465a21a887a54d1374b5249597561dd0ec45cdf",
+        "cases/foundation-4417-control/case.variant.json": "6c7d3c8a94de53973379a3d6b212c94b127831f50aeb8f1c470bdfff98437659",
+        "cases/foundation-4417-control/final_state.variant.json": "3154d4c5fe26d7798ebc64032bf68225c7981a68b8663c994242e855aa81d8ec",
+        "cases/foundation-4417-control/initial.json": "17214e38eee701fad304abf6cf2d8eb3a7ad4df70c76dece6a7ee1abf809c8f3",
+        "cases/foundation-4417-control/metrics.json": "749d4864af7b9948e37450cb717095ec7b9aff3edb1a838b729115a2aba986c1",
+        "cases/foundation-4417-control/replay.tape.json": "fb2fcdf74f427de905dcca0d100c17214865bb536309a4640f4f5be409a01490",
+        "cases/foundation-4417-control/result.json": "184880a0c80acabe110416120446a5a144c13270105eb6cd7a42268d9be6a61c",
+        "cases/foundation-4417-control/studio_checkpoint.json": "2be4d88b4d637d42d87e57bfa725af67be964763f2cf61e9a05c26f34de05bb6",
+        "cases/foundation-4417-control/telemetry.json": "96be86165d569c1e98cab40d4d0fea0ca1dea9d14baaadb5d3ea6be7b4302213",
+        "cases/foundation-4417-traits/case.json": "5cbd6ee8d9d3b7cee8c6b145425f90b043f65d8db4541ab25d3aa695b200dd45",
+        "cases/foundation-4417-traits/case.variant.json": "b904d43117cf9ca82ceea4be14edf4ec929b86b78d7522df3aa96d69b9181a33",
+        "cases/foundation-4417-traits/final_state.variant.json": "c9bbbb847bf0dac391d12fc1bd9cf6fe03498149e3600afbebf0da621e4c1c18",
+        "cases/foundation-4417-traits/initial.json": "e4a0c8b32c12f06afc928adc66ed73175bd945f1f17e0b1409d4e2ccdd07dcb3",
+        "cases/foundation-4417-traits/metrics.json": "1ea8a26c4406ccdad03d8af22bd1df4ff1630d6789958627eb7d600eb20adaac",
+        "cases/foundation-4417-traits/replay.tape.json": "7aec53230c12557d48b42cbed74522bac87eec6f56bfc0b77a4f30ce3ef4a7b5",
+        "cases/foundation-4417-traits/result.json": "2b7d5b6db74b2e7f7cafc3ef8a8daeae6476ffa433d4d57c699666982a52f2f9",
+        "cases/foundation-4417-traits/studio_checkpoint.json": "8056e21ead1053e3482fb79d2df52f705fe8f6952433d56be6a6c6c7699a3dd7",
+        "cases/foundation-4417-traits/telemetry.json": "494dc129c3d097c799bb09a387dc59bd8bd1756e2dc7b52e1ca79484dd514e3d",
+        "experiment-report.json": "36ed13f782392bf18eaf3a3f67f300d5e8d50074a4dc1b35688e0091e4e49356",
+        "experiment.command.json": "9f79d4d0a2d478e81060486d76725af318c15b061bfbc16152fb348086e7fae2",
+        "experiment.log": "8ba9dab8b6a612b9b31e78936bbd2a5d86bd524ff4459cba9b6ca9b5f26b2e9a",
+        "git-provenance.json": "1cf83f57aa5e3fdc4ef0568066c87a6f3de9a33b949c059f7f42e7519b78e6f5",
+        "godot-version.command.json": "77067475fcff66d5d3a25838f80b954d2849bf8baeb225f1e920ce9ded6c2d74",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+        "import.command.json": "40060753ceed5374acc1f980c7ea212dacd48e4fc0b095f0a9c2f40a92200742",
+        "import.log": "34d5233c8158f9eb55387513ce5f386583c3b5828c0d27de69362aae42bc8ba0",
+        "inputs/experiment.json": "352fb6ecbd7935d87f574b43d90c1546e8f2acc348e93a10030f53575782ffde",
+        "inputs/requested.json": "aa1afee67f47f7baabb6b56deec0a4c84f13fa36bbfc8497f0581625006bd860",
+        "run-report.json": "45b18974b63b954f39d9c882e038f9b5a7d1364a3d9f552c62678da5ba1455c6",
+        "runner.py": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "5cac24c55897745545202fce6e9273aa7c5eb5e489a346ef7dbe7eed77720c9e",
+        "source.diff.patch": "abdc37e95c3120fd97798585d62b0e0e3b184399808977698792915ff882033d",
+        "variant-base-manifest.json": "fb2443c0d601d5b6f18ccac71ac29fdf30f7bff1033a9e3c43059a21f0c41238",
+        "variant-creation-manifest.json": "fb2443c0d601d5b6f18ccac71ac29fdf30f7bff1033a9e3c43059a21f0c41238",
+        "variant-integrity.json": "e6f7eaf0c9fca9a924cc680bff3ff4b7a3510e45d730c60c30084012a48d405f",
+        "variant-provenance.json": "c2a9237021acb21be033f96eff6e686eeb490a2f9a6230f3339138465fc639fa",
+        "variant-variant.json": "0f11726eb48195212d0b937f8cf5cccccb94f891dd1eaaabbcbecc55623f006b",
+        "workspace-source-manifest.json": "5cac24c55897745545202fce6e9273aa7c5eb5e489a346ef7dbe7eed77720c9e"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

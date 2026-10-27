@@ -1,0 +1,58 @@
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -11,6 +11,7 @@
+ # Prerequisite link presentation only. Actual preceding editor/PCK worlds retain
+ # every field/RNG; admit only these identities with the current content revision.
+ const USABILITY_PRESENTATION_SOURCES := [
++	"783a29291ac592ebc055867155cb640c481893c7ef900ebc36fe9adab56678ab", # Before refreshing Studio actions after the already committed first release.
+ 	"0b0443b989c38ddd34b943846617d8bebdab3ee0cbe4e7b2dd6885f456202488", # Exact preceding Paper Icon EXE; unchanged stored gameplay fields.
+ 	"900d63cc8e8ce4f2928ec127c3cb9d87e1ca6b5ec3ba18555ac49294fc7c2c1c", # Before the shared folder Theme and retained setup navigation.
+ 	"6800a07e9c01c2aa0476d8251afdfc3f0f3c61ad5989ff2c99bcd813d1c2ae65", # Before offering the optional tutorial on every save opening.
+--- before/scripts/phases/studio_phase.gd
++++ after/scripts/phases/studio_phase.gd
+@@ -81,6 +81,9 @@
+ 	if _run_state != null:
+ 		_refresh_game_list()
+ 		_refresh_summary()
++		# Launch prevalidates this scene before committing its release. Once
++		# mounted, derive action availability from the committed RunState.
++		_refresh_dashboard_actions()
+ 		_show_pending_publisher_notice()
+ 		_refresh_starter_hint()
+ 
+@@ -486,15 +489,20 @@
+ 	_refresh_game_list()
+ 	_refresh_summary()
+ 	_refresh_rivals()
+-	_refresh_contract_action()
++	_refresh_dashboard_actions()
+ 	%PublisherList.disabled = false
+ 	%PublisherList.tooltip_text = "Browse publisher profiles and unlock requirements."
+ 	_show_pending_publisher_notice()
+-	%PostGameSummaries.disabled = _run_state.get_released_game_ids().is_empty()
+-	%StartNextGame.text = "Produce First Game" if _run_state.get_released_game_ids().is_empty() else "Produce Next Game"
+-	%StartNextGame.disabled = false
+ 	_refresh_starter_hint()
+ 	return true
++
++func _refresh_dashboard_actions() -> void:
++	if _run_state == null: return
++	_refresh_contract_action()
++	var has_releases := not _run_state.get_released_game_ids().is_empty()
++	%PostGameSummaries.disabled = not has_releases
++	%StartNextGame.text = "Produce Next Game" if has_releases else "Produce First Game"
++	%StartNextGame.disabled = false
+ 
+ func _refresh_game_list() -> void:
+ 	if _run_state == null or not is_node_ready(): return
+--- before/scripts/debug/verify_beta_finalization_and_launch.gd
++++ after/scripts/debug/verify_beta_finalization_and_launch.gd
+@@ -142,6 +142,8 @@
+ 	_expect(state.has_units_sold_result() and state.get_units_sold_result().get_sales_period() == &"month_1", "Gameplay commits Month 1 units sold exactly once from prior launch results")
+ 	_expect(state.has_month_one_sales_revenue_result() and state.get_month_one_sales_revenue_result().get_earned_sales_cycle_count() == 0, "Gameplay commits the projected Month 1 sales/revenue foundation without earning sales at Launch")
+ 	_expect(not active.get_node("%SummaryPanel").visible and active.get_node_or_null("%ContinueButton") == null, "Studio needs no continuation confirmation and starts with release stats hidden")
++	_expect(run.get_released_game_ids().size()==1 and not active.get_node("%PostGameSummaries").disabled and active.get_node("%StartNextGame").text=="Produce Next Game", "First committed launch immediately enables history and labels the next game correctly")
++	_expect(run.is_primitive_contract_offer_available() and not active.get_node("%Contracts").disabled, "First committed launch immediately enables the legally available Contract offer")
+ 	active.open_summary()
+ 	var text := (active.get_node("%ReviewLabel") as Label).text + (active.get_node("%EarnedLabel") as Label).text
+ 	_expect(not text.contains("Hidden") and not text.contains("Remaining") and text.contains("Final Review:") and text.contains("Earned: 0"), "Post Game Summaries opens the committed results")

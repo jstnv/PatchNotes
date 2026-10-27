@@ -1,0 +1,17 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+AGE_DIAGNOSTIC {"cash":0,"draws":4,"plan_generic":false,"plan_typed":false,"priorities":{"0":25,"1":25,"2":25,"3":25},"project_can":true,"run_can":false,"valid":true}
+ERROR: Primitive branches: legal bounded priority action 2: Priority change rejected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_primitive_branches.gd:10)
+       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/queue-20261018-v2/bank_age_diagnostic.gd:24)
+ERROR: Primitive branches: still-unpaid Bank age2 or greater reached legally
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_primitive_branches.gd:10)
+       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/queue-20261018-v2/bank_age_diagnostic.gd:32)
+BANK_AGE checks=7 failures=2
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

@@ -1,0 +1,295 @@
+{
+  "all_canonical_inputs_match_tested_project": true,
+  "inputs": 735,
+  "runtime_source": "a2772c29a42bfd7b76c25743794e8ded3fec97beecff98ac95e04a9833aab586",
+  "changed_files": [
+    "data/feature_store_ledger.json",
+    "scripts/audio/soundtrack.gd",
+    "scripts/cards/feature_store_catalog.gd",
+    "scripts/debug/capture_primitive_branches.gd",
+    "scripts/debug/capture_store_cones.gd",
+    "scripts/debug/verify_feature_store.gd",
+    "scripts/debug/verify_feature_store_radial.gd",
+    "scripts/debug/verify_gameplay_tree.gd",
+    "scripts/debug/verify_gameplay_tree.gd.uid",
+    "scripts/debug/verify_pause_track_continuity.gd",
+    "scripts/debug/verify_pause_track_continuity.gd.uid",
+    "scripts/debug/verify_research_integration.gd",
+    "scripts/debug/verify_store_hud.gd",
+    "scripts/debug/verify_store_shopping_guidance.gd",
+    "scripts/debug/verify_world_restore_file.gd",
+    "scripts/market/rival_world_checkpoint.gd",
+    "scripts/persistence/studio_checkpoint.gd",
+    "scripts/ui/feature_store.gd",
+    "scripts/ui/feature_store_map.gd",
+    "scripts/ui/pause_menu.gd"
+  ],
+  "checks": [
+    {
+      "name": "import",
+      "summary": [],
+      "printed_passes": 0,
+      "warnings": []
+    },
+    {
+      "name": "verify_gameplay_tree",
+      "summary": [
+        "GAMEPLAY_TREE checks=79 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": []
+    },
+    {
+      "name": "verify_feature_store",
+      "summary": [
+        "Feature Store verification: 0 failures"
+      ],
+      "printed_passes": 67,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "WARNING: A complete Alpha action requires four current candidate instances.",
+        "WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png",
+        "WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png",
+        "WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png",
+        "WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png",
+        "WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png",
+        "WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png",
+        "WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png",
+        "WARNING: Artwork not found for card 'lives_system': res://assets/artwork/lives_system.png",
+        "WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png",
+        "WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png",
+        "WARNING: Artwork not found for card 'music': res://assets/artwork/music.png",
+        "WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png",
+        "WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png",
+        "WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png",
+        "WARNING: Artwork not found for card 'secrets': res://assets/artwork/secrets.png",
+        "WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png",
+        "WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png",
+        "WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png"
+      ]
+    },
+    {
+      "name": "verify_feature_parents",
+      "summary": [
+        "Feature parents: 65 checks, 0 failures"
+      ],
+      "printed_passes": 65,
+      "warnings": []
+    },
+    {
+      "name": "verify_feature_research",
+      "summary": [
+        "Feature research: 0 failures"
+      ],
+      "printed_passes": 26,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_research_integration",
+      "summary": [
+        "Research integration: 0 failures"
+      ],
+      "printed_passes": 46,
+      "warnings": []
+    },
+    {
+      "name": "verify_store_cone_parents",
+      "summary": [
+        "STORE_CONE_PARENTS checks=171 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_primitive_branches",
+      "summary": [
+        "PRIMITIVE_BRANCHES checks=205 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_store_shopping_guidance",
+      "summary": [
+        "Shopping guidance: 0 failures"
+      ],
+      "printed_passes": 38,
+      "warnings": []
+    },
+    {
+      "name": "verify_feature_spending_guidance",
+      "summary": [
+        "Spending guidance: 0 failures"
+      ],
+      "printed_passes": 59,
+      "warnings": []
+    },
+    {
+      "name": "verify_feature_store_navigation",
+      "summary": [
+        "Feature Store navigation verification: 0 failures"
+      ],
+      "printed_passes": 84,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_store_hud",
+      "summary": [
+        "STORE_HUD checks=135 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": []
+    },
+    {
+      "name": "verify_world_restore_file",
+      "summary": [
+        "Fresh world restore: 0 failures"
+      ],
+      "printed_passes": 5,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_pause_menu",
+      "summary": [
+        "PAUSE_MENU checks=64 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png",
+        "WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png",
+        "WARNING: Artwork not found for card 'controller': res://assets/artwork/controller.png",
+        "WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png",
+        "WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png",
+        "WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png",
+        "WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png",
+        "WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png"
+      ]
+    },
+    {
+      "name": "verify_pause_music",
+      "summary": [
+        "PAUSE_MUSIC checks=713 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_soundtrack_sync",
+      "summary": [
+        "Soundtrack sync: 3503 checks, 0 failures"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_studio_soundtrack",
+      "summary": [
+        "Studio soundtrack: 7621 checks, 0 failures"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png",
+        "WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png",
+        "WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png",
+        "WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png",
+        "WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png",
+        "WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png",
+        "WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png"
+      ]
+    },
+    {
+      "name": "capture_store_cones",
+      "summary": [
+        "Bloom Feature Store verification: 0 failures"
+      ],
+      "printed_passes": 447,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "capture_store_hud",
+      "summary": [
+        "STORE_HUD checks=153 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_pause_track_continuity",
+      "summary": [
+        "PAUSE_TRACK backend=WASAPI checks=300 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": []
+    },
+    {
+      "name": "verify_gameplay_extra",
+      "summary": [
+        "GAMEPLAY_EXTRA checks=10 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    }
+  ],
+  "pngs": [
+    "debug-1152x648.png",
+    "debug-1280x720.png",
+    "debug-1920x1080.png",
+    "debug-900x600.png",
+    "starter-1152x648.png",
+    "store-1152x648.png",
+    "store-1280x720.png",
+    "store-1920x1080.png",
+    "store-900x600.png",
+    "store-audio-1152.png",
+    "store-audio-1280.png",
+    "store-audio-900.png",
+    "store-combat-fork-1152.png",
+    "store-combat-fork-1280.png",
+    "store-combat-fork-900.png",
+    "store-detail-1152.png",
+    "store-detail-1280.png",
+    "store-detail-900.png",
+    "store-difficulty-details-1152.png",
+    "store-difficulty-details-1280.png",
+    "store-difficulty-details-900.png",
+    "store-gameplay-1152.png",
+    "store-gameplay-1280.png",
+    "store-gameplay-900.png",
+    "store-gameplay-merge-1152.png",
+    "store-gameplay-merge-1280.png",
+    "store-gameplay-merge-900.png",
+    "store-overview-1152.png",
+    "store-overview-1280.png",
+    "store-overview-900.png",
+    "store-story-world-1152.png",
+    "store-story-world-1280.png",
+    "store-story-world-900.png",
+    "store-technology-tools-1152.png",
+    "store-technology-tools-1280.png",
+    "store-technology-tools-900.png",
+    "store-visuals-1152.png",
+    "store-visuals-1280.png",
+    "store-visuals-900.png"
+  ]
+}

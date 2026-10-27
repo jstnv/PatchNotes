@@ -1,0 +1,107 @@
+{
+  "pass": true,
+  "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+  "source": "d4065bc10fd797b32405c507044bc2349b339c2d2a5b2a5c414817d17bc398d9",
+  "maintained_final": [
+    "verify_card_fan_entry_layout",
+    "verify_card_motion",
+    "verify_contract_challenge_matrix",
+    "verify_contract_presentation",
+    "verify_upper_card_fan",
+    "verify_rival_world_foundation",
+    "verify_publisher_relationships",
+    "verify_checkpoint_codec"
+  ],
+  "entry": "38 checks / 0 failures",
+  "upper_fan": "1740 / 0",
+  "world_foundation": "156 / 0",
+  "relationships": "43 / 0",
+  "codec": "46 / 0",
+  "actual_prior_worlds": {
+    "checks": 32,
+    "failures": 0,
+    "inputs": [
+      {
+        "path": "C:/Users/64jus/AppData/Local/Temp/pn-sidestreet-canonical-20261023-v5/world-operator/result.json.fixture.json",
+        "source": "a6766632c3c57c6abf5df0b4c981390c7f0dece678c6665d843bb84de8076cbe"
+      },
+      {
+        "path": "C:/Users/64jus/AppData/Local/Temp/pn-sidestreet-canonical-20261023-v5/world-operator/result.json.operator-fixture.json",
+        "source": "a6766632c3c57c6abf5df0b4c981390c7f0dece678c6665d843bb84de8076cbe"
+      },
+      {
+        "path": "C:/Users/64jus/AppData/Local/Temp/pn-sidestreet-canonical-20261023-v5/compiled-world/result.json.fixture.json",
+        "source": "1be636f8f92822d4d693179a1bf9b5ed693a92ee2269133674d73ed22bacd113"
+      },
+      {
+        "path": "C:/Users/64jus/AppData/Local/Temp/pn-sidestreet-canonical-20261023-v5/compiled-world/result.json.operator-fixture.json",
+        "source": "1be636f8f92822d4d693179a1bf9b5ed693a92ee2269133674d73ed22bacd113"
+      }
+    ],
+    "source": "d4065bc10fd797b32405c507044bc2349b339c2d2a5b2a5c414817d17bc398d9"
+  },
+  "native": [
+    {
+      "actions": "[P: (18.0, 552.0), S: (151.0, 32.0)]",
+      "fan": "[P: (18.0, 234.0), S: (1116.0, 310.0)]",
+      "fan_flags": 3,
+      "fan_min": "(0.0, 240.0)",
+      "first_scale": "(0.625, 0.625)",
+      "footer": "[P: (16.0, 602.0), S: (1120.0, 44.0)]",
+      "parent": "[P: (18.0, 234.0), S: (1116.0, 310.0)]",
+      "phase": "[P: (0.0, 88.0), S: (1152.0, 508.0)]",
+      "root_size": "(1152, 648)",
+      "tooltips": [
+        {
+          "position": "(586, 357)",
+          "size": "(456, 185)"
+        }
+      ],
+      "width": 1152
+    },
+    {
+      "actions": "[P: (18.0, 624.0), S: (151.0, 32.0)]",
+      "fan": "[P: (18.0, 234.0), S: (1244.0, 382.0)]",
+      "fan_flags": 3,
+      "fan_min": "(0.0, 240.0)",
+      "first_scale": "(0.76, 0.76)",
+      "footer": "[P: (16.0, 674.0), S: (1248.0, 44.0)]",
+      "parent": "[P: (18.0, 234.0), S: (1244.0, 382.0)]",
+      "phase": "[P: (0.0, 88.0), S: (1280.0, 580.0)]",
+      "root_size": "(1280, 720)",
+      "tooltips": [
+        {
+          "position": "(650, 379)",
+          "size": "(456, 185)"
+        }
+      ],
+      "width": 1280
+    }
+  ],
+  "source_boundary": "Native project and all external final checks match canonical bytes exactly after copying only the generated verifier UID. Five maintained runs predate that debug UID only. Original result.json canonical_unchanged=false is retained, not rewritten.",
+  "retained_initial_failures": {
+    "entry": "30 checks / 14 failures",
+    "tooltip": "32 checks / 2 failures",
+    "compat": "24 checks / 4 failures",
+    "harness": "probe and compatibility parse errors retained; fixed explicit Variant/RefCounted/String annotations"
+  },
+  "runner_missing_jobs": {
+    "not_run": [
+      "verify_publisher_commission_migration",
+      "verify_publisher_relationship_migration",
+      "verify_rival_world_checkpoint"
+    ],
+    "corrected_checks": [
+      "verify_rival_world_foundation",
+      "verify_publisher_relationships",
+      "verify_checkpoint_codec"
+    ],
+    "note": "Original aggregate remains false because nonexistent suite names were requested. All five executed checks passed; the actual relevant suites above and unmodified old-world checks passed separately."
+  },
+  "release_ready": false,
+  "limits": [
+    "No new export or actual release EXE interaction.",
+    "Existing missing artwork warnings and six ObjectDB shutdown instances remain.",
+    "P4 mechanics remain unimplemented; latest Contract correction took precedence."
+  ]
+}

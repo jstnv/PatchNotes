@@ -1,5 +1,7 @@
 # 2026-10-24 decision: play available rival Features before phase exit
 
+**2026-10-26 stronger phase gate:** The [complete Feature-exhaustion ruling](2026-10-26-rival-complete-feature-exhaustion-phase-gate-decision-v1.md) extends this visible-deal rule to legally drawable, affordable Features still in the project's frozen phase supply. The visible-only exit permission below is historical; exact legal search and recovery remain OPEN.
+
 **2026-10-25 supersession:** The later [full-Scope release decision](2026-10-25-full-scope-qa-marketing-decision-v1.md) retains the requirement to play every legal, affordable visible Feature but withdraws the rival's ordinary **under-Scope Alpha exit/launch** fallback. This record's under-Scope permission below is historical, not current design authority; canonical runtime has not yet adopted the new rule.
 
 **Status: LOCKED qualitative rival behavior; NOT IMPLEMENTED.** Authority: the user's direct 2026-10-24 instruction: “Rivals are required to play every possible feature available in the hand. If there’s no feature in the draw pool, the AI can proceed.” This narrows the [finite legal project-plan decision](2026-10-09-finite-project-policy-decision-v1.md). It supersedes the current trial policy's fixed two-hand exit as a sufficient stopping condition, and supersedes the proposed Scope-aware exit wherever that proposal would leave a playable Feature in the current deal.

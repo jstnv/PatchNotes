@@ -1,0 +1,104 @@
+[
+  {
+    "label": "cold-prior",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_world_restore_file.gd\", \"--\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\queue-20261018-v2\\\\prior-v2.json\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\queue-20261018-v2\\\\cold-prior-restored.json\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Player schema restores exact finance, traits and RNG\", \"PASS: World restores from unmodified file \", \"PASS: Every persisted rival action, finance, RNG, archive and ownership field survives\", \"PASS: Every persisted player field survives\", \"PASS: Unverified source still rejects\", \"Fresh world restore: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "cold-v2",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_world_restore_file.gd\", \"--\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\queue-20261018-v2\\\\roster-v2.json\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\queue-20261018-v2\\\\cold-v2-restored.json\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Player schema restores exact finance, traits and RNG\", \"PASS: World restores from unmodified file \", \"PASS: Every persisted rival action, finance, RNG, archive and ownership field survives\", \"PASS: Every persisted player field survives\", \"PASS: Unverified source still rejects\", \"Fresh world restore: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "studio_specialties",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_studio_specialties.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Menu commits exactly one specialty\", \"PASS: Stale confirmation callback does not grant again\", \"PASS: Failed first start preserves optional zero-cycle purchase window\", \"PASS: Successful nonmatching first game commits independent Genre\", \"PASS: First-project boundary closes initial window with usual cost\", \"PASS: Unowned Primitive costs one cycle and the boundary pays rent\", \"PASS: New ownership feeds next supply without changing current frozen supply\", \"Studio specialties verification: 0 failures\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "studio_folder_menu",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_studio_folder_menu.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Attention bounce returns to neutral\", \"PASS: Attention bounce returns to neutral\", \"PASS: Attention bounce returns to neutral\", \"PASS: Existing checkpoint still requires replacement confirmation\", \"PASS: Cancel replacement leaves creation unopened\", \"Studio folder menu: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "studio_checkpoint",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_studio_checkpoint.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Future RNG contract_deal\", \"PASS: Future RNG contract_deal\", \"PASS: Future RNG contract_deal\", \"PASS: Future RNG contract_deal\", \"PASS: Future RNG contract_deal\", \"Studio checkpoint verification: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "genre_checkpoint",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_genre_checkpoint.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Next action writes current revision at next generation\", \"PASS: Upgrade preserves previous generation bytes\", \"PASS: Upgrade contains one action and identical frozen history\", \"PASS: Real store identifies unrelated revision\", \"PASS: Incompatible revision bytes remain preserved\", \"Genre checkpoint verification: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "feature_store",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_feature_store.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"       [4] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:122)\", \"       [5] _verify_phase_credits (res://scripts/debug/verify_feature_store.gd:96)\", \"       [6] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:123)\", \"PASS: Alpha parent resolution discounts direct Core child\", \"PASS: Credit cannot repeat after phase transition\", \"Feature Store verification: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "feature_research",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_feature_research.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Duplicate Research cannot advance next queue entry\", \"PASS: Completion checkpoint captures: \", \"PASS: Completion hydration preserves payments/ownership\", \"PASS: Second queued Feature completes across monthly rent boundary\", \"PASS: Native monthly finance processed\", \"Feature research: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "primitive_branches",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_primitive_branches.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"PRIMITIVE_BRANCHES checks=199 failures=0\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "store_cone_parents",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_store_cone_parents.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"STORE_CONE_PARENTS checks=171 failures=0\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "gameplay_tree",
+    "exit": 1,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_gameplay_tree.gd\"], \"exit\": 1, \"errors\": [\"ERROR: Primitive branches: Pre-change checkpoint evidence supplied\"], \"tail\": [\"ERROR: Primitive branches: Pre-change checkpoint evidence supplied\", \"   at: push_error (core/variant/variant_utility.cpp:1023)\", \"   GDScript backtrace (most recent call first):\", \"       [0] check (res://scripts/debug/verify_primitive_branches.gd:10)\", \"       [1] _initialize (res://scripts/debug/verify_gameplay_tree.gd:60)\", \"GAMEPLAY_TREE checks=51 failures=1\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "legacy_world",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_legacy_world.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: New operator commits a productive boundary\", \"PASS: Former Studio advances through legal AI commands\", \"PASS: Old Studio continues development on shared calendar\", \"PASS: Post-handoff active former Studio captures\", \"PASS: Post-handoff Continue preserves sole operator \", \"Legacy world: 30 checks, 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "rival_gameplay_activation",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_rival_gameplay_activation.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"RIVAL_GAMEPLAY_ACTIVATION checks=10 failures=0 cycle=1\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "cult_following",
+    "exit": 1,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_cult_following.gd\"], \"exit\": 42, \"errors\": [\"ERROR: FAIL: Old Cult revision preserves the complete saved state without restamping traits\", \"ERROR: FAIL: Old Cult revision preserves the complete saved state without restamping traits\", \"ERROR: FAIL: Old revision preserves previews\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Old revision preserves previews\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Old revision preserves previews\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Old revision preserves previews\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\"], \"tail\": [\"ERROR: FAIL: Historical audio-credit hash preserves inactive Cult\", \"   at: push_error (core/variant/variant_utility.cpp:1023)\", \"   GDScript backtrace (most recent call first):\", \"       [0] check (res://scripts/debug/verify_cult_following.gd:7)\", \"       [1] _run (res://scripts/debug/verify_cult_following.gd:67)\", \"CULT v8 checks=205 failures=42\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "contract_challenge_publishers",
+    "exit": 1,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_contract_challenge_publishers.gd\"], \"exit\": 1, \"errors\": [\"ERROR: FAIL: Historical rule revision restores without retroactive bonus\"], \"tail\": [\"ERROR: FAIL: Historical rule revision restores without retroactive bonus\", \"   at: push_error (core/variant/variant_utility.cpp:1023)\", \"   GDScript backtrace (most recent call first):\", \"       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)\", \"       [1] _run (res://scripts/debug/verify_contract_challenge_publishers.gd:60)\", \"Contract challenge publishers: 1 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "research_integration",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_research_integration.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Corrupt installment fails whole checkpoint\", \"PASS: Unproven trait consumption fails whole checkpoint\", \"PASS: Cheap hypothetical final installment floors at zero\", \"PASS: Otherwise-paid zero final installment still consumes opportunity\", \"PASS: Already-free hypothetical acquisition does not consume opportunity\", \"Research integration: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "founder_victory",
+    "exit": 0,
+    "output": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64_console.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_founder_victory.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Founder victory ledger: 13 checks, 0 failures\", \"Loaded 40 cards.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  }
+]

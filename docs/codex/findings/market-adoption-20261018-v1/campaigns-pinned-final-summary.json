@@ -1,0 +1,588 @@
+{
+  "date": "2026-10-22",
+  "status": "PASS",
+  "source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+  "harness_sha256": "def17c5507afc870bbbe3aa37fca741d0499c4c093972799d48236f25b752ceb",
+  "runner_sha256": {
+    "run.py": "4c39624406c29f348cdbb2746d3435780304f558b8ab9f09894f822d17c39b56",
+    "run_rss.py": "54e3d0cb58cbdad24da1b6b770e4df65a88715a02ba158909430ac7d72d279b0"
+  },
+  "record_checks": 5820,
+  "replay_checks": 5964,
+  "unique_legal_commands": 267,
+  "unique_player_releases": 14,
+  "unique_productive_cycles": 111,
+  "rows": [
+    {
+      "route": "action-war",
+      "record": "acceptance-pinned-v2-action-war",
+      "replay": "replay-pinned-v2-action-war",
+      "source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+      "record_checks": 1071,
+      "replay_checks": 1100,
+      "commands": 54,
+      "player_releases": 3,
+      "final_cycle": 21,
+      "reviews": [
+        2.1,
+        2.4,
+        1.9
+      ],
+      "final_cash_cents": 345852,
+      "final_fans": 8,
+      "coverage": {
+        "age_month_reuse": 30,
+        "completed_pressured_player": 2,
+        "disjoint": 0,
+        "expired_facts": 36,
+        "genre_only": 11,
+        "own_other_title": 6,
+        "pair": 6,
+        "rejected_atomic": 21,
+        "strong_player_release": 0,
+        "strong_player_to_rival": 0,
+        "theme_only": 0
+      },
+      "checkpoints": [
+        {
+          "checkpoint_bytes": 51656,
+          "checkpoint_wall_us": 205374,
+          "cycle": 7,
+          "static_memory_bytes": 76679186
+        },
+        {
+          "checkpoint_bytes": 102489,
+          "checkpoint_wall_us": 371994,
+          "cycle": 14,
+          "static_memory_bytes": 79077319
+        },
+        {
+          "checkpoint_bytes": 154583,
+          "checkpoint_wall_us": 485022,
+          "cycle": 21,
+          "static_memory_bytes": 81608441
+        }
+      ],
+      "measurements": [
+        {
+          "label": "acceptance-pinned-v2-action-war",
+          "checks": 1071,
+          "elapsed_seconds": 21.324355399992783,
+          "process_cpu_seconds": 19.8125,
+          "peak_working_set_bytes": null,
+          "peak_pagefile_bytes": null,
+          "native_memory_samples": 0,
+          "godot_peak_static_memory_bytes": 110177318,
+          "action_wall_us_max": 49560,
+          "world_wall_us_max": 327016
+        },
+        {
+          "label": "replay-pinned-v2-action-war",
+          "checks": 1100,
+          "elapsed_seconds": 16.325569799984805,
+          "process_cpu_seconds": 14.890625,
+          "peak_working_set_bytes": null,
+          "peak_pagefile_bytes": null,
+          "native_memory_samples": 0,
+          "godot_peak_static_memory_bytes": 111503370,
+          "action_wall_us_max": 43189,
+          "world_wall_us_max": 456194
+        }
+      ],
+      "final_digest": "38ffe02be537eb2263ed9cd0f3b709b6f36b6095501eb4f81a81588679144eba"
+    },
+    {
+      "route": "action-fantasy",
+      "record": "acceptance-pinned-v4-action-fantasy",
+      "replay": "replay-pinned-v4-action-fantasy",
+      "source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+      "record_checks": 1071,
+      "replay_checks": 1100,
+      "commands": 54,
+      "player_releases": 3,
+      "final_cycle": 21,
+      "reviews": [
+        2.1,
+        2.4,
+        1.9
+      ],
+      "final_cash_cents": 300397,
+      "final_fans": 8,
+      "coverage": {
+        "age_month_reuse": 30,
+        "completed_pressured_player": 2,
+        "disjoint": 0,
+        "expired_facts": 36,
+        "genre_only": 0,
+        "own_other_title": 6,
+        "pair": 11,
+        "rejected_atomic": 21,
+        "strong_player_release": 0,
+        "strong_player_to_rival": 0,
+        "theme_only": 11
+      },
+      "checkpoints": [
+        {
+          "checkpoint_bytes": 51676,
+          "checkpoint_wall_us": 954995,
+          "cycle": 7,
+          "static_memory_bytes": 76696308
+        },
+        {
+          "checkpoint_bytes": 102297,
+          "checkpoint_wall_us": 1209637,
+          "cycle": 14,
+          "static_memory_bytes": 79094157
+        },
+        {
+          "checkpoint_bytes": 154191,
+          "checkpoint_wall_us": 844245,
+          "cycle": 21,
+          "static_memory_bytes": 81619027
+        }
+      ],
+      "measurements": [
+        {
+          "label": "acceptance-pinned-v4-action-fantasy",
+          "checks": 1071,
+          "elapsed_seconds": 39.98712100001285,
+          "process_cpu_seconds": 27.46875,
+          "peak_working_set_bytes": null,
+          "peak_pagefile_bytes": null,
+          "native_memory_samples": 0,
+          "godot_peak_static_memory_bytes": 110124744,
+          "action_wall_us_max": 156432,
+          "world_wall_us_max": 658074
+        },
+        {
+          "label": "replay-pinned-v4-action-fantasy",
+          "checks": 1100,
+          "elapsed_seconds": 26.389847600017674,
+          "process_cpu_seconds": 18.046875,
+          "peak_working_set_bytes": 175263744,
+          "peak_pagefile_bytes": 163602432,
+          "native_memory_samples": 259,
+          "godot_peak_static_memory_bytes": 111453756,
+          "action_wall_us_max": 140376,
+          "world_wall_us_max": 838234
+        }
+      ],
+      "final_digest": "d5fdf3aeefc6bcfde095c410cd1f4454481d2d03e4f3f102abe5a55a7e4da807"
+    },
+    {
+      "route": "puzzle-war",
+      "record": "acceptance-pinned-v4-puzzle-war",
+      "replay": "replay-pinned-v4-puzzle-war",
+      "source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+      "record_checks": 1070,
+      "replay_checks": 1100,
+      "commands": 54,
+      "player_releases": 3,
+      "final_cycle": 21,
+      "reviews": [
+        1.6,
+        2.2,
+        1.5
+      ],
+      "final_cash_cents": 374495,
+      "final_fans": 6,
+      "coverage": {
+        "age_month_reuse": 30,
+        "completed_pressured_player": 0,
+        "disjoint": 5,
+        "expired_facts": 36,
+        "genre_only": 0,
+        "own_other_title": 6,
+        "pair": 6,
+        "rejected_atomic": 21,
+        "strong_player_release": 0,
+        "strong_player_to_rival": 0,
+        "theme_only": 0
+      },
+      "checkpoints": [
+        {
+          "checkpoint_bytes": 51835,
+          "checkpoint_wall_us": 550667,
+          "cycle": 7,
+          "static_memory_bytes": 76696203
+        },
+        {
+          "checkpoint_bytes": 102412,
+          "checkpoint_wall_us": 767949,
+          "cycle": 14,
+          "static_memory_bytes": 79095544
+        },
+        {
+          "checkpoint_bytes": 154399,
+          "checkpoint_wall_us": 894687,
+          "cycle": 21,
+          "static_memory_bytes": 81619515
+        }
+      ],
+      "measurements": [
+        {
+          "label": "acceptance-pinned-v4-puzzle-war",
+          "checks": 1070,
+          "elapsed_seconds": 33.91053799999645,
+          "process_cpu_seconds": 27.25,
+          "peak_working_set_bytes": 176103424,
+          "peak_pagefile_bytes": 165720064,
+          "native_memory_samples": 334,
+          "godot_peak_static_memory_bytes": 110161351,
+          "action_wall_us_max": 92760,
+          "world_wall_us_max": 724946
+        },
+        {
+          "label": "replay-pinned-v4-puzzle-war",
+          "checks": 1100,
+          "elapsed_seconds": 21.26368639996508,
+          "process_cpu_seconds": 17.265625,
+          "peak_working_set_bytes": 176521216,
+          "peak_pagefile_bytes": 164188160,
+          "native_memory_samples": 210,
+          "godot_peak_static_memory_bytes": 111485167,
+          "action_wall_us_max": 81432,
+          "world_wall_us_max": 593108
+        }
+      ],
+      "final_digest": "0a556b3e44786845515b4c3c135d338e2b110d8aa8313f4a59e7bb8ea9cce495"
+    },
+    {
+      "route": "puzzle-fantasy",
+      "record": "acceptance-pinned-v4-puzzle-fantasy",
+      "replay": "replay-pinned-v4-puzzle-fantasy",
+      "source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+      "record_checks": 1070,
+      "replay_checks": 1100,
+      "commands": 54,
+      "player_releases": 3,
+      "final_cycle": 21,
+      "reviews": [
+        1.6,
+        2.2,
+        1.5
+      ],
+      "final_cash_cents": 343026,
+      "final_fans": 6,
+      "coverage": {
+        "age_month_reuse": 30,
+        "completed_pressured_player": 0,
+        "disjoint": 0,
+        "expired_facts": 36,
+        "genre_only": 0,
+        "own_other_title": 6,
+        "pair": 6,
+        "rejected_atomic": 21,
+        "strong_player_release": 0,
+        "strong_player_to_rival": 0,
+        "theme_only": 11
+      },
+      "checkpoints": [
+        {
+          "checkpoint_bytes": 52009,
+          "checkpoint_wall_us": 1066669,
+          "cycle": 7,
+          "static_memory_bytes": 76699193
+        },
+        {
+          "checkpoint_bytes": 102764,
+          "checkpoint_wall_us": 1247832,
+          "cycle": 14,
+          "static_memory_bytes": 79097108
+        },
+        {
+          "checkpoint_bytes": 154963,
+          "checkpoint_wall_us": 1173469,
+          "cycle": 21,
+          "static_memory_bytes": 81620039
+        }
+      ],
+      "measurements": [
+        {
+          "label": "acceptance-pinned-v4-puzzle-fantasy",
+          "checks": 1070,
+          "elapsed_seconds": 52.77691820001928,
+          "process_cpu_seconds": 28.1875,
+          "peak_working_set_bytes": 177299456,
+          "peak_pagefile_bytes": 167485440,
+          "native_memory_samples": 510,
+          "godot_peak_static_memory_bytes": 110177067,
+          "action_wall_us_max": 172893,
+          "world_wall_us_max": 2039405
+        },
+        {
+          "label": "replay-pinned-v4-puzzle-fantasy",
+          "checks": 1100,
+          "elapsed_seconds": 34.12619729997823,
+          "process_cpu_seconds": 18.171875,
+          "peak_working_set_bytes": 176148480,
+          "peak_pagefile_bytes": 164081664,
+          "native_memory_samples": 328,
+          "godot_peak_static_memory_bytes": 111498463,
+          "action_wall_us_max": 333809,
+          "world_wall_us_max": 1268946
+        }
+      ],
+      "final_digest": "2594fb0a7f2d7ceea6ff8dcd479397bb7e4c9c4d6c08aaa1741b2313ad7a448f"
+    },
+    {
+      "route": "strong",
+      "record": "acceptance-pinned-v4-strong",
+      "replay": "replay-pinned-v4-strong",
+      "source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+      "record_checks": 1538,
+      "replay_checks": 1564,
+      "commands": 51,
+      "player_releases": 2,
+      "final_cycle": 27,
+      "reviews": [
+        7.8,
+        2.4
+      ],
+      "final_cash_cents": 667341,
+      "final_fans": 125,
+      "coverage": {
+        "age_month_reuse": 41,
+        "completed_pressured_player": 1,
+        "disjoint": 0,
+        "expired_facts": 96,
+        "genre_only": 4,
+        "own_other_title": 0,
+        "pair": 0,
+        "rejected_atomic": 27,
+        "strong_player_release": 1,
+        "strong_player_to_rival": 2,
+        "theme_only": 0
+      },
+      "checkpoints": [
+        {
+          "checkpoint_bytes": 135612,
+          "checkpoint_wall_us": 835220,
+          "cycle": 20,
+          "static_memory_bytes": 80238292
+        },
+        {
+          "checkpoint_bytes": 190465,
+          "checkpoint_wall_us": 1100703,
+          "cycle": 27,
+          "static_memory_bytes": 82977177
+        }
+      ],
+      "measurements": [
+        {
+          "label": "acceptance-pinned-v4-strong",
+          "checks": 1538,
+          "elapsed_seconds": 52.13041370001156,
+          "process_cpu_seconds": 34.4375,
+          "peak_working_set_bytes": 206245888,
+          "peak_pagefile_bytes": 171900928,
+          "native_memory_samples": 510,
+          "godot_peak_static_memory_bytes": 116910104,
+          "action_wall_us_max": 108670,
+          "world_wall_us_max": 706361
+        },
+        {
+          "label": "replay-pinned-v4-strong",
+          "checks": 1564,
+          "elapsed_seconds": 30.121920500008855,
+          "process_cpu_seconds": 21.65625,
+          "peak_working_set_bytes": 187031552,
+          "peak_pagefile_bytes": 175915008,
+          "native_memory_samples": 296,
+          "godot_peak_static_memory_bytes": 118095877,
+          "action_wall_us_max": 91166,
+          "world_wall_us_max": 675237
+        }
+      ],
+      "final_digest": "3d33ff946865cc89519239fe49913f8b9ddcefa599b70c9d1aeb521c82ac5fd2"
+    }
+  ],
+  "artifacts": {
+    "acceptance-pinned-v2-action-war.json": {
+      "bytes": 65940,
+      "sha256": "9a80824a95df5167835461188c1acee58a6d21849c29840aa11e2816a4f8ba25"
+    },
+    "replay-pinned-v2-action-war.json": {
+      "bytes": 65901,
+      "sha256": "d580a83ec2c4ffccbdc3a4f7efd1716c43dd19edcb3e9b8708f08df78b911b29"
+    },
+    "acceptance-pinned-v2-action-war-run.json": {
+      "bytes": 1802,
+      "sha256": "3b20be287c2822093f073dad3498b8780d58fd4ff0367976a36be4b4b177a289"
+    },
+    "replay-pinned-v2-action-war-run.json": {
+      "bytes": 1982,
+      "sha256": "d6aa2fe57cf0c414bc1544f1774a2fd04e013a319a0d29a0acbdf677e7b48913"
+    },
+    "acceptance-pinned-v2-action-war.log": {
+      "bytes": 6968,
+      "sha256": "f394dee007771a396c22358a8413ec3220808a8184ae82292ca0b5fd63b5766e"
+    },
+    "replay-pinned-v2-action-war.log": {
+      "bytes": 6965,
+      "sha256": "4e5dc98c3090c4373d66aafdc29e7f9dc454346a7c83d7964229d49ced9bf527"
+    },
+    "acceptance-pinned-v2-action-war.json.tape.json": {
+      "bytes": 561958,
+      "sha256": "99820a7794f16b7d17384afef36adbed58779f61d7da704666637e510a41c161"
+    },
+    "acceptance-pinned-v2-action-war.json.checkpoint.json": {
+      "bytes": 248833,
+      "sha256": "4c5d8317c48edce74f14303287090d0dfd5bf3ef68b8b96d9e7cdc7a9ff70c27"
+    },
+    "replay-pinned-v2-action-war.json.checkpoint.json": {
+      "bytes": 248833,
+      "sha256": "4c5d8317c48edce74f14303287090d0dfd5bf3ef68b8b96d9e7cdc7a9ff70c27"
+    },
+    "acceptance-pinned-v4-action-fantasy.json": {
+      "bytes": 66203,
+      "sha256": "f1e2c0b00367747c674eb38b8ba30b2c1bce83f2360529d6ffce26026330bce7"
+    },
+    "replay-pinned-v4-action-fantasy.json": {
+      "bytes": 66159,
+      "sha256": "7448f2654858b3ba1969ca23eb70ebb2a6422f92b6848d8e59431f8b4175bf3e"
+    },
+    "acceptance-pinned-v4-action-fantasy-run.json": {
+      "bytes": 1947,
+      "sha256": "cd67b340359caa95cd88b0d9534b867df0a1cfb7b234089ffa801e979482f2b0"
+    },
+    "replay-pinned-v4-action-fantasy-run.json": {
+      "bytes": 59317,
+      "sha256": "5105816e0abdd38fe0c8d5e852f573a3641d399c14d78407f02969a3e5054ae7"
+    },
+    "acceptance-pinned-v4-action-fantasy.log": {
+      "bytes": 7079,
+      "sha256": "6bf88c936b0bceaca7ba1b7a91ae15f3064cb392f236b845094c3e8df9b3809b"
+    },
+    "replay-pinned-v4-action-fantasy.log": {
+      "bytes": 7072,
+      "sha256": "90ca280ace4d4686c309d94245cc702d9978abdf2eaa8c46b2c082ecd84b03cf"
+    },
+    "acceptance-pinned-v4-action-fantasy.json.tape.json": {
+      "bytes": 563786,
+      "sha256": "7c7de136e6e844d08291821a2c55780ca8815f4aba999baa63b8358887a4302a"
+    },
+    "acceptance-pinned-v4-action-fantasy.json.checkpoint.json": {
+      "bytes": 247961,
+      "sha256": "bd206836835fa28936f05d66ecbe27ec930248811fcb407709dee0dcf46c7cfe"
+    },
+    "replay-pinned-v4-action-fantasy.json.checkpoint.json": {
+      "bytes": 247961,
+      "sha256": "bd206836835fa28936f05d66ecbe27ec930248811fcb407709dee0dcf46c7cfe"
+    },
+    "acceptance-pinned-v4-puzzle-war.json": {
+      "bytes": 65938,
+      "sha256": "fa0899ffea73d276a501c200ae350610fcf29c928ac2e1acc14d49e589acde4e"
+    },
+    "replay-pinned-v4-puzzle-war.json": {
+      "bytes": 65895,
+      "sha256": "b60967ffa0fb3a293d93057dc44e63df0d1abdfdd4a81c2fcf3c7bca9e9bae2c"
+    },
+    "acceptance-pinned-v4-puzzle-war-run.json": {
+      "bytes": 75537,
+      "sha256": "a7c949e6442b547f7145d06c011963e35be28c543e8a0c8ff3920d4ec907de3a"
+    },
+    "replay-pinned-v4-puzzle-war-run.json": {
+      "bytes": 48488,
+      "sha256": "3118c8a94f737d1425e599a978d109e92b2e725008a0555402efd85b1db2a806"
+    },
+    "acceptance-pinned-v4-puzzle-war.log": {
+      "bytes": 6847,
+      "sha256": "d76e095d1cf8de9ece61f68edae53f228815a7847ce0bf3ea85dfb84d5c96ca8"
+    },
+    "replay-pinned-v4-puzzle-war.log": {
+      "bytes": 6840,
+      "sha256": "55de81a0d9369fbaa561deaa464c6f9db2ded90d120053c29cdc395c7e592014"
+    },
+    "acceptance-pinned-v4-puzzle-war.json.tape.json": {
+      "bytes": 561366,
+      "sha256": "6d498dffa14caf0a6dfb1055abe0110a0cd802ca49052fe4c7656751ceab4025"
+    },
+    "acceptance-pinned-v4-puzzle-war.json.checkpoint.json": {
+      "bytes": 248591,
+      "sha256": "aae8e13fdcf1abec11d8e2d9792eda7e5931c0c960156b7f30893ffa8f627509"
+    },
+    "replay-pinned-v4-puzzle-war.json.checkpoint.json": {
+      "bytes": 248591,
+      "sha256": "aae8e13fdcf1abec11d8e2d9792eda7e5931c0c960156b7f30893ffa8f627509"
+    },
+    "acceptance-pinned-v4-puzzle-fantasy.json": {
+      "bytes": 66265,
+      "sha256": "36ba2f3e2d4ab77cb2cf4ca89823744c786759ed3159702e9c2ff710cc844b9e"
+    },
+    "replay-pinned-v4-puzzle-fantasy.json": {
+      "bytes": 66217,
+      "sha256": "bb3418c85103e443f9750b434da32e33477381c150b938a3b05aed1ea0b90a7f"
+    },
+    "acceptance-pinned-v4-puzzle-fantasy-run.json": {
+      "bytes": 114147,
+      "sha256": "57ea0cf1186ca96e6bca69e682d352d72d426f434fb9833db9111f345807475e"
+    },
+    "replay-pinned-v4-puzzle-fantasy-run.json": {
+      "bytes": 74447,
+      "sha256": "3cc1a30c4e5a3fd4d66daa5d0b345ac72496db387e2c747eef1d2309a056421b"
+    },
+    "acceptance-pinned-v4-puzzle-fantasy.log": {
+      "bytes": 7086,
+      "sha256": "a8c670e11bf98a07d5bfc69e55c0d055fb26a644ddb94330250907fec1e25781"
+    },
+    "replay-pinned-v4-puzzle-fantasy.log": {
+      "bytes": 7075,
+      "sha256": "38ef6999ffef89e517f3adffb4fbc61d1b51f9ab03b99829a71762dd31747e30"
+    },
+    "acceptance-pinned-v4-puzzle-fantasy.json.tape.json": {
+      "bytes": 563014,
+      "sha256": "099a52cd1fc009bfa71df4a3aecd0592b41f2c69dad4c6e27253f78c162ba667"
+    },
+    "acceptance-pinned-v4-puzzle-fantasy.json.checkpoint.json": {
+      "bytes": 249289,
+      "sha256": "b03b4326f08f6248880d7a9bbd649bcd556929d1419f9ceda24c52c263750505"
+    },
+    "replay-pinned-v4-puzzle-fantasy.json.checkpoint.json": {
+      "bytes": 249289,
+      "sha256": "b03b4326f08f6248880d7a9bbd649bcd556929d1419f9ceda24c52c263750505"
+    },
+    "acceptance-pinned-v4-strong.json": {
+      "bytes": 74902,
+      "sha256": "76164de2e38bc9658544523de7ae2c960b6d6b0be3fc9405dbf551650fbf4bed"
+    },
+    "replay-pinned-v4-strong.json": {
+      "bytes": 74853,
+      "sha256": "f38bb6fdaead7177c4dc00c438db29b8ab6054e80f486e8e4a3509b63277fa01"
+    },
+    "acceptance-pinned-v4-strong-run.json": {
+      "bytes": 114095,
+      "sha256": "ab6f21935f7832e29eaf5346d01f46aa6e2188e1cd71b8e6962e50a1318788a7"
+    },
+    "replay-pinned-v4-strong-run.json": {
+      "bytes": 67263,
+      "sha256": "49dd4373f1f5dfc1ea31ec0d5b80cf12f3b8e0de9f36dc7259a4a2544002d974"
+    },
+    "acceptance-pinned-v4-strong.log": {
+      "bytes": 6322,
+      "sha256": "fa3a98602d621c910b70f8c8e797b1d32a652d21231b103f1bd36489e40f3803"
+    },
+    "replay-pinned-v4-strong.log": {
+      "bytes": 6437,
+      "sha256": "394a9877bedd30d31fe6bcfa1dfa9c164da85f9307b0fd4acdd7de26a092189c"
+    },
+    "acceptance-pinned-v4-strong.json.tape.json": {
+      "bytes": 622554,
+      "sha256": "6ea8349e8fcae05cf9a7ae4d9332ab4fef847c6717ce8fb778eb1f2917ca8e24"
+    },
+    "acceptance-pinned-v4-strong.json.checkpoint.json": {
+      "bytes": 307814,
+      "sha256": "3a1c76200b64c6b794f27e087adc7087b5235958d0089a1d8ded55148a310151"
+    },
+    "replay-pinned-v4-strong.json.checkpoint.json": {
+      "bytes": 307814,
+      "sha256": "3a1c76200b64c6b794f27e087adc7087b5235958d0089a1d8ded55148a310151"
+    }
+  },
+  "limits": [
+    "Two actual incumbents only; 21-27 cycles per route; no population budget or long-run balance claim.",
+    "Working set includes shared resident mappings and is sampled before exit; null means not measured.",
+    "Timings include startup, hashing, assertions, serialization and concurrent host load.",
+    "Historical cycle13 timeout cause is not established by these different passing routes."
+  ]
+}

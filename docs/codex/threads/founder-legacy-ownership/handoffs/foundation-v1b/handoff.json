@@ -1,0 +1,140 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-17T10:05:37.192765+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "founder-foundation-v1b",
+    "owner": "founder-legacy-ownership",
+    "created_utc": "2026-10-17T09:55:02.060972+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "bf55f6242734a85c384566137c9eca97a3251d2d9d422e57cf57c9504eedcb3f",
+    "creation_identity": "bf55f6242734a85c384566137c9eca97a3251d2d9d422e57cf57c9504eedcb3f",
+    "lineage": [],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "Adopt founder career records, equal-share ownership planners, and lossless checkpoint codec after reconciliation with the AI shared world; keep transactions uncommitted until finance settlement is atomic.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\founder-legacy-ownership\\2026-10-17-foundation-candidate-decision-v1.md",
+    "sha256": "f5dbd800778e843aaf42498ac130b25d91fb35a7ac1496f2484731e9aca009a7",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Focused founder and cap-table verifier passes on the adopted source, including consent, majority, dilution, cycle, migration-boundary and codec cases.",
+    "World integration settles buyer, seller and target cash with shares in one validated commit and replays a fresh-process whole-world checkpoint."
+  ],
+  "base_identity": "bf55f6242734a85c384566137c9eca97a3251d2d9d422e57cf57c9504eedcb3f",
+  "candidate_identity": "3a4f963ec2a7b2ff26480b3d362ecb2e6b61fc8b9f8c54ee88d05888809f4ac3",
+  "canonical_identity": "802c72b22a4cb28eb6584f458357deffc47ba90ad34eb22037645d4f4bbbf486",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "scripts/debug/verify_founder_foundation.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0f44dae561393c118be4ac3ac82ff3b3486423afa4c281c573073a4586ac0927"
+    },
+    {
+      "path": "scripts/debug/verify_founder_foundation.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7ec95fea1f87efc0033c1cfe48bc963d647c2fcf8bc3c4d0c3ca45ebc45a0c3f"
+    },
+    {
+      "path": "scripts/legacy/founder_profile.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "88b0f4350f77bb3b18a15c5155c0cd8dd9a03947266360326fafa318ada02ff5"
+    },
+    {
+      "path": "scripts/legacy/founder_profile.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "46aea8a8faa61cb9aac5c2a78662a5bcdae405f3bc2359c7aac0c2a478d5417a"
+    },
+    {
+      "path": "scripts/legacy/legacy_codec.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d1539a91f1303436a40076f0f1a0cf167c3d9e967752003712037cc6635cbaf1"
+    },
+    {
+      "path": "scripts/legacy/legacy_codec.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fd561e675f6b1e847d4bfbbb74c7a7cb6cdba32f64777b0a9bd03783e00e01ce"
+    },
+    {
+      "path": "scripts/legacy/ownership_book.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "80a908f49978d2b76fed1ebc9cd180eaa45eff59c0e568e1ffe7c3398fdc9ae6"
+    },
+    {
+      "path": "scripts/legacy/ownership_book.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "207efd816ed8d5e502074f54212eb4b4e0fc77f7d0a30d6651e2c1897aa2b915"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "scripts/debug/verify_rival_world_foundation.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "428e90d2164bfc17e4656eb65c457a578f774351280c072ad72fe6dc92f162c1"
+    }
+  ],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\founder-legacy-ownership\\sims\\foundation-v1b-campaign-03",
+      "ok": true,
+      "error": null,
+      "source_identity": "3a4f963ec2a7b2ff26480b3d362ecb2e6b61fc8b9f8c54ee88d05888809f4ac3",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "99df67533951176b12ba5231da6d622ca6ec7451600a1460a9b88c127abf6343",
+        "cases/action-4417/case.json": "04e83261da2c3e36dd60289225d6080ce1df1772856717536a80b3dfc2995cfd",
+        "cases/action-4417/case.variant.json": "b5d4f154f2e4615debf2cdb926cde5d408d2536b5b9c8d32047cecc05128ca1a",
+        "cases/action-4417/final_state.variant.json": "0841213fa28787533b10ebc5aa880f9a96a792101ed845b420da6576e70afc6d",
+        "cases/action-4417/initial.json": "ce242580d3bc332d8f06865f0e9d14bb334bc42f790d0ebd68a675f8dd20ac8e",
+        "cases/action-4417/metrics.json": "2bb91998e80b1261f7c2c894b3cb45ac3e8fb242acc3f94502f7225357219a27",
+        "cases/action-4417/replay.tape.json": "68b564f48326b94721cd6cba12dabe6e406331f5ca57e9ba983c582ab8d6414b",
+        "cases/action-4417/result.json": "aa72178b93950631f830f58563c7d05da76c6901b38a187f0173158a275cea82",
+        "cases/action-4417/studio_checkpoint.json": "768493956199e3a253886625191d1c8f9b264052e521b94a5329d34a19f756f7",
+        "experiment-report.json": "7d456ea0fe30acdfc4ada255bfcc160422c2f44b54c35b25fcf0c82274a10749",
+        "experiment.command.json": "153c17c7bdacc4276d0a6ef0d3e0dca65a7627c92e3315872244cf36ecb26fad",
+        "experiment.log": "7c9de38b2ddd2108d049b7f82d6e47fe3726c994c2f1474b13ea12a0385f0f85",
+        "git-provenance.json": "b8e11f76de5b67c9c93d25dd0f106af8fd61c1ddd3bba6faa66f036da9fb4fff",
+        "godot-version.command.json": "66be278659dfc2a00e1e04599eaac60b9da6d4cd9f1ccee43706a841971462ad",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "34b00372779158d3901491bca2ad6c38d25800cf2ad9ee4c8e0fad3cfc33ede6",
+        "import.command.json": "b39ab7a646608ceb374d414b1057a95b30f8974b0518cbe0572584a94910fcdb",
+        "import.log": "8f682010031489deb29882b15c0b161cb85c5496784eccc287fd3e74da3dbe8b",
+        "inputs/experiment.json": "d15f5728376ccd3b148e4f3795b977ca9c1f00ea89211b137347a5c480a3b625",
+        "inputs/requested.json": "eb3f405c28435f9a48d9fc655f4a7e82a445e9090ce66c9de94620014fb525b7",
+        "run-report.json": "da583569efaa7dc6d46fa4027d0df4321e52236b9c6133b1dc334c9ce7937cb0",
+        "runner.py": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "bb7ad821b6dfe2d2236a34d7dc426c1a4fafaf9ea0d61759d39250df019ea9a5",
+        "source.diff.patch": "abdc37e95c3120fd97798585d62b0e0e3b184399808977698792915ff882033d",
+        "variant-base-manifest.json": "c9075eee7e145ed685367cbed0baadfd740cd87f064d8840eff64eb54b2d505e",
+        "variant-creation-manifest.json": "c9075eee7e145ed685367cbed0baadfd740cd87f064d8840eff64eb54b2d505e",
+        "variant-integrity.json": "d318427a4e048a68dcb2302a7bc12bbb4711a77fe845a9c95cd7d5699bd01385",
+        "variant-provenance.json": "69f3f93a71b66832afd3d4a7b02d75953254cf7ef1ae62d31415cd434b3c6b2d",
+        "variant-variant.json": "d6de7b31a8b349452fba43e3998e1b6d5aaaa548cf3c47e8ea919a7486d62720",
+        "workspace-source-manifest.json": "47ade403aa94bbbd55aade845a071c595c92be3711f386d5d88844efe8800eed"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

@@ -1,0 +1,30 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: Create fixture
+PASS: First qualifying fixture
+PASS: One release cannot unlock Starwave
+PASS: Ironclad stays two hands
+PASS: Ironclad stays two hands
+PASS: Native trial completion hand
+PASS: Native trial completion hand
+PASS: Second qualifying fixture
+PASS: Two releases and two completions cannot unlock Starwave
+PASS: Native trial completion hand
+PASS: Native trial completion hand
+PASS: Third distinct completion unlocks Starwave
+PASS: prior Starwave hand
+PASS: prior Starwave hand
+PASS: prior Starwave hand
+PASS: prior SideStreet hand
+PASS: prior SideStreet hand
+PASS: actual pre-challenge completed contracts: 
+PASS: private writer acquired
+ERROR: FAIL: old executable publishes real disk generation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] _run (res://scripts/debug/capture_prior_contracts.gd:20)
+PRIOR_CONTRACTS failures=1
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

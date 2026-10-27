@@ -11,6 +11,8 @@ var in_studio := false
 var pending := false
 var failure := ""
 var last_payload: Dictionary = {}
+## Process-local UI token; only durable publications increment it, never loads.
+var completed_saves := 0
 var replace_on_save := false
 var _migration_input := ""
 var _migration_output: Dictionary = {}
@@ -88,6 +90,7 @@ func _finish_write() -> void:
 	pending=revision!=_change_revision
 	failure=""
 	run.checkpoint_mutations_allowed=true
+	if result.status == &"saved": completed_saves += 1
 	_notify_status()
 
 func wait_saved() -> bool:
@@ -228,6 +231,7 @@ func flush() -> bool:
 	pending = false
 	failure = ""
 	run.checkpoint_mutations_allowed = true
+	completed_saves += 1
 	_notify_status()
 	return true
 

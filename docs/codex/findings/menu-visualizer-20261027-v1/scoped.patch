@@ -1,0 +1,273 @@
+--- before/scripts/phases/main_menu.gd
++++ after/scripts/phases/main_menu.gd
+@@ -41,6 +41,8 @@
+ var _discard_dialog: ConfirmationDialog
+ var _replacement_acknowledged := false
+ var _setup_focus: WeakRef
++var _visualizer: Control
++const Visualizer := preload("res://scripts/ui/menu_audio_visualizer.gd")
+ 
+ const FOLDERS := {&"genre": "Genre Specializations", &"traits": "Traits", &"overview": "Overview"}
+ 
+@@ -91,6 +93,9 @@
+ 	recovery.visible = checkpoint_info.status not in [&"empty",&"valid"]
+ 	_actions.CheckpointRecovery = recovery
+ 	FolderUI.label(_title_screen,"PROTOTYPE",&"MetadataLabel")
++	_visualizer = Visualizer.new()
++	_visualizer.name = "MenuAudioVisualizer"
++	root.add_child(_visualizer)
+ 	_setup_surface = FolderUI.surface(root)
+ 	_setup_surface.set_meta("bounded_folder",true)
+ 	_setup_surface.name = "StudioCreationFolder"
+@@ -173,6 +178,16 @@
+ 	_title_screen.size.x=minf(520,size.x-80)
+ 	_title_screen.size.y=_title_screen.get_combined_minimum_size().y
+ 	_title_screen.position=Vector2(48,maxf(12,(size.y-_title_screen.size.y)/2))
++	if is_instance_valid(_visualizer):
++		var left := _title_screen.position.x+_title_screen.size.x+40.0
++		var available := maxf(0.0,size.x-left-48.0)
++		var width := minf(560.0,available)
++		_visualizer.position=Vector2(left+(available-width)/2.0,maxf(48.0,(size.y-340.0)/2.0))
++		_visualizer.size=Vector2(width,minf(340.0,maxf(180.0,size.y-96.0)))
++
++func _process(_delta: float) -> void:
++	if not is_instance_valid(_visualizer) or navigation == null: return
++	_visualizer.set_active(is_visible_in_tree() and _title_screen.is_visible_in_tree() and navigation.is_top(_title_screen) and not navigation.busy and _visualizer.size.x>=120.0 and size.y>=360.0)
+ 
+ func action_button(id: String) -> Button: return _actions.get(id)
+ 
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -4,6 +4,8 @@
+ extends RefCounted
+ 
+ const Session := preload("res://scripts/simulation/campaign_session.gd")
++## Title audio observer only; preceding saved world, ownership and RNG stay exact.
++const MENU_VISUALIZER_PREDECESSORS := ["6e31125897228a4a80f175f449f0fdd52400079450a310b4ee6f40a71d063d4a"]
+ ## Twelve-Scope grants apply to new Studios only; retain old ownership and RNG.
+ const STARTER_SCOPE_PREDECESSORS := ["3eb0f864ee07afc000f7ac087b5b1b7c2396d93e89056b53a84900b9e4954560"]
+ ## Exact pre-optimization editor and shipped v0.03 sources. Rules, persisted
+@@ -325,7 +327,7 @@
+ 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
+ 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
+ 	var current_source := Replay.source_identity() if captured_source_identity.is_empty() else captured_source_identity
+-	var source_ok: bool = predecessor_source==current_source or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
++	var source_ok: bool = predecessor_source==current_source or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+ 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
+ 	if predecessor_source!=current_source and predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES+USABILITY_PRESENTATION_SOURCES:
+ 		paired_revision=StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_EMPLOYEE_RULES)
+--- before/scripts/ui/menu_audio_visualizer.gd
++++ after/scripts/ui/menu_audio_visualizer.gd
+@@ -0,0 +1,126 @@
++extends Control
++
++## Decorative title-only observer. Never owns or advances soundtrack playback.
++const BANDS := 24
++const LOW_HZ := 40.0
++const HIGH_HZ := 12000.0
++var levels := PackedFloat32Array()
++var peaks := PackedFloat32Array()
++var _peak_age := PackedFloat32Array()
++var _active := false
++var _quiet := false
++var _effect: AudioEffectSpectrumAnalyzer
++var _instance: AudioEffectSpectrumAnalyzerInstance
++
++func _ready() -> void:
++	theme = FolderUI.THEME
++	mouse_filter = Control.MOUSE_FILTER_IGNORE
++	focus_mode = Control.FOCUS_NONE
++	clip_contents = true
++	levels.resize(BANDS);levels.fill(0.0)
++	peaks.resize(BANDS);peaks.fill(0.0)
++	_peak_age.resize(BANDS);_peak_age.fill(0.0)
++	set_process(false)
++	hide()
++	resized.connect(queue_redraw)
++
++func set_active(value: bool) -> void:
++	if value == _active: return
++	_active = value
++	visible = value
++	set_process(value)
++	if value: _attach()
++	else:
++		_release()
++		levels.fill(0.0);peaks.fill(0.0);_peak_age.fill(0.0)
++	queue_redraw()
++
++func _attach() -> void:
++	_release()
++	var bus := AudioServer.get_bus_index(&"Music")
++	if bus < 0: return
++	_effect = AudioEffectSpectrumAnalyzer.new()
++	_effect.fft_size = AudioEffectSpectrumAnalyzer.FFT_SIZE_1024
++	_effect.buffer_length = 0.1
++	AudioServer.add_bus_effect(bus,_effect)
++	_instance = AudioServer.get_bus_effect_instance(bus,AudioServer.get_bus_effect_count(bus)-1) as AudioEffectSpectrumAnalyzerInstance
++
++func _release() -> void:
++	_instance = null
++	if _effect == null: return
++	for bus in range(AudioServer.bus_count):
++		for slot in range(AudioServer.get_bus_effect_count(bus)-1,-1,-1):
++			if AudioServer.get_bus_effect(bus,slot) == _effect:
++				AudioServer.remove_bus_effect(bus,slot)
++	_effect = null
++
++func _audible_gain() -> float:
++	var song := get_node_or_null("/root/Soundtrack")
++	if song == null or not is_instance_valid(song.player) or not song.player.playing or song.player.stream_paused: return 0.0
++	var gain := 1.0
++	for name in [&"Music",&"Master"]:
++		var bus := AudioServer.get_bus_index(name)
++		if bus < 0 or AudioServer.is_bus_mute(bus): return 0.0
++		gain *= db_to_linear(AudioServer.get_bus_volume_db(bus))
++	return gain if gain > 0.0001 else 0.0
++
++func _process(delta: float) -> void:
++	if _instance == null: _attach()
++	var gain := _audible_gain()
++	_quiet = gain == 0.0
++	for index in BANDS:
++		var target := 0.0
++		if _instance != null and gain > 0.0:
++			var low := LOW_HZ * pow(HIGH_HZ/LOW_HZ,float(index)/BANDS)
++			var high := LOW_HZ * pow(HIGH_HZ/LOW_HZ,float(index+1)/BANDS)
++			var stereo := _instance.get_magnitude_for_frequency_range(low,high)
++			var energy := (stereo.x+stereo.y)*0.5*gain
++			target = clampf((linear_to_db(maxf(energy,0.00000001))+72.0)/60.0,0.0,1.0)
++		var response := 0.035 if target > levels[index] else 0.18
++		levels[index] = lerpf(levels[index],target,1.0-exp(-maxf(0.0,delta)/response))
++		if levels[index] >= peaks[index]:
++			peaks[index] = levels[index]
++			_peak_age[index] = 0.0
++		else:
++			_peak_age[index] += maxf(0.0,delta)
++			if _peak_age[index] > 0.15: peaks[index] = maxf(levels[index],peaks[index]-delta*0.7)
++	queue_redraw()
++
++func graph_rect() -> Rect2:
++	return Rect2(0,76,size.x,maxf(16.0,size.y-118.0))
++
++func bar_rect(index: int) -> Rect2:
++	var graph := graph_rect()
++	var cell := graph.size.x/BANDS
++	var height := maxf(2.0,floorf(levels[index]*graph.size.y/4.0)*4.0)
++	return Rect2(floorf(index*cell)+1,graph.end.y-height,maxf(1.0,floorf(cell)-3),height)
++
++func _draw() -> void:
++	if levels.size() != BANDS or size.x < 120: return
++	var muted := FolderUI.color(&"muted")
++	var cyan := FolderUI.color(&"cyan")
++	var orange := FolderUI.color(&"orange")
++	var mono := get_theme_font("font",&"MetadataLabel")
++	var heading := get_theme_font("font",&"HeadingLabel")
++	draw_string(mono,Vector2(0,12),"SOUNDTRACK / TEST",HORIZONTAL_ALIGNMENT_LEFT,-1,11,muted)
++	draw_string(heading,Vector2(0,43),"CRUNCH TIME",HORIZONTAL_ALIGNMENT_LEFT,-1,mini(24,int(size.x/8)),FolderUI.color(&"text"))
++	var graph := graph_rect()
++	for fraction in [0.0,0.25,0.5,0.75]:
++		var y := roundf(graph.end.y-graph.size.y*fraction)
++		draw_line(Vector2(0,y),Vector2(size.x,y),Color(muted,0.13),1.0)
++	for index in BANDS:
++		var bar := bar_rect(index)
++		draw_rect(bar,Color(cyan,0.55+0.35*levels[index]))
++		if levels[index] > 0.01:
++			draw_rect(Rect2(bar.position.x,graph.end.y+4,bar.size.x,minf(10,bar.size.y*0.06)),Color(cyan,0.07))
++		if peaks[index] > 0.01:
++			draw_rect(Rect2(bar.position.x,roundf(graph.end.y-peaks[index]*graph.size.y),bar.size.x,2),Color(orange,0.9))
++	draw_string(mono,Vector2(0,graph.end.y+22),"40 Hz",HORIZONTAL_ALIGNMENT_LEFT,-1,11,muted)
++	if size.x >= 300:
++		var mid := log(1000.0/LOW_HZ)/log(HIGH_HZ/LOW_HZ)
++		draw_string(mono,Vector2(size.x*mid-18,graph.end.y+22),"1 kHz",HORIZONTAL_ALIGNMENT_LEFT,-1,11,muted)
++	draw_string(mono,Vector2(size.x-34,graph.end.y+22),"12kHz",HORIZONTAL_ALIGNMENT_LEFT,-1,11,muted)
++	draw_string(mono,Vector2(0,size.y-2),"70 BPM / "+("QUIET" if _quiet else "LIVE"),HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color(muted,0.75))
++
++func _exit_tree() -> void:
++	_release()
+--- before/scripts/debug/verify_menu_visualizer.gd
++++ after/scripts/debug/verify_menu_visualizer.gd
+@@ -0,0 +1,83 @@
++extends SceneTree
++var checks:=0
++var failures:=0
++var output:=""
++func expect(ok: bool,label: String) -> void:
++	checks+=1
++	if not ok:failures+=1;push_error("FAIL: "+label)
++func _initialize() -> void: _run.call_deferred()
++func frames(count: int) -> void:
++	for i in count: await process_frame
++func maximum(values: PackedFloat32Array) -> float:
++	var result:=0.0
++	for value in values:result=maxf(result,value)
++	return result
++func _run() -> void:
++	create_timer(30.0).timeout.connect(func():push_error("Menu visualizer check timed out");quit(2))
++	for arg in OS.get_cmdline_user_args():
++		if arg.begins_with("--out="):output=arg.trim_prefix("--out=")
++	var music:=AudioServer.get_bus_index(&"Music")
++	var baseline:=AudioServer.get_bus_effect_count(music)
++	var song:=root.get_node("Soundtrack")
++	var player_id: int=song.player.get_instance_id()
++	var before: float=song.presentation_seconds()
++	var menu:=MainMenu.new();root.add_child(menu);await frames(3)
++	var visual: Control=menu.get("_visualizer")
++	expect(visual!=null,"Actual title owns a music spectrum visualizer")
++	if visual==null:menu.free();quit(failures);return
++	expect(visual.mouse_filter==Control.MOUSE_FILTER_IGNORE and visual.focus_mode==Control.FOCUS_NONE,"Decorative spectrum never consumes pointer or keyboard input")
++	expect(AudioServer.get_bus_effect_count(music)==baseline+1,"Only one owned analyser joins the Music bus")
++	for dimensions in [Vector2i(1152,648),Vector2i(1280,720),Vector2i(900,600),Vector2i(1920,1080),Vector2i(720,600)]:
++		root.size=dimensions;root.content_scale_size=dimensions;await frames(3)
++		var title: Control=menu.get("_title_screen")
++		if visual.visible:
++			expect(root.get_visible_rect().encloses(visual.get_global_rect()) and not visual.get_global_rect().intersects(title.get_global_rect()),"Spectrum fits unused title space at "+str(dimensions))
++			for index in visual.BANDS:
++				expect(Rect2(Vector2.ZERO,visual.size).encloses(visual.bar_rect(index)),"Each drawn bar stays inside its allocated bounds")
++		else:expect(dimensions.x<800,"Compact windows omit spectrum instead of covering controls")
++	root.size=Vector2i(1152,648);root.content_scale_size=Vector2i(1152,648)
++	await create_timer(0.7).timeout
++	var high:=maximum(visual.levels)
++	expect(high>0.01,"Real running soundtrack produces nonzero FFT energy")
++	var first: PackedFloat32Array=visual.levels.duplicate()
++	await create_timer(0.25).timeout
++	expect(visual.levels!=first,"Actual audio changes the bars over time")
++	await capture("main-menu-spectrum-1152")
++	for bus in [&"Music",&"Master"]:
++		var index:=AudioServer.get_bus_index(bus)
++		var prior:=AudioServer.is_bus_mute(index)
++		AudioServer.set_bus_mute(index,true)
++		await create_timer(0.8).timeout
++		expect(maximum(visual.levels)<0.02,"Muted "+str(bus)+" settles to silence, not fake beat motion")
++		AudioServer.set_bus_mute(index,prior)
++		await create_timer(0.3).timeout
++	var volume:=AudioServer.get_bus_volume_db(music)
++	AudioServer.set_bus_volume_db(music,-80)
++	await create_timer(0.8).timeout
++	expect(maximum(visual.levels)<0.02,"Zero music volume leaves a quiet graph")
++	AudioServer.set_bus_volume_db(music,volume)
++	menu.navigation.animate=false
++	menu.open_setup();await frames(3)
++	expect(not visual.visible and AudioServer.get_bus_effect_count(music)==baseline,"Creation folders hide spectrum and release FFT work")
++	menu.navigate_back();await frames(3)
++	expect(visual.visible and AudioServer.get_bus_effect_count(music)==baseline+1,"Returning to title reacquires exactly one analyser")
++	var folder:=PanelContainer.new();var back:=Button.new();folder.add_child(back);menu.add_child(folder)
++	menu.navigation.push(folder,back);await frames(3)
++	expect(not visual.visible and AudioServer.get_bus_effect_count(music)==baseline,"Other title navigation destinations stop the spectrum too")
++	menu.navigation.pop();await frames(3)
++	expect(visual.visible and AudioServer.get_bus_effect_count(music)==baseline+1,"Folder Back restores spectrum without a leak")
++	await create_timer(0.35).timeout
++	for dimensions in [Vector2i(1280,720),Vector2i(900,600)]:
++		root.size=dimensions;root.content_scale_size=dimensions;await frames(3)
++		await capture("main-menu-spectrum-"+str(dimensions.x))
++	expect(song.player.get_instance_id()==player_id and song.player.playing and song.presentation_seconds()>before,"Observer never restarts, seeks or pauses the existing soundtrack")
++	menu.free();await frames(2)
++	expect(AudioServer.get_bus_effect_count(music)==baseline,"Scene teardown removes only the owned analyser")
++	expect(is_equal_approx(AudioServer.get_bus_volume_db(music),volume),"Visualizer never changes the music mix gain")
++	print("MENU_VISUALIZER checks=%d failures=%d peak=%f"%[checks,failures,high])
++	quit(failures)
++func capture(label: String) -> void:
++	if output.is_empty() or DisplayServer.get_name()=="headless":return
++	await RenderingServer.frame_post_draw
++	var image:=root.get_texture().get_image()
++	expect(image.save_png(output.path_join(label+".png"))==OK,"Native menu screenshot saved")

@@ -26,10 +26,24 @@ func _initialize() -> void:
 					results.append(result)
 		phase.free()
 	var expected = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/production_hand_pre_extraction.json"))
-	assert(JSON.parse_string(JSON.stringify(results)) == expected, "Pre-extraction production parity failed")
+	# Preserve the frozen extraction fixture; only its explicitly superseded
+	# Balanced reward changes. Trigger flags and every other field stay exact.
+	for row in expected:
+		if row.balanced_production:
+			var total := 0
+			for value in row.score_additions.values(): total += int(value)
+			@warning_ignore("integer_division")
+			var boosted := total * 5 / 4
+			for category in range(4):
+				@warning_ignore("integer_division")
+				row.score_additions[str(category)] = boosted / 4 + (1 if category < boosted % 4 else 0)
 	var output_path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
 	if not output_path.is_empty():
 		var file := FileAccess.open(output_path, FileAccess.WRITE)
 		file.store_string(JSON.stringify(results, "\t"))
-	print("PASS: production characterization: %d cases, input and project unchanged" % results.size())
+	if JSON.parse_string(JSON.stringify(results)) != JSON.parse_string(JSON.stringify(expected)):
+		push_error("FAIL: Production fixture with approved 1.25 Balanced delta failed")
+		quit(1)
+		return
+	print("PASS: production characterization with Balanced 1.25 delta: %d cases, input and project unchanged" % results.size())
 	quit()

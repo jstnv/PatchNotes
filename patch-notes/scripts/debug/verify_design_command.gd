@@ -150,9 +150,10 @@ func run_cases(database: Node) -> void:
 	if mode != "oracle" and FileAccess.file_exists(expected_path):
 		var expected = JSON.parse_string(FileAccess.get_file_as_string(expected_path))
 		# The user authorized correcting the legacy overflow case. Keep the old
-		# oracle immutable; compare every other case and assert rejection above.
-		expected = expected.filter(func(row: Dictionary) -> bool: return row.scenario != "production_overflow")
-		var unchanged_digests := digests.filter(func(row: Dictionary) -> bool: return row.scenario != "production_overflow")
+		# oracle immutable; exclude the approved 1.25 Balanced change too.
+		# New Balanced full-state parity: verify_balanced_boost_parity.gd.
+		expected = expected.filter(func(row: Dictionary) -> bool: return row.scenario not in ["production_overflow", "balanced"])
+		var unchanged_digests := digests.filter(func(row: Dictionary) -> bool: return row.scenario not in ["production_overflow", "balanced"])
 		_expect(JSON.parse_string(JSON.stringify(unchanged_digests)) == expected, "%s full state/RNG/signal trace matches pre-extraction oracle" % mode)
 	var output_path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
 	if not output_path.is_empty():
@@ -169,7 +170,7 @@ func check_invariants(before: Dictionary, after: Dictionary, scenario: String, s
 		if scenario == "production_overflow":
 			_expect(after == before, "Authorized overflow correction rejects without mutation")
 		if scenario == "balanced":
-			_expect(_values(project) == [6,5,5,5,4], "Balanced conserves 21 points")
+			_expect(_values(project) == [7,7,6,6,4], "Balanced boosts 21 to26 and splits whole points")
 		if scenario == "passes":
 			_expect(project.get_current_scope() == 0 and project.get_accumulated_bug_pressure() == 0.0 and phase.get("_exhausted_card_ids").is_empty(), "Pass lifecycle unchanged")
 	var old_streams: Dictionary = before["run"]["random_streams"]["streams"]

@@ -1,0 +1,40 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--headless",
+    "--script",
+    "res://scripts/debug/verify_bank_integration.gd"
+  ],
+  "exit": 0,
+  "errors": [],
+  "extra_environment": {
+    "PN_CARD_FRAME_OUTPUT": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\publisher-p1-20261023-v1\\current-legacy.frame.json",
+    "PN_OLD_WORLD_FRAME": ""
+  },
+  "summary": [
+    "PASS: Midphase sales history",
+    "PASS: Midphase sales history",
+    "PASS: Design initializes phase",
+    "PASS: Design Cash opens finance overlay",
+    "PASS: Design loan accepted midphase",
+    "PASS: Design banking preserves project and clock",
+    "PASS: Alpha initializes phase",
+    "PASS: Alpha Cash opens finance overlay",
+    "PASS: Alpha loan accepted midphase",
+    "PASS: Alpha banking preserves project and clock",
+    "PASS: Fixture advances to Beta",
+    "PASS: Beta initializes phase",
+    "PASS: Beta Cash opens finance overlay",
+    "PASS: Beta loan accepted midphase",
+    "PASS: Beta banking preserves project and clock",
+    "PASS: Active education UI fixture creates a real account",
+    "PASS: Education payoff opens Finances",
+    "PASS: Education confirmation uses displayed payoff despite a later preview change",
+    "PASS: Repeated education confirmation signal is one-shot",
+    "Bank integration: 0 failures"
+  ]
+}

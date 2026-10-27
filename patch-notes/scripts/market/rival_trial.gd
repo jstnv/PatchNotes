@@ -118,6 +118,8 @@ static func choose(view: Dictionary, genre: String, label: String, beta_aware: b
 	# revision is one real productive hand. No policy counter needs restoration.
 	if current.phase == "beta" and current.get("hand_revision",0) >= BETA_HANDS+1 and current.get("can_exit",false): return _development(view,&"request_exit")
 	var cards: Array = current.candidates.duplicate(true)
+	if current.phase == "beta":
+		cards = cards.filter(func(card): return card.type != "beta" or BetaPriorityAllocation.category_enabled(StringName(card.beta_category)))
 	cards.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
 		if (a.type == "feature") != (b.type == "feature"): return a.type == "feature"
 		return int(a.token) < int(b.token))

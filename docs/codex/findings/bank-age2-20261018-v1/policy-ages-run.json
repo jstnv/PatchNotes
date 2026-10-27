@@ -1,0 +1,25 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\bank-age2-20261018-v1\\policy_ages.gd"
+  ],
+  "exit": 0,
+  "elapsed": 1.9372193999879528,
+  "errors": [],
+  "tail": [
+    "PASS: Unknown type or missing identity rejects",
+    "PASS: Credit boundary multiplication overflow rejects",
+    "PASS: Maximum exact-cent bill services without sum overflow",
+    "PASS: Income overflow leaves credit and ledger untouched",
+    "EXPENSE_POLICY_FIXTURES checks=86 failures=0",
+    "Loaded 40 cards.",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -1,0 +1,677 @@
+--- base/queries/market_release_index.gd.uid
++++ candidate/queries/market_release_index.gd.uid
+@@ -0,0 +1 @@
++uid://pypfr0j0g8oa
+--- base/scripts/contracts/contract_challenges.gd
++++ candidate/scripts/contracts/contract_challenges.gd
+@@ -0,0 +1,137 @@
++class_name ContractChallenges
++extends RefCounted
++
++## Frozen trial terms and deterministic integer grading. A ContractState owns
++## its accepted copy; later catalog changes cannot alter an accepted offer.
++const VERSION := 1
++const NO_REDRAWS := &"no_redraws_v1"
++const BALANCED_CORES := &"balanced_cores_v1"
++const CORE_SCOPE_RATIO := &"core_scope_ratio_v1"
++const TARGET_CORES := &"target_cores_v1"
++const SCOPE_CEILING := &"scope_ceiling_v1"
++const FULL := 10000
++# Bounds keep every intermediate in evaluate below the signed 64-bit limit.
++const MAX_INPUT := 1000000
++const BONUS_CASH_CENTS := 10000
++const BONUS_PROMOTION := 4
++
++
++static func terms_for_contract(contract_id: StringName) -> Dictionary:
++	var specs := specs_for_contract(contract_id)
++	if specs.is_empty(): return {}
++	return {"version":VERSION,"specs":specs,"cash_cap_cents":BONUS_CASH_CENTS,"promotion_cap":BONUS_PROMOTION}
++
++
++static func description(contract_id: StringName) -> String:
++	match contract_id:
++		ContractDefinitions.SIDESTREET: return "Challenge: no successful redraws and final Scope at most 12. Scope 13–16 reduces the grade; any redraw earns no challenge bonus."
++		ContractDefinitions.CROWN: return "Challenge: keep the four final Core scores balanced. Full grade when highest minus lowest is at most 2.0; it fades over another 4.0."
++		ContractDefinitions.NEON: return "Challenge: total final Core score must reach 1.5 times final Scope. A lower ratio earns a proportional grade."
++		ContractDefinitions.STARWAVE: return "Challenge: aim for 7.0 in every final Core. Above and below count equally; total deviation of 8.0 earns no bonus."
++	return ""
++
++
++static func reward(terms: Dictionary, scope: int, cores: Dictionary, successful_redraws: int) -> Dictionary:
++	if terms.is_empty(): return {"grade_bp":0,"cash_cents":0,"promotion":0}
++	if not _valid_terms(terms): return {}
++	var profile := evaluate_profile(terms.specs, scope, cores, successful_redraws)
++	if profile.is_empty(): return {}
++	return {"grade_bp":profile.grade_bp,"cash_cents":int(terms.cash_cap_cents) * int(profile.grade_bp) / FULL,
++		"promotion":int(terms.promotion_cap) * int(profile.grade_bp) / FULL}
++
++
++static func _valid_terms(terms: Dictionary) -> bool:
++	return terms.get("version") == VERSION and terms.get("cash_cap_cents") == BONUS_CASH_CENTS and terms.get("promotion_cap") == BONUS_PROMOTION and terms.get("specs") is Array
++
++
++static func specs_for_contract(contract_id: StringName) -> Array[Dictionary]:
++	match contract_id:
++		ContractDefinitions.IRONCLAD:
++			return []
++		ContractDefinitions.SIDESTREET:
++			return [{"version": VERSION, "kind": NO_REDRAWS}, {"version": VERSION, "kind": SCOPE_CEILING, "maximum": 12, "fade_excess": 4}]
++		ContractDefinitions.CROWN:
++			return [{"version": VERSION, "kind": BALANCED_CORES, "allowed_gap": 4, "fade_gap": 8}]
++		ContractDefinitions.NEON:
++			return [{"version": VERSION, "kind": CORE_SCOPE_RATIO, "core_units": 3, "scope_units": 1}]
++		ContractDefinitions.STARWAVE:
++			return [{"version": VERSION, "kind": TARGET_CORES, "targets": {0:14,1:14,2:14,3:14}, "fade_total": 16}]
++	return []
++
++
++static func evaluate(spec: Dictionary, scope: Variant, cores: Dictionary, successful_redraws: Variant = 0) -> Dictionary:
++	if not _valid_inputs(scope, cores, successful_redraws): return {}
++	if spec.get("version") != VERSION or not spec.get("kind") is StringName: return {}
++	var kind: StringName = spec.kind
++	var grade := -1
++	var observed := 0
++	match kind:
++		NO_REDRAWS:
++			if spec.size() != 2: return {}
++			observed = successful_redraws
++			grade = FULL if observed == 0 else 0
++		BALANCED_CORES:
++			if not _valid_nonnegative(spec.get("allowed_gap")) or not _valid_positive(spec.get("fade_gap")): return {}
++			var low: int = cores[0]
++			var high: int = cores[0]
++			for category in range(1, 4):
++				low = mini(low, cores[category])
++				high = maxi(high, cores[category])
++			observed = high - low
++			grade = _fade(maxi(0, observed - int(spec.allowed_gap)), int(spec.fade_gap))
++		CORE_SCOPE_RATIO:
++			if not _valid_positive(spec.get("core_units")) or not _valid_positive(spec.get("scope_units")): return {}
++			for category in range(4): observed += cores[category]
++			var required := int(scope) * int(spec.core_units)
++			if required == 0:
++				grade = FULL if observed > 0 else 0
++			else:
++				grade = mini(FULL, observed * int(spec.scope_units) * FULL / required)
++		TARGET_CORES:
++			if not spec.get("targets") is Dictionary or not _valid_positive(spec.get("fade_total")): return {}
++			var targets: Dictionary = spec.targets
++			if targets.size() != 4: return {}
++			for category in range(4):
++				if not _valid_nonnegative(targets.get(category)): return {}
++				observed += absi(cores[category] - int(targets[category]))
++			grade = _fade(observed, int(spec.fade_total))
++		SCOPE_CEILING:
++			if not _valid_nonnegative(spec.get("maximum")) or not _valid_positive(spec.get("fade_excess")): return {}
++			observed = scope
++			grade = _fade(maxi(0, observed - int(spec.maximum)), int(spec.fade_excess))
++		_: return {}
++	return {"version": VERSION, "kind": kind, "grade_bp": grade, "observed": observed, "met": grade == FULL}
++
++
++static func evaluate_profile(specs: Array, scope: Variant, cores: Dictionary, successful_redraws: Variant = 0) -> Dictionary:
++	if specs.is_empty() or specs.size() > 4: return {}
++	var parts: Array[Dictionary] = []
++	var grade := FULL
++	var seen: Dictionary = {}
++	for item in specs:
++		if not item is Dictionary: return {}
++		var result := evaluate(item, scope, cores, successful_redraws)
++		if result.is_empty() or seen.has(result.kind): return {}
++		seen[result.kind] = true
++		parts.append(result)
++		grade = mini(grade, int(result.grade_bp))
++	return {"version": VERSION, "grade_bp": grade, "met": grade == FULL, "parts": parts}
++
++
++static func _valid_inputs(scope: Variant, cores: Dictionary, successful_redraws: Variant) -> bool:
++	if not _valid_nonnegative(scope) or not _valid_nonnegative(successful_redraws) or cores.size() != 4: return false
++	for category in range(4):
++		if not _valid_nonnegative(cores.get(category)): return false
++	return true
++
++
++static func _valid_nonnegative(value: Variant) -> bool:
++	return typeof(value) == TYPE_INT and value >= 0 and value <= MAX_INPUT
++
++
++static func _valid_positive(value: Variant) -> bool:
++	return _valid_nonnegative(value) and value > 0
++
++
++static func _fade(excess: int, width: int) -> int:
++	return maxi(0, FULL - mini(FULL, excess * FULL / width))
+--- base/scripts/contracts/contract_challenges.gd.uid
++++ candidate/scripts/contracts/contract_challenges.gd.uid
+@@ -0,0 +1 @@
++uid://82u4ihncclcr
+--- base/scripts/contracts/contract_result.gd
++++ candidate/scripts/contracts/contract_result.gd
+@@ -9,9 +9,12 @@
+ var _upfront_cents: int
+ var _denominator: int
+ var _promotion: int
++var _challenge_grade_bp := 0
++var _bonus_cash_cents := 0
++var _bonus_promotion := 0
+ 
+ 
+-func _init(scope: int, core_half_units: Dictionary, completion_numerator: int, payout_cents: int, remainder_cents: int, upfront_cents: int = ContractState.GUARANTEED_UPFRONT_CENTS, denominator: int = 96, promotion: int = 0) -> void:
++func _init(scope: int, core_half_units: Dictionary, completion_numerator: int, payout_cents: int, remainder_cents: int, upfront_cents: int = ContractState.GUARANTEED_UPFRONT_CENTS, denominator: int = 96, promotion: int = 0, challenge_grade_bp: int = 0, bonus_cash_cents: int = 0, bonus_promotion: int = 0) -> void:
+ 	_scope = scope
+ 	_core_half_units = core_half_units.duplicate()
+ 	_completion_numerator = completion_numerator
+@@ -20,6 +23,9 @@
+ 	_upfront_cents = upfront_cents
+ 	_denominator = denominator
+ 	_promotion = promotion
++	_challenge_grade_bp = challenge_grade_bp
++	_bonus_cash_cents = bonus_cash_cents
++	_bonus_promotion = bonus_promotion
+ 
+ 
+ func get_scope() -> int:
+@@ -50,3 +56,6 @@
+ 	return float(_completion_numerator) * 100.0 / float(_denominator)
+ 
+ func get_promotion() -> int: return _promotion
++func get_challenge_grade_bp() -> int: return _challenge_grade_bp
++func get_bonus_cash_cents() -> int: return _bonus_cash_cents
++func get_bonus_promotion() -> int: return _bonus_promotion
+--- base/scripts/contracts/contract_state.gd
++++ candidate/scripts/contracts/contract_state.gd
+@@ -34,6 +34,8 @@
+ var _source_release_id: StringName
+ var _trial_terms: Dictionary = {}
+ var _neon_focus := -1
++var _challenge_terms: Dictionary = {}
++var _challenge_redraws := 0
+ 
+ 
+ func _init(eligible_feature_ids: Array[StringName] = [], contract_id: StringName = CONTRACT_ID, offer_id: StringName = CONTRACT_ID, source_release_id: StringName = &"") -> void:
+@@ -124,6 +126,22 @@
+ 	return true
+ 
+ 
++func freeze_challenge() -> bool:
++	if _upfront_committed or not _challenge_terms.is_empty(): return false
++	_challenge_terms = ContractChallenges.terms_for_contract(_contract_id).duplicate(true)
++	return _contract_id == CONTRACT_ID or not _challenge_terms.is_empty()
++
++
++func record_successful_redraw(count: int) -> void:
++	if _contract_id != SIDESTREET_CONTRACT_ID: return
++	assert(count > 0 and _challenge_redraws <= ContractChallenges.MAX_INPUT - count)
++	_challenge_redraws += count
++
++
++func get_challenge_terms() -> Dictionary: return _challenge_terms.duplicate(true)
++func get_challenge_redraws() -> int: return _challenge_redraws
++
++
+ func can_commit_priorities(distribution: Dictionary) -> bool:
+ 	return not is_completed() and PriorityAllocation.is_valid_distribution(distribution) and distribution != _priorities
+ 
+@@ -176,6 +194,8 @@
+ 	var numerator := 0
+ 	var remainder := 0
+ 	var total_payout := 0
++	var challenge_reward := {"grade_bp":0,"cash_cents":0,"promotion":0}
++	var base_promotion := 0
+ 	if completing:
+ 		var completion := calculate_for_state(_scope + scope_addition, projected_scores)
+ 		if completion.is_empty():
+@@ -183,6 +203,12 @@
+ 		numerator = completion.numerator
+ 		remainder = completion.remainder_cents
+ 		total_payout = completion.payout_cents
++		base_promotion = int(completion.get("promotion",0))
++		if not _challenge_terms.is_empty():
++			challenge_reward = ContractChallenges.reward(_challenge_terms, _scope + scope_addition, projected_scores, _challenge_redraws)
++			if challenge_reward.is_empty(): return {}
++			remainder += int(challenge_reward.cash_cents)
++			total_payout += int(challenge_reward.cash_cents)
+ 	return {
+ 		"expected_hand_count": _successful_hands,
+ 		"scope_addition": scope_addition,
+@@ -193,6 +219,10 @@
+ 		"completion_numerator": numerator,
+ 		"remainder_cents": remainder,
+ 		"payout_cents": total_payout,
++		"base_promotion": base_promotion,
++		"challenge_grade_bp": challenge_reward.grade_bp,
++		"bonus_cash_cents": challenge_reward.cash_cents,
++		"bonus_promotion": challenge_reward.promotion,
+ 	}
+ 
+ 
+@@ -210,7 +240,7 @@
+ 	_successful_hands += 1
+ 	if plan.completing:
+ 		var completion := calculate_for_state(_scope,_core_half_units)
+-		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents, plan.remainder_cents, get_advance_cents(), int(completion.get("denominator",96)), int(completion.get("promotion",0)))
++		_result = ContractResult.new(_scope, _core_half_units, plan.completion_numerator, plan.payout_cents, plan.remainder_cents, get_advance_cents(), int(completion.get("denominator",96)), plan.base_promotion + plan.bonus_promotion, plan.challenge_grade_bp, plan.bonus_cash_cents, plan.bonus_promotion)
+ 		_payout_committed = true
+ 	return true
+ 
+--- base/scripts/debug/verify_alpha_pack_ui.gd.uid
++++ candidate/scripts/debug/verify_alpha_pack_ui.gd.uid
+@@ -0,0 +1 @@
++uid://cajuuo1inkls8
+--- base/scripts/debug/verify_alpha_shop_pack.gd.uid
++++ candidate/scripts/debug/verify_alpha_shop_pack.gd.uid
+@@ -0,0 +1 @@
++uid://bnv0qyldkm7gh
+--- base/scripts/debug/verify_contract_challenge_publishers.gd
++++ candidate/scripts/debug/verify_contract_challenge_publishers.gd
+@@ -0,0 +1,62 @@
++extends "res://scripts/debug/verify_starwave.gd"
++
++func _run() -> void:
++	for publisher in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT]:
++		var run := trial_run()
++		var quote := offer_for(run,publisher)
++		var state := run.accept_publisher_contract(quote)
++		expect(state!=null,"Publisher accepts with frozen challenge")
++		if state==null: continue
++		expect(state.get_challenge_terms()==ContractChallenges.terms_for_contract(state.get_contract_id()),"Publisher terms freeze at acceptance")
++		var cards := passes()
++		for i in range(2):
++			var plan := state.plan_hand(cards)
++			expect(commit_native_hand(run,state,cards,plan.remainder_cents),"Publisher hand commits with bonus-aware finance")
++		var result := state.get_result()
++		var base := PublisherTrialTerms.completion(state.get_contract_id(),state.get_scope(),result._core_half_units,state._neon_focus)
++		var bonus := ContractChallenges.reward(state.get_challenge_terms(),state.get_scope(),result._core_half_units,0)
++		expect(result.get_bonus_cash_cents()==bonus.cash_cents and result.get_bonus_promotion()==bonus.promotion,"Publisher bonus matches final grade")
++		expect(result.get_payout_cents()==int(base.payout_cents)+int(bonus.cash_cents) and result.get_promotion()==int(base.promotion)+int(bonus.promotion),"Publisher base and bonus add exactly")
++		expect(run.get_pending_promotion_awards().get(state.get_offer_id(),-1)==result.get_promotion(),"Publisher Promotion banks once")
++		roundtrip(run,"Challenged "+String(publisher))
++		var adapter := StudioCheckpoint.new()
++		var saved := adapter.capture(run)
++		if not saved.is_empty():
++			var forged := saved.duplicate(true)
++			for pair: Dictionary in forged.run.publisher_offers:
++				if pair.key==String(state.get_offer_id()): pair.value.state.result.bonus_cash_cents = str(result.get_bonus_cash_cents()+1)
++			expect(adapter.hydrate(forged)==null,"Forged challenge cash rejects on restore")
++			forged = saved.duplicate(true)
++			for pair: Dictionary in forged.run.publisher_offers:
++				if pair.key==String(state.get_offer_id()): pair.value.state.challenge_redraws = "1"
++			expect(adapter.hydrate(forged)==null,"Forged redraw history rejects on restore")
++	var wave_run := starwave_fixture()
++	var wave := wave_run.accept_publisher_contract(offer_for(wave_run,PublisherCatalog.STARWAVE))
++	expect(wave!=null and wave.get_challenge_terms()==ContractChallenges.terms_for_contract(PublisherTrialTerms.STARWAVE),"Starwave challenge freezes on acceptance")
++	if wave!=null:
++		var wave_cards := passes()
++		for i in range(3):
++			var plan := wave.plan_hand(wave_cards)
++			expect(commit_native_hand(wave_run,wave,wave_cards,plan.remainder_cents),"Starwave productive hand commits")
++		var wave_result := wave.get_result()
++		var wave_base := PublisherTrialTerms.completion(PublisherTrialTerms.STARWAVE,wave.get_scope(),wave_result._core_half_units)
++		var wave_bonus := ContractChallenges.reward(wave.get_challenge_terms(),wave.get_scope(),wave_result._core_half_units,0)
++		expect(wave_result.get_payout_cents()==int(wave_base.payout_cents)+int(wave_bonus.cash_cents),"Starwave cash includes separate challenge bonus")
++		expect(wave_result.get_promotion()==wave_bonus.promotion and wave_run.get_pending_promotion_awards().get(wave.get_offer_id(),-1)==wave_bonus.promotion,"Starwave challenge Promotion banks without base Promotion")
++		roundtrip(wave_run,"Challenged Starwave")
++	var legacy_run := trial_run()
++	var legacy := legacy_run.accept_publisher_contract(offer_for(legacy_run,PublisherCatalog.CROWN_QUILL))
++	if legacy!=null:
++		legacy._challenge_terms.clear() # Model a completed pre-challenge Contract.
++		for i in range(2):
++			var legacy_plan := legacy.plan_hand(passes())
++			expect(commit_native_hand(legacy_run,legacy,passes(),legacy_plan.remainder_cents),"Historical base hand commits")
++		var old_adapter := StudioCheckpoint.new()
++		var old_record := old_adapter.capture(legacy_run)
++		expect(not old_record.is_empty(),"Historical-shaped completed Contract captures")
++		if not old_record.is_empty():
++			old_record.content_revision = old_adapter._rules_revision(StudioCheckpoint.PRE_CHALLENGE_RULES)
++			var old_restored := old_adapter.hydrate(old_record)
++			expect(old_restored!=null and old_restored.get_pending_promotion()==legacy.get_result().get_promotion(),"Historical rule revision restores without retroactive bonus")
++	print("Contract challenge publishers: %d failures" % failures)
++	quit(0 if failures==0 else 1)
+--- base/scripts/debug/verify_contract_challenge_runtime.gd
++++ candidate/scripts/debug/verify_contract_challenge_runtime.gd
+@@ -0,0 +1,63 @@
++extends "res://scripts/debug/verify_sidestreet_contract.gd"
++
++func _verify() -> void:
++	snapshots.load_ledgers()
++	database = root.get_node("CardDatabase")
++	var equal := {0:14,1:14,2:14,3:14}
++	var side_terms := ContractChallenges.terms_for_contract(ContractDefinitions.SIDESTREET)
++	check(ContractChallenges.terms_for_contract(ContractDefinitions.IRONCLAD).is_empty(), "Ironclad has no challenge")
++	check(ContractChallenges.reward(side_terms,12,equal,0) == {"grade_bp":10000,"cash_cents":10000,"promotion":4}, "Full SideStreet reward is $100 and 4 Promotion")
++	check(ContractChallenges.reward(side_terms,14,equal,0) == {"grade_bp":5000,"cash_cents":5000,"promotion":2}, "Scope penalty gives half reward")
++	check(ContractChallenges.reward(side_terms,12,equal,1) == {"grade_bp":0,"cash_cents":0,"promotion":0}, "Successful redraw loses SideStreet reward")
++	var crown := ContractChallenges.reward(ContractChallenges.terms_for_contract(ContractDefinitions.CROWN),12,{0:22,1:12,2:12,3:12},0)
++	check(crown == {"grade_bp":2500,"cash_cents":2500,"promotion":1}, "Dominant Core gives graded Crown reward")
++	var neon := ContractChallenges.reward(ContractChallenges.terms_for_contract(ContractDefinitions.NEON),20,{0:12,1:12,2:12,3:12},0)
++	check(neon == {"grade_bp":8000,"cash_cents":8000,"promotion":3}, "Insufficient Core:Scope ratio gives graded Neon reward")
++	var star := ContractChallenges.reward(ContractChallenges.terms_for_contract(ContractDefinitions.STARWAVE),12,{0:12,1:14,2:14,3:14},0)
++	check(star == {"grade_bp":8750,"cash_cents":8750,"promotion":3}, "Below-target Starwave score gives graded reward")
++	check(ContractChallenges.reward(ContractChallenges.terms_for_contract(ContractDefinitions.STARWAVE),12,{0:16,1:14,2:14,3:14},0) == star, "Starwave over-target penalty is symmetric")
++	var run := new_run(200000)
++	var game := release(0)
++	check(run.register_release(game), "Legal release opens first Contract entitlement")
++	var iron := await complete_contract(run,run.accept_primitive_contract())
++	check(iron.phase != null and run.get_pending_promotion() == 0, "Ironclad completion preserves zero challenge Promotion")
++	(iron.phase as ContractPhase).queue_free()
++	var side_offer := run.get_next_sidestreet_offer()
++	var side_state := run.accept_sidestreet_offer(side_offer.offer_id)
++	check(side_state != null and side_state.get_challenge_terms() == side_terms, "SideStreet terms freeze on acceptance")
++	var side := await complete_contract(run,side_state)
++	var result := side_state.get_result()
++	var base := side_state.calculate_for_state(result.get_scope(),result._core_half_units)
++	check(result.get_bonus_cash_cents()==10000 and result.get_bonus_promotion()==4, "Final hand awards full separate SideStreet bonus")
++	check(result.get_payout_cents()==int(base.payout_cents)+10000 and result.get_promotion()==4, "Challenge adds to, never reduces, base payout")
++	check((side.phase as ContractPhase)._completion_stats.text.contains("Challenge grade") and (side.phase as ContractPhase)._completion_stats.text.contains("$100.00"), "Completion view separates challenge grade and bonus")
++	check(run.get_pending_promotion()==4, "Bonus Promotion banks for next successful launch")
++	(side.phase as ContractPhase).queue_free()
++	var redraw_run := new_run(200000)
++	var redraw_game := release(0)
++	redraw_run.register_release(redraw_game)
++	var redraw_iron := await complete_contract(redraw_run,redraw_run.accept_primitive_contract())
++	(redraw_iron.phase as ContractPhase).queue_free()
++	var redraw_offer := redraw_run.get_next_sidestreet_offer()
++	var redraw_state := redraw_run.accept_sidestreet_offer(redraw_offer.offer_id)
++	var session: Variant = load("res://scripts/simulation/contract_session.gd").new(redraw_state,redraw_run,database.get_development_catalog())
++	session.publish_initial(fixture_cards(true))
++	var before_rng := redraw_run.random_streams.snapshot()
++	var before_budget := redraw_run.get_available_redraws()
++	var invalid_slots: Array[int] = [99]
++	check(not session.redraw(invalid_slots).ok and redraw_state.get_challenge_redraws()==0 and before_rng==redraw_run.random_streams.snapshot() and before_budget==redraw_run.get_available_redraws(), "Rejected redraw preserves grade inputs, budget and RNG")
++	var pass_slot: Array[int] = [1]
++	var rolls: Array[float] = [0.0]
++	var redrawn: Dictionary = session.redraw(pass_slot,rolls,rolls)
++	check(redrawn.ok and redraw_state.get_challenge_redraws()==1 and redraw_run.get_available_redraws()==before_budget-1, "Successful Contract redraw records one challenge miss")
++	var cards: Array[CardData] = []
++	for id in ContractState.PASS_IDS: cards.append(database.get_card(id))
++	for i in range(2):
++		var plan := redraw_state.plan_hand(cards)
++		var commit := func() -> bool: return redraw_run.commit_contract_hand(redraw_state,cards,plan.remainder_cents)
++		check(redraw_run.complete_productive_action(commit,plan.remainder_cents,redraw_run.get_completed_run_cycles(),&"",&"publisher_receipt" if plan.remainder_cents>0 else &"contract_hand",redraw_state.get_offer_id()), "No-redraw miss still completes base Contract")
++	var missed := redraw_state.get_result()
++	var missed_base := redraw_state.calculate_for_state(missed.get_scope(),missed._core_half_units)
++	check(missed.get_bonus_cash_cents()==0 and missed.get_bonus_promotion()==0 and missed.get_payout_cents()==missed_base.payout_cents, "Miss loses only the separate bonus")
++	print("Contract challenge runtime: %d failures" % failures)
++	quit(0 if failures==0 else 1)
+--- base/scripts/debug/verify_market_release_index.gd.uid
++++ candidate/scripts/debug/verify_market_release_index.gd.uid
+@@ -0,0 +1 @@
++uid://cfaw2wh6iduej
+--- base/scripts/debug/verify_publisher_trial_promotion.gd
++++ candidate/scripts/debug/verify_publisher_trial_promotion.gd
+@@ -35,16 +35,17 @@
+ 	expect(first.get_awareness_result().get_total_awareness()==118 and run.register_release(first),"First-launch Buzz and Unknown Name freeze together")
+ 	expect(not run.get_unlocked_publisher_ids().has(PublisherCatalog.NEON_CIRCUIT),"First release below Neon threshold")
+ 	var crown := finish_contract(run,PublisherCatalog.CROWN_QUILL)
+-	expect(crown!=null and run.get_pending_promotion()==8,"Crown banks separately floored whole points")
++	var crown_promotion := crown.get_result().get_promotion() if crown!=null else -1
++	expect(crown!=null and crown_promotion==8+crown.get_result().get_bonus_promotion() and run.get_pending_promotion()==crown_promotion,"Crown banks base and challenge Promotion together")
+ 	var pending := run.get_pending_promotion_awards()
+ 	expect(not run.register_release(ProjectState.new(30)) and pending==run.get_pending_promotion_awards(),"Failed launch preserves bank")
+ 	expect(run.register_release(first) and pending==run.get_pending_promotion_awards(),"Old release callback cannot consume newly banked Promotion")
+-	var expected_second := 125 + mini(150,run.get_fans()/4)
++	var expected_second := 117 + crown_promotion + mini(150,run.get_fans()/4)
+ 	var second := finished(run,"Second",14)
+ 	expect(second.get_awareness_result().get_total_awareness()==expected_second and run.get_pending_promotion_awards()==pending,"Previewed launch includes Promotion without consuming it")
+ 	expect(run.register_release(second) and run.get_pending_promotion_awards().is_empty(),"Successful launch consumes exactly its award IDs")
+ 	var id := second.get_release_id()
+-	expect(run.get_release_metadata(id).review.awareness==expected_second and run.get_released_game_sales(id).launch_awareness==expected_second and run.get_release_promotion(id)==8,"History, sales and Promotion history share the frozen result")
++	expect(run.get_release_metadata(id).review.awareness==expected_second and run.get_released_game_sales(id).launch_awareness==expected_second and run.get_release_promotion(id)==crown_promotion,"History, sales and Promotion history share the frozen result")
+ 	expect(run.get_unlocked_publisher_ids().has(PublisherCatalog.NEON_CIRCUIT),"Promotion participates in the frozen Neon threshold")
+ 	var neon := finish_contract(run,PublisherCatalog.NEON_CIRCUIT)
+ 	expect(neon!=null and run.get_pending_promotion()==neon.get_result().get_promotion(),"Later Neon award remains separate")
+--- base/scripts/debug/verify_queue_source_migration.gd.uid
++++ candidate/scripts/debug/verify_queue_source_migration.gd.uid
+@@ -0,0 +1 @@
++uid://cab48utp0ehdo
+--- base/scripts/debug/verify_victory_commit.gd.uid
++++ candidate/scripts/debug/verify_victory_commit.gd.uid
+@@ -0,0 +1 @@
++uid://bxix3rxi4ips8
+--- base/scripts/persistence/checkpoint_schema.gd
++++ candidate/scripts/persistence/checkpoint_schema.gd
+@@ -113,7 +113,18 @@
+ 	return {"base_name":"text","genre":"id","theme":"id","genre_ratios":array_of("uint"),"release_title":"text","release_year":"uint","release_cycle":"uint","review":review}
+ 
+ static func contract() -> Dictionary:
+-	return {"publisher_connections":"bool","contract_id":"id","offer_id":"id","source_release_id":"id","eligible":map_of("id","bool"),"scope":"uint","cores":map_of("uint","uint"),"hands":"uint","exhausted":map_of("id","bool"),"priorities":map_of("uint","uint"),"upfront":"bool","paid":"bool","trial_terms":union_of([{},fields("scope cash_cents advance_cents promotion denominator"),fields("scope cash_cents advance_cents promotion denominator required_hands")]),"neon_focus":"int","result":{"scope":"uint","cores":map_of("uint","uint"),"numerator":"uint","payout":"uint","remainder":"uint","upfront":"uint","denominator":"uint","promotion":"uint"}}
++	var old := {"publisher_connections":"bool","contract_id":"id","offer_id":"id","source_release_id":"id","eligible":map_of("id","bool"),"scope":"uint","cores":map_of("uint","uint"),"hands":"uint","exhausted":map_of("id","bool"),"priorities":map_of("uint","uint"),"upfront":"bool","paid":"bool","trial_terms":union_of([{},fields("scope cash_cents advance_cents promotion denominator"),fields("scope cash_cents advance_cents promotion denominator required_hands")]),"neon_focus":"int","result":{"scope":"uint","cores":map_of("uint","uint"),"numerator":"uint","payout":"uint","remainder":"uint","upfront":"uint","denominator":"uint","promotion":"uint"}}
++	var current := old.duplicate(true)
++	var spec := union_of([
++		{"version":"uint","kind":"id"},
++		{"version":"uint","kind":"id","maximum":"uint","fade_excess":"uint"},
++		{"version":"uint","kind":"id","allowed_gap":"uint","fade_gap":"uint"},
++		{"version":"uint","kind":"id","core_units":"uint","scope_units":"uint"},
++		{"version":"uint","kind":"id","targets":map_of("uint","uint"),"fade_total":"uint"}])
++	current.challenge_terms = union_of([{}, {"version":"uint","specs":array_of(spec),"cash_cap_cents":"uint","promotion_cap":"uint"}])
++	current.challenge_redraws = "uint"
++	current.result.merge(fields("challenge_grade_bp bonus_cash_cents bonus_promotion"))
++	return union_of([old,current])
+ 
+ static func root(education_enabled: bool = true, active_rival: bool = false) -> Dictionary:
+ 	var traits := fields("version starting_points spent_points refunded_points remaining_points point_cash_cents family_funding_cents")
+--- base/scripts/persistence/studio_checkpoint.gd
++++ candidate/scripts/persistence/studio_checkpoint.gd
+@@ -6,7 +6,8 @@
+ const PRE_EDUCATION_RULES := PREVIOUS_RULES + "-fanbase1-starwave1"
+ const PRE_CULT_RULES := "finance6-bank1-employees1-traits6-sales1-contracts3-research1-review2-fanbase1-starwave1-education1"
+ const PRE_CULT20_RULES := "finance6-bank1-employees1-traits7-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult1"
+-const RULES := "finance6-bank1-employees1-traits8-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult2"
++const PRE_CHALLENGE_RULES := "finance6-bank1-employees1-traits8-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult2"
++const RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2"
+ const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
+ var error := ""
+ var _revision := ""
+@@ -50,7 +51,7 @@
+ 		if path == "res://data/audio_credits.json":
+ 			# Version 7 already excluded audio credits. Preserve its real save
+ 			# identity when it becomes a supported historical revision.
+-			if rules in [RULES, PRE_CULT20_RULES]: continue
++			if rules in [RULES, PRE_CHALLENGE_RULES, PRE_CULT20_RULES]: continue
+ 			if not legacy_audio_hash.is_empty():
+ 				data += path + legacy_audio_hash
+ 				continue
+@@ -98,7 +99,14 @@
+ 	if state == null: return null
+ 	if not state.is_completed(): return null
+ 	var result := state.get_result()
+-	return {"publisher_connections":state._publisher_connections,"contract_id":state._contract_id,"offer_id":state._offer_id,"source_release_id":state._source_release_id,"eligible":state._eligible_feature_ids,"scope":state._scope,"cores":state._core_half_units,"hands":state._successful_hands,"exhausted":state._exhausted_feature_ids,"priorities":state._priorities,"upfront":state._upfront_committed,"paid":state._payout_committed,"trial_terms":state._trial_terms,"neon_focus":state._neon_focus,"result":{"scope":result._scope,"cores":result._core_half_units,"numerator":result._completion_numerator,"payout":result._payout_cents,"remainder":result._remainder_cents,"upfront":result._upfront_cents,"denominator":result._denominator,"promotion":result._promotion}}
++	var record := {"publisher_connections":state._publisher_connections,"contract_id":state._contract_id,"offer_id":state._offer_id,"source_release_id":state._source_release_id,"eligible":state._eligible_feature_ids,"scope":state._scope,"cores":state._core_half_units,"hands":state._successful_hands,"exhausted":state._exhausted_feature_ids,"priorities":state._priorities,"upfront":state._upfront_committed,"paid":state._payout_committed,"trial_terms":state._trial_terms,"neon_focus":state._neon_focus,"result":{"scope":result._scope,"cores":result._core_half_units,"numerator":result._completion_numerator,"payout":result._payout_cents,"remainder":result._remainder_cents,"upfront":result._upfront_cents,"denominator":result._denominator,"promotion":result._promotion}}
++	if not state._challenge_terms.is_empty():
++		record.challenge_terms = state._challenge_terms.duplicate(true)
++		record.challenge_redraws = state._challenge_redraws
++		record.result.challenge_grade_bp = result._challenge_grade_bp
++		record.result.bonus_cash_cents = result._bonus_cash_cents
++		record.result.bonus_promotion = result._bonus_promotion
++	return record
+ 
+ func validate(payload: Dictionary) -> String:
+ 	return _validate(payload,false)
+@@ -109,7 +117,7 @@
+ func _validate(payload: Dictionary, active_rival: bool) -> String:
+ 	# Pre-Fanbase saves lack exact exposure provenance. Preserve unsupported
+ 	# bytes instead of inventing Fans or replaying old sales.
+-	if payload.get("content_revision", "") not in (_catalog_revisions(RULES) + _catalog_revisions(PRE_CULT20_RULES) + _legacy_revisions(PRE_CULT_RULES) + _legacy_revisions(PRE_EDUCATION_RULES)) or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
++	if payload.get("content_revision", "") not in (_catalog_revisions(RULES) + _catalog_revisions(PRE_CHALLENGE_RULES) + _catalog_revisions(PRE_CULT20_RULES) + _legacy_revisions(PRE_CULT_RULES) + _legacy_revisions(PRE_EDUCATION_RULES)) or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
+ 	var value: Dictionary = _decode_payload(payload,active_rival)
+ 	if value.is_empty(): return error
+ 	if value.checkpoint_kind != ("rival_active" if active_rival else "studio") or value.sequence < 1: return "Invalid checkpoint boundary"
+@@ -230,7 +238,11 @@
+ 		if not r.unlocked_publishers.has(PublisherCatalog.STARWAVE) or not r.publisher_offers.has(starwave_id): return "Missing Starwave offer"
+ 		var starwave: Dictionary = r.publisher_offers[starwave_id]
+ 		if starwave.publisher_id!=PublisherCatalog.STARWAVE or starwave.source_release_id!=&"" or not _valid_contract(starwave.state,r,PublisherTrialTerms.STARWAVE,starwave_id,&""): return "Invalid Starwave offer"
++		if starwave.state!=null and starwave.state.result.promotion>0: expected_awards[starwave_id] = starwave.state.result.promotion
+ 	elif r.unlocked_publishers.has(PublisherCatalog.STARWAVE) or r.publisher_offers.has(starwave_id): return "Unqualified Starwave offer"
++	for id: StringName in r.sidestreet_entitlements:
++		var sidestreet: Variant = r.sidestreet_entitlements[id].state
++		if sidestreet!=null and sidestreet.result.promotion>0: expected_awards[sidestreet.offer_id] = sidestreet.result.promotion
+ 	for id: StringName in r.publisher_offers:
+ 		var publisher: StringName = r.publisher_offers[id].publisher_id
+ 		if publisher not in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT,PublisherCatalog.STARWAVE] or id!=StringName("%s:%s:first" % [r.bank_run_id,publisher]): return "Unknown trial offer"
+@@ -291,6 +303,17 @@
+ 		advance = terms.advance_cents
+ 		expected = PublisherTrialTerms.completion(kind,c.scope,c.cores,focus)
+ 	if expected.is_empty(): return false
++	var bonus_cash := 0
++	var bonus_promotion := 0
++	var grade_bp := 0
++	if c.has("challenge_terms"):
++		if kind==ContractState.CONTRACT_ID or c.challenge_terms != ContractChallenges.terms_for_contract(kind) or c.challenge_redraws>ContractChallenges.MAX_INPUT or (kind!=ContractState.SIDESTREET_CONTRACT_ID and c.challenge_redraws!=0): return false
++		var reward := ContractChallenges.reward(c.challenge_terms,c.scope,c.cores,c.challenge_redraws)
++		if reward.is_empty(): return false
++		bonus_cash = reward.cash_cents
++		bonus_promotion = reward.promotion
++		grade_bp = reward.grade_bp
++	elif c.has("challenge_redraws") or c.result.has("bonus_cash_cents"): return false
+ 	var paid := 0
+ 	var hands := 0
+ 	for action: Dictionary in r.studio_finance.actions:
+@@ -298,9 +321,14 @@
+ 		if action.kind==&"publisher_receipt": paid += int(action.direct_delta)
+ 		if action.productive and action.kind in [&"contract_hand",&"publisher_receipt"]:
+ 			hands += 1
+-			if action.direct_delta != (int(expected.remainder_cents) if hands==required_hands else 0): return false
+-	if paid!=int(expected.payout_cents) or hands!=required_hands: return false
+-	return c.result == {"scope":c.scope,"cores":c.cores,"numerator":expected.numerator,"payout":expected.payout_cents,"remainder":expected.remainder_cents,"upfront":advance,"denominator":expected.get("denominator",96),"promotion":expected.get("promotion",0)}
++			if action.direct_delta != (int(expected.remainder_cents)+bonus_cash if hands==required_hands else 0): return false
++	if paid!=int(expected.payout_cents)+bonus_cash or hands!=required_hands: return false
++	var expected_result := {"scope":c.scope,"cores":c.cores,"numerator":expected.numerator,"payout":int(expected.payout_cents)+bonus_cash,"remainder":int(expected.remainder_cents)+bonus_cash,"upfront":advance,"denominator":expected.get("denominator",96),"promotion":int(expected.get("promotion",0))+bonus_promotion}
++	if c.has("challenge_terms"):
++		expected_result.challenge_grade_bp = grade_bp
++		expected_result.bonus_cash_cents = bonus_cash
++		expected_result.bonus_promotion = bonus_promotion
++	return c.result == expected_result
+ 
+ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
+ 	error = validate_active_rival(payload) if active_rival else validate(payload)
+@@ -346,5 +374,8 @@
+ 	for key in {"_publisher_connections":"publisher_connections","_contract_id":"contract_id","_offer_id":"offer_id","_source_release_id":"source_release_id","_eligible_feature_ids":"eligible","_scope":"scope","_core_half_units":"cores","_successful_hands":"hands","_exhausted_feature_ids":"exhausted","_priorities":"priorities","_upfront_committed":"upfront","_payout_committed":"paid","_trial_terms":"trial_terms","_neon_focus":"neon_focus"}:
+ 		var mapping := {"_publisher_connections":"publisher_connections","_contract_id":"contract_id","_offer_id":"offer_id","_source_release_id":"source_release_id","_eligible_feature_ids":"eligible","_scope":"scope","_core_half_units":"cores","_successful_hands":"hands","_exhausted_feature_ids":"exhausted","_priorities":"priorities","_upfront_committed":"upfront","_payout_committed":"paid","_trial_terms":"trial_terms","_neon_focus":"neon_focus"}
+ 		state.set(key,c[mapping[key]])
+-	state._result = ContractResult.new(c.result.scope,c.result.cores,c.result.numerator,c.result.payout,c.result.remainder,c.result.upfront,c.result.denominator,c.result.promotion)
++	if c.has("challenge_terms"):
++		state._challenge_terms = c.challenge_terms.duplicate(true)
++		state._challenge_redraws = c.challenge_redraws
++	state._result = ContractResult.new(c.result.scope,c.result.cores,c.result.numerator,c.result.payout,c.result.remainder,c.result.upfront,c.result.denominator,c.result.promotion,c.result.get("challenge_grade_bp",0),c.result.get("bonus_cash_cents",0),c.result.get("bonus_promotion",0))
+ 	return state
+--- base/scripts/phases/contract_phase.gd
++++ candidate/scripts/phases/contract_phase.gd
+@@ -282,7 +282,7 @@
+ 	_completion_modal = CanvasLayer.new()
+ 	_completion_modal.layer = 30
+ 	add_child(_completion_modal)
+-	var content := _modal_content(_completion_modal, Vector2(560, 360))
++	var content := _modal_content(_completion_modal, Vector2(560, 420))
+ 	_completion_panel = content.get_parent() as PanelContainer
+ 	_completion_panel.hide()
+ 	_completion_modal.hide()
+@@ -482,9 +482,11 @@
+ 		_format_half(result.get_core_score_half_units(ProjectState.CoreScore.DESIGN)), _format_half(_state.get_core_target(3)),
+ 		result.get_completion_percent(), CashFormatter.format_exact_cents(result.get_upfront_cents()),
+ 		CashFormatter.format_exact_cents(result.get_completion_payment_cents()), CashFormatter.format_exact_cents(result.get_payout_cents())]
+-	if _state.get_contract_id()==PublisherTrialTerms.STARWAVE:
++	if not _state.get_challenge_terms().is_empty():
++		_completion_stats.text += "\nChallenge grade: %.1f%% · Bonus: %s and %d Promotion" % [float(result.get_challenge_grade_bp()) / 100.0, CashFormatter.format_exact_cents(result.get_bonus_cash_cents()), result.get_bonus_promotion()]
++	if _state.get_contract_id()==PublisherTrialTerms.STARWAVE and _state.get_challenge_terms().is_empty():
+ 		_completion_stats.text += "\nNo Promotion from this Contract. Existing awards are unchanged."
+-	elif not _state._trial_terms.is_empty(): _completion_stats.text += "\nPromotion earned: %d Awareness for the next successful launch" % result.get_promotion()
++	elif result.get_promotion()>0: _completion_stats.text += "\nTotal Promotion: %d Awareness for the next successful launch" % result.get_promotion()
+ 	_selected_views.clear()
+ 	_candidate_row.hide()
+ 	_priority_modal.hide()
+@@ -496,11 +498,14 @@
+ func _refresh_all() -> void:
+ 	if _state == null: return
+ 	_status_label.text = "Hands remaining: %d / %d · Select exactly four cards" % [maxi(0, _state.get_required_hands() - _state.get_successful_hand_count()), _state.get_required_hands()]
++	if not _state.get_challenge_terms().is_empty():
++		_status_label.text += "\n" + ContractChallenges.description(_state.get_contract_id())
++		if _state.get_contract_id()==ContractDefinitions.SIDESTREET: _status_label.text += " Successful redraws: %d" % _state.get_challenge_redraws()
+ 	if _state.get_contract_id()==PublisherTrialTerms.STARWAVE:
+ 		var cores := {}
+ 		for category in range(4): cores[category] = _state.get_core_score_half_units(category)
+ 		var earned := _state.calculate_for_state(_state.get_scope(),cores)
+-		_status_label.text += "\nCash at current completion: %s · Paid after hand 3 · No Promotion" % CashFormatter.format_exact_cents(earned.get("remainder_cents",0))
++		_status_label.text += "\nBase cash at current completion: %s · Paid after hand 3" % CashFormatter.format_exact_cents(earned.get("remainder_cents",0))
+ 	for i in range(4):
+ 		_score_values[i].text = "%s\n%s / %s" % [["Graphics", "Sound", "Tech", "Design"][i], _format_half(_presented_scores.get(HandPresentation.CORE[i], _state.get_core_score_half_units(i))), _format_half(_state.get_core_target(i))]
+ 	_score_values[4].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", _state.get_scope()), _state.get_scope_target()]
+--- base/scripts/phases/studio_phase.gd
++++ candidate/scripts/phases/studio_phase.gd
+@@ -340,9 +340,12 @@
+ 		title.text = PublisherCatalog.name_for(quote.publisher_id)+" Contract"
+ 		if quote.publisher_id==PublisherCatalog.STARWAVE:
+ 			details.text = "Three production hands · four cards per hand\nTargets: Scope 14 · Graphics/Sound/Technology/Design 7 each\nAdvance on acceptance: $0.00\nMaximum cash: $2,240.00, paid only after hand three. Hands one and two pay $0.00.\nCash scales with capped Scope and Core completion, rounded down to cents; no minimum completion is required.\nNo Promotion from this Contract. Existing awards are unchanged.\nYour %d owned Primitive Features and Core Passes are frozen at acceptance.\nEach hand costs one productive cycle; Feature play costs $0.\nAcceptance and browsing cost no cycles. This Contract cannot be abandoned." % quote.eligible.size()
++			details.text = details.text.replace("No Promotion from this Contract. Existing awards are unchanged.", "No base Promotion. A separate challenge can award up to $100 and 4 Promotion for the next successful launch.")
++			details.text += "\n" + ContractChallenges.description(PublisherTrialTerms.STARWAVE)
+ 			return
+ 		var focus := "Balanced Cores: each Core target 4, with an additional weakest-Core share." if quote.focus<0 else "Frozen Core focus: %s (target 9); other Core targets: 2 each." % String(PublisherTrialTerms.STATS[quote.focus]).capitalize()
+ 		details.text = "Two production hands · four cards per hand\nScope target: %d\n%s\nAdvance on acceptance: %s\nMaximum total cash (including advance): %s\nMaximum Promotion: %d Awareness for your next successful launch.\nCash and whole Promotion are separately rounded down according to completion.\nYour %d owned Primitive Features and Core Passes are frozen at acceptance.\nEach hand costs one productive cycle; Feature play costs $0.\nAcceptance and browsing cost no cycles. This Contract cannot be abandoned." % [terms.scope,focus,CashFormatter.format_exact_cents(terms.advance_cents),CashFormatter.format_exact_cents(terms.cash_cents),terms.promotion,quote.eligible.size()]
++		details.text += "\nSeparate challenge bonus: up to $100 and 4 Promotion. Base rewards stay intact.\n" + ContractChallenges.description(PublisherTrialTerms.contract_id(quote.publisher_id))
+ 		return
+ 	if _selected_contract_offer_id == ContractState.CONTRACT_ID:
+ 		title.text = "Balanced Primitive Contract"
+@@ -356,6 +359,7 @@
+ 			return
+ 		title.text = "SideStreet Cash Contract"
+ 		details.text = "Publisher: SideStreet Games\nOffer for: %s\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nMaximum payout: $1,200.00, paid only after hand two according to completion.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cash or cycles. The contract cannot be abandoned after acceptance." % _run_state.get_released_game_display_name(offer.release_id)
++		details.text += "\nSeparate challenge bonus: up to $100 and 4 Promotion. Base payout stays intact.\n" + ContractChallenges.description(ContractDefinitions.SIDESTREET)
+ 
+ 
+ func _close_contract_detail() -> void:
+--- base/scripts/run_state.gd
++++ candidate/scripts/run_state.gd
+@@ -965,7 +965,7 @@
+ 		return null
+ 	var accepted := ContractState.new(_primitive_contract_eligible_ids())
+ 	accepted._publisher_connections = StudioTraits.is_active(_studio_traits,&"publisher_connections")
+-	if not accepted.commit_upfront():
++	if not accepted.freeze_challenge() or not accepted.commit_upfront():
+ 		return null
+ 	# Block observers until both ownership and the exact-cent guarantee commit.
+ 	var was_blocked := is_blocking_signals()
+@@ -1047,7 +1047,7 @@
+ 		return null
+ 	var release_id: StringName = next.release_id
+ 	var accepted := ContractState.new(_primitive_contract_eligible_ids(), ContractState.SIDESTREET_CONTRACT_ID, offer_id, release_id)
+-	if not accepted.commit_upfront():
++	if not accepted.freeze_challenge() or not accepted.commit_upfront():
+ 		return null
+ 	var entitlement: Dictionary = _sidestreet_entitlements[release_id]
+ 	entitlement.state = accepted
+@@ -1092,7 +1092,7 @@
+ 		return
+ 	_pending_contract_completion = null
+ 	if _publisher_offers.has(state.get_offer_id()):
+-		if state.get_contract_id()!=PublisherTrialTerms.STARWAVE:
++		if state.get_contract_id()!=PublisherTrialTerms.STARWAVE or state.get_result().get_promotion() > 0:
+ 			_promotion_awards[state.get_offer_id()] = state.get_result().get_promotion()
+ 		return
+ 	if state == _primitive_contract:
+@@ -1105,6 +1105,7 @@
+ 	_sidestreet_results[state.get_offer_id()] = {"offer_id": state.get_offer_id(), "release_id": state.get_source_release_id(),
+ 		"scope": result.get_scope(), "core_half_units": cores, "completion_numerator": result.get_completion_numerator(),
+ 		"payout_cents": result.get_payout_cents()}
++	if result.get_promotion() > 0: _promotion_awards[state.get_offer_id()] = result.get_promotion()
+ 
+ 
+ func get_completed_contract_count() -> int:
+@@ -1444,7 +1445,7 @@
+ 	var eligible: Array[StringName] = []
+ 	eligible.assign(quote.eligible)
+ 	var accepted := ContractState.new(eligible,kind,quote.offer_id,quote.source_release_id)
+-	if not accepted.freeze_trial(quote.focus) or not accepted.commit_upfront(): return null
++	if not accepted.freeze_trial(quote.focus) or not accepted.freeze_challenge() or not accepted.commit_upfront(): return null
+ 	var was_blocked := is_blocking_signals()
+ 	set_block_signals(true)
+ 	_publisher_offers[quote.offer_id].state = accepted
+--- base/scripts/simulation/contract_session.gd
++++ candidate/scripts/simulation/contract_session.gd
+@@ -156,6 +156,7 @@
+ 		_rng.state = before
+ 		return reject("Redraw presentation unavailable")
+ 	var publish := func() -> void:
++		_state.record_successful_redraw(count)
+ 		for index in range(count):
+ 			cards[slots[index]] = replacements[index]
+ 			candidate_ids[slots[index]] = next_id

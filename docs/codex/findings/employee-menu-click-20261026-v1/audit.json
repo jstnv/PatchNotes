@@ -1,0 +1,189 @@
+{
+  "date": "2026-10-26",
+  "branch": "main",
+  "head": "087df09d653858b72c6e2dc344352237433dd3ac",
+  "source_sha256": {
+    "patch-notes/scripts/phases/studio_phase.gd": "01618b0d8376830b01b04462f74f1ddab5d6b182c9aed634284135cfbd0528ad",
+    "patch-notes/scripts/ui/employee_panel.gd": "3fba14bb7d254ca205feb125d0f807f7b1d10a564252719a449d47abc19931d5",
+    "patch-notes/scripts/market/rival_world_checkpoint.gd": "caab895fbbd357cfa88a841fab999d10aac50d476c8ff6b9b7a6eb79bf90d352",
+    "patch-notes/scripts/debug/verify_employee_click.gd": "4f8c5fb71e28bcf0ed9a28a0ab88c372f58c800408ec497de7326d1fae7f57be",
+    "patch-notes/scripts/debug/verify_employee_unlock.gd": "e974f8f45a87647f3fdc38293274e7e32769900bf1dab0c7a3dd92994edeb70c",
+    "patch-notes/scripts/debug/employee_test_actions.gd": "ed4f218a54556133f17ca1dfd213aa0d1cd7a562ef7c29688e55e5805594a683",
+    "docs/codex/logs/2026-10-26-employee-menu-click-v1.md": "2409e0f1c7a0aec57fe30ffbd02a1141ee1b7702002a83d74f78a62a10d76b03"
+  },
+  "receipts": {
+    "baseline": {
+      "receipt_sha256": "a6c2fe6eed0ffbdfbc844ff9b375ee8b4fd5712855d2575955a80f793377333f",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-transition-20261026-v1/restore.gd",
+        "--",
+        "--capture"
+      ]
+    },
+    "click-repro": {
+      "receipt_sha256": "0cdb68cb28f97509303837bb377bfbb10ac316f037fd08cf9fe19667f1f4d961",
+      "exit": 2,
+      "errors": [
+        "ERROR: Rival Gameplay: Mutation guard still permits visible employee browsing",
+        "ERROR: Rival Gameplay: Mutation guard still permits visible employee browsing"
+      ],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_click.gd"
+      ]
+    },
+    "click-green": {
+      "receipt_sha256": "45cda9cad5aa9b5d1beadebd0539b48c11db72b8292a3b03412fae4e7ff20e6c",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_click.gd"
+      ]
+    },
+    "click-final": {
+      "receipt_sha256": "7a30a6657b5ed87cebd5459c6010c67a45922857fa31039078c1415d4dabaff9",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_click.gd"
+      ]
+    },
+    "click-native": {
+      "receipt_sha256": "e5e4a1343f277f110f9c989f0a3af7862ef772e292e648012f39da4a83be5aa5",
+      "exit": 1,
+      "errors": [
+        "ERROR: Rival Gameplay: Real pointer click displays Employees"
+      ],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_click.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80",
+        "--",
+        "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/employee-menu-click-20261026-v1/captures"
+      ]
+    },
+    "click-native-v2": {
+      "receipt_sha256": "9190a69f8dde37cf28e53a47eeb85129bf24f980cd0c3c46dcbb10a44f0b530f",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_click.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80",
+        "--",
+        "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/employee-menu-click-20261026-v1/captures-final"
+      ]
+    },
+    "unlock": {
+      "receipt_sha256": "d38a3f004d1a4f2126e8f9bf4ef7c89679089ef65f3674b92ce7bc212753677b",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_unlock.gd"
+      ]
+    },
+    "employee-ui": {
+      "receipt_sha256": "82f7569352577394a71a6e97b946433bd996f9a75769470f0a0856c3bd39def6",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_ui.gd"
+      ]
+    },
+    "cold-restore": {
+      "receipt_sha256": "d9aada60ebea280160d8dccfe72065e508d11b4d6829ad3756bbe6922023bd7d",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-transition-20261026-v1/restore.gd"
+      ]
+    }
+  },
+  "before_pair_sha256": "723b5c0cd1fab12351072550f083edb23d9b687ba267124f07fab8c18b830cad",
+  "captures_sha256": {
+    "employees-1152.png": "1415d329f32287e4420b45f153e520b4cff2cb1f6d6684cfc14152fbd45624af",
+    "employees-1280.png": "ca43e71a5b7a612bae1000ad5ea972f56e18fd6c875c0cf58892653067e91ea2",
+    "employees-readonly-1152.png": "b61aad1eec0a5202279efe0b727964049d187d1a133a8bcdb757bd12f8e3382f",
+    "employees-readonly-1280.png": "2b6ea32447ac578b79be9020a61cf57f4354e19d39c8aeac29a3661dd2b8c22e"
+  },
+  "inspected_player_generations_unchanged": {
+    "checkpoint.183.json": "bdd7c1ea4e9cd27e6500a0c9944792eb449cbe206c57e711d251553bbb011977",
+    "checkpoint.184.json": "4e7bce794050c27ca320748f36da444aebc9f32d38c28b1696ad77a962e239dc"
+  },
+  "fixture_funding_dollars": 20000,
+  "ordinary_solvency_proven": false,
+  "user_exact_session_reproduced": false,
+  "exported": false,
+  "committed": false,
+  "pushed": false
+}

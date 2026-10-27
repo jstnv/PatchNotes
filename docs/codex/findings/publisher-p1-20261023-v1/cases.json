@@ -1,0 +1,68 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "finite-development-fixture",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "action-4417",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "p1-action-4417",
+          "studio_name": "P1 Structural Control",
+          "specialty": "action",
+          "traits": [],
+          "seed": "4417"
+        }
+      },
+      "max_commands": 100,
+      "target_release_count": 2,
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "P1 Control",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "sports-1112",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "p1-sports-1112",
+          "studio_name": "P1 Structural Control",
+          "specialty": "sports",
+          "traits": [],
+          "seed": "1112"
+        }
+      },
+      "max_commands": 100,
+      "target_release_count": 2,
+      "policy": {
+        "config": {
+          "genre": "sports",
+          "theme": "fantasy",
+          "name_prefix": "P1 Control",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    }
+  ]
+}

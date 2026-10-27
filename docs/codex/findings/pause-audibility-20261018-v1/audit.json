@@ -1,0 +1,207 @@
+{
+  "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+  "sources_after": {
+    "patch-notes/scripts/audio/soundtrack.gd": "20144741148007e48d0c02f11c1669727f4df8b9aed2a888871bfb169da96dc0",
+    "patch-notes/scripts/ui/pause_menu.gd": "9b86ce90d23726783430e6cd7a556dfbc6e0da1382fff58c697b0d9f80045893",
+    "patch-notes/scripts/audio/music_grid.gd": "8aa6d8c104209c99d97704b4eabb660113a8e3b27c5ce0a9651a1133f4b6fc3b",
+    "patch-notes/scripts/audio/theme_map.gd": "9cb87b85cd4e2b0b523100174cf30f49c9a5e85966992cd254d8453c363bdbb9",
+    "patch-notes/scripts/settings/demo_settings_store.gd": "52126d4ef3bee8d3b1c61420b30b1ccd5085f82504b852d6e5d7ef9f03915b95",
+    "patch-notes/project.godot": "8aa54166f5d90f216b72af0bc512b5aee2a549620fcbe39c380e62ffe1a5ad4b",
+    "patch-notes/scripts/debug/verify_pause_audibility.gd": "adc9da63cd8d79fa2e1461d8f3e4340dfaffd5e39e1a7174624865e02033b21d",
+    "docs/codex/findings/pause-audibility-20261018-v1/probe.gd": "c9c093257b4ffc26123c02f1b8845bd671788e137993030487ec94b55a7dc295",
+    "docs/codex/findings/pause-audibility-20261018-v1/run.py": "c749fae0b6316e6d795045f26137bd312ab9878bae199d315956619455a3c9c1",
+    "docs/codex/findings/pause-audibility-20261018-v1/regression_old.gd": "44ba67eca6b0d6f6eefa51f246f4b203f34d334e91a38e8368fa0e0a7b7f2501"
+  },
+  "changed_runtime_files": [
+    "patch-notes/scripts/audio/soundtrack.gd"
+  ],
+  "runs": {
+    "before": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "WASAPI",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-audibility-20261018-v1\\probe.gd"
+      ],
+      "exit": 0,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "AUDIBILITY checks=112 failures=0"
+      ]
+    },
+    "candidate": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "WASAPI",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-audibility-20261018-v1\\probe.gd"
+      ],
+      "exit": 0,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "AUDIBILITY checks=112 failures=0"
+      ]
+    },
+    "native": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "WASAPI",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_pause_audibility.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "OpenGL API 3.3.0 NVIDIA 546.18 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU",
+        "",
+        "Loaded 40 cards.",
+        "PAUSE_AUDIBILITY checks=444 failures=0"
+      ]
+    },
+    "regression-old": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-audibility-20261018-v1/regression_old.gd"
+      ],
+      "exit": 2,
+      "errors": [
+        "ERROR: Rival Gameplay: Paused main remains audible relative to the dry song: -7.74 dB",
+        "ERROR: Rival Gameplay: Paused studio remains audible relative to the dry song: -10.64 dB"
+      ],
+      "tail": [
+        "ERROR: Rival Gameplay: Paused studio remains audible relative to the dry song: -10.64 dB",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)",
+        "       [1] _initialize (res://scripts/debug/verify_pause_audibility.gd:56)",
+        "PAUSE_AUDIBILITY checks=444 failures=2",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "pause_music": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_pause_music.gd"
+      ],
+      "exit": 0,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "PAUSE_MUSIC checks=713 failures=0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "pause_menu": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_pause_menu.gd"
+      ],
+      "exit": 0,
+      "errors": [],
+      "tail": [
+        "       [1] refresh (res://scripts/cards/card_view.gd:114)",
+        "       [2] _ready (res://scripts/cards/card_view.gd:46)",
+        "       [3] _return_fan (res://scripts/ui/hand_presentation.gd:317)",
+        "       [4] advance_music (res://scripts/ui/hand_presentation.gd:64)",
+        "       [5] _process (res://scripts/ui/hand_presentation.gd:56)",
+        "PAUSE_MENU checks=60 failures=0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    "sync": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_soundtrack_sync.gd"
+      ],
+      "exit": 0,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "BACKEND Dummy position=0.17997916042805 loops=0 length=27.4285625 time=27.6952406758059",
+        "Soundtrack sync: 3503 checks, 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    }
+  },
+  "baseline_levels": [
+    {
+      "attenuation_db": -7.74442270728678,
+      "rms_ratio": 0.409995287200753,
+      "theme": "main"
+    },
+    {
+      "attenuation_db": -10.6398509851397,
+      "rms_ratio": 0.293770005062255,
+      "theme": "studio"
+    }
+  ],
+  "fixed_native_levels": [
+    {
+      "attenuation_db": -0.722817794038756,
+      "rms_ratio": 0.920151016651946,
+      "theme": "main"
+    },
+    {
+      "attenuation_db": -1.04324493811127,
+      "rms_ratio": 0.886824643714656,
+      "theme": "studio"
+    }
+  ],
+  "scope": "Filter audibility fix. Esc transport stop not observed; actual user listening acceptance pending."
+}

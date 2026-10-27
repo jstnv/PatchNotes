@@ -11,6 +11,7 @@ const REQUIRED_SCOPE := 30
 const LaunchSettlement := preload("res://scripts/simulation/launch_settlement.gd")
 const BeginProject := preload("res://scripts/simulation/begin_project.gd")
 const RivalTrial := preload("res://scripts/market/rival_trial.gd")
+const SaveNotification := preload("res://scripts/ui/save_notification.gd")
 
 var project_state: ProjectState
 var run_state: RunState
@@ -24,13 +25,13 @@ var active_contract_state: ContractState
 var checkpoints: CheckpointCoordinator
 var rival_world: RivalWorld
 var _save_label: Label
+var _save_notice: Control
 var _save_failure_dialog: AcceptDialog
 var _quit_dialog: ConfirmationDialog
 var _return_checkpoint_dialog: ConfirmationDialog
 var _recovery_dialog: ConfirmationDialog
 var _loading_checkpoint := false
 var _save_navigation_pending := false
-var _session_quit: Button
 var _startup_panel: PanelContainer
 var pause_menu: PauseMenu
 var guided_tutorial: GuidedProductionTutorial
@@ -277,7 +278,6 @@ func _create_guided_tutorial() -> void:
 	guided_tutorial.finished.connect(_close_guided_tutorial)
 	_active_phase.hide()
 	%GameplayHUD.hide()
-	if _session_quit != null: _session_quit.hide()
 
 func _on_tutorial_choice(experienced: bool, accepted: bool) -> void:
 	_onboarding.answer(experienced)
@@ -303,7 +303,6 @@ func _close_guided_tutorial(completed: bool) -> void:
 	if _active_phase is StudioPhase:
 		_active_phase.show()
 		%GameplayHUD.show()
-		if _session_quit != null: _session_quit.show()
 		_active_phase.get_node("%StartNextGame").grab_focus()
 	get_node("/root/Soundtrack").request_theme(&"studio",true)
 
@@ -666,27 +665,13 @@ func _ensure_month_one_sales_revenue_result() -> bool:
 func _build_checkpoint_controls() -> void:
 	get_tree().auto_accept_quit = false
 	var layer := CanvasLayer.new()
+	layer.name = "SavePresentation"
 	layer.layer = 80
 	add_child(layer)
-	var panel := VBoxContainer.new()
-	panel.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	panel.position = Vector2(-248,-72)
-	panel.custom_minimum_size = Vector2(236,32)
-	layer.add_child(panel)
-	_save_label = Label.new()
-	var status_row := HBoxContainer.new()
-	status_row.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	panel.add_child(status_row)
-	_save_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_save_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	_save_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	status_row.add_child(_save_label)
-	_session_quit = Button.new()
-	_session_quit.text = "Quit"
-	_session_quit.pressed.connect(_request_quit)
-	_session_quit.hide()
-	status_row.add_child(_session_quit)
+	_save_notice = SaveNotification.new()
+	_save_notice.name = "SaveNotification"
+	layer.add_child(_save_notice)
+	_save_label = _save_notice.message
 	_save_failure_dialog = AcceptDialog.new()
 	_save_failure_dialog.title = "Not saved"
 	_save_failure_dialog.dialog_text = "Your last action happened, but it has not been saved.\nRetry to continue, return to your last saved Studio, or quit without saving."
@@ -707,9 +692,7 @@ func _build_checkpoint_controls() -> void:
 
 func _checkpoint_status() -> void:
 	if _save_label == null: return
-	_save_label.text = "Not saved" if not checkpoints.failure.is_empty() else ("Saving Studio…" if checkpoints.is_saving() else "Studio saved")
-	_session_quit.visible = not run_state.get_studio_name().is_empty()
-	_save_label.tooltip_text = checkpoints.failure
+	_save_notice.update_status(checkpoints.is_saving(),checkpoints.failure,checkpoints.completed_saves)
 	if checkpoints.failure.is_empty(): _save_failure_dialog.hide()
 	# load_current can emit failure synchronously. Continue owns that failure's
 	# recovery prompt; opening a second exclusive window here would collide.

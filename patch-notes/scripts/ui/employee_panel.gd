@@ -39,6 +39,7 @@ func open_for(value: RunState) -> void:
 			if run.finance_changed.is_connected(_refresh):run.finance_changed.disconnect(_refresh)
 		run=value;run.employees_changed.connect(_refresh);run.finance_changed.connect(_refresh)
 	_return_focus=get_viewport().gui_get_focus_owner()
+	status.hide()
 	show();_refresh();back_button.grab_focus()
 func close() -> void:
 	if confirmation.visible:confirmation.hide();pending={};return

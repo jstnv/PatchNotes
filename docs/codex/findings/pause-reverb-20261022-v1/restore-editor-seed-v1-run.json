@@ -1,0 +1,37 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-reverb-20261022-v1\\restore.gd",
+    "--",
+    "--input=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-adoption-20261018-v1\\acceptance-pinned-v2-action-war.json.checkpoint.json",
+    "--output=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-reverb-20261022-v1\\restore-editor-seed-v1.json",
+    "--store=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-reverb-20261022-v1\\store-editor-v1",
+    "--mode=seed"
+  ],
+  "profile": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-reverb-20261022-v1\\profile-restore-editor-seed-v1",
+  "exit": 1,
+  "timed_out": false,
+  "elapsed_seconds": 7.969,
+  "errors": [
+    "ERROR: PAUSE_REVERB_RESTORE normal Store accepts exact old pair at generation one: { \"status\": &\"writer_busy\" }",
+    "ERROR: PAUSE_REVERB_RESTORE normal Store validates prior source: "
+  ],
+  "tail": [
+    "RESTORE_CHECK 7 PASS unknown-source rejection does not mutate payload",
+    "RESTORE_CHECK 8 PASS original snapshot has actual release facts for corruption check",
+    "RESTORE_CHECK 9 PASS corruption retains valid market shape and recomputed hash",
+    "RESTORE_CHECK 10 PASS valid-hash corrupted market rejected against original owners",
+    "RESTORE_CHECK 11 PASS market-corruption rejection does not mutate payload",
+    "RESTORE_CHECK 12 PASS original acceptance artifact unchanged",
+    "RESTORE_CHECK 13 PASS runtime source remains stable throughout check",
+    "PAUSE_REVERB_RESTORE checks=13 failures=2",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

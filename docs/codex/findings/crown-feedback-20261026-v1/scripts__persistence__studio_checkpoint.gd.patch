@@ -1,0 +1,81 @@
+--- current/scripts/persistence/studio_checkpoint.gd
+
++++ private/scripts/persistence/studio_checkpoint.gd
+
+@@ -18,7 +18,7 @@
+
+ const PRE_USABILITY_RULES := PRE_SUPPORT_RULES + "-support1"
+ const PRE_EMPLOYEE_RULES := PRE_USABILITY_RULES + "-traits9-bank2-priority10"
+ const PRE_SEARCH_RULES := PRE_EMPLOYEE_RULES + "-employees2"
+-const RULES := PRE_SEARCH_RULES + "-contractsearch1"
++const RULES := PRE_SEARCH_RULES + "-contractsearch1-crownsearch-private1"
+ const PreSearchSchema := preload("res://scripts/persistence/pre_contract_search/schema.gd")
+ const UsabilityPrevious := preload("res://scripts/persistence/pre_usability/studio.gd")
+ const SupportPrevious := preload("res://scripts/contracts/pre_support/studio.gd")
+@@ -115,6 +115,10 @@
+
+ 	for id: StringName in run._sidestreet_briefs:
+ 		var brief: Dictionary = run._sidestreet_briefs[id]
+ 		state.sidestreet_briefs[id] = {"offer_id":brief.offer_id,"source_release_id":brief.source_release_id,"state":_contract(brief.state)}
++	state.crown_briefs = {}
++	for id: StringName in run._crown_briefs:
++		var brief: Dictionary = run._crown_briefs[id]
++		state.crown_briefs[id] = {"offer_id":brief.offer_id,"source_release_id":brief.source_release_id,"state":_contract(brief.state)}
+ 	state.publisher_offers = {}
+ 	for id: StringName in run._publisher_offers:
+ 		var offer: Dictionary = run._publisher_offers[id]
+@@ -369,12 +373,21 @@
+
+ 		if (not searched and ((r.contract_search.legacy_offers.get(id)!=&"brief" and r.contract_search.intro_offer_id!=id) or not r.released_games.has(source) or id != StringName("%s:sidestreet-brief:%s" % [r.bank_run_id,source]))) or (searched and not source.is_empty()) or brief.offer_id != id or not _valid_contract(brief.state,r,ContractDefinitions.SIDESTREET_BRIEF,id,source): return "Invalid Brief provenance"
+ 		if brief.state == null: pending_briefs += 1
+ 		else: completed_briefs += 1
++	var pending_crown_briefs := 0
++	var completed_crown_briefs := 0
++	if not r.unlocked_publishers.has(PublisherCatalog.CROWN_QUILL) and not r.crown_briefs.is_empty(): return "Premature Brief"
++	for id: StringName in r.crown_briefs:
++		var brief: Dictionary = r.crown_briefs[id]
++		var source: StringName = brief.source_release_id
++		if not source.is_empty() or RunState.ContractSearch.source(r,id,&"brief",&"crown_quill").is_empty() or brief.offer_id != id or not _valid_contract(brief.state,r,ContractDefinitions.CROWN_BRIEF,id,source): return "Invalid Crown Search provenance"
++		if brief.state == null: pending_crown_briefs += 1
++		else: completed_crown_briefs += 1
+ 	if not RunState.Commission.valid_save(r,active_id): return "Invalid commission rights/finance provenance"
+ 	if not RunState.Support.valid_save(r,active_id): return "Invalid support history/finance provenance"
+ 	var completed_commissions := 0
+ 	for deal: Dictionary in r.commission_deals.values():
+ 		if deal.result != null: completed_commissions += 1
+-	if pending_briefs > 1 or completed_briefs + completed_commissions + r.support_assessments.size() != r.publisher_relationships.events.size(): return "Brief/support event coverage mismatch"
++	if pending_briefs > 1 or pending_crown_briefs > 1 or completed_briefs + completed_crown_briefs + completed_commissions + r.support_assessments.size() != r.publisher_relationships.events.size(): return "Brief/support event coverage mismatch"
+ 	var expected_awards := {}
+ 	for publisher: StringName in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT]:
+ 		var offer_id := StringName("%s:%s:first" % [r.bank_run_id,publisher])
+@@ -453,7 +466,7 @@
+
+ 	if c.publisher_connections != connected: return false
+ 	var advance := (55000 if connected else 40000) if kind==ContractState.CONTRACT_ID else 0
+ 	var expected: Dictionary
+-	if kind == ContractDefinitions.SIDESTREET_BRIEF:
++	if kind in [ContractDefinitions.SIDESTREET_BRIEF,ContractDefinitions.CROWN_BRIEF]:
+ 		if not c.trial_terms.is_empty() or c.neon_focus != -1 or not c.has("challenge_terms"): return false
+ 		expected = ContractDefinitions.evaluate(kind,c.scope,c.cores,-1,0)
+ 	elif terms.is_empty():
+@@ -471,7 +484,7 @@
+
+ 	var bonus_promotion := 0
+ 	var grade_bp := 0
+ 	if c.has("challenge_terms"):
+-		if kind==ContractState.CONTRACT_ID or c.challenge_terms != ContractChallenges.terms_for_contract(kind) or c.challenge_redraws>ContractChallenges.MAX_INPUT or (kind not in [ContractState.SIDESTREET_CONTRACT_ID,ContractDefinitions.SIDESTREET_BRIEF] and c.challenge_redraws!=0): return false
++		if kind==ContractState.CONTRACT_ID or c.challenge_terms != ContractChallenges.terms_for_contract(kind) or c.challenge_redraws>ContractChallenges.MAX_INPUT or (kind not in [ContractState.SIDESTREET_CONTRACT_ID,ContractDefinitions.SIDESTREET_BRIEF,ContractDefinitions.CROWN_BRIEF] and c.challenge_redraws!=0): return false
+ 		var reward := ContractChallenges.reward(c.challenge_terms,c.scope,c.cores,c.challenge_redraws)
+ 		if reward.is_empty(): return false
+ 		bonus_cash = reward.cash_cents
+@@ -535,6 +548,9 @@
+
+ 	for id: StringName in r.sidestreet_briefs:
+ 		var brief: Dictionary = r.sidestreet_briefs[id]
+ 		run._sidestreet_briefs[id] = {"offer_id":brief.offer_id,"source_release_id":brief.source_release_id,"state":_hydrate_contract(brief.state)}
++	for id: StringName in r.crown_briefs:
++		var brief: Dictionary = r.crown_briefs[id]
++		run._crown_briefs[id] = {"offer_id":brief.offer_id,"source_release_id":brief.source_release_id,"state":_hydrate_contract(brief.state)}
+ 	for id: StringName in r.publisher_offers:
+ 		var offer: Dictionary = r.publisher_offers[id]
+ 		run._publisher_offers[id] = {"publisher_id":offer.publisher_id,"source_release_id":offer.source_release_id,"state":_hydrate_contract(offer.state)}

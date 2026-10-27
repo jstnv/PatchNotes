@@ -1,0 +1,14 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+MIGRATION_CHECK 1 PASS original exists
+MIGRATION_CHECK 2 FAIL upgrade original: Invalid old player sequence
+ERROR: Migration: upgrade original: Invalid old player sequence
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/migration.gd:21)
+       [1] run (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/migration.gd:109)
+       [2] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/migration.gd:89)
+MARKET_MIGRATION bank-only run checks=2 failures=1
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

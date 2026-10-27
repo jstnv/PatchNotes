@@ -1,0 +1,68 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Loaded 40 cards.
+PASS: Unchanged quote colored_text
+PASS: Unchanged path colored_text
+PASS: Unchanged quote save_files
+PASS: Unchanged path save_files
+PASS: Unchanged quote difficulty_levels
+PASS: Unchanged path difficulty_levels
+PASS: Both missing parents are explicit
+PASS: Neither-parent rejection is atomic
+PASS: One parent still locked
+PASS: Queued parent does not unlock
+PASS: Both permanently owned unlock
+PASS: Selection and quote inspection grant no credit
+PASS: Contract grants no credit
+PASS: Contract publishing guard grants no credit
+PASS: First parent committed credit
+PASS: One combined credit is ten percent
+PASS: Repeated parent in same project cannot double credit
+PASS: Other parent in same project credits independently
+PASS: Two parents in one project aggregate
+PASS: Two plus three credits share fifty percent cap
+PASS: Six combined credits remain capped
+PASS: Familiarity does not discount deposit
+PASS: Two-parent admission commits
+PASS: Admission grants neither ownership nor a cycle
+PASS: Duplicate admission is atomic
+PASS: Research completes
+PASS: Ownership only on completion
+PASS: Mid-research credit changes only unpaid installment
+PASS: Stale installment rejects atomically
+PASS: Deposit affordability boundary 84999
+PASS: Unaffordable Research preserves all state
+PASS: Deposit affordability boundary 85000
+PASS: Unaffordable Research preserves all state
+PASS: Odd-cent quote rounds only after percentage
+PASS: Odd-cent deposit and installment exact
+PASS: DAG visits shared ancestor once in dependency order
+PASS: Invalid graph fails closed: { "purchase_parents": ["text", "text"] }
+PASS: Invalid graph fails closed: { "purchase_parents": ["text", "missing"] }
+PASS: Invalid graph fails closed: { "purchase_parents": ["recorded_sounds", "text"] }
+PASS: Invalid graph fails closed: { "purchase_parents": [] }
+PASS: Invalid graph fails closed: { "purchase_parents": "text" }
+PASS: Invalid graph fails closed: { "purchase_parents": [42] }
+PASS: Invalid graph fails closed: { "purchase_parents": ["8_bit_sound", "text"], "gameplay_features_required": 3 }
+PASS: Invalid graph fails closed: { "purchase_parents": ["text", "8_bit_sound"], "purchase_parent": "8_bit_sound" }
+PASS: Indirect cycle rejected before quote
+PASS: Live acquisition includes both named parents
+PASS: Current catalog remains valid
+PASS: Startup catalog graph rejects invalid reference
+PASS: One node and visible AND badge at (1152, 648)
+PASS: Both navigable parents and capped credits displayed
+PASS: Detail fits viewport
+PASS: Parent navigation accepts keyboard focus
+FAIL: Keyboard/controller action navigates cross-lane parent; selected=
+PASS: Actual admission confirmation retained
+PASS: One node and visible AND badge at (1280, 720)
+PASS: Both navigable parents and capped credits displayed
+PASS: Detail fits viewport
+PASS: Parent navigation accepts keyboard focus
+FAIL: Keyboard/controller action navigates cross-lane parent; selected=
+PASS: Actual admission confirmation retained
+Feature parents: 60 checks, 2 failures
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

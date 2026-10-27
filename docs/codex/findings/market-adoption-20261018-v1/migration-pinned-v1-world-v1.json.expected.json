@@ -1,0 +1,4543 @@
+{
+	"checkpoint_kind": "studio",
+	"content_revision": "f522bf2f8166cba5fa68cb9936c04ef0b64d46560d5e68cca9681733e1fa7f0b",
+	"rival_world": {
+		"cycle": "9",
+		"history": [
+			{
+				"genre": "action",
+				"release_cycle": "7",
+				"release_id": "incumbent-arcade-foundry:project:1",
+				"review_tenths": "22",
+				"studio_id": "incumbent-arcade-foundry",
+				"theme": "fantasy",
+				"title": "Arcade Foundry 1"
+			},
+			{
+				"genre": "adventure",
+				"release_cycle": "7",
+				"release_id": "incumbent-wayfinder-works:project:1",
+				"review_tenths": "25",
+				"studio_id": "incumbent-wayfinder-works",
+				"theme": "fantasy",
+				"title": "Wayfinder Works 1"
+			}
+		],
+		"market": {
+			"cycle_start": "8",
+			"facts": [
+				{
+					"cores": [
+						"10",
+						"18",
+						"8",
+						"11"
+					],
+					"cores_available": true,
+					"genre": "adventure",
+					"release_cycle": "7",
+					"release_id": "4678a151d6ca5b59d1af0841d47c502e:project:1",
+					"review_tenths": "12",
+					"studio_id": "4678a151d6ca5b59d1af0841d47c502e",
+					"theme": "fantasy"
+				},
+				{
+					"cores": [
+						"10",
+						"11",
+						"27",
+						"16"
+					],
+					"cores_available": true,
+					"genre": "action",
+					"release_cycle": "7",
+					"release_id": "incumbent-arcade-foundry:project:1",
+					"review_tenths": "22",
+					"studio_id": "incumbent-arcade-foundry",
+					"theme": "fantasy"
+				},
+				{
+					"cores": [
+						"13",
+						"14",
+						"12",
+						"26"
+					],
+					"cores_available": true,
+					"genre": "adventure",
+					"release_cycle": "7",
+					"release_id": "incumbent-wayfinder-works:project:1",
+					"review_tenths": "25",
+					"studio_id": "incumbent-wayfinder-works",
+					"theme": "fantasy"
+				}
+			],
+			"id": "market-v2-8-faf2e2ef1f5efb8df4f37899c9a1a166aeab4ef3acdf3c8ebf6f6c8413d7398e",
+			"version": "2"
+		},
+		"market_origin": {
+			"active_projects": [
+				{
+					"key": "incumbent-arcade-foundry",
+					"value": "incumbent-arcade-foundry:project:2"
+				},
+				{
+					"key": "incumbent-wayfinder-works",
+					"value": "incumbent-wayfinder-works:project:2"
+				}
+			],
+			"content_revision": "e5fa9d0bf6ac3f0722f2b310e0a14c0de07a8c4b4deccce9b703894406eae1ea",
+			"cycle": "9",
+			"source_id": "3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f"
+		},
+		"rng_algorithm": "godot-4.7.1-rng-v1",
+		"schema_version": "1",
+		"source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+		"studios": [
+			{
+				"archive": [
+					{
+						"genre": "action",
+						"id": "arcade-history-1977",
+						"review_tenths": "72",
+						"theme": "science_fiction",
+						"title": "Circuit Clash",
+						"year": "1977"
+					},
+					{
+						"genre": "action",
+						"id": "arcade-history-1979",
+						"review_tenths": "78",
+						"theme": "war",
+						"title": "Skyline Siege",
+						"year": "1979"
+					}
+				],
+				"development": {
+					"awaiting_confirmation": false,
+					"finalized": false,
+					"hand": {
+						"active": true,
+						"available_features": [
+							"keyboard_and_mouse",
+							"menu_system"
+						],
+						"candidate_cards": [
+							"sound_pass",
+							"8_bit_sound",
+							"sound_pass",
+							"scrolling",
+							"text",
+							"graphics_pass",
+							"sound_pass"
+						],
+						"candidate_ids": [
+							"0",
+							"5",
+							"6",
+							"7",
+							"8",
+							"9",
+							"10"
+						],
+						"exhausted": [
+							{
+								"key": "controller",
+								"value": true
+							},
+							{
+								"key": "split_screen",
+								"value": true
+							},
+							{
+								"key": "sprites",
+								"value": true
+							},
+							{
+								"key": "4_color_palette",
+								"value": true
+							}
+						],
+						"finalization_requested": false,
+						"next_candidate_id": "11",
+						"priorities": [
+							{
+								"key": "0",
+								"value": "25"
+							},
+							{
+								"key": "1",
+								"value": "25"
+							},
+							{
+								"key": "2",
+								"value": "25"
+							},
+							{
+								"key": "3",
+								"value": "25"
+							}
+						],
+						"revision": "2"
+					},
+					"phase_index": "0",
+					"project": {
+						"_accumulated_alpha_bug_pressure": {
+							"f64": "0000000000000000"
+						},
+						"_accumulated_bug_pressure": {
+							"f64": "400471c71c71c71d"
+						},
+						"_alpha_hidden_bugs_generated": "0",
+						"_base_name": "Arcade Foundry 2",
+						"_competitor_snapshot_id": "reckless_upstart",
+						"_competitor_snapshot_revealed": false,
+						"_core_scores": [
+							{
+								"key": "0",
+								"value": "9"
+							},
+							{
+								"key": "1",
+								"value": "0"
+							},
+							{
+								"key": "2",
+								"value": "7"
+							},
+							{
+								"key": "3",
+								"value": "5"
+							}
+						],
+						"_current_cycle": "1",
+						"_current_scope": "7",
+						"_exhausted_beta_card_ids": [],
+						"_feature_supply_ids": [
+							"text",
+							"sprites",
+							"4_color_palette",
+							"8_bit_sound",
+							"keyboard_and_mouse",
+							"controller",
+							"scrolling",
+							"menu_system",
+							"split_screen",
+							"multiple_endings",
+							"controls",
+							"enemies",
+							"power_ups",
+							"general_combat",
+							"levels",
+							"maps",
+							"exploration",
+							"sound_effects",
+							"music",
+							"dialogue",
+							"secrets"
+						],
+						"_fixed_bugs": "0",
+						"_genre_id": "action",
+						"_genre_ratios": [
+							"30",
+							"20",
+							"30",
+							"20"
+						],
+						"_has_alpha_finalization": false,
+						"_has_beta_finalization": false,
+						"_has_design_bug_finalization": false,
+						"_hidden_bugs": "0",
+						"_implemented_alpha_feature_ids": [],
+						"_implemented_design_feature_ids": [],
+						"_known_bugs": "0",
+						"_market_details": {
+							"base": [
+								"40",
+								"26",
+								"40",
+								"26"
+							],
+							"benchmark_lifts": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"cycle_start": "0",
+							"density_lift": "0",
+							"historical": true,
+							"recent_count": "0",
+							"snapshot_id": "pre-market-neutral:3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f",
+							"standards": [
+								"40",
+								"26",
+								"40",
+								"26"
+							]
+						},
+						"_market_forecast_snapshot_id": "market_surge",
+						"_market_forecast_snapshot_revealed": false,
+						"_market_snapshot_id": "pre-market-neutral:3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f",
+						"_market_standards": [
+							"40",
+							"26",
+							"40",
+							"26"
+						],
+						"_marketing_output": "0",
+						"_release_id": "incumbent-arcade-foundry:project:2",
+						"_required_scope": "30",
+						"_theme_id": "fantasy",
+						"_unimplemented_alpha_feature_ids": [],
+						"_unimplemented_design_feature_ids": [],
+						"_was_perfect_production": false
+					},
+					"sequence": "2"
+				},
+				"id": "incumbent-arcade-foundry",
+				"run": {
+					"active_project_id": "incumbent-arcade-foundry:project:2",
+					"checkpoint_kind": "rival_active",
+					"content_revision": "f522bf2f8166cba5fa68cb9936c04ef0b64d46560d5e68cca9681733e1fa7f0b",
+					"rng": [
+						{
+							"key": "snapshot",
+							"value": {
+								"seed": "190729643567963",
+								"state": "8774555013358231061"
+							}
+						},
+						{
+							"key": "review",
+							"value": {
+								"seed": "190729643567964",
+								"state": "-3119616988387618299"
+							}
+						},
+						{
+							"key": "design_deal",
+							"value": {
+								"seed": "190729643567965",
+								"state": "-6288387554040570049"
+							}
+						},
+						{
+							"key": "design_finalize",
+							"value": {
+								"seed": "190729643567966",
+								"state": "-5328610641543977460"
+							}
+						},
+						{
+							"key": "alpha_deal",
+							"value": {
+								"seed": "190729643567967",
+								"state": "-2120586949893127077"
+							}
+						},
+						{
+							"key": "alpha_finalize",
+							"value": {
+								"seed": "190729643567968",
+								"state": "-8581806386908932602"
+							}
+						},
+						{
+							"key": "beta_deal",
+							"value": {
+								"seed": "190729643567969",
+								"state": "4206371826397326779"
+							}
+						},
+						{
+							"key": "beta_insight",
+							"value": {
+								"seed": "190729643567970",
+								"state": "-4388866710569265787"
+							}
+						},
+						{
+							"key": "contract_deal",
+							"value": {
+								"seed": "190729643567971",
+								"state": "4318516149279135481"
+							}
+						}
+					],
+					"rng_algorithm": "godot-4.7.1-rng-v1",
+					"run": {
+						"available_redraws": "4",
+						"bank_run_id": "incumbent-arcade-foundry",
+						"cash_cents": "421524",
+						"cash_initialized": true,
+						"completed_run_cycles": "9",
+						"credited_projects": [
+							{
+								"key": "incumbent-arcade-foundry:project:1",
+								"value": [
+									{
+										"key": "keyboard_and_mouse",
+										"value": true
+									},
+									{
+										"key": "split_screen",
+										"value": true
+									},
+									{
+										"key": "controller",
+										"value": true
+									},
+									{
+										"key": "menu_system",
+										"value": true
+									},
+									{
+										"key": "scrolling",
+										"value": true
+									},
+									{
+										"key": "4_color_palette",
+										"value": true
+									},
+									{
+										"key": "secrets",
+										"value": true
+									},
+									{
+										"key": "music",
+										"value": true
+									},
+									{
+										"key": "power_ups",
+										"value": true
+									},
+									{
+										"key": "levels",
+										"value": true
+									},
+									{
+										"key": "maps",
+										"value": true
+									},
+									{
+										"key": "sound_effects",
+										"value": true
+									},
+									{
+										"key": "general_combat",
+										"value": true
+									},
+									{
+										"key": "controls",
+										"value": true
+									}
+								]
+							},
+							{
+								"key": "incumbent-arcade-foundry:project:2",
+								"value": [
+									{
+										"key": "controller",
+										"value": true
+									},
+									{
+										"key": "split_screen",
+										"value": true
+									},
+									{
+										"key": "sprites",
+										"value": true
+									},
+									{
+										"key": "4_color_palette",
+										"value": true
+									}
+								]
+							}
+						],
+						"employees": {
+							"employees": [],
+							"events": [],
+							"owner": "incumbent-arcade-foundry",
+							"schema_version": "1"
+						},
+						"familiarity": [
+							{
+								"key": "keyboard_and_mouse",
+								"value": "1"
+							},
+							{
+								"key": "split_screen",
+								"value": "2"
+							},
+							{
+								"key": "controller",
+								"value": "2"
+							},
+							{
+								"key": "menu_system",
+								"value": "1"
+							},
+							{
+								"key": "scrolling",
+								"value": "1"
+							},
+							{
+								"key": "4_color_palette",
+								"value": "2"
+							},
+							{
+								"key": "secrets",
+								"value": "1"
+							},
+							{
+								"key": "music",
+								"value": "1"
+							},
+							{
+								"key": "power_ups",
+								"value": "1"
+							},
+							{
+								"key": "levels",
+								"value": "1"
+							},
+							{
+								"key": "maps",
+								"value": "1"
+							},
+							{
+								"key": "sound_effects",
+								"value": "1"
+							},
+							{
+								"key": "general_combat",
+								"value": "1"
+							},
+							{
+								"key": "controls",
+								"value": "1"
+							},
+							{
+								"key": "sprites",
+								"value": "1"
+							}
+						],
+						"fanbase": {
+							"fans": "12",
+							"last_cycle": "9",
+							"months": [
+								{
+									"ending": "20",
+									"gained": "0",
+									"lost": "0",
+									"month": "1",
+									"net": "0",
+									"releases": [],
+									"starting": "20"
+								},
+								{
+									"ending": "20",
+									"gained": "0",
+									"lost": "0",
+									"month": "2",
+									"net": "0",
+									"releases": [],
+									"starting": "20"
+								},
+								{
+									"ending": "20",
+									"gained": "0",
+									"lost": "0",
+									"month": "3",
+									"net": "0",
+									"releases": [],
+									"starting": "20"
+								},
+								{
+									"ending": "12",
+									"gained": "0",
+									"lost": "8",
+									"month": "4",
+									"net": "-8",
+									"releases": [
+										{
+											"earned_units": "108",
+											"lost_fans": "8",
+											"new_fans": "0",
+											"release_id": "incumbent-arcade-foundry:project:1"
+										}
+									],
+									"starting": "20"
+								}
+							],
+							"releases": [
+								{
+									"key": "incumbent-arcade-foundry:project:1",
+									"value": {
+										"accounted_units": "108",
+										"gained": "0",
+										"launch_fans": "20",
+										"loss_exposure_accounted": "8",
+										"lost": "8",
+										"neutral": {
+											"active_awareness_scaled": "0",
+											"campaign_count": "0",
+											"campaign_months": [],
+											"earned_cycles": "2",
+											"earned_units": "491",
+											"entitlement_cents": "343356",
+											"exhausted": true,
+											"last_processed_run_cycle": "9",
+											"last_settlement_run_cycle": "8",
+											"later_enabled": true,
+											"launch_awareness": "106",
+											"market_bp": "9000",
+											"market_factors": [
+												{
+													"key": "1",
+													"value": {
+														"cycle_start": "0",
+														"factor_bp": "10000",
+														"genre_only": "0",
+														"historical": false,
+														"pair": "0",
+														"snapshot_id": "market-0-neutral",
+														"theme_only": "0"
+													}
+												}
+											],
+											"monthly_units": "0",
+											"organic_awareness_scaled": "0",
+											"release_id": "incumbent-arcade-foundry:project:1",
+											"review_tenths": "50",
+											"settled_cents": "171328",
+											"total_earned_cycles": "2",
+											"total_units": "491"
+										},
+										"review_tenths": "22"
+									}
+								}
+							]
+						},
+						"feature_research": [],
+						"first_game_tutorial": {
+							"first_pool_published": true,
+							"first_stat": "technology",
+							"second_pool_published": true,
+							"second_stat": "design",
+							"stage": "3"
+						},
+						"first_studio_economy": true,
+						"first_tutorial_project_id": "incumbent-arcade-foundry:project:1",
+						"ironclad_completion_committed": false,
+						"lean_savings": [],
+						"next_project_serial": "3",
+						"owned_features": [
+							{
+								"key": "text",
+								"value": true
+							},
+							{
+								"key": "sprites",
+								"value": true
+							},
+							{
+								"key": "4_color_palette",
+								"value": true
+							},
+							{
+								"key": "8_bit_sound",
+								"value": true
+							},
+							{
+								"key": "keyboard_and_mouse",
+								"value": true
+							},
+							{
+								"key": "controller",
+								"value": true
+							},
+							{
+								"key": "scrolling",
+								"value": true
+							},
+							{
+								"key": "menu_system",
+								"value": true
+							},
+							{
+								"key": "split_screen",
+								"value": true
+							},
+							{
+								"key": "multiple_endings",
+								"value": true
+							},
+							{
+								"key": "controls",
+								"value": true
+							},
+							{
+								"key": "enemies",
+								"value": true
+							},
+							{
+								"key": "power_ups",
+								"value": true
+							},
+							{
+								"key": "general_combat",
+								"value": true
+							},
+							{
+								"key": "levels",
+								"value": true
+							},
+							{
+								"key": "maps",
+								"value": true
+							},
+							{
+								"key": "exploration",
+								"value": true
+							},
+							{
+								"key": "sound_effects",
+								"value": true
+							},
+							{
+								"key": "music",
+								"value": true
+							},
+							{
+								"key": "dialogue",
+								"value": true
+							},
+							{
+								"key": "secrets",
+								"value": true
+							}
+						],
+						"pending_publisher_notifications": [
+							"ironclad"
+						],
+						"primitive_contract": null,
+						"promotion_awards": [],
+						"promotion_consumed": [],
+						"publisher_offers": [],
+						"release_metadata": [
+							{
+								"key": "incumbent-arcade-foundry:project:1",
+								"value": {
+									"base_name": "Arcade Foundry 1",
+									"genre": "action",
+									"genre_ratios": [
+										"30",
+										"20",
+										"30",
+										"20"
+									],
+									"release_cycle": "7",
+									"release_title": "Arcade Foundry 1",
+									"release_year": "1980",
+									"review": {
+										"awareness": "106",
+										"competitor_id": "",
+										"competitor_target_cycle": "-1",
+										"cores": [
+											"10",
+											"11",
+											"27",
+											"16"
+										],
+										"development_cycles": "6",
+										"fan_awareness": "5",
+										"final_review": {
+											"f64": "400199999999999a"
+										},
+										"forecast_id": "",
+										"forecast_multiplier": "",
+										"launch_fans": "20",
+										"launch_marketing": "1",
+										"production_rating": {
+											"f64": "400a0f6b86a0178c"
+										},
+										"projected_gross_cents": "215784",
+										"projected_net_cents": "151048",
+										"projected_units": "216",
+										"remaining_bugs": "2",
+										"required_scope": "30",
+										"scope": "22",
+										"scope_completion": {
+											"f64": "3fe7777777777777"
+										},
+										"standards": [
+											"40",
+											"26",
+											"40",
+											"26"
+										]
+									},
+									"theme": "fantasy"
+								}
+							}
+						],
+						"released_games": [
+							{
+								"key": "incumbent-arcade-foundry:project:1",
+								"value": {
+									"active_awareness_scaled": "0",
+									"base_name": "Arcade Foundry 1",
+									"campaign_count": "0",
+									"campaign_months": [],
+									"earned_cycles": "2",
+									"earned_units": "216",
+									"entitlement_cents": "151048",
+									"exhausted": true,
+									"last_processed_run_cycle": "9",
+									"last_settlement_run_cycle": "8",
+									"later_enabled": true,
+									"launch_awareness": "106",
+									"market_bp": "9000",
+									"market_factors": [
+										{
+											"key": "1",
+											"value": {
+												"cycle_start": "0",
+												"factor_bp": "10000",
+												"genre_only": "0",
+												"historical": true,
+												"pair": "0",
+												"snapshot_id": "pre-market-neutral:3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f",
+												"theme_only": "0"
+											}
+										}
+									],
+									"monthly_units": "0",
+									"organic_awareness_scaled": "0",
+									"release_id": "incumbent-arcade-foundry:project:1",
+									"release_title": "Arcade Foundry 1",
+									"release_year": "1980",
+									"review_tenths": "22",
+									"settled_cents": "75524",
+									"total_earned_cycles": "2",
+									"total_units": "216"
+								}
+							}
+						],
+						"resourceful_claims": [],
+						"seen_tutorial_topics": [],
+						"sidestreet_entitlements": [],
+						"sidestreet_results": [],
+						"starter_selection_confirmed": true,
+						"studio_finance": {
+							"actions": [
+								{
+									"cash_before": "550000",
+									"cycle": "0",
+									"direct_delta": "5000",
+									"kind": "financing_in",
+									"productive": false,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "studio_trait_unspent_points_v1"
+								},
+								{
+									"cash_before": "555000",
+									"cycle": "0",
+									"direct_delta": "30000",
+									"kind": "financing_in",
+									"productive": false,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "studio_trait_family_funding_v1"
+								},
+								{
+									"cash_before": "585000",
+									"cycle": "1",
+									"direct_delta": "0",
+									"kind": "development",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"cash_before": "585000",
+									"cycle": "2",
+									"direct_delta": "-34000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"cash_before": "501000",
+									"cycle": "3",
+									"direct_delta": "-15000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"cash_before": "486000",
+									"cycle": "4",
+									"direct_delta": "-28000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"cash_before": "408000",
+									"cycle": "5",
+									"direct_delta": "-27000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"cash_before": "381000",
+									"cycle": "6",
+									"direct_delta": "100000",
+									"kind": "beta_income",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"cash_before": "431000",
+									"cycle": "7",
+									"direct_delta": "0",
+									"kind": "beta_income",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"cash_before": "431000",
+									"cycle": "8",
+									"direct_delta": "0",
+									"kind": "development",
+									"productive": true,
+									"sales_earned": "75524",
+									"settled": "75524",
+									"source_id": "incumbent-arcade-foundry:project:2"
+								},
+								{
+									"cash_before": "456524",
+									"cycle": "9",
+									"direct_delta": "-35000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "75524",
+									"settled": "0",
+									"source_id": "incumbent-arcade-foundry:project:2"
+								}
+							],
+							"bank_loans": [],
+							"cash_cents": "421524",
+							"credit": {
+								"history": [
+									{
+										"after": "600",
+										"before": "600",
+										"change": "0",
+										"cycle": "2",
+										"month": "1",
+										"operating_profit_cents": "-84000",
+										"policy_version": "typed_expenses_v1",
+										"reasons": [
+											{
+												"points": "0",
+												"type": "paid_no_profit"
+											}
+										],
+										"requested_change": "0"
+									},
+									{
+										"after": "600",
+										"before": "600",
+										"change": "0",
+										"cycle": "4",
+										"month": "2",
+										"operating_profit_cents": "-93000",
+										"policy_version": "typed_expenses_v1",
+										"reasons": [
+											{
+												"points": "0",
+												"type": "paid_no_profit"
+											}
+										],
+										"requested_change": "0"
+									},
+									{
+										"after": "603",
+										"before": "600",
+										"change": "3",
+										"cycle": "6",
+										"month": "3",
+										"operating_profit_cents": "23000",
+										"policy_version": "typed_expenses_v1",
+										"reasons": [
+											{
+												"points": "3",
+												"type": "clean_profit"
+											}
+										],
+										"requested_change": "3"
+									},
+									{
+										"after": "606",
+										"before": "603",
+										"change": "3",
+										"cycle": "8",
+										"month": "4",
+										"operating_profit_cents": "25524",
+										"policy_version": "typed_expenses_v1",
+										"reasons": [
+											{
+												"points": "3",
+												"type": "clean_profit"
+											}
+										],
+										"requested_change": "3"
+									}
+								],
+								"last_processed_month": "4",
+								"policy_version": "typed_expenses_v1",
+								"score": "606"
+							},
+							"education": {},
+							"employees": [],
+							"initial_cash_cents": "550000",
+							"last_cycle": "9",
+							"monthly_rent_cents": "50000",
+							"monthly_rows": [
+								{
+									"beta_income_cents": "0",
+									"campaign_cents": "0",
+									"cash_change_cents": "501000",
+									"closing_cash_cents": "501000",
+									"feature_play_cents": "34000",
+									"financing_in_cents": "585000",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "1",
+									"net_profit_cents": "-84000",
+									"opening_cash_cents": "0",
+									"operating_expenses_cents": "84000",
+									"operating_revenue_cents": "0",
+									"other_expense_cents": "0",
+									"other_income_cents": "0",
+									"partial": false,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "50000",
+									"rent_paid_cents": "50000",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "0",
+									"sales_settled_cents": "0",
+									"store_cents": "0"
+								},
+								{
+									"beta_income_cents": "0",
+									"campaign_cents": "0",
+									"cash_change_cents": "-93000",
+									"closing_cash_cents": "408000",
+									"feature_play_cents": "43000",
+									"financing_in_cents": "0",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "2",
+									"net_profit_cents": "-93000",
+									"opening_cash_cents": "501000",
+									"operating_expenses_cents": "93000",
+									"operating_revenue_cents": "0",
+									"other_expense_cents": "0",
+									"other_income_cents": "0",
+									"partial": false,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "50000",
+									"rent_paid_cents": "50000",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "0",
+									"sales_settled_cents": "0",
+									"store_cents": "0"
+								},
+								{
+									"beta_income_cents": "100000",
+									"campaign_cents": "0",
+									"cash_change_cents": "23000",
+									"closing_cash_cents": "431000",
+									"feature_play_cents": "27000",
+									"financing_in_cents": "0",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "3",
+									"net_profit_cents": "23000",
+									"opening_cash_cents": "408000",
+									"operating_expenses_cents": "77000",
+									"operating_revenue_cents": "100000",
+									"other_expense_cents": "0",
+									"other_income_cents": "100000",
+									"partial": false,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "50000",
+									"rent_paid_cents": "50000",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "0",
+									"sales_settled_cents": "0",
+									"store_cents": "0"
+								},
+								{
+									"beta_income_cents": "0",
+									"campaign_cents": "0",
+									"cash_change_cents": "25524",
+									"closing_cash_cents": "456524",
+									"feature_play_cents": "0",
+									"financing_in_cents": "0",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "4",
+									"net_profit_cents": "25524",
+									"opening_cash_cents": "431000",
+									"operating_expenses_cents": "50000",
+									"operating_revenue_cents": "75524",
+									"other_expense_cents": "0",
+									"other_income_cents": "0",
+									"partial": false,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "50000",
+									"rent_paid_cents": "50000",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "75524",
+									"sales_settled_cents": "75524",
+									"store_cents": "0"
+								},
+								{
+									"beta_income_cents": "0",
+									"campaign_cents": "0",
+									"cash_change_cents": "-35000",
+									"closing_cash_cents": "421524",
+									"feature_play_cents": "35000",
+									"financing_in_cents": "0",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "5",
+									"net_profit_cents": "40524",
+									"opening_cash_cents": "456524",
+									"operating_expenses_cents": "35000",
+									"operating_revenue_cents": "75524",
+									"other_expense_cents": "0",
+									"other_income_cents": "0",
+									"partial": true,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "0",
+									"rent_paid_cents": "0",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "75524",
+									"sales_settled_cents": "0",
+									"store_cents": "0"
+								}
+							],
+							"obligations": [
+								{
+									"bill_id": "rent:1",
+									"due_cents": "50000",
+									"due_cycle": "2",
+									"expense_type": "rent",
+									"late": false,
+									"month": "1",
+									"paid_cents": "50000",
+									"paid_on_time": true,
+									"payments": [
+										{
+											"cents": "50000",
+											"cycle": "2",
+											"month": "1"
+										}
+									],
+									"recovery_overdue_cycles": "0",
+									"settled_cycle": "2",
+									"source_id": "studio_rent",
+									"unpaid_cents": "0"
+								},
+								{
+									"bill_id": "rent:2",
+									"due_cents": "50000",
+									"due_cycle": "4",
+									"expense_type": "rent",
+									"late": false,
+									"month": "2",
+									"paid_cents": "50000",
+									"paid_on_time": true,
+									"payments": [
+										{
+											"cents": "50000",
+											"cycle": "4",
+											"month": "2"
+										}
+									],
+									"recovery_overdue_cycles": "0",
+									"settled_cycle": "4",
+									"source_id": "studio_rent",
+									"unpaid_cents": "0"
+								},
+								{
+									"bill_id": "rent:3",
+									"due_cents": "50000",
+									"due_cycle": "6",
+									"expense_type": "rent",
+									"late": false,
+									"month": "3",
+									"paid_cents": "50000",
+									"paid_on_time": true,
+									"payments": [
+										{
+											"cents": "50000",
+											"cycle": "6",
+											"month": "3"
+										}
+									],
+									"recovery_overdue_cycles": "0",
+									"settled_cycle": "6",
+									"source_id": "studio_rent",
+									"unpaid_cents": "0"
+								},
+								{
+									"bill_id": "rent:4",
+									"due_cents": "50000",
+									"due_cycle": "8",
+									"expense_type": "rent",
+									"late": false,
+									"month": "4",
+									"paid_cents": "50000",
+									"paid_on_time": true,
+									"payments": [
+										{
+											"cents": "50000",
+											"cycle": "8",
+											"month": "4"
+										}
+									],
+									"recovery_overdue_cycles": "0",
+									"settled_cycle": "8",
+									"source_id": "studio_rent",
+									"unpaid_cents": "0"
+								}
+							],
+							"schema_version": "6",
+							"transactions": [
+								{
+									"amount_cents": "550000",
+									"cash_after_cents": "550000",
+									"cash_before_cents": "0",
+									"cash_delta_cents": "550000",
+									"cycle": "0",
+									"due_month": "0",
+									"kind": "starting_funding",
+									"month": "1",
+									"sequence": "1",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "5000",
+									"cash_after_cents": "555000",
+									"cash_before_cents": "550000",
+									"cash_delta_cents": "5000",
+									"cycle": "0",
+									"due_month": "0",
+									"kind": "financing_in",
+									"month": "1",
+									"sequence": "2",
+									"source_id": "studio_trait_unspent_points_v1"
+								},
+								{
+									"amount_cents": "30000",
+									"cash_after_cents": "585000",
+									"cash_before_cents": "555000",
+									"cash_delta_cents": "30000",
+									"cycle": "0",
+									"due_month": "0",
+									"kind": "financing_in",
+									"month": "1",
+									"sequence": "3",
+									"source_id": "studio_trait_family_funding_v1"
+								},
+								{
+									"amount_cents": "0",
+									"cash_after_cents": "585000",
+									"cash_before_cents": "585000",
+									"cash_delta_cents": "0",
+									"cycle": "1",
+									"due_month": "0",
+									"kind": "development",
+									"month": "1",
+									"sequence": "4",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"amount_cents": "34000",
+									"cash_after_cents": "551000",
+									"cash_before_cents": "585000",
+									"cash_delta_cents": "-34000",
+									"cycle": "2",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "1",
+									"sequence": "5",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "551000",
+									"cash_before_cents": "551000",
+									"cash_delta_cents": "0",
+									"cycle": "2",
+									"due_month": "1",
+									"kind": "rent_due",
+									"month": "1",
+									"sequence": "6",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "501000",
+									"cash_before_cents": "551000",
+									"cash_delta_cents": "-50000",
+									"cycle": "2",
+									"due_month": "1",
+									"kind": "rent_payment",
+									"month": "1",
+									"sequence": "7",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "15000",
+									"cash_after_cents": "486000",
+									"cash_before_cents": "501000",
+									"cash_delta_cents": "-15000",
+									"cycle": "3",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "2",
+									"sequence": "8",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"amount_cents": "28000",
+									"cash_after_cents": "458000",
+									"cash_before_cents": "486000",
+									"cash_delta_cents": "-28000",
+									"cycle": "4",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "2",
+									"sequence": "9",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "458000",
+									"cash_before_cents": "458000",
+									"cash_delta_cents": "0",
+									"cycle": "4",
+									"due_month": "2",
+									"kind": "rent_due",
+									"month": "2",
+									"sequence": "10",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "408000",
+									"cash_before_cents": "458000",
+									"cash_delta_cents": "-50000",
+									"cycle": "4",
+									"due_month": "2",
+									"kind": "rent_payment",
+									"month": "2",
+									"sequence": "11",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "27000",
+									"cash_after_cents": "381000",
+									"cash_before_cents": "408000",
+									"cash_delta_cents": "-27000",
+									"cycle": "5",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "3",
+									"sequence": "12",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"amount_cents": "100000",
+									"cash_after_cents": "481000",
+									"cash_before_cents": "381000",
+									"cash_delta_cents": "100000",
+									"cycle": "6",
+									"due_month": "0",
+									"kind": "beta_income",
+									"month": "3",
+									"sequence": "13",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "481000",
+									"cash_before_cents": "481000",
+									"cash_delta_cents": "0",
+									"cycle": "6",
+									"due_month": "3",
+									"kind": "rent_due",
+									"month": "3",
+									"sequence": "14",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "431000",
+									"cash_before_cents": "481000",
+									"cash_delta_cents": "-50000",
+									"cycle": "6",
+									"due_month": "3",
+									"kind": "rent_payment",
+									"month": "3",
+									"sequence": "15",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "0",
+									"cash_after_cents": "431000",
+									"cash_before_cents": "431000",
+									"cash_delta_cents": "0",
+									"cycle": "7",
+									"due_month": "0",
+									"kind": "beta_income",
+									"month": "4",
+									"sequence": "16",
+									"source_id": "incumbent-arcade-foundry:project:1"
+								},
+								{
+									"amount_cents": "0",
+									"cash_after_cents": "431000",
+									"cash_before_cents": "431000",
+									"cash_delta_cents": "0",
+									"cycle": "8",
+									"due_month": "0",
+									"kind": "development",
+									"month": "4",
+									"sequence": "17",
+									"source_id": "incumbent-arcade-foundry:project:2"
+								},
+								{
+									"amount_cents": "75524",
+									"cash_after_cents": "431000",
+									"cash_before_cents": "431000",
+									"cash_delta_cents": "0",
+									"cycle": "8",
+									"due_month": "0",
+									"kind": "sales_earned",
+									"month": "4",
+									"sequence": "18",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "75524",
+									"cash_after_cents": "506524",
+									"cash_before_cents": "431000",
+									"cash_delta_cents": "75524",
+									"cycle": "8",
+									"due_month": "0",
+									"kind": "sales_settlement",
+									"month": "4",
+									"sequence": "19",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "506524",
+									"cash_before_cents": "506524",
+									"cash_delta_cents": "0",
+									"cycle": "8",
+									"due_month": "4",
+									"kind": "rent_due",
+									"month": "4",
+									"sequence": "20",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "456524",
+									"cash_before_cents": "506524",
+									"cash_delta_cents": "-50000",
+									"cycle": "8",
+									"due_month": "4",
+									"kind": "rent_payment",
+									"month": "4",
+									"sequence": "21",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "35000",
+									"cash_after_cents": "421524",
+									"cash_before_cents": "456524",
+									"cash_delta_cents": "-35000",
+									"cycle": "9",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "5",
+									"sequence": "22",
+									"source_id": "incumbent-arcade-foundry:project:2"
+								},
+								{
+									"amount_cents": "75524",
+									"cash_after_cents": "421524",
+									"cash_before_cents": "421524",
+									"cash_delta_cents": "0",
+									"cycle": "9",
+									"due_month": "0",
+									"kind": "sales_earned",
+									"month": "5",
+									"sequence": "23",
+									"source_id": ""
+								}
+							],
+							"unsettled_sales_net_cents": "75524"
+						},
+						"studio_name": "Arcade Foundry",
+						"studio_specialty": "action",
+						"studio_traits": {
+							"active_ids": [
+								"family_funding",
+								"cult_following"
+							],
+							"effects_mode": "approved_effects_v1",
+							"family_funding_cents": "30000",
+							"point_cash_cents": "5000",
+							"reason": "",
+							"refunded_points": "0",
+							"remaining_points": "1",
+							"spent_points": "3",
+							"starting_points": "4",
+							"trait_ids": [
+								"family_funding",
+								"cult_following"
+							],
+							"valid": true,
+							"version": "8"
+						},
+						"unlocked_publishers": [
+							{
+								"key": "ironclad",
+								"value": true
+							}
+						]
+					},
+					"run_id": "incumbent-arcade-foundry",
+					"sequence": "1",
+					"source_build": "studio-checkpoint-runtime-v1"
+				},
+				"sequence": "21"
+			},
+			{
+				"archive": [
+					{
+						"genre": "adventure",
+						"id": "wayfinder-history-1976",
+						"review_tenths": "71",
+						"theme": "fantasy",
+						"title": "The Lantern Road",
+						"year": "1976"
+					},
+					{
+						"genre": "adventure",
+						"id": "wayfinder-history-1979",
+						"review_tenths": "76",
+						"theme": "mystery",
+						"title": "Atlas of Ash",
+						"year": "1979"
+					}
+				],
+				"development": {
+					"awaiting_confirmation": false,
+					"finalized": false,
+					"hand": {
+						"active": true,
+						"available_features": [
+							"4_color_palette",
+							"keyboard_and_mouse",
+							"local_leaderboards",
+							"score_system"
+						],
+						"candidate_cards": [
+							"technology_pass",
+							"sound_pass",
+							"technology_pass",
+							"8_bit_music",
+							"text",
+							"lives_system",
+							"sound_pass"
+						],
+						"candidate_ids": [
+							"0",
+							"5",
+							"6",
+							"7",
+							"8",
+							"9",
+							"10"
+						],
+						"exhausted": [
+							{
+								"key": "sprites",
+								"value": true
+							},
+							{
+								"key": "split_screen",
+								"value": true
+							},
+							{
+								"key": "controller",
+								"value": true
+							},
+							{
+								"key": "8_bit_sound",
+								"value": true
+							}
+						],
+						"finalization_requested": false,
+						"next_candidate_id": "11",
+						"priorities": [
+							{
+								"key": "0",
+								"value": "25"
+							},
+							{
+								"key": "1",
+								"value": "25"
+							},
+							{
+								"key": "2",
+								"value": "25"
+							},
+							{
+								"key": "3",
+								"value": "25"
+							}
+						],
+						"revision": "2"
+					},
+					"phase_index": "0",
+					"project": {
+						"_accumulated_alpha_bug_pressure": {
+							"f64": "0000000000000000"
+						},
+						"_accumulated_bug_pressure": {
+							"f64": "4008000000000000"
+						},
+						"_alpha_hidden_bugs_generated": "0",
+						"_base_name": "Wayfinder Works 2",
+						"_competitor_snapshot_id": "established_rival",
+						"_competitor_snapshot_revealed": false,
+						"_core_scores": [
+							{
+								"key": "0",
+								"value": "7"
+							},
+							{
+								"key": "1",
+								"value": "5"
+							},
+							{
+								"key": "2",
+								"value": "7"
+							},
+							{
+								"key": "3",
+								"value": "5"
+							}
+						],
+						"_current_cycle": "1",
+						"_current_scope": "8",
+						"_exhausted_beta_card_ids": [],
+						"_feature_supply_ids": [
+							"text",
+							"4_color_palette",
+							"8_bit_sound",
+							"keyboard_and_mouse",
+							"controller",
+							"local_leaderboards",
+							"split_screen",
+							"score_system",
+							"lives_system",
+							"simple_story",
+							"dialogue",
+							"character_backstories",
+							"multiple_endings",
+							"controls",
+							"general_combat",
+							"levels",
+							"maps",
+							"exploration",
+							"secrets",
+							"sprites",
+							"8_bit_music",
+							"music"
+						],
+						"_fixed_bugs": "0",
+						"_genre_id": "adventure",
+						"_genre_ratios": [
+							"25",
+							"20",
+							"15",
+							"40"
+						],
+						"_has_alpha_finalization": false,
+						"_has_beta_finalization": false,
+						"_has_design_bug_finalization": false,
+						"_hidden_bugs": "0",
+						"_implemented_alpha_feature_ids": [],
+						"_implemented_design_feature_ids": [],
+						"_known_bugs": "0",
+						"_market_details": {
+							"base": [
+								"33",
+								"26",
+								"20",
+								"53"
+							],
+							"benchmark_lifts": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"cycle_start": "0",
+							"density_lift": "0",
+							"historical": true,
+							"recent_count": "0",
+							"snapshot_id": "pre-market-neutral:3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f",
+							"standards": [
+								"33",
+								"26",
+								"20",
+								"53"
+							]
+						},
+						"_market_forecast_snapshot_id": "stable_market",
+						"_market_forecast_snapshot_revealed": false,
+						"_market_snapshot_id": "pre-market-neutral:3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f",
+						"_market_standards": [
+							"33",
+							"26",
+							"20",
+							"53"
+						],
+						"_marketing_output": "0",
+						"_release_id": "incumbent-wayfinder-works:project:2",
+						"_required_scope": "30",
+						"_theme_id": "fantasy",
+						"_unimplemented_alpha_feature_ids": [],
+						"_unimplemented_design_feature_ids": [],
+						"_was_perfect_production": false
+					},
+					"sequence": "2"
+				},
+				"id": "incumbent-wayfinder-works",
+				"run": {
+					"active_project_id": "incumbent-wayfinder-works:project:2",
+					"checkpoint_kind": "rival_active",
+					"content_revision": "f522bf2f8166cba5fa68cb9936c04ef0b64d46560d5e68cca9681733e1fa7f0b",
+					"rng": [
+						{
+							"key": "snapshot",
+							"value": {
+								"seed": "50916187586736",
+								"state": "4359651729937765910"
+							}
+						},
+						{
+							"key": "review",
+							"value": {
+								"seed": "50916187586737",
+								"state": "7027190111440842082"
+							}
+						},
+						{
+							"key": "design_deal",
+							"value": {
+								"seed": "50916187586738",
+								"state": "-6892491662071964513"
+							}
+						},
+						{
+							"key": "design_finalize",
+							"value": {
+								"seed": "50916187586739",
+								"state": "8703230148745109005"
+							}
+						},
+						{
+							"key": "alpha_deal",
+							"value": {
+								"seed": "50916187586740",
+								"state": "-7225180432399311708"
+							}
+						},
+						{
+							"key": "alpha_finalize",
+							"value": {
+								"seed": "50916187586741",
+								"state": "5450034403380153863"
+							}
+						},
+						{
+							"key": "beta_deal",
+							"value": {
+								"seed": "50916187586742",
+								"state": "-2400972645591882340"
+							}
+						},
+						{
+							"key": "beta_insight",
+							"value": {
+								"seed": "50916187586743",
+								"state": "-4839665548193507798"
+							}
+						},
+						{
+							"key": "contract_deal",
+							"value": {
+								"seed": "50916187586744",
+								"state": "-2230650257952800278"
+							}
+						}
+					],
+					"rng_algorithm": "godot-4.7.1-rng-v1",
+					"run": {
+						"available_redraws": "4",
+						"bank_run_id": "incumbent-wayfinder-works",
+						"cash_cents": "417412",
+						"cash_initialized": true,
+						"completed_run_cycles": "9",
+						"credited_projects": [
+							{
+								"key": "incumbent-wayfinder-works:project:1",
+								"value": [
+									{
+										"key": "lives_system",
+										"value": true
+									},
+									{
+										"key": "8_bit_sound",
+										"value": true
+									},
+									{
+										"key": "8_bit_music",
+										"value": true
+									},
+									{
+										"key": "sprites",
+										"value": true
+									},
+									{
+										"key": "split_screen",
+										"value": true
+									},
+									{
+										"key": "controller",
+										"value": true
+									},
+									{
+										"key": "local_leaderboards",
+										"value": true
+									},
+									{
+										"key": "score_system",
+										"value": true
+									},
+									{
+										"key": "general_combat",
+										"value": true
+									},
+									{
+										"key": "levels",
+										"value": true
+									},
+									{
+										"key": "music",
+										"value": true
+									},
+									{
+										"key": "controls",
+										"value": true
+									},
+									{
+										"key": "multiple_endings",
+										"value": true
+									},
+									{
+										"key": "maps",
+										"value": true
+									},
+									{
+										"key": "simple_story",
+										"value": true
+									},
+									{
+										"key": "dialogue",
+										"value": true
+									}
+								]
+							},
+							{
+								"key": "incumbent-wayfinder-works:project:2",
+								"value": [
+									{
+										"key": "sprites",
+										"value": true
+									},
+									{
+										"key": "split_screen",
+										"value": true
+									},
+									{
+										"key": "controller",
+										"value": true
+									},
+									{
+										"key": "8_bit_sound",
+										"value": true
+									}
+								]
+							}
+						],
+						"employees": {
+							"employees": [],
+							"events": [],
+							"owner": "incumbent-wayfinder-works",
+							"schema_version": "1"
+						},
+						"familiarity": [
+							{
+								"key": "lives_system",
+								"value": "1"
+							},
+							{
+								"key": "8_bit_sound",
+								"value": "2"
+							},
+							{
+								"key": "8_bit_music",
+								"value": "1"
+							},
+							{
+								"key": "sprites",
+								"value": "2"
+							},
+							{
+								"key": "split_screen",
+								"value": "2"
+							},
+							{
+								"key": "controller",
+								"value": "2"
+							},
+							{
+								"key": "local_leaderboards",
+								"value": "1"
+							},
+							{
+								"key": "score_system",
+								"value": "1"
+							},
+							{
+								"key": "general_combat",
+								"value": "1"
+							},
+							{
+								"key": "levels",
+								"value": "1"
+							},
+							{
+								"key": "music",
+								"value": "1"
+							},
+							{
+								"key": "controls",
+								"value": "1"
+							},
+							{
+								"key": "multiple_endings",
+								"value": "1"
+							},
+							{
+								"key": "maps",
+								"value": "1"
+							},
+							{
+								"key": "simple_story",
+								"value": "1"
+							},
+							{
+								"key": "dialogue",
+								"value": "1"
+							}
+						],
+						"fanbase": {
+							"fans": "13",
+							"last_cycle": "9",
+							"months": [
+								{
+									"ending": "20",
+									"gained": "0",
+									"lost": "0",
+									"month": "1",
+									"net": "0",
+									"releases": [],
+									"starting": "20"
+								},
+								{
+									"ending": "20",
+									"gained": "0",
+									"lost": "0",
+									"month": "2",
+									"net": "0",
+									"releases": [],
+									"starting": "20"
+								},
+								{
+									"ending": "20",
+									"gained": "0",
+									"lost": "0",
+									"month": "3",
+									"net": "0",
+									"releases": [],
+									"starting": "20"
+								},
+								{
+									"ending": "13",
+									"gained": "0",
+									"lost": "7",
+									"month": "4",
+									"net": "-7",
+									"releases": [
+										{
+											"earned_units": "125",
+											"lost_fans": "7",
+											"new_fans": "0",
+											"release_id": "incumbent-wayfinder-works:project:1"
+										}
+									],
+									"starting": "20"
+								}
+							],
+							"releases": [
+								{
+									"key": "incumbent-wayfinder-works:project:1",
+									"value": {
+										"accounted_units": "125",
+										"gained": "0",
+										"launch_fans": "20",
+										"loss_exposure_accounted": "7",
+										"lost": "7",
+										"neutral": {
+											"active_awareness_scaled": "0",
+											"campaign_count": "0",
+											"campaign_months": [],
+											"earned_cycles": "2",
+											"earned_units": "503",
+											"entitlement_cents": "351747",
+											"exhausted": true,
+											"last_processed_run_cycle": "9",
+											"last_settlement_run_cycle": "8",
+											"later_enabled": true,
+											"launch_awareness": "113",
+											"market_bp": "9000",
+											"market_factors": [
+												{
+													"key": "1",
+													"value": {
+														"cycle_start": "0",
+														"factor_bp": "10000",
+														"genre_only": "0",
+														"historical": false,
+														"pair": "0",
+														"snapshot_id": "market-0-neutral",
+														"theme_only": "0"
+													}
+												}
+											],
+											"monthly_units": "0",
+											"organic_awareness_scaled": "0",
+											"release_id": "incumbent-wayfinder-works:project:1",
+											"review_tenths": "50",
+											"settled_cents": "175524",
+											"total_earned_cycles": "2",
+											"total_units": "503"
+										},
+										"review_tenths": "25"
+									}
+								}
+							]
+						},
+						"feature_research": [],
+						"first_game_tutorial": {
+							"first_pool_published": true,
+							"first_stat": "sound",
+							"second_pool_published": true,
+							"second_stat": "design",
+							"stage": "3"
+						},
+						"first_studio_economy": true,
+						"first_tutorial_project_id": "incumbent-wayfinder-works:project:1",
+						"ironclad_completion_committed": false,
+						"lean_savings": [],
+						"next_project_serial": "3",
+						"owned_features": [
+							{
+								"key": "text",
+								"value": true
+							},
+							{
+								"key": "4_color_palette",
+								"value": true
+							},
+							{
+								"key": "8_bit_sound",
+								"value": true
+							},
+							{
+								"key": "keyboard_and_mouse",
+								"value": true
+							},
+							{
+								"key": "controller",
+								"value": true
+							},
+							{
+								"key": "local_leaderboards",
+								"value": true
+							},
+							{
+								"key": "split_screen",
+								"value": true
+							},
+							{
+								"key": "score_system",
+								"value": true
+							},
+							{
+								"key": "lives_system",
+								"value": true
+							},
+							{
+								"key": "simple_story",
+								"value": true
+							},
+							{
+								"key": "dialogue",
+								"value": true
+							},
+							{
+								"key": "character_backstories",
+								"value": true
+							},
+							{
+								"key": "multiple_endings",
+								"value": true
+							},
+							{
+								"key": "controls",
+								"value": true
+							},
+							{
+								"key": "general_combat",
+								"value": true
+							},
+							{
+								"key": "levels",
+								"value": true
+							},
+							{
+								"key": "maps",
+								"value": true
+							},
+							{
+								"key": "exploration",
+								"value": true
+							},
+							{
+								"key": "secrets",
+								"value": true
+							},
+							{
+								"key": "sprites",
+								"value": true
+							},
+							{
+								"key": "8_bit_music",
+								"value": true
+							},
+							{
+								"key": "music",
+								"value": true
+							}
+						],
+						"pending_publisher_notifications": [
+							"ironclad"
+						],
+						"primitive_contract": null,
+						"promotion_awards": [],
+						"promotion_consumed": [],
+						"publisher_offers": [],
+						"release_metadata": [
+							{
+								"key": "incumbent-wayfinder-works:project:1",
+								"value": {
+									"base_name": "Wayfinder Works 1",
+									"genre": "adventure",
+									"genre_ratios": [
+										"25",
+										"20",
+										"15",
+										"40"
+									],
+									"release_cycle": "7",
+									"release_title": "Wayfinder Works 1",
+									"release_year": "1980",
+									"review": {
+										"awareness": "113",
+										"competitor_id": "fast_follower",
+										"competitor_target_cycle": "12",
+										"cores": [
+											"13",
+											"14",
+											"12",
+											"26"
+										],
+										"development_cycles": "6",
+										"fan_awareness": "5",
+										"final_review": {
+											"f64": "4004000000000000"
+										},
+										"forecast_id": "market_slump",
+										"forecast_multiplier": "0.90",
+										"launch_fans": "20",
+										"launch_marketing": "8",
+										"production_rating": {
+											"f64": "400df525f89ab2a5"
+										},
+										"projected_gross_cents": "250749",
+										"projected_net_cents": "175524",
+										"projected_units": "251",
+										"remaining_bugs": "6",
+										"required_scope": "30",
+										"scope": "25",
+										"scope_completion": {
+											"f64": "3feaaaaaaaaaaaab"
+										},
+										"standards": [
+											"33",
+											"26",
+											"20",
+											"53"
+										]
+									},
+									"theme": "fantasy"
+								}
+							}
+						],
+						"released_games": [
+							{
+								"key": "incumbent-wayfinder-works:project:1",
+								"value": {
+									"active_awareness_scaled": "0",
+									"base_name": "Wayfinder Works 1",
+									"campaign_count": "0",
+									"campaign_months": [],
+									"earned_cycles": "2",
+									"earned_units": "251",
+									"entitlement_cents": "175524",
+									"exhausted": true,
+									"last_processed_run_cycle": "9",
+									"last_settlement_run_cycle": "8",
+									"later_enabled": true,
+									"launch_awareness": "113",
+									"market_bp": "9000",
+									"market_factors": [
+										{
+											"key": "1",
+											"value": {
+												"cycle_start": "0",
+												"factor_bp": "10000",
+												"genre_only": "0",
+												"historical": true,
+												"pair": "0",
+												"snapshot_id": "pre-market-neutral:3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f",
+												"theme_only": "0"
+											}
+										}
+									],
+									"monthly_units": "0",
+									"organic_awareness_scaled": "0",
+									"release_id": "incumbent-wayfinder-works:project:1",
+									"release_title": "Wayfinder Works 1",
+									"release_year": "1980",
+									"review_tenths": "25",
+									"settled_cents": "87412",
+									"total_earned_cycles": "2",
+									"total_units": "251"
+								}
+							}
+						],
+						"resourceful_claims": [],
+						"seen_tutorial_topics": [],
+						"sidestreet_entitlements": [],
+						"sidestreet_results": [],
+						"starter_selection_confirmed": true,
+						"studio_finance": {
+							"actions": [
+								{
+									"cash_before": "550000",
+									"cycle": "0",
+									"direct_delta": "5000",
+									"kind": "financing_in",
+									"productive": false,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "studio_trait_unspent_points_v1"
+								},
+								{
+									"cash_before": "555000",
+									"cycle": "0",
+									"direct_delta": "30000",
+									"kind": "financing_in",
+									"productive": false,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "studio_trait_family_funding_v1"
+								},
+								{
+									"cash_before": "585000",
+									"cycle": "1",
+									"direct_delta": "0",
+									"kind": "development",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"cash_before": "585000",
+									"cycle": "2",
+									"direct_delta": "-28000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"cash_before": "507000",
+									"cycle": "3",
+									"direct_delta": "-28000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"cash_before": "479000",
+									"cycle": "4",
+									"direct_delta": "-33000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"cash_before": "396000",
+									"cycle": "5",
+									"direct_delta": "-26000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"cash_before": "370000",
+									"cycle": "6",
+									"direct_delta": "0",
+									"kind": "beta_income",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"cash_before": "320000",
+									"cycle": "7",
+									"direct_delta": "100000",
+									"kind": "beta_income",
+									"productive": true,
+									"sales_earned": "0",
+									"settled": "0",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"cash_before": "420000",
+									"cycle": "8",
+									"direct_delta": "0",
+									"kind": "development",
+									"productive": true,
+									"sales_earned": "87412",
+									"settled": "87412",
+									"source_id": "incumbent-wayfinder-works:project:2"
+								},
+								{
+									"cash_before": "457412",
+									"cycle": "9",
+									"direct_delta": "-40000",
+									"kind": "feature_play",
+									"productive": true,
+									"sales_earned": "88112",
+									"settled": "0",
+									"source_id": "incumbent-wayfinder-works:project:2"
+								}
+							],
+							"bank_loans": [],
+							"cash_cents": "417412",
+							"credit": {
+								"history": [
+									{
+										"after": "600",
+										"before": "600",
+										"change": "0",
+										"cycle": "2",
+										"month": "1",
+										"operating_profit_cents": "-78000",
+										"policy_version": "typed_expenses_v1",
+										"reasons": [
+											{
+												"points": "0",
+												"type": "paid_no_profit"
+											}
+										],
+										"requested_change": "0"
+									},
+									{
+										"after": "600",
+										"before": "600",
+										"change": "0",
+										"cycle": "4",
+										"month": "2",
+										"operating_profit_cents": "-111000",
+										"policy_version": "typed_expenses_v1",
+										"reasons": [
+											{
+												"points": "0",
+												"type": "paid_no_profit"
+											}
+										],
+										"requested_change": "0"
+									},
+									{
+										"after": "600",
+										"before": "600",
+										"change": "0",
+										"cycle": "6",
+										"month": "3",
+										"operating_profit_cents": "-76000",
+										"policy_version": "typed_expenses_v1",
+										"reasons": [
+											{
+												"points": "0",
+												"type": "paid_no_profit"
+											}
+										],
+										"requested_change": "0"
+									},
+									{
+										"after": "603",
+										"before": "600",
+										"change": "3",
+										"cycle": "8",
+										"month": "4",
+										"operating_profit_cents": "137412",
+										"policy_version": "typed_expenses_v1",
+										"reasons": [
+											{
+												"points": "3",
+												"type": "clean_profit"
+											}
+										],
+										"requested_change": "3"
+									}
+								],
+								"last_processed_month": "4",
+								"policy_version": "typed_expenses_v1",
+								"score": "603"
+							},
+							"education": {},
+							"employees": [],
+							"initial_cash_cents": "550000",
+							"last_cycle": "9",
+							"monthly_rent_cents": "50000",
+							"monthly_rows": [
+								{
+									"beta_income_cents": "0",
+									"campaign_cents": "0",
+									"cash_change_cents": "507000",
+									"closing_cash_cents": "507000",
+									"feature_play_cents": "28000",
+									"financing_in_cents": "585000",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "1",
+									"net_profit_cents": "-78000",
+									"opening_cash_cents": "0",
+									"operating_expenses_cents": "78000",
+									"operating_revenue_cents": "0",
+									"other_expense_cents": "0",
+									"other_income_cents": "0",
+									"partial": false,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "50000",
+									"rent_paid_cents": "50000",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "0",
+									"sales_settled_cents": "0",
+									"store_cents": "0"
+								},
+								{
+									"beta_income_cents": "0",
+									"campaign_cents": "0",
+									"cash_change_cents": "-111000",
+									"closing_cash_cents": "396000",
+									"feature_play_cents": "61000",
+									"financing_in_cents": "0",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "2",
+									"net_profit_cents": "-111000",
+									"opening_cash_cents": "507000",
+									"operating_expenses_cents": "111000",
+									"operating_revenue_cents": "0",
+									"other_expense_cents": "0",
+									"other_income_cents": "0",
+									"partial": false,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "50000",
+									"rent_paid_cents": "50000",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "0",
+									"sales_settled_cents": "0",
+									"store_cents": "0"
+								},
+								{
+									"beta_income_cents": "0",
+									"campaign_cents": "0",
+									"cash_change_cents": "-76000",
+									"closing_cash_cents": "320000",
+									"feature_play_cents": "26000",
+									"financing_in_cents": "0",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "3",
+									"net_profit_cents": "-76000",
+									"opening_cash_cents": "396000",
+									"operating_expenses_cents": "76000",
+									"operating_revenue_cents": "0",
+									"other_expense_cents": "0",
+									"other_income_cents": "0",
+									"partial": false,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "50000",
+									"rent_paid_cents": "50000",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "0",
+									"sales_settled_cents": "0",
+									"store_cents": "0"
+								},
+								{
+									"beta_income_cents": "100000",
+									"campaign_cents": "0",
+									"cash_change_cents": "137412",
+									"closing_cash_cents": "457412",
+									"feature_play_cents": "0",
+									"financing_in_cents": "0",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "4",
+									"net_profit_cents": "137412",
+									"opening_cash_cents": "320000",
+									"operating_expenses_cents": "50000",
+									"operating_revenue_cents": "187412",
+									"other_expense_cents": "0",
+									"other_income_cents": "100000",
+									"partial": false,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "50000",
+									"rent_paid_cents": "50000",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "87412",
+									"sales_settled_cents": "87412",
+									"store_cents": "0"
+								},
+								{
+									"beta_income_cents": "0",
+									"campaign_cents": "0",
+									"cash_change_cents": "-40000",
+									"closing_cash_cents": "417412",
+									"feature_play_cents": "40000",
+									"financing_in_cents": "0",
+									"interest_cents": "0",
+									"interest_paid_cents": "0",
+									"miscellaneous_income_cents": "0",
+									"month": "5",
+									"net_profit_cents": "48112",
+									"opening_cash_cents": "457412",
+									"operating_expenses_cents": "40000",
+									"operating_revenue_cents": "88112",
+									"other_expense_cents": "0",
+									"other_income_cents": "0",
+									"partial": true,
+									"payroll_due_cents": "0",
+									"payroll_paid_cents": "0",
+									"payroll_unpaid_cents": "0",
+									"playtest_cents": "0",
+									"principal_paid_cents": "0",
+									"publisher_income_cents": "0",
+									"rent_due_cents": "0",
+									"rent_paid_cents": "0",
+									"rent_unpaid_cents": "0",
+									"sales_net_earned_cents": "88112",
+									"sales_settled_cents": "0",
+									"store_cents": "0"
+								}
+							],
+							"obligations": [
+								{
+									"bill_id": "rent:1",
+									"due_cents": "50000",
+									"due_cycle": "2",
+									"expense_type": "rent",
+									"late": false,
+									"month": "1",
+									"paid_cents": "50000",
+									"paid_on_time": true,
+									"payments": [
+										{
+											"cents": "50000",
+											"cycle": "2",
+											"month": "1"
+										}
+									],
+									"recovery_overdue_cycles": "0",
+									"settled_cycle": "2",
+									"source_id": "studio_rent",
+									"unpaid_cents": "0"
+								},
+								{
+									"bill_id": "rent:2",
+									"due_cents": "50000",
+									"due_cycle": "4",
+									"expense_type": "rent",
+									"late": false,
+									"month": "2",
+									"paid_cents": "50000",
+									"paid_on_time": true,
+									"payments": [
+										{
+											"cents": "50000",
+											"cycle": "4",
+											"month": "2"
+										}
+									],
+									"recovery_overdue_cycles": "0",
+									"settled_cycle": "4",
+									"source_id": "studio_rent",
+									"unpaid_cents": "0"
+								},
+								{
+									"bill_id": "rent:3",
+									"due_cents": "50000",
+									"due_cycle": "6",
+									"expense_type": "rent",
+									"late": false,
+									"month": "3",
+									"paid_cents": "50000",
+									"paid_on_time": true,
+									"payments": [
+										{
+											"cents": "50000",
+											"cycle": "6",
+											"month": "3"
+										}
+									],
+									"recovery_overdue_cycles": "0",
+									"settled_cycle": "6",
+									"source_id": "studio_rent",
+									"unpaid_cents": "0"
+								},
+								{
+									"bill_id": "rent:4",
+									"due_cents": "50000",
+									"due_cycle": "8",
+									"expense_type": "rent",
+									"late": false,
+									"month": "4",
+									"paid_cents": "50000",
+									"paid_on_time": true,
+									"payments": [
+										{
+											"cents": "50000",
+											"cycle": "8",
+											"month": "4"
+										}
+									],
+									"recovery_overdue_cycles": "0",
+									"settled_cycle": "8",
+									"source_id": "studio_rent",
+									"unpaid_cents": "0"
+								}
+							],
+							"schema_version": "6",
+							"transactions": [
+								{
+									"amount_cents": "550000",
+									"cash_after_cents": "550000",
+									"cash_before_cents": "0",
+									"cash_delta_cents": "550000",
+									"cycle": "0",
+									"due_month": "0",
+									"kind": "starting_funding",
+									"month": "1",
+									"sequence": "1",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "5000",
+									"cash_after_cents": "555000",
+									"cash_before_cents": "550000",
+									"cash_delta_cents": "5000",
+									"cycle": "0",
+									"due_month": "0",
+									"kind": "financing_in",
+									"month": "1",
+									"sequence": "2",
+									"source_id": "studio_trait_unspent_points_v1"
+								},
+								{
+									"amount_cents": "30000",
+									"cash_after_cents": "585000",
+									"cash_before_cents": "555000",
+									"cash_delta_cents": "30000",
+									"cycle": "0",
+									"due_month": "0",
+									"kind": "financing_in",
+									"month": "1",
+									"sequence": "3",
+									"source_id": "studio_trait_family_funding_v1"
+								},
+								{
+									"amount_cents": "0",
+									"cash_after_cents": "585000",
+									"cash_before_cents": "585000",
+									"cash_delta_cents": "0",
+									"cycle": "1",
+									"due_month": "0",
+									"kind": "development",
+									"month": "1",
+									"sequence": "4",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"amount_cents": "28000",
+									"cash_after_cents": "557000",
+									"cash_before_cents": "585000",
+									"cash_delta_cents": "-28000",
+									"cycle": "2",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "1",
+									"sequence": "5",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "557000",
+									"cash_before_cents": "557000",
+									"cash_delta_cents": "0",
+									"cycle": "2",
+									"due_month": "1",
+									"kind": "rent_due",
+									"month": "1",
+									"sequence": "6",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "507000",
+									"cash_before_cents": "557000",
+									"cash_delta_cents": "-50000",
+									"cycle": "2",
+									"due_month": "1",
+									"kind": "rent_payment",
+									"month": "1",
+									"sequence": "7",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "28000",
+									"cash_after_cents": "479000",
+									"cash_before_cents": "507000",
+									"cash_delta_cents": "-28000",
+									"cycle": "3",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "2",
+									"sequence": "8",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"amount_cents": "33000",
+									"cash_after_cents": "446000",
+									"cash_before_cents": "479000",
+									"cash_delta_cents": "-33000",
+									"cycle": "4",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "2",
+									"sequence": "9",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "446000",
+									"cash_before_cents": "446000",
+									"cash_delta_cents": "0",
+									"cycle": "4",
+									"due_month": "2",
+									"kind": "rent_due",
+									"month": "2",
+									"sequence": "10",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "396000",
+									"cash_before_cents": "446000",
+									"cash_delta_cents": "-50000",
+									"cycle": "4",
+									"due_month": "2",
+									"kind": "rent_payment",
+									"month": "2",
+									"sequence": "11",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "26000",
+									"cash_after_cents": "370000",
+									"cash_before_cents": "396000",
+									"cash_delta_cents": "-26000",
+									"cycle": "5",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "3",
+									"sequence": "12",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"amount_cents": "0",
+									"cash_after_cents": "370000",
+									"cash_before_cents": "370000",
+									"cash_delta_cents": "0",
+									"cycle": "6",
+									"due_month": "0",
+									"kind": "beta_income",
+									"month": "3",
+									"sequence": "13",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "370000",
+									"cash_before_cents": "370000",
+									"cash_delta_cents": "0",
+									"cycle": "6",
+									"due_month": "3",
+									"kind": "rent_due",
+									"month": "3",
+									"sequence": "14",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "320000",
+									"cash_before_cents": "370000",
+									"cash_delta_cents": "-50000",
+									"cycle": "6",
+									"due_month": "3",
+									"kind": "rent_payment",
+									"month": "3",
+									"sequence": "15",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "100000",
+									"cash_after_cents": "420000",
+									"cash_before_cents": "320000",
+									"cash_delta_cents": "100000",
+									"cycle": "7",
+									"due_month": "0",
+									"kind": "beta_income",
+									"month": "4",
+									"sequence": "16",
+									"source_id": "incumbent-wayfinder-works:project:1"
+								},
+								{
+									"amount_cents": "0",
+									"cash_after_cents": "420000",
+									"cash_before_cents": "420000",
+									"cash_delta_cents": "0",
+									"cycle": "8",
+									"due_month": "0",
+									"kind": "development",
+									"month": "4",
+									"sequence": "17",
+									"source_id": "incumbent-wayfinder-works:project:2"
+								},
+								{
+									"amount_cents": "87412",
+									"cash_after_cents": "420000",
+									"cash_before_cents": "420000",
+									"cash_delta_cents": "0",
+									"cycle": "8",
+									"due_month": "0",
+									"kind": "sales_earned",
+									"month": "4",
+									"sequence": "18",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "87412",
+									"cash_after_cents": "507412",
+									"cash_before_cents": "420000",
+									"cash_delta_cents": "87412",
+									"cycle": "8",
+									"due_month": "0",
+									"kind": "sales_settlement",
+									"month": "4",
+									"sequence": "19",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "507412",
+									"cash_before_cents": "507412",
+									"cash_delta_cents": "0",
+									"cycle": "8",
+									"due_month": "4",
+									"kind": "rent_due",
+									"month": "4",
+									"sequence": "20",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "50000",
+									"cash_after_cents": "457412",
+									"cash_before_cents": "507412",
+									"cash_delta_cents": "-50000",
+									"cycle": "8",
+									"due_month": "4",
+									"kind": "rent_payment",
+									"month": "4",
+									"sequence": "21",
+									"source_id": ""
+								},
+								{
+									"amount_cents": "40000",
+									"cash_after_cents": "417412",
+									"cash_before_cents": "457412",
+									"cash_delta_cents": "-40000",
+									"cycle": "9",
+									"due_month": "0",
+									"kind": "feature_play",
+									"month": "5",
+									"sequence": "22",
+									"source_id": "incumbent-wayfinder-works:project:2"
+								},
+								{
+									"amount_cents": "88112",
+									"cash_after_cents": "417412",
+									"cash_before_cents": "417412",
+									"cash_delta_cents": "0",
+									"cycle": "9",
+									"due_month": "0",
+									"kind": "sales_earned",
+									"month": "5",
+									"sequence": "23",
+									"source_id": ""
+								}
+							],
+							"unsettled_sales_net_cents": "88112"
+						},
+						"studio_name": "Wayfinder Works",
+						"studio_specialty": "adventure",
+						"studio_traits": {
+							"active_ids": [
+								"family_funding",
+								"cult_following"
+							],
+							"effects_mode": "approved_effects_v1",
+							"family_funding_cents": "30000",
+							"point_cash_cents": "5000",
+							"reason": "",
+							"refunded_points": "0",
+							"remaining_points": "1",
+							"spent_points": "3",
+							"starting_points": "4",
+							"trait_ids": [
+								"family_funding",
+								"cult_following"
+							],
+							"valid": true,
+							"version": "8"
+						},
+						"unlocked_publishers": [
+							{
+								"key": "ironclad",
+								"value": true
+							}
+						]
+					},
+					"run_id": "incumbent-wayfinder-works",
+					"sequence": "1",
+					"source_build": "studio-checkpoint-runtime-v1"
+				},
+				"sequence": "21"
+			}
+		]
+	},
+	"rng": [
+		{
+			"key": "snapshot",
+			"value": {
+				"seed": "3065200089476346259",
+				"state": "-2754170655432084701"
+			}
+		},
+		{
+			"key": "review",
+			"value": {
+				"seed": "-7620271809769877805",
+				"state": "4066647850109469780"
+			}
+		},
+		{
+			"key": "design_deal",
+			"value": {
+				"seed": "-7592135496814179017",
+				"state": "-6999403259793909415"
+			}
+		},
+		{
+			"key": "design_finalize",
+			"value": {
+				"seed": "-2525791113785879569",
+				"state": "4502437709930071129"
+			}
+		},
+		{
+			"key": "alpha_deal",
+			"value": {
+				"seed": "-4052826668407318879",
+				"state": "-6929098644643595495"
+			}
+		},
+		{
+			"key": "alpha_finalize",
+			"value": {
+				"seed": "6273501913031054669",
+				"state": "-5261425556579446721"
+			}
+		},
+		{
+			"key": "beta_deal",
+			"value": {
+				"seed": "-8440293516889862157",
+				"state": "4385653551959738733"
+			}
+		},
+		{
+			"key": "beta_insight",
+			"value": {
+				"seed": "7146019262958585491",
+				"state": "5217589232505556003"
+			}
+		},
+		{
+			"key": "contract_deal",
+			"value": {
+				"seed": "-2307791968552257235",
+				"state": "5487519932300729287"
+			}
+		}
+	],
+	"rng_algorithm": "godot-4.7.1-rng-v1",
+	"run": {
+		"available_redraws": "4",
+		"bank_run_id": "4678a151d6ca5b59d1af0841d47c502e",
+		"cash_cents": "591559",
+		"cash_initialized": true,
+		"completed_run_cycles": "9",
+		"credited_projects": [
+			{
+				"key": "4678a151d6ca5b59d1af0841d47c502e:project:1",
+				"value": [
+					{
+						"key": "8_bit_sound",
+						"value": true
+					},
+					{
+						"key": "split_screen",
+						"value": true
+					},
+					{
+						"key": "4_color_palette",
+						"value": true
+					},
+					{
+						"key": "text",
+						"value": true
+					},
+					{
+						"key": "maps",
+						"value": true
+					},
+					{
+						"key": "dialogue",
+						"value": true
+					},
+					{
+						"key": "multiple_endings",
+						"value": true
+					},
+					{
+						"key": "secrets",
+						"value": true
+					}
+				]
+			}
+		],
+		"employees": {
+			"employees": [],
+			"events": [],
+			"owner": "4678a151d6ca5b59d1af0841d47c502e",
+			"schema_version": "1"
+		},
+		"familiarity": [
+			{
+				"key": "8_bit_sound",
+				"value": "1"
+			},
+			{
+				"key": "split_screen",
+				"value": "1"
+			},
+			{
+				"key": "4_color_palette",
+				"value": "1"
+			},
+			{
+				"key": "text",
+				"value": "1"
+			},
+			{
+				"key": "maps",
+				"value": "1"
+			},
+			{
+				"key": "dialogue",
+				"value": "1"
+			},
+			{
+				"key": "multiple_endings",
+				"value": "1"
+			},
+			{
+				"key": "secrets",
+				"value": "1"
+			}
+		],
+		"fanbase": {
+			"fans": "0",
+			"last_cycle": "9",
+			"months": [
+				{
+					"ending": "0",
+					"gained": "0",
+					"lost": "0",
+					"month": "1",
+					"net": "0",
+					"releases": [],
+					"starting": "0"
+				},
+				{
+					"ending": "0",
+					"gained": "0",
+					"lost": "0",
+					"month": "2",
+					"net": "0",
+					"releases": [],
+					"starting": "0"
+				},
+				{
+					"ending": "0",
+					"gained": "0",
+					"lost": "0",
+					"month": "3",
+					"net": "0",
+					"releases": [],
+					"starting": "0"
+				},
+				{
+					"ending": "0",
+					"gained": "0",
+					"lost": "0",
+					"month": "4",
+					"net": "0",
+					"releases": [
+						{
+							"earned_units": "58",
+							"lost_fans": "0",
+							"new_fans": "0",
+							"release_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+						}
+					],
+					"starting": "0"
+				}
+			],
+			"releases": [
+				{
+					"key": "4678a151d6ca5b59d1af0841d47c502e:project:1",
+					"value": {
+						"accounted_units": "58",
+						"gained": "0",
+						"launch_fans": "0",
+						"loss_exposure_accounted": "0",
+						"lost": "0",
+						"neutral": {
+							"active_awareness_scaled": "0",
+							"campaign_count": "0",
+							"campaign_months": [],
+							"earned_cycles": "2",
+							"earned_units": "488",
+							"entitlement_cents": "341258",
+							"exhausted": true,
+							"last_processed_run_cycle": "9",
+							"last_settlement_run_cycle": "8",
+							"later_enabled": true,
+							"launch_awareness": "104",
+							"market_bp": "9000",
+							"market_factors": [
+								{
+									"key": "1",
+									"value": {
+										"cycle_start": "0",
+										"factor_bp": "10000",
+										"genre_only": "0",
+										"historical": false,
+										"pair": "0",
+										"snapshot_id": "market-0-neutral",
+										"theme_only": "0"
+									}
+								}
+							],
+							"monthly_units": "0",
+							"organic_awareness_scaled": "0",
+							"release_id": "4678a151d6ca5b59d1af0841d47c502e:project:1",
+							"review_tenths": "50",
+							"settled_cents": "170629",
+							"total_earned_cycles": "2",
+							"total_units": "488"
+						},
+						"review_tenths": "12"
+					}
+				}
+			]
+		},
+		"feature_research": [],
+		"first_game_tutorial": {
+			"first_pool_published": true,
+			"first_stat": "sound",
+			"second_pool_published": true,
+			"second_stat": "graphics",
+			"stage": "3"
+		},
+		"first_studio_economy": true,
+		"first_tutorial_project_id": "4678a151d6ca5b59d1af0841d47c502e:project:1",
+		"ironclad_completion_committed": true,
+		"lean_savings": [],
+		"next_project_serial": "2",
+		"owned_features": [
+			{
+				"key": "text",
+				"value": true
+			},
+			{
+				"key": "4_color_palette",
+				"value": true
+			},
+			{
+				"key": "8_bit_sound",
+				"value": true
+			},
+			{
+				"key": "keyboard_and_mouse",
+				"value": true
+			},
+			{
+				"key": "controller",
+				"value": true
+			},
+			{
+				"key": "local_leaderboards",
+				"value": true
+			},
+			{
+				"key": "split_screen",
+				"value": true
+			},
+			{
+				"key": "score_system",
+				"value": true
+			},
+			{
+				"key": "lives_system",
+				"value": true
+			},
+			{
+				"key": "simple_story",
+				"value": true
+			},
+			{
+				"key": "dialogue",
+				"value": true
+			},
+			{
+				"key": "character_backstories",
+				"value": true
+			},
+			{
+				"key": "multiple_endings",
+				"value": true
+			},
+			{
+				"key": "controls",
+				"value": true
+			},
+			{
+				"key": "general_combat",
+				"value": true
+			},
+			{
+				"key": "levels",
+				"value": true
+			},
+			{
+				"key": "maps",
+				"value": true
+			},
+			{
+				"key": "exploration",
+				"value": true
+			},
+			{
+				"key": "secrets",
+				"value": true
+			}
+		],
+		"pending_publisher_notifications": [],
+		"primitive_contract": {
+			"contract_id": "balanced_primitive_contract_v1",
+			"cores": [
+				{
+					"key": "0",
+					"value": "16"
+				},
+				{
+					"key": "1",
+					"value": "0"
+				},
+				{
+					"key": "2",
+					"value": "18"
+				},
+				{
+					"key": "3",
+					"value": "14"
+				}
+			],
+			"eligible": [
+				{
+					"key": "text",
+					"value": true
+				},
+				{
+					"key": "4_color_palette",
+					"value": true
+				},
+				{
+					"key": "8_bit_sound",
+					"value": true
+				},
+				{
+					"key": "keyboard_and_mouse",
+					"value": true
+				},
+				{
+					"key": "controller",
+					"value": true
+				},
+				{
+					"key": "local_leaderboards",
+					"value": true
+				},
+				{
+					"key": "split_screen",
+					"value": true
+				},
+				{
+					"key": "score_system",
+					"value": true
+				},
+				{
+					"key": "lives_system",
+					"value": true
+				},
+				{
+					"key": "simple_story",
+					"value": true
+				},
+				{
+					"key": "dialogue",
+					"value": true
+				},
+				{
+					"key": "character_backstories",
+					"value": true
+				},
+				{
+					"key": "multiple_endings",
+					"value": true
+				},
+				{
+					"key": "controls",
+					"value": true
+				},
+				{
+					"key": "general_combat",
+					"value": true
+				},
+				{
+					"key": "levels",
+					"value": true
+				},
+				{
+					"key": "maps",
+					"value": true
+				},
+				{
+					"key": "exploration",
+					"value": true
+				},
+				{
+					"key": "secrets",
+					"value": true
+				}
+			],
+			"exhausted": [
+				{
+					"key": "maps",
+					"value": true
+				},
+				{
+					"key": "levels",
+					"value": true
+				},
+				{
+					"key": "keyboard_and_mouse",
+					"value": true
+				},
+				{
+					"key": "character_backstories",
+					"value": true
+				},
+				{
+					"key": "4_color_palette",
+					"value": true
+				},
+				{
+					"key": "controller",
+					"value": true
+				},
+				{
+					"key": "controls",
+					"value": true
+				}
+			],
+			"hands": "2",
+			"neon_focus": "-1",
+			"offer_id": "balanced_primitive_contract_v1",
+			"paid": true,
+			"priorities": [
+				{
+					"key": "0",
+					"value": "25"
+				},
+				{
+					"key": "1",
+					"value": "25"
+				},
+				{
+					"key": "2",
+					"value": "25"
+				},
+				{
+					"key": "3",
+					"value": "25"
+				}
+			],
+			"publisher_connections": false,
+			"result": {
+				"cores": [
+					{
+						"key": "0",
+						"value": "16"
+					},
+					{
+						"key": "1",
+						"value": "0"
+					},
+					{
+						"key": "2",
+						"value": "18"
+					},
+					{
+						"key": "3",
+						"value": "14"
+					}
+				],
+				"denominator": "96",
+				"numerator": "72",
+				"payout": "190000",
+				"promotion": "0",
+				"remainder": "150000",
+				"scope": "9",
+				"upfront": "40000"
+			},
+			"scope": "9",
+			"source_release_id": "",
+			"trial_terms": {},
+			"upfront": true
+		},
+		"promotion_awards": [],
+		"promotion_consumed": [],
+		"publisher_offers": [],
+		"release_metadata": [
+			{
+				"key": "4678a151d6ca5b59d1af0841d47c502e:project:1",
+				"value": {
+					"base_name": "l",
+					"genre": "adventure",
+					"genre_ratios": [
+						"25",
+						"20",
+						"15",
+						"40"
+					],
+					"release_cycle": "7",
+					"release_title": "l",
+					"release_year": "1980",
+					"review": {
+						"awareness": "104",
+						"competitor_id": "obsessive_polisher",
+						"competitor_target_cycle": "20",
+						"cores": [
+							"10",
+							"18",
+							"8",
+							"11"
+						],
+						"development_cycles": "6",
+						"fan_awareness": "0",
+						"final_review": {
+							"f64": "3ff3333333333333"
+						},
+						"forecast_id": "",
+						"forecast_multiplier": "",
+						"launch_fans": "0",
+						"launch_marketing": "4",
+						"production_rating": {
+							"f64": "4003d5ed53621eb9"
+						},
+						"projected_gross_cents": "116883",
+						"projected_net_cents": "81818",
+						"projected_units": "117",
+						"remaining_bugs": "3",
+						"required_scope": "30",
+						"scope": "13",
+						"scope_completion": {
+							"f64": "3fdbbbbbbbbbbbbc"
+						},
+						"standards": [
+							"33",
+							"26",
+							"20",
+							"53"
+						]
+					},
+					"theme": "fantasy"
+				}
+			}
+		],
+		"released_games": [
+			{
+				"key": "4678a151d6ca5b59d1af0841d47c502e:project:1",
+				"value": {
+					"active_awareness_scaled": "0",
+					"base_name": "l",
+					"campaign_count": "0",
+					"campaign_months": [],
+					"earned_cycles": "2",
+					"earned_units": "117",
+					"entitlement_cents": "81818",
+					"exhausted": true,
+					"last_processed_run_cycle": "9",
+					"last_settlement_run_cycle": "8",
+					"later_enabled": true,
+					"launch_awareness": "104",
+					"market_bp": "9000",
+					"market_factors": [
+						{
+							"key": "1",
+							"value": {
+								"cycle_start": "0",
+								"factor_bp": "10000",
+								"genre_only": "0",
+								"historical": true,
+								"pair": "0",
+								"snapshot_id": "pre-market-neutral:3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f",
+								"theme_only": "0"
+							}
+						}
+					],
+					"monthly_units": "0",
+					"organic_awareness_scaled": "0",
+					"release_id": "4678a151d6ca5b59d1af0841d47c502e:project:1",
+					"release_title": "l",
+					"release_year": "1980",
+					"review_tenths": "12",
+					"settled_cents": "40559",
+					"total_earned_cycles": "2",
+					"total_units": "117"
+				}
+			}
+		],
+		"resourceful_claims": [],
+		"seen_tutorial_topics": [
+			{
+				"key": "studio_first_store",
+				"value": true
+			},
+			{
+				"key": "predevelopment_setup",
+				"value": true
+			},
+			{
+				"key": "design_choose",
+				"value": true
+			},
+			{
+				"key": "design_pool_sound",
+				"value": true
+			},
+			{
+				"key": "first_game_first_find",
+				"value": true
+			},
+			{
+				"key": "first_game_first_implement",
+				"value": true
+			},
+			{
+				"key": "first_game_redraw_select",
+				"value": true
+			},
+			{
+				"key": "first_game_redraw_now",
+				"value": true
+			},
+			{
+				"key": "first_game_redraw_wrong",
+				"value": true
+			},
+			{
+				"key": "design_progress",
+				"value": true
+			},
+			{
+				"key": "alpha_progress",
+				"value": true
+			},
+			{
+				"key": "alpha_ready",
+				"value": true
+			},
+			{
+				"key": "beta_search",
+				"value": true
+			},
+			{
+				"key": "beta_ready",
+				"value": true
+			},
+			{
+				"key": "studio_between_games",
+				"value": true
+			},
+			{
+				"key": "contract_choose",
+				"value": true
+			},
+			{
+				"key": "contract_ready",
+				"value": true
+			},
+			{
+				"key": "contract_final_hand",
+				"value": true
+			}
+		],
+		"sidestreet_entitlements": [],
+		"sidestreet_results": [],
+		"starter_selection_confirmed": true,
+		"studio_finance": {
+			"actions": [
+				{
+					"cash_before": "550000",
+					"cycle": "0",
+					"direct_delta": "20000",
+					"kind": "financing_in",
+					"productive": false,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "studio_trait_unspent_points_v1"
+				},
+				{
+					"cash_before": "570000",
+					"cycle": "1",
+					"direct_delta": "0",
+					"kind": "development",
+					"productive": true,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"cash_before": "570000",
+					"cycle": "2",
+					"direct_delta": "-9000",
+					"kind": "feature_play",
+					"productive": true,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"cash_before": "511000",
+					"cycle": "3",
+					"direct_delta": "-24000",
+					"kind": "feature_play",
+					"productive": true,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"cash_before": "487000",
+					"cycle": "4",
+					"direct_delta": "0",
+					"kind": "playtest",
+					"productive": true,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"cash_before": "437000",
+					"cycle": "5",
+					"direct_delta": "-26000",
+					"kind": "feature_play",
+					"productive": true,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"cash_before": "411000",
+					"cycle": "6",
+					"direct_delta": "-50000",
+					"kind": "playtest",
+					"productive": true,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"cash_before": "311000",
+					"cycle": "7",
+					"direct_delta": "100000",
+					"kind": "beta_income",
+					"productive": true,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"cash_before": "411000",
+					"cycle": "7",
+					"direct_delta": "40000",
+					"kind": "publisher_receipt",
+					"productive": false,
+					"sales_earned": "0",
+					"settled": "0",
+					"source_id": "balanced_primitive_contract_v1"
+				},
+				{
+					"cash_before": "451000",
+					"cycle": "8",
+					"direct_delta": "0",
+					"kind": "contract_hand",
+					"productive": true,
+					"sales_earned": "40559",
+					"settled": "40559",
+					"source_id": "balanced_primitive_contract_v1"
+				},
+				{
+					"cash_before": "441559",
+					"cycle": "9",
+					"direct_delta": "150000",
+					"kind": "publisher_receipt",
+					"productive": true,
+					"sales_earned": "41259",
+					"settled": "0",
+					"source_id": "balanced_primitive_contract_v1"
+				}
+			],
+			"bank_loans": [],
+			"cash_cents": "591559",
+			"credit": {
+				"history": [
+					{
+						"after": "600",
+						"before": "600",
+						"change": "0",
+						"cycle": "2",
+						"month": "1",
+						"operating_profit_cents": "-59000",
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": "0",
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": "0"
+					},
+					{
+						"after": "600",
+						"before": "600",
+						"change": "0",
+						"cycle": "4",
+						"month": "2",
+						"operating_profit_cents": "-74000",
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": "0",
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": "0"
+					},
+					{
+						"after": "600",
+						"before": "600",
+						"change": "0",
+						"cycle": "6",
+						"month": "3",
+						"operating_profit_cents": "-126000",
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": "0",
+								"type": "paid_no_profit"
+							}
+						],
+						"requested_change": "0"
+					},
+					{
+						"after": "603",
+						"before": "600",
+						"change": "3",
+						"cycle": "8",
+						"month": "4",
+						"operating_profit_cents": "130559",
+						"policy_version": "typed_expenses_v1",
+						"reasons": [
+							{
+								"points": "3",
+								"type": "clean_profit"
+							}
+						],
+						"requested_change": "3"
+					}
+				],
+				"last_processed_month": "4",
+				"policy_version": "typed_expenses_v1",
+				"score": "603"
+			},
+			"education": {},
+			"employees": [],
+			"initial_cash_cents": "550000",
+			"last_cycle": "9",
+			"monthly_rent_cents": "50000",
+			"monthly_rows": [
+				{
+					"beta_income_cents": "0",
+					"campaign_cents": "0",
+					"cash_change_cents": "511000",
+					"closing_cash_cents": "511000",
+					"feature_play_cents": "9000",
+					"financing_in_cents": "570000",
+					"interest_cents": "0",
+					"interest_paid_cents": "0",
+					"miscellaneous_income_cents": "0",
+					"month": "1",
+					"net_profit_cents": "-59000",
+					"opening_cash_cents": "0",
+					"operating_expenses_cents": "59000",
+					"operating_revenue_cents": "0",
+					"other_expense_cents": "0",
+					"other_income_cents": "0",
+					"partial": false,
+					"payroll_due_cents": "0",
+					"payroll_paid_cents": "0",
+					"payroll_unpaid_cents": "0",
+					"playtest_cents": "0",
+					"principal_paid_cents": "0",
+					"publisher_income_cents": "0",
+					"rent_due_cents": "50000",
+					"rent_paid_cents": "50000",
+					"rent_unpaid_cents": "0",
+					"sales_net_earned_cents": "0",
+					"sales_settled_cents": "0",
+					"store_cents": "0"
+				},
+				{
+					"beta_income_cents": "0",
+					"campaign_cents": "0",
+					"cash_change_cents": "-74000",
+					"closing_cash_cents": "437000",
+					"feature_play_cents": "24000",
+					"financing_in_cents": "0",
+					"interest_cents": "0",
+					"interest_paid_cents": "0",
+					"miscellaneous_income_cents": "0",
+					"month": "2",
+					"net_profit_cents": "-74000",
+					"opening_cash_cents": "511000",
+					"operating_expenses_cents": "74000",
+					"operating_revenue_cents": "0",
+					"other_expense_cents": "0",
+					"other_income_cents": "0",
+					"partial": false,
+					"payroll_due_cents": "0",
+					"payroll_paid_cents": "0",
+					"payroll_unpaid_cents": "0",
+					"playtest_cents": "0",
+					"principal_paid_cents": "0",
+					"publisher_income_cents": "0",
+					"rent_due_cents": "50000",
+					"rent_paid_cents": "50000",
+					"rent_unpaid_cents": "0",
+					"sales_net_earned_cents": "0",
+					"sales_settled_cents": "0",
+					"store_cents": "0"
+				},
+				{
+					"beta_income_cents": "0",
+					"campaign_cents": "0",
+					"cash_change_cents": "-126000",
+					"closing_cash_cents": "311000",
+					"feature_play_cents": "26000",
+					"financing_in_cents": "0",
+					"interest_cents": "0",
+					"interest_paid_cents": "0",
+					"miscellaneous_income_cents": "0",
+					"month": "3",
+					"net_profit_cents": "-126000",
+					"opening_cash_cents": "437000",
+					"operating_expenses_cents": "126000",
+					"operating_revenue_cents": "0",
+					"other_expense_cents": "0",
+					"other_income_cents": "0",
+					"partial": false,
+					"payroll_due_cents": "0",
+					"payroll_paid_cents": "0",
+					"payroll_unpaid_cents": "0",
+					"playtest_cents": "50000",
+					"principal_paid_cents": "0",
+					"publisher_income_cents": "0",
+					"rent_due_cents": "50000",
+					"rent_paid_cents": "50000",
+					"rent_unpaid_cents": "0",
+					"sales_net_earned_cents": "0",
+					"sales_settled_cents": "0",
+					"store_cents": "0"
+				},
+				{
+					"beta_income_cents": "100000",
+					"campaign_cents": "0",
+					"cash_change_cents": "130559",
+					"closing_cash_cents": "441559",
+					"feature_play_cents": "0",
+					"financing_in_cents": "0",
+					"interest_cents": "0",
+					"interest_paid_cents": "0",
+					"miscellaneous_income_cents": "0",
+					"month": "4",
+					"net_profit_cents": "130559",
+					"opening_cash_cents": "311000",
+					"operating_expenses_cents": "50000",
+					"operating_revenue_cents": "180559",
+					"other_expense_cents": "0",
+					"other_income_cents": "140000",
+					"partial": false,
+					"payroll_due_cents": "0",
+					"payroll_paid_cents": "0",
+					"payroll_unpaid_cents": "0",
+					"playtest_cents": "0",
+					"principal_paid_cents": "0",
+					"publisher_income_cents": "40000",
+					"rent_due_cents": "50000",
+					"rent_paid_cents": "50000",
+					"rent_unpaid_cents": "0",
+					"sales_net_earned_cents": "40559",
+					"sales_settled_cents": "40559",
+					"store_cents": "0"
+				},
+				{
+					"beta_income_cents": "0",
+					"campaign_cents": "0",
+					"cash_change_cents": "150000",
+					"closing_cash_cents": "591559",
+					"feature_play_cents": "0",
+					"financing_in_cents": "0",
+					"interest_cents": "0",
+					"interest_paid_cents": "0",
+					"miscellaneous_income_cents": "0",
+					"month": "5",
+					"net_profit_cents": "191259",
+					"opening_cash_cents": "441559",
+					"operating_expenses_cents": "0",
+					"operating_revenue_cents": "191259",
+					"other_expense_cents": "0",
+					"other_income_cents": "150000",
+					"partial": true,
+					"payroll_due_cents": "0",
+					"payroll_paid_cents": "0",
+					"payroll_unpaid_cents": "0",
+					"playtest_cents": "0",
+					"principal_paid_cents": "0",
+					"publisher_income_cents": "150000",
+					"rent_due_cents": "0",
+					"rent_paid_cents": "0",
+					"rent_unpaid_cents": "0",
+					"sales_net_earned_cents": "41259",
+					"sales_settled_cents": "0",
+					"store_cents": "0"
+				}
+			],
+			"obligations": [
+				{
+					"bill_id": "rent:1",
+					"due_cents": "50000",
+					"due_cycle": "2",
+					"expense_type": "rent",
+					"late": false,
+					"month": "1",
+					"paid_cents": "50000",
+					"paid_on_time": true,
+					"payments": [
+						{
+							"cents": "50000",
+							"cycle": "2",
+							"month": "1"
+						}
+					],
+					"recovery_overdue_cycles": "0",
+					"settled_cycle": "2",
+					"source_id": "studio_rent",
+					"unpaid_cents": "0"
+				},
+				{
+					"bill_id": "rent:2",
+					"due_cents": "50000",
+					"due_cycle": "4",
+					"expense_type": "rent",
+					"late": false,
+					"month": "2",
+					"paid_cents": "50000",
+					"paid_on_time": true,
+					"payments": [
+						{
+							"cents": "50000",
+							"cycle": "4",
+							"month": "2"
+						}
+					],
+					"recovery_overdue_cycles": "0",
+					"settled_cycle": "4",
+					"source_id": "studio_rent",
+					"unpaid_cents": "0"
+				},
+				{
+					"bill_id": "rent:3",
+					"due_cents": "50000",
+					"due_cycle": "6",
+					"expense_type": "rent",
+					"late": false,
+					"month": "3",
+					"paid_cents": "50000",
+					"paid_on_time": true,
+					"payments": [
+						{
+							"cents": "50000",
+							"cycle": "6",
+							"month": "3"
+						}
+					],
+					"recovery_overdue_cycles": "0",
+					"settled_cycle": "6",
+					"source_id": "studio_rent",
+					"unpaid_cents": "0"
+				},
+				{
+					"bill_id": "rent:4",
+					"due_cents": "50000",
+					"due_cycle": "8",
+					"expense_type": "rent",
+					"late": false,
+					"month": "4",
+					"paid_cents": "50000",
+					"paid_on_time": true,
+					"payments": [
+						{
+							"cents": "50000",
+							"cycle": "8",
+							"month": "4"
+						}
+					],
+					"recovery_overdue_cycles": "0",
+					"settled_cycle": "8",
+					"source_id": "studio_rent",
+					"unpaid_cents": "0"
+				}
+			],
+			"schema_version": "6",
+			"transactions": [
+				{
+					"amount_cents": "550000",
+					"cash_after_cents": "550000",
+					"cash_before_cents": "0",
+					"cash_delta_cents": "550000",
+					"cycle": "0",
+					"due_month": "0",
+					"kind": "starting_funding",
+					"month": "1",
+					"sequence": "1",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "20000",
+					"cash_after_cents": "570000",
+					"cash_before_cents": "550000",
+					"cash_delta_cents": "20000",
+					"cycle": "0",
+					"due_month": "0",
+					"kind": "financing_in",
+					"month": "1",
+					"sequence": "2",
+					"source_id": "studio_trait_unspent_points_v1"
+				},
+				{
+					"amount_cents": "0",
+					"cash_after_cents": "570000",
+					"cash_before_cents": "570000",
+					"cash_delta_cents": "0",
+					"cycle": "1",
+					"due_month": "0",
+					"kind": "development",
+					"month": "1",
+					"sequence": "3",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"amount_cents": "9000",
+					"cash_after_cents": "561000",
+					"cash_before_cents": "570000",
+					"cash_delta_cents": "-9000",
+					"cycle": "2",
+					"due_month": "0",
+					"kind": "feature_play",
+					"month": "1",
+					"sequence": "4",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "561000",
+					"cash_before_cents": "561000",
+					"cash_delta_cents": "0",
+					"cycle": "2",
+					"due_month": "1",
+					"kind": "rent_due",
+					"month": "1",
+					"sequence": "5",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "511000",
+					"cash_before_cents": "561000",
+					"cash_delta_cents": "-50000",
+					"cycle": "2",
+					"due_month": "1",
+					"kind": "rent_payment",
+					"month": "1",
+					"sequence": "6",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "24000",
+					"cash_after_cents": "487000",
+					"cash_before_cents": "511000",
+					"cash_delta_cents": "-24000",
+					"cycle": "3",
+					"due_month": "0",
+					"kind": "feature_play",
+					"month": "2",
+					"sequence": "7",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"amount_cents": "0",
+					"cash_after_cents": "487000",
+					"cash_before_cents": "487000",
+					"cash_delta_cents": "0",
+					"cycle": "4",
+					"due_month": "0",
+					"kind": "playtest",
+					"month": "2",
+					"sequence": "8",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "487000",
+					"cash_before_cents": "487000",
+					"cash_delta_cents": "0",
+					"cycle": "4",
+					"due_month": "2",
+					"kind": "rent_due",
+					"month": "2",
+					"sequence": "9",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "437000",
+					"cash_before_cents": "487000",
+					"cash_delta_cents": "-50000",
+					"cycle": "4",
+					"due_month": "2",
+					"kind": "rent_payment",
+					"month": "2",
+					"sequence": "10",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "26000",
+					"cash_after_cents": "411000",
+					"cash_before_cents": "437000",
+					"cash_delta_cents": "-26000",
+					"cycle": "5",
+					"due_month": "0",
+					"kind": "feature_play",
+					"month": "3",
+					"sequence": "11",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "361000",
+					"cash_before_cents": "411000",
+					"cash_delta_cents": "-50000",
+					"cycle": "6",
+					"due_month": "0",
+					"kind": "playtest",
+					"month": "3",
+					"sequence": "12",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "361000",
+					"cash_before_cents": "361000",
+					"cash_delta_cents": "0",
+					"cycle": "6",
+					"due_month": "3",
+					"kind": "rent_due",
+					"month": "3",
+					"sequence": "13",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "311000",
+					"cash_before_cents": "361000",
+					"cash_delta_cents": "-50000",
+					"cycle": "6",
+					"due_month": "3",
+					"kind": "rent_payment",
+					"month": "3",
+					"sequence": "14",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "100000",
+					"cash_after_cents": "411000",
+					"cash_before_cents": "311000",
+					"cash_delta_cents": "100000",
+					"cycle": "7",
+					"due_month": "0",
+					"kind": "beta_income",
+					"month": "4",
+					"sequence": "15",
+					"source_id": "4678a151d6ca5b59d1af0841d47c502e:project:1"
+				},
+				{
+					"amount_cents": "40000",
+					"cash_after_cents": "451000",
+					"cash_before_cents": "411000",
+					"cash_delta_cents": "40000",
+					"cycle": "7",
+					"due_month": "0",
+					"kind": "publisher_receipt",
+					"month": "4",
+					"sequence": "16",
+					"source_id": "balanced_primitive_contract_v1"
+				},
+				{
+					"amount_cents": "0",
+					"cash_after_cents": "451000",
+					"cash_before_cents": "451000",
+					"cash_delta_cents": "0",
+					"cycle": "8",
+					"due_month": "0",
+					"kind": "contract_hand",
+					"month": "4",
+					"sequence": "17",
+					"source_id": "balanced_primitive_contract_v1"
+				},
+				{
+					"amount_cents": "40559",
+					"cash_after_cents": "451000",
+					"cash_before_cents": "451000",
+					"cash_delta_cents": "0",
+					"cycle": "8",
+					"due_month": "0",
+					"kind": "sales_earned",
+					"month": "4",
+					"sequence": "18",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "40559",
+					"cash_after_cents": "491559",
+					"cash_before_cents": "451000",
+					"cash_delta_cents": "40559",
+					"cycle": "8",
+					"due_month": "0",
+					"kind": "sales_settlement",
+					"month": "4",
+					"sequence": "19",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "491559",
+					"cash_before_cents": "491559",
+					"cash_delta_cents": "0",
+					"cycle": "8",
+					"due_month": "4",
+					"kind": "rent_due",
+					"month": "4",
+					"sequence": "20",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "50000",
+					"cash_after_cents": "441559",
+					"cash_before_cents": "491559",
+					"cash_delta_cents": "-50000",
+					"cycle": "8",
+					"due_month": "4",
+					"kind": "rent_payment",
+					"month": "4",
+					"sequence": "21",
+					"source_id": ""
+				},
+				{
+					"amount_cents": "150000",
+					"cash_after_cents": "591559",
+					"cash_before_cents": "441559",
+					"cash_delta_cents": "150000",
+					"cycle": "9",
+					"due_month": "0",
+					"kind": "publisher_receipt",
+					"month": "5",
+					"sequence": "22",
+					"source_id": "balanced_primitive_contract_v1"
+				},
+				{
+					"amount_cents": "41259",
+					"cash_after_cents": "591559",
+					"cash_before_cents": "591559",
+					"cash_delta_cents": "0",
+					"cycle": "9",
+					"due_month": "0",
+					"kind": "sales_earned",
+					"month": "5",
+					"sequence": "23",
+					"source_id": ""
+				}
+			],
+			"unsettled_sales_net_cents": "41259"
+		},
+		"studio_name": "b",
+		"studio_specialty": "adventure",
+		"studio_traits": {
+			"active_ids": [],
+			"effects_mode": "approved_effects_v1",
+			"family_funding_cents": "0",
+			"point_cash_cents": "20000",
+			"reason": "",
+			"refunded_points": "0",
+			"remaining_points": "4",
+			"spent_points": "0",
+			"starting_points": "4",
+			"trait_ids": [],
+			"valid": true,
+			"version": "8"
+		},
+		"unlocked_publishers": [
+			{
+				"key": "ironclad",
+				"value": true
+			},
+			{
+				"key": "sidestreet",
+				"value": true
+			}
+		]
+	},
+	"run_id": "4678a151d6ca5b59d1af0841d47c502e",
+	"sequence": "4",
+	"source_build": "studio-checkpoint-runtime-v1"
+}

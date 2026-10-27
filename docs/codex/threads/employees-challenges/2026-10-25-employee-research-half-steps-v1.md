@@ -1,5 +1,7 @@
 # Employee-assisted Feature research — 2026-10-25
 
+**SUPERSEDED in part on 2026-10-26:** The later [active Research correction](2026-10-26-active-research-falloff-direction-v1.md) limits employee progress to successfully committed Store Research actions. The passive progress after unrelated productive actions described below is historical. Shared duty, whole calendar cycles and payment on actual progress remain selected; falloff beyond two employees is directed but its curve remains OPEN.
+
 ## Selected direction
 
 **LOCKED qualitative design; NOT IMPLEMENTED.** The user resumed Employees design and selected these rules:

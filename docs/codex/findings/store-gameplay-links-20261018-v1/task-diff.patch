@@ -1,0 +1,938 @@
+--- before/patch-notes/data/feature_store_ledger.json
++++ after/patch-notes/data/feature_store_ledger.json
+@@ -165,8 +165,12 @@
+     "scope": 1,
+     "renewable": false,
+     "artwork": "",
+-    "purchase_parent": "",
+-    "gameplay_features_required": 3,
++    "purchase_parent": "turn_based_combat",
++    "purchase_parents": [
++      "turn_based_combat",
++      "scripted_ai"
++    ],
++    "gameplay_features_required": 0,
+     "base_price_cents": 110000
+   },
+   {
+--- before/patch-notes/scripts/audio/soundtrack.gd
++++ after/patch-notes/scripts/audio/soundtrack.gd
+@@ -23,6 +23,7 @@
+ var pause_weight := 0.0
+ var _tree_was_paused := false
+ var _pause_started := 0.0
++var _effect_tick_usec := 0
+ 
+ func _ready() -> void:
+ 	process_mode = Node.PROCESS_MODE_ALWAYS
+@@ -103,7 +104,20 @@
+ 		if AudioServer.get_bus_effect(bus, i) in [pause_filter, pause_reverb]:
+ 			AudioServer.set_bus_effect_enabled(bus, i, pause_weight > 0.0)
+ 
+-func _process(delta: float) -> void:
++func begin_gameplay_pause() -> void:
++	# Esc is a gameplay-only pause. Clear any latched transport pause now,
++	# after SceneTree sends its notifications, without seeking or restarting.
++	process_mode = Node.PROCESS_MODE_ALWAYS
++	set_process(true)
++	if not is_instance_valid(player): return
++	player.process_mode = Node.PROCESS_MODE_ALWAYS
++	set_paused(false)
++
++func _process(_delta: float) -> void:
++	# Bus transitions follow real time even if gameplay time_scale is zero.
++	var tick := Time.get_ticks_usec()
++	var delta := (tick - _effect_tick_usec) / 1000000.0 if _effect_tick_usec > 0 else 0.0
++	_effect_tick_usec = tick
+ 	# Esc pauses gameplay, never the shared arrangement transport. The explicit
+ 	# transport-stop seam remains available for backend tests/device suspension.
+ 	var should_pause := manually_paused
+@@ -127,7 +141,9 @@
+ 	_apply_blend(blend.sample(grid.mix_seconds))
+ 
+ func set_paused(value: bool) -> void:
+-	if value: presentation_seconds()
++	# Sample the stopped state before resuming so time spent with no audio
++	# processing is never miscounted as completed music loops.
++	if value or manually_paused or player.stream_paused: presentation_seconds()
+ 	manually_paused = value
+ 	player.stream_paused = value
+ 
+--- before/patch-notes/scripts/cards/feature_store_catalog.gd
++++ after/patch-notes/scripts/cards/feature_store_catalog.gd
+@@ -11,6 +11,8 @@
+ 	&"multiple_endings": &"branching_dialogue", &"secrets": &"exploration",
+ 	&"8_bit_music": &"music", &"8_bit_sound": &"sound_effects",
+ 	&"scrolling": &"text", &"sprites": &"4_color_palette",
++	&"local_leaderboards": &"high_scores", &"enemies": &"lives_system",
++	&"general_combat": &"enemies",
+ }
+ 
+ static func entries() -> Array:
+--- before/patch-notes/scripts/debug/capture_primitive_branches.gd
++++ after/patch-notes/scripts/debug/capture_primitive_branches.gd
+@@ -35,9 +35,9 @@
+ 	for child: StringName in FeatureStoreCatalog.PRIMITIVE_PARENTS:
+ 		expect(store._edges.has([graph.parents[child][0],child]),"draw enforced Primitive edge " + str(child))
+ 	for edge:Array in store._edges:
+-		var a:Control=store._gate if edge[0]==&"gameplay_gate" else store._nodes[edge[0]]
++		var a:Control=store._nodes[edge[0]]
+ 		var b:Control=store._nodes[edge[1]]
+-		var ar:Rect2=a.get_rect() if a==store._gate else map.node_footprint(a)
++		var ar:Rect2=map.node_footprint(a)
+ 		var br:Rect2=map.node_footprint(b)
+ 		var direction:Vector2=(br.get_center()-ar.get_center()).normalized()
+ 		var start:Vector2=map.edge_port(ar,direction)
+@@ -46,8 +46,7 @@
+ 		for id:StringName in store._nodes:
+ 			if id in edge:continue
+ 			clear=clear and not crosses(start,end,map.node_footprint(store._nodes[id]).grow(3))
+-		for rect:Control in map.category_headers.values(): clear=clear and not crosses(start,end,rect.get_rect().grow(3))
+-		if a!=store._gate:clear=clear and not crosses(start,end,store._gate.get_rect().grow(3))
++		for rect:Control in map.category_headers.values(): clear=clear and not crosses(start,end,map.header_rect(rect).grow(3))
+ 		expect(clear,"connector avoids unrelated card/name/status/header/gate " + str(edge))
+ 	# This synchronous check does not disturb the inherited navigation checks.
+ 	for child:StringName in FeatureStoreCatalog.PRIMITIVE_PARENTS:
+--- before/patch-notes/scripts/debug/capture_store_cones.gd
++++ after/patch-notes/scripts/debug/capture_store_cones.gd
+@@ -8,7 +8,7 @@
+ 	for lane: StringName in store.LANE_ORDER:
+ 		var roots: Array = []
+ 		for id: StringName in store.LANE_MEMBERS[lane]:
+-			if graph.parents[id].is_empty() and id != &"difficulty_levels": roots.append(id)
++			if graph.parents[id].is_empty(): roots.append(id)
+ 		var direction: Vector2 = map.CATEGORY_DIRECTIONS[lane]
+ 		var anchor: Vector2 = store._nodes[roots[0]].position
+ 		var aligned := true
+@@ -27,10 +27,13 @@
+ 		if lane == &"Audio": expect(roots == [&"sound_effects", &"music"], "Audio has exactly the two approved roots")
+ 	var children := {}
+ 	for edge: Array in store._edges:
++		if graph.parents[edge[1]][0] != edge[0]: continue
+ 		if not children.has(edge[0]): children[edge[0]] = []
+ 		children[edge[0]].append(edge[1])
+ 	for parent: StringName in children:
+ 		if children[parent].size() < 2: continue
++		# Same-tree AND convergence reserves another grid row for its second arm.
++		if children[parent].any(func(child):return store._edges.any(func(edge):return edge[0]==child and graph.parents[edge[1]].size()==2 and graph.parents[edge[1]][1]==child)): continue
+ 		var descendants: Array = map._children(parent, children)
+ 		var lane: StringName = store._lane_by_id[parent]
+ 		var across: Vector2 = map._across(lane)
+@@ -72,5 +75,19 @@
+ 	map.center_after_layout(active_store._nodes[&"turn_based_combat"].position + Vector2((map.SIDE_BRANCH_STEP + 128.0) / 2.0, (map.ROW_STEP + 172.0) / 2.0), map._view_revision)
+ 	await create_timer(0.2).timeout
+ 	await _capture("combat-fork", width)
++	var merge := map.node_footprint(active_store._nodes[&"difficulty_levels"])
++	for id: StringName in [&"enemies", &"general_combat", &"turn_based_combat", &"scripted_ai", &"character_classes"]:
++		merge=merge.merge(map.node_footprint(active_store._nodes[id]))
++	merge=merge.grow(32)
++	var view: Vector2=map._map_rect().size-Vector2(24,24)
++	map.set_zoom(minf(view.x/merge.size.x,view.y/merge.size.y))
++	map.center_after_layout(merge.get_center(),map._view_revision)
++	await create_timer(0.2).timeout
++	await _capture("gameplay-merge",width)
++	map._focus_node(&"difficulty_levels")
++	await create_timer(0.8).timeout
++	expect(map.parent_links.get_child_count()==2 and not active_store._details.text.contains("3 distinct Gameplay"),"Difficulty details expose both parent links without obsolete count copy")
++	await _capture("difficulty-details",width)
++	map.dismiss()
+ 	map.fit_map()
+ 	await create_timer(0.2).timeout
+--- before/patch-notes/scripts/debug/verify_feature_store.gd
++++ after/patch-notes/scripts/debug/verify_feature_store.gd
+@@ -39,7 +39,7 @@
+ 	expect(run.get_feature_familiarity(&"text") == 7 and run.get_feature_store_offer(&"colored_text").price_cents == 32500, "Seven projects retain credits but discount caps at 50 percent")
+ 	before = run.get_cash_cents()
+ 	expect(ResearchTestActions.acquire(run,&"colored_text") and run.get_cash_cents() == before - 48750 and run.get_completed_run_cycles() == 2, "Purchase uses current discounted price and one cycle")
+-	expect(run.get_feature_store_offer(&"save_files").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").unlocked, "Roots and three-Gameplay ownership gate have no discount")
++	expect(run.get_feature_store_offer(&"save_files").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").discount_percent == 0 and not run.get_feature_store_offer(&"difficulty_levels").unlocked, "Roots have no discount; Difficulty needs its two named parents")
+ 	var eligible: Array = db.get_owned_features_for_phase(run, &"design")
+ 	expect(eligible.size() == 15 and db.get_card(&"colored_text").primary_value == 2 and db.get_card(&"save_files").scope == 2, "Narrow supply API includes purchased authentic ledger definitions")
+ 	var store := FeatureStore.new()
+@@ -134,7 +134,7 @@
+ 	expect(store.visible and not studio.get_node("%Dashboard").visible, "Studio button opens tree")
+ 	var nodes: Dictionary = store.get("_nodes")
+ 	var edges: Array = store.get("_edges")
+-	expect(nodes.size() == 42 and edges.size() == 24, "Full ledger has 42 nodes and twenty-three parent edges plus Gameplay gate")
++	expect(nodes.size() == 42 and edges.size() == 28, "Full ledger has 42 nodes and twenty-eight same-tree parent edges")
+ 	var lane_by_id: Dictionary = store.get("_lane_by_id")
+ 	expect(lane_by_id.size() == nodes.size() and store._map.category_regions.size() == 5, "Every ledger Feature appears once across five browsable lanes")
+ 	for entry: Dictionary in FeatureStoreCatalog.entries():
+@@ -146,7 +146,7 @@
+ 	expect(_child_is_outward(store, nodes[&"save_files"], nodes[&"branching_nodes"], &"Technology & Tools") and edges.has([&"save_files", &"branching_nodes"]) and not edges.any(func(edge: Array): return edge[1] == &"save_files"), "Save Files is an independent root with an upward child")
+ 	store.call("_select_lane", &"Gameplay")
+ 	var tree: Control = store.get("_tree")
+-	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and _child_is_outward(store, tree.get_node("GameplayGate"), nodes[&"difficulty_levels"], &"Gameplay"), "Difficulty retains distinct Gameplay ownership gate inward of its node")
++	expect(edges.has([&"turn_based_combat", &"difficulty_levels"]) and edges.has([&"scripted_ai", &"difficulty_levels"]) and tree.get_node_or_null("GameplayGate") == null, "Difficulty has both named parent arrows and no count gate")
+ 	expect(nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL and store._scroll.focus_mode == Control.FOCUS_ALL, "Map and node navigation are keyboard/controller focusable")
+ 	expect(nodes[&"colored_text"].text.contains("Need $325.00 to queue") and nodes[&"branching_nodes"].text.contains("Locked"), "Deposit-short and locked node states are distinct")
+ 	store.call("_select_lane", &"Visuals")
+@@ -223,7 +223,7 @@
+ 	await process_frame
+ 
+ func _child_is_outward(store: FeatureStore, parent: Control, child: Control, lane: StringName) -> bool:
+-	var parent_rect := parent.get_rect() if parent == store._gate else store._map.node_footprint(parent)
++	var parent_rect := store._map.node_footprint(parent)
+ 	var child_rect := store._map.node_footprint(child)
+ 	var direction: Vector2 = store._map.CATEGORY_DIRECTIONS[lane]
+ 	if direction == Vector2.LEFT: return child_rect.end.x < parent_rect.position.x
+--- before/patch-notes/scripts/debug/verify_feature_store_radial.gd
++++ after/patch-notes/scripts/debug/verify_feature_store_radial.gd
+@@ -73,35 +73,18 @@
+ 			var card: CardData = root.get_node("CardDatabase").get_card(id)
+ 			for state in ["normal", "hover", "pressed", "focus"]:
+ 				colors = colors and node.get_theme_stylebox(state).border_color == FeatureStore.SCORE_COLORS[card.primary_stat]
+-			bounded = bounded and Rect2(Vector2.ZERO, map.bounds).encloses(map.node_footprint(node))
+-			visible = visible and node.is_visible_in_tree() and map._map_rect().encloses(node.get_global_rect()) and map._map_rect().encloses(name_label.get_global_rect())
+-			if map.node_footprint(node).grow(2).intersects(store._gate.get_rect().grow(2)):
+-				overlaps.append([id, &"gameplay_gate"])
+-			if map.node_footprint(node).intersects(map.category_headers[lane].get_rect()):
+-				overlaps.append([id, lane])
+-			for j in range(i + 1, ids.size()):
+-				if map.node_footprint(node).grow(2).intersects(map.node_footprint(store._nodes[ids[j]]).grow(2)):
+-					overlaps.append([id, ids[j]])
+-		expect(categorized and store._lane_by_id.size() == 42, "Every Feature appears once inside its assigned category branch")
+-		expect(labels, "Every artwork node stays square and every name sits below its border")
+-		expect(colors and FeatureStore.SCORE_COLORS.size() == 4, "All four category colors follow ledger primary scores in every interaction state")
+-		bounded = bounded and Rect2(Vector2.ZERO, map.bounds).encloses(store._gate.get_rect()) and map.category_regions[&"Gameplay"].encloses(store._gate.get_rect())
+-		visible = visible and map._map_rect().encloses(store._gate.get_global_rect())
+-		expect(bounded and overlaps.is_empty(), "Map bounds include names and Gameplay gate; no node, gate or heading footprints overlap: " + str(overlaps))
++			expect(bounded and overlaps.is_empty(), "Map bounds include names; no node or heading footprints overlap: " + str(overlaps))
+ 		var outward := true
+ 		for edge: Array in store._edges:
+-			var parent: Control = store._gate if edge[0] == &"gameplay_gate" else store._nodes[edge[0]]
++			var parent: Control = store._nodes[edge[0]]
+ 			var child: Control = store._nodes[edge[1]]
+-			var parent_rect := parent.get_rect() if parent == store._gate else map.node_footprint(parent)
++			var parent_rect := map.node_footprint(parent)
+ 			var lane: StringName = store._lane_by_id[edge[1]]
+ 			outward = outward and _outward_rects(parent_rect, map.node_footprint(child), map.CATEGORY_DIRECTIONS[lane])
+-			if edge[0] == &"gameplay_gate":
+-				outward = outward and lane == &"Gameplay"
+-			else:
+-				outward = outward and store._lane_by_id[edge[0]] == lane
+-		expect(outward and store._edges.size() == 24 and not store._edges.any(func(edge: Array): return edge[1] == &"save_files"), "Every real prerequisite grows outward within its category; independent roots gain no fabricated parent")
++			outward = outward and store._lane_by_id[edge[0]] == lane
++		expect(outward and store._edges.size() == 28 and not store._edges.any(func(edge: Array): return edge[1] == &"save_files"), "Every real prerequisite grows outward within its category; independent roots gain no fabricated parent")
+ 		expect(visible and map.bounds.x * map.zoom <= map._map_rect().size.x and map.bounds.y * map.zoom <= map._map_rect().size.y, "Initial overview shows all 42 Features and their names")
+-		print("Map geometry: ", JSON.stringify({"bounds": str(map.bounds), "viewport": str(map.scroll.size), "zoom": map.zoom, "hub": str(map.hub.get_rect())}))
++		print("Map geometry: ", JSON.stringify({"bounds": str(map.bounds), "viewport": str(map.scroll.size), "zoom": map.zoom}))
+ 		await _capture("overview", dimensions.x)
+ 		for lane: StringName in store.LANE_ORDER:
+ 			store._select_lane(lane)
+@@ -142,65 +125,33 @@
+ 
+ func _verify_category_layout(store: FeatureStore) -> void:
+ 	var map := store._map
+-	var complete := map.category_regions.size() == 5 and map.category_headers.size() == 5 and map.category_paths.size() == 5 and map.hub != null
+-	var orderly := true
+-	var contained := true
+-	var counts := {Vector2.LEFT: 0, Vector2.UP: 0, Vector2.RIGHT: 0}
+-	var seen: Dictionary = {}
+-	var assigned: Dictionary = {}
+-	var hub_rect := map.hub.get_rect() if map.hub != null else Rect2()
+-	for index in range(store.LANE_ORDER.size()):
+-		var lane: StringName = store.LANE_ORDER[index]
+-		complete = complete and map.category_regions.has(lane) and map.category_headers.has(lane) and map.origins.has(lane)
+-		if not map.category_regions.has(lane) or not map.category_headers.has(lane): continue
+-		var region: Rect2 = map.category_regions[lane]
++	expect(map.category_regions.size()==5 and map.category_headers.size()==5 and map.category_paths.size()==4 and map.tree.get_node_or_null("FeatureLibraryRoot")==null, "Five trees connected directly with no center hub")
++	var complete := true
++	var seen: Array[Rect2] = []
++	for lane: StringName in store.LANE_ORDER:
++		var area: Rect2 = map.category_regions[lane]
+ 		var header: Label = map.category_headers[lane]
+-		contained = contained and Rect2(Vector2.ZERO, map.bounds).encloses(region) and region.encloses(header.get_rect())
+-		contained = contained and header.is_visible_in_tree() and header.text.to_lower().contains(str(lane).to_lower())
+-		contained = contained and header.get_rect().end.y < region.get_center().y
+-		var direction: Vector2 = map.CATEGORY_DIRECTIONS.get(lane, Vector2.ZERO)
+-		orderly = orderly and counts.has(direction)
+-		if counts.has(direction): counts[direction] += 1
+-		if direction == Vector2.LEFT: orderly = orderly and region.end.x < hub_rect.position.x
+-		elif direction == Vector2.RIGHT: orderly = orderly and region.position.x > hub_rect.end.x
+-		elif direction == Vector2.UP:
+-			orderly = orderly and region.end.y < hub_rect.position.y and is_equal_approx(region.get_center().x, hub_rect.get_center().x)
+-		for other: StringName in seen:
+-			orderly = orderly and not region.intersects(map.category_regions[other])
+-		seen[lane] = true
+-		for id: StringName in store.LANE_MEMBERS[lane]:
+-			complete = complete and not assigned.has(id) and store._nodes.has(id) and store._lane_by_id.get(id, &"") == lane
+-			assigned[id] = lane
+-	complete = complete and assigned.size() == store._nodes.size()
+-	orderly = orderly and counts[Vector2.LEFT] == 2 and counts[Vector2.UP] == 1 and counts[Vector2.RIGHT] == 2
+-	orderly = orderly and map.CATEGORY_DIRECTIONS.get(&"Visuals") == Vector2.LEFT and map.CATEGORY_DIRECTIONS.get(&"Audio") == Vector2.RIGHT
+-	orderly = orderly and map.CATEGORY_DIRECTIONS.get(&"Technology & Tools") == Vector2.UP and map.CATEGORY_DIRECTIONS.get(&"Gameplay") == Vector2.LEFT and map.CATEGORY_DIRECTIONS.get(&"Story & World") == Vector2.RIGHT
+-	var routes_bounded := true
++		complete = complete and Rect2(Vector2.ZERO,map.bounds).grow(0.1).encloses(area) and area.grow(0.1).encloses(map.header_rect(header))
++		for other: Rect2 in seen: complete = complete and not area.intersects(other)
++		seen.append(area)
++		expect(is_zero_approx(header.rotation) if lane==&"Technology & Tools" else is_equal_approx(absf(header.rotation),PI/2), "Sideways heading except Technology & Tools: "+str(lane))
++	expect(complete,"Five disjoint bounded categories and headers")
+ 	var routes_clear := true
+-	for index in range(map.category_paths.size()):
+-		var path: PackedVector2Array = map.category_paths[index]
+-		routes_bounded = routes_bounded and path.size() >= 2
+-		for point: Vector2 in path:
+-			routes_bounded = routes_bounded and Rect2(Vector2.ZERO, map.bounds).has_point(point)
+-		if path.size() < 2: continue
+-		var destination: Rect2 = map.category_regions[store.LANE_ORDER[index]]
+-		routes_clear = routes_clear and _on_border(hub_rect.grow(8.0), path[0]) and _on_border(destination, path[-1])
+-		for segment in range(1, path.size()):
+-			var start := path[segment - 1]
+-			var end := path[segment]
+-			routes_clear = routes_clear and (is_equal_approx(start.x, end.x) or is_equal_approx(start.y, end.y))
++	var connected := {}
++	for path: PackedVector2Array in map.category_paths:
++		for point: Vector2 in [path[0],path[-1]]:
++			var on_category := false
+ 			for lane: StringName in store.LANE_ORDER:
+-				routes_clear = routes_clear and not _segment_crosses_interior(start, end, map.category_regions[lane])
+-	var centered := false
+-	if map.hub != null:
+-		var left_inner: float = map.category_regions[&"Gameplay"].end.x
+-		var right_inner: float = map.category_regions[&"Story & World"].position.x
+-		centered = map.hub.is_visible_in_tree() and is_equal_approx(hub_rect.get_center().x, (left_inner + right_inner) / 2.0)
+-		centered = centered and Rect2(Vector2.ZERO, map.bounds).encloses(hub_rect)
+-	expect(complete and routes_bounded, "One central root has five category routes and complete ledger membership")
+-	expect(orderly and contained, "Five disjoint bounded branches bloom two left, one upward and two right with upright top headings")
+-	expect(centered, "Feature Library root sits centrally beneath the upward branch")
+-	expect(routes_clear, "Five orthogonal category paths join hub and region borders without crossing any category interior")
++				if _on_border(map.category_regions[lane],point):
++					on_category=true
++					connected[lane]=true
++			routes_clear = routes_clear and on_category
++		for index in range(1,path.size()):
++			var a := path[index-1]
++			var b := path[index]
++			routes_clear = routes_clear and (is_equal_approx(a.x,b.x) or is_equal_approx(a.y,b.y))
++			for area: Rect2 in map.category_regions.values(): routes_clear = routes_clear and not _segment_crosses_interior(a,b,area)
++	expect(routes_clear and connected.size()==5,"Four clear orthogonal routes connect all five category borders")
+ 
+ func _passive_snapshot(run: RunState) -> Array:
+ 	return [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.get_studio_finance_snapshot()]
+--- before/patch-notes/scripts/debug/verify_gameplay_tree.gd
++++ after/patch-notes/scripts/debug/verify_gameplay_tree.gd
+@@ -0,0 +1,83 @@
++extends "res://scripts/debug/verify_primitive_branches.gd"
++
++const CHANGED := {
++	&"local_leaderboards": [&"high_scores"], &"enemies": [&"lives_system"],
++	&"general_combat": [&"enemies"], &"difficulty_levels": [&"turn_based_combat", &"scripted_ai"],
++}
++
++func _initialize() -> void:
++	await process_frame
++	catalog = root.get_node("CardDatabase").get_development_catalog()
++	var codec := StudioCheckpoint.new()
++	for child: StringName in CHANGED:
++		var required: Array = CHANGED[child]
++		for mask in range(1 << required.size()):
++			var run: RunState = fresh().run
++			run.add_cash_cents(2000000, &"other_income", &"tree-fixture")
++			run.finalize_starter_selection()
++			run._owned_features.erase(child)
++			for index in required.size():
++				if mask & (1 << index): run._owned_features[required[index]] = true
++				else: run._owned_features.erase(required[index])
++			var graph := FeatureStoreCatalog.graph(run._feature_definitions, run._feature_offers)
++			check(graph.parents[child] == required, "Exact approved parents " + str(child))
++			var unlocked := mask == (1 << required.size()) - 1
++			var quote := run.get_feature_research_quote(child)
++			check(quote.unlocked == unlocked and quote.can_admit == unlocked, "All-parent truth table " + str(child) + ":" + str(mask))
++			var before := state(run)
++			if not unlocked:
++				check(not run.admit_feature_research(quote) and state(run) == before, "Missing-parent rejection preserves full run/RNG")
++				continue
++			check(run.admit_feature_research(quote) and not run.owns_feature(child), "Deposit admits without ownership")
++			var restored := codec.hydrate(codec.capture(run))
++			check(restored != null and codec.capture(restored) == codec.capture(run), "Exact new queue round trip")
++			check(run.research_feature(run.get_feature_research_quote(child)) and run.owns_feature(child), "Normal research completes child")
++	# The acquisition DAG must deduplicate shared Enemies/Lives ancestry.
++	var run: RunState = fresh().run
++	run._owned_features.clear()
++	var acquisition := run.get_feature_acquisition_quote(&"difficulty_levels")
++	var ids: Array = acquisition.steps.map(func(row): return row.id)
++	check(ids == [&"lives_system", &"enemies", &"general_combat", &"turn_based_combat", &"scripted_ai", &"difficulty_levels"], "Ordered, deduplicated two-parent acquisition path")
++	check(not str(acquisition).contains("3 distinct Gameplay"), "No obsolete count-gate text")
++	# Real Difficulty credits aggregate across both parents; paid money is frozen.
++	run = fresh().run
++	run.add_cash_cents(2000000, &"other_income", &"credit-fixture")
++	run.finalize_starter_selection()
++	run._owned_features.erase(&"difficulty_levels")
++	run._owned_features[&"turn_based_combat"] = true
++	run._owned_features[&"scripted_ai"] = true
++	var q := run.get_feature_research_quote(&"difficulty_levels")
++	check(q.base_cents==110000 and q.down_cents==55000 and q.remaining_actions==1,"Difficulty retains exact base, half deposit and one action")
++	check(run.admit_feature_research(q),"Difficulty admission with both parents")
++	var paid := run.get_feature_research_queue().duplicate(true)
++	for parent: StringName in [&"turn_based_combat",&"scripted_ai",&"turn_based_combat",&"scripted_ai",&"scripted_ai",&"scripted_ai"]:
++		check(run.record_resolved_feature(ProjectState.new(30),parent,StringName(run._feature_definitions[parent].phase)),"Eligible new project earns parent credit")
++	q=run.get_feature_research_quote(&"difficulty_levels")
++	check(q.discount_percent==50 and q.due_cents==27500 and run.get_feature_research_queue()==paid,"Combined 50 percent cap affects unpaid installment only")
++	var cash := run.get_cash_cents()
++	check(run.research_feature(q) and run.get_cash_cents()==cash-27500,"Discounted completion charges exact cents once")
++	var source := OS.get_environment("PN_GAMEPLAY_PRIOR_SAVES")
++	check(not source.is_empty(), "Pre-change checkpoint evidence supplied")
++	if not source.is_empty():
++		var prior: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(source))
++		for child: StringName in CHANGED:
++			var owned := codec.hydrate(prior["owned_"+str(child)])
++			check(owned!=null and owned.owns_feature(child),"Old owned Feature retained without parent grants")
++			var owned_expected: Dictionary = prior["owned_"+str(child)].duplicate(true)
++			owned_expected.content_revision=codec.revision()
++			check(owned!=null and codec.capture(owned)==owned_expected,"Owned checkpoint preserves every field")
++			var restored := codec.hydrate(prior[str(child)])
++			check(restored != null, "Actual old paid queue restores " + str(child) + ": " + codec.error)
++			if restored == null: continue
++			var expected: Dictionary = prior[str(child)].duplicate(true)
++			expected.content_revision = codec.revision()
++			check(codec.capture(restored) == expected, "Only content revision changes, all saved fields retained")
++			check(CHANGED[child].any(func(parent): return not restored.owns_feature(parent)), "Prior queue genuinely lacks a new prerequisite")
++			var quote := restored.get_feature_research_quote(child)
++			var prior_cash := restored.get_cash_cents()
++			var cycle := restored.get_completed_run_cycles()
++			check(restored.research_feature(quote) and restored.owns_feature(child) and restored.get_cash_cents() == prior_cash - quote.due_cents and restored.get_completed_run_cycles() == cycle + 1, "Old queue finishes at original unpaid balance, exactly once")
++			var before := state(restored)
++			check(not restored.research_feature(quote) and state(restored) == before, "Duplicate completion is inert")
++	print("GAMEPLAY_TREE checks=%d failures=%d" % [checks, failures])
++	quit(failures)
+--- before/patch-notes/scripts/debug/verify_gameplay_tree.gd.uid
++++ after/patch-notes/scripts/debug/verify_gameplay_tree.gd.uid
+@@ -0,0 +1 @@
++uid://mmseuug1ehdk
+--- before/patch-notes/scripts/debug/verify_pause_track_continuity.gd
++++ after/patch-notes/scripts/debug/verify_pause_track_continuity.gd
+@@ -0,0 +1,78 @@
++extends "res://scripts/debug/verify_pause_menu.gd"
++
++func _initialize() -> void:
++	await process_frame
++	create_timer(115).timeout.connect(func(): push_error("Pause track timeout"); quit(2))
++	node_added.connect(_replace_store)
++	var preferences := DemoSettingsStore.defaults()
++	preferences.Music = 13
++	DemoSettingsStore.apply_audio(preferences)
++	DemoSettingsStore.write_settings(preferences) # Isolated test profile only.
++	game = load("res://scenes/gameplay.tscn").instantiate()
++	root.add_child(game)
++	current_scene = game
++	music = root.get_node("Soundtrack")
++	await process_frame
++	game._on_studio_created("Pause music transport", &"action", [], game._active_phase)
++	await create_timer(1.5).timeout
++	var bus := AudioServer.get_bus_index(&"Master")
++	var capture := AudioEffectCapture.new()
++	capture.buffer_length = 2.0
++	AudioServer.add_bus_effect(bus, capture)
++	var backend: String = AudioServer.get_driver_name()
++	var record := {"backend":backend,"samples":[],"preferences":preferences}
++	var identity: int = music.player.get_stream_playback().get_instance_id()
++	var before := game_state()
++	await key(KEY_ESCAPE)
++	expect(paused and game.pause_menu.is_open(), "Real Esc menu owns pause")
++	var raw_start: float = music.player.get_playback_position()
++	var heard_start: float = music.presentation_seconds()
++	for step in 144:
++		if step == 22: Engine.time_scale = 0.0
++		if step == 44: music.request_theme(&"main", true)
++		if step == 88: music.request_theme(&"studio", true)
++		capture.clear_buffer()
++		await create_timer(0.5, true, false, true).timeout
++		var buffer := capture.get_buffer(capture.get_frames_available())
++		var power := 0.0
++		for frame: Vector2 in buffer: power += frame.length_squared()
++		var raw: float = music.player.get_playback_position()
++		var expected: float = (step + 1) * 0.5
++		var delta := fposmod(raw - raw_start, music.player.stream.get_length())
++		record.samples.append({"raw_position":raw,"elapsed":delta,"expected":expected,"energy":power,"frames":buffer.size(),"stream_paused":music.player.stream_paused,"can_process":music.player.can_process(),"player_mode":music.player.process_mode,"filter":music.pause_weight,"tree_paused":paused,"time_scale":Engine.time_scale,"mix_clock":music.presentation_seconds()})
++		expect(music.presentation_seconds()-heard_start > expected * 0.75, "Actual WAV playhead advances during pause, sample " + str(step))
++		expect(buffer.size() > 1000 and power > 0.001, "Actual filtered song continues producing audio, sample " + str(step))
++	expect(game_state() == before and music.pause_weight == 1.0, "Gameplay frozen, full existing filter retained")
++	expect(music.presentation_seconds() > heard_start + 4.5, "Shared music time map advances with real song")
++	expect(music.player.get_stream_playback().get_instance_id() == identity, "No restart or replacement while paused")
++	Engine.time_scale = 1.0
++	game.pause_menu.settings_button.pressed.emit()
++	await create_timer(0.5).timeout
++	expect(paused and game.get_node("%GameplayHUD").settings_menu.is_open(),"Settings opens inside paused gameplay")
++	var settings_position: float = music.player.get_playback_position()
++	await create_timer(0.5).timeout
++	expect(not music.player.stream_paused and music.player.get_playback_position()!=settings_position,"Actual song advances inside paused Settings")
++	await key(KEY_ESCAPE)
++	expect(paused,"Closing Settings retains gameplay pause")
++	await key(KEY_ESCAPE)
++	await create_timer(0.5, true, false, true).timeout
++	expect(not paused and music.pause_weight == 0.0, "Esc resumes gameplay and clears filter")
++	music.set_paused(true)
++	expect(music.player.stream_paused,"Constructed latched transport pause")
++	music.set_process(false)
++	await key(KEY_ESCAPE)
++	await create_timer(0.5).timeout
++	var recovery: float = music.player.get_playback_position()
++	await create_timer(0.5).timeout
++	expect(not music.manually_paused and not music.player.stream_paused and music.is_processing(),"Esc restores the always-running music transport")
++	expect(music.player.get_playback_position()!=recovery,"Recovery advances actual WAV without restarting")
++	expect(music.player.get_stream_playback().get_instance_id()==identity,"Recovery retains synchronized playback identity")
++	await key(KEY_ESCAPE)
++	AudioServer.remove_bus_effect(bus, AudioServer.get_bus_effect_count(bus)-1)
++	record.checks = checks
++	record.failures = failures
++	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT"), FileAccess.WRITE).store_string(JSON.stringify(record,"\t"))
++	print("PAUSE_TRACK backend=%s checks=%d failures=%d" % [backend,checks,failures])
++	music.player.stop()
++	await create_timer(0.15).timeout
++	quit(failures)
+--- before/patch-notes/scripts/debug/verify_pause_track_continuity.gd.uid
++++ after/patch-notes/scripts/debug/verify_pause_track_continuity.gd.uid
+@@ -0,0 +1 @@
++uid://cy076rbk4v1lm
+--- before/patch-notes/scripts/debug/verify_research_integration.gd
++++ after/patch-notes/scripts/debug/verify_research_integration.gd
+@@ -33,7 +33,7 @@
+ 	starter.create_studio_with_traits("Starter",&"action",[&"resourceful"])
+ 	var chosen: StringName
+ 	for item: Dictionary in FeatureStoreCatalog.starting_features():
+-		if not starter.owns_feature(StringName(item.id)): chosen=StringName(item.id); break
++		if starter.get_primitive_reserve_offer(StringName(item.id)).can_purchase: chosen=StringName(item.id); break
+ 	var offer := starter.get_primitive_reserve_offer(chosen)
+ 	expect(offer.price_cents==offer.base_price_cents-10000 and starter.purchase_starter_feature(chosen) and starter.resourceful_saving(10000)==0,"Initial purchase consumes same saving window")
+ 	roundtrip(starter,"Resourceful initial purchase")
+@@ -84,7 +84,7 @@
+ 	run._owned_features.erase(&"enemies")
+ 	run._owned_features.erase(&"power_ups")
+ 	run._owned_features.erase(&"general_combat")
+-	expect(not run.get_feature_research_quote(&"difficulty_levels").can_admit,"Unmet distinct Gameplay ownership gate remains enforced")
++	expect(not run.get_feature_research_quote(&"difficulty_levels").can_admit,"Unmet two-parent Difficulty gate remains enforced")
+ 	run = fresh([&"resourceful"])
+ 	run.admit_feature_research(run.get_feature_research_quote(&"colored_text"))
+ 	run.research_feature(run.get_feature_research_quote(&"colored_text"))
+--- before/patch-notes/scripts/debug/verify_store_hud.gd
++++ after/patch-notes/scripts/debug/verify_store_hud.gd
+@@ -16,6 +16,7 @@
+ 			expect(run.admit_feature_research(quote),"HUD fixture admits research " + str(id))
+ 			while run.get_feature_research_quote(id).queued:
+ 				expect(run.research_feature(run.get_feature_research_quote(id)),"HUD fixture completes research " + str(id))
++	expect(run.admit_feature_research(run.get_feature_research_quote(&"8_color_palette")),"Create a real pending queue for the compact control row")
+ 	var adapter := StudioCheckpoint.new()
+ 	var payload := adapter.capture(run)
+ 	expect(not payload.is_empty(),"Fixture captures through normal checkpoint codec")
+@@ -57,6 +58,8 @@
+ 		if resolution.x >= 1152: expect(store._owned_summary.get_line_count()==1,"Supported-size pool stays on one line")
+ 		expect(not store._body.get_global_rect().intersects(chart) and store._close.global_position.y >= chart.end.y,"Body and Close Store clear chart")
+ 		expect(store._debug.get_global_rect().end.x <= store._close.global_position.x and viewport.encloses(store._debug.get_global_rect()),"Debug is beside Close Store")
++		if store._research_list.visible:
++			expect(store._research_list.get_parent()==store._close.get_parent() and store._research_button.get_parent()==store._close.get_parent(),"Research queue and action share Debug / Close row")
+ 		var category_buttons := store.find_children("*","Button",true,false).filter(func(button: Button):return button.text in FeatureStore.LANE_ORDER)
+ 		expect(category_buttons.is_empty(),"Category zoom shortcut buttons removed")
+ 		expect(store._scroll.size.y >= resolution.y - 360,"Map receives reclaimed header space")
+--- before/patch-notes/scripts/debug/verify_store_shopping_guidance.gd
++++ after/patch-notes/scripts/debug/verify_store_shopping_guidance.gd
+@@ -39,10 +39,10 @@
+ 	check(fresh.purchase_cycles==1 and fresh.purchase_cents==expected-chain.acquisition.steps[0].price_cents,"Mid-chain requery removes bought ancestor and cycle")
+ 	check(run.get_feature_store_offer(&"branching_nodes").discount_percent==0,"Ownership alone grants no familiarity discount")
+ 	var gate := run.get_feature_spending_advice(&"difficulty_levels")
+-	check(gate.acquisition.steps.size()==1,"Gameplay-count gate never invents priced parents")
++	check(gate.acquisition.steps.any(func(x):return x.id==&"turn_based_combat") and gate.acquisition.steps.any(func(x):return x.id==&"scripted_ai"),"Difficulty quotes both real parent paths")
+ 	current.set("_owned_features",{}) # Constructed empty-pool gate fixture only.
+ 	gate=current.get_feature_spending_advice(&"difficulty_levels")
+-	check(gate.acquisition.requirements.any(func(x):return "3 distinct Gameplay" in x),"Unmet count gate is an explicit requirement")
++	check(gate.acquisition.steps.any(func(x):return x.id==&"lives_system") and not str(gate).contains("3 distinct Gameplay"),"Difficulty has transitive Lives ancestry and no count gate")
+ 	var lease := RunState.new()
+ 	lease.initialize_cash_cents(0)
+ 	check(lease.create_studio_with_traits("Lease",&"action",[&"expensive_lease"]),"Create live Lease")
+--- before/patch-notes/scripts/debug/verify_world_restore_file.gd
++++ after/patch-notes/scripts/debug/verify_world_restore_file.gd
+@@ -24,10 +24,11 @@
+ 	if world==null: quit(1);return
+ 	var saved := codec.capture(world)
+ 	var before: Dictionary=source.world.duplicate(true);before.erase("source_identity")
++	for row: Dictionary in before.studios: row.run.content_revision=StudioCheckpoint.new().revision()
+ 	var after: Dictionary=saved.duplicate(true);after.erase("source_identity")
+ 	check(JSON.parse_string(JSON.stringify(before))==JSON.parse_string(JSON.stringify(after)),"Every persisted rival action, finance, RNG, archive and ownership field survives")
+ 	var player_saved := StudioCheckpoint.new().capture(run)
+-	var prior: Dictionary=source.player.duplicate(true);prior.sequence="1"
++	var prior: Dictionary=source.player.duplicate(true);prior.sequence="1";prior.content_revision=StudioCheckpoint.new().revision()
+ 	check(JSON.stringify(prior)==JSON.stringify(player_saved),"Every persisted player field survives")
+ 	var corrupted := saved.duplicate(true);corrupted.source_identity="unverified-source"
+ 	check(not codec.validate(corrupted,player_saved).is_empty(),"Unverified source still rejects")
+--- before/patch-notes/scripts/market/rival_world_checkpoint.gd
++++ after/patch-notes/scripts/market/rival_world_checkpoint.gd
+@@ -31,7 +31,7 @@
+ # Contracts4 preserves already-completed results; new acceptances freeze trial challenges.
+ const COMPATIBLE_PRE_CHALLENGE_SOURCES := ["b3e0baf68815977cad07a3915045a85f53c18df341f3bf3bbe2d8bcc24c94d46"]
+ # Cardinal Store trees: retain actual saved ownership and admitted payments.
+-const COMPATIBLE_PRE_CONE_SOURCES := ["81d4c3577b722bd2bbf552618ae3011cd9f8672f5ee83b3f4c0851c4aa750aed"]
++const COMPATIBLE_PRE_CONE_SOURCES := ["ea4268bd65ae08e2a5a344384eb82dbd1a2fd9f3ef710def8443a0ce578f910c", "81d4c3577b722bd2bbf552618ae3011cd9f8672f5ee83b3f4c0851c4aa750aed"]
+ const MAX_RIVALS := 8
+ const PROJECT_INTS := ["_current_scope","_hidden_bugs","_known_bugs","_fixed_bugs","_marketing_output","_alpha_hidden_bugs_generated","_required_scope","_current_cycle"]
+ const PROJECT_FLOATS := ["_accumulated_bug_pressure","_accumulated_alpha_bug_pressure"]
+--- before/patch-notes/scripts/persistence/studio_checkpoint.gd
++++ after/patch-notes/scripts/persistence/studio_checkpoint.gd
+@@ -9,7 +9,8 @@
+ const PRE_BRANCH_RULES := "finance6-bank1-employees1-traits8-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult2"
+ const PRE_CHALLENGE_RULES := PRE_BRANCH_RULES + "-branches1"
+ const PRE_CONE_RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches1"
+-const RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches2"
++const PRE_GAMEPLAY_TREE_RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches2"
++const RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches3"
+ const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
+ var error := ""
+ var _revision := ""
+@@ -31,13 +32,16 @@
+ # are unchanged; accept only the exact preceding eleven-node catalog identity.
+ const PRE_ALPHA_CATALOG_HASH := "547a1cbc408ac263f3cf3c3a9e96e8667f33993e211bbb492937716c7df414cf"
+ 
++const PRE_GAMEPLAY_TREE_CATALOG_HASH := "a2e42e9c683c04b37ec7dd68650244f799fe7296d0eeca6d55e75ad2c1e70f93"
++
+ func _catalog_revisions(rules: String) -> Array[String]:
+-	return [_rules_revision(rules),_rules_revision(rules,"",PRE_ALPHA_CATALOG_HASH)]
++	return [_rules_revision(rules),_rules_revision(rules,"",PRE_GAMEPLAY_TREE_CATALOG_HASH),_rules_revision(rules,"",PRE_ALPHA_CATALOG_HASH)]
+ 
+ func _legacy_revisions(rules: String) -> Array[String]:
+ 	var result: Array[String] = _catalog_revisions(rules)
+ 	for audio_hash: String in LEGACY_AUDIO_HASHES:
+ 		result.append(_rules_revision(rules, audio_hash))
++		result.append(_rules_revision(rules, audio_hash, PRE_GAMEPLAY_TREE_CATALOG_HASH))
+ 		result.append(_rules_revision(rules, audio_hash, PRE_ALPHA_CATALOG_HASH))
+ 	return result
+ 
+@@ -53,7 +57,7 @@
+ 		if path == "res://data/audio_credits.json":
+ 			# Version 7 already excluded audio credits. Preserve its real save
+ 			# identity when it becomes a supported historical revision.
+-			if rules in [RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
++			if rules in [RULES, PRE_GAMEPLAY_TREE_RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
+ 			if not legacy_audio_hash.is_empty():
+ 				data += path + legacy_audio_hash
+ 				continue
+@@ -119,7 +123,7 @@
+ func _validate(payload: Dictionary, active_rival: bool) -> String:
+ 	# Pre-Fanbase saves lack exact exposure provenance. Preserve unsupported
+ 	# bytes instead of inventing Fans or replaying old sales.
+-	if payload.get("content_revision", "") not in (_catalog_revisions(RULES) + _catalog_revisions(PRE_CONE_RULES) + _catalog_revisions(PRE_CHALLENGE_RULES) + _catalog_revisions(PRE_BRANCH_RULES) + _catalog_revisions(PRE_CULT20_RULES) + _legacy_revisions(PRE_CULT_RULES) + _legacy_revisions(PRE_EDUCATION_RULES)) or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
++	if payload.get("content_revision", "") not in (_catalog_revisions(RULES) + _catalog_revisions(PRE_GAMEPLAY_TREE_RULES) + _catalog_revisions(PRE_CONE_RULES) + _catalog_revisions(PRE_CHALLENGE_RULES) + _catalog_revisions(PRE_BRANCH_RULES) + _catalog_revisions(PRE_CULT20_RULES) + _legacy_revisions(PRE_CULT_RULES) + _legacy_revisions(PRE_EDUCATION_RULES)) or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
+ 	var value: Dictionary = _decode_payload(payload,active_rival)
+ 	if value.is_empty(): return error
+ 	if value.checkpoint_kind != ("rival_active" if active_rival else "studio") or value.sequence < 1: return "Invalid checkpoint boundary"
+--- before/patch-notes/scripts/ui/feature_store.gd
++++ after/patch-notes/scripts/ui/feature_store.gd
+@@ -24,7 +24,6 @@
+ var _lane_by_id: Dictionary = {}
+ var _lane_scroll: Dictionary = {}
+ var _active_lane: StringName = &"Visuals"
+-var _gate: Label
+ var _lane_heading: Label
+ var _details: Label
+ var _cash: Label
+@@ -101,14 +100,21 @@
+ 	layout.add_theme_constant_override("separation", 12)
+ 	margin.add_child(layout)
+ 	var actions := HBoxContainer.new()
++	actions.alignment = BoxContainer.ALIGNMENT_END
+ 	actions.add_theme_constant_override("separation", 8)
+ 	layout.add_child(actions)
+-	_spending_advice = Label.new()
+-	_spending_advice.name = "SpendingAdvice"
+-	_spending_advice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+-	_spending_advice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+-	_spending_advice.add_theme_font_size_override("font_size", 14)
+-	actions.add_child(_spending_advice)
++	_research_list = OptionButton.new()
++	_research_list.fit_to_longest_item = false
++	_research_list.custom_minimum_size.x = 100
++	_research_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	_research_list.item_selected.connect(func(index: int): _select_node(_research_list.get_item_metadata(index)))
++	actions.add_child(_research_list)
++	_research_button = Button.new()
++	_research_button.text = "Research"
++	_research_button.pressed.connect(func():
++		var quote := _research_quote.duplicate(true)
++		if _run.research_feature(quote): _refresh())
++	actions.add_child(_research_button)
+ 	_debug = DebugButton.new()
+ 	_debug.name = "StoreDebug"
+ 	_debug.text = "Debug"
+@@ -123,18 +129,12 @@
+ 	resized.connect(_position_debug)
+ 	visibility_changed.connect(func():
+ 		if not visible: _debug_popup.hide())
+-	var queue_bar := HBoxContainer.new()
+-	layout.add_child(queue_bar)
+-	_research_list = OptionButton.new()
+-	_research_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+-	_research_list.item_selected.connect(func(index: int): _select_node(_research_list.get_item_metadata(index)))
+-	queue_bar.add_child(_research_list)
+-	_research_button = Button.new()
+-	_research_button.text = "Research"
+-	_research_button.pressed.connect(func():
+-		var quote := _research_quote.duplicate(true)
+-		if _run.research_feature(quote): _refresh())
+-	queue_bar.add_child(_research_button)
++	_spending_advice = Label.new()
++	_spending_advice.name = "SpendingAdvice"
++	_spending_advice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	_spending_advice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
++	_spending_advice.add_theme_font_size_override("font_size", 14)
++	layout.add_child(_spending_advice)
+ 	_map = FeatureStoreMap.new()
+ 	add_child(_map)
+ 	_map.configure(self, layout)
+@@ -299,12 +299,13 @@
+ 		assert(_lane_by_id.has(id), "Feature missing Store lane: " + str(id))
+ 		var parents: Array = graph.parents[id]
+ 		var parent: StringName = parents[0] if not parents.is_empty() else &""
+-		if int(entry.get("gameplay_features_required", 0)) > 0:
+-			parent = &"gameplay_gate"
+ 		if not parent.is_empty():
+ 			if not children.has(parent): children[parent] = []
+ 			children[parent].append(id)
+-			_edges.append([parent, id])
++		# Layout follows the first parent only. Every same-tree AND parent gets
++		# its own real connector; cross-tree gates retain their inspect links.
++		for required: StringName in parents:
++			if _lane_by_id[required] == _lane_by_id[id]: _edges.append([required, id])
+ 		var button := Button.new()
+ 		button.size = NODE_SIZE
+ 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+@@ -317,14 +318,6 @@
+ 		_map.decorate(button, get_node("/root/CardDatabase").get_card(id))
+ 		if parents.size() > 1: _map.decorate_and_gate(button, parents)
+ 	assert(_nodes.size() == _lane_by_id.size(), "Store lane map does not match ledger")
+-	_gate = Label.new()
+-	_gate.name = "GameplayGate"
+-	_gate.text = "OWN ANY 3 DISTINCT\nGAMEPLAY FEATURES\nOwnership gate • no discount"
+-	_gate.size = Vector2(180, 100)
+-	_gate.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+-	_gate.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+-	_gate.add_theme_font_size_override("font_size", 14)
+-	_tree.add_child(_gate)
+ 	_lane_heading = Label.new()
+ 	_lane_heading.position = Vector2(16, 8)
+ 	_tree.add_child(_lane_heading)
+@@ -343,9 +336,9 @@
+ func _draw_connections() -> void:
+ 	_map.draw_core()
+ 	for edge: Array in _edges:
+-		var parent: Control = _gate if edge[0] == &"gameplay_gate" else _nodes[edge[0]]
++		var parent: Control = _nodes[edge[0]]
+ 		var child: Control = _nodes[edge[1]]
+-		var parent_rect := parent.get_rect() if parent == _gate else _map.node_footprint(parent)
++		var parent_rect := _map.node_footprint(parent)
+ 		var child_rect := _map.node_footprint(child)
+ 		var direction := (child_rect.get_center() - parent_rect.get_center()).normalized()
+ 		var start := _map.edge_port(parent_rect, direction)
+@@ -383,6 +376,7 @@
+ 	var advice := _run.get_feature_spending_advice(_selected)
+ 	# Unknown prototype prices live in Debug; an actual shortfall stays prominent.
+ 	_spending_advice.text = "Next game: known costs may leave too little cash. Check itemized costs before buying." if advice.get("below_reserve", false) else ""
++	_spending_advice.visible = not _spending_advice.text.is_empty()
+ 	_spending_advice.tooltip_text = FeatureSpendingGuidance.explanation(advice) if not _spending_advice.text.is_empty() else ""
+ 	_spending_advice.add_theme_color_override("font_color", Color("e9c46a"))
+ 	var owned := _summarize_owned_features()
+--- before/patch-notes/scripts/ui/feature_store_map.gd
++++ after/patch-notes/scripts/ui/feature_store_map.gd
+@@ -18,7 +18,6 @@
+ var category_headers: Dictionary = {}
+ var category_paths: Array[PackedVector2Array] = []
+ var category_cones: Dictionary = {}
+-var hub: Label
+ const CATEGORY_DIRECTIONS := {
+ 	&"Visuals": Vector2.LEFT, &"Audio": Vector2.RIGHT,
+ 	&"Technology & Tools": Vector2.UP,
+@@ -27,7 +26,7 @@
+ const COLUMN_STEP := 212.0
+ const ROW_STEP := 212.0
+ const BRANCH_STEP := 212.0
+-const SIDE_BRANCH_STEP := BRANCH_STEP * 4.0
++const SIDE_BRANCH_STEP := BRANCH_STEP * 2.0
+ const SPINE_CHILDREN := {&"text": &"scrolling", &"4_color_palette": &"sprites", &"general_combat": &"turn_based_combat"}
+ const LABEL_OFFSET := Vector2(-8, 136)
+ const LABEL_SIZE := Vector2(144, 36)
+@@ -246,7 +245,6 @@
+ 		var families: Array = []
+ 		for id: StringName in store.LANE_MEMBERS[lane]:
+ 			if not store._edges.any(func(edge: Array): return edge[1] == id): families.append(id)
+-		if lane == &"Gameplay": families.append(&"gameplay_gate")
+ 		if lane == &"Technology & Tools":
+ 			# The branching Tools root sits in the middle of the horizontal root row.
+ 			families = [&"keyboard_and_mouse", &"menu_system", &"save_files", &"controller", &"split_screen"]
+@@ -256,14 +254,14 @@
+ 			# Every root shares the inner axis. Reserve its descendants across that
+ 			# axis, never pack another independent root ahead of an existing branch.
+ 			_place_branch(id, across * track, children, direction, across, 0)
+-			var node: Control = store._gate if id == &"gameplay_gate" else store._nodes[id]
+-			var footprint := node.get_rect() if node == store._gate else node_footprint(node)
++			var node: Control = store._nodes[id]
++			var footprint := node_footprint(node)
+ 			root_area = footprint if track == 0 else root_area.merge(footprint)
+ 			track += _branch_span(id, children, 0)
++		_align_merges(lane, children, direction, across)
+ 		var area := node_footprint(store._nodes[store.LANE_MEMBERS[lane][0]])
+ 		for id: StringName in store.LANE_MEMBERS[lane]:
+ 			area = area.merge(node_footprint(store._nodes[id]))
+-		if lane == &"Gameplay": area = area.merge(store._gate.get_rect())
+ 		# The cone reserves room for later children without inventing prerequisites.
+ 		# Side cones open away from the crown; their inner edge contains roots only.
+ 		var cone_points := PackedVector2Array()
+@@ -291,23 +289,32 @@
+ 		category_cones[lane] = Geometry2D.convex_hull(cone_points)
+ 		area = Rect2(cone_points[0], Vector2.ZERO)
+ 		for point: Vector2 in cone_points: area = area.expand(point)
+-		area.position.y -= 64.0
+-		area.size.y += 64.0
++		if lane == &"Technology & Tools":
++			area.position.y -= 64.0
++			area.size.y += 64.0
++		else:
++			if direction == Vector2.RIGHT: area.position.x -= 80.0
++			area.size.x += 80.0
+ 		category_regions[lane] = area
+ 		var heading := Label.new()
+ 		heading.name = "Category" + str(store.LANE_ORDER.find(lane))
+ 		heading.text = str(lane)
+ 		heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+ 		heading.add_theme_font_size_override("font_size", 36)
+-		heading.size = Vector2(area.size.x, 44)
+-		heading.position = area.position + Vector2(0, 16)
++		if lane == &"Technology & Tools":
++			heading.size = Vector2(area.size.x, 44)
++			heading.position = area.position + Vector2(0, 16)
++		else:
++			heading.size = Vector2(area.size.y, 56)
++			heading.rotation = -PI / 2.0 if direction == Vector2.LEFT else PI / 2.0
++			heading.position = Vector2(area.end.x - 64, area.end.y) if direction == Vector2.LEFT else area.position + Vector2(64, 0)
+ 		heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 		tree.add_child(heading)
+ 		category_headers[lane] = heading
+ 		origins[lane] = area.get_center()
+ 	# An open central trunk, with two boughs on each side and a crown above.
+ 	var crown: Rect2 = category_regions[&"Technology & Tools"]
+-	var inner_edge := crown.size.x / 2.0 + 140.0
++	var inner_edge := 100.0
+ 	var upper_height := maxf(category_regions[&"Visuals"].size.y, category_regions[&"Audio"].size.y)
+ 	for lane: StringName in store.LANE_ORDER:
+ 		var area: Rect2 = category_regions[lane]
+@@ -319,28 +326,19 @@
+ 			&"Audio": destination = Vector2(inner_edge, -area.size.y - 80.0)
+ 			_: destination = Vector2(inner_edge, 100.0)
+ 		_move_category(lane, destination - area.position)
+-	hub = Label.new()
+-	hub.name = "FeatureLibraryRoot"
+-	hub.text = "FEATURE LIBRARY"
+-	hub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+-	hub.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+-	hub.add_theme_font_size_override("font_size", 42)
+-	hub.size = Vector2(440, 100)
+-	hub.position = -hub.size / 2.0
+-	hub.mouse_filter = Control.MOUSE_FILTER_IGNORE
+-	tree.add_child(hub)
+-	center = hub.get_rect().get_center()
+-	for lane: StringName in store.LANE_ORDER:
+-		var direction: Vector2 = CATEGORY_DIRECTIONS[lane]
+-		var area: Rect2 = category_regions[lane]
+-		var start := edge_port(hub.get_rect(), direction)
+-		if direction == Vector2.UP:
+-			category_paths.append(PackedVector2Array([start, Vector2(center.x, area.end.y)]))
+-		else:
+-			var end := Vector2(area.end.x if direction == Vector2.LEFT else area.position.x, area.get_center().y)
+-			var fork_x := direction.x * (inner_edge - 70.0)
+-			category_paths.append(PackedVector2Array([start, Vector2(fork_x, start.y), Vector2(fork_x, end.y), end]))
+-	var extent := hub.get_rect().grow(8.0)
++	# Five category trees share four connecting paths, with no center root.
++	# These neutral lines organize categories; arrows alone denote prerequisites.
++	center = Vector2.ZERO
++	var crown_end := Vector2(0, category_regions[&"Technology & Tools"].end.y)
++	for pair: Array in [[&"Visuals", &"Gameplay"], [&"Audio", &"Story & World"]]:
++		var upper: Rect2 = category_regions[pair[0]]
++		var lower: Rect2 = category_regions[pair[1]]
++		var side := -1.0 if pair[0] == &"Visuals" else 1.0
++		var a := Vector2(side * inner_edge, upper.get_center().y)
++		var b := Vector2(side * inner_edge, lower.get_center().y)
++		category_paths.append(PackedVector2Array([crown_end, Vector2(0, a.y), a]))
++		category_paths.append(PackedVector2Array([a, Vector2(side * 40, a.y), Vector2(side * 40, b.y), b]))
++	var extent: Rect2 = category_regions[&"Technology & Tools"]
+ 	for area: Rect2 in category_regions.values(): extent = extent.merge(area)
+ 	extent = extent.grow(32.0)
+ 	var half_width := maxf(absf(extent.position.x), absf(extent.end.x))
+@@ -348,7 +346,6 @@
+ 	extent.size.x = half_width * 2.0
+ 	var offset := -extent.position
+ 	for lane: StringName in store.LANE_ORDER: _move_category(lane, offset)
+-	hub.position += offset
+ 	center += offset
+ 	for i in range(category_paths.size()):
+ 		for j in range(category_paths[i].size()): category_paths[i][j] += offset
+@@ -358,6 +355,28 @@
+ 	# Wait for Containers to lay out before measuring the first overview.
+ 	_initial_overview()
+ 
++func _align_merges(lane: StringName, children: Dictionary, direction: Vector2, across: Vector2) -> void:
++	var graph := FeatureStoreCatalog.graph(store._run._feature_definitions, store._run._feature_offers)
++	var ordered := FeatureStoreCatalog.ordered_ancestors(store.LANE_MEMBERS[lane], graph.parents)
++	for id: StringName in ordered.order:
++		var parents: Array = graph.parents[id]
++		if parents.size() != 2 or not store.LANE_MEMBERS[lane].has(id): continue
++		if not parents.all(func(parent): return store._lane_by_id[parent] == lane): continue
++		var a: Vector2 = store._nodes[parents[0]].position
++		var b: Vector2 = store._nodes[parents[1]].position
++		var cross_axis := across.normalized()
++		# Put the second arm beside the primary parent's fork, one row beyond
++		# its sibling. The two arrows converge outside that fork, never across it.
++		var depth := maxf(a.dot(direction), b.dot(direction))
++		var second := direction * depth + cross_axis * (maxf(a.dot(cross_axis), b.dot(cross_axis)) + ROW_STEP)
++		_shift_branch(parents[1], second - b, children)
++		var target := direction * (depth + SIDE_BRANCH_STEP) + cross_axis * (a.dot(cross_axis) + ROW_STEP)
++		_shift_branch(id, target - store._nodes[id].position, children)
++
++func _shift_branch(id: StringName, delta: Vector2, children: Dictionary) -> void:
++	store._nodes[id].position += delta
++	for child: StringName in children.get(id, []): _shift_branch(child, delta, children)
++
+ func _initial_overview() -> void:
+ 	var revision := _view_revision
+ 	await get_tree().process_frame
+@@ -370,7 +389,6 @@
+ 
+ func _move_category(lane: StringName, offset: Vector2) -> void:
+ 	for id: StringName in store.LANE_MEMBERS[lane]: store._nodes[id].position += offset
+-	if lane == &"Gameplay": store._gate.position += offset
+ 	category_headers[lane].position += offset
+ 	category_regions[lane].position += offset
+ 	origins[lane] += offset
+@@ -397,9 +415,8 @@
+ 	return maxi(1, span)
+ 
+ func _place_branch(id: StringName, point: Vector2, children: Dictionary, direction: Vector2, across: Vector2, depth: int) -> void:
+-	var node: Control = store._gate if id == &"gameplay_gate" else store._nodes[id]
++	var node: Control = store._nodes[id]
+ 	node.position = point
+-	if id == &"gameplay_gate": node.position.x -= (node.size.x - store.NODE_SIZE.x) / 2.0
+ 	var descendants := _children(id, children)
+ 	var track := 1 if descendants.size() == 1 and depth > 0 else 0
+ 	for child: StringName in descendants:
+@@ -415,11 +432,12 @@
+ 		tree.draw_colored_polygon(cone, Color("1c2029"))
+ 		tree.draw_polyline(cone, Color("394453"), 2.0, true)
+ 		var header: Label = category_headers[lane]
+-		tree.draw_style_box(_category_style(), header.get_rect())
++		tree.draw_style_box(_category_style(), header_rect(header))
+ 	for path: PackedVector2Array in category_paths:
+ 		tree.draw_polyline(path, Color("667688"), 4.0, true)
+-	if hub != null:
+-		tree.draw_style_box(_category_style(), hub.get_rect().grow(8.0))
++
++func header_rect(header: Label) -> Rect2:
++	return Transform2D(header.rotation, header.position) * Rect2(Vector2.ZERO, header.size)
+ 
+ func _category_style() -> StyleBoxFlat:
+ 	var style := StyleBoxFlat.new()
+--- before/patch-notes/scripts/ui/pause_menu.gd
++++ after/patch-notes/scripts/ui/pause_menu.gd
+@@ -82,6 +82,8 @@
+ 	_return_focus = get_viewport().gui_get_focus_owner()
+ 	_owns_pause = true
+ 	get_tree().paused = true
++	var soundtrack := get_node_or_null("/root/Soundtrack")
++	if soundtrack != null: soundtrack.begin_gameplay_pause()
+ 	panel.show()
+ 	show_choices()
+ 

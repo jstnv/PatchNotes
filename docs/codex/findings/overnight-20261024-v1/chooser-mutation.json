@@ -1,0 +1,22 @@
+{
+  "pass": true,
+  "scope": "Private test-only row removal: old count guard misses absent Brief; corrected exact-ID guard detects it. No canonical UI or gameplay mutation.",
+  "probes": [
+    {
+      "mode": "old-count-guard",
+      "expected_failure": false,
+      "failed": false,
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-chooser-mutation-20261024-v1\\old-count-guard\\probe.log",
+      "log_sha256": "3d92303199236a6009fd18660cf35229de04601e028baaf6e301cf5b157c4872",
+      "verifier_sha256": "f48e436e368467c07ffed74499ec218f5f915104a30c97794c9b07a9ca208015"
+    },
+    {
+      "mode": "exact-id-guard",
+      "expected_failure": true,
+      "failed": true,
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-chooser-mutation-20261024-v1\\exact-id-guard\\probe.log",
+      "log_sha256": "c37dffa1843a761a1b2334ce8c4e2692620bb31947d4a71611187ef82d7a45f8",
+      "verifier_sha256": "797a2540b1e5d03e6952168535da86fd3d6f6587f0cf4247f99633e9fd7f1e1a"
+    }
+  ]
+}

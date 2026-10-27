@@ -109,7 +109,7 @@ func sequence(count: int, bonus: bool, frame_step: float) -> void:
 	# A stationary injected transport clock never advances visual events.
 	for i in range(10): motion.advance_music(fake_time)
 	check(motion.trace.is_empty(), "No events while clock is stationary")
-	var deadline := fake_time + (count * 3 + 4) * Grid.STEP
+	var deadline := fake_time + (count + 10) * Grid.STEP
 	while motion._music_driven and fake_time < deadline:
 		fake_time += frame_step
 		motion.advance_music(fake_time)
@@ -123,13 +123,13 @@ func sequence(count: int, bonus: bool, frame_step: float) -> void:
 		for i in range(rows.size()):
 			check(rows[i].index == i, "Left-to-right event order")
 			check(rows[i].lateness_seconds >= -0.00001 and rows[i].lateness_seconds <= frame_step + 0.00001, "Event error bounded by one render frame")
-			if i > 0: check(is_equal_approx(rows[i].beat_index - rows[i-1].beat_index, 1.0), "Fixed subdivision cadence")
+			if i > 0: check(is_equal_approx(rows[i].beat_index - rows[i-1].beat_index, 0.0 if event.begins_with("bonus") else 1.0), "Base cards keep cadence; synergy text is simultaneous")
 	check(motion._play_sound.bus == &"SFX" and motion._remove_sound.bus == &"SFX", "Both cues obey SFX settings")
 	check(motion._play_sound.stream is AudioStreamWAV and motion._remove_sound.stream is AudioStreamWAV, "Original WAV cues loaded")
 	if bonus:
 		var start: Array = motion.trace.filter(func(e): return e.event == "specialization_started")
 		var rise: Array = motion.trace.filter(func(e): return e.event == "bonus_rise")
-		check(rise[0].beat_index - start[0].beat_index == HandPresentation.SPECIALIZATION_LEAD_BEATS, "Popup precedes bonuses by one music subdivision")
+		check(rise[0].beat_index == start[0].beat_index, "All multiplier rises begin with the popup")
 		check(motion.trace.filter(func(e): return e.event in ["exit_bounce", "exit_grounded"]).is_empty(), "No extra victory wave after synergy")
 	check(motion.trace.filter(func(e): return e.event == "exit_slide").size() == 1, "Exactly one removal cue boundary")
 	traces.append({"count": count, "bonus": bonus, "frame_step": frame_step, "events": motion.trace.duplicate(true)})
@@ -164,7 +164,7 @@ func balanced_sequence(frame_step: float) -> void:
 	var action := func():
 		calls[0] += 1
 		state._cycle += 1
-		for i in range(4): state[HandPresentation.CORE[i]] += 6 if i == 0 else 5
+		for i in range(4): state[HandPresentation.CORE[i]] += 7 if i < 2 else 6
 		motion.note_specialization(Callable(), true)
 	check(motion.play("play", fan, selected, action, func(): return state.duplicate(), Callable(), Callable()), "Balanced visual sequence accepted")
 	for i in range(10): motion.advance_music(fake_time)
@@ -174,14 +174,14 @@ func balanced_sequence(frame_step: float) -> void:
 		fake_time += frame_step
 		motion.advance_music(fake_time)
 	var played := snapshots.filter(func(row): return row.event == "score")
-	check(played.size() == 4 and played[-1].values[&"graphics"] == 105 and played[-1].values[&"design"] == 7, "Balanced first displays printed hand gains")
+	check(played.size() == 4 and played[-1].values[&"graphics"] == 100 and played[-1].values[&"design"] == 1, "Balanced keeps HUD unchanged while card values float")
 	var shared := snapshots.filter(func(row): return row.event == "balanced_redistributed")
-	check(shared.size() == 1 and shared[0].values[&"graphics"] == 106 and shared[0].values[&"design"] == 6, "Balanced applies signed transfer once after cards play")
+	check(shared.size() == 1 and shared[0].values[&"graphics"] == 107 and shared[0].values[&"design"] == 7, "Balanced applies boosted split once after cards play")
 	check(calls[0] == 1 and state._cycle == 1, "Balanced presentation never replays gameplay")
 	for key in HandPresentation.CORE: check(motion.display_values[key] == state[key], "Balanced display matches authoritative final score")
 	var starts := motion.trace.filter(func(e): return e.event == "specialization_started")
 	var splits := motion.trace.filter(func(e): return e.event == "balanced_redistributed")
-	check(starts.size() == 1 and splits.size() == 1 and splits[0].beat_index - starts[0].beat_index == 1, "Balanced popup then redistribution share continuous music grid")
+	check(starts.size() == 1 and splits.size() == 1 and splits[0].beat_index - starts[0].beat_index == 5, "Balanced merge/split/sink deposits five music subdivisions after popup")
 	check(motion.trace.filter(func(e): return e.event in ["bonus_rise", "exit_bounce"]).is_empty(), "Balanced has no second bounce wave")
 	check(splits[0].lateness_seconds >= -0.00001 and splits[0].lateness_seconds <= frame_step + 0.00001, "Balanced low-frame-rate event stays within one frame")
 	traces.append({"balanced":true, "frame_step":frame_step, "events":motion.trace.duplicate(true)})

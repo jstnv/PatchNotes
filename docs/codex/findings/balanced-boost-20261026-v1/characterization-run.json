@@ -1,0 +1,26 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_production_extraction.gd"
+  ],
+  "exit": 124,
+  "elapsed_seconds": 130.016,
+  "errors": [
+    "SCRIPT ERROR: Assertion failed: Production fixture with approved 1.25 Balanced delta failed"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "SCRIPT ERROR: Assertion failed: Production fixture with approved 1.25 Balanced delta failed",
+    "   at: _initialize (res://scripts/debug/verify_production_extraction.gd:40)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _initialize (res://scripts/debug/verify_production_extraction.gd:40)",
+    "Loaded 40 cards."
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "date": "2026-10-22",
+  "branch": "main",
+  "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+  "baseline": "before-source.json",
+  "baseline_sha256": "624d934d5be7dc0c6c69078cc7c6e19c2577d3901eaa015564f6deddf124a040",
+  "editor_mechanics_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+  "scope": "scripts/**/*.gd including debug, data/**/*.json and queries/**/*.gd; comparison to this task baseline, not HEAD or whole worktree.",
+  "before_count": 349,
+  "current_count": 357,
+  "changed_count": 30,
+  "status_counts": {
+    "modified": 22,
+    "added": 8,
+    "removed": 0
+  },
+  "files": [
+    {
+      "path": "patch-notes/queries/market_release_index.gd",
+      "status": "modified",
+      "before_sha256": "f43bdc8ef7e2d2ad7dc6302b5f50a821d3fe9282e7c5b69060dfdff5b6a49ea2",
+      "current_sha256": "9c29f93cf21e85aa8194492fa67c5603ae06fe31bd4dcfa6498b18bb15f7ddc0",
+      "current_bytes": 3441
+    },
+    {
+      "path": "patch-notes/scripts/debug/verify_contract_challenge_publishers.gd",
+      "status": "modified",
+      "before_sha256": "88328ef340d111e6101e887655a2fb679f913079f32823c4c542a10cee7c0a5f",
+      "current_sha256": "25c40cc1502427f091ac3dbd4a80d1ed887a46700d6d0e6c1b1cd06777be67cb",
+      "current_bytes": 4961
+    },
+    {
+      "path": "patch-notes/scripts/debug/verify_market_density_trial.gd",
+      "status": "added",
+      "before_sha256": null,
+      "current_sha256": "e04334a1813803f854e32abf3c9cb7574ef04381e07d9e31e71bda4fd24b3188",
+      "current_bytes": 12364
+    },
+    {
+      "path": "patch-notes/scripts/debug/verify_rival_trial_activation.gd",
+      "status": "modified",
+      "before_sha256": "0c9242e51c13a88e8ad170969106f638a7d6cb4846430ce3d7baf01bc426a050",
+      "current_sha256": "7435f2e22b85e8e8c7826d698f719a7d680468c92e72e9c39fd8c3bd340b7b2f",
+      "current_bytes": 8166
+    },
+    {
+      "path": "patch-notes/scripts/fanbase/studio_fanbase.gd",
+      "status": "modified",
+      "before_sha256": "566846ebf61e4d1b944276d9aaeacb06ecd316c71d5b7a944412db1247d06b36",
+      "current_sha256": "2b834f9c720084f0144941594f6e68806af66200900cf25c517f239a451acf5d",
+      "current_bytes": 8873
+    },
+    {
+      "path": "patch-notes/scripts/market/legacy_pre_market_fanbase.gd",
+      "status": "added",
+      "before_sha256": null,
+      "current_sha256": "4d528fa6a84ed26f8805b88cc830daf7c299bb00ec7fcd279ae13ab30386a728",
+      "current_bytes": 8832
+    },
+    {
+      "path": "patch-notes/scripts/market/legacy_pre_market_sales.gd",
+      "status": "added",
+      "before_sha256": null,
+      "current_sha256": "a6aeeaaac6ad47b2480cf010559686e53ed7e4e7c0eeb2d419ae65ef6b9b673b",
+      "current_bytes": 11904
+    },
+    {
+      "path": "patch-notes/scripts/market/legacy_pre_market_schema.gd",
+      "status": "added",
+      "before_sha256": null,
+      "current_sha256": "a58f4605bf98150dad423d956a1862c8c594658a77133653c0c465acbb6c2083",
+      "current_bytes": 10774
+    },
+    {
+      "path": "patch-notes/scripts/market/legacy_pre_market_studio_validator.gd",
+      "status": "added",
+      "before_sha256": null,
+      "current_sha256": "3d1b8b11cd54439792a917bf61b4a6f4676865213a8c1ea249b27c1c4a43011e",
+      "current_bytes": 31217
+    },
+    {
+      "path": "patch-notes/scripts/market/legacy_pre_market_world.gd",
+      "status": "added",
+      "before_sha256": null,
+      "current_sha256": "96978da5e2ba6f39264b1b30a7f8d7ed30d1d141b8d1ece56e4807c5b5a376b8",
+      "current_bytes": 21285
+    },
+    {
+      "path": "patch-notes/scripts/market/market_save_migration_trial.gd",
+      "status": "added",
+      "before_sha256": null,
+      "current_sha256": "96d0b43ee9e91634cc0013c117a97beefa56c4ec74c218e90ea8bcc84a403e2b",
+      "current_bytes": 12471
+    },
+    {
+      "path": "patch-notes/scripts/market/market_transaction_trial.gd",
+      "status": "added",
+      "before_sha256": null,
+      "current_sha256": "6f1e6259d8aa3c09c2130e5c03dc1d766fca3b3a42ff0880d097398aaa414535",
+      "current_bytes": 8748
+    },
+    {
+      "path": "patch-notes/scripts/market/rival_world.gd",
+      "status": "modified",
+      "before_sha256": "9f9ad490ba6caa07812342321f22c999cc574e33f435699f5b8ceb773a6b1986",
+      "current_sha256": "0d1c7eade207e46675b1acf964ce6d21fb7d22e775ae3a4dec3ba6840fe3f636",
+      "current_bytes": 9346
+    },
+    {
+      "path": "patch-notes/scripts/market/rival_world_checkpoint.gd",
+      "status": "modified",
+      "before_sha256": "6194aa33230bb10f177c3fe8d3ce7bab013ac8654de80a46a5e68c92050dd7c6",
+      "current_sha256": "6f729a3cbfa14b722508d36aaff340397fe0b4f873699607d7da173e96149112",
+      "current_bytes": 29483
+    },
+    {
+      "path": "patch-notes/scripts/persistence/checkpoint_coordinator.gd",
+      "status": "modified",
+      "before_sha256": "0ed77e3b1bee498ee63a70e81bc370036e256cb888e7138ac046ce077dc8d374",
+      "current_sha256": "bb4ff91373a457720406ba343490513b9bbe027d43b98a4c5a7857ca57fdb16f",
+      "current_bytes": 6613
+    },
+    {
+      "path": "patch-notes/scripts/persistence/checkpoint_schema.gd",
+      "status": "modified",
+      "before_sha256": "775f688c84524cbe1b3707251487971a5f25ed77a6b62dcb0c763bfa33192ba5",
+      "current_sha256": "f3aa3d0d60986db32954653772235a42176bf27840b26eeb6d39b20debe2a6bf",
+      "current_bytes": 11286
+    },
+    {
+      "path": "patch-notes/scripts/persistence/studio_checkpoint.gd",
+      "status": "modified",
+      "before_sha256": "a0d6660e0e6a149264c6d1fbf1a515563a678e107de944dcbc2ce03387cd1ad9",
+      "current_sha256": "38d534d5e620f838836bd7722c61ddf79e68bd663794f960a04469b617b49ba6",
+      "current_bytes": 32110
+    },
+    {
+      "path": "patch-notes/scripts/phases/post_game_review.gd",
+      "status": "modified",
+      "before_sha256": "3e84f7600dd6ef17f679a948231729858a0639aade01d1369a020f365f980e0d",
+      "current_sha256": "d3d6cb7c277876efaa422172b1380bb04cc969c290309a6c5998db34c451954c",
+      "current_bytes": 9647
+    },
+    {
+      "path": "patch-notes/scripts/phases/studio_phase.gd",
+      "status": "modified",
+      "before_sha256": "fde82e339b30265fcba366f071fa13395e99a97ee22ca811f86ca0d1f32b486c",
+      "current_sha256": "9c9f6df94c3b717baf882b80b0f027e0058f2ee0772577ace7a4f00171a5261e",
+      "current_bytes": 29628
+    },
+    {
+      "path": "patch-notes/scripts/project_state.gd",
+      "status": "modified",
+      "before_sha256": "747e87f7e245b2ff6d1233e9888cf07b0b3fb61873ca953105a9b227ca1d8041",
+      "current_sha256": "4d7b2c8f2f49a34e2856f6ed83cf779fdae4da207a40bd5df9a2c67fce784567",
+      "current_bytes": 31421
+    },
+    {
+      "path": "patch-notes/scripts/review/primitive_review_calculator.gd",
+      "status": "modified",
+      "before_sha256": "abc0b809d253035ea07c3133dc82c568ffd0f32a43f352ec50c479d0b3081846",
+      "current_sha256": "e58090fbb1562a653a4883058b1577dc9c45f49e86a48f208208b8fce4ea9098",
+      "current_bytes": 5371
+    },
+    {
+      "path": "patch-notes/scripts/run_state.gd",
+      "status": "modified",
+      "before_sha256": "34e1dcc0c0ce18c7ddc9d95d2bde161191a619e098e46101ec4d9f0944444388",
+      "current_sha256": "af4a6e2eeda2015337bf3f0f666a5136719edd4154b141416bef8f5e50b8a464",
+      "current_bytes": 70700
+    },
+    {
+      "path": "patch-notes/scripts/sales/released_game_monthly_report.gd",
+      "status": "modified",
+      "before_sha256": "8dc055ab6813713c51b09c6f7cddf50ca5f5a9a814ef2fce637aa928d2d6fc47",
+      "current_sha256": "2dfd20c43245066dc57f01d43faa198a08a6a903fab228acf4dced2c054cd44d",
+      "current_bytes": 3420
+    },
+    {
+      "path": "patch-notes/scripts/sales/released_game_sales.gd",
+      "status": "modified",
+      "before_sha256": "4d8418b023557cffae670794c9a881d936a2dcbf0eb457d85438c8bfce014739",
+      "current_sha256": "33a56e47a43375d04c8a88a857fdf611b907d1dff604417a67ea841e2a64d743",
+      "current_bytes": 13683
+    },
+    {
+      "path": "patch-notes/scripts/simulation/begin_project.gd",
+      "status": "modified",
+      "before_sha256": "4a23b56999c31e663ab5afb87293d219ed3127c3056b64808c11ba02bd24ebee",
+      "current_sha256": "3234f670e37973ba628a556267d1eb59d4934db40a43359f76eef63a69564c5f",
+      "current_bytes": 3255
+    },
+    {
+      "path": "patch-notes/scripts/simulation/development_replay.gd",
+      "status": "modified",
+      "before_sha256": "1501ecd4f2cd439590bbe54720423ec413a78d9eed01f773e7c73da710b2c68d",
+      "current_sha256": "617222544f75bc369c693d9fbd5583b17efdbc0f49bdefae83bdb41eb2f59d06",
+      "current_bytes": 8536
+    },
+    {
+      "path": "patch-notes/scripts/ui/gameplay_hud.gd",
+      "status": "modified",
+      "before_sha256": "b2a11d1aee6138f6cf70795b767bc0d22627d40c8e293cdd658894f0564aa8a5",
+      "current_sha256": "66f457e50433611582c6ebb72ab97032301fb8c70f3d4e614d1dc7e5aa97dc91",
+      "current_bytes": 28493
+    },
+    {
+      "path": "patch-notes/scripts/ui/how_to_play_content.gd",
+      "status": "modified",
+      "before_sha256": "44cda97f92f7cf268272d4b2666fcf780e27c75a18ac5f6564b11fcbea62ac6f",
+      "current_sha256": "4222587a9f983a69a00c240877b0a885f321a32e6aafa8a8911be43a9fd7d901",
+      "current_bytes": 32308
+    },
+    {
+      "path": "patch-notes/scripts/ui/monthly_sales_report.gd",
+      "status": "modified",
+      "before_sha256": "094a5968c8a45a8581b3f1eea856493177675e6abee7e8e7d58c1b583a78f4c7",
+      "current_sha256": "213d0d4ee30a358dbc9f33b4455085ac1adae5870822497d8b3894a63e0cd471",
+      "current_bytes": 7083
+    },
+    {
+      "path": "patch-notes/scripts/ui/predevelopment_overlay.gd",
+      "status": "modified",
+      "before_sha256": "0c443c4df0ec4c5475974d3c7066f22e0967fbfb4564b1e2918f426bc4151096",
+      "current_sha256": "5202d6bd216877a881e0349bb0c9665aedd78e4e5e027e10785c0d9d2b9a0ed8",
+      "current_bytes": 8634
+    }
+  ]
+}

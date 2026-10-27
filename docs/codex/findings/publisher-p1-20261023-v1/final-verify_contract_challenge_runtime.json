@@ -1,0 +1,40 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--headless",
+    "--script",
+    "res://scripts/debug/verify_contract_challenge_runtime.gd"
+  ],
+  "exit": 0,
+  "errors": [],
+  "extra_environment": {
+    "PN_CARD_FRAME_OUTPUT": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\publisher-p1-20261023-v1\\current-legacy.frame.json",
+    "PN_OLD_WORLD_FRAME": ""
+  },
+  "summary": [
+    "PASS: Second hand has a legal seven-candidate draw and four-card play",
+    "PASS: Second hand commits payout and completion",
+    "PASS: Exactly two successful hands complete",
+    "PASS: Completion view shows Scope, four Core scores, percent and exact payout",
+    "PASS: Final hand awards full separate SideStreet bonus",
+    "PASS: Challenge adds to, never reduces, base payout",
+    "PASS: Completion view separates challenge grade and bonus",
+    "PASS: Bonus Promotion banks for next successful launch",
+    "PASS: Authoritative ContractState opens in ContractPhase",
+    "PASS: First hand commits through the shared productive cycle",
+    "PASS: Second hand has a legal seven-candidate draw and four-card play",
+    "PASS: Second hand commits payout and completion",
+    "PASS: Exactly two successful hands complete",
+    "PASS: Completion view shows Scope, four Core scores, percent and exact payout",
+    "PASS: Rejected redraw preserves grade inputs, budget and RNG",
+    "PASS: Successful Contract redraw records one challenge miss",
+    "PASS: No-redraw miss still completes base Contract",
+    "PASS: No-redraw miss still completes base Contract",
+    "PASS: Miss loses only the separate bonus",
+    "Contract challenge runtime: 0 failures"
+  ]
+}

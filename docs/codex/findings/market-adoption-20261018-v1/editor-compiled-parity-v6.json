@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "fields_compared_exactly": [
+    "recipe",
+    "releases",
+    "projects",
+    "observations",
+    "coverage"
+  ],
+  "player_checkpoint_exact": true,
+  "world_checkpoint_exact_except": [
+    "world.source_identity"
+  ],
+  "editor_source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+  "compiled_source_identity": "d259a6545d3802f5a2493f96547d9e10ad26984f4342270724232a3764fbec72",
+  "commands": 54,
+  "player_releases": 3,
+  "excluded_report_fields": [
+    "timings",
+    "source_identity",
+    "starting_source_identity",
+    "final digest containing build identity"
+  ],
+  "excluded_checkpoint_fields": [
+    "top-level digest containing build identity"
+  ],
+  "inputs": {
+    "acceptance-pinned-v2-action-war.json": {
+      "bytes": 65940,
+      "sha256": "9a80824a95df5167835461188c1acee58a6d21849c29840aa11e2816a4f8ba25"
+    },
+    "pack-campaign-v6.json": {
+      "bytes": 65911,
+      "sha256": "1c4bb4246054dbdc66d517d44c661e3c84a1743103c262a452a8c57685131849"
+    },
+    "acceptance-pinned-v2-action-war.json.checkpoint.json": {
+      "bytes": 248833,
+      "sha256": "4c5d8317c48edce74f14303287090d0dfd5bf3ef68b8b96d9e7cdc7a9ff70c27"
+    },
+    "pack-campaign-v6.json.checkpoint.json": {
+      "bytes": 248833,
+      "sha256": "4270ff4d5447db1e3799bf07f04b51bbefd9dfa2735c6a7def26a380dc6a21f2"
+    }
+  }
+}

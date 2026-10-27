@@ -1,0 +1,40 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\simulators\\crown-feedback-20261026-v1\\project",
+    "--audio-driver",
+    "Dummy",
+    "--headless",
+    "--script",
+    "res://scripts/debug/verify_contract_extraction.gd"
+  ],
+  "exit": 124,
+  "seconds": 240.015,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant. (Warning treated as error.)",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_contract_extraction.gd\" with error \"Compilation failed\".",
+    "ERROR: Attempt to open script 'res://../docs/codex/threads/simulation-engine/m3b-v1/contract_phase_oracle.gd' resulted in error 'File not found'.",
+    "ERROR: Failed loading resource: res://../docs/codex/threads/simulation-engine/m3b-v1/contract_phase_oracle.gd.",
+    "SCRIPT ERROR: Attempt to call function 'new' in base 'null instance' on a null instance."
+  ],
+  "tail": [
+    "PASS: Campaign Contract command",
+    "PASS: Campaign Contract hand",
+    "PASS: Campaign Contract hand",
+    "PASS: Completion awaits Studio dismissal",
+    "PASS: Campaign dismisses Contract",
+    "PASS: Contract continuation exact after restore",
+    "PASS: Completed Contract, receipt and Promotion survive Studio restore",
+    "PASS: Save Contract fresh-process tape",
+    "PASS: Accept ironclad",
+    "PASS: Accept ironclad",
+    "PASS: Accept ironclad",
+    "SCRIPT ERROR: Attempt to call function 'new' in base 'null instance' on a null instance.",
+    "   at: _run (res://scripts/debug/verify_contract_extraction.gd:101)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _run (res://scripts/debug/verify_contract_extraction.gd:101)"
+  ]
+}

@@ -1,0 +1,297 @@
+--- base/scripts/debug/g4_synergy_policy.gd
++++ candidate/scripts/debug/g4_synergy_policy.gd
+@@ -0,0 +1,42 @@
++## Private matched policy wrapper; reference repeats the unchanged trial choice.
++extends RefCounted
++
++const POLICY_ID := "g4-synergy-choice-study"
++const POLICY_VERSION := "1"
++const Fixture := preload("res://scripts/simulation/finite_fixture_policy.gd")
++const Trial := preload("res://scripts/market/rival_trial.gd")
++
++static func factory(config: Dictionary) -> Callable:
++	if not Fixture.valid_config(config) or config.get("mode") not in ["reference", "synergy", "synergy_beta"]: return Callable()
++	if config.get("selection") != "features_first" or config.get("theme") != "fantasy": return Callable()
++	for phase in ["design", "alpha", "beta"]:
++		if float(config.hands.get(phase, -1)) != 2.0: return Callable()
++	var mode := str(config.mode)
++	var genre := str(config.genre)
++	var label := str(config.name_prefix)
++	if mode in ["synergy", "synergy_beta"]:
++		var beta_aware := mode == "synergy_beta"
++		return func(view: Dictionary) -> Dictionary: return Trial.choose(view,genre,label,beta_aware)
++	return func(view: Dictionary) -> Dictionary: return _reference_choice(view,genre,label)
++
++static func _reference_choice(view: Dictionary, genre: String, label: String) -> Dictionary:
++	if view.phase == &"studio":
++		return {"type":&"begin_development","payload":{"name":"%s %d" % [label,view.releases.size()+1],"genre":genre,"theme":"fantasy"}}
++	if view.phase == &"contract": return {}
++	var current: Dictionary = view.development
++	if current.finalized: return {"type":&"launch"} if current.phase == "beta" else _development(view,&"enter_next_phase")
++	if current.confirmation_pending: return _development(view,&"confirm_exit")
++	if not current.active: return _development(view,&"begin")
++	if current.get("hand_revision",0) >= 3 and current.get("can_exit",false): return _development(view,&"request_exit")
++	var cards: Array = current.candidates.duplicate(true)
++	cards.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
++		if (a.type == "feature") != (b.type == "feature"): return a.type == "feature"
++		return int(a.token) < int(b.token))
++	if cards.size()<4: return {}
++	var tokens: Array[int] = []
++	for index in range(4): tokens.append(int(cards[index].token))
++	return _development(view,&"play",{"candidate_ids":tokens})
++
++static func _development(view: Dictionary,kind: StringName,payload: Dictionary = {}) -> Dictionary:
++	var current: Dictionary = view.development
++	return {"type":&"development","payload":{"request":{"schema_version":1,"type":kind,"project_id":view.project_id,"phase":current.phase,"sequence":current.sequence,"project_cycle":current.project_cycle,"run_cycle":current.run_cycle,"payload":payload}}}
+--- base/scripts/market/rival_beta_synergy_choice.gd
++++ candidate/scripts/market/rival_beta_synergy_choice.gd
+@@ -0,0 +1,102 @@
++## Private G4 Beta study candidate. Uses only the current public observation.
++## Legal settlement and hidden Bugs remain entirely with BetaHandCommand.
++extends RefCounted
++
++static func pick(current: Dictionary, reference_cards: Array, run_id: StringName, use_candidate: bool = true) -> Array[int]:
++	var reference := _assess(reference_cards)
++	if reference.is_empty(): return _tokens(reference_cards)
++	var cards: Array = current.candidates
++	var best: Dictionary = {}
++	var known := int(current.get("known_bugs", 0))
++	var upper_hidden := maxi(0, int(current.get("required_scope", 0)))
++	for a in range(cards.size() - 3):
++		for b in range(a + 1, cards.size() - 2):
++			for c in range(b + 1, cards.size() - 1):
++				for d in range(c + 1, cards.size()):
++					var hand: Array = [cards[a], cards[b], cards[c], cards[d]]
++					var candidate := _assess(hand)
++					if candidate.is_empty(): continue
++					if candidate.kind not in ["qa", "balanced"] or candidate.search_values.is_empty() or candidate.debug_values.is_empty(): continue
++					var improvement := 0
++					var strictly_better := false
++					var dominated := false
++					for hidden in range(upper_hidden + 1):
++						var baseline_remaining := _remaining(reference, known, hidden)
++						var candidate_remaining := _remaining(candidate, known, hidden)
++						if candidate_remaining > baseline_remaining:
++							dominated = true
++							break
++						if candidate_remaining < baseline_remaining:
++							strictly_better = true
++							improvement += baseline_remaining - candidate_remaining
++					if dominated or not strictly_better: continue
++					candidate.improvement = improvement
++					if best.is_empty() or improvement > int(best.improvement) or (improvement == int(best.improvement) and _tie_better(candidate, best)):
++						best = candidate
++	var chosen: Dictionary = best if use_candidate and not best.is_empty() else reference
++	return chosen.tokens
++
++static func _assess(cards: Array) -> Dictionary:
++	if cards.size() != 4: return {}
++	var counts := {"qa":0, "marketing":0, "insider":0}
++	var search_values: Array[int] = []
++	var debug_values: Array[int] = []
++	var marketing := 0
++	var payout_cents := 0
++	var finite := {}
++	for card: Dictionary in cards:
++		if str(card.get("type", "")) != "beta": return {}
++		var definition := str(card.get("definition", ""))
++		if not bool(card.get("renewable", true)):
++			if finite.has(definition): return {}
++			finite[definition] = true
++		var category := str(card.get("beta_category", ""))
++		if not counts.has(category): return {}
++		counts[category] += 1
++		var value := int(card.get("beta_value", -1))
++		if value < 0: return {}
++		if category == "qa":
++			match str(card.get("qa_operation", "")):
++				"search": search_values.append(value)
++				"debug": debug_values.append(value)
++				_: return {}
++		elif category == "marketing": marketing += value
++		elif definition == "playtest_rival_games": payout_cents += 100000
++	var kind := "qa" if counts.qa == 4 else "marketing" if counts.marketing == 4 else "balanced" if counts.qa == 2 and counts.marketing == 1 and counts.insider == 1 else "none"
++	if kind == "marketing": marketing = int(floor(float(marketing) * 1.5))
++	elif kind == "balanced": marketing = int(ceil(float(marketing) * 1.25))
++	return {"tokens":_tokens(cards),"kind":kind,"search_values":search_values,"debug_values":debug_values,"marketing":marketing,"payout_cents":payout_cents,"improvement":0}
++
++static func _remaining(assessment: Dictionary, known: int, hidden: int) -> int:
++	var hidden_left := hidden
++	var known_left := known
++	for value: int in assessment.search_values:
++		var effective := float(value) * (1.5 if assessment.kind == "qa" else 1.0)
++		var requested := int(floor(1.0 + effective + float(hidden_left) * 0.15 * effective))
++		if assessment.kind == "balanced": requested = int(ceil(float(requested) * 1.25))
++		var found := mini(requested, hidden_left)
++		hidden_left -= found
++		known_left += found
++	for value: int in assessment.debug_values:
++		var effective := float(value) * (1.5 if assessment.kind == "qa" else 1.0)
++		var requested := int(floor(1.0 + effective))
++		if assessment.kind == "balanced": requested = int(ceil(float(requested) * 1.25))
++		known_left -= mini(requested, known_left)
++	return hidden_left + known_left
++
++static func _tie_better(candidate: Dictionary, incumbent: Dictionary) -> bool:
++	if int(candidate.marketing) != int(incumbent.marketing): return int(candidate.marketing) > int(incumbent.marketing)
++	if int(candidate.payout_cents) != int(incumbent.payout_cents): return int(candidate.payout_cents) > int(incumbent.payout_cents)
++	var a: Array[int] = candidate.tokens.duplicate()
++	var b: Array[int] = incumbent.tokens.duplicate()
++	a.sort()
++	b.sort()
++	for index in range(a.size()):
++		if a[index] != b[index]: return a[index] < b[index]
++	return false
++
++static func _tokens(cards: Array) -> Array[int]:
++	var ids: Array[int] = []
++	for card: Dictionary in cards: ids.append(int(card.token))
++	ids.sort()
++	return ids
+--- base/scripts/market/rival_synergy_choice.gd
++++ candidate/scripts/market/rival_synergy_choice.gd
+@@ -0,0 +1,113 @@
++## Private G4 study candidate. Reads one visible Design/Alpha deal only.
++## The legal hand command remains the authority for cost, refill and settlement.
++extends RefCounted
++
++const ProductionHand := preload("res://scripts/simulation/production_hand.gd")
++const CORE_BY_STAT := {"graphics": 0, "sound": 1, "technology": 2, "design": 3}
++
++static func pick(current: Dictionary, reference_cards: Array, run_id: StringName, use_candidate: bool = true) -> Array[int]:
++	var reference := _assess(current, reference_cards)
++	if reference.is_empty(): return _tokens(reference_cards)
++	var best: Dictionary = {}
++	var cards: Array = current.candidates
++	for a in range(cards.size() - 3):
++		for b in range(a + 1, cards.size() - 2):
++			for c in range(b + 1, cards.size() - 1):
++				for d in range(c + 1, cards.size()):
++					var hand: Array = [cards[a], cards[b], cards[c], cards[d]]
++					var assessed := _assess(current, hand)
++					if assessed.is_empty() or assessed.synergy == "none": continue
++					if int(assessed.cost_cents) > int(reference.cost_cents) or int(assessed.cost_cents) > int(current.cash_cents): continue
++					if float(assessed.proxy) <= float(reference.proxy): continue
++					if best.is_empty() or float(assessed.proxy) > float(best.proxy) or (float(assessed.proxy) == float(best.proxy) and _tokens_less(assessed.tokens, best.tokens)):
++						best = assessed
++	var chosen: Dictionary = best if use_candidate and not best.is_empty() else reference
++	return chosen.tokens
++
++static func _assess(current: Dictionary, cards: Array) -> Dictionary:
++	if cards.size() != 4: return {}
++	var base: Dictionary = {0:0, 1:0, 2:0, 3:0}
++	var records: Array = []
++	var seen_features := {}
++	var has_feature := false
++	var scope := 0
++	var cost_cents := 0
++	var bug_pressure := 0.0
++	for card: Dictionary in cards:
++		var primary := str(card.get("primary_stat", ""))
++		if not CORE_BY_STAT.has(primary): return {}
++		records.append({&"primary_stat":StringName(primary)})
++		var contributions: Array = card.get("core_contributions", [])
++		if contributions.is_empty():
++			contributions = [{"stat":primary,"value":card.get("primary_value",0)}]
++			if not str(card.get("secondary_stat", "")).is_empty(): contributions.append({"stat":card.secondary_stat,"value":card.secondary_value})
++		var raw_total := 0
++		for entry: Dictionary in contributions:
++			var stat := str(entry.get("stat", ""))
++			if not CORE_BY_STAT.has(stat): return {}
++			var value := int(entry.get("value", -1))
++			if value < 0: return {}
++			base[CORE_BY_STAT[stat]] += value
++			raw_total += value
++		var card_scope := int(card.get("scope", -1))
++		if card_scope < 0: return {}
++		scope += card_scope
++		if str(card.get("type", "")) == "feature":
++			var definition := str(card.get("definition", ""))
++			if definition.is_empty() or seen_features.has(definition): return {}
++			seen_features[definition] = true
++			has_feature = true
++			# Conservative bound for the current primitive-only trial roster.
++			cost_cents += (int(card.primary_value) + int(card.secondary_value) + 2 * card_scope) * 1000
++			bug_pressure += float(raw_total * card_scope) / 18.0
++		elif str(card.get("type", "")) != "pass": return {}
++	var final_action: Dictionary = ProductionHand.calculate(records,base,has_feature)
++	var final_core: Dictionary = final_action.score_additions
++	var proxy := _review_proxy(current,final_core,scope)
++	if not is_finite(proxy) or proxy < 0.0: return {}
++	var synergy := "specialization" if not StringName(final_action.specialization_stat).is_empty() else "balanced" if bool(final_action.balanced_production) else "none"
++	return {"tokens":_tokens(cards),"synergy":synergy,"proxy":proxy,"cost_cents":cost_cents,"scope":scope,"bug_pressure":bug_pressure,"base_core":base,"final_core":final_core}
++
++static func _review_proxy(current: Dictionary, additions: Dictionary, hand_scope: int) -> float:
++	var profile := PrimitiveReviewCalculator.get_genre_profile(StringName(current.get("genre", "")))
++	var required := int(current.get("required_scope", 0))
++	if profile == null or required <= 0: return -1.0
++	var core: Dictionary = current.get("core", {})
++	var ratios: Array[float] = []
++	var total := 0.0
++	for category: ProjectState.CoreScore in ProjectState.CoreScore.values():
++		if not core.has(category): return -1.0
++		var standard := profile.get_standard(category)
++		if standard <= 0: return -1.0
++		var score := int(core[category]) + int(additions.get(category, 0))
++		var ratio := clampf(float(score) / float(standard),0.0,PrimitiveReviewCalculator.RATIO_CAP)
++		ratios.append(ratio)
++		total += ratio
++	var mean := total / 4.0
++	var squared := 0.0
++	for ratio in ratios: squared += pow(ratio - mean, 2.0)
++	var deviation := sqrt(squared / 4.0)
++	var quality := clampf(mean - deviation * PrimitiveReviewCalculator.IMBALANCE_COEFFICIENT,0.0,PrimitiveReviewCalculator.RATIO_CAP)
++	var production := clampf(quality * PrimitiveReviewCalculator.PRODUCTION_SCALE,0.0,10.0)
++	var completion := clampf(float(int(current.get("scope",0)) + hand_scope) / float(required),0.0,1.0)
++	var known := int(current.get("known_bugs",0))
++	var bug_factor := clampf(1.0 - float(known) / float(required),PrimitiveReviewCalculator.BUG_MULTIPLIER_FLOOR,1.0)
++	return clampf(production * completion * bug_factor,0.0,10.0)
++
++static func _tokens(cards: Array) -> Array[int]:
++	var ordered := cards.duplicate()
++	ordered.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
++		if (a.type == "feature") != (b.type == "feature"): return a.type == "feature"
++		return int(a.token) < int(b.token))
++	var ids: Array[int] = []
++	for card: Dictionary in ordered: ids.append(int(card.token))
++	return ids
++
++static func _tokens_less(left: Array[int], right: Array[int]) -> bool:
++	var sorted_left := left.duplicate()
++	var sorted_right := right.duplicate()
++	sorted_left.sort()
++	sorted_right.sort()
++	for index in range(mini(sorted_left.size(),sorted_right.size())):
++		if sorted_left[index] != sorted_right[index]: return sorted_left[index] < sorted_right[index]
++	return sorted_left.size() < sorted_right.size()
+--- base/scripts/market/rival_trial.gd
++++ candidate/scripts/market/rival_trial.gd
+@@ -3,6 +3,8 @@
+ extends RefCounted
+ 
+ const Factory := preload("res://scripts/simulation/run_factory.gd")
++const SynergyChoice := preload("res://scripts/market/rival_synergy_choice.gd")
++const BetaChoice := preload("res://scripts/market/rival_beta_synergy_choice.gd")
+ const ZERO_STEPS := 12
+ const HANDS_PER_PHASE := 2
+ 
+@@ -42,7 +44,7 @@
+ 		result[id] = func(view: Dictionary) -> Dictionary: return choose(view,genre,label)
+ 	return result
+ 
+-static func choose(view: Dictionary, genre: String, label: String) -> Dictionary:
++static func choose(view: Dictionary, genre: String, label: String, beta_aware: bool = false) -> Dictionary:
+ 	if view.phase == &"studio":
+ 		return {"type":&"begin_development","payload":{"name":"%s %d" % [label,view.releases.size()+1],"genre":genre,"theme":"fantasy"}}
+ 	if view.phase == &"contract": return {}
+@@ -60,6 +62,10 @@
+ 	if cards.size()<4: return {}
+ 	var tokens: Array[int] = []
+ 	for index in range(4): tokens.append(int(cards[index].token))
++	if current.phase in ["design","alpha"]:
++		tokens = SynergyChoice.pick(current,cards.slice(0,4),StringName(view.run_id))
++	elif current.phase == "beta":
++		tokens = BetaChoice.pick(current,cards.slice(0,4),StringName(view.run_id),beta_aware)
+ 	return _development(view,&"play",{"candidate_ids":tokens})
+ 
+ static func _development(view: Dictionary,kind: StringName,payload: Dictionary = {}) -> Dictionary:

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_alpha_phase.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 2.656,
+  "errors": [],
+  "tail": [
+    "       [3] play (res://scripts/ui/hand_presentation.gd:138)",
+    "       [4] _present_action (res://scripts/ui/phase_workspace.gd:163)",
+    "       [5] _verify_post_hand_redeal_failure (res://scripts/debug/verify_alpha_phase.gd:701)",
+    "PASS: Refill failure rejects before Alpha production or a cycle commits",
+    "PASS: Refill failure preserves exhaustion and draw RNG",
+    "PASS: Refill failure preserves the complete candidate pool and selected hand",
+    "PASS: Alpha retains the exact injected ProjectState",
+    "Alpha priority verification passed.",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -82,6 +82,18 @@ func ordered_cards() -> Array[CardView]:
 		if card is CardView and card not in result: result.append(card)
 	return result
 
+## Selected Search cards lead; pool slots and the chosen organization stay intact.
+static func search_first(cards: Array[CardView]) -> Array[CardView]:
+	var searches: Array[CardView] = []
+	var remaining: Array[CardView] = []
+	for card in cards:
+		if card.card_data != null and card.card_data.qa_operation == &"search":
+			searches.append(card)
+		else:
+			remaining.append(card)
+	searches.append_array(remaining)
+	return searches
+
 func retain_order(previous: Array) -> void:
 	_visual_order.clear()
 	for card in previous:
@@ -154,14 +166,17 @@ func card_at(point: Vector2) -> CardView:
 	var cards := ordered_cards()
 	cards.sort_custom(func(a: CardView, b: CardView): return a.z_index > b.z_index)
 	for card: CardView in cards:
+		if not card.is_visible_in_tree() or not card.is_node_ready(): continue
 		if Rect2(Vector2.ZERO, card.size).has_point(card.get_transform().affine_inverse() * point): return card
 	return null
 
+func _get_tooltip(at_position: Vector2) -> String:
+	# Godot queries before _gui_input; caching text there leaves stale hover areas.
+	var card := card_at(at_position)
+	return card.input_button.tooltip_text if card != null else ""
+
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		var card := card_at(event.position)
-		tooltip_text = card.input_button.tooltip_text if card != null else ""
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		var card := card_at(event.position)
 		if event.pressed: _pressed = card if card != null and not card.input_button.disabled else null
 		else:
@@ -172,6 +187,7 @@ func _gui_input(event: InputEvent) -> void:
 		accept_event()
 
 func _make_custom_tooltip(for_text: String) -> Object:
+	if for_text.strip_edges().is_empty(): return null
 	var label := Label.new()
 	label.custom_minimum_size.x = minf(440.0, get_viewport_rect().size.x - 48.0)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -189,7 +205,7 @@ func arrange(immediate := false) -> void:
 	var visible_width := minf(size.x, get_viewport_rect().size.x - global_position.x - 16.0)
 	var factor := clampf((size.y - 100.0) / CARD_SIZE.y, 0.45, 0.76)
 	var spacing := minf(124.0, (size.x - CARD_SIZE.x * factor - 70.0) / maxf(1, count - 1))
-	var upper := cards.filter(func(card): return card.is_selected())
+	var upper := search_first(cards.filter(func(card): return card.is_selected()))
 	var lower := cards.filter(func(card): return not card.is_selected())
 	# Separate groups diagonally: preserve readable card scale instead of
 	# shrinking two complete rows into the same short viewport.

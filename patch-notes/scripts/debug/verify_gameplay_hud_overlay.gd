@@ -157,6 +157,7 @@ func verify_design_guidance(hud: GameplayHUD, phase: DesignPhase, project: Proje
 
 func verify_overlay(hud: GameplayHUD, phase: Control, project: ProjectState, run: RunState, title: String) -> void:
 	var names: Array = ["QAPriority", "MarketingPriority", "InsiderPriority"] if title == "Beta" else ["GraphicsPriority", "SoundPriority", "TechnologyPriority", "DesignPriority"]
+	if title == "Beta" and not BetaPriorityAllocation.insiders_enabled(): names.erase("InsiderPriority")
 	var views := phase.get_node("%HandContainer").get_children()
 	for index in range(4): views[index].card_pressed.emit(views[index])
 	var selection: Array = phase.get_selected_candidate_views()
@@ -181,6 +182,7 @@ func verify_overlay(hud: GameplayHUD, phase: Control, project: ProjectState, run
 	check(overlay.shade.get_signal_connection_list("gui_input").is_empty(), title + ": backdrop has no dismiss action")
 	check(overlay.dialog.get_global_rect().size.x <= 1152 and overlay.dialog.get_global_rect().size.y <= 648, title + ": modal fits viewport")
 	var sliders := overlay.dialog.find_children("*", "VSlider", true, false)
+	sliders = sliders.filter(func(slider): return slider.is_visible_in_tree())
 	check(sliders.size() == names.size(), title + ": exact vertical category count")
 	for index in range(1, sliders.size()):
 		check(not sliders[index - 1].get_parent().get_global_rect().intersects(sliders[index].get_parent().get_global_rect()), title + ": modal columns do not overlap")
@@ -192,7 +194,7 @@ func verify_overlay(hud: GameplayHUD, phase: Control, project: ProjectState, run
 		check(overlay.dialog.is_ancestor_of(root.gui_get_focus_owner()), title + ": keyboard focus stays inside modal")
 	for index in range(names.size()):
 		var slider := phase.get_node("%" + names[index]) as VSlider
-		check(slider.value == priorities.values()[index] and slider.min_value == 10 and slider.max_value == 50 and slider.step == 5, title + ": controls initialize committed values and constraints")
+		check(slider.value == priorities.values()[index] and slider.min_value == 10 and slider.max_value == 75 and slider.step == 5, title + ": controls initialize committed values and constraints")
 	views[5].card_pressed.emit(views[5])
 	check(phase.get_selected_candidate_views() == selection and not phase.redraw_selected_cards(), title + ": modal blocks candidate and redraw input")
 	var play_name: String = {"Design": "PlayCardButton", "Alpha": "PlayAlphaHandButton", "Beta": "PlayHandButton"}[title]
@@ -243,6 +245,9 @@ func verify_beta_synergy_help(hud: GameplayHUD, phase: Control, project: Project
 		{"ids": [&"debug", &"search_for_bugs", &"posters", &"study_competition"], "label": "Balanced ×1.25"},
 		{"ids": [&"sign_flippers", &"posters", &"press_release", &"debug"], "label": "Synergy: none"},
 	]
+	if not BetaPriorityAllocation.insiders_enabled():
+		patterns.remove_at(2) # Balanced Operations is unavailable during the Insider hold.
+		patterns[-1].label = "Synergy: mixed"
 	for pattern: Dictionary in patterns:
 		for index in range(4): selected[index].set_card(database.call("get_card", pattern.ids[index]))
 		workspace.refresh()

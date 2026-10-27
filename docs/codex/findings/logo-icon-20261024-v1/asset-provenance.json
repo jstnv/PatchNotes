@@ -1,0 +1,35 @@
+{
+  "tool": "built-in image_gen",
+  "intent": "edit/background-extraction",
+  "transparent_background": true,
+  "prompt": "Use case: background-extraction. Edit the supplied Patch Notes logo into a transparent application icon master. Preserve the exact recognizable chunky cream pixel-art letter shapes, exact two-line text PATCH / NOTES, the turquoise square in the O, scattered cyan pixels at upper right, white outlined document with orange horizontal lines on the right, and the thin cyan/orange underline. Remove the entire dark photograph/background, including negative spaces between letters, letter counters and inside the document; these spaces must be genuinely transparent. Add only a thin continuous dark charcoal outline immediately around the existing colored logo strokes (approximately 2 source pixels, for visibility on light desktops). No rectangular backing, no badge, no shadow, no glow, no new elements or text, no opaque paper fill. Clean crisp flat pixel-art edges, preserve original composition and proportions. Deliver a 1024 by 1024 transparent RGBA PNG, the full original approximately 2:1 logo centered vertically and horizontally with about 5 percent clear padding at left/right. Keep this as a faithful cutout, not a redesign.",
+  "source": {
+    "path": "C:\\Users\\64jus\\.codex\\codex-remote-attachments\\01a11488-6601-7cf0-9b09-7fa2b3f5efdd\\35746D7E-E913-4F51-BF2F-F2B0E1442596\\1-Photo-1.jpg",
+    "bytes": 24623,
+    "sha256": "d7f06f9536a1429ab6fdf5bdc69f6b5c2a4f91f15a73e05aa30d39e30639d738"
+  },
+  "png": {
+    "path": "patch-notes\\assets\\branding\\patch_notes_logo.png",
+    "bytes": 563542,
+    "sha256": "110208b457be9323ccdeb3aaa97b6a25e1ef00dc1c71ce0f702aea725d9d2302"
+  },
+  "ico": {
+    "path": "patch-notes\\assets\\branding\\patch_notes.ico",
+    "bytes": 358742,
+    "sha256": "9d74d81782c50c810f16aa3d1af897d53ce44899c2e3e8b570d14e51e72453e3"
+  },
+  "actual_png_pixels": [
+    1254,
+    1254
+  ],
+  "icon_sizes": [
+    16,
+    32,
+    48,
+    64,
+    128,
+    256
+  ],
+  "ico_conversion": "Pillow ICO format conversion only, 32-bit DIB frames; generated PNG copied without visual edits",
+  "note": "Preserved thin charcoal edge around the supplied logo strokes; no opaque rectangular backing. Full wordmark becomes small at16/32 px."
+}

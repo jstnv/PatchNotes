@@ -1,0 +1,37 @@
+--- base/scripts/simulation/development_session.gd
++++ candidate/scripts/simulation/development_session.gd
+@@ -169,4 +169,33 @@
+ 	var pending: Array = []
+ 	if phase_index==1: pending=hand._pending_playtest_categories.duplicate()
+ 	if phase_index==2: pending=hand._pending_corrective_pass_ids.duplicate()
+-	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize(),"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending}
++	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize(),"candidates":candidates,"hand_quotes":_trial_current_hand_quotes(),"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending}
++
++## Private G4 study only: read the existing exact Feature price and productive
++## cycle preflight for every current four-card choice. The preflight is a cash
++## and next-cycle quote; it cannot promise the hand's production/refill succeeds.
++func _trial_current_hand_quotes() -> Array:
++	var quotes: Array = []
++	if phase_index >= 2 or not hand.active or finalized or awaiting_confirmation:
++		return quotes
++	var count: int = hand.candidate_ids.size()
++	if count != 7 or hand._candidate_cards.size() != count:
++		return quotes
++	for a in range(count - 3):
++		for b in range(a + 1, count - 2):
++			for c in range(b + 1, count - 1):
++				for d in range(c + 1, count):
++					var ids: Array = [hand.candidate_ids[a], hand.candidate_ids[b], hand.candidate_ids[c], hand.candidate_ids[d]]
++					var cards: Array[CardData] = [hand._candidate_cards[a], hand._candidate_cards[b], hand._candidate_cards[c], hand._candidate_cards[d]]
++					var cost: int = run.primitive_feature_hand_cost_cents(cards, project.get_release_id())
++					var planned: Dictionary = {}
++					if cost >= 0 and project.can_advance_cycle():
++						planned = run._plan_productive_cycle(-cost, &"", &"feature_play", project.get_release_id())
++					var available: bool = not planned.is_empty()
++					var finance: Dictionary = planned.get("finance", {})
++					quotes.append({"candidate_ids": ids, "cost_cents": cost,
++						"cash_preflight_ok": available,
++						"next_cash_cents": int(finance.get("cash_cents", -1)) if available and not finance.is_empty() else -1,
++						"settlement_cents": int(planned.get("payable", -1)) if available else -1,
++						"bills_paid_cents": int(finance.get("bills_paid_cents", -1)) if available and not finance.is_empty() else -1})
++	return quotes

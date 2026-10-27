@@ -1,0 +1,214 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-18T23:28:42.306744+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "g4-current-hand-20261018-v3",
+    "owner": "ai-competitors",
+    "created_utc": "2026-10-18T23:00:06.033034+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "391cc6cf4bd6a7737ad73bd3d869c27516e79ae4f06da06efd138a03ea2ab0d6",
+    "creation_identity": "391cc6cf4bd6a7737ad73bd3d869c27516e79ae4f06da06efd138a03ea2ab0d6",
+    "lineage": [
+      {
+        "id": "g4-current-hand-20261018-v1",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g4-current-hand-20261018-v1",
+        "metadata_sha256": "3788b88bde60b10e063e4aac9ae754b2e3f692f940b327879103a8a3c8408aa4",
+        "source_identity": "391cc6cf4bd6a7737ad73bd3d869c27516e79ae4f06da06efd138a03ea2ab0d6"
+      }
+    ],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "DESIGN REVIEW ONLY: read-only exact current Design and Alpha four-card cash quote view in DevelopmentSession observation; no AI choice policy, no balance coefficients, no canonical adoption authorized.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\2026-10-18-g4-current-hand-quote-design-review-v1.md",
+    "sha256": "a04fc0ae1bab733dd2803d9e1c1b19a6666c4c6f24eeab2b89fdeb9281aad400",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Before queuing adoption, approve a population CPU and observation-latency budget and demonstrate a new optimized private version meets it; v3 policy-plus-observation time is 2.14 to 3.50 times frozen control.",
+    "Preserve full state, RNG, action tape, Review, finance and legal exits for same-source finite controls; compare fresh legal Studio recipes rather than importing incompatible checkpoints.",
+    "For selected current legal hands, verify 35 unique Design/Alpha combinations, deterministic read-only observation, exact direct play cost and next-cycle cash against accepted receipt including settlement and due bills; label quote as current-cycle preflight only.",
+    "Reconcile source drift and rerun focused and representative multi-rival world checks on current canonical source before any approved integration. Keep cheapest-only policy excluded and all AI objective, population and market coefficients OPEN."
+  ],
+  "base_identity": "391cc6cf4bd6a7737ad73bd3d869c27516e79ae4f06da06efd138a03ea2ab0d6",
+  "candidate_identity": "b91e6299220bbf4a9084ed3a6f8a9f5fbb421e0e949f250ffc82e88627a3b105",
+  "canonical_identity": "94d35f3818cecb38b92d1acb58d0b313c14e5ef7587e7616ac3b0d52f0f0b169",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "scripts/simulation/development_session.gd",
+      "change": "modified",
+      "before_sha256": "d2613f664d1d867d8980b1f14e9882b4785509c34188d2ba63f31cfe1e3e45fd",
+      "after_sha256": "fccf926ac6cce6993c4d8a2f6c9259d7365460b6975c09004a94973900b2e2a6"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "scripts/cards/feature_store_catalog.gd",
+      "change": "modified",
+      "before_sha256": "cd6d1f2fd6adec3a750f12ec46637b951300d09bd508d16084f76d1625a58cf5",
+      "after_sha256": "12487e4c089e102d8a47c008d94b9b6223a1af3d00a9297abaa0f51bc1f5425e"
+    },
+    {
+      "path": "scripts/debug/capture_store_cones.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "207b7710cb830148f38bd92cecee6ea8b211306078bdb40a0c8811a6707b1151"
+    },
+    {
+      "path": "scripts/debug/verify_feature_research.gd",
+      "change": "modified",
+      "before_sha256": "4fd0781650807a59769c65d45f174216d0ee10e215a0fda6e358a7ce67260843",
+      "after_sha256": "84571dc3ad9bd922c2d49602ef2d32cea5d8784cc08c1d676bd2f3773d4ed130"
+    },
+    {
+      "path": "scripts/debug/verify_feature_store.gd",
+      "change": "modified",
+      "before_sha256": "9492469bcc51535b88535f5acafd96742f1ad8a1e30faacf62c6f3ea1d7efb96",
+      "after_sha256": "3148664f372e35de9d8c68b23e05ad68b975ee5c71947d350a86a053afe97177"
+    },
+    {
+      "path": "scripts/debug/verify_feature_store_radial.gd",
+      "change": "modified",
+      "before_sha256": "0ce97d50cd1df67d49c25e7395d4590d5cc85668057d9e0eb9485a7510d1a5f4",
+      "after_sha256": "e82c0649995f717d0ab73d72ba3210afc537dbea194bffd733533fc3b921d3ea"
+    },
+    {
+      "path": "scripts/debug/verify_how_to_play.gd",
+      "change": "modified",
+      "before_sha256": "cca2c1da578d54d8eeb263f3867fe364dbdbf905707d5f8e4ab2a009141d1b16",
+      "after_sha256": "565059fe3bffd520e5120a2e3aa3d57d5313309bf78952f7270bdb646f0396ba"
+    },
+    {
+      "path": "scripts/debug/verify_pause_music.gd",
+      "change": "modified",
+      "before_sha256": "27d0dbc9244eb9f988e01e12c849108370491df0a657d7d962d6f98a4977a1be",
+      "after_sha256": "8c401ef0224b16b29611d86522de92111dffc21abc9efea09fd002c74c5f6b0e"
+    },
+    {
+      "path": "scripts/debug/verify_pause_music.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "14f97cedf0442575b71e2a9d1c69f0bbd85a67e90b4addbdc535bc203979a103"
+    },
+    {
+      "path": "scripts/debug/verify_primitive_branches.gd",
+      "change": "modified",
+      "before_sha256": "ffee5f03d79751d35777d3ba38f6662a7b9357c339c6d2041461cc2f6fafc65f",
+      "after_sha256": "39ffe11936e20f781396ac1f64b4ca2dfa0999dd84a1e0dfbab4fd1ac3e5e01e"
+    },
+    {
+      "path": "scripts/debug/verify_store_cone_parents.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fc1a9c212285e667415c206a888ac3ed6d754edbf0e6888cccf2e73f9899f744"
+    },
+    {
+      "path": "scripts/market/rival_world_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "4dcf201732c8410b92003c9099056099752ed40ccc33b7e818061e1d94306cc5",
+      "after_sha256": "cafd0fe4f5eab8091754218a938f4c9fb3c63fd86f6b2d2636b730f4e9e74c15"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "b86c5c1b832227481f11f0fd2b292b493a32af80b4eeee8e4bb32b0a279215dd",
+      "after_sha256": "89184d1b73be8bb3f06543129bcc69e6f8d05c485ec68de78928bc10491af131"
+    },
+    {
+      "path": "scripts/ui/feature_store_map.gd",
+      "change": "modified",
+      "before_sha256": "5507376fb9049d73cfdd3c1b4b5a00261cbdc12d93ab9bd3730d3925b4bddd76",
+      "after_sha256": "18e11106f9e78622d1ef3ab516526bbdbd0d870c818c838440994e9e174d6d57"
+    },
+    {
+      "path": "scripts/ui/hand_presentation.gd",
+      "change": "modified",
+      "before_sha256": "1e8309ef7a7e5d82a73e130bf15cdde4b21622abfd10d0b8646ca30cf7ce79fc",
+      "after_sha256": "67fc9db83da7cc84ba9e0d1524b7aee9d5a5fd30cb257f743e4e0d027e66ad95"
+    }
+  ],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\g4-current-hand-quote-only-20261018-v3",
+      "ok": true,
+      "error": null,
+      "source_identity": "b91e6299220bbf4a9084ed3a6f8a9f5fbb421e0e949f250ffc82e88627a3b105",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "b3a58ff62f620a0b0957945b04d7aa41a91949110e8adc71efdc7be72abc0a38",
+        "cases/action-4417-control/case.json": "2a19217ec220f046cdefd84b798fa40bfdf39fe0f21bb373b42a405858565669",
+        "cases/action-4417-control/case.variant.json": "264c5fd2519067f26779cee8c6370d3bc6e2e4adfa7462f7acedc0b5d8f9fe61",
+        "cases/action-4417-control/final_state.variant.json": "764835db9b1ff1ab13b368af96526dbce008093b01b5eaa85525025a2d728ae9",
+        "cases/action-4417-control/initial.json": "e1e936d411152777973c92788e21e0b56f83133f175116fc3459e8398dd30cbd",
+        "cases/action-4417-control/metrics.json": "6d2231a1d912b09f781e04230f70801ba8bb3f6286a6ee620f5bee1371d4931a",
+        "cases/action-4417-control/replay.tape.json": "d80f2dca82322d082e546b62b3b0e1257c704a28969d8da7fccf793470698884",
+        "cases/action-4417-control/result.json": "14468aa9e8c2a3914d2b9a33452fb9926ddfad29bc15f1b85968f7051656aabb",
+        "cases/action-4417-control/studio_checkpoint.json": "d9ba654b914e2e429d70547ce51f6ef55c7ca8cb29cfe33e46c77c5851f4cc75",
+        "cases/action-4417-control/telemetry.json": "37632263f4e7f26d2a040675707555f51f02956682dc349a1d55be861699b971",
+        "cases/action-90210-control/case.json": "55cfffdaf61ea715e511faa87a4e329c82c16860725d81b7ef11bbb13e658181",
+        "cases/action-90210-control/case.variant.json": "85bb2a18651b01ce546230364e39deb27df873f84c6e8cc586f0562877ca5bba",
+        "cases/action-90210-control/final_state.variant.json": "70e50871fb07ade95bb72de60769ba5755d666383831ea0d28310530e060b836",
+        "cases/action-90210-control/initial.json": "0b0abd3eef3ab437cea5ed136b6e4e6acff78dd8af93446314d328da66fd58e3",
+        "cases/action-90210-control/metrics.json": "0fd95f22569b408249dae6e6f0fbb242f823175c6265b32be75a7d225fb81eb4",
+        "cases/action-90210-control/replay.tape.json": "79049cfa05ae6aceaf97945c6be18fa26a59fd8c23ca9982d8628f883034c9d6",
+        "cases/action-90210-control/result.json": "88bd68d69834dde9ad57cd27b754bb8b0d94169367b6a46c742adba33fda42c3",
+        "cases/action-90210-control/studio_checkpoint.json": "f302f30a3f76be4b3e4ec398620954cd658a47cee33b8c5760bbd4b3b70e4cdd",
+        "cases/action-90210-control/telemetry.json": "789ee18b182accfaa1924b057a560136f8a5a2689d0027fdef8f88422d1f564b",
+        "cases/adventure-4417-control/case.json": "ccc2b8b06ad7cc9bb3a0352aacb893e46440fad859cc7934e03f6ce91020700f",
+        "cases/adventure-4417-control/case.variant.json": "1baefcf91cf9d546b6f2cc9aa8e1a6f836a7446d8ea9c182cbe129ca6b8aab6b",
+        "cases/adventure-4417-control/final_state.variant.json": "1b66b9c5d5137957d7138702356e260c0cddab51b02f2755ef24d1baba12bb04",
+        "cases/adventure-4417-control/initial.json": "928cb5e8b4ce8e28bfc75099c576e545f1534f2c0f06bb8f1bfdc6c8c8154ef6",
+        "cases/adventure-4417-control/metrics.json": "fd5b70b30f060daaefa7e3ea6f1a086a2de1656795c2bc9c2d49f79b0fa0df03",
+        "cases/adventure-4417-control/replay.tape.json": "50aab4d9ab5542fe2647d2cb77a02536e3c60cebc19239ea284d311f73aeb9ab",
+        "cases/adventure-4417-control/result.json": "45bbb2b15918f6fdc8b1508e252d13d1feef2a2d36607028c9a9be4bcddf1465",
+        "cases/adventure-4417-control/studio_checkpoint.json": "7820f694c47d5f1aec4a27c1d2e525cf6890feb66e80e0beb619b54c6d80717e",
+        "cases/adventure-4417-control/telemetry.json": "e0ad709b852dc97398efeef3a56573d893a51767726320980794ea856e66d822",
+        "cases/adventure-90210-control/case.json": "dc9d741e6b77458c370db5dfe653c02c69c0cdae558b6d37c46c02ef34cc9bf2",
+        "cases/adventure-90210-control/case.variant.json": "fdd593d35d66a8a219b55766e05a7cf4091709c6654c32287613bcb2db32bdae",
+        "cases/adventure-90210-control/final_state.variant.json": "c4ff02f4c6c93958a432527307f3c853031bc7181bac16ef925e69acd8b88594",
+        "cases/adventure-90210-control/initial.json": "1bdffa6c41246cf22453d381bc55098f1cce7e38fc4970ef05f6cb38baae668d",
+        "cases/adventure-90210-control/metrics.json": "92520b7a02a9e48d4eae88e462f2e858daddcd0882868003d61e7110dafbc8bb",
+        "cases/adventure-90210-control/replay.tape.json": "48e259a7edd516fc0dd8ad10882a9acb847d3c1586885f05d09d055ef1c945c2",
+        "cases/adventure-90210-control/result.json": "c7533267dc69cfc596cc266372326775ec08757904a9c94aa4ec8549cb3c55d2",
+        "cases/adventure-90210-control/studio_checkpoint.json": "af736a939d81d99d5324d0f8eae65df25ccba7b4f183b0e1f8e5dd6a352acee2",
+        "cases/adventure-90210-control/telemetry.json": "6bf7ba3f4f3f25e7489845018774eeb00b788a64e7415f597031d6b0915c1156",
+        "experiment-report.json": "de6a7b585e808bb4696751eca943c6323b8aa8c7c9b99c4a1014d3dddddaf84e",
+        "experiment.command.json": "c70d662d065c3591b6f19f066a40338a544a01192eff809871622607bec5da95",
+        "experiment.log": "ec64018f89bbfbbf6d9a636bdd3629767c22d456d6cd1f89e57540500d463940",
+        "git-provenance.json": "6cd6eda99b1bc21d7ff8b829dc9460889bcdc8585546c8fb64586833896a77e9",
+        "godot-version.command.json": "787c267368499cf99d4798f531198e743a1ac0923ac5700309baba1b0aa33109",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "bd1065a081e24d4e9cafc2b9c15a139b0561f2483a37a1c0a142f1efce720f0c",
+        "import.command.json": "d51442597294f020953eacbca2910a95cd6ea75e9a9d0c304be54eb69b356f6b",
+        "import.log": "36966aecb5ec2e20b3e6e43bccf7eb9b2ffe70aa93d7fe846a672a4c93b65a1e",
+        "inputs/experiment.json": "4b530cd0d377d8c69f5e6c543376a8ee75ca4b17814b910de76d537872d69f96",
+        "inputs/requested.json": "1203b4b3717bb8b7296861f2fc0fb093581d3812ea83eb6feaca7150a76ea495",
+        "run-report.json": "e69de07a375594aada4730f397135629a1bd56bd7913e1114177ed3febf0b55b",
+        "runner.py": "65bdf6c5eb4a47af829283a0b07d4b78ad45e8a95139607b96a613d6ffbf9193",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "618046cd77db8eb1607b278de7edbd8231122a888c45b18c505934af06b50858",
+        "source.diff.patch": "c3002e04149f99a43fc3adfea0d5cef054c4725cfd7f27bc053b960d9242188d",
+        "variant-base-manifest.json": "34d94dc6b7801ec84108f0868202befda48a9f893ff07e721a98c1542ee03624",
+        "variant-creation-manifest.json": "34d94dc6b7801ec84108f0868202befda48a9f893ff07e721a98c1542ee03624",
+        "variant-integrity.json": "9a93bc13c87dc9fa755aeb8a23e98d88c49bd27247e1598e48a091e57cc82fbd",
+        "variant-provenance.json": "5817b0d3208ac5417c969a793237d78abdcc62437ca2262824d5bf95050727d8",
+        "variant-variant.json": "dbe841e5bf24e536cf89edeb10138a354c1dc77150ce1fc82cd1c49e4174b37a",
+        "workspace-source-manifest.json": "4ee15b1848b7cf9ae85c9c951243f1a3cbc0810bb6de683ba3eebc9dec3208d5"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

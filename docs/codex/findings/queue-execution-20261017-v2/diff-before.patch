@@ -1,0 +1,1109 @@
+diff --git a/patch-notes/data/audio_credits.json b/patch-notes/data/audio_credits.json
+index 8c69f760..2f443422 100644
+--- a/patch-notes/data/audio_credits.json
++++ b/patch-notes/data/audio_credits.json
+@@ -32,6 +32,14 @@
+       "frames": 14400,
+       "channels": 1,
+       "sample_bytes": 2
++    },
++    {
++      "path": "res://assets/audio/crunch_time_70/crunch_time_studio_smooth_D_minor.wav",
++      "sha256": "7a549919f30ccce1d243b85ff761423fb7f8a2e742d387aae1804e03c86b902c",
++      "sample_rate": 48000,
++      "frames": 1316571,
++      "channels": 2,
++      "sample_bytes": 3
+     }
+   ],
+   "source": "User-supplied Crunch Time Prototype 01 / Tempo_70 WAV",
+@@ -42,7 +50,7 @@
+     "Final release clearance/attribution review",
+     "Audible card tap/whoosh mix preference"
+   ],
+-  "note": "Version A defaults on Music bus; B selectable via audio/soundtrack/prototype_variant. MP3 previews are not shipped.",
++  "note": "Version A defaults on Music bus; B selectable via audio/soundtrack/prototype_variant. Studio Smooth shares the main harmonic/time map and uses an aligned next-bar crossfade. MP3 previews are not shipped.",
+   "card_sfx": {
+     "source": "Original procedural synthesis; no external samples",
+     "cues": {
+@@ -50,5 +58,11 @@
+       "card_whoosh.wav": "played/redrawn hand removal"
+     },
+     "provenance": "assets/audio/card_sfx/PROVENANCE.md"
++  },
++  "studio_theme": {
++    "source": "User-supplied Studio Smooth preview, matched byte-for-byte to original local synthesis project",
++    "adaptation": "Pitched MIDI notes restored +2 semitones from C minor to main-theme D minor, then resynthesized at unchanged 70 BPM; drums and note timing retained. Original preview preserved.",
++    "time_map": "crunch-time-d-minor-70-v1",
++    "provenance": "assets/audio/crunch_time_70/STUDIO_THEME.md"
+   }
+ }
+diff --git a/patch-notes/scripts/audio/music_grid.gd b/patch-notes/scripts/audio/music_grid.gd
+index d96b3903..26174234 100644
+--- a/patch-notes/scripts/audio/music_grid.gd
++++ b/patch-notes/scripts/audio/music_grid.gd
+@@ -1,9 +1,11 @@
+ class_name MusicGrid
+ extends RefCounted
+ 
+-const STEP := 60.0 / 140.0
+-const STEPS_PER_LOOP := 64
++const Map := preload("res://scripts/audio/theme_map.gd")
++const STEP := Map.STEP
++const STEPS_PER_LOOP := Map.STEPS_PER_LOOP
+ var seconds := 0.0
++var mix_seconds := 0.0
+ var loops := 0
+ var previous_position := -1.0
+ 
+@@ -21,6 +23,7 @@ func sample(position: float, loops: int, length: float, since_mix: float, latenc
+ 	# The WAV is rounded to a whole sample. Map its endpoint to exactly 64
+ 	# subdivisions, preventing that sub-sample error accumulating each loop.
+ 	var scale_to_grid := STEPS_PER_LOOP * STEP / length
++	mix_seconds = maxf(mix_seconds, (loops * length + position + since_mix) * scale_to_grid)
+ 	var heard := (loops * length + position + since_mix - latency) * scale_to_grid
+ 	seconds = maxf(seconds, maxf(0.0, heard)) # Audio-thread jitter never rewinds.
+ 	return seconds
+diff --git a/patch-notes/scripts/audio/soundtrack.gd b/patch-notes/scripts/audio/soundtrack.gd
+index d2736495..7ad3e687 100644
+--- a/patch-notes/scripts/audio/soundtrack.gd
++++ b/patch-notes/scripts/audio/soundtrack.gd
+@@ -1,13 +1,19 @@
+ extends Node
+ 
+ const Grid := preload("res://scripts/audio/music_grid.gd")
+-const A := "res://assets/audio/crunch_time_70/crunch_time_A_jazz.wav"
+-const B := "res://assets/audio/crunch_time_70/crunch_time_B_techno.wav"
++const Map := preload("res://scripts/audio/theme_map.gd")
++const Blend := preload("res://scripts/audio/theme_blend.gd")
++const A := Map.MAIN_A
++const B := Map.MAIN_B
+ var player: AudioStreamPlayer
++var themes: AudioStreamSynchronized
+ var grid := Grid.new()
++var blend := Blend.new()
++var requested_theme: StringName = &"main"
+ var output_latency := 0.0
+ var manually_paused := false
+ var last_sample_usec := 0
++var _applied_weight := -1.0
+ 
+ func _ready() -> void:
+ 	process_mode = Node.PROCESS_MODE_ALWAYS
+@@ -17,21 +23,54 @@ func _ready() -> void:
+ 	player.bus = &"Music"
+ 	add_child(player)
+ 	var path := B if ProjectSettings.get_setting("audio/soundtrack/prototype_variant", "A") == "B" else A
+-	var stream := load(path).duplicate() as AudioStreamWAV
+-	stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+-	stream.loop_begin = 0
+-	stream.loop_end = roundi(stream.get_length() * stream.mix_rate)
+-	player.stream = stream
++	var main := _loop(path)
++	var studio := _loop(Map.STUDIO)
++	if main == null or studio == null: return
++	# One audio playback owns both WAVs. Even the inaudible arrangement keeps
++	# running at the identical sample/bar offset; transitions never seek/restart.
++	themes = AudioStreamSynchronized.new()
++	themes.stream_count = 2
++	themes.set_sync_stream(0, main)
++	themes.set_sync_stream(1, studio)
++	_apply_blend(0.0)
++	player.stream = themes
+ 	output_latency = AudioServer.get_output_latency()
+ 	player.play()
+ 	AudioServer.bus_layout_changed.connect(func(): output_latency = AudioServer.get_output_latency())
+ 
++func _loop(path: String) -> AudioStreamWAV:
++	var source := load(path) as AudioStreamWAV
++	if not Map.compatible(source):
++		push_error("Soundtrack does not match the shared time map: " + path)
++		return null
++	var stream := source.duplicate() as AudioStreamWAV
++	stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
++	stream.loop_begin = 0
++	stream.loop_end = Map.FRAMES
++	return stream
++
++func request_theme(theme: StringName) -> bool:
++	if theme not in [&"main", &"studio"] or themes == null: return false
++	presentation_seconds()
++	requested_theme = theme
++	# Schedule against the mix cursor, not the already-heard cursor; output
++	# latency must not make the music change one buffer late on purpose.
++	blend.request(theme == &"studio", grid.mix_seconds)
++	return true
++
++func _apply_blend(weight: float) -> void:
++	if themes == null or weight == _applied_weight: return
++	_applied_weight = weight
++	themes.set_sync_stream_volume(0, linear_to_db(1.0 - weight))
++	themes.set_sync_stream_volume(1, linear_to_db(weight))
++
+ func _process(_delta: float) -> void:
+ 	var should_pause := manually_paused or get_tree().paused
+ 	if should_pause != player.stream_paused:
+ 		if should_pause: presentation_seconds()
+ 		player.stream_paused = should_pause
+ 	presentation_seconds()
++	_apply_blend(blend.sample(grid.mix_seconds))
+ 
+ func set_paused(value: bool) -> void:
+ 	if value: presentation_seconds()
+diff --git a/patch-notes/scripts/cards/feature_store_catalog.gd b/patch-notes/scripts/cards/feature_store_catalog.gd
+index 32b09107..6854c5ee 100644
+--- a/patch-notes/scripts/cards/feature_store_catalog.gd
++++ b/patch-notes/scripts/cards/feature_store_catalog.gd
+@@ -17,3 +17,70 @@ static func starting_features() -> Array:
+ 			if entry.get("type") == "feature" and entry.get("phase") in ["design", "alpha"]:
+ 				result.append(entry)
+ 	return result
++
++## Validate the entire prerequisite graph before any quote can use it. The first
++## named parent is the sole map anchor; the second is an additional AND gate.
++static func graph(definitions: Dictionary, offers: Dictionary) -> Dictionary:
++	var parents := {}
++	for id: StringName in definitions:
++		parents[id] = []
++	for id: StringName in offers:
++		if not definitions.has(id): return {"error":"Missing Feature definition: " + str(id)}
++		var entry: Dictionary = offers[id]
++		var legacy: Variant = entry.get("purchase_parent", "")
++		if not legacy is String and not legacy is StringName: return {"error":"Invalid parent: " + str(id)}
++		var named: Array = []
++		if entry.has("purchase_parents"):
++			if not entry.purchase_parents is Array or entry.purchase_parents.size() not in [1, 2]:
++				return {"error":"Expected one or two named parents: " + str(id)}
++			for value: Variant in entry.purchase_parents:
++				if not value is String and not value is StringName: return {"error":"Invalid named parent: " + str(id)}
++				named.append(StringName(value))
++			if not str(legacy).is_empty() and StringName(legacy) != named[0]: return {"error":"Parent anchor mismatch: " + str(id)}
++		elif not str(legacy).is_empty():
++			named.append(StringName(legacy))
++		var seen := {}
++		for parent: StringName in named:
++			if parent.is_empty() or parent == id or seen.has(parent) or not definitions.has(parent):
++				return {"error":"Duplicate, missing or self parent: " + str(id)}
++			seen[parent] = true
++		if not named.is_empty() and int(entry.get("gameplay_features_required", 0)) > 0:
++			return {"error":"Named parents cannot also use a Gameplay count: " + str(id)}
++		parents[id] = named
++	# Iterative postorder also catches cycles without risking recursive overflow.
++	var ordered := ordered_ancestors(parents.keys(), parents)
++	if ordered.has("error"): return ordered
++	return {"parents":parents}
++
++static func ordered_ancestors(ids: Array, parents: Dictionary) -> Dictionary:
++	var stack: Array = []
++	for id in ids: stack.append([StringName(id), false])
++	var visiting := {}
++	var visited := {}
++	var order: Array[StringName] = []
++	while not stack.is_empty():
++		var frame: Array = stack.pop_back()
++		var id: StringName = frame[0]
++		if visited.has(id): continue
++		if not parents.has(id): return {"error":"Missing parent: " + str(id)}
++		if frame[1]:
++			visiting.erase(id)
++			visited[id] = true
++			order.append(id)
++			continue
++		if visiting.has(id): return {"error":"Cyclic parents: " + str(id)}
++		visiting[id] = true
++		stack.append([id, true])
++		for index in range(parents[id].size() - 1, -1, -1): stack.append([parents[id][index], false])
++	return {"order":order}
++
++static func validate_entries(starters: Array, store_entries: Array) -> String:
++	var definitions := {}
++	var offers := {}
++	for entry: Dictionary in starters + store_entries:
++		if entry.get("type") != "feature": continue
++		var id := StringName(entry.get("id", ""))
++		if id.is_empty() or definitions.has(id): return "Duplicate or empty Feature id: " + str(id)
++		definitions[id] = entry
++	for entry: Dictionary in store_entries: offers[StringName(entry.id)] = entry
++	return str(graph(definitions, offers).get("error", ""))
+diff --git a/patch-notes/scripts/debug/verify_bank_integration.gd b/patch-notes/scripts/debug/verify_bank_integration.gd
+index 0e551bd9..e6eb49ee 100644
+--- a/patch-notes/scripts/debug/verify_bank_integration.gd
++++ b/patch-notes/scripts/debug/verify_bank_integration.gd
+@@ -35,12 +35,17 @@ func _run() -> void:
+ 			root.get_texture().get_image().save_png(ProjectSettings.globalize_path("res://../docs/codex/findings/banking-implementation-v1/bank-%d.png" % resolution.x))
+ 		menu._confirm_accept()
+ 		check(snapshot(run) == before and menu._confirm.visible,"Acceptance waits for explicit confirmation")
++		var shown_quote: Dictionary = menu._quote.duplicate(true)
++		var changed_quote := run.get_bank_quote(60000,12)
++		check(changed_quote.get("accepted",false) and changed_quote.schedule.principal_cents != shown_quote.schedule.principal_cents,"Distinct valid quote can arrive while confirmation is open")
++		menu._quote = changed_quote
+ 		menu._confirm.hide()
+ 		var observer := func(): check(not run.accept_bank_loan(quote),"Bank signal reentry rejects")
+ 		run.finance_changed.connect(observer)
+ 		menu._confirm_transaction()
+ 		run.finance_changed.disconnect(observer)
+ 		check(run.get_cash_cents() == before[0]+50000 and run.get_completed_run_cycles() == before[1],"Confirmed UI funds native run without time")
++		check(run.get_studio_finance_snapshot().bank_loans[0].schedule.principal_cents == shown_quote.schedule.principal_cents,"Confirmation accepts the displayed terms, not a later quote")
+ 		check(not run.accept_bank_loan(quote),"Native duplicate loan rejects")
+ 		reconcile(run)
+ 		for i in range(3):
+@@ -50,6 +55,18 @@ func _run() -> void:
+ 		check(loan.issued == 1 and loan.principal_paid_cents == 4167 and loan.interest_paid_cents == 500,"Scheduled native payment remains signed despite later sales")
+ 		menu.open_bank()
+ 		check(not menu.payoff_button.disabled and menu.quote_details.text.contains("Payoff now"),"Active loan and exact payoff visible")
++		var before_dialog_cancel := snapshot(run)
++		menu._confirm_payoff()
++		menu._confirm.canceled.emit()
++		menu._confirm_transaction()
++		check(snapshot(run) == before_dialog_cancel and not run.get_studio_finance_snapshot().bank_loans[0].closed,"Canceled payoff dialog cannot execute a stale confirmation")
++		var before_cancel := snapshot(run)
++		menu._confirm_payoff()
++		menu.close()
++		menu.open()
++		menu.open_bank()
++		menu._confirm_transaction()
++		check(snapshot(run) == before_cancel and not run.get_studio_finance_snapshot().bank_loans[0].closed,"Dismissed payoff cannot execute after reopening Finances")
+ 		menu._confirm_payoff()
+ 		menu._confirm.hide()
+ 		menu._confirm_transaction()
+@@ -96,5 +113,23 @@ func _run() -> void:
+ 		await process_frame
+ 	game.queue_free()
+ 	await process_frame
++	var education_run := RunState.new()
++	check(education_run.initialize_cash(0) and education_run.create_studio_with_traits("Education confirmation",&"action",[&"college_dropout"]),"Active education UI fixture creates a real account")
++	var education_menu := StudioFinances.new()
++	root.add_child(education_menu)
++	education_menu.bind_run(education_run)
++	check(education_menu.open(),"Education payoff opens Finances")
++	var shown_education: Dictionary = education_menu._education_payoff.duplicate(true)
++	var education_cash := education_run.get_cash_cents()
++	education_menu._confirm_education_payoff()
++	education_menu._education_payoff = {}
++	education_menu._confirm.hide()
++	education_menu._confirm_transaction()
++	check(education_run.get_studio_finance_snapshot().get("education",{}).get("closed",false) and education_run.get_cash_cents() == education_cash-shown_education.get("total_cents",-1),"Education confirmation uses displayed payoff despite a later preview change")
++	var closed_education := education_run.get_studio_finance_snapshot()
++	education_menu._confirm_transaction()
++	check(education_run.get_studio_finance_snapshot() == closed_education,"Repeated education confirmation signal is one-shot")
++	education_menu.queue_free()
++	await process_frame
+ 	print("Bank integration: %d failures" % failures)
+ 	quit(failures)
+diff --git a/patch-notes/scripts/debug/verify_soundtrack_sync.gd b/patch-notes/scripts/debug/verify_soundtrack_sync.gd
+index 16abbc98..02a14791 100644
+--- a/patch-notes/scripts/debug/verify_soundtrack_sync.gd
++++ b/patch-notes/scripts/debug/verify_soundtrack_sync.gd
+@@ -17,7 +17,7 @@ func check(value: bool, message: String) -> void:
+ 
+ func run() -> void:
+ 	var music := root.get_node("Soundtrack")
+-	check(music.player.stream is AudioStreamWAV and music.player.bus == &"Music", "WAV on Music bus")
++	check(music.player.stream is AudioStreamSynchronized and music.player.stream.get_sync_stream(0) is AudioStreamWAV and music.player.bus == &"Music", "Synchronized WAVs on Music bus")
+ 	var length: float = music.player.stream.get_length()
+ 	check(absf(length - 27.4285625) < 0.0001, "70 BPM eight-bar sample length")
+ 	var grid := Grid.new()
+diff --git a/patch-notes/scripts/gameplay.gd b/patch-notes/scripts/gameplay.gd
+index 419c3a96..9b7e13bb 100644
+--- a/patch-notes/scripts/gameplay.gd
++++ b/patch-notes/scripts/gameplay.gd
+@@ -10,6 +10,7 @@ const SNAPSHOT_DATABASE_SCRIPT := preload("res://scripts/market/primitive_snapsh
+ const REQUIRED_SCOPE := 30
+ const LaunchSettlement := preload("res://scripts/simulation/launch_settlement.gd")
+ const BeginProject := preload("res://scripts/simulation/begin_project.gd")
++const RivalTrial := preload("res://scripts/market/rival_trial.gd")
+ 
+ var project_state: ProjectState
+ var run_state: RunState
+@@ -21,6 +22,7 @@ var _review_rng := RandomNumberGenerator.new()
+ var _controlled_review_roll := -1
+ var active_contract_state: ContractState
+ var checkpoints: CheckpointCoordinator
++var rival_world: RivalWorld
+ var _save_label: Label
+ var _save_failure_dialog: AcceptDialog
+ var _quit_dialog: ConfirmationDialog
+@@ -57,6 +59,7 @@ func _start_gameplay() -> void:
+ 		push_error("Could not initialize the Primitive project snapshots.")
+ 		_show_startup_failure("Could not initialize the Primitive project snapshots.")
+ 		return
++	if checkpoints != null: checkpoints.rival_catalog = get_node("/root/CardDatabase").get_development_catalog()
+ 	if not run_state.is_cash_initialized() and not run_state.initialize_cash(0):
+ 		push_error("Could not initialize the prototype run with $0 Studio cash.")
+ 		return
+@@ -140,6 +143,11 @@ func _on_studio_created(name: String, specialty: StringName, trait_ids: Array, s
+ 	if not run_state.create_studio_with_traits(name, specialty, trait_ids):
+ 		source.show_error("Enter a valid name and Genre specialty; check the trait limits.")
+ 		return
++	rival_world = RivalTrial.create_world(run_state,checkpoints.rival_catalog)
++	if rival_world == null or not checkpoints.attach_rivals(rival_world,checkpoints.rival_catalog):
++		_show_startup_failure("Trial rivals could not be initialized. This new Studio was not saved.")
++		return
++	_connect_rival_calendar()
+ 	if checkpoints != null: checkpoints.replace_on_save = checkpoints.store.inspect().status != &"empty"
+ 	_enter_initial_studio()
+ 
+@@ -148,6 +156,7 @@ func _enter_initial_studio(restored: bool = false) -> void:
+ 	if studio == null or not studio.setup(null, run_state, _snapshot_database):
+ 		push_error("Could not open the new Studio.")
+ 		return
++	studio.set_rival_world(rival_world)
+ 	studio.contract_requested.connect(_on_contract_requested)
+ 	studio.development_requested.connect(_on_development_requested)
+ 	%PhaseRoot.add_child(studio)
+@@ -160,6 +169,16 @@ func _enter_initial_studio(restored: bool = false) -> void:
+ 	if not restored: run_state.refresh_redraws()
+ 	if checkpoints != null: checkpoints.entered_studio(restored)
+ 
++func _connect_rival_calendar() -> void:
++	if rival_world == null: return
++	if not run_state.calendar_changed.is_connected(_advance_rival_calendar):
++		run_state.calendar_changed.connect(_advance_rival_calendar)
++
++func _advance_rival_calendar() -> void:
++	if rival_world == null or checkpoints == null or not checkpoints.failure.is_empty(): return
++	var report: Dictionary = rival_world.advance_committed_player_cycle(RivalTrial.policies(rival_world),RivalTrial.ZERO_STEPS)
++	if not report.ok: checkpoints._failed("Trial rival world stopped: " + str(report.get("reason","Unknown world error")))
++
+ 
+ ## Verifier/new-project injection boundary. Controlled rolls use the locked
+ ## integer interval [0, 100) and must be supplied before Gameplay enters tree.
+@@ -309,6 +328,7 @@ func _replace_beta_with_launch(source_beta_phase: Control, launch_scene: PackedS
+ 		if studio_phase != null: studio_phase.queue_free()
+ 		_transition_in_progress = false
+ 		return false
++	studio_phase.set_rival_world(rival_world)
+ 	studio_phase.contract_requested.connect(_on_contract_requested)
+ 	studio_phase.development_requested.connect(_on_development_requested)
+ 	%PhaseRoot.add_child(studio_phase)
+@@ -352,6 +372,7 @@ func _on_contract_completion_dismissed(source_contract: ContractPhase) -> void:
+ 		if studio_phase != null: studio_phase.queue_free()
+ 		_transition_in_progress = false
+ 		return
++	studio_phase.set_rival_world(rival_world)
+ 	studio_phase.contract_requested.connect(_on_contract_requested)
+ 	studio_phase.development_requested.connect(_on_development_requested)
+ 	%PhaseRoot.add_child(studio_phase)
+@@ -563,6 +584,8 @@ func _continue_checkpoint() -> void:
+ 		_show_checkpoint_recovery()
+ 		return
+ 	run_state = restored
++	rival_world = checkpoints.rival_world
++	_connect_rival_calendar()
+ 	project_state = null
+ 	active_contract_state = null
+ 	_review_rng = run_state.random_streams.stream(&"review")
+diff --git a/patch-notes/scripts/persistence/checkpoint_coordinator.gd b/patch-notes/scripts/persistence/checkpoint_coordinator.gd
+index a67c950b..ebef690c 100644
+--- a/patch-notes/scripts/persistence/checkpoint_coordinator.gd
++++ b/patch-notes/scripts/persistence/checkpoint_coordinator.gd
+@@ -3,14 +3,34 @@ extends Node
+ 
+ signal status_changed
+ var adapter := StudioCheckpoint.new()
+-var store := StudioCheckpointStore.new("user://saves/studio", adapter.validate)
++var store: StudioCheckpointStore
+ var run: RunState
++var rival_world: RivalWorld
++var rival_catalog: RefCounted
+ var in_studio := false
+ var pending := false
+ var failure := ""
+ var last_payload: Dictionary = {}
+ var replace_on_save := false
+ 
++func _init() -> void:
++	store = StudioCheckpointStore.new("user://saves/studio",_validate_payload)
++
++func _validate_payload(payload: Dictionary) -> String:
++	if not payload.has("rival_world"): return adapter.validate(payload)
++	if not payload.rival_world is Dictionary: return "Malformed rival world field"
++	var player_payload := payload.duplicate(true)
++	player_payload.erase("rival_world")
++	var reason := adapter.validate(player_payload)
++	if not reason.is_empty(): return reason
++	return load("res://scripts/market/rival_world_checkpoint.gd").new().validate(payload.rival_world,player_payload)
++
++func attach_rivals(world: RivalWorld, definitions: RefCounted) -> bool:
++	if world == null or definitions == null or world.player != run or world.cycle != run.get_completed_run_cycles(): return false
++	rival_world = world
++	rival_catalog = definitions
++	return true
++
+ func attach(value: RunState) -> void:
+ 	if run!=null:
+ 		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed"]:
+@@ -49,6 +69,11 @@ func flush() -> bool:
+ 	if not pending: return failure.is_empty()
+ 	var payload := adapter.capture(run)
+ 	if payload.is_empty(): return _failed(adapter.error)
++	if rival_world != null:
++		var world_codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
++		var saved_world: Dictionary = world_codec.capture(rival_world)
++		if saved_world.is_empty(): return _failed("Rival world checkpoint: " + world_codec.error)
++		payload.rival_world = saved_world
+ 	# Guidance acknowledgments ride along only on a committed action. Repeated
+ 	# callbacks with identical state never create another generation.
+ 	if payload==last_payload:
+@@ -81,13 +106,26 @@ func load_current() -> RunState:
+ 		return null
+ 	var inspected := store.inspect()
+ 	if inspected.status!=&"valid": return null
+-	var restored := adapter.hydrate(inspected.payload)
++	var player_payload: Dictionary = inspected.payload.duplicate(true)
++	player_payload.erase("rival_world")
++	var restored := adapter.hydrate(player_payload)
+ 	if restored==null: return null
++	var restored_world: RivalWorld = null
++	if inspected.payload.has("rival_world"):
++		if rival_catalog == null:
++			failure = "Rival definitions unavailable for Continue"
++			return null
++		var world_codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
++		restored_world = world_codec.restore(inspected.payload.rival_world,player_payload,restored,rival_catalog)
++		if restored_world == null:
++			failure = "Rival world Continue rejected: " + world_codec.error
++			return null
+ 	last_payload = inspected.payload.duplicate(true)
+ 	last_payload.sequence = "1"
+ 	failure = ""
+ 	pending = false
+ 	attach(restored)
++	rival_world = restored_world
+ 	return restored
+ 
+ func _exit_tree() -> void:
+diff --git a/patch-notes/scripts/persistence/checkpoint_schema.gd b/patch-notes/scripts/persistence/checkpoint_schema.gd
+index 8ce65b33..f541ccf9 100644
+--- a/patch-notes/scripts/persistence/checkpoint_schema.gd
++++ b/patch-notes/scripts/persistence/checkpoint_schema.gd
+@@ -112,7 +112,7 @@ static func metadata() -> Dictionary:
+ static func contract() -> Dictionary:
+ 	return {"publisher_connections":"bool","contract_id":"id","offer_id":"id","source_release_id":"id","eligible":map_of("id","bool"),"scope":"uint","cores":map_of("uint","uint"),"hands":"uint","exhausted":map_of("id","bool"),"priorities":map_of("uint","uint"),"upfront":"bool","paid":"bool","trial_terms":union_of([{},fields("scope cash_cents advance_cents promotion denominator"),fields("scope cash_cents advance_cents promotion denominator required_hands")]),"neon_focus":"int","result":{"scope":"uint","cores":map_of("uint","uint"),"numerator":"uint","payout":"uint","remainder":"uint","upfront":"uint","denominator":"uint","promotion":"uint"}}
+ 
+-static func root(education_enabled: bool = true) -> Dictionary:
++static func root(education_enabled: bool = true, active_rival: bool = false) -> Dictionary:
+ 	var traits := fields("version starting_points spent_points refunded_points remaining_points point_cash_cents family_funding_cents")
+ 	traits.merge({"valid":"bool","reason":"text","trait_ids":array_of("id"),"active_ids":array_of("id"),"effects_mode":"id"})
+ 	var run := fields("cash_cents completed_run_cycles available_redraws next_project_serial")
+@@ -139,4 +139,6 @@ static func root(education_enabled: bool = true) -> Dictionary:
+ 	run.studio_finance = finance(education_enabled)
+ 	run.fanbase = StudioFanbase.schema()
+ 	run.employees = employees()
+-	return {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":run,"rng":map_of("id",{"seed":"int","state":"int"})}
++	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":run,"rng":map_of("id",{"seed":"int","state":"int"})}
++	if active_rival: result.active_project_id = "id"
++	return result
+diff --git a/patch-notes/scripts/persistence/startup_data_check.gd b/patch-notes/scripts/persistence/startup_data_check.gd
+index 81ff6cb4..c2dcf789 100644
+--- a/patch-notes/scripts/persistence/startup_data_check.gd
++++ b/patch-notes/scripts/persistence/startup_data_check.gd
+@@ -23,6 +23,8 @@ static func inspect(database: Node, overrides: Dictionary = {}) -> String:
+ 	for path in ["res://data/card_ledger.json","res://data/feature_store_ledger.json"]:
+ 		var errors: Array = database.validate_card_definitions(parsed[path])
+ 		if not errors.is_empty(): return "Invalid card definitions: " + path + " (" + str(errors[0]) + ")"
++	var graph_error := FeatureStoreCatalog.validate_entries(parsed["res://data/card_ledger.json"], parsed[FeatureStoreCatalog.PATH])
++	if not graph_error.is_empty(): return "Invalid Feature prerequisites: " + graph_error
+ 	var pre: Dictionary = parsed[PrimitivePredevelopment.PATH]
+ 	for kind in ["genres","themes"]:
+ 		if not pre.get(kind) is Array or pre[kind].is_empty(): return "Missing pre-development choices: " + kind
+diff --git a/patch-notes/scripts/persistence/studio_checkpoint.gd b/patch-notes/scripts/persistence/studio_checkpoint.gd
+index 78a82ee4..1f9db747 100644
+--- a/patch-notes/scripts/persistence/studio_checkpoint.gd
++++ b/patch-notes/scripts/persistence/studio_checkpoint.gd
+@@ -51,7 +51,7 @@ func _collect_data(directory: String, paths: Array[String]) -> void:
+ 		if name.ends_with(".json"): paths.append(directory.path_join(name))
+ 	for name in DirAccess.get_directories_at(directory): _collect_data(directory.path_join(name), paths)
+ 
+-func capture(run: RunState) -> Dictionary:
++func capture(run: RunState, active_project_id: StringName = &"") -> Dictionary:
+ 	error = ""
+ 	if run == null or run._feature_purchase_in_progress or run._productive_cycle_in_progress or run._committing_cycle_cash or run._publishing_cycle or run._pending_contract_completion != null or run.get_active_contract() != null:
+ 		error = "Checkpoint requires a quiescent Studio."
+@@ -73,12 +73,14 @@ func capture(run: RunState) -> Dictionary:
+ 	if run._first_game_tutorial != null:
+ 		var tutorial := run._first_game_tutorial
+ 		state.first_game_tutorial = {"stage":tutorial.stage,"first_stat":tutorial.first_stat,"second_stat":tutorial.second_stat,"first_pool_published":tutorial.first_pool_published,"second_pool_published":tutorial.second_pool_published}
+-	var native := {"checkpoint_kind":"studio","run_id":run._bank_run_id,"sequence":1,"source_build":BUILD,"content_revision":revision(),"rng_algorithm":RunRandom.ALGORITHM,"run":state,"rng":run.random_streams.snapshot()}
++	var active := not active_project_id.is_empty()
++	var native := {"checkpoint_kind":"rival_active" if active else "studio","run_id":run._bank_run_id,"sequence":1,"source_build":BUILD,"content_revision":revision(),"rng_algorithm":RunRandom.ALGORITHM,"run":state,"rng":run.random_streams.snapshot()}
++	if active: native.active_project_id = active_project_id
+ 	var codec := CheckpointCodec.new()
+-	var encoded: Variant = codec.encode(native,CheckpointSchema.root())
++	var encoded: Variant = codec.encode(native,CheckpointSchema.root(true,active))
+ 	error = codec.error
+ 	if not error.is_empty(): return {}
+-	error = validate(encoded)
++	error = validate_active_rival(encoded) if active else validate(encoded)
+ 	return encoded if error.is_empty() else {}
+ 
+ func _contract(state: ContractState) -> Variant:
+@@ -88,12 +90,20 @@ func _contract(state: ContractState) -> Variant:
+ 	return {"publisher_connections":state._publisher_connections,"contract_id":state._contract_id,"offer_id":state._offer_id,"source_release_id":state._source_release_id,"eligible":state._eligible_feature_ids,"scope":state._scope,"cores":state._core_half_units,"hands":state._successful_hands,"exhausted":state._exhausted_feature_ids,"priorities":state._priorities,"upfront":state._upfront_committed,"paid":state._payout_committed,"trial_terms":state._trial_terms,"neon_focus":state._neon_focus,"result":{"scope":result._scope,"cores":result._core_half_units,"numerator":result._completion_numerator,"payout":result._payout_cents,"remainder":result._remainder_cents,"upfront":result._upfront_cents,"denominator":result._denominator,"promotion":result._promotion}}
+ 
+ func validate(payload: Dictionary) -> String:
++	return _validate(payload,false)
++
++func validate_active_rival(payload: Dictionary) -> String:
++	return _validate(payload,true)
++
++func _validate(payload: Dictionary, active_rival: bool) -> String:
+ 	# Pre-Fanbase saves lack exact exposure provenance. Preserve unsupported
+ 	# bytes instead of inventing Fans or replaying old sales.
+ 	if payload.get("content_revision", "") not in ([revision(), _rules_revision(PRE_CULT20_RULES)] + _legacy_revisions(PRE_CULT_RULES) + _legacy_revisions(PRE_EDUCATION_RULES)) or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
+-	var value: Dictionary = _decode_payload(payload)
++	var value: Dictionary = _decode_payload(payload,active_rival)
+ 	if value.is_empty(): return error
+-	if value.checkpoint_kind != "studio" or value.sequence < 1: return "Invalid checkpoint boundary"
++	if value.checkpoint_kind != ("rival_active" if active_rival else "studio") or value.sequence < 1: return "Invalid checkpoint boundary"
++	var active_id: StringName = value.active_project_id if active_rival else &""
++	if active_rival and (active_id.is_empty() or value.run.released_games.has(active_id)): return "Invalid active rival project"
+ 	var r: Dictionary = value.run
+ 	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
+ 	if r.studio_name.is_empty() or r.studio_name != r.studio_name.strip_edges() or r.studio_name.length()>80 or StudioSpecialties.preview(r.studio_specialty).is_empty(): return "Invalid Studio identity"
+@@ -154,7 +164,7 @@ func validate(payload: Dictionary) -> String:
+ 		if not catalog._feature_definitions.has(id) or not r.owned_features[id]: return "Unknown owned Feature"
+ 	var counts := {}
+ 	for id: StringName in r.credited_projects:
+-		if not r.released_games.has(id): return "Unreleased familiarity project"
++		if not r.released_games.has(id) and id != active_id: return "Unreleased familiarity project"
+ 		for feature: StringName in r.credited_projects[id]:
+ 			if not r.owned_features.has(feature) or not r.credited_projects[id][feature]: return "Invalid familiarity Feature"
+ 			counts[feature] = int(counts.get(feature,0))+1
+@@ -173,7 +183,7 @@ func validate(payload: Dictionary) -> String:
+ 		if meta.review.cores.size()!=4 or meta.review.standards.size()!=4 or meta.review.final_review<0 or meta.review.final_review>10 or meta.review.scope_completion<0: return "Invalid frozen Review"
+ 		if roundi(meta.review.final_review*10)!=sales.review_tenths or meta.review.awareness!=sales.launch_awareness or meta.review.projected_units!=sales.total_units: return "Frozen launch mismatch"
+ 	for id: StringName in r.lean_savings:
+-		if not r.released_games.has(id) or r.lean_savings[id]>10000: return "Invalid Lean cap"
++		if (not r.released_games.has(id) and id != active_id) or r.lean_savings[id]>10000: return "Invalid Lean cap"
+ 	if not _valid_contract(r.primitive_contract,r,ContractState.CONTRACT_ID,ContractState.CONTRACT_ID,&""): return "Invalid Ironclad checkpoint"
+ 	if r.ironclad_completion_committed != (r.primitive_contract!=null): return "Ironclad completion mismatch"
+ 	var results := {}
+@@ -236,7 +246,7 @@ func validate(payload: Dictionary) -> String:
+ 		seen[id] = true
+ 	if r.first_game_tutorial!=null:
+ 		var tutorial: Dictionary = r.first_game_tutorial
+-		if not r.released_games.has(r.first_tutorial_project_id) or tutorial.stage>FirstGameTutorial.Stage.COMPLETE: return "Invalid tutorial"
++		if (not r.released_games.has(r.first_tutorial_project_id) and r.first_tutorial_project_id != active_id) or tutorial.stage>FirstGameTutorial.Stage.COMPLETE: return "Invalid tutorial"
+ 		for stat in [tutorial.first_stat,tutorial.second_stat]:
+ 			if stat!=&"" and stat not in FirstGameTutorial.STATS: return "Invalid tutorial stat"
+ 	if not RunRandom.new().restore(value.rng): return "Invalid RNG streams"
+@@ -281,10 +291,10 @@ func _valid_contract(c: Variant, r: Dictionary, kind: StringName, offer: StringN
+ 	if paid!=int(expected.payout_cents) or hands!=required_hands: return false
+ 	return c.result == {"scope":c.scope,"cores":c.cores,"numerator":expected.numerator,"payout":expected.payout_cents,"remainder":expected.remainder_cents,"upfront":advance,"denominator":expected.get("denominator",96),"promotion":expected.get("promotion",0)}
+ 
+-func hydrate(payload: Dictionary) -> RunState:
+-	error = validate(payload)
++func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
++	error = validate_active_rival(payload) if active_rival else validate(payload)
+ 	if not error.is_empty(): return null
+-	var value: Dictionary = _decode_payload(payload)
++	var value: Dictionary = _decode_payload(payload,active_rival)
+ 	var run := RunState.new()
+ 	var r: Dictionary = value.run
+ 	for field: String in FIELDS:
+@@ -304,10 +314,10 @@ func hydrate(payload: Dictionary) -> RunState:
+ 		for key: String in r.first_game_tutorial: run._first_game_tutorial.set(key,r.first_game_tutorial[key])
+ 	return run
+ 
+-func _decode_payload(payload: Dictionary) -> Dictionary:
++func _decode_payload(payload: Dictionary, active_rival: bool = false) -> Dictionary:
+ 	var prior: bool = payload.get("content_revision", "") in _legacy_revisions(PRE_EDUCATION_RULES)
+ 	var codec := CheckpointCodec.new()
+-	var value: Variant = codec.decode(payload,CheckpointSchema.root(not prior))
++	var value: Variant = codec.decode(payload,CheckpointSchema.root(not prior,active_rival))
+ 	if not codec.error.is_empty(): error = codec.error; return {}
+ 	if payload.get("content_revision", "") == _rules_revision(PRE_CULT20_RULES) and not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5,6,7]: error = "Invalid historical trait version"; return {}
+ 	if payload.get("content_revision", "") in _legacy_revisions(PRE_CULT_RULES) and not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5,6]: error = "Invalid historical trait version"; return {}
+diff --git a/patch-notes/scripts/phases/studio_phase.gd b/patch-notes/scripts/phases/studio_phase.gd
+index bfd8fb8d..d784ffda 100644
+--- a/patch-notes/scripts/phases/studio_phase.gd
++++ b/patch-notes/scripts/phases/studio_phase.gd
+@@ -22,6 +22,19 @@ var _employees_panel: EmployeePanel
+ var _contract_chooser: OptionButton
+ var _selected_contract_quote: Dictionary = {}
+ var _promotion_notice: Label
++var _rival_world: RivalWorld
++var _rival_status: Label
++
++func set_rival_world(world: RivalWorld) -> void:
++	_rival_world = world
++	_refresh_rivals()
++
++func _refresh_rivals() -> void:
++	if _rival_world == null or _rival_status == null: return
++	var rows: Array = ["Rivals (trial) · %d live releases" % _rival_world.live_releases.size()]
++	for entry: Dictionary in _rival_world.observation().studios:
++		rows.append("%s: %s · %d Fans · $%d · %d live games" % [entry.name,String(entry.phase).capitalize(),entry.fans,int(int(entry.cash_cents)/100),entry.release_count])
++	_rival_status.text = "\n".join(rows)
+ 
+ 
+ func _ready() -> void:
+@@ -44,6 +57,13 @@ func _ready() -> void:
+ 	%PostGameSummaries.tooltip_text = "Browse every released game, its category Reviews, and earned versus projected sales. Opening is free."
+ 	%FeatureStoreButton.tooltip_text = "Browse owned Features, prices and prerequisites. Opening the Store costs no cycles."
+ 	%StartNextGame.tooltip_text = "Name the next game and choose its Genre and Theme. Opening setup is free."
++	if _rival_world != null:
++		_rival_status = Label.new()
++		_rival_status.name = "RivalTrialStatus"
++		_rival_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
++		$Dashboard/Layout.add_child(_rival_status)
++		$Dashboard/Layout.move_child(_rival_status,2)
++		_refresh_rivals()
+ 	if _run_state != null:
+ 		_refresh_game_list()
+ 		_refresh_summary()
+@@ -386,6 +406,8 @@ func setup(project_state: ProjectState, run_state: RunState, snapshot_database:
+ 		_run_state.sales_changed.disconnect(_refresh_summary)
+ 	if _run_state != null and _run_state.features_changed.is_connected(_refresh_starter_hint):
+ 		_run_state.features_changed.disconnect(_refresh_starter_hint)
++	if _run_state != null and _run_state.calendar_changed.is_connected(_refresh_rivals):
++		_run_state.calendar_changed.disconnect(_refresh_rivals)
+ 	_project_state = project_state
+ 	_run_state = run_state
+ 	_snapshot_database = snapshot_database
+@@ -393,12 +415,14 @@ func setup(project_state: ProjectState, run_state: RunState, snapshot_database:
+ 	if project_state != null and not _run_state.register_release(project_state):
+ 		return false
+ 	_run_state.calendar_changed.connect(_refresh_summary)
++	_run_state.calendar_changed.connect(_refresh_rivals)
+ 	_run_state.sales_changed.connect(_refresh_summary)
+ 	_run_state.features_changed.connect(_refresh_starter_hint)
+ 	if project_state != null:
+ 		_selected_release_id = project_state.get_release_id()
+ 	_refresh_game_list()
+ 	_refresh_summary()
++	_refresh_rivals()
+ 	_refresh_contract_action()
+ 	%PublisherList.disabled = false
+ 	%PublisherList.tooltip_text = "Browse publisher profiles and unlock requirements."
+diff --git a/patch-notes/scripts/run_state.gd b/patch-notes/scripts/run_state.gd
+index afcc7e66..695dabab 100644
+--- a/patch-notes/scripts/run_state.gd
++++ b/patch-notes/scripts/run_state.gd
+@@ -283,14 +283,11 @@ func get_feature_spending_advice(purchase_id: StringName = &"") -> Dictionary:
+ ## Current quotes only. Never purchases or assumes an ancestor is already owned.
+ func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
+ 	var path := {"available":true,"steps":[],"price_cents":0,"cycles":0,"requirements":[]}
+-	var pending: Array[StringName] = []
+-	var seen: Dictionary = {}
+-	while not id.is_empty():
+-		if seen.has(id) or not _feature_definitions.has(id): return {"available":false,"reason":"Acquisition quote unavailable for this Feature."}
+-		seen[id] = true
+-		pending.push_front(id)
+-		var offer := get_feature_store_offer(id)
+-		id = StringName(offer.get("parent", &""))
++	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
++	if graph.has("error"): return {"available":false,"reason":graph.error}
++	var traversal := FeatureStoreCatalog.ordered_ancestors([] if id.is_empty() else [id], graph.parents)
++	if traversal.has("error"): return {"available":false,"reason":traversal.error}
++	var pending: Array[StringName] = traversal.order
+ 	var saving_available := resourceful_saving(10000) > 0
+ 	for feature: StringName in pending:
+ 		var offer := get_feature_store_offer(feature)
+@@ -320,7 +317,7 @@ func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
+ 		path.cycles += cycles
+ 		if not primitive and not owned:
+ 			if needs_starter_selection() and not path.requirements.has("Later Features require the first game's completion."): path.requirements.append("Later Features require the first game's completion.")
+-			if not offer.unlocked and StringName(offer.parent).is_empty(): path.requirements.append(offer.prerequisite)
++			if not offer.unlocked and not path.requirements.has(offer.prerequisite): path.requirements.append(offer.prerequisite)
+ 	return path
+ 
+ 
+@@ -493,28 +490,39 @@ func record_resolved_feature(project: ProjectState, id: StringName, phase: Strin
+ 
+ 
+ func get_feature_store_offer(id: StringName) -> Dictionary:
+-	if not _feature_offers.has(id):
+-		return {}
++	if not _feature_offers.has(id): return {}
++	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
++	if graph.has("error"): return {}
+ 	var entry: Dictionary = _feature_offers[id]
+-	var parent := StringName(entry.purchase_parent)
+-	var required := int(entry.gameplay_features_required)
++	var parents: Array = graph.parents[id]
++	var parent: StringName = parents[0] if not parents.is_empty() else &""
++	var missing: Array[StringName] = []
++	var contributions: Array = []
++	var names: Array[String] = []
++	var credits := 0
++	for required_parent: StringName in parents:
++		var count := get_feature_familiarity(required_parent)
++		var parent_name := str(_feature_definitions[required_parent].name)
++		credits += count
++		names.append(parent_name)
++		if not owns_feature(required_parent): missing.append(required_parent)
++		contributions.append({"id":required_parent,"name":parent_name,"owned":owns_feature(required_parent),"credits":count})
++	var required := int(entry.get("gameplay_features_required", 0))
+ 	var gameplay_owned := 0
+ 	for owned_id: StringName in _owned_features:
+-		if _feature_definitions[owned_id].get("department", "") == "gameplay":
+-			gameplay_owned += 1
+-	var unlocked := (parent.is_empty() or owns_feature(parent)) and gameplay_owned >= required
+-	var discount := mini(get_feature_familiarity(parent), 5) * 10 if not parent.is_empty() and required == 0 else 0
++		if _feature_definitions[owned_id].get("department", "") == "gameplay": gameplay_owned += 1
++	var unlocked := missing.is_empty() and gameplay_owned >= required
++	var discount := mini(credits, 5) * 10
+ 	var base_price := int(entry.base_price_cents)
+-	var price: int = (base_price / 100) * (100 - discount)
++	# Exact integer cents, without multiplying a potentially large base first.
++	var price: int = (base_price / 100) * (100 - discount) + ((base_price % 100) * (100 - discount)) / 100
+ 	var prerequisite := "New root"
+-	if not parent.is_empty():
+-		prerequisite = "Own " + str(_feature_definitions[parent].name)
+-	elif required > 0:
+-		prerequisite = "Own %d distinct Gameplay Features (%d owned)" % [required, gameplay_owned]
+-	return {"id": id, "name": entry.name, "parent": parent, "prerequisite": prerequisite,
+-		"owned": owns_feature(id), "unlocked": unlocked, "base_price_cents": base_price,
+-		"discount_percent": discount, "price_cents": price,
+-		"affordable": _cash_initialized and _cash_cents >= price}
++	if not parents.is_empty(): prerequisite = "Own " + " AND ".join(names)
++	elif required > 0: prerequisite = "Own %d distinct Gameplay Features (%d owned)" % [required, gameplay_owned]
++	return {"id":id,"name":entry.name,"parent":parent,"parents":parents.duplicate(),"missing_parents":missing,
++		"parent_contributions":contributions,"parent_credits":credits,"prerequisite":prerequisite,
++		"owned":owns_feature(id),"unlocked":unlocked,"base_price_cents":base_price,
++		"discount_percent":discount,"price_cents":price,"affordable":_cash_initialized and _cash_cents >= price}
+ 
+ 
+ func purchase_feature(id: StringName) -> bool:
+@@ -533,6 +541,7 @@ func get_feature_research_queue() -> Array:
+ 
+ 
+ func get_feature_research_quote(id: StringName) -> Dictionary:
++	if FeatureStoreCatalog.graph(_feature_definitions, _feature_offers).has("error"): return {}
+ 	var offer := get_feature_store_offer(id)
+ 	var primitive := offer.is_empty()
+ 	if primitive: offer = get_primitive_reserve_offer(id)
+diff --git a/patch-notes/scripts/simulation/development_session.gd b/patch-notes/scripts/simulation/development_session.gd
+index 425b08af..9e4ce60f 100644
+--- a/patch-notes/scripts/simulation/development_session.gd
++++ b/patch-notes/scripts/simulation/development_session.gd
+@@ -27,7 +27,7 @@ func initialize(project_state: ProjectState,run_state: RunState,definitions: Ref
+ 	_create_phase()
+ 	return true
+ 
+-func _create_phase() -> void:
++func _create_phase(refresh: bool = true) -> void:
+ 	hand=HAND_SCRIPTS[phase_index].new()
+ 	hand._project_state=project
+ 	hand._run_state=run
+@@ -49,7 +49,7 @@ func _create_phase() -> void:
+ 	if phase_index<2: actions.finalization_rng=run.random_streams.stream(StringName(str(PHASES[phase_index])+"_finalize"))
+ 	awaiting_confirmation=false
+ 	finalized=false
+-	run.refresh_redraws()
++	if refresh: run.refresh_redraws()
+ 
+ func command(kind: StringName,payload: Dictionary = {}) -> Dictionary:
+ 	return {"schema_version":1,"type":kind,"project_id":project.get_release_id(),"phase":PHASES[phase_index],"sequence":sequence,"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"payload":payload.duplicate(true)}
+@@ -168,4 +168,4 @@ func observation() -> Dictionary:
+ 	var pending: Array = []
+ 	if phase_index==1: pending=hand._pending_playtest_categories.duplicate()
+ 	if phase_index==2: pending=hand._pending_corrective_pass_ids.duplicate()
+-	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending}
++	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize(),"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending}
+diff --git a/patch-notes/scripts/ui/feature_store.gd b/patch-notes/scripts/ui/feature_store.gd
+index a75d2848..211335fd 100644
+--- a/patch-notes/scripts/ui/feature_store.gd
++++ b/patch-notes/scripts/ui/feature_store.gd
+@@ -122,6 +122,12 @@ func _refresh() -> void:
+ 	# Deferred run signals can arrive after Studio has been detached for departure.
+ 	if not is_inside_tree() or _tree == null:
+ 		return
++	var graph := FeatureStoreCatalog.graph(_run._feature_definitions, _run._feature_offers)
++	if graph.has("error"):
++		_cash.text = "Feature Store unavailable: " + str(graph.error)
++		_research_button.disabled = true
++		_map.popup.hide()
++		return
+ 	_cash.text = "Feature Store"
+ 	_research_list.clear()
+ 	_research_quote = {}
+@@ -248,7 +254,9 @@ func _summarize_owned_features() -> Dictionary:
+ 
+ 
+ func _build_tree() -> void:
+-	var entries := FeatureStoreCatalog.starting_features() + FeatureStoreCatalog.entries()
++	var entries: Array = _run._feature_definitions.values()
++	var graph := FeatureStoreCatalog.graph(_run._feature_definitions, _run._feature_offers)
++	if graph.has("error"): return
+ 	var children: Dictionary = {}
+ 	for lane: StringName in LANE_ORDER:
+ 		for id: StringName in LANE_MEMBERS[lane]:
+@@ -257,7 +265,8 @@ func _build_tree() -> void:
+ 	for entry: Dictionary in entries:
+ 		var id := StringName(entry.id)
+ 		assert(_lane_by_id.has(id), "Feature missing Store lane: " + str(id))
+-		var parent := StringName(entry.get("purchase_parent", ""))
++		var parents: Array = graph.parents[id]
++		var parent: StringName = parents[0] if not parents.is_empty() else &""
+ 		if int(entry.get("gameplay_features_required", 0)) > 0:
+ 			parent = &"gameplay_gate"
+ 		if not parent.is_empty():
+@@ -274,6 +283,7 @@ func _build_tree() -> void:
+ 		_tree.add_child(button)
+ 		_nodes[id] = button
+ 		_map.decorate(button, get_node("/root/CardDatabase").get_card(id))
++		if parents.size() > 1: _map.decorate_and_gate(button, parents)
+ 	assert(_nodes.size() == _lane_by_id.size(), "Store lane map does not match ledger")
+ 	_gate = Label.new()
+ 	_gate.name = "GameplayGate"
+diff --git a/patch-notes/scripts/ui/feature_store_map.gd b/patch-notes/scripts/ui/feature_store_map.gd
+index ca3ba36e..cc754be3 100644
+--- a/patch-notes/scripts/ui/feature_store_map.gd
++++ b/patch-notes/scripts/ui/feature_store_map.gd
+@@ -6,6 +6,7 @@ var scroll: ScrollContainer
+ var canvas: Control
+ var tree: Control
+ var popup: PanelContainer
++var parent_links: VBoxContainer
+ var shopping_details: Label
+ var price: RichTextLabel
+ var zoom_label: Label
+@@ -120,6 +121,12 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer) -> void:
+ 	var guidance_scroll := ScrollContainer.new()
+ 	guidance_scroll.custom_minimum_size = Vector2(310,140)
+ 	guidance_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
++	guidance_scroll.follow_focus = true
++	var guidance_content := VBoxContainer.new()
++	guidance_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	guidance_scroll.add_child(guidance_content)
++	parent_links = VBoxContainer.new()
++	guidance_content.add_child(parent_links)
+ 	details.add_child(guidance_scroll)
+ 	shopping_details = Label.new()
+ 	shopping_details.name = "ShoppingDetails"
+@@ -127,7 +134,7 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer) -> void:
+ 	shopping_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ 	shopping_details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ 	shopping_details.add_theme_font_size_override("font_size",13)
+-	guidance_scroll.add_child(shopping_details)
++	guidance_content.add_child(shopping_details)
+ 	var back := Button.new()
+ 	back.name = "BackToMapButton"
+ 	back.text = "Back to Map"
+@@ -195,6 +202,39 @@ func decorate(button: Button, card: CardData) -> void:
+ 	status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	button.add_child(status)
+ 
++func decorate_and_gate(button: Button, parents: Array) -> void:
++	var badge := Label.new()
++	badge.name = "AndGate"
++	badge.text = "AND: %d parents" % parents.size()
++	badge.position = Vector2(6, 96)
++	badge.size = Vector2(116, 25)
++	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
++	badge.add_theme_font_size_override("font_size", 13)
++	badge.add_theme_color_override("font_color", Color("ffe1a0"))
++	var background := StyleBoxFlat.new()
++	background.bg_color = Color("1b1c24")
++	badge.add_theme_stylebox_override("normal", background)
++	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
++	button.add_child(badge)
++
++func _parent_details(offer: Dictionary) -> String:
++	for child in parent_links.get_children():
++		parent_links.remove_child(child)
++		child.queue_free()
++	var rows: Array[String] = []
++	for contribution: Dictionary in offer.get("parent_contributions", []):
++		rows.append("%s: %s; %d project credit(s)" % [contribution.name, "owned" if contribution.owned else "MISSING", contribution.credits])
++		if offer.parents.size() > 1:
++			var link := Button.new()
++			link.name = "Parent_" + str(contribution.id)
++			link.text = "AND: " + str(contribution.name)
++			link.tooltip_text = "Inspect required parent in " + str(store._lane_by_id[contribution.id])
++			link.pressed.connect(_focus_node.bind(contribution.id))
++			parent_links.add_child(link)
++	if not rows.is_empty():
++		rows.append("Familiarity: %d%% (10%% per parent-project credit; shared 50%% cap). Applies to unpaid research only." % offer.discount_percent)
++	return "\n".join(rows)
++
+ func layout_map(children: Dictionary) -> void:
+ 	# Category paths organize the map only; purchase prerequisites stay in _edges.
+ 	for lane: StringName in store.LANE_ORDER:
+@@ -412,6 +452,7 @@ func show_details() -> void:
+ 	if card.secondary_value != 0: stats += " · %d %s" % [card.secondary_value, FeatureStore.score_label(card.secondary_stat)]
+ 	store._details.text = card.card_name + "\n" + stats + " · %d Scope" % card.scope
+ 	var offer := store._run.get_feature_store_offer(store._selected)
++	var parent_text := _parent_details(offer)
+ 	if store._run.owns_feature(store._selected):
+ 		store._details.text += "\nOwned"
+ 		store._buy.text = "Already owned"
+@@ -432,7 +473,7 @@ func show_details() -> void:
+ 		store._buy.text = "Research head" if quote.head else "Queued" if quote.queued else "Queue research" if quote.can_admit else store.queue_status(quote)
+ 	store._buy.tooltip_text = "\n".join(blockers)
+ 	var advice := store._run.get_feature_spending_advice(store._selected)
+-	shopping_details.text = ("\n".join(blockers) + "\n\n" if not blockers.is_empty() else "") + FeatureSpendingGuidance.acquisition_text(advice) + "\n\n" + FeatureSpendingGuidance.explanation(advice)
++	shopping_details.text = (parent_text + "\n\n" if not parent_text.is_empty() else "") + ("\n".join(blockers) + "\n\n" if not blockers.is_empty() else "") + FeatureSpendingGuidance.acquisition_text(advice) + "\n\n" + FeatureSpendingGuidance.explanation(advice)
+ 	price.visible = not price.text.is_empty()
+ 	popup.show()
+ 	popup.reset_size()
+@@ -624,6 +665,7 @@ func _input(event: InputEvent) -> void:
+ 		get_viewport().set_input_as_handled()
+ 	elif event is InputEventKey and event.pressed and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed:
+ 		var directions := {KEY_LEFT: Vector2.LEFT, KEY_RIGHT: Vector2.RIGHT, KEY_UP: Vector2.UP, KEY_DOWN: Vector2.DOWN}
++		if popup.visible and popup.is_ancestor_of(focused) and not event.is_action_pressed("ui_cancel"): return
+ 		if directions.has(event.keycode):
+ 			_cancel_drag()
+ 			navigate_direction(directions[event.keycode])
+diff --git a/patch-notes/scripts/ui/gameplay_hud.gd b/patch-notes/scripts/ui/gameplay_hud.gd
+index 6c17dfda..df2daf54 100644
+--- a/patch-notes/scripts/ui/gameplay_hud.gd
++++ b/patch-notes/scripts/ui/gameplay_hud.gd
+@@ -150,6 +150,10 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
+ 	refresh()
+ 
+ func set_phase(controller: Control) -> void:
++	# Only successful visible phase changes cue music; browsing overlays do not.
++	var soundtrack := get_node_or_null("/root/Soundtrack")
++	if soundtrack != null:
++		soundtrack.request_theme(&"studio" if controller is StudioPhase or controller is PostGameReview or controller is FirstProjectSetup else &"main")
+ 	settings_menu.close()
+ 	studio_finances.close()
+ 	fans_dialog.hide()
+diff --git a/patch-notes/scripts/ui/studio_finances.gd b/patch-notes/scripts/ui/studio_finances.gd
+index b2c71c81..f1943f73 100644
+--- a/patch-notes/scripts/ui/studio_finances.gd
++++ b/patch-notes/scripts/ui/studio_finances.gd
+@@ -34,6 +34,7 @@ var _payoff: Dictionary = {}
+ var _schedule_page := 0
+ var _confirm: ConfirmationDialog
+ var _confirmation_kind: StringName = &""
++var _confirmation_payload: Dictionary = {}
+ var education_details: RichTextLabel
+ var education_payoff_button: Button
+ var _education_payoff: Dictionary = {}
+@@ -187,6 +188,7 @@ func _ready() -> void:
+ 	_confirm.title = "Confirm Bank transaction"
+ 	_confirm.dialog_autowrap = true
+ 	_confirm.confirmed.connect(_confirm_transaction)
++	_confirm.canceled.connect(_cancel_confirmation)
+ 	add_child(_confirm)
+ 	_set_page(&"finances")
+ 
+@@ -223,9 +225,9 @@ func open(return_label: String = "Back to Game") -> bool:
+ 
+ 
+ func close() -> void:
++	_cancel_confirmation()
+ 	if not visible: return
+ 	visible = false
+-	_confirm.hide()
+ 	if _entrance != null: _entrance.kill()
+ 	if is_instance_valid(_previous_focus) and _previous_focus.is_inside_tree() and _previous_focus.is_visible_in_tree():
+ 		_previous_focus.grab_focus()
+@@ -249,6 +251,7 @@ func back() -> void:
+ 
+ 
+ func _set_page(value: StringName) -> void:
++	_cancel_confirmation()
+ 	page = value
+ 	_title.text = "Visit Bank" if page == &"bank" else "Studio Finances"
+ 	_finance_page.visible = page == &"finances"
+@@ -267,7 +270,7 @@ func refresh() -> void:
+ 	var available := bool(report.get("available", false))
+ 	_quote = {}
+ 	_payoff = {}
+-	_confirm.hide()
++	_cancel_confirmation()
+ 	accept_button.disabled = true
+ 	payoff_button.disabled = true
+ 	quote_details.text = "Enter an amount and term, then preview the exact quote."
+@@ -424,7 +427,13 @@ static func _money(cents: int) -> String:
+ func _invalidate_quote(_text: String) -> void:
+ 	_quote = {}
+ 	accept_button.disabled = true
+-	_confirm.hide()
++	_cancel_confirmation()
++
++
++func _cancel_confirmation() -> void:
++	_confirmation_kind = &""
++	_confirmation_payload = {}
++	if _confirm != null: _confirm.hide()
+ 
+ 
+ func _preview_quote() -> void:
+@@ -457,6 +466,7 @@ func _confirm_accept() -> void:
+ 	if not visible or page != &"bank" or not _quote.get("accepted", false): return
+ 	_confirm.title = "Confirm Bank transaction"
+ 	_confirmation_kind = &"accept"
++	_confirmation_payload = _quote.duplicate(true)
+ 	_confirm.dialog_text = "Borrow %s over %d months? Total scheduled interest: %s. First payment is due at cycle %d. No time passes on acceptance." % [_money(_quote.schedule.principal_cents),_quote.schedule.term_months,_money(_quote.schedule.total_interest_cents),_quote.schedule.first_due_cycle]
+ 	_confirm.popup_centered(Vector2i(520,180))
+ 
+@@ -465,20 +475,24 @@ func _confirm_payoff() -> void:
+ 	if not visible or page != &"bank" or _payoff.is_empty(): return
+ 	_confirm.title = "Confirm Bank transaction"
+ 	_confirmation_kind = &"payoff"
++	_confirmation_payload = _payoff.duplicate(true)
+ 	_confirm.dialog_text = "Pay %s to close this loan? This includes outstanding principal and due unpaid interest. Already-due rent and payroll bills must also be covered and are paid first. Future interest is waived." % _money(_payoff.total_cents)
+ 	_confirm.popup_centered(Vector2i(520,180))
+ 
+ 
+ func _confirm_transaction() -> void:
++	var kind := _confirmation_kind
++	var payload := _confirmation_payload.duplicate(true)
++	_cancel_confirmation()
+ 	if not visible or run == null: return
+-	if _confirmation_kind == &"education_payoff":
++	if kind == &"education_payoff":
+ 		if page != &"finances": return
+-		var education_ok := run.pay_off_education(_education_payoff)
++		var education_ok := run.pay_off_education(payload)
+ 		refresh()
+ 		if not education_ok: education_details.text += "\nPayoff rejected: quote changed or cash is insufficient. No time passed."
+ 		return
+-	if page != &"bank": return
+-	var ok := run.accept_bank_loan(_quote) if _confirmation_kind == &"accept" else run.pay_off_bank_loan(_payoff)
++	if page != &"bank" or kind not in [&"accept", &"payoff"]: return
++	var ok := run.accept_bank_loan(payload) if kind == &"accept" else run.pay_off_bank_loan(payload)
+ 	refresh()
+ 	if not ok: quote_details.text = "Transaction rejected. Cash or finance state changed, funds are insufficient, or another action is in progress. Preview again."
+ 
+@@ -511,6 +525,7 @@ func _update_education(available: bool) -> void:
+ func _confirm_education_payoff() -> void:
+ 	if not visible or page != &"finances" or _education_payoff.is_empty(): return
+ 	_confirmation_kind = &"education_payoff"
++	_confirmation_payload = _education_payoff.duplicate(true)
+ 	_confirm.title = "Confirm education payoff"
+ 	_confirm.dialog_text = "Pay %s of already-due rent, payroll and Bank bills, then %s to close education debt? Total cash required: %s. This is one zero-cycle action; future education interest is waived." % [_money(_education_payoff.other_due_cents),_money(_education_payoff.total_cents),_money(_education_payoff.required_cash_cents)]
+ 	_confirm.popup_centered(Vector2i(520,220))
+diff --git a/tools/release_gate.py b/tools/release_gate.py
+index c42ac5da..7b2948a5 100644
+--- a/tools/release_gate.py
++++ b/tools/release_gate.py
+@@ -12,6 +12,21 @@ def load(name,path):
+  spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
+ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+ 
++def continuation_profile(output,producer):
++ """A cold-process consumer must use its successful producer's isolated save."""
++ record=json.loads((output/(producer+'.command.json')).read_text())
++ if record.get('exit')!=0 or record.get('errors') or not record.get('profile'):
++  raise RuntimeError('Missing successful profile-producing verifier: '+producer)
++ profile=Path(record['profile']).resolve()
++ if not profile.is_relative_to((output/'profiles').resolve()) or not all((profile/key).is_dir() for key in ('APPDATA','LOCALAPPDATA')):
++  raise RuntimeError('Refusing non-isolated or missing continuation profile')
++ return profile
++
++def verifier_timeout(name):
++ # This finite 96-cycle calendar fixture now also advances the real trial world.
++ # Keep its bound explicit; do not raise every verifier's limit.
++ return 1200 if name=='verify_sidestreet_scope_and_year' else 240
++
+ def verifier_has_initializer(path):
+  # Some older verifiers schedule _run from _init and do not implement the
+  # optional SceneTree _initialize callback. Do not invent a parent callback.
+@@ -141,7 +156,8 @@ def main():
+     prior=json.loads((out/(path.stem+'.command.json')).read_text())
+     if prior['exit'] or prior['errors']:raise RuntimeError('Invalid cached result '+path.stem)
+     continue
+-   checks.run(path.stem,['--script',script])
++   profile=continuation_profile(out,'verify_rival_gameplay_activation') if path.stem=='verify_rival_gameplay_cold_continue' else None
++   checks.run(path.stem,['--script',script],timeout=verifier_timeout(path.stem),profile=profile)
+    report.setdefault('verifier_evidence',{})[path.stem]=str(evidence)
+    report['checks'].append(path.stem);record()
+   exporter=load('exporter',REPO/'docs/codex/findings/export-queue-v3/export.py');exporter.OUT=out

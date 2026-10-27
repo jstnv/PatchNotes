@@ -116,8 +116,10 @@ func _production(width: int) -> void:
 	await shot("centered-hand-%d" % width)
 	while not motion.trace.any(func(e): return e.event == "score"):
 		await process_frame
-	expect(hud.stats[1].text == "Graphics\n2 / 33" and not hud._score_pulses.is_empty(), "First bounce updates the scoreboard and exposes a +2 base indicator")
+	expect(hud.stats[1].text == "Graphics\n0 / 33" and is_instance_valid(motion._score_flow), "First bounce holds the HUD while the card score floats")
 	await shot("score-bounce-%d" % width)
+	while not motion.trace.any(func(e): return e.event == "hud_deposit"): await process_frame
+	expect(hud.stats[1].text == "Graphics\n12 / 33" and not hud.scoreboard._punches.is_empty(), "Falling values deposit the final score and punch the HUD")
 	if motion.busy: await motion.finished
 	var order: Array = []
 	for event in motion.trace:
@@ -131,7 +133,7 @@ func _production(width: int) -> void:
 		expect(absf((beats[i].msec-beats[i-1].msec)/1000.0-HandPresentation.BEAT_SECONDS)<0.10,"Left-to-right bounces maintain140 BPM")
 	var timed_bonuses: Array = motion.trace.filter(func(e): return e.event == "bonus_rise")
 	var ends: Array = motion.trace.filter(func(e): return e.event == "specialization_complete")
-	expect(timed_bonuses.size()==4 and ends.size()==1 and absf((ends[0].msec-timed_bonuses[0].msec)/1000.0-HandPresentation.SPECIALIZATION_SECONDS)<0.15,"Four bonus bounces form one specialization cycle at4:1")
+	expect(timed_bonuses.size()==4 and ends.size()==1 and absf((ends[0].msec-timed_bonuses[0].msec)/1000.0-HandPresentation.SPECIALIZATION_SECONDS)<0.15,"Simultaneous multipliers finish the four-subdivision merge cycle")
 	var return_count := 0
 	for event in motion.trace:
 		if event.event == "return_from_bottom": return_count += 1
@@ -141,7 +143,7 @@ func _production(width: int) -> void:
 	for event in motion.trace:
 		if event.event == "bonus": bonuses.append(event.index)
 		if event.event == "deal": deals.append(event)
-	expect(bonuses == [0, 1, 2, 3], "Specialization bonuses reveal once per card, left to right")
+	expect(bonuses == [0, 1, 2, 3], "Simultaneous specialization merge records each card exactly once")
 	var finale: Array = []
 	for event in motion.trace:
 		if event.event in ["bonus", "exit_bounce", "exit_grounded", "exit_slide"]:

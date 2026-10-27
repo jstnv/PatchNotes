@@ -1,0 +1,106 @@
+--- base/scripts/run_state.gd
++++ candidate/scripts/run_state.gd
+@@ -1244,7 +1244,14 @@
+ 		return {}
+ 	if direct_cash_delta_cents < -_cash_cents or direct_cash_delta_cents > MAX_SIGNED_INT - _cash_cents:
+ 		return {}
+-	var cash_after_action := _cash_cents + direct_cash_delta_cents
++	var shared: Dictionary = _plan_productive_cycle_shared(campaign_release_id)
++	if shared.is_empty(): return {}
++	return _plan_productive_cycle_after_shared(direct_cash_delta_cents, campaign_release_id, finance_kind, source_id, shared)
++
++## The released-game settlement and Fan plan are the same for all current-hand
++## Feature prices. This helper is local to one observation or one commit plan;
++## no result is cached across an action or a calendar cycle.
++func _plan_productive_cycle_shared(campaign_release_id: StringName) -> Dictionary:
+ 	var next_records: Dictionary = {}
+ 	var payable := 0
+ 	var earned := 0
+@@ -1264,6 +1271,12 @@
+ 		next_records[id] = next
+ 	var fan_plan := StudioFanbase.plan(_fanbase, _released_games, next_records, _completed_run_cycles + 1)
+ 	if fan_plan.is_empty(): return {}
++	return {"records": next_records, "payable": payable, "earned": earned, "fans": fan_plan}
++
++func _plan_productive_cycle_after_shared(direct_cash_delta_cents: int, campaign_release_id: StringName, finance_kind: StringName, source_id: StringName, shared: Dictionary) -> Dictionary:
++	var cash_after_action := _cash_cents + direct_cash_delta_cents
++	var payable: int = shared.payable
++	var earned: int = shared.earned
+ 	if payable > MAX_SIGNED_INT - cash_after_action:
+ 		return {}
+ 	var finance_plan: Dictionary = {}
+@@ -1272,7 +1285,26 @@
+ 			finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
+ 		finance_plan = StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles + 1, _cash_cents, direct_cash_delta_cents, finance_kind, earned, payable, true, source_id)
+ 		if finance_plan.is_empty(): return {}
+-	return {"records": next_records, "payable": payable, "finance": finance_plan, "fans": fan_plan}
++	return {"records": shared.records, "payable": payable, "finance": finance_plan, "fans": shared.fans}
++
++## Exact current-cycle Feature cash preflights for several prices. Each distinct
++## price still receives its own finance plan because it may change bill service.
++func _plan_feature_play_costs(costs: Array[int], source_id: StringName) -> Dictionary:
++	var plans: Dictionary = {}
++	if _productive_cycle_in_progress or _feature_purchase_in_progress or _pending_contract_completion != null or _completed_run_cycles < 0 or _completed_run_cycles == MAX_SIGNED_INT or _available_redraws < 0 or _available_redraws > MAX_REDRAWS:
++		return plans
++	var eligible: Array[int] = []
++	for cost: int in costs:
++		if plans.has(cost): continue
++		plans[cost] = {}
++		if cost < 0 or cost > _cash_cents or (cost != 0 and not _cash_initialized): continue
++		eligible.append(cost)
++	if eligible.is_empty(): return plans
++	var shared: Dictionary = _plan_productive_cycle_shared(&"")
++	if shared.is_empty(): return plans
++	for cost: int in eligible:
++		plans[cost] = _plan_productive_cycle_after_shared(-cost, &"", &"feature_play", source_id, shared)
++	return plans
+ 
+ 
+ ## The direct-effects callback must be synchronous and atomic on false, using
+--- base/scripts/simulation/development_session.gd
++++ candidate/scripts/simulation/development_session.gd
+@@ -169,4 +169,43 @@
+ 	var pending: Array = []
+ 	if phase_index==1: pending=hand._pending_playtest_categories.duplicate()
+ 	if phase_index==2: pending=hand._pending_corrective_pass_ids.duplicate()
+-	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize(),"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending}
++	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize(),"candidates":candidates,"hand_quotes":_trial_current_hand_quotes(),"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending}
++
++## Private G4 study only: read the existing exact Feature price and productive
++## cycle preflight for every current four-card choice. The preflight is a cash
++## and next-cycle quote; it cannot promise the hand's production/refill succeeds.
++func _trial_current_hand_quotes() -> Array:
++	var quotes: Array = []
++	if phase_index >= 2 or not hand.active or finalized or awaiting_confirmation:
++		return quotes
++	var count: int = hand.candidate_ids.size()
++	if count != 7 or hand._candidate_cards.size() != count:
++		return quotes
++	var combinations: Array = []
++	var distinct_costs: Array[int] = []
++	var seen_costs: Dictionary = {}
++	for a in range(count - 3):
++		for b in range(a + 1, count - 2):
++			for c in range(b + 1, count - 1):
++				for d in range(c + 1, count):
++					var ids: Array = [hand.candidate_ids[a], hand.candidate_ids[b], hand.candidate_ids[c], hand.candidate_ids[d]]
++					var cards: Array[CardData] = [hand._candidate_cards[a], hand._candidate_cards[b], hand._candidate_cards[c], hand._candidate_cards[d]]
++					var cost: int = run.primitive_feature_hand_cost_cents(cards, project.get_release_id())
++					combinations.append({"candidate_ids": ids, "cost_cents": cost})
++					if cost >= 0 and not seen_costs.has(cost):
++						seen_costs[cost] = true
++						distinct_costs.append(cost)
++	var planned_by_cost: Dictionary = {}
++	if project.can_advance_cycle():
++		planned_by_cost = run._plan_feature_play_costs(distinct_costs, project.get_release_id())
++	for choice: Dictionary in combinations:
++		var cost: int = choice.cost_cents
++		var planned: Dictionary = planned_by_cost.get(cost, {})
++		var available: bool = not planned.is_empty()
++		var finance: Dictionary = planned.get("finance", {})
++		quotes.append({"candidate_ids": choice.candidate_ids, "cost_cents": cost,
++			"cash_preflight_ok": available,
++			"next_cash_cents": int(finance.get("cash_cents", -1)) if available and not finance.is_empty() else -1,
++			"settlement_cents": int(planned.get("payable", -1)) if available else -1,
++			"bills_paid_cents": int(finance.get("bills_paid_cents", -1)) if available and not finance.is_empty() else -1})
++	return quotes

@@ -1,0 +1,15 @@
+# Research staff order and cadence persistence — 2026-10-26
+
+**Later same-day ruling:** The [cadence phase decision](2026-10-26-research-cadence-phase-decision-v1.md) selects the second committed action as the first later-staff pulse and keeps the counter advancing through rank changes while Research duty remains assigned. The OPEN text below records the state when this earlier note was written.
+
+**LOCKED design, NOT IMPLEMENTED:** Resolve Research-assigned employees in **hire order**. The first two assigned employees in that order receive the selected half-step on every successfully committed active Store Research action; each later assigned employee follows the selected every-other-action taper. Apply their eligible paid half-steps in the same order, stopping at the first unaffordable or bill-unsafe step under the already selected prefix rule. Removing an employee from Research duty resets that employee's later-staff cadence. Reassigning starts a fresh cadence. Save and Continue preserve Research duty and the cadence of employees who remain assigned; Continue does not reset or award a step.
+
+This records the user's “Yes, hire order and persistent cadence” answer to the exact question covering hire order, reset on removal from Research duty and survival through Continue. It extends [opt-in duty and committed-action counting](2026-10-26-research-duty-cadence-resourceful-decisions-v1.md). A committed Research action counts toward later-staff cadence even when its optional step cannot be paid or no pre-queued target remains; a rejected action counts nothing. The order of hire events supplies a stable ordering even when two employees are hired on the same calendar cycle.
+
+**Still OPEN:** whether a newly assigned later employee's first half-step occurs on their first or second eligible action, cadence behavior when a continuously assigned employee temporarily moves between first-two and later rank, exact quote/payment identity, UI and save migration. The [accounting proposal](2026-10-26-research-accounting-proposal-v1.md) recommends counts 2, 4, 6 and continued counter across a rank change; those details are not implied by this confirmation.
+
+Branch `main`, HEAD `087df09d653858b72c6e2dc344352237433dd3ac` at inspection. Design documentation only; no gameplay code, tests, simulation, Google Drive, commit or push.
+
+## Session record
+
+Read current local authority and inspected branch, HEAD, status and diff before edits. Added this thread note; updated this thread's accounting proposal, design task, duty ruling, README and working notes, plus the matching summaries in `CURRENT_STATE.md`, `DECISIONS.md`, Employees and Feature Store design and the existing Research DESIGN entry in `TODO.md`. Concurrent worktree edits were preserved. Targeted whitespace and link checks passed; no gameplay behavior verification was run. Remaining rulings are the first later-staff pulse, rank changes while continuously assigned, changed-rate cents, preview and composite payment/save identity. The implementation handoff remains pending those decisions.

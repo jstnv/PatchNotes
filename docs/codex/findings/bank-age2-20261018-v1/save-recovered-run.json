@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\bank-age2-20261018-v1\\cold_store.gd",
+    "--",
+    "save",
+    "route-v1.json.studio.json"
+  ],
+  "exit": 1,
+  "elapsed": 3.331416500004707,
+  "errors": [
+    "ERROR: Primitive branches: actual Studio generation published into isolated store"
+  ],
+  "tail": [
+    "ERROR: Primitive branches: actual Studio generation published into isolated store",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (res://scripts/debug/verify_primitive_branches.gd:10)",
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/bank-age2-20261018-v1/cold_store.gd:14)",
+    "BANK_COLD checks=1 failures=1 mode=save",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "pass": true,
+  "branch": "main",
+  "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+  "local_uncommitted": true,
+  "source_files": 786,
+  "source_manifest_sha256": "8f3feba60d306818335724c77e43de3f0a72fe1bae2634404b1bf35fdb48ca34",
+  "changed_source": [
+    {
+      "path": "scripts/debug/verify_checkpoint_recovery_ui.gd",
+      "before": "4fe85ec98b7e6b2e831cfda070e63e7b67b30125a3dad8ae76e3035804ac9cb2",
+      "after": "ee4be5dfc9680e38cec746454e3ae0005435d566faffd55e3dafbeb5db7c7ca6"
+    },
+    {
+      "path": "scripts/debug/verify_continue_loading.gd",
+      "before": "1214cb3f61820dbc3fa8a91660e5994836806d7ee22434f171266909b77dfdc0",
+      "after": "47ca982d62a91e1fca435cfda76b53b5e38dccab3fae6e71b3e795bc1b2ace3c"
+    },
+    {
+      "path": "scripts/debug/verify_continue_loading.gd.uid",
+      "before": null,
+      "after": "854cb567bb8e862608085b4ffbe3ad1cd71e983b18b9cd5b873734f70e3c8539"
+    },
+    {
+      "path": "scripts/gameplay.gd",
+      "before": "a2ebe0d9fb4e3128c55a481bd1c3dbf9b0e0148eb100753467f9db98e2df8abe",
+      "after": "cb0ceb82d73e00e9725652f329401ed792d3ac0a4575046f72d707d00bc34355"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_coordinator.gd",
+      "before": "0d7dc3c491e7cc5ce8c59e73d3833c4ac84acc24db36152f6fe4d09e40165a7a",
+      "after": "04805e35333d054deada291ab79754f8dde4402adc654f159ba7822a17d0f058"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_load.gd",
+      "before": null,
+      "after": "dab0411de978e7f49abd7a6b0987d6e4e0909ffbbfbf11fad165019416349752"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_load.gd.uid",
+      "before": null,
+      "after": "9543e319726ce573161f790557cb93f0fb574300f448c0114c7353b79ed54526"
+    },
+    {
+      "path": "scripts/ui/continue_loading.gd",
+      "before": null,
+      "after": "5480dcf7fd6f1832f1407e8a589927aaae7b814e90d59f0884926d3c09a84663"
+    },
+    {
+      "path": "scripts/ui/continue_loading.gd.uid",
+      "before": null,
+      "after": "06f3558f65b5ac42f79316bd520e151a1ca73e23b0992cb80eb6ba77469e5be4"
+    }
+  ],
+  "focused_suites": 9,
+  "preceding_headless_to_final_delta": [
+    "scripts/debug/verify_continue_loading.gd",
+    "scripts/gameplay.gd",
+    "scripts/ui/continue_loading.gd"
+  ],
+  "native_checks": 149,
+  "audio_backend": "WASAPI",
+  "captures": [
+    {
+      "file": "loading-1152x648.png",
+      "size": [
+        1152,
+        648
+      ],
+      "sha256": "5fdbc1244e44c56f611a8b99bbb844b6a8b2078e5f05006c350dc1baa9b0eb12"
+    },
+    {
+      "file": "loading-1280x720.png",
+      "size": [
+        1280,
+        720
+      ],
+      "sha256": "db008f24237ace74e022b97652304d3fff6b14eff08ed72a3f059052a0524077"
+    },
+    {
+      "file": "studio-1280x720.png",
+      "size": [
+        1280,
+        720
+      ],
+      "sha256": "13f4d3dd23f64ba38498295d79423991cd1358ee09816c6088b85664cc904c3e"
+    }
+  ],
+  "whitespace_errors": 0,
+  "boundary": "Nine focused native runs pass on one unchanged final source snapshot. Nine earlier headless runs pass before the final visual entrance/viewport correction, recorded separately. No source files in either frozen run were rewritten. No full174-suite or export claim."
+}

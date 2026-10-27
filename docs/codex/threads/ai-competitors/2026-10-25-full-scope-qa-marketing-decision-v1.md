@@ -1,5 +1,11 @@
 # Rival full-Scope release and funded Beta priority — decision, 2026-10-25
 
+**2026-10-26 financing update:** The [later Beta and loan direction](2026-10-26-beta-qa-marketing-loan-direction-v1.md) supersedes this record's no-new-loan limit for optional Beta. Rivals should consider legal, serviceable Bank quotes before giving up useful QA or Marketing. Exact borrowing and Beta-stop policies remain OPEN.
+
+**2026-10-26 clarification:** The [hard release-gate ruling](2026-10-26-rival-full-scope-hard-release-gate-decision-v1.md) makes full committed Scope an unconditional invariant for every AI-controlled rival. Read any below-Scope exit or recovery discussion here under that later rule; no AI under-Scope launch exception remains. QA/Marketing opportunity details remain OPEN.
+
+**Later phase clarification:** The [whole-supply Feature ruling](2026-10-26-rival-complete-feature-exhaustion-phase-gate-decision-v1.md) extends the visible-deal requirement below to every legally drawable, affordable Feature in the current phase's frozen finite supply. Search/recovery details remain OPEN.
+
 **Status: LOCKED behavioral direction; stopping, recovery and numerical policy OPEN.** The user directed that **every AI-controlled Studio complete its project's required Scope before considering release**, then prioritize Debug and, when its bankroll supports further work, Marketing. This applies to starting rivals, later entrants and any continuing former-player Studio while AI-controlled. The player retains the ordinary legal under-Scope release option. This revises the rival-specific under-Scope fallback allowed by the [earlier Feature-exhaustion ruling](2026-10-24-feature-exhaustion-exit-decision-v1.md) and the [narrow implementation](2026-10-24-two-hand-exit-retirement-decision-v1.md); their rule to play every currently legal, affordable visible Feature remains in force.
 
 ## Exact intent at the legal phase boundaries

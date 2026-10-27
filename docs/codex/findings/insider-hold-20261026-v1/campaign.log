@@ -1,0 +1,24 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+CAMPAIGN_REJECT_DETAIL { "kind": &"development", "payload": { "request": { "schema_version": 1, "type": &"play", "project_id": &"campaign_fixture:project:2", "phase": &"beta", "sequence": 13, "project_cycle": 5, "run_cycle": 14, "payload": { "candidate_ids": [4, 5, 6, 7] } } }, "phase": &"beta", "run_cycle": 14, "cash_cents": 0 } { "ok": false, "error": "The run calendar cannot advance safely.", "events": [] }
+ERROR: FAIL: Expected acceptance for development
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)
+       [1] act (res://scripts/debug/verify_campaign_session.gd:21)
+       [2] dev (res://scripts/debug/verify_campaign_session.gd:26)
+       [3] _initialize (res://scripts/debug/verify_campaign_session.gd:70)
+ERROR: FAIL: Next project starts
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)
+       [1] _initialize (res://scripts/debug/verify_campaign_session.gd:49)
+ERROR: FAIL: Three complete projects reached Studio
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_campaign_session.gd:12)
+       [1] _initialize (res://scripts/debug/verify_campaign_session.gd:102)
+Campaign session verification: 3 failures; 55 steps; 26 reentrant checks
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

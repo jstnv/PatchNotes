@@ -1,0 +1,44 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\simulators\\crown-feedback-20261026-v1\\project",
+    "--audio-driver",
+    "Dummy",
+    "--headless",
+    "--script",
+    "res://scripts/debug/verify_crown_feedback_ui.gd"
+  ],
+  "exit": 1,
+  "seconds": 9.984,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant. (Warning treated as error.)",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_crown_feedback_ui.gd\" with error \"Compilation failed\".",
+    "FAIL: Accept enters playable Brief",
+    "FAIL: Accept enters playable Brief",
+    "ERROR: 8 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.",
+    "ERROR: 6 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.",
+    "ERROR: 5 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.",
+    "ERROR: 25 resources still in use at exit (run with --verbose for details)."
+  ],
+  "tail": [
+    "PASS: Real pointer opens Contracts",
+    "PASS: Private Crown chooser exposes Brief only with real unlock",
+    "PASS: Search and work duration distinguished",
+    "PASS: Paid Search selects durable Crown offer",
+    "FAIL: Accept enters playable Brief",
+    "CROWN_FEEDBACK_UI checks=14 failures=2",
+    "ERROR: 8 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.",
+    "ERROR: 6 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.",
+    "ERROR: 5 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.",
+    "WARNING: 2 RIDs of type \"CanvasItem\" were leaked.",
+    "   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)",
+    "WARNING: 78 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)",
+    "ERROR: 25 resources still in use at exit (run with --verbose for details).",
+    "   at: clear (core/io/resource.cpp:822)"
+  ]
+}

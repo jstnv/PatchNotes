@@ -1,0 +1,26 @@
+{
+  "elapsed_seconds": 3.6244402999873273,
+  "process_cpu_seconds": 3.34375,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_primitive_review.gd"
+  ],
+  "exit": 0,
+  "errors": [],
+  "tail": [
+    "PASS: Marketing, cash-independent snapshot identity, reveal-independent state, and cycles do not affect Review",
+    "PASS: LaunchPhase reads the committed Review result",
+    "PASS: Launch UI displays the permitted Review breakdown",
+    "PASS: Launch UI conceals Bugs, snapshots, and cash results",
+    "PASS: Launch reconstruction preserves the same one-shot result without recalculation",
+    "Primitive Review verification passed.",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

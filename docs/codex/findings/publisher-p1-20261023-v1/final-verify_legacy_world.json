@@ -1,0 +1,40 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--headless",
+    "--script",
+    "res://scripts/debug/verify_legacy_world.gd"
+  ],
+  "exit": 0,
+  "errors": [],
+  "extra_environment": {
+    "PN_CARD_FRAME_OUTPUT": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\publisher-p1-20261023-v1\\current-legacy.frame.json",
+    "PN_OLD_WORLD_FRAME": ""
+  },
+  "summary": [
+    "PASS: Corporate secondary sale proposed",
+    "PASS: Secondary buyer and seller consent",
+    "PASS: Secondary proceeds go to seller, never target",
+    "PASS: Unfunded quote can be inspected",
+    "PASS: Insufficient funds reject without partial settlement",
+    "PASS: Whole world including capital journals checkpoints",
+    "PASS: Mismatched ownership cash event cannot restore",
+    "PASS: Malformed exact integer cannot restore as a sentinel",
+    "PASS: Whole-world exact integer codec restores ",
+    "PASS: Ownership, consents, finance and external settlement restore exactly",
+    "PASS: Active phase cannot hand off",
+    "PASS: Safe Studio handoff chooses one manual operator",
+    "PASS: Former Studio retains cash and becomes autonomous",
+    "PASS: Handoff retains every former Studio finance, pool, employee, history and RNG field",
+    "PASS: New operator commits a productive boundary",
+    "PASS: Former Studio advances through legal AI commands",
+    "PASS: Old Studio continues development on shared calendar",
+    "PASS: Post-handoff active former Studio captures",
+    "PASS: Post-handoff Continue preserves sole operator ",
+    "Legacy world: 30 checks, 0 failures"
+  ]
+}

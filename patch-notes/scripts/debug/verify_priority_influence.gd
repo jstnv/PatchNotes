@@ -125,16 +125,16 @@ func _verify_phase_chart(title: String, resolution: Vector2i) -> void:
 	expect(overlay.open(), title + ": initialization opens")
 	await _settle_chart()
 	var chart: Control = overlay.get("priority_chart")
-	var defaults := [35, 35, 30] if title == "Beta" else [25, 25, 25, 25]
-	var default_shares := [.35, .35, .3] if title == "Beta" else [.25, .25, .25, .25]
-	var names := BETA_INPUTS if title == "Beta" else CORE_INPUTS
+	var defaults := [50, 50] if title == "Beta" else [25, 25, 25, 25]
+	var default_shares := [.5, .5] if title == "Beta" else [.25, .25, .25, .25]
+	var names := BETA_INPUTS.slice(0,2) if title == "Beta" else CORE_INPUTS
 	_assert_chart(chart, defaults, default_shares, title + " default")
-	expect(chart.get("category_names") == (["QA", "Marketing", "Insider"] if title == "Beta" else CORE_NAMES), title + ": chart names match phase categories")
+	expect(chart.get("category_names") == (["QA", "Marketing"] if title == "Beta" else CORE_NAMES), title + ": chart names match phase categories")
 	_assert_bounds(chart, overlay.dialog, resolution, title + " %s" % resolution)
 	var before := _snapshot(project, run)
 	var committed: Dictionary = phase.get_priority_distribution()
-	var values := [50, 20, 30] if title == "Beta" else [50, 15, 15, 20]
-	var shares := [.5, .2, .3] if title == "Beta" else [.5, .15, .15, .2]
+	var values := [75, 25] if title == "Beta" else [50, 15, 15, 20]
+	var shares := [.75, .25] if title == "Beta" else [.5, .15, .15, .2]
 	for i in range(names.size()): (phase.get_node("%" + names[i]) as Range).value = values[i]
 	await _settle_chart()
 	_assert_chart(chart, values, shares, title + " staged initialization")

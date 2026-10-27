@@ -1,0 +1,29 @@
+{
+  "elapsed_seconds": 9.424998300004518,
+  "process_cpu_seconds": 7.96875,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_world_restore_file.gd",
+    "--",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-20261018-v2\\profile-ai-world-before\\APPDATA\\Godot\\app_userdata\\Patch Notes\\saves\\studio\\checkpoint.21.json",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\queue-20261018-v2\\ai-migration-final-restored.json"
+  ],
+  "exit": 0,
+  "errors": [],
+  "tail": [
+    "",
+    "Loaded 40 cards.",
+    "PASS: Player schema restores exact finance, traits and RNG",
+    "PASS: World restores from unmodified file ",
+    "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+    "PASS: Every persisted player field survives",
+    "PASS: Unverified source still rejects",
+    "Fresh world restore: 0 failures"
+  ]
+}

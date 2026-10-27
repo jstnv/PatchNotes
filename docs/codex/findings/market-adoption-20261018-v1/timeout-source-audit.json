@@ -1,0 +1,66 @@
+{
+  "review_date": "2026-10-22",
+  "source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+  "rows": [
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "historical_sha256": "a0d6660e0e6a149264c6d1fbf1a515563a678e107de944dcbc2ce03387cd1ad9",
+      "before_source_sha256": "a0d6660e0e6a149264c6d1fbf1a515563a678e107de944dcbc2ce03387cd1ad9",
+      "current_sha256": "38d534d5e620f838836bd7722c61ddf79e68bd663794f960a04469b617b49ba6"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_coordinator.gd",
+      "historical_sha256": "0ed77e3b1bee498ee63a70e81bc370036e256cb888e7138ac046ce077dc8d374",
+      "before_source_sha256": "0ed77e3b1bee498ee63a70e81bc370036e256cb888e7138ac046ce077dc8d374",
+      "current_sha256": "bb4ff91373a457720406ba343490513b9bbe027d43b98a4c5a7857ca57fdb16f"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint_store.gd",
+      "historical_sha256": "22143ec9959ce8255aae73607ff6b256f4b48d69b9bb9a76b3dbce86336e4fd9",
+      "before_source_sha256": "22143ec9959ce8255aae73607ff6b256f4b48d69b9bb9a76b3dbce86336e4fd9",
+      "current_sha256": "22143ec9959ce8255aae73607ff6b256f4b48d69b9bb9a76b3dbce86336e4fd9"
+    },
+    {
+      "path": "scripts/debug/verify_rival_trial_activation.gd",
+      "historical_sha256": "0c9242e51c13a88e8ad170969106f638a7d6cb4846430ce3d7baf01bc426a050",
+      "before_source_sha256": "0c9242e51c13a88e8ad170969106f638a7d6cb4846430ce3d7baf01bc426a050",
+      "current_sha256": "7435f2e22b85e8e8c7826d698f719a7d680468c92e72e9c39fd8c3bd340b7b2f"
+    }
+  ],
+  "historical_inputs": [
+    {
+      "path": "docs/codex/threads/ai-competitors/sims/market-density-current-world-20261018-v1/rival-verifier.command.json",
+      "sha256": "562d1fe530bbe06b62c9360aaf5dab12ee6b75432769fc1d4000b9e6528fc898"
+    },
+    {
+      "path": "docs/codex/threads/ai-competitors/sims/market-density-current-world-20261018-v1/rival-verifier.log",
+      "sha256": "f306e7b95c8524115962bf2b3b7d5c2e23d54ca2393f078ed1c28d09991340d8"
+    }
+  ],
+  "historical_data_json_count": 6,
+  "current_checks": {
+    "raw_harness": {
+      "path": "timeout-current-v1-run.json",
+      "checks": 118,
+      "failures": 4,
+      "wall_seconds": 197.50412120000692,
+      "cpu_seconds": 123.609375
+    },
+    "branch_proof": {
+      "path": "trial-restore-continuation-v2.json",
+      "checks": 37,
+      "failures": 0,
+      "wall_seconds": 16.42312899994431,
+      "cpu_seconds": 13.671875
+    },
+    "corrected_harness": {
+      "path": "timeout-current-v2-run.json",
+      "checks": 120,
+      "failures": 0,
+      "wall_seconds": 155.5915999999852,
+      "cpu_seconds": 118.984375
+    }
+  },
+  "post_check_source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+  "mechanical_input_count": 138
+}

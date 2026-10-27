@@ -1,0 +1,979 @@
+--- before/scripts/ui/card_score_floats.gd
++++ after/scripts/ui/card_score_floats.gd
+@@ -0,0 +1,187 @@
++extends Control
++
++## Read-only text poses sampled from the presentation music clock.
++const STEP := 60.0 / 140.0
++const COLORS := [Color("#eb8b9b"), Color("#efcd66"), Color("#74d3de"), Color("#bfa3ed")]
++const CORE := [&"graphics", &"sound", &"technology", &"design"]
++const NAMES := ["GFX", "SOUND", "TECH", "DESIGN"]
++var tokens: Array[Dictionary] = []
++var hub: Dictionary
++var phase := "base"
++var synergy_start := -1.0
++var exit_start := -1.0
++var balanced := false
++var divisor := 1
++var multiplier_text := "×1.5"
++var exit_complete := false
++var category_values: Array = []
++
++func configure(hand: Array, bases: Array, finals: Array, categories: Array) -> void:
++	mouse_filter = Control.MOUSE_FILTER_IGNORE
++	clip_contents = true
++	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
++	category_values = categories.duplicate()
++	for index in range(hand.size()):
++		var token := _token()
++		token.merge({"ghost":hand[index], "base":bases[index], "final":finals[index], "started":-1.0})
++		var card: CardData = hand[index].card_data
++		var category := CORE.find(card.primary_stat)
++		token.color = COLORS[category] if category >= 0 else Color("#f5ce69")
++		token.caption = "CORE" if category >= 0 else "FOUND" if card.qa_operation == &"search" else "FIXED" if card.qa_operation == &"debug" else "MKTG"
++		tokens.append(token)
++	hub = _token()
++	hub.color = Color("#f5ce69")
++	hub.caption = "TOTAL CORE"
++
++func _token() -> Dictionary:
++	var window := Control.new()
++	window.mouse_filter = Control.MOUSE_FILTER_IGNORE
++	window.clip_contents = true
++	add_child(window)
++	var result := {"window":window}
++	for key in ["value", "mult", "unit"]:
++		var label := Label.new()
++		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
++		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
++		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
++		label.add_theme_color_override("font_outline_color", Color("#111820"))
++		label.add_theme_constant_override("outline_size", 5)
++		window.add_child(label)
++		result[key] = label
++	window.hide()
++	return result
++
++func reveal(index: int, started: float) -> void:
++	tokens[index].started = started
++
++func begin_synergy(is_balanced: bool, started: float) -> void:
++	balanced = is_balanced
++	synergy_start = started
++	phase = "balanced" if balanced else "specialization"
++
++func begin_exit(started: float) -> void:
++	exit_start = started
++	phase = "exit"
++
++func finish_exit() -> void:
++	exit_complete = true
++	hub.window.hide()
++	for token in tokens: token.window.hide()
++
++func rejoin(seconds: float) -> void:
++	for token in tokens:
++		if token.started >= 0: token.started += seconds
++	if synergy_start >= 0: synergy_start += seconds
++	if exit_start >= 0: exit_start += seconds
++
++func _anchor(token: Dictionary) -> Vector2:
++	var ghost: Control = token.ghost
++	return (ghost.position + ghost.pivot_offset - Vector2(0, ghost.size.y * ghost.scale.y / 2.0 + 44.0)).round()
++
++func _back(value: float) -> float:
++	var u := clampf(value, 0.0, 1.0) - 1.0
++	return 1.0 + 2.70158 * u * u * u + 1.70158 * u * u
++
++func _value_text(value: int) -> String:
++	if divisor == 2:
++		@warning_ignore("integer_division")
++		var whole := value / 2
++		return "+%d%s" % [whole, ".5" if value % 2 else ""]
++	return "+%d" % value
++
++func _pose(token: Dictionary, at: Vector2, value: int, multiplier: String = "", split: float = 0.0, mult_y: float = 0.0, shake: float = 0.0, entering := false) -> void:
++	var width := minf(180.0, size.x / (tokens.size() + 0.2)) if token != hub else minf(260.0, size.x)
++	var border := size.y
++	if token.has("ghost"):
++		border = _anchor(token).y + 44.0
++	else:
++		for item in tokens: border = minf(border, _anchor(item).y + 44.0)
++	token.window.position = Vector2(roundf(at.x - width / 2.0), 0)
++	token.window.size = Vector2(width, maxf(0.0, border))
++	token.window.show()
++	var box := width / 2.0 - 4.0
++	var offset := width / 4.0 * split
++	for key in ["value", "mult"]:
++		var label: Label = token[key]
++		label.size = Vector2(box, 38)
++		label.pivot_offset = label.size / 2.0
++		label.text = _value_text(value) if key == "value" else multiplier
++		# The multiplier rises in its own right-hand slot instead of crossing
++		# through the original number while that number shifts left.
++		var horizontal := -offset if key == "value" else width / 4.0 if entering else offset
++		label.position = Vector2(width / 2.0 - box / 2.0 + horizontal, at.y - 19.0 + (0.0 if key == "value" else mult_y)).round()
++		var font: Font = label.get_theme_font("font")
++		var natural := font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 28).x
++		label.add_theme_font_size_override("font_size", int(clampf(28.0 * box / maxf(box, natural), 14.0, 28.0)))
++		label.add_theme_color_override("font_color", token.color)
++		label.scale = Vector2.ONE * (1.0 + 0.13 * absf(shake))
++		label.rotation = shake * 0.045
++	token.mult.visible = not multiplier.is_empty()
++	token.unit.text = token.caption
++	token.unit.position = Vector2(0, at.y + 18.0).round()
++	token.unit.size = Vector2(width, 18)
++	token.unit.add_theme_font_size_override("font_size", 12)
++	token.unit.add_theme_color_override("font_color", token.color)
++
++func sample(now: float) -> void:
++	if exit_complete: return
++	if exit_start >= 0:
++		hub.window.hide()
++		var age := maxf(0.0, (now - exit_start) / STEP)
++		for index in range(tokens.size()):
++			var token: Dictionary = tokens[index]
++			if age >= 1.0:
++				token.window.hide()
++				continue
++			var at := _anchor(token)
++			at.y += -10.0 * sin(age * TAU) if age < 0.25 else -10.0 + 110.0 * pow((age - 0.25) / 0.75, 2.0)
++			_pose(token, at, int(category_values[index % 4]) if balanced else int(token.final))
++		return
++	if synergy_start >= 0:
++		var age := maxf(0.0, (now - synergy_start) / STEP)
++		if balanced: _balanced(age)
++		else:
++			for token in tokens:
++				var at := _anchor(token)
++				if age < 1.0:
++					_pose(token, at, token.base, multiplier_text, minf(1.0, age * 4.0), 74.0 * (1.0 - _back(age * 2.0)), 0, true)
++				elif age < 2.0:
++					_pose(token, at, token.base, multiplier_text, 2.0 - age)
++				else:
++					var shake := sin((age - 2.0) * 32.0) * exp(-(age - 2.0) * 4.0)
++					_pose(token, at, token.final, "", 0, 0, shake)
++		return
++	for token in tokens:
++		if token.started < 0: continue
++		var age := maxf(0.0, (now - float(token.started)) / (STEP / 2.0))
++		var at := _anchor(token)
++		at.y += 74.0 * (1.0 - _back(age))
++		_pose(token, at, token.base)
++
++func _balanced(age: float) -> void:
++	var center := Vector2(size.x / 2.0, size.y)
++	var sum := 0
++	var boosted := 0
++	for token in tokens:
++		center.y = minf(center.y, _anchor(token).y)
++		sum += int(token.base)
++	for value in category_values: boosted += int(value)
++	center.y = maxf(22.0, center.y - 12.0)
++	if age < 0.5:
++		for token in tokens: _pose(token, _anchor(token).lerp(center, age * 2.0), token.base)
++		return
++	for token in tokens: token.window.hide()
++	if age < 1.0:
++		_pose(hub, center, sum, "×1.25", _back((age - 0.5) * 2.0))
++	elif age < 2.0:
++		_pose(hub, center, sum, "×1.25", 2.0 - age)
++	elif age < 2.15:
++		_pose(hub, center, boosted, "", 0, 0, sin((age - 2.0) * 32.0))
++	else:
++		hub.window.hide()
++		var travel := clampf((age - 2.15) / 0.85, 0.0, 1.0)
++		for index in range(tokens.size()):
++			var token: Dictionary = tokens[index]
++			token.color = COLORS[index % 4]
++			token.caption = NAMES[index % 4]
++			_pose(token, center.lerp(_anchor(token), _back(travel)), int(category_values[index % 4]))
+--- before/scripts/ui/hand_presentation.gd
++++ after/scripts/ui/hand_presentation.gd
+@@ -14,6 +14,7 @@
+ const SPECIALIZATION_BEATS := 4
+ const SPECIALIZATION_SECONDS := BEAT_SECONDS * SPECIALIZATION_BEATS
+ const CORE := [&"graphics", &"sound", &"technology", &"design"]
++const ScoreFloats := preload("res://scripts/ui/card_score_floats.gd")
+ const PlayBurst := preload("res://scripts/ui/card_play_burst.gd")
+ const CHARGE_SECONDS := 0.06
+ const CHARGE_SCALE := 0.94
+@@ -47,6 +48,12 @@
+ var _remove_sound: AudioStreamPlayer
+ var _bonus_labels: Array[Dictionary] = []
+ var _card_bursts: Array[Dictionary] = []
++var _score_flow: Control
++var _confirmed_values: Dictionary = {}
++var _starting_values: Dictionary = {}
++var _deposit_beat := 0.0
++var _deposited := false
++var _number_multiplier := 1.5
+ 
+ func _music_seconds() -> float:
+ 	if clock_source.is_valid(): return float(clock_source.call())
+@@ -73,6 +80,7 @@
+ 		if age>=PlayBurst.LIFETIME:
+ 			remove_child(effect.node);effect.node.queue_free();_card_bursts.remove_at(i)
+ 		else:effect.node.sample(age)
++	if is_instance_valid(_score_flow): _score_flow.sample(now)
+ 	for effect in _bonus_labels:
+ 		if not is_instance_valid(effect.label): continue
+ 		var age: float = maxf(0.0, now - effect.started)
+@@ -84,6 +92,8 @@
+ 	var shift := skipped_beats * BEAT_SECONDS
+ 	_music_cursor += shift
+ 	_first_beat += skipped_beats
++	_deposit_beat += skipped_beats
++	if is_instance_valid(_score_flow): _score_flow.rejoin(shift)
+ 	for effect in _bonus_labels: effect.started += shift
+ 	for effect in _card_bursts: effect.started += shift
+ 	trace.append({"index": -1, "event": "music_resume", "skipped_beats": skipped_beats,
+@@ -91,10 +101,11 @@
+ 		"music_seconds": _music_seconds(), "resume_seconds": _music_cursor, "lateness_seconds": 0.0})
+ 
+ 
+-func note_specialization(header: Callable, balanced := false) -> void:
++func note_specialization(header: Callable, balanced := false, multiplier := 1.5) -> void:
+ 	if capturing:
+ 		_specialization = true
+ 		_balanced = balanced
++		_number_multiplier = multiplier
+ 		_specialization_header = header
+ 
+ func _ready() -> void:
+@@ -128,6 +139,7 @@
+ 	_restore = restore
+ 	trace.clear()
+ 	_specialization = false
++	_number_multiplier = 1.5
+ 	_balanced = false
+ 	_balanced_deltas.clear()
+ 	_sources = fan.ordered_cards() if fan is CardFan else fan.get_children()
+@@ -162,6 +174,9 @@
+ 		_clear()
+ 		return false
+ 	busy = true
++	_deposited = false
++	_starting_values = before.duplicate()
++	_confirmed_values = after.duplicate()
+ 	action_kind = kind
+ 	_prior_focus = get_viewport().gui_get_focus_owner()
+ 	show()
+@@ -196,6 +211,7 @@
+ 	if project == null: return {}
+ 	var result := {&"scope": project.get_current_scope(), &"fixed": project.get_fixed_bugs(),
+ 		&"discovered": project.get_known_bugs() + project.get_fixed_bugs(), &"marketing": project.get_marketing_output(),
++		"_design_pressure": project.get_accumulated_bug_pressure(), "_alpha_pressure": project.get_accumulated_alpha_bug_pressure(),
+ 		"_cycle": project.get_current_cycle(), "_redraws": run.get_available_redraws() if run != null else 0}
+ 	for i in range(4): result[CORE[i]] = project.get_core_score(i)
+ 	return result
+@@ -233,11 +249,15 @@
+ func _animate(kind: String) -> void:
+ 	_music_cursor = _music_seconds()
+ 	_first_beat = ceili((_music_cursor + BEAT_SECONDS) / BEAT_SECONDS)
++	_deposit_beat = _first_beat + _hand.size() + (5 if _specialization else 1)
++	if kind != "redraw": _create_score_flow()
+ 	_music_driven = true
+ 	_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).set_parallel()
+ 	_tween.pause()
+ 	var center := size / 2.0
+-	var scale_value := minf(0.68, (size.x - 70.0) / (_hand.size() * 258.0))
++	# Reserve a score lane even in the shorter tutorial/Contract stage.
++	var scale_value := minf(0.68, minf((size.x - 70.0) / (_hand.size() * 258.0), maxf(0.25, (size.y - 110.0) / CardFan.CARD_SIZE.y)))
++	center.y = maxf(center.y, 120.0 + CardFan.CARD_SIZE.y * scale_value / 2.0)
+ 	var remaining := _ghosts.filter(func(card): return card not in _hand)
+ 	for ghost in _ghosts:
+ 		if ghost in _hand:
+@@ -261,27 +281,18 @@
+ 			_tween.parallel().tween_property(ghost, "position:x", size.x + 260.0 + _hand.find(ghost) * 150.0, BEAT_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+ 	else:
+ 		_tween.chain().tween_interval(maxf(0.0, _first_beat * BEAT_SECONDS - _music_cursor - BEAT_SECONDS))
+-		for i in range(_hand.size()):
+-			_activation_bounce(i,scale_value,false)
+-		if _balanced:
++		for i in range(_hand.size()): _activation_bounce(i, scale_value, false)
++		if _specialization:
+ 			_tween.chain().tween_callback(_begin_specialization)
+-			_tween.chain().tween_interval(SPECIALIZATION_LEAD_BEATS * BEAT_SECONDS)
+-			_tween.chain().tween_callback(_redistribute_balanced)
++			_tween.chain().tween_interval(2 * BEAT_SECONDS)
++			_tween.chain().tween_callback(_merge_numbers)
+ 			_tween.chain().tween_interval(BEAT_SECONDS)
+-		elif _specialization:
+-			_tween.chain().tween_callback(_begin_specialization)
+-			_tween.chain().tween_interval(SPECIALIZATION_LEAD_BEATS * BEAT_SECONDS)
+-			for i in range(_hand.size()):
+-				_activation_bounce(i,scale_value,true)
++			_tween.chain().tween_callback(_numbers_ready)
++			_tween.chain().tween_interval(BEAT_SECONDS)
+ 			_tween.chain().tween_callback(_record.bind(-1, "specialization_complete"))
+-		if not _specialization:
+-			# A purely visual victory wave after every resolved score/bonus is shown.
+-			for i in range(_hand.size()):
+-				var ghost := _hand[i]
+-				_tween.chain().tween_callback(_record.bind(i, "exit_bounce"))
+-				_tween.chain().tween_property(ghost, "position:y", -22.0, BEAT_SECONDS / 2.0).as_relative()
+-				_tween.chain().tween_property(ghost, "position:y", 22.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
+-				_tween.chain().tween_callback(_record.bind(i, "exit_grounded"))
++		_tween.chain().tween_callback(_begin_number_exit)
++		_tween.chain().tween_interval(BEAT_SECONDS)
++		_tween.chain().tween_callback(_deposit_scores)
+ 		_tween.chain().tween_callback(_record.bind(-1, "exit_slide"))
+ 		_tween.chain()
+ 		for ghost in _hand:
+@@ -392,30 +403,74 @@
+ 	_tween.tween_interval(BEAT_SECONDS / 2.0)
+ 	_tween.tween_callback(func(): _record(-1, "sorted"); _clear(false))
+ 
++func _scalar(card: CardData, row: Dictionary) -> int:
++	var core := 0
++	for key in CORE: core += int(row.get(key, 0))
++	if not card.core_contributions().is_empty(): return core
++	if card.qa_operation == &"debug": return int(row.get(&"fixed", 0))
++	if card.qa_operation == &"search": return int(row.get(&"discovered", 0))
++	return int(row.get(&"marketing", 0))
++
++func _create_score_flow() -> void:
++	_score_flow = ScoreFloats.new()
++	_score_flow.name = "FloatingScores"
++	_score_flow.z_index = 400
++	add_child(_score_flow)
++	var bases: Array = []
++	var finals: Array = []
++	for index in range(_cards.size()):
++		var raw := {}
++		var resolved := _timeline[index].duplicate()
++		for key in resolved: resolved[key] += int(_bonus_timeline[index].get(key, 0))
++		for key in CORE + [&"marketing", &"fixed", &"discovered"]: raw[key] = _weight(_cards[index], key)
++		bases.append(_scalar(_cards[index], raw) * int(_starting_values.get("_score_divisor", 1)) if _specialization else _scalar(_cards[index], resolved))
++		finals.append(_scalar(_cards[index], resolved))
++	var categories: Array = []
++	for key in CORE: categories.append(int(_confirmed_values.get(key, 0)) - int(_starting_values.get(key, 0)))
++	_score_flow.configure(_hand, bases, finals, categories)
++	_score_flow.divisor = int(_starting_values.get("_score_divisor", 1))
++	_score_flow.multiplier_text = "×%s" % str(_number_multiplier)
++
+ func _begin_specialization() -> void:
+ 	_record(-1, "specialization_started")
++	_score_flow.begin_synergy(_balanced, (_first_beat + _hand.size()) * BEAT_SECONDS)
++	if not _balanced:
++		for index in range(_hand.size()): _record(index, "bonus_rise")
+ 	if _specialization_header.is_valid():
+ 		_specialization_header.call()
+ 		_specialization_header = Callable()
+ 
++func _merge_numbers() -> void:
++	if _balanced: _record(-1, "balanced_merge")
++	else:
++		for index in range(_hand.size()): _score_bonus(index)
++
++func _numbers_ready() -> void:
++	if _balanced: _record(-1, "balanced_split")
++	else:
++		for index in range(_hand.size()): _record(index, "bonus_grounded")
++
+ func _score_bonus(index: int) -> void:
+-	_emit_card_burst(index,true)
+-	var deltas := _bonus_timeline[index]
+-	var parts: Array[String] = []
+-	for key in deltas:
+-		display_values[key] += deltas[key]
+-		if deltas[key] > 0: parts.append("+%d %s" % [deltas[key], str(key).capitalize()])
++	# The simultaneous number merge is visual; gameplay already committed.
++	_record(index, "bonus")
++
++func _begin_number_exit() -> void:
++	_score_flow.begin_exit((_deposit_beat - 1.0) * BEAT_SECONDS)
++	_record(-1, "numbers_exit")
++
++func _deposit_scores() -> void:
++	if _deposited: return
++	_deposited = true
++	_score_flow.sample(_deposit_beat * BEAT_SECONDS)
++	_score_flow.finish_exit()
++	_record(-1, "numbers_hidden")
++	var deltas := {}
++	for key in _confirmed_values:
++		if not str(key).begins_with("_"): deltas[key] = int(_confirmed_values[key]) - int(_starting_values.get(key, 0))
++	display_values = _confirmed_values.duplicate()
+ 	if _update.is_valid(): _update.call(display_values.duplicate(), deltas)
+-	if not parts.is_empty():
+-		var label := Label.new()
+-		label.text = "\n".join(parts)
+-		label.add_theme_color_override("font_color", Color("#f5bd59"))
+-		label.add_theme_font_size_override("font_size", 24)
+-		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+-		_hand[index].add_child(label)
+-		label.position = Vector2(8, 90)
+-		_bonus_labels.append({"label":label, "started":(_first_beat + _hand.size() + SPECIALIZATION_LEAD_BEATS + index + 0.5) * BEAT_SECONDS})
+-	_record(index, "bonus")
++	_record(-1, "hud_deposit")
++	if _balanced: _record(-1, "balanced_redistributed")
+ 
+ func _record(index: int, event: String) -> void:
+ 	var beat := -1.0
+@@ -424,18 +479,18 @@
+ 		"rise": beat = _first_beat + index
+ 		"score": beat = _first_beat + index + 0.5
+ 		"grounded": beat = _first_beat + index + 1.0
+-		"bonus_rise": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS + index
+-		"bonus": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS + index + 0.5
+-		"bonus_grounded": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS + index + 1.0
++		"bonus_rise": beat = _first_beat + count
++		"bonus": beat = _first_beat + count + 2
++		"bonus_grounded": beat = _first_beat + count + 3
+ 		"specialization_started": beat = _first_beat + count
+-		"specialization_complete": beat = _first_beat + 2 * count + SPECIALIZATION_LEAD_BEATS
+-		"balanced_redistributed": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS
+-		"exit_slide": beat = _first_beat + count + SPECIALIZATION_LEAD_BEATS + 1 if _balanced else _first_beat + 2 * count + (SPECIALIZATION_LEAD_BEATS if _specialization else 0)
+-		"exit_bounce": beat = _first_beat + count * (2 if _specialization else 1) + index
+-		"exit_grounded": beat = _first_beat + count * (2 if _specialization else 1) + index + 1.0
++		"specialization_complete": beat = _first_beat + count + 4
++		"balanced_merge": beat = _first_beat + count + 2
++		"balanced_split": beat = _first_beat + count + 3
++		"numbers_exit": beat = _deposit_beat - 1
++		"numbers_hidden", "hud_deposit", "balanced_redistributed", "exit_slide": beat = _deposit_beat
+ 	var now := _music_seconds()
+ 	# Suppress stale audio bursts after a long frame.
+-	if event in ["score", "bonus"] and now - beat * BEAT_SECONDS < 0.12: _play_sound.play()
++	if (event == "score" or (event == "bonus" and index == 0)) and now - beat * BEAT_SECONDS < 0.12: _play_sound.play()
+ 	if event in ["exit_slide", "redraw_exit"]: _remove_sound.play()
+ 	trace.append({"index": index, "event": event, "msec": Time.get_ticks_msec(),
+ 		"beat_index": beat, "scheduled_seconds": beat * BEAT_SECONDS,
+@@ -443,15 +498,11 @@
+ 	card_step.emit(index, event)
+ 
+ func _redistribute_balanced() -> void:
+-	for key in _balanced_deltas: display_values[key] += _balanced_deltas[key]
+-	if _update.is_valid(): _update.call(display_values.duplicate(), _balanced_deltas.duplicate())
+-	_record(-1, "balanced_redistributed")
++	_deposit_scores()
+ 
+ func _score_card(index: int) -> void:
+ 	_emit_card_burst(index)
+-	var deltas: Dictionary = _timeline[index]
+-	for key in deltas: display_values[key] += deltas[key]
+-	if _update.is_valid(): _update.call(display_values.duplicate(), deltas)
++	_score_flow.reveal(index, (_first_beat + index + 0.5) * BEAT_SECONDS)
+ 	_record(index, "score")
+ 
+ func cancel() -> void:
+@@ -484,6 +535,12 @@
+ 		if is_instance_valid(effect.node):remove_child(effect.node);effect.node.queue_free()
+ 	_card_bursts.clear()
+ 	_balanced_deltas.clear()
++	if is_instance_valid(_score_flow):
++		remove_child(_score_flow)
++		_score_flow.queue_free()
++	_score_flow = null
++	_confirmed_values.clear()
++	_starting_values.clear()
+ 	_balanced = false
+ 	_specialization_header = Callable()
+ 	_sources.clear()
+--- before/scripts/ui/production_scoreboard.gd
++++ after/scripts/ui/production_scoreboard.gd
+@@ -7,6 +7,45 @@
+ var header_title: Label
+ var hidden_bugs: Label
+ var show_hidden_bugs := false
++var _punches: Dictionary = {}
++
++func punch(deltas: Dictionary) -> void:
++	var indices := {}
++	for key in deltas:
++		if int(deltas[key]) == 0: continue
++		var index := [&"graphics", &"sound", &"technology", &"design"].find(key) + 1
++		if key == &"scope": index = 5
++		elif key == &"marketing": index = 0
++		elif key in [&"fixed", &"discovered"]: index = 6
++		elif index == 0: continue
++		indices[index] = true
++	for index in indices:
++		if _punches.has(index): _punches[index].kill()
++		var tween := animate_number(stats[index])
++		_punches[index] = tween
++		tween.finished.connect(func():
++			if _punches.get(index) == tween: _punches.erase(index))
++
++static func animate_number(label: Label) -> Tween:
++	label.pivot_offset = label.size / 2.0
++	label.scale = Vector2.ONE * 0.9
++	label.rotation = -0.025
++	label.self_modulate = Color("#f5ce69")
++	var tween := label.create_tween().set_parallel()
++	tween.tween_property(label, "scale", Vector2.ONE * 1.18, 0.075).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
++	tween.tween_property(label, "rotation", 0.025, 0.075)
++	tween.chain().tween_property(label, "scale", Vector2.ONE, 0.34).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
++	tween.parallel().tween_property(label, "rotation", 0.0, 0.22)
++	tween.parallel().tween_property(label, "self_modulate", Color.WHITE, 0.22)
++	return tween
++
++func reset_punches() -> void:
++	for tween in _punches.values(): tween.kill()
++	_punches.clear()
++	for label in stats:
++		label.scale = Vector2.ONE
++		label.rotation = 0.0
++		label.self_modulate = Color.WHITE
+ 
+ func _ready() -> void:
+ 	row = HBoxContainer.new()
+@@ -58,7 +97,7 @@
+ 		var known := maxi(0,int(presented.get(&"discovered",project.get_known_bugs()+project.get_fixed_bugs()))-fixed)
+ 		stats[6].text = "Known / Fixed\n%d / %d"%[known,fixed]
+ 	else:
+-		stats[6].text = "Bug Pressure\n%.2f"%(project.get_accumulated_alpha_bug_pressure() if context==&"alpha" else project.get_accumulated_bug_pressure())
++		stats[6].text = "Bug Pressure\n%.2f"%presented.get("_alpha_pressure" if context==&"alpha" else "_design_pressure", project.get_accumulated_alpha_bug_pressure() if context==&"alpha" else project.get_accumulated_bug_pressure())
+ 	hidden_bugs.visible = show_hidden_bugs and context==&"beta"
+ 	if hidden_bugs.visible:
+ 		var hidden: int = maxi(0,int(presented._bug_total)-int(presented.discovered)) if presented.has("_bug_total") else project.get_hidden_bugs()
+--- before/scripts/ui/gameplay_hud.gd
++++ after/scripts/ui/gameplay_hud.gd
+@@ -156,6 +156,7 @@
+ 	studio_finances.close()
+ 	fans_dialog.hide()
+ 	_presented_scores.clear()
++	scoreboard.reset_punches()
+ 	for pulse in _score_pulses:
+ 		if is_instance_valid(pulse): pulse.queue_free()
+ 	_score_pulses.clear()
+@@ -418,32 +419,7 @@
+ func _show_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
+ 	_presented_scores = values.duplicate()
+ 	refresh()
+-	for key: StringName in deltas:
+-		var amount: int = deltas[key]
+-		if amount == 0: continue
+-		var index := HandPresentation.CORE.find(key) + 1
+-		var caption := "+%d" % amount
+-		if key == &"scope": index = 5
+-		elif key == &"marketing": index = 0
+-		elif key == &"fixed":
+-			index = 6
+-			caption += " fixed"
+-		elif key == &"discovered":
+-			index = 6
+-			caption += " found"
+-		var pulse := Label.new()
+-		pulse.text = caption
+-		pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
+-		pulse.add_theme_color_override("font_color", Color("f5ce69"))
+-		pulse.add_theme_font_size_override("font_size", 18)
+-		pulse.z_index = 200
+-		add_child(pulse)
+-		pulse.global_position = stats[index].global_position + Vector2(0, 38 if key != &"fixed" else 54)
+-		_score_pulses.append(pulse)
+-		var tween := pulse.create_tween().set_parallel()
+-		tween.tween_property(pulse, "position:y", pulse.position.y - 18.0, 0.55)
+-		tween.tween_property(pulse, "modulate:a", 0.0, 0.55).set_delay(0.16)
+-		tween.chain().tween_callback(func(): _score_pulses.erase(pulse); pulse.queue_free())
++	scoreboard.punch(deltas)
+ 
+ func _refresh_footer() -> void:
+ 	var cents := run.get_cash_cents()
+--- before/scripts/ui/guided_production_tutorial.gd
++++ after/scripts/ui/guided_production_tutorial.gd
+@@ -306,9 +306,10 @@
+ 	values["_bug_total"] = model.project.get_hidden_bugs()+model.project.get_known_bugs()+model.project.get_fixed_bugs()
+ 	return values
+ 
+-func _present_scores(values: Dictionary, _deltas: Dictionary) -> void:
++func _present_scores(values: Dictionary, deltas: Dictionary) -> void:
+ 	_shown_scores = values.duplicate()
+ 	_update_stats()
++	stats.punch(deltas)
+ 
+ func _restore_scores() -> void:
+ 	_shown_scores.clear()
+--- before/scripts/ui/phase_workspace.gd
++++ after/scripts/ui/phase_workspace.gd
+@@ -186,7 +186,7 @@
+ func show_synergy(title: String, detail: String) -> void:
+ 	if hand_motion != null and hand_motion.capturing:
+ 		synergy_notification.banner.hide()
+-		hand_motion.note_specialization(func(): synergy_notification.show_message(title, detail), title == "Balanced Production!")
++		hand_motion.note_specialization(func(): synergy_notification.show_message(title, detail), title == "Balanced Production!", 1.25 if title == "Balanced Operations!" else 1.5)
+ 		return
+ 	synergy_notification.show_message(title, detail)
+ 
+--- before/scripts/phases/contract_phase.gd
++++ after/scripts/phases/contract_phase.gd
+@@ -24,6 +24,7 @@
+ 
+ var _candidate_row: CardFan
+ var hand_motion: HandPresentation
++var _score_synergy: SynergyNotification
+ var _presented_scores: Dictionary = {}
+ var _status_label: Label
+ var _scores_label: Label
+@@ -207,6 +208,8 @@
+ 	_feedback_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ 	actions.add_child(_feedback_label)
+ 	_build_completion_panel()
++	_score_synergy = SynergyNotification.new()
++	add_child(_score_synergy)
+ 	hand_motion = HandPresentation.new()
+ 	add_child(hand_motion)
+ 	var organize := Button.new()
+@@ -227,29 +230,23 @@
+ 		if _state.is_completed(): _completion_modal.hide()
+ 
+ func _score_snapshot() -> Dictionary:
+-	var values := {&"scope": _state.get_scope(), "_cycle": _run.get_completed_run_cycles(), "_redraws": _run.get_available_redraws()}
++	var values := {&"scope": _state.get_scope(), "_cycle": _run.get_completed_run_cycles(), "_redraws": _run.get_available_redraws(), "_score_divisor": 2}
+ 	for i in range(4): values[HandPresentation.CORE[i]] = _state.get_core_score_half_units(i)
+ 	return values
+ 
+ func _display_scores(values: Dictionary, deltas: Dictionary) -> void:
+ 	_presented_scores = values.duplicate()
+ 	_refresh_all()
+-	var parts: Array[String] = []
+-	for key: StringName in deltas:
+-		if deltas[key] == 0: continue
+-		parts.append("+%s %s" % [str(deltas[key]) if key == &"scope" else _format_half(deltas[key]), str(key).capitalize()])
+-	if parts.is_empty(): return
+-	var pulse := Label.new()
+-	pulse.text = " · ".join(parts)
+-	pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
+-	pulse.z_index = 200
+-	pulse.add_theme_color_override("font_color", Color("f5ce69"))
+-	add_child(pulse)
+-	pulse.global_position = _score_values[0].global_position + Vector2(0, 20)
+-	var tween := pulse.create_tween().set_parallel()
+-	tween.tween_property(pulse, "position:y", pulse.position.y - 16.0, 0.55)
+-	tween.tween_property(pulse, "modulate:a", 0.0, 0.55)
+-	tween.chain().tween_callback(pulse.queue_free)
++	for index in range(5):
++		var key: StringName = HandPresentation.CORE[index] if index < 4 else &"scope"
++		if int(deltas.get(key, 0)) != 0: ProductionScoreboard.animate_number(_score_values[index])
++
++func _show_score_synergy(stat: StringName) -> void:
++	_score_synergy.banner.offset_left = -220
++	_score_synergy.banner.offset_right = 220
++	_score_synergy.banner.offset_top = maxf(160.0, get_global_rect().end.y - 112.0)
++	_score_synergy.banner.offset_bottom = _score_synergy.banner.offset_top + 62
++	_score_synergy.show_message("%s Specialization!" % str(stat).capitalize(), "Core ×1.5 · Scope stays printed")
+ 
+ func _restore_scores() -> void:
+ 	_presented_scores.clear()
+@@ -432,6 +429,8 @@
+ 		_command_busy = false
+ 		_feedback_label.text = _run.get_financial_block_reason()
+ 		return false
++	var stat: StringName = result.events[0].plan.specialization_stat
++	if not stat.is_empty(): hand_motion.note_specialization(_show_score_synergy.bind(stat))
+ 	if _state.is_completed(): _show_completion()
+ 	else:
+ 		_publish_candidate_pool(result.replacements,true)
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -24,6 +24,8 @@
+ const BALANCED_BOOST_PREDECESSORS := ["1c28c28f1f82b53cfb76f246f66562d476ffeb23d1ca152cd455108a693c5b4e"]
+ ## Positive one-point Balanced allowance is prospective; saved state stays exact.
+ const BALANCED_SMALL_HAND_PREDECESSORS := ["9d30a157bfbcdec10be0de7120979ca282c137b23d327bb5b4e24fe2842c6cac"]
++## Floating score presentation only; exact preceding player/world/RNG retained.
++const SCORE_FLOAT_PREDECESSORS := ["8593779f9afa7deab4ca218fab64118864efe5d763ff088485f8d6ad43be7ab8"]
+ ## New grants change prospectively; existing world ownership/RNG is retained.
+ const EMPLOYEE_PRE_SEARCH_SOURCES := ["5dd56b5b84e8e72065c4394ca301f89694461a8a32b62486565fb1f9c49400bd","9216e53b16f5381247b2d4f6a7bfcfd168523cfc6ef5e9d0e11107280367bb31"]
+ const ROOT_FIRST_PREDECESSOR_SOURCES := [
+@@ -321,7 +323,7 @@
+ 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
+ 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
+ 	var current_source := Replay.source_identity() if captured_source_identity.is_empty() else captured_source_identity
+-	var source_ok: bool = predecessor_source==current_source or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
++	var source_ok: bool = predecessor_source==current_source or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+ 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
+ 	if predecessor_source!=current_source and predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES+USABILITY_PRESENTATION_SOURCES:
+ 		paired_revision=StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_EMPLOYEE_RULES)
+--- before/scripts/debug/verify_score_floats.gd
++++ after/scripts/debug/verify_score_floats.gd
+@@ -0,0 +1,175 @@
++extends SceneTree
++var checks:=0
++var failures:=0
++var clock:=0.0
++var output:=""
++func check(ok: bool,label: String) -> void:
++	checks+=1
++	if not ok:failures+=1;push_error("FAIL: "+label)
++func _initialize() -> void:
++	_run.call_deferred()
++
++func jump(motion: HandPresentation, seconds: float) -> void:
++	clock=seconds
++	motion.advance_music(clock)
++
++func _run() -> void:
++	for arg in OS.get_cmdline_user_args():
++		if arg.begins_with("--out="): output=arg.trim_prefix("--out=")
++	check(ResourceLoader.exists("res://scripts/ui/card_score_floats.gd"),"Music-sampled floating scores exist")
++	var motion:=HandPresentation.new()
++	check(motion.has_method("_deposit_scores"),"HUD deposit is separate from card score events")
++	motion.free()
++	if failures: quit(failures); return
++	for dimensions in [Vector2i(1152,648),Vector2i(1280,720),Vector2i(832,320)]:
++		root.size=dimensions;root.content_scale_size=dimensions
++		for kind in ["normal","specialization","balanced"]: await exercise(kind,false)
++	for kind in ["normal","specialization","balanced"]: await exercise(kind,true)
++	await contract_units()
++	await capped_qa()
++	await punch()
++	await process_frame
++	await create_timer(0.2).timeout
++	print("SCORE_FLOATS checks=%d failures=%d"%[checks,failures])
++	quit(failures)
++
++func shot(label: String) -> void:
++	if output.is_empty() or DisplayServer.get_name()=="headless":return
++	await RenderingServer.frame_post_draw
++	root.get_texture().get_image().save_png(output.path_join(label+".png"))
++
++func exercise(kind: String, slow: bool) -> void:
++	var fan:=Control.new();var motion:=HandPresentation.new()
++	root.add_child(fan);root.add_child(motion)
++	motion.set_process(false);clock=0.0;motion.clock_source=func():return clock
++	var cards: Array=[]
++	for index in range(4):
++		var card:=CardData.new()
++		card.id=StringName("float_fixture_"+str(index));card.card_name="Score "+str(index+1)
++		card.primary_stat=HandPresentation.CORE[0 if kind=="specialization" else index]
++		card.primary_value=3 if index==2 and kind!="specialization" else 2
++		var view: CardView=load("res://scenes/cards/card_view.tscn").instantiate()
++		view.set_card(card);fan.add_child(view);cards.append(view)
++	var state: Dictionary={"_cycle":0,&"graphics":10,&"sound":20,&"technology":30,&"design":40}
++	var before:=state.duplicate()
++	var calls: Array=[0]
++	var deposits: Array=[]
++	var action:=func():
++		calls[0]+=1;state._cycle+=1
++		if kind=="specialization":state[&"graphics"]+=12;motion.note_specialization(Callable())
++		elif kind=="balanced":
++			for index in range(4):state[HandPresentation.CORE[index]]+=3 if index<3 else 2
++			motion.note_specialization(Callable(),true)
++		else:
++			for index in range(4):state[HandPresentation.CORE[index]]+=3 if index==2 else 2
++	var update:=func(values: Dictionary,deltas: Dictionary):
++		if not deltas.is_empty():deposits.append({"values":values.duplicate(),"hidden":motion._score_flow.tokens.all(func(t):return not t.window.visible)})
++	check(motion.play("play",fan,cards,action,func():return state.duplicate(),update,Callable()),kind+" accepted")
++	var first: float=motion._first_beat*HandPresentation.BEAT_SECONDS
++	var step:=HandPresentation.BEAT_SECONDS
++	if slow:
++		while motion._music_driven and clock<20:jump(motion,clock+0.31)
++		check(deposits.size()==1 and motion.display_values==state,kind+" low FPS deposits exactly once")
++		for event in motion.trace:
++			if event.beat_index>=0:check(event.lateness_seconds>=-0.0001 and event.lateness_seconds<=0.3101,"Every low-FPS event stays within one frame")
++	else:
++		jump(motion,first+0.6*step)
++		check(deposits.is_empty() and motion.display_values==before,"Card score floats without leaking committed HUD totals")
++		var flow: Control=motion._score_flow
++		check(flow.tokens[0].window.visible and flow.tokens[0].value.horizontal_alignment==HORIZONTAL_ALIGNMENT_CENTER,"Score rises centered above its card")
++		var pose: Vector2=flow.tokens[0].value.position
++		jump(motion,clock)
++		check(flow.tokens[0].value.position==pose,"Stationary music holds the exact text pose")
++		motion._rejoin_music_grid(2)
++		jump(motion,clock+2*step)
++		check(flow.tokens[0].value.position==pose,"Resume rejoin preserves text age and pose")
++		first=motion._first_beat*step
++		if kind!="normal":
++			var popup:=first+4*step
++			jump(motion,popup+0.75*step)
++			if kind=="specialization":
++				check(flow.tokens.all(func(t):return t.mult.visible and t.mult.text=="×1.5"),"All specialization multipliers appear together")
++				for token in flow.tokens:
++					var midpoint: float=(token.value.position.x+token.value.size.x/2+token.mult.position.x+token.mult.size.x/2)/2
++					check(absf(midpoint-token.window.size.x/2)<1.1,"Original and multiplier have symmetric centers")
++				await shot(kind+"-pair-"+str(root.size.x))
++				jump(motion,popup+1.5*step)
++				for token in flow.tokens:
++					var gap: float=token.mult.position.x-token.value.position.x
++					check(absf(gap-token.window.size.x/4)<1.1,"Both texts move inward during the merge")
++				jump(motion,popup+2.05*step)
++				check(flow.tokens.all(func(t):return t.value.text=="+3" and not t.mult.visible),"Specialization merges to exact resolved per-card values")
++			else:
++				check(flow.hub.window.visible and flow.hub.value.text=="+9" and flow.hub.mult.text=="×1.25","Balanced collects total and splits sum/multiplier")
++				await shot(kind+"-pair-"+str(root.size.x))
++				jump(motion,popup+2.05*step)
++				check(flow.hub.value.text=="+11","Balanced merge uses floored boosted total")
++				jump(motion,popup+3.05*step)
++				check(flow.tokens.map(func(t):return t.value.text)==["+3","+3","+3","+2"],"Balanced splits exact whole-category values to four cards")
++				await shot(kind+"-split-"+str(root.size.x))
++			for token in flow.tokens:
++				check(token.value.get_global_rect().position.y>=0 and token.value.get_global_rect().end.y<=token.window.get_global_rect().end.y,"Settled floating scores fit above the card inside a short stage")
++		var deposit: float=motion._deposit_beat*step
++		jump(motion,deposit-0.001)
++		check(deposits.is_empty() and motion.display_values==before,"HUD remains held throughout merge and falling values")
++		jump(motion,deposit+0.0001)
++		check(deposits.size()==1 and deposits[0].hidden and motion.display_values==state,"Hidden numbers deposit the exact committed snapshot once")
++		var names: Array=motion.trace.map(func(e):return e.event)
++		check(names.find("numbers_hidden")<names.find("hud_deposit") and names.find("hud_deposit")<names.find("exit_slide"),"Numbers hide before HUD update before card slide")
++		motion._deposit_scores()
++		check(deposits.size()==1,"Duplicate deposit callback is harmless")
++	check(calls[0]==1 and state._cycle==1,"Presentation never resolves the hand twice")
++	motion.cancel()
++	check(motion._score_flow==null and motion._card_bursts.is_empty(),"Cancel clears floats and particles")
++	motion.free();fan.free();await process_frame
++
++func punch() -> void:
++	var hud:=ProductionScoreboard.new();root.add_child(hud);await process_frame
++	var project:=ProjectState.new(30)
++	var before:=HandPresentation.project_snapshot(project,null)
++	project.add_core_scores_and_scope({},1,0.75)
++	hud.render(project,&"design",before)
++	check(hud.stats[6].text=="Bug Pressure\n0.00","Committed Bug Pressure stays held alongside floating scores")
++	hud.render(project,&"design",HandPresentation.project_snapshot(project,null))
++	check(hud.stats[6].text=="Bug Pressure\n0.75","Deposited Bug Pressure shows the exact confirmed value")
++	hud.punch({&"graphics":3})
++	check(hud._punches.size()==1,"Scoreboard starts one bounded punch per changed counter")
++	# Sample the exact peak: a native frame can skip a short wall-clock peak.
++	hud._punches[1].pause()
++	hud._punches[1].custom_step(0.075)
++	check(hud.stats[1].scale.x>1.0,"Changed number pops visibly")
++	hud.punch({&"graphics":1});check(hud._punches.size()==1,"Rapid update replaces the previous punch")
++	await create_timer(0.6).timeout
++	check(hud.stats[1].scale.is_equal_approx(Vector2.ONE) and is_zero_approx(hud.stats[1].rotation) and hud._punches.is_empty(),"HUD animation settles exactly")
++	hud.reset_punches();hud.free()
++
++func contract_units() -> void:
++	var motion:=HandPresentation.new();var fan:=Control.new()
++	root.add_child(fan);root.add_child(motion);motion.set_process(false)
++	clock=0;motion.clock_source=func():return clock
++	var view: CardView=load("res://scenes/cards/card_view.tscn").instantiate()
++	view.set_card(root.get_node("CardDatabase").get_card(&"graphics_pass"));fan.add_child(view)
++	var state: Dictionary={"_cycle":0,"_score_divisor":2,&"graphics":0}
++	var action:=func():state._cycle=1;state[&"graphics"]=6;motion.note_specialization(Callable())
++	check(motion.play("play",fan,[view],action,func():return state.duplicate(),Callable(),Callable()),"Contract half-unit fixture starts")
++	jump(motion,(motion._first_beat+0.6)*HandPresentation.BEAT_SECONDS)
++	check(motion._score_flow.tokens[0].value.text=="+2","Contract base score displays points, not storage half-units")
++	jump(motion,(motion._first_beat+1+2.05)*HandPresentation.BEAT_SECONDS)
++	check(motion._score_flow.tokens[0].value.text=="+3","Contract specialization displays exact converted points")
++	motion.cancel();motion.free();fan.free();await process_frame
++
++func capped_qa() -> void:
++	var motion:=HandPresentation.new();var fan:=Control.new()
++	root.add_child(fan);root.add_child(motion);motion.set_process(false)
++	clock=0;motion.clock_source=func():return clock
++	var cards: Array=[]
++	for index in range(4):
++		var view: CardView=load("res://scenes/cards/card_view.tscn").instantiate()
++		view.set_card(root.get_node("CardDatabase").get_card(&"debug"));fan.add_child(view);cards.append(view)
++	var state: Dictionary={"_cycle":0,&"fixed":0,&"discovered":1}
++	var action:=func():state._cycle=1;state[&"fixed"]=1;motion.note_specialization(Callable())
++	check(motion.play("play",fan,cards,action,func():return state.duplicate(),Callable(),Callable()),"Capped QA fixture starts")
++	jump(motion,(motion._first_beat+4+2.05)*HandPresentation.BEAT_SECONDS)
++	check(motion._score_flow.tokens.reduce(func(sum,t):return sum+int(t.final),0)==1,"Capped QA floats conserve the exact resolved Bug count")
++	check(motion._score_flow.tokens.all(func(t):return t.value.text in ["+0","+1"]),"Capped QA never invents multiplied Bugs")
++	motion.cancel();motion.free();fan.free();await process_frame
+--- before/scripts/debug/verify_soundtrack_sync.gd
++++ after/scripts/debug/verify_soundtrack_sync.gd
+@@ -109,7 +109,7 @@
+ 	# A stationary injected transport clock never advances visual events.
+ 	for i in range(10): motion.advance_music(fake_time)
+ 	check(motion.trace.is_empty(), "No events while clock is stationary")
+-	var deadline := fake_time + (count * 3 + 4) * Grid.STEP
++	var deadline := fake_time + (count + 10) * Grid.STEP
+ 	while motion._music_driven and fake_time < deadline:
+ 		fake_time += frame_step
+ 		motion.advance_music(fake_time)
+@@ -123,13 +123,13 @@
+ 		for i in range(rows.size()):
+ 			check(rows[i].index == i, "Left-to-right event order")
+ 			check(rows[i].lateness_seconds >= -0.00001 and rows[i].lateness_seconds <= frame_step + 0.00001, "Event error bounded by one render frame")
+-			if i > 0: check(is_equal_approx(rows[i].beat_index - rows[i-1].beat_index, 1.0), "Fixed subdivision cadence")
++			if i > 0: check(is_equal_approx(rows[i].beat_index - rows[i-1].beat_index, 0.0 if event.begins_with("bonus") else 1.0), "Base cards keep cadence; synergy text is simultaneous")
+ 	check(motion._play_sound.bus == &"SFX" and motion._remove_sound.bus == &"SFX", "Both cues obey SFX settings")
+ 	check(motion._play_sound.stream is AudioStreamWAV and motion._remove_sound.stream is AudioStreamWAV, "Original WAV cues loaded")
+ 	if bonus:
+ 		var start: Array = motion.trace.filter(func(e): return e.event == "specialization_started")
+ 		var rise: Array = motion.trace.filter(func(e): return e.event == "bonus_rise")
+-		check(rise[0].beat_index - start[0].beat_index == HandPresentation.SPECIALIZATION_LEAD_BEATS, "Popup precedes bonuses by one music subdivision")
++		check(rise[0].beat_index == start[0].beat_index, "All multiplier rises begin with the popup")
+ 		check(motion.trace.filter(func(e): return e.event in ["exit_bounce", "exit_grounded"]).is_empty(), "No extra victory wave after synergy")
+ 	check(motion.trace.filter(func(e): return e.event == "exit_slide").size() == 1, "Exactly one removal cue boundary")
+ 	traces.append({"count": count, "bonus": bonus, "frame_step": frame_step, "events": motion.trace.duplicate(true)})
+@@ -174,14 +174,14 @@
+ 		fake_time += frame_step
+ 		motion.advance_music(fake_time)
+ 	var played := snapshots.filter(func(row): return row.event == "score")
+-	check(played.size() == 4 and played[-1].values[&"graphics"] == 105 and played[-1].values[&"design"] == 7, "Balanced first displays printed hand gains")
++	check(played.size() == 4 and played[-1].values[&"graphics"] == 100 and played[-1].values[&"design"] == 1, "Balanced keeps HUD unchanged while card values float")
+ 	var shared := snapshots.filter(func(row): return row.event == "balanced_redistributed")
+ 	check(shared.size() == 1 and shared[0].values[&"graphics"] == 107 and shared[0].values[&"design"] == 7, "Balanced applies boosted split once after cards play")
+ 	check(calls[0] == 1 and state._cycle == 1, "Balanced presentation never replays gameplay")
+ 	for key in HandPresentation.CORE: check(motion.display_values[key] == state[key], "Balanced display matches authoritative final score")
+ 	var starts := motion.trace.filter(func(e): return e.event == "specialization_started")
+ 	var splits := motion.trace.filter(func(e): return e.event == "balanced_redistributed")
+-	check(starts.size() == 1 and splits.size() == 1 and splits[0].beat_index - starts[0].beat_index == 1, "Balanced popup then redistribution share continuous music grid")
++	check(starts.size() == 1 and splits.size() == 1 and splits[0].beat_index - starts[0].beat_index == 5, "Balanced merge/split/sink deposits five music subdivisions after popup")
+ 	check(motion.trace.filter(func(e): return e.event in ["bonus_rise", "exit_bounce"]).is_empty(), "Balanced has no second bounce wave")
+ 	check(splits[0].lateness_seconds >= -0.00001 and splits[0].lateness_seconds <= frame_step + 0.00001, "Balanced low-frame-rate event stays within one frame")
+ 	traces.append({"balanced":true, "frame_step":frame_step, "events":motion.trace.duplicate(true)})
+--- before/scripts/debug/verify_card_motion.gd
++++ after/scripts/debug/verify_card_motion.gd
+@@ -116,8 +116,10 @@
+ 	await shot("centered-hand-%d" % width)
+ 	while not motion.trace.any(func(e): return e.event == "score"):
+ 		await process_frame
+-	expect(hud.stats[1].text == "Graphics\n2 / 33" and not hud._score_pulses.is_empty(), "First bounce updates the scoreboard and exposes a +2 base indicator")
++	expect(hud.stats[1].text == "Graphics\n0 / 33" and is_instance_valid(motion._score_flow), "First bounce holds the HUD while the card score floats")
+ 	await shot("score-bounce-%d" % width)
++	while not motion.trace.any(func(e): return e.event == "hud_deposit"): await process_frame
++	expect(hud.stats[1].text == "Graphics\n12 / 33" and not hud.scoreboard._punches.is_empty(), "Falling values deposit the final score and punch the HUD")
+ 	if motion.busy: await motion.finished
+ 	var order: Array = []
+ 	for event in motion.trace:
+@@ -131,7 +133,7 @@
+ 		expect(absf((beats[i].msec-beats[i-1].msec)/1000.0-HandPresentation.BEAT_SECONDS)<0.10,"Left-to-right bounces maintain140 BPM")
+ 	var timed_bonuses: Array = motion.trace.filter(func(e): return e.event == "bonus_rise")
+ 	var ends: Array = motion.trace.filter(func(e): return e.event == "specialization_complete")
+-	expect(timed_bonuses.size()==4 and ends.size()==1 and absf((ends[0].msec-timed_bonuses[0].msec)/1000.0-HandPresentation.SPECIALIZATION_SECONDS)<0.15,"Four bonus bounces form one specialization cycle at4:1")
++	expect(timed_bonuses.size()==4 and ends.size()==1 and absf((ends[0].msec-timed_bonuses[0].msec)/1000.0-HandPresentation.SPECIALIZATION_SECONDS)<0.15,"Simultaneous multipliers finish the four-subdivision merge cycle")
+ 	var return_count := 0
+ 	for event in motion.trace:
+ 		if event.event == "return_from_bottom": return_count += 1
+@@ -141,7 +143,7 @@
+ 	for event in motion.trace:
+ 		if event.event == "bonus": bonuses.append(event.index)
+ 		if event.event == "deal": deals.append(event)
+-	expect(bonuses == [0, 1, 2, 3], "Specialization bonuses reveal once per card, left to right")
++	expect(bonuses == [0, 1, 2, 3], "Simultaneous specialization merge records each card exactly once")
+ 	var finale: Array = []
+ 	for event in motion.trace:
+ 		if event.event in ["bonus", "exit_bounce", "exit_grounded", "exit_slide"]:
+--- before/scripts/debug/verify_gameplay_hud_overlay.gd
++++ after/scripts/debug/verify_gameplay_hud_overlay.gd
+@@ -157,6 +157,7 @@
+ 
+ func verify_overlay(hud: GameplayHUD, phase: Control, project: ProjectState, run: RunState, title: String) -> void:
+ 	var names: Array = ["QAPriority", "MarketingPriority", "InsiderPriority"] if title == "Beta" else ["GraphicsPriority", "SoundPriority", "TechnologyPriority", "DesignPriority"]
++	if title == "Beta" and not BetaPriorityAllocation.insiders_enabled(): names.erase("InsiderPriority")
+ 	var views := phase.get_node("%HandContainer").get_children()
+ 	for index in range(4): views[index].card_pressed.emit(views[index])
+ 	var selection: Array = phase.get_selected_candidate_views()
+@@ -181,6 +182,7 @@
+ 	check(overlay.shade.get_signal_connection_list("gui_input").is_empty(), title + ": backdrop has no dismiss action")
+ 	check(overlay.dialog.get_global_rect().size.x <= 1152 and overlay.dialog.get_global_rect().size.y <= 648, title + ": modal fits viewport")
+ 	var sliders := overlay.dialog.find_children("*", "VSlider", true, false)
++	sliders = sliders.filter(func(slider): return slider.is_visible_in_tree())
+ 	check(sliders.size() == names.size(), title + ": exact vertical category count")
+ 	for index in range(1, sliders.size()):
+ 		check(not sliders[index - 1].get_parent().get_global_rect().intersects(sliders[index].get_parent().get_global_rect()), title + ": modal columns do not overlap")
+@@ -192,7 +194,7 @@
+ 		check(overlay.dialog.is_ancestor_of(root.gui_get_focus_owner()), title + ": keyboard focus stays inside modal")
+ 	for index in range(names.size()):
+ 		var slider := phase.get_node("%" + names[index]) as VSlider
+-		check(slider.value == priorities.values()[index] and slider.min_value == 10 and slider.max_value == 50 and slider.step == 5, title + ": controls initialize committed values and constraints")
++		check(slider.value == priorities.values()[index] and slider.min_value == 10 and slider.max_value == 75 and slider.step == 5, title + ": controls initialize committed values and constraints")
+ 	views[5].card_pressed.emit(views[5])
+ 	check(phase.get_selected_candidate_views() == selection and not phase.redraw_selected_cards(), title + ": modal blocks candidate and redraw input")
+ 	var play_name: String = {"Design": "PlayCardButton", "Alpha": "PlayAlphaHandButton", "Beta": "PlayHandButton"}[title]
+@@ -243,6 +245,9 @@
+ 		{"ids": [&"debug", &"search_for_bugs", &"posters", &"study_competition"], "label": "Balanced ×1.25"},
+ 		{"ids": [&"sign_flippers", &"posters", &"press_release", &"debug"], "label": "Synergy: none"},
+ 	]
++	if not BetaPriorityAllocation.insiders_enabled():
++		patterns.remove_at(2) # Balanced Operations is unavailable during the Insider hold.
++		patterns[-1].label = "Synergy: mixed"
+ 	for pattern: Dictionary in patterns:
+ 		for index in range(4): selected[index].set_card(database.call("get_card", pattern.ids[index]))
+ 		workspace.refresh()

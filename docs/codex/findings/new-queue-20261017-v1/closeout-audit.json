@@ -1,0 +1,104 @@
+{
+  "canonical_export_inputs_byte_current": 270,
+  "package_entries": 301,
+  "build_commands_passed": [
+    "clean-import",
+    "export-release",
+    "headless-startup"
+  ],
+  "variety_candidate": {
+    "id": "ai-market-variety-implementation-v1",
+    "owner": "ai-competitors",
+    "status": "CANDIDATE",
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\market-variety-implementation-v1",
+    "metadata_sha256": "fddf1e16bc4ef6c50a2f86dbf115e3925f0d77d243e55b9723f30c6219cb9d73",
+    "base_identity": "f7baf91f2775d9f4f50c75c1a9e4bef992640919dfdf9eb26f75d8031bef67bb",
+    "creation_identity": "f7baf91f2775d9f4f50c75c1a9e4bef992640919dfdf9eb26f75d8031bef67bb",
+    "candidate_identity": "e1b9ad8f60242761e75ff33350dd7305fd6bbcba8407f6b65bd9072e64870e3e",
+    "canonical_identity": "a8627abac889f6863d9f420ac34cc0379d8ff7f7fd4597fddf1ab42fd090275d",
+    "canonical_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "baseline_drift": true,
+    "delta": [
+      {
+        "path": "scripts/debug/verify_rival_trial_activation.gd",
+        "change": "modified",
+        "before_sha256": "0c9242e51c13a88e8ad170969106f638a7d6cb4846430ce3d7baf01bc426a050",
+        "after_sha256": "bf32da2bd04e895b719d85244877f5144fb02eeb44e9a90399fc7faac9672bd4"
+      },
+      {
+        "path": "scripts/market/ai_market_pressure_trial.gd",
+        "change": "added",
+        "before_sha256": null,
+        "after_sha256": "dfecef38991dd951dcb96f46e43e1d97c17e0e62bff39d80c822052089eeff22"
+      },
+      {
+        "path": "scripts/market/rival_trial.gd",
+        "change": "modified",
+        "before_sha256": "f7ca64f80c18b23258840c24b111001056b277088c822791f0ee61392db4ae07",
+        "after_sha256": "b562815661e24bcf821b8698c5208d4ffaa7e2a855c777906a8136a4dfab5ed0"
+      }
+    ],
+    "canonical_delta": [
+      {
+        "path": "scripts/debug/verify_victory_commit.gd",
+        "change": "modified",
+        "before_sha256": "4b6a6a87fb22d369bf7d82fa2635c4d0073eb4f0b2130518d325eaeb453962bb",
+        "after_sha256": "da2e623b031fc61d822b5bc1bb6aa286405e5816ebb467b10d127875055bca69"
+      }
+    ],
+    "lineage": []
+  },
+  "variety_processes": [
+    {
+      "argv": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\new-queue-20261017-v1\\ai-variety-run-v2\\project",
+        "--script",
+        "res://scripts/debug/verify_rival_trial_activation.gd"
+      ],
+      "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\new-queue-20261017-v1\\ai-variety-rivals-1",
+      "timeout_seconds": 240.0,
+      "started_utc": "2026-10-18T03:50:30.749634+00:00",
+      "headless": true,
+      "exit": 0,
+      "elapsed_seconds": 53.10899999999674,
+      "errors": [],
+      "ignored_environment_errors": []
+    },
+    {
+      "argv": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\new-queue-20261017-v1\\ai-variety-run-v2\\project",
+        "--script",
+        "res://scripts/debug/verify_rival_trial_activation.gd"
+      ],
+      "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\new-queue-20261017-v1\\ai-variety-rivals-2",
+      "timeout_seconds": 240.0,
+      "started_utc": "2026-10-18T03:51:25.783563+00:00",
+      "headless": true,
+      "exit": 0,
+      "elapsed_seconds": 52.5619999999908,
+      "errors": [],
+      "ignored_environment_errors": []
+    }
+  ],
+  "variety_repeat_evidence_exact": true,
+  "variety_releases": [
+    "MARKET_SHADOW_RELEASE studio=incumbent-arcade-foundry release=incumbent-arcade-foundry:project:1 cycle=7 genre=action theme=fantasy review=19 cores=[15, 21, 17, 15] earned=338 settled=236363",
+    "MARKET_SHADOW_RELEASE studio=incumbent-wayfinder-works release=incumbent-wayfinder-works:project:1 cycle=7 genre=adventure theme=fantasy review=18 cores=[13, 13, 16, 24] earned=253 settled=176922",
+    "MARKET_SHADOW_RELEASE studio=incumbent-arcade-foundry release=incumbent-arcade-foundry:project:2 cycle=14 genre=action theme=war review=29 cores=[17, 14, 24, 17] earned=333 settled=232866",
+    "MARKET_SHADOW_RELEASE studio=incumbent-wayfinder-works release=incumbent-wayfinder-works:project:2 cycle=14 genre=adventure theme=mystery review=16 cores=[17, 14, 11, 18] earned=240 settled=167832"
+  ],
+  "shadow_sales_rows": 20,
+  "shadow_sales_factor_basis_points": [
+    9100,
+    9400,
+    9700
+  ],
+  "variety_player_fresh_replay_ok": true,
+  "scope": "Private Theme variety and shadow arithmetic only; no active pressure or broad policy/quality verdict."
+}

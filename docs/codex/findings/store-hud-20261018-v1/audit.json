@@ -1,0 +1,196 @@
+{
+  "all_canonical_inputs_match_tested_project": true,
+  "inputs": 731,
+  "runtime_source": "ea4268bd65ae08e2a5a344384eb82dbd1a2fd9f3ef710def8443a0ce578f910c",
+  "changed_files": [
+    "scripts/debug/capture_store_hud.gd",
+    "scripts/debug/capture_store_hud.gd.uid",
+    "scripts/debug/verify_feature_spending_guidance.gd",
+    "scripts/debug/verify_feature_store.gd",
+    "scripts/debug/verify_feature_store_navigation.gd",
+    "scripts/debug/verify_store_hud.gd",
+    "scripts/debug/verify_store_hud.gd.uid",
+    "scripts/market/rival_world_checkpoint.gd",
+    "scripts/ui/feature_store.gd",
+    "scripts/ui/feature_store_map.gd",
+    "scripts/ui/gameplay_hud.gd",
+    "scripts/ui/menu_transitions.gd"
+  ],
+  "checks": [
+    {
+      "name": "import",
+      "summary": [],
+      "printed_passes": 0,
+      "warnings": []
+    },
+    {
+      "name": "verify_store_hud",
+      "summary": [
+        "STORE_HUD checks=130 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_feature_store",
+      "summary": [
+        "Feature Store verification: 0 failures"
+      ],
+      "printed_passes": 66,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "WARNING: A complete Alpha action requires four current candidate instances.",
+        "WARNING: Artwork not found for card '4_color_palette': res://assets/artwork/4_color_palette.png",
+        "WARNING: Artwork not found for card '8_bit_music': res://assets/artwork/8_bit_music.png",
+        "WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png",
+        "WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png",
+        "WARNING: Artwork not found for card 'dialogue': res://assets/artwork/dialogue.png",
+        "WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png",
+        "WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png",
+        "WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png",
+        "WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png",
+        "WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png",
+        "WARNING: Artwork not found for card 'music': res://assets/artwork/music.png",
+        "WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png",
+        "WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png",
+        "WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png",
+        "WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png",
+        "WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png",
+        "WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png"
+      ]
+    },
+    {
+      "name": "verify_feature_store_navigation",
+      "summary": [
+        "Feature Store navigation verification: 0 failures"
+      ],
+      "printed_passes": 84,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_feature_spending_guidance",
+      "summary": [
+        "Spending guidance: 0 failures"
+      ],
+      "printed_passes": 59,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_store_shopping_guidance",
+      "summary": [
+        "Shopping guidance: 0 failures"
+      ],
+      "printed_passes": 38,
+      "warnings": []
+    },
+    {
+      "name": "verify_feature_store_copy",
+      "summary": [
+        "Store copy: 52 checks, 0 failures"
+      ],
+      "printed_passes": 52,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_world_restore_file",
+      "summary": [
+        "Fresh world restore: 0 failures"
+      ],
+      "printed_passes": 5,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_sales_revenue_hud",
+      "summary": [
+        "SALES_REVENUE_HUD checks=458 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "verify_gameplay_hud_overlay",
+      "summary": [
+        "Gameplay HUD and priority overlay verification passed."
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "WARNING: A complete Alpha action requires four current candidate instances.",
+        "WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png",
+        "WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png",
+        "WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png",
+        "WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png",
+        "WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png",
+        "WARNING: Artwork not found for card 'music': res://assets/artwork/music.png",
+        "WARNING: Artwork not found for card 'power_ups': res://assets/artwork/power_ups.png",
+        "WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png",
+        "WARNING: Artwork not found for card 'simple_story': res://assets/artwork/simple_story.png",
+        "WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png",
+        "WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png",
+        "WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png"
+      ]
+    },
+    {
+      "name": "capture_store_hud",
+      "summary": [
+        "STORE_HUD checks=148 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": []
+    },
+    {
+      "name": "capture_sales_hud",
+      "summary": [
+        "SALES_HUD_RENDER checks=150 failures=0"
+      ],
+      "printed_passes": 0,
+      "warnings": [
+        "WARNING: A complete Alpha action requires four current candidate instances.",
+        "WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png",
+        "WARNING: Artwork not found for card 'controls': res://assets/artwork/controls.png",
+        "WARNING: Artwork not found for card 'enemies': res://assets/artwork/enemies.png",
+        "WARNING: Artwork not found for card 'general_combat': res://assets/artwork/general_combat.png",
+        "WARNING: Artwork not found for card 'levels': res://assets/artwork/levels.png",
+        "WARNING: Artwork not found for card 'maps': res://assets/artwork/maps.png",
+        "WARNING: Artwork not found for card 'menu_system': res://assets/artwork/menu_system.png",
+        "WARNING: Artwork not found for card 'multiple_endings': res://assets/artwork/multiple_endings.png",
+        "WARNING: Artwork not found for card 'scrolling': res://assets/artwork/scrolling.png",
+        "WARNING: Artwork not found for card 'sound_effects': res://assets/artwork/sound_effects.png",
+        "WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png"
+      ]
+    }
+  ],
+  "pngs": [
+    "alpha-1152x648.png",
+    "alpha-1280x720.png",
+    "beta-1152x648.png",
+    "beta-1280x720.png",
+    "contract-1152x648.png",
+    "contract-1280x720.png",
+    "debug-1152x648.png",
+    "debug-1280x720.png",
+    "debug-1920x1080.png",
+    "debug-900x600.png",
+    "design-1152x648.png",
+    "design-1280x720.png",
+    "starter-1152x648.png",
+    "store-1152x648.png",
+    "store-1280x720.png",
+    "store-1920x1080.png",
+    "store-900x600.png",
+    "studio-1152x648.png",
+    "studio-1280x720.png"
+  ]
+}

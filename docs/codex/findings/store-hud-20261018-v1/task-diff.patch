@@ -1,0 +1,594 @@
+--- before/patch-notes/scripts/debug/capture_store_hud.gd
++++ after/patch-notes/scripts/debug/capture_store_hud.gd
+@@ -0,0 +1 @@
++extends "res://scripts/debug/verify_store_hud.gd"
+--- before/patch-notes/scripts/debug/capture_store_hud.gd.uid
++++ after/patch-notes/scripts/debug/capture_store_hud.gd.uid
+@@ -0,0 +1 @@
++uid://cxfcol30jhn8p
+--- before/patch-notes/scripts/debug/verify_feature_spending_guidance.gd
++++ after/patch-notes/scripts/debug/verify_feature_spending_guidance.gd
+@@ -54,7 +54,8 @@
+ 	check(a.known_play_cost_cents == run.primitive_feature_hand_cost_cents(owned) and a.owned_feature_count == owned.size(), "Budget charges exactly the owned pool, not every purchasable branch")
+ 	var reserve_id: StringName
+ 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
+-		if not run.owns_feature(StringName(entry.id)):
++		# This single-purchase fixture needs an available root/owned parent.
++		if run.get_primitive_reserve_offer(StringName(entry.id)).get("can_purchase", false):
+ 			reserve_id = StringName(entry.id)
+ 			break
+ 	var extra: Array[CardData] = [db.get_card(reserve_id)]
+@@ -141,7 +142,7 @@
+ 		var before := state(run)
+ 		store._select_node(id)
+ 		await create_timer(0.6).timeout
+-		check(not store._spending_advice.text.is_empty() and root.get_visible_rect().encloses(store._spending_advice.get_global_rect()), "Spending advice visible at " + str(size))
++		check(not store._debug.tooltip_text.is_empty() and root.get_visible_rect().encloses(store._debug.get_global_rect()), "Diagnostic advice accessible at " + str(size))
+ 		check(not store._spending_advice.text.contains("23") and not store._spending_advice.text.contains("average"), "Internal average is not a player-facing stat")
+ 		check(root.get_visible_rect().encloses(store._buy.get_global_rect()) and not store._buy.disabled, "Advisory leaves reachable legal Purchase at " + str(size))
+ 		if "--capture" in OS.get_cmdline_user_args():
+@@ -149,7 +150,7 @@
+ 			await RenderingServer.frame_post_draw
+ 			root.get_texture().get_image().save_png(OUT + "/rendered/%s-%d.png" % [label, size.x])
+ 		store._map.dismiss()
+-		check(store._spending_advice.text.begins_with("Next game"), "Closing details restores owned-only budget")
++		check(store._debug.tooltip_text.contains(FeatureSpendingGuidance.message(run.get_feature_spending_advice())), "Closing details restores owned-only diagnostic budget")
+ 		store.hide()
+ 		store.open_store()
+ 		check(state(run) == before, "Browse/reopen/animate has zero transactions")
+--- before/patch-notes/scripts/debug/verify_feature_store.gd
++++ after/patch-notes/scripts/debug/verify_feature_store.gd
+@@ -136,8 +136,7 @@
+ 	var edges: Array = store.get("_edges")
+ 	expect(nodes.size() == 42 and edges.size() == 24, "Full ledger has 42 nodes and twenty-three parent edges plus Gameplay gate")
+ 	var lane_by_id: Dictionary = store.get("_lane_by_id")
+-	var lane_buttons: Dictionary = store.get("_lane_buttons")
+-	expect(lane_by_id.size() == nodes.size() and lane_buttons.size() == 5, "Every ledger Feature appears once across five browsable lanes")
++	expect(lane_by_id.size() == nodes.size() and store._map.category_regions.size() == 5, "Every ledger Feature appears once across five browsable lanes")
+ 	for entry: Dictionary in FeatureStoreCatalog.entries():
+ 		var parent := StringName(entry.purchase_parent)
+ 		if not parent.is_empty():
+@@ -148,7 +147,7 @@
+ 	store.call("_select_lane", &"Gameplay")
+ 	var tree: Control = store.get("_tree")
+ 	expect(edges.has([&"gameplay_gate", &"difficulty_levels"]) and _child_is_outward(store, tree.get_node("GameplayGate"), nodes[&"difficulty_levels"], &"Gameplay"), "Difficulty retains distinct Gameplay ownership gate inward of its node")
+-	expect(lane_buttons[&"Gameplay"].focus_mode == Control.FOCUS_ALL and nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL, "Lane and node navigation are keyboard/controller focusable")
++	expect(nodes[&"difficulty_levels"].focus_mode == Control.FOCUS_ALL and store._scroll.focus_mode == Control.FOCUS_ALL, "Map and node navigation are keyboard/controller focusable")
+ 	expect(nodes[&"colored_text"].text.contains("Need $325.00 to queue") and nodes[&"branching_nodes"].text.contains("Locked"), "Deposit-short and locked node states are distinct")
+ 	store.call("_select_lane", &"Visuals")
+ 	store.call("_select_node", &"colored_text")
+--- before/patch-notes/scripts/debug/verify_feature_store_navigation.gd
++++ after/patch-notes/scripts/debug/verify_feature_store_navigation.gd
+@@ -117,6 +117,12 @@
+ 	expect(not map.popup.visible, "Escape dismisses keyboard-opened details")
+ 	_key(KEY_RIGHT)
+ 	expect(store._selected == &"text", "Arrow browsing resumes from focused node after dismissal")
++	for zoom: float in [0.75,1.00010396295693,1.5]:
++		map.set_zoom(zoom)
++		map._focus_node(&"colored_text")
++		_key(KEY_ESCAPE)
++		_key(KEY_RIGHT)
++		expect(store._selected == &"text", "Equal-distance inward tie prefers parent at zoom " + str(zoom))
+ 	# Actual GUI button routing, not direct calls to _input: drags must not click.
+ 	await _reset_view()
+ 	at = text.get_global_rect().get_center()
+--- before/patch-notes/scripts/debug/verify_store_hud.gd
++++ after/patch-notes/scripts/debug/verify_store_hud.gd
+@@ -0,0 +1,152 @@
++extends "res://scripts/debug/verify_sales_revenue_hud.gd"
++
++func _initialize() -> void:
++	await process_frame
++	create_timer(120).timeout.connect(func(): push_error("Store HUD timeout"); quit(2))
++	node_added.connect(func(node: Node):
++		if node is CheckpointCoordinator: node.store = TestStore.new("user://saves/studio",node._validate_payload))
++	var run := fixture_run()
++	for i in range(6):
++		release_fixture(run,"Store HUD release %d" % i)
++		expect(run.complete_productive_action(),"Constructed release earns through normal calendar")
++	# Legal research creates owned Features whose play fees remain unspecified.
++	for id: StringName in [&"colored_text", &"save_files", &"branching_nodes", &"animated_sprites"]:
++		var quote := run.get_feature_research_quote(id)
++		if quote.can_admit:
++			expect(run.admit_feature_research(quote),"HUD fixture admits research " + str(id))
++			while run.get_feature_research_quote(id).queued:
++				expect(run.research_feature(run.get_feature_research_quote(id)),"HUD fixture completes research " + str(id))
++	var adapter := StudioCheckpoint.new()
++	var payload := adapter.capture(run)
++	expect(not payload.is_empty(),"Fixture captures through normal checkpoint codec")
++	for resolution in [Vector2i(1152,648),Vector2i(1280,720),Vector2i(1920,1080),Vector2i(900,600)]:
++		var fixture := adapter.hydrate(payload)
++		var game: Control = load("res://scenes/gameplay.tscn").instantiate()
++		game.run_state = fixture
++		root.add_child(game)
++		await settle()
++		root.min_size = Vector2i.ZERO
++		root.size = resolution
++		root.content_scale_size = resolution
++		await settle()
++		var studio: StudioPhase = game._active_phase
++		var hud: GameplayHUD = game.get_node("%GameplayHUD")
++		studio._open_feature_store()
++		hud.tutorial_overlay.close()
++		hud.contextual_tip.dismiss()
++		await settle()
++		await settle()
++		var store := studio._feature_store
++		store._map.fit_map()
++		await create_timer(0.8).timeout
++		var before := Replay.digest(fixture)
++		var chart := hud.sales_hud.get_global_rect()
++		var header := store._header.get_global_rect()
++		print("STORE_BOUNDS ",resolution," store=",store.get_global_rect()," body=",store._body.get_global_rect()," map=",store._scroll.get_global_rect()," header=",header," chart=",chart)
++		var viewport := Rect2(Vector2.ZERO,Vector2(resolution))
++		expect(hud.sales_hud.visible and hud.sales_hud.model.market_count == 6,"Live market chart is present")
++		expect(is_equal_approx(store._cash.global_position.y,chart.position.y) and is_equal_approx(store._owned_summary.global_position.y,chart.position.y),"Title and pool tops align with chart")
++		expect(viewport.encloses(header) and not header.intersects(chart),"Header fits beside chart "+str(resolution))
++		expect(store._cash.get_global_rect().end.x < store._owned_summary.global_position.x,"Owned pool is to the right of title")
++		var summary := store._summarize_owned_features()
++		expect(summary.unpriced_count > 0 and store._owned_summary.text.contains("Scope %d" % summary.scope),"Owned Scope binds to real owned Features")
++		for stat in [&"graphics", &"sound", &"technology", &"design"]:
++			expect(store._owned_summary.text.contains("%s %d" % [FeatureStore.score_label(stat),summary[stat]]),"Correct category total "+str(stat))
++		expect(not store._owned_summary.text.contains("Core Score") and not store._owned_summary.text.contains("TBD"),"Header omits aggregate Core Score and TBD copy")
++		expect(store._owned_summary.get_line_count() == store._owned_summary.get_visible_line_count(),"All pool text is visible")
++		if resolution.x >= 1152: expect(store._owned_summary.get_line_count()==1,"Supported-size pool stays on one line")
++		expect(not store._body.get_global_rect().intersects(chart) and store._close.global_position.y >= chart.end.y,"Body and Close Store clear chart")
++		expect(store._debug.get_global_rect().end.x <= store._close.global_position.x and viewport.encloses(store._debug.get_global_rect()),"Debug is beside Close Store")
++		var category_buttons := store.find_children("*","Button",true,false).filter(func(button: Button):return button.text in FeatureStore.LANE_ORDER)
++		expect(category_buttons.is_empty(),"Category zoom shortcut buttons removed")
++		expect(store._scroll.size.y >= resolution.y - 360,"Map receives reclaimed header space")
++		expect(store._debug.tooltip_text.contains("play cost TBD") and store._debug.tooltip_text.contains("unknown"),"Debug contains prototype fee and unknown-cost explanations")
++		var entered := [false]
++		hud.sales_hud.chart.mouse_entered.connect(func(): entered[0]=true)
++		motion(Vector2(3,3))
++		await settle()
++		motion(hud.sales_hud.chart.get_global_rect().get_center())
++		await settle()
++		expect(entered[0],"Chart remains mouse-reachable above Store for tooltips")
++		motion(Vector2(3,3))
++		await picture("store",resolution)
++		store._debug.grab_focus()
++		key(KEY_ENTER)
++		await settle()
++		expect(store._debug_popup.visible and viewport.encloses(store._debug_popup.get_global_rect()),"Keyboard opens bounded scrollable Debug notes")
++		var zoom_before := store._map.zoom
++		var wheel := InputEventMouseButton.new()
++		wheel.position=store._debug_scroll.get_global_rect().get_center()
++		wheel.button_index=MOUSE_BUTTON_WHEEL_DOWN
++		wheel.pressed=true
++		root.push_input(wheel,true)
++		await settle()
++		expect(store._debug_scroll.scroll_vertical>0 and store._map.zoom==zoom_before,"Debug wheel scrolls notes without zooming the map underneath")
++		store._debug_scroll.scroll_vertical=0
++		await picture("debug",resolution)
++		key(KEY_ESCAPE)
++		await settle()
++		expect(not store._debug_popup.visible and not paused and store._debug.has_focus(),"Escape closes Debug and returns focus without pausing")
++		store._select_node(&"branching_nodes")
++		await create_timer(0.8).timeout
++		expect(not store._map.popup.get_global_rect().intersects(chart),"Feature details never cover persistent chart")
++		store._map.dismiss()
++		expect(Replay.digest(fixture)==before,"Browsing chart and Debug leaves finance, RNG, cards and calendar unchanged")
++		store._close.grab_focus()
++		key(KEY_ENTER)
++		await settle()
++		expect(not store.visible and studio.get_node("%Dashboard").visible,"Close Store returns to Studio")
++		expect(game.get_node("%PhaseRoot").offset_top==88,"Closing restores Studio chart reservation")
++		studio._open_feature_store()
++		await settle()
++		expect(store.visible and not store._debug_popup.visible and game.get_node("%PhaseRoot").offset_top==12,"Reopening reuses compact header and closes Debug")
++		game.queue_free()
++		await settle()
++	# Pre-release Store remains usable without the sales chart.
++	var fresh := RunState.new()
++	fresh.initialize_cash_cents(0)
++	fresh.create_studio_with_traits("First Store",&"action",[])
++	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
++	game.run_state=fresh
++	root.add_child(game)
++	await settle()
++	root.size=Vector2i(1152,648)
++	root.content_scale_size=root.size
++	var studio: StudioPhase=game._active_phase
++	studio._open_feature_store()
++	await settle()
++	var hud: GameplayHUD=game.get_node("%GameplayHUD")
++	hud.contextual_tip.dismiss()
++	await create_timer(0.8).timeout
++	print("STARTER_HEADER visible=",hud.sales_hud.visible," offset=",studio._feature_store._header.offset_right," header=",studio._feature_store._header.get_rect()," store=",studio._feature_store.get_rect())
++	expect(not hud.sales_hud.visible and studio._feature_store._header.offset_right==-16,"Pre-release header uses available width")
++	expect(studio._feature_store._cash.global_position.y==12 and studio._feature_store._owned_summary.global_position.y==12 and studio._feature_store._header.size.y<76,"Starter labels stay at top after resize, with bounded header height")
++	expect(studio._feature_store._owned_summary.tooltip_text.contains("0 cycles"),"Starter purchase explanation remains available")
++	await picture("starter",Vector2i(1152,648))
++	game.queue_free()
++	await settle()
++	print("STORE_HUD checks=%d failures=%d" % [checks,failures])
++	var output := OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	if not output.is_empty(): FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures},"\t"))
++	quit(0 if failures==0 else 1)
++
++func motion(point: Vector2) -> void:
++	var event := InputEventMouseMotion.new()
++	event.position=point
++	event.global_position=point
++	root.push_input(event,true)
++
++func key(code: Key) -> void:
++	for pressed in [true,false]:
++		var event := InputEventKey.new()
++		event.keycode=code
++		event.physical_keycode=code
++		event.pressed=pressed
++		root.push_input(event,true)
++
++func picture(label: String,resolution: Vector2i) -> void:
++	if DisplayServer.get_name()=="headless": return
++	await RenderingServer.frame_post_draw
++	var screenshot := root.get_texture().get_image()
++	expect(screenshot.get_size()==resolution,"PNG has requested native dimensions")
++	expect(screenshot.save_png(OS.get_environment("PN_STORE_CAPTURE").path_join("%s-%dx%d.png" % [label,resolution.x,resolution.y]))==OK,"Saved native "+label)
+--- before/patch-notes/scripts/debug/verify_store_hud.gd.uid
++++ after/patch-notes/scripts/debug/verify_store_hud.gd.uid
+@@ -0,0 +1 @@
++uid://dggarpbnujibj
+--- before/patch-notes/scripts/market/rival_world_checkpoint.gd
++++ after/patch-notes/scripts/market/rival_world_checkpoint.gd
+@@ -16,6 +16,7 @@
+ # 2026-10-18 title-to-Studio audio timing and pause menu; the source fingerprint
+ # includes presentation scripts. Exact prior world/Founder v2 state is verified.
+ const COMPATIBLE_PRESENTATION_SOURCES := [
++	"f4303f0101e1971026080ec0b0acf3c817e96675fa190758d7c8651b8969a412", # Pre-Store-header UI; exact prior-world restore verified.
+ 	"580bd1331cdc4bca578230005e3ca4f9cc91ead0b03b78be3238bdb7c9fc5150", # Explicit always-processing music transport; unchanged persisted fields.
+ 	"38f92c219924494964e5982c6ed7976a5d2fec97de6ea1a7565fdd4d7e6bb41e", # Pre-pause-music presentation; persisted world fields unchanged.
+ 	"236a7e6184d14ff5b8f0f14fff01e61643f208e1318385c64cebea24f21a3ac3", # Pre-tooltip Pause routing; unchanged persisted world fields.
+--- before/patch-notes/scripts/ui/feature_store.gd
++++ after/patch-notes/scripts/ui/feature_store.gd
+@@ -1,5 +1,5 @@
+ class_name FeatureStore
+-extends PanelContainer
++extends Control
+ 
+ var _map: FeatureStoreMap
+ var _run: RunState
+@@ -22,7 +22,6 @@
+ 	&"Story & World": [&"simple_story", &"dialogue", &"branching_dialogue", &"character_backstories", &"character_development", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets"],
+ }
+ var _lane_by_id: Dictionary = {}
+-var _lane_buttons: Dictionary = {}
+ var _lane_scroll: Dictionary = {}
+ var _active_lane: StringName = &"Visuals"
+ var _gate: Label
+@@ -37,14 +36,28 @@
+ var _research_button: Button
+ var _research_quote: Dictionary = {}
+ var _admission_dialog: ConfirmationDialog
++var _header: HBoxContainer
++var _body: PanelContainer
++var _close: Button
++var _debug: Button
++var _debug_popup: PanelContainer
++var _debug_notes: Label
++var _debug_scroll: ScrollContainer
++
++class DebugButton extends Button:
++	func _make_custom_tooltip(for_text: String) -> Object:
++		return FeatureStore.notes_tooltip(for_text, get_viewport_rect().size.x)
+ 
+ class PoolSummaryLabel extends Label:
+ 	func _make_custom_tooltip(for_text: String) -> Object:
+-		var label := Label.new()
+-		label.custom_minimum_size.x = minf(480, get_viewport_rect().size.x - 48)
+-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+-		label.text = for_text
+-		return label
++		return FeatureStore.notes_tooltip(for_text, get_viewport_rect().size.x)
++
++static func notes_tooltip(for_text: String, viewport_width: float) -> Label:
++	var label := Label.new()
++	label.custom_minimum_size.x = minf(480, viewport_width - 48)
++	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
++	label.text = for_text
++	return label
+ 
+ static func score_label(stat: StringName) -> String:
+ 	return "Tech" if stat == &"technology" else str(stat).capitalize()
+@@ -53,32 +66,63 @@
+ func setup(run: RunState) -> void:
+ 	_run = run
+ 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
++	mouse_filter = Control.MOUSE_FILTER_IGNORE
++	_header = HBoxContainer.new()
++	_header.name = "StoreHeader"
++	_header.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
++	_header.offset_left = 16
++	_header.offset_right = -16
++	_header.add_theme_constant_override("separation", 24)
++	_header.mouse_filter = Control.MOUSE_FILTER_IGNORE
++	add_child(_header)
++	_cash = Label.new()
++	_cash.vertical_alignment = VERTICAL_ALIGNMENT_TOP
++	_cash.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
++	_header.add_child(_cash)
++	_owned_summary = PoolSummaryLabel.new()
++	_owned_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	_owned_summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
++	_owned_summary.vertical_alignment = VERTICAL_ALIGNMENT_TOP
++	_owned_summary.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
++	_owned_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
++	_owned_summary.add_theme_font_size_override("font_size", 14)
++	_header.add_child(_owned_summary)
++	# Autowrapped labels can briefly request tall bounds during viewport resize.
++	_header.minimum_size_changed.connect(func(): _header.offset_bottom = _header.get_combined_minimum_size().y)
++	_body = PanelContainer.new()
++	_body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
++	_body.offset_top = 76
++	add_child(_body)
+ 	var margin := MarginContainer.new()
+ 	for side: String in ["left", "right", "top", "bottom"]:
+-		margin.add_theme_constant_override("margin_" + side, 24)
+-	add_child(margin)
++		margin.add_theme_constant_override("margin_" + side, 16)
++	_body.add_child(margin)
+ 	var layout := VBoxContainer.new()
+ 	layout.add_theme_constant_override("separation", 12)
+ 	margin.add_child(layout)
+-	var header := HBoxContainer.new()
+-	layout.add_child(header)
+-	_cash = Label.new()
+-	_cash.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+-	header.add_child(_cash)
+-	var close := Button.new()
+-	close.text = "Close Store"
+-	close.pressed.connect(hide)
+-	header.add_child(close)
+-	_owned_summary = PoolSummaryLabel.new()
+-	_owned_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+-	_owned_summary.add_theme_font_size_override("font_size", 14)
+-	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Play cost is once per owned Feature in a project; Passes are free. Later Store Features have no defined play price yet.\n\nOwned Features join games started after you acquire them. Each game keeps the Feature supply it started with. Ownership does not guarantee a draw or play."
+-	layout.add_child(_owned_summary)
++	var actions := HBoxContainer.new()
++	actions.add_theme_constant_override("separation", 8)
++	layout.add_child(actions)
+ 	_spending_advice = Label.new()
+ 	_spending_advice.name = "SpendingAdvice"
++	_spending_advice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ 	_spending_advice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ 	_spending_advice.add_theme_font_size_override("font_size", 14)
+-	layout.add_child(_spending_advice)
++	actions.add_child(_spending_advice)
++	_debug = DebugButton.new()
++	_debug.name = "StoreDebug"
++	_debug.text = "Debug"
++	_debug.pressed.connect(_toggle_debug)
++	actions.add_child(_debug)
++	_close = Button.new()
++	_close.name = "CloseStore"
++	_close.text = "Close Store"
++	_close.pressed.connect(hide)
++	actions.add_child(_close)
++	_build_debug_popup()
++	resized.connect(_position_debug)
++	visibility_changed.connect(func():
++		if not visible: _debug_popup.hide())
+ 	var queue_bar := HBoxContainer.new()
+ 	layout.add_child(queue_bar)
+ 	_research_list = OptionButton.new()
+@@ -91,18 +135,6 @@
+ 		var quote := _research_quote.duplicate(true)
+ 		if _run.research_feature(quote): _refresh())
+ 	queue_bar.add_child(_research_button)
+-	var lanes := HBoxContainer.new()
+-	lanes.add_theme_constant_override("separation", 8)
+-	layout.add_child(lanes)
+-	for lane: StringName in LANE_ORDER:
+-		var lane_button := Button.new()
+-		lane_button.text = str(lane)
+-		lane_button.toggle_mode = true
+-		lane_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+-		lane_button.focus_mode = Control.FOCUS_ALL
+-		lane_button.pressed.connect(_select_lane.bind(lane))
+-		lanes.add_child(lane_button)
+-		_lane_buttons[lane] = lane_button
+ 	_map = FeatureStoreMap.new()
+ 	add_child(_map)
+ 	_map.configure(self, layout)
+@@ -143,14 +175,11 @@
+ 	_research_button.disabled = _research_quote.is_empty() or not _research_quote.can_research
+ 	_research_button.text = "Research" if _research_quote.is_empty() else "Research %s - 1 cycle" % CashFormatter.format_exact_cents(_research_quote.due_cents)
+ 	_research_button.tooltip_text = "Only the first queued Feature receives research. No automatic progress or due bills."
++	var owned := _summarize_owned_features()
++	_owned_summary.text = "OWNED POOL  ·  Scope %d  ·  Graphics %d · Sound %d · Tech %d · Design %d" % [owned.scope, owned.graphics, owned.sound, owned.technology, owned.design]
++	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Known play cost once per owned Feature: %s; Passes are free.\n\nOwned Features join games started after you acquire them. Each game keeps the Feature supply it started with. Ownership does not guarantee a draw or play." % CashFormatter.format_exact_cents(owned.known_play_cost_cents)
+ 	if _run.needs_starter_selection():
+-		var pool := _run.get_starter_pool_summary()
+-		_cash.text += "\nFirst-game pool: %d Scope · Optional Primitive purchases cost 0 cycles" % pool.scope
+-	var owned := _summarize_owned_features()
+-	_owned_summary.text = "OWNED POOL  •  Scope %d  •  Core Score %d\n" % [owned.scope, owned.total_score]
+-	_owned_summary.text += "Graphics %d · Sound %d · Tech %d · Design %d  •  Play once: %s" % [owned.graphics, owned.sound, owned.technology, owned.design, CashFormatter.format_exact_cents(owned.known_play_cost_cents)]
+-	if owned.unpriced_count > 0:
+-		_owned_summary.text += "\n+ %d Store Feature%s with play cost TBD" % [owned.unpriced_count, "" if owned.unpriced_count == 1 else "s"]
++		_owned_summary.tooltip_text += "\n\nFirst-game pool: optional Primitive purchases cost 0 cycles."
+ 	if _nodes.is_empty():
+ 		_build_tree()
+ 	for id: StringName in _nodes:
+@@ -309,8 +338,6 @@
+ func _select_lane(lane: StringName) -> void:
+ 	_active_lane = lane
+ 	_map.navigate(lane)
+-	for key: StringName in _lane_buttons:
+-		_lane_buttons[key].button_pressed = key == lane
+ 
+ 
+ func _draw_connections() -> void:
+@@ -332,6 +359,7 @@
+ 
+ 
+ func _select_node(id: StringName) -> void:
++	_debug_popup.hide()
+ 	_selected = id
+ 	_refresh()
+ 	_map.focus_selection(id)
+@@ -341,11 +369,79 @@
+ 	_refresh_spending_advice()
+ 
+ 
++# The HUD supplies its reserved right corner. The Store uses the same top origin
++# while its body starts below the persistent chart, leaving that corner interactive.
++func get_menu_transition_content() -> Control:
++	return _body.get_child(0)
++
++
++func reserve_sales_corner(enabled: bool) -> void:
++	_header.offset_right = -32.0 - SalesRevenueHUD.WIDTH if enabled else -16.0
++
++
+ func _refresh_spending_advice() -> void:
+ 	var advice := _run.get_feature_spending_advice(_selected)
+-	_spending_advice.text = FeatureSpendingGuidance.message(advice)
+-	_spending_advice.tooltip_text = FeatureSpendingGuidance.explanation(advice)
+-	_spending_advice.add_theme_color_override("font_color", Color("e9c46a") if advice.get("below_reserve", false) else Color("bdd5cf"))
++	# Unknown prototype prices live in Debug; an actual shortfall stays prominent.
++	_spending_advice.text = "Next game: known costs may leave too little cash. Check itemized costs before buying." if advice.get("below_reserve", false) else ""
++	_spending_advice.tooltip_text = FeatureSpendingGuidance.explanation(advice) if not _spending_advice.text.is_empty() else ""
++	_spending_advice.add_theme_color_override("font_color", Color("e9c46a"))
++	var owned := _summarize_owned_features()
++	var notes := "Prototype pricing\nKnown owned-pool play cost: %s\n%d Store Feature%s with play cost TBD. Later Store Features have no defined play price yet; unknown fees are not zero-cost promises." % [CashFormatter.format_exact_cents(owned.known_play_cost_cents), owned.unpriced_count, "" if owned.unpriced_count == 1 else "s"]
++	notes += "\n\n" + FeatureSpendingGuidance.message(advice) + "\n\n" + FeatureSpendingGuidance.explanation(advice)
++	_debug.tooltip_text = notes + "\n\nClick Debug to keep these notes open."
++	_debug_notes.text = notes
++
++
++func _build_debug_popup() -> void:
++	_debug_popup = PanelContainer.new()
++	_debug_popup.name = "StoreDebugNotes"
++	_debug_popup.add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
++	add_child(_debug_popup)
++	var box := VBoxContainer.new()
++	box.add_theme_constant_override("separation", 8)
++	_debug_popup.add_child(box)
++	_debug_scroll = ScrollContainer.new()
++	_debug_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
++	box.add_child(_debug_scroll)
++	_debug_notes = Label.new()
++	_debug_notes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	_debug_notes.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
++	_debug_notes.add_theme_font_size_override("font_size", 14)
++	_debug_scroll.add_child(_debug_notes)
++	var dismiss := Button.new()
++	dismiss.text = "Close Debug"
++	dismiss.pressed.connect(_close_debug)
++	box.add_child(dismiss)
++	_debug_popup.hide()
++
++
++func _position_debug() -> void:
++	if not is_instance_valid(_debug_popup): return
++	_debug_scroll.custom_minimum_size = Vector2(minf(520, size.x - 64), minf(320, size.y - 220))
++	_debug_popup.reset_size()
++	_debug_popup.position = Vector2(size.x - _debug_popup.size.x - 16, _close.get_global_rect().end.y - global_position.y + 8)
++
++
++func _toggle_debug() -> void:
++	if _debug_popup.visible:
++		_close_debug()
++		return
++	_map.dismiss()
++	_debug_popup.show()
++	_debug_popup.move_to_front()
++	_position_debug()
++	_debug_popup.get_child(0).get_child(1).grab_focus()
++
++
++func _close_debug() -> void:
++	_debug_popup.hide()
++	_debug.grab_focus()
++
++
++func _unhandled_key_input(event: InputEvent) -> void:
++	if is_visible_in_tree() and _debug_popup.visible and event.is_action_pressed("ui_cancel"):
++		_close_debug()
++		get_viewport().set_input_as_handled()
+ 
+ 
+ func _purchase() -> void:
+--- before/patch-notes/scripts/ui/feature_store_map.gd
++++ after/patch-notes/scripts/ui/feature_store_map.gd
+@@ -546,7 +546,7 @@
+ 	if focusing or (_menu_tween != null and _menu_tween.is_running()): return
+ 	if store._selected.is_empty() or not store.is_visible_in_tree(): return
+ 	var node_rect: Rect2 = store._nodes[store._selected].get_global_rect()
+-	var limits := store.get_global_rect().grow(-8)
++	var limits := store._body.get_global_rect().grow(-8)
+ 	var point := Vector2(node_rect.end.x + 12, node_rect.position.y)
+ 	if point.x + popup.size.x > limits.end.x: point.x = node_rect.position.x - popup.size.x - 12
+ 	point.x = clampf(point.x, limits.position.x, maxf(limits.position.x, limits.end.x - popup.size.x))
+@@ -671,13 +671,14 @@
+ 			if store._nodes[id] == focused:
+ 				anchor = id
+ 				break
+-	var center := Vector2(scroll.scroll_horizontal, scroll.scroll_vertical) + _map_rect().size / 2.0
+-	if not anchor.is_empty(): center = tree.position + (store._nodes[anchor].position + store.NODE_SIZE / 2.0) * zoom
++	# Compare logical map positions, so zoom/tween rounding cannot reorder ties.
++	var center := (Vector2(scroll.scroll_horizontal, scroll.scroll_vertical) + _map_rect().size / 2.0 - tree.position) / zoom
++	if not anchor.is_empty(): center = store._nodes[anchor].position + store.NODE_SIZE / 2.0
+ 	var target: StringName = &""
+ 	var best := INF
+ 	for id: StringName in store._nodes:
+ 		if id == anchor: continue
+-		var delta: Vector2 = tree.position + (store._nodes[id].position + store.NODE_SIZE / 2.0) * zoom - center
++		var delta: Vector2 = store._nodes[id].position + store.NODE_SIZE / 2.0 - center
+ 		var score := delta.length_squared()
+ 		if not anchor.is_empty():
+ 			var forward := delta.dot(direction)
+@@ -685,7 +686,7 @@
+ 			var sideways := absf(delta.cross(direction))
+ 			# Prefer the requested row/column before distant diagonal branches.
+ 			score = forward + sideways * 2.0 + (100000.0 if sideways > forward else 0.0)
+-		if score < best:
++		if score < best or (is_equal_approx(score, best) and store._edges.has([id, anchor])):
+ 			best = score
+ 			target = id
+ 	if not target.is_empty(): _focus_node(target)
+@@ -698,6 +699,9 @@
+ 
+ func _input(event: InputEvent) -> void:
+ 	if store == null or not store.is_visible_in_tree(): return
++	if store._debug_popup.visible:
++		_cancel_drag()
++		return
+ 	# Focused overlays (such as Tutorial) own input above the map.
+ 	var focused := get_viewport().gui_get_focus_owner()
+ 	if focused != null and _input_layer(focused) > _input_layer(self):
+--- before/patch-notes/scripts/ui/gameplay_hud.gd
++++ after/patch-notes/scripts/ui/gameplay_hud.gd
+@@ -224,11 +224,18 @@
+ 	get_node("PersistentHeader").offset_right = -32.0 - SalesRevenueHUD.WIDTH if sales_hud.visible else -16.0
+ 	var phase_root := get_parent().get_node_or_null("%PhaseRoot") as Control
+ 	if phase_root != null:
+-		phase_root.offset_top = 88.0 if sales_hud.visible or get_node("PersistentHeader").visible else 12.0
++		var store_open: bool = phase is StudioPhase and is_instance_valid(phase._feature_store) and phase._feature_store.visible
++		phase_root.offset_top = 12.0 if store_open else (88.0 if sales_hud.visible or get_node("PersistentHeader").visible else 12.0)
++		# Layout containers should not swallow the chart's mouse tooltips.
++		phase_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
++		if phase is StudioPhase:
++			phase.mouse_filter = Control.MOUSE_FILTER_IGNORE
++			if store_open: phase._feature_store.reserve_sales_corner(sales_hud.visible)
+ 
+ 
+ func set_tutorial_context(context: StringName) -> void:
+ 	tutorial_context = context
++	_layout_sales_hud()
+ 	tutorial_overlay.close()
+ 	contextual_tip.dismiss()
+ 	_guidance_ready = true
+--- before/patch-notes/scripts/ui/menu_transitions.gd
++++ after/patch-notes/scripts/ui/menu_transitions.gd
+@@ -42,6 +42,8 @@
+ 	# Keep full-screen menu bounds fixed; slide their content within the surface.
+ 	if (menu is PanelContainer or (menu.get_script() != null and menu.get_script().resource_path.get_file() in MENUS)) and menu.get_child_count() > 0 and menu.get_child(0) is Control:
+ 		visual = menu.get_child(0)
++	if menu.has_method("get_menu_transition_content"):
++		visual = menu.get_menu_transition_content()
+ 	# Layout may still settle vertically after opening. Never tween/restore its Y.
+ 	var rest_x := visual.position.x
+ 	visual.position.x = rest_x + 44

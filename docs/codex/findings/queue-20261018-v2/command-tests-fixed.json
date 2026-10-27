@@ -1,0 +1,38 @@
+[
+  {
+    "label": "design_command",
+    "exit": 1,
+    "output": "{\"elapsed_seconds\": 8.442480099998647, \"process_cpu_seconds\": 7.984375, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_design_command.gd\"], \"exit\": 1, \"errors\": [\"ERROR: FAIL: live full state/RNG/signal trace matches pre-extraction oracle\", \"ERROR: FAIL: headless full state/RNG/signal trace matches pre-extraction oracle\"], \"tail\": [\"ERROR: FAIL: headless full state/RNG/signal trace matches pre-extraction oracle\", \"   at: push_error (core/variant/variant_utility.cpp:1023)\", \"   GDScript backtrace (most recent call first):\", \"       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)\", \"       [1] run_cases (res://scripts/debug/verify_design_command.gd:153)\", \"       [2] _initialize (res://scripts/debug/verify_design_command.gd:41)\", \"       [3] run_cases (res://scripts/debug/verify_design_command.gd:160)\", \"Design command trace capture: 45 scenarios (headless)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "alpha_command",
+    "exit": 1,
+    "output": "{\"elapsed_seconds\": 11.321203700004844, \"process_cpu_seconds\": 10.71875, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_alpha_command.gd\"], \"exit\": 1, \"errors\": [\"ERROR: FAIL: live full state/RNG/signal trace matches pre-extraction oracle\", \"ERROR: FAIL: headless full state/RNG/signal trace matches pre-extraction oracle\"], \"tail\": [\"ERROR: FAIL: headless full state/RNG/signal trace matches pre-extraction oracle\", \"   at: push_error (core/variant/variant_utility.cpp:1023)\", \"   GDScript backtrace (most recent call first):\", \"       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)\", \"       [1] run_cases (res://scripts/debug/verify_alpha_command.gd:159)\", \"       [2] _initialize (res://scripts/debug/verify_alpha_command.gd:40)\", \"       [3] run_cases (res://scripts/debug/verify_alpha_command.gd:168)\", \"Alpha command trace capture: 57 scenarios (headless)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "beta_command",
+    "exit": 1,
+    "output": "{\"elapsed_seconds\": 16.6226236000075, \"process_cpu_seconds\": 15.53125, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_beta_command.gd\"], \"exit\": 1, \"errors\": [\"ERROR: FAIL: live complete Beta trace matches original\", \"ERROR: FAIL: headless complete Beta trace matches original\"], \"tail\": [\"ERROR: FAIL: headless complete Beta trace matches original\", \"   at: push_error (core/variant/variant_utility.cpp:1023)\", \"   GDScript backtrace (most recent call first):\", \"       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)\", \"       [1] run_cases (res://scripts/debug/verify_beta_command.gd:158)\", \"       [2] _initialize (res://scripts/debug/verify_beta_command.gd:15)\", \"       [3] run_cases (res://scripts/debug/verify_beta_command.gd:163)\", \"Beta command trace capture: 84 scenarios (headless)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "production_extraction",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 1.2232662000169512, \"process_cpu_seconds\": 1.125, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_production_extraction.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"PASS: production characterization: 80 cases, input and project unchanged\", \"Loaded 40 cards.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "beta_qa_specialization",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 1.4073603999859188, \"process_cpu_seconds\": 1.28125, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_beta_qa_specialization.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:492)\", \"       [1] _verify_atomic_failure (res://scripts/debug/verify_beta_qa_specialization.gd:142)\", \"       [2] _make_beta (res://scripts/debug/verify_beta_qa_specialization.gd:46)\", \"PASS: Forced replacement failure rejects specialized hand\", \"PASS: Failed specialized preflight preserves Bugs, cycle, and selection\", \"Beta QA Specialization verification passed.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "beta_balanced_operations",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 1.4999432000040542, \"process_cpu_seconds\": 1.34375, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_beta_balanced_operations.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"       [1] _verify_atomicity (res://scripts/debug/verify_beta_balanced_operations.gd:159)\", \"       [2] _make_beta (res://scripts/debug/verify_beta_balanced_operations.gd:50)\", \"PASS: Forced replacement failure rejects a qualifying Balanced hand\", \"PASS: Rejected action never displays a synergy notification\", \"PASS: Rejected Balanced hand preserves all observed state and selection\", \"Beta Balanced Operations verification passed.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  }
+]

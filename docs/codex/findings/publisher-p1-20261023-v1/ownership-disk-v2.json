@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--headless",
+    "--script",
+    "res://../docs/codex/findings/publisher-p1-20261023-v1/ownership_disk.gd",
+    "--",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\publisher-p1-20261023-v1\\predecessor-populated.frame.json",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\publisher-p1-20261023-v1\\ownership-current.frame.json"
+  ],
+  "exit": 0,
+  "errors": [],
+  "extra_environment": {},
+  "summary": [
+    "PASS: populated predecessor Founder world restores: ",
+    "PASS: actual ownership transactions, cap tables and Founder handoff remain populated",
+    "PASS: all old Founder ownership finance history RNG and sessions remain exact",
+    "PASS: Studio identity owns five dormant relationships independently of Founder: incumbent-wayfinder-works",
+    "PASS: Studio identity owns five dormant relationships independently of Founder: incumbent-arcade-foundry",
+    "PASS: Studio identity owns five dormant relationships independently of Founder: legacy-player",
+    "PASS: populated current pair validates before disk publication",
+    "PASS: ordinary strict Store writes populated current generation",
+    "PASS: Founder ID cannot replace Studio relationship owner",
+    "PASS: rival cannot inherit manual Studio relationship owner",
+    "PASS: forged persisted awards reject",
+    "PASS: all rejected publications retain exact last valid disk generation",
+    "PASS: disk coordinator restores exact current populated world",
+    "P1 ownership/disk checks=13 failures=0"
+  ]
+}

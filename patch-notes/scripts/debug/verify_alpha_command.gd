@@ -159,7 +159,11 @@ func run_cases(database: Node) -> void:
 	if mode != "oracle": _expect(FileAccess.file_exists(expected_path), "Pinned oracle digests exist")
 	if mode != "oracle" and FileAccess.file_exists(expected_path):
 		var expected = JSON.parse_string(FileAccess.get_file_as_string(expected_path))
-		_expect(JSON.parse_string(JSON.stringify(digests)) == expected, "%s full state/RNG/signal trace matches pre-extraction oracle" % mode)
+		# Retain the historical oracle. The approved 1.25 Balanced change has
+		# exact current live/headless coverage in verify_balanced_boost_parity.
+		expected = expected.filter(func(row: Dictionary) -> bool: return row.scenario != "balanced")
+		var unchanged := digests.filter(func(row: Dictionary) -> bool: return row.scenario != "balanced")
+		_expect(JSON.parse_string(JSON.stringify(unchanged)) == expected, "%s unchanged state/RNG/signal trace matches pre-extraction oracle" % mode)
 	var output_path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
 	if not output_path.is_empty():
 		# Keep both paths when the default maintained verifier runs live + headless.
@@ -187,7 +191,7 @@ func check_invariants(before: Dictionary, after: Dictionary, scenario: String, s
 		if scenario == "production_overflow":
 			_expect(after == before, "Authorized overflow correction rejects without mutation")
 		if scenario == "balanced":
-			_expect(_values(project) == [6,5,5,5,4], "Balanced conserves 21 points")
+			_expect(_values(project) == [7,7,6,6,4], "Balanced boosts 21 to26 and splits whole points")
 		if scenario == "passes":
 			_expect(project.get_current_scope() == 0 and project.get_accumulated_alpha_bug_pressure() == 0.0 and phase.get("_exhausted_feature_ids").is_empty(), "Pass lifecycle unchanged")
 	var old_streams: Dictionary = before["run"]["random_streams"]["streams"]

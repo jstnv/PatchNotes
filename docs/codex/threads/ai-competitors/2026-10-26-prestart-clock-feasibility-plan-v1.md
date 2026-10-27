@@ -1,0 +1,15 @@
+# January work-in-progress clock feasibility — pre-run plan, 2026-10-26
+
+**Status: bounded diagnostic, not a candidate WIP implementation.** This is the H2 architectural gate in the [overnight study](2026-10-26-opening-market-overnight-study-plan-v1.md). Question: can the present source take one genuinely legal rival `begin_development` productive action before player cycle zero, then install that active project at a January 1980 world boundary without a new epoch or normalization contract?
+
+## Hypothesis and fixed cases
+
+- **H0:** a new player and current two-rival trial world at cycle zero checkpoint normally; both rivals are Studio and archive remains frozen. This is the same legal fresh Action/no-trait recipe as the opening probe, seeds **4417 and 4418**.
+- **H1:** for Arcade only, take the actual `RivalTrial` policy's `begin_development` choice and execute it through `CampaignSession.execute` at the current legal world cycle-zero boundary. It must be accepted, produce an active Design project, advance only that rival to cycle one and charge genuine production/monthly costs. This is a diagnostic **one-action prelude**; do not revise its hand, Scope, Review or funds afterward.
+- **Expected gate:** reinitializing a world with player cycle zero and the now-advanced rival should reject. The previously initialized world should reject a save snapshot because its rival and player cycles differ. If either unexpectedly accepts, inspect full state/RNG and save validation before treating it as feasible.
+
+No candidate is permitted to relabel cycle counters, finance journal dates, market facts, project begins, or RNG to force acceptance in this screen. The current Review, AI policy, cash and cohort remain unchanged. At most **one** legal prelude action per seed, **zero** post-start actions/releases, and one ordinary independent-Studio smoke case capped at 100 commands/one release. Two shared-world diagnostic processes, one fresh-process repeat for seed4417 if both first runs pass, each at **240 seconds**. Freeze source through `tools/simulate.py run --variant` into new output folders, retain any capture failure, and compare source/world/RNG digests; no seed replacement. Do not infer release timing or 5.6–6.2 quality from this gate.
+
+Measure before/after rival phase/cycle/cash/Fans/finance last cycle/project ID/Scope, world and player cycles, `RivalWorld.initialize` result, `RivalWorldCheckpoint.snapshot` result and error, market rows/facts, source and RNG identities. A negative result documents a specific required interface; it does not establish that pre-start projects are impossible in a revised system.
+
+**Source boundary at plan:** `main`/`087df09d653858b72c6e2dc344352237433dd3ac`, dirty current checkout with concurrent source edits. Current `RivalWorld.initialize` demands every supplied rival's completed cycle equal the player's; `RivalWorldCheckpoint.snapshot` repeats this requirement. `RunState.get_current_year/month` derives January 1980 from cycle zero, and finance validates `studio_finance.last_cycle == completed_run_cycles`. These are source observations to test, not approved new rules.

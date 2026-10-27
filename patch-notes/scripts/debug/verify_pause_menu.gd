@@ -104,6 +104,11 @@ func _initialize() -> void:
 	quit(0 if failures == 0 else 1)
 
 func skip_save_invitation() -> void:
+	# New-save loading spans several rendered frames; a fixed single-frame wait
+	# can arrive before the invitation on a slower host. Keep the test bounded.
+	var deadline := Time.get_ticks_msec() + 3000
+	while (game.guided_tutorial == null or not game.guided_tutorial.asking) and Time.get_ticks_msec() < deadline:
+		await process_frame
 	var view: GuidedProductionTutorial = game.guided_tutorial
 	expect(view != null and view.asking, "Save restore offers the optional tutorial before pause testing")
 	if view != null:
@@ -149,7 +154,7 @@ func check_pause_and_settings() -> void:
 	expect(root.gui_get_focus_owner() == game.pause_menu.resume_button, "Resume owns initial focus")
 	var time_left := timer.time_left
 	var music_before: float = music.presentation_seconds()
-	await create_timer(0.7).timeout
+	await create_timer(music.PAUSE_FADE + 0.2).timeout
 	expect(timer.time_left == time_left, "Gameplay Timer is frozen")
 	expect(not music.player.stream_paused and music.presentation_seconds() > music_before + 0.4 and music.pause_weight == 1.0, "Music and grid keep running with full pause treatment")
 	await key(KEY_TAB,true)

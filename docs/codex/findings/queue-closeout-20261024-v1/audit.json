@@ -1,0 +1,2958 @@
+{
+  "pass": true,
+  "checks": 731,
+  "branch": "main",
+  "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+  "production_unchanged": true,
+  "canonical_delta": [
+    "scripts/debug/verify_market_browser.gd"
+  ],
+  "maintained_suites": 182,
+  "coverage_scope": "One full immutable run plus eight corrected checks. All production source matches; one verifier expectation changed. Not one uninterrupted all-green invocation.",
+  "coverage": {
+    "verify_alpha_command": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_command.command.json",
+      "command_sha256": "bddb4a1313ae481f2da89542bb1e1e85d8c8a05c9a438879a2591331759e1871",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_command.log",
+      "log_sha256": "198507f17d2448eeba2ad1fdbe7339fa4bf01de4584dc4675e4071ddaa642a7e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_alpha_command.gd",
+        "sha256": "57152d4b7e5357d326b424c3baa5d1c8777892a4ace1860a41edec6db6484681",
+        "original": "res://scripts/debug/verify_alpha_command.gd",
+        "original_sha256": "d418e0327765c6a2ae264b2900c98f380e7a1756bdbf78b2cc1577de4ad1c265",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_alpha_exit_arrears": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_exit_arrears.command.json",
+      "command_sha256": "d831bbe3d506408c9cd33ad99b22b9705f92dc7c46f799e9e53ef6a2274626c7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_exit_arrears.log",
+      "log_sha256": "bf8fb8dc4d000a2cb6c0a341300f438c4b81d848203374e81cba0bea016aa394",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_alpha_exit_arrears.gd",
+        "sha256": "d7c88cc465d098b43d560433dee3163aa9e8662f0bae5c77f1958f958b1256d1",
+        "original": "res://scripts/debug/verify_alpha_exit_arrears.gd",
+        "original_sha256": "adb35e56b16065473bcc69997952b54faea1fd975efe41d352b4ab58ef827390",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_alpha_finalization": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_finalization.command.json",
+      "command_sha256": "4495d2c971a2dc6e4eba51fc53d3bcfb9d9287399211215b539993a68fd61a68",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_finalization.log",
+      "log_sha256": "201a438d13bb87ade1ac2f7657dfb28f4bb111b101833d4a13c740781c520a06",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_alpha_finalization.gd",
+        "sha256": "43c51f1617aa8dcff7779c4129135bfd1965da83234a61cbc15217d3b3c724b6",
+        "original": "res://scripts/debug/verify_alpha_finalization.gd",
+        "original_sha256": "11aa166297140956e77e554c9a487802930040e58a1bb33cba104e0f298bbdb9",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_alpha_pack_ui": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_pack_ui.command.json",
+      "command_sha256": "3f0ab9db8677eb88a7e4853c03a34b67abfb8f3f87104a0608f0f69355db36fa",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_pack_ui.log",
+      "log_sha256": "8a6d0e44ea1da32b69823a610dbd73b5db236b477c35ce1e06834671516ceece",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_alpha_pack_ui.gd",
+        "sha256": "8978d4bbabe8e10f59e235db657bfa00bfedd3f3b432c6b96b6db2528c808c91",
+        "original": "res://scripts/debug/verify_alpha_pack_ui.gd",
+        "original_sha256": "775f9f95ec09d5d80c3756de0d370d375c82f278b98334dd030cd83f8aaf17cc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_alpha_phase": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_phase.command.json",
+      "command_sha256": "00317501dc3df2cc962f93e743b008f23c6edad9579d083b0e10b0756d47f453",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_alpha_phase.log",
+      "log_sha256": "8107ddd167920828cdc985a4af9dc4ff1160f8a10bade453cd908e33e7a79661",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_alpha_phase.gd",
+        "sha256": "5915a43c3c033e41579df8e9f1f361a916c682fb342fa5bd2182cb827f0a9e88",
+        "original": "res://scripts/debug/verify_alpha_phase.gd",
+        "original_sha256": "9298fe633173f6db5214f27b3a8e107fc1ecdc208f44bb011f0947e9df6cabed",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_alpha_shop_pack": {
+      "run": "corrected-continuation",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_alpha_shop_pack.command.json",
+      "command_sha256": "901a101e8747f3399a52201eb608eeacba95688ff6fdd8f973e4296a472d9a66",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_alpha_shop_pack.log",
+      "log_sha256": "321855db849fbb13c8dfa87a74584dae8f5d1397badb3780026eeac956afa965",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\wrappers\\verify_alpha_shop_pack\\verify_alpha_shop_pack.gd",
+        "sha256": "c2e1c5719fc994f249772c167f0d2957756d21907e167cdbb8f7094f280625c8",
+        "original": "res://scripts/debug/verify_alpha_shop_pack.gd",
+        "original_sha256": "0ede8b194334bee12f60680095b9cea5ede9f8d18c59f4587e71f709e7677872",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47737
+      }
+    },
+    "verify_atomic_selected_redraw": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_atomic_selected_redraw.command.json",
+      "command_sha256": "e88c84b778a82c4ce43f7b7dfd19d8ac3001e753a8cb478213799a6f625d4923",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_atomic_selected_redraw.log",
+      "log_sha256": "ce7374aa69a7159204e42c7de4d709e0d21a4f8465a109b3500cf3a7c1eb5340",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_atomic_selected_redraw.gd",
+        "sha256": "18d71a12a58f52890b4e2968c7433ca93b061f393e86bc371182b24f6e292f88",
+        "original": "res://scripts/debug/verify_atomic_selected_redraw.gd",
+        "original_sha256": "6cc5f13d78ebb90fbee1b5cbfd95cb501c1f3a56d05dcc496400035f572f63cc",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_balanced_primitive_contract": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_balanced_primitive_contract.command.json",
+      "command_sha256": "b8786c953b76b4f68cb2c8acbbceb40d335a70479f39a4a2e07c5a7208e98b17",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_balanced_primitive_contract.log",
+      "log_sha256": "a20d41d657866e9dfe7364dfb312a2a03d03b234046aa383260e4ecb6571d8d3",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_balanced_primitive_contract.gd",
+        "sha256": "20c1e76d2ff49406420df3671e4b710bf0a5f74d069689b08aa84aa8abb6cdf0",
+        "original": "res://scripts/debug/verify_balanced_primitive_contract.gd",
+        "original_sha256": "87c88bfbfa16ab3ec120687dd205a199735d1a93c648e50040c2a1bed4212fc6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_bank_finance": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_bank_finance.command.json",
+      "command_sha256": "85e9965260cfd94943670f5bf01c21adef49074946bfd3474efdfe965adc2f28",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_bank_finance.log",
+      "log_sha256": "ca069489f5d89c1c1a0613ebb07bab1d14246cecfa39910cf8e09506eb4caf9e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_bank_finance.gd",
+        "sha256": "9515f9d5bbd8a90c4d69df3b27af212d05b7f470caf8c3c7d46f18d94fb44c4c",
+        "original": "res://scripts/debug/verify_bank_finance.gd",
+        "original_sha256": "4bfd73c00d53ac7b1aab61e7deda5238bd75f965fd78f2e85edd1f59abf8667c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_bank_integration": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_bank_integration.command.json",
+      "command_sha256": "4f9bc39eb5c83fa3a434ce205f89f7c2adcb4bba4919bfdde23e1de95d76ebcd",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_bank_integration.log",
+      "log_sha256": "e6194f8572d4e6214cc2e8753e640b57dc1e093c1b1917345d42f2a7eada9ffd",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_bank_integration.gd",
+        "sha256": "8d5252a8b6f5ff08cf3ae0e780ef0844733d15f1da036c5023ec8be7fbde32b8",
+        "original": "res://scripts/debug/verify_bank_integration.gd",
+        "original_sha256": "10e02ae19035f2c5d39b8ce947f0d4d7e4708b9c5d6b5585ec9e072730fbc400",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_bank_loan": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_bank_loan.command.json",
+      "command_sha256": "5207910fe62c16f7aff5dd6b6d112ebce1f3b52d581f25de6444247237c5a8d1",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_bank_loan.log",
+      "log_sha256": "cb8b8048218b114ccf8287cd55dddaaa5d324721bfffebb85ff4c27127be5066",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_bank_loan.gd",
+        "sha256": "d2324855e6b2b8e384556f03a68a77a9de1aa91b7ee102f7d0997c7cdb6aa439",
+        "original": "res://scripts/debug/verify_bank_loan.gd",
+        "original_sha256": "a6dcbe4442ff7c1137ed884d1f12364833635de750dbd96265a6c50183f309a9",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_begin_project_extraction": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_begin_project_extraction.command.json",
+      "command_sha256": "910c895aaef3d569ec5452722c63db37573334017c12daa17593788ce3f2f051",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_begin_project_extraction.log",
+      "log_sha256": "1a35ed769726dbf80dcc1b931cf474ab3743b49b0838f522702b49619a3fdc93",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_begin_project_extraction.gd",
+        "sha256": "0a0d95c6e5635b2d3c26411415d6b5c7ff4b7b3b22c28069c1966b7a37f99440",
+        "original": "res://scripts/debug/verify_begin_project_extraction.gd",
+        "original_sha256": "5ab50c35e56cd1902cd7a0a9569fa74a7630864ac63d13aae2173a58340b4719",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_balanced_operations": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_balanced_operations.command.json",
+      "command_sha256": "647a213d28dfa113f2f8106e9baf3a553561d8b78ac943c4c2626da666cd0e2b",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_balanced_operations.log",
+      "log_sha256": "2eacc2d494f205b56d97a9f7058401e25d0279a377fde66bca95722d58110b52",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_balanced_operations.gd",
+        "sha256": "5cb6312570ae8edf896470eb7d4ed70e330e71ad0be80129701bfbcad4f5b831",
+        "original": "res://scripts/debug/verify_beta_balanced_operations.gd",
+        "original_sha256": "ba299282ada55125edcb2055d269bca29d51eeaa0d3b3f6d496311bc74f50fcc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_base_hand_resolution": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_base_hand_resolution.command.json",
+      "command_sha256": "38eed526cd0405406d60a2d6402a5ca7ee7987d4fdb72764e3867064537a7bcc",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_base_hand_resolution.log",
+      "log_sha256": "47192ad3c1eaa8bdc88b8b705ab6b64882ccc499d8dd80b4c05ef7c2ccda6161",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_base_hand_resolution.gd",
+        "sha256": "78ecc8a917fe57522fd0d2bc1c27fb95bb93886cfb5642974dcf2cec67cda1e9",
+        "original": "res://scripts/debug/verify_beta_base_hand_resolution.gd",
+        "original_sha256": "48f5a290f01614ea46c27e2cf56d8f9ddbe527d64d7d3155679217fffc8da1d0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_card_data": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_card_data.command.json",
+      "command_sha256": "0604c7f89c0f17541efe09d87478a310e25765ef7046d7aa916c5c2a0e1682ad",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_card_data.log",
+      "log_sha256": "1a9450ee68ad8b8a6d8c6c2baee457ecd120bcfb198f8cea5c6692a9633d3550",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_card_data.gd",
+        "sha256": "69eb6ae0c0398d0a2e3c8f5155109f6484091e323796359c19fdc8e74543df5f",
+        "original": "res://scripts/debug/verify_beta_card_data.gd",
+        "original_sha256": "b21eb3395db4fddbc5dd9d3c993ab48aa6b3691ef866e7e019c8e96499ad9a8a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_command": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_command.command.json",
+      "command_sha256": "1c2dc740914ee139d03533b61b462e0daf9838fc5895e45bd60878f15d4e2d12",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_command.log",
+      "log_sha256": "8cc5585d68d7b26bdf58aa360a403e30d4f47b5bb908dcd54b586ba531cda8a3",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_command.gd",
+        "sha256": "1aa1b67725a86ae7b21a58007c83af593e3ff494f5d2029d2c197325df833dc2",
+        "original": "res://scripts/debug/verify_beta_command.gd",
+        "original_sha256": "146cdccbc6ca75b91068b197fd3d430346ec94d841b21654ce9f69bd0be25958",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_finalization_and_launch": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_finalization_and_launch.command.json",
+      "command_sha256": "20c12502fa0546b1be975b930e885bba2e76f06a59e6d202b1368a2102df5ac5",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_finalization_and_launch.log",
+      "log_sha256": "e901ca0df492a7f9a47c4c7240addca58c1d677c40e3bbc53997be3faac64c65",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_finalization_and_launch.gd",
+        "sha256": "267bafac23d435db62a5b06f06e57966ff71c1a57a15790b6b60f190638b52cd",
+        "original": "res://scripts/debug/verify_beta_finalization_and_launch.gd",
+        "original_sha256": "2a474a9481eee6930267884a62ee2ecd1fa2dae0b1f0c6fc46ed7d23c3b8c1bc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_host_playtest": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_host_playtest.command.json",
+      "command_sha256": "815bfc2307783de4af98d9ef5a5f3d3be949c8b65ebbc8f27da83ae6ea6bbb77",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_host_playtest.log",
+      "log_sha256": "7d80cff236266c0f743866ca8a80b1e2ada08d17f210769e1bcfca682a6b19ec",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_host_playtest.gd",
+        "sha256": "a8a193bbdd6cb6468ac6ec32a22605ba5446842e8b9c61c220cdb716c40c89ce",
+        "original": "res://scripts/debug/verify_beta_host_playtest.gd",
+        "original_sha256": "53d4de1ab8594f716b48fce8785925270c5ed3a1f9893e13bfd9a610d5b81ec3",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_marketing_insider_state": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_marketing_insider_state.command.json",
+      "command_sha256": "f1953ed3b05115113591f9c129097c087357a1a0422c1c9f829dbdb93bad46f9",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_marketing_insider_state.log",
+      "log_sha256": "b299ecd6bff37c700b8be05c49ecda05988adaa2d3ef02e7c09d980be1b30655",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_marketing_insider_state.gd",
+        "sha256": "d7cf0d6daf786d93b3023fa2789e123b1df13c6c5e3ebd6690e8470e78e5ae6b",
+        "original": "res://scripts/debug/verify_beta_marketing_insider_state.gd",
+        "original_sha256": "520bcfcc8791007cb902d48d95650eded74b0c60ccb55e3f9611da1ddf1f4cb2",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_marketing_specialization": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_marketing_specialization.command.json",
+      "command_sha256": "89ddce1dec9bb3f970689a5e2825d80c34c1dee2489508732f2cf5e6cc988f14",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_marketing_specialization.log",
+      "log_sha256": "c16078e39f1f8d8e303e256c8cdcfff851669412a74a0917860b721aab074012",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_marketing_specialization.gd",
+        "sha256": "68c112fce10d42472ebd7a1ee5890746393212e620157d92bb75958c57e0c8e4",
+        "original": "res://scripts/debug/verify_beta_marketing_specialization.gd",
+        "original_sha256": "2240e948ada7cedc09153f51748c31e2b44de946edbc7a87c779e46c4292b59c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_planning": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_planning.command.json",
+      "command_sha256": "aea4731e40ee1cc73fff8f854699053d4750d1f6f513621435a0cd3d7c800bd7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_planning.log",
+      "log_sha256": "125d4ea0f2928c2bafb0b889462087ebc9835502e205d6815de88b711b6f1793",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_planning.gd",
+        "sha256": "7b19b333c675fe01aff84e22e82bb2f8fa4be0f8663ac7f39257bc58d0197235",
+        "original": "res://scripts/debug/verify_beta_planning.gd",
+        "original_sha256": "f078027443a4b8ccf0605abf7dbb7faec665bf1f4d6dd2efac7af0acac64686f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_qa_specialization": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_qa_specialization.command.json",
+      "command_sha256": "90ed8875637ac672f80a4f6677829a7b6d51f5e8326a1d23b5784709cfc3e1c6",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_qa_specialization.log",
+      "log_sha256": "3de32d62133e93e051562041284542d405a7705dcfbda2863c92e96e5566d075",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_qa_specialization.gd",
+        "sha256": "06f298942f71584842f035986fe4727b1ef134daad95f8c8f6c59cbe8b3db00d",
+        "original": "res://scripts/debug/verify_beta_qa_specialization.gd",
+        "original_sha256": "4607ec1f9c287df6a82326e603f7e9e6db6aded36758619496695ae0321cd7f0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_beta_qa_state": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_qa_state.command.json",
+      "command_sha256": "cb319dac65c9fb092b56fb48062cb4f03902ed622b795bb82f04be7f3b5420cb",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_beta_qa_state.log",
+      "log_sha256": "63baba46d24077bbeb330cd0309c5ab5381ac090e85ee020bfe5ed31b44cae79",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_beta_qa_state.gd",
+        "sha256": "678fee1062cfa14cb1b5c9fd42d36935e9ef0096c7354396a8f325fdf16e5d26",
+        "original": "res://scripts/debug/verify_beta_qa_state.gd",
+        "original_sha256": "6db5c7e45d406740717650a4abaa58289c9197a5264d2f8c61d7c62f1deff66c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_batch": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_batch.command.json",
+      "command_sha256": "516a4fbac5b8c221a4b9f5e58616f24cae1a80a25cdc58f49ce92bd3980f22ee",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_batch.log",
+      "log_sha256": "7027b4bbb1ef7ce0ac61d349628bd4cd5d9f40bc9491909ed1aebbf928475771",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_batch.gd",
+        "sha256": "d01fc2eaf6c5a005b22f0306307bf8c190555a7482705821c8c4640e291114a4",
+        "original": "res://scripts/debug/verify_campaign_batch.gd",
+        "original_sha256": "50defe0a531af4f05096303820c89551ad7928bc328f8b90a9af16eafddecb36",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_continuation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_continuation.command.json",
+      "command_sha256": "da469fc5b6222aa9e22b0b421d97d5883c131d02dcf818cd4117fd2d2c51a0be",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_continuation.log",
+      "log_sha256": "a0ca7347cf2159d8422f83a3249b1ad1884adf67e7a11db790f5d81003e993c9",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_continuation.gd",
+        "sha256": "2228a88c5ee947e457bdaf66d73cc181af3b97a86f109f3cad3cba13fbe7f915",
+        "original": "res://scripts/debug/verify_campaign_continuation.gd",
+        "original_sha256": "9690d349498c42b6780adbb4573fcd86f2c1c38b1c8fc0813e5b6cfee68b08a0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_live_parity": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_live_parity.command.json",
+      "command_sha256": "0d79853dd86875143f08db6bc71c63ff9f76f50fac4436d723497c9fa6a0f888",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_live_parity.log",
+      "log_sha256": "1b267ddf201b3c7358145380a8439fd515b1afc66e44b5ceaec20628c52ba62e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_live_parity.gd",
+        "sha256": "516a64c39d4046679c9d7c6f950650052e2c56ee1794c99f36fb33ff15af415a",
+        "original": "res://scripts/debug/verify_campaign_live_parity.gd",
+        "original_sha256": "2e50cd8577f4c3f355e246fdfc3c5f4ce4d6ab24bed4ed358add61bb6d17ac7c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_reducer": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_reducer.command.json",
+      "command_sha256": "3fbdb0c9fe78b74891465b000d8f08b094757a769d23bb8eee060964fbbf4598",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_reducer.log",
+      "log_sha256": "1782835de922a638cb23f53b392b848ac81eac841bf29db5902a336e0f3d808a",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_reducer.gd",
+        "sha256": "eb9ecfb6aea7dd1579d48029d1266a8d52afcfe6e26d83377cef445e7dc70cc9",
+        "original": "res://scripts/debug/verify_campaign_reducer.gd",
+        "original_sha256": "1abe71d055b411561eb55f513c8cfe2eb52d19ada94ba57d7a2a2b83a0287933",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_seeded_parity": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_seeded_parity.command.json",
+      "command_sha256": "408d4af9fff352074e0cd23a220671ade9c65e1d789031cabd01ca77f24c68a5",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_seeded_parity.log",
+      "log_sha256": "2abb5cb8f9064d3365a450ff073d0d908b374028c1f2ea0f245b4e13ab839eb7",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_seeded_parity.gd",
+        "sha256": "4e918cfdcdfb97688417af4a632c4afb470256b2b5b6e75d4ec6d7cd106953f3",
+        "original": "res://scripts/debug/verify_campaign_seeded_parity.gd",
+        "original_sha256": "a5763e17c9116d9dcd2d1a95e7a2e8928240870f191581f684bc4791f04bbccf",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_session": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_session.command.json",
+      "command_sha256": "114c9d16abd51620bf2597c98b7f684232bae2590fdc5c826ef44b5648e1e3b0",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_session.log",
+      "log_sha256": "b470cf9d1befc3ee175c1ad713ffbb79eb1fa317a2860357493e40c6d11178ca",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_session.gd",
+        "sha256": "971b5fb7ac2d8778d0bd6bb687c965696d11803dbe2e81854bf250535e717ceb",
+        "original": "res://scripts/debug/verify_campaign_session.gd",
+        "original_sha256": "c4081de9b924815ff87a57decb960754677fd453a707b4a895bd3b4ad1b7e430",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_stress": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_stress.command.json",
+      "command_sha256": "d73537a040e5cd410cd46167db1ef3e44eec6825871315526e0a870525f67977",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_stress.log",
+      "log_sha256": "dc9b19202067dbb42caac450d5db47943e6cd3620a769ba898453d9f6ef5fc93",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_stress.gd",
+        "sha256": "05e7d16bbcbf0903553ca1d969c86cac3f27b60021688637e6f9202dd52299b0",
+        "original": "res://scripts/debug/verify_campaign_stress.gd",
+        "original_sha256": "ec761f08b5d6ee8fe1b1598e256f520cb9a18666a93bfc4c4defa31129dd4eaa",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_stress_cult": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_stress_cult.command.json",
+      "command_sha256": "65cc1c365f8f49dd95c21f1160f3b129726102e89b387e589e442078134c1ad4",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_stress_cult.log",
+      "log_sha256": "6f140c72a716153be39aabea041917065d0510a6f29453a2cd0e09202de1c34f",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_stress_cult.gd",
+        "sha256": "cb9916494a36560dc8bcfef6c7273e57340efc77f53a4736550d0a5280b38957",
+        "original": "res://scripts/debug/verify_campaign_stress_cult.gd",
+        "original_sha256": "fec82b7971c1e0c6a5cf50997291370009feb5f26922f8bd22a714bb305482fe",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_stress_education": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_stress_education.command.json",
+      "command_sha256": "765a6d0ee5e6e586fe6aa56ca37cb7a59617369660b85ce18e632c3ffee8a385",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_stress_education.log",
+      "log_sha256": "051a408b2f9a80b7cfd42656d841f667d675d725e0139661f2743909529ae1ae",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_stress_education.gd",
+        "sha256": "8903e1b1093be586a6abedf7bb143e57270b41d9fdbaf722ad54e058bc06b2a6",
+        "original": "res://scripts/debug/verify_campaign_stress_education.gd",
+        "original_sha256": "c907466a17676cb68c31fc61162bb46d7aba116c58009c0c48fddc0d0744a7b5",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_stress_puzzle": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_stress_puzzle.command.json",
+      "command_sha256": "bacf939572a6796a99a930b50b46302b61995b81f023408ecc11bd4b64d7adef",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_stress_puzzle.log",
+      "log_sha256": "6f140c72a716153be39aabea041917065d0510a6f29453a2cd0e09202de1c34f",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_stress_puzzle.gd",
+        "sha256": "f645bdd8c9c74a6bac6ce644348a6233dc03579bebea94df1530a30cb1a9bd5b",
+        "original": "res://scripts/debug/verify_campaign_stress_puzzle.gd",
+        "original_sha256": "5c49223a58028cdd723998d8df031bb0cc61172ab84f72b555747d80d784b941",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_campaign_telemetry": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_telemetry.command.json",
+      "command_sha256": "92f0cd51a129b6d4812fdbdf9ffc8ca91dd4f8a6cd77c7e81b27962685c4626c",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_campaign_telemetry.log",
+      "log_sha256": "71879db192523b9c0224a2da2a8bfb47a5b5e6b37508fbb1e542d056f3e1f35b",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_campaign_telemetry.gd",
+        "sha256": "f5796c0119d243212cb878e260249bab04d8902b8c71d7a610b48fd3ba1499b5",
+        "original": "res://scripts/debug/verify_campaign_telemetry.gd",
+        "original_sha256": "971c7767a8d1dd74e67aec5112499a13b62a4458daaeff801f28ae5772bdb701",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_candidate_retention": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_candidate_retention.command.json",
+      "command_sha256": "4d8807adac610cdd59c10749201800f1f3ad887c582bb1b98be352bd17415015",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_candidate_retention.log",
+      "log_sha256": "34313c3c655b7167430a2b4449784e34253758e075dc65835d23ac9d2af40269",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_candidate_retention.gd",
+        "sha256": "1171b8fb0911b6a660dc086ef7f4d6c16361121decc3859a9bc5ee628f2aed75",
+        "original": "res://scripts/debug/verify_candidate_retention.gd",
+        "original_sha256": "fa3d7274979a97382b1c06ed72763ee509df77f4ce538662dc305c82fdf2ca03",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_card_fan_entry_layout": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_card_fan_entry_layout.command.json",
+      "command_sha256": "1616d7dc1d14cf2446a63062c260de45a474347b9fa028bb5a96d889f52342e8",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_card_fan_entry_layout.log",
+      "log_sha256": "74fe2bf8557cfe809697fbbefd2f569961bef9a274c2f5b90566e064b29562ee",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_card_fan_entry_layout.gd",
+        "sha256": "757c273cb6a1b9f3bd6b16dd1e3f8fc51be9d1f48b612c73cbe7003aa12a8c7c",
+        "original": "res://scripts/debug/verify_card_fan_entry_layout.gd",
+        "original_sha256": "8f1699d8e955e2f27de191b395eaa03d24d9829e1ed06c3f9839520af5c5c4c3",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_card_frame": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_card_frame.command.json",
+      "command_sha256": "5b4ec8dcddd7203b080a605c03253b14362fa365923b168ab3b0c899e4489bc8",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_card_frame.log",
+      "log_sha256": "09bc6af54c6be33724ea6d8e69bfb686f4f23fd2b1a4f17b2d37f20ebd4a2dbc",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_card_frame.gd",
+        "sha256": "38562bb3b1b56e55c2f8209798f9c6140b5d81865f23dbd683ecb59fbbb0c405",
+        "original": "res://scripts/debug/verify_card_frame.gd",
+        "original_sha256": "e163784483dd09a5211f5ef12df2ee268f81d1977a56bdb55507d644bc3a5ced",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_card_motion": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_card_motion.command.json",
+      "command_sha256": "59d89362671093ada515071ea387d98c36b91bb1af19468613d2f6b77a491b3a",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_card_motion.log",
+      "log_sha256": "a10a05d4875a2135bdc108f0722201e0d97752866d8752332354281892e77547",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_card_motion.gd",
+        "sha256": "0890a6bda83a2a7e3bd002463396889c89d471e2b31104546200172c922e91c9",
+        "original": "res://scripts/debug/verify_card_motion.gd",
+        "original_sha256": "ca9bcc0664b22eff8f11025a70674cbbed41b5cf43e1b794b19cb2ba41208a18",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_checkpoint_codec": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_codec.command.json",
+      "command_sha256": "6112ea6206ded9dcbb9dc0ff21f3ff72a6bfd5e4f42bb9075ae0a69d0542716a",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_codec.log",
+      "log_sha256": "235695a7253abd6ef088ffdb94313aa22c9e054304a44d309f97618f25ce70a6",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_checkpoint_codec.gd",
+        "sha256": "2286c61d59142367bab7864a7a4dc328478c71454c5b3ded7c66741e4931fc6b",
+        "original": "res://scripts/debug/verify_checkpoint_codec.gd",
+        "original_sha256": "58d504595cc16f7695a607e0a91e36586ad284a9d3756925418478092930c7d4",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_checkpoint_recovery_ui": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_recovery_ui.command.json",
+      "command_sha256": "51879b05dbbc25cb934494c7df135c737666ebbc2269061716dabd7c68aba2d7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_recovery_ui.log",
+      "log_sha256": "ff1c60e46ef156bf3f79216586a9cfb0d31e20e626f60671c119791820ef65dc",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_checkpoint_recovery_ui.gd",
+        "sha256": "e4f3710df1185f9ee50e47e175f3ef53334faabd739b28b64411700d9fe00a77",
+        "original": "res://scripts/debug/verify_checkpoint_recovery_ui.gd",
+        "original_sha256": "ee4be5dfc9680e38cec746454e3ae0005435d566faffd55e3dafbeb5db7c7ca6",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_checkpoint_rng": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_rng.command.json",
+      "command_sha256": "45e96add3022d659e72aaa5196200e0bcd2df7541957d2eb3aeecf9b0a7e8008",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_rng.log",
+      "log_sha256": "bf0e9dcbb67aa5d1d97de7513fcf54339fabf128ef75506a959ac63d2da0ec67",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_checkpoint_rng.gd",
+        "sha256": "b0566fcb1f0346581c30b84d14d6d5b4996b054a164e17477a1f13e619cc38ba",
+        "original": "res://scripts/debug/verify_checkpoint_rng.gd",
+        "original_sha256": "f54370dc10e4fa68d68c67b796dbb825db205e8b15770dc33c15a854f09c64a1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_checkpoint_runtime": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_runtime.command.json",
+      "command_sha256": "bd67a38b10c41001d4c78bc1deae21e0471c7593aac784b915878096450fed1d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_runtime.log",
+      "log_sha256": "5c1956a6b0b4f16295c9f0f4eb34376bc72da770c7b4f341836ab9547889c36a",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_checkpoint_runtime.gd",
+        "sha256": "c419cb181952a638819332b090524f8bdc26d4fc623cd6972a130e9900142e2e",
+        "original": "res://scripts/debug/verify_checkpoint_runtime.gd",
+        "original_sha256": "d4ced092027518524e610b4835ca886e505ad30eca6b993e28a089d77136073f",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_checkpoint_store": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_store.command.json",
+      "command_sha256": "214c90047a4474f577520cf9f8016deeff33c27dcecdd6b28df18ce7c0c860ef",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_checkpoint_store.log",
+      "log_sha256": "35c7fc4284a355b471fd05ad91596b054a06e4dafe5dadf3808d3805d19628ec",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_checkpoint_store.gd",
+        "sha256": "f0161e4eab77fac80a51eeb18eee8c7fb542c0dafbcad0a961eab87169089740",
+        "original": "res://scripts/debug/verify_checkpoint_store.gd",
+        "original_sha256": "6f0c87408f4f9f6fea7dc02ac720fb067ea9d55b7c7eb0e9af62ae65f865a987",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_continue_loading": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_continue_loading.command.json",
+      "command_sha256": "f08e5bdcd68971f23ee68614fb0a595799d5553410356e7732f4d87c430c11d1",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_continue_loading.log",
+      "log_sha256": "77e711ab56d99d03076f029ac18785038a313284e901cfd28368bf00db552d56",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_continue_loading.gd",
+        "sha256": "f15146ccccfd33e386bb58838e58fd23adff3cd9e2de1a5b4d479625621234f8",
+        "original": "res://scripts/debug/verify_continue_loading.gd",
+        "original_sha256": "47ca982d62a91e1fca435cfda76b53b5e38dccab3fae6e71b3e795bc1b2ace3c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_contract_challenge_matrix": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_challenge_matrix.command.json",
+      "command_sha256": "ce6eca2b3d7fae5bbc3a05cfdaa880fc22511f4a2321b9dd9554271676af169e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_challenge_matrix.log",
+      "log_sha256": "8d40a56cd5d896ff13021b78b2b6690cb977083db0765ba92814dc2a446807d3",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_contract_challenge_matrix.gd",
+        "sha256": "8de229ada81c497bb96666d1459f9fce5fcd4e027303a342fd3ca1dffe3f6263",
+        "original": "res://scripts/debug/verify_contract_challenge_matrix.gd",
+        "original_sha256": "b77b5f3238016f79795eed5f5fa06afeeadb2f9cf952d75135417709fc0a4194",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_contract_challenge_publishers": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_challenge_publishers.command.json",
+      "command_sha256": "4a8466076f82fd33c2644d9f5dc9a5623d9a9ac02881b277789d09ca2861c1e6",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_challenge_publishers.log",
+      "log_sha256": "b61acfbc931025ff2d7f12366aecbfdedb676c09c755a3add011bf14070abe52",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_contract_challenge_publishers.gd",
+        "sha256": "e21700605b3aac49854be8d32e584172eeb1e9c863e4dc8b741d7e96b72a61ed",
+        "original": "res://scripts/debug/verify_contract_challenge_publishers.gd",
+        "original_sha256": "8e172900a92aa843ea2ac72401b950f6872d030a6b972c83de1aaf0c8a325a2a",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_contract_challenge_runtime": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_challenge_runtime.command.json",
+      "command_sha256": "030951bcb7870b3eca4a6843d20beddefb4c36e92a2693c049a15ea0dfdc6c3e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_challenge_runtime.log",
+      "log_sha256": "7b2825b306841c5b7b3a206aec2c0dd7a1439156c4cbb5f6dc7f1bd8152f0bf4",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_contract_challenge_runtime.gd",
+        "sha256": "54abb6547a5131144f1a7ddd81536ad3a872c48505f66140eed332e40bf4c79d",
+        "original": "res://scripts/debug/verify_contract_challenge_runtime.gd",
+        "original_sha256": "90bb98af3a3328c4f548ecd6e61692ec8dba71312c47490cd3386da122c3696d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_contract_definitions": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_definitions.command.json",
+      "command_sha256": "cef5d1e751eedeecf5f017b8f1624800c7cd0fb05f5cf19a1c5ea34606d096b7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_definitions.log",
+      "log_sha256": "4f37679b239ffaebbe4da3025462818bf7c033deee7f4ca206bda7d7427962da",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_contract_definitions.gd",
+        "sha256": "87539d5ee151cfd17e981e883df0aa775313dd60c1a842c3cdcf8814082d81dd",
+        "original": "res://scripts/debug/verify_contract_definitions.gd",
+        "original_sha256": "0ea3b5c496d91fa2e633feed9a3ceb50b2e08b9cabb74154b449111f3cad3b73",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_contract_extraction": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_extraction.command.json",
+      "command_sha256": "80bde9aecfe2c4a9456af101bc74d48678e162c00c70fd417fa253656aaf4a44",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_extraction.log",
+      "log_sha256": "78f2324fa3bcdc234dd1e36729a4ca644a5daca3c8dda81e704317dc592fe91b",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_contract_extraction.gd",
+        "sha256": "9dd2330b51eed9aeeb219b78889594e564f55e3d1e795fd02e1381e9dec9ca0a",
+        "original": "res://scripts/debug/verify_contract_extraction.gd",
+        "original_sha256": "68ca58f47b764e94bc452e6d9358781e9ccaebf6f8ab2d0e9d03f1ce31e3c676",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_contract_presentation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_presentation.command.json",
+      "command_sha256": "ce7638a9f38610e9680673410a5235ed5892320b5b5775f85275d7060398c7fa",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_contract_presentation.log",
+      "log_sha256": "b7b41e0df7af8469f9caf9e7f3dc9ccd05ba284b33a677b9b816f2d9c0c02f6d",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_contract_presentation.gd",
+        "sha256": "acae0656727c722717a23533ed507748e39cc1b07c31e7e6878ff0a31d166b2f",
+        "original": "res://scripts/debug/verify_contract_presentation.gd",
+        "original_sha256": "b100eef2f889d8d22d5681025d24cc28673783fdc1ad6836fa1a574cf610d7a4",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_cult_following": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_cult_following.command.json",
+      "command_sha256": "7887d7cb82139047c700b52447cfb498eb9aa32d08e53a66eecb0520e56d5a7e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_cult_following.log",
+      "log_sha256": "da37833ac58da979f52fc05247d38fe315ab7870ffb391418e28cdb27a0ed1d0",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_cult_following.gd",
+        "sha256": "6c9a5ef88ac4ac35ba52a1438d13564d4288d5214339d3d7ca0ae9f9f75b5241",
+        "original": "res://scripts/debug/verify_cult_following.gd",
+        "original_sha256": "7b6adae2f1c876123e347e21c806a8bce6e5cfa4f3225c1f21af182d3b67cb65",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_demo_settings": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_demo_settings.command.json",
+      "command_sha256": "22b9bea227fe549b4bdb537cc00e5512a1636f85c761c1fa92e25b20078a6f0f",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_demo_settings.log",
+      "log_sha256": "fb2a36699b16ce090763671240c89b2c883ad717ed9b8fe52b6967916ddded1b",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_demo_settings.gd",
+        "sha256": "13cc57597eb5b94d65f57d0597d26d57f4fd9a4f632712cc0c6d64a98e3b893a",
+        "original": "res://scripts/debug/verify_demo_settings.gd",
+        "original_sha256": "5b6da65f14ac704ec649fc8315159758ceac5915fbe5467f9a351cd7d3e6701d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_design_command": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_design_command.command.json",
+      "command_sha256": "809f637f813223f603e657e4100ce1220c91f966670697c5aebe049677b7ffcd",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_design_command.log",
+      "log_sha256": "36ab64b7aed943bd0acff7ed3081f32dbe4ce0b3f638680acb9e6ffd040ec2f5",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_design_command.gd",
+        "sha256": "e99a68bab4bb9a84c62fa84210660626fdf2f3a6575b8ecab3ca007920afe941",
+        "original": "res://scripts/debug/verify_design_command.gd",
+        "original_sha256": "5c1ca96d45d9d29fe9e976e6fbd9248bb61e77be6368a7b326afc3c2322c9b3f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_design_phase": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_design_phase.command.json",
+      "command_sha256": "018c9b5d41effcfc6a66c97eb595ee9287a37d7d82218bcf7f0ac5f152e9e45e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_design_phase.log",
+      "log_sha256": "37f5e93fc06f1df8ed61da5dc1d79788727f4c07be93cb191021ba9302859b5b",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_design_phase.gd",
+        "sha256": "fd8ddd1498349417180b1949f33e1de3c4c019a46da95c09efa1e93ab793e163",
+        "original": "res://scripts/debug/verify_design_phase.gd",
+        "original_sha256": "fd55bdf42e0d1078970464340c60294b46332be68cf189e9667142374f556e6c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_development_protocol": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_development_protocol.command.json",
+      "command_sha256": "816c68439f11b4ae2995a6970821818b1b9f99d63c5e4a0d147d2c31a41fbeb7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_development_protocol.log",
+      "log_sha256": "057bf41fdaf0350bb8dc2a6f7598989922b8be57eec6463b021d6c3a45208536",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_development_protocol.gd",
+        "sha256": "ca297929235b3abdd68a4f1448b3efd4af110d3a6ca33ae98472382fcf4768f9",
+        "original": "res://scripts/debug/verify_development_protocol.gd",
+        "original_sha256": "b4140318289ab9dcd3d52fde237e811a31a530e21bb1cb719dec28ef65879a58",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_development_replay": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_development_replay.command.json",
+      "command_sha256": "fd84f1e9a7fbc3cba0ca0ceadbfdae9afd18174914fc4be8b34b3ad7c9e8e091",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_development_replay.log",
+      "log_sha256": "73d104b5c3f6a1ae263f72d239917933c7511fd71f3251c163314f2dd078eb11",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_development_replay.gd",
+        "sha256": "8c4bee9c542a2421d6a7ece497d1633cea4cfb902243fa07097223549e9736f0",
+        "original": "res://scripts/debug/verify_development_replay.gd",
+        "original_sha256": "b68c9ba43b2105677778b4494d046e5628040d292e59d10f18ddee01bab451d1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_education_atomicity": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_education_atomicity.command.json",
+      "command_sha256": "35c807b4f19a9e98b48a9fd9c07786c03d53e710209d40361faeb920f1b5b5bd",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_education_atomicity.log",
+      "log_sha256": "9b2c605674721b5c0ffcb1e0bf02528d722cba5f3608e35509a7e492e8425aea",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_education_atomicity.gd",
+        "sha256": "cf11461d7c7b224e4861ad3f05375ad8372fd3a9eba826eb7249f61dcbbfb705",
+        "original": "res://scripts/debug/verify_education_atomicity.gd",
+        "original_sha256": "cf06183e2a49486dddb7b3db77342444f4c476b1976f7d14143dd7960acdc3d8",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_education_debt": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_education_debt.command.json",
+      "command_sha256": "82392881fab8c514297cda2f311959e7cf089a4da06b43ddad507895df3d53b5",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_education_debt.log",
+      "log_sha256": "e311c82862bf1a27318e1bac6d74a39a202482cac8bdd413ae343cf65f2c6a39",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_education_debt.gd",
+        "sha256": "1a2e9353597ba71868e577ba994b9906bfa8aafdc4e34dc319cb6f3356940a5b",
+        "original": "res://scripts/debug/verify_education_debt.gd",
+        "original_sha256": "8b4a2772192146ad683ad66f57f6932b11e4e50d47cbc418ae08355213c85339",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_education_edges": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_education_edges.command.json",
+      "command_sha256": "79ff502ac00a219c4a53d77263e40675d53f39c75a2f4e6fb10e2cc1899f5a52",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_education_edges.log",
+      "log_sha256": "957645fa8180a2bcea1e9c9912f41b566c7eb8301e3ea96f42bec3ff6ed4b347",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_education_edges.gd",
+        "sha256": "ff0c580948b74a7809b3dc1e03506db1e500e68afea8e205fc5ab7c15006772b",
+        "original": "res://scripts/debug/verify_education_edges.gd",
+        "original_sha256": "63509859c9e5d38a9d09930e5730443563d8d6ff8fb78f4c7f5b1b97891c82fd",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_employee_hands": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_employee_hands.command.json",
+      "command_sha256": "2895811adbfef703302f33e8a64688b22d04964af38e2b687b5d9d03f4107542",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_employee_hands.log",
+      "log_sha256": "0b975f6f4676cca8b318f90b666e0741da1351bb96c286e1c473620c91f0473e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_employee_hands.gd",
+        "sha256": "82fc7e8b4abe1bdf3284216b3e671b3d2a2543d18be70ef67e06e95c228ca9c6",
+        "original": "res://scripts/debug/verify_employee_hands.gd",
+        "original_sha256": "a150d8842780cfaabf2b917e11c63d96157f4fc3b44c2df99bfb4b6aa4707b26",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_employee_ui": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_employee_ui.command.json",
+      "command_sha256": "f1a6ce0a10e8ed02a6910125e646bf7806afd486e4e235bcdf200ba47346dbc4",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_employee_ui.log",
+      "log_sha256": "76fbf94b736101bf360b1e6a6a1bc4fe06edebf729ef3a6b2746441ebda4b45d",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_employee_ui.gd",
+        "sha256": "6b49506ae2b3d8adf0cdb12ef5ab390899b88b899e6be97125fbe37be58f8bc6",
+        "original": "res://scripts/debug/verify_employee_ui.gd",
+        "original_sha256": "151885ba06c42eef19315422c37f88d438e8d2193939741cecd0d49f3bb29202",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_employees": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_employees.command.json",
+      "command_sha256": "18a07d49a17c6f6d01eacd1571e54d787c3637c2a81440856486aad60962b49e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_employees.log",
+      "log_sha256": "711fb65736be3627ad38c55478a0006e1ac2c4a205f367726129ffac33197554",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_employees.gd",
+        "sha256": "ede165dde995a691167c3c401898f4e404641b002a08830a095fdebc4f9fd7bc",
+        "original": "res://scripts/debug/verify_employees.gd",
+        "original_sha256": "99a47aeeee6319d805fa460ae9a4b9f3cbf536bce337c7abe065883d1f1f1ffa",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_exact_cent_run_state": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_exact_cent_run_state.command.json",
+      "command_sha256": "4958a85996db7921dbc0ef1bebed2ef8ec829dfd5d8c2a70e011034e917c3ef7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_exact_cent_run_state.log",
+      "log_sha256": "a61af28357693870e111970f461cc10b2fba5a1bcf73f3fa1a7b087f3e9f7dc3",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_exact_cent_run_state.gd",
+        "sha256": "aef7dedb26838cd70622003eeb0e139e70140ee4b5b4ab63cedc6976e27639bf",
+        "original": "res://scripts/debug/verify_exact_cent_run_state.gd",
+        "original_sha256": "4f6c4449a58b7245f2ba09ab050c01a6f7cb1e2be9f79cacee90691d1cd1c2db",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_fanbase_checkpoint": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_fanbase_checkpoint.command.json",
+      "command_sha256": "5c51ec00a03f5a097d35e5c58e94f7bf026262fd1ffbe2bbdd908cc955196e54",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_fanbase_checkpoint.log",
+      "log_sha256": "8006f3c5ba767ceed42e6dc37464e2a38cb17d4b1452a8d0f1da6b1523d1d301",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_fanbase_checkpoint.gd",
+        "sha256": "4c3d211d42cd9a5d17f25627e92baa53652a9f08e0b1aeddd885a83c5eeb040d",
+        "original": "res://scripts/debug/verify_fanbase_checkpoint.gd",
+        "original_sha256": "9c4c6e9047ff4a723825038dd17eabef76033203a5102db579a20e3e5a795c9f",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_fanbase_incremental": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_fanbase_incremental.command.json",
+      "command_sha256": "da72623e6245867e34e63e04ca9fa58baf4613ebd0bcf254fba61c9d6ccb6f91",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_fanbase_incremental.log",
+      "log_sha256": "b0507c40b368bf156f7516f807695c4cd42f997ba0f284cb1e0e1adfcd675382",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_fanbase_incremental.gd",
+        "sha256": "132adee617e878bc50877a8bb2ef1dbf5f84525e5dbdfbc74e1e95881631087f",
+        "original": "res://scripts/debug/verify_fanbase_incremental.gd",
+        "original_sha256": "9842056957b81cecd688da8f7516eb1a21462ad33d47ec800a79fff636a9a5ef",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_fanbase_ui": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_fanbase_ui.command.json",
+      "command_sha256": "05f1c90376484a2db3ad2cd3bc88ccc7166564bb35fa87624856733e6a042935",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_fanbase_ui.log",
+      "log_sha256": "ee1fd28d11675f0ef324155345f50b2be3c6842f098f692d5b4e6064199eca1f",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_fanbase_ui.gd",
+        "sha256": "94f40a9d3d145059e6b985e92d59e6cc524dba5bc3dd5e5021f15966995540ed",
+        "original": "res://scripts/debug/verify_fanbase_ui.gd",
+        "original_sha256": "5d9cebdafc9d9fbf9ea0100a37be17de80a3fb15edba7ed21d301bd7b73e74e3",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_feature_parents": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_parents.command.json",
+      "command_sha256": "59fff4ebf9df2ff00cdae78194b431a7aaee57b8cd138948b0f474becb5f4cdf",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_parents.log",
+      "log_sha256": "1fbc1a1fd53b7f941ac44a3cf8ed4091ed070332426ef52411984e2c5f963a97",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_feature_parents.gd",
+        "sha256": "3e9e6e23e435914aa4cb8ea671c31c8b88cea0cb53c21d6c9ac096728b674cd7",
+        "original": "res://scripts/debug/verify_feature_parents.gd",
+        "original_sha256": "2459d82c2b5aa25b424e51453f8329908593333036d674bb2e9ffe82ac9e264e",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_feature_research": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_research.command.json",
+      "command_sha256": "b0202265871d573f59e617a943f26dcf5961332bb2866880b69e1dd55498e5c9",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_research.log",
+      "log_sha256": "1cec7c25ff879f6d999627e30901361dba45a79c7885336efd669a7bab71f0cd",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_feature_research.gd",
+        "sha256": "c8e0cb490bda2461d43de519576c96a356d5aba9acfd89d83662dff57c7a6dd3",
+        "original": "res://scripts/debug/verify_feature_research.gd",
+        "original_sha256": "84571dc3ad9bd922c2d49602ef2d32cea5d8784cc08c1d676bd2f3773d4ed130",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_feature_spending_guidance": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_spending_guidance.command.json",
+      "command_sha256": "dda90d2214bdf2dd0c78d9b6897f8b85303c31813240c5e065e047a362c5d941",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_spending_guidance.log",
+      "log_sha256": "eb24eac0891741a04d37284fca71a12d26f8d4b5cc328a6aa92b1c8326dcc632",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_feature_spending_guidance.gd",
+        "sha256": "33d5f3a1500edf8b4693297096d71e5e3a81f0dd23c98dc87917e9f4479363f7",
+        "original": "res://scripts/debug/verify_feature_spending_guidance.gd",
+        "original_sha256": "1fa2bc4813aee6078c67676ed87be9ca1ca48cb433793854cfe3c927b41b4666",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_feature_store": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store.command.json",
+      "command_sha256": "64f78d8691ec322feaccd29f42142d43f15136edb6187e8ba8b5e6034489b88b",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store.log",
+      "log_sha256": "bbef6b934eb5486e857943b4425fb870b0fa762840c4559328f84aa90d92e4fe",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_feature_store.gd",
+        "sha256": "9cab109f3f475af64946b56a3836872c2786a0628a427b910a5d79116f75714a",
+        "original": "res://scripts/debug/verify_feature_store.gd",
+        "original_sha256": "807676dc42717725772c8b79bdc50c8ffd186f16191e6a4a089cfb194d821402",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_feature_store_copy": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store_copy.command.json",
+      "command_sha256": "882dcc22024727802478bda181d2c5814df919f8ee8dcaa566c74eb28923a6d0",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store_copy.log",
+      "log_sha256": "888d6819168c10f3c2a9f5bebd0aae2e990c1e0a7a583ea15a767cc327a062a9",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_feature_store_copy.gd",
+        "sha256": "1a1ca86acde842ad3fa14494553e625b6af0aa5fd564e894cd16fb0e51c77779",
+        "original": "res://scripts/debug/verify_feature_store_copy.gd",
+        "original_sha256": "a669bdb25e22f441810fd71b62324ee0d2a6dae46ef48bf65f366f80a2335c09",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_feature_store_cycle_purchase": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store_cycle_purchase.command.json",
+      "command_sha256": "caafca709a3ff29a9b990eead091e5b8bbb7e738ada701a5a758656db99da5ef",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store_cycle_purchase.log",
+      "log_sha256": "0d58c3e23224db28c0ee8465c2605bad2cee7553cafb0ae597888f986e423c9d",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_feature_store_cycle_purchase.gd",
+        "sha256": "4e69214ac52c87866dee5b960965abea68c240054953d5103c4a2e29a8b78785",
+        "original": "res://scripts/debug/verify_feature_store_cycle_purchase.gd",
+        "original_sha256": "9f30e59c635cfd1ce7581b349c64edd0fc1664c1ba1d6eeeba56d54f73e3395d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_feature_store_navigation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store_navigation.command.json",
+      "command_sha256": "a31d4953caad6c450644534a7125183d86489dae57e375736f316f12cccadbf5",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store_navigation.log",
+      "log_sha256": "d4e502882f086f05c468e617de3be63bc6c9ec597973e9a7269b5e9a48901171",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_feature_store_navigation.gd",
+        "sha256": "f442f4bea15c619b2ae6e0182f967a5051fb547b1a104899803f647102380536",
+        "original": "res://scripts/debug/verify_feature_store_navigation.gd",
+        "original_sha256": "91f23939f35dd8e7ba5fdb9b37cf127fa65587188c26ad13c0c12f3f87507071",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_feature_store_radial": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store_radial.command.json",
+      "command_sha256": "901a4e6e62263b1524ffc2bd535728799b03d1f0c4e399c5038b401be0ee0b3a",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_feature_store_radial.log",
+      "log_sha256": "7bbbc6c358dcee84698a2049c52dc1d10a4922574cf40c054e861985578bfb84",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_feature_store_radial.gd",
+        "sha256": "2f3d977bafe2aa0ea02b84082d1ed5a96f3c1960000955f161bad740fb755a6c",
+        "original": "res://scripts/debug/verify_feature_store_radial.gd",
+        "original_sha256": "5f0d20e489ee870be50c8fb48ec6458cf8946c5cdb80b0d6e6b62a25015cdae1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_finance_observation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_finance_observation.command.json",
+      "command_sha256": "3f6a5f586014c9a89353f71b8a493fccf91addbefbe5409dd5b54416ece36eb9",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_finance_observation.log",
+      "log_sha256": "9e0d59b7122393b44f7c2238e8c00bfef2637baf989ea472fc1d57724c9d2682",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_finance_observation.gd",
+        "sha256": "8bc0db38d9d192eb4c5b317aefa23ca2b759f1078427c3f804518452c77d33bc",
+        "original": "res://scripts/debug/verify_finance_observation.gd",
+        "original_sha256": "f8e75f5ddabea0ec8472f950ddd381bed4acff4028d64d6d57a3e5ff87c4bfc7",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_first_game_and_tips": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_first_game_and_tips.command.json",
+      "command_sha256": "769e24029623a20fbe80c42c920efe821c4dd9706f37863f9bf60fc8b85ddeb6",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_first_game_and_tips.log",
+      "log_sha256": "544a8be626810bc5976b6dd17390284a00eef3ba11e5fc804f589b180ba469c5",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_first_game_and_tips.gd",
+        "sha256": "90a2e811a0c954814836a7574dd3188202aa105e31d18cdacfd13bc140c71160",
+        "original": "res://scripts/debug/verify_first_game_and_tips.gd",
+        "original_sha256": "ca2b3662486cc30c7979f8013507cd5dedac4fd11b478f3596419cc664c5c8da",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_first_game_scripted_tutorial": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_first_game_scripted_tutorial.command.json",
+      "command_sha256": "968393f012d8de7b7a6ee4c6cb014542549535910a5ebab1b4686baa8a093497",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_first_game_scripted_tutorial.log",
+      "log_sha256": "132f161804cefa3b6e303142817f4b4d323f18a19925c27c2c9695be53fa0679",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_first_game_scripted_tutorial.gd",
+        "sha256": "cc25f7e1030cab3b05255fd3c2a4e17e426bc3822c3e44436b5a033249f82323",
+        "original": "res://scripts/debug/verify_first_game_scripted_tutorial.gd",
+        "original_sha256": "e7b19b4950db999ad549a354db4d845c1d3c0308e44f684360a678df44e60020",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_first_studio_feature_economy": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_first_studio_feature_economy.command.json",
+      "command_sha256": "cff0e3743c5278fcfe60b61ac9b2f1ab1e01fcaa5bbd0abe8edea684d9a0bdc9",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_first_studio_feature_economy.log",
+      "log_sha256": "a905b3f72388238aa516267de61cdd8c40355e854e80612da9169f4b013a0aea",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_first_studio_feature_economy.gd",
+        "sha256": "5cab65634c3822ab6c589cdb65e860c2dcc47f455b7d30d0c1abf725b4f6ed2a",
+        "original": "res://scripts/debug/verify_first_studio_feature_economy.gd",
+        "original_sha256": "b460bc26070925b1598550d99f386f890619a06409bae2cf1182b9c52448b3bf",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_founder_foundation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_founder_foundation.command.json",
+      "command_sha256": "1eb708dfaa2a4e222ac4c7e1bf722fabad1aa6e6de23e1b223084ac26614a110",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_founder_foundation.log",
+      "log_sha256": "c7bf07532c62cd71f8058a9dce36a0bdda821a369710e5522931bf18adabb9c7",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_founder_foundation.gd",
+        "sha256": "849a77bfee7134193ef45985654afeb439ba845d03dabd00693063098f49775b",
+        "original": "res://scripts/debug/verify_founder_foundation.gd",
+        "original_sha256": "0f44dae561393c118be4ac3ac82ff3b3486423afa4c281c573073a4586ac0927",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_founder_victory": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_founder_victory.command.json",
+      "command_sha256": "e5753865489153cd2dab6fd0045fcd66ebedafe35065bbfb47bd3b7d7ea6e0be",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_founder_victory.log",
+      "log_sha256": "f74f6154a2b1e8ba54898b882e4b4fbe9ce2f9e7a6003c75ed79ed4d0da441b3",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_founder_victory.gd",
+        "sha256": "c0aa150c797dd61bece9afc6cf790ae93307dd3c53f83f028c138dc9113e3c14",
+        "original": "res://scripts/debug/verify_founder_victory.gd",
+        "original_sha256": "ac355f449083b06a34e2a3dd2184402eaf4dc191d333832ff69e791800b726ab",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_legacy_world": {
+      "run": "corrected-continuation",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_legacy_world.command.json",
+      "command_sha256": "a972654b1a2051d092a29ec073e3c50ffd1a6a0fb9351725ef6d1ee8ee158ec8",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_legacy_world.log",
+      "log_sha256": "77064797a018c4762277c2e21f22968b6e69480939df2f6ddc5d7c8f8f84a85e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\wrappers\\verify_legacy_world\\verify_legacy_world.gd",
+        "sha256": "3de4e330eddb4958758bd76237616237c55668d023e86c4a36745b7722735ca1",
+        "original": "res://scripts/debug/verify_legacy_world.gd",
+        "original_sha256": "b6bb20752bd3c28c4b161a7f1406045451705e20e732672211feb0683bba8030",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47737
+      }
+    },
+    "verify_founder_victory_cold": {
+      "run": "corrected-continuation",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_founder_victory_cold.command.json",
+      "command_sha256": "1dbec3e49b86333132d0c579ee1cc2bd52ff276d353148afdc665c64980e500d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_founder_victory_cold.log",
+      "log_sha256": "062bbaef605938841b838520ec84e51ef61b925f5c5ff34ce1c2a99b41b67878",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\wrappers\\verify_founder_victory_cold\\verify_founder_victory_cold.gd",
+        "sha256": "3fa2a881746f9c2b7f772317da1513346fd8dbda14377ee6f1c4c32f5bd3b950",
+        "original": "res://scripts/debug/verify_founder_victory_cold.gd",
+        "original_sha256": "a6def52726202ef45731473d9954e3603d1f33952ddcd32c99a83975fde69582",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47737
+      }
+    },
+    "verify_game_lifespan_sales": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_game_lifespan_sales.command.json",
+      "command_sha256": "5960f05c5a8a56c0051af4910f095e567e11c22528cc7a0adbc5e867203499d3",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_game_lifespan_sales.log",
+      "log_sha256": "df7ea5f2a1313f1ca331f8e3d7618b2ea42b0f3423d093e7e3fae0015458b9e0",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_game_lifespan_sales.gd",
+        "sha256": "1c32f2992cab13fd0c95d2621acf1ebcca4243cb690a5fd5fd8401d582cfccac",
+        "original": "res://scripts/debug/verify_game_lifespan_sales.gd",
+        "original_sha256": "1f5b0fa0e05bcfdd4e8d635dbf5f5f2ebd47f8c2301137f857cb6e05e0b16d33",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_game_lifespan_trial": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_game_lifespan_trial.command.json",
+      "command_sha256": "54203a8dd0f90e4887e2a08a6568fb8f5a6aa709a62c7aa17896b02316efb40d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_game_lifespan_trial.log",
+      "log_sha256": "41fe0a370879b605ef18c1e96236cc644a459c1a8d09e30ee6ee118a0a9e8095",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_game_lifespan_trial.gd",
+        "sha256": "62521abafbd7b82f742516315ad4b5046bd3295e19350b4c1a20f908686f3e35",
+        "original": "res://scripts/debug/verify_game_lifespan_trial.gd",
+        "original_sha256": "9be516168698be878813bf1246224e136ec9f0f106c749d3d65b1c74863e64ad",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_gameplay_hud_overlay": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_gameplay_hud_overlay.command.json",
+      "command_sha256": "2dedc9aaf5754fa832663a96652a92d97d316a719bebc56273d015baee43842e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_gameplay_hud_overlay.log",
+      "log_sha256": "492795fbd8c67de1934c83dff9a00b37f059871cf642ddfabc521bb51ac7a43e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_gameplay_hud_overlay.gd",
+        "sha256": "1b773dab2ccb69721c1675f8640d4a808baff59f3dfd9c38ae782828943fa82e",
+        "original": "res://scripts/debug/verify_gameplay_hud_overlay.gd",
+        "original_sha256": "e5d4363b2ce469815ceb4030c26d6433dc7d120807cab71961d3f7b1e335a8c4",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_gameplay_transition": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_gameplay_transition.command.json",
+      "command_sha256": "dc0d63abf8287ff28e0d21debca3e767d6731a1003b1955d4dbe94973196fcf0",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_gameplay_transition.log",
+      "log_sha256": "36a496c57ee1085cfe752aa6068fb328af586dba81ae947cc900e32645b3f288",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_gameplay_transition.gd",
+        "sha256": "db04f9148055fd75217e554ac21a9978d622007732f817b58939cf89ef132806",
+        "original": "res://scripts/debug/verify_gameplay_transition.gd",
+        "original_sha256": "4236eda155de9aa83bb731781f1c6954e8b8e91bb4e1bf54c203dcb21d9fc635",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_gameplay_tree": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_gameplay_tree.command.json",
+      "command_sha256": "f3358d0299129bb31806a0aa381af371504682c9737251829cec1fd46615321d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_gameplay_tree.log",
+      "log_sha256": "63a1107342d923886f51a4f934d764f24344324a493ece1415003b3276c9ed7a",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_gameplay_tree.gd",
+        "sha256": "0a508f04695a9ac05079c175ae08936b1e0549a9c49ef09600cdced9ba442f9c",
+        "original": "res://scripts/debug/verify_gameplay_tree.gd",
+        "original_sha256": "9e64f38994692617859dcbbb5561458010bb8a21f5c3e6c0ecb5da0524305db3",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_genre_checkpoint": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_genre_checkpoint.command.json",
+      "command_sha256": "68680f4656580424b685e7815fb03ce854ba1fc212a00884d7be1238d8ea51fc",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_genre_checkpoint.log",
+      "log_sha256": "38adbebda2909f37bf7a43e8de5cc7c088ee6f7b0fdfd8e6c6444a551f66a85d",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_genre_checkpoint.gd",
+        "sha256": "9e420fc6e74e9c0414fb0e88a0ba6cace9cfa1bb44a32bff8196b7f66db35b3d",
+        "original": "res://scripts/debug/verify_genre_checkpoint.gd",
+        "original_sha256": "ba3f0367201b066f5ae0fe3f136dafd550f0448be4c2c1b804c960dc3d272818",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": true,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_genre_fit": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_genre_fit.command.json",
+      "command_sha256": "268fe66b572739657fb1d8900ea47be8480236a7402aab04eb185561b4c2da36",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_genre_fit.log",
+      "log_sha256": "e9f2a3dffa32a2006d06faf85b3f46eb96a2a3ea00ab63c75c1d5dae5a18bd6b",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_genre_fit.gd",
+        "sha256": "f9ebdc6eb0597de29217e649fa88c652f24305dcd44f136436fc89c811f78725",
+        "original": "res://scripts/debug/verify_genre_fit.gd",
+        "original_sha256": "d3daff4840188a50dc5005ce41352510d61e4d37d6a47563d8d75cca96c65f25",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_genre_targets_ui": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_genre_targets_ui.command.json",
+      "command_sha256": "919d55ee916c754fa836bcd4cf31574c8d2d1f9e809801d3ef0c49345c475072",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_genre_targets_ui.log",
+      "log_sha256": "b1348e0cac56a87c001d0a66b63143c5d3a08db86db5214016ec14f4057a320d",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_genre_targets_ui.gd",
+        "sha256": "32074b0e5cf179604b9473b49c444db53b66f359b4fc42432677d85bc6bc0a06",
+        "original": "res://scripts/debug/verify_genre_targets_ui.gd",
+        "original_sha256": "336dcb351d26eb9a690d634f2e42dbea5ddfa52310e7af587d902a6ee4b07df9",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_how_to_play": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_how_to_play.command.json",
+      "command_sha256": "3c48a10fbc37f9cea4cb4cc2a659d663ffe6b584aaa79ef65f2ebea0e3edd3fd",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_how_to_play.log",
+      "log_sha256": "a7ca97412a8cc5d6b3d23d6dca0dda6c3278b6d7d12756e13a3eca64e8790e1d",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_how_to_play.gd",
+        "sha256": "5b4e5743326f931a7fb022ab28b3a35acbaf19cddd97a1e3221cde3d855fc7b4",
+        "original": "res://scripts/debug/verify_how_to_play.gd",
+        "original_sha256": "565059fe3bffd520e5120a2e3aa3d57d5313309bf78952f7270bdb646f0396ba",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_launch_extraction": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_launch_extraction.command.json",
+      "command_sha256": "6f2fd6070933e8cd49904fa0aeb12c2e50fa3a80313eea8ebd958748d0b6d573",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_launch_extraction.log",
+      "log_sha256": "b5407c647b414eb8bfbd8dcda66c8a9c0a81be6f7874b726e5b5e2f5d38be0ef",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_launch_extraction.gd",
+        "sha256": "fc6b6b5300d743c5c33384bb8d5fd26737f39c295132b94e5ad657fca0aedf63",
+        "original": "res://scripts/debug/verify_launch_extraction.gd",
+        "original_sha256": "4b2cda225c9f668e6c8d60196178ab66a0eb30002e07d71764ee5b8869265e0b",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_legacy_gameplay": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_legacy_gameplay.command.json",
+      "command_sha256": "7e446031e95c66f8e2ef66f1289cfd9f6322902d14e29432bbd8983c6953a45e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_legacy_gameplay.log",
+      "log_sha256": "1583939779c8670f8774c247437be456f6c2a100fb51c334fb0de5c6c855b24c",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_legacy_gameplay.gd",
+        "sha256": "a8cceaa5ad4c3ec0e071b3fc313b473b8dc11ca145918590f93a5764281d0307",
+        "original": "res://scripts/debug/verify_legacy_gameplay.gd",
+        "original_sha256": "64226e35c505a903eea8b19a72f0d0c63cec168a81dcb47683a22d4a0439ee38",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_lifespan_reporting_integrity": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_lifespan_reporting_integrity.command.json",
+      "command_sha256": "c93f80f2bb308aea76ef60e7daf8595cc1ccd210df590402a92674c59a947f4d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_lifespan_reporting_integrity.log",
+      "log_sha256": "c14c6fa17ca7e46dfdc48b2dbbc8a9788e5670fba22b7a79043a05bf7de44c31",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_lifespan_reporting_integrity.gd",
+        "sha256": "8be2fa82425abe8231fa22861a8899f594444b0cda03907be039dbe7bbd130ad",
+        "original": "res://scripts/debug/verify_lifespan_reporting_integrity.gd",
+        "original_sha256": "5684aca737eaeefa6f7841a9dbdbdd0865ea22063055dab6d1848283114be881",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_main_menu_history": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_main_menu_history.command.json",
+      "command_sha256": "ee6aefdebb37d41b075be795ff49643128861a0345001311aefa64f4070db28d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_main_menu_history.log",
+      "log_sha256": "c2a068782a0efb0c918fc43e49ba1835a99e90c4b4124d761ac39cd127edf04f",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_main_menu_history.gd",
+        "sha256": "344ae89cc0d0fe6d1885e553ea6e1fac5cd92a8f4a058328a9f1d3b50fcb01b7",
+        "original": "res://scripts/debug/verify_main_menu_history.gd",
+        "original_sha256": "543fd45a8b989ac355f1529ee763f3af40bbde630041dd56dbe3f79955f02f67",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_market_density_trial": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_market_density_trial.command.json",
+      "command_sha256": "994804fb8508a35b5cdfa284b067189a685efc445398da2116097e8db1b60eed",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_market_density_trial.log",
+      "log_sha256": "ec29170e37d567d2b90a356479cd677f1fefce719497b4b0b61909afe1cb9ff0",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_market_density_trial.gd",
+        "sha256": "ec1205f15819e07ade3a923512ed817e1755a863a4998186cf18349ea7839ec3",
+        "original": "res://scripts/debug/verify_market_density_trial.gd",
+        "original_sha256": "e04334a1813803f854e32abf3c9cb7574ef04381e07d9e31e71bda4fd24b3188",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_market_release_index": {
+      "run": "corrected-continuation",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_market_release_index.command.json",
+      "command_sha256": "67a764b8c39a63c822a04b4ed864cd91c98ef8ea1d34185e323fff778e6b9588",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_market_release_index.log",
+      "log_sha256": "bf6b0fcadec40253686403b56aab278ac3468a7a6753e258fc3f45852be5a72f",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\wrappers\\verify_market_release_index\\verify_market_release_index.gd",
+        "sha256": "0c1c55fe9b89d08fa24bee197a83dadf78351a82628c5228ae30dd4018a37416",
+        "original": "res://scripts/debug/verify_market_release_index.gd",
+        "original_sha256": "b595f554ee663b608f97b435adede33f3dfbbcdd1341cc0d906eb14231ddcab1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47737
+      }
+    },
+    "verify_menu_navigation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_menu_navigation.command.json",
+      "command_sha256": "ebdb93874ef86d27502e36fc48b838a92c879eb42deadf93d2e0c4d349b8e340",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_menu_navigation.log",
+      "log_sha256": "6b7f9cde60a3ce62e74c99c653451da5b7d8577826913542e78a0e9f359ccfa0",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_menu_navigation.gd",
+        "sha256": "3dec25e42a998498b73a5da2d9949644c935df4cf0e603c5449e54c700504751",
+        "original": "res://scripts/debug/verify_menu_navigation.gd",
+        "original_sha256": "2c5232684dc112536a63e6537e7b02e0e67f2b881107d3ab1218a2c3f8ff4207",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_monthly_sales_report": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_monthly_sales_report.command.json",
+      "command_sha256": "d7daaf7abd673a8c7431b8c91ed69c8f80c3d223662fa786b60186ebf4862a7c",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_monthly_sales_report.log",
+      "log_sha256": "17d0bb17debbdc610175c35187bc1984a1a24e0453880bcf7c93ed6652c37a57",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_monthly_sales_report.gd",
+        "sha256": "ade87cb610c23c3cab4cc777e75c3d6a4233858b053afabc5455f3cf2aa150a4",
+        "original": "res://scripts/debug/verify_monthly_sales_report.gd",
+        "original_sha256": "46d814b01a2e18a484fc5bb39f256f7e657794fd3e7dbf667af8202f12a3bb13",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_outstanding_expenses": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_outstanding_expenses.command.json",
+      "command_sha256": "bde41bff005a9672784291d5e7f6d002cd356cee0c5f8be0387d50a8b2cd13ee",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_outstanding_expenses.log",
+      "log_sha256": "315e23449addedb60fb6be7bc6ede546ad4e5163723cee4aef7104709b18d26c",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_outstanding_expenses.gd",
+        "sha256": "87e2b408007117c519d49e27816a3c8f8513cdfd255f479de285584edf39fb9f",
+        "original": "res://scripts/debug/verify_outstanding_expenses.gd",
+        "original_sha256": "6956410131a5088f8bc1bbcf24c5cba46d9fd211c2ae377d33be1fb9c80110a0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_pause_audibility": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_audibility.command.json",
+      "command_sha256": "03829193337b179f670bf1052641008f5b088d1364518d8a1e10a9d4190c1a70",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_audibility.log",
+      "log_sha256": "67888fd299fdb7d5e9d37c6e46547ca060a64c19242d686571b1a673eaf18d0f",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_pause_audibility.gd",
+        "sha256": "d99ebb3f5119b4d7f1f6c96b51292b57d0cad51c4bfa9e760826ae3f5416807c",
+        "original": "res://scripts/debug/verify_pause_audibility.gd",
+        "original_sha256": "520cf474ade9ff1e3ebcb60f212c857588c004ad446813eb55a13f0afb6efb14",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_pause_menu": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_menu.command.json",
+      "command_sha256": "836498d9952c10b27a410f2b76fd177fa82078011f070d7687f5e7601600de9d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_menu.log",
+      "log_sha256": "b1d5440db7e73aaa24d6c5adfcae27a2cb99471cba3963115dde9a4895135924",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_pause_menu.gd",
+        "sha256": "428b59b30d3c0a0b261c6035fc50306963c94e01f7218d5696c6e75a4b053055",
+        "original": "res://scripts/debug/verify_pause_menu.gd",
+        "original_sha256": "9e1cd25c53f184948ef32f365fbd4d1d3973bdb7d9a88515eeab4cb0074343e2",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_pause_music": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_music.command.json",
+      "command_sha256": "0cb0d0260021376c512218de94edb745828d6cf15999f25cc41052b9c7644cd9",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_music.log",
+      "log_sha256": "a225a90deb53a0e13e6f360e26a31a4ef6c196b4cd95f3779ca7e648c1b77faa",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_pause_music.gd",
+        "sha256": "92657b0f86662f87d58c2be456ab17b51fa796cb4f39a6cf76a2cd56857784ed",
+        "original": "res://scripts/debug/verify_pause_music.gd",
+        "original_sha256": "cdcb2f8c36195c0da5c51d1c26e241ae3e0e3bd143b83076027e00e220682ed0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_pause_track": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_track.command.json",
+      "command_sha256": "1ffb00aeb7ef03ecca2053b16b9827fb4e2a1a03368a7ec34ac8638ff330b704",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_track.log",
+      "log_sha256": "f8c5a8cd246aeea2a416535915ebca9e6c7c1a6e71375e59693fbfb838bde4a9",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_pause_track.gd",
+        "sha256": "c1d9f06d785fb37843eec3dab8b076c6ca5ee9003110303e24c5f3b96e19fde7",
+        "original": "res://scripts/debug/verify_pause_track.gd",
+        "original_sha256": "06a97d2274589154929cf67fee7bde027d4a269000893cae271000f213054af6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_pause_track_continuity": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_track_continuity.command.json",
+      "command_sha256": "ea3260d100bb04b9a153249ad6e6ef4ba3346907e277b5c0139020ac2bb96b69",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pause_track_continuity.log",
+      "log_sha256": "e3dd9c25f5fcf6725d84e42cc2eb1b2c6957b676f3bd1216e3fca7f08822fc71",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_pause_track_continuity.gd",
+        "sha256": "fe803d9c0ba0deac31b407036b881dcec2961aaaafc8c8d52afc3002f52f1cae",
+        "original": "res://scripts/debug/verify_pause_track_continuity.gd",
+        "original_sha256": "ab7201207e395732f9456328b248a32359c43b0955304b29bc8f7241bdcf7e9e",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_pool_organization": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pool_organization.command.json",
+      "command_sha256": "329a1f7281484cd5444828d8d2a50663600f626b034e0456e44ae3865be3d8de",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_pool_organization.log",
+      "log_sha256": "a8c30d3d6eea27790ae6b9c1548ee5d91ebcd5a7529a6506899ae76208a4ceb3",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_pool_organization.gd",
+        "sha256": "d56135d971aaeeea80949445d6ba8bd2c3f8dfe89a450f10f2b172ae8a037fa2",
+        "original": "res://scripts/debug/verify_pool_organization.gd",
+        "original_sha256": "242bef2cd74473f6282a13d9c9db860c2205bd67d0b816f6130c5c63d76f9952",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_predevelopment": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_predevelopment.command.json",
+      "command_sha256": "a82624ce2990e818379782ca7dccd2209bcfc12633a0090a16b348aa1b80841e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_predevelopment.log",
+      "log_sha256": "7fb07d2f74e2bbe5fcbb5f55fa504a2d380b22e5b676f665f5874380b7289fef",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_predevelopment.gd",
+        "sha256": "1403471a5a112b6c138925c65bdd6e5d13faf818984491f500fe2af5ea1181a4",
+        "original": "res://scripts/debug/verify_predevelopment.gd",
+        "original_sha256": "c84f35b7a36bd472ed50381773d95d843a1626f85ab72ac7ab198f3e3f0c714c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_primitive_awareness": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_awareness.command.json",
+      "command_sha256": "1a3842722664c5180a393acde3a3a4ba1b20db8f77e0f5db57f9c785439dc079",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_awareness.log",
+      "log_sha256": "9256bd236c7c17e88ea637f69999be40d2556df7a549ef81ca344fdfe2fe450f",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_primitive_awareness.gd",
+        "sha256": "e2fb5953bbcc37cb2481bcbb309bae7a6292e393eaf0647b97829f865d64eb75",
+        "original": "res://scripts/debug/verify_primitive_awareness.gd",
+        "original_sha256": "9dfc32808d366ed7dd9c8052c4bcd39c2ae4c3e6c461e9e2657bc74e63cf13b6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_primitive_branches": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_branches.command.json",
+      "command_sha256": "ed8222bc66c4dd5e0a3e89d2fa26070e455c1f557ea65d1a051bb0e8158e78be",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_branches.log",
+      "log_sha256": "46edb80a3ac93919debddca2a37d4a81fac6c385ed4906097b7072bc7236be16",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_primitive_branches.gd",
+        "sha256": "4c58e78dc83dcfd47d2cd2ef2c099483a2ace48a8004f9511eb998dc827c5fc3",
+        "original": "res://scripts/debug/verify_primitive_branches.gd",
+        "original_sha256": "39ffe11936e20f781396ac1f64b4ca2dfa0999dd84a1e0dfbab4fd1ac3e5e01e",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_primitive_launch_market_context": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_launch_market_context.command.json",
+      "command_sha256": "ddc6559ba5f1ed1c649d0e970e59a4955bb4e3932bf9149a5bf8fd50e7bd0afd",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_launch_market_context.log",
+      "log_sha256": "96b9fc8913661b87273ace749cc1454e6084c5a336afc7e0186cc47092dc2b42",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_primitive_launch_market_context.gd",
+        "sha256": "ab39beec04204048efdbe81c93af1813616ed48260b2ba4677d4d5b3e2ac226b",
+        "original": "res://scripts/debug/verify_primitive_launch_market_context.gd",
+        "original_sha256": "9649cac921c4fa1eb38b46dff5186d5016df1b736a98cdafe0e7f95011c21193",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_primitive_month_one_sales_revenue": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_month_one_sales_revenue.command.json",
+      "command_sha256": "b6753c3dff1fec0bc719be6d003c9e977f982219a802df394c9464ea5181dbfa",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_month_one_sales_revenue.log",
+      "log_sha256": "ac31d29c68fa3bc17210d44e6469de6a48971ee26478e609844963bf103eefaf",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_primitive_month_one_sales_revenue.gd",
+        "sha256": "01747ddc51664140378f9200053e542a92f0e538ed48bd8f24a8f23e76e4f7b9",
+        "original": "res://scripts/debug/verify_primitive_month_one_sales_revenue.gd",
+        "original_sha256": "2ec277bc9992acc4fcc1359010174cdd4d5a595f40ee868f16268e17b8356406",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_primitive_review": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_review.command.json",
+      "command_sha256": "d13702cc477f1217743d9bafe2bd9df5c5e8cd22c9150ac4ea8700f1b36f5975",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_review.log",
+      "log_sha256": "793090b9dbc47cda79f12a942e6539455f692a9a5e8e25e62be7c43ccfe82003",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_primitive_review.gd",
+        "sha256": "5d4de44b51e22e6662fc3504337939f693f97b1e23e9bb4d38c6043a7038c013",
+        "original": "res://scripts/debug/verify_primitive_review.gd",
+        "original_sha256": "192912dd63e8b78321712e8779043a00594edb1bfb103fe2ee2278e5e3d842d4",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_primitive_run_initialization": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_run_initialization.command.json",
+      "command_sha256": "de9491adc94b0b363b6b9f92766f057288ccbcef5db66a7c1b09b787ae69057d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_run_initialization.log",
+      "log_sha256": "4f8c370a51bd2432a0bcadab5caffb9a65b6e60b5e24d2c041b089c49e152b5d",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_primitive_run_initialization.gd",
+        "sha256": "7f876cae67ea733761af2737ea9e11183682199f2dd012e05c83f428d8e98ca3",
+        "original": "res://scripts/debug/verify_primitive_run_initialization.gd",
+        "original_sha256": "d2115b0fd450975b766deae08f7dd4f0461ac7ae5ca77d275e4213ab51ea712a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_primitive_snapshot_ledgers": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_snapshot_ledgers.command.json",
+      "command_sha256": "950e643b1d5d4c974b5ad61887dac1d0861680049d0b05fb4ae2a03cdf07fd10",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_snapshot_ledgers.log",
+      "log_sha256": "c0e49476ab26080023911cdea4aa04f3960f84da80217b4dd4661e6a1db08f92",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_primitive_snapshot_ledgers.gd",
+        "sha256": "c80ef8569aee13bb5e8cbd293b79304b774f75cd13672378e8b9c973524b2f4d",
+        "original": "res://scripts/debug/verify_primitive_snapshot_ledgers.gd",
+        "original_sha256": "6397c68f833546090a480e0dc81f66ccb3ccf7b3952eeb4e58ba48e6b970144f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_primitive_units_sold": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_units_sold.command.json",
+      "command_sha256": "7d0769fc5540241353bd5a57f3964ec362534f580b53abe587ab4376f25f885d",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_primitive_units_sold.log",
+      "log_sha256": "b557abc217adcc5c63c241c852e8a4eef551382e69d1ffc7ba3e091e472838cc",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_primitive_units_sold.gd",
+        "sha256": "89cf1bb5b3dbf7cc7039fbf3bb7f48b33f10c16e42deebf6d121453cbe8cf355",
+        "original": "res://scripts/debug/verify_primitive_units_sold.gd",
+        "original_sha256": "c70dbcd6bbb685855765965c9594ef387e8c2b402c62f64bf55897dcd1573471",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_priority_influence": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_priority_influence.command.json",
+      "command_sha256": "18c7d549f2f5b6f401a0adf9a6ac707656516a424395bb5721525019c9638609",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_priority_influence.log",
+      "log_sha256": "3a8208915a3be68fbda6b2fef84057a050cbfca39c0159eb952c6bbcbe832b75",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_priority_influence.gd",
+        "sha256": "5b65deeb82d013796046a7eda340080112a6e75a70b70a870691a77a661c9e1a",
+        "original": "res://scripts/debug/verify_priority_influence.gd",
+        "original_sha256": "6d40eca8972017836c18741e91bb2250bc2a3aa64456e1a65c47b35eb85e7551",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_production_extraction": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_production_extraction.command.json",
+      "command_sha256": "ba3b005d85b5012e69e7d2ae3aa8a66feb22952be3e0839440244414d82b3966",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_production_extraction.log",
+      "log_sha256": "62a8da499b7efb1296fd45fa5d613bac2b47785eb0856617376af1b44553a1d1",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_production_extraction.gd",
+        "sha256": "2cfd0117743701d5940db958f75edd2f17519ad4bfc840a666d82ab63c8e8184",
+        "original": "res://scripts/debug/verify_production_extraction.gd",
+        "original_sha256": "1c51d0da42e83b73e42c793224324800895d44b11668e4f9dd841091ac924c52",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_production_overflow": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_production_overflow.command.json",
+      "command_sha256": "e6355b4a14edd03702f58ff12242d29be38a8b68e47204c32516f71976cc24e5",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_production_overflow.log",
+      "log_sha256": "f9092452c3426bfdfafc070e1c0715f160c36f32d35c623839200547e37ced3e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_production_overflow.gd",
+        "sha256": "7f6ae508635f316dd66b780bc567f783259bd562d86cf49132602cf816a45287",
+        "original": "res://scripts/debug/verify_production_overflow.gd",
+        "original_sha256": "73b4cf9dcd5e74a2a2d9d58ba58710c519afc56952255c9383a0312c25fb9627",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_browser_states": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_browser_states.command.json",
+      "command_sha256": "273fcccde79f06739047cc9cb8cf7e3ac796279831c9504b2452f0378a1881a0",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_browser_states.log",
+      "log_sha256": "297ba5e675f3146c752a675c28515e4959a21d0d1d2c6cd6adec614ae36a1b76",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_browser_states.gd",
+        "sha256": "20ac2500f5e9fcb08c919ea2d3812f194a05137f62d4f363d661613ecb690f5c",
+        "original": "res://scripts/debug/verify_publisher_browser_states.gd",
+        "original_sha256": "b8e6157abf5f42d649f83a646e13b454201f632ab437421a9114342ddd13d54b",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_connections": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_connections.command.json",
+      "command_sha256": "6e124e969e9f053a98d1232c0f528b5b5848fb9a4e4d3d5267549d34ef0718ab",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_connections.log",
+      "log_sha256": "b45c35c95016a2206ae3880bd2c9a237c4022177bcedf951e3e1c140b613281e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_connections.gd",
+        "sha256": "c1623a4316b37e92f52855d960db35626a5805c566bc818505cf786be76885dc",
+        "original": "res://scripts/debug/verify_publisher_connections.gd",
+        "original_sha256": "d22058dca58e6bb5692df3672bfde3b0a31de8059aeab306364bb3d93cff2466",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_connections_ui": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_connections_ui.command.json",
+      "command_sha256": "c676c9fcefd2eb50afe9d89e2e2ee545283ef9bf7d22ab63ab766a27398452f3",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_connections_ui.log",
+      "log_sha256": "aa6cf777eebf38defd5af9f03fd68b73feb45f10ab428044c824b0958d4faa73",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_connections_ui.gd",
+        "sha256": "952ccf9d62d05d4f5c5738e11ebc73f188e2fa5726ba0db230c1772cc3948f8c",
+        "original": "res://scripts/debug/verify_publisher_connections_ui.gd",
+        "original_sha256": "b15aff774ea36a9ad07444222dca422044392a27793b117e2497529cb5b1de72",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_list_progression": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_list_progression.command.json",
+      "command_sha256": "1826a47bda8452a110ed9cb7c55c5a4bdc0ec7c7d55ec692578fc4bf00b3b327",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_list_progression.log",
+      "log_sha256": "126cc6c869c729982fd690d1925cff3859b99ee102a7f521658a23d16d393bb8",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_list_progression.gd",
+        "sha256": "93471fea9575054ca15279b55a909746064c6e5a048be1902d681286e9e461b1",
+        "original": "res://scripts/debug/verify_publisher_list_progression.gd",
+        "original_sha256": "b47b7982d7696da635177ed7949725c64dd4d2fdd52695b3aaa08e402adf2c6d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_relationships": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_relationships.command.json",
+      "command_sha256": "23b52a475963ac93a027060e77c5ff31bf1e5384fe5d24b9e98fafa52eaceea7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_relationships.log",
+      "log_sha256": "f287288bd2671051656dee4c2b2c3d92a5e6b8e24ab2f19565f83874632af261",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_relationships.gd",
+        "sha256": "44e70364fa769566fcc273ec4b3d971f7b215c6ea3d509ddd18414215caeca6b",
+        "original": "res://scripts/debug/verify_publisher_relationships.gd",
+        "original_sha256": "1193866fe7f0b10efe129cbab28e84bc8cee0bd4e2b39aa317051959cdb0bfb0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_support": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_support.command.json",
+      "command_sha256": "068436935a38585c21e6649ad11a69890c85aa11c02830d63b777b86d3ed0123",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_support.log",
+      "log_sha256": "cabb1e1dfc8aa9a0c4d4361f396ff293617649f06574c12c30af2188dc66e47a",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_support.gd",
+        "sha256": "7d567cbaa47af1908c10db82e61d2818469b9f3f6b4be9014521417a887d8912",
+        "original": "res://scripts/debug/verify_publisher_support.gd",
+        "original_sha256": "c51b6769c51e88c386dbb485df1553bca9fde416c7c3ebe2dd38a3368c53fc9e",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_trial_cash": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_trial_cash.command.json",
+      "command_sha256": "564bc6307f7d02cf8b79bfa324683e377146138107e3d9d92104026d8bab408e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_trial_cash.log",
+      "log_sha256": "75e700dc10c2c1188b365a6dfa9beb828e2e91f4242908231bb48759a68bea18",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_trial_cash.gd",
+        "sha256": "6c538a60da45defb2637c2679c5065d46a25b6147135b820f3651cce258f1fcc",
+        "original": "res://scripts/debug/verify_publisher_trial_cash.gd",
+        "original_sha256": "307db9e7cd0cf3aeb69876c383a0f5077d464e1a8c9b679b5236b1b8bff8ee45",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_trial_liquidity": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_trial_liquidity.command.json",
+      "command_sha256": "47348f7c2928bc6a5d200e06fdb7dcb1fa1fc05a47727aa314ba2677c72f3c7c",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_trial_liquidity.log",
+      "log_sha256": "34a1591e37bad0b51d0d9cd9bf8f2373d7ae2d8261afe92d2540cfdcf50f86e2",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_trial_liquidity.gd",
+        "sha256": "cde228ca64f552d459ab73432faafdf49abb80773f228906eef5585a11abe84d",
+        "original": "res://scripts/debug/verify_publisher_trial_liquidity.gd",
+        "original_sha256": "f12c8290ef559dfb96ad3ddb4322a14fed7f75ed3630bbdd439d9a9f4b113fce",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_trial_offers": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_trial_offers.command.json",
+      "command_sha256": "0ce3bbe82110c55d905661052d72a19466d0507414b1a8ad30d2b5a6607a3958",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_trial_offers.log",
+      "log_sha256": "6186c994dc049e5c5f272743485107ef3498b4358f6f8bb8b466ccc8420eca86",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_trial_offers.gd",
+        "sha256": "b4174bf5c35cb382ab061f926afe7739b9cc03474f98d606bc6a9bf88ca6afb9",
+        "original": "res://scripts/debug/verify_publisher_trial_offers.gd",
+        "original_sha256": "c000ae846880c0c764d07f2acece6d7cf91b364cd5daacce74cfbfc0cd0ca038",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_publisher_trial_promotion": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_trial_promotion.command.json",
+      "command_sha256": "693be7bd23ad36fe8492721f5e1e431a27259af4a7da41a6ff17c38327af58ed",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_publisher_trial_promotion.log",
+      "log_sha256": "54c02d47f2bf206e52f3d80bb4685c3c6559993fa2b03c11d80de94e4ea49396",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_publisher_trial_promotion.gd",
+        "sha256": "f8e3a170ee193c5517fc4c1db7141ead89cdea77cd624c88ed5c6115a467d40d",
+        "original": "res://scripts/debug/verify_publisher_trial_promotion.gd",
+        "original_sha256": "4c45e89e76320b4e9d7db969212f99c79bcd4f83a43c026cc77d43324403e198",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_queue_source_migration": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_queue_source_migration.command.json",
+      "command_sha256": "5783466a46cb70bd3c584de82ffdb39fd8fd24782f78a94c7d56dc3df8bcfc94",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_queue_source_migration.log",
+      "log_sha256": "bb3b75c767ef66c90d36b9caef15d1a76002a1707886da000a495de4fdbbdada",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_queue_source_migration.gd",
+        "sha256": "b4b72a97b9b75cce7b808ad76de2de294e3e12698fd59143fd44edd897660862",
+        "original": "res://scripts/debug/verify_queue_source_migration.gd",
+        "original_sha256": "b2cb39b88cbafcffb1d118ad21c49d487a6cde4c1924362915a5407f9917cbf0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_redraw_class_parity": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_redraw_class_parity.command.json",
+      "command_sha256": "32b745ebcf2f7982f26806bb4e4ace0fe74eb1d330719423984dc1aebc7bd1a7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_redraw_class_parity.log",
+      "log_sha256": "b998e002a142f29e3d3d69910b4194d8fe883d85e6f7f3b2d493ce5ffcb6a42a",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_redraw_class_parity.gd",
+        "sha256": "db3045c2d965faf018a294441d83651358df81283fb249d50f764f82bd4b0ac6",
+        "original": "res://scripts/debug/verify_redraw_class_parity.gd",
+        "original_sha256": "c43d1b79629060d55cf21cf5e5813d7ae57f6e69c361edf1d6ee8974c1bbe2b3",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_release_menus": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_release_menus.command.json",
+      "command_sha256": "4620f9fe348d9131d8b8c086c4b9e1ea9e0cf602a556b2235fb4cff108715990",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_release_menus.log",
+      "log_sha256": "bdd2c0e60b961c0de1e9338722c37db625709479f6e2eae9de717ecb5f25ffa1",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_release_menus.gd",
+        "sha256": "a51a52dc44c1c91f51f644f54b97596ce987132b38f2b8391018e70c3458f52c",
+        "original": "res://scripts/debug/verify_release_menus.gd",
+        "original_sha256": "ce9b4ed729e016ead159d68831db28368c19f0aa55e0110f8282c8ad52485647",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_research_integration": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_research_integration.command.json",
+      "command_sha256": "3978c32304b15e0a133d4d473dd2187f190cad88313a0e36f73dc9872211d812",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_research_integration.log",
+      "log_sha256": "a04f7b4e188a072926444c577ef274a70b92f9bf1f09848d4bebc612c92737f1",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_research_integration.gd",
+        "sha256": "b9b07c13c9ec5fa14094026959b93855999ea4d72f0ea6ab07bc4e97433c9e2c",
+        "original": "res://scripts/debug/verify_research_integration.gd",
+        "original_sha256": "01e33fe640a8363f6b19872a898c0fc0adeefdcd08ba4c2c29c0e9486948b357",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_research_ui": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_research_ui.command.json",
+      "command_sha256": "661c01aacc98db0c95fbd82ad4d23b5911695ad8a5b610cb8833729aba5943c9",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_research_ui.log",
+      "log_sha256": "7f5859cea43b560310a0643c8d9cf559fbe8c5dd788f7e99b1334300ca9a899e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_research_ui.gd",
+        "sha256": "752f50d27a7190b5cbf599bf07dde13b5c173285ef60baffee0fc509f6642159",
+        "original": "res://scripts/debug/verify_research_ui.gd",
+        "original_sha256": "25e4ed61d725dbaef42f616b2751e06d69e6943f347618fa3387bdb174573754",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_rival_gameplay_activation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_gameplay_activation.command.json",
+      "command_sha256": "037fe0beae8c1a9ede232f68eef778e146e30d4e1d5c9cd1c045ebe1569dbddb",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_gameplay_activation.log",
+      "log_sha256": "6e2613a337085b863010336019e7cd4a19eee7c3f0ba82d5018b062e027b3e43",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_rival_gameplay_activation.gd",
+        "sha256": "8749242eabb529f28f683ba096c4968a609915a7e08278ea6f1b8d6cf61a4261",
+        "original": "res://scripts/debug/verify_rival_gameplay_activation.gd",
+        "original_sha256": "c0a7ae652c42ab12806d06b22a6a31b95e492d947527c38dce66f5fa9f78d7c2",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_rival_gameplay_cold_continue": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_gameplay_cold_continue.command.json",
+      "command_sha256": "793d7925f4c607a00f212971de3a07723ae4db0dc2dd9d85945509a1ad936e92",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_gameplay_cold_continue.log",
+      "log_sha256": "52633e0a0cd6ee4af8154c827864f937921551b441ec1cf885d83974d686e96c",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_rival_gameplay_cold_continue.gd",
+        "sha256": "b518f05d8fca810a67e233d3247b6345a7dbe53c16640b706bc4561e999e1ca0",
+        "original": "res://scripts/debug/verify_rival_gameplay_cold_continue.gd",
+        "original_sha256": "f8687ef4312094c5d8ef46cd991e1258bc1094ced2e7042c2aa758de04560c34",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_rival_synergy": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_synergy.command.json",
+      "command_sha256": "5d69c7bdb6e3601a97b79daafb10449b07de8aad5380d024d8c1ce24786436e3",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_synergy.log",
+      "log_sha256": "08b5ae6460ad178f7865c53792d895e4acba01e7a3a2487ed46de347482807f0",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_rival_synergy.gd",
+        "sha256": "ca6ff85b6ef20834ddc7b41f35dab7787ba51918e6947c97bc77cb68bdde40c5",
+        "original": "res://scripts/debug/verify_rival_synergy.gd",
+        "original_sha256": "df39b7060e4917439e4e3f53eb6a53d175433604b40af2e7f369c93e1668f63c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_rival_trial_activation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_trial_activation.command.json",
+      "command_sha256": "22529a066c655cbea5318bb89c168321df5a26c1f48a155b4a59f1c38b4e21c2",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_trial_activation.log",
+      "log_sha256": "94d030a5051fd40cf40c7396e750f58a827be833128de490e8774fd6513b4735",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_rival_trial_activation.gd",
+        "sha256": "92fc17532049d6e844309a15d26f74c4a47a90a21375b23f0c5380ec457eefe3",
+        "original": "res://scripts/debug/verify_rival_trial_activation.gd",
+        "original_sha256": "7435f2e22b85e8e8c7826d698f719a7d680468c92e72e9c39fd8c3bd340b7b2f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_rival_world_foundation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_world_foundation.command.json",
+      "command_sha256": "24d7dd48f6e5493d5b61a5bfbd9984064b983a7647ed1209dd05e1a0ccd12194",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_rival_world_foundation.log",
+      "log_sha256": "1e0f7523d9c731eda17c546c63a5c9934b16252ff6000155559c72c8ed16bde3",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_rival_world_foundation.gd",
+        "sha256": "38d143991ebf4cc20ccb6f03a074e63ef0e71f2f263f2cc02694de01b2e79eea",
+        "original": "res://scripts/debug/verify_rival_world_foundation.gd",
+        "original_sha256": "7099b44b1ff5e8ab4b4641687cdae4c6e34099d367d0f9e517e6643ca6e7d516",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_run_calendar_and_studio_entry": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_run_calendar_and_studio_entry.command.json",
+      "command_sha256": "4018e26909e88528c9def95bb8784448e054600e33223507cb4c61edbd74b86a",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_run_calendar_and_studio_entry.log",
+      "log_sha256": "e57183c8119a078ac093686aa68cd350fcb06fe574406d1c5c8835a8f7fb4856",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_run_calendar_and_studio_entry.gd",
+        "sha256": "5c757ec911961c0eecb58a32e5e7ab944f73f600a1833a48150a009f5a5909d4",
+        "original": "res://scripts/debug/verify_run_calendar_and_studio_entry.gd",
+        "original_sha256": "3bbf7889747bc12d00388510fc20454c74d5b38338d690dfd640c156ebc82a22",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_run_finance_and_beta_insider_state": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_run_finance_and_beta_insider_state.command.json",
+      "command_sha256": "2fb5faeee53c575be8124ebf3454815950c35d37edbcabf9a001981b85252fc9",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_run_finance_and_beta_insider_state.log",
+      "log_sha256": "872683aadb9cd9d33ec151fd88e5f51ed988f920c4cbb5ed85af02528063c5e9",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_run_finance_and_beta_insider_state.gd",
+        "sha256": "4812aebc002142e419c3f1ab07576c5be3d5888faefac128d30aba8cd702639d",
+        "original": "res://scripts/debug/verify_run_finance_and_beta_insider_state.gd",
+        "original_sha256": "6e34b7dd40d159fdc91eb21d0f2bbaf1953bfa09da080e4104420672acb929bc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_sales_earning_and_settlement": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_sales_earning_and_settlement.command.json",
+      "command_sha256": "f3b5f24eb9acd00d5fa9dac1f1bf1948487c20b954be3af40b56bcbbbc87576c",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_sales_earning_and_settlement.log",
+      "log_sha256": "a1cc7dea5f0f11525fd91b47376c0019d0bc14b66eba368d5dc26e4e151d3261",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_sales_earning_and_settlement.gd",
+        "sha256": "de797d51558ec3ecb2375fd532b79b2c321c409681d2a4e9982117731b3d3746",
+        "original": "res://scripts/debug/verify_sales_earning_and_settlement.gd",
+        "original_sha256": "d3f73fcc6101088a292833c9e8738f3fac5047077d48f40425010b654b2e7e50",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_sales_revenue_hud": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_sales_revenue_hud.command.json",
+      "command_sha256": "32c8542d521b18d1488f08420f540700eb21cc6e7a349962d32d95e28aa9dac2",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_sales_revenue_hud.log",
+      "log_sha256": "25d5ec9b1d43212a0aa47f78e8c56fb0d085288304b24e00d8c5507d27e1fe7e",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_sales_revenue_hud.gd",
+        "sha256": "64e25663b00422b78a9de871536bd6d518d6a41ed704e8d6498c167bb133e081",
+        "original": "res://scripts/debug/verify_sales_revenue_hud.gd",
+        "original_sha256": "d118c40e2da414d2de6f0a31212f28d88ed0a79dc1f5d73d4c4bc3ab789e0b93",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_shared_redraw_and_priority_adjustment": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_shared_redraw_and_priority_adjustment.command.json",
+      "command_sha256": "94cf258cce9ba6edeeea21822de6140ead3073d03aeac7153e7d49afd6cd8ed7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_shared_redraw_and_priority_adjustment.log",
+      "log_sha256": "4928dada2eb185a3521214c4da689152dbfccddce1ea5426b52f9d5778db17b8",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_shared_redraw_and_priority_adjustment.gd",
+        "sha256": "0029fbb253b5b7afb44d75314bad03391198ea50c023a99dda65fc6bbbea075c",
+        "original": "res://scripts/debug/verify_shared_redraw_and_priority_adjustment.gd",
+        "original_sha256": "f7adef01c2e77326c0cb6186102430ba767de13ad9a2d8fca45e9c373f009931",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_sidestreet_contract": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_sidestreet_contract.command.json",
+      "command_sha256": "c693e579736e860e0cfea7c3d162155a4e2a57b18272958e297cbf103be544a1",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_sidestreet_contract.log",
+      "log_sha256": "3ad93d7aba6b553a8397f54bce0df388231ff9eb941fb446ef52246c4243ebd2",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_sidestreet_contract.gd",
+        "sha256": "4b0e0a4f9a1b11dcc1ea0afbde20fdfb7560f89bc7689bda0943ffdd87771f42",
+        "original": "res://scripts/debug/verify_sidestreet_contract.gd",
+        "original_sha256": "cd7e164fdb814177f7ed1be8f07b8dd9a1f8d2e5d6d8ca1e542ed989da2b9f39",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_sidestreet_scope_and_year": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_sidestreet_scope_and_year.command.json",
+      "command_sha256": "adc5457276f710542d0f093b26f5adfdfe51f48205686600245ba1fd820a91d5",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_sidestreet_scope_and_year.log",
+      "log_sha256": "92e7af7a1f36490d63ad286ec5164dfc7ef826d08cb8ff68f9c9a5d08c017f19",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_sidestreet_scope_and_year.gd",
+        "sha256": "032880984aaf970a2e3cb9b2bec906402ff180614ea6864cbe19b63f6c5d069c",
+        "original": "res://scripts/debug/verify_sidestreet_scope_and_year.gd",
+        "original_sha256": "6da2c4dac17743a845ef7710148657623fff6caaa1452b26ef01a3b826505883",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_simulation_efficiency": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_simulation_efficiency.command.json",
+      "command_sha256": "191b2ebb3bc849919e6fc4493ad76ba70667ef662b196e26aa3547568335357a",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_simulation_efficiency.log",
+      "log_sha256": "3599fec671a7f6f26ce99a3dbe34ccb53e592ca89fd88950b991c7558354265d",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_simulation_efficiency.gd",
+        "sha256": "94dad6790b446abb25abbdb5fec576107e777fa86211925540ec51a72c02b0f5",
+        "original": "res://scripts/debug/verify_simulation_efficiency.gd",
+        "original_sha256": "c61e003663eadecae708377d3d6dac2c1bfc9da4579d3b6109344b097cc5c347",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_soundtrack_sync": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_soundtrack_sync.command.json",
+      "command_sha256": "976a41d0bc9691a7c36152cafa04902dc4461fc71b89e8a9c4784219cc027d9c",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_soundtrack_sync.log",
+      "log_sha256": "2965324d3b833d3f4f1ef5504b1500a07990f7064194452730df138850308f26",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_soundtrack_sync.gd",
+        "sha256": "ce646bfcf08ebf4300490b8f0aab7a763d0bbc8f1ca31b3132e14cd30f77fd14",
+        "original": "res://scripts/debug/verify_soundtrack_sync.gd",
+        "original_sha256": "ab27819927a44d7317ac55f000f174d21ff13dacf285e4b93254eb2b8ff6b9f0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_startup_recovery": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_startup_recovery.command.json",
+      "command_sha256": "30579f131e41e62018474504b72c73fed499748285e3e0986a913067c5d25fd6",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_startup_recovery.log",
+      "log_sha256": "563f6d30ba5ec017a7b5135444f1c49799248f4efe8517d6dcef571eb403a3f2",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_startup_recovery.gd",
+        "sha256": "83a51fc10041420e987c130d875e2f236bc16edd5a11ef981fd5b0239cb8cb8f",
+        "original": "res://scripts/debug/verify_startup_recovery.gd",
+        "original_sha256": "bb7469dc113dd780fcb2d80350fb5abb448105ff1eb55f66c55143ade9e97539",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_starwave": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_starwave.command.json",
+      "command_sha256": "de779478cfb9dcadf44233a9f172e2575ff109b571e93b8e2323340d691c28a7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_starwave.log",
+      "log_sha256": "46ffd6ee129be867c0721183972d5fd8e17f35c57a6d977709eae36c712566fc",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_starwave.gd",
+        "sha256": "19c8877aa301c48ef9ab96667fea52fadc952ba4619a4d3529b11cdfc2487d56",
+        "original": "res://scripts/debug/verify_starwave.gd",
+        "original_sha256": "d89347e5826662643a28103117ae4578a58992b954467952632ad8e9def592e3",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_starwave_ui": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_starwave_ui.command.json",
+      "command_sha256": "14b61251c7bc764f90e070a0060a0161f4c9d05c856ee68f3d645a68ab6422d7",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_starwave_ui.log",
+      "log_sha256": "ba3551f6b64a3a1c6c6dc91bf19bd1fa76cd2d419cc0e70d39470f04f731e15b",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_starwave_ui.gd",
+        "sha256": "a7444447d22fd2f50aaf81155fd0c62f39e968b0037ef40f795e00aad5948d27",
+        "original": "res://scripts/debug/verify_starwave_ui.gd",
+        "original_sha256": "75bbb8f94963a6cbef9cea0445dd8d9a403cf7c81dca3ab0617b8e8b72458c9e",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_store_cone_parents": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_store_cone_parents.command.json",
+      "command_sha256": "146937d1becd90a344ddd4455f64835b6baed4a4a0a0b5cb983b4a22e586e3df",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_store_cone_parents.log",
+      "log_sha256": "ce0dbf85cb65d85ae4094d8ee4687da3e12fadd211f6469752a4efd3002d81a0",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_store_cone_parents.gd",
+        "sha256": "959212ef6a498f8f423c69d24db0a2d6aba6910fc3b1f1ebf4b8b55796fd432d",
+        "original": "res://scripts/debug/verify_store_cone_parents.gd",
+        "original_sha256": "fc1a9c212285e667415c206a888ac3ed6d754edbf0e6888cccf2e73f9899f744",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_store_hud": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_store_hud.command.json",
+      "command_sha256": "4889159e062106102c98bf18e9d70cd0c614bec299f1b14c87c01610536d7069",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_store_hud.log",
+      "log_sha256": "a6ddc55f27c060a25a9887b6adb683fabffbacfc793b97174a967b749421cf47",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_store_hud.gd",
+        "sha256": "6ee52139c05b70b4de75443191d3ac78cd9a66963cd7a0dd8f658c9d5c92b412",
+        "original": "res://scripts/debug/verify_store_hud.gd",
+        "original_sha256": "fc34723fba15e0e11dd42794c687d0f77c7fcadf3e2789cbcc40a4d2b1f8c232",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_store_shopping_guidance": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_store_shopping_guidance.command.json",
+      "command_sha256": "f842864c6fcdbd9086b217dd6198b6b871e32ee9f56d1896f1320287ec25350e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_store_shopping_guidance.log",
+      "log_sha256": "40d335c4f60f7aa8015a3e3733edf1819daae0f0968302d77e0a12af964e4f39",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_store_shopping_guidance.gd",
+        "sha256": "ffc6636e97ad555eb1a9d7e8c02b2f8b91d31285dbfe7c860236c3d9bf2b01e3",
+        "original": "res://scripts/debug/verify_store_shopping_guidance.gd",
+        "original_sha256": "9461e3906d9eabaf205ec986b042708c28cf9607751e639ed989d7347fb57e08",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_store_study": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_store_study.command.json",
+      "command_sha256": "1099f99dab556fe004ecc34b8c2293c9da9d24deab309ee00a550fa51ceed7fe",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_store_study.log",
+      "log_sha256": "b4f5056f761adf6665b160908e9a9de190c5370d64e8171e263561791534c390",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_store_study.gd",
+        "sha256": "bc7ca0e10c4a4f16a2965375d59fc7b5dd1e30bfb857016a0a8504f57d477340",
+        "original": "res://scripts/debug/verify_store_study.gd",
+        "original_sha256": "07a30838a418b374e7bb6c3f9d13b59b7c2c1afac921897d234f8be25ac35883",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_checkpoint": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_checkpoint.command.json",
+      "command_sha256": "fa856927f9ef7455d9e42241f0452d008b853852c4519587ec1d57d172936216",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_checkpoint.log",
+      "log_sha256": "e76a043633935be7fbcc092fc9cb9d31a5674b95e2bfa03c241e7c3fbbc69934",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_checkpoint.gd",
+        "sha256": "45cc6fe9bf6c4e060c136ce5c1bbe166dfb863c402266255b21e8b1afbb6bdf3",
+        "original": "res://scripts/debug/verify_studio_checkpoint.gd",
+        "original_sha256": "2628beaab48c608b6d4b3594d05c1b5a79f81b37150960ea2fb6797678995d72",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_fanbase": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_fanbase.command.json",
+      "command_sha256": "e5dabe82fa8a3a77d4deab36b68a29a5a0b064cf932f20cfedff7fc0cd012606",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_fanbase.log",
+      "log_sha256": "e14ad1069c13a121cfd7407362169c4bc7a5c0653dbf109bd18e7eacddcf21a9",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_fanbase.gd",
+        "sha256": "2423e6957e256dcea639c3ab68f776bd47af6c679ef68aaa3e07143dee3c4287",
+        "original": "res://scripts/debug/verify_studio_fanbase.gd",
+        "original_sha256": "9ef116a90fccd232256c747f1c6e2d8a4582cac8df2081b95f0075d587881ccb",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_finance_integration": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_finance_integration.command.json",
+      "command_sha256": "43f137e3c937e3571c0719dfba4082375a37eeba006d07484fa0dbc0a72819e1",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_finance_integration.log",
+      "log_sha256": "ac2268b7849591b29619e5cd6c4dce067ae63f9b5ec9ed001d83f771be4655a0",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_finance_integration.gd",
+        "sha256": "5344cbc0dde55cbfb8023bb120ad64ff25aea285456ef81fc355d79325b11511",
+        "original": "res://scripts/debug/verify_studio_finance_integration.gd",
+        "original_sha256": "49d200927e0bec9f8109d2f88283285ca0e69f027ea9d934c2586c559ee77770",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_finance_ledger": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_finance_ledger.command.json",
+      "command_sha256": "228455cd6a4dbe6fe770c9c21af9844be6e2159b994ef014d4b5d86f4c4f4d3e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_finance_ledger.log",
+      "log_sha256": "85d72800431f12a73549949c001b57dc6d19fbf5d75b8099e2fdf50b10a342eb",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_finance_ledger.gd",
+        "sha256": "fdc66b28eb1f54d412d8f3f88bac9beffc3b9713fee5a7abc5f8e4c28ffb30d0",
+        "original": "res://scripts/debug/verify_studio_finance_ledger.gd",
+        "original_sha256": "fe8fdb70d339de4c23236cd592984dce5ec6a81393a4bcc3df92cbc8a12a79ff",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_finances": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_finances.command.json",
+      "command_sha256": "ee8c4fddbcc85a7c5af76eb4654792fcd85d640f44547c10c44be56e903e8510",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_finances.log",
+      "log_sha256": "013361b9d9d61800bd059d6d39a168c8f8f2e5868b75c7702e90fe82c7991ee7",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_finances.gd",
+        "sha256": "66f56af5e5f04d5f9421b76a56e19f18f3f940c6f5f679502a62eb88cd670a39",
+        "original": "res://scripts/debug/verify_studio_finances.gd",
+        "original_sha256": "a55c42cccc523636fc7dd3ea3fa2ecf6b067e6780c685290bef803e6cf81a12f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_folder_menu": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_folder_menu.command.json",
+      "command_sha256": "a74f968b9ab18ac5145f59dddd8a80af5517c536d6bcf61eb6ed12ce612bbbe8",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_folder_menu.log",
+      "log_sha256": "7c3cbc0f62ee55503475b92b382baf6adcfe558bdaa26df1e0efae918ce88d93",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_folder_menu.gd",
+        "sha256": "9cde925eecbe515f874cb998871a0c298eafa8a95fb9c4f0df301ef5675c618c",
+        "original": "res://scripts/debug/verify_studio_folder_menu.gd",
+        "original_sha256": "2c48d3ac0bec1ef0625910b610c714568127a13843241c1c34db2640d9f0a621",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_mouse_navigation": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_mouse_navigation.command.json",
+      "command_sha256": "012dc2fc800839554de96df5c7f474775a09307f70ca6e675a84f5470b3f587c",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_mouse_navigation.log",
+      "log_sha256": "48782cbff6f843bba412aa7951ba05bc690787cf3d59289f2bfea1daf42ab7c3",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_mouse_navigation.gd",
+        "sha256": "874de9885b3d0b8408f9b3d6ce9fb7cd2503d07962f03377a126efa5a491662c",
+        "original": "res://scripts/debug/verify_studio_mouse_navigation.gd",
+        "original_sha256": "7e60ac7f486b80e8511591cfa24b1456ca451ae29dbe7f783ae282be1078eafc",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_roster_versions": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_roster_versions.command.json",
+      "command_sha256": "fbe2070222cec2fe1644b73d0f5092e8fa41de7ebf1c0dd461a4ccc1b03de3a1",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_roster_versions.log",
+      "log_sha256": "2856bd0217ea4d3aa7ba47f03795370ba0ae4f2cc6af927136c2c35491c78afb",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_roster_versions.gd",
+        "sha256": "11781473e118bdb632f62a02f5c4dc8777d7888ed298bb87e3e5f2e97ec5f972",
+        "original": "res://scripts/debug/verify_studio_roster_versions.gd",
+        "original_sha256": "e602c2dbdcfa3f5aaff7bf676009e28bb16c07853ea728b3510b4c8410cb474a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_soundtrack": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_soundtrack.command.json",
+      "command_sha256": "0d41e886b8300ba093cd1281a7c82f352518c3580cd71ac16d42faea5e5a8ba0",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_soundtrack.log",
+      "log_sha256": "28d984f87ddd59e5ec79a1fb977cfeb1fcee4af0173b217279afcdca7b974724",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_soundtrack.gd",
+        "sha256": "ed36ee5807ff5cea0ece979b91bc5689fe1be785e406c6341f98c866ed026715",
+        "original": "res://scripts/debug/verify_studio_soundtrack.gd",
+        "original_sha256": "8f777810e941a4478f7761a279f89ff5a61d8cfccbb0ed76fe44849c30fc0d79",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_specialties": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_specialties.command.json",
+      "command_sha256": "040c8fff9f487ef3f2f082e76fffde6352a4aac6851eca83e5beeb2319bdd87e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_specialties.log",
+      "log_sha256": "89790c29b8719b0125acca3e9697636feb77493213fb261db1fae3b3db2f8d48",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_specialties.gd",
+        "sha256": "815c7c5c60c3f631d9c8cba6ebb3df1293014cd31cba028042f1b225b8372ef6",
+        "original": "res://scripts/debug/verify_studio_specialties.gd",
+        "original_sha256": "2220b6605dbc214fa821d9effc04b48437343351c54881974cb34976cd7f23ec",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_studio_traits": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_traits.command.json",
+      "command_sha256": "0f005c6ba47e6b9745960c141e081efe380d0c6be3fa6af432a2ef74f1337e46",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_studio_traits.log",
+      "log_sha256": "d10b3c9a697498292f8f5d03d3471b71412dc9b354e0ff1d2244307740b8b2e5",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_studio_traits.gd",
+        "sha256": "2bad713e12698d24145bd64ea687003cfb6682808b9c2805ef4d9a791d334307",
+        "original": "res://scripts/debug/verify_studio_traits.gd",
+        "original_sha256": "a6d591f7ab6bc537139af6f28e33f0cd54919e820b40cac19fdebcf6d4c2c911",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_three_core": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_three_core.command.json",
+      "command_sha256": "8efc28575bda998c7a602ba2dd6b88afd9465e5d980eb54fe52ae4171d2416ea",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_three_core.log",
+      "log_sha256": "4fd47f9ced0841e37c5a50baf92ad8936954a839fa6d3f7fb3838c26dadcf73a",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_three_core.gd",
+        "sha256": "2ec32f50072a4dfc385b6f30a079a2bfc08e22abd2083491d25c82c79884fb87",
+        "original": "res://scripts/debug/verify_three_core.gd",
+        "original_sha256": "077b704404e640cebd098704696e5a397c26343918691d57dd073e8e67d6886d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_three_core_parity": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_three_core_parity.command.json",
+      "command_sha256": "709e4a3d5533aaad0bfc40079a669e4576606ee36dafe358aa6763feaa942c56",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_three_core_parity.log",
+      "log_sha256": "2018c0741dda70436d28a0f214f0c478c1ebce84a3361a672077ae7956957d87",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_three_core_parity.gd",
+        "sha256": "76d32022f9becc2e3ae693c5033ec1cbd62eb65f11ea773205d82047ca459830",
+        "original": "res://scripts/debug/verify_three_core_parity.gd",
+        "original_sha256": "fbb32aa4283fbefda155bf42f29048c0942f3fb07b2fcab0b314e2620a60f671",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_trait_effects": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_trait_effects.command.json",
+      "command_sha256": "7e81d52f263bc2d3758870cff13d9219e85d7b9fc76b07c57a5026c037c9074b",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_trait_effects.log",
+      "log_sha256": "eb1c8093006ecf4f43b4d9536b281ba4b4e97e8a708920a09bf978df2cf986d4",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_trait_effects.gd",
+        "sha256": "2eda6c5c2137c73aabe0b90092b0a69e351b422e8c4f7cf333479ba5db907672",
+        "original": "res://scripts/debug/verify_trait_effects.gd",
+        "original_sha256": "d00aecf929c3569709e40047b90590843a682ec3ff14ab741f00ce37c92685e6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_trait_lean": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_trait_lean.command.json",
+      "command_sha256": "8d8620db8e3fa31372bf8cbd3239495503b712c87e100e7c4c938f06c6f4d472",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_trait_lean.log",
+      "log_sha256": "5153b39e99f3575e5fe11e90950b83ad5ceeb14a6522547a5d7546d35d74837f",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_trait_lean.gd",
+        "sha256": "6d768938529bfea197503dde7e615dce86801106572ef3a6c56567beb718506f",
+        "original": "res://scripts/debug/verify_trait_lean.gd",
+        "original_sha256": "3c0a9753543599424dac7d14330190c02147ea58c1885855e536fe6c5a635bc9",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_trait_lease": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_trait_lease.command.json",
+      "command_sha256": "969a197a0b58faa0df50e1a22ca99dcdec45acf766abf52673899d978a7358d3",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_trait_lease.log",
+      "log_sha256": "707a0d9492c9dfb59e1d4e851e71caae0c3fc63e5f2d5c15316ffc773b980dc8",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_trait_lease.gd",
+        "sha256": "d07f15c5bdaf52ed7f4f535f04665971829e82c0f001ee1058e137fc8dca922a",
+        "original": "res://scripts/debug/verify_trait_lease.gd",
+        "original_sha256": "aaaa6a7207c4489c67c98c7ff98b06f0bfc36ea9631f696d87bd64785c6c0edc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_upper_card_fan": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_upper_card_fan.command.json",
+      "command_sha256": "74c549a4023711b47a0576419c3de218bdcbbc719b03e110c769b5c8ce31ad47",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_upper_card_fan.log",
+      "log_sha256": "65d8ab45fcc7669a13d2d4466f00710e9766c07f1da76f8e45006daf46f580f2",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_upper_card_fan.gd",
+        "sha256": "4d8ce1fbf58b59f1f7e1350a3dcb2f27417bf0383218dcde1050c3d8acf0fd14",
+        "original": "res://scripts/debug/verify_upper_card_fan.gd",
+        "original_sha256": "36502bbb3d4457a72c45734866b00ca0ac07e0bcd73b3e596b9c726ce2989384",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_usability_bank": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_bank.command.json",
+      "command_sha256": "1ad8887e6158974395bb074e841cafcb45445836397870ecd8f91cba6d7db6f3",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_bank.log",
+      "log_sha256": "1f24682d9b01c487c09e61e3b9c7d510f5f736ad6f80f70fdf1cd715e4cd7a05",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_usability_bank.gd",
+        "sha256": "bf37440e58f6e06790b03272cfb96a279e38a6bda2ab8c02a5731d0af664a576",
+        "original": "res://scripts/debug/verify_usability_bank.gd",
+        "original_sha256": "6d388e563d8f219db9f6e963c1bfd8115c5fdece1c42f1d3447aaf7f48934984",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_usability_persistence": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_persistence.command.json",
+      "command_sha256": "62ffdbb9c3e7f38e3c5f4167dc3766e710b7e7d1d9f6a9a967b539ecdbd9fd76",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_persistence.log",
+      "log_sha256": "2c10f606d08ae1882433dff5ea2fa4ad0a2b2e3bdb8c504a927bfa7c9f60d935",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_usability_persistence.gd",
+        "sha256": "71cd3259713a6f9055bbab9a431df7d502f34d876d8c9bb49bfb7edbdb759301",
+        "original": "res://scripts/debug/verify_usability_persistence.gd",
+        "original_sha256": "5e282f3cb545f8676a18549cc63782835eb44ab42f37948e4d0af39481eda806",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_usability_priorities": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_priorities.command.json",
+      "command_sha256": "3a8702c8575d3afa4d2001cdd7435c49864ef85e79ac7d337c498686a543fca1",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_priorities.log",
+      "log_sha256": "3ef1a5e4afc3b0deef01190af4890da6b15b330376b9e98b8f5e735996669ef1",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_usability_priorities.gd",
+        "sha256": "ccc1a043fe508a794e19109f1e6db121cf6835dccc8d8c60e37b953896baefdc",
+        "original": "res://scripts/debug/verify_usability_priorities.gd",
+        "original_sha256": "b05512eaf9f5a9dc58c657a4a58ccac3ab9f7c51a40dd8812c009c6c6841a8fb",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_usability_store": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_store.command.json",
+      "command_sha256": "41f94844239dd73f8d37810992213243f90cf0b6b70a2411f673384f24341323",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_store.log",
+      "log_sha256": "f62ebb18dfe6fef1e7620c2f380a9ca67aae1776e6af7c3e43eb012c4cf90533",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_usability_store.gd",
+        "sha256": "4790cae10a28d760b07d37d012e34a6220ba070785ee9f9e41e90d0c403380e5",
+        "original": "res://scripts/debug/verify_usability_store.gd",
+        "original_sha256": "8e67814c34839c91bdabe89d1606cf44e28e203415aeae8ae2b6ee6c1b4659f6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_usability_traits": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_traits.command.json",
+      "command_sha256": "5a51f7cb79d468a6f7187d9afa946dc7c5627d50c720cb8c5f6faba9cf9610c9",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_usability_traits.log",
+      "log_sha256": "a0393ec5bb1ec2fb795448530b2ef20c21cab71a907b36b24029839d10c9f401",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_usability_traits.gd",
+        "sha256": "88c66ba9f47115a15d9450b3c174d471c37dd82db79ee1b71a80348a995dd73e",
+        "original": "res://scripts/debug/verify_usability_traits.gd",
+        "original_sha256": "df276057594e0167c9db212df745773059a7888140df778eb7243cc942c6b28c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_victory_commit": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_victory_commit.command.json",
+      "command_sha256": "48d3c9fbdd99e09987c3b83c1c5dd0e82e626f839ac57f4e20559f1531e1c793",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_victory_commit.log",
+      "log_sha256": "d546969bfe0345a221913d2d60a200157de637bd5618c2e799e4d846adcdbea2",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_victory_commit.gd",
+        "sha256": "5ca8c4986af57ae79f9bee6da5bdf01f8c151db1f6be4c1fff53c9a5dd265e02",
+        "original": "res://scripts/debug/verify_victory_commit.gd",
+        "original_sha256": "da2e623b031fc61d822b5bc1bb6aa286405e5816ebb467b10d127875055bca69",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_world_restore_file": {
+      "run": "corrected-continuation",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_world_restore_file.command.json",
+      "command_sha256": "c2ffaa8b3fa2f040bffb4a03bad6a97f562ea140882eb8345acb533dc7b12368",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_world_restore_file.log",
+      "log_sha256": "542e690136740893fb99f67b20f1535705621ac25180b021ede19302f4c5ee20",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\wrappers\\verify_world_restore_file\\verify_world_restore_file.gd",
+        "sha256": "e9f21414967f76745a46209b7109992f4ebb6a585196aaab683bccec2a2d76ca",
+        "original": "res://scripts/debug/verify_world_restore_file.gd",
+        "original_sha256": "83b95c11fb1d82717fa9e57dbe5ed7ca1784b986331a6f49b217b31422cf2c11",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47737
+      }
+    },
+    "verify_zero_work_release": {
+      "run": "full",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_zero_work_release.command.json",
+      "command_sha256": "92424846d0b5ae01b0be320f80119f985f2a2410bb241e3097236eb2e132174b",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\verify_zero_work_release.log",
+      "log_sha256": "76aa2ef6bbc98ae47e1ae4490c3196580a0b670bf74b26c316f6107a1eb6d0eb",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\full\\wrappers\\verify_zero_work_release.gd",
+        "sha256": "a38ed0d44788930e02914cb6a87b0400215e660a37430cd0657b725ad92cce2e",
+        "original": "res://scripts/debug/verify_zero_work_release.gd",
+        "original_sha256": "94be9011743c9ffc1f795435b220620429070092c2f5f24d2a2f3ae62b41357c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47736
+      }
+    },
+    "verify_alpha_shop_pack_cold": {
+      "run": "corrected-continuation",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_alpha_shop_pack_cold.command.json",
+      "command_sha256": "269c39cb3ba310fd64be394c4e27bc552aff87eca2a701d2cf22e1898bc36f3e",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_alpha_shop_pack_cold.log",
+      "log_sha256": "5a6a9be4d0f7c89fc705c59da44fbf9416ee1279211881d09bf255155d69cb98",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\wrappers\\verify_alpha_shop_pack_cold\\verify_alpha_shop_pack.gd",
+        "sha256": "c2e1c5719fc994f249772c167f0d2957756d21907e167cdbb8f7094f280625c8",
+        "original": "res://scripts/debug/verify_alpha_shop_pack.gd",
+        "original_sha256": "0ede8b194334bee12f60680095b9cea5ede9f8d18c59f4587e71f709e7677872",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47737
+      }
+    },
+    "verify_market_browser": {
+      "run": "corrected-continuation",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_market_browser.command.json",
+      "command_sha256": "9c763268433c3aaba467821dabb263d91d418a4d76ece7727145b1fa73b1ca41",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_market_browser.log",
+      "log_sha256": "be02510c54a804d77c8651c3a48c087436673b2a57b5a389f301e553888fcfd1",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\wrappers\\verify_market_browser\\verify_market_browser.gd",
+        "sha256": "4972e132fac4d51d66af121676a0b7dfd87c041c76ac6a53ad59b25b6f0d4c50",
+        "original": "res://scripts/debug/verify_market_browser.gd",
+        "original_sha256": "92522b4aba206a2b5b47d95b8b0297766c9f8e5e2c194ba1fd8b1c894c71a43f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47737
+      }
+    },
+    "verify_market_release_index_cold": {
+      "run": "corrected-continuation",
+      "command": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_market_release_index_cold.command.json",
+      "command_sha256": "93b2e6b75da4f30e0ac9a916aeaac75009316a6a579f2fe9fc418f0a32e32034",
+      "log": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\verify_market_release_index_cold.log",
+      "log_sha256": "57304ce20d08bac54a1006a231bacaa312cbbec1d3f349cda549a79efbb766d0",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\corrected-continuation\\wrappers\\verify_market_release_index_cold\\verify_market_release_index.gd",
+        "sha256": "0c1c55fe9b89d08fa24bee197a83dadf78351a82628c5228ae30dd4018a37416",
+        "original": "res://scripts/debug/verify_market_release_index.gd",
+        "original_sha256": "b595f554ee663b608f97b435adede33f3dfbbcdd1341cc0d906eb14231ddcab1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47737
+      }
+    }
+  },
+  "campaign": {
+    "commands": 98,
+    "releases": 4,
+    "cycles": 42,
+    "exact_replay": true,
+    "telemetry": 99
+  },
+  "crown": {
+    "cases": 30,
+    "pairs": 15,
+    "audit_checks": 1036,
+    "same_source_cold_commands": 15,
+    "fresh_predecessor_migration": "NOT TESTED / unsupported candidate schema"
+  },
+  "package": {
+    "pass": true,
+    "exit": 0,
+    "errors": [],
+    "command": [
+      "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\package-v2\\patch-notes-demo-20261007-706egcsj\\demo\\Patch Notes Demo.exe",
+      "--headless",
+      "--quit-after",
+      "20"
+    ],
+    "cwd": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-queue-closeout-20261024-v1\\package-v2\\patch-notes-demo-20261007-706egcsj\\demo",
+    "pack_entries": 383,
+    "canonical_unchanged": true,
+    "release_ready": false,
+    "scope": "Same fresh audited package; isolated headless release EXE Main Menu startup, no path override or gameplay interaction."
+  },
+  "release_ready": false,
+  "commit_push": "NOT RUN"
+}

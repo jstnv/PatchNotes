@@ -1,0 +1,69 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "publisher_commission_trial_policy_v1.gd",
+    "id": "contracts-publisher-commission-short",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "sports-1108-commission-short-v1",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "contracts-r20-sports-1108",
+          "studio_name": "SideStreet R20 Sports 1108",
+          "specialty": "sports",
+          "traits": [],
+          "seed": "1108"
+        }
+      },
+      "max_commands": 300,
+      "target_release_count": 4,
+      "telemetry": true,
+      "policy": {
+        "config": {
+          "starter_ids": [
+            "sprites",
+            "general_combat",
+            "levels"
+          ],
+          "development_first": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "Brief Progression",
+            "selection": "features_first",
+            "hands": {
+              "design": 3,
+              "alpha": 5,
+              "beta": 4
+            }
+          },
+          "development_later": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "Brief Progression",
+            "selection": "features_first",
+            "hands": {
+              "design": 2,
+              "alpha": 2,
+              "beta": 2
+            }
+          },
+          "development_commission": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "Commission Short",
+            "selection": "features_first",
+            "hands": {
+              "design": 2,
+              "alpha": 2,
+              "beta": 2
+            }
+          }
+        }
+      }
+    }
+  ]
+}

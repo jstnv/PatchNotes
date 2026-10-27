@@ -63,7 +63,7 @@ func _ready() -> void:
 	%PostGameSummaries.get_parent().move_child(_market_button,1)
 	%FeatureStoreButton.pressed.connect(_open_feature_store)
 	%Employees.disabled = true
-	%Employees.tooltip_text = "Temporarily unavailable."
+	%Employees.tooltip_text = "Unlocks after releasing 2 games."
 	%Employees.pressed.connect(_open_employees)
 	%PublisherList.pressed.connect(_open_publishers)
 	%PostGameSummaries.pressed.connect(open_summary)
@@ -525,6 +525,8 @@ func _refresh_dashboard_actions() -> void:
 	%PostGameSummaries.disabled = not has_releases
 	%StartNextGame.text = "Produce Next Game" if has_releases else "Produce First Game"
 	%StartNextGame.disabled = false
+	%Employees.disabled = _run_state.get_released_game_ids().size() < 2
+	%Employees.tooltip_text = "Unlocks after releasing 2 games." if %Employees.disabled else "Manage specialists, courses and training."
 
 func _refresh_game_list() -> void:
 	if _run_state == null or not is_node_ready(): return
@@ -662,11 +664,22 @@ func get_predevelopment_support_quote() -> Dictionary:
 
 
 func _open_employees() -> void:
-	if _run_state == null: return
+	if _run_state == null or _run_state.get_released_game_ids().size() < 2: return
+	# Browsing is free. A save/mutation guard may defer first-time activation,
+	# but must not turn an enabled navigation button into a silent no-op.
+	var read_only := not _run_state.uses_employee_trial() and not _run_state.activate_employee_trial()
 	if _employees_panel == null:
 		_employees_panel = EmployeePanel.new()
 		add_child(_employees_panel)
+		_employees_panel.closed.connect(func():
+			%Dashboard.show()
+			%Employees.grab_focus())
+	%SummaryPanel.hide()
+	%Dashboard.hide()
 	_employees_panel.open_for(_run_state)
+	if read_only:
+		_employees_panel.status.text = "Employee management is temporarily read-only. Resolve any save warning, then reopen this menu to retry."
+		_employees_panel.status.show()
 
 func _refresh_contract_search() -> void:
 	if _search_work==null or _run_state==null:return

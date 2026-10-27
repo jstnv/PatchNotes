@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_ui_design_system.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 0.219,
+  "errors": [
+    "ERROR: Attempt to open script 'res://scripts/debug/verify_ui_design_system.gd' resulted in error 'File not found'.",
+    "ERROR: Failed loading resource: res://scripts/debug/verify_ui_design_system.gd.",
+    "ERROR: Can't load script: res://scripts/debug/verify_ui_design_system.gd"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "ERROR: Attempt to open script 'res://scripts/debug/verify_ui_design_system.gd' resulted in error 'File not found'.",
+    "   at: load_source_code (modules/gdscript/gdscript.cpp:1139)",
+    "ERROR: Failed loading resource: res://scripts/debug/verify_ui_design_system.gd.",
+    "   at: _load (core/io/resource_loader.cpp:317)",
+    "ERROR: Can't load script: res://scripts/debug/verify_ui_design_system.gd",
+    "   at: start (main/main.cpp:4366)"
+  ]
+}

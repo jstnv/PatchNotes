@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-reverb-20261022-v1\\restore.gd",
+    "--",
+    "--input=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-adoption-20261018-v1\\acceptance-pinned-v2-action-war.json.checkpoint.json",
+    "--output=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-reverb-20261022-v1\\restore-editor-seed-v2.json",
+    "--store=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-reverb-20261022-v1\\store-editor-v2",
+    "--mode=seed"
+  ],
+  "profile": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\pause-reverb-20261022-v1\\profile-restore-editor-seed-v2",
+  "exit": 0,
+  "timed_out": false,
+  "elapsed_seconds": 11.672,
+  "errors": [],
+  "tail": [
+    "RESTORE_CHECK 14 PASS unknown-source rejection does not mutate payload",
+    "RESTORE_CHECK 15 PASS original snapshot has actual release facts for corruption check",
+    "RESTORE_CHECK 16 PASS corruption retains valid market shape and recomputed hash",
+    "RESTORE_CHECK 17 PASS valid-hash corrupted market rejected against original owners",
+    "RESTORE_CHECK 18 PASS market-corruption rejection does not mutate payload",
+    "RESTORE_CHECK 19 PASS original acceptance artifact unchanged",
+    "RESTORE_CHECK 20 PASS runtime source remains stable throughout check",
+    "PAUSE_REVERB_RESTORE checks=20 failures=0",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

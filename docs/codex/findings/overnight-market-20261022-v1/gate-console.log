@@ -1,0 +1,23 @@
+import 0 []
+verify_alpha_command 1 SS: Historical oracle excludes only unowned unused Alpha shop metadata
+PASS: Historical oracle excludes only unowned unused Alpha shop metadata
+PASS: Pinned oracle digests exist
+ERROR: FAIL: headless full state/RNG/signal trace matches pre-extraction oracle
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)
+       [1] run_cases (res://scripts/debug/verify_alpha_command.gd:159)
+       [2] _initialize (res://scripts/debug/verify_alpha_command.gd:40)
+       [3] run_cases (res://scripts/debug/verify_alpha_command.gd:168)
+Alpha command trace capture: 57 scenarios (headless)
+
+Traceback (most recent call last):
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\tools\release_gate.py", line 242, in <module>
+    if __name__=='__main__':sys.exit(main())
+                                     ^^^^^^
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\tools\release_gate.py", line 209, in main
+    checks.run(name,verifier_arguments(out,name,script),timeout=verifier_timeout(name),profile=profile)
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\docs\codex\findings\checkpoint-runtime-v1\run_checks.py", line 40, in run
+    if result.returncode or errors:raise RuntimeError(name)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: verify_alpha_command

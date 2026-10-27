@@ -26,6 +26,7 @@ func _initialize() -> void:
 	var codec := StudioCheckpoint.new()
 	var old: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v1.json"))
 	var current: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v2.json"))
+	var roots: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v3.json"))
 	var exceptions := {}
 	for genre: String in old:
 		var v1 := StudioSpecialties.preview(StringName(genre),1)
@@ -33,6 +34,9 @@ func _initialize() -> void:
 		var ids1: Array = v1.ids.map(func(id): return str(id)); ids1.sort()
 		var ids2: Array = v2.ids.map(func(id): return str(id)); ids2.sort()
 		check(ids1 == old[genre].ids and ids2 == current[genre].ids,"independent exact roster fixtures " + genre)
+		var v3 := StudioSpecialties.preview(StringName(genre),3)
+		var ids3: Array=v3.ids.map(func(id):return str(id));ids3.sort()
+		check(ids3==roots[genre].ids and v3.scope==roots[genre].scope and v3.count==roots[genre].count,"historical root-first v3 preview stays exact "+genre)
 		check(v1.count == v2.count and v1.scope == v2.scope and v2.count == current[genre].count and v2.scope == current[genre].scope,"unchanged count and Scope " + genre)
 		var expected: Array = v1.ids.duplicate()
 		var c1 := core(ids1); var c2 := core(ids2)
@@ -52,7 +56,7 @@ func _initialize() -> void:
 		check(not payload.is_empty() and payload.run.founding_roster_version == "2","explicit persisted v2 " + genre)
 		var restored := codec.hydrate(payload)
 		check(restored != null and restored.get_founding_roster_version() == 2 and codec.capture(restored) == payload,"v2 exact checkpoint round trip " + genre)
-		for invalid in ["0","4","2.5",2,null]:
+		for invalid in ["0","5","2.5",2,null]:
 			var malformed := payload.duplicate(true); malformed.run.founding_roster_version = invalid
 			check(codec.hydrate(malformed) == null,"invalid version rejects " + str(invalid))
 		var before := state(run)
@@ -61,7 +65,11 @@ func _initialize() -> void:
 		for resourceful: bool in [false,true]:
 			for initial: bool in [true,false]:
 				var session := Factory.create_fresh_session({"schema_version":1,"studio_id":"roster","studio_name":"Roster","specialty":str(genre),"traits":["resourceful"] if resourceful else [],"seed":"4417"},catalog)
+				# This block characterizes historical v2 Maps quotes/transactions.
 				var run: RunState = session.run
+				run._owned_features.clear()
+				for id in StudioSpecialties.preview(genre,2).ids:run._owned_features[id]=true
+				run._founding_roster_version=2
 				var project := PrimitivePredevelopment.prepare_project("Frozen",genre,&"fantasy",run)
 				if not initial: run.finalize_starter_selection()
 				var quote := run.get_primitive_reserve_offer(&"maps")

@@ -9,6 +9,8 @@ var _failures := 0
 
 
 func _initialize() -> void:
+	# Historical Insider coverage; ordinary runs keep the temporary hold.
+	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
 	await process_frame
 	_snapshots = PrimitiveSnapshotDatabase.new()
 	_snapshots.load_ledgers()

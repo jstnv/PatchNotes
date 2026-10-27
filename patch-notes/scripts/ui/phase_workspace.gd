@@ -86,6 +86,8 @@ func configure(controller: Control, title: String) -> void:
 		if hand_motion != null and hand_motion.busy: return
 		organize_button.text = phase.get_node("%HandContainer").cycle_organization()
 		refresh())
+	if fan.beta_sort_only and not BetaPriorityAllocation.insiders_enabled():
+		organize_button.tooltip_text = "Group QA, then Marketing cards; corrective Core Passes follow. Insider cards are temporarily disabled. No cash, cycle or redraw cost."
 	backlog_title = pool_title
 	backlog_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pool_title.add_theme_color_override("font_color", Color("#79d4da"))
@@ -184,7 +186,7 @@ func move_control(node_name: String, destination: Node) -> void:
 func show_synergy(title: String, detail: String) -> void:
 	if hand_motion != null and hand_motion.capturing:
 		synergy_notification.banner.hide()
-		hand_motion.note_specialization(func(): synergy_notification.show_message(title, detail), title == "Balanced Production!")
+		hand_motion.note_specialization(func(): synergy_notification.show_message(title, detail), title == "Balanced Production!", 1.25 if title == "Balanced Operations!" else 1.5)
 		return
 	synergy_notification.show_message(title, detail)
 
@@ -250,7 +252,7 @@ func _synergy_tip() -> Dictionary:
 	var selected: Array[CardView] = phase.get_selected_candidate_views()
 	if phase_name == "Beta":
 		return _beta_synergy_tip(selected)
-	var overview := {"label": "Synergy ?", "title": "What is a synergy?", "body": "A synergy is a bonus for a four-card hand. Core means Graphics, Sound, Technology or Design; the first score on each card is its primary Core label. Match all four primary labels for ×1.5 hand Core gains, or use a Feature and hand gains within ±15% of their average to share the hand total evenly. Only one bonus applies."}
+	var overview := {"label": "Synergy ?", "title": "What is a synergy?", "body": "A synergy is a bonus for a four-card hand. Core means Graphics, Sound, Technology or Design; the first score on each card is its primary Core label. Match all four primary labels for ×1.5 hand Core gains, or use a Feature and positive gains in every category: highest minus lowest at most 1 point, or each within ±15% of the average. Balanced boosts total Core ×1.25, rounds down, then shares it evenly. Only one bonus applies."}
 	if selected.is_empty(): return overview
 	var first_stat: StringName = selected[0].card_data.primary_stat
 	var all_same := true
@@ -261,14 +263,14 @@ func _synergy_tip() -> Dictionary:
 		if all_same:
 			var stat_name := str(first_stat).capitalize()
 			return {"label": "Synergy: %d/4 %s" % [selected.size(), stat_name], "title": "Build a %s combo" % stat_name, "body": "%d selected cards share %s as their primary Core label. Choose %d more with that primary label for Specialization: ×1.5 to this hand's Core gains. Passes count too." % [selected.size(), stat_name, 4 - selected.size()]}
-		return {"label": "Synergy: mixed", "title": "Look for a combo", "body": "These primary Core labels differ. Match all four for Specialization, or use at least one Feature and keep this hand’s four Core gains within ±15% of their average for Balanced Production."}
+		return {"label": "Synergy: mixed", "title": "Look for a combo", "body": "These primary Core labels differ. Match all four for Specialization, or use at least one Feature and give every category positive Core: highest minus lowest at most 1 point, or each gain within ±15% of the average, for Balanced Production."}
 	var final_production := get_selected_production_synergy()
 	if not final_production.is_empty():
 		if not String(final_production.get("specialization_stat", &"")).is_empty():
 			var stat_name := str(final_production.specialization_stat).capitalize()
 			return {"label": "%s ×1.5" % stat_name, "title": "%s Specialization ready" % stat_name, "body": "All four cards share %s as their primary Core label. Playing this hand multiplies its Core gains by 1.5, rounded by category. Printed Scope and Bug Pressure do not multiply." % stat_name}
 		if final_production.get("balanced_production", false):
-			return {"label": "Balanced split", "title": "Balanced Production ready", "body": "This hand includes a Feature and all four hand Core gains are within ±15% of their average. After the cards play, their original total is shared evenly. Spare points go to Graphics, Sound, Technology, then Design. Scope stays unchanged."}
+			return {"label": "Balanced split", "title": "Balanced Production ready", "body": "This hand includes a Feature and positive Core in every category, with a spread of at most 1 point or every gain within ±15% of the average. After the cards play, their Core total gets ×1.25, rounded down to whole points, then shared evenly. Spare points go to Graphics, Sound, Technology, then Design. Scope stays unchanged."}
 	return {"label": "Synergy: none", "title": "No synergy on this hand", "body": "The hand can still play normally. Four matching primary Core labels give Specialization; a Feature plus evenly distributed hand Core gains can give Balanced Production. Only one bonus applies."}
 
 
@@ -309,12 +311,19 @@ func get_selected_production_synergy() -> Dictionary:
 
 func _beta_synergy_tip(selected: Array[CardView]) -> Dictionary:
 	var overview := {"label": "Synergy ?", "title": "What is a Beta synergy?", "body": "Four QA cards boost Search and Debug card values ×1.5. Four Marketing cards boost their combined Marketing Output ×1.5. A 2/1/1 mix of QA, Marketing and Insider boosts qualifying outputs ×1.25. Only one bonus applies."}
+	if not BetaPriorityAllocation.insiders_enabled():
+		overview.body = "Four QA cards boost Search and Debug card values ×1.5. Four Marketing cards boost combined Marketing Output ×1.5. Insider cards/priorities are temporarily disabled, so Balanced Operations is unavailable."
 	if selected.is_empty(): return overview
 	var counts := {CardData.BETA_CATEGORY_QA: 0, CardData.BETA_CATEGORY_MARKETING: 0, CardData.BETA_CATEGORY_INSIDER: 0}
 	for view: CardView in selected:
 		if view.card_data == null or not counts.has(view.card_data.beta_category):
 			return {"label": "Synergy: none", "title": "Corrective Pass selected", "body": "A Host Playtest corrective Pass can still add Core score when played, but a hand containing one does not qualify for QA, Marketing or Balanced Operations synergy."}
 		counts[view.card_data.beta_category] += 1
+	if not BetaPriorityAllocation.insiders_enabled():
+		if counts[CardData.BETA_CATEGORY_INSIDER] > 0:
+			return {"label":"Unavailable", "title":"Insider temporarily disabled", "body":"Replace this retained Insider card with a QA or Marketing card before playing."}
+		if counts[CardData.BETA_CATEGORY_QA] != selected.size() and counts[CardData.BETA_CATEGORY_MARKETING] != selected.size():
+			return {"label":"Synergy: mixed", "title":"Look for a Beta combo", "body":"Four QA or four Marketing cards specialize. Balanced Operations is unavailable while Insider cards are disabled."}
 	if selected.size() < 4:
 		if counts[CardData.BETA_CATEGORY_QA] == selected.size():
 			return {"label": "Synergy: %d/4 QA" % selected.size(), "title": "Build a QA combo", "body": "Add %d more QA cards for QA Specialization. Search and Debug card values get ×1.5 before their bug formulas and caps." % (4 - selected.size())}

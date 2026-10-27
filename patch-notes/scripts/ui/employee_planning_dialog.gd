@@ -29,7 +29,7 @@ func _ready() -> void:
 		column.add_child(label)
 		var input := VSlider.new()
 		input.min_value = 10
-		input.max_value = 50
+		input.max_value = PriorityAllocation.MAX_PRIORITY
 		input.step = 5
 		input.custom_minimum_size = Vector2(32,120)
 		input.size_flags_horizontal = Control.SIZE_SHRINK_CENTER

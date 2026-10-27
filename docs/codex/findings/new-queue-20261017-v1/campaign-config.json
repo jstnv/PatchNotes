@@ -1,0 +1,97 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "finite-development-fixture",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "action-4417",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "queue-action",
+          "studio_name": "Queue fresh campaign",
+          "specialty": "action",
+          "traits": [],
+          "seed": "4417"
+        }
+      },
+      "max_commands": 100,
+      "target_release_count": 2,
+      "policy": {
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "Fresh queue",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "adventure-4471",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "queue-adventure",
+          "studio_name": "Queue fresh campaign",
+          "specialty": "adventure",
+          "traits": [],
+          "seed": "4471"
+        }
+      },
+      "max_commands": 100,
+      "target_release_count": 2,
+      "policy": {
+        "config": {
+          "genre": "adventure",
+          "theme": "fantasy",
+          "name_prefix": "Fresh queue",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "strategy-4714",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "queue-strategy",
+          "studio_name": "Queue fresh campaign",
+          "specialty": "strategy",
+          "traits": [],
+          "seed": "4714"
+        }
+      },
+      "max_commands": 100,
+      "target_release_count": 2,
+      "policy": {
+        "config": {
+          "genre": "strategy",
+          "theme": "fantasy",
+          "name_prefix": "Fresh queue",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    }
+  ]
+}

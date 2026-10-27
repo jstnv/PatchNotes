@@ -1,0 +1,29 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+RESTORE_CHECK 1 PASS input has a named actual previous source
+RESTORE_CHECK 2 PASS presentation edit preserves content revision
+RESTORE_CHECK 3 PASS seed starts in an empty isolated Store
+ERROR: PAUSE_REVERB_RESTORE normal Store accepts exact old pair at generation one: { "status": &"writer_busy" }
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-reverb-20261022-v1/restore.gd:26)
+       [1] _run (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-reverb-20261022-v1/restore.gd:67)
+RESTORE_CHECK 4 FAIL normal Store accepts exact old pair at generation one: { "status": &"writer_busy" }
+ERROR: PAUSE_REVERB_RESTORE normal Store validates prior source: 
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-reverb-20261022-v1/restore.gd:26)
+       [1] _run (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-reverb-20261022-v1/restore.gd:69)
+RESTORE_CHECK 5 FAIL normal Store validates prior source: 
+RESTORE_CHECK 6 PASS unknown world source still rejected
+RESTORE_CHECK 7 PASS unknown-source rejection does not mutate payload
+RESTORE_CHECK 8 PASS original snapshot has actual release facts for corruption check
+RESTORE_CHECK 9 PASS corruption retains valid market shape and recomputed hash
+RESTORE_CHECK 10 PASS valid-hash corrupted market rejected against original owners
+RESTORE_CHECK 11 PASS market-corruption rejection does not mutate payload
+RESTORE_CHECK 12 PASS original acceptance artifact unchanged
+RESTORE_CHECK 13 PASS runtime source remains stable throughout check
+PAUSE_REVERB_RESTORE checks=13 failures=2
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

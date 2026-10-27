@@ -1,0 +1,32 @@
+{
+  "elapsed_seconds": 117.34876059996895,
+  "process_cpu_seconds": 85.078125,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\exposure.gd",
+    "--",
+    "--output=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\action-war-4417-v2.json",
+    "--route=action-war",
+    "--seed=4417",
+    "--source=5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536"
+  ],
+  "exit": 0,
+  "timed_out": false,
+  "errors": [],
+  "tail": [
+    "MARKET_ACCEPTANCE_STEP route=action-war step=104 cycle=41 action_us=71501 world_us=323143 hash_us=667734 cash=284158 fans=2",
+    "MARKET_ACCEPTANCE_STEP route=action-war step=105 cycle=42 action_us=93934 world_us=1129569 hash_us=380414 cash=241850 fans=2",
+    "MARKET_ACCEPTANCE_STEP route=action-war step=106 cycle=42 action_us=5261 world_us=0 hash_us=369178 cash=241850 fans=2",
+    "MARKET_ACCEPTANCE_STEP route=action-war step=107 cycle=42 action_us=10672 world_us=0 hash_us=407293 cash=241850 fans=2",
+    "MARKET_ACCEPTANCE_STEP route=action-war step=108 cycle=42 action_us=75500 world_us=0 hash_us=292181 cash=241850 fans=2",
+    "MARKET_ACCEPTANCE route=action-war checks=7297 failures=0 coverage={\"age_month_reuse\":153,\"completed_pressured_player\":5,\"disjoint\":0,\"expired_facts\":864,\"genre_only\":54,\"own_other_title\":46,\"pair\":46,\"rejected_atomic\":42,\"strong_player_release\":0,\"strong_player_to_rival\":0,\"theme_only\":0}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

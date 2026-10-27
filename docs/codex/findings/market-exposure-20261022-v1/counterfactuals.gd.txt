@@ -1,0 +1,72 @@
+
+## Pure observational counterfactuals. Never applied to a RunState or ProjectState.
+func _fixed_review(inputs: Dictionary, standards: Array) -> Dictionary:
+	var ratios: Array[float] = []
+	var sum := 0.0
+	for category in range(4):
+		var ratio := clampf(float(inputs.cores[category])/float(standards[category]),0.0,1.25)
+		ratios.append(ratio)
+		sum += ratio
+	var average := sum/4.0
+	var variance := 0.0
+	for ratio: float in ratios: variance += pow(ratio-average,2.0)
+	var quality := clampf(average-sqrt(variance/4.0)*0.5,0.0,1.25)
+	var production := clampf(quality*8.0,0.0,10.0)
+	var raw := clampf(production*float(inputs.scope_completion)*float(inputs.bug_multiplier)+float(inputs.variance_modifier),0.0,10.0)
+	return {"production_rating":production,"unrounded_review":raw,"final_review":floor(raw*10.0+0.5)/10.0}
+
+func _own_titles_only(snapshot: Dictionary, owner: String) -> Dictionary:
+	var result := snapshot.duplicate(true)
+	result.facts = result.facts.filter(func(fact: Dictionary) -> bool: return fact.studio_id==owner)
+	result.id = "market-0-neutral" if result.cycle_start==0 else Market.identifier(result.cycle_start,result.facts)
+	expect(Market.valid(result),"fixed snapshot with rival facts removed remains well formed")
+	return result
+
+func _counterfactual_report() -> void:
+	var digest_before := _state_digest()
+	for owner: String in _owners():
+		var run: RunState = _owners()[owner]
+		for id: StringName in run.get_released_game_ids():
+			actual_publications.append({"owner":owner,"release_id":str(id),"metadata":run.get_release_metadata(id),"sales":run.get_released_game_sales(id),"fan_ledger":run._fanbase.releases[id]})
+	var owner := str(player.run._bank_run_id)
+	for id: StringName in player.run.get_released_game_ids():
+		var final: Dictionary = player.run.get_released_game_sales(id)
+		var metadata: Dictionary = player.run.get_release_metadata(id)
+		var initial := ReleasedGameSales.create(id,final.total_units,final.review_tenths,final.launch_awareness,final.market_bp)
+		for key: String in ["base_name","release_title","release_year"]: initial[key]=final[key]
+		var observed := initial.duplicate(true)
+		var without_rivals := initial.duplicate(true)
+		var neutral := initial.duplicate(true)
+		var age_rows: Array = []
+		var settled_gain_actual := 0
+		var settled_gain_without_rivals := 0
+		var settled_gain_neutral := 0
+		var fans: Dictionary = player.run._fanbase.releases[id]
+		for age_cycle in range(1,int(final.total_earned_cycles)+1):
+			var age_month: int = age_cycle/2+age_cycle%2
+			var boundary: int = int(metadata.release_cycle)+age_cycle
+			var actual_factor: Dictionary = final.market_factors[age_month]
+			var source: Dictionary = snapshots.get(actual_factor.snapshot_id,{})
+			expect(not source.is_empty(),"counterfactual resolves exact recorded factor snapshot")
+			if source.is_empty(): return
+			var only_own := _own_titles_only(source,owner)
+			var own_factor := Market.sales_factor(only_own,owner,str(id),str(metadata.genre),str(metadata.theme))
+			var neutral_factor := Market.neutral_factor()
+			var campaign: bool = age_cycle>=3 and age_cycle%2==1 and final.campaign_months.has(age_month)
+			observed = ReleasedGameSales.next_cycle(observed,boundary,boundary%2==0,campaign,actual_factor.factor_bp,actual_factor.snapshot_id,actual_factor)
+			without_rivals = ReleasedGameSales.next_cycle(without_rivals,boundary,boundary%2==0,campaign,own_factor.factor_bp,own_factor.snapshot_id,own_factor)
+			neutral = ReleasedGameSales.next_cycle(neutral,boundary,boundary%2==0,campaign,10000,neutral_factor.snapshot_id,neutral_factor)
+			expect(not observed.is_empty() and not without_rivals.is_empty() and not neutral.is_empty(),"three pure factual-input sales replays are legal")
+			if observed.is_empty() or without_rivals.is_empty() or neutral.is_empty(): return
+			if boundary%2==0:
+				var quality: int = mini(30,maxi(0,int(fans.review_tenths)-50))
+				settled_gain_actual = maxi(0,int(observed.earned_units)-int(fans.launch_fans))*8*quality/2000
+				settled_gain_without_rivals = maxi(0,int(without_rivals.earned_units)-int(fans.launch_fans))*8*quality/2000
+				settled_gain_neutral = maxi(0,int(neutral.earned_units)-int(fans.launch_fans))*8*quality/2000
+			if age_cycle%2==1:
+				age_rows.append({"age_month":age_month,"run_cycle":boundary,"actual_factor":actual_factor,"own_title_only_factor":own_factor,"actual_snapshot":source.id,"rival_facts_removed":source.facts.size()-only_own.facts.size()})
+		expect(observed==final,"actual fixed-input sales replay equals every authoritative sales field")
+		expect(settled_gain_actual==int(fans.gained),"factual settled Fan gain target reproduced")
+		expect(observed.earned_units<=without_rivals.earned_units and without_rivals.earned_units<=neutral.earned_units,"removing crowding cannot decrease fixed-input units")
+		sales_counterfactuals.append({"release_id":str(id),"cycle":world.cycle,"launch_fans":fans.launch_fans,"review_tenths":final.review_tenths,"actual":observed,"rival_facts_removed":without_rivals,"all_facts_removed":neutral,"age_month_factors":age_rows,"settled_gain_targets":{"actual":settled_gain_actual,"rival_facts_removed":settled_gain_without_rivals,"all_facts_removed":settled_gain_neutral},"actual_loss_exposure_accounted":fans.loss_exposure_accounted,"actual_lost":fans.lost,"boundary":"Direct fixed-launch-input differences only; no alternate campaign or revised later launch Fans/Awareness."})
+	expect(_state_digest()==digest_before,"all counterfactual observations preserve exact live state and RNG")

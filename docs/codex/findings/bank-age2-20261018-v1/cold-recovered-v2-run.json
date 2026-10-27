@@ -1,0 +1,26 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\bank-age2-20261018-v1\\cold_store.gd",
+    "--",
+    "restore",
+    "route-v1.json.studio.json"
+  ],
+  "exit": 0,
+  "elapsed": 5.807243000017479,
+  "errors": [],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "BANK_COLD checks=4 failures=0 mode=restore",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

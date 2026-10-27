@@ -1,0 +1,32 @@
+{
+  "elapsed_seconds": 127.70966990001034,
+  "process_cpu_seconds": 114.984375,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\exposure.gd",
+    "--",
+    "--output=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\puzzle-fantasy-4417-v2.json",
+    "--route=puzzle-fantasy",
+    "--seed=4417",
+    "--source=5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536"
+  ],
+  "exit": 0,
+  "timed_out": false,
+  "errors": [],
+  "tail": [
+    "MARKET_ACCEPTANCE_STEP route=puzzle-fantasy step=104 cycle=41 action_us=173489 world_us=461544 hash_us=917387 cash=246131 fans=1",
+    "MARKET_ACCEPTANCE_STEP route=puzzle-fantasy step=105 cycle=42 action_us=102693 world_us=1389907 hash_us=539165 cash=201026 fans=1",
+    "MARKET_ACCEPTANCE_STEP route=puzzle-fantasy step=106 cycle=42 action_us=8792 world_us=0 hash_us=419405 cash=201026 fans=1",
+    "MARKET_ACCEPTANCE_STEP route=puzzle-fantasy step=107 cycle=42 action_us=12628 world_us=0 hash_us=504945 cash=201026 fans=1",
+    "MARKET_ACCEPTANCE_STEP route=puzzle-fantasy step=108 cycle=42 action_us=82406 world_us=0 hash_us=386955 cash=201026 fans=1",
+    "MARKET_ACCEPTANCE route=puzzle-fantasy checks=7296 failures=0 coverage={\"age_month_reuse\":153,\"completed_pressured_player\":0,\"disjoint\":0,\"expired_facts\":864,\"genre_only\":0,\"own_other_title\":46,\"pair\":46,\"rejected_atomic\":42,\"strong_player_release\":0,\"strong_player_to_rival\":0,\"theme_only\":54}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

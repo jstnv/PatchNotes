@@ -1,0 +1,324 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-19T00:30:34.653172+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "g4-current-hand-20261018-v5",
+    "owner": "ai-competitors",
+    "created_utc": "2026-10-19T00:02:28.831075+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "391cc6cf4bd6a7737ad73bd3d869c27516e79ae4f06da06efd138a03ea2ab0d6",
+    "creation_identity": "dd06da7521f5fd83ada78662ac5a3dcb5b4ca769ebc0749ace8a3aa2129f8b14",
+    "lineage": [
+      {
+        "id": "g4-current-hand-20261018-v1",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g4-current-hand-20261018-v1",
+        "metadata_sha256": "3788b88bde60b10e063e4aac9ae754b2e3f692f940b327879103a8a3c8408aa4",
+        "source_identity": "391cc6cf4bd6a7737ad73bd3d869c27516e79ae4f06da06efd138a03ea2ab0d6"
+      },
+      {
+        "id": "g4-current-hand-20261018-v3",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g4-current-hand-20261018-v3",
+        "metadata_sha256": "dbe841e5bf24e536cf89edeb10138a354c1dc77150ce1fc82cd1c49e4174b37a",
+        "source_identity": "b91e6299220bbf4a9084ed3a6f8a9f5fbb421e0e949f250ffc82e88627a3b105"
+      },
+      {
+        "id": "g4-current-hand-20261018-v4",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\g4-current-hand-20261018-v4",
+        "metadata_sha256": "0e6bd83fc847c00a89429e3f09eafc7b7beeee3e612986d4c0b21b98ed45e8eb",
+        "source_identity": "dd06da7521f5fd83ada78662ac5a3dcb5b4ca769ebc0749ace8a3aa2129f8b14"
+      }
+    ],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "DESIGN REVIEW ONLY: exact current-hand quote with observation-local price deduplication and shared next-cycle sales/Fan preflight; preserve price-specific finance and ordinary commit path",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\2026-10-18-g4-quote-performance-design-review-v1.md",
+    "sha256": "099e60b1ca74ab74d56cfd264a27cb9cc95d6dfb34255b77305348bdf31327be",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Reconcile both changed source files with current canonical drift; do not replace the project wholesale",
+    "Specify and verify unavailable quote reasons and legal low-cash or arrears parity before any canonical adoption",
+    "Set and pass a stable eight-rival world CPU and memory budget; current repeated elapsed screen is mixed",
+    "Repeat exact quote-to-receipt, state/RNG, legal world, checkpoint and fresh-process replay checks on integrated source"
+  ],
+  "base_identity": "391cc6cf4bd6a7737ad73bd3d869c27516e79ae4f06da06efd138a03ea2ab0d6",
+  "candidate_identity": "8e1e475d3b99395f3d46c71fc9619fca5889faa90eccdb5fbff50f835442bb17",
+  "canonical_identity": "3a79cda4fd564babbc43a6b12d8136ad0026bd3b01e03e995266cef9595525db",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "scripts/run_state.gd",
+      "change": "modified",
+      "before_sha256": "eb18befdf9cf621e073b509b24a3aa792e34ff4b510acdea19310110969b5925",
+      "after_sha256": "6a44a7cfd792138548b329c7b06f9c278c053ea13550d2a285bb08be03600b91"
+    },
+    {
+      "path": "scripts/simulation/development_session.gd",
+      "change": "modified",
+      "before_sha256": "d2613f664d1d867d8980b1f14e9882b4785509c34188d2ba63f31cfe1e3e45fd",
+      "after_sha256": "9be0896a649969381236c9a647de3abcfcb5b74e13c91187701d161b61ee8d15"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "scripts/audio/soundtrack.gd",
+      "change": "modified",
+      "before_sha256": "aeeef4efa367a83911f1fc0b9c827b2a3f35cb9f8b158b566700d3a42ddfa7d9",
+      "after_sha256": "864c255941a283e6b0d3218863c7c3c3aab45027c3e3d06f492dd67168a67d22"
+    },
+    {
+      "path": "scripts/cards/feature_store_catalog.gd",
+      "change": "modified",
+      "before_sha256": "cd6d1f2fd6adec3a750f12ec46637b951300d09bd508d16084f76d1625a58cf5",
+      "after_sha256": "12487e4c089e102d8a47c008d94b9b6223a1af3d00a9297abaa0f51bc1f5425e"
+    },
+    {
+      "path": "scripts/debug/capture_store_cones.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "207b7710cb830148f38bd92cecee6ea8b211306078bdb40a0c8811a6707b1151"
+    },
+    {
+      "path": "scripts/debug/capture_store_cones.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "6b372160254ccdec69d209d4f11c2dc962bee191f680e390c0cf5d5f9db21038"
+    },
+    {
+      "path": "scripts/debug/capture_store_hud.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c50b16cce42be2b8022b9fc278ecf841065d2afffffb187a3a8a7ca184ef3307"
+    },
+    {
+      "path": "scripts/debug/capture_store_hud.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "1b5010158f8502cee763f498b04d120969bbbc50797b49335308e0d2880f9891"
+    },
+    {
+      "path": "scripts/debug/verify_feature_research.gd",
+      "change": "modified",
+      "before_sha256": "4fd0781650807a59769c65d45f174216d0ee10e215a0fda6e358a7ce67260843",
+      "after_sha256": "84571dc3ad9bd922c2d49602ef2d32cea5d8784cc08c1d676bd2f3773d4ed130"
+    },
+    {
+      "path": "scripts/debug/verify_feature_spending_guidance.gd",
+      "change": "modified",
+      "before_sha256": "60926d6c8ba34cd27b67034fb999e07d46b99dd7480f8793083e26bc1d123f46",
+      "after_sha256": "caeec4917a9bfb524d710bacc184765dbe33533c56c8f9a293b6296180faaaee"
+    },
+    {
+      "path": "scripts/debug/verify_feature_store.gd",
+      "change": "modified",
+      "before_sha256": "9492469bcc51535b88535f5acafd96742f1ad8a1e30faacf62c6f3ea1d7efb96",
+      "after_sha256": "6518ae20494a55863e9aa5aebdf7a38c0e8eba0221a56eec3297c97b4dd8d828"
+    },
+    {
+      "path": "scripts/debug/verify_feature_store_navigation.gd",
+      "change": "modified",
+      "before_sha256": "8f51f8ec358e297dfbb010917bda02a050bf9942e09caf6369503d1540d0a244",
+      "after_sha256": "91f23939f35dd8e7ba5fdb9b37cf127fa65587188c26ad13c0c12f3f87507071"
+    },
+    {
+      "path": "scripts/debug/verify_feature_store_radial.gd",
+      "change": "modified",
+      "before_sha256": "0ce97d50cd1df67d49c25e7395d4590d5cc85668057d9e0eb9485a7510d1a5f4",
+      "after_sha256": "e82c0649995f717d0ab73d72ba3210afc537dbea194bffd733533fc3b921d3ea"
+    },
+    {
+      "path": "scripts/debug/verify_how_to_play.gd",
+      "change": "modified",
+      "before_sha256": "cca2c1da578d54d8eeb263f3867fe364dbdbf905707d5f8e4ab2a009141d1b16",
+      "after_sha256": "565059fe3bffd520e5120a2e3aa3d57d5313309bf78952f7270bdb646f0396ba"
+    },
+    {
+      "path": "scripts/debug/verify_pause_music.gd",
+      "change": "modified",
+      "before_sha256": "27d0dbc9244eb9f988e01e12c849108370491df0a657d7d962d6f98a4977a1be",
+      "after_sha256": "8c401ef0224b16b29611d86522de92111dffc21abc9efea09fd002c74c5f6b0e"
+    },
+    {
+      "path": "scripts/debug/verify_pause_music.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "14f97cedf0442575b71e2a9d1c69f0bbd85a67e90b4addbdc535bc203979a103"
+    },
+    {
+      "path": "scripts/debug/verify_pause_track.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "06a97d2274589154929cf67fee7bde027d4a269000893cae271000f213054af6"
+    },
+    {
+      "path": "scripts/debug/verify_pause_track.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c37fbd146cf6196b44c6f5ba7baa844107c24f55a19673a113757179f281f27d"
+    },
+    {
+      "path": "scripts/debug/verify_primitive_branches.gd",
+      "change": "modified",
+      "before_sha256": "ffee5f03d79751d35777d3ba38f6662a7b9357c339c6d2041461cc2f6fafc65f",
+      "after_sha256": "39ffe11936e20f781396ac1f64b4ca2dfa0999dd84a1e0dfbab4fd1ac3e5e01e"
+    },
+    {
+      "path": "scripts/debug/verify_store_cone_parents.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fc1a9c212285e667415c206a888ac3ed6d754edbf0e6888cccf2e73f9899f744"
+    },
+    {
+      "path": "scripts/debug/verify_store_cone_parents.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5e67efad5eb00a4d6b24704c9afeddb8c6c162cbe63bbb493a22d7921b3b33c6"
+    },
+    {
+      "path": "scripts/debug/verify_store_hud.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "816981b6a4c57d52fa2e1ad13b9ed8405cc171abe808cf117a32dbb4cc59a231"
+    },
+    {
+      "path": "scripts/debug/verify_store_hud.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "42b021549c6d819b16310dd17614d79a5ec5bb45d81bdb7a6b72577753990f2d"
+    },
+    {
+      "path": "scripts/debug/verify_store_shopping_guidance.gd",
+      "change": "modified",
+      "before_sha256": "ec2502ba8090e9d311a42ae9f065b83a8ab8848363f62a85d4cf1c94501adc87",
+      "after_sha256": "0a4e8203bc9445544a45083de89d5aa877c0cef260a7406844df5beb8a1efca2"
+    },
+    {
+      "path": "scripts/market/rival_world_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "4dcf201732c8410b92003c9099056099752ed40ccc33b7e818061e1d94306cc5",
+      "after_sha256": "f37cf207c4649c4435ae9c9e6879385279bcb33831c95158f8343779b84d808d"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "b86c5c1b832227481f11f0fd2b292b493a32af80b4eeee8e4bb32b0a279215dd",
+      "after_sha256": "89184d1b73be8bb3f06543129bcc69e6f8d05c485ec68de78928bc10491af131"
+    },
+    {
+      "path": "scripts/ui/feature_store.gd",
+      "change": "modified",
+      "before_sha256": "3546f27816a6903582b1eb4238baaa5b5c571fbdd22e03d5b61abf0cbcd3c99b",
+      "after_sha256": "13d4c2ae00178c41ce82b4ad245d87d1802a57074636fa1792812eb577510cb2"
+    },
+    {
+      "path": "scripts/ui/feature_store_map.gd",
+      "change": "modified",
+      "before_sha256": "5507376fb9049d73cfdd3c1b4b5a00261cbdc12d93ab9bd3730d3925b4bddd76",
+      "after_sha256": "97da91ba4d577a5763a3b8728feb71002cb8d299158d968c50e5da708c7c211c"
+    },
+    {
+      "path": "scripts/ui/gameplay_hud.gd",
+      "change": "modified",
+      "before_sha256": "62a7a7051c207cfa60038aa6af01c8ea85506596449dccd16f102e3b49f88727",
+      "after_sha256": "b2a11d1aee6138f6cf70795b767bc0d22627d40c8e293cdd658894f0564aa8a5"
+    },
+    {
+      "path": "scripts/ui/hand_presentation.gd",
+      "change": "modified",
+      "before_sha256": "1e8309ef7a7e5d82a73e130bf15cdde4b21622abfd10d0b8646ca30cf7ce79fc",
+      "after_sha256": "67fc9db83da7cc84ba9e0d1524b7aee9d5a5fd30cb257f743e4e0d027e66ad95"
+    },
+    {
+      "path": "scripts/ui/menu_transitions.gd",
+      "change": "modified",
+      "before_sha256": "b4612e41c53e5aa450b12853e88d0a8e9348db46e22fca2823b88828aa28dc31",
+      "after_sha256": "241f323d5cc45549b4af6f7776a2f41317d028f497cb26ee44411fc4a2b30960"
+    }
+  ],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\g4-quote-perf-shared-20261018-v5",
+      "ok": true,
+      "error": null,
+      "source_identity": "8e1e475d3b99395f3d46c71fc9619fca5889faa90eccdb5fbff50f835442bb17",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "8f33f4cfe32748a0bb003c602a8b2427948f947b1db196842cebb526645438a8",
+        "cases/action-4417-control/case.json": "2a19217ec220f046cdefd84b798fa40bfdf39fe0f21bb373b42a405858565669",
+        "cases/action-4417-control/case.variant.json": "264c5fd2519067f26779cee8c6370d3bc6e2e4adfa7462f7acedc0b5d8f9fe61",
+        "cases/action-4417-control/final_state.variant.json": "764835db9b1ff1ab13b368af96526dbce008093b01b5eaa85525025a2d728ae9",
+        "cases/action-4417-control/initial.json": "e1e936d411152777973c92788e21e0b56f83133f175116fc3459e8398dd30cbd",
+        "cases/action-4417-control/metrics.json": "42ce7066843a408e10279f3d5ee0f8f2a747fa5821293053cad147a1860bac33",
+        "cases/action-4417-control/replay.tape.json": "263849361c55a9f9e04105f8eb2677d23b7d3e064b7f8d4148503ba57300fd6a",
+        "cases/action-4417-control/result.json": "cbf5206acdbec14c25151b3192b309c0990ebd8bbb9dbab5742602e3a3c67abc",
+        "cases/action-4417-control/studio_checkpoint.json": "3723155946c848a1e9f43ecba41770ed8585575cc376e9959e66129dca974d4c",
+        "cases/action-4417-control/telemetry.json": "4e6e99916f5adb14313e6a124c98f15fe3f33a8244bbb182b0c841c9129921df",
+        "cases/action-90210-control/case.json": "55cfffdaf61ea715e511faa87a4e329c82c16860725d81b7ef11bbb13e658181",
+        "cases/action-90210-control/case.variant.json": "85bb2a18651b01ce546230364e39deb27df873f84c6e8cc586f0562877ca5bba",
+        "cases/action-90210-control/final_state.variant.json": "70e50871fb07ade95bb72de60769ba5755d666383831ea0d28310530e060b836",
+        "cases/action-90210-control/initial.json": "0b0abd3eef3ab437cea5ed136b6e4e6acff78dd8af93446314d328da66fd58e3",
+        "cases/action-90210-control/metrics.json": "009bd339a03054e665eea6793e050a41e7123b3ee2312b035321d5c9932d30ec",
+        "cases/action-90210-control/replay.tape.json": "6141251f142df232027eaf1312f150ee4ec180223decc80364bcefa172a76601",
+        "cases/action-90210-control/result.json": "e479af4d427bdf29e61005ee8cdc917205d6aede27ec7abc45c5c27051e69efc",
+        "cases/action-90210-control/studio_checkpoint.json": "cdc6e6c9f7c66a1a46f3317e6f9bef1f97df2ef5af5a625dcd7a54e028a26fb8",
+        "cases/action-90210-control/telemetry.json": "a172986a2c60066ab5b56838465604a870d4555f33e8afab6ffc94ac6479cde2",
+        "cases/adventure-4417-control/case.json": "ccc2b8b06ad7cc9bb3a0352aacb893e46440fad859cc7934e03f6ce91020700f",
+        "cases/adventure-4417-control/case.variant.json": "1baefcf91cf9d546b6f2cc9aa8e1a6f836a7446d8ea9c182cbe129ca6b8aab6b",
+        "cases/adventure-4417-control/final_state.variant.json": "1b66b9c5d5137957d7138702356e260c0cddab51b02f2755ef24d1baba12bb04",
+        "cases/adventure-4417-control/initial.json": "928cb5e8b4ce8e28bfc75099c576e545f1534f2c0f06bb8f1bfdc6c8c8154ef6",
+        "cases/adventure-4417-control/metrics.json": "704ca4b4a4461640bc1900376f130dee13149faac21c225b5fab3e4e8822165b",
+        "cases/adventure-4417-control/replay.tape.json": "0761295527ff456fec7ea25cd6a2410dab116433075c6c38c526b45eb1618cca",
+        "cases/adventure-4417-control/result.json": "e5db89121d3a1f20d5fc9d087c48e32c271317d57cac988067c2ce5877105cd8",
+        "cases/adventure-4417-control/studio_checkpoint.json": "bc02c56ab4c553995231c661eb08a7e56e6f509b39a2f94df4f1f95660bf222a",
+        "cases/adventure-4417-control/telemetry.json": "4d4152ac0efd93a076312f862e5c304c2a96193010c622c369efa8cbac9eb75d",
+        "cases/adventure-90210-control/case.json": "dc9d741e6b77458c370db5dfe653c02c69c0cdae558b6d37c46c02ef34cc9bf2",
+        "cases/adventure-90210-control/case.variant.json": "fdd593d35d66a8a219b55766e05a7cf4091709c6654c32287613bcb2db32bdae",
+        "cases/adventure-90210-control/final_state.variant.json": "c4ff02f4c6c93958a432527307f3c853031bc7181bac16ef925e69acd8b88594",
+        "cases/adventure-90210-control/initial.json": "1bdffa6c41246cf22453d381bc55098f1cce7e38fc4970ef05f6cb38baae668d",
+        "cases/adventure-90210-control/metrics.json": "afa2e3366d6f1b6e4ef090dc55f43c04e76b83115a7a6af7907f238a65353cf3",
+        "cases/adventure-90210-control/replay.tape.json": "07d5048c7dea69292747f1db704fb625d8dae50bf37c5bee4b6e27821389e937",
+        "cases/adventure-90210-control/result.json": "f361f7e7f0b54d58858806e71427d0bc5bb153ba8e395f3e238f608e355aefc9",
+        "cases/adventure-90210-control/studio_checkpoint.json": "c93a1158d61a5bde8b0de63dc6838f18ae7c2209e721caee86c6f8a6d843b522",
+        "cases/adventure-90210-control/telemetry.json": "bc16ca395188d61581d332be7cce15e32295cf64d2c649402699367f14bd5b03",
+        "experiment-report.json": "c607a776cff4ce0f96bdfc8a3875b49b109d838df5828c4df3366a6d6169df47",
+        "experiment.command.json": "d06a7ef7d882a075b682e66bf275a6ea4750c9a30300020604bed6efae88c646",
+        "experiment.log": "ec64018f89bbfbbf6d9a636bdd3629767c22d456d6cd1f89e57540500d463940",
+        "git-provenance.json": "787df42a5001f20920dd739d496c305560aee9197815debfa7a8d9b8771db659",
+        "godot-version.command.json": "c7896a2a3684ac8e68fd87cc44f29e4ddc6e62f455768541062cba24afb16483",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "bd1065a081e24d4e9cafc2b9c15a139b0561f2483a37a1c0a142f1efce720f0c",
+        "import.command.json": "ea143a40b289f1d964dad44610286cad22496d3d56b061e1e863cb101b19cc66",
+        "import.log": "36966aecb5ec2e20b3e6e43bccf7eb9b2ffe70aa93d7fe846a672a4c93b65a1e",
+        "inputs/experiment.json": "4b530cd0d377d8c69f5e6c543376a8ee75ca4b17814b910de76d537872d69f96",
+        "inputs/requested.json": "1203b4b3717bb8b7296861f2fc0fb093581d3812ea83eb6feaca7150a76ea495",
+        "run-report.json": "b93d6ae0ba1774f0c7ce8e54b4b1c7d4e408e0be243474ce63512acb10c35e08",
+        "runner.py": "65bdf6c5eb4a47af829283a0b07d4b78ad45e8a95139607b96a613d6ffbf9193",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "0b7ba6de6bf90edf563c5a09a2e95c65c0df0d01ed23ade0953e38f1f9ab77a5",
+        "source.diff.patch": "f04d9b8525409fc8ade95fa7e61c67b42bacd8827dc094f825161add5d3e8381",
+        "variant-base-manifest.json": "34d94dc6b7801ec84108f0868202befda48a9f893ff07e721a98c1542ee03624",
+        "variant-creation-manifest.json": "781f89b592ed11451967bc0627e9284a7a62e9ffc7f765aaf96701331e41dd36",
+        "variant-integrity.json": "0b17998e2a5c179cdaff88b44835116ea169e334b133d08016fd4300bf532dee",
+        "variant-provenance.json": "217bf11b1380f8381a00f476769f8cdc836289c22ae742bb8bedb9a30180238b",
+        "variant-variant.json": "748c4d6e3e782d9d7f26df00077e10ef6bda6dc759d782f248d51c4c449eeffe",
+        "workspace-source-manifest.json": "a29eafe4327e8138ce7bd6e8c47e769da213c6bc4d6c49d6ef379cd366184f93"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

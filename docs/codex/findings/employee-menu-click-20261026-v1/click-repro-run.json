@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_click.gd"
+  ],
+  "exit": 2,
+  "elapsed_seconds": 7.75,
+  "errors": [
+    "ERROR: Rival Gameplay: Mutation guard still permits visible employee browsing",
+    "ERROR: Rival Gameplay: Mutation guard still permits visible employee browsing"
+  ],
+  "tail": [
+    "CLICK_TARGET Employees at=(815.0, 411.0) hovered=Employees:<Button#253654731425>",
+    "CLICK_TARGET Back at=(68.5, 149.0) hovered=Back:<Button#256657853392>",
+    "CLICK_TARGET Employees at=(815.0, 411.0) hovered=Employees:<Button#253654731425>",
+    "ERROR: Rival Gameplay: Mutation guard still permits visible employee browsing",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)",
+    "       [1] _run (res://scripts/debug/verify_employee_click.gd:86)",
+    "       [2] settle (res://scripts/debug/verify_employee_click.gd:27)",
+    "EMPLOYEE_CLICK checks=54 failures=2"
+  ]
+}

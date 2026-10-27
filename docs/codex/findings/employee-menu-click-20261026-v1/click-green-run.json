@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_click.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 9.14,
+  "errors": [],
+  "tail": [
+    "CLICK_TARGET Employees at=(751.0, 375.0) hovered=Employees:<Button#168174816229>",
+    "OPEN_PRECONDITIONS { \"allowed\": true, \"trial\": false, \"publishing\": false, \"failure\": \"\", \"button_rect\": [P: (680.0, 384.0), S: (270.0, 54.0)], \"studio_size\": (1280.0, 580.0) }",
+    "CLICK_TARGET Employees at=(815.0, 411.0) hovered=Employees:<Button#259660974753>",
+    "CLICK_TARGET Back at=(68.5, 149.0) hovered=Back:<Button#262697651152>",
+    "CLICK_TARGET Employees at=(815.0, 411.0) hovered=Employees:<Button#259660974753>",
+    "CLICK_TARGET Back at=(68.5, 149.0) hovered=Back:<Button#268150245790>",
+    "CLICK_TARGET Employees at=(815.0, 411.0) hovered=Employees:<Button#259660974753>",
+    "EMPLOYEE_CLICK checks=60 failures=0",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

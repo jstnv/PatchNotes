@@ -1,0 +1,36 @@
+{
+  "elapsed_seconds": 0.3991954000084661,
+  "process_cpu_seconds": 0.21875,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\exposure.gd",
+    "--",
+    "--output=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-exposure-20261022-v1\\action-war-4417-v1.json",
+    "--route=action-war",
+    "--seed=4417",
+    "--source=5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536"
+  ],
+  "exit": 1,
+  "timed_out": false,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"final\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"metadata\" variable because the value doesn't have a set type.",
+    "ERROR: Failed to load script \"C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-exposure-20261022-v1/exposure.gd\" with error \"Parse error\"."
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"final\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-exposure-20261022-v1/exposure.gd:453)",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"metadata\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-exposure-20261022-v1/exposure.gd:454)",
+    "ERROR: Failed to load script \"C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-exposure-20261022-v1/exposure.gd\" with error \"Parse error\".",
+    "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)"
+  ]
+}

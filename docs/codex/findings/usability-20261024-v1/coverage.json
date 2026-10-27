@@ -1,0 +1,2465 @@
+{
+  "scope": "Source-fenced union, not a single all-green run against one final source. Final affected suites were repeated on the final immutable source. Earlier failures retained.",
+  "suites": 182,
+  "missing": [],
+  "runs": [
+    {
+      "run": "regression-v1",
+      "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1",
+      "pass": false,
+      "canonical_unchanged": false,
+      "checks": 182,
+      "failed": [
+        "verify_alpha_command",
+        "verify_alpha_pack_ui",
+        "verify_alpha_phase",
+        "verify_beta_base_hand_resolution",
+        "verify_beta_command",
+        "verify_beta_host_playtest",
+        "verify_campaign_continuation",
+        "verify_campaign_live_parity",
+        "verify_cult_following",
+        "verify_design_command",
+        "verify_design_phase",
+        "verify_development_replay",
+        "verify_education_debt",
+        "verify_education_edges",
+        "verify_feature_parents",
+        "verify_feature_store",
+        "verify_feature_store_copy",
+        "verify_gameplay_hud_overlay",
+        "verify_gameplay_transition",
+        "verify_pause_menu",
+        "verify_research_ui",
+        "verify_store_shopping_guidance",
+        "verify_studio_traits"
+      ]
+    },
+    {
+      "run": "continuation-v1",
+      "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1",
+      "pass": false,
+      "canonical_unchanged": true,
+      "checks": 10,
+      "failed": [
+        "verify_alpha_pack_ui",
+        "verify_cult_following"
+      ]
+    },
+    {
+      "run": "continuation-v2",
+      "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2",
+      "pass": false,
+      "canonical_unchanged": true,
+      "checks": 8,
+      "failed": [
+        "verify_campaign_live_parity"
+      ]
+    },
+    {
+      "run": "continuation-v3",
+      "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v3",
+      "pass": false,
+      "canonical_unchanged": true,
+      "checks": 10,
+      "failed": [
+        "verify_feature_parents",
+        "verify_gameplay_hud_overlay"
+      ]
+    },
+    {
+      "run": "final-focused-v1",
+      "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1",
+      "pass": true,
+      "canonical_unchanged": true,
+      "checks": 17,
+      "failed": []
+    }
+  ],
+  "coverage": {
+    "verify_alpha_exit_arrears": {
+      "run": "regression-v1",
+      "log_sha256": "3fea31eb26493393db79b54caf06eb0b2793de9d5ec4aa86c7c098bb4efe8b4c",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_alpha_exit_arrears.gd",
+        "sha256": "ecc0e5b3d9f7d371a06ca18ca74a66372fc0b251805825d0d8e165a2a82a6c11",
+        "original": "res://scripts/debug/verify_alpha_exit_arrears.gd",
+        "original_sha256": "adb35e56b16065473bcc69997952b54faea1fd975efe41d352b4ab58ef827390",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_alpha_finalization": {
+      "run": "regression-v1",
+      "log_sha256": "d0fee7c52b284adfda8a03d8b14b7b1e0e705881a9dacf5d7a1f1699f3ce5846",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_alpha_finalization.gd",
+        "sha256": "7de7983b3e92a41a706918f422c019fd05b1b66d829750be56884f58daf8eecd",
+        "original": "res://scripts/debug/verify_alpha_finalization.gd",
+        "original_sha256": "11aa166297140956e77e554c9a487802930040e58a1bb33cba104e0f298bbdb9",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_alpha_shop_pack": {
+      "run": "regression-v1",
+      "log_sha256": "bd63d7752ae46cd28e9d0097254ad475a38fb8a0deac7dbb9c62596ce063f5bb",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_alpha_shop_pack.gd",
+        "sha256": "7691b9193ab90e6ba16ba76187f3db7b34ed4cce0e13951635d33e932f81d0a1",
+        "original": "res://scripts/debug/verify_alpha_shop_pack.gd",
+        "original_sha256": "0ede8b194334bee12f60680095b9cea5ede9f8d18c59f4587e71f709e7677872",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_alpha_shop_pack_cold": {
+      "run": "regression-v1",
+      "log_sha256": "5a6a9be4d0f7c89fc705c59da44fbf9416ee1279211881d09bf255155d69cb98",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_alpha_shop_pack.gd",
+        "sha256": "7691b9193ab90e6ba16ba76187f3db7b34ed4cce0e13951635d33e932f81d0a1",
+        "original": "res://scripts/debug/verify_alpha_shop_pack.gd",
+        "original_sha256": "0ede8b194334bee12f60680095b9cea5ede9f8d18c59f4587e71f709e7677872",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_atomic_selected_redraw": {
+      "run": "regression-v1",
+      "log_sha256": "67e34253d634fb28d0f7d75363e0dd3f5332413e3e7e09a27fb9895d79721378",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_atomic_selected_redraw.gd",
+        "sha256": "d75befd90c3a0301fa1141cbb53dc8a230d25da04f91321485d10b42982d70d9",
+        "original": "res://scripts/debug/verify_atomic_selected_redraw.gd",
+        "original_sha256": "6cc5f13d78ebb90fbee1b5cbfd95cb501c1f3a56d05dcc496400035f572f63cc",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_balanced_primitive_contract": {
+      "run": "regression-v1",
+      "log_sha256": "4ddd1d7032d779ffd028b0ae900479c9e334cfcb09b42696337f1c8565daddf6",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_balanced_primitive_contract.gd",
+        "sha256": "323e83ecda968bff7e148f82c035c4fa19222970aa16287a7ba034b1a907acfa",
+        "original": "res://scripts/debug/verify_balanced_primitive_contract.gd",
+        "original_sha256": "87c88bfbfa16ab3ec120687dd205a199735d1a93c648e50040c2a1bed4212fc6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_bank_finance": {
+      "run": "regression-v1",
+      "log_sha256": "ca069489f5d89c1c1a0613ebb07bab1d14246cecfa39910cf8e09506eb4caf9e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_bank_finance.gd",
+        "sha256": "28342ee4115fe13c25e99d3cf3483908583a81ee56f999ce5d753789efae46ca",
+        "original": "res://scripts/debug/verify_bank_finance.gd",
+        "original_sha256": "4bfd73c00d53ac7b1aab61e7deda5238bd75f965fd78f2e85edd1f59abf8667c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_bank_integration": {
+      "run": "final-focused-v1",
+      "log_sha256": "b8389b153eb4256bad2c85c1a8b80e44a8024fe026e8a00641c729654ef95785",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_bank_integration.gd",
+        "sha256": "655b2b7915ea89a4af3b8729a559c6b37d0de208cba038b2471a94e290c5797d",
+        "original": "res://scripts/debug/verify_bank_integration.gd",
+        "original_sha256": "10e02ae19035f2c5d39b8ce947f0d4d7e4708b9c5d6b5585ec9e072730fbc400",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_bank_loan": {
+      "run": "regression-v1",
+      "log_sha256": "cb8b8048218b114ccf8287cd55dddaaa5d324721bfffebb85ff4c27127be5066",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_bank_loan.gd",
+        "sha256": "0cdf5160cf76cc6a476b5645fe2729bb3d59659f5bcc77fa6ad7f7f30def9e60",
+        "original": "res://scripts/debug/verify_bank_loan.gd",
+        "original_sha256": "a6dcbe4442ff7c1137ed884d1f12364833635de750dbd96265a6c50183f309a9",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_begin_project_extraction": {
+      "run": "regression-v1",
+      "log_sha256": "840d2a4af6d057ead3e0e09268aa81742e4b9fa43c53ec7e169b35d9d8479296",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_begin_project_extraction.gd",
+        "sha256": "ee86ac43dfe8920d1117dcdc91c0c3cc8925a041eb38f7a85c1e06470dc9218a",
+        "original": "res://scripts/debug/verify_begin_project_extraction.gd",
+        "original_sha256": "5ab50c35e56cd1902cd7a0a9569fa74a7630864ac63d13aae2173a58340b4719",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_balanced_operations": {
+      "run": "regression-v1",
+      "log_sha256": "2eacc2d494f205b56d97a9f7058401e25d0279a377fde66bca95722d58110b52",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_beta_balanced_operations.gd",
+        "sha256": "c85323abc84b314d0797c825eb5292b0b4d68e138e9b6898d4fd40a5ca4b2b44",
+        "original": "res://scripts/debug/verify_beta_balanced_operations.gd",
+        "original_sha256": "ba299282ada55125edcb2055d269bca29d51eeaa0d3b3f6d496311bc74f50fcc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_card_data": {
+      "run": "regression-v1",
+      "log_sha256": "1a9450ee68ad8b8a6d8c6c2baee457ecd120bcfb198f8cea5c6692a9633d3550",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_beta_card_data.gd",
+        "sha256": "72ea15a3d9e18f38b9060cead5425c56664742b6ed390eb5b47b42b5a9108fc9",
+        "original": "res://scripts/debug/verify_beta_card_data.gd",
+        "original_sha256": "b21eb3395db4fddbc5dd9d3c993ab48aa6b3691ef866e7e019c8e96499ad9a8a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_finalization_and_launch": {
+      "run": "regression-v1",
+      "log_sha256": "0742c5dde579fdd948841e6b3e9502fa71ec000cfbfa3323df21f5c462a22c7e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_beta_finalization_and_launch.gd",
+        "sha256": "015df0c8cbf54a466f4ce19c10501dd9170c164026a71fbdab42bcda5cf2ee83",
+        "original": "res://scripts/debug/verify_beta_finalization_and_launch.gd",
+        "original_sha256": "2a474a9481eee6930267884a62ee2ecd1fa2dae0b1f0c6fc46ed7d23c3b8c1bc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_marketing_insider_state": {
+      "run": "regression-v1",
+      "log_sha256": "b299ecd6bff37c700b8be05c49ecda05988adaa2d3ef02e7c09d980be1b30655",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_beta_marketing_insider_state.gd",
+        "sha256": "e105bd0cff85787648509ed041342d25ca2e2bfc1d95416a507e72452a12c86c",
+        "original": "res://scripts/debug/verify_beta_marketing_insider_state.gd",
+        "original_sha256": "520bcfcc8791007cb902d48d95650eded74b0c60ccb55e3f9611da1ddf1f4cb2",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_marketing_specialization": {
+      "run": "regression-v1",
+      "log_sha256": "c16078e39f1f8d8e303e256c8cdcfff851669412a74a0917860b721aab074012",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_beta_marketing_specialization.gd",
+        "sha256": "24cd399c110a8a62b77c52ce6a1134f9a9448969ea9dd86be4e7f2f3840fc247",
+        "original": "res://scripts/debug/verify_beta_marketing_specialization.gd",
+        "original_sha256": "2240e948ada7cedc09153f51748c31e2b44de946edbc7a87c779e46c4292b59c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_planning": {
+      "run": "regression-v1",
+      "log_sha256": "125d4ea0f2928c2bafb0b889462087ebc9835502e205d6815de88b711b6f1793",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_beta_planning.gd",
+        "sha256": "20f022958c098bf903e7e92831f35b54098e625c52f0371f66a4da2e18c0aa6e",
+        "original": "res://scripts/debug/verify_beta_planning.gd",
+        "original_sha256": "f078027443a4b8ccf0605abf7dbb7faec665bf1f4d6dd2efac7af0acac64686f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_qa_specialization": {
+      "run": "regression-v1",
+      "log_sha256": "3de32d62133e93e051562041284542d405a7705dcfbda2863c92e96e5566d075",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_beta_qa_specialization.gd",
+        "sha256": "05eb1eba5f7af049400443e7b1ff618620c301fdeb4e876abbb9de1b6a614e8d",
+        "original": "res://scripts/debug/verify_beta_qa_specialization.gd",
+        "original_sha256": "4607ec1f9c287df6a82326e603f7e9e6db6aded36758619496695ae0321cd7f0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_qa_state": {
+      "run": "regression-v1",
+      "log_sha256": "63baba46d24077bbeb330cd0309c5ab5381ac090e85ee020bfe5ed31b44cae79",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_beta_qa_state.gd",
+        "sha256": "ffb7465f758de66465abc5e4865024cb34c2d66f4f138c1312686f00dc2195ab",
+        "original": "res://scripts/debug/verify_beta_qa_state.gd",
+        "original_sha256": "6db5c7e45d406740717650a4abaa58289c9197a5264d2f8c61d7c62f1deff66c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_batch": {
+      "run": "regression-v1",
+      "log_sha256": "f01682f5b27e060fdadd33d5d51a083e806e28f49503a01f1089cfedb72cbd96",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_batch.gd",
+        "sha256": "ff95e26c3a5945d0eea93ec76f55ec8d761b2300aaba317dfeab7e6dc3a1638a",
+        "original": "res://scripts/debug/verify_campaign_batch.gd",
+        "original_sha256": "50defe0a531af4f05096303820c89551ad7928bc328f8b90a9af16eafddecb36",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_reducer": {
+      "run": "regression-v1",
+      "log_sha256": "1782835de922a638cb23f53b392b848ac81eac841bf29db5902a336e0f3d808a",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_reducer.gd",
+        "sha256": "9497944f6b66cefc7f9ab8796d2ae563c18680ec00fc27d236e226f0cd31f601",
+        "original": "res://scripts/debug/verify_campaign_reducer.gd",
+        "original_sha256": "1abe71d055b411561eb55f513c8cfe2eb52d19ada94ba57d7a2a2b83a0287933",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_seeded_parity": {
+      "run": "regression-v1",
+      "log_sha256": "df8d20ac1cb5cbe4861e1769e943090be3f9e0c9d91b8cbe8fed4c1100e70f17",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_seeded_parity.gd",
+        "sha256": "3ef530564981a09f82b631a56b1210bd17439b9eb1522e3c7e6230f5f1ea9c94",
+        "original": "res://scripts/debug/verify_campaign_seeded_parity.gd",
+        "original_sha256": "a5763e17c9116d9dcd2d1a95e7a2e8928240870f191581f684bc4791f04bbccf",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_session": {
+      "run": "regression-v1",
+      "log_sha256": "b470cf9d1befc3ee175c1ad713ffbb79eb1fa317a2860357493e40c6d11178ca",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_session.gd",
+        "sha256": "098e6dc37ba41d6a7a314f409125c9c646d15ab5853816574772b3ee365c560d",
+        "original": "res://scripts/debug/verify_campaign_session.gd",
+        "original_sha256": "c4081de9b924815ff87a57decb960754677fd453a707b4a895bd3b4ad1b7e430",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_stress": {
+      "run": "regression-v1",
+      "log_sha256": "dc9b19202067dbb42caac450d5db47943e6cd3620a769ba898453d9f6ef5fc93",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_stress.gd",
+        "sha256": "8ec51817c5d7b9eca144714baa885e21bd75b28a276d5b471588147a96b240bd",
+        "original": "res://scripts/debug/verify_campaign_stress.gd",
+        "original_sha256": "ec761f08b5d6ee8fe1b1598e256f520cb9a18666a93bfc4c4defa31129dd4eaa",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_stress_cult": {
+      "run": "regression-v1",
+      "log_sha256": "6f140c72a716153be39aabea041917065d0510a6f29453a2cd0e09202de1c34f",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_stress_cult.gd",
+        "sha256": "e1060f446af43def8c73c5708105a6171606ef36aa67a5704c2c8cc860d539f3",
+        "original": "res://scripts/debug/verify_campaign_stress_cult.gd",
+        "original_sha256": "fec82b7971c1e0c6a5cf50997291370009feb5f26922f8bd22a714bb305482fe",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_stress_education": {
+      "run": "regression-v1",
+      "log_sha256": "051a408b2f9a80b7cfd42656d841f667d675d725e0139661f2743909529ae1ae",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_stress_education.gd",
+        "sha256": "80096a327f2624b5e91cce47ee372de896c9c9a8982f2e68389309d8cd18b96f",
+        "original": "res://scripts/debug/verify_campaign_stress_education.gd",
+        "original_sha256": "c907466a17676cb68c31fc61162bb46d7aba116c58009c0c48fddc0d0744a7b5",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_stress_puzzle": {
+      "run": "regression-v1",
+      "log_sha256": "6f140c72a716153be39aabea041917065d0510a6f29453a2cd0e09202de1c34f",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_stress_puzzle.gd",
+        "sha256": "0a6b7641a164becf9c6c699cc14c2126ebf6f837465ae146eb33b9617654e008",
+        "original": "res://scripts/debug/verify_campaign_stress_puzzle.gd",
+        "original_sha256": "5c49223a58028cdd723998d8df031bb0cc61172ab84f72b555747d80d784b941",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_telemetry": {
+      "run": "regression-v1",
+      "log_sha256": "3642b4efe304a898752961379793a0703e24b8a55a5934ba172b8d8e4ef3d0ce",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_campaign_telemetry.gd",
+        "sha256": "8592a54b45a94387ed94ec658c8faab115836c048eaba34d6525c2ea58a2f800",
+        "original": "res://scripts/debug/verify_campaign_telemetry.gd",
+        "original_sha256": "971c7767a8d1dd74e67aec5112499a13b62a4458daaeff801f28ae5772bdb701",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_candidate_retention": {
+      "run": "regression-v1",
+      "log_sha256": "410216003bcfc17b81f8ce781d32c84eeae84185079148b284435c835367944e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_candidate_retention.gd",
+        "sha256": "0fe47ffbdaa2bd376ca8060499f439cdbe163713afed5b51e09ae5e31ce2fa5a",
+        "original": "res://scripts/debug/verify_candidate_retention.gd",
+        "original_sha256": "fa3d7274979a97382b1c06ed72763ee509df77f4ce538662dc305c82fdf2ca03",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_card_fan_entry_layout": {
+      "run": "regression-v1",
+      "log_sha256": "19c99229c3151ae7d2ebbe1583c89c249a7a497c9b48d500e6bc9537b147d14a",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_card_fan_entry_layout.gd",
+        "sha256": "1f4b4eb4afd248a495ede7d2df0b1a313bade73c03919ad1487a8802091a9264",
+        "original": "res://scripts/debug/verify_card_fan_entry_layout.gd",
+        "original_sha256": "8f1699d8e955e2f27de191b395eaa03d24d9829e1ed06c3f9839520af5c5c4c3",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_card_frame": {
+      "run": "regression-v1",
+      "log_sha256": "09bc6af54c6be33724ea6d8e69bfb686f4f23fd2b1a4f17b2d37f20ebd4a2dbc",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_card_frame.gd",
+        "sha256": "b68a6e44d8ec0444c6a4533ab589485454ed005efc6b04e221294332beb7d34f",
+        "original": "res://scripts/debug/verify_card_frame.gd",
+        "original_sha256": "e163784483dd09a5211f5ef12df2ee268f81d1977a56bdb55507d644bc3a5ced",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_card_motion": {
+      "run": "regression-v1",
+      "log_sha256": "3e88d37a1317b8ba6f179d808a1ca8d3f50f372b1e73d33251eb0400f9301cba",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_card_motion.gd",
+        "sha256": "0135d59a3af8d049d79bc99b6e68ec293ed9e5450abf4a3520ff133ba39f6525",
+        "original": "res://scripts/debug/verify_card_motion.gd",
+        "original_sha256": "ca9bcc0664b22eff8f11025a70674cbbed41b5cf43e1b794b19cb2ba41208a18",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_checkpoint_codec": {
+      "run": "regression-v1",
+      "log_sha256": "235695a7253abd6ef088ffdb94313aa22c9e054304a44d309f97618f25ce70a6",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_checkpoint_codec.gd",
+        "sha256": "cf47b5c8c04c8f45b4f47447f2c6e0fc73ae38744261d81f4e1d23f8dcbe5ac5",
+        "original": "res://scripts/debug/verify_checkpoint_codec.gd",
+        "original_sha256": "58d504595cc16f7695a607e0a91e36586ad284a9d3756925418478092930c7d4",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_checkpoint_recovery_ui": {
+      "run": "regression-v1",
+      "log_sha256": "cea13472461d0e08eee77d961ba4a198dc01a4bfd524d199b05f4df2aff186bc",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_checkpoint_recovery_ui.gd",
+        "sha256": "536845cdf054a13fe59f86ce196166f7f0d14c5c96e99d07593ab0fc5fd4a67d",
+        "original": "res://scripts/debug/verify_checkpoint_recovery_ui.gd",
+        "original_sha256": "ee4be5dfc9680e38cec746454e3ae0005435d566faffd55e3dafbeb5db7c7ca6",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_checkpoint_rng": {
+      "run": "regression-v1",
+      "log_sha256": "bf0e9dcbb67aa5d1d97de7513fcf54339fabf128ef75506a959ac63d2da0ec67",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_checkpoint_rng.gd",
+        "sha256": "6bce90b827a621d6386cba90dddb5eb755cce7f291edcb7fe6602a1d30bfa655",
+        "original": "res://scripts/debug/verify_checkpoint_rng.gd",
+        "original_sha256": "f54370dc10e4fa68d68c67b796dbb825db205e8b15770dc33c15a854f09c64a1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_checkpoint_runtime": {
+      "run": "final-focused-v1",
+      "log_sha256": "39771b1c08efca9cbeef592312ad35f3cfc98ccb9ead853ecf0bd80fa8c2ad6a",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_checkpoint_runtime.gd",
+        "sha256": "bf4d6b0b2c68e84a22cfc182f634fed664350b661f1aa864bc85de41a309f850",
+        "original": "res://scripts/debug/verify_checkpoint_runtime.gd",
+        "original_sha256": "d4ced092027518524e610b4835ca886e505ad30eca6b993e28a089d77136073f",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_checkpoint_store": {
+      "run": "regression-v1",
+      "log_sha256": "35c7fc4284a355b471fd05ad91596b054a06e4dafe5dadf3808d3805d19628ec",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_checkpoint_store.gd",
+        "sha256": "064beed4fc32ef2375cb4149a2647947c4fce18b93195ab37c0a7d9b84e50137",
+        "original": "res://scripts/debug/verify_checkpoint_store.gd",
+        "original_sha256": "6f0c87408f4f9f6fea7dc02ac720fb067ea9d55b7c7eb0e9af62ae65f865a987",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_continue_loading": {
+      "run": "regression-v1",
+      "log_sha256": "c5dac5a546181a0506618ffaff2231cfc90cdde5b3f5ae85af4c34725038ba48",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_continue_loading.gd",
+        "sha256": "bb2b224ac08e1ac22f39d67d9b6f6a28f12fab3fb0ead4f64cf9b38a4fa3ac94",
+        "original": "res://scripts/debug/verify_continue_loading.gd",
+        "original_sha256": "47ca982d62a91e1fca435cfda76b53b5e38dccab3fae6e71b3e795bc1b2ace3c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_contract_challenge_matrix": {
+      "run": "regression-v1",
+      "log_sha256": "8d40a56cd5d896ff13021b78b2b6690cb977083db0765ba92814dc2a446807d3",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_contract_challenge_matrix.gd",
+        "sha256": "91de3cf7d064b0569c7964a05f3d5a1dafa0b94942c82aeff0eb7b27e3a2284f",
+        "original": "res://scripts/debug/verify_contract_challenge_matrix.gd",
+        "original_sha256": "b77b5f3238016f79795eed5f5fa06afeeadb2f9cf952d75135417709fc0a4194",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_contract_challenge_publishers": {
+      "run": "regression-v1",
+      "log_sha256": "b61acfbc931025ff2d7f12366aecbfdedb676c09c755a3add011bf14070abe52",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_contract_challenge_publishers.gd",
+        "sha256": "5495e68f9500ca5593590bef30d0468076d53031787fb69179bfd91f3826c7f7",
+        "original": "res://scripts/debug/verify_contract_challenge_publishers.gd",
+        "original_sha256": "8e172900a92aa843ea2ac72401b950f6872d030a6b972c83de1aaf0c8a325a2a",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_contract_challenge_runtime": {
+      "run": "regression-v1",
+      "log_sha256": "36279c3ad0c1ae2eefe2631e930893e3857a4e6504ea388e3a3833dc756a0335",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_contract_challenge_runtime.gd",
+        "sha256": "56ee2c3337854155a8092d8bd647c7cc2ea41d6698e01dbb9197edae4c3c486f",
+        "original": "res://scripts/debug/verify_contract_challenge_runtime.gd",
+        "original_sha256": "90bb98af3a3328c4f548ecd6e61692ec8dba71312c47490cd3386da122c3696d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_contract_definitions": {
+      "run": "regression-v1",
+      "log_sha256": "4f37679b239ffaebbe4da3025462818bf7c033deee7f4ca206bda7d7427962da",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_contract_definitions.gd",
+        "sha256": "5ef7e1ddf9199db7761f177c05df6168bdef38a32c67ee456454a7b98bbc32ca",
+        "original": "res://scripts/debug/verify_contract_definitions.gd",
+        "original_sha256": "0ea3b5c496d91fa2e633feed9a3ceb50b2e08b9cabb74154b449111f3cad3b73",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_contract_extraction": {
+      "run": "regression-v1",
+      "log_sha256": "c439c9ae4c78bc32c4e90f20759ae15ee0c6b309b59c17daf891ae548cd82372",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_contract_extraction.gd",
+        "sha256": "ff23af088a2ddebe91e828135a77654dedee3394be93a40c83210c2db2417174",
+        "original": "res://scripts/debug/verify_contract_extraction.gd",
+        "original_sha256": "68ca58f47b764e94bc452e6d9358781e9ccaebf6f8ab2d0e9d03f1ce31e3c676",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_contract_presentation": {
+      "run": "regression-v1",
+      "log_sha256": "caae3f3dea321739a318599bf004bfdb4ace186fe31fac4e1bb5385bd87de16a",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_contract_presentation.gd",
+        "sha256": "40a4437f05aeddafa0e244373976f4a34813f3dbe681a9de0a5cced80b326b65",
+        "original": "res://scripts/debug/verify_contract_presentation.gd",
+        "original_sha256": "b100eef2f889d8d22d5681025d24cc28673783fdc1ad6836fa1a574cf610d7a4",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_demo_settings": {
+      "run": "regression-v1",
+      "log_sha256": "d62a3aa0c055ba153e104e502fa2db640bd72019b552bb2b0f738676170ad8eb",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_demo_settings.gd",
+        "sha256": "49f6032d38770c1d21aa76cdcaac173d01e03f0db9d23101de2831c2ea721bed",
+        "original": "res://scripts/debug/verify_demo_settings.gd",
+        "original_sha256": "5b6da65f14ac704ec649fc8315159758ceac5915fbe5467f9a351cd7d3e6701d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_development_protocol": {
+      "run": "regression-v1",
+      "log_sha256": "057bf41fdaf0350bb8dc2a6f7598989922b8be57eec6463b021d6c3a45208536",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_development_protocol.gd",
+        "sha256": "78e0035e5348370b3a790ae37083ed32eb567c53991b67dd2d7d80373672684f",
+        "original": "res://scripts/debug/verify_development_protocol.gd",
+        "original_sha256": "b4140318289ab9dcd3d52fde237e811a31a530e21bb1cb719dec28ef65879a58",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_education_atomicity": {
+      "run": "regression-v1",
+      "log_sha256": "9b2c605674721b5c0ffcb1e0bf02528d722cba5f3608e35509a7e492e8425aea",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_education_atomicity.gd",
+        "sha256": "23535be4213475d1fe971934b6476592dea6782871cb565bad3c7fe34faabff9",
+        "original": "res://scripts/debug/verify_education_atomicity.gd",
+        "original_sha256": "cf06183e2a49486dddb7b3db77342444f4c476b1976f7d14143dd7960acdc3d8",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_employee_hands": {
+      "run": "regression-v1",
+      "log_sha256": "cf5267e061f611086d34e4a4c5a0a0b33d5e99e8359f09bce017ca9b95cdc205",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_employee_hands.gd",
+        "sha256": "be78b0190d663f7a210ec9d477b4ba3f02509012eedbd259b54536d9568e829a",
+        "original": "res://scripts/debug/verify_employee_hands.gd",
+        "original_sha256": "a150d8842780cfaabf2b917e11c63d96157f4fc3b44c2df99bfb4b6aa4707b26",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_employee_ui": {
+      "run": "regression-v1",
+      "log_sha256": "76fbf94b736101bf360b1e6a6a1bc4fe06edebf729ef3a6b2746441ebda4b45d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_employee_ui.gd",
+        "sha256": "ec5414cc0a299eaa6ff038ba22d633538d47dfb0565b4b4f7d3f6aa5da466a46",
+        "original": "res://scripts/debug/verify_employee_ui.gd",
+        "original_sha256": "151885ba06c42eef19315422c37f88d438e8d2193939741cecd0d49f3bb29202",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_employees": {
+      "run": "regression-v1",
+      "log_sha256": "711fb65736be3627ad38c55478a0006e1ac2c4a205f367726129ffac33197554",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_employees.gd",
+        "sha256": "72c5875b36a1101b05f0ecf8ad31b76d877db79d44b4994be8d321db1cc384b9",
+        "original": "res://scripts/debug/verify_employees.gd",
+        "original_sha256": "99a47aeeee6319d805fa460ae9a4b9f3cbf536bce337c7abe065883d1f1f1ffa",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_exact_cent_run_state": {
+      "run": "regression-v1",
+      "log_sha256": "5a1301012603eaa77cb3aa906b8d1890763b753efba0a8f73dbfe98909721afb",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_exact_cent_run_state.gd",
+        "sha256": "9d752e98d80d1e62dd5146d19d0dcb1f12d51ce1d8fcc9452f5417bc4b7ce715",
+        "original": "res://scripts/debug/verify_exact_cent_run_state.gd",
+        "original_sha256": "4f6c4449a58b7245f2ba09ab050c01a6f7cb1e2be9f79cacee90691d1cd1c2db",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_fanbase_checkpoint": {
+      "run": "regression-v1",
+      "log_sha256": "8006f3c5ba767ceed42e6dc37464e2a38cb17d4b1452a8d0f1da6b1523d1d301",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_fanbase_checkpoint.gd",
+        "sha256": "384ea7b98a43526f0467655111519007919f360c05d624f3d002409c52fc8688",
+        "original": "res://scripts/debug/verify_fanbase_checkpoint.gd",
+        "original_sha256": "9c4c6e9047ff4a723825038dd17eabef76033203a5102db579a20e3e5a795c9f",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_fanbase_incremental": {
+      "run": "regression-v1",
+      "log_sha256": "e096d4f329bed91bb42133a64074d6307f535b48d2f451f5ac976001fad32f2d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_fanbase_incremental.gd",
+        "sha256": "4a0bf02709170b6d7eb4ee801e76bbcdb5af1b7dfe4d47d4bb87ce193f40e191",
+        "original": "res://scripts/debug/verify_fanbase_incremental.gd",
+        "original_sha256": "9842056957b81cecd688da8f7516eb1a21462ad33d47ec800a79fff636a9a5ef",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_fanbase_ui": {
+      "run": "regression-v1",
+      "log_sha256": "66b81db6ecf9a63787acd8517791611fb97e9cb209ac0a74fda6d7b5562ec538",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_fanbase_ui.gd",
+        "sha256": "baf69fb44ca7bf5193462065fefc6d39e8687ecdbb999d3c2d8064e752fae71e",
+        "original": "res://scripts/debug/verify_fanbase_ui.gd",
+        "original_sha256": "5d9cebdafc9d9fbf9ea0100a37be17de80a3fb15edba7ed21d301bd7b73e74e3",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_feature_research": {
+      "run": "regression-v1",
+      "log_sha256": "2e961f3cb125e3bf4b9efc5e6134b9642714f6846ea15c1862c705dbccbae726",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_feature_research.gd",
+        "sha256": "e04baead96a3d60172d40a00a7e60d36f4032c3bff7cb4f196a9ff5c26be5d20",
+        "original": "res://scripts/debug/verify_feature_research.gd",
+        "original_sha256": "84571dc3ad9bd922c2d49602ef2d32cea5d8784cc08c1d676bd2f3773d4ed130",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_feature_spending_guidance": {
+      "run": "regression-v1",
+      "log_sha256": "eb24eac0891741a04d37284fca71a12d26f8d4b5cc328a6aa92b1c8326dcc632",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_feature_spending_guidance.gd",
+        "sha256": "85f4f25c98335d854b4cdfcbf721702ded702fd0244f1c9ac6f32af5bc8db847",
+        "original": "res://scripts/debug/verify_feature_spending_guidance.gd",
+        "original_sha256": "1fa2bc4813aee6078c67676ed87be9ca1ca48cb433793854cfe3c927b41b4666",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_feature_store_cycle_purchase": {
+      "run": "regression-v1",
+      "log_sha256": "0d58c3e23224db28c0ee8465c2605bad2cee7553cafb0ae597888f986e423c9d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_feature_store_cycle_purchase.gd",
+        "sha256": "1e90cf579b3a235ef4d4d8f6f580c8f7c6d552433fa153b0da10ab642ed1f3f9",
+        "original": "res://scripts/debug/verify_feature_store_cycle_purchase.gd",
+        "original_sha256": "9f30e59c635cfd1ce7581b349c64edd0fc1664c1ba1d6eeeba56d54f73e3395d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_feature_store_navigation": {
+      "run": "regression-v1",
+      "log_sha256": "98b2f420d7b87c2bdd2df91e01e9b73e36fafca95b3e3af2f4c93429e966ee7a",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_feature_store_navigation.gd",
+        "sha256": "d764b50c64eaf51b6ef893f1474ca802c10fb41c447196c41f9aa517bb759456",
+        "original": "res://scripts/debug/verify_feature_store_navigation.gd",
+        "original_sha256": "91f23939f35dd8e7ba5fdb9b37cf127fa65587188c26ad13c0c12f3f87507071",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_feature_store_radial": {
+      "run": "regression-v1",
+      "log_sha256": "fb57e69a2b64d8ee73ee126ab5b21fe055c44583df78ab6709736966c14e02c8",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_feature_store_radial.gd",
+        "sha256": "1abcd762b7de0a62d35df2d4103072cfb21fba312a9324bf2bf456ccd6419d0c",
+        "original": "res://scripts/debug/verify_feature_store_radial.gd",
+        "original_sha256": "5f0d20e489ee870be50c8fb48ec6458cf8946c5cdb80b0d6e6b62a25015cdae1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_finance_observation": {
+      "run": "regression-v1",
+      "log_sha256": "9e0d59b7122393b44f7c2238e8c00bfef2637baf989ea472fc1d57724c9d2682",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_finance_observation.gd",
+        "sha256": "d6076046d9e62bd0310424e169353408d766554e3f3b4b1d38d1d194a8f7ac89",
+        "original": "res://scripts/debug/verify_finance_observation.gd",
+        "original_sha256": "f8e75f5ddabea0ec8472f950ddd381bed4acff4028d64d6d57a3e5ff87c4bfc7",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_first_game_and_tips": {
+      "run": "final-focused-v1",
+      "log_sha256": "455f5b8f8faadf36f8083f44a89a4de385b6c51f8922063be5ff26e64bc900a6",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_first_game_and_tips.gd",
+        "sha256": "eade266879afd7e8fa939059d1d183da9191cbd0706f7e014cbd565ea6e8a7d8",
+        "original": "res://scripts/debug/verify_first_game_and_tips.gd",
+        "original_sha256": "ca2b3662486cc30c7979f8013507cd5dedac4fd11b478f3596419cc664c5c8da",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_first_game_scripted_tutorial": {
+      "run": "regression-v1",
+      "log_sha256": "139dd8f1f9459f4e7890979b6684dc9d3b67d3c263d5f6ae5c97a1b9b0ab1feb",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_first_game_scripted_tutorial.gd",
+        "sha256": "7c90e4b88fc811cc903c5e7096064f0afc6acb234c1f87a870f4285c13723bd4",
+        "original": "res://scripts/debug/verify_first_game_scripted_tutorial.gd",
+        "original_sha256": "e7b19b4950db999ad549a354db4d845c1d3c0308e44f684360a678df44e60020",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_first_studio_feature_economy": {
+      "run": "regression-v1",
+      "log_sha256": "f09b1d273a2a7f65e8ec785f25b692fb398bf8a930fe7ed8bb9a3f0955ac67a3",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_first_studio_feature_economy.gd",
+        "sha256": "53971a4927b109e11d03064258bd895ad5dfbca80893af04dfdcebc765e39792",
+        "original": "res://scripts/debug/verify_first_studio_feature_economy.gd",
+        "original_sha256": "b460bc26070925b1598550d99f386f890619a06409bae2cf1182b9c52448b3bf",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_founder_foundation": {
+      "run": "regression-v1",
+      "log_sha256": "c7bf07532c62cd71f8058a9dce36a0bdda821a369710e5522931bf18adabb9c7",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_founder_foundation.gd",
+        "sha256": "0773f9fe6b705cbb82b87601c3d0dd6ae12b9148f766d4db882d8c16a3a755e3",
+        "original": "res://scripts/debug/verify_founder_foundation.gd",
+        "original_sha256": "0f44dae561393c118be4ac3ac82ff3b3486423afa4c281c573073a4586ac0927",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_founder_victory": {
+      "run": "regression-v1",
+      "log_sha256": "f74f6154a2b1e8ba54898b882e4b4fbe9ce2f9e7a6003c75ed79ed4d0da441b3",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_founder_victory.gd",
+        "sha256": "eb1a8981c3abd6c28f8a247cdc7acccbc628629f3be7789f983408f2cedd8464",
+        "original": "res://scripts/debug/verify_founder_victory.gd",
+        "original_sha256": "ac355f449083b06a34e2a3dd2184402eaf4dc191d333832ff69e791800b726ab",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_legacy_world": {
+      "run": "regression-v1",
+      "log_sha256": "77064797a018c4762277c2e21f22968b6e69480939df2f6ddc5d7c8f8f84a85e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_legacy_world.gd",
+        "sha256": "938669ab56c9bb141066ec81991463c2a1e47365c1c325707b8dd8eabe288e12",
+        "original": "res://scripts/debug/verify_legacy_world.gd",
+        "original_sha256": "b6bb20752bd3c28c4b161a7f1406045451705e20e732672211feb0683bba8030",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_founder_victory_cold": {
+      "run": "regression-v1",
+      "log_sha256": "062bbaef605938841b838520ec84e51ef61b925f5c5ff34ce1c2a99b41b67878",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_founder_victory_cold.gd",
+        "sha256": "4f3677a75723e1759d5a2d4b55d19eaab56eb8f6497faaad84466c70aed6018d",
+        "original": "res://scripts/debug/verify_founder_victory_cold.gd",
+        "original_sha256": "a6def52726202ef45731473d9954e3603d1f33952ddcd32c99a83975fde69582",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_game_lifespan_sales": {
+      "run": "regression-v1",
+      "log_sha256": "df7ea5f2a1313f1ca331f8e3d7618b2ea42b0f3423d093e7e3fae0015458b9e0",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_game_lifespan_sales.gd",
+        "sha256": "0afcfad37627bef8c896e76057ba404428721b474b711c3f1dd951ad4723f0fc",
+        "original": "res://scripts/debug/verify_game_lifespan_sales.gd",
+        "original_sha256": "1f5b0fa0e05bcfdd4e8d635dbf5f5f2ebd47f8c2301137f857cb6e05e0b16d33",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_game_lifespan_trial": {
+      "run": "regression-v1",
+      "log_sha256": "41fe0a370879b605ef18c1e96236cc644a459c1a8d09e30ee6ee118a0a9e8095",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_game_lifespan_trial.gd",
+        "sha256": "ed33e7c8a7d80658718582375cd4efef63353d4b7d8fa65e7dcf563d8fca8aae",
+        "original": "res://scripts/debug/verify_game_lifespan_trial.gd",
+        "original_sha256": "9be516168698be878813bf1246224e136ec9f0f106c749d3d65b1c74863e64ad",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_gameplay_tree": {
+      "run": "regression-v1",
+      "log_sha256": "63a1107342d923886f51a4f934d764f24344324a493ece1415003b3276c9ed7a",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_gameplay_tree.gd",
+        "sha256": "1a051aad6d7112a757266b5e9ccd89db46af11bece046a92c0cd579abf068731",
+        "original": "res://scripts/debug/verify_gameplay_tree.gd",
+        "original_sha256": "9e64f38994692617859dcbbb5561458010bb8a21f5c3e6c0ecb5da0524305db3",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_genre_checkpoint": {
+      "run": "regression-v1",
+      "log_sha256": "38adbebda2909f37bf7a43e8de5cc7c088ee6f7b0fdfd8e6c6444a551f66a85d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_genre_checkpoint.gd",
+        "sha256": "5bc4020a3495c69d38ae00fcb28db0fb909e1cd711dac6e9fa6634f0ec740c10",
+        "original": "res://scripts/debug/verify_genre_checkpoint.gd",
+        "original_sha256": "ba3f0367201b066f5ae0fe3f136dafd550f0448be4c2c1b804c960dc3d272818",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": true
+      }
+    },
+    "verify_genre_fit": {
+      "run": "regression-v1",
+      "log_sha256": "e9f2a3dffa32a2006d06faf85b3f46eb96a2a3ea00ab63c75c1d5dae5a18bd6b",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_genre_fit.gd",
+        "sha256": "8c88203bd86e331a6db3f4235105af3f5ebb3fb69533e3997af15c6855fc53c3",
+        "original": "res://scripts/debug/verify_genre_fit.gd",
+        "original_sha256": "d3daff4840188a50dc5005ce41352510d61e4d37d6a47563d8d75cca96c65f25",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_genre_targets_ui": {
+      "run": "regression-v1",
+      "log_sha256": "4154b7f07fdb5f631dceb229165233ec9ee9415a58f894d4f7785b4a0ce243ad",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_genre_targets_ui.gd",
+        "sha256": "00ba9d5153e87851af33d4b7bb619a3a75c006c814a24598eb9d3332a1893457",
+        "original": "res://scripts/debug/verify_genre_targets_ui.gd",
+        "original_sha256": "336dcb351d26eb9a690d634f2e42dbea5ddfa52310e7af587d902a6ee4b07df9",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_how_to_play": {
+      "run": "regression-v1",
+      "log_sha256": "bf99808f92aea7b041a0efb3e1ddc7770ada3b8794b54e4afe068e30f1f2b3c5",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_how_to_play.gd",
+        "sha256": "f361612403479d869210fc0abd89622e8695d872c5920c87f551fcbf1396e637",
+        "original": "res://scripts/debug/verify_how_to_play.gd",
+        "original_sha256": "565059fe3bffd520e5120a2e3aa3d57d5313309bf78952f7270bdb646f0396ba",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_launch_extraction": {
+      "run": "regression-v1",
+      "log_sha256": "b5407c647b414eb8bfbd8dcda66c8a9c0a81be6f7874b726e5b5e2f5d38be0ef",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_launch_extraction.gd",
+        "sha256": "bf0648a2cdb8314f1aa5ff9d74047ad008aa3e2019f8cd90737f35558013b91f",
+        "original": "res://scripts/debug/verify_launch_extraction.gd",
+        "original_sha256": "4b2cda225c9f668e6c8d60196178ab66a0eb30002e07d71764ee5b8869265e0b",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_legacy_gameplay": {
+      "run": "regression-v1",
+      "log_sha256": "da920be40fe6d1065101d4eb47f4a34b4a26b1388714add2a1316c47471a8f9b",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_legacy_gameplay.gd",
+        "sha256": "09f08ece989361c7f9a69822d9f5455d24f9bd7d493f23e44ed897d88e5fca8b",
+        "original": "res://scripts/debug/verify_legacy_gameplay.gd",
+        "original_sha256": "64226e35c505a903eea8b19a72f0d0c63cec168a81dcb47683a22d4a0439ee38",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_lifespan_reporting_integrity": {
+      "run": "regression-v1",
+      "log_sha256": "335cb178446d8af816859c9f0321c6b2f2cb411f579d1e77467b1e0e8aef2dbd",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_lifespan_reporting_integrity.gd",
+        "sha256": "3057f2146ccc115a91fd30e06d84fdfbc57d25252b0a66c7341dc7a3043e0228",
+        "original": "res://scripts/debug/verify_lifespan_reporting_integrity.gd",
+        "original_sha256": "5684aca737eaeefa6f7841a9dbdbdd0865ea22063055dab6d1848283114be881",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_main_menu_history": {
+      "run": "regression-v1",
+      "log_sha256": "45aff8d61bc08aa3e267612689f4749032959a799f5d7d8969d664847f825c63",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_main_menu_history.gd",
+        "sha256": "0d5114e650b2ef4ec1e7d1f95e2494b5df2d351870b06af57a2ad1cbd1240a52",
+        "original": "res://scripts/debug/verify_main_menu_history.gd",
+        "original_sha256": "543fd45a8b989ac355f1529ee763f3af40bbde630041dd56dbe3f79955f02f67",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_market_browser": {
+      "run": "regression-v1",
+      "log_sha256": "6a726935dd226ae9f0f3d96c66af82adf6bcf086b4a7ec4b4cbba7f413bdf612",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_market_browser.gd",
+        "sha256": "807b1092eb175685c0a9cb02fa58df68760890f47d066259ef91a1de0f977557",
+        "original": "res://scripts/debug/verify_market_browser.gd",
+        "original_sha256": "b936478777fce8df74de48d37d6ab1e36e73884923ba20c5fc72997f81f6f1a6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_market_density_trial": {
+      "run": "regression-v1",
+      "log_sha256": "b3af70ad927952337034f4b45d60ede11b51b1368ca930f2408c63953fa20aae",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_market_density_trial.gd",
+        "sha256": "02c7e4739ee05c11bf3b4e868f3d8bed5a331e6d5fbbbbe88ac84b5949490167",
+        "original": "res://scripts/debug/verify_market_density_trial.gd",
+        "original_sha256": "e04334a1813803f854e32abf3c9cb7574ef04381e07d9e31e71bda4fd24b3188",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_market_release_index": {
+      "run": "regression-v1",
+      "log_sha256": "f16a9d2ba3d96fff32c8e26573850b48ae7da3edc5cada67ce38cad640fca5d1",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_market_release_index.gd",
+        "sha256": "6d1d4c036b99d729d24b8089c5092f6e042e83d2a4dcb58784c1560e95b79eea",
+        "original": "res://scripts/debug/verify_market_release_index.gd",
+        "original_sha256": "b595f554ee663b608f97b435adede33f3dfbbcdd1341cc0d906eb14231ddcab1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_market_release_index_cold": {
+      "run": "regression-v1",
+      "log_sha256": "594679eb77b90d620e9c44915afaec09cb58277b39f808c4ccb2b7d601b7e348",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_market_release_index.gd",
+        "sha256": "6d1d4c036b99d729d24b8089c5092f6e042e83d2a4dcb58784c1560e95b79eea",
+        "original": "res://scripts/debug/verify_market_release_index.gd",
+        "original_sha256": "b595f554ee663b608f97b435adede33f3dfbbcdd1341cc0d906eb14231ddcab1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_menu_navigation": {
+      "run": "regression-v1",
+      "log_sha256": "634a2ce2ac35da75fed8d6ac38df4e95c5680cc0f875c587f5758b33d1e1e111",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_menu_navigation.gd",
+        "sha256": "9ed3f841e17c0c4356e08b2344ad553b9c28edcd6779c386cab5de302301ffe7",
+        "original": "res://scripts/debug/verify_menu_navigation.gd",
+        "original_sha256": "2c5232684dc112536a63e6537e7b02e0e67f2b881107d3ab1218a2c3f8ff4207",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_monthly_sales_report": {
+      "run": "regression-v1",
+      "log_sha256": "17d0bb17debbdc610175c35187bc1984a1a24e0453880bcf7c93ed6652c37a57",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_monthly_sales_report.gd",
+        "sha256": "f56f31aed6b0c4deb34c116d986c29357f876d82ae8f72fe6491a111b0fd17f6",
+        "original": "res://scripts/debug/verify_monthly_sales_report.gd",
+        "original_sha256": "46d814b01a2e18a484fc5bb39f256f7e657794fd3e7dbf667af8202f12a3bb13",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_outstanding_expenses": {
+      "run": "regression-v1",
+      "log_sha256": "315e23449addedb60fb6be7bc6ede546ad4e5163723cee4aef7104709b18d26c",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_outstanding_expenses.gd",
+        "sha256": "e4e83684519a70c3af203bb26b58c6c0819d308c8b025c500b16cff88f111aaa",
+        "original": "res://scripts/debug/verify_outstanding_expenses.gd",
+        "original_sha256": "6956410131a5088f8bc1bbcf24c5cba46d9fd211c2ae377d33be1fb9c80110a0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_pause_audibility": {
+      "run": "regression-v1",
+      "log_sha256": "6d89da5334207cc9de725e599bb743a6b8b81c521f1b6304b5586597e3927d09",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_pause_audibility.gd",
+        "sha256": "cc70e86301c64512cdbebd9f801fac2c0fa150972cf01d60317a68ce9e1ba2ac",
+        "original": "res://scripts/debug/verify_pause_audibility.gd",
+        "original_sha256": "520cf474ade9ff1e3ebcb60f212c857588c004ad446813eb55a13f0afb6efb14",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_pause_music": {
+      "run": "regression-v1",
+      "log_sha256": "a225a90deb53a0e13e6f360e26a31a4ef6c196b4cd95f3779ca7e648c1b77faa",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_pause_music.gd",
+        "sha256": "02c1455ad64b8cb26f3de432a2191282a8cd4b04a0e69ff60bbba34a5a58c562",
+        "original": "res://scripts/debug/verify_pause_music.gd",
+        "original_sha256": "cdcb2f8c36195c0da5c51d1c26e241ae3e0e3bd143b83076027e00e220682ed0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_pause_track": {
+      "run": "regression-v1",
+      "log_sha256": "ddb0ce1bd8a020f0c294a64ceecfe2092ee65e2069b11db0ed74671f3aa63d1f",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_pause_track.gd",
+        "sha256": "ca14ebed50cbf3b364304eb31933f8a712c9cf50f15faf69857ec4d2a8c53a41",
+        "original": "res://scripts/debug/verify_pause_track.gd",
+        "original_sha256": "06a97d2274589154929cf67fee7bde027d4a269000893cae271000f213054af6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_pause_track_continuity": {
+      "run": "regression-v1",
+      "log_sha256": "517b0ea928e2a696768fecfdfe0c0d9cd56ba0113daf60634d1708451c71c055",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_pause_track_continuity.gd",
+        "sha256": "c9b9c1d6147cae1aad5b098f5854017d0329477d2fdd3cc5c7d914bf85bc9994",
+        "original": "res://scripts/debug/verify_pause_track_continuity.gd",
+        "original_sha256": "ab7201207e395732f9456328b248a32359c43b0955304b29bc8f7241bdcf7e9e",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_pool_organization": {
+      "run": "regression-v1",
+      "log_sha256": "a8c30d3d6eea27790ae6b9c1548ee5d91ebcd5a7529a6506899ae76208a4ceb3",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_pool_organization.gd",
+        "sha256": "d94cfba5331ff907b2614a03b6c705fd0fdf3ae2538cda533b1e08c832f0b497",
+        "original": "res://scripts/debug/verify_pool_organization.gd",
+        "original_sha256": "242bef2cd74473f6282a13d9c9db860c2205bd67d0b816f6130c5c63d76f9952",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_predevelopment": {
+      "run": "regression-v1",
+      "log_sha256": "4201dd5b18457668b64ff03e3eeee51cf9f33bbd8ceee24d5a1b8caeb34eb45d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_predevelopment.gd",
+        "sha256": "fd1c9601bf2ad4d90c5d133a054c4befe2e636b12344a0b0fa94b6df22d2f650",
+        "original": "res://scripts/debug/verify_predevelopment.gd",
+        "original_sha256": "c84f35b7a36bd472ed50381773d95d843a1626f85ab72ac7ab198f3e3f0c714c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_primitive_awareness": {
+      "run": "regression-v1",
+      "log_sha256": "9256bd236c7c17e88ea637f69999be40d2556df7a549ef81ca344fdfe2fe450f",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_primitive_awareness.gd",
+        "sha256": "e4f0bf2018c2be848fd3c7138e582daaf6b3e85ebcea4564cb2820d44803ce65",
+        "original": "res://scripts/debug/verify_primitive_awareness.gd",
+        "original_sha256": "9dfc32808d366ed7dd9c8052c4bcd39c2ae4c3e6c461e9e2657bc74e63cf13b6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_primitive_branches": {
+      "run": "regression-v1",
+      "log_sha256": "46edb80a3ac93919debddca2a37d4a81fac6c385ed4906097b7072bc7236be16",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_primitive_branches.gd",
+        "sha256": "6cb7de0b1d059e1a2b388679e70c57be8d0773ce016d2d588d80e0e074dfc291",
+        "original": "res://scripts/debug/verify_primitive_branches.gd",
+        "original_sha256": "39ffe11936e20f781396ac1f64b4ca2dfa0999dd84a1e0dfbab4fd1ac3e5e01e",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_primitive_launch_market_context": {
+      "run": "regression-v1",
+      "log_sha256": "53d732d430cd43644e925d73f898e149b6d6a2b5c9eea8bf1d8dc83e7ff23e11",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_primitive_launch_market_context.gd",
+        "sha256": "12ca0ecd9823c4f414463ebaeba19e4fd3b2f3f97618d0a760e8a20cdf32a6db",
+        "original": "res://scripts/debug/verify_primitive_launch_market_context.gd",
+        "original_sha256": "9649cac921c4fa1eb38b46dff5186d5016df1b736a98cdafe0e7f95011c21193",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_primitive_month_one_sales_revenue": {
+      "run": "regression-v1",
+      "log_sha256": "ac31d29c68fa3bc17210d44e6469de6a48971ee26478e609844963bf103eefaf",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_primitive_month_one_sales_revenue.gd",
+        "sha256": "0fcd63fd1d5b2b7d90a872a906dc26e07aae6a2be27cf51a69b70c42dad09b1d",
+        "original": "res://scripts/debug/verify_primitive_month_one_sales_revenue.gd",
+        "original_sha256": "2ec277bc9992acc4fcc1359010174cdd4d5a595f40ee868f16268e17b8356406",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_primitive_review": {
+      "run": "regression-v1",
+      "log_sha256": "793090b9dbc47cda79f12a942e6539455f692a9a5e8e25e62be7c43ccfe82003",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_primitive_review.gd",
+        "sha256": "2a6c2ea1e0691119f340d50a00ff0bd9999bcc7c808fe305c9b2f65d2d80a5bd",
+        "original": "res://scripts/debug/verify_primitive_review.gd",
+        "original_sha256": "192912dd63e8b78321712e8779043a00594edb1bfb103fe2ee2278e5e3d842d4",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_primitive_run_initialization": {
+      "run": "regression-v1",
+      "log_sha256": "581cf2fc2059e290259ff47f36378fef5e5ea2f3d57ad1ad3b25d46de1b6b35a",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_primitive_run_initialization.gd",
+        "sha256": "f43590954ccd8aef4b127782686f3b23ed9ae1ee1234243e91e4d90f0351fdd8",
+        "original": "res://scripts/debug/verify_primitive_run_initialization.gd",
+        "original_sha256": "d2115b0fd450975b766deae08f7dd4f0461ac7ae5ca77d275e4213ab51ea712a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_primitive_snapshot_ledgers": {
+      "run": "regression-v1",
+      "log_sha256": "c0e49476ab26080023911cdea4aa04f3960f84da80217b4dd4661e6a1db08f92",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_primitive_snapshot_ledgers.gd",
+        "sha256": "67d4472e5a1603b6bafe7e37dd9ff6967611ee8e776468e93e4a5552a98c2595",
+        "original": "res://scripts/debug/verify_primitive_snapshot_ledgers.gd",
+        "original_sha256": "6397c68f833546090a480e0dc81f66ccb3ccf7b3952eeb4e58ba48e6b970144f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_primitive_units_sold": {
+      "run": "regression-v1",
+      "log_sha256": "b557abc217adcc5c63c241c852e8a4eef551382e69d1ffc7ba3e091e472838cc",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_primitive_units_sold.gd",
+        "sha256": "88c896877d3ffa1aace1a72de66165515da2899a05a93a3507a7378be0cbb94f",
+        "original": "res://scripts/debug/verify_primitive_units_sold.gd",
+        "original_sha256": "c70dbcd6bbb685855765965c9594ef387e8c2b402c62f64bf55897dcd1573471",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_priority_influence": {
+      "run": "final-focused-v1",
+      "log_sha256": "c1c6a60ee44e4c2be9679cc6440223049eb20e3c5da31753b5525cb32fc78c5b",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_priority_influence.gd",
+        "sha256": "88d498415b297db15830317b3ffaf5e0fe5509f1222b62b9e22648a4b3d6e526",
+        "original": "res://scripts/debug/verify_priority_influence.gd",
+        "original_sha256": "6d40eca8972017836c18741e91bb2250bc2a3aa64456e1a65c47b35eb85e7551",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_production_extraction": {
+      "run": "regression-v1",
+      "log_sha256": "62a8da499b7efb1296fd45fa5d613bac2b47785eb0856617376af1b44553a1d1",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_production_extraction.gd",
+        "sha256": "b48629a6a6ad215fbb04ef52d8067cd42080cde56923347139ab9200e061ea91",
+        "original": "res://scripts/debug/verify_production_extraction.gd",
+        "original_sha256": "1c51d0da42e83b73e42c793224324800895d44b11668e4f9dd841091ac924c52",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_production_overflow": {
+      "run": "regression-v1",
+      "log_sha256": "f9092452c3426bfdfafc070e1c0715f160c36f32d35c623839200547e37ced3e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_production_overflow.gd",
+        "sha256": "a10b20a1dc896a315172f6c32e475339c5394e2cbfb2cee385b573f1d1e5f202",
+        "original": "res://scripts/debug/verify_production_overflow.gd",
+        "original_sha256": "73b4cf9dcd5e74a2a2d9d58ba58710c519afc56952255c9383a0312c25fb9627",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_browser_states": {
+      "run": "regression-v1",
+      "log_sha256": "0b96d7aecec24661f17fffeb938be64b11fc75e73b538a419542c2031da1f4e6",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_browser_states.gd",
+        "sha256": "99c16421958bde7c4277536819917f1573b7500a5fcf7c56489c7cf1a8279d66",
+        "original": "res://scripts/debug/verify_publisher_browser_states.gd",
+        "original_sha256": "b8e6157abf5f42d649f83a646e13b454201f632ab437421a9114342ddd13d54b",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_connections": {
+      "run": "regression-v1",
+      "log_sha256": "b45c35c95016a2206ae3880bd2c9a237c4022177bcedf951e3e1c140b613281e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_connections.gd",
+        "sha256": "d1aa60a3d695bd9b48fe62498abb57e21b6d8db2bc1e7277ca82cc48f4113f1a",
+        "original": "res://scripts/debug/verify_publisher_connections.gd",
+        "original_sha256": "d22058dca58e6bb5692df3672bfde3b0a31de8059aeab306364bb3d93cff2466",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_connections_ui": {
+      "run": "regression-v1",
+      "log_sha256": "aa6cf777eebf38defd5af9f03fd68b73feb45f10ab428044c824b0958d4faa73",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_connections_ui.gd",
+        "sha256": "d9d4eb202d84b5e956e0ec7447104615517e47fea716bdc50e2c252c5dc7e604",
+        "original": "res://scripts/debug/verify_publisher_connections_ui.gd",
+        "original_sha256": "b15aff774ea36a9ad07444222dca422044392a27793b117e2497529cb5b1de72",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_list_progression": {
+      "run": "regression-v1",
+      "log_sha256": "db20e59d2cd0fca4155c9dff266492e2c8f86e87c658d7f8f466a287bcb78869",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_list_progression.gd",
+        "sha256": "d99d553c476dc9763224df9917dd5678cabe8990d47e26c5bde6b593d110bef3",
+        "original": "res://scripts/debug/verify_publisher_list_progression.gd",
+        "original_sha256": "b47b7982d7696da635177ed7949725c64dd4d2fdd52695b3aaa08e402adf2c6d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_relationships": {
+      "run": "regression-v1",
+      "log_sha256": "f287288bd2671051656dee4c2b2c3d92a5e6b8e24ab2f19565f83874632af261",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_relationships.gd",
+        "sha256": "df4d9ae169d5d4292b1d5f5a1aa2064150a104d9cf27114264a4c6041facffec",
+        "original": "res://scripts/debug/verify_publisher_relationships.gd",
+        "original_sha256": "1193866fe7f0b10efe129cbab28e84bc8cee0bd4e2b39aa317051959cdb0bfb0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_support": {
+      "run": "final-focused-v1",
+      "log_sha256": "7c4244df45c7492a7821a64206d56a65196a78da4b3c02c102fb85bcb5306909",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_publisher_support.gd",
+        "sha256": "940b57c8c222cc9c2976a1ed45e7bcfc5fd85d1e307199b7a1afa570f1727896",
+        "original": "res://scripts/debug/verify_publisher_support.gd",
+        "original_sha256": "c51b6769c51e88c386dbb485df1553bca9fde416c7c3ebe2dd38a3368c53fc9e",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_publisher_trial_cash": {
+      "run": "regression-v1",
+      "log_sha256": "75e700dc10c2c1188b365a6dfa9beb828e2e91f4242908231bb48759a68bea18",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_trial_cash.gd",
+        "sha256": "e6209623f8055990aaba96dfd2c79dd6e49403e5e4281d83d2bf34685569d5fe",
+        "original": "res://scripts/debug/verify_publisher_trial_cash.gd",
+        "original_sha256": "307db9e7cd0cf3aeb69876c383a0f5077d464e1a8c9b679b5236b1b8bff8ee45",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_trial_liquidity": {
+      "run": "regression-v1",
+      "log_sha256": "34a1591e37bad0b51d0d9cd9bf8f2373d7ae2d8261afe92d2540cfdcf50f86e2",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_trial_liquidity.gd",
+        "sha256": "c100b3133f5869c4052da3e8fd3dd6b6ce21669de30329d2e058d7309557272f",
+        "original": "res://scripts/debug/verify_publisher_trial_liquidity.gd",
+        "original_sha256": "f12c8290ef559dfb96ad3ddb4322a14fed7f75ed3630bbdd439d9a9f4b113fce",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_trial_offers": {
+      "run": "regression-v1",
+      "log_sha256": "49b9a23044086fc81caf89f5e621455a79db69ebbb5149c03a051efa8365085b",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_trial_offers.gd",
+        "sha256": "f92a2b99e7df9a8bac437d0c7f23cfe5a8ac6dcb5a934b3451e32424f5074b67",
+        "original": "res://scripts/debug/verify_publisher_trial_offers.gd",
+        "original_sha256": "c000ae846880c0c764d07f2acece6d7cf91b364cd5daacce74cfbfc0cd0ca038",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_publisher_trial_promotion": {
+      "run": "regression-v1",
+      "log_sha256": "54c02d47f2bf206e52f3d80bb4685c3c6559993fa2b03c11d80de94e4ea49396",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_publisher_trial_promotion.gd",
+        "sha256": "9c7f34a1178227908cc5ebda417e5134be5a1dad827ef138d1103d3b0c16e307",
+        "original": "res://scripts/debug/verify_publisher_trial_promotion.gd",
+        "original_sha256": "4c45e89e76320b4e9d7db969212f99c79bcd4f83a43c026cc77d43324403e198",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_queue_source_migration": {
+      "run": "regression-v1",
+      "log_sha256": "bb3b75c767ef66c90d36b9caef15d1a76002a1707886da000a495de4fdbbdada",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_queue_source_migration.gd",
+        "sha256": "45d74834b94efaa39ef03829aebe13bcb9a1ccc5327d1b2b28f574a1f3364c59",
+        "original": "res://scripts/debug/verify_queue_source_migration.gd",
+        "original_sha256": "b2cb39b88cbafcffb1d118ad21c49d487a6cde4c1924362915a5407f9917cbf0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_redraw_class_parity": {
+      "run": "regression-v1",
+      "log_sha256": "d3bb360b9905effada9765d7f2724364237175edaf96d55c686fd1e0ebfc222d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_redraw_class_parity.gd",
+        "sha256": "f546e5601d91e0718fdbc53df43a676eb82995c64e963854fe65ac2156fd9a8f",
+        "original": "res://scripts/debug/verify_redraw_class_parity.gd",
+        "original_sha256": "c43d1b79629060d55cf21cf5e5813d7ae57f6e69c361edf1d6ee8974c1bbe2b3",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_release_menus": {
+      "run": "regression-v1",
+      "log_sha256": "bf23dbd2a0622dda363dacb3a5d0e0df6547cb5f43388ec2a1cc9ec9f601aa0d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_release_menus.gd",
+        "sha256": "521f19ce7b4955b97a3430d3a35825817b2d6dce6b9de894c74d32a43466d68d",
+        "original": "res://scripts/debug/verify_release_menus.gd",
+        "original_sha256": "ce9b4ed729e016ead159d68831db28368c19f0aa55e0110f8282c8ad52485647",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_research_integration": {
+      "run": "regression-v1",
+      "log_sha256": "a04f7b4e188a072926444c577ef274a70b92f9bf1f09848d4bebc612c92737f1",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_research_integration.gd",
+        "sha256": "251adf02f971314a16f55359148effea23579f5f8d1565bdb4fcb5e8f8a99138",
+        "original": "res://scripts/debug/verify_research_integration.gd",
+        "original_sha256": "01e33fe640a8363f6b19872a898c0fc0adeefdcd08ba4c2c29c0e9486948b357",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_rival_gameplay_activation": {
+      "run": "regression-v1",
+      "log_sha256": "a74f8cdd0e20f36c3a228a72b44acf8209e42db62e45a4bb330cc2ac7626d9d8",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_rival_gameplay_activation.gd",
+        "sha256": "725c04ffd2d2c44d16064f34eb8865cdb2d1ff754ba6f6480b87dd402b22796d",
+        "original": "res://scripts/debug/verify_rival_gameplay_activation.gd",
+        "original_sha256": "c0a7ae652c42ab12806d06b22a6a31b95e492d947527c38dce66f5fa9f78d7c2",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_rival_gameplay_cold_continue": {
+      "run": "regression-v1",
+      "log_sha256": "b6d67e469151f605bac6aeedbad3739a5532897999b762878b6a189d0c6d43a2",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_rival_gameplay_cold_continue.gd",
+        "sha256": "a823ac48cb9bb9db55381125427f8e592f9b372749edaa31452786e7f7e5920c",
+        "original": "res://scripts/debug/verify_rival_gameplay_cold_continue.gd",
+        "original_sha256": "f8687ef4312094c5d8ef46cd991e1258bc1094ced2e7042c2aa758de04560c34",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_rival_synergy": {
+      "run": "regression-v1",
+      "log_sha256": "08b5ae6460ad178f7865c53792d895e4acba01e7a3a2487ed46de347482807f0",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_rival_synergy.gd",
+        "sha256": "2e37fbcaa4f0b5ef163aaeedc56f0b6912735c6d4320badd4aadcc0201bc52bc",
+        "original": "res://scripts/debug/verify_rival_synergy.gd",
+        "original_sha256": "df39b7060e4917439e4e3f53eb6a53d175433604b40af2e7f369c93e1668f63c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_rival_trial_activation": {
+      "run": "regression-v1",
+      "log_sha256": "94d030a5051fd40cf40c7396e750f58a827be833128de490e8774fd6513b4735",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_rival_trial_activation.gd",
+        "sha256": "cc900b3a6584891e7d6c13353fe09d43f8cdba6143d529132d80ad7134b7d552",
+        "original": "res://scripts/debug/verify_rival_trial_activation.gd",
+        "original_sha256": "7435f2e22b85e8e8c7826d698f719a7d680468c92e72e9c39fd8c3bd340b7b2f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_rival_world_foundation": {
+      "run": "regression-v1",
+      "log_sha256": "1e0f7523d9c731eda17c546c63a5c9934b16252ff6000155559c72c8ed16bde3",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_rival_world_foundation.gd",
+        "sha256": "6125a9b03b7ac5bbbee05e94b617116cc7c7961dd8ed3813e030b0c1ac4ef50f",
+        "original": "res://scripts/debug/verify_rival_world_foundation.gd",
+        "original_sha256": "7099b44b1ff5e8ab4b4641687cdae4c6e34099d367d0f9e517e6643ca6e7d516",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_run_calendar_and_studio_entry": {
+      "run": "regression-v1",
+      "log_sha256": "e57183c8119a078ac093686aa68cd350fcb06fe574406d1c5c8835a8f7fb4856",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_run_calendar_and_studio_entry.gd",
+        "sha256": "122e351728618d70636fab46479dd4e316535bda430208f4d3267865d7d98363",
+        "original": "res://scripts/debug/verify_run_calendar_and_studio_entry.gd",
+        "original_sha256": "3bbf7889747bc12d00388510fc20454c74d5b38338d690dfd640c156ebc82a22",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_run_finance_and_beta_insider_state": {
+      "run": "regression-v1",
+      "log_sha256": "da9f338c67d26799d07c5fd90371b37ac7b7437ba11e0d0a5ce6953bd7a8820c",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_run_finance_and_beta_insider_state.gd",
+        "sha256": "e425b0711f8e927b21579cf5acee3c4f6718e139272b9c62b18f8325ea28ed08",
+        "original": "res://scripts/debug/verify_run_finance_and_beta_insider_state.gd",
+        "original_sha256": "6e34b7dd40d159fdc91eb21d0f2bbaf1953bfa09da080e4104420672acb929bc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_sales_earning_and_settlement": {
+      "run": "regression-v1",
+      "log_sha256": "a3e9d3c4486569337e7217f13261aba7277ad52a47b3cd482a05f9a505e7fe24",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_sales_earning_and_settlement.gd",
+        "sha256": "fa07f27c43c2c882488e376d05aedc9ca7b0c90d31b318b36aae49839174aa87",
+        "original": "res://scripts/debug/verify_sales_earning_and_settlement.gd",
+        "original_sha256": "d3f73fcc6101088a292833c9e8738f3fac5047077d48f40425010b654b2e7e50",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_sales_revenue_hud": {
+      "run": "regression-v1",
+      "log_sha256": "25d5ec9b1d43212a0aa47f78e8c56fb0d085288304b24e00d8c5507d27e1fe7e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_sales_revenue_hud.gd",
+        "sha256": "ab7fb58842376c22243b9f3650d261bc07c90a2c86e5b6b6265aafa8134598a5",
+        "original": "res://scripts/debug/verify_sales_revenue_hud.gd",
+        "original_sha256": "d118c40e2da414d2de6f0a31212f28d88ed0a79dc1f5d73d4c4bc3ab789e0b93",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_shared_redraw_and_priority_adjustment": {
+      "run": "regression-v1",
+      "log_sha256": "fbde678be6b5572041ef3367dbc6d082f2142f2a6f896d4f0e2cf01b2d0acc95",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_shared_redraw_and_priority_adjustment.gd",
+        "sha256": "2d78a90518d35c5815efe671c1717ae65d781fa9a636f1f6e635d5611cd0a878",
+        "original": "res://scripts/debug/verify_shared_redraw_and_priority_adjustment.gd",
+        "original_sha256": "f7adef01c2e77326c0cb6186102430ba767de13ad9a2d8fca45e9c373f009931",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_sidestreet_contract": {
+      "run": "regression-v1",
+      "log_sha256": "8ad21866ee0a50791ab80e49db03bc09cf53df8205d0ba9daac69b9e8435233e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_sidestreet_contract.gd",
+        "sha256": "61ad989c5b6e10f168d0c1daa182274ed596e50fc0a2f03f59e10109c41c6d08",
+        "original": "res://scripts/debug/verify_sidestreet_contract.gd",
+        "original_sha256": "cd7e164fdb814177f7ed1be8f07b8dd9a1f8d2e5d6d8ca1e542ed989da2b9f39",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_sidestreet_scope_and_year": {
+      "run": "regression-v1",
+      "log_sha256": "8d9b3c0fd9ab41769a8bd830e92ad1994318a211d76a78c63b2b25e3142d2673",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_sidestreet_scope_and_year.gd",
+        "sha256": "a00e5e0601eacabee824d39201d98b338678a555cea893d20d4eaa2e2f812157",
+        "original": "res://scripts/debug/verify_sidestreet_scope_and_year.gd",
+        "original_sha256": "6da2c4dac17743a845ef7710148657623fff6caaa1452b26ef01a3b826505883",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_simulation_efficiency": {
+      "run": "regression-v1",
+      "log_sha256": "3599fec671a7f6f26ce99a3dbe34ccb53e592ca89fd88950b991c7558354265d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_simulation_efficiency.gd",
+        "sha256": "c8a93fc559358bdf1d5dfeb1f156b92e39a80f94a981a039506e4e5b1590342b",
+        "original": "res://scripts/debug/verify_simulation_efficiency.gd",
+        "original_sha256": "c61e003663eadecae708377d3d6dac2c1bfc9da4579d3b6109344b097cc5c347",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_soundtrack_sync": {
+      "run": "regression-v1",
+      "log_sha256": "5c7f8bf376b6de7ee89e63484ef4d99448df834110ba2d42c7d599e5804be5f5",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_soundtrack_sync.gd",
+        "sha256": "5b32e27cfe4ed296a5f7ee2955a27a960e17ae22e34a2107a1585811c1b82f7a",
+        "original": "res://scripts/debug/verify_soundtrack_sync.gd",
+        "original_sha256": "ab27819927a44d7317ac55f000f174d21ff13dacf285e4b93254eb2b8ff6b9f0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_startup_recovery": {
+      "run": "regression-v1",
+      "log_sha256": "563f6d30ba5ec017a7b5135444f1c49799248f4efe8517d6dcef571eb403a3f2",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_startup_recovery.gd",
+        "sha256": "7822615285fb47a8ece695f0c7d14d345c5fd2f2a9d47b12602b9082c8fe0501",
+        "original": "res://scripts/debug/verify_startup_recovery.gd",
+        "original_sha256": "bb7469dc113dd780fcb2d80350fb5abb448105ff1eb55f66c55143ade9e97539",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_starwave": {
+      "run": "regression-v1",
+      "log_sha256": "6d2d5703042df57af0a24c360562f7ecfbcb6e1ff24ba35cd506360150b4687f",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_starwave.gd",
+        "sha256": "0ec6893bf774dc059ac7e9c1f848d4a5f3923481d910afa9fdf494669217c60b",
+        "original": "res://scripts/debug/verify_starwave.gd",
+        "original_sha256": "d89347e5826662643a28103117ae4578a58992b954467952632ad8e9def592e3",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_starwave_ui": {
+      "run": "regression-v1",
+      "log_sha256": "bf5a770885b19cf686b839a94775d7ea539e71dd01e32647a9ea41cba0c18632",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_starwave_ui.gd",
+        "sha256": "dcd8ee0b0ac0546df92b7c8053e579bcfd109a4dc053bf66733eb11c8f99aebe",
+        "original": "res://scripts/debug/verify_starwave_ui.gd",
+        "original_sha256": "75bbb8f94963a6cbef9cea0445dd8d9a403cf7c81dca3ab0617b8e8b72458c9e",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_store_cone_parents": {
+      "run": "regression-v1",
+      "log_sha256": "ce0dbf85cb65d85ae4094d8ee4687da3e12fadd211f6469752a4efd3002d81a0",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_store_cone_parents.gd",
+        "sha256": "b633b68ed13a71521c59d63c73038671af0a6d260ad6aa9bdcce827b8d10d2be",
+        "original": "res://scripts/debug/verify_store_cone_parents.gd",
+        "original_sha256": "fc1a9c212285e667415c206a888ac3ed6d754edbf0e6888cccf2e73f9899f744",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_store_hud": {
+      "run": "regression-v1",
+      "log_sha256": "a6ddc55f27c060a25a9887b6adb683fabffbacfc793b97174a967b749421cf47",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_store_hud.gd",
+        "sha256": "747f34df400362a45278dfd8ad69feaff74056d97b66bd047e783746e934c84c",
+        "original": "res://scripts/debug/verify_store_hud.gd",
+        "original_sha256": "fc34723fba15e0e11dd42794c687d0f77c7fcadf3e2789cbcc40a4d2b1f8c232",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_store_study": {
+      "run": "regression-v1",
+      "log_sha256": "b4f5056f761adf6665b160908e9a9de190c5370d64e8171e263561791534c390",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_store_study.gd",
+        "sha256": "9592b6c649b7f0b9c64cfc9881fbecc7afd24bc71e3cbbee8a6512c33a30cd7d",
+        "original": "res://scripts/debug/verify_store_study.gd",
+        "original_sha256": "07a30838a418b374e7bb6c3f9d13b59b7c2c1afac921897d234f8be25ac35883",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_checkpoint": {
+      "run": "final-focused-v1",
+      "log_sha256": "e76a043633935be7fbcc092fc9cb9d31a5674b95e2bfa03c241e7c3fbbc69934",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_studio_checkpoint.gd",
+        "sha256": "0e75fa2fdff99cb42e5371e455168df1a3c0e2e12e0c687e2b9421f416963c6a",
+        "original": "res://scripts/debug/verify_studio_checkpoint.gd",
+        "original_sha256": "2628beaab48c608b6d4b3594d05c1b5a79f81b37150960ea2fb6797678995d72",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_studio_fanbase": {
+      "run": "regression-v1",
+      "log_sha256": "e14ad1069c13a121cfd7407362169c4bc7a5c0653dbf109bd18e7eacddcf21a9",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_fanbase.gd",
+        "sha256": "b3be31f825cc0dfcca4b7dfc96282e982f33c13bc184e52f32dac1e352dae9b3",
+        "original": "res://scripts/debug/verify_studio_fanbase.gd",
+        "original_sha256": "9ef116a90fccd232256c747f1c6e2d8a4582cac8df2081b95f0075d587881ccb",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_finance_integration": {
+      "run": "regression-v1",
+      "log_sha256": "ac2268b7849591b29619e5cd6c4dce067ae63f9b5ec9ed001d83f771be4655a0",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_finance_integration.gd",
+        "sha256": "865eb186ce495bf1b784d8ee902fdf3076a7db39af778899addb8995bdeed6a2",
+        "original": "res://scripts/debug/verify_studio_finance_integration.gd",
+        "original_sha256": "49d200927e0bec9f8109d2f88283285ca0e69f027ea9d934c2586c559ee77770",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_finance_ledger": {
+      "run": "regression-v1",
+      "log_sha256": "7238898560c1c7fb166b98a234db488b2ef0870345d8f63e030953fa6aebf12f",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_finance_ledger.gd",
+        "sha256": "c94791cbaeda9d82e1d31c2b11c326054bf603ada2e6af383af7e720bb0a544e",
+        "original": "res://scripts/debug/verify_studio_finance_ledger.gd",
+        "original_sha256": "fe8fdb70d339de4c23236cd592984dce5ec6a81393a4bcc3df92cbc8a12a79ff",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_finances": {
+      "run": "regression-v1",
+      "log_sha256": "70c306cefc1f18753cce6cf799c4b6c2a707bc389660c9629b4dd6d180fcb548",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_finances.gd",
+        "sha256": "56929b7600219ca92ee143d62224efa1879e3f7924b3060b4c59e80fadf9af1d",
+        "original": "res://scripts/debug/verify_studio_finances.gd",
+        "original_sha256": "a55c42cccc523636fc7dd3ea3fa2ecf6b067e6780c685290bef803e6cf81a12f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_folder_menu": {
+      "run": "regression-v1",
+      "log_sha256": "7c3cbc0f62ee55503475b92b382baf6adcfe558bdaa26df1e0efae918ce88d93",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_folder_menu.gd",
+        "sha256": "bc1791d435db4f2010d62fb661683534370ee4fe7cbb2d685ae390f984d37d65",
+        "original": "res://scripts/debug/verify_studio_folder_menu.gd",
+        "original_sha256": "2c48d3ac0bec1ef0625910b610c714568127a13843241c1c34db2640d9f0a621",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_mouse_navigation": {
+      "run": "regression-v1",
+      "log_sha256": "a2f220625342a9cf52ec828ce712b15e87df1a07fcdbacfdb3d7c2fd84a2665e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_mouse_navigation.gd",
+        "sha256": "314159d18a098631b33d00a378b968fc11c0a04b0b2d54583f39dee88ff06998",
+        "original": "res://scripts/debug/verify_studio_mouse_navigation.gd",
+        "original_sha256": "7e60ac7f486b80e8511591cfa24b1456ca451ae29dbe7f783ae282be1078eafc",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_roster_versions": {
+      "run": "regression-v1",
+      "log_sha256": "2856bd0217ea4d3aa7ba47f03795370ba0ae4f2cc6af927136c2c35491c78afb",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_roster_versions.gd",
+        "sha256": "c09d3e8e2dbfe3fe114e238d6968a1703d3d5e3016892912510f9c2bd6dfcc03",
+        "original": "res://scripts/debug/verify_studio_roster_versions.gd",
+        "original_sha256": "e602c2dbdcfa3f5aaff7bf676009e28bb16c07853ea728b3510b4c8410cb474a",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_soundtrack": {
+      "run": "regression-v1",
+      "log_sha256": "d52920a6c36a88aec9e17d35669947e68094338a08b16832560a8d241942f11c",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_soundtrack.gd",
+        "sha256": "2938e63ee70b49f67139ecff4f39d57a6e4e77bc0b1241f27771a90b5099844c",
+        "original": "res://scripts/debug/verify_studio_soundtrack.gd",
+        "original_sha256": "8f777810e941a4478f7761a279f89ff5a61d8cfccbb0ed76fe44849c30fc0d79",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_specialties": {
+      "run": "regression-v1",
+      "log_sha256": "bc61641f8ac87c369ebb3c11efbc134b7034dec9e126e0a0327b352443ac602b",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_studio_specialties.gd",
+        "sha256": "9481eeca2665fa5ab6e2b030018baa1baa61b31866112d4c070c20c56a3fb819",
+        "original": "res://scripts/debug/verify_studio_specialties.gd",
+        "original_sha256": "2220b6605dbc214fa821d9effc04b48437343351c54881974cb34976cd7f23ec",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_three_core": {
+      "run": "regression-v1",
+      "log_sha256": "4fd47f9ced0841e37c5a50baf92ad8936954a839fa6d3f7fb3838c26dadcf73a",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_three_core.gd",
+        "sha256": "d90b1fecf273b2606bb314888f09f911b7879956bc8b32e015bff398683e494d",
+        "original": "res://scripts/debug/verify_three_core.gd",
+        "original_sha256": "077b704404e640cebd098704696e5a397c26343918691d57dd073e8e67d6886d",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_three_core_parity": {
+      "run": "regression-v1",
+      "log_sha256": "d81a459dcef6be7a38ce7fb75eae7adc02884a96400e58d99aabb11ce0aac602",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_three_core_parity.gd",
+        "sha256": "157c2d6a60ba4dbe333e15e0778f1be47091eb95ec56af88ff66cae3d6828853",
+        "original": "res://scripts/debug/verify_three_core_parity.gd",
+        "original_sha256": "fbb32aa4283fbefda155bf42f29048c0942f3fb07b2fcab0b314e2620a60f671",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_trait_effects": {
+      "run": "regression-v1",
+      "log_sha256": "eb1c8093006ecf4f43b4d9536b281ba4b4e97e8a708920a09bf978df2cf986d4",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_trait_effects.gd",
+        "sha256": "0d8af98a33543ba411cc01a101e4fbbb47f02281d4227f238b93ab5829410ff1",
+        "original": "res://scripts/debug/verify_trait_effects.gd",
+        "original_sha256": "d00aecf929c3569709e40047b90590843a682ec3ff14ab741f00ce37c92685e6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_trait_lean": {
+      "run": "regression-v1",
+      "log_sha256": "5153b39e99f3575e5fe11e90950b83ad5ceeb14a6522547a5d7546d35d74837f",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_trait_lean.gd",
+        "sha256": "b457d7cfff6d9e12e504b1cefe6ff71a9e47c0c734d77480c6c947a8d34ab30b",
+        "original": "res://scripts/debug/verify_trait_lean.gd",
+        "original_sha256": "3c0a9753543599424dac7d14330190c02147ea58c1885855e536fe6c5a635bc9",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_trait_lease": {
+      "run": "regression-v1",
+      "log_sha256": "707a0d9492c9dfb59e1d4e851e71caae0c3fc63e5f2d5c15316ffc773b980dc8",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_trait_lease.gd",
+        "sha256": "d03f97457912e6ff9779b9b910b6083d59e414002e1145ae55b13a9659ffff1d",
+        "original": "res://scripts/debug/verify_trait_lease.gd",
+        "original_sha256": "aaaa6a7207c4489c67c98c7ff98b06f0bfc36ea9631f696d87bd64785c6c0edc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_upper_card_fan": {
+      "run": "regression-v1",
+      "log_sha256": "5ab872ca5dbad5e7c2a6779af5640d259dd7378e3d6fa880f0d90eaa72b13a48",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_upper_card_fan.gd",
+        "sha256": "3481113f4bbe3f8319dd8b9ccf0661f218bd7f7b31e7eaa699677ff49095c619",
+        "original": "res://scripts/debug/verify_upper_card_fan.gd",
+        "original_sha256": "36502bbb3d4457a72c45734866b00ca0ac07e0bcd73b3e596b9c726ce2989384",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_usability_bank": {
+      "run": "final-focused-v1",
+      "log_sha256": "1f24682d9b01c487c09e61e3b9c7d510f5f736ad6f80f70fdf1cd715e4cd7a05",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_usability_bank.gd",
+        "sha256": "24bfb22f6112fa698f99bedc9e5af91e0ba48c99b587295fd3ae716513966b42",
+        "original": "res://scripts/debug/verify_usability_bank.gd",
+        "original_sha256": "6d388e563d8f219db9f6e963c1bfd8115c5fdece1c42f1d3447aaf7f48934984",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_usability_persistence": {
+      "run": "final-focused-v1",
+      "log_sha256": "2c10f606d08ae1882433dff5ea2fa4ad0a2b2e3bdb8c504a927bfa7c9f60d935",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_usability_persistence.gd",
+        "sha256": "060467021a78ad3eb7d8eeab2b3c2fa8eba49b06734bc4effbf3dc065b5a03e7",
+        "original": "res://scripts/debug/verify_usability_persistence.gd",
+        "original_sha256": "5e282f3cb545f8676a18549cc63782835eb44ab42f37948e4d0af39481eda806",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_usability_priorities": {
+      "run": "final-focused-v1",
+      "log_sha256": "3ef1a5e4afc3b0deef01190af4890da6b15b330376b9e98b8f5e735996669ef1",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_usability_priorities.gd",
+        "sha256": "55712078dd07cf1315f76fa4681c13db9635fd7d99ab617ebecf21a01e7a6c7b",
+        "original": "res://scripts/debug/verify_usability_priorities.gd",
+        "original_sha256": "b05512eaf9f5a9dc58c657a4a58ccac3ab9f7c51a40dd8812c009c6c6841a8fb",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_usability_store": {
+      "run": "final-focused-v1",
+      "log_sha256": "f62ebb18dfe6fef1e7620c2f380a9ca67aae1776e6af7c3e43eb012c4cf90533",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_usability_store.gd",
+        "sha256": "f86e95127d18c231f8a291e56f362c328bdde5dfa2acf172d2f6113b5033d02d",
+        "original": "res://scripts/debug/verify_usability_store.gd",
+        "original_sha256": "8e67814c34839c91bdabe89d1606cf44e28e203415aeae8ae2b6ee6c1b4659f6",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_usability_traits": {
+      "run": "final-focused-v1",
+      "log_sha256": "a0393ec5bb1ec2fb795448530b2ef20c21cab71a907b36b24029839d10c9f401",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_usability_traits.gd",
+        "sha256": "bcbc9bef0e175091ef78e4a97cc6d2e008f4648f91a21f69bd1e94716499fae4",
+        "original": "res://scripts/debug/verify_usability_traits.gd",
+        "original_sha256": "df276057594e0167c9db212df745773059a7888140df778eb7243cc942c6b28c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_victory_commit": {
+      "run": "regression-v1",
+      "log_sha256": "d546969bfe0345a221913d2d60a200157de637bd5618c2e799e4d846adcdbea2",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_victory_commit.gd",
+        "sha256": "9e700a2dcf85358f62d6870976f26c1338d7a30df7df7205dc754c51a5f599f3",
+        "original": "res://scripts/debug/verify_victory_commit.gd",
+        "original_sha256": "da2e623b031fc61d822b5bc1bb6aa286405e5816ebb467b10d127875055bca69",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_world_restore_file": {
+      "run": "regression-v1",
+      "log_sha256": "542e690136740893fb99f67b20f1535705621ac25180b021ede19302f4c5ee20",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_world_restore_file.gd",
+        "sha256": "7eefd4cc01869291a8bf7af0e4ea5a9c419e223f795b6e1bb33c3a5079343887",
+        "original": "res://scripts/debug/verify_world_restore_file.gd",
+        "original_sha256": "83b95c11fb1d82717fa9e57dbe5ed7ca1784b986331a6f49b217b31422cf2c11",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_zero_work_release": {
+      "run": "regression-v1",
+      "log_sha256": "3ce626bb485f5c52d689a5eddee83c29fdc6ce5a4faa1a496dd38343466eda45",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\regression-v1\\wrappers\\verify_zero_work_release.gd",
+        "sha256": "3472d8d6b8b9a041c7c97af79e4d16e42c7fc52c5b62c7e4b8bb770e2fc91a74",
+        "original": "res://scripts/debug/verify_zero_work_release.gd",
+        "original_sha256": "94be9011743c9ffc1f795435b220620429070092c2f5f24d2a2f3ae62b41357c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_alpha_command": {
+      "run": "continuation-v1",
+      "log_sha256": "842c1a3029771c3ef8278cd76e0a6a738739dbfb1dafad75dc19cf16a75427b6",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\wrappers\\verify_alpha_command.gd",
+        "sha256": "5076ea9d4a24d3bee76e5c11058831b98a94dc7759e45508b5bb7fa8d8f522ee",
+        "original": "res://scripts/debug/verify_alpha_command.gd",
+        "original_sha256": "d418e0327765c6a2ae264b2900c98f380e7a1756bdbf78b2cc1577de4ad1c265",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_alpha_phase": {
+      "run": "continuation-v1",
+      "log_sha256": "a78f94104ada3a7d42167116e5c6d861db02f8e9fcded93eadb662f77c9e330e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\wrappers\\verify_alpha_phase.gd",
+        "sha256": "2701395b0eb3b8b0982d3001c6fcfee0f4b8f88f8d4d485bfed562299a828780",
+        "original": "res://scripts/debug/verify_alpha_phase.gd",
+        "original_sha256": "9298fe633173f6db5214f27b3a8e107fc1ecdc208f44bb011f0947e9df6cabed",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_base_hand_resolution": {
+      "run": "continuation-v1",
+      "log_sha256": "47192ad3c1eaa8bdc88b8b705ab6b64882ccc499d8dd80b4c05ef7c2ccda6161",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\wrappers\\verify_beta_base_hand_resolution.gd",
+        "sha256": "2ec927ac796776c88d2c5d646425b7a82513ad5e1b7fdba34394d618d3331734",
+        "original": "res://scripts/debug/verify_beta_base_hand_resolution.gd",
+        "original_sha256": "48f5a290f01614ea46c27e2cf56d8f9ddbe527d64d7d3155679217fffc8da1d0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_command": {
+      "run": "continuation-v1",
+      "log_sha256": "8cc5585d68d7b26bdf58aa360a403e30d4f47b5bb908dcd54b586ba531cda8a3",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\wrappers\\verify_beta_command.gd",
+        "sha256": "57a632083f2c81cc7dc85295beec46c7e7d20f95f7aaf2fd10290075e61f065c",
+        "original": "res://scripts/debug/verify_beta_command.gd",
+        "original_sha256": "146cdccbc6ca75b91068b197fd3d430346ec94d841b21654ce9f69bd0be25958",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_beta_host_playtest": {
+      "run": "continuation-v1",
+      "log_sha256": "d5a095c67f2ef2f0a12dc766562e6173c9c1dc62278e7c2d69b7ba0e9ec5eb70",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\wrappers\\verify_beta_host_playtest.gd",
+        "sha256": "32241f70f4dc7fa0d0162ee6780b9e75f2c99f967705f780bfd5c272545fd071",
+        "original": "res://scripts/debug/verify_beta_host_playtest.gd",
+        "original_sha256": "53d4de1ab8594f716b48fce8785925270c5ed3a1f9893e13bfd9a610d5b81ec3",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_design_phase": {
+      "run": "continuation-v1",
+      "log_sha256": "25e4a29156db1ea285371cd5c4d4e4e3e623279c09ff43c1b4cdb9877bd1bba4",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\wrappers\\verify_design_phase.gd",
+        "sha256": "a9430c0f0d31730da45f69c2025348704be95f7f9a5810389c32c21b3fe625c0",
+        "original": "res://scripts/debug/verify_design_phase.gd",
+        "original_sha256": "fd55bdf42e0d1078970464340c60294b46332be68cf189e9667142374f556e6c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_studio_traits": {
+      "run": "continuation-v1",
+      "log_sha256": "04ca3b953a82edd7c6d8834c02f96abe13cca3c3a619e7b5ef7ea266abe39a11",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v1\\wrappers\\verify_studio_traits.gd",
+        "sha256": "174b0f1571a72b48ee4a9011621b8f7dfb31361e0f51e6fb25dd8b8ee89f5f8e",
+        "original": "res://scripts/debug/verify_studio_traits.gd",
+        "original_sha256": "a6d591f7ab6bc537139af6f28e33f0cd54919e820b40cac19fdebcf6d4c2c911",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_alpha_pack_ui": {
+      "run": "continuation-v2",
+      "log_sha256": "21d75f1fadc8e5d50a383bb53a8b4dc61c2d5f6cb9f3fcde67663f43325d2180",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\wrappers\\verify_alpha_pack_ui.gd",
+        "sha256": "bfd6ac5aa1c44005e7defcd0ed53347d77870ca794abca80993cf80acbf27ccb",
+        "original": "res://scripts/debug/verify_alpha_pack_ui.gd",
+        "original_sha256": "775f9f95ec09d5d80c3756de0d370d375c82f278b98334dd030cd83f8aaf17cc",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_continuation": {
+      "run": "continuation-v2",
+      "log_sha256": "a0ca7347cf2159d8422f83a3249b1ad1884adf67e7a11db790f5d81003e993c9",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\wrappers\\verify_campaign_continuation.gd",
+        "sha256": "98d626f67cbff696440c2cbf5cd05bc2ee1f455c27b2106dd88e8d5124b6db91",
+        "original": "res://scripts/debug/verify_campaign_continuation.gd",
+        "original_sha256": "9690d349498c42b6780adbb4573fcd86f2c1c38b1c8fc0813e5b6cfee68b08a0",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_cult_following": {
+      "run": "continuation-v2",
+      "log_sha256": "da37833ac58da979f52fc05247d38fe315ab7870ffb391418e28cdb27a0ed1d0",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\wrappers\\verify_cult_following.gd",
+        "sha256": "5def5e8f9347318676f2ecd5f238f9042ee305c81470702c4a632541276f949e",
+        "original": "res://scripts/debug/verify_cult_following.gd",
+        "original_sha256": "7b6adae2f1c876123e347e21c806a8bce6e5cfa4f3225c1f21af182d3b67cb65",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_design_command": {
+      "run": "continuation-v2",
+      "log_sha256": "36ab64b7aed943bd0acff7ed3081f32dbe4ce0b3f638680acb9e6ffd040ec2f5",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\wrappers\\verify_design_command.gd",
+        "sha256": "06d595a51ba0b4a6ff9c867474497197eedb6c06376d75dbd2eae6fd4d159523",
+        "original": "res://scripts/debug/verify_design_command.gd",
+        "original_sha256": "5c1ca96d45d9d29fe9e976e6fbd9248bb61e77be6368a7b326afc3c2322c9b3f",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_development_replay": {
+      "run": "continuation-v2",
+      "log_sha256": "73d104b5c3f6a1ae263f72d239917933c7511fd71f3251c163314f2dd078eb11",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\wrappers\\verify_development_replay.gd",
+        "sha256": "9c097ccd1069c99a2a325aa01bf0ed31be854674d38a45222211b302c881fbbb",
+        "original": "res://scripts/debug/verify_development_replay.gd",
+        "original_sha256": "b68c9ba43b2105677778b4494d046e5628040d292e59d10f18ddee01bab451d1",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_education_debt": {
+      "run": "continuation-v2",
+      "log_sha256": "e311c82862bf1a27318e1bac6d74a39a202482cac8bdd413ae343cf65f2c6a39",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\wrappers\\verify_education_debt.gd",
+        "sha256": "24255633dfaf9e6b13bc1b43e3aa8e56463f9365dcdec21c074058acb91d8ee4",
+        "original": "res://scripts/debug/verify_education_debt.gd",
+        "original_sha256": "8b4a2772192146ad683ad66f57f6932b11e4e50d47cbc418ae08355213c85339",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_education_edges": {
+      "run": "continuation-v2",
+      "log_sha256": "957645fa8180a2bcea1e9c9912f41b566c7eb8301e3ea96f42bec3ff6ed4b347",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v2\\wrappers\\verify_education_edges.gd",
+        "sha256": "f6ddf3058ad40ad5e71917e3cf90bf82a2f731f697318a1fe48a5a106b261224",
+        "original": "res://scripts/debug/verify_education_edges.gd",
+        "original_sha256": "63509859c9e5d38a9d09930e5730443563d8d6ff8fb78f4c7f5b1b97891c82fd",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_feature_store": {
+      "run": "continuation-v3",
+      "log_sha256": "1d168ab322158b0a0f27f0b8458b2ee616a728e411c854bd3fcf7d725250a90d",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v3\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v3\\wrappers\\verify_feature_store.gd",
+        "sha256": "e93d1e3b5820079a9e13309bb91ca12567d91587f79628b91a583d027eff8871",
+        "original": "res://scripts/debug/verify_feature_store.gd",
+        "original_sha256": "807676dc42717725772c8b79bdc50c8ffd186f16191e6a4a089cfb194d821402",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_feature_store_copy": {
+      "run": "continuation-v3",
+      "log_sha256": "09e3b65282ef90b79d4ef171c408328b030ee09bd2e047def6137d7523b3605e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v3\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v3\\wrappers\\verify_feature_store_copy.gd",
+        "sha256": "0f6832ba6a7ffcc4e85996a298bdfec8922a5a325188004a71070923fe670bf9",
+        "original": "res://scripts/debug/verify_feature_store_copy.gd",
+        "original_sha256": "a669bdb25e22f441810fd71b62324ee0d2a6dae46ef48bf65f366f80a2335c09",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_gameplay_transition": {
+      "run": "continuation-v3",
+      "log_sha256": "fee4b8a52260ad81be5f1ccb9c7da9cffc984aa201a5cb15c1b6b9bb47ec20b6",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v3\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\continuation-v3\\wrappers\\verify_gameplay_transition.gd",
+        "sha256": "7aa9bbd609206e8d7e020f53c6c60e19a94b2bdf66d17e8675e4eeae9ed5faee",
+        "original": "res://scripts/debug/verify_gameplay_transition.gd",
+        "original_sha256": "4236eda155de9aa83bb731781f1c6954e8b8e91bb4e1bf54c203dcb21d9fc635",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false
+      }
+    },
+    "verify_campaign_live_parity": {
+      "run": "final-focused-v1",
+      "log_sha256": "6916c39b978052a3a3b279a0dd46f4376236e1ac0f212ad2353cf90113c7a371",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_campaign_live_parity.gd",
+        "sha256": "7d4662062f24ad91acd915b53788c1e47df15618e36ff4605380ab0c450ea45b",
+        "original": "res://scripts/debug/verify_campaign_live_parity.gd",
+        "original_sha256": "2e50cd8577f4c3f355e246fdfc3c5f4ce4d6ab24bed4ed358add61bb6d17ac7c",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_feature_parents": {
+      "run": "final-focused-v1",
+      "log_sha256": "0a5ea99bc8daccdcd5b62603d418c5524f26377a939108e9b7d7db4e81b47547",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_feature_parents.gd",
+        "sha256": "bf3ea3e5b9fee6412fdc70525c5a84c8d21520704a41878eddec23128c5d2de4",
+        "original": "res://scripts/debug/verify_feature_parents.gd",
+        "original_sha256": "2459d82c2b5aa25b424e51453f8329908593333036d674bb2e9ffe82ac9e264e",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_gameplay_hud_overlay": {
+      "run": "final-focused-v1",
+      "log_sha256": "51b1f15a350336b7fe8ea95d9049228c678c2d1e53df3629d4bbf476c7f9d12e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_gameplay_hud_overlay.gd",
+        "sha256": "80a3d3751483fb1b9852152f6fa3e505fb1c01adbe5f3ef80f34c58edb5946ca",
+        "original": "res://scripts/debug/verify_gameplay_hud_overlay.gd",
+        "original_sha256": "e5d4363b2ce469815ceb4030c26d6433dc7d120807cab71961d3f7b1e335a8c4",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_pause_menu": {
+      "run": "final-focused-v1",
+      "log_sha256": "af6b1fcb585fd53a80d6e1e65ba18687fa268584797b4d55af8aa1276b42040f",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_pause_menu.gd",
+        "sha256": "9ce2ea9be4b3d3fe3c07e512fd5e9bc89340bdb76392a2be30ab902ade2963b4",
+        "original": "res://scripts/debug/verify_pause_menu.gd",
+        "original_sha256": "9e1cd25c53f184948ef32f365fbd4d1d3973bdb7d9a88515eeab4cb0074343e2",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_research_ui": {
+      "run": "final-focused-v1",
+      "log_sha256": "7f5859cea43b560310a0643c8d9cf559fbe8c5dd788f7e99b1334300ca9a899e",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_research_ui.gd",
+        "sha256": "d8130ffc56c5d1cb0e475b0a1183eef62dc92493c154b936113858c62d98c258",
+        "original": "res://scripts/debug/verify_research_ui.gd",
+        "original_sha256": "25e4ed61d725dbaef42f616b2751e06d69e6943f347618fa3387bdb174573754",
+        "parent_initialize_called": false,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    },
+    "verify_store_shopping_guidance": {
+      "run": "final-focused-v1",
+      "log_sha256": "40d335c4f60f7aa8015a3e3733edf1819daae0f0968302d77e0a12af964e4f39",
+      "source_manifest": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\canonical-source.json",
+      "wrapper": {
+        "path": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-focused-v1\\wrappers\\verify_store_shopping_guidance.gd",
+        "sha256": "76f334510675b23ce7b0cb0264b1d494b71e6c30109131708be794ec2064d15f",
+        "original": "res://scripts/debug/verify_store_shopping_guidance.gd",
+        "original_sha256": "9461e3906d9eabaf205ec986b042708c28cf9607751e639ed989d7347fb57e08",
+        "parent_initialize_called": true,
+        "preserve_source_owned_lease": false,
+        "test_writer_port": 47735
+      }
+    }
+  },
+  "release_ready": false
+}

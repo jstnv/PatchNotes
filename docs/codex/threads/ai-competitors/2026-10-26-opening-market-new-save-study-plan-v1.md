@@ -1,0 +1,19 @@
+# Fresh-save Market bootstrap probe — pre-run plan, 2026-10-26
+
+**Status: DESIGN experiment; no gameplay adoption.** Question: what Market state does a genuinely fresh January 1980 save expose, and can its already persisted frozen rival archive support a separate historical presentation without affecting live market pressure? This is a narrow first step toward the [generated-history and active-project direction](2026-10-26-generated-incumbent-history-active-project-direction-v1.md), not a test that the desired partly completed projects or 8.0+ releases exist.
+
+## Hypothesis and cases
+
+- **H0 current source:** the live Market browser and market snapshot begin empty/neutral, with two rival Studios in Studio and four historical titles stored only in the archive. This is expected from source, but will be observed from actual fresh world creation.
+- **H1 read-only historical projection:** a private probe can order those four archive titles by historical year/Studio/ID and expose date/Review without inserting them into live release facts, sales, Fans, current-year ranking or market pressure. It must not mutate the world, RNG or cash. This is a presentation feasibility probe, not an adopted UI or a generated new cohort.
+- Compare **A actual live Market query** with **B private historical projection** at the same freshly generated world and seed. B does not change gameplay rules. Rival history is currently fixed; no new score, cash, Feature or WIP injection is permitted in this v1.
+
+## Declared starts, policies and limits
+
+- Seeds `4417` and `4418`; recipe schema 1, player Studio ID `opening-market-probe-<seed>`, name `Opening Market Probe`, Action specialty, no traits. Create the ordinary `RivalTrial` world from the legal fresh player session and current development catalog. Both seeds must have player/world cycle 0 and no player or rival live release.
+- **Commands/releases:** zero productive actions, zero releases, no Store, Bank or Contract choices. The only policy is a read-only cycle-0 query. The historical projection may sort and copy data, not issue a gameplay command.
+- Capture branch/HEAD, canonical and variant source identities, archives (ID, title, year, Genre, Theme, Review), live browser/index rows, market snapshot, rival phase/project state, cash/Fans, player/world/RNG digest and probe timings. Do not expose or infer hidden future draws. A two-process same-seed rerun checks deterministic bootstrap and projected ordering; these are fresh starts, not Studio Continue.
+- Use a named thread-owned simulator variant created from current canonical source. Add only a diagnostic script under its private `project/scripts/debug/`. Run the documented `tools/simulate.py run --variant` into a unique thread-owned bundle, then run the diagnostic against that frozen bundle in separate isolated Godot processes/profiles using the same isolation helpers as the existing AI world runner. Each import and probe has a 240-second wall limit. Retain incomplete, failed and timed-out outputs; do not silently change seeds or bounds.
+- **Stop:** fail the v1 if bootstrap, source identity, archive shape, Market query, zero live rows/facts, world immutability or same-seed exact bootstrap comparison fails. Do not declare the desired opening achieved from this probe. A project genuinely in progress before January requires a separate versioned pre-start prefix/hydration prototype, with legal Scope/Core/Bug/cash provenance, save/Continue and 1980 continuation tests; do not fabricate it here.
+
+**Acceptance for this probe only:** both seeds show the actual empty live Market and separate four-title frozen archive at cycle 0; read-only historical projection is stable and leaves all live market/gameplay state intact in fresh independent processes. This does not approve historic UI, active projects, 8.0 Reviews, cohort size or market balance.

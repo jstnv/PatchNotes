@@ -10,6 +10,8 @@ var _failures := 0
 
 
 func _initialize() -> void:
+	# Historical Insider coverage; ordinary runs keep the temporary hold.
+	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
 	var database := CARD_DATABASE_SCRIPT.new()
 	database.name = "CardDatabase"
 	root.add_child(database)

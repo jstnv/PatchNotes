@@ -1,0 +1,61 @@
+{
+  "head": "087df09d653858b72c6e2dc344352237433dd3ac",
+  "source": {
+    "patch-notes/scripts/ui/save_notification.gd": "38666273b24e0c44b49a4873d688946a6c6388f6066005c49550e43a992fd088",
+    "patch-notes/scripts/gameplay.gd": "0501f00765591ad3b7a663a6ab1272c520c5504d47ba8050db961cb78fdd16ef",
+    "patch-notes/scripts/persistence/checkpoint_coordinator.gd": "191c1da9977381bfff39bed76f0f6dc58dd7da115ec23f9f5f2825e60ebdbc64",
+    "patch-notes/scripts/debug/verify_save_notification.gd": "387fe591ae22422e418e62248e7eeac4fb0d155296aa8b79d64b6c08be9d5f85",
+    "patch-notes/scripts/debug/verify_background_checkpoint.gd": "85ab9126c9a6986573aac9f10408461ef61c594ca034058df4871896eeb40972"
+  },
+  "red": {
+    "checks": 8,
+    "failures": 4,
+    "exit": 1
+  },
+  "headless": {
+    "checks": 36,
+    "failures": 0,
+    "exit": 0
+  },
+  "native": {
+    "checks": 36,
+    "failures": 0,
+    "exit": 0
+  },
+  "background_lifecycle": {
+    "checks": 29,
+    "failures": 0,
+    "frames": 2601,
+    "kickoff_ms": 74.069,
+    "max_frame_gap_ms": 89.459,
+    "ok": true
+  },
+  "pause": {
+    "checks": 65,
+    "failures": 0,
+    "exit": 0
+  },
+  "sizes": [
+    [
+      1152,
+      648
+    ],
+    [
+      1280,
+      720
+    ]
+  ],
+  "captures_inspected": [
+    "saved-1152.png",
+    "dismissed-1152.png",
+    "saved-1280.png",
+    "dismissed-1280.png"
+  ],
+  "timing_seconds": {
+    "enter": 0.2,
+    "hold": 2.4,
+    "exit": 0.25
+  },
+  "export": "NOT RUN",
+  "saved_schema_changed": false
+}

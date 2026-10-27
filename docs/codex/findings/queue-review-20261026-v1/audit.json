@@ -1,0 +1,157 @@
+{
+  "date": "2026-10-26",
+  "branch": "main",
+  "head": "087df09d653858b72c6e2dc344352237433dd3ac",
+  "initial_manifest_sha256": "bea9870441fdaad3f7cc17c58441444bb522b4db746ac492486ccfea65feaf13",
+  "project_delta": [
+    "scripts/debug/verify_market_browser.gd"
+  ],
+  "production_unchanged": true,
+  "source_sha256": {
+    "patch-notes/scripts/cards/feature_research.gd": "9d71afe61c975fcc1557754321aeaf7c4a8eb05a0face5e987d920498ae81bb6",
+    "patch-notes/scripts/run_state.gd": "363b19f7474307284ff8e346e197b5b9c14225df900e2ff3273ef97cc4cda71e",
+    "patch-notes/scripts/contracts/contract_definitions.gd": "773b98499f75fe4309f992627459889fa68b053b0113c6a169073bd4a23cc21f",
+    "patch-notes/scripts/contracts/contract_challenges.gd": "4f12d577a1f383a0eb11c2235a1c5aadf489ea550d4d6a24ffd8a0ec9c3fd4e4",
+    "patch-notes/scripts/contracts/contract_state.gd": "3194c98003541ae0209b8a991fe5ceecfa601f2a8dc7c0b6ea068b89e52a181b",
+    "patch-notes/scripts/contracts/contract_search.gd": "61eface83a20702ab0f98e2e5a9ebf357a21e73622dd2100fe11c9dc0824c598",
+    "patch-notes/scripts/contracts/publisher_relationship_rules.gd": "177ae7a10e395cbc0064b343622e917d524bf720714ea1660065271bc40bf39c",
+    "patch-notes/scripts/simulation/studio_actions.gd": "95ebf5fd2a4b391c24cbaf63b101f384a53886b67f81f6fdf50a8e4f7edb4ee4",
+    "patch-notes/scripts/employees/employee_roster.gd": "3b06a320cd93737f155be209f44ff3b1f4426f2c21ce884843f95d67e2ecb1ce",
+    "patch-notes/scripts/market/rival_trial.gd": "dab541a08cd1483fc556f9e57d7590d7379254970659ed12ccad08851116a2c0",
+    "patch-notes/scripts/finance/studio_finance_ledger.gd": "3765cad5d1193c3d5ca4b0c660c926f9a8d8b277d04a921cfa9efde8ffcf0348",
+    "patch-notes/scripts/debug/verify_market_browser.gd": "39c0941f4cbdf4c0bf29019dae9947935c87f06ab6380390fbcc39dc85a1dacb",
+    "docs/codex/threads/contracts/COMPACT-PACKAGE-HANDOFF-2026-10-26-v3.md": "058169a72f3675e04ad2e51c5d71c5a5120cfbab6546651b0b16b16a0570778c",
+    "docs/codex/threads/contracts/CROWN-PAID-WORK-TERMS-2026-10-26-v1.md": "99461f84f165d542a6725c3ffa3b021e179bcfb6f6b128ac3d4d752b4f5496fb",
+    "docs/codex/threads/employees-challenges/2026-10-26-research-accounting-design-task-v1.md": "1e2892f613ebb11c8f9d61780e531f8ed5a01ce5a6941cf66a0b24f5e08a9eaf",
+    "docs/codex/threads/employees-challenges/2026-10-26-research-accounting-proposal-v1.md": "ad2b28d4e0b4acfaeb08a8b99c02d9f7e6a11286c40308a6b6d0b06eb2ad4786",
+    "docs/codex/TODO.md": "71ec909025c0e84745f1aa143ea73e4eaaf39b2c1e2ba56964ab1ee6ec146319",
+    "docs/codex/CURRENT_STATE.md": "498aa78134c6765d8e1976c4bb561d3ee4b3aaac3b8f0926048a2a3da4b737e2",
+    "docs/codex/logs/2026-10-26-queue-review-v1.md": "cb9070b2d8485ecaa10fcad2b70846a82c2624ff425eba8146212606e78690fc"
+  },
+  "review_sha256": "80418263c4f402e3e984b8173e6a6327ad7d157da05b603b4ca4ceb577d7062e",
+  "checks": {
+    "research": {
+      "sha256": "15879a06989c436bc21d22c76cf85c901b4b8b7333aeed2927f5a7ebda0bcf5f",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_integration.gd"
+      ],
+      "exit": 0
+    },
+    "world": {
+      "sha256": "e05e6683b09cdc3dab8db32da55d21e9dd6fa6c30b3eba785def1c45d13ac3bc",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_rival_gameplay_activation.gd"
+      ],
+      "exit": 0
+    },
+    "background-v2": {
+      "sha256": "8abb3b6e80bcb171e13f3ff17f823291a366d04df8c642b0e58149b259cf79a1",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_background_checkpoint.gd"
+      ],
+      "exit": 0
+    },
+    "market-v2": {
+      "sha256": "a4c629ba16f0c7578577f173e7e4628c771ac5aafc993a4d9bc09b90a5bddb4d",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_market_browser.gd"
+      ],
+      "exit": 0
+    },
+    "market-native": {
+      "sha256": "583c2925bc8eb3f97bd80e6ba58d3c2c29947390e4fdef306bea68b684d4f707",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_market_browser.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0
+    },
+    "employees-headless": {
+      "sha256": "b86c1b6d6944d24d27f93fd0e56db03ccef79b6def02fd0246b550302c2db3f6",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_click.gd"
+      ],
+      "exit": 0
+    },
+    "employees-native": {
+      "sha256": "94dfe879adcf0f136fb9531bf03ac71f883f8e1754297a895c482151904a4078",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_employee_click.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80",
+        "--",
+        "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/queue-review-20261026-v1/employees-native"
+      ],
+      "exit": 0
+    }
+  },
+  "captures": {
+    "market-native\\market-1152x648.png": "d0237f73a7602dbf0959bf0d7b8018d80afa5b445384ea7a97078b895d3c37c7",
+    "market-native\\market-1280x720.png": "b031b53b4926f12260fa4ea05aa5815047b5e29c3bfeb8b238ef93b50425db2f",
+    "market-native\\studio-market-1152x648.png": "d64a04245ce2d21c863a1feef768625fbb2078a49575c116f5b3b0ef7f8a4a51",
+    "market-native\\studio-market-1280x720.png": "4a3e5ab7fc4e70c4f6be9c1b5c2d8acd3deecad478fe04368b4267edf62b4d96",
+    "employees-native\\employees-1152.png": "1415d329f32287e4420b45f153e520b4cff2cb1f6d6684cfc14152fbd45624af",
+    "employees-native\\employees-1280.png": "ca43e71a5b7a612bae1000ad5ea972f56e18fd6c875c0cf58892653067e91ea2",
+    "employees-native\\employees-readonly-1152.png": "b61aad1eec0a5202279efe0b727964049d187d1a133a8bcdb757bd12f8e3382f",
+    "employees-native\\employees-readonly-1280.png": "2b6ea32447ac578b79be9020a61cf57f4354e19d39c8aeac29a3661dd2b8c22e"
+  },
+  "campaign_result_sha256": "ea8453b40cabe95ad931e472ab53a19ee3fe47e828446347a45d5a8b837c3e4c",
+  "replay_report_sha256": "75b231f562dbbc06ae92c060a8e16865a987f52079a8a6e2a0cabe9f3dca74eb",
+  "diff_check": 0
+}

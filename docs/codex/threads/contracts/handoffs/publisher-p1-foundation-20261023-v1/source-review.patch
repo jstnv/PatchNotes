@@ -1,0 +1,2019 @@
+--- base/scripts/contracts/pre_relationships/schema.gd
++++ candidate/scripts/contracts/pre_relationships/schema.gd
+@@ -0,0 +1,168 @@
++extends RefCounted
++
++## All schemas originate in code. Disk records cannot select constructors or
++## supply a schema. Alternative records are a closed, trusted union.
++static func fields(names: String, kind: String = "uint") -> Dictionary:
++	var result := {}
++	for key in names.split(" ", false): result[key] = kind
++	return result
++
++static func array_of(item: Variant) -> Dictionary: return {"array":item}
++static func map_of(key: Variant, value: Variant) -> Dictionary: return {"map":[key,value]}
++static func optional(item: Variant) -> Dictionary: return {"nullable":item}
++static func union_of(items: Array) -> Dictionary: return {"one_of":items}
++
++static func finance(education_enabled: bool = true) -> Dictionary:
++	var schedule := fields("schema_version principal_cents term_months accepted_cycle first_due_cycle last_due_cycle maximum_installment_cents total_interest_cents total_payment_cents")
++	var quote := fields("older_sales_cents latest_sales_cents basis_cents rent_cents obligations_cents capacity_cents maximum_principal_cents revision")
++	quote.merge(fields("eligible accepted", "bool"))
++	quote.merge(fields("run_id loan_id quote_id", "id"))
++	quote.reason = "text"
++	quote.schedule = schedule
++	var hire := fields("revision fee_cents wage_cents hire_cycle first_due_cycle")
++	hire.merge(fields("type run_id employee_id", "id"))
++	var payoff := fields("revision principal_cents interest_cents total_cents")
++	payoff.merge(fields("type loan_id", "id"))
++	var action := fields("cycle cash_before sales_earned settled")
++	action.direct_delta = "int"
++	action.merge(fields("kind source_id", "id"))
++	action.productive = "bool"
++	var ordinary_action := action.duplicate(true)
++	action.operation = union_of([{}, {"type":"id","quote":quote}, hire, payoff])
++	if education_enabled:
++		var education_payoff := fields("revision principal_cents interest_cents total_cents other_due_cents required_cash_cents")
++		education_payoff.merge(fields("type account_id","id"))
++		action.operation.one_of.append(education_payoff)
++		action.operation.one_of.append(fields("type run_id trait_id account_id","id"))
++	var transaction := fields("sequence cycle month amount_cents cash_before_cents cash_after_cents due_month")
++	transaction.cash_delta_cents = "int"
++	transaction.merge(fields("kind source_id", "id"))
++	var row := fields("month")
++	for key in StudioFinanceLedger.NONNEGATIVE_ROW_FIELDS: row[key] = "uint"
++	row.merge(fields("cash_change_cents net_profit_cents", "int"))
++	row.partial = "bool"
++	var ownership_row := row.duplicate(true)
++	ownership_row.ownership_in_cents = "uint"
++	ownership_row.ownership_out_cents = "uint"
++	var bill := fields("month due_cycle due_cents paid_cents unpaid_cents")
++	bill.merge(fields("bill_id source_id expense_type", "id"))
++	bill.merge(fields("settled_cycle recovery_overdue_cycles", "int"))
++	bill.merge(fields("paid_on_time late", "bool"))
++	bill.payments = array_of(fields("cycle month cents"))
++	var bank_bill := bill.duplicate(true)
++	bank_bill.merge(fields("principal_cents interest_cents principal_paid_cents interest_paid_cents"))
++	var reason := fields("due_cycle evaluated_cycle overdue_cycles")
++	reason.merge(fields("type bill_id", "id"))
++	reason.points = "int"
++	reason.recovered = "bool"
++	var history := fields("month cycle before after")
++	history.merge(fields("operating_profit_cents requested_change change", "int"))
++	history.policy_version = "text"
++	history.reasons = array_of(union_of([reason,{"type":"id","points":"int"}]))
++	var credit := fields("score last_processed_month")
++	credit.policy_version = "text"
++	credit.history = array_of(history)
++	var loan := fields("issued principal_paid_cents interest_paid_cents")
++	loan.merge(fields("loan_id run_id quote_id", "id"))
++	loan.merge(fields("closed early_payoff", "bool"))
++	loan.closed_cycle = "int"
++	loan.schedule = schedule
++	var employee := fields("wage_cents hire_cycle first_due_cycle issued")
++	employee.employee_id = "id"
++	var result := fields("schema_version initial_cash_cents monthly_rent_cents last_cycle cash_cents unsettled_sales_net_cents")
++	result.merge({"monthly_rows":array_of(union_of([row,ownership_row])),"obligations":array_of(union_of([bill,bank_bill])),"transactions":array_of(transaction),"actions":array_of(union_of([ordinary_action,action])),"credit":credit,"bank_loans":array_of(loan),"employees":array_of(employee)})
++	if education_enabled:
++		var education := fields("schema_version issued principal_paid_cents interest_paid_cents")
++		education.merge(fields("account_id run_id trait_id","id"))
++		education.merge(fields("closed early_payoff","bool"))
++		education.closed_cycle = "int"
++		education.schedule = fields("schema_version principal_cents regular_due_cents term_months first_due_cycle last_due_cycle total_interest_cents total_payment_cents")
++		result.education = union_of([{},education])
++	return result
++
++static func employees() -> Dictionary:
++	var hand := fields("project_cycle cycle")
++	hand.merge(fields("type project_id phase", "id"))
++	hand.cards = array_of(fields("id type primary secondary", "id"))
++	hand.before = map_of("uint","uint")
++	hand.proposed = map_of("uint","uint")
++	var employee := fields("employee_id owner type", "id")
++	employee.hire_cycle = "uint"
++	employee.trained = "bool"
++	employee.projects = map_of("id", {"trained_action":"id","used_action":"id","actions":array_of("id")})
++	return {"schema_version":"uint","owner":"id","employees":map_of("id",employee),"events":array_of(union_of([{"type":"id","employee_id":"id","cycle":"uint"},hand]))}
++
++static func market_factor() -> Dictionary:
++	return {"factor_bp":"uint","snapshot_id":"text","cycle_start":"uint","genre_only":"uint","theme_only":"uint","pair":"uint","historical":"bool"}
++
++static func market_details() -> Dictionary:
++	return {"snapshot_id":"text","cycle_start":"uint","standards":array_of("uint"),"base":array_of("uint"),"recent_count":"uint","density_lift":"uint","benchmark_lifts":array_of("uint"),"historical":"bool"}
++
++static func sales() -> Dictionary:
++	var result := fields("total_units earned_cycles total_earned_cycles earned_units entitlement_cents settled_cents campaign_count organic_awareness_scaled active_awareness_scaled monthly_units release_year")
++	result.merge(fields("last_processed_run_cycle last_settlement_run_cycle review_tenths launch_awareness market_bp", "int"))
++	result.merge(fields("exhausted later_enabled", "bool"))
++	result.merge(fields("base_name release_title", "text"))
++	result.release_id = "id"
++	result.campaign_months = map_of("uint","uint")
++	result.market_factors = map_of("uint",market_factor())
++	return result
++
++static func metadata() -> Dictionary:
++	var review := fields("scope required_scope development_cycles remaining_bugs awareness launch_marketing launch_fans fan_awareness projected_units projected_gross_cents projected_net_cents")
++	review.merge(fields("final_review production_rating scope_completion", "float"))
++	review.cores = array_of("uint")
++	review.standards = array_of("uint")
++	review.merge(fields("forecast_id competitor_id", "id"))
++	review.forecast_multiplier = "text"
++	review.competitor_target_cycle = "int"
++	var market_review := review.duplicate(true)
++	market_review.market = market_details()
++	return {"base_name":"text","genre":"id","theme":"id","genre_ratios":array_of("uint"),"release_title":"text","release_year":"uint","release_cycle":"uint","review":union_of([review,market_review])}
++
++static func contract() -> Dictionary:
++	var old := {"publisher_connections":"bool","contract_id":"id","offer_id":"id","source_release_id":"id","eligible":map_of("id","bool"),"scope":"uint","cores":map_of("uint","uint"),"hands":"uint","exhausted":map_of("id","bool"),"priorities":map_of("uint","uint"),"upfront":"bool","paid":"bool","trial_terms":union_of([{},fields("scope cash_cents advance_cents promotion denominator"),fields("scope cash_cents advance_cents promotion denominator required_hands")]),"neon_focus":"int","result":{"scope":"uint","cores":map_of("uint","uint"),"numerator":"uint","payout":"uint","remainder":"uint","upfront":"uint","denominator":"uint","promotion":"uint"}}
++	var current := old.duplicate(true)
++	var spec := union_of([
++		{"version":"uint","kind":"id"},
++		{"version":"uint","kind":"id","maximum":"uint","fade_excess":"uint"},
++		{"version":"uint","kind":"id","allowed_gap":"uint","fade_gap":"uint"},
++		{"version":"uint","kind":"id","core_units":"uint","scope_units":"uint"},
++		{"version":"uint","kind":"id","targets":map_of("uint","uint"),"fade_total":"uint"}])
++	current.challenge_terms = union_of([{}, {"version":"uint","specs":array_of(spec),"cash_cap_cents":"uint","promotion_cap":"uint"}])
++	current.challenge_redraws = "uint"
++	current.result.merge(fields("challenge_grade_bp bonus_cash_cents bonus_promotion"))
++	return union_of([old,current])
++
++static func root(education_enabled: bool = true, active_rival: bool = false) -> Dictionary:
++	var traits := fields("version starting_points spent_points refunded_points remaining_points point_cash_cents family_funding_cents")
++	traits.merge({"valid":"bool","reason":"text","trait_ids":array_of("id"),"active_ids":array_of("id"),"effects_mode":"id"})
++	var run := fields("cash_cents completed_run_cycles available_redraws next_project_serial")
++	run.merge(fields("cash_initialized first_studio_economy starter_selection_confirmed ironclad_completion_committed", "bool"))
++	run.studio_name = "text"
++	run.merge(fields("studio_specialty first_tutorial_project_id bank_run_id", "id"))
++	for key in ["owned_features","unlocked_publishers","seen_tutorial_topics"]: run[key] = map_of("id","bool")
++	run.resourceful_claims = map_of("uint","id")
++	run.feature_research = array_of(FeatureResearch.schema())
++	run.familiarity = map_of("id","uint")
++	run.credited_projects = map_of("id",map_of("id","bool"))
++	run.released_games = map_of("id",sales())
++	run.release_metadata = map_of("id",metadata())
++	run.primitive_contract = optional(contract())
++	run.publisher_offers = map_of("id",{"publisher_id":"id","source_release_id":"id","state":optional(contract())})
++	run.promotion_awards = map_of("id","uint")
++	run.promotion_consumed = map_of("id","id")
++	run.sidestreet_entitlements = map_of("id",{"offer_id":"id","state":optional(contract())})
++	run.sidestreet_results = map_of("id",{"offer_id":"id","release_id":"id","scope":"uint","core_half_units":map_of("uint","uint"),"completion_numerator":"uint","payout_cents":"uint"})
++	run.pending_publisher_notifications = array_of("id")
++	run.studio_traits = union_of([{},traits])
++	run.lean_savings = map_of("id","uint")
++	run.first_game_tutorial = optional({"stage":"uint","first_stat":"id","second_stat":"id","first_pool_published":"bool","second_pool_published":"bool"})
++	run.studio_finance = finance(education_enabled)
++	run.fanbase = StudioFanbase.schema()
++	run.employees = employees()
++	var versioned_run: Dictionary = run.duplicate(true)
++	versioned_run.founding_roster_version = "uint"
++	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":union_of([run,versioned_run]),"rng":map_of("id",{"seed":"int","state":"int"})}
++	if active_rival: result.active_project_id = "id"
++	return result
+--- base/scripts/contracts/pre_relationships/studio.gd
++++ candidate/scripts/contracts/pre_relationships/studio.gd
+@@ -0,0 +1,417 @@
++extends RefCounted
++
++const CheckpointSchema := preload("res://scripts/contracts/pre_relationships/schema.gd")
++
++const BUILD := "studio-checkpoint-runtime-v1"
++const PREVIOUS_RULES := "finance5-bank1-employees1-traits5-sales1-contracts3-research1-review2"
++const PRE_EDUCATION_RULES := PREVIOUS_RULES + "-fanbase1-starwave1"
++const PRE_CULT_RULES := "finance6-bank1-employees1-traits6-sales1-contracts3-research1-review2-fanbase1-starwave1-education1"
++const PRE_CULT20_RULES := "finance6-bank1-employees1-traits7-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult1"
++const PRE_BRANCH_RULES := "finance6-bank1-employees1-traits8-sales1-contracts3-research1-review2-fanbase1-starwave1-education1-cult2"
++const PRE_CHALLENGE_RULES := PRE_BRANCH_RULES + "-branches1"
++const PRE_CONE_RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches1"
++const PRE_GAMEPLAY_TREE_RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches2"
++const PRE_ROSTER_RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches3"
++const PRE_MARKET_RULES := PRE_ROSTER_RULES + "-roster2"
++const RULES := PRE_MARKET_RULES + "-market1"
++const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
++var error := ""
++var _revision := ""
++var _previous_revision := ""
++
++func revision() -> String:
++	if _revision.is_empty():
++		_revision = _rules_revision(RULES)
++	return _revision
++
++func previous_revision() -> String:
++	if _previous_revision.is_empty(): _previous_revision = _rules_revision(PREVIOUS_RULES)
++	return _previous_revision
++
++# Credits are presentation metadata, not save content. Legacy revisions included
++# them; retain both verified credit manifests without ignoring gameplay hashes.
++const LEGACY_AUDIO_HASHES := ["56545f71a914d244952925813e71aeca3584e07ce36ddcbfbe07a15749ef1cf3", "66dcfcc25c7da4e974750353a4f192a89507563ffc7854c591bd21c9ddf25d78"]
++# Additive four-card Alpha pack. Existing definitions, snapshots and payments
++# are unchanged; accept only the exact preceding eleven-node catalog identity.
++const PRE_ALPHA_CATALOG_HASH := "547a1cbc408ac263f3cf3c3a9e96e8667f33993e211bbb492937716c7df414cf"
++
++const PRE_GAMEPLAY_TREE_CATALOG_HASH := "a2e42e9c683c04b37ec7dd68650244f799fe7296d0eeca6d55e75ad2c1e70f93"
++
++func _catalog_revisions(rules: String) -> Array[String]:
++	return [_rules_revision(rules),_rules_revision(rules,"",PRE_GAMEPLAY_TREE_CATALOG_HASH),_rules_revision(rules,"",PRE_ALPHA_CATALOG_HASH)]
++
++func _legacy_revisions(rules: String) -> Array[String]:
++	var result: Array[String] = _catalog_revisions(rules)
++	for audio_hash: String in LEGACY_AUDIO_HASHES:
++		result.append(_rules_revision(rules, audio_hash))
++		result.append(_rules_revision(rules, audio_hash, PRE_GAMEPLAY_TREE_CATALOG_HASH))
++		result.append(_rules_revision(rules, audio_hash, PRE_ALPHA_CATALOG_HASH))
++	return result
++
++func _rules_revision(rules: String, legacy_audio_hash: String = "", prior_catalog_hash: String = "") -> String:
++	var data := rules
++	var paths: Array[String] = []
++	_collect_data("res://data", paths)
++	paths.sort()
++	for path in paths:
++		if path=="res://data/feature_store_ledger.json" and not prior_catalog_hash.is_empty():
++			data+=path+prior_catalog_hash
++			continue
++		if path == "res://data/audio_credits.json":
++			# Version 7 already excluded audio credits. Preserve its real save
++			# identity when it becomes a supported historical revision.
++			if rules in [RULES, PRE_MARKET_RULES, PRE_ROSTER_RULES, PRE_GAMEPLAY_TREE_RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
++			if not legacy_audio_hash.is_empty():
++				data += path + legacy_audio_hash
++				continue
++		data += path + FileAccess.get_sha256(path)
++	return data.sha256_text()
++
++func _collect_data(directory: String, paths: Array[String]) -> void:
++	for name in DirAccess.get_files_at(directory):
++		if name.ends_with(".json"): paths.append(directory.path_join(name))
++	for name in DirAccess.get_directories_at(directory): _collect_data(directory.path_join(name), paths)
++
++func capture(run: RunState, active_project_id: StringName = &"") -> Dictionary:
++	error = ""
++	if run == null or run._feature_purchase_in_progress or run._productive_cycle_in_progress or run._committing_cycle_cash or run._publishing_cycle or run._pending_contract_completion != null or run.get_active_contract() != null:
++		error = "Checkpoint requires a quiescent Studio."
++		return {}
++	var state := {}
++	for field: String in FIELDS:
++		state[field.trim_prefix("_")] = run.get(field)
++	# Keep original v1 provenance absent when re-saving old Studios, preserving
++	# their historical shape. New founding grants carry an explicit version.
++	if run.get_founding_roster_version() != 1:
++		state.founding_roster_version = run.get_founding_roster_version()
++	state.next_project_serial = run.next_project_serial
++	state.primitive_contract = _contract(run._primitive_contract)
++	state.sidestreet_entitlements = {}
++	for id: StringName in run._sidestreet_entitlements:
++		var offer: Dictionary = run._sidestreet_entitlements[id]
++		state.sidestreet_entitlements[id] = {"offer_id":offer.offer_id,"state":_contract(offer.state)}
++	state.publisher_offers = {}
++	for id: StringName in run._publisher_offers:
++		var offer: Dictionary = run._publisher_offers[id]
++		state.publisher_offers[id] = {"publisher_id":offer.publisher_id,"source_release_id":offer.source_release_id,"state":_contract(offer.state)}
++	state.first_game_tutorial = null
++	if run._first_game_tutorial != null:
++		var tutorial := run._first_game_tutorial
++		state.first_game_tutorial = {"stage":tutorial.stage,"first_stat":tutorial.first_stat,"second_stat":tutorial.second_stat,"first_pool_published":tutorial.first_pool_published,"second_pool_published":tutorial.second_pool_published}
++	var active := not active_project_id.is_empty()
++	var native := {"checkpoint_kind":"rival_active" if active else "studio","run_id":run._bank_run_id,"sequence":1,"source_build":BUILD,"content_revision":revision(),"rng_algorithm":RunRandom.ALGORITHM,"run":state,"rng":run.random_streams.snapshot()}
++	if active: native.active_project_id = active_project_id
++	var codec := CheckpointCodec.new()
++	var encoded: Variant = codec.encode(native,CheckpointSchema.root(true,active))
++	error = codec.error
++	if not error.is_empty(): return {}
++	error = validate_active_rival(encoded) if active else validate(encoded)
++	return encoded if error.is_empty() else {}
++
++func _contract(state: ContractState) -> Variant:
++	if state == null: return null
++	if not state.is_completed(): return null
++	var result := state.get_result()
++	var record := {"publisher_connections":state._publisher_connections,"contract_id":state._contract_id,"offer_id":state._offer_id,"source_release_id":state._source_release_id,"eligible":state._eligible_feature_ids,"scope":state._scope,"cores":state._core_half_units,"hands":state._successful_hands,"exhausted":state._exhausted_feature_ids,"priorities":state._priorities,"upfront":state._upfront_committed,"paid":state._payout_committed,"trial_terms":state._trial_terms,"neon_focus":state._neon_focus,"result":{"scope":result._scope,"cores":result._core_half_units,"numerator":result._completion_numerator,"payout":result._payout_cents,"remainder":result._remainder_cents,"upfront":result._upfront_cents,"denominator":result._denominator,"promotion":result._promotion}}
++	if not state._challenge_terms.is_empty():
++		record.challenge_terms = state._challenge_terms.duplicate(true)
++		record.challenge_redraws = state._challenge_redraws
++		record.result.challenge_grade_bp = result._challenge_grade_bp
++		record.result.bonus_cash_cents = result._bonus_cash_cents
++		record.result.bonus_promotion = result._bonus_promotion
++	return record
++
++func validate(payload: Dictionary) -> String:
++	return _validate(payload,false)
++
++func validate_active_rival(payload: Dictionary) -> String:
++	return _validate(payload,true)
++
++func _validate(payload: Dictionary, active_rival: bool) -> String:
++	if payload.get("content_revision", "") != revision():
++		var migration: RefCounted=load("res://scripts/market/market_save_migration_trial.gd").new()
++		if not migration.is_old_revision(str(payload.get("content_revision",""))): return "INCOMPATIBLE_CONTENT_OR_RNG"
++		var upgraded: Dictionary=migration.upgrade_store_player(payload,active_rival)
++		return migration.error if upgraded.is_empty() else _validate(upgraded,active_rival)
++	# Pre-Fanbase saves lack exact exposure provenance. Preserve unsupported
++	# bytes instead of inventing Fans or replaying old sales.
++	if payload.get("content_revision", "") != revision() or payload.get("rng_algorithm", "") != RunRandom.ALGORITHM: return "INCOMPATIBLE_CONTENT_OR_RNG"
++	var value: Dictionary = _decode_payload(payload,active_rival)
++	if value.is_empty(): return error
++	if value.checkpoint_kind != ("rival_active" if active_rival else "studio") or value.sequence < 1: return "Invalid checkpoint boundary"
++	var active_id: StringName = value.active_project_id if active_rival else &""
++	if active_rival and (active_id.is_empty() or value.run.released_games.has(active_id)): return "Invalid active rival project"
++	var r: Dictionary = value.run
++	var roster_version: int = r.get("founding_roster_version",1)
++	if roster_version not in [1,2]: return "Invalid founding roster version"
++	if r.has("founding_roster_version") and payload.content_revision != revision(): return "Invalid historical founding roster metadata"
++	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
++	if r.studio_name.is_empty() or r.studio_name != r.studio_name.strip_edges() or r.studio_name.length()>80 or StudioSpecialties.preview(r.studio_specialty).is_empty(): return "Invalid Studio identity"
++	if not r.cash_initialized or not r.first_studio_economy or r.available_redraws>4 or r.next_project_serial<1: return "Invalid run counters"
++	if r.studio_finance.cash_cents != r.cash_cents or r.studio_finance.last_cycle != r.completed_run_cycles or not StudioFinanceLedger._is_valid(r.studio_finance): return "Invalid finance provenance"
++	if not FeatureResearch.validate(r.feature_research,r.owned_features,r.studio_finance,r.completed_run_cycles,r.bank_run_id): return "Invalid research provenance"
++	for research: Dictionary in r.feature_research:
++		var definition := RunState.new()
++		if not definition._feature_definitions.has(research.feature_id): return "Unknown research Feature"
++		var catalog_base: int = definition._feature_offers[research.feature_id].base_price_cents if definition._feature_offers.has(research.feature_id) else (int(definition._feature_definitions[research.feature_id].scope)+1)*15000
++		if research.base_cents != catalog_base or r.starter_selection_confirmed == false: return "Invalid research terms"
++	if r.employees.owner != value.run_id or not EmployeeRoster.valid(r.employees): return "Invalid employee provenance"
++	if r.employees.employees.size() != r.studio_finance.employees.size(): return "Payroll roster mismatch"
++	for employee: Dictionary in r.studio_finance.employees:
++		if not r.employees.employees.has(employee.employee_id) or r.employees.employees[employee.employee_id].hire_cycle != employee.hire_cycle: return "Payroll identity mismatch"
++	for loan: Dictionary in r.studio_finance.bank_loans:
++		if loan.run_id != value.run_id: return "Loan owner mismatch"
++	if not r.studio_traits.is_empty() and StudioTraits.evaluate_traits(r.studio_traits.trait_ids,r.studio_traits.version) != r.studio_traits: return "Invalid traits"
++	var education_id: StringName = &""
++	for id: StringName in [&"college_dropout",&"graduate"]:
++		if StudioTraits.is_active(r.studio_traits,id): education_id = id
++	var education: Dictionary = r.studio_finance.education
++	if education_id.is_empty():
++		if not education.is_empty(): return "Inactive education liability"
++	elif education.is_empty() or education.run_id != value.run_id or education.trait_id != education_id or education.account_id != StringName("%s:education" % value.run_id): return "Education trait/owner mismatch"
++	# Startup receipts are paired with exactly the saved trait version's effects.
++	if r.studio_finance.initial_cash_cents != RunState.FIRST_STUDIO_CASH_CENTS: return "Invalid base funding"
++	for entry: Array in [[&"studio_trait_unspent_points_v1",r.studio_traits.get("point_cash_cents",0)],[&"studio_trait_family_funding_v1",r.studio_traits.get("family_funding_cents",0)]]:
++		var count := 0
++		for action: Dictionary in r.studio_finance.actions:
++			if action.source_id != entry[0]: continue
++			count += 1
++			if action.cycle != 0 or action.productive or action.kind != &"financing_in" or action.direct_delta != entry[1] or entry[1] <= 0: return "Invalid trait receipt"
++		if count != (1 if entry[1] > 0 else 0): return "Missing or duplicated trait receipt"
++	if not r.resourceful_claims.is_empty() and not StudioTraits.is_active(r.studio_traits,&"resourceful"): return "Inactive Resourceful claim"
++	var claim_sources := {}
++	var catalog_for_claims := RunState.new()
++	for window: int in r.resourceful_claims:
++		var source: StringName = r.resourceful_claims[window]
++		if window > r.released_games.size() or claim_sources.has(source): return "Invalid Resourceful window"
++		claim_sources[source] = true
++		var matched := false
++		for entry: Dictionary in r.feature_research:
++			for paid: Dictionary in entry.payments:
++				if entry.id == source and paid.saving_cents > 0 and paid.window == window: matched = true
++		if catalog_for_claims._feature_definitions.has(source) and not catalog_for_claims._feature_offers.has(source) and r.owned_features.has(source) and window == 0:
++			var base: int = (int(catalog_for_claims._feature_definitions[source].scope)+1)*15000
++			for action: Dictionary in r.studio_finance.actions:
++				if action.source_id==source and action.kind==&"store" and not action.productive and action.direct_delta==-(base-mini(10000,base)): matched = true
++		if not matched: return "Unproven Resourceful claim"
++	for entry: Dictionary in r.feature_research:
++		for paid: Dictionary in entry.payments:
++			if paid.window > r.released_games.size(): return "Future Resourceful window"
++			if paid.saving_cents > 0 and r.resourceful_claims.get(paid.window,&"") != entry.id: return "Missing Resourceful consumption"
++	if r.studio_finance.monthly_rent_cents != (51500 if StudioTraits.is_active(r.studio_traits,&"expensive_lease") else 50000): return "Trait rent mismatch"
++	var catalog := RunState.new()
++	for id: StringName in r.owned_features:
++		if not catalog._feature_definitions.has(id) or not r.owned_features[id]: return "Unknown owned Feature"
++	var counts := {}
++	for id: StringName in r.credited_projects:
++		if not r.released_games.has(id) and id != active_id: return "Unreleased familiarity project"
++		for feature: StringName in r.credited_projects[id]:
++			if not r.owned_features.has(feature) or not r.credited_projects[id][feature]: return "Invalid familiarity Feature"
++			counts[feature] = int(counts.get(feature,0))+1
++	if counts != r.familiarity: return "Familiarity count mismatch"
++	if not StudioFanbase.validate(r.fanbase, r.released_games, r.release_metadata, r.completed_run_cycles, StudioTraits.starting_fans(r.studio_traits)): return "Invalid Fanbase provenance"
++	if r.released_games.keys() != r.release_metadata.keys(): return "Release order/identity mismatch"
++	for id: StringName in r.released_games:
++		var sales: Dictionary = r.released_games[id]
++		var meta: Dictionary = r.release_metadata[id]
++		if id.is_empty() or sales.release_id != id or not ReleasedGameSales.is_valid(sales): return "Invalid release sales"
++		if meta.release_cycle>r.completed_run_cycles or sales.last_processed_run_cycle>r.completed_run_cycles or sales.last_settlement_run_cycle>r.completed_run_cycles: return "Future release accounting"
++		if sales.later_enabled and sales.total_earned_cycles != r.completed_run_cycles-meta.release_cycle: return "Release age mismatch"
++		if sales.last_settlement_run_cycle>=0 and sales.last_settlement_run_cycle%2!=0: return "Invalid settlement boundary"
++		if sales.release_title!=meta.release_title or sales.release_year!=meta.release_year or sales.base_name!=meta.base_name: return "Release metadata mismatch"
++		if meta.release_year != RunState.START_YEAR+meta.release_cycle/24 or PrimitivePredevelopment.find_entry("genres",meta.genre).is_empty() or PrimitivePredevelopment.find_entry("themes",meta.theme).is_empty(): return "Invalid release catalog/year"
++		if meta.review.cores.size()!=4 or meta.review.standards.size()!=4 or meta.review.final_review<0 or meta.review.final_review>10 or meta.review.scope_completion<0: return "Invalid frozen Review"
++		if roundi(meta.review.final_review*10)!=sales.review_tenths or meta.review.awareness!=sales.launch_awareness or meta.review.projected_units!=sales.total_units: return "Frozen launch mismatch"
++		if meta.review.has("market") and (not preload("res://scripts/market/market_transaction_trial.gd").valid_details(meta.review.market,meta.genre) or meta.review.market.standards!=meta.review.standards or meta.review.market.cycle_start>meta.release_cycle): return "Invalid frozen market Review"
++	for id: StringName in r.lean_savings:
++		if (not r.released_games.has(id) and id != active_id) or r.lean_savings[id]>10000: return "Invalid Lean cap"
++	if not _valid_contract(r.primitive_contract,r,ContractState.CONTRACT_ID,ContractState.CONTRACT_ID,&""): return "Invalid Ironclad checkpoint"
++	if r.ironclad_completion_committed != (r.primitive_contract!=null): return "Ironclad completion mismatch"
++	var results := {}
++	for id: StringName in r.sidestreet_entitlements:
++		var offer: Dictionary = r.sidestreet_entitlements[id]
++		var expected := StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID,id])
++		if not r.released_games.has(id) or offer.offer_id!=expected or not _valid_contract(offer.state,r,ContractState.SIDESTREET_CONTRACT_ID,expected,id): return "Invalid SideStreet checkpoint"
++		if offer.state!=null:
++			var c: Dictionary = offer.state
++			results[expected] = {"offer_id":expected,"release_id":id,"scope":c.scope,"core_half_units":c.cores,"completion_numerator":c.result.numerator,"payout_cents":c.result.payout}
++	if results!=r.sidestreet_results: return "Contract history mismatch"
++	var expected_awards := {}
++	for publisher: StringName in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT]:
++		var offer_id := StringName("%s:%s:first" % [r.bank_run_id,publisher])
++		var source: StringName
++		for release_id: StringName in r.release_metadata:
++			var frozen: Dictionary = r.release_metadata[release_id].review
++			if (publisher==PublisherCatalog.CROWN_QUILL and frozen.final_review>=7.0) or (publisher==PublisherCatalog.NEON_CIRCUIT and frozen.awareness>=125):
++				source = release_id
++				break
++		if source.is_empty():
++			if r.publisher_offers.has(offer_id) or r.unlocked_publishers.has(publisher): return "Unqualified trial offer"
++			continue
++		if not r.publisher_offers.has(offer_id) or not r.unlocked_publishers.has(publisher): return "Missing trial offer"
++		var offer: Dictionary = r.publisher_offers[offer_id]
++		if offer.publisher_id!=publisher or offer.source_release_id!=source or not _valid_contract(offer.state,r,PublisherTrialTerms.contract_id(publisher),offer_id,source): return "Invalid trial offer"
++		if offer.state!=null: expected_awards[offer_id] = offer.state.result.promotion
++	# Starwave qualifies from distinct prior Contracts and releases, rather than
++	# a single release. Its immutable first offer therefore has no source release.
++	var prior_completions: int = int(r.ironclad_completion_committed) + r.sidestreet_results.size() + expected_awards.size()
++	var starwave_id := StringName("%s:%s:first" % [r.bank_run_id,PublisherCatalog.STARWAVE])
++	if r.released_games.size()>=2 and prior_completions>=3:
++		if not r.unlocked_publishers.has(PublisherCatalog.STARWAVE) or not r.publisher_offers.has(starwave_id): return "Missing Starwave offer"
++		var starwave: Dictionary = r.publisher_offers[starwave_id]
++		if starwave.publisher_id!=PublisherCatalog.STARWAVE or starwave.source_release_id!=&"" or not _valid_contract(starwave.state,r,PublisherTrialTerms.STARWAVE,starwave_id,&""): return "Invalid Starwave offer"
++		if starwave.state!=null and starwave.state.result.promotion>0: expected_awards[starwave_id] = starwave.state.result.promotion
++	elif r.unlocked_publishers.has(PublisherCatalog.STARWAVE) or r.publisher_offers.has(starwave_id): return "Unqualified Starwave offer"
++	for id: StringName in r.sidestreet_entitlements:
++		var sidestreet: Variant = r.sidestreet_entitlements[id].state
++		if sidestreet!=null and sidestreet.result.promotion>0: expected_awards[sidestreet.offer_id] = sidestreet.result.promotion
++	for id: StringName in r.publisher_offers:
++		var publisher: StringName = r.publisher_offers[id].publisher_id
++		if publisher not in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT,PublisherCatalog.STARWAVE] or id!=StringName("%s:%s:first" % [r.bank_run_id,publisher]): return "Unknown trial offer"
++	if expected_awards!=r.promotion_awards: return "Promotion award mismatch"
++	for id: StringName in r.promotion_consumed:
++		if not r.promotion_awards.has(id) or not r.released_games.has(r.promotion_consumed[id]): return "Invalid Promotion consumption"
++	for id: StringName in r.promotion_awards:
++		var completed_cycle := -1
++		for action: Dictionary in r.studio_finance.actions:
++			if action.source_id==id and action.productive: completed_cycle = action.cycle
++		var next_release: StringName
++		for release_id: StringName in r.release_metadata:
++			if r.release_metadata[release_id].release_cycle>=completed_cycle:
++				next_release = release_id
++				break
++		if next_release.is_empty():
++			if r.promotion_consumed.has(id): return "Premature Promotion consumption"
++		elif r.promotion_consumed.get(id,&"")!=next_release: return "Promotion next-release mismatch"
++	for id: StringName in r.unlocked_publishers:
++		if not r.unlocked_publishers[id] or not id in [&"ironclad",&"sidestreet",&"crown_quill",&"neon_circuit",&"starwave"]: return "Invalid publisher"
++	var seen := {}
++	for id: StringName in r.pending_publisher_notifications:
++		if seen.has(id) or not r.unlocked_publishers.has(id): return "Invalid publisher notice"
++		seen[id] = true
++	if r.first_game_tutorial!=null:
++		var tutorial: Dictionary = r.first_game_tutorial
++		if (not r.released_games.has(r.first_tutorial_project_id) and r.first_tutorial_project_id != active_id) or tutorial.stage>FirstGameTutorial.Stage.COMPLETE: return "Invalid tutorial"
++		for stat in [tutorial.first_stat,tutorial.second_stat]:
++			if stat!=&"" and stat not in FirstGameTutorial.STATS: return "Invalid tutorial stat"
++	if not RunRandom.new().restore(value.rng): return "Invalid RNG streams"
++	return ""
++
++func _valid_contract(c: Variant, r: Dictionary, kind: StringName, offer: StringName, release: StringName) -> bool:
++	if c==null: return true
++	var required_hands := 3 if kind==PublisherTrialTerms.STARWAVE else 2
++	if c.contract_id!=kind or c.offer_id!=offer or c.source_release_id!=release or c.hands!=required_hands or not c.upfront or not c.paid or not PriorityAllocation.is_valid_distribution(c.priorities): return false
++	for id: StringName in c.eligible:
++		if not c.eligible[id] or not r.owned_features.has(id): return false
++		var primitive := false
++		for entry: Dictionary in FeatureStoreCatalog.starting_features():
++			if StringName(entry.id)==id: primitive = true; break
++		if not primitive: return false
++	for id: StringName in c.exhausted:
++		if not c.exhausted[id] or not c.eligible.has(id): return false
++	var terms := PublisherTrialTerms.terms(kind)
++	var connected := kind==ContractState.CONTRACT_ID and StudioTraits.is_active(r.studio_traits,&"publisher_connections")
++	if c.publisher_connections != connected: return false
++	var advance := (55000 if connected else 40000) if kind==ContractState.CONTRACT_ID else 0
++	var expected: Dictionary
++	if terms.is_empty():
++		if not c.trial_terms.is_empty() or c.neon_focus!=-1: return false
++		expected = ContractState._calculate_completion_for_budget(c.scope,c.cores,240000-advance,advance) if kind==ContractState.CONTRACT_ID else ContractState.calculate_sidestreet_completion(c.scope,c.cores)
++	else:
++		var eligible: Array[StringName] = []
++		eligible.assign(c.eligible.keys())
++		var focus := PublisherTrialTerms.focus(eligible) if kind==PublisherTrialTerms.NEON else -1
++		if c.trial_terms!=terms or c.neon_focus!=focus: return false
++		advance = terms.advance_cents
++		expected = PublisherTrialTerms.completion(kind,c.scope,c.cores,focus)
++	if expected.is_empty(): return false
++	var bonus_cash := 0
++	var bonus_promotion := 0
++	var grade_bp := 0
++	if c.has("challenge_terms"):
++		if kind==ContractState.CONTRACT_ID or c.challenge_terms != ContractChallenges.terms_for_contract(kind) or c.challenge_redraws>ContractChallenges.MAX_INPUT or (kind!=ContractState.SIDESTREET_CONTRACT_ID and c.challenge_redraws!=0): return false
++		var reward := ContractChallenges.reward(c.challenge_terms,c.scope,c.cores,c.challenge_redraws)
++		if reward.is_empty(): return false
++		bonus_cash = reward.cash_cents
++		bonus_promotion = reward.promotion
++		grade_bp = reward.grade_bp
++	elif c.has("challenge_redraws") or c.result.has("bonus_cash_cents"): return false
++	var paid := 0
++	var hands := 0
++	for action: Dictionary in r.studio_finance.actions:
++		if action.source_id!=offer: continue
++		if action.kind==&"publisher_receipt": paid += int(action.direct_delta)
++		if action.productive and action.kind in [&"contract_hand",&"publisher_receipt"]:
++			hands += 1
++			if action.direct_delta != (int(expected.remainder_cents)+bonus_cash if hands==required_hands else 0): return false
++	if paid!=int(expected.payout_cents)+bonus_cash or hands!=required_hands: return false
++	var expected_result := {"scope":c.scope,"cores":c.cores,"numerator":expected.numerator,"payout":int(expected.payout_cents)+bonus_cash,"remainder":int(expected.remainder_cents)+bonus_cash,"upfront":advance,"denominator":expected.get("denominator",96),"promotion":int(expected.get("promotion",0))+bonus_promotion}
++	if c.has("challenge_terms"):
++		expected_result.challenge_grade_bp = grade_bp
++		expected_result.bonus_cash_cents = bonus_cash
++		expected_result.bonus_promotion = bonus_promotion
++	return c.result == expected_result
++
++func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
++	if payload.get("content_revision", "") != revision():
++		var migration: RefCounted=load("res://scripts/market/market_save_migration_trial.gd").new()
++		if not migration.is_old_revision(str(payload.get("content_revision",""))): error="INCOMPATIBLE_CONTENT_OR_RNG"; return null
++		var upgraded: Dictionary=migration.upgrade_store_player(payload,active_rival)
++		if upgraded.is_empty(): error=migration.error; return null
++		return hydrate(upgraded,active_rival)
++	error = validate_active_rival(payload) if active_rival else validate(payload)
++	if not error.is_empty(): return null
++	var value: Dictionary = _decode_payload(payload,active_rival)
++	var run := RunState.new()
++	var r: Dictionary = value.run
++	run._founding_roster_version = r.get("founding_roster_version",1)
++	for field: String in FIELDS:
++		if field=="_pending_publisher_notifications": run._pending_publisher_notifications.assign(r.pending_publisher_notifications)
++		else: run.set(field,r[field.trim_prefix("_")])
++	run.next_project_serial = r.next_project_serial
++	run.random_streams.restore(value.rng)
++	run._primitive_contract = _hydrate_contract(r.primitive_contract)
++	for id: StringName in r.sidestreet_entitlements:
++		var offer: Dictionary = r.sidestreet_entitlements[id]
++		run._sidestreet_entitlements[id] = {"offer_id":offer.offer_id,"state":_hydrate_contract(offer.state)}
++	for id: StringName in r.publisher_offers:
++		var offer: Dictionary = r.publisher_offers[id]
++		run._publisher_offers[id] = {"publisher_id":offer.publisher_id,"source_release_id":offer.source_release_id,"state":_hydrate_contract(offer.state)}
++	if r.first_game_tutorial!=null:
++		run._first_game_tutorial = FirstGameTutorial.new()
++		for key: String in r.first_game_tutorial: run._first_game_tutorial.set(key,r.first_game_tutorial[key])
++	return run
++
++func _decode_payload(payload: Dictionary, active_rival: bool = false) -> Dictionary:
++	# Current payloads need no legacy catalog/finance conversion. Preserve strict
++	# decoding without repeating historical file hashes for every saved owner.
++	if payload.get("content_revision", "") == revision():
++		var current_codec := CheckpointCodec.new()
++		var current: Variant = current_codec.decode(payload,CheckpointSchema.root(true,active_rival))
++		if not current_codec.error.is_empty(): error=current_codec.error; return {}
++		return current
++	var prior: bool = payload.get("content_revision", "") in _legacy_revisions(PRE_EDUCATION_RULES)
++	var codec := CheckpointCodec.new()
++	var value: Variant = codec.decode(payload,CheckpointSchema.root(not prior,active_rival))
++	if not codec.error.is_empty(): error = codec.error; return {}
++	if payload.get("content_revision", "") in _catalog_revisions(PRE_CULT20_RULES) and not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5,6,7]: error = "Invalid historical trait version"; return {}
++	if payload.get("content_revision", "") in _legacy_revisions(PRE_CULT_RULES) and not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5,6]: error = "Invalid historical trait version"; return {}
++	if prior:
++		if not value.run.studio_traits.is_empty() and value.run.studio_traits.version not in [3,4,5]: error = "Invalid historical trait version"; return {}
++		var upgraded := StudioFinanceLedger.upgrade_v5(value.run.studio_finance)
++		if upgraded.is_empty(): error = "Invalid prior finance journal"; return {}
++		value.run.studio_finance = upgraded
++		value.content_revision = revision()
++	return value
++
++func _hydrate_contract(c: Variant) -> ContractState:
++	if c==null: return null
++	var state := ContractState.new()
++	for key in {"_publisher_connections":"publisher_connections","_contract_id":"contract_id","_offer_id":"offer_id","_source_release_id":"source_release_id","_eligible_feature_ids":"eligible","_scope":"scope","_core_half_units":"cores","_successful_hands":"hands","_exhausted_feature_ids":"exhausted","_priorities":"priorities","_upfront_committed":"upfront","_payout_committed":"paid","_trial_terms":"trial_terms","_neon_focus":"neon_focus"}:
++		var mapping := {"_publisher_connections":"publisher_connections","_contract_id":"contract_id","_offer_id":"offer_id","_source_release_id":"source_release_id","_eligible_feature_ids":"eligible","_scope":"scope","_core_half_units":"cores","_successful_hands":"hands","_exhausted_feature_ids":"exhausted","_priorities":"priorities","_upfront_committed":"upfront","_payout_committed":"paid","_trial_terms":"trial_terms","_neon_focus":"neon_focus"}
++		state.set(key,c[mapping[key]])
++	if c.has("challenge_terms"):
++		state._challenge_terms = c.challenge_terms.duplicate(true)
++		state._challenge_redraws = c.challenge_redraws
++	state._result = ContractResult.new(c.result.scope,c.result.cores,c.result.numerator,c.result.payout,c.result.remainder,c.result.upfront,c.result.denominator,c.result.promotion,c.result.get("challenge_grade_bp",0),c.result.get("bonus_cash_cents",0),c.result.get("bonus_promotion",0))
++	return state
+--- base/scripts/contracts/publisher_relationship_rules.gd
++++ candidate/scripts/contracts/publisher_relationship_rules.gd
+@@ -0,0 +1,6 @@
++## No relationship award producers are enabled in P1. Future code-owned rules
++## must validate committed source facts and frozen terms, never trust disk deltas.
++extends RefCounted
++
++static func resolve(_run_facts: Variant, _request: Dictionary) -> Dictionary:
++	return {}
+--- base/scripts/contracts/publisher_relationships.gd
++++ candidate/scripts/contracts/publisher_relationships.gd
+@@ -0,0 +1,83 @@
++## Pure event ledger. Resolvers are trusted code, never serialized Callables.
++extends RefCounted
++
++const VERSION := 1
++const LIMIT_BP := 10000
++const PUBLISHERS := [&"ironclad", &"sidestreet", &"crown_quill", &"neon_circuit", &"starwave"]
++const REQUEST_FIELDS := ["event_id", "source_id", "publisher_id", "kind", "cycle"]
++
++static func create(owner: StringName) -> Dictionary:
++	return {"version":VERSION,"owner":owner,"events":[]}
++
++static func schema() -> Dictionary:
++	return {"version":"uint","owner":"id","events":CheckpointSchema.array_of({"ordinal":"uint","event_id":"id","source_id":"id","publisher_id":"id","kind":"id","cycle":"uint","requested_reputation_bp":"uint","requested_investment_bp":"uint","credited_reputation_bp":"uint","credited_investment_bp":"uint"})}
++
++static func _request(event: Dictionary) -> Dictionary:
++	var result := {}
++	for key: String in REQUEST_FIELDS:
++		if not event.has(key): return {}
++		result[key] = event[key]
++	return result
++
++static func _valid_request(request: Dictionary, cycle: int) -> bool:
++	if request.size() != REQUEST_FIELDS.size(): return false
++	for key: String in ["event_id","source_id","publisher_id","kind"]:
++		if not request.get(key) is StringName or request[key].is_empty() or str(request[key]).length() > 160: return false
++	return request.publisher_id in PUBLISHERS and request.get("cycle") is int and request.cycle >= 0 and request.cycle <= cycle
++
++static func _totals() -> Dictionary:
++	var totals := {}
++	for publisher: StringName in PUBLISHERS:
++		totals[publisher] = {"reputation_bp":0,"investment_bp":0}
++	return totals
++
++static func _event(request: Dictionary, ordinal: int, totals: Dictionary, resolver: Callable) -> Dictionary:
++	if not resolver.is_valid(): return {}
++	var resolved: Variant = resolver.call(request.duplicate(true))
++	if not resolved is Dictionary or resolved.size() != 2: return {}
++	for key: String in ["reputation_bp","investment_bp"]:
++		if not resolved.get(key) is int or resolved[key] < 0 or resolved[key] > LIMIT_BP: return {}
++	var event := request.duplicate(true)
++	event.ordinal = ordinal
++	for measure: String in ["reputation_bp","investment_bp"]:
++		event["requested_"+measure] = resolved[measure]
++		event["credited_"+measure] = mini(resolved[measure],LIMIT_BP-int(totals[request.publisher_id][measure]))
++	return event
++
++static func reconstruct(ledger: Dictionary, owner: StringName, cycle: int, resolver: Callable) -> Dictionary:
++	if owner.is_empty() or cycle < 0 or ledger.size() != 3 or not ledger.get("version") is int or ledger.version != VERSION or not ledger.get("owner") is StringName or ledger.owner != owner or not ledger.get("events") is Array: return {}
++	var totals := _totals()
++	var event_ids := {}
++	var sources := {}
++	var prior_cycle := 0
++	for index in range(ledger.events.size()):
++		var value: Variant = ledger.events[index]
++		if not value is Dictionary: return {}
++		var request := _request(value)
++		if not _valid_request(request,cycle) or request.cycle < prior_cycle or event_ids.has(request.event_id): return {}
++		# A source may produce distinct event kinds, but cannot double-credit one
++		# kind by changing publisher or inventing another event ID.
++		var source_key: Array = [request.kind,request.source_id]
++		if sources.has(source_key): return {}
++		var expected := _event(request,index+1,totals,resolver)
++		if expected.is_empty() or expected != value: return {}
++		for measure: String in ["reputation_bp","investment_bp"]:
++			totals[request.publisher_id][measure] += expected["credited_"+measure]
++		event_ids[request.event_id] = true
++		sources[source_key] = true
++		prior_cycle = request.cycle
++	return totals
++
++static func plan(ledger: Dictionary, owner: StringName, request: Dictionary, cycle: int, resolver: Callable) -> Dictionary:
++	var totals := reconstruct(ledger,owner,cycle,resolver)
++	if totals.is_empty() or not _valid_request(request,cycle): return {}
++	for prior: Dictionary in ledger.events:
++		if prior.event_id == request.event_id:
++			return {"ledger":ledger.duplicate(true),"event":prior.duplicate(true),"changed":false} if _request(prior) == request else {}
++		if prior.kind == request.kind and prior.source_id == request.source_id: return {}
++	if not ledger.events.is_empty() and request.cycle < ledger.events[-1].cycle: return {}
++	var event := _event(request,ledger.events.size()+1,totals,resolver)
++	if event.is_empty(): return {}
++	var next := ledger.duplicate(true)
++	next.events.append(event.duplicate(true))
++	return {"ledger":next,"event":event,"changed":true}
+--- base/scripts/debug/verify_contract_challenge_publishers.gd
++++ candidate/scripts/debug/verify_contract_challenge_publishers.gd
+@@ -1,68 +1,69 @@
+-extends "res://scripts/debug/verify_starwave.gd"
+-
+-func _run() -> void:
+-	for publisher in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT]:
+-		var run := trial_run()
+-		var quote := offer_for(run,publisher)
+-		var state := run.accept_publisher_contract(quote)
+-		expect(state!=null,"Publisher accepts with frozen challenge")
+-		if state==null: continue
+-		expect(state.get_challenge_terms()==ContractChallenges.terms_for_contract(state.get_contract_id()),"Publisher terms freeze at acceptance")
+-		var cards := passes()
+-		for i in range(2):
+-			var plan := state.plan_hand(cards)
+-			expect(commit_native_hand(run,state,cards,plan.remainder_cents),"Publisher hand commits with bonus-aware finance")
+-		var result := state.get_result()
+-		var base := PublisherTrialTerms.completion(state.get_contract_id(),state.get_scope(),result._core_half_units,state._neon_focus)
+-		var bonus := ContractChallenges.reward(state.get_challenge_terms(),state.get_scope(),result._core_half_units,0)
+-		expect(result.get_bonus_cash_cents()==bonus.cash_cents and result.get_bonus_promotion()==bonus.promotion,"Publisher bonus matches final grade")
+-		expect(result.get_payout_cents()==int(base.payout_cents)+int(bonus.cash_cents) and result.get_promotion()==int(base.promotion)+int(bonus.promotion),"Publisher base and bonus add exactly")
+-		expect(run.get_pending_promotion_awards().get(state.get_offer_id(),-1)==result.get_promotion(),"Publisher Promotion banks once")
+-		roundtrip(run,"Challenged "+String(publisher))
+-		var adapter := StudioCheckpoint.new()
+-		var saved := adapter.capture(run)
+-		if not saved.is_empty():
+-			var forged := saved.duplicate(true)
+-			for pair: Dictionary in forged.run.publisher_offers:
+-				if pair.key==String(state.get_offer_id()): pair.value.state.result.bonus_cash_cents = str(result.get_bonus_cash_cents()+1)
+-			expect(adapter.hydrate(forged)==null,"Forged challenge cash rejects on restore")
+-			forged = saved.duplicate(true)
+-			for pair: Dictionary in forged.run.publisher_offers:
+-				if pair.key==String(state.get_offer_id()): pair.value.state.challenge_redraws = "1"
+-			expect(adapter.hydrate(forged)==null,"Forged redraw history rejects on restore")
+-	var wave_run := starwave_fixture()
+-	var wave := wave_run.accept_publisher_contract(offer_for(wave_run,PublisherCatalog.STARWAVE))
+-	expect(wave!=null and wave.get_challenge_terms()==ContractChallenges.terms_for_contract(PublisherTrialTerms.STARWAVE),"Starwave challenge freezes on acceptance")
+-	if wave!=null:
+-		var wave_cards := passes()
+-		for i in range(3):
+-			var plan := wave.plan_hand(wave_cards)
+-			expect(commit_native_hand(wave_run,wave,wave_cards,plan.remainder_cents),"Starwave productive hand commits")
+-		var wave_result := wave.get_result()
+-		var wave_base := PublisherTrialTerms.completion(PublisherTrialTerms.STARWAVE,wave.get_scope(),wave_result._core_half_units)
+-		var wave_bonus := ContractChallenges.reward(wave.get_challenge_terms(),wave.get_scope(),wave_result._core_half_units,0)
+-		expect(wave_result.get_payout_cents()==int(wave_base.payout_cents)+int(wave_bonus.cash_cents),"Starwave cash includes separate challenge bonus")
+-		expect(wave_result.get_promotion()==wave_bonus.promotion and wave_run.get_pending_promotion_awards().get(wave.get_offer_id(),-1)==wave_bonus.promotion,"Starwave challenge Promotion banks without base Promotion")
+-		roundtrip(wave_run,"Challenged Starwave")
+-	var legacy_run := trial_run()
+-	var legacy := legacy_run.accept_publisher_contract(offer_for(legacy_run,PublisherCatalog.CROWN_QUILL))
+-	if legacy!=null:
+-		legacy._challenge_terms.clear() # Model a completed pre-challenge Contract.
+-		for i in range(2):
+-			var legacy_plan := legacy.plan_hand(passes())
+-			expect(commit_native_hand(legacy_run,legacy,passes(),legacy_plan.remainder_cents),"Historical base hand commits")
+-		var old_adapter := StudioCheckpoint.new()
+-		var old_record := old_adapter.capture(legacy_run)
+-		expect(not old_record.is_empty(),"Historical-shaped completed Contract captures")
+-		if not old_record.is_empty():
+-			old_record.content_revision = old_adapter._rules_revision(StudioCheckpoint.PRE_CHALLENGE_RULES)
+-			old_record.run.erase("founding_roster_version") # Constructed historical Action roster predates v2.
+-			# This constructed legacy fixture predates market ledgers too. Current
+-			# fields under an old revision must fail the real migration validator.
+-			for sale: Dictionary in old_record.run.released_games: sale.value.erase("market_factors")
+-			for fan: Dictionary in old_record.run.fanbase.releases: fan.value.neutral.erase("market_factors")
+-			for meta: Dictionary in old_record.run.release_metadata: meta.value.review.erase("market")
+-			var old_restored := old_adapter.hydrate(old_record)
+-			expect(old_restored!=null and old_restored.get_pending_promotion()==legacy.get_result().get_promotion(),"Historical rule revision restores without retroactive bonus")
+-	print("Contract challenge publishers: %d failures" % failures)
+-	quit(0 if failures==0 else 1)
++extends "res://scripts/debug/verify_starwave.gd"
++
++func _run() -> void:
++	for publisher in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT]:
++		var run := trial_run()
++		var quote := offer_for(run,publisher)
++		var state := run.accept_publisher_contract(quote)
++		expect(state!=null,"Publisher accepts with frozen challenge")
++		if state==null: continue
++		expect(state.get_challenge_terms()==ContractChallenges.terms_for_contract(state.get_contract_id()),"Publisher terms freeze at acceptance")
++		var cards := passes()
++		for i in range(2):
++			var plan := state.plan_hand(cards)
++			expect(commit_native_hand(run,state,cards,plan.remainder_cents),"Publisher hand commits with bonus-aware finance")
++		var result := state.get_result()
++		var base := PublisherTrialTerms.completion(state.get_contract_id(),state.get_scope(),result._core_half_units,state._neon_focus)
++		var bonus := ContractChallenges.reward(state.get_challenge_terms(),state.get_scope(),result._core_half_units,0)
++		expect(result.get_bonus_cash_cents()==bonus.cash_cents and result.get_bonus_promotion()==bonus.promotion,"Publisher bonus matches final grade")
++		expect(result.get_payout_cents()==int(base.payout_cents)+int(bonus.cash_cents) and result.get_promotion()==int(base.promotion)+int(bonus.promotion),"Publisher base and bonus add exactly")
++		expect(run.get_pending_promotion_awards().get(state.get_offer_id(),-1)==result.get_promotion(),"Publisher Promotion banks once")
++		roundtrip(run,"Challenged "+String(publisher))
++		var adapter := StudioCheckpoint.new()
++		var saved := adapter.capture(run)
++		if not saved.is_empty():
++			var forged := saved.duplicate(true)
++			for pair: Dictionary in forged.run.publisher_offers:
++				if pair.key==String(state.get_offer_id()): pair.value.state.result.bonus_cash_cents = str(result.get_bonus_cash_cents()+1)
++			expect(adapter.hydrate(forged)==null,"Forged challenge cash rejects on restore")
++			forged = saved.duplicate(true)
++			for pair: Dictionary in forged.run.publisher_offers:
++				if pair.key==String(state.get_offer_id()): pair.value.state.challenge_redraws = "1"
++			expect(adapter.hydrate(forged)==null,"Forged redraw history rejects on restore")
++	var wave_run := starwave_fixture()
++	var wave := wave_run.accept_publisher_contract(offer_for(wave_run,PublisherCatalog.STARWAVE))
++	expect(wave!=null and wave.get_challenge_terms()==ContractChallenges.terms_for_contract(PublisherTrialTerms.STARWAVE),"Starwave challenge freezes on acceptance")
++	if wave!=null:
++		var wave_cards := passes()
++		for i in range(3):
++			var plan := wave.plan_hand(wave_cards)
++			expect(commit_native_hand(wave_run,wave,wave_cards,plan.remainder_cents),"Starwave productive hand commits")
++		var wave_result := wave.get_result()
++		var wave_base := PublisherTrialTerms.completion(PublisherTrialTerms.STARWAVE,wave.get_scope(),wave_result._core_half_units)
++		var wave_bonus := ContractChallenges.reward(wave.get_challenge_terms(),wave.get_scope(),wave_result._core_half_units,0)
++		expect(wave_result.get_payout_cents()==int(wave_base.payout_cents)+int(wave_bonus.cash_cents),"Starwave cash includes separate challenge bonus")
++		expect(wave_result.get_promotion()==wave_bonus.promotion and wave_run.get_pending_promotion_awards().get(wave.get_offer_id(),-1)==wave_bonus.promotion,"Starwave challenge Promotion banks without base Promotion")
++		roundtrip(wave_run,"Challenged Starwave")
++	var legacy_run := trial_run()
++	var legacy := legacy_run.accept_publisher_contract(offer_for(legacy_run,PublisherCatalog.CROWN_QUILL))
++	if legacy!=null:
++		legacy._challenge_terms.clear() # Model a completed pre-challenge Contract.
++		for i in range(2):
++			var legacy_plan := legacy.plan_hand(passes())
++			expect(commit_native_hand(legacy_run,legacy,passes(),legacy_plan.remainder_cents),"Historical base hand commits")
++		var old_adapter := StudioCheckpoint.new()
++		var old_record := old_adapter.capture(legacy_run)
++		expect(not old_record.is_empty(),"Historical-shaped completed Contract captures")
++		if not old_record.is_empty():
++			old_record.content_revision = old_adapter._rules_revision(StudioCheckpoint.PRE_CHALLENGE_RULES)
++			old_record.run.erase("publisher_relationships") # Constructed old shape predates P1.
++			old_record.run.erase("founding_roster_version") # Constructed historical Action roster predates v2.
++			# This constructed legacy fixture predates market ledgers too. Current
++			# fields under an old revision must fail the real migration validator.
++			for sale: Dictionary in old_record.run.released_games: sale.value.erase("market_factors")
++			for fan: Dictionary in old_record.run.fanbase.releases: fan.value.neutral.erase("market_factors")
++			for meta: Dictionary in old_record.run.release_metadata: meta.value.review.erase("market")
++			var old_restored := old_adapter.hydrate(old_record)
++			expect(old_restored!=null and old_restored.get_pending_promotion()==legacy.get_result().get_promotion(),"Historical rule revision restores without retroactive bonus")
++	print("Contract challenge publishers: %d failures" % failures)
++	quit(0 if failures==0 else 1)
+--- base/scripts/debug/verify_publisher_relationships.gd
++++ candidate/scripts/debug/verify_publisher_relationships.gd
+@@ -0,0 +1,152 @@
++extends SceneTree
++
++const Ledger := preload("res://scripts/contracts/publisher_relationships.gd")
++const Rules := preload("res://scripts/contracts/publisher_relationship_rules.gd")
++var checks := 0
++var failures := 0
++var facts := {}
++
++func _initialize() -> void:
++	call_deferred("_run")
++
++func check(ok: bool, label: String) -> void:
++	checks += 1
++	if not ok:
++		failures += 1
++		printerr("FAIL: " + label)
++	else: print("PASS: " + label)
++
++func fixture(request: Dictionary) -> Dictionary:
++	if not facts.has(request.source_id): return {}
++	var fact: Dictionary = facts[request.source_id]
++	if fact.request != request: return {}
++	return fact.amounts.duplicate(true)
++
++func request(id: StringName, publisher: StringName, cycle: int, rep: int, inv: int) -> Dictionary:
++	var event := {"event_id":StringName("event:"+str(id)),"source_id":id,"publisher_id":publisher,"kind":&"fixture_credit_v1","cycle":cycle}
++	facts[id] = {"request":event.duplicate(true),"amounts":{"reputation_bp":rep,"investment_bp":inv}}
++	return event
++
++func pure_checks() -> void:
++	var empty := Ledger.create(&"owner-a")
++	var a := request(&"first",&"sidestreet",1,6000,1500)
++	var p := Ledger.plan(empty,&"owner-a",a,1,fixture)
++	check(not p.is_empty() and p.changed and empty.events.is_empty(),"pure plan leaves original empty")
++	if p.is_empty(): return
++	var one: Dictionary = p.ledger
++	var retry := Ledger.plan(one,&"owner-a",a,1,fixture)
++	check(not retry.is_empty() and not retry.changed and retry.ledger == one,"exact retry is no-op")
++	var wrong := a.duplicate(true); wrong.publisher_id = &"neon_circuit"
++	check(Ledger.plan(one,&"owner-a",wrong,1,fixture).is_empty(),"event ID cannot change publisher")
++	wrong = a.duplicate(true); wrong.event_id = &"different-event"
++	check(Ledger.plan(one,&"owner-a",wrong,1,fixture).is_empty(),"new ID cannot credit same source/kind twice")
++	var b := request(&"second",&"sidestreet",2,6000,10000)
++	var two := Ledger.plan(one,&"owner-a",b,2,fixture)
++	check(two.event.credited_reputation_bp == 4000 and two.event.credited_investment_bp == 8500,"independent clipping at candidate representation cap")
++	var c := request(&"third",&"sidestreet",3,100,100)
++	var three := Ledger.plan(two.ledger,&"owner-a",c,3,fixture)
++	check(three.changed and three.event.credited_reputation_bp == 0 and three.event.credited_investment_bp == 0,"qualifying event retained at cap with zero actual credit")
++	var other := request(&"fourth",&"neon_circuit",4,250,500)
++	var four := Ledger.plan(three.ledger,&"owner-a",other,4,fixture)
++	var totals := Ledger.reconstruct(four.ledger,&"owner-a",4,fixture)
++	check(totals[&"sidestreet"].reputation_bp == 10000 and totals[&"neon_circuit"].reputation_bp == 250 and totals[&"ironclad"].investment_bp == 0,"publishers remain isolated")
++	check(Ledger.reconstruct(four.ledger,&"owner-b",4,fixture).is_empty(),"another Studio cannot hydrate owner-a history")
++	check(not Ledger.plan(Ledger.create(&"owner-b"),&"owner-b",a,1,fixture).is_empty(),"same source text in separate Studio is independent")
++	for field in ["ordinal","requested_reputation_bp","credited_reputation_bp","requested_investment_bp","credited_investment_bp"]:
++		var bad: Dictionary = four.ledger.duplicate(true); bad.events[0][field] += 1
++		check(Ledger.reconstruct(bad,&"owner-a",4,fixture).is_empty(),"forged "+field+" rejects")
++	var bad: Dictionary = four.ledger.duplicate(true); bad.events.reverse()
++	check(Ledger.reconstruct(bad,&"owner-a",4,fixture).is_empty(),"reordered history rejects")
++	bad = four.ledger.duplicate(true); bad.events.append(bad.events[0].duplicate(true))
++	check(Ledger.reconstruct(bad,&"owner-a",4,fixture).is_empty(),"duplicate history rejects")
++	check(Ledger.reconstruct(four.ledger,&"owner-a",3,fixture).is_empty(),"future-cycle event rejects")
++	check(Ledger.plan(one,&"owner-a",request(&"backdated",&"sidestreet",0,1,1),1,fixture).is_empty(),"backdated append rejects")
++	for amounts: Array in [[-1,1],[1,-1],[10001,0],[0,10001]]:
++		var invalid := request(StringName("bad:"+str(amounts)),&"crown_quill",4,amounts[0],amounts[1])
++		check(Ledger.plan(four.ledger,&"owner-a",invalid,4,fixture).is_empty(),"invalid credit bound rejects "+str(amounts))
++	var float_request := a.duplicate(true); float_request.cycle = 1.0
++	check(Ledger.plan(empty,&"owner-a",float_request,1,fixture).is_empty(),"float counter rejects")
++	var codec := CheckpointCodec.new()
++	var encoded: Variant = codec.encode(four.ledger,Ledger.schema())
++	var decoded: Variant = codec.decode(JSON.parse_string(JSON.stringify(encoded)),Ledger.schema())
++	check(codec.error.is_empty() and decoded == four.ledger and Ledger.reconstruct(decoded,&"owner-a",4,fixture) == totals,"nonzero fixture typed JSON roundtrip")
++	var production := func(event: Dictionary) -> Dictionary: return Rules.resolve({},event)
++	check(Ledger.reconstruct(four.ledger,&"owner-a",4,production).is_empty(),"fixture credits rejected by production resolver")
++	check(Ledger.plan(empty,&"owner-a",a,1,production).is_empty(),"P1 enables no award producer")
++	p.event.credited_reputation_bp = 99
++	check(one.events[0].credited_reputation_bp == 6000,"detached event cannot mutate planned history")
++	totals[&"neon_circuit"].reputation_bp = 999
++	check(Ledger.reconstruct(four.ledger,&"owner-a",4,fixture)[&"neon_circuit"].reputation_bp == 250,"observation cannot mutate history")
++
++func native_checks() -> void:
++	var run := RunState.new(); run.initialize_cash(0)
++	check(run.create_studio_with_traits("P1 native",&"action",[]),"legal Studio creation")
++	var adapter := StudioCheckpoint.new()
++	var saved := adapter.capture(run)
++	check(not saved.is_empty(),"new Studio checkpoint captures: "+adapter.error)
++	check(run.get_publisher_relationships().size() == 5 and run._publisher_relationships.events.is_empty(),"new Studio has five zero relationships and no events")
++	var observed := run.get_publisher_relationships(); observed[&"sidestreet"].reputation_bp = 999
++	check(run.get_publisher_relationships()[&"sidestreet"].reputation_bp == 0,"RunState observation detached")
++	var rejected := request(&"runtime",&"sidestreet",0,1000,1000)
++	check(not run.commit_publisher_relationship_event(rejected) and adapter.capture(run) == saved,"disabled event preserves full runtime and RNG")
++	run._relationship_commit_in_progress = true
++	check(not run.commit_publisher_relationship_event(rejected),"reentrant producer rejects")
++	run._relationship_commit_in_progress = false
++	run.checkpoint_mutations_allowed = false
++	check(not run.commit_publisher_relationship_event(rejected),"checkpoint mutation fence preserved")
++	run.checkpoint_mutations_allowed = true
++	var restored := adapter.hydrate(saved)
++	check(restored != null and adapter.capture(restored) == saved,"native full checkpoint roundtrip exact")
++	var wrong := saved.duplicate(true); wrong.run.publisher_relationships.owner = "another-studio"
++	check(adapter.hydrate(wrong) == null and adapter.capture(run) == saved,"wrong owner rejects without damaging live Studio")
++	wrong = saved.duplicate(true); wrong.run.publisher_relationships.events = [{"unexpected":"reward"}]
++	check(adapter.hydrate(wrong) == null,"malformed event payload rejects")
++	wrong = saved.duplicate(true); wrong.run.erase("publisher_relationships")
++	check(adapter.hydrate(wrong) == null,"current revision cannot omit relationship ledger")
++	wrong = saved.duplicate(true); wrong.content_revision = "unknown"
++	check(adapter.hydrate(wrong) == null,"unknown content revision rejects")
++	# Save the valid generation after the rejection checks for a separate process.
++	var args := OS.get_cmdline_user_args()
++	if args.size() >= 2 and args[0] == "write":
++		var file := FileAccess.open(args[1],FileAccess.WRITE)
++		check(file != null,"isolated fixture file opens")
++		if file != null: file.store_string(JSON.stringify(saved)); file.close()
++
++func file_checks(args: PackedStringArray) -> void:
++	var input: Variant = JSON.parse_string(FileAccess.get_file_as_string(args[1]))
++	check(input is Dictionary,"retained input parses")
++	if not input is Dictionary: return
++	var payload: Dictionary = input.get("studio_payload",input)
++	var before := payload.duplicate(true)
++	var adapter := StudioCheckpoint.new()
++	if args[0] == "cold":
++		var run := adapter.hydrate(payload)
++		check(run != null and adapter.capture(run) == payload,"fresh-process current native restore exact: "+adapter.error)
++		if run != null:
++			check(run.get_publisher_relationships()[&"sidestreet"].reputation_bp == 0,"cold no reward minted")
++	else:
++		var upgraded := adapter.upgrade_relationship_predecessor(payload)
++		check(not upgraded.is_empty(),"exact predecessor migrates: "+adapter.error)
++		if upgraded.is_empty(): return
++		var projected := upgraded.duplicate(true)
++		projected.run.erase("publisher_relationships"); projected.content_revision = payload.content_revision
++		check(projected == payload and payload == before,"migration preserves every preexisting encoded field and input bytes")
++		var run := adapter.hydrate(payload)
++		check(run != null and adapter.capture(run) == upgraded,"old native payload hydrates directly and captures upgraded shape")
++		if run != null: check(run._publisher_relationships.events.is_empty(),"migration does not backfill completed Contracts")
++		var malformed := payload.duplicate(true); malformed.run.cash_cents = "999999"
++		check(adapter.upgrade_relationship_predecessor(malformed).is_empty(),"old accounting corruption fails original validator")
++		malformed = payload.duplicate(true); malformed.run.publisher_relationships = upgraded.run.publisher_relationships
++		check(adapter.upgrade_relationship_predecessor(malformed).is_empty(),"mixed old/new shape rejects")
++		malformed = payload.duplicate(true); malformed.content_revision = "unknown"
++		check(adapter.upgrade_relationship_predecessor(malformed).is_empty(),"unknown predecessor rejects")
++
++func _run() -> void:
++	var args := OS.get_cmdline_user_args()
++	if args.size() >= 2 and args[0] in ["cold","migrate"]:
++		file_checks(args)
++	else:
++		pure_checks()
++		native_checks()
++	print("P1 checks=%d failures=%d" % [checks,failures])
++	quit(0 if failures == 0 else 1)
+--- base/scripts/market/market_save_migration_trial.gd
++++ candidate/scripts/market/market_save_migration_trial.gd
+@@ -1,214 +1,215 @@
+-## Prospective market upgrade. Validate the original source/schema/accounting
+-## before adding neutral historical factors. Only the in-memory copy changes;
+-## CheckpointStore publishes it at the next ordinary committed Studio action.
+-extends RefCounted
+-
+-const OldStudio := preload("res://scripts/market/legacy_pre_market_studio_validator.gd")
+-const OldWorld := preload("res://scripts/market/legacy_pre_market_world.gd")
+-const Replay := preload("res://scripts/simulation/development_replay.gd")
+-const Market := preload("res://scripts/market/market_transaction_trial.gd")
+-const OldSource := "1e7e9c1f1c5766d209a5d0826cf07982c528b6e4b132087e08130dcb0c30cb82"
+-const OldPlayerRevision := "a6547dc9b3e4d316c024267b1fe40406adfce6efa0e5692127b9b155a7fe7cfd"
+-# Named sources already accepted by the pre-market codec, paired with their
+-# original content revision. These are not arbitrary source substitutions.
+-const SOURCE_REVISIONS := {
+-	OldSource: OldPlayerRevision,
+-	"bf8d5157c91dd608456d66470d61e4927edb283401ef001c93b3a62d34b9aa6f": OldPlayerRevision,
+-	"9f321103092057b23ced7fc43ebefdffc1aa56e620b237dc734e17a451a1cbf7": "2533834fd893a109e4f794984360f77d3ebe20545cc4402ca4ac681c263f2d08",
+-	"ea4268bd65ae08e2a5a344384eb82dbd1a2fd9f3ef710def8443a0ce578f910c": "20acdff15d364fb81cc305c04a7f05f23d7ee183ffc1345da4183f3e127821f3",
+-	"81d4c3577b722bd2bbf552618ae3011cd9f8672f5ee83b3f4c0851c4aa750aed": "8194d8d5849f214bf9929f604c0809ebd499b9f40063e43c7c5613aba38f8af4",
+-	"b3e0baf68815977cad07a3915045a85f53c18df341f3bf3bbe2d8bcc24c94d46": "6d71877d168cd74230b48d66b0b9f43c5c291ebbeebe11fd3cf3e5af132d2d37",
+-	"1365082d5d1d70e81749e19931215f74cc303678edbba35479db9676ce7415a3": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
+-	"f4303f0101e1971026080ec0b0acf3c817e96675fa190758d7c8651b8969a412": "20acdff15d364fb81cc305c04a7f05f23d7ee183ffc1345da4183f3e127821f3",
+-	"580bd1331cdc4bca578230005e3ca4f9cc91ead0b03b78be3238bdb7c9fc5150": "20acdff15d364fb81cc305c04a7f05f23d7ee183ffc1345da4183f3e127821f3",
+-	"38f92c219924494964e5982c6ed7976a5d2fec97de6ea1a7565fdd4d7e6bb41e": "8194d8d5849f214bf9929f604c0809ebd499b9f40063e43c7c5613aba38f8af4",
+-	"236a7e6184d14ff5b8f0f14fff01e61643f208e1318385c64cebea24f21a3ac3": "8194d8d5849f214bf9929f604c0809ebd499b9f40063e43c7c5613aba38f8af4",
+-	"f8f130c6a3e6b7d27710e11a56b445ea6c73d9dbc26ca26a8501ca2cf7ca32de": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
+-	"200a5b089b34f95c31231bade1e3f6720b77b8ec87c9691e19b496b91098bfd6": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
+-	"fd7e8a3bfe749b1c121b7515e150c35ea926f80f5511b2ba86d8ee5dceb8c867": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
+-	"ac944a5fafd1470251f51fafd9496b4c54542e6f51baaa963fd3c860cef5d2f5": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
+-	"0679720d9518de5ce8eb7f94ba7cd2970d001afad945b3a0e4156e5396de7040": "e5fa9d0bf6ac3f0722f2b310e0a14c0de07a8c4b4deccce9b703894406eae1ea",
+-	"3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f": "e5fa9d0bf6ac3f0722f2b310e0a14c0de07a8c4b4deccce9b703894406eae1ea",
+-}
+-
+-var error := ""
+-static var _old_revisions: Array = []
+-
+-static func known_source(source_id: String) -> bool:
+-	return SOURCE_REVISIONS.has(source_id)
+-
+-static func is_old_revision(revision_id: String) -> bool:
+-	# Player-only Store generations have content provenance, not a runtime-source
+-	# field. The frozen validator still checks the complete exact old schema.
+-	if _old_revisions.is_empty():
+-		var old := OldStudio.new()
+-		_old_revisions = old._catalog_revisions(OldStudio.RULES) + old._catalog_revisions(OldStudio.PRE_ROSTER_RULES) + old._catalog_revisions(OldStudio.PRE_GAMEPLAY_TREE_RULES) + old._catalog_revisions(OldStudio.PRE_CONE_RULES) + old._catalog_revisions(OldStudio.PRE_CHALLENGE_RULES) + old._catalog_revisions(OldStudio.PRE_BRANCH_RULES) + old._catalog_revisions(OldStudio.PRE_CULT20_RULES) + old._legacy_revisions(OldStudio.PRE_CULT_RULES) + old._legacy_revisions(OldStudio.PRE_EDUCATION_RULES)
+-	return revision_id in _old_revisions
+-
+-func _old_native(payload: Dictionary, active: bool) -> Dictionary:
+-	if payload.get("source_build") != OldStudio.BUILD or not is_old_revision(str(payload.get("content_revision", ""))):
+-		error = "Unknown pre-market Studio revision/build"
+-		return {}
+-	var adapter := OldStudio.new()
+-	var reason: String = adapter.validate_active_rival(payload) if active else adapter.validate(payload)
+-	if not reason.is_empty():
+-		error = "Invalid original pre-market Studio: " + reason
+-		return {}
+-	var native: Dictionary = adapter._decode_payload(payload, active)
+-	if native.is_empty(): error = adapter.error
+-	return native
+-
+-static func _neutral_factor(source_id: String) -> Dictionary:
+-	return {"factor_bp":10000, "snapshot_id":source_id, "cycle_start":0,
+-		"genre_only":0, "theme_only":0, "pair":0, "historical":true}
+-
+-func _add_factors(sale: Dictionary, source_id: String, historical: bool = true) -> bool:
+-	if sale.has("market_factors"):
+-		error = "Mixed old/new sales shape"
+-		return false
+-	var factors := {}
+-	var cycles: int = sale.total_earned_cycles
+-	for age in range(1, cycles / 2 + cycles % 2 + 1):
+-		factors[age] = _neutral_factor(source_id)
+-		factors[age].historical = historical
+-	sale.market_factors = factors
+-	return true
+-
+-func _upgrade_run(payload: Dictionary, active: bool, source_id: String) -> Dictionary:
+-	var native := _old_native(payload, active)
+-	if native.is_empty(): return {}
+-	for id: StringName in native.run.released_games:
+-		if not _add_factors(native.run.released_games[id], source_id): return {}
+-	for id: StringName in native.run.fanbase.releases:
+-		if not _add_factors(native.run.fanbase.releases[id].neutral, "market-0-neutral", false): return {}
+-	native.content_revision = StudioCheckpoint.new().revision()
+-	var codec := CheckpointCodec.new()
+-	var encoded: Variant = codec.encode(native, CheckpointSchema.root(true, active))
+-	if not codec.error.is_empty() or not encoded is Dictionary:
+-		error = "Upgraded Studio encoding: " + codec.error
+-		return {}
+-	var adapter := StudioCheckpoint.new()
+-	var reason: String = adapter.validate_active_rival(encoded) if active else adapter.validate(encoded)
+-	if not reason.is_empty():
+-		error = "Upgraded Studio validation: " + reason
+-		return {}
+-	return encoded
+-
+-func upgrade_store_player(payload: Dictionary, active: bool = false) -> Dictionary:
+-	error = ""
+-	if payload.has("rival_world"):
+-		error = "World must migrate with its player"
+-		return {}
+-	if not is_old_revision(str(payload.get("content_revision", ""))): return payload.duplicate(true)
+-	return _upgrade_run(payload, active, "pre-market-neutral:content:" + str(payload.content_revision))
+-
+-func upgrade_player_only(envelope: Dictionary) -> Dictionary:
+-	error = ""
+-	var source_id := str(envelope.get("source_identity", ""))
+-	if envelope.size() != 8 or not known_source(source_id) or envelope.get("kind") != "campaign_studio" or envelope.get("schema_version") != "1" or envelope.get("engine_version") != Engine.get_version_info().string or envelope.get("rng_algorithm") != RunRandom.ALGORITHM or not envelope.get("studio_payload") is Dictionary or not envelope.get("integrity") is String:
+-		error = "Unknown or mixed pre-market simulator envelope"
+-		return {}
+-	var contents := envelope.duplicate(true)
+-	contents.erase("integrity")
+-	if Replay.digest(contents) != envelope.integrity or envelope.studio_payload.get("content_revision") != SOURCE_REVISIONS[source_id]:
+-		error = "Old envelope integrity or source/content pair mismatch"
+-		return {}
+-	var sequence: Variant = CheckpointCodec.new().integer(envelope.get("accepted_sequence"))
+-	if not sequence is int or sequence < 0:
+-		error = "Invalid old player sequence"
+-		return {}
+-	var player := _upgrade_run(envelope.studio_payload, false, "pre-market-neutral:" + source_id)
+-	return {"player":player, "source_identity":source_id} if not player.is_empty() else {}
+-
+-func _historical_project(project: Dictionary, source_id: String) -> bool:
+-	if project.has("_market_standards") or project.has("_market_snapshot_id") or project.has("_market_details"):
+-		error = "Mixed old/new project shape"
+-		return false
+-	var base: Array = PrimitiveReviewCalculator.GENRE_TARGETS.get(StringName(str(project.get("_genre_id", ""))), [])
+-	if base.size() != 4:
+-		error = "Unknown historical project Genre"
+-		return false
+-	var encoded: Array = base.map(func(value: Variant) -> String: return str(value))
+-	project._market_standards = encoded.duplicate()
+-	project._market_snapshot_id = source_id
+-	project._market_details = {"snapshot_id":source_id, "cycle_start":"0", "standards":encoded.duplicate(),
+-		"base":encoded.duplicate(), "recent_count":"0", "density_lift":"0", "benchmark_lifts":["0","0","0","0"], "historical":true}
+-	return true
+-
+-func upgrade_pair(old_player: Dictionary, old_world: Dictionary, catalog: RefCounted = null) -> Dictionary:
+-	error = ""
+-	var source_id := str(old_world.get("source_identity", ""))
+-	if not known_source(source_id) or old_world.has("market") or old_player.has("rival_world") or not old_world.get("studios") is Array:
+-		error = "Unknown or mixed pre-market world source/shape"
+-		return {}
+-	if catalog == null:
+-		error = "Card catalog required for original world validation"
+-		return {}
+-	var revision_id: String = SOURCE_REVISIONS[source_id]
+-	if old_player.get("content_revision") != revision_id:
+-		error = "Old player/world source/content mismatch"
+-		return {}
+-	if _old_native(old_player, false).is_empty(): return {}
+-	for row: Variant in old_world.studios:
+-		if not row is Dictionary or not row.get("run") is Dictionary or row.run.get("content_revision") != revision_id:
+-			error = "Mixed old rival source/content revision"
+-			return {}
+-		if _old_native(row.run, row.get("development") != null).is_empty(): return {}
+-	# Restore the original whole world against the frozen schema before adding
+-	# fields. This checks active hands, catalog, release ownership and Founder.
+-	var old_adapter := OldStudio.new()
+-	var old_run := old_adapter.hydrate(old_player)
+-	if old_run == null:
+-		error = old_adapter.error
+-		return {}
+-	var old_codec := OldWorld.new()
+-	var restored: RivalWorld = old_codec.restore(old_world, old_player, old_run, catalog)
+-	if restored == null:
+-		error = "Original pre-market world: " + old_codec.error
+-		return {}
+-	var factor_source := "pre-market-neutral:" + source_id
+-	var player := _upgrade_run(old_player, false, factor_source)
+-	if player.is_empty(): return {}
+-	var world := old_world.duplicate(true)
+-	for row: Dictionary in world.studios:
+-		var active: bool = row.development != null
+-		var upgraded := _upgrade_run(row.run, active, factor_source)
+-		if upgraded.is_empty(): return {}
+-		row.run = upgraded
+-		if active and not _historical_project(row.development.project, factor_source): return {}
+-	var cycle: int = restored.cycle
+-	var start: int = cycle - cycle % 2
+-	var codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
+-	var facts: Variant = codec._expected_market_facts({"cycle_start":start}, player, world.studios)
+-	if not facts is Array:
+-		error = "Invalid original release facts"
+-		return {}
+-	var market := {"version":Market.VERSION, "cycle_start":start,
+-		"id":"market-0-neutral" if start == 0 else Market.identifier(start, facts), "facts":facts}
+-	if not Market.valid(market):
+-		error = "Invalid migrated market month"
+-		return {}
+-	var encoder := CheckpointCodec.new()
+-	world.market = encoder.encode(market, codec._market_schema())
+-	if not encoder.error.is_empty():
+-		error = encoder.error
+-		return {}
+-	var active_projects := {}
+-	for row: Dictionary in old_world.studios:
+-		if row.development != null:
+-			active_projects[StringName(row.id)] = StringName(row.run.active_project_id)
+-	world.market_origin = encoder.encode({"source_id":source_id,"content_revision":revision_id,
+-		"cycle":cycle,"active_projects":active_projects},codec._origin_schema())
+-	if not encoder.error.is_empty():
+-		error = encoder.error
+-		return {}
+-	# Runtime provenance changes only on this validated in-memory version.
+-	world.source_identity = Replay.source_identity()
+-	var current_player := StudioCheckpoint.new().hydrate(player)
+-	if current_player == null:
+-		error = "Upgraded player could not hydrate"
+-		return {}
+-	if codec.restore(world, player, current_player, catalog) == null:
+-		error = "Upgraded world: " + str(codec.error) + " [source=" + str(world.source_identity) + ", current=" + Replay.source_identity() + "]"
+-		return {}
+-	return {"player":player, "world":world, "market":market, "source_identity":source_id}
++## Prospective market upgrade. Validate the original source/schema/accounting
++## before adding neutral historical factors. Only the in-memory copy changes;
++## CheckpointStore publishes it at the next ordinary committed Studio action.
++extends RefCounted
++
++const OldStudio := preload("res://scripts/market/legacy_pre_market_studio_validator.gd")
++const OldWorld := preload("res://scripts/market/legacy_pre_market_world.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++const Market := preload("res://scripts/market/market_transaction_trial.gd")
++const OldSource := "1e7e9c1f1c5766d209a5d0826cf07982c528b6e4b132087e08130dcb0c30cb82"
++const OldPlayerRevision := "a6547dc9b3e4d316c024267b1fe40406adfce6efa0e5692127b9b155a7fe7cfd"
++# Named sources already accepted by the pre-market codec, paired with their
++# original content revision. These are not arbitrary source substitutions.
++const SOURCE_REVISIONS := {
++	OldSource: OldPlayerRevision,
++	"bf8d5157c91dd608456d66470d61e4927edb283401ef001c93b3a62d34b9aa6f": OldPlayerRevision,
++	"9f321103092057b23ced7fc43ebefdffc1aa56e620b237dc734e17a451a1cbf7": "2533834fd893a109e4f794984360f77d3ebe20545cc4402ca4ac681c263f2d08",
++	"ea4268bd65ae08e2a5a344384eb82dbd1a2fd9f3ef710def8443a0ce578f910c": "20acdff15d364fb81cc305c04a7f05f23d7ee183ffc1345da4183f3e127821f3",
++	"81d4c3577b722bd2bbf552618ae3011cd9f8672f5ee83b3f4c0851c4aa750aed": "8194d8d5849f214bf9929f604c0809ebd499b9f40063e43c7c5613aba38f8af4",
++	"b3e0baf68815977cad07a3915045a85f53c18df341f3bf3bbe2d8bcc24c94d46": "6d71877d168cd74230b48d66b0b9f43c5c291ebbeebe11fd3cf3e5af132d2d37",
++	"1365082d5d1d70e81749e19931215f74cc303678edbba35479db9676ce7415a3": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
++	"f4303f0101e1971026080ec0b0acf3c817e96675fa190758d7c8651b8969a412": "20acdff15d364fb81cc305c04a7f05f23d7ee183ffc1345da4183f3e127821f3",
++	"580bd1331cdc4bca578230005e3ca4f9cc91ead0b03b78be3238bdb7c9fc5150": "20acdff15d364fb81cc305c04a7f05f23d7ee183ffc1345da4183f3e127821f3",
++	"38f92c219924494964e5982c6ed7976a5d2fec97de6ea1a7565fdd4d7e6bb41e": "8194d8d5849f214bf9929f604c0809ebd499b9f40063e43c7c5613aba38f8af4",
++	"236a7e6184d14ff5b8f0f14fff01e61643f208e1318385c64cebea24f21a3ac3": "8194d8d5849f214bf9929f604c0809ebd499b9f40063e43c7c5613aba38f8af4",
++	"f8f130c6a3e6b7d27710e11a56b445ea6c73d9dbc26ca26a8501ca2cf7ca32de": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
++	"200a5b089b34f95c31231bade1e3f6720b77b8ec87c9691e19b496b91098bfd6": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
++	"fd7e8a3bfe749b1c121b7515e150c35ea926f80f5511b2ba86d8ee5dceb8c867": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
++	"ac944a5fafd1470251f51fafd9496b4c54542e6f51baaa963fd3c860cef5d2f5": "dd095178754c57e1f7eba29959c26e5cb023e81b3074b238b6af7655019f455e",
++	"0679720d9518de5ce8eb7f94ba7cd2970d001afad945b3a0e4156e5396de7040": "e5fa9d0bf6ac3f0722f2b310e0a14c0de07a8c4b4deccce9b703894406eae1ea",
++	"3e0d3958740f71149b3bb5b3e9f0b15b70cc6d71c96c6c03dd1f594d56a71c8f": "e5fa9d0bf6ac3f0722f2b310e0a14c0de07a8c4b4deccce9b703894406eae1ea",
++}
++
++var error := ""
++static var _old_revisions: Array = []
++
++static func known_source(source_id: String) -> bool:
++	return SOURCE_REVISIONS.has(source_id)
++
++static func is_old_revision(revision_id: String) -> bool:
++	# Player-only Store generations have content provenance, not a runtime-source
++	# field. The frozen validator still checks the complete exact old schema.
++	if _old_revisions.is_empty():
++		var old := OldStudio.new()
++		_old_revisions = old._catalog_revisions(OldStudio.RULES) + old._catalog_revisions(OldStudio.PRE_ROSTER_RULES) + old._catalog_revisions(OldStudio.PRE_GAMEPLAY_TREE_RULES) + old._catalog_revisions(OldStudio.PRE_CONE_RULES) + old._catalog_revisions(OldStudio.PRE_CHALLENGE_RULES) + old._catalog_revisions(OldStudio.PRE_BRANCH_RULES) + old._catalog_revisions(OldStudio.PRE_CULT20_RULES) + old._legacy_revisions(OldStudio.PRE_CULT_RULES) + old._legacy_revisions(OldStudio.PRE_EDUCATION_RULES)
++	return revision_id in _old_revisions
++
++func _old_native(payload: Dictionary, active: bool) -> Dictionary:
++	if payload.get("source_build") != OldStudio.BUILD or not is_old_revision(str(payload.get("content_revision", ""))):
++		error = "Unknown pre-market Studio revision/build"
++		return {}
++	var adapter := OldStudio.new()
++	var reason: String = adapter.validate_active_rival(payload) if active else adapter.validate(payload)
++	if not reason.is_empty():
++		error = "Invalid original pre-market Studio: " + reason
++		return {}
++	var native: Dictionary = adapter._decode_payload(payload, active)
++	if native.is_empty(): error = adapter.error
++	return native
++
++static func _neutral_factor(source_id: String) -> Dictionary:
++	return {"factor_bp":10000, "snapshot_id":source_id, "cycle_start":0,
++		"genre_only":0, "theme_only":0, "pair":0, "historical":true}
++
++func _add_factors(sale: Dictionary, source_id: String, historical: bool = true) -> bool:
++	if sale.has("market_factors"):
++		error = "Mixed old/new sales shape"
++		return false
++	var factors := {}
++	var cycles: int = sale.total_earned_cycles
++	for age in range(1, cycles / 2 + cycles % 2 + 1):
++		factors[age] = _neutral_factor(source_id)
++		factors[age].historical = historical
++	sale.market_factors = factors
++	return true
++
++func _upgrade_run(payload: Dictionary, active: bool, source_id: String) -> Dictionary:
++	var native := _old_native(payload, active)
++	if native.is_empty(): return {}
++	for id: StringName in native.run.released_games:
++		if not _add_factors(native.run.released_games[id], source_id): return {}
++	for id: StringName in native.run.fanbase.releases:
++		if not _add_factors(native.run.fanbase.releases[id].neutral, "market-0-neutral", false): return {}
++	native.run.publisher_relationships = RunState.RelationshipLedger.create(native.run.bank_run_id)
++	native.content_revision = StudioCheckpoint.new().revision()
++	var codec := CheckpointCodec.new()
++	var encoded: Variant = codec.encode(native, CheckpointSchema.root(true, active))
++	if not codec.error.is_empty() or not encoded is Dictionary:
++		error = "Upgraded Studio encoding: " + codec.error
++		return {}
++	var adapter := StudioCheckpoint.new()
++	var reason: String = adapter.validate_active_rival(encoded) if active else adapter.validate(encoded)
++	if not reason.is_empty():
++		error = "Upgraded Studio validation: " + reason
++		return {}
++	return encoded
++
++func upgrade_store_player(payload: Dictionary, active: bool = false) -> Dictionary:
++	error = ""
++	if payload.has("rival_world"):
++		error = "World must migrate with its player"
++		return {}
++	if not is_old_revision(str(payload.get("content_revision", ""))): return payload.duplicate(true)
++	return _upgrade_run(payload, active, "pre-market-neutral:content:" + str(payload.content_revision))
++
++func upgrade_player_only(envelope: Dictionary) -> Dictionary:
++	error = ""
++	var source_id := str(envelope.get("source_identity", ""))
++	if envelope.size() != 8 or not known_source(source_id) or envelope.get("kind") != "campaign_studio" or envelope.get("schema_version") != "1" or envelope.get("engine_version") != Engine.get_version_info().string or envelope.get("rng_algorithm") != RunRandom.ALGORITHM or not envelope.get("studio_payload") is Dictionary or not envelope.get("integrity") is String:
++		error = "Unknown or mixed pre-market simulator envelope"
++		return {}
++	var contents := envelope.duplicate(true)
++	contents.erase("integrity")
++	if Replay.digest(contents) != envelope.integrity or envelope.studio_payload.get("content_revision") != SOURCE_REVISIONS[source_id]:
++		error = "Old envelope integrity or source/content pair mismatch"
++		return {}
++	var sequence: Variant = CheckpointCodec.new().integer(envelope.get("accepted_sequence"))
++	if not sequence is int or sequence < 0:
++		error = "Invalid old player sequence"
++		return {}
++	var player := _upgrade_run(envelope.studio_payload, false, "pre-market-neutral:" + source_id)
++	return {"player":player, "source_identity":source_id} if not player.is_empty() else {}
++
++func _historical_project(project: Dictionary, source_id: String) -> bool:
++	if project.has("_market_standards") or project.has("_market_snapshot_id") or project.has("_market_details"):
++		error = "Mixed old/new project shape"
++		return false
++	var base: Array = PrimitiveReviewCalculator.GENRE_TARGETS.get(StringName(str(project.get("_genre_id", ""))), [])
++	if base.size() != 4:
++		error = "Unknown historical project Genre"
++		return false
++	var encoded: Array = base.map(func(value: Variant) -> String: return str(value))
++	project._market_standards = encoded.duplicate()
++	project._market_snapshot_id = source_id
++	project._market_details = {"snapshot_id":source_id, "cycle_start":"0", "standards":encoded.duplicate(),
++		"base":encoded.duplicate(), "recent_count":"0", "density_lift":"0", "benchmark_lifts":["0","0","0","0"], "historical":true}
++	return true
++
++func upgrade_pair(old_player: Dictionary, old_world: Dictionary, catalog: RefCounted = null) -> Dictionary:
++	error = ""
++	var source_id := str(old_world.get("source_identity", ""))
++	if not known_source(source_id) or old_world.has("market") or old_player.has("rival_world") or not old_world.get("studios") is Array:
++		error = "Unknown or mixed pre-market world source/shape"
++		return {}
++	if catalog == null:
++		error = "Card catalog required for original world validation"
++		return {}
++	var revision_id: String = SOURCE_REVISIONS[source_id]
++	if old_player.get("content_revision") != revision_id:
++		error = "Old player/world source/content mismatch"
++		return {}
++	if _old_native(old_player, false).is_empty(): return {}
++	for row: Variant in old_world.studios:
++		if not row is Dictionary or not row.get("run") is Dictionary or row.run.get("content_revision") != revision_id:
++			error = "Mixed old rival source/content revision"
++			return {}
++		if _old_native(row.run, row.get("development") != null).is_empty(): return {}
++	# Restore the original whole world against the frozen schema before adding
++	# fields. This checks active hands, catalog, release ownership and Founder.
++	var old_adapter := OldStudio.new()
++	var old_run := old_adapter.hydrate(old_player)
++	if old_run == null:
++		error = old_adapter.error
++		return {}
++	var old_codec := OldWorld.new()
++	var restored: RivalWorld = old_codec.restore(old_world, old_player, old_run, catalog)
++	if restored == null:
++		error = "Original pre-market world: " + old_codec.error
++		return {}
++	var factor_source := "pre-market-neutral:" + source_id
++	var player := _upgrade_run(old_player, false, factor_source)
++	if player.is_empty(): return {}
++	var world := old_world.duplicate(true)
++	for row: Dictionary in world.studios:
++		var active: bool = row.development != null
++		var upgraded := _upgrade_run(row.run, active, factor_source)
++		if upgraded.is_empty(): return {}
++		row.run = upgraded
++		if active and not _historical_project(row.development.project, factor_source): return {}
++	var cycle: int = restored.cycle
++	var start: int = cycle - cycle % 2
++	var codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
++	var facts: Variant = codec._expected_market_facts({"cycle_start":start}, player, world.studios)
++	if not facts is Array:
++		error = "Invalid original release facts"
++		return {}
++	var market := {"version":Market.VERSION, "cycle_start":start,
++		"id":"market-0-neutral" if start == 0 else Market.identifier(start, facts), "facts":facts}
++	if not Market.valid(market):
++		error = "Invalid migrated market month"
++		return {}
++	var encoder := CheckpointCodec.new()
++	world.market = encoder.encode(market, codec._market_schema())
++	if not encoder.error.is_empty():
++		error = encoder.error
++		return {}
++	var active_projects := {}
++	for row: Dictionary in old_world.studios:
++		if row.development != null:
++			active_projects[StringName(row.id)] = StringName(row.run.active_project_id)
++	world.market_origin = encoder.encode({"source_id":source_id,"content_revision":revision_id,
++		"cycle":cycle,"active_projects":active_projects},codec._origin_schema())
++	if not encoder.error.is_empty():
++		error = encoder.error
++		return {}
++	# Runtime provenance changes only on this validated in-memory version.
++	world.source_identity = Replay.source_identity()
++	var current_player := StudioCheckpoint.new().hydrate(player)
++	if current_player == null:
++		error = "Upgraded player could not hydrate"
++		return {}
++	if codec.restore(world, player, current_player, catalog) == null:
++		error = "Upgraded world: " + str(codec.error) + " [source=" + str(world.source_identity) + ", current=" + Replay.source_identity() + "]"
++		return {}
++	return {"player":player, "world":world, "market":market, "source_identity":source_id}
+--- base/scripts/market/rival_world_checkpoint.gd
++++ candidate/scripts/market/rival_world_checkpoint.gd
+@@ -47,6 +47,9 @@
+ 	"5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+ 	"d259a6545d3802f5a2493f96547d9e10ad26984f4342270724232a3764fbec72",
+ ]
++# Exact P1 preceding canonical source, tested with an unmodified whole-world
++# payload. Paired content revisions are checked before ordinary validation.
++const RELATIONSHIP_PREDECESSOR_SOURCE := "652f14adf47d7b305e40503e6f624ce1acfe8813fe72d31e249e8572930de14f"
+ const MAX_RIVALS := 8
+ const PROJECT_INTS := ["_current_scope","_hidden_bugs","_known_bugs","_fixed_bugs","_marketing_output","_alpha_hidden_bugs_generated","_required_scope","_current_cycle"]
+ const PROJECT_FLOATS := ["_accumulated_bug_pressure","_accumulated_alpha_bug_pressure"]
+@@ -217,7 +220,15 @@
+ 
+ func _read(payload: Dictionary, player_payload: Dictionary) -> Dictionary:
+ 	error = ""
+-	var source_ok: bool = payload.get("source_identity")==Replay.source_identity() or payload.get("source_identity") in COMPATIBLE_MARKET_PRESENTATION_SOURCES
++	var relationship_predecessor: bool = payload.get("source_identity") == RELATIONSHIP_PREDECESSOR_SOURCE
++	if relationship_predecessor:
++		var old_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision()
++		if player_payload.get("content_revision") != old_revision or not payload.get("studios") is Array:
++			error = "Mismatched relationship predecessor pair"; return {}
++		for row: Variant in payload.studios:
++			if not row is Dictionary or not row.get("run") is Dictionary or row.run.get("content_revision") != old_revision:
++				error = "Mismatched relationship predecessor Studio"; return {}
++	var source_ok: bool = payload.get("source_identity")==Replay.source_identity() or payload.get("source_identity") in COMPATIBLE_MARKET_PRESENTATION_SOURCES or relationship_predecessor
+ 	if payload.size()!=7+int(payload.has("legacy"))+int(payload.has("market_origin")) or payload.get("schema_version")!="1" or not source_ok or payload.get("rng_algorithm")!=RunRandom.ALGORITHM or not payload.get("studios") is Array or not payload.get("history") is Array or not payload.get("market") is Dictionary:
+ 		error = "INCOMPATIBLE_RIVAL_WORLD_SOURCE_OR_SCHEMA"
+ 		return {}
+--- base/scripts/persistence/checkpoint_coordinator.gd
++++ candidate/scripts/persistence/checkpoint_coordinator.gd
+@@ -1,165 +1,165 @@
+-class_name CheckpointCoordinator
+-extends Node
+-
+-signal status_changed
+-var adapter := StudioCheckpoint.new()
+-var store: StudioCheckpointStore
+-var run: RunState
+-var rival_world: RivalWorld
+-var rival_catalog: RefCounted
+-var in_studio := false
+-var pending := false
+-var failure := ""
+-var last_payload: Dictionary = {}
+-var replace_on_save := false
+-var _migration_input := ""
+-var _migration_output: Dictionary = {}
+-
+-func _init() -> void:
+-	store = StudioCheckpointStore.new("user://saves/studio",_validate_payload)
+-
+-func _validate_payload(payload: Dictionary) -> String:
+-	var candidate := _market_compatible_payload(payload)
+-	if candidate.is_empty(): return "Invalid pre-market migration payload"
+-	if not candidate.has("rival_world"): return adapter.validate(candidate)
+-	if not candidate.rival_world is Dictionary: return "Malformed rival world field"
+-	var player_payload := candidate.duplicate(true)
+-	player_payload.erase("rival_world")
+-	var reason := adapter.validate(player_payload)
+-	if not reason.is_empty(): return reason
+-	if rival_catalog==null: return "Rival definitions unavailable for validation"
+-	var restored := adapter.hydrate(player_payload)
+-	if restored==null: return adapter.error
+-	var codec: RefCounted=load("res://scripts/market/rival_world_checkpoint.gd").new()
+-	if codec.restore(candidate.rival_world,player_payload,restored,rival_catalog)==null: return codec.error
+-	return ""
+-
+-func _market_compatible_payload(payload: Dictionary) -> Dictionary:
+-	if payload.get("content_revision")==adapter.revision(): return payload.duplicate(true)
+-	var key:=JSON.stringify(payload).sha256_text()
+-	if key==_migration_input and not _migration_output.is_empty(): return _migration_output.duplicate(true)
+-	var migration: RefCounted=load("res://scripts/market/market_save_migration_trial.gd").new()
+-	if not payload.has("rival_world"):
+-		var player_only: Dictionary=migration.upgrade_store_player(payload)
+-		if not player_only.is_empty() and migration.error.is_empty():
+-			_migration_input=key;_migration_output=player_only.duplicate(true)
+-		return player_only
+-	if not payload.rival_world is Dictionary or payload.rival_world.has("market"): return payload.duplicate(true)
+-	var player := payload.duplicate(true)
+-	player.erase("rival_world")
+-	var upgraded: Dictionary=migration.upgrade_pair(player,payload.rival_world,rival_catalog)
+-	if upgraded.is_empty(): return {}
+-	var combined: Dictionary=upgraded.player
+-	combined.rival_world=upgraded.world
+-	_migration_input=key;_migration_output=combined.duplicate(true)
+-	return combined
+-
+-func attach_rivals(world: RivalWorld, definitions: RefCounted) -> bool:
+-	if world == null or definitions == null or world.player != run or world.cycle != run.get_completed_run_cycles(): return false
+-	rival_world = world
+-	rival_catalog = definitions
+-	return true
+-
+-func attach(value: RunState) -> void:
+-	if run!=null:
+-		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed"]:
+-			if run.is_connected(name,_changed): run.disconnect(name,_changed)
+-		run.studio_departure_guard = Callable()
+-		run.checkpoint_before_mutation = Callable()
+-	run = value
+-	run.studio_departure_guard = before_departure
+-	run.checkpoint_before_mutation = before_mutation
+-	for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed"]:
+-		run.connect(name,_changed)
+-
+-func _changed() -> void:
+-	if not in_studio: return
+-	pending = true
+-	flush.call_deferred()
+-
+-func entered_studio(restored: bool = false) -> void:
+-	in_studio = true
+-	pending = not restored
+-	if pending: flush()
+-	else: status_changed.emit()
+-
+-func before_departure() -> bool:
+-	if not in_studio: return false
+-	return flush()
+-
+-func before_mutation() -> bool:
+-	if not failure.is_empty(): return false
+-	if not in_studio or run._productive_cycle_in_progress or run._publishing_cycle or run._feature_purchase_in_progress or run._committing_cycle_cash: return true
+-	return flush()
+-
+-func flush() -> bool:
+-	if not in_studio or run==null: return failure.is_empty()
+-	if run.get_active_contract()!=null: return failure.is_empty()
+-	if not pending: return failure.is_empty()
+-	var payload := adapter.capture(run)
+-	if payload.is_empty(): return _failed(adapter.error)
+-	if rival_world != null:
+-		var world_codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
+-		var saved_world: Dictionary = world_codec.capture(rival_world)
+-		if saved_world.is_empty(): return _failed("Rival world checkpoint: " + world_codec.error)
+-		payload.rival_world = saved_world
+-	# Guidance acknowledgments ride along only on a committed action. Repeated
+-	# callbacks with identical state never create another generation.
+-	if payload==last_payload:
+-		pending = false
+-		return true
+-	var result := store.replace_run(payload) if replace_on_save else store.save(payload)
+-	if result.status!=&"saved": return _failed(str(result.get("reason",result.status)))
+-	last_payload = payload
+-	replace_on_save = false
+-	pending = false
+-	failure = ""
+-	run.checkpoint_mutations_allowed = true
+-	status_changed.emit()
+-	return true
+-
+-func _failed(reason: String) -> bool:
+-	failure = reason
+-	run.checkpoint_mutations_allowed = false
+-	status_changed.emit()
+-	return false
+-
+-func retry() -> bool:
+-	pending = true
+-	return flush()
+-
+-func load_current() -> RunState:
+-	if not store.acquire():
+-		failure = "Another Patch Notes process owns the save slot. Close it before continuing."
+-		status_changed.emit()
+-		return null
+-	var inspected := store.inspect()
+-	if inspected.status!=&"valid": return null
+-	var candidate := _market_compatible_payload(inspected.payload)
+-	if candidate.is_empty():
+-		failure="Pre-market Continue migration rejected"
+-		return null
+-	var player_payload: Dictionary = candidate.duplicate(true)
+-	player_payload.erase("rival_world")
+-	var restored := adapter.hydrate(player_payload)
+-	if restored==null: return null
+-	var restored_world: RivalWorld = null
+-	if candidate.has("rival_world"):
+-		if rival_catalog == null:
+-			failure = "Rival definitions unavailable for Continue"
+-			return null
+-		var world_codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
+-		restored_world = world_codec.restore(candidate.rival_world,player_payload,restored,rival_catalog)
+-		if restored_world == null:
+-			failure = "Rival world Continue rejected: " + world_codec.error
+-			return null
+-	last_payload = inspected.payload.duplicate(true)
+-	last_payload.sequence = "1"
+-	failure = ""
+-	pending = false
+-	attach(restored)
+-	rival_world = restored_world
+-	return restored
+-
+-func _exit_tree() -> void:
+-	store.release_writer()
++class_name CheckpointCoordinator
++extends Node
++
++signal status_changed
++var adapter := StudioCheckpoint.new()
++var store: StudioCheckpointStore
++var run: RunState
++var rival_world: RivalWorld
++var rival_catalog: RefCounted
++var in_studio := false
++var pending := false
++var failure := ""
++var last_payload: Dictionary = {}
++var replace_on_save := false
++var _migration_input := ""
++var _migration_output: Dictionary = {}
++
++func _init() -> void:
++	store = StudioCheckpointStore.new("user://saves/studio",_validate_payload)
++
++func _validate_payload(payload: Dictionary) -> String:
++	var candidate := _market_compatible_payload(payload)
++	if candidate.is_empty(): return "Invalid pre-market migration payload"
++	if not candidate.has("rival_world"): return adapter.validate(candidate)
++	if not candidate.rival_world is Dictionary: return "Malformed rival world field"
++	var player_payload := candidate.duplicate(true)
++	player_payload.erase("rival_world")
++	var reason := adapter.validate(player_payload)
++	if not reason.is_empty(): return reason
++	if rival_catalog==null: return "Rival definitions unavailable for validation"
++	var restored := adapter.hydrate(player_payload)
++	if restored==null: return adapter.error
++	var codec: RefCounted=load("res://scripts/market/rival_world_checkpoint.gd").new()
++	if codec.restore(candidate.rival_world,player_payload,restored,rival_catalog)==null: return codec.error
++	return ""
++
++func _market_compatible_payload(payload: Dictionary) -> Dictionary:
++	if payload.get("content_revision")==adapter.revision(): return payload.duplicate(true)
++	var key:=JSON.stringify(payload).sha256_text()
++	if key==_migration_input and not _migration_output.is_empty(): return _migration_output.duplicate(true)
++	var migration: RefCounted=load("res://scripts/market/market_save_migration_trial.gd").new()
++	if not payload.has("rival_world"):
++		var player_only: Dictionary=migration.upgrade_store_player(payload)
++		if not player_only.is_empty() and migration.error.is_empty():
++			_migration_input=key;_migration_output=player_only.duplicate(true)
++		return player_only
++	if not payload.rival_world is Dictionary or payload.rival_world.has("market"): return payload.duplicate(true)
++	var player := payload.duplicate(true)
++	player.erase("rival_world")
++	var upgraded: Dictionary=migration.upgrade_pair(player,payload.rival_world,rival_catalog)
++	if upgraded.is_empty(): return {}
++	var combined: Dictionary=upgraded.player
++	combined.rival_world=upgraded.world
++	_migration_input=key;_migration_output=combined.duplicate(true)
++	return combined
++
++func attach_rivals(world: RivalWorld, definitions: RefCounted) -> bool:
++	if world == null or definitions == null or world.player != run or world.cycle != run.get_completed_run_cycles(): return false
++	rival_world = world
++	rival_catalog = definitions
++	return true
++
++func attach(value: RunState) -> void:
++	if run!=null:
++		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"publisher_relationships_changed"]:
++			if run.is_connected(name,_changed): run.disconnect(name,_changed)
++		run.studio_departure_guard = Callable()
++		run.checkpoint_before_mutation = Callable()
++	run = value
++	run.studio_departure_guard = before_departure
++	run.checkpoint_before_mutation = before_mutation
++	for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"publisher_relationships_changed"]:
++		run.connect(name,_changed)
++
++func _changed() -> void:
++	if not in_studio: return
++	pending = true
++	flush.call_deferred()
++
++func entered_studio(restored: bool = false) -> void:
++	in_studio = true
++	pending = not restored
++	if pending: flush()
++	else: status_changed.emit()
++
++func before_departure() -> bool:
++	if not in_studio: return false
++	return flush()
++
++func before_mutation() -> bool:
++	if not failure.is_empty(): return false
++	if not in_studio or run._productive_cycle_in_progress or run._publishing_cycle or run._feature_purchase_in_progress or run._committing_cycle_cash: return true
++	return flush()
++
++func flush() -> bool:
++	if not in_studio or run==null: return failure.is_empty()
++	if run.get_active_contract()!=null: return failure.is_empty()
++	if not pending: return failure.is_empty()
++	var payload := adapter.capture(run)
++	if payload.is_empty(): return _failed(adapter.error)
++	if rival_world != null:
++		var world_codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
++		var saved_world: Dictionary = world_codec.capture(rival_world)
++		if saved_world.is_empty(): return _failed("Rival world checkpoint: " + world_codec.error)
++		payload.rival_world = saved_world
++	# Guidance acknowledgments ride along only on a committed action. Repeated
++	# callbacks with identical state never create another generation.
++	if payload==last_payload:
++		pending = false
++		return true
++	var result := store.replace_run(payload) if replace_on_save else store.save(payload)
++	if result.status!=&"saved": return _failed(str(result.get("reason",result.status)))
++	last_payload = payload
++	replace_on_save = false
++	pending = false
++	failure = ""
++	run.checkpoint_mutations_allowed = true
++	status_changed.emit()
++	return true
++
++func _failed(reason: String) -> bool:
++	failure = reason
++	run.checkpoint_mutations_allowed = false
++	status_changed.emit()
++	return false
++
++func retry() -> bool:
++	pending = true
++	return flush()
++
++func load_current() -> RunState:
++	if not store.acquire():
++		failure = "Another Patch Notes process owns the save slot. Close it before continuing."
++		status_changed.emit()
++		return null
++	var inspected := store.inspect()
++	if inspected.status!=&"valid": return null
++	var candidate := _market_compatible_payload(inspected.payload)
++	if candidate.is_empty():
++		failure="Pre-market Continue migration rejected"
++		return null
++	var player_payload: Dictionary = candidate.duplicate(true)
++	player_payload.erase("rival_world")
++	var restored := adapter.hydrate(player_payload)
++	if restored==null: return null
++	var restored_world: RivalWorld = null
++	if candidate.has("rival_world"):
++		if rival_catalog == null:
++			failure = "Rival definitions unavailable for Continue"
++			return null
++		var world_codec: RefCounted = load("res://scripts/market/rival_world_checkpoint.gd").new()
++		restored_world = world_codec.restore(candidate.rival_world,player_payload,restored,rival_catalog)
++		if restored_world == null:
++			failure = "Rival world Continue rejected: " + world_codec.error
++			return null
++	last_payload = inspected.payload.duplicate(true)
++	last_payload.sequence = "1"
++	failure = ""
++	pending = false
++	attach(restored)
++	rival_world = restored_world
++	return restored
++
++func _exit_tree() -> void:
++	store.release_writer()
+--- base/scripts/persistence/checkpoint_schema.gd
++++ candidate/scripts/persistence/checkpoint_schema.gd
+@@ -151,6 +151,7 @@
+ 	run.release_metadata = map_of("id",metadata())
+ 	run.primitive_contract = optional(contract())
+ 	run.publisher_offers = map_of("id",{"publisher_id":"id","source_release_id":"id","state":optional(contract())})
++	run.publisher_relationships = preload("res://scripts/contracts/publisher_relationships.gd").schema()
+ 	run.promotion_awards = map_of("id","uint")
+ 	run.promotion_consumed = map_of("id","id")
+ 	run.sidestreet_entitlements = map_of("id",{"offer_id":"id","state":optional(contract())})
+--- base/scripts/persistence/studio_checkpoint.gd
++++ candidate/scripts/persistence/studio_checkpoint.gd
+@@ -12,8 +12,10 @@
+ const PRE_GAMEPLAY_TREE_RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches2"
+ const PRE_ROSTER_RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches3"
+ const PRE_MARKET_RULES := PRE_ROSTER_RULES + "-roster2"
+-const RULES := PRE_MARKET_RULES + "-market1"
+-const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed"]
++const PRE_RELATIONSHIP_RULES := PRE_MARKET_RULES + "-market1"
++const RULES := PRE_RELATIONSHIP_RULES + "-relationships1"
++const RelationshipPrevious := preload("res://scripts/contracts/pre_relationships/studio.gd")
++const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed","_publisher_relationships"]
+ var error := ""
+ var _revision := ""
+ var _previous_revision := ""
+@@ -59,7 +61,7 @@
+ 		if path == "res://data/audio_credits.json":
+ 			# Version 7 already excluded audio credits. Preserve its real save
+ 			# identity when it becomes a supported historical revision.
+-			if rules in [RULES, PRE_MARKET_RULES, PRE_ROSTER_RULES, PRE_GAMEPLAY_TREE_RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
++			if rules in [RULES, PRE_RELATIONSHIP_RULES, PRE_MARKET_RULES, PRE_ROSTER_RULES, PRE_GAMEPLAY_TREE_RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
+ 			if not legacy_audio_hash.is_empty():
+ 				data += path + legacy_audio_hash
+ 				continue
+@@ -127,6 +129,9 @@
+ 	return _validate(payload,true)
+ 
+ func _validate(payload: Dictionary, active_rival: bool) -> String:
++	if payload.get("content_revision", "") == RelationshipPrevious.new().revision():
++		var upgraded := upgrade_relationship_predecessor(payload,active_rival)
++		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
+ 	if payload.get("content_revision", "") != revision():
+ 		var migration: RefCounted=load("res://scripts/market/market_save_migration_trial.gd").new()
+ 		if not migration.is_old_revision(str(payload.get("content_revision",""))): return "INCOMPATIBLE_CONTENT_OR_RNG"
+@@ -141,6 +146,8 @@
+ 	var active_id: StringName = value.active_project_id if active_rival else &""
+ 	if active_rival and (active_id.is_empty() or value.run.released_games.has(active_id)): return "Invalid active rival project"
+ 	var r: Dictionary = value.run
++	var resolver := func(request: Dictionary) -> Dictionary: return RunState.RelationshipRules.resolve(r,request)
++	if RunState.RelationshipLedger.reconstruct(r.publisher_relationships,r.bank_run_id,r.completed_run_cycles,resolver).is_empty(): return "Invalid publisher relationship provenance"
+ 	var roster_version: int = r.get("founding_roster_version",1)
+ 	if roster_version not in [1,2]: return "Invalid founding roster version"
+ 	if r.has("founding_roster_version") and payload.content_revision != revision(): return "Invalid historical founding roster metadata"
+@@ -352,6 +359,9 @@
+ 	return c.result == expected_result
+ 
+ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
++	if payload.get("content_revision", "") == RelationshipPrevious.new().revision():
++		var upgraded := upgrade_relationship_predecessor(payload,active_rival)
++		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
+ 	if payload.get("content_revision", "") != revision():
+ 		var migration: RefCounted=load("res://scripts/market/market_save_migration_trial.gd").new()
+ 		if not migration.is_old_revision(str(payload.get("content_revision",""))): error="INCOMPATIBLE_CONTENT_OR_RNG"; return null
+@@ -381,7 +391,27 @@
+ 		for key: String in r.first_game_tutorial: run._first_game_tutorial.set(key,r.first_game_tutorial[key])
+ 	return run
+ 
++func upgrade_relationship_predecessor(payload: Dictionary, active_rival: bool = false) -> Dictionary:
++	error = ""
++	var previous := RelationshipPrevious.new()
++	if payload.get("content_revision") != previous.revision():
++		error = "Unknown relationship predecessor"
++		return {}
++	error = previous.validate_active_rival(payload) if active_rival else previous.validate(payload)
++	if not error.is_empty(): return {}
++	var native: Dictionary = previous._decode_payload(payload,active_rival)
++	if native.is_empty(): error = previous.error; return {}
++	native.run.publisher_relationships = RunState.RelationshipLedger.create(native.run.bank_run_id)
++	native.content_revision = revision()
++	var codec := CheckpointCodec.new()
++	var upgraded: Variant = codec.encode(native,CheckpointSchema.root(true,active_rival))
++	error = codec.error
++	return upgraded if error.is_empty() and upgraded is Dictionary else {}
++
+ func _decode_payload(payload: Dictionary, active_rival: bool = false) -> Dictionary:
++	if payload.get("content_revision", "") == RelationshipPrevious.new().revision():
++		var upgraded := upgrade_relationship_predecessor(payload,active_rival)
++		return {} if upgraded.is_empty() else _decode_payload(upgraded,active_rival)
+ 	# Current payloads need no legacy catalog/finance conversion. Preserve strict
+ 	# decoding without repeating historical file hashes for every saved owner.
+ 	if payload.get("content_revision", "") == revision():
+--- base/scripts/run_state.gd
++++ candidate/scripts/run_state.gd
+@@ -78,6 +78,34 @@
+ var _publisher_offers: Dictionary = {}
+ var _promotion_awards: Dictionary = {}
+ var _promotion_consumed: Dictionary = {}
++const RelationshipLedger := preload("res://scripts/contracts/publisher_relationships.gd")
++const RelationshipRules := preload("res://scripts/contracts/publisher_relationship_rules.gd")
++var _publisher_relationships: Dictionary = {}
++var _relationship_commit_in_progress := false
++signal publisher_relationships_changed
++
++func get_publisher_relationships() -> Dictionary:
++	var resolver := func(request: Dictionary) -> Dictionary: return RelationshipRules.resolve(self,request)
++	return RelationshipLedger.reconstruct(_publisher_relationships,_bank_run_id,_completed_run_cycles,resolver)
++
++## Internal producer seam; P1 has no enabled producer. No UI-provided amounts.
++func commit_publisher_relationship_event(request: Dictionary) -> bool:
++	if _relationship_commit_in_progress or _productive_cycle_in_progress or _publishing_cycle or _committing_cycle_cash or _feature_purchase_in_progress or get_active_contract() != null: return false
++	_relationship_commit_in_progress = true
++	if not can_mutate_checkpoint():
++		_relationship_commit_in_progress = false
++		return false
++	var resolver := func(source: Dictionary) -> Dictionary: return RelationshipRules.resolve(self,source)
++	var planned := RelationshipLedger.plan(_publisher_relationships,_bank_run_id,request,_completed_run_cycles,resolver)
++	if planned.is_empty():
++		_relationship_commit_in_progress = false
++		return false
++	if planned.changed:
++		_publisher_relationships = planned.ledger
++		publisher_relationships_changed.emit()
++	_relationship_commit_in_progress = false
++	return true
++
+ 
+ func can_mutate_checkpoint() -> bool:
+ 	return checkpoint_mutations_allowed and (not checkpoint_before_mutation.is_valid() or checkpoint_before_mutation.call())
+@@ -168,6 +196,7 @@
+ 	_studio_finance = finance
+ 	_bank_run_id = proposed_run_id
+ 	_employees = EmployeeRoster.create(_bank_run_id)
++	_publisher_relationships = RelationshipLedger.create(_bank_run_id)
+ 	fans_changed.emit()
+ 	cash_changed.emit()
+ 	features_changed.emit()
+--- base/scripts/simulation/run_factory.gd
++++ candidate/scripts/simulation/run_factory.gd
+@@ -1,52 +1,53 @@
+-## Deterministic test bootstrap. This is not a player save migration or a rival
+-## starting-resource policy. Every identity, seed and Studio choice is supplied.
+-extends RefCounted
+-
+-const Session := preload("res://scripts/simulation/campaign_session.gd")
+-
+-static func create_fresh_session(recipe: Variant, definitions: RefCounted) -> RefCounted:
+-	if definitions == null or not recipe is Dictionary or recipe.get("schema_version") != 1: return null
+-	for field in ["studio_id","studio_name","specialty","seed"]:
+-		if not recipe.get(field) is String or recipe[field].is_empty(): return null
+-	if not recipe.seed.is_valid_int() or int(recipe.seed) < 0 or int(recipe.seed) > ProjectState.MAX_SIGNED_INT-RunRandom.STREAMS.size() or not recipe.get("traits") is Array: return null
+-	var traits: Array[StringName] = []
+-	for id: Variant in recipe.traits:
+-		if not id is String: return null
+-		traits.append(StringName(id))
+-	var run := RunState.new()
+-	run.initialize_cash(0)
+-	if not run.create_studio_with_traits(recipe.studio_name,StringName(recipe.specialty),traits): return null
+-	# Keep all generated references coherent, including education opening records.
+-	var generated := String(run._bank_run_id)
+-	var stable := String(recipe.studio_id)
+-	run._studio_finance = _replace_identity(run._studio_finance,generated,stable)
+-	run._bank_run_id = StringName(stable)
+-	run._employees = EmployeeRoster.create(StringName(stable))
+-	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = int(recipe.seed)+RunRandom.STREAMS.find(id)
+-	var snapshots := PrimitiveSnapshotDatabase.new()
+-	if not snapshots.load_ledgers(): return null
+-	var session := Session.new()
+-	return session if session.initialize(run,definitions,snapshots) else null
+-
+-## Exactly one input boundary. Active development snapshots are not accepted.
+-static func create(initial: Dictionary, definitions: RefCounted) -> RefCounted:
+-	if initial.size() != 1: return null
+-	if initial.has("recipe"): return create_fresh_session(initial.recipe,definitions)
+-	if not initial.get("checkpoint") is Dictionary or definitions == null: return null
+-	var snapshots := PrimitiveSnapshotDatabase.new()
+-	if not snapshots.load_ledgers(): return null
+-	var session := Session.new()
+-	return session if session.restore_checkpoint(initial.checkpoint,definitions,snapshots) else null
+-
+-static func _replace_identity(value: Variant, old: String, replacement: String) -> Variant:
+-	if value is StringName: return StringName(String(value).replace(old,replacement))
+-	if value is String: return value.replace(old,replacement)
+-	if value is Array:
+-		var result: Array = value.duplicate(true)
+-		for index in range(result.size()): result[index] = _replace_identity(result[index],old,replacement)
+-		return result
+-	if value is Dictionary:
+-		var result: Dictionary = {}
+-		for key in value: result[_replace_identity(key,old,replacement)] = _replace_identity(value[key],old,replacement)
+-		return result
+-	return value
++## Deterministic test bootstrap. This is not a player save migration or a rival
++## starting-resource policy. Every identity, seed and Studio choice is supplied.
++extends RefCounted
++
++const Session := preload("res://scripts/simulation/campaign_session.gd")
++
++static func create_fresh_session(recipe: Variant, definitions: RefCounted) -> RefCounted:
++	if definitions == null or not recipe is Dictionary or recipe.get("schema_version") != 1: return null
++	for field in ["studio_id","studio_name","specialty","seed"]:
++		if not recipe.get(field) is String or recipe[field].is_empty(): return null
++	if not recipe.seed.is_valid_int() or int(recipe.seed) < 0 or int(recipe.seed) > ProjectState.MAX_SIGNED_INT-RunRandom.STREAMS.size() or not recipe.get("traits") is Array: return null
++	var traits: Array[StringName] = []
++	for id: Variant in recipe.traits:
++		if not id is String: return null
++		traits.append(StringName(id))
++	var run := RunState.new()
++	run.initialize_cash(0)
++	if not run.create_studio_with_traits(recipe.studio_name,StringName(recipe.specialty),traits): return null
++	# Keep all generated references coherent, including education opening records.
++	var generated := String(run._bank_run_id)
++	var stable := String(recipe.studio_id)
++	run._studio_finance = _replace_identity(run._studio_finance,generated,stable)
++	run._bank_run_id = StringName(stable)
++	run._employees = EmployeeRoster.create(StringName(stable))
++	run._publisher_relationships = RunState.RelationshipLedger.create(StringName(stable))
++	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = int(recipe.seed)+RunRandom.STREAMS.find(id)
++	var snapshots := PrimitiveSnapshotDatabase.new()
++	if not snapshots.load_ledgers(): return null
++	var session := Session.new()
++	return session if session.initialize(run,definitions,snapshots) else null
++
++## Exactly one input boundary. Active development snapshots are not accepted.
++static func create(initial: Dictionary, definitions: RefCounted) -> RefCounted:
++	if initial.size() != 1: return null
++	if initial.has("recipe"): return create_fresh_session(initial.recipe,definitions)
++	if not initial.get("checkpoint") is Dictionary or definitions == null: return null
++	var snapshots := PrimitiveSnapshotDatabase.new()
++	if not snapshots.load_ledgers(): return null
++	var session := Session.new()
++	return session if session.restore_checkpoint(initial.checkpoint,definitions,snapshots) else null
++
++static func _replace_identity(value: Variant, old: String, replacement: String) -> Variant:
++	if value is StringName: return StringName(String(value).replace(old,replacement))
++	if value is String: return value.replace(old,replacement)
++	if value is Array:
++		var result: Array = value.duplicate(true)
++		for index in range(result.size()): result[index] = _replace_identity(result[index],old,replacement)
++		return result
++	if value is Dictionary:
++		var result: Dictionary = {}
++		for key in value: result[_replace_identity(key,old,replacement)] = _replace_identity(value[key],old,replacement)
++		return result
++	return value

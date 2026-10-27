@@ -397,9 +397,9 @@ func _verify_alpha_balanced_production_calculation() -> void:
 	})
 	_expect(qualifying.provisional_scores == {graphics: 8, sound: 8, technology: 10, design: 12}, "Alpha provisional totals include cumulative Design carryover plus unmodified current-action base production")
 	_expect(qualifying.specialization_stat.is_empty() and qualifying.balanced_production, "A mixed Alpha Feature-and-Pass action activates Balanced Production from hand totals")
-	_expect(qualifying.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Alpha Balanced aggregates primary, secondary, and Pass production per Core Score before equal total-preserving redistribution")
-	_expect(qualifying.score_additions[design] == 5 and qualifying.score_additions[technology] == 5, "Redistribution equalizes the smaller categories")
-	_expect(alpha.call("_build_balanced_production_debug_message", qualifying.score_additions) == "Alpha Balanced Production hit! Added scores: Graphics +6, Sound +5, Technology +5, Design +5", "Alpha Balanced feedback identifies activation and deterministic final gains")
+	_expect(qualifying.score_additions == {graphics: 7, sound: 7, technology: 6, design: 6}, "Alpha Balanced aggregates primary, secondary, and Pass production per Core Score before boosting the total1.25 and splitting whole points")
+	_expect(qualifying.score_additions[design] == 6 and qualifying.score_additions[technology] == 6, "Redistribution equalizes the smaller categories")
+	_expect(alpha.call("_build_balanced_production_debug_message", qualifying.score_additions) == "Alpha Balanced Production hit! Added scores: Graphics +7, Sound +7, Technology +6, Design +6", "Alpha Balanced feedback identifies activation and deterministic final gains")
 
 	var unbalanced_state := ProjectState.new(30)
 	alpha.setup(unbalanced_state)
@@ -492,7 +492,7 @@ func _verify_alpha_balanced_production_resolution() -> void:
 	_expect(state.finalize_design_bugs(false, 7, [&"text"] as Array[StringName], [] as Array[StringName]), "Alpha Balanced fixture stores existing finalized Hidden Bugs")
 	var expected_additions: Dictionary[ProjectState.CoreScore, int] = {}
 	for category: ProjectState.CoreScore in CATEGORIES:
-		expected_additions[category] = 2
+		expected_additions[category] = 3 if category < 2 else 2
 	var final_action: Dictionary = alpha.call("_calculate_final_action_production", base_action)
 	_expect(final_action.specialization_stat.is_empty() and final_action.balanced_production, "Balanced Production is the winning synergy for the controlled Alpha lifecycle action")
 	_expect(final_action.provisional_scores.values().all(func(value: int) -> bool: return value == target), "Provisional scoreboard is retained for diagnostics; hand alone qualifies")
@@ -624,7 +624,7 @@ func _verify_host_playtest() -> void:
 		&"cards": balanced_cards,
 		&"score_additions": {graphics: 5, sound: 5, technology: 5, design: 6},
 	})
-	_expect(injected_balanced.balanced_production and injected_balanced.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Injected Pass definitions participate normally in Alpha Balanced Production")
+	_expect(injected_balanced.balanced_production and injected_balanced.score_additions == {graphics: 7, sound: 7, technology: 6, design: 6}, "Injected Pass definitions participate normally in Alpha Balanced Production")
 
 	alpha.queue_free()
 	await process_frame
@@ -729,7 +729,7 @@ func _instance_ids(views: Array) -> Array[int]:
 func _verify_controls(alpha: AlphaPhase) -> void:
 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
 		var slider := alpha.get_node("%%%s" % node_name) as VSlider
-		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 10-50 bounds in five-point steps" % node_name)
+		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 75.0 and slider.step == 5.0, "%s uses 10-75 bounds in five-point steps" % node_name)
 	var panel := alpha.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
 	_expect(panel.size.x <= 1008.0 and panel.size.y <= 463.0, "Corrected Alpha allocation panel fits the established phase bounds")
 	_verify_distribution(alpha, "Initial Alpha allocation uses the complete budget")
@@ -752,7 +752,7 @@ func _verify_distribution(alpha: AlphaPhase, description: String) -> void:
 	for category: ProjectState.CoreScore in CATEGORIES:
 		var value: int = distribution.get(category, 0)
 		total += value
-		valid = valid and value >= 5 and value <= 50 and value % 5 == 0
+		valid = valid and value >= 10 and value <= 75 and value % 5 == 0
 	_expect(valid and total <= 100 and alpha.get_available_priority() == 100 - total, description)
 
 

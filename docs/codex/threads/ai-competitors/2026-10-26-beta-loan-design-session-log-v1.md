@@ -1,0 +1,11 @@
+# AI Competitors Beta financing session — 2026-10-26
+
+**Branch / HEAD at inspection:** `main` / `087df09d653858b72c6e2dc344352237433dd3ac`. Shared checkout was dirty before this session, including contemporaneous edits to `DECISIONS.md`, this thread's `README.md` and its full-Scope/QA decision. Those edits and `.codex-godot-temp` were preserved. No commit or push.
+
+**User direction:** QA before Marketing; continue Beta when worthwhile extra cycles are affordable; encourage legal loans. Reconciled this against `docs/codex/design/economy-banking.md` Bank2 paragraphs and current `patch-notes/scripts/finance/bank_loan.gd` and `studio_finance_ledger.gd` quote path. Bank2 ordinary loans depend on two positive settled-sales months and residual capacity; a one-time cash-poor recovery facility may be available. Frozen history alone cannot supply new settled sales. Prior AI no-new-loan Beta guidance is superseded, while exact loan and stop policy remains OPEN.
+
+**Files changed by this session:** new [decision](2026-10-26-beta-qa-marketing-loan-direction-v1.md), this log, the supersession headers in [cash-funded Beta](2026-10-25-cash-funded-beta-direction-v1.md) and [full-Scope/QA](2026-10-25-full-scope-qa-marketing-decision-v1.md), and short cross-links in [thread README](README.md) and `docs/codex/DECISIONS.md`. No canonical gameplay, simulator variant, TODO, player save or `.codex-godot-temp` change.
+
+**Checks:** `rg`/targeted source reads verified Bank quote and eligibility; a PowerShell `Test-Path` pass resolved all seven relative links in the new decision. `git diff --check --` on the new decision and cash-funded record returned 0. A whole-checkout `git diff --check` produced pre-existing/concurrent CRLF trailing-whitespace warnings in shared documents, so it is not a clean repo-wide formatting gate. No headless run: this was a qualitative policy ruling, not a tested candidate. No implementation, balance or release acceptance claim.
+
+**Follow-up:** predeclare and run a private matched Beta/loan study with actual legal quotes, no-sales and eligible Studios, debt service, publication density, Review/Bugs, player-market impact, replay/Continue and CPU. Keep loan terms, reserves, benefit threshold and finite stopping OPEN until evidence and a separate handoff. No TODO entry yet.

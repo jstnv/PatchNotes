@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-26",
+  "branch": "main",
+  "head": "087df09d653858b72c6e2dc344352237433dd3ac",
+  "source_sha256": {
+    "patch-notes/scripts/market/rival_world_checkpoint.gd": "9141b0bbf8b1c247206cd8472e8ebbdb1706b50a355c8953c8cc57d2745ab643",
+    "patch-notes/scripts/debug/verify_balanced_boost_parity.gd": "f9df4eac7306f7f3ea16423b9df80c07338fd1071445d1ddfb06313a9a26f6ca",
+    "patch-notes/scripts/ui/how_to_play_content.gd": "9a8196ffe89933eefdae1f6f625ad719b2830956d448b14ceed9d513a6d049d2",
+    "patch-notes/scripts/ui/guided_production_tutorial.gd": "eec357923750eec191b1c9bc81afbf5b76e308eee85b10cf2f13cad83ff89c4d",
+    "patch-notes/scripts/ui/gameplay_hud.gd": "9be0e9f9ab7129e3888d30d09d4ad75b8efd8858a5c3aa8e470930acf8aef0f2",
+    "patch-notes/scripts/ui/tutorial_overlay.gd": "5ecf36f8443f9b96edc64e4ee20153fae8f49e41c0df214707a191c2bed7726f",
+    "patch-notes/scripts/ui/phase_workspace.gd": "69f42a292afa094bb67cd3eb11f288abeaa6659727d83c61cae16f82ba3d9558",
+    "patch-notes/scripts/cards/balanced_production.gd": "ad7231f493501cd49ffdd5bca94bf4f562b4f3e12607cbc6c445175e1958b4cf",
+    "patch-notes/scripts/debug/verify_balanced_boost.gd": "d5a4e808c6d19ba6d736d9f26c9700c2ddbfc5c15ad6a2c8a153187e746ab31f",
+    "docs/codex/CURRENT_STATE.md": "6eacd31d90c657afb5572953a39c8dcb10f0a8230b0c92a23a8e37cff58de5b2",
+    "docs/codex/TODO.md": "2b4eff9719c9de7017e04f7ab16f8fffc852d49286aa742656b7df8700008b4f",
+    "docs/codex/DECISIONS.md": "43a12f2a02a09fdfc2c2bafc3640cbfe0f6a627b7ded16c46d4de8f63504256d",
+    "docs/codex/design/core-and-studio.md": "9338a53da7f4426446c3b4e8f002016ec7a501372aab903f18593d8537ea5280",
+    "docs/codex/logs/2026-10-26-balanced-small-hand-v1.md": "997f2e5ad6bc184ec7b9a24164b326223e6ba614b27f98069b8823158f5f959c"
+  },
+  "receipts": {
+    "baseline": {
+      "sha256": "cc3c69c172d0ad87c226249ed0eafe9627d4b691a05538309357167886340575",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://../docs/codex/findings/pause-transition-20261026-v1/restore.gd",
+        "--",
+        "--capture"
+      ],
+      "exit": 0
+    },
+    "arithmetic-final": {
+      "sha256": "8fff87582fff949177de8738a985b3090faf03bbe895fef924be637398b01d54",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_balanced_boost.gd"
+      ],
+      "exit": 0
+    },
+    "design": {
+      "sha256": "b14d278f3f71bf2436c0ff0eb74d06edae1bdd14bf7b31c635ad246c5775a196",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_design_phase.gd"
+      ],
+      "exit": 0
+    },
+    "alpha": {
+      "sha256": "79018706946ad9385685fc346d42d5326a217c6ba8fb1b48b7cb647141cb5916",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_alpha_phase.gd"
+      ],
+      "exit": 0
+    },
+    "parity": {
+      "sha256": "ca5731ec4c280c7866059d26fe1707371358ba3955073a03b3038b0dfeb385ad",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_balanced_boost_parity.gd"
+      ],
+      "exit": 0
+    },
+    "characterization": {
+      "sha256": "39c163aa0de403e7bc5c455b5ffb338acba58abc683651770b1c17e0b94687f7",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_production_extraction.gd"
+      ],
+      "exit": 0
+    },
+    "tutorial-native": {
+      "sha256": "3acc1d430a4c2db6373e130a54e8205408618a83d6a745dc834c0d17f5b78d45",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_guided_tutorial_ui.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0
+    },
+    "cold": {
+      "sha256": "c96c378abc317cd83c7f09231953207f692aca51b8181067ed21c668811cf510",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://../docs/codex/findings/pause-transition-20261026-v1/restore.gd"
+      ],
+      "exit": 0
+    }
+  },
+  "reward_body_unchanged": true,
+  "diff_check": 0
+}

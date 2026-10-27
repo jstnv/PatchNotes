@@ -31,6 +31,11 @@ var payoff_button: Button
 var loan_selector: OptionButton
 var _selected_loan: StringName = &""
 var quote_details: RichTextLabel
+var payment_details_button: Button
+var payment_details: RichTextLabel
+var _payment_page: VBoxContainer
+var _payment_previous: Button
+var _payment_next: Button
 var _quote: Dictionary = {}
 var _payoff: Dictionary = {}
 var _schedule_page := 0
@@ -175,7 +180,7 @@ func _ready() -> void:
 	term_input.text_changed.connect(_invalidate_quote)
 	quote_details = RichTextLabel.new()
 	quote_details.name = "BankQuote"
-	quote_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	quote_details.size_flags_vertical = Control.SIZE_FILL
 	quote_details.scroll_active = true
 	quote_details.custom_minimum_size.y = 130
 	_bank_page.add_child(quote_details)
@@ -186,20 +191,38 @@ func _ready() -> void:
 	loan_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	loan_selector.item_selected.connect(_select_active_loan)
 	pages.add_child(loan_selector)
-	for direction in [-1,1]:
-		var button := Button.new()
-		button.text = "Previous payments" if direction < 0 else "Next payments"
-		button.pressed.connect(func():
-			_schedule_page = maxi(0,_schedule_page + direction)
-			_show_quote())
-		pages.add_child(button)
+	payment_details_button = Button.new()
+	payment_details_button.name = "PaymentBreakdownButton"
+	payment_details_button.text = "Payment breakdown"
+	payment_details_button.pressed.connect(_open_payment_details)
+	pages.add_child(payment_details_button)
 	_label("Financial history", _bank_page, 18)
 	bank_history = RichTextLabel.new()
 	bank_history.name = "BankHistory"
 	bank_history.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bank_history.scroll_active = true
 	_bank_page.add_child(bank_history)
-	_label("Rate: 1% of scheduled opening principal per month. Credit uses prototype defaults; score does not set eligibility or price.", _bank_page)
+	_label("1% monthly interest. Credit history does not change loan pricing.", _bank_page)
+	_payment_page = VBoxContainer.new()
+	_payment_page.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(_payment_page)
+	var payment_controls := HBoxContainer.new()
+	_payment_page.add_child(payment_controls)
+	for direction in [-1,1]:
+		var button := Button.new()
+		button.name = "PreviousPaymentPage" if direction < 0 else "NextPaymentPage"
+		button.text = "Previous payments" if direction < 0 else "Next payments"
+		if direction < 0: _payment_previous = button
+		else: _payment_next = button
+		button.pressed.connect(func():
+			_schedule_page = maxi(0,_schedule_page + direction)
+			_show_quote())
+		payment_controls.add_child(button)
+	payment_details = RichTextLabel.new()
+	payment_details.name = "BankPaymentDetails"
+	payment_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	payment_details.scroll_active = true
+	_payment_page.add_child(payment_details)
 	_confirm = ConfirmationDialog.new()
 	_confirm.title = "Confirm Bank transaction"
 	_confirm.dialog_autowrap = true
@@ -259,7 +282,10 @@ func open_bank() -> void:
 
 
 func back() -> void:
-	if page == &"bank":
+	if page == &"bank_payments":
+		_set_page(&"bank")
+		payment_details_button.grab_focus()
+	elif page == &"bank":
 		_set_page(&"finances")
 		bank_button.grab_focus()
 	else:
@@ -269,11 +295,19 @@ func back() -> void:
 func _set_page(value: StringName) -> void:
 	_cancel_confirmation()
 	page = value
-	_title.text = "Visit Bank" if page == &"bank" else "Studio Finances"
+	_title.text = "Payment breakdown" if page == &"bank_payments" else ("Visit Bank" if page == &"bank" else "Studio Finances")
 	_finance_page.visible = page == &"finances"
 	_bank_page.visible = page == &"bank"
+	_payment_page.visible = page == &"bank_payments"
 	bank_button.visible = page == &"finances"
-	back_button.text = "Back to Finances" if page == &"bank" else _return_label
+	back_button.text = "Back to Bank" if page == &"bank_payments" else ("Back to Finances" if page == &"bank" else _return_label)
+
+
+func _open_payment_details() -> void:
+	if not visible or page != &"bank" or not _quote.has("schedule"): return
+	_set_page(&"bank_payments")
+	back_button.grab_focus()
+	_animate_entrance.call_deferred()
 
 
 func _on_finance_changed() -> void:
@@ -290,6 +324,10 @@ func refresh() -> void:
 	accept_button.disabled = true
 	payoff_button.disabled = true
 	quote_details.text = "Enter an amount and term, then preview the exact quote."
+	payment_details.text = "No current repayment schedule."
+	payment_details_button.disabled = true
+	_payment_previous.disabled = true
+	_payment_next.disabled = true
 	loan_selector.clear()
 	var selected_index := 0
 	if available:
@@ -457,7 +495,7 @@ func _select_active_loan(index: int) -> void:
 	for loan: Dictionary in report.get("bank_loans",[]):
 		if loan.loan_id != _selected_loan or loan.closed: continue
 		_payoff = run.get_bank_payoff_quote(_selected_loan)
-		_quote = {"schedule":loan.schedule,"reason":"Active loan: " + String(_selected_loan)}
+		_quote = {"schedule":loan.schedule,"reason":"Active loan"}
 		payoff_button.disabled = _payoff.is_empty()
 		_show_quote()
 		return
@@ -465,6 +503,8 @@ func _select_active_loan(index: int) -> void:
 func _invalidate_quote(_text: String) -> void:
 	_quote = {}
 	accept_button.disabled = true
+	payment_details_button.disabled = true
+	quote_details.text = "Amount or term changed. Preview the new quote."
 	_cancel_confirmation()
 
 
@@ -484,6 +524,10 @@ func _preview_quote() -> void:
 
 func _show_quote() -> void:
 	var lines: Array[String] = [_quote.get("reason", "Quote unavailable.")]
+	var summary: Array[String] = lines.duplicate()
+	payment_details_button.disabled = not _quote.has("schedule")
+	_payment_previous.disabled = true
+	_payment_next.disabled = true
 	if _quote.has("capacity_cents"):
 		lines.append("Settled sales: older %s · latest %s · conservative basis %s" % [_money(_quote.older_sales_cents),_money(_quote.latest_sales_cents),_money(_quote.basis_cents)])
 		lines.append("Monthly rent %s · Other required obligations %s · Payment capacity %s" % [_money(_quote.rent_cents),_money(_quote.obligations_cents),_money(_quote.capacity_cents)])
@@ -495,13 +539,33 @@ func _show_quote() -> void:
 	if _quote.has("schedule"):
 		var terms: Dictionary = _quote.schedule
 		lines.append("%s over %d months · 1%% monthly · Total interest %s · Total repayment %s" % [_money(terms.principal_cents),terms.term_months,_money(terms.total_interest_cents),_money(terms.total_payment_cents)])
+		summary.append("%s over %d months · 1%% monthly" % [_money(terms.principal_cents),terms.term_months])
+		summary.append("Total interest %s · Total repayment %s" % [_money(terms.total_interest_cents),_money(terms.total_payment_cents)])
+		var issued := 0
+		if not _quote.get("accepted", false):
+			for loan: Dictionary in report.get("bank_loans", []):
+				if loan.loan_id == _selected_loan: issued = int(loan.issued)
+		if issued < int(terms.term_months):
+			var upcoming := BankLoan.installment(terms, issued + 1)
+			summary.append("Next scheduled payment: %s · Month %d" % [_money(upcoming.payment_cents),upcoming.due_cycle/2])
+		if _quote.get("rules_version") == 2 and _quote.get("accepted", false):
+			if _quote.requested_principal_cents != terms.principal_cents:
+				summary.append("Requested %s → Qualified %s" % [_money(_quote.requested_principal_cents),_money(terms.principal_cents)])
+			if _quote.recovery_cents > 0:
+				summary.append("Overdue paid %s · Cash received %s" % [_money(_quote.recovery_cents),_money(_quote.net_proceeds_cents)])
 		_schedule_page = mini(_schedule_page, (int(terms.term_months)-1)/12)
+		_payment_previous.disabled = _schedule_page == 0
+		_payment_next.disabled = (_schedule_page + 1) * 12 >= int(terms.term_months)
 		for number in range(_schedule_page*12+1,mini((_schedule_page+1)*12+1,int(terms.term_months)+1)):
 			var due := BankLoan.installment(terms,number)
 			lines.append("%d. Month %d / cycle %d: %s = %s principal + %s interest" % [number,due.due_cycle/2,due.due_cycle,_money(due.payment_cents),_money(due.principal_cents),_money(due.interest_cents)])
 	if not _payoff.is_empty():
 		lines.append("Outstanding principal %s · Due unpaid interest %s · Payoff now %s. Future interest is waived; no fee." % [_money(_payoff.principal_cents),_money(_payoff.interest_cents),_money(_payoff.total_cents)])
-	quote_details.text = "\n".join(lines)
+		summary.append("Remaining principal %s · Payoff now %s" % [_money(_payoff.principal_cents),_money(_payoff.total_cents)])
+	if not _quote.has("schedule") and _quote.has("maximum_principal_cents"):
+		summary.append("Maximum principal for this term: %s" % _money(_quote.maximum_principal_cents))
+	quote_details.text = "\n".join(summary)
+	payment_details.text = "\n".join(lines)
 
 
 func _confirm_accept() -> void:

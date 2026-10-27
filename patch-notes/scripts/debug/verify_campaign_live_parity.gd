@@ -155,8 +155,8 @@ func exit_phase() -> void:
 		studio._review_view.get_node("%ContinueButton").pressed.emit()
 	compare("Exit phase %d"%index)
 
-func full_project(title: String,extras := false) -> void:
-	begin_project(title)
+func full_project(title: String,extras := false,genre: StringName = &"action") -> void:
+	begin_project(title,genre)
 	if failures: return
 	for index in range(3):
 		begin_phase()
@@ -282,10 +282,20 @@ func continue_studio(saved: Dictionary) -> void:
 
 ## Both maintained suites use the same real Gameplay/coordinator setup. Caller
 ## supplies a fully explicit recipe and an isolated test output/profile.
-func start_route(recipe: Dictionary) -> CheckpointCoordinator:
+func start_route(recipe: Dictionary,roster_version: int = StudioSpecialties.ROSTER_VERSION) -> CheckpointCoordinator:
 	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT")+"."+route_id+".recipe.json",FileAccess.WRITE).store_string(JSON.stringify(recipe,"\t"))
 	session = Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
 	var native: RefCounted = Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
+	if roster_version != StudioSpecialties.ROSTER_VERSION:
+		# Explicit historical foundation for the long Bank/payroll matrix. A
+		#12-Scope new game is tested independently, without forcing loan eligibility.
+		for instance in [session,native]:
+			instance.run._owned_features.clear()
+			for id in StudioSpecialties.preview(StringName(recipe.specialty),roster_version).ids:instance.run._owned_features[id]=true
+			instance.run._founding_roster_version=roster_version
+	# This exact checkpoint, rather than the fresh recipe, reproduces historical
+	# fixtures through the ordinary CLI. No checkpoint identity is rewritten.
+	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT")+"."+route_id+".initial-checkpoint.json",FileAccess.WRITE).store_string(JSON.stringify(session.export_checkpoint(),"\t"))
 	game = load("res://scenes/gameplay.tscn").instantiate()
 	game.run_state = native.run
 	root.add_child(game)
@@ -311,7 +321,7 @@ func _initialize() -> void:
 		route_id = "campaign_"+str(seed_value)
 		segment = 0
 		var recipe := {"schema_version":1,"studio_id":route_id,"employee_trial":true,"studio_name":"Live parity","specialty":"action","traits":[],"seed":str(seed_value)}
-		var coordinator := start_route(recipe)
+		var coordinator := start_route(recipe,3)
 		await full_project("First")
 		if failures: break
 		store_action(true)

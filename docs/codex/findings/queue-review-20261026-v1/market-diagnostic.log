@@ -1,0 +1,22 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+MARKET_DIAGNOSTIC { "label": "Studio Market button fits between shared HUD bars", "window": (1152, 648), "canvas": (1152, 648), "paused": false, "button": [P: (266.0, 4150.0), S: (270.0, 54.0)], "button_visible": false, "button_disabled": false, "focus": "@Button@212:<Button#216056990527>", "footer": [P: (16.0, 602.0), S: (1120.0, 53.0)] }
+ERROR: Rival foundation: Studio Market button fits between shared HUD bars
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_world_foundation.gd:15)
+       [1] expect (res://../docs/codex/findings/queue-review-20261026-v1/market_diagnostic.gd:13)
+       [2] _initialize (res://scripts/debug/verify_market_browser.gd:61)
+       [3] settle_market (res://scripts/debug/verify_market_browser.gd:112)
+MARKET_DIAGNOSTIC { "label": "Escape returns focus to Market without pausing", "window": (1152, 648), "canvas": (1152, 648), "paused": false, "button": [P: (266.0, 4150.0), S: (270.0, 54.0)], "button_visible": false, "button_disabled": false, "focus": "StartNextGame:<Button#212550552183>", "footer": [P: (16.0, 602.0), S: (1120.0, 53.0)] }
+ERROR: Rival foundation: Escape returns focus to Market without pausing
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_world_foundation.gd:15)
+       [1] expect (res://../docs/codex/findings/queue-review-20261026-v1/market_diagnostic.gd:13)
+       [2] _initialize (res://scripts/debug/verify_market_browser.gd:104)
+       [3] settle_market (res://scripts/debug/verify_market_browser.gd:112)
+MARKET_BROWSER checks=104 failures=2
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

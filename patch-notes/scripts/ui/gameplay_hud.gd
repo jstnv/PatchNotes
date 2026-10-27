@@ -156,6 +156,7 @@ func set_phase(controller: Control) -> void:
 	studio_finances.close()
 	fans_dialog.hide()
 	_presented_scores.clear()
+	scoreboard.reset_punches()
 	for pulse in _score_pulses:
 		if is_instance_valid(pulse): pulse.queue_free()
 	_score_pulses.clear()
@@ -370,7 +371,7 @@ func _production_guidance() -> Dictionary:
 					var category := str(final_production.specialization_stat).capitalize()
 					return {"key": name + "_specialization_" + str(final_production.specialization_stat), "title": "%s Specialization ready" % category, "body": "All four cards share %s as their primary Core label. This hand earns ×1.5 Core gains, rounded by category; Scope stays printed." % category}
 				if final_production.get("balanced_production", false):
-					return {"key": name + "_balanced", "title": "Balanced Production ready", "body": "A Feature and hand Core gains within ±15% of their average share the original hand total evenly after playing. Spare points follow Graphics, Sound, Technology, Design. Scope stays printed."}
+					return {"key": name + "_balanced", "title": "Balanced Production ready", "body": "With a Feature, positive hand Core gains qualify if highest minus lowest is at most 1 point, or each is within ±15% of the average. Boost the Core total ×1.25, round down, then share it evenly after playing. Spare points follow Graphics, Sound, Technology, Design. Scope stays printed."}
 		return {"key": name + "_ready", "title": "Four cards selected", "body": "Play the hand to advance one cycle. Selected Features exhaust for this project; Passes can return."}
 	var available := workspace.get_pool_specialization_guidance()
 	if not available.is_empty(): return available
@@ -418,32 +419,7 @@ func refresh() -> void:
 func _show_presented_scores(values: Dictionary, deltas: Dictionary) -> void:
 	_presented_scores = values.duplicate()
 	refresh()
-	for key: StringName in deltas:
-		var amount: int = deltas[key]
-		if amount == 0: continue
-		var index := HandPresentation.CORE.find(key) + 1
-		var caption := "+%d" % amount
-		if key == &"scope": index = 5
-		elif key == &"marketing": index = 0
-		elif key == &"fixed":
-			index = 6
-			caption += " fixed"
-		elif key == &"discovered":
-			index = 6
-			caption += " found"
-		var pulse := Label.new()
-		pulse.text = caption
-		pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		pulse.add_theme_color_override("font_color", Color("f5ce69"))
-		pulse.add_theme_font_size_override("font_size", 18)
-		pulse.z_index = 200
-		add_child(pulse)
-		pulse.global_position = stats[index].global_position + Vector2(0, 38 if key != &"fixed" else 54)
-		_score_pulses.append(pulse)
-		var tween := pulse.create_tween().set_parallel()
-		tween.tween_property(pulse, "position:y", pulse.position.y - 18.0, 0.55)
-		tween.tween_property(pulse, "modulate:a", 0.0, 0.55).set_delay(0.16)
-		tween.chain().tween_callback(func(): _score_pulses.erase(pulse); pulse.queue_free())
+	scoreboard.punch(deltas)
 
 func _refresh_footer() -> void:
 	var cents := run.get_cash_cents()

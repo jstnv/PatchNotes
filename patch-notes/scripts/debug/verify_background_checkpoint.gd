@@ -87,17 +87,20 @@ func _initialize() -> void:
 	saved.sequence="1"
 	expect(saved==StudioCheckpoint.new().capture(run),"Newest detached player/RNG state is durable")
 	expect(current.sequence==2,"Intervening signals coalesce to exactly one follow-up generation")
+	expect(owner.completed_saves==2,"Only the two durable publications advance notification state")
 	var prior_sequence: int=current.sequence
 	run.cash_changed.emit()
 	await process_frame
 	expect(await owner.wait_saved(),"Identical notifications finish without a new publication")
 	expect(owner.store.inspect().sequence==prior_sequence,"Background identical-state notifications do not create another generation")
+	expect(owner.completed_saves==prior_sequence,"Identical notifications do not create a new Saved notification token")
 	owner.store.fault=&"before_rename"
 	expect(run.add_cash(1),"Fault fixture commits a new Studio action")
 	await process_frame
 	expect(not await owner.wait_saved(),"Failed background publication surfaces failure")
 	expect(not run.checkpoint_mutations_allowed and not owner.before_departure(),"Save failure blocks mutations and departure")
 	expect(owner.store.inspect().sequence==prior_sequence,"Failed write preserves last good generation")
+	expect(owner.completed_saves==prior_sequence,"Failed publication cannot announce another successful save")
 	owner.store.fault=&""
 	owner.failure=""
 	owner.pending=true
@@ -117,6 +120,7 @@ func _initialize() -> void:
 	fresh.background_saves=true
 	var cold: RunState=fresh.load_current()
 	expect(cold!=null and fresh.store.inspect().get("sequence")==prior_sequence+2,"Teardown drains and releases its writer before a fresh Continue")
+	expect(fresh.completed_saves==0,"Loading a saved Studio does not announce a new publication")
 	expect(cold.get_cash_cents()==run.get_cash_cents(),"Teardown persisted the latest committed action")
 	fresh.entered_studio(true)
 	expect(cold.add_cash(1),"Fresh Continue allows a new committed action")

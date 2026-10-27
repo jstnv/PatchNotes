@@ -1,0 +1,71 @@
+{
+  "checks": [
+    {
+      "name": "persistence",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\project",
+        "--headless",
+        "--script",
+        "res://scripts/debug/verify_usability_persistence.gd",
+        "--",
+        "--out=C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\persistence"
+      ],
+      "exit": 0,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "name": "cold",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\project",
+        "--headless",
+        "--script",
+        "res://scripts/debug/verify_usability_persistence.gd",
+        "--",
+        "--out=C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\cold",
+        "--input=C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\persistence\\current-save.json"
+      ],
+      "exit": 0,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "name": "review",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\project",
+        "--headless",
+        "--script",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\review\\harness.gd",
+        "--",
+        "--out=C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\review"
+      ],
+      "exit": 0,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "name": "native",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\project",
+        "--script",
+        "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\native\\harness.gd",
+        "--",
+        "--out=C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-usability-20261024-v1\\final-audit-v1\\native"
+      ],
+      "exit": 0,
+      "errors": [],
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "release_ready": false,
+  "canonical_unchanged": true
+}

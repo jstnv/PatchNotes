@@ -1,0 +1,49 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: pure plan leaves original empty
+PASS: exact retry is no-op
+PASS: event ID cannot change publisher
+PASS: new ID cannot credit same source/kind twice
+PASS: independent clipping at candidate representation cap
+PASS: qualifying event retained at cap with zero actual credit
+PASS: publishers remain isolated
+PASS: another Studio cannot hydrate owner-a history
+PASS: same source text in separate Studio is independent
+PASS: forged ordinal rejects
+PASS: forged requested_reputation_bp rejects
+PASS: forged credited_reputation_bp rejects
+PASS: forged requested_investment_bp rejects
+PASS: forged credited_investment_bp rejects
+PASS: reordered history rejects
+PASS: duplicate history rejects
+PASS: future-cycle event rejects
+PASS: backdated append rejects
+PASS: invalid credit bound rejects [-1, 1]
+PASS: invalid credit bound rejects [1, -1]
+PASS: invalid credit bound rejects [10001, 0]
+PASS: invalid credit bound rejects [0, 10001]
+PASS: float counter rejects
+PASS: nonzero fixture typed JSON roundtrip
+PASS: fixture credits rejected by production resolver
+PASS: P1 enables no award producer
+PASS: detached event cannot mutate planned history
+PASS: observation cannot mutate history
+PASS: legal Studio creation
+PASS: new Studio checkpoint captures: 
+PASS: new Studio has five zero relationships and no events
+PASS: RunState observation detached
+PASS: disabled event preserves full runtime and RNG
+PASS: reentrant producer rejects
+PASS: checkpoint mutation fence preserved
+PASS: native full checkpoint roundtrip exact
+PASS: wrong owner rejects without damaging live Studio
+PASS: malformed event payload rejects
+PASS: current revision cannot omit relationship ledger
+PASS: unknown content revision rejects
+PASS: current world includes valid Studio relationship records
+PASS: known old source cannot claim relationship schema
+PASS: current source cannot mix predecessor and current Studio schemas
+P1 checks=43 failures=0
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

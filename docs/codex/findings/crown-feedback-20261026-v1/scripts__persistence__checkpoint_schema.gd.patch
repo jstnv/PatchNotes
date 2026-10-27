@@ -1,0 +1,13 @@
+--- current/scripts/persistence/checkpoint_schema.gd
+
++++ private/scripts/persistence/checkpoint_schema.gd
+
+@@ -168,6 +168,7 @@
+
+ 	run.support_assessments = map_of("id",preload("res://scripts/contracts/publisher_support.gd").assessment_schema())
+ 	run.sidestreet_briefs = map_of("id",{"offer_id":"id","source_release_id":"id","state":optional(contract())})
+ 	run.contract_search=preload("res://scripts/contracts/contract_search.gd").schema()
++	run.crown_briefs = map_of("id",{"offer_id":"id","source_release_id":"id","state":optional(contract())})
+ 	run.publisher_relationships = preload("res://scripts/contracts/publisher_relationships.gd").schema()
+ 	run.promotion_awards = map_of("id","uint")
+ 	run.promotion_consumed = map_of("id","id")

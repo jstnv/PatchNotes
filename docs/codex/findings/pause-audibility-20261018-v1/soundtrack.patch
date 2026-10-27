@@ -1,0 +1,13 @@
+--- before/soundtrack.gd
++++ patch-notes/scripts/audio/soundtrack.gd
+@@ -82,7 +82,9 @@
+ 	# Music only: settings continue to own bus volume/mute; SFX stays separate.
+ 	pause_filter = AudioEffectLowPassFilter.new()
+ 	pause_filter.db = AudioEffectFilter.FILTER_24DB
+-	pause_filter.resonance = 0.15
++	# Very low resonance damps the passband too: across the steep filter it
++	# removed much of the bass/melody, making continuing playback sound stopped.
++	pause_filter.resonance = 0.5
+ 	pause_reverb = AudioEffectReverb.new()
+ 	pause_reverb.room_size = 0.65
+ 	pause_reverb.damping = 0.45

@@ -1,0 +1,442 @@
+--- base/scripts/contracts/contract_challenges.gd
++++ candidate/scripts/contracts/contract_challenges.gd
+@@ -19,12 +19,14 @@
+ static func terms_for_contract(contract_id: StringName) -> Dictionary:
+ 	var specs := specs_for_contract(contract_id)
+ 	if specs.is_empty(): return {}
+-	return {"version":VERSION,"specs":specs,"cash_cap_cents":BONUS_CASH_CENTS,"promotion_cap":BONUS_PROMOTION}
++	var relationship_only := contract_id == ContractDefinitions.SIDESTREET_BRIEF
++	return {"version":VERSION,"specs":specs,"cash_cap_cents":0 if relationship_only else BONUS_CASH_CENTS,"promotion_cap":0 if relationship_only else BONUS_PROMOTION}
+ 
+ 
+ static func description(contract_id: StringName) -> String:
+ 	match contract_id:
+ 		ContractDefinitions.SIDESTREET: return "Challenge: no successful redraws and final Scope at most 12. Scope 13–16 reduces the grade; any redraw earns no challenge bonus."
++		ContractDefinitions.SIDESTREET_BRIEF: return "Relationship Brief: no successful redraws and final Scope at most 10. Scope 11 halves the promise; Scope 12 or any redraw misses it."
+ 		ContractDefinitions.CROWN: return "Challenge: keep the four final Core scores balanced. Full grade when highest minus lowest is at most 2.0; it fades over another 4.0."
+ 		ContractDefinitions.NEON: return "Challenge: total final Core score must reach 1.5 times final Scope. A lower ratio earns a proportional grade."
+ 		ContractDefinitions.STARWAVE: return "Challenge: aim for 7.0 in every final Core. Above and below count equally; total deviation of 8.0 earns no bonus."
+@@ -41,7 +43,8 @@
+ 
+ 
+ static func _valid_terms(terms: Dictionary) -> bool:
+-	return terms.get("version") == VERSION and terms.get("cash_cap_cents") == BONUS_CASH_CENTS and terms.get("promotion_cap") == BONUS_PROMOTION and terms.get("specs") is Array
++	var caps := [terms.get("cash_cap_cents"),terms.get("promotion_cap")]
++	return terms.get("version") == VERSION and caps in [[BONUS_CASH_CENTS,BONUS_PROMOTION],[0,0]] and terms.get("specs") is Array
+ 
+ 
+ static func specs_for_contract(contract_id: StringName) -> Array[Dictionary]:
+@@ -50,6 +53,8 @@
+ 			return []
+ 		ContractDefinitions.SIDESTREET:
+ 			return [{"version": VERSION, "kind": NO_REDRAWS}, {"version": VERSION, "kind": SCOPE_CEILING, "maximum": 12, "fade_excess": 4}]
++		ContractDefinitions.SIDESTREET_BRIEF:
++			return [{"version": VERSION, "kind": NO_REDRAWS}, {"version": VERSION, "kind": SCOPE_CEILING, "maximum": 10, "fade_excess": 2}]
+ 		ContractDefinitions.CROWN:
+ 			return [{"version": VERSION, "kind": BALANCED_CORES, "allowed_gap": 4, "fade_gap": 8}]
+ 		ContractDefinitions.NEON:
+--- base/scripts/contracts/contract_definitions.gd
++++ candidate/scripts/contracts/contract_definitions.gd
+@@ -6,6 +6,7 @@
+ const VERSION := 1
+ const IRONCLAD := &"balanced_primitive_contract_v1"
+ const SIDESTREET := &"sidestreet_cash_contract_v1"
++const SIDESTREET_BRIEF := &"sidestreet_relationship_brief_trial_v1"
+ const CROWN := &"crown_quill_primitive_trial_v1"
+ const NEON := &"neon_circuit_primitive_trial_v1"
+ const STARWAVE := &"starwave_primitive_trial_v1"
+@@ -13,7 +14,7 @@
+ 
+ 
+ static func built_in_ids() -> Array[StringName]:
+-	return [IRONCLAD, SIDESTREET, CROWN, NEON, STARWAVE]
++	return [IRONCLAD, SIDESTREET, SIDESTREET_BRIEF, CROWN, NEON, STARWAVE]
+ 
+ 
+ static func definition(id: StringName) -> Dictionary:
+@@ -23,6 +24,9 @@
+ 			common.merge({"publisher_id": &"ironclad", "title": "Balanced Primitive Contract", "cash_cents": 240000, "advance_cents": 40000, "promotion": 0, "denominator": 96, "score": _score(12, 4, 12, 1)}, true)
+ 		SIDESTREET:
+ 			common.merge({"publisher_id": &"sidestreet", "title": "SideStreet Cash Contract", "cash_cents": 120000, "advance_cents": 0, "promotion": 0, "denominator": 96, "score": _score(12, 4, 12, 1)}, true)
++		SIDESTREET_BRIEF:
++			# Private pilot: relationship-only. Cash/Promotion terms remain open.
++			common.merge({"publisher_id": &"sidestreet", "title": "SideStreet Relationship Brief", "cash_cents": 0, "advance_cents": 0, "promotion": 0, "denominator": 64, "scope_target": 10, "core_target": 6, "score": _score(10, 4, 6, 1)}, true)
+ 		CROWN:
+ 			common.merge({"publisher_id": &"crown_quill", "title": "Crown & Quill Contract", "cash_cents": 192000, "advance_cents": 15000, "promotion": 12, "denominator": 66, "scope_target": 9, "core_target": 8, "score": _score(9, 2, 8, 1, 8, 2), "stored_terms": {"scope": 9, "cash_cents": 192000, "advance_cents": 15000, "promotion": 12, "denominator": 66}}, true)
+ 		NEON:
+--- base/scripts/contracts/contract_state.gd
++++ candidate/scripts/contracts/contract_state.gd
+@@ -3,6 +3,7 @@
+ 
+ const CONTRACT_ID := ContractDefinitions.IRONCLAD
+ const SIDESTREET_CONTRACT_ID := ContractDefinitions.SIDESTREET
++const SIDESTREET_BRIEF_ID := ContractDefinitions.SIDESTREET_BRIEF
+ const SIDESTREET_INVESTMENT_CENTS := 120000
+ const REQUIRED_HANDS := 2
+ const EXPECTED_SCOPE := 12
+@@ -133,7 +134,7 @@
+ 
+ 
+ func record_successful_redraw(count: int) -> void:
+-	if _contract_id != SIDESTREET_CONTRACT_ID: return
++	if _contract_id not in [SIDESTREET_CONTRACT_ID, SIDESTREET_BRIEF_ID]: return
+ 	assert(count > 0 and _challenge_redraws <= ContractChallenges.MAX_INPUT - count)
+ 	_challenge_redraws += count
+ 
+@@ -301,15 +302,15 @@
+ 	if _contract_id in [PublisherTrialTerms.CROWN,PublisherTrialTerms.NEON,PublisherTrialTerms.STARWAVE]:
+ 		if _trial_terms!=PublisherTrialTerms.terms(_contract_id): return {}
+ 		return PublisherTrialTerms.completion(_contract_id,scope,cores,_neon_focus)
+-	if _contract_id in [SIDESTREET_CONTRACT_ID,CONTRACT_ID]:
++	if _contract_id in [SIDESTREET_CONTRACT_ID,SIDESTREET_BRIEF_ID,CONTRACT_ID]:
+ 		var calculated := ContractDefinitions.evaluate(_contract_id,scope,cores,-1,get_advance_cents())
+ 		if calculated.is_empty(): return {}
+-		return {"numerator":calculated.numerator,"remainder_cents":calculated.remainder_cents,"payout_cents":calculated.payout_cents}
++		return {"numerator":calculated.numerator,"denominator":calculated.denominator,"remainder_cents":calculated.remainder_cents,"payout_cents":calculated.payout_cents}
+ 	return {}
+ 
+ func get_advance_cents() -> int:
+ 	if not _trial_terms.is_empty(): return _trial_terms.advance_cents
+-	return 0 if _contract_id==SIDESTREET_CONTRACT_ID else GUARANTEED_UPFRONT_CENTS + (15000 if _publisher_connections else 0)
++	return 0 if _contract_id in [SIDESTREET_CONTRACT_ID,SIDESTREET_BRIEF_ID] else GUARANTEED_UPFRONT_CENTS + (15000 if _publisher_connections else 0)
+ 
+ func get_scope_target() -> int: return ContractDefinitions.scope_target(_contract_id)
+ 
+--- base/scripts/contracts/publisher_relationship_brief.gd
++++ candidate/scripts/contracts/publisher_relationship_brief.gd
+@@ -0,0 +1,21 @@
++class_name PublisherRelationshipBrief
++extends RefCounted
++
++## Private SideStreet trial. Existing work-Contract cash and Promotion are
++## deliberately separate from this relationship-only result.
++const FULL := 10000
++const MAX_REPUTATION_AWARD_BP := 1000
++
++static func result(state: ContractState) -> Dictionary:
++	if state == null or state.get_contract_id() != ContractDefinitions.SIDESTREET_BRIEF or not state.is_completed():
++		return {}
++	var completion := state.get_result()
++	if completion == null or completion.get_payout_cents() != 0 or completion.get_promotion() != 0:
++		return {}
++	var numerator := completion.get_completion_numerator()
++	if numerator < 0 or numerator > 64: return {}
++	var completion_bp := numerator * FULL / 64
++	var promise_bp := completion.get_challenge_grade_bp()
++	if promise_bp not in [0,5000,10000]: return {}
++	var award_bp := MAX_REPUTATION_AWARD_BP * mini(completion_bp,promise_bp) / FULL
++	return {"completion_bp":completion_bp,"promise_bp":promise_bp,"raw_award_bp":award_bp}
+--- base/scripts/contracts/publisher_relationship_rules.gd
++++ candidate/scripts/contracts/publisher_relationship_rules.gd
+@@ -1,6 +1,52 @@
+-## No relationship award producers are enabled in P1. Future code-owned rules
+-## must validate committed source facts and frozen terms, never trust disk deltas.
++## Private P2: one trusted producer from committed, code-owned Brief results.
+ extends RefCounted
++const KIND := &"sidestreet_brief_completion_v1"
+ 
+-static func resolve(_run_facts: Variant, _request: Dictionary) -> Dictionary:
+-	return {}
++static func facts(run: Variant, id: StringName) -> Dictionary:
++	var briefs: Dictionary = run.get("sidestreet_briefs",{}) if run is Dictionary else run._sidestreet_briefs
++	if not briefs.has(id): return {}
++	var offer: Dictionary = briefs[id]
++	if offer.state == null: return {}
++	var c: Dictionary = {}
++	if run is Dictionary:
++		c = offer.state
++	else:
++		var state: ContractState = offer.state
++		if not state.is_completed(): return {}
++		var result := state.get_result()
++		var cores := {}
++		for i in range(4): cores[i] = state.get_core_score_half_units(i)
++		c = {"contract_id":state.get_contract_id(),"offer_id":state.get_offer_id(),"source_release_id":state.get_source_release_id(),"hands":state.get_successful_hand_count(),"upfront":state.is_upfront_committed(),"paid":state.is_payout_committed(),"scope":state.get_scope(),"cores":cores,"challenge_terms":state.get_challenge_terms(),"challenge_redraws":state.get_challenge_redraws(),"result":{"numerator":result.get_completion_numerator(),"denominator":64,"payout":result.get_payout_cents(),"promotion":result.get_promotion(),"challenge_grade_bp":result.get_challenge_grade_bp()}}
++	var owner: StringName = run.bank_run_id if run is Dictionary else run._bank_run_id
++	var releases: Dictionary = run.released_games if run is Dictionary else run._released_games
++	var finance: Dictionary = run.studio_finance if run is Dictionary else run._studio_finance
++	var cycle: int = run.completed_run_cycles if run is Dictionary else run._completed_run_cycles
++	if id != StringName("%s:sidestreet-brief:%s" % [owner,offer.source_release_id]) or not releases.has(offer.source_release_id): return {}
++	if c.contract_id != ContractDefinitions.SIDESTREET_BRIEF or c.offer_id != id or c.source_release_id != offer.source_release_id or c.hands != 2 or not c.upfront or not c.paid: return {}
++	if c.challenge_terms != ContractChallenges.terms_for_contract(ContractDefinitions.SIDESTREET_BRIEF): return {}
++	var calculated := ContractDefinitions.evaluate(ContractDefinitions.SIDESTREET_BRIEF,c.scope,c.cores,-1,0)
++	var reward := ContractChallenges.reward(c.challenge_terms,c.scope,c.cores,c.challenge_redraws)
++	if calculated.is_empty() or reward.is_empty(): return {}
++	if c.result.numerator != calculated.numerator or c.result.denominator != 64 or c.result.payout != 0 or c.result.promotion != 0 or c.result.challenge_grade_bp != reward.grade_bp: return {}
++	var hands := 0
++	var completed_cycle := 0
++	for action: Dictionary in finance.actions:
++		if action.source_id != id: continue
++		if action.productive and action.kind == &"contract_hand":
++			if action.direct_delta != 0: return {}
++			hands += 1
++			completed_cycle = action.cycle
++	if hands != 2 or completed_cycle > cycle or completed_cycle <= 0: return {}
++	var grade: int = mini(10000 * int(calculated.numerator) / 64,int(reward.grade_bp))
++	return {"cycle":completed_cycle,"award":1000 * grade / 10000}
++
++static func request_for(run: Variant,id: StringName) -> Dictionary:
++	var found := facts(run,id)
++	if found.is_empty(): return {}
++	return {"event_id":StringName(str(id)+":reputation"),"source_id":id,"publisher_id":&"sidestreet","kind":KIND,"cycle":found.cycle}
++
++static func resolve(run: Variant,request: Dictionary) -> Dictionary:
++	if request.size() != 5 or request.get("publisher_id") != &"sidestreet" or request.get("kind") != KIND or not request.get("source_id") is StringName: return {}
++	var expected := request_for(run,request.source_id)
++	if expected.is_empty() or expected != request: return {}
++	return {"reputation_bp":int(facts(run,request.source_id).award),"investment_bp":0}
+--- base/scripts/persistence/checkpoint_schema.gd
++++ candidate/scripts/persistence/checkpoint_schema.gd
+@@ -151,6 +151,7 @@
+ 	run.release_metadata = map_of("id",metadata())
+ 	run.primitive_contract = optional(contract())
+ 	run.publisher_offers = map_of("id",{"publisher_id":"id","source_release_id":"id","state":optional(contract())})
++	run.sidestreet_briefs = map_of("id",{"offer_id":"id","source_release_id":"id","state":optional(contract())})
+ 	run.publisher_relationships = preload("res://scripts/contracts/publisher_relationships.gd").schema()
+ 	run.promotion_awards = map_of("id","uint")
+ 	run.promotion_consumed = map_of("id","id")
+--- base/scripts/persistence/studio_checkpoint.gd
++++ candidate/scripts/persistence/studio_checkpoint.gd
+@@ -13,7 +13,7 @@
+ const PRE_ROSTER_RULES := "finance6-bank1-employees1-traits8-sales1-contracts4-research1-review2-fanbase1-starwave1-education1-cult2-branches3"
+ const PRE_MARKET_RULES := PRE_ROSTER_RULES + "-roster2"
+ const PRE_RELATIONSHIP_RULES := PRE_MARKET_RULES + "-market1"
+-const RULES := PRE_RELATIONSHIP_RULES + "-relationships1"
++const RULES := PRE_RELATIONSHIP_RULES + "-relationships1-sidestreet-p2-private1"
+ const RelationshipPrevious := preload("res://scripts/contracts/pre_relationships/studio.gd")
+ const FIELDS := ["_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed","_publisher_relationships"]
+ var error := ""
+@@ -91,6 +91,10 @@
+ 	for id: StringName in run._sidestreet_entitlements:
+ 		var offer: Dictionary = run._sidestreet_entitlements[id]
+ 		state.sidestreet_entitlements[id] = {"offer_id":offer.offer_id,"state":_contract(offer.state)}
++	state.sidestreet_briefs = {}
++	for id: StringName in run._sidestreet_briefs:
++		var brief: Dictionary = run._sidestreet_briefs[id]
++		state.sidestreet_briefs[id] = {"offer_id":brief.offer_id,"source_release_id":brief.source_release_id,"state":_contract(brief.state)}
+ 	state.publisher_offers = {}
+ 	for id: StringName in run._publisher_offers:
+ 		var offer: Dictionary = run._publisher_offers[id]
+@@ -242,6 +246,16 @@
+ 			var c: Dictionary = offer.state
+ 			results[expected] = {"offer_id":expected,"release_id":id,"scope":c.scope,"core_half_units":c.cores,"completion_numerator":c.result.numerator,"payout_cents":c.result.payout}
+ 	if results!=r.sidestreet_results: return "Contract history mismatch"
++	var pending_briefs := 0
++	var completed_briefs := 0
++	if not r.unlocked_publishers.has(PublisherCatalog.SIDESTREET) and not r.sidestreet_briefs.is_empty(): return "Premature Brief"
++	for id: StringName in r.sidestreet_briefs:
++		var brief: Dictionary = r.sidestreet_briefs[id]
++		var source: StringName = brief.source_release_id
++		if not r.released_games.has(source) or id != StringName("%s:sidestreet-brief:%s" % [r.bank_run_id,source]) or brief.offer_id != id or not _valid_contract(brief.state,r,ContractDefinitions.SIDESTREET_BRIEF,id,source): return "Invalid Brief provenance"
++		if brief.state == null: pending_briefs += 1
++		else: completed_briefs += 1
++	if pending_briefs > 1 or completed_briefs != r.publisher_relationships.events.size(): return "Brief event coverage mismatch"
+ 	var expected_awards := {}
+ 	for publisher: StringName in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT]:
+ 		var offer_id := StringName("%s:%s:first" % [r.bank_run_id,publisher])
+@@ -320,7 +334,10 @@
+ 	if c.publisher_connections != connected: return false
+ 	var advance := (55000 if connected else 40000) if kind==ContractState.CONTRACT_ID else 0
+ 	var expected: Dictionary
+-	if terms.is_empty():
++	if kind == ContractDefinitions.SIDESTREET_BRIEF:
++		if not c.trial_terms.is_empty() or c.neon_focus != -1 or not c.has("challenge_terms"): return false
++		expected = ContractDefinitions.evaluate(kind,c.scope,c.cores,-1,0)
++	elif terms.is_empty():
+ 		if not c.trial_terms.is_empty() or c.neon_focus!=-1: return false
+ 		expected = ContractState._calculate_completion_for_budget(c.scope,c.cores,240000-advance,advance) if kind==ContractState.CONTRACT_ID else ContractState.calculate_sidestreet_completion(c.scope,c.cores)
+ 	else:
+@@ -335,7 +352,7 @@
+ 	var bonus_promotion := 0
+ 	var grade_bp := 0
+ 	if c.has("challenge_terms"):
+-		if kind==ContractState.CONTRACT_ID or c.challenge_terms != ContractChallenges.terms_for_contract(kind) or c.challenge_redraws>ContractChallenges.MAX_INPUT or (kind!=ContractState.SIDESTREET_CONTRACT_ID and c.challenge_redraws!=0): return false
++		if kind==ContractState.CONTRACT_ID or c.challenge_terms != ContractChallenges.terms_for_contract(kind) or c.challenge_redraws>ContractChallenges.MAX_INPUT or (kind not in [ContractState.SIDESTREET_CONTRACT_ID,ContractDefinitions.SIDESTREET_BRIEF] and c.challenge_redraws!=0): return false
+ 		var reward := ContractChallenges.reward(c.challenge_terms,c.scope,c.cores,c.challenge_redraws)
+ 		if reward.is_empty(): return false
+ 		bonus_cash = reward.cash_cents
+@@ -383,6 +400,9 @@
+ 	for id: StringName in r.sidestreet_entitlements:
+ 		var offer: Dictionary = r.sidestreet_entitlements[id]
+ 		run._sidestreet_entitlements[id] = {"offer_id":offer.offer_id,"state":_hydrate_contract(offer.state)}
++	for id: StringName in r.sidestreet_briefs:
++		var brief: Dictionary = r.sidestreet_briefs[id]
++		run._sidestreet_briefs[id] = {"offer_id":brief.offer_id,"source_release_id":brief.source_release_id,"state":_hydrate_contract(brief.state)}
+ 	for id: StringName in r.publisher_offers:
+ 		var offer: Dictionary = r.publisher_offers[id]
+ 		run._publisher_offers[id] = {"publisher_id":offer.publisher_id,"source_release_id":offer.source_release_id,"state":_hydrate_contract(offer.state)}
+--- base/scripts/run_state.gd
++++ candidate/scripts/run_state.gd
+@@ -80,6 +80,7 @@
+ var _promotion_consumed: Dictionary = {}
+ const RelationshipLedger := preload("res://scripts/contracts/publisher_relationships.gd")
+ const RelationshipRules := preload("res://scripts/contracts/publisher_relationship_rules.gd")
++var _sidestreet_briefs: Dictionary = {}
+ var _publisher_relationships: Dictionary = {}
+ var _relationship_commit_in_progress := false
+ signal publisher_relationships_changed
+@@ -904,6 +905,8 @@
+ 	if project.get_current_scope() >= project.get_required_scope():
+ 		_sidestreet_entitlements[id] = {"offer_id": StringName("%s:%s" % [ContractState.SIDESTREET_CONTRACT_ID, id]), "state": null}
+ 	_refresh_publisher_unlocks()
++	if _unlocked_publishers.has(PublisherCatalog.SIDESTREET):
++		_issue_sidestreet_brief(id)
+ 	sales_changed.emit()
+ 	fans_changed.emit()
+ 	return true
+@@ -1040,6 +1043,9 @@
+ 
+ 
+ func get_active_contract() -> ContractState:
++	for offer: Dictionary in _sidestreet_briefs.values():
++		var brief: ContractState = offer.state
++		if brief != null and not brief.is_completed(): return brief
+ 	for offer: Dictionary in _publisher_offers.values():
+ 		var state: ContractState = offer.state
+ 		if state!=null and not state.is_completed(): return state
+@@ -1053,6 +1059,8 @@
+ 
+ 
+ func owns_contract_state(state: ContractState) -> bool:
++	for offer: Dictionary in _sidestreet_briefs.values():
++		if offer.state == state and state != null: return true
+ 	for offer: Dictionary in _publisher_offers.values():
+ 		if offer.state==state and state!=null: return true
+ 	if state == null:
+@@ -1063,6 +1071,44 @@
+ 		if entitlement.state == state:
+ 			return true
+ 	return false
++
++
++func get_sidestreet_brief_offer() -> Dictionary:
++	if not _unlocked_publishers.has(PublisherCatalog.SIDESTREET): return {}
++	for offer: Dictionary in _sidestreet_briefs.values():
++		if offer.state == null:
++			return {"offer_id":offer.offer_id,"publisher_id":PublisherCatalog.SIDESTREET,
++				"source_release_id":offer.source_release_id,"required_hands":2,
++				"cash_cents":0,"advance_cents":0,"promotion":0}
++	return {}
++
++
++func accept_sidestreet_brief(offer_id: StringName) -> ContractState:
++	if not can_mutate_checkpoint() or _publishing_cycle or _productive_cycle_in_progress: return null
++	if studio_departure_guard.is_valid() and not studio_departure_guard.call(): return null
++	var offered := get_sidestreet_brief_offer()
++	if offered.is_empty() or offered.offer_id != offer_id or get_active_contract() != null: return null
++	var accepted := ContractState.new(_primitive_contract_eligible_ids(),ContractDefinitions.SIDESTREET_BRIEF,offer_id,offered.source_release_id)
++	if not accepted.freeze_challenge() or not accepted.commit_upfront(): return null
++	_sidestreets_brief_set_state(offer_id,accepted)
++	contracts_changed.emit()
++	return accepted
++
++
++func _sidestreets_brief_set_state(offer_id: StringName, state: ContractState) -> void:
++	var offer: Dictionary = _sidestreet_briefs[offer_id]
++	offer.state = state
++	_sidestreet_briefs[offer_id] = offer
++
++
++func _issue_sidestreet_brief(source_release_id: StringName) -> void:
++	if source_release_id.is_empty() or not _released_games.has(source_release_id): return
++	for offer: Dictionary in _sidestreet_briefs.values():
++		if offer.state == null or not offer.state.is_completed() or offer.source_release_id == source_release_id: return
++	var offer_id := StringName("%s:sidestreet-brief:%s" % [_bank_run_id,source_release_id])
++	if _sidestreet_briefs.has(offer_id): return
++	_sidestreet_briefs[offer_id] = {"offer_id":offer_id,"source_release_id":source_release_id,"state":null}
++	contracts_changed.emit()
+ 
+ 
+ func get_next_sidestreet_offer() -> Dictionary:
+@@ -1144,6 +1190,7 @@
+ 	if state == null:
+ 		return
+ 	_pending_contract_completion = null
++	if state.get_contract_id() == ContractDefinitions.SIDESTREET_BRIEF: return
+ 	if _publisher_offers.has(state.get_offer_id()):
+ 		if state.get_contract_id()!=PublisherTrialTerms.STARWAVE or state.get_result().get_promotion() > 0:
+ 			_promotion_awards[state.get_offer_id()] = state.get_result().get_promotion()
+@@ -1233,6 +1280,8 @@
+ 		if _unlocked_publishers.has(id) or not _meets_publisher_requirement(id):
+ 			continue
+ 		_unlocked_publishers[id] = true
++		if id == PublisherCatalog.SIDESTREET and not _released_games.is_empty():
++			_issue_sidestreet_brief(_released_games.keys()[-1])
+ 		if id in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT,PublisherCatalog.STARWAVE]:
+ 			var offer_id := StringName("%s:%s:first" % [_bank_run_id,id])
+ 			var source: StringName
+@@ -1345,6 +1394,7 @@
+ 	var familiarity_before := _familiarity.duplicate()
+ 	var ownership_before := _owned_features.duplicate()
+ 	var publishers_before := _unlocked_publishers.duplicate()
++	var relationships_before := _publisher_relationships.duplicate(true)
+ 	var completed_contracts_before := get_completed_contract_count()
+ 	var employees_before := _employees.duplicate(true)
+ 	_productive_cycle_in_progress = true
+@@ -1374,6 +1424,7 @@
+ 	if not plan.finance.is_empty():
+ 		spend_cash_cents(plan.finance.bills_paid_cents)
+ 		_studio_finance = plan.finance.ledger
++	_commit_finished_brief_events()
+ 	_refresh_publisher_unlocks()
+ 	_committing_cycle_cash = false
+ 	set_block_signals(was_blocked)
+@@ -1389,6 +1440,8 @@
+ 		features_changed.emit()
+ 	if _unlocked_publishers != publishers_before:
+ 		publishers_changed.emit()
++	if _publisher_relationships != relationships_before:
++		publisher_relationships_changed.emit()
+ 	if get_completed_contract_count() != completed_contracts_before:
+ 		contracts_changed.emit()
+ 	if not _released_games.is_empty():
+@@ -1531,3 +1584,17 @@
+ 	if not _productive_cycle_in_progress or project_id.is_empty() or int(_lean_savings.get(project_id, 0)) != expected_saved or saving < 0 or saving > 10000 - expected_saved: return false
+ 	if saving > 0: _lean_savings[project_id] = expected_saved + saving
+ 	return true
++
++## Private P2 producer, inside the existing productive transaction before signals.
++## Facts are already committed, finance contains the exact completing hand.
++func _commit_finished_brief_events() -> void:
++	assert(_productive_cycle_in_progress and _committing_cycle_cash)
++	for id: StringName in _sidestreet_briefs:
++		var state: ContractState = _sidestreet_briefs[id].state
++		if state == null or not state.is_completed(): continue
++		var request := RelationshipRules.request_for(self,id)
++		assert(not request.is_empty())
++		var resolver := func(source: Dictionary) -> Dictionary: return RelationshipRules.resolve(self,source)
++		var planned := RelationshipLedger.plan(_publisher_relationships,_bank_run_id,request,_completed_run_cycles,resolver)
++		assert(not planned.is_empty())
++		if planned.changed: _publisher_relationships = planned.ledger
+--- base/scripts/simulation/campaign_session.gd
++++ candidate/scripts/simulation/campaign_session.gd
+@@ -134,7 +134,7 @@
+ 		for id in ids:
+ 			var quote := run.get_feature_research_quote(id)
+ 			if not quote.is_empty(): quotes.append(quote)
+-	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"releases":releases,"studio_actions":StudioActions.observation(run),"contract":{} if contract == null else contract.observation(),"development":{} if in_studio or contract != null else development.observation()}
++	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"releases":releases,"studio_actions":StudioActions.observation(run),"publisher_relationships":run.get_publisher_relationships(),"contract":{} if contract == null else contract.observation(),"development":{} if in_studio or contract != null else development.observation()}
+ 
+ func quote_bank(principal_cents: Variant,months: Variant) -> Dictionary:
+ 	return run.get_bank_quote(principal_cents,months) if run != null else {}
+--- base/scripts/simulation/studio_actions.gd
++++ candidate/scripts/simulation/studio_actions.gd
+@@ -21,6 +21,9 @@
+ 			&"sidestreet":
+ 				if payload.size() != 2 or (not payload.get("offer_id") is String and not payload.get("offer_id") is StringName): return reject("SideStreet offer ID required")
+ 				state = run.accept_sidestreet_offer(StringName(payload.offer_id))
++			&"sidestreet_brief":
++				if payload.size() != 2 or (not payload.get("offer_id") is String and not payload.get("offer_id") is StringName): return reject("Brief ID required")
++				state = run.accept_sidestreet_brief(StringName(payload.offer_id))
+ 			&"publisher":
+ 				if payload.size() != 2 or not payload.get("quote") is Dictionary: return reject("Publisher quote required")
+ 				state = run.accept_publisher_contract(payload.quote)
+@@ -34,6 +37,8 @@
+ static func observation(run: RunState) -> Dictionary:
+ 	var money := run.get_studio_action_finance_observation()
+ 	var offers: Array = []
++	var brief := run.get_sidestreet_brief_offer()
++	if not brief.is_empty() and run.get_active_contract()==null: offers.append({"kind":&"sidestreet_brief","offer_id":brief.offer_id,"quote":brief})
+ 	if run.is_primitive_contract_offer_available(): offers.append({"kind":&"ironclad"})
+ 	if run.is_sidestreet_offer_available(): offers.append({"kind":&"sidestreet","offer_id":run.get_next_sidestreet_offer().offer_id})
+ 	for id: StringName in run.get_pending_publisher_offer_ids():

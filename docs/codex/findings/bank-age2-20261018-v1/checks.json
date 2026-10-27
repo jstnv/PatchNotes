@@ -1,0 +1,20 @@
+[
+  {
+    "label": "bank-only-v1",
+    "exit": 0,
+    "stdout": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\bank-age2-20261018-v1\\\\bank_only.gd\"], \"exit\": 0, \"elapsed\": 11.10906889999751, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"BANK_ONLY_GUARD checks=12 failures=0\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "policy-ages",
+    "exit": 0,
+    "stdout": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\bank-age2-20261018-v1\\\\policy_ages.gd\"], \"exit\": 0, \"elapsed\": 1.9372193999879528, \"errors\": [], \"tail\": [\"PASS: Unknown type or missing identity rejects\", \"PASS: Credit boundary multiplication overflow rejects\", \"PASS: Maximum exact-cent bill services without sum overflow\", \"PASS: Income overflow leaves credit and ledger untouched\", \"EXPENSE_POLICY_FIXTURES checks=86 failures=0\", \"Loaded 40 cards.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "save-recovered",
+    "exit": 1,
+    "stdout": "{\"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\bank-age2-20261018-v1\\\\cold_store.gd\", \"--\", \"save\", \"route-v1.json.studio.json\"], \"exit\": 1, \"elapsed\": 3.331416500004707, \"errors\": [\"ERROR: Primitive branches: actual Studio generation published into isolated store\"], \"tail\": [\"ERROR: Primitive branches: actual Studio generation published into isolated store\", \"   at: push_error (core/variant/variant_utility.cpp:1023)\", \"   GDScript backtrace (most recent call first):\", \"       [0] check (res://scripts/debug/verify_primitive_branches.gd:10)\", \"       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/bank-age2-20261018-v1/cold_store.gd:14)\", \"BANK_COLD checks=1 failures=1 mode=save\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  }
+]

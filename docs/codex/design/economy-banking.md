@@ -1,5 +1,7 @@
 # Economy and banking
 
+**2026-10-26 Bank presentation — IMPLEMENTED locally:** keep a short loan/quote summary, next scheduled payment, remaining principal/payoff and **Financial history** on the main Bank page. Move monthly principal/interest installments and qualification calculations behind **Payment breakdown**, with Previous/Next pages and Back to Bank. Use readable loan labels instead of internal IDs. Viewing details is passive and preserves the displayed quote; borrowing, payoff, overdue, rate, eligibility and confirmation rules are unchanged. [Source, native captures and focused checks](../logs/2026-10-26-bank-presentation-v1.md).
+
 Authority: cumulative §§20–25,45,66–69; live Tasks29,30,33. Current source: [RunState](../../../patch-notes/scripts/run_state.gd), [finance ledger](../../../patch-notes/scripts/finance/studio_finance_ledger.gd), [typed expenses](../../../patch-notes/scripts/finance/outstanding_expenses.gd). Status refreshed 2026-10-06.
 
 ## Locked working foundation

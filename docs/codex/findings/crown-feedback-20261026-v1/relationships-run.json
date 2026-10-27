@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\simulators\\crown-feedback-20261026-v1\\project",
+    "--audio-driver",
+    "Dummy",
+    "--headless",
+    "--script",
+    "res://scripts/debug/verify_publisher_relationships.gd"
+  ],
+  "exit": 0,
+  "seconds": 3.86,
+  "errors": [],
+  "tail": [
+    "PASS: RunState observation detached",
+    "PASS: disabled event preserves full runtime and RNG",
+    "PASS: reentrant producer rejects",
+    "PASS: checkpoint mutation fence preserved",
+    "PASS: native full checkpoint roundtrip exact",
+    "PASS: wrong owner rejects without damaging live Studio",
+    "PASS: malformed event payload rejects",
+    "PASS: current revision cannot omit relationship ledger",
+    "PASS: unknown content revision rejects",
+    "PASS: current world includes valid Studio relationship records",
+    "PASS: known old source cannot claim relationship schema",
+    "PASS: current source cannot mix predecessor and current Studio schemas",
+    "P1 checks=43 failures=0",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

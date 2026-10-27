@@ -1,0 +1,70 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "sidestreet_brief_observation_policy_v6.gd",
+    "id": "contracts-publisher-pilot-current-access",
+    "version": "2"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "sports-1104-current-access-design4",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "contracts-brief-sports-1104",
+          "studio_name": "SideStreet Brief Sports",
+          "specialty": "sports",
+          "traits": [],
+          "seed": "1104"
+        }
+      },
+      "max_commands": 130,
+      "target_release_count": 2,
+      "policy": {
+        "config": {
+          "contract_selection": "features_first",
+          "starter_ids": [
+            "sprites",
+            "general_combat",
+            "levels"
+          ],
+          "development_first": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "Brief Screen",
+            "selection": "features_first",
+            "hands": {
+              "design": 4,
+              "alpha": 4,
+              "beta": 4
+            }
+          },
+          "development_later": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "Brief Screen",
+            "selection": "features_first",
+            "hands": {
+              "design": 5,
+              "alpha": 6,
+              "beta": 6
+            }
+          },
+          "side_card_ids": [
+            "power_ups",
+            "split_screen",
+            "text",
+            "sound_pass"
+          ],
+          "side_second_card_ids": [
+            "controller",
+            "menu_system",
+            "multiple_endings",
+            "sound_pass"
+          ]
+        }
+      }
+    }
+  ]
+}

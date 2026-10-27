@@ -1,0 +1,38 @@
+[
+  {
+    "label": "design_command",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 23.27996980000171, \"process_cpu_seconds\": 20.484375, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_design_command.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Historical oracle comparison permits only v8 non-Cult version metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Pinned oracle digests exist\", \"PASS: headless full state/RNG/signal trace matches pre-extraction oracle\", \"Design command trace capture: 45 scenarios (headless)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "alpha_command",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 31.30956850000075, \"process_cpu_seconds\": 27.59375, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_alpha_command.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Historical oracle comparison permits only v8 non-Cult version metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Pinned oracle digests exist\", \"PASS: headless full state/RNG/signal trace matches pre-extraction oracle\", \"Alpha command trace capture: 57 scenarios (headless)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "beta_command",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 48.07786540000234, \"process_cpu_seconds\": 41.78125, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_beta_command.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Historical oracle comparison permits only v8 non-Cult version metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Historical oracle excludes only unowned unused Alpha shop metadata\", \"PASS: Pinned Beta oracle digests exist\", \"PASS: headless complete Beta trace matches original\", \"Beta command trace capture: 84 scenarios (headless)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "production_extraction",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 3.533737799996743, \"process_cpu_seconds\": 2.828125, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_production_extraction.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"PASS: production characterization: 80 cases, input and project unchanged\", \"Loaded 40 cards.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "beta_qa_specialization",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 4.201686199987307, \"process_cpu_seconds\": 3.71875, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_beta_qa_specialization.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"       [0] play_selected_hand (res://scripts/phases/beta_phase.gd:492)\", \"       [1] _verify_atomic_failure (res://scripts/debug/verify_beta_qa_specialization.gd:142)\", \"       [2] _make_beta (res://scripts/debug/verify_beta_qa_specialization.gd:46)\", \"PASS: Forced replacement failure rejects specialized hand\", \"PASS: Failed specialized preflight preserves Bugs, cycle, and selection\", \"Beta QA Specialization verification passed.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "beta_balanced_operations",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 4.369546900008572, \"process_cpu_seconds\": 3.625, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_beta_balanced_operations.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"       [1] _verify_atomicity (res://scripts/debug/verify_beta_balanced_operations.gd:159)\", \"       [2] _make_beta (res://scripts/debug/verify_beta_balanced_operations.gd:50)\", \"PASS: Forced replacement failure rejects a qualifying Balanced hand\", \"PASS: Rejected action never displays a synergy notification\", \"PASS: Rejected Balanced hand preserves all observed state and selection\", \"Beta Balanced Operations verification passed.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  }
+]

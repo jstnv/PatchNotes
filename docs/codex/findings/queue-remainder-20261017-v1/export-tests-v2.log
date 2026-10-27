@@ -1,0 +1,21 @@
+test_config_header_accepted (tools.tests.test_export_validation.ExportValidationTests.test_config_header_accepted) ... ok
+test_empty_config_rejected_despite_valid_md5 (tools.tests.test_export_validation.ExportValidationTests.test_empty_config_rejected_despite_valid_md5) ... ok
+test_private_writable_temp_per_build (tools.tests.test_export_validation.ExportValidationTests.test_private_writable_temp_per_build) ... ok
+PCK PASS 1 entries; all runtime files retained; every payload MD5 verified; excluded material absent
+good 0 []
+test_successful_command (tools.tests.test_export_validation.ExportValidationTests.test_successful_command) ... ok
+test_wrong_config_signature_rejected (tools.tests.test_export_validation.ExportValidationTests.test_wrong_config_signature_rejected) ... ok
+bad 0 ['ERROR: Safe save failed.']
+test_zero_exit_export_error_is_rejected (tools.tests.test_export_validation.ExportValidationTests.test_zero_exit_export_error_is_rejected) ... ok
+test_erroring_producer_cannot_supply_a_save (tools.tests.test_release_gate.ContinuationProfileTests.test_erroring_producer_cannot_supply_a_save) ... ok
+test_failed_producer_cannot_supply_a_save (tools.tests.test_release_gate.ContinuationProfileTests.test_failed_producer_cannot_supply_a_save) ... ok
+test_missing_profile_directory_is_rejected (tools.tests.test_release_gate.ContinuationProfileTests.test_missing_profile_directory_is_rejected) ... ok
+test_missing_provenance_fails_closed (tools.tests.test_release_gate.ContinuationProfileTests.test_missing_provenance_fails_closed) ... ok
+test_only_finite_calendar_fixture_gets_longer_limit (tools.tests.test_release_gate.ContinuationProfileTests.test_only_finite_calendar_fixture_gets_longer_limit) ... ok
+test_outside_profile_cannot_touch_player_saves (tools.tests.test_release_gate.ContinuationProfileTests.test_outside_profile_cannot_touch_player_saves) ... ok
+test_successful_prior_process_reuses_exact_isolated_profile (tools.tests.test_release_gate.ContinuationProfileTests.test_successful_prior_process_reuses_exact_isolated_profile) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.348s
+
+OK

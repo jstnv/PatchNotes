@@ -10,6 +10,8 @@ func _initialize() -> void:
 	music = root.get_node("Soundtrack")
 	await process_frame
 	game._on_studio_created("Pause audibility", &"action", [], game._active_phase)
+	await process_frame
+	await skip_save_invitation()
 	var prefs := DemoSettingsStore.defaults()
 	prefs.Music = 13
 	DemoSettingsStore.apply_audio(prefs)
@@ -31,7 +33,7 @@ func _initialize() -> void:
 		await create_timer(1.0).timeout
 		await key(KEY_ESCAPE)
 		var frozen := game_state()
-		await create_timer(0.7).timeout
+		await create_timer(music.PAUSE_FADE + 0.2).timeout
 		var source_power := 0.0
 		var filtered_power := 0.0
 		var prior_clock: float = music.presentation_seconds()
@@ -59,7 +61,7 @@ func _initialize() -> void:
 		# but no material song attenuation. Dry unity is checked separately above.
 		expect(source_power > 0.001 and gain >= 0.95, "Paused %s retains the dry song level with room reverb: %.2f dB" % [theme,linear_to_db(gain)])
 		await key(KEY_ESCAPE)
-		await create_timer(0.5).timeout
+		await create_timer(music.PAUSE_FADE + 0.2).timeout
 		expect(not paused and music.pause_weight == 0.0, "Resume clears pause treatment")
 	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT"),FileAccess.WRITE).store_string(JSON.stringify({"backend":AudioServer.get_driver_name(),"rows":rows,"levels":levels,"checks":checks,"failures":failures},"\t"))
 	print("PAUSE_AUDIBILITY checks=%d failures=%d" % [checks,failures])

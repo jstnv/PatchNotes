@@ -1,0 +1,278 @@
+--- base/scripts/debug/verify_founder_victory.gd
++++ candidate/scripts/debug/verify_founder_victory.gd
+@@ -0,0 +1,55 @@
++extends SceneTree
++
++const Victory := preload("res://scripts/legacy/victory_ledger.gd")
++const Legacy := preload("res://scripts/legacy/legacy_world.gd")
++const Founder := preload("res://scripts/legacy/founder_profile.gd")
++const Ownership := preload("res://scripts/legacy/ownership_book.gd")
++
++var checks := 0
++var failures := 0
++
++func check(ok: bool, label: String) -> void:
++	checks+=1
++	if not ok: failures+=1; push_error("FAIL: "+label)
++
++func _initialize() -> void:
++	var founder := Founder.create("tester","root",0)
++	var ledger := Victory.create(founder,0)
++	check(Victory.valid(ledger,founder,[],0),"Empty victory ledger is valid and has no free claim")
++	var books := {"root":Ownership.create("root",{"founder:tester":1000000})}
++	for number in range(1,11):
++		var id := "sub%d"%number
++		var parent := "sub9" if number==10 else "root"
++		books[id]=Ownership.create(id,{"studio:"+parent:1000000})
++	books["tie"]=Ownership.create("tie",{"studio:root":500000,"outside:pool":500000})
++	check(Ownership.valid_world(books),"Acyclic twelve-Studio corporate fixture validates")
++	var expected := ["sub1","sub10","sub2","sub3","sub4","sub5","sub6","sub7","sub8","sub9"]
++	check(Victory.controlled_subsidiaries(books,"tester")==expected,"Ten distinct majority subsidiaries include an indirect child but exclude a 50 percent tie")
++	var partial := books.duplicate(true)
++	partial.erase("sub10")
++	partial["sub9"].transaction_ids.append("tx-9")
++	var first_event := {"id":"tx-9","cycle":0,"target":"sub9","cash_legs":[]}
++	var first := Victory.after_ownership_commit(ledger,founder,[first_event],partial,0,"tx-9")
++	check(not first.is_empty() and not first.awarded and first.ledger.claims.is_empty(),"Nine subsidiaries do not claim")
++	check(Victory.after_ownership_commit(ledger,founder,[first_event],books,0,"tx-10").is_empty(),"Missing committed transaction cannot claim")
++	books["sub10"].transaction_ids.append("tx-10")
++	var second_event := {"id":"tx-10","cycle":0,"target":"sub10","cash_legs":[]}
++	var events := [first_event,second_event]
++	check(Victory.after_ownership_commit(first.ledger,first.founder,events,books,0,"tx-9").is_empty(),"An older event cannot be replayed as the current commit")
++	var awarded := Victory.after_ownership_commit(first.ledger,first.founder,events,books,0,"tx-10")
++	check(not awarded.is_empty() and awarded.awarded and awarded.founder.milestone_ids==[Victory.SUBSIDIARY_CLAIM],"Tenth committed acquisition records one founder victory")
++	if awarded.is_empty(): quit(1); return
++	check(Victory.valid(awarded.ledger,awarded.founder,events,0),"Claim validates against transaction and frozen control graph")
++	var again := Victory.after_ownership_commit(awarded.ledger,awarded.founder,events,books,0,"tx-10")
++	check(not again.is_empty() and not again.awarded and again.ledger==awarded.ledger,"Repeated evaluation leaves the achievement once-only")
++	var corrupt: Dictionary = awarded.ledger.duplicate(true)
++	corrupt.claims[0].studio_ids.pop_back()
++	check(not Victory.valid(corrupt,awarded.founder,events,0),"Corrupted subsidiary evidence rejects")
++	corrupt=awarded.ledger.duplicate(true)
++	corrupt.claims[0].books["sub10"].holders={"studio:root":500000,"outside:pool":500000}
++	check(not Victory.valid(corrupt,awarded.founder,events,0),"Tampered majority proof rejects")
++	check(not Victory.valid(awarded.ledger,founder,events,0),"Missing founder milestone rejects")
++	var restored: Dictionary=Legacy._unwire(JSON.parse_string(JSON.stringify(Legacy._wire(awarded.ledger))))
++	check(restored==awarded.ledger and Victory.valid(restored,awarded.founder,events,0),"Exact JSON ledger round trip preserves claim")
++	print("Founder victory ledger: %d checks, %d failures"%[checks,failures])
++	quit(failures)
+--- base/scripts/debug/verify_founder_victory.gd.uid
++++ candidate/scripts/debug/verify_founder_victory.gd.uid
+@@ -0,0 +1 @@
++uid://cvf7e5yby70
+--- base/scripts/debug/verify_founder_victory_cold.gd
++++ candidate/scripts/debug/verify_founder_victory_cold.gd
+@@ -0,0 +1,42 @@
++extends SceneTree
++
++const WorldCodec := preload("res://scripts/market/rival_world_checkpoint.gd")
++const Replay := preload("res://scripts/simulation/development_replay.gd")
++
++var checks := 0
++var failures := 0
++
++func check(ok: bool, label: String) -> void:
++	checks+=1
++	if not ok: failures+=1; push_error("FAIL: "+label)
++
++func _initialize() -> void: _run.call_deferred()
++
++func _run() -> void:
++	var path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
++	var frame: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
++	if not frame is Dictionary or not frame.get("player") is Dictionary or not frame.get("world") is Dictionary:
++		push_error("Missing prior-process world frame"); quit(1); return
++	var catalog: RefCounted=root.get_node("CardDatabase").get_development_catalog()
++	var adapter := StudioCheckpoint.new()
++	var codec := WorldCodec.new()
++	var player: RunState=adapter.hydrate(frame.player)
++	var world: RivalWorld=codec.restore(frame.world,frame.player,player,catalog)
++	check(world!=null and codec.error.is_empty(),"Fresh process restores candidate founder world")
++	if world==null: quit(1); return
++	check(world.legacy.version==2 and world.legacy.victory.claims.is_empty() and Replay.digest(codec.capture(world))==frame.digest,"Cold Continue retains empty versioned victory ledger exactly")
++	var corrupt: Dictionary=frame.world.duplicate(true)
++	corrupt.legacy.victory.original_studio_id="wrong-original"
++	check(codec.restore(corrupt,frame.player,adapter.hydrate(frame.player),catalog)==null,"Forged original Studio rejects on restore")
++	corrupt=frame.world.duplicate(true)
++	corrupt.legacy.victory.claims=[{"id":"victory:subsidiaries"}]
++	check(codec.restore(corrupt,frame.player,adapter.hydrate(frame.player),catalog)==null,"Unproven victory claim rejects on restore")
++	var historical: Dictionary=frame.world.duplicate(true)
++	historical.legacy.version="1"
++	historical.legacy.erase("victory")
++	var old: RivalWorld=codec.restore(historical,frame.player,adapter.hydrate(frame.player),catalog)
++	check(old!=null and old.legacy.version==1 and old.legacy.founder==world.legacy.founder,"Same-source version-one founder data remains readable")
++	historical.legacy.founder.milestone_ids.append("victory:subsidiaries")
++	check(codec.restore(historical,frame.player,adapter.hydrate(frame.player),catalog)==null,"Version-one data cannot carry an unproven victory milestone")
++	print("Founder victory cold restore: %d checks, %d failures"%[checks,failures])
++	quit(failures)
+--- base/scripts/debug/verify_founder_victory_cold.gd.uid
++++ candidate/scripts/debug/verify_founder_victory_cold.gd.uid
+@@ -0,0 +1 @@
++uid://cauydbbc0vski
+--- base/scripts/legacy/legacy_world.gd
++++ candidate/scripts/legacy/legacy_world.gd
+@@ -4,6 +4,7 @@
+ 
+ const Ownership := preload("res://scripts/legacy/ownership_book.gd")
+ const Founder := preload("res://scripts/legacy/founder_profile.gd")
++const Victory := preload("res://scripts/legacy/victory_ledger.gd")
+ const Codec := preload("res://scripts/legacy/legacy_codec.gd")
+ const Session := preload("res://scripts/simulation/campaign_session.gd")
+ 
+@@ -14,14 +15,18 @@
+ 
+ static func initialize(world: RivalWorld, founder: Dictionary, books: Dictionary) -> bool:
+ 	if world == null or world.player == null or world._busy or not world.legacy.is_empty(): return false
+-	var value := {"version":1,"founder":founder.duplicate(true),"books":books.duplicate(true),"offers":{},"events":[],"operator_sequence":0}
++	var value := {"version":2,"founder":founder.duplicate(true),"books":books.duplicate(true),"offers":{},"events":[],"operator_sequence":0,"victory":Victory.create(founder,world.cycle)}
+ 	if not valid(value,world): return false
+ 	world.legacy=value
+ 	return true
+ 
+ static func valid(value: Dictionary, world: RivalWorld, planned_ledgers: Dictionary = {}) -> bool:
+-	if value.size()!=6 or value.get("version")!=1 or not value.get("founder") is Dictionary or not value.get("books") is Dictionary or not value.get("offers") is Dictionary or not value.get("events") is Array or typeof(value.get("operator_sequence"))!=TYPE_INT or value.operator_sequence<0: return false
++	if value.get("version") not in [1,2] or value.size()!=(7 if value.version==2 else 6) or not value.get("founder") is Dictionary or not value.get("books") is Dictionary or not value.get("offers") is Dictionary or not value.get("events") is Array or typeof(value.get("operator_sequence"))!=TYPE_INT or value.operator_sequence<0: return false
+ 	if not Founder.valid(value.founder) or not Ownership.valid_world(value.books): return false
++	if value.version==1:
++		for milestone: String in value.founder.milestone_ids:
++			if milestone.begins_with("victory:"): return false
++	if value.version==2 and (not value.get("victory") is Dictionary or not Victory.valid(value.victory,value.founder,value.events,world.cycle)): return false
+ 	var all := runs(world)
+ 	if value.books.size()!=all.size() or value.founder.active_studio_id!=str(world.player._bank_run_id): return false
+ 	for id in all:
+@@ -140,6 +145,13 @@
+ 	next.books=plan.books
+ 	next.offers.erase(offer_id)
+ 	next.events.append({"id":offer_id,"cycle":world.cycle,"target":request.studio_id,"cash_legs":plan.cash_legs})
++	if next.version==1:
++		next.version=2
++		next.victory=Victory.create(next.founder,world.cycle)
++	var result := Victory.after_ownership_commit(next.victory,next.founder,next.events,next.books,world.cycle,offer_id)
++	if result.is_empty(): return false
++	next.victory=result.ledger
++	next.founder=result.founder
+ 	if not valid(next,world,ledgers): return false
+ 	world._busy=true
+ 	# Publish every cash leg and the cap table before any observer can run.
+@@ -183,7 +195,7 @@
+ 
+ static func encode(value: Dictionary) -> Dictionary:
+ 	var result := value.duplicate(true)
+-	result.version="1"
++	result.version=str(value.version)
+ 	result.founder=_wire(Codec.encode_founder(value.founder))
+ 	for id in value.books: result.books[id]=_wire(Codec.encode_book(value.books[id]))
+ 	result.operator_sequence=str(value.operator_sequence)
+@@ -191,14 +203,16 @@
+ 	# fields without accepting executable objects or resource paths.
+ 	result.offers=_wire(value.offers)
+ 	result.events=_wire(value.events)
++	if value.version==2: result.victory=_wire(value.victory)
+ 	return result
+ 
+ static func decode(payload: Dictionary) -> Dictionary:
+-	if payload.size()!=6 or payload.get("version")!="1" or not payload.get("founder") is Dictionary or not payload.get("books") is Dictionary: return {}
++	if payload.get("version") not in ["1","2"] or payload.size()!=(7 if payload.version=="2" else 6) or not payload.get("founder") is Dictionary or not payload.get("books") is Dictionary: return {}
+ 	if not _wire_valid(payload.get("offers")) or not _wire_valid(payload.get("events")): return {}
+ 	if not _wire_valid(payload.founder) or not _wire_valid(payload.books): return {}
++	if payload.version=="2" and (not payload.get("victory") is Dictionary or not _wire_valid(payload.victory)): return {}
+ 	var result := payload.duplicate(true)
+-	result.version=1
++	result.version=int(payload.version)
+ 	result.founder=Codec.decode_founder(_unwire(payload.founder))
+ 	if result.founder.is_empty(): return {}
+ 	for id in payload.books:
+@@ -208,6 +222,7 @@
+ 	result.operator_sequence=Codec._integer(payload.get("operator_sequence"))
+ 	result.offers=_unwire(payload.get("offers"))
+ 	result.events=_unwire(payload.get("events"))
++	if result.version==2: result.victory=_unwire(payload.victory)
+ 	return result
+ 
+ static func _wire_valid(value: Variant) -> bool:
+--- base/scripts/legacy/victory_ledger.gd
++++ candidate/scripts/legacy/victory_ledger.gd
+@@ -0,0 +1,79 @@
++## Versioned founder victory claims. Only the subsidiary route has an evaluator
++## in this candidate; other routes cannot be claimed without committed facts.
++extends RefCounted
++
++const Ownership := preload("res://scripts/legacy/ownership_book.gd")
++const Founder := preload("res://scripts/legacy/founder_profile.gd")
++const SUBSIDIARY_CLAIM := "victory:subsidiaries"
++const SUBSIDIARY_TARGET := 10
++
++static func create(founder: Dictionary, cycle: int) -> Dictionary:
++	if not Founder.valid(founder) or founder.career_studio_ids.is_empty() or cycle < 0: return {}
++	return {"schema_version":1,"activated_cycle":cycle,
++		"original_studio_id":founder.career_studio_ids[0],"claims":[]}
++
++## Direct founder majorities are corporate roots. Follow only direct corporate
++## majorities from each root, so minority interests and duplicate paths do not count.
++static func controlled_subsidiaries(books: Dictionary, founder_id: String) -> Array:
++	if founder_id.is_empty() or not Ownership.valid_world(books): return []
++	var roots := {}
++	for id in books:
++		if Ownership.controller(books[id]) == "founder:"+founder_id: roots[id]=true
++	var visited := roots.duplicate()
++	var pending: Array = roots.keys()
++	while not pending.is_empty():
++		var parent: String = pending.pop_back()
++		for id in books:
++			if visited.has(id) or Ownership.controller(books[id]) != "studio:"+parent: continue
++			visited[id]=true
++			pending.append(id)
++	var subsidiaries: Array = []
++	for id in visited:
++		if not roots.has(id): subsidiaries.append(id)
++	subsidiaries.sort()
++	return subsidiaries
++
++static func valid(ledger: Dictionary, founder: Dictionary, events: Array, cycle: int) -> bool:
++	if not Founder.valid(founder) or ledger.size()!=4 or ledger.get("schema_version")!=1: return false
++	if typeof(ledger.get("activated_cycle"))!=TYPE_INT or ledger.activated_cycle<0 or ledger.activated_cycle>cycle: return false
++	if typeof(ledger.get("original_studio_id"))!=TYPE_STRING or founder.career_studio_ids.is_empty() or ledger.original_studio_id!=founder.career_studio_ids[0]: return false
++	if not ledger.get("claims") is Array or ledger.claims.size()>1: return false
++	var claim_seen := false
++	for claim: Variant in ledger.claims:
++		if not claim is Dictionary or claim.size()!=5 or claim.get("id")!=SUBSIDIARY_CLAIM or claim_seen: return false
++		if typeof(claim.get("cycle"))!=TYPE_INT or claim.cycle<ledger.activated_cycle or claim.cycle>cycle: return false
++		if typeof(claim.get("event_id"))!=TYPE_STRING or claim.event_id.is_empty() or not claim.get("studio_ids") is Array or not claim.get("books") is Dictionary: return false
++		if not Ownership.valid_world(claim.books): return false
++		var source: Dictionary = {}
++		for event: Variant in events:
++			if event is Dictionary and event.get("id")==claim.event_id: source=event; break
++		if source.is_empty() or source.get("cycle")!=claim.cycle or not claim.books.has(source.get("target")): return false
++		if not claim.books[source.target].transaction_ids.has(claim.event_id): return false
++		var expected := controlled_subsidiaries(claim.books,founder.founder_id)
++		if expected.size()<SUBSIDIARY_TARGET or claim.studio_ids!=expected: return false
++		if not founder.milestone_ids.has(SUBSIDIARY_CLAIM): return false
++		claim_seen=true
++	for milestone: Variant in founder.milestone_ids:
++		if milestone.begins_with("victory:") and (milestone!=SUBSIDIARY_CLAIM or not claim_seen): return false
++	return true
++
++## Invoke only inside an actual ownership commit after its finance and share
++## plan validates. A quote, consent or rejected plan never reaches this call.
++static func after_ownership_commit(ledger: Dictionary, founder: Dictionary, events: Array, books: Dictionary, cycle: int, event_id: String) -> Dictionary:
++	if not valid(ledger,founder,events,cycle) or not Ownership.valid_world(books) or event_id.is_empty(): return {}
++	if events.is_empty() or not events.back() is Dictionary or events.back().get("id")!=event_id: return {}
++	var source: Dictionary = {}
++	for event: Variant in events:
++		if event is Dictionary and event.get("id")==event_id: source=event; break
++	if source.is_empty() or source.get("cycle")!=cycle or not books.has(source.get("target")): return {}
++	if not books[source.target].transaction_ids.has(event_id): return {}
++	var ids := controlled_subsidiaries(books,founder.founder_id)
++	if ledger.claims.size()>0 or ids.size()<SUBSIDIARY_TARGET:
++		return {"ledger":ledger.duplicate(true),"founder":founder.duplicate(true),"awarded":false}
++	var next_ledger := ledger.duplicate(true)
++	var next_founder := Founder.record_milestone(founder,SUBSIDIARY_CLAIM)
++	if next_founder.is_empty(): return {}
++	next_ledger.claims.append({"id":SUBSIDIARY_CLAIM,"cycle":cycle,"event_id":event_id,
++		"studio_ids":ids,"books":books.duplicate(true)})
++	if not valid(next_ledger,next_founder,events,cycle): return {}
++	return {"ledger":next_ledger,"founder":next_founder,"awarded":true}
+--- base/scripts/legacy/victory_ledger.gd.uid
++++ candidate/scripts/legacy/victory_ledger.gd.uid
+@@ -0,0 +1 @@
++uid://8qc8tgau72eb

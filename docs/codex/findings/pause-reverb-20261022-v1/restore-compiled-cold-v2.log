@@ -1,0 +1,24 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+RESTORE_CHECK 1 PASS input has a named actual previous source
+RESTORE_CHECK 2 PASS presentation edit preserves content revision
+RESTORE_CHECK 3 PASS normal Store validates prior source: 
+RESTORE_CHECK 4 PASS stored original pair has no payload changes
+RESTORE_CHECK 5 PASS normal Continue restores original player and active world
+RESTORE_CHECK 6 PASS captured player exact including finance, releases, Fans and RNG
+RESTORE_CHECK 7 PASS captured world exact except executable source marker
+RESTORE_CHECK 8 PASS new capture uses actual current source
+RESTORE_CHECK 9 PASS Continue leaves original generation bytes unchanged
+RESTORE_CHECK 10 PASS Continue publishes no replacement generation
+RESTORE_CHECK 11 PASS unknown world source still rejected
+RESTORE_CHECK 12 PASS unknown-source rejection does not mutate payload
+RESTORE_CHECK 13 PASS original snapshot has actual release facts for corruption check
+RESTORE_CHECK 14 PASS corruption retains valid market shape and recomputed hash
+RESTORE_CHECK 15 PASS valid-hash corrupted market rejected against original owners
+RESTORE_CHECK 16 PASS market-corruption rejection does not mutate payload
+RESTORE_CHECK 17 PASS original acceptance artifact unchanged
+RESTORE_CHECK 18 PASS runtime source remains stable throughout check
+PAUSE_REVERB_RESTORE checks=18 failures=0
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

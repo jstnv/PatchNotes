@@ -1,0 +1,300 @@
+{
+  "checks": 25,
+  "failed": 0,
+  "results": [
+    {
+      "pass": true,
+      "label": "neon-completed: payload integrity"
+    },
+    {
+      "pass": true,
+      "label": "neon-resume-completed: payload integrity"
+    },
+    {
+      "pass": true,
+      "label": "neon-resume-cold-restored: payload integrity"
+    },
+    {
+      "pass": true,
+      "label": "neon: exact checkpoint bytes survive fresh-process Continue"
+    },
+    {
+      "pass": true,
+      "label": "neon: exact cycle/cash"
+    },
+    {
+      "pass": true,
+      "label": "neon: only completing hand pays once"
+    },
+    {
+      "pass": true,
+      "label": "neon: expected keyed Promotion"
+    },
+    {
+      "pass": true,
+      "label": "neon: exhausted IDs unique"
+    },
+    {
+      "pass": true,
+      "label": "neon: exhausted IDs unique"
+    },
+    {
+      "pass": true,
+      "label": "neon: original/replay full payload equal after exhausted-map ordering normalization"
+    },
+    {
+      "pass": true,
+      "label": "starwave-completed: payload integrity"
+    },
+    {
+      "pass": true,
+      "label": "starwave-matrix-completed: payload integrity"
+    },
+    {
+      "pass": true,
+      "label": "starwave-matrix-cold-restored: payload integrity"
+    },
+    {
+      "pass": true,
+      "label": "starwave: exact checkpoint bytes survive fresh-process Continue"
+    },
+    {
+      "pass": true,
+      "label": "starwave: exact cycle/cash"
+    },
+    {
+      "pass": true,
+      "label": "starwave: only completing hand pays once"
+    },
+    {
+      "pass": true,
+      "label": "starwave: expected keyed Promotion"
+    },
+    {
+      "pass": true,
+      "label": "starwave: exhausted IDs unique"
+    },
+    {
+      "pass": true,
+      "label": "starwave: exhausted IDs unique"
+    },
+    {
+      "pass": true,
+      "label": "starwave: exhausted IDs unique"
+    },
+    {
+      "pass": true,
+      "label": "starwave: exhausted IDs unique"
+    },
+    {
+      "pass": true,
+      "label": "starwave: original/replay full payload equal after exhausted-map ordering normalization"
+    },
+    {
+      "pass": true,
+      "label": "Retained Contract/publisher modules match current bytes"
+    },
+    {
+      "pass": true,
+      "label": "Retained export unchanged: Patch Notes Demo.exe"
+    },
+    {
+      "pass": true,
+      "label": "Retained export unchanged: Patch Notes Demo.pck"
+    }
+  ],
+  "replays": {
+    "neon": {
+      "original_sha256": "874ad076fb40fa7fbbccc0e295f519bc681341596521d17cfaa11ac086f4ac85",
+      "completed_sha256": "931fb331876c93317d5356b4752f6fd2e36a91406870dc9ea1b546b95c80226b",
+      "cold_sha256": "931fb331876c93317d5356b4752f6fd2e36a91406870dc9ea1b546b95c80226b",
+      "cycle": 17,
+      "cash_cents": 540244,
+      "receipts": [
+        {
+          "amount_cents": "156000",
+          "cash_after_cents": "540244",
+          "cash_before_cents": "384244",
+          "cash_delta_cents": "156000",
+          "cycle": "17",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "9",
+          "sequence": "37",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:neon_circuit:first"
+        }
+      ],
+      "promotion_awards": [
+        {
+          "key": "f4447cfb81304a74f9d20ec63c2f013e:neon_circuit:first",
+          "value": "20"
+        }
+      ],
+      "payload_differences": [
+        "/run/publisher_offers/0/value/state/exhausted/1/key",
+        "/run/publisher_offers/0/value/state/exhausted/2/key",
+        "/run/publisher_offers/0/value/state/exhausted/3/key",
+        "/run/publisher_offers/0/value/state/exhausted/4/key",
+        "/run/publisher_offers/0/value/state/exhausted/5/key",
+        "/run/publisher_offers/0/value/state/exhausted/6/key",
+        "/run/publisher_offers/0/value/state/exhausted/7/key"
+      ]
+    },
+    "starwave": {
+      "original_sha256": "001a38ec3977c400a223a1d1792a1d91fdb06650bec6217f863f9cab09bdf6bf",
+      "completed_sha256": "6a7f3207f91351c883fef03f7adf716bb28cdfc0a46206770a7e3ff312f889e3",
+      "cold_sha256": "6a7f3207f91351c883fef03f7adf716bb28cdfc0a46206770a7e3ff312f889e3",
+      "cycle": 37,
+      "cash_cents": 1848116,
+      "receipts": [
+        {
+          "amount_cents": "224000",
+          "cash_after_cents": "1848116",
+          "cash_before_cents": "1624116",
+          "cash_delta_cents": "224000",
+          "cycle": "37",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "19",
+          "sequence": "141",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:starwave:first"
+        }
+      ],
+      "promotion_awards": [],
+      "payload_differences": [
+        "/run/publisher_offers/1/value/state/exhausted/0/key",
+        "/run/publisher_offers/1/value/state/exhausted/1/key",
+        "/run/publisher_offers/1/value/state/exhausted/4/key",
+        "/run/publisher_offers/1/value/state/exhausted/5/key",
+        "/run/publisher_offers/1/value/state/exhausted/6/key",
+        "/run/publisher_offers/1/value/state/exhausted/7/key",
+        "/run/publisher_offers/1/value/state/exhausted/8/key",
+        "/run/publisher_offers/1/value/state/exhausted/9/key"
+      ]
+    }
+  },
+  "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+  "branch": "main",
+  "contract_modules": [
+    {
+      "path": "scripts\\contracts\\contract_result.gd",
+      "matches": true,
+      "sha256": "99c8b66275027712db4d96ff6dae7ca38628305213fef07f538f37bfd6c75697"
+    },
+    {
+      "path": "scripts\\contracts\\contract_result.gd.uid",
+      "matches": true,
+      "sha256": "851253759800c1a71e1d5c7bdbdac6bcf68b4e4faf2578b53bbb8cea45a33345"
+    },
+    {
+      "path": "scripts\\contracts\\contract_state.gd",
+      "matches": true,
+      "sha256": "13172af8ec2b527b26c03049ee38dc2aac4c0c1900b2f4652f0ece670adfb5d9"
+    },
+    {
+      "path": "scripts\\contracts\\contract_state.gd.uid",
+      "matches": true,
+      "sha256": "cc52a02052fba47473ee62f225f903571984380aff90800a9f4cc81b6bdc0434"
+    },
+    {
+      "path": "scripts\\contracts\\publisher_trial_terms.gd",
+      "matches": true,
+      "sha256": "c7b0d3cc0c448f73dec7524fccd7b47d246c72ca6fe804581d06cf16e0397920"
+    },
+    {
+      "path": "scripts\\contracts\\publisher_trial_terms.gd.uid",
+      "matches": true,
+      "sha256": "3c8d8df80e4747ac8e60e72ec739436a0c909544e93d8e74165e9d489beb3da6"
+    },
+    {
+      "path": "scripts\\phases\\contract_phase.gd",
+      "matches": true,
+      "sha256": "09fe2ac465c3f35b277037c58f23f7cfd55ebd0213167815a2d43ea293254ed4"
+    },
+    {
+      "path": "scripts\\publishers\\publisher_browser.gd",
+      "matches": true,
+      "sha256": "81b08d5640936944634ba176af64f0e44eb4c0ee95c391b07e22c53b5656305f"
+    },
+    {
+      "path": "scripts\\publishers\\publisher_browser.gd.uid",
+      "matches": true,
+      "sha256": "893ed16cb8dba8cf443d070c19a334f9f297203b7e004392b1b7a09d22c2a900"
+    },
+    {
+      "path": "scripts\\publishers\\publisher_catalog.gd",
+      "matches": true,
+      "sha256": "45bf1aca89ba8ce0dda279508963c6c233715b6a5027abe6b99717e70d7494e5"
+    },
+    {
+      "path": "scripts\\publishers\\publisher_catalog.gd.uid",
+      "matches": true,
+      "sha256": "4ead3f0397fa02a673a2abba3f05e456a654911a948c949ed64a0867e555955e"
+    },
+    {
+      "path": "scripts\\simulation\\contract_session.gd",
+      "matches": true,
+      "sha256": "75e8d628ef1f72ac8d139c136ad18751c93f1c546d04de3d72f6218783f94539"
+    }
+  ],
+  "source_drift_from_retained_export": [
+    {
+      "path": "scripts\\gameplay.gd",
+      "export_source_sha256": "d7e38f0d109c36ba4596669ea7baa63947b0cf6b0e2f2c0bdd99cf15c6f5a4e2",
+      "current_sha256": "468d8a16c8f87e3a6f44ad05406309665840d9dbc3113d66513b38d8bb49d829"
+    },
+    {
+      "path": "scripts\\debug\\verify_bank_integration.gd",
+      "export_source_sha256": "1b72c2ad5aff6e697add582685d3a02b5dc0ff4f4b38125bfa43fdf2f8f9ad64",
+      "current_sha256": "1df96d04db94a18d09d183a7a9f40e0cdd8438d040e7fb5497ad247a48062eff"
+    },
+    {
+      "path": "scripts\\persistence\\checkpoint_coordinator.gd",
+      "export_source_sha256": "6db95918f6f56d9736504194e120f4749764ce45eb02f387a668fd7d59b38ce8",
+      "current_sha256": "0ed77e3b1bee498ee63a70e81bc370036e256cb888e7138ac046ce077dc8d374"
+    },
+    {
+      "path": "scripts\\persistence\\checkpoint_schema.gd",
+      "export_source_sha256": "73f6667444f8c7a1b62477d5207b1e70c5967e92e8b3329e22938f4a3692b8c6",
+      "current_sha256": "64719844be35a32f16afcef2671db7c3d86bab054a42ae10cad84b2ca7230625"
+    },
+    {
+      "path": "scripts\\persistence\\studio_checkpoint.gd",
+      "export_source_sha256": "c7fef1376f04f0fa6fc0225f529acd67fd6f990173bfd518ef86347d068d3c42",
+      "current_sha256": "0e29790dcdaa52266d845f7d40df8297b6ca2b3b0fac810aa30da93494a24dbf"
+    },
+    {
+      "path": "scripts\\simulation\\development_session.gd",
+      "export_source_sha256": "276367c0d7a3c46402e29d86c5bbdf9799d80ce0f3600bcf0387bf240333546c",
+      "current_sha256": "7172b10af3270c70c3b382974633b93297d45ab6ae9cfa40ef6606a10593ab14"
+    },
+    {
+      "path": "scripts\\ui\\studio_finances.gd",
+      "export_source_sha256": "3d8fab6ba714e90ddfea9d1f6e6c14778033ea441a4b96ff0fa3bfc759476ded",
+      "current_sha256": "a7fc89ce21c1c495f84778629a03a9e7352b992d1ea1412cf7b3c309c42f660f"
+    }
+  ],
+  "current_scripts_outside_export_manifest": [
+    {
+      "path": "scripts\\debug\\verify_rival_trial_activation.gd",
+      "sha256": "c4a8bc624a88782ebdc656a524edaba5d35c9401f55bb68612fe79be9ec64b69"
+    },
+    {
+      "path": "scripts\\debug\\verify_rival_world_foundation.gd",
+      "sha256": "7099b44b1ff5e8ab4b4641687cdae4c6e34099d367d0f9e517e6643ca6e7d516"
+    },
+    {
+      "path": "scripts\\market\\rival_trial.gd",
+      "sha256": "f7ca64f80c18b23258840c24b111001056b277088c822791f0ee61392db4ae07"
+    },
+    {
+      "path": "scripts\\market\\rival_world.gd",
+      "sha256": "8eef3d712125b9e2f6d2e7412d3865c721170aa3284988c5eba6fb006a668f73"
+    },
+    {
+      "path": "scripts\\market\\rival_world_checkpoint.gd",
+      "sha256": "530e4811d83d57b798aea4ff6bd27a8e6c7780ff7be6372c453298018f3d733a"
+    }
+  ],
+  "limits": "Retained export evidence. Current integrated Gameplay/checkpoint/AI changes are not accepted by these replays."
+}

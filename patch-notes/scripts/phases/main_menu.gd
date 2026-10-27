@@ -41,6 +41,8 @@ var _back: Button
 var _discard_dialog: ConfirmationDialog
 var _replacement_acknowledged := false
 var _setup_focus: WeakRef
+var _visualizer: Control
+const Visualizer := preload("res://scripts/ui/menu_audio_visualizer.gd")
 
 const FOLDERS := {&"genre": "Genre Specializations", &"traits": "Traits", &"overview": "Overview"}
 
@@ -91,6 +93,9 @@ func _ready() -> void:
 	recovery.visible = checkpoint_info.status not in [&"empty",&"valid"]
 	_actions.CheckpointRecovery = recovery
 	FolderUI.label(_title_screen,"PROTOTYPE",&"MetadataLabel")
+	_visualizer = Visualizer.new()
+	_visualizer.name = "MenuAudioVisualizer"
+	root.add_child(_visualizer)
 	_setup_surface = FolderUI.surface(root)
 	_setup_surface.set_meta("bounded_folder",true)
 	_setup_surface.name = "StudioCreationFolder"
@@ -173,6 +178,16 @@ func _layout_title() -> void:
 	_title_screen.size.x=minf(520,size.x-80)
 	_title_screen.size.y=_title_screen.get_combined_minimum_size().y
 	_title_screen.position=Vector2(48,maxf(12,(size.y-_title_screen.size.y)/2))
+	if is_instance_valid(_visualizer):
+		var left := _title_screen.position.x+_title_screen.size.x+40.0
+		var available := maxf(0.0,size.x-left-48.0)
+		var width := minf(560.0,available)
+		_visualizer.position=Vector2(left+(available-width)/2.0,maxf(48.0,(size.y-340.0)/2.0))
+		_visualizer.size=Vector2(width,minf(340.0,maxf(180.0,size.y-96.0)))
+
+func _process(_delta: float) -> void:
+	if not is_instance_valid(_visualizer) or navigation == null: return
+	_visualizer.set_active(is_visible_in_tree() and _title_screen.is_visible_in_tree() and navigation.is_top(_title_screen) and not navigation.busy and _visualizer.size.x>=120.0 and size.y>=360.0)
 
 func action_button(id: String) -> Button: return _actions.get(id)
 

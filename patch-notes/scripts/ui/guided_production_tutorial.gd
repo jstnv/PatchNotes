@@ -8,7 +8,7 @@ const CARD_SCENE := preload("res://scenes/cards/card_view.tscn")
 const TITLES := ["Core quality and Scope", "Balanced Production", "Specialization", "Build a synergy with a redraw", "Play the redrawn synergy", "Alpha: expand the game", "Beta: Marketing and Awareness", "QA: find Hidden Bugs", "QA: fix Known Bugs"]
 const INSTRUCTIONS := [
 	"Graphics, Sound, Technology and Design are Core quality. Scope measures how much game you have built. Features add their printed Scope; Passes add Core but no Scope. Select all four cards, then Implement.",
-	"A Feature plus four category gains within ±15% of their average triggers Balanced Production. The original total is shared evenly; it does not create extra points. These eight points already divide into two per category. Play all four.",
+	"Balanced Production needs a Feature and positive gains in all four categories: highest minus lowest at most 1 point, or each gain within ±15% of the average. Multiply the Core total by 1.25, round down to whole points, then share evenly. These eight points become ten: 3 Graphics, 3 Sound, 2 Tech, 2 Design. Play all four.",
 	"Match all four PRIMARY Core labels for Specialization. Secondary labels do not decide the match. This Graphics hand gets ×1.5 Core gains, rounded by category; its printed Scope stays the same. Select all four.",
 	"Three extra candidates now make the normal seven-card pool. Keep the three Graphics Passes. Select Sound Pass and press Redraw: this lesson guarantees the fourth Graphics Pass. Normal redraws follow priorities and are not guaranteed.",
 	"The redraw used one redraw and no productive cycle. Select the four Graphics Passes, then Implement. Renewable Passes can return in later hands. A successful hand restores one redraw, up to the shared cap.",
@@ -286,7 +286,7 @@ func play_selected() -> void:
 		var resolved: Dictionary = model.play(slots)
 		if not resolved.ok: return
 		if resolved.balanced_production:
-			motion.note_specialization(func(): synergy.show_message("Balanced Production!","Original hand total shared evenly"),true)
+			motion.note_specialization(func(): synergy.show_message("Balanced Production!","1.25× Core total shared evenly"),true)
 		elif not resolved.specialization_stat.is_empty():
 			motion.note_specialization(func(): synergy.show_message(String(resolved.specialization_stat).capitalize()+" Specialization!","Current production/QA bonus"))
 		_deal_views()
@@ -306,9 +306,10 @@ func _snapshot() -> Dictionary:
 	values["_bug_total"] = model.project.get_hidden_bugs()+model.project.get_known_bugs()+model.project.get_fixed_bugs()
 	return values
 
-func _present_scores(values: Dictionary, _deltas: Dictionary) -> void:
+func _present_scores(values: Dictionary, deltas: Dictionary) -> void:
 	_shown_scores = values.duplicate()
 	_update_stats()
+	stats.punch(deltas)
 
 func _restore_scores() -> void:
 	_shown_scores.clear()

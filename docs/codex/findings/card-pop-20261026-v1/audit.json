@@ -1,0 +1,216 @@
+{
+  "date": "2026-10-26",
+  "branch": "main",
+  "head": "087df09d653858b72c6e2dc344352237433dd3ac",
+  "source_sha256": {
+    "patch-notes/scripts/ui/hand_presentation.gd": "f1c49109557aa0c116b7f06b9cb9106667082c463e46810fab444274bcede6ce",
+    "patch-notes/scripts/ui/card_play_burst.gd": "4abfeb06d8fc53c6eb95a1bcd9663ed6d41dd30d5ec3824ddd75dab72c5b57df",
+    "patch-notes/scripts/market/rival_world_checkpoint.gd": "595689ba1f6b0362b30438d69fb1319185ca33fdbdc549e13fc0df4b27e673b9",
+    "patch-notes/scripts/debug/verify_card_pop.gd": "8116072d5093cc3bf53ead760287cc70c2c941b45d5790887b2c8429a0f7f496",
+    "docs/codex/logs/2026-10-26-card-pop-v1.md": "380c638ee8bcc4a35d96fd434f3f25bc1b4d6d367a97b6ff9d3cb209cc79d145"
+  },
+  "existing_runtime_edits": [
+    "scripts/market/rival_world_checkpoint.gd",
+    "scripts/ui/hand_presentation.gd"
+  ],
+  "added_runtime_scripts": [
+    "scripts/ui/card_play_burst.gd"
+  ],
+  "receipts": {
+    "baseline": {
+      "sha256": "5ebd2d07ae132becf9a57c600cc6cc3b5fc98a887f42e1738e9be05d70a81e32",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-transition-20261026-v1/restore.gd",
+        "--",
+        "--capture"
+      ]
+    },
+    "pop-red": {
+      "sha256": "643d28a9fd0f7a17e7ff90f57736a3581bd0ed3275e3f4ed9b3259c7f935cfe2",
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: Music-sampled card spark effect exists",
+        "ERROR: FAIL: Scoring cards have a charge and scale-pop bounce"
+      ],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_card_pop.gd"
+      ]
+    },
+    "pop-green": {
+      "sha256": "35e869f1923a8dba44caf24324fa112226dc47e6e754026e80d836faf1785660",
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: Expired sparks are released on the shared clock",
+        "ERROR: FAIL: Expired sparks are released on the shared clock",
+        "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+      ],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_card_pop.gd"
+      ]
+    },
+    "pop-green-v2": {
+      "sha256": "549fc213234e286db34fc80f007f8d82222d96476bc03c0402cd609cc0701c0a",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_card_pop.gd"
+      ]
+    },
+    "pop-final": {
+      "sha256": "9144d7c44e2205476a9ec4cfc260a6a6144b34bc876dccfd132f3a5513ba1408",
+      "exit": 0,
+      "errors": [
+        "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+      ],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_card_pop.gd"
+      ]
+    },
+    "pop-drained": {
+      "sha256": "a5373f86a76bc514b2fe06953def28a39175fd4ac7ca7aa476e5c8f994f3f1e7",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_card_pop.gd"
+      ]
+    },
+    "music-sync": {
+      "sha256": "47718d738ada250724533ef948b4fb55143a46ec44024e6f1b97b08365b7e44d",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_soundtrack_sync.gd"
+      ]
+    },
+    "native": {
+      "sha256": "af1e4fbaf78f46dd419aeb05a1526e0ad6bc4cc198b3fa702dff04bdaf90a0ca",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/card-pop-20261026-v1/native.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ]
+    },
+    "tutorial": {
+      "sha256": "04b00342775b3f3ef03897168d2b39c720857235369b4c91cf2e6276a75ada33",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_guided_tutorial_ui.gd"
+      ]
+    },
+    "cold-final": {
+      "sha256": "cc0ecc5d3a999108da3ba0c0682325c152e98d817af37e1e79208b7f74674122",
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/pause-transition-20261026-v1/restore.gd"
+      ]
+    },
+    "search-first": {
+      "sha256": "00d7aecf210462cc76b8a850d68074d462b5470b3e45233b32919e554fcfde65",
+      "exit": 0,
+      "errors": [
+        "ERROR: 1 resources still in use at exit (run with --verbose for details)."
+      ],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_search_first.gd"
+      ]
+    }
+  },
+  "native_capture_sha256": {
+    "native\\1152-charge.png": "c73baf8c56757b09e8ab1882c1c8bd485454f70e4b9dc83d05e61193e598cc4c",
+    "native\\1152-pop.png": "141ded85c4ca5483b0779333bd34187d17bef876b19215b19f56dd6458a1d1a1",
+    "native\\1152-sparks.png": "9abe8bfe83faee6f48bf97bfd9feafcc7190714b6a679ad7baface5766efbce7",
+    "native\\1280-charge.png": "de58b1e7996fc704746ef1588037cb28c6d23090b34ccf0d42b734d7af7035dc",
+    "native\\1280-pop.png": "b42674086f29f44f34b988c8dd3cf28108c85862962ca15f23bf9dbab0e0a52c",
+    "native\\1280-sparks.png": "2b978426afcc1cc2eb84e0bca172b2c8f6dbf49c7f223203a54d7de1b1a656ee"
+  },
+  "before_pair_sha256": "3784898b77a216198fbae018e217a656026964b9d9cf0351d125825d5d482641",
+  "player_build_rebuilt": false,
+  "committed": false,
+  "pushed": false
+}

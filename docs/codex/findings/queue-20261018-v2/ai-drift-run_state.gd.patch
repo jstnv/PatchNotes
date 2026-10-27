@@ -1,0 +1,28 @@
+--- candidate-base/scripts/run_state.gd
++++ current/scripts/run_state.gd
+@@ -49,6 +49,7 @@
+ var _seen_tutorial_topics: Dictionary = {}
+ var _studio_name := ""
+ var _studio_specialty: StringName = &""
++var _founding_roster_version := 1 # Missing historical metadata means the original grant.
+ var _studio_traits: Dictionary = {}
+ var _lean_savings: Dictionary = {}
+ var _first_studio_economy := false
+@@ -160,6 +161,7 @@
+ 	_first_studio_economy = true
+ 	_studio_name = cleaned
+ 	_studio_specialty = specialty
++	_founding_roster_version = StudioSpecialties.ROSTER_VERSION
+ 	_studio_finance = finance
+ 	_bank_run_id = proposed_run_id
+ 	_employees = EmployeeRoster.create(_bank_run_id)
+@@ -339,6 +341,9 @@
+ func get_studio_specialty() -> StringName:
+ 	return _studio_specialty
+ 
++func get_founding_roster_version() -> int:
++	return _founding_roster_version
++
+ 
+ func uses_first_studio_economy() -> bool:
+ 	return _first_studio_economy

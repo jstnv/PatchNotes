@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_balanced_boost_parity.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 5.063,
+  "errors": [],
+  "tail": [
+    "PASS: Committed exact boosted category",
+    "PASS: Committed exact boosted category",
+    "PASS: Committed exact boosted category",
+    "PASS: Committed exact boosted category",
+    "PASS: One cycle and printed Scope",
+    "PASS: One authoritative production notification",
+    "PASS: Exact live/headless state, refill RNG and ordered signals: Alpha [17, 20, 20, 23]",
+    "BALANCED_BOOST_PARITY comparisons=6 failures=0",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -1,0 +1,2918 @@
+{
+	"checks": 1100,
+	"commands": 54,
+	"coverage": {
+		"age_month_reuse": 30,
+		"completed_pressured_player": 0,
+		"disjoint": 5,
+		"expired_facts": 36,
+		"genre_only": 0,
+		"own_other_title": 6,
+		"pair": 6,
+		"rejected_atomic": 0,
+		"strong_player_release": 0,
+		"strong_player_to_rival": 0,
+		"theme_only": 0
+	},
+	"cpu_note": "Wall timings only; measure actual process CPU in external runner.",
+	"errors": [],
+	"failure_reason": "",
+	"failures": 0,
+	"final": "0a556b3e44786845515b4c3c135d338e2b110d8aa8313f4a59e7bb8ea9cce495",
+	"harness_sha256": "def17c5507afc870bbbe3aa37fca741d0499c4c093972799d48236f25b752ceb",
+	"mode": "replay",
+	"observations": [
+		{
+			"age_month": 1,
+			"cash_cents": 426839,
+			"cycle": 8,
+			"earned_units": 87,
+			"entitlement_cents": 60839,
+			"factor": {
+				"cycle_start": 8,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 60839
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 441524,
+			"cycle": 8,
+			"earned_units": 108,
+			"entitlement_cents": 75524,
+			"factor": {
+				"cycle_start": 8,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 75524
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 366314,
+			"cycle": 8,
+			"earned_units": 122,
+			"entitlement_cents": 85314,
+			"factor": {
+				"cycle_start": 8,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 85314
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 394839,
+			"cycle": 9,
+			"earned_units": 174,
+			"entitlement_cents": 121678,
+			"factor": {
+				"cycle_start": 8,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 60839
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 403524,
+			"cycle": 9,
+			"earned_units": 218,
+			"entitlement_cents": 152447,
+			"factor": {
+				"cycle_start": 8,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 75524
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 333314,
+			"cycle": 9,
+			"earned_units": 244,
+			"entitlement_cents": 170629,
+			"factor": {
+				"cycle_start": 8,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 85314
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 392762,
+			"cycle": 10,
+			"earned_units": 197,
+			"entitlement_cents": 137762,
+			"factor": {
+				"cycle_start": 10,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-10-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 137762
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 420426,
+			"cycle": 10,
+			"earned_units": 248,
+			"entitlement_cents": 173426,
+			"factor": {
+				"cycle_start": 10,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-10-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 173426
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 367706,
+			"cycle": 10,
+			"earned_units": 277,
+			"entitlement_cents": 193706,
+			"factor": {
+				"cycle_start": 10,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-10-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 193706
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 361762,
+			"cycle": 11,
+			"earned_units": 221,
+			"entitlement_cents": 154545,
+			"factor": {
+				"cycle_start": 10,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-10-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 137762
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 392426,
+			"cycle": 11,
+			"earned_units": 278,
+			"entitlement_cents": 194405,
+			"factor": {
+				"cycle_start": 10,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-10-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 173426
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 336706,
+			"cycle": 11,
+			"earned_units": 310,
+			"entitlement_cents": 216783,
+			"factor": {
+				"cycle_start": 10,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-10-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 193706
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 326139,
+			"cycle": 12,
+			"earned_units": 229,
+			"entitlement_cents": 160139,
+			"factor": {
+				"cycle_start": 12,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-12-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 160139
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 340097,
+			"cycle": 12,
+			"earned_units": 289,
+			"entitlement_cents": 202097,
+			"factor": {
+				"cycle_start": 12,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-12-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 202097
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 295873,
+			"cycle": 12,
+			"earned_units": 323,
+			"entitlement_cents": 225873,
+			"factor": {
+				"cycle_start": 12,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-12-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 225873
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 326139,
+			"cycle": 13,
+			"earned_units": 237,
+			"entitlement_cents": 165734,
+			"factor": {
+				"cycle_start": 12,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-12-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 160139
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 340097,
+			"cycle": 13,
+			"earned_units": 301,
+			"entitlement_cents": 210489,
+			"factor": {
+				"cycle_start": 12,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-12-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 202097
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 295873,
+			"cycle": 13,
+			"earned_units": 336,
+			"entitlement_cents": 234964,
+			"factor": {
+				"cycle_start": 12,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-12-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 225873
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 283132,
+			"cycle": 14,
+			"earned_units": 239,
+			"entitlement_cents": 167132,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 167132
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 301286,
+			"cycle": 14,
+			"earned_units": 305,
+			"entitlement_cents": 213286,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 213286
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 357762,
+			"cycle": 14,
+			"earned_units": 340,
+			"entitlement_cents": 237762,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 237762
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 283132,
+			"cycle": 15,
+			"earned_units": 242,
+			"entitlement_cents": 169230,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 167132
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 283132,
+			"cycle": 15,
+			"earned_units": 122,
+			"entitlement_cents": 85314,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 10,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:2",
+			"settled_cents": 0
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 301286,
+			"cycle": 15,
+			"earned_units": 309,
+			"entitlement_cents": 216083,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 213286
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 301286,
+			"cycle": 15,
+			"earned_units": 170,
+			"entitlement_cents": 118881,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 8500,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 14,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:2",
+			"settled_cents": 0
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 357762,
+			"cycle": 15,
+			"earned_units": 345,
+			"entitlement_cents": 241258,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 237762
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 357762,
+			"cycle": 15,
+			"earned_units": 133,
+			"entitlement_cents": 93006,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 8500,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 13,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:2",
+			"settled_cents": 0
+		},
+		{
+			"age_month": 5,
+			"cash_cents": 377558,
+			"cycle": 16,
+			"earned_units": 242,
+			"entitlement_cents": 169230,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 169230
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 377558,
+			"cycle": 16,
+			"earned_units": 245,
+			"entitlement_cents": 171328,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:2",
+			"settled_cents": 171328
+		},
+		{
+			"age_month": 5,
+			"cash_cents": 459943,
+			"cycle": 16,
+			"earned_units": 310,
+			"entitlement_cents": 216783,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 216783
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 459943,
+			"cycle": 16,
+			"earned_units": 342,
+			"entitlement_cents": 239160,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 8500,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:2",
+			"settled_cents": 239160
+		},
+		{
+			"age_month": 5,
+			"cash_cents": 463670,
+			"cycle": 16,
+			"earned_units": 346,
+			"entitlement_cents": 241957,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 241957
+		},
+		{
+			"age_month": 1,
+			"cash_cents": 463670,
+			"cycle": 16,
+			"earned_units": 267,
+			"entitlement_cents": 186713,
+			"factor": {
+				"cycle_start": 14,
+				"factor_bp": 8500,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"theme_only": 1
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:2",
+			"settled_cents": 186713
+		},
+		{
+			"age_month": 5,
+			"cash_cents": 350558,
+			"cycle": 17,
+			"earned_units": 242,
+			"entitlement_cents": 169230,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 169230
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 350558,
+			"cycle": 17,
+			"earned_units": 278,
+			"entitlement_cents": 194405,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:2",
+			"settled_cents": 171328
+		},
+		{
+			"age_month": 5,
+			"cash_cents": 428943,
+			"cycle": 17,
+			"earned_units": 311,
+			"entitlement_cents": 217482,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 216783
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 428943,
+			"cycle": 17,
+			"earned_units": 387,
+			"entitlement_cents": 270629,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:2",
+			"settled_cents": 239160
+		},
+		{
+			"age_month": 5,
+			"cash_cents": 440670,
+			"cycle": 17,
+			"earned_units": 348,
+			"entitlement_cents": 243356,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 241957
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 440670,
+			"cycle": 17,
+			"earned_units": 301,
+			"entitlement_cents": 210489,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:2",
+			"settled_cents": 186713
+		},
+		{
+			"age_month": 6,
+			"cash_cents": 320712,
+			"cycle": 18,
+			"earned_units": 242,
+			"entitlement_cents": 169230,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 169230
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 320712,
+			"cycle": 18,
+			"earned_units": 311,
+			"entitlement_cents": 217482,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:2",
+			"settled_cents": 217482
+		},
+		{
+			"age_month": 6,
+			"cash_cents": 404579,
+			"cycle": 18,
+			"earned_units": 311,
+			"entitlement_cents": 217482,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 217482
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 404579,
+			"cycle": 18,
+			"earned_units": 432,
+			"entitlement_cents": 302097,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:2",
+			"settled_cents": 302097
+		},
+		{
+			"age_month": 6,
+			"cash_cents": 409320,
+			"cycle": 18,
+			"earned_units": 348,
+			"entitlement_cents": 243356,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 243356
+		},
+		{
+			"age_month": 2,
+			"cash_cents": 409320,
+			"cycle": 18,
+			"earned_units": 336,
+			"entitlement_cents": 234964,
+			"factor": {
+				"cycle_start": 16,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-16-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:2",
+			"settled_cents": 234964
+		},
+		{
+			"age_month": 6,
+			"cash_cents": 307712,
+			"cycle": 19,
+			"earned_units": 242,
+			"entitlement_cents": 169230,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 169230
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 307712,
+			"cycle": 19,
+			"earned_units": 323,
+			"entitlement_cents": 225873,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:2",
+			"settled_cents": 217482
+		},
+		{
+			"age_month": 6,
+			"cash_cents": 391579,
+			"cycle": 19,
+			"earned_units": 311,
+			"entitlement_cents": 217482,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 217482
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 391579,
+			"cycle": 19,
+			"earned_units": 450,
+			"entitlement_cents": 314685,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:2",
+			"settled_cents": 302097
+		},
+		{
+			"age_month": 6,
+			"cash_cents": 386320,
+			"cycle": 19,
+			"earned_units": 348,
+			"entitlement_cents": 243356,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 243356
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 386320,
+			"cycle": 19,
+			"earned_units": 349,
+			"entitlement_cents": 244055,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:2",
+			"settled_cents": 234964
+		},
+		{
+			"age_month": 7,
+			"cash_cents": 274495,
+			"cycle": 20,
+			"earned_units": 242,
+			"entitlement_cents": 169230,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 169230
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 274495,
+			"cycle": 20,
+			"earned_units": 335,
+			"entitlement_cents": 234265,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:2",
+			"settled_cents": 234265
+		},
+		{
+			"age_month": 7,
+			"cash_cents": 366754,
+			"cycle": 20,
+			"earned_units": 311,
+			"entitlement_cents": 217482,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 8500,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 1
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 217482
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 366754,
+			"cycle": 20,
+			"earned_units": 468,
+			"entitlement_cents": 327272,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:2",
+			"settled_cents": 327272
+		},
+		{
+			"age_month": 7,
+			"cash_cents": 455201,
+			"cycle": 20,
+			"earned_units": 348,
+			"entitlement_cents": 243356,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 8500,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 1
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 243356
+		},
+		{
+			"age_month": 3,
+			"cash_cents": 455201,
+			"cycle": 20,
+			"earned_units": 363,
+			"entitlement_cents": 253845,
+			"factor": {
+				"cycle_start": 18,
+				"factor_bp": 8200,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-18-fc056197184b2c3970cb222bd292eb15b9485bc360468d699efb4c8d47d8960d",
+				"theme_only": 2
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:2",
+			"settled_cents": 253845
+		},
+		{
+			"age_month": 7,
+			"cash_cents": 374495,
+			"cycle": 21,
+			"earned_units": 242,
+			"entitlement_cents": 169230,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 8800,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:1",
+			"settled_cents": 169230
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 374495,
+			"cycle": 21,
+			"earned_units": 340,
+			"entitlement_cents": 237762,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 10000,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 0
+			},
+			"fans": 6,
+			"owner": "market-acceptance-puzzle-war",
+			"release": "market-acceptance-puzzle-war:project:2",
+			"settled_cents": 234265
+		},
+		{
+			"age_month": 7,
+			"cash_cents": 366754,
+			"cycle": 21,
+			"earned_units": 311,
+			"entitlement_cents": 217482,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 8500,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 1
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:1",
+			"settled_cents": 217482
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 366754,
+			"cycle": 21,
+			"earned_units": 476,
+			"entitlement_cents": 332866,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 1
+			},
+			"fans": 10,
+			"owner": "incumbent-arcade-foundry",
+			"release": "incumbent-arcade-foundry:project:2",
+			"settled_cents": 327272
+		},
+		{
+			"age_month": 7,
+			"cash_cents": 455201,
+			"cycle": 21,
+			"earned_units": 348,
+			"entitlement_cents": 243356,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 8500,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 1,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 1
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:1",
+			"settled_cents": 243356
+		},
+		{
+			"age_month": 4,
+			"cash_cents": 455201,
+			"cycle": 21,
+			"earned_units": 369,
+			"entitlement_cents": 258041,
+			"factor": {
+				"cycle_start": 20,
+				"factor_bp": 9700,
+				"genre_only": 0,
+				"historical": false,
+				"pair": 0,
+				"snapshot_id": "market-v2-20-2f09d640d8a9bf1b06bcd6d0642c7db8a7cb39bdac0eef3e42913d38adfb59c9",
+				"theme_only": 1
+			},
+			"fans": 9,
+			"owner": "incumbent-wayfinder-works",
+			"release": "incumbent-wayfinder-works:project:2",
+			"settled_cents": 253845
+		}
+	],
+	"projects": {
+		"incumbent-arcade-foundry:project:1": {
+			"cycle": 1,
+			"details": {
+				"base": [
+					40,
+					26,
+					40,
+					26
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 0,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-0-neutral",
+				"standards": [
+					40,
+					26,
+					40,
+					26
+				]
+			},
+			"genre": "action",
+			"owner": "incumbent-arcade-foundry",
+			"source": {
+				"cycle_start": 0,
+				"facts": [],
+				"id": "market-0-neutral",
+				"version": 2
+			},
+			"standards": [
+				40,
+				26,
+				40,
+				26
+			]
+		},
+		"incumbent-arcade-foundry:project:2": {
+			"cycle": 8,
+			"details": {
+				"base": [
+					40,
+					26,
+					40,
+					26
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 8,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"standards": [
+					40,
+					26,
+					40,
+					26
+				]
+			},
+			"genre": "action",
+			"owner": "incumbent-arcade-foundry",
+			"source": {
+				"cycle_start": 8,
+				"facts": [
+					{
+						"cores": [
+							13,
+							14,
+							26,
+							18
+						],
+						"cores_available": true,
+						"genre": "action",
+						"release_cycle": 7,
+						"release_id": "incumbent-arcade-foundry:project:1",
+						"review_tenths": 27,
+						"studio_id": "incumbent-arcade-foundry",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							6,
+							17,
+							11,
+							26
+						],
+						"cores_available": true,
+						"genre": "adventure",
+						"release_cycle": 7,
+						"release_id": "incumbent-wayfinder-works:project:1",
+						"review_tenths": 25,
+						"studio_id": "incumbent-wayfinder-works",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							10,
+							6,
+							14,
+							27
+						],
+						"cores_available": true,
+						"genre": "puzzle",
+						"release_cycle": 7,
+						"release_id": "market-acceptance-puzzle-war:project:1",
+						"review_tenths": 16,
+						"studio_id": "market-acceptance-puzzle-war",
+						"theme": "war"
+					}
+				],
+				"id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"version": 2
+			},
+			"standards": [
+				40,
+				26,
+				40,
+				26
+			]
+		},
+		"incumbent-arcade-foundry:project:3": {
+			"cycle": 15,
+			"details": {
+				"base": [
+					40,
+					26,
+					40,
+					26
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 14,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"standards": [
+					40,
+					26,
+					40,
+					26
+				]
+			},
+			"genre": "action",
+			"owner": "incumbent-arcade-foundry",
+			"source": {
+				"cycle_start": 14,
+				"facts": [
+					{
+						"cores": [
+							13,
+							14,
+							26,
+							18
+						],
+						"cores_available": true,
+						"genre": "action",
+						"release_cycle": 7,
+						"release_id": "incumbent-arcade-foundry:project:1",
+						"review_tenths": 27,
+						"studio_id": "incumbent-arcade-foundry",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							6,
+							17,
+							11,
+							26
+						],
+						"cores_available": true,
+						"genre": "adventure",
+						"release_cycle": 7,
+						"release_id": "incumbent-wayfinder-works:project:1",
+						"review_tenths": 25,
+						"studio_id": "incumbent-wayfinder-works",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							10,
+							6,
+							14,
+							27
+						],
+						"cores_available": true,
+						"genre": "puzzle",
+						"release_cycle": 7,
+						"release_id": "market-acceptance-puzzle-war:project:1",
+						"review_tenths": 16,
+						"studio_id": "market-acceptance-puzzle-war",
+						"theme": "war"
+					}
+				],
+				"id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"version": 2
+			},
+			"standards": [
+				40,
+				26,
+				40,
+				26
+			]
+		},
+		"incumbent-wayfinder-works:project:1": {
+			"cycle": 1,
+			"details": {
+				"base": [
+					33,
+					26,
+					20,
+					53
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 0,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-0-neutral",
+				"standards": [
+					33,
+					26,
+					20,
+					53
+				]
+			},
+			"genre": "adventure",
+			"owner": "incumbent-wayfinder-works",
+			"source": {
+				"cycle_start": 0,
+				"facts": [],
+				"id": "market-0-neutral",
+				"version": 2
+			},
+			"standards": [
+				33,
+				26,
+				20,
+				53
+			]
+		},
+		"incumbent-wayfinder-works:project:2": {
+			"cycle": 8,
+			"details": {
+				"base": [
+					33,
+					26,
+					20,
+					53
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 8,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"standards": [
+					33,
+					26,
+					20,
+					53
+				]
+			},
+			"genre": "adventure",
+			"owner": "incumbent-wayfinder-works",
+			"source": {
+				"cycle_start": 8,
+				"facts": [
+					{
+						"cores": [
+							13,
+							14,
+							26,
+							18
+						],
+						"cores_available": true,
+						"genre": "action",
+						"release_cycle": 7,
+						"release_id": "incumbent-arcade-foundry:project:1",
+						"review_tenths": 27,
+						"studio_id": "incumbent-arcade-foundry",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							6,
+							17,
+							11,
+							26
+						],
+						"cores_available": true,
+						"genre": "adventure",
+						"release_cycle": 7,
+						"release_id": "incumbent-wayfinder-works:project:1",
+						"review_tenths": 25,
+						"studio_id": "incumbent-wayfinder-works",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							10,
+							6,
+							14,
+							27
+						],
+						"cores_available": true,
+						"genre": "puzzle",
+						"release_cycle": 7,
+						"release_id": "market-acceptance-puzzle-war:project:1",
+						"review_tenths": 16,
+						"studio_id": "market-acceptance-puzzle-war",
+						"theme": "war"
+					}
+				],
+				"id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"version": 2
+			},
+			"standards": [
+				33,
+				26,
+				20,
+				53
+			]
+		},
+		"incumbent-wayfinder-works:project:3": {
+			"cycle": 15,
+			"details": {
+				"base": [
+					33,
+					26,
+					20,
+					53
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 14,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"standards": [
+					33,
+					26,
+					20,
+					53
+				]
+			},
+			"genre": "adventure",
+			"owner": "incumbent-wayfinder-works",
+			"source": {
+				"cycle_start": 14,
+				"facts": [
+					{
+						"cores": [
+							13,
+							14,
+							26,
+							18
+						],
+						"cores_available": true,
+						"genre": "action",
+						"release_cycle": 7,
+						"release_id": "incumbent-arcade-foundry:project:1",
+						"review_tenths": 27,
+						"studio_id": "incumbent-arcade-foundry",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							6,
+							17,
+							11,
+							26
+						],
+						"cores_available": true,
+						"genre": "adventure",
+						"release_cycle": 7,
+						"release_id": "incumbent-wayfinder-works:project:1",
+						"review_tenths": 25,
+						"studio_id": "incumbent-wayfinder-works",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							10,
+							6,
+							14,
+							27
+						],
+						"cores_available": true,
+						"genre": "puzzle",
+						"release_cycle": 7,
+						"release_id": "market-acceptance-puzzle-war:project:1",
+						"review_tenths": 16,
+						"studio_id": "market-acceptance-puzzle-war",
+						"theme": "war"
+					}
+				],
+				"id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"version": 2
+			},
+			"standards": [
+				33,
+				26,
+				20,
+				53
+			]
+		},
+		"market-acceptance-puzzle-war:project:1": {
+			"cycle": 1,
+			"details": {
+				"base": [
+					20,
+					13,
+					40,
+					59
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 0,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-0-neutral",
+				"standards": [
+					20,
+					13,
+					40,
+					59
+				]
+			},
+			"genre": "puzzle",
+			"owner": "market-acceptance-puzzle-war",
+			"source": {
+				"cycle_start": 0,
+				"facts": [],
+				"id": "market-0-neutral",
+				"version": 2
+			},
+			"standards": [
+				20,
+				13,
+				40,
+				59
+			]
+		},
+		"market-acceptance-puzzle-war:project:2": {
+			"cycle": 8,
+			"details": {
+				"base": [
+					20,
+					13,
+					40,
+					59
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 8,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"standards": [
+					20,
+					13,
+					40,
+					59
+				]
+			},
+			"genre": "puzzle",
+			"owner": "market-acceptance-puzzle-war",
+			"source": {
+				"cycle_start": 8,
+				"facts": [
+					{
+						"cores": [
+							13,
+							14,
+							26,
+							18
+						],
+						"cores_available": true,
+						"genre": "action",
+						"release_cycle": 7,
+						"release_id": "incumbent-arcade-foundry:project:1",
+						"review_tenths": 27,
+						"studio_id": "incumbent-arcade-foundry",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							6,
+							17,
+							11,
+							26
+						],
+						"cores_available": true,
+						"genre": "adventure",
+						"release_cycle": 7,
+						"release_id": "incumbent-wayfinder-works:project:1",
+						"review_tenths": 25,
+						"studio_id": "incumbent-wayfinder-works",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							10,
+							6,
+							14,
+							27
+						],
+						"cores_available": true,
+						"genre": "puzzle",
+						"release_cycle": 7,
+						"release_id": "market-acceptance-puzzle-war:project:1",
+						"review_tenths": 16,
+						"studio_id": "market-acceptance-puzzle-war",
+						"theme": "war"
+					}
+				],
+				"id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"version": 2
+			},
+			"standards": [
+				20,
+				13,
+				40,
+				59
+			]
+		},
+		"market-acceptance-puzzle-war:project:3": {
+			"cycle": 15,
+			"details": {
+				"base": [
+					20,
+					13,
+					40,
+					59
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 14,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"standards": [
+					20,
+					13,
+					40,
+					59
+				]
+			},
+			"genre": "puzzle",
+			"owner": "market-acceptance-puzzle-war",
+			"source": {
+				"cycle_start": 14,
+				"facts": [
+					{
+						"cores": [
+							13,
+							14,
+							26,
+							18
+						],
+						"cores_available": true,
+						"genre": "action",
+						"release_cycle": 7,
+						"release_id": "incumbent-arcade-foundry:project:1",
+						"review_tenths": 27,
+						"studio_id": "incumbent-arcade-foundry",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							6,
+							17,
+							11,
+							26
+						],
+						"cores_available": true,
+						"genre": "adventure",
+						"release_cycle": 7,
+						"release_id": "incumbent-wayfinder-works:project:1",
+						"review_tenths": 25,
+						"studio_id": "incumbent-wayfinder-works",
+						"theme": "fantasy"
+					},
+					{
+						"cores": [
+							10,
+							6,
+							14,
+							27
+						],
+						"cores_available": true,
+						"genre": "puzzle",
+						"release_cycle": 7,
+						"release_id": "market-acceptance-puzzle-war:project:1",
+						"review_tenths": 16,
+						"studio_id": "market-acceptance-puzzle-war",
+						"theme": "war"
+					}
+				],
+				"id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"version": 2
+			},
+			"standards": [
+				20,
+				13,
+				40,
+				59
+			]
+		}
+	},
+	"recipe": {
+		"schema_version": 1,
+		"seed": "4417",
+		"specialty": "puzzle",
+		"studio_id": "market-acceptance-puzzle-war",
+		"studio_name": "Market puzzle-war",
+		"traits": [
+			"cult_following"
+		]
+	},
+	"releases": [
+		{
+			"cash_cents": 416000,
+			"cycle": 7,
+			"fans": 20,
+			"id": "market-acceptance-puzzle-war:project:1",
+			"market_details": {
+				"base": [
+					20,
+					13,
+					40,
+					59
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 0,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-0-neutral",
+				"standards": [
+					20,
+					13,
+					40,
+					59
+				]
+			},
+			"metadata": {
+				"base_name": "Market route 1",
+				"genre": "puzzle",
+				"genre_ratios": [
+					15,
+					10,
+					30,
+					45
+				],
+				"release_cycle": 7,
+				"release_title": "Market route 1",
+				"release_year": 1980,
+				"review": {
+					"awareness": 106,
+					"competitor_id": "established_rival",
+					"competitor_target_cycle": 16,
+					"cores": [
+						10,
+						6,
+						14,
+						27
+					],
+					"development_cycles": 6,
+					"fan_awareness": 5,
+					"final_review": 1.6,
+					"forecast_id": "",
+					"forecast_multiplier": "",
+					"launch_fans": 20,
+					"launch_marketing": 1,
+					"market": {
+						"base": [
+							20,
+							13,
+							40,
+							59
+						],
+						"benchmark_lifts": [
+							0,
+							0,
+							0,
+							0
+						],
+						"cycle_start": 0,
+						"density_lift": 0,
+						"historical": false,
+						"recent_count": 0,
+						"snapshot_id": "market-0-neutral",
+						"standards": [
+							20,
+							13,
+							40,
+							59
+						]
+					},
+					"production_rating": 3.31513959536212,
+					"projected_gross_cents": 173826,
+					"projected_net_cents": 121678,
+					"projected_units": 174,
+					"remaining_bugs": 4,
+					"required_scope": 30,
+					"scope": 22,
+					"scope_completion": 0.733333333333333,
+					"standards": [
+						20,
+						13,
+						40,
+						59
+					]
+				},
+				"theme": "war"
+			},
+			"sales": {
+				"active_awareness_scaled": 0,
+				"base_name": "Market route 1",
+				"campaign_count": 0,
+				"campaign_months": {},
+				"earned_cycles": 0,
+				"earned_units": 0,
+				"entitlement_cents": 0,
+				"exhausted": false,
+				"last_processed_run_cycle": -1,
+				"last_settlement_run_cycle": -1,
+				"later_enabled": true,
+				"launch_awareness": 106,
+				"market_bp": 10000,
+				"market_factors": {},
+				"monthly_units": 0,
+				"organic_awareness_scaled": 0,
+				"release_id": "market-acceptance-puzzle-war:project:1",
+				"release_title": "Market route 1",
+				"release_year": 1980,
+				"review_tenths": 16,
+				"settled_cents": 0,
+				"total_earned_cycles": 0,
+				"total_units": 174
+			},
+			"standards": [
+				20,
+				13,
+				40,
+				59
+			]
+		},
+		{
+			"cash_cents": 283132,
+			"cycle": 14,
+			"fans": 10,
+			"id": "market-acceptance-puzzle-war:project:2",
+			"market_details": {
+				"base": [
+					20,
+					13,
+					40,
+					59
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 8,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"standards": [
+					20,
+					13,
+					40,
+					59
+				]
+			},
+			"metadata": {
+				"base_name": "Market route 2",
+				"genre": "puzzle",
+				"genre_ratios": [
+					15,
+					10,
+					30,
+					45
+				],
+				"release_cycle": 14,
+				"release_title": "Market route 2",
+				"release_year": 1980,
+				"review": {
+					"awareness": 109,
+					"competitor_id": "",
+					"competitor_target_cycle": -1,
+					"cores": [
+						12,
+						6,
+						18,
+						24
+					],
+					"development_cycles": 6,
+					"fan_awareness": 2,
+					"final_review": 2.2,
+					"forecast_id": "",
+					"forecast_multiplier": "",
+					"launch_fans": 10,
+					"launch_marketing": 7,
+					"market": {
+						"base": [
+							20,
+							13,
+							40,
+							59
+						],
+						"benchmark_lifts": [
+							0,
+							0,
+							0,
+							0
+						],
+						"cycle_start": 8,
+						"density_lift": 0,
+						"historical": false,
+						"recent_count": 0,
+						"snapshot_id": "market-v2-8-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+						"standards": [
+							20,
+							13,
+							40,
+							59
+						]
+					},
+					"production_rating": 3.54679946852631,
+					"projected_gross_cents": 278721,
+					"projected_net_cents": 195104,
+					"projected_units": 279,
+					"remaining_bugs": 2,
+					"required_scope": 30,
+					"scope": 22,
+					"scope_completion": 0.733333333333333,
+					"standards": [
+						20,
+						13,
+						40,
+						59
+					]
+				},
+				"theme": "war"
+			},
+			"sales": {
+				"active_awareness_scaled": 0,
+				"base_name": "Market route 2",
+				"campaign_count": 0,
+				"campaign_months": {},
+				"earned_cycles": 0,
+				"earned_units": 0,
+				"entitlement_cents": 0,
+				"exhausted": false,
+				"last_processed_run_cycle": -1,
+				"last_settlement_run_cycle": -1,
+				"later_enabled": true,
+				"launch_awareness": 109,
+				"market_bp": 11500,
+				"market_factors": {},
+				"monthly_units": 0,
+				"organic_awareness_scaled": 0,
+				"release_id": "market-acceptance-puzzle-war:project:2",
+				"release_title": "Market route 2",
+				"release_year": 1980,
+				"review_tenths": 22,
+				"settled_cents": 0,
+				"total_earned_cycles": 0,
+				"total_units": 279
+			},
+			"standards": [
+				20,
+				13,
+				40,
+				59
+			]
+		},
+		{
+			"cash_cents": 374495,
+			"cycle": 21,
+			"fans": 6,
+			"id": "market-acceptance-puzzle-war:project:3",
+			"market_details": {
+				"base": [
+					20,
+					13,
+					40,
+					59
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 14,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+				"standards": [
+					20,
+					13,
+					40,
+					59
+				]
+			},
+			"metadata": {
+				"base_name": "Market route 3",
+				"genre": "puzzle",
+				"genre_ratios": [
+					15,
+					10,
+					30,
+					45
+				],
+				"release_cycle": 21,
+				"release_title": "Market route 3",
+				"release_year": 1980,
+				"review": {
+					"awareness": 101,
+					"competitor_id": "fast_follower",
+					"competitor_target_cycle": 12,
+					"cores": [
+						8,
+						6,
+						15,
+						28
+					],
+					"development_cycles": 6,
+					"fan_awareness": 1,
+					"final_review": 1.5,
+					"forecast_id": "market_slump",
+					"forecast_multiplier": "0.90",
+					"launch_fans": 6,
+					"launch_marketing": 0,
+					"market": {
+						"base": [
+							20,
+							13,
+							40,
+							59
+						],
+						"benchmark_lifts": [
+							0,
+							0,
+							0,
+							0
+						],
+						"cycle_start": 14,
+						"density_lift": 0,
+						"historical": false,
+						"recent_count": 0,
+						"snapshot_id": "market-v2-14-aa90295b80fa2273f79ca9e1f86af038a128f9a1a13078ed923369d0dc616fca",
+						"standards": [
+							20,
+							13,
+							40,
+							59
+						]
+					},
+					"production_rating": 3.25625378632226,
+					"projected_gross_cents": 144855,
+					"projected_net_cents": 101398,
+					"projected_units": 145,
+					"remaining_bugs": 4,
+					"required_scope": 30,
+					"scope": 21,
+					"scope_completion": 0.7,
+					"standards": [
+						20,
+						13,
+						40,
+						59
+					]
+				},
+				"theme": "war"
+			},
+			"sales": {
+				"active_awareness_scaled": 0,
+				"base_name": "Market route 3",
+				"campaign_count": 0,
+				"campaign_months": {},
+				"earned_cycles": 0,
+				"earned_units": 0,
+				"entitlement_cents": 0,
+				"exhausted": false,
+				"last_processed_run_cycle": -1,
+				"last_settlement_run_cycle": -1,
+				"later_enabled": true,
+				"launch_awareness": 101,
+				"market_bp": 9000,
+				"market_factors": {},
+				"monthly_units": 0,
+				"organic_awareness_scaled": 0,
+				"release_id": "market-acceptance-puzzle-war:project:3",
+				"release_title": "Market route 3",
+				"release_year": 1980,
+				"review_tenths": 15,
+				"settled_cents": 0,
+				"total_earned_cycles": 0,
+				"total_units": 145
+			},
+			"standards": [
+				20,
+				13,
+				40,
+				59
+			]
+		}
+	],
+	"route": "puzzle-war",
+	"source_drift": false,
+	"source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+	"starting_source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+	"synthetic_gameplay_state": false,
+	"timings": [
+		{
+			"action_wall_us": 3523,
+			"cycle": 1,
+			"hash_wall_us": 83741,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 1,
+			"static_memory_bytes": 79333112,
+			"type": "begin_development",
+			"world_wall_us": 38784
+		},
+		{
+			"action_wall_us": 602,
+			"cycle": 1,
+			"hash_wall_us": 82317,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 2,
+			"static_memory_bytes": 79350448,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 832,
+			"cycle": 2,
+			"hash_wall_us": 52927,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 3,
+			"static_memory_bytes": 79420164,
+			"type": "development",
+			"world_wall_us": 6667
+		},
+		{
+			"action_wall_us": 1328,
+			"cycle": 3,
+			"hash_wall_us": 59449,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 4,
+			"static_memory_bytes": 79492064,
+			"type": "development",
+			"world_wall_us": 16901
+		},
+		{
+			"action_wall_us": 186,
+			"cycle": 3,
+			"hash_wall_us": 53255,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 5,
+			"static_memory_bytes": 79450040,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 127,
+			"cycle": 3,
+			"hash_wall_us": 55491,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 6,
+			"static_memory_bytes": 79396632,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 430,
+			"cycle": 3,
+			"hash_wall_us": 55040,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 7,
+			"static_memory_bytes": 79396256,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 1025,
+			"cycle": 4,
+			"hash_wall_us": 57712,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 8,
+			"static_memory_bytes": 79470232,
+			"type": "development",
+			"world_wall_us": 16177
+		},
+		{
+			"action_wall_us": 1088,
+			"cycle": 5,
+			"hash_wall_us": 58817,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 9,
+			"static_memory_bytes": 79546804,
+			"type": "development",
+			"world_wall_us": 33130
+		},
+		{
+			"action_wall_us": 1848,
+			"cycle": 5,
+			"hash_wall_us": 61451,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 10,
+			"static_memory_bytes": 79505428,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 1968,
+			"cycle": 5,
+			"hash_wall_us": 61876,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 11,
+			"static_memory_bytes": 79452672,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 135,
+			"cycle": 5,
+			"hash_wall_us": 69857,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 12,
+			"static_memory_bytes": 79453592,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 186,
+			"cycle": 5,
+			"hash_wall_us": 61201,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 13,
+			"static_memory_bytes": 79453124,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 1083,
+			"cycle": 6,
+			"hash_wall_us": 71466,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 14,
+			"static_memory_bytes": 79518284,
+			"type": "development",
+			"world_wall_us": 11248
+		},
+		{
+			"action_wall_us": 1525,
+			"cycle": 7,
+			"hash_wall_us": 37771,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 15,
+			"static_memory_bytes": 79643192,
+			"type": "development",
+			"world_wall_us": 159160
+		},
+		{
+			"action_wall_us": 1597,
+			"cycle": 7,
+			"hash_wall_us": 36436,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 16,
+			"static_memory_bytes": 79622220,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 2782,
+			"cycle": 7,
+			"hash_wall_us": 36821,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 17,
+			"static_memory_bytes": 79559408,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"checkpoint_bytes": 51835,
+			"checkpoint_wall_us": 656794,
+			"cycle": 7,
+			"static_memory_bytes": 80407731
+		},
+		{
+			"action_wall_us": 16167,
+			"cycle": 7,
+			"hash_wall_us": 121886,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 18,
+			"static_memory_bytes": 80055924,
+			"type": "launch",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 55961,
+			"cycle": 8,
+			"hash_wall_us": 321539,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 19,
+			"static_memory_bytes": 80125660,
+			"type": "begin_development",
+			"world_wall_us": 229689
+		},
+		{
+			"action_wall_us": 4595,
+			"cycle": 8,
+			"hash_wall_us": 333097,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 20,
+			"static_memory_bytes": 80134052,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 8374,
+			"cycle": 9,
+			"hash_wall_us": 281788,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 21,
+			"static_memory_bytes": 80196284,
+			"type": "development",
+			"world_wall_us": 40825
+		},
+		{
+			"action_wall_us": 9105,
+			"cycle": 10,
+			"hash_wall_us": 354725,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 22,
+			"static_memory_bytes": 80304404,
+			"type": "development",
+			"world_wall_us": 82894
+		},
+		{
+			"action_wall_us": 556,
+			"cycle": 10,
+			"hash_wall_us": 259426,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 23,
+			"static_memory_bytes": 80272668,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 225,
+			"cycle": 10,
+			"hash_wall_us": 260621,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 24,
+			"static_memory_bytes": 80217048,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 2447,
+			"cycle": 10,
+			"hash_wall_us": 330220,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 25,
+			"static_memory_bytes": 80216600,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 11727,
+			"cycle": 11,
+			"hash_wall_us": 348656,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 26,
+			"static_memory_bytes": 80285932,
+			"type": "development",
+			"world_wall_us": 74671
+		},
+		{
+			"action_wall_us": 12181,
+			"cycle": 12,
+			"hash_wall_us": 336807,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 27,
+			"static_memory_bytes": 80394968,
+			"type": "development",
+			"world_wall_us": 198191
+		},
+		{
+			"action_wall_us": 11645,
+			"cycle": 12,
+			"hash_wall_us": 297660,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 28,
+			"static_memory_bytes": 80364320,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 8253,
+			"cycle": 12,
+			"hash_wall_us": 257853,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 29,
+			"static_memory_bytes": 80313252,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 945,
+			"cycle": 12,
+			"hash_wall_us": 319655,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 30,
+			"static_memory_bytes": 80314024,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 368,
+			"cycle": 12,
+			"hash_wall_us": 269143,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 31,
+			"static_memory_bytes": 80313524,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 10570,
+			"cycle": 13,
+			"hash_wall_us": 300626,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 32,
+			"static_memory_bytes": 80375744,
+			"type": "development",
+			"world_wall_us": 71139
+		},
+		{
+			"action_wall_us": 11351,
+			"cycle": 14,
+			"hash_wall_us": 206924,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 33,
+			"static_memory_bytes": 80532336,
+			"type": "development",
+			"world_wall_us": 511092
+		},
+		{
+			"action_wall_us": 5989,
+			"cycle": 14,
+			"hash_wall_us": 188531,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 34,
+			"static_memory_bytes": 80519440,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 12916,
+			"cycle": 14,
+			"hash_wall_us": 186263,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 35,
+			"static_memory_bytes": 80456616,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"checkpoint_bytes": 102412,
+			"checkpoint_wall_us": 675622,
+			"cycle": 14,
+			"static_memory_bytes": 81432020
+		},
+		{
+			"action_wall_us": 81432,
+			"cycle": 14,
+			"hash_wall_us": 121394,
+			"peak_static_memory_bytes": 101996709,
+			"sequence": 36,
+			"static_memory_bytes": 80879220,
+			"type": "launch",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 29307,
+			"cycle": 15,
+			"hash_wall_us": 511556,
+			"peak_static_memory_bytes": 104728931,
+			"sequence": 37,
+			"static_memory_bytes": 80916984,
+			"type": "begin_development",
+			"world_wall_us": 278834
+		},
+		{
+			"action_wall_us": 1331,
+			"cycle": 15,
+			"hash_wall_us": 367818,
+			"peak_static_memory_bytes": 104739450,
+			"sequence": 38,
+			"static_memory_bytes": 80920336,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 19201,
+			"cycle": 16,
+			"hash_wall_us": 394341,
+			"peak_static_memory_bytes": 106129551,
+			"sequence": 39,
+			"static_memory_bytes": 81035488,
+			"type": "development",
+			"world_wall_us": 96674
+		},
+		{
+			"action_wall_us": 17326,
+			"cycle": 17,
+			"hash_wall_us": 352209,
+			"peak_static_memory_bytes": 106905331,
+			"sequence": 40,
+			"static_memory_bytes": 81137996,
+			"type": "development",
+			"world_wall_us": 143164
+		},
+		{
+			"action_wall_us": 325,
+			"cycle": 17,
+			"hash_wall_us": 328119,
+			"peak_static_memory_bytes": 106905331,
+			"sequence": 41,
+			"static_memory_bytes": 81101748,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 244,
+			"cycle": 17,
+			"hash_wall_us": 345631,
+			"peak_static_memory_bytes": 106905331,
+			"sequence": 42,
+			"static_memory_bytes": 81047072,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 2818,
+			"cycle": 17,
+			"hash_wall_us": 344437,
+			"peak_static_memory_bytes": 106905331,
+			"sequence": 43,
+			"static_memory_bytes": 81046624,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 25142,
+			"cycle": 18,
+			"hash_wall_us": 434776,
+			"peak_static_memory_bytes": 109767748,
+			"sequence": 44,
+			"static_memory_bytes": 81154480,
+			"type": "development",
+			"world_wall_us": 158065
+		},
+		{
+			"action_wall_us": 19023,
+			"cycle": 19,
+			"hash_wall_us": 357701,
+			"peak_static_memory_bytes": 110680442,
+			"sequence": 45,
+			"static_memory_bytes": 81257004,
+			"type": "development",
+			"world_wall_us": 273516
+		},
+		{
+			"action_wall_us": 12259,
+			"cycle": 19,
+			"hash_wall_us": 340475,
+			"peak_static_memory_bytes": 110680442,
+			"sequence": 46,
+			"static_memory_bytes": 81221172,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 10424,
+			"cycle": 19,
+			"hash_wall_us": 364066,
+			"peak_static_memory_bytes": 110680442,
+			"sequence": 47,
+			"static_memory_bytes": 81170856,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 348,
+			"cycle": 19,
+			"hash_wall_us": 387116,
+			"peak_static_memory_bytes": 110680442,
+			"sequence": 48,
+			"static_memory_bytes": 81171628,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 872,
+			"cycle": 19,
+			"hash_wall_us": 471162,
+			"peak_static_memory_bytes": 110680442,
+			"sequence": 49,
+			"static_memory_bytes": 81171128,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 48984,
+			"cycle": 20,
+			"hash_wall_us": 466080,
+			"peak_static_memory_bytes": 111485167,
+			"sequence": 50,
+			"static_memory_bytes": 81254032,
+			"type": "development",
+			"world_wall_us": 159426
+		},
+		{
+			"action_wall_us": 21480,
+			"cycle": 21,
+			"hash_wall_us": 267855,
+			"peak_static_memory_bytes": 111485167,
+			"sequence": 51,
+			"static_memory_bytes": 81406444,
+			"type": "development",
+			"world_wall_us": 593108
+		},
+		{
+			"action_wall_us": 6343,
+			"cycle": 21,
+			"hash_wall_us": 234145,
+			"peak_static_memory_bytes": 111485167,
+			"sequence": 52,
+			"static_memory_bytes": 81388036,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 10779,
+			"cycle": 21,
+			"hash_wall_us": 224009,
+			"peak_static_memory_bytes": 111485167,
+			"sequence": 53,
+			"static_memory_bytes": 81323204,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"checkpoint_bytes": 154399,
+			"checkpoint_wall_us": 753340,
+			"cycle": 21,
+			"static_memory_bytes": 82582471
+		},
+		{
+			"action_wall_us": 70088,
+			"cycle": 21,
+			"hash_wall_us": 204711,
+			"peak_static_memory_bytes": 111485167,
+			"sequence": 54,
+			"static_memory_bytes": 81752060,
+			"type": "launch",
+			"world_wall_us": 0
+		}
+	]
+}

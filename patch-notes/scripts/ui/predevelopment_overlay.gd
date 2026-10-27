@@ -72,7 +72,7 @@ func _ready() -> void:
 	theme_input = _add_options(identity, "themes")
 	theme_input.tooltip_text = "Genre and Theme determine which other releases crowd this game's future sales."
 	_add_label(priorities, "Initial Design priorities", 20)
-	_add_label(priorities, "Priorities weight future draws, not scores.\nAllocate 100 total, 10-50 each in steps of 5.", 14)
+	_add_label(priorities, "Priorities weight future draws, not scores.\nAllocate 100 total, 10-75 each in steps of 5.", 14)
 	priorities.tooltip_text = "Graphics: visuals. Sound: audio. Tech: systems. Design: gameplay. Core scores measure quality; Scope measures how much game you build."
 	var priority_body := HBoxContainer.new()
 	priority_body.add_theme_constant_override("separation", 16)
@@ -91,7 +91,7 @@ func _ready() -> void:
 		priority_labels.append(value)
 		var slider := HSlider.new()
 		slider.min_value = 10
-		slider.max_value = 50
+		slider.max_value = PriorityAllocation.MAX_PRIORITY
 		slider.step = 5
 		slider.value = 25
 		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL

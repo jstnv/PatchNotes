@@ -1,0 +1,85 @@
+360: func _animate_player_lists_in() -> void:
+361: 	Sfx.slide(left_player_region, true)
+362: 	if player_list_tween != null and player_list_tween.is_valid():
+363: 		player_list_tween.kill()
+364: 
+365: 	# Capture the responsive anchor result each time. Only x is animated;
+366: 	# VBoxContainer remains responsible for vertical centering and height.
+367: 	left_player_rest_x = left_player_region.position.x
+368: 	right_player_rest_x = right_player_region.position.x
+369: 
+370: 	left_player_region.position.x = (
+371: 		left_player_rest_x - PLAYER_SLIDE_DISTANCE
+372: 	)
+373: 	right_player_region.position.x = (
+374: 		right_player_rest_x + PLAYER_SLIDE_DISTANCE
+375: 	)
+376: 	left_player_region.modulate.a = 0.0
+377: 	right_player_region.modulate.a = 0.0
+378: 
+379: 	player_list_tween = create_tween()
+380: 	player_list_tween.set_parallel(true)
+381: 
+382: 	player_list_tween.tween_property(
+383: 		left_player_region,
+384: 		"position:x",
+385: 		left_player_rest_x,
+386: 		PLAYER_SLIDE_DURATION
+387: 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+388: 	player_list_tween.tween_property(
+389: 		left_player_region,
+390: 		"modulate:a",
+391: 		1.0,
+392: 		PLAYER_SLIDE_DURATION * 0.65
+393: 	)
+394: 	player_list_tween.tween_property(
+395: 		right_player_region,
+396: 		"position:x",
+397: 		right_player_rest_x,
+398: 		PLAYER_SLIDE_DURATION
+399: 	).set_delay(RIGHT_LIST_DELAY).set_trans(
+400: 		Tween.TRANS_BACK
+401: 	).set_ease(Tween.EASE_OUT)
+402: 	player_list_tween.tween_property(
+403: 		right_player_region,
+404: 		"modulate:a",
+405: 		1.0,
+406: 		PLAYER_SLIDE_DURATION * 0.65
+407: 	).set_delay(RIGHT_LIST_DELAY)
+408: 
+409: 
+410: func _animate_player_lists_out() -> void:
+411: 	Sfx.slide(left_player_region, false)
+412: 	if player_list_tween != null and player_list_tween.is_valid():
+413: 		player_list_tween.kill()
+414: 	player_list_tween = create_tween()
+415: 	player_list_tween.set_parallel(true)
+416: 	player_list_tween.tween_property(left_player_region, "position:x", left_player_rest_x - PLAYER_SLIDE_DISTANCE, PLAYER_SLIDE_DURATION).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+417: 	player_list_tween.tween_property(right_player_region, "position:x", right_player_rest_x + PLAYER_SLIDE_DISTANCE, PLAYER_SLIDE_DURATION).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+418: 	player_list_tween.tween_property(left_player_region, "modulate:a", 0.0, PLAYER_SLIDE_DURATION * 0.75)
+419: 	player_list_tween.tween_property(right_player_region, "modulate:a", 0.0, PLAYER_SLIDE_DURATION * 0.75)
+420: 	player_list_tween.tween_property(cancel_button, "position:y", cancel_button.position.y + 160.0, PLAYER_SLIDE_DURATION).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+421: 	player_list_tween.tween_property(cancel_button, "modulate:a", 0.0, PLAYER_SLIDE_DURATION * 0.75)
+422: 	await player_list_tween.finished
+423: 
+424: 
+425: func _animate_action_buttons_in() -> void:
+426: 	Sfx.slide(assign_button, true)
+427: 	var travel := get_viewport_rect().size.x + 120.0
+428: 	assign_button.position.x = assign_rest_position.x - travel
+429: 	skip_button.position.x = skip_rest_position.x + travel
+430: 	assign_button.modulate.a = 0.25
+431: 	skip_button.modulate.a = 0.25
+432: 	assign_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+433: 	skip_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+434: 	var entrance := create_tween()
+435: 	entrance.set_parallel(true)
+436: 	entrance.tween_property(assign_button, "position", assign_rest_position, 0.42).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+437: 	entrance.tween_property(skip_button, "position", skip_rest_position, 0.42).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+438: 	entrance.tween_property(assign_button, "modulate:a", 1.0, 0.34)
+439: 	entrance.tween_property(skip_button, "modulate:a", 1.0, 0.34)
+440: 	await entrance.finished
+441: 	assign_button.mouse_filter = Control.MOUSE_FILTER_STOP
+442: 	skip_button.mouse_filter = Control.MOUSE_FILTER_STOP
+443: 
+444: 

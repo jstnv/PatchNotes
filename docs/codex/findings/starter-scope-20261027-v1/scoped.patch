@@ -1,0 +1,264 @@
+--- before/scripts/studio_specialties.gd
++++ after/scripts/studio_specialties.gd
+@@ -1,12 +1,25 @@
+ class_name StudioSpecialties
+ extends RefCounted
+ 
+-## Authority §63 (historical v1/v2),2026-10-25 root-first replacements (v3).
++## Historical v1/v2, root-first v3;2026-10-27 twelve-Scope new starts (v4).
+ ## Fixed Primitive membership: future cards and Store ancestors never auto-grant.
+-const ROSTER_VERSION := 3
++const ROSTER_VERSION := 4
++const STARTING_SCOPE := 12
+ const LEVELS_SWAP := [&"strategy", &"simulation", &"sports"]
+ const COMMON_IDS: Array[StringName] = [&"text", &"4_color_palette", &"8_bit_sound", &"keyboard_and_mouse", &"controller", &"controls"]
+ const ROOT_FIRST_COMMON_IDS: Array[StringName] = [&"text", &"4_color_palette", &"sound_effects", &"keyboard_and_mouse", &"controller", &"controls"]
++## Fixed subsets of v3. Keep roots/parents, common six and genre identity;
++## do not prune by RNG or grant future catalog additions automatically.
++const SCOPE_12_EXTRAS := {
++	&"action": ["sprites", "levels", "exploration", "simple_story"],
++	&"adventure": ["levels", "exploration", "simple_story", "dialogue", "character_backstories"],
++	&"role_playing": ["menu_system", "simple_story", "dialogue", "character_backstories", "score_system"],
++	&"strategy": ["levels", "menu_system", "lives_system", "score_system"],
++	&"simulation": ["scrolling", "menu_system", "lives_system", "score_system"],
++	&"puzzle": ["levels", "exploration", "simple_story", "dialogue", "score_system"],
++	&"sports": ["music", "levels", "lives_system", "power_ups"],
++	&"racing": ["sprites", "levels", "scrolling"],
++}
+ const ROOT_FIRST_PATCHES := {
+ 	&"action": {"remove":["multiple_endings","general_combat"],"add":["lives_system","simple_story"]},
+ 	&"adventure": {"remove":["8_bit_sound","local_leaderboards","multiple_endings","general_combat"],"add":["enemies","sound_effects"]},
+@@ -31,7 +44,7 @@
+ 
+ static func preview(specialty: StringName, roster_version: int = ROSTER_VERSION) -> Dictionary:
+ 	var genre := PrimitivePredevelopment.find_entry("genres", specialty)
+-	if roster_version not in [1, 2, 3] or not RULES.has(specialty) or genre.is_empty(): return {}
++	if roster_version not in [1, 2, 3, 4] or not RULES.has(specialty) or genre.is_empty(): return {}
+ 	var rule: Dictionary = RULES[specialty]
+ 	var swap := roster_version >= 2 and specialty in LEVELS_SWAP
+ 	var ids: Array[StringName] = []
+@@ -47,11 +60,17 @@
+ 			ids.append(StringName(card.id))
+ 			names.append(str(card.name))
+ 			scope += int(card.scope)
+-	if roster_version == 3:
++	if roster_version >= 3:
+ 		var patch: Dictionary = ROOT_FIRST_PATCHES[specialty]
+ 		for id in patch.remove: ids.erase(StringName(id))
+ 		for id in patch.add:
+ 			if not ids.has(StringName(id)): ids.append(StringName(id))
++		if roster_version == 4:
++			var allowed: Array[StringName] = ROOT_FIRST_COMMON_IDS.duplicate()
++			for id in SCOPE_12_EXTRAS[specialty]:
++				if not ids.has(StringName(id)): return {}
++				allowed.append(StringName(id))
++			ids = ids.filter(func(id: StringName): return allowed.has(id))
+ 		# Recompute only presentation totals from actual fixed membership.
+ 		names.clear()
+ 		scope=0
+@@ -61,10 +80,14 @@
+ 			if not PRIMITIVE_IDS.has(str(id)) or not definitions.has(id): return {}
+ 			names.append(str(definitions[id].name))
+ 			scope+=int(definitions[id].scope)
+-	for id in ROOT_FIRST_COMMON_IDS if roster_version == 3 else COMMON_IDS:
++	for id in ROOT_FIRST_COMMON_IDS if roster_version >= 3 else COMMON_IDS:
+ 		if not ids.has(StringName(id)): return {}
+ 	if roster_version < 3:
+ 		for id in rule.signature:
+ 			if not ids.has(StringName(id)): return {}
++	if roster_version == 4 and scope != STARTING_SCOPE: return {}
++	var note := "Starts with connected Primitive parent paths. Later Features are optional Store purchases or research."
++	if roster_version == 4: note = "Starts with 12 printed Scope and connected Primitive parent paths."
++	elif roster_version < 3: note = "Starts with Levels instead of Maps. Maps is an optional Store purchase unlocked by Levels." if swap else ""
+ 	return {"id": specialty, "name": genre.name, "ids": ids, "names": names, "scope": scope, "count": ids.size(), "emphasis": rule.emphasis,
+-		"roster_version":roster_version,"note":"Starts with connected Primitive parent paths. Later Features are optional Store purchases or research." if roster_version == 3 else ("Starts with Levels instead of Maps. Maps is an optional Store purchase unlocked by Levels." if swap else "")}
++		"roster_version":roster_version,"note":note}
+--- before/scripts/persistence/studio_checkpoint.gd
++++ after/scripts/persistence/studio_checkpoint.gd
+@@ -230,7 +230,7 @@
+ 	var resolver := func(request: Dictionary) -> Dictionary: return RunState.RelationshipRules.resolve(r,request)
+ 	if RunState.RelationshipLedger.reconstruct(r.publisher_relationships,r.bank_run_id,r.completed_run_cycles,resolver).is_empty(): return "Invalid publisher relationship provenance"
+ 	var roster_version: int = r.get("founding_roster_version",1)
+-	if roster_version not in [1,2,3]: return "Invalid founding roster version"
++	if roster_version not in [1,2,3,4]: return "Invalid founding roster version"
+ 	if r.has("founding_roster_version") and payload.content_revision != revision(): return "Invalid historical founding roster metadata"
+ 	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
+ 	if r.studio_name.is_empty() or r.studio_name != r.studio_name.strip_edges() or r.studio_name.length()>80 or StudioSpecialties.preview(r.studio_specialty).is_empty(): return "Invalid Studio identity"
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -4,6 +4,8 @@
+ extends RefCounted
+ 
+ const Session := preload("res://scripts/simulation/campaign_session.gd")
++## Twelve-Scope grants apply to new Studios only; retain old ownership and RNG.
++const STARTER_SCOPE_PREDECESSORS := ["3eb0f864ee07afc000f7ac087b5b1b7c2396d93e89056b53a84900b9e4954560"]
+ ## Exact pre-optimization editor and shipped v0.03 sources. Rules, persisted
+ ## fields and RNG are unchanged; every ordinary field check still applies.
+ const LATENCY_PREDECESSOR_SOURCES := ["a866e98020c0018f943ce8b98bbbd564b83d4ecd356bc6a4fd5cf66b0c483fa7", "617a97c83aabe2bba6613a8b4e5bddca7f1b9c4a974b8efb06e3595ad7334c94", "ce24d2a07703a664edd86574b2c678666f9307c5160710a62ce55603c7a74692", "a458650917031ee5dddd23c8a5b7c79986254f731f03a0113ddab4377aab0435"]
+@@ -323,7 +325,7 @@
+ 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
+ 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
+ 	var current_source := Replay.source_identity() if captured_source_identity.is_empty() else captured_source_identity
+-	var source_ok: bool = predecessor_source==current_source or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
++	var source_ok: bool = predecessor_source==current_source or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+ 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
+ 	if predecessor_source!=current_source and predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES+USABILITY_PRESENTATION_SOURCES:
+ 		paired_revision=StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_EMPLOYEE_RULES)
+--- before/scripts/debug/verify_studio_specialties.gd
++++ after/scripts/debug/verify_studio_specialties.gd
+@@ -13,7 +13,7 @@
+ 	return [run.get_studio_name(), run.get_studio_specialty(), run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.needs_starter_selection()]
+ 
+ func _run() -> void:
+-	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v3.json"))
++	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v4.json"))
+ 	for genre: String in fixtures:
+ 		var run := RunState.new()
+ 		run.initialize_cash_cents(0)
+@@ -93,7 +93,7 @@
+ 	menu.call("_confirm_studio")
+ 	menu.call("_confirm_studio")
+ 	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
+-	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids().size() == 18, "Menu commits exactly one specialty")
++	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids() == StudioSpecialties.preview(&"action").ids, "Menu commits exactly one specialty")
+ 	before = snapshot(run)
+ 	check(snapshot(run) == before, "Duplicate confirmation does not grant again")
+ 	var studio: StudioPhase = game.get("_active_phase")
+--- before/scripts/debug/verify_root_first_rosters.gd
++++ after/scripts/debug/verify_root_first_rosters.gd
+@@ -8,7 +8,7 @@
+ 	print("PASS: " if ok else "FAIL: ",label)
+ 	if not ok:failures+=1
+ func _run() -> void:
+-	var fixture_path := "res://scripts/debug/fixtures/studio_specialties_v3.json"
++	var fixture_path := "res://scripts/debug/fixtures/studio_specialties_v4.json"
+ 	for arg in OS.get_cmdline_user_args():
+ 		if arg.begins_with("--input="): fixture_path = arg.trim_prefix("--input=")
+ 	var fixtures: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(fixture_path))
+@@ -21,14 +21,25 @@
+ 		var run: RunState=session.run
+ 		var view := StudioSpecialties.preview(StringName(genre))
+ 		var ids: Array=view.ids.map(func(id):return str(id));ids.sort()
+-		expect(view.roster_version==3 and run.get_founding_roster_version()==3,"New starts use explicit v3: "+genre)
+-		expect(ids==fixtures[genre].ids and view.scope==fixtures[genre].scope and view.count==fixtures[genre].count,"Independent exact v3 roster/count/Scope: "+genre)
++		expect(view.roster_version==4 and run.get_founding_roster_version()==4,"New starts use explicit v4: "+genre)
++		expect(ids==fixtures[genre].ids and view.scope==fixtures[genre].scope and view.count==fixtures[genre].count,"Independent exact v4 roster/count/Scope: "+genre)
++		var actual_scope:=0
++		var printed: Array[int]=[0,0,0,0]
++		var core_names: Array=[&"graphics",&"sound",&"technology",&"design"]
++		for id: StringName in run.get_owned_feature_ids():
++			var entry: Dictionary=run._feature_definitions[id]
++			actual_scope+=int(entry.scope)
++			for part in ["primary","secondary"]:
++				var stat:=StringName(entry.get(part+"_stat",""))
++				if stat in core_names:printed[core_names.find(stat)]+=int(entry.get(part+"_value",0))
++		var expected_core: Array=fixtures[genre].core.map(func(value):return int(value))
++		expect(actual_scope==12 and view.scope==actual_scope and printed==expected_core,"Actual granted card values total12 Scope and the independent printed Core fixture: "+genre)
+ 		for id: StringName in run.get_owned_feature_ids():
+ 			expect(graph.parents[id].all(func(parent):return run.owns_feature(parent)),"Every owned starting node has all named parents: "+genre+"/"+str(id))
+ 			expect(run.get_feature_familiarity(id)==0,"Starting grants never credit plays: "+genre+"/"+str(id))
+ 		var saved := schema.capture(run)
+ 		var restored := schema.hydrate(saved)
+-		expect(not saved.is_empty() and saved.run.founding_roster_version=="3" and restored!=null and schema.capture(restored)==saved,"V3 exact saved-state/RNG round trip: "+genre)
++		expect(not saved.is_empty() and saved.run.founding_roster_version=="4" and restored!=null and schema.capture(restored)==saved,"V4 exact saved-state/RNG round trip: "+genre)
+ 		var prior := saved.duplicate(true)
+ 		StudioSpecialties.preview(StringName(genre))
+ 		expect(not run.set_studio_name("Duplicate",&"action") and schema.capture(run)==prior,"No passive or repeat grant: "+genre)
+@@ -40,5 +51,12 @@
+ 			var cash:=run.get_cash_cents();var cycle:=run.get_completed_run_cycles()
+ 			var quote:=run.get_primitive_reserve_offer(&"8_bit_sound")
+ 			expect(run.purchase_starter_feature(&"8_bit_sound") and run.get_cash_cents()==cash-int(quote.price_cents) and run.get_completed_run_cycles()==cycle,"Existing child purchase price/timing remain intact: "+genre)
++	var incumbent_player=Factory.create_fresh_session({"schema_version":1,"studio_id":"scope-incumbent-check","studio_name":"Scope","specialty":"action","traits":[],"seed":"4417"},catalog)
++	var world=load("res://scripts/market/rival_trial.gd").create_world(incumbent_player.run,catalog)
++	expect(world!=null,"New reduced founding pools still initialize the incumbent world")
++	if world!=null:
++		for id in world.studios:
++			var run: RunState=world.studios[id].run
++			expect(run.get_owned_feature_ids().all(func(feature):return graph.parents[feature].all(func(parent):return run.owns_feature(parent))),"Existing separate incumbent bonuses keep every named parent: "+str(id))
+ 	print("ROOT_FIRST_ROSTERS checks=%d failures=%d"%[checks,failures])
+ 	quit(failures)
+--- before/scripts/debug/verify_studio_roster_versions.gd
++++ after/scripts/debug/verify_studio_roster_versions.gd
+@@ -26,6 +26,7 @@
+ 	var codec := StudioCheckpoint.new()
+ 	var old: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v1.json"))
+ 	var current: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v2.json"))
++	var roots: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v3.json"))
+ 	var exceptions := {}
+ 	for genre: String in old:
+ 		var v1 := StudioSpecialties.preview(StringName(genre),1)
+@@ -33,6 +34,9 @@
+ 		var ids1: Array = v1.ids.map(func(id): return str(id)); ids1.sort()
+ 		var ids2: Array = v2.ids.map(func(id): return str(id)); ids2.sort()
+ 		check(ids1 == old[genre].ids and ids2 == current[genre].ids,"independent exact roster fixtures " + genre)
++		var v3 := StudioSpecialties.preview(StringName(genre),3)
++		var ids3: Array=v3.ids.map(func(id):return str(id));ids3.sort()
++		check(ids3==roots[genre].ids and v3.scope==roots[genre].scope and v3.count==roots[genre].count,"historical root-first v3 preview stays exact "+genre)
+ 		check(v1.count == v2.count and v1.scope == v2.scope and v2.count == current[genre].count and v2.scope == current[genre].scope,"unchanged count and Scope " + genre)
+ 		var expected: Array = v1.ids.duplicate()
+ 		var c1 := core(ids1); var c2 := core(ids2)
+@@ -52,7 +56,7 @@
+ 		check(not payload.is_empty() and payload.run.founding_roster_version == "2","explicit persisted v2 " + genre)
+ 		var restored := codec.hydrate(payload)
+ 		check(restored != null and restored.get_founding_roster_version() == 2 and codec.capture(restored) == payload,"v2 exact checkpoint round trip " + genre)
+-		for invalid in ["0","4","2.5",2,null]:
++		for invalid in ["0","5","2.5",2,null]:
+ 			var malformed := payload.duplicate(true); malformed.run.founding_roster_version = invalid
+ 			check(codec.hydrate(malformed) == null,"invalid version rejects " + str(invalid))
+ 		var before := state(run)
+@@ -61,7 +65,11 @@
+ 		for resourceful: bool in [false,true]:
+ 			for initial: bool in [true,false]:
+ 				var session := Factory.create_fresh_session({"schema_version":1,"studio_id":"roster","studio_name":"Roster","specialty":str(genre),"traits":["resourceful"] if resourceful else [],"seed":"4417"},catalog)
++				# This block characterizes historical v2 Maps quotes/transactions.
+ 				var run: RunState = session.run
++				run._owned_features.clear()
++				for id in StudioSpecialties.preview(genre,2).ids:run._owned_features[id]=true
++				run._founding_roster_version=2
+ 				var project := PrimitivePredevelopment.prepare_project("Frozen",genre,&"fantasy",run)
+ 				if not initial: run.finalize_starter_selection()
+ 				var quote := run.get_primitive_reserve_offer(&"maps")
+--- before/scripts/debug/verify_campaign_live_parity.gd
++++ after/scripts/debug/verify_campaign_live_parity.gd
+@@ -155,8 +155,8 @@
+ 		studio._review_view.get_node("%ContinueButton").pressed.emit()
+ 	compare("Exit phase %d"%index)
+ 
+-func full_project(title: String,extras := false) -> void:
+-	begin_project(title)
++func full_project(title: String,extras := false,genre: StringName = &"action") -> void:
++	begin_project(title,genre)
+ 	if failures: return
+ 	for index in range(3):
+ 		begin_phase()
+@@ -282,10 +282,20 @@
+ 
+ ## Both maintained suites use the same real Gameplay/coordinator setup. Caller
+ ## supplies a fully explicit recipe and an isolated test output/profile.
+-func start_route(recipe: Dictionary) -> CheckpointCoordinator:
++func start_route(recipe: Dictionary,roster_version: int = StudioSpecialties.ROSTER_VERSION) -> CheckpointCoordinator:
+ 	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT")+"."+route_id+".recipe.json",FileAccess.WRITE).store_string(JSON.stringify(recipe,"\t"))
+ 	session = Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
+ 	var native: RefCounted = Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
++	if roster_version != StudioSpecialties.ROSTER_VERSION:
++		# Explicit historical foundation for the long Bank/payroll matrix. A
++		#12-Scope new game is tested independently, without forcing loan eligibility.
++		for instance in [session,native]:
++			instance.run._owned_features.clear()
++			for id in StudioSpecialties.preview(StringName(recipe.specialty),roster_version).ids:instance.run._owned_features[id]=true
++			instance.run._founding_roster_version=roster_version
++	# This exact checkpoint, rather than the fresh recipe, reproduces historical
++	# fixtures through the ordinary CLI. No checkpoint identity is rewritten.
++	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT")+"."+route_id+".initial-checkpoint.json",FileAccess.WRITE).store_string(JSON.stringify(session.export_checkpoint(),"\t"))
+ 	game = load("res://scenes/gameplay.tscn").instantiate()
+ 	game.run_state = native.run
+ 	root.add_child(game)
+@@ -311,7 +321,7 @@
+ 		route_id = "campaign_"+str(seed_value)
+ 		segment = 0
+ 		var recipe := {"schema_version":1,"studio_id":route_id,"employee_trial":true,"studio_name":"Live parity","specialty":"action","traits":[],"seed":str(seed_value)}
+-		var coordinator := start_route(recipe)
++		var coordinator := start_route(recipe,3)
+ 		await full_project("First")
+ 		if failures: break
+ 		store_action(true)

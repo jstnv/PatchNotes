@@ -1,0 +1,84 @@
+--- base/scripts/market/rival_trial.gd
++++ candidate/scripts/market/rival_trial.gd
+@@ -39,11 +39,78 @@
+ static func policies(world: RivalWorld) -> Dictionary:
+ 	var result := {}
+ 	for id: StringName in world.studios:
+-		var genre: String = String(world.studios[id].run.get_studio_specialty())
+-		var label: String = world.studios[id].run.get_studio_name()
+-		var enabled := uses_synergy_trial(id, world.studios[id].run)
++		var session: RefCounted = world.studios[id]
++		var genre: String = String(session.run.get_studio_specialty())
++		var label: String = session.run.get_studio_name()
++		var enabled := uses_synergy_trial(id, session.run)
++		result[id] = func(view: Dictionary) -> Dictionary: return _feature_maximal_choice(view,session,genre,label,enabled)
++	return result
++
++## Study-only control. The production policy above is the candidate.
++static func project_plan_policies(world: RivalWorld, arm: String) -> Dictionary:
++	if arm == "B": return policies(world)
++	if arm != "A": return {}
++	var result := {}
++	for id: StringName in world.studios:
++		var session: RefCounted = world.studios[id]
++		var genre: String = String(session.run.get_studio_specialty())
++		var label: String = session.run.get_studio_name()
++		var enabled := uses_synergy_trial(id, session.run)
+ 		result[id] = func(view: Dictionary) -> Dictionary: return choose(view,genre,label,enabled,enabled)
+ 	return result
++
++static func _feature_maximal_choice(view: Dictionary, session: RefCounted, genre: String, label: String, enabled: bool) -> Dictionary:
++	if view.phase not in [&"design",&"alpha"]: return choose(view,genre,label,enabled,enabled)
++	var current: Dictionary = view.development
++	if current.finalized or current.confirmation_pending or not current.active: return choose(view,genre,label,enabled,enabled)
++	var tokens := _legal_visible_feature_hand(current,session)
++	if not tokens.is_empty(): return _development(view,&"play",{"candidate_ids":tokens})
++	if current.get("can_exit",false): return _development(view,&"request_exit")
++	return {}
++
++## Inspect only the current seven visible instances. Exact hand legality and
++## current hand fee come from the authoritative phase hand and RunState.
++static func _legal_visible_feature_hand(current: Dictionary, session: RefCounted) -> Array[int]:
++	var hand: RefCounted = session.development.hand
++	var cards: Array = current.candidates
++	var best_tokens: Array[int] = []
++	var best_features := 0
++	var best_value := -INF
++	for a in range(cards.size()-3):
++		for b in range(a+1,cards.size()-2):
++			for c in range(b+1,cards.size()-1):
++				for d in range(c+1,cards.size()):
++					var offered: Array = [cards[a],cards[b],cards[c],cards[d]]
++					var selected: Array[CardData] = []
++					var tokens: Array[int] = []
++					var features := 0
++					for card: Dictionary in offered:
++						var token := int(card.token)
++						var index: int = hand.candidate_ids.find(token)
++						if index < 0: break
++						selected.append(hand._candidate_cards[index])
++						tokens.append(token)
++						if card.type == "feature": features += 1
++					if selected.size() != 4 or features == 0: continue
++					var base: Dictionary = hand.calculate_base(selected)
++					if not base.get("valid",false): continue
++					var cost: int = session.run.primitive_feature_hand_cost_cents(selected,session.development.project.get_release_id())
++					if cost < 0 or cost > int(current.cash_cents): continue
++					var assessed: Dictionary = SynergyChoice._assess(current,offered)
++					var shortfall: int = maxi(0,int(current.required_scope)-int(current.scope))
++					var value: float = float(assessed.get("proxy",0.0))+float(mini(int(base.get("scope",0)),shortfall))*0.03
++					tokens.sort()
++					if features > best_features or (features == best_features and value > best_value) or (features == best_features and value == best_value and _tokens_less(tokens,best_tokens)):
++						best_features = features
++						best_value = value
++						best_tokens = tokens
++	return best_tokens
++
++static func _tokens_less(left: Array[int], right: Array[int]) -> bool:
++	if right.is_empty(): return true
++	for index in range(mini(left.size(),right.size())):
++		if left[index] != right[index]: return left[index] < right[index]
++	return left.size() < right.size()
+ 
+ static func uses_synergy_trial(id: StringName, run: RunState) -> bool:
+ 	# Former player Studios and richer Store pools retain the previous policy.

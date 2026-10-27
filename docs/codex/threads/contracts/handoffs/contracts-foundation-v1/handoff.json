@@ -1,0 +1,183 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-17T10:27:46.610104+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "contracts-foundation-v1",
+    "owner": "contracts",
+    "created_utc": "2026-10-17T10:18:16.560601+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "ab7b4324cb93c94d3a65c935b353917f94590bc8b5d59bbf5ab4a2c672140ed8",
+    "creation_identity": "ab7b4324cb93c94d3a65c935b353917f94590bc8b5d59bbf5ab4a2c672140ed8",
+    "lineage": [],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "Adopt the code-owned versioned definitions for the five current Contracts and compatible ContractState/PublisherTrialTerms routing; preserve offer terms, scoring, payouts, Promotion, hand and save behavior.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\FOUNDATION-DECISION-2026-10-17-v1.md",
+    "sha256": "a6a75dcd1b234a714a3e130d183d417e602d751f45457107a9f3d9974e4e413b",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "All five existing Contract focused suites and the definition verifier pass with zero failures on the integrated source.",
+    "A legal fresh Crown campaign and exact fresh-process replay preserve all 85 accepted state digests and the final state against the current baseline route, or document justified drift.",
+    "Existing checkpoint fields and frozen trial terms remain byte/field compatible; no new offer or balance value is adopted."
+  ],
+  "base_identity": "ab7b4324cb93c94d3a65c935b353917f94590bc8b5d59bbf5ab4a2c672140ed8",
+  "candidate_identity": "aeac243b2384f4b740583559f1b104b6b835ce15d67195281697d6d8e8a4648c",
+  "canonical_identity": "c7fd3db19210122f2e00aab9745cc6e075c6e38267fb99f8ef1cca0ff138b35d",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "scripts/contracts/contract_definitions.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fe44f875af7670beee5039cbcd2d3746c89d5345eb6e9427ab96aa5015e81e94"
+    },
+    {
+      "path": "scripts/contracts/contract_definitions.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "218c50632ccc939775db0251ed40381f9df794d102d0f1f72766365d8375a731"
+    },
+    {
+      "path": "scripts/contracts/contract_state.gd",
+      "change": "modified",
+      "before_sha256": "13172af8ec2b527b26c03049ee38dc2aac4c0c1900b2f4652f0ece670adfb5d9",
+      "after_sha256": "e181f6de333b6a349053a348229838bc38704f706e46c940778a363034ec8f8c"
+    },
+    {
+      "path": "scripts/contracts/publisher_trial_terms.gd",
+      "change": "modified",
+      "before_sha256": "c7b0d3cc0c448f73dec7524fccd7b47d246c72ca6fe804581d06cf16e0397920",
+      "after_sha256": "735249c177407aa0a0bdcf88bd5733aaa63963e80f75e6ca93588caf848617bc"
+    },
+    {
+      "path": "scripts/debug/verify_contract_definitions.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "80aeedf3760f95cfd45858fe21417a405e91188846a1cc753656d242f0963b71"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "scripts/debug/verify_bank_integration.gd",
+      "change": "modified",
+      "before_sha256": "1b72c2ad5aff6e697add582685d3a02b5dc0ff4f4b38125bfa43fdf2f8f9ad64",
+      "after_sha256": "1df96d04db94a18d09d183a7a9f40e0cdd8438d040e7fb5497ad247a48062eff"
+    },
+    {
+      "path": "scripts/debug/verify_rival_trial_activation.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "047357e4a55519ed0369df91c194dda039c3c0cabdf07fef227e4e6d4452f32a"
+    },
+    {
+      "path": "scripts/gameplay.gd",
+      "change": "modified",
+      "before_sha256": "d7e38f0d109c36ba4596669ea7baa63947b0cf6b0e2f2c0bdd99cf15c6f5a4e2",
+      "after_sha256": "468d8a16c8f87e3a6f44ad05406309665840d9dbc3113d66513b38d8bb49d829"
+    },
+    {
+      "path": "scripts/market/rival_trial.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5f665e46f316d51ca6d783945fa0ab3ea969255ed61fad43f9ec2cf0bb0f9e0e"
+    },
+    {
+      "path": "scripts/market/rival_world.gd",
+      "change": "modified",
+      "before_sha256": "a6374d245f45abc80ffcfbad4a930203b8cb6a57d6e619cbef14a3b849ca8765",
+      "after_sha256": "8eef3d712125b9e2f6d2e7412d3865c721170aa3284988c5eba6fb006a668f73"
+    },
+    {
+      "path": "scripts/market/rival_world_checkpoint.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "8e96794b1b6a87b8ca561f5cd41870f34ffd74ea862653ddeec8a26b9dfd94bc"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_coordinator.gd",
+      "change": "modified",
+      "before_sha256": "6db95918f6f56d9736504194e120f4749764ce45eb02f387a668fd7d59b38ce8",
+      "after_sha256": "0ed77e3b1bee498ee63a70e81bc370036e256cb888e7138ac046ce077dc8d374"
+    },
+    {
+      "path": "scripts/persistence/checkpoint_schema.gd",
+      "change": "modified",
+      "before_sha256": "73f6667444f8c7a1b62477d5207b1e70c5967e92e8b3329e22938f4a3692b8c6",
+      "after_sha256": "64719844be35a32f16afcef2671db7c3d86bab054a42ae10cad84b2ca7230625"
+    },
+    {
+      "path": "scripts/persistence/studio_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "c7fef1376f04f0fa6fc0225f529acd67fd6f990173bfd518ef86347d068d3c42",
+      "after_sha256": "0e29790dcdaa52266d845f7d40df8297b6ca2b3b0fac810aa30da93494a24dbf"
+    },
+    {
+      "path": "scripts/simulation/development_session.gd",
+      "change": "modified",
+      "before_sha256": "276367c0d7a3c46402e29d86c5bbdf9799d80ce0f3600bcf0387bf240333546c",
+      "after_sha256": "3f33eb6f72564b3f33576b4193e5a2a77ec0132a7ae5cc7eafe1015f83879628"
+    },
+    {
+      "path": "scripts/ui/studio_finances.gd",
+      "change": "modified",
+      "before_sha256": "3d8fab6ba714e90ddfea9d1f6e6c14778033ea441a4b96ff0fa3bfc759476ded",
+      "after_sha256": "a7fc89ce21c1c495f84778629a03a9e7352b992d1ea1412cf7b3c309c42f660f"
+    }
+  ],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\contracts\\sim-v27\\foundation-crown-run-03",
+      "ok": true,
+      "error": null,
+      "source_identity": "aeac243b2384f4b740583559f1b104b6b835ce15d67195281697d6d8e8a4648c",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "3e65a356b770241c3746272f012c79f0199d86bc8057877416702836cd47dddc",
+        "cases/action-cult20-4417-crown-no-reuse/case.json": "14f34db81abe6f21f7b458e2c2d215d75586b7fcac1b99686747afa9fc544b28",
+        "cases/action-cult20-4417-crown-no-reuse/case.variant.json": "71936ee8b4962dab93296dd40a3370aa0fb78e816a135540eeb14db0623ae5ca",
+        "cases/action-cult20-4417-crown-no-reuse/final_state.variant.json": "eefef3e2695183890c63a2b8f989ec55385fd7d6043bfcb9d9e85a5112368f0e",
+        "cases/action-cult20-4417-crown-no-reuse/initial.json": "54cb2dd90aca029e4ecb4f875f32beffa34dcb768e9ab057991257fc9c309594",
+        "cases/action-cult20-4417-crown-no-reuse/metrics.json": "f74f525104f287c4e10c8056a13a201927b490b7d0d5786034eda08aa79c2be2",
+        "cases/action-cult20-4417-crown-no-reuse/replay.tape.json": "e308bdd88ec3c4db6500f7b7e7366e940b8a20dc1403b2bc9d35da458ade64f5",
+        "cases/action-cult20-4417-crown-no-reuse/result.json": "d67c615cac81e05187b17bbef4b8db51604c568836263c690adec8f302fa3a55",
+        "cases/action-cult20-4417-crown-no-reuse/studio_checkpoint.json": "978236e5fb253c6e0e44d84f05e783692b4c3c2e340db7110126e75df1ac6496",
+        "experiment-report.json": "e7e77b3644ba0e78c3584728494e533442878e725acc89779877f1fe74ba2322",
+        "experiment.command.json": "91d61dcd618a91d913acd690c0cf092982e64a55e587edff51e329483b9dfa7c",
+        "experiment.log": "aebe1c0dc3ace740e2e5bc4db9e570a3f1103ab92a14370fbc362ae99e1b2202",
+        "git-provenance.json": "d7acb9150237d027c9310ecf939c7f0379289a7e00a8a17e7a518e2e7ff3211d",
+        "godot-version.command.json": "b493eef3d6af53ae405e07f49af4ff14d3e61a3d643455ce7ff03023cf4a3111",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "f90f743a6a821846991ef28f469260ec58384ccebc902af1315c6a7f1a417ecf",
+        "import.command.json": "fe33638614878cb4de54d632c5b1c29f1b6a302ea1b5457f186e157ff59ef3c6",
+        "import.log": "895999898f8ce3f6b9ab8754e337c5fbaa0ae62c47247cdfcec157f95c9262bc",
+        "inputs/experiment.json": "e6e6e6886a3512e02bb394cbd269755852e367c198ab612f8df731527c7db5e8",
+        "inputs/requested.json": "ab89e5698c651971ba842edba85c5c9e6c2baf92d7bf6e38541b22a78ebaaa18",
+        "run-report.json": "813a9e27ec1a2fe5cf4f3070f774a094abc5f444d895e5bcd1742256e0f0733f",
+        "runner.py": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "80fe2df241abbaf82c42b259ea8744d722cdc5329f13c5b7a60c2302ef322ac4",
+        "source.diff.patch": "4435c0742465b1ff67d902a6c74ea88531ffd93f021b3f938c7cf06cbf49a00e",
+        "variant-base-manifest.json": "4351c9a9a9d223e2fa918f2541d24eeb235040c039f89725b9aa5b502ffcd874",
+        "variant-creation-manifest.json": "4351c9a9a9d223e2fa918f2541d24eeb235040c039f89725b9aa5b502ffcd874",
+        "variant-integrity.json": "610498bd65222351025f61d82a0fef9a4f1abb43cd3fd490e3cd997bb6073a4d",
+        "variant-provenance.json": "5cd8ef6c7ba1829268315a53858aee1dd4337f949ef83debf9ad213e618b6cae",
+        "variant-variant.json": "8d6a4a23ee75ebc902f23e155fcbc7c818852ea6481cbb820086500c32ce44f5",
+        "workspace-source-manifest.json": "07ec7ffe23bb321e388c04cef57418a5398bbc5f41079185de8bc395da65aaa8"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

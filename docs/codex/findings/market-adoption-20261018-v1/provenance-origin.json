@@ -1,0 +1,142 @@
+{
+	"cases": [
+		{
+			"label": "input is current runtime source",
+			"pass": true
+		},
+		{
+			"label": "unmodified actual legal checkpoint validates: ",
+			"pass": true
+		},
+		{
+			"label": "actual player has a frozen earning factor",
+			"pass": true
+		},
+		{
+			"label": "arbitrary factor source ID rejected",
+			"pass": true,
+			"reason": "Frozen market history/provenance mismatch"
+		},
+		{
+			"label": "arbitrary factor source ID rejected validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "forged factor hash has a locally valid shape and arithmetic",
+			"pass": true
+		},
+		{
+			"label": "valid-shape forged historical factor hash rejected against actual releases",
+			"pass": true,
+			"reason": "Frozen market history/provenance mismatch"
+		},
+		{
+			"label": "valid-shape forged historical factor hash rejected against actual releases validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "future factor has valid isolated shape",
+			"pass": true
+		},
+		{
+			"label": "future age-month factor rejected",
+			"pass": true,
+			"reason": "Market factor month mismatch"
+		},
+		{
+			"label": "future age-month factor rejected validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "actual rival has a capped market factor",
+			"pass": true
+		},
+		{
+			"label": "changed capped bucket leaves factor and all money arithmetic unchanged",
+			"pass": true
+		},
+		{
+			"label": "valid-arithmetic false crowding count rejected",
+			"pass": true,
+			"reason": "Frozen market history/provenance mismatch"
+		},
+		{
+			"label": "valid-arithmetic false crowding count rejected validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "actual player completed a pressured project",
+			"pass": true
+		},
+		{
+			"label": "forged target remains internally consistent",
+			"pass": true
+		},
+		{
+			"label": "consistent false target rejected against original source facts",
+			"pass": true,
+			"reason": "Frozen market history/provenance mismatch"
+		},
+		{
+			"label": "consistent false target rejected against original source facts validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "current snapshot cannot masquerade as historical by flag alone",
+			"pass": true,
+			"reason": "Unproven historical market exemption"
+		},
+		{
+			"label": "current snapshot cannot masquerade as historical by flag alone validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "current factor cannot use historical source without historical marker",
+			"pass": true,
+			"reason": "Frozen market history/provenance mismatch"
+		},
+		{
+			"label": "current factor cannot use historical source without historical marker validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "current campaign contains its real baseline first project",
+			"pass": true
+		},
+		{
+			"label": "current first project cannot acquire invented historical provenance",
+			"pass": true,
+			"reason": "Unproven historical market exemption"
+		},
+		{
+			"label": "current first project cannot acquire invented historical provenance validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "current snapshot contains actual releases",
+			"pass": true
+		},
+		{
+			"label": "forged current snapshot has a valid recomputed hash",
+			"pass": true
+		},
+		{
+			"label": "valid-hash current snapshot cannot change owner release facts",
+			"pass": true,
+			"reason": "Market owner provenance mismatch"
+		},
+		{
+			"label": "valid-hash current snapshot cannot change owner release facts validation has no mutation",
+			"pass": true
+		},
+		{
+			"label": "original legal checkpoint bytes preserved",
+			"pass": true
+		}
+	],
+	"checks": 31,
+	"failures": 0,
+	"input": "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/acceptance-origin-action-war.json.checkpoint.json",
+	"input_sha256": "6ccffe27647fadb72cd40029b5f4dada5639766dde97f7a04674f090bb3caaee",
+	"source_identity": "51a9efae0361a7b918abcde135db57fe2d85398ab15723e9d06d6dee4057a9a3"
+}

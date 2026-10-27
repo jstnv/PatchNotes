@@ -1,0 +1,160 @@
+--- before/scripts/ui/card_score_floats.gd
++++ after/scripts/ui/card_score_floats.gd
+@@ -3,7 +3,6 @@
+ ## Read-only text poses sampled from the presentation music clock.
+ const STEP := 60.0 / 140.0
+ const RISE_HEIGHT := 74.0
+-const LANDING_DROP := 10.0
+ const COLORS := [Color("#eb8b9b"), Color("#efcd66"), Color("#74d3de"), Color("#bfa3ed")]
+ const CORE := [&"graphics", &"sound", &"technology", &"design"]
+ const NAMES := ["GFX", "SOUND", "TECH", "DESIGN"]
+@@ -81,23 +80,16 @@
+ 	return (ghost.position + ghost.pivot_offset - Vector2(0, ghost.size.y * ghost.scale.y / 2.0 + 44.0)).round()
+ 
+ func _rise(value: float) -> float:
+-	var t := clampf(value, 0.0, 1.0)
+-	var peak := 1.0 + LANDING_DROP / RISE_HEIGHT
+-	# Reach the apex halfway through the same rise interval, leaving a
+-	# full quarter subdivision to fall visibly into place under soft gravity.
+-	if t < 0.5:
+-		var up := t * 2.0
+-		return peak * (2.0 * up - up * up)
+-	var down := (t - 0.5) * 2.0
+-	return peak - (peak - 1.0) * down * down
++	# Outta Pocket player-list entrance, sampled on our existing music clock.
++	return float(Tween.interpolate_value(0.0, 1.0, clampf(value, 0.0, 1.0), 1.0, Tween.TRANS_BACK, Tween.EASE_OUT))
+ 
+ func _toward_merge(value: float) -> float:
+-	var t := clampf(value, 0.0, 1.0)
+-	return 1.0 - cos(t * PI / 2.0)
++	# Its player-list exit: pull the opposite way before accelerating inward.
++	return float(Tween.interpolate_value(0.0, 1.0, clampf(value, 0.0, 1.0), 1.0, Tween.TRANS_BACK, Tween.EASE_IN))
+ 
+ func _away_from_merge(value: float) -> float:
+-	var t := clampf(value, 0.0, 1.0)
+-	return sin(t * PI / 2.0)
++	# Assign/Skip entrance: launch quickly, then ease into the destination.
++	return float(Tween.interpolate_value(0.0, 1.0, clampf(value, 0.0, 1.0), 1.0, Tween.TRANS_CUBIC, Tween.EASE_OUT))
+ 
+ func _value_text(value: int) -> String:
+ 	if divisor == 2:
+@@ -197,11 +189,11 @@
+ 		_pose(hub, center, sum, "×1.25", 1.0)
+ 	elif age < 2.0:
+ 		_pose(hub, center, sum, "×1.25", 1.0 - _toward_merge((age - 1.5) * 2.0))
+-	elif age < 2.15:
++	elif age < 2.25:
+ 		_pose(hub, center, boosted, "", 0, 0, sin((age - 2.0) * 32.0))
+ 	else:
+ 		hub.window.hide()
+-		var travel := clampf((age - 2.15) / 0.85, 0.0, 1.0)
++		var travel := clampf((age - 2.25) / 0.75, 0.0, 1.0)
+ 		for index in range(tokens.size()):
+ 			var token: Dictionary = tokens[index]
+ 			token.color = COLORS[index % 4]
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -25,7 +25,7 @@
+ ## Positive one-point Balanced allowance is prospective; saved state stays exact.
+ const BALANCED_SMALL_HAND_PREDECESSORS := ["9d30a157bfbcdec10be0de7120979ca282c137b23d327bb5b4e24fe2842c6cac"]
+ ## Floating score presentation only; exact preceding player/world/RNG retained.
+-const SCORE_FLOAT_PREDECESSORS := ["8593779f9afa7deab4ca218fab64118864efe5d763ff088485f8d6ad43be7ab8", "02e62ac6d53d7b50c642ffb2a6e70fd64afcf01eec07dee4c919d4394773c3cc", "c3e80e9a7118d84803ef047dbf11e641030b3c6ebfcaeabc12dc6344f12d4c78", "797d2689941140d51cb8637fd2d03efa1f2011a6794a3803b65af68ac6213d4c", "6b46939ffd7efda8229858ecdbf9790cb9b12444180e7eea0db729ae22f82635"]
++const SCORE_FLOAT_PREDECESSORS := ["8593779f9afa7deab4ca218fab64118864efe5d763ff088485f8d6ad43be7ab8", "02e62ac6d53d7b50c642ffb2a6e70fd64afcf01eec07dee4c919d4394773c3cc", "c3e80e9a7118d84803ef047dbf11e641030b3c6ebfcaeabc12dc6344f12d4c78", "797d2689941140d51cb8637fd2d03efa1f2011a6794a3803b65af68ac6213d4c", "6b46939ffd7efda8229858ecdbf9790cb9b12444180e7eea0db729ae22f82635", "f9854f69fe47880510e5c933b80aefbbc7f6469226328321f8ff55e33bdbe3b4"]
+ ## New grants change prospectively; existing world ownership/RNG is retained.
+ const EMPLOYEE_PRE_SEARCH_SOURCES := ["5dd56b5b84e8e72065c4394ca301f89694461a8a32b62486565fb1f9c49400bd","9216e53b16f5381247b2d4f6a7bfcfd168523cfc6ef5e9d0e11107280367bb31"]
+ const ROOT_FIRST_PREDECESSOR_SOURCES := [
+--- before/scripts/debug/verify_score_floats.gd
++++ after/scripts/debug/verify_score_floats.gd
+@@ -22,8 +22,8 @@
+ 	var easing: Control=load("res://scripts/ui/card_score_floats.gd").new()
+ 	check(easing._rise(0.25)>0.5,"Card text launches with strong initial upward velocity")
+ 	check(easing._rise(0.25)-easing._rise(0.0)>easing._rise(0.5)-easing._rise(0.25),"Upward travel decelerates under downward gravity")
+-	var drop: float=74.0*(easing._rise(0.5)-easing._rise(1.0))
+-	check(drop>=8 and drop<=12 and easing._rise(0.5)>easing._rise(0.75) and easing._rise(0.75)>easing._rise(1.0),"Popups peak early then visibly descend about ten pixels")
++	var drop: float=74.0*(easing._rise(0.6)-easing._rise(1.0))
++	check(drop>=5 and drop<=10 and easing._rise(0.6)>easing._rise(0.8) and easing._rise(0.8)>easing._rise(1.0),"Reference entrance overshoots then settles visibly")
+ 	check(is_equal_approx(easing._rise(1.0),1.0),"Popup descent ends on the original half-subdivision boundary")
+ 	check(easing.has_method("_toward_merge") and easing.has_method("_away_from_merge"),"Merge-point gravity supplies inward and outward motion")
+ 	if easing.has_method("_toward_merge") and easing.has_method("_away_from_merge"):
+@@ -31,8 +31,9 @@
+ 		for index in range(5):
+ 			inward.append(easing._toward_merge(index/4.0));outward.append(easing._away_from_merge(index/4.0))
+ 		check(is_zero_approx(inward[0]) and is_equal_approx(inward[4],1.0) and is_zero_approx(outward[0]) and is_equal_approx(outward[4],1.0),"Gravity motion keeps original endpoints")
+-		check(inward[4]-inward[3]>inward[3]-inward[2] and inward[3]-inward[2]>inward[2]-inward[1],"Numbers accelerate toward the merge point")
++		check(inward[1]<0 and inward[2]<0 and inward[3]>0,"Reference exit first moves opposite the merge then reverses")
+ 		check(outward[1]-outward[0]>outward[2]-outward[1] and outward[2]-outward[1]>outward[3]-outward[2],"Numbers decelerate as they spread away from the merge point")
++		check(outward[2]>0.8 and outward[2]<1.0,"Mitosis uses the quick assign/skip entrance style")
+ 	easing.free()
+ 	motion.free()
+ 	if failures: quit(failures); return
+@@ -51,7 +52,9 @@
+ func shot(label: String) -> void:
+ 	if output.is_empty() or DisplayServer.get_name()=="headless":return
+ 	await RenderingServer.frame_post_draw
+-	root.get_texture().get_image().save_png(output.path_join(label+".png"))
++	var capture:=root.get_texture().get_image()
++	print("SCORE_CAPTURE ",label," viewport=",root.size," image=",capture.get_size())
++	capture.save_png(output.path_join(label+".png"))
+ 
+ func exercise(kind: String, slow: bool) -> void:
+ 	var fan:=Control.new();var motion:=HandPresentation.new()
+@@ -100,12 +103,12 @@
+ 		check(flow.tokens[0].value.position==pose,"Resume rejoin preserves text age and pose")
+ 		first=motion._first_beat*step
+ 		if kind=="normal":
+-			jump(motion,first+0.75*step)
++			jump(motion,first+0.8*step)
+ 			var peak: float=flow.tokens[0].value.position.y-flow._anchor(flow.tokens[0]).y
+ 			await shot("score-apex-"+str(root.size.x))
+ 			jump(motion,first+1.0*step)
+ 			var resting: float=flow.tokens[0].value.position.y-flow._anchor(flow.tokens[0]).y
+-			check(resting-peak>=8 and resting-peak<=12,"Score visibly drops from apex to rest before the next card")
++			check(resting-peak>=5 and resting-peak<=10,"Score entrance overshoots and settles before the next card")
+ 			await shot("score-rest-"+str(root.size.x))
+ 		if kind!="normal":
+ 			var popup:=first+4*step
+@@ -113,11 +116,11 @@
+ 			if kind=="specialization":
+ 				check(flow.tokens.all(func(t):return t.mult.position.y>t.value.position.y),"Multiplier launches upward out of the border below its resting height")
+ 				await shot("multiplier-launch-"+str(root.size.x))
+-				jump(motion,popup+0.25*step)
++				jump(motion,popup+0.3*step)
+ 				check(flow.tokens.all(func(t):return t.mult.position.y<t.value.position.y),"Multiplier reaches a small apex above its resting height")
+ 				await shot("multiplier-apex-"+str(root.size.x))
+ 				var apex_y: float=flow.tokens[0].mult.position.y
+-				jump(motion,popup+0.375*step)
++				jump(motion,popup+0.4*step)
+ 				check(flow.tokens[0].mult.position.y>apex_y and flow.tokens[0].mult.position.y<flow.tokens[0].value.position.y,"Multiplier visibly descends below its turning point before resting")
+ 				await shot("multiplier-descending-"+str(root.size.x))
+ 				jump(motion,popup+0.75*step)
+@@ -130,7 +133,9 @@
+ 				jump(motion,popup+1.5*step)
+ 				for token in flow.tokens:
+ 					var gap: float=token.mult.position.x-token.value.position.x
+-					check(gap>token.window.size.x/4+1 and gap<token.window.size.x/2,"Merge eases in: less than half the inward travel at its midpoint")
++					check(gap>token.window.size.x/2,"Merge starts with the reference opposite-direction counter-bounce")
++				jump(motion,popup+1.8*step)
++				check(flow.tokens.all(func(t):return t.mult.position.x-t.value.position.x<t.window.size.x/2),"Specialization reverses into the merge before its original result beat")
+ 				jump(motion,popup+2.05*step)
+ 				check(flow.tokens.all(func(t):return t.value.text=="+3" and not t.mult.visible),"Specialization merges to exact resolved per-card values")
+ 			else:
+@@ -139,6 +144,7 @@
+ 				var token: Dictionary=flow.tokens[0]
+ 				var origin: Vector2=flow._anchor(token)
+ 				check(absf(token.window.position.x+token.window.size.x/2-origin.x)<absf(root.size.x/2.0-origin.x)/2,"Balanced gathering eases into the central merge")
++				check(token.window.position.x+token.window.size.x/2<origin.x,"Balanced first pulls away before gathering into the merge")
+ 				jump(motion,popup+0.75*step)
+ 				check(flow.hub.window.visible and flow.hub.value.text=="+9" and flow.hub.mult.text=="×1.25","Balanced collects total and splits sum/multiplier")
+ 				check(flow.hub.mult.position.x-flow.hub.value.position.x>flow.hub.window.size.x/4,"Sum/multiplier mitosis launches outward then slows")
+@@ -150,7 +156,10 @@
+ 				await shot("balanced-hold-"+str(root.size.x))
+ 				jump(motion,popup+1.5*step)
+ 				check([flow.hub.value.position,flow.hub.mult.position]==split_pose,"Balanced hold lasts exactly half a music subdivision")
+-				jump(motion,popup+1.75*step)
++				jump(motion,popup+1.65*step)
++				check(flow.hub.mult.position.x-flow.hub.value.position.x>split_pose[1].x-split_pose[0].x,"Balanced counter-bounces outward after the tiny hold")
++				await shot("balanced-counter-bounce-"+str(root.size.x))
++				jump(motion,popup+1.875*step)
+ 				check(flow.hub.mult.position.x-flow.hub.value.position.x<split_pose[1].x-split_pose[0].x,"Balanced merges after the hold within its original interval")
+ 				jump(motion,popup+2.05*step)
+ 				check(flow.hub.value.text=="+11","Balanced merge uses floored boosted total")

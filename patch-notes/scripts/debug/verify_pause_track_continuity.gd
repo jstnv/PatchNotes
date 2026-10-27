@@ -14,6 +14,8 @@ func _initialize() -> void:
 	music = root.get_node("Soundtrack")
 	await process_frame
 	game._on_studio_created("Pause music transport", &"action", [], game._active_phase)
+	await process_frame
+	await skip_save_invitation()
 	await create_timer(1.5).timeout
 	var bus := AudioServer.get_bus_index(&"Master")
 	var capture := AudioEffectCapture.new()
@@ -55,7 +57,7 @@ func _initialize() -> void:
 	await key(KEY_ESCAPE)
 	expect(paused,"Closing Settings retains gameplay pause")
 	await key(KEY_ESCAPE)
-	await create_timer(0.5, true, false, true).timeout
+	await create_timer(music.PAUSE_FADE + 0.2, true, false, true).timeout
 	expect(not paused and music.pause_weight == 0.0, "Esc resumes gameplay and clears filter")
 	music.set_paused(true)
 	expect(music.player.stream_paused,"Constructed latched transport pause")

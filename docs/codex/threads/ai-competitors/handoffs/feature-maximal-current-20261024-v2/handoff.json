@@ -1,0 +1,114 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-24T22:19:36.930458+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "rival-feature-maximal-current-20261024-v19",
+    "owner": "ai-competitors",
+    "created_utc": "2026-10-24T21:46:55.268450+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "2854718a8c8f6f7c10dbc42ec69e66c7deb975f75c35720e6e659b424524e29a",
+    "creation_identity": "236e39dc0a4808e4309af2898f4e4d06e43280a943c1f12415d5b5a76f85c49d",
+    "lineage": [
+      {
+        "id": "rival-feature-maximal-current-20261024-v18",
+        "owner": "ai-competitors",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\simulators\\rival-feature-maximal-current-20261024-v18",
+        "metadata_sha256": "9b3298ead8d50eea6523023312a34f87d13b703ec25d91e6702e1fab7973d356",
+        "source_identity": "236e39dc0a4808e4309af2898f4e4d06e43280a943c1f12415d5b5a76f85c49d"
+      }
+    ],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": null
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "Replace fixed two-hand Design and Alpha rival exit with current-visible maximum legal affordable Feature play; retain Beta and current cohort. Omit diagnostic A helper and preserve the existing G4 eligibility gate on integration.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\2026-10-24-two-hand-exit-retirement-decision-v1.md",
+    "sha256": "dcc47b186d5a9979daaa00e76e51677cd187596103ee963136af06dc1ff20f8e",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "No Design or Alpha ordinary exit while a current visible four-card hand can legally and affordably include a Feature; re-evaluate after each real refill.",
+    "Preserve uses_synergy_trial: G4 tie ranking only where enabled; stable-token tie otherwise, including former-player and richer-pool Studios.",
+    "Retain exact hand charges, normal one-productive-action-per-player-cycle world scheduling, state/RNG replay and Studio-only Continue.",
+    "Test cash-blocked visible Feature, short-pool and illegal-exit fallback on current canonical source before marking integration complete."
+  ],
+  "base_identity": "2854718a8c8f6f7c10dbc42ec69e66c7deb975f75c35720e6e659b424524e29a",
+  "candidate_identity": "d23410e4f7ddbd077ac5e9a111c10bdd4660c694c62c00755b6f616bac2de8b7",
+  "canonical_identity": "c2033c7ece6346cf6c6ba2d8a44d10f410f4cdb6afdd54c0416ba741024fc69f",
+  "baseline_drift": true,
+  "changes": [
+    {
+      "path": "scripts/market/rival_trial.gd",
+      "change": "modified",
+      "before_sha256": "349321ce91dc25f8a5926b5b3d612cafd64fe1062cae1f8bf83d7d5d6ff34767",
+      "after_sha256": "00ccb51e03758776cac7de30eceab6e79d349709623458e07abe1864a1a68ef4"
+    }
+  ],
+  "canonical_changes_since_base": [
+    {
+      "path": "scripts/market/rival_world_checkpoint.gd",
+      "change": "modified",
+      "before_sha256": "bc15dd8609fb0ce65b72303ac4358d8165d47582186302c475ee0744b0db52c7",
+      "after_sha256": "4c0227626c7d1d4d48fb51c0773e4a41f202997db21bf257b504e335ea634866"
+    },
+    {
+      "path": "scripts/phases/studio_phase.gd",
+      "change": "modified",
+      "before_sha256": "e1c6d9d940aa832512542b9e58daa980183c35ee4c0e698fe24cbdbda36c7958",
+      "after_sha256": "3673d68180eedd7e58f76ffb7cda35b79812b694ac5c5786ccffedda1a14ec39"
+    }
+  ],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\rival-feature-maximal-smoke-20261024-v19",
+      "ok": true,
+      "error": null,
+      "source_identity": "d23410e4f7ddbd077ac5e9a111c10bdd4660c694c62c00755b6f616bac2de8b7",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "f70ff85e228548befc284d988f86243465c032278ed55b9da411fb2aae0e34a3",
+        "cases/foundation-legal-action-4417/case.json": "946aee350f030c89c9c27371261b9545c947fe02197ffb088612ccecd8435101",
+        "cases/foundation-legal-action-4417/case.variant.json": "77903405dec17c00599f96b3e26e8a87c57baa6b396e10006a7229bd516327a6",
+        "cases/foundation-legal-action-4417/final_state.variant.json": "b292d2ab35b8a4def7e18550e2b974b506b7ca0b5ad714bbbac87daa08b87ae9",
+        "cases/foundation-legal-action-4417/initial.json": "27ebb7b736e0e9bc34629da0f4004ddc199c5c2afe630535a6a9754e15a53ba8",
+        "cases/foundation-legal-action-4417/metrics.json": "d2e85cdb47783b4d5bb6e2825ce16efd52fed412aab022725587552d5aaf9907",
+        "cases/foundation-legal-action-4417/replay.tape.json": "477d1021ce4d9bfe09e686f4efaf9e607c0d1ce6fb884539ef8a04cf06fcd482",
+        "cases/foundation-legal-action-4417/result.json": "42b431f939f59e3b554b386c1897a5a608adea3d4b3f094f5b11533b4393013b",
+        "cases/foundation-legal-action-4417/studio_checkpoint.json": "41912ebcb853a4f27b8e301159c980b2f2094650a2dc4e5bff4d15bd3ff49cc3",
+        "experiment-report.json": "9dd1b29ff9440c5107a559cc6e82e94aa2c2a73bc883817bca0e75292da57822",
+        "experiment.command.json": "1e240f6342af0decd0d7b325d6f620442071d870cb53ee3958529ba36beed943",
+        "experiment.log": "7c9de38b2ddd2108d049b7f82d6e47fe3726c994c2f1474b13ea12a0385f0f85",
+        "git-provenance.json": "e45e1ee565f3183b947cc0372b8aed7115d844e1914fca98e399baf29af9bb76",
+        "godot-version.command.json": "8a2c72290c4fbbe5bc1708c14680892fa22c29a02f899e468cd047cb40a97428",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+        "import.command.json": "b2da1422e1bc81ac513885782a4027a34c5bbd4b5ad826bcfc6d4e24d0fa658c",
+        "import.log": "e9d8ced5a3a2bc3c2e45c49b755a90cb11328386720463d3d66ea89111c2daf7",
+        "inputs/experiment.json": "b5769d65b3e1da8351a3fe029da1200aa256d3b2d19d831276812edf0d029a74",
+        "inputs/requested.json": "1530f1cb7d7549606fddf9222ee1ceb35e656d4c4dddae966c922261cda93ad7",
+        "run-report.json": "5d38fe0372dcf8744d7395ab0c3a9825c2ad18e86008d66158b0bf7e2671d24f",
+        "runner.py": "65bdf6c5eb4a47af829283a0b07d4b78ad45e8a95139607b96a613d6ffbf9193",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "edaf30a292e2308de8796c77d04633559501caeee9e64f37d46e0e36f20630e5",
+        "source.diff.patch": "92d3c3c850b69b0cf67caaf3c3cecfd74a1e3429e5b1944be630af4c771dfab7",
+        "variant-base-manifest.json": "032fb330dfcb8ba0e9ba6942b6494b0a223e9f47b959f67ee51f4521448e3a48",
+        "variant-creation-manifest.json": "43756b372599a9fb2fced8d411de671b1af2e843fd73d60ad17d21fbbc337c7b",
+        "variant-integrity.json": "d8899a5122191ff65684fa8a41bd31716f8bf726df616a15c95866110be458aa",
+        "variant-provenance.json": "1377f340dcdef1fd375ff86b46d94b5a200ed60d7ee56af838665ee34c92d646",
+        "variant-variant.json": "906b7df93c8906a108f96d43d7c6e7eeb438e24ef8f7866bde55b6746f9f73f5",
+        "workspace-source-manifest.json": "edaf30a292e2308de8796c77d04633559501caeee9e64f37d46e0e36f20630e5"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

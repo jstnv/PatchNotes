@@ -1,0 +1,139 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "res://scripts/simulation/finite_fixture_policy.gd",
+    "id": "finite-development-fixture",
+    "version": "1",
+    "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "action",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "roster-action",
+          "studio_name": "Roster action",
+          "specialty": "action",
+          "traits": [],
+          "seed": "4417"
+        }
+      },
+      "max_commands": 120,
+      "target_release_count": 3,
+      "policy": {
+        "id": "finite-development-fixture",
+        "version": "1",
+        "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+        "config": {
+          "genre": "action",
+          "theme": "fantasy",
+          "name_prefix": "Roster route",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "strategy",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "roster-strategy",
+          "studio_name": "Roster strategy",
+          "specialty": "strategy",
+          "traits": [],
+          "seed": "4418"
+        }
+      },
+      "max_commands": 120,
+      "target_release_count": 3,
+      "policy": {
+        "id": "finite-development-fixture",
+        "version": "1",
+        "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+        "config": {
+          "genre": "strategy",
+          "theme": "fantasy",
+          "name_prefix": "Roster route",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "simulation",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "roster-simulation",
+          "studio_name": "Roster simulation",
+          "specialty": "simulation",
+          "traits": [],
+          "seed": "4419"
+        }
+      },
+      "max_commands": 120,
+      "target_release_count": 3,
+      "policy": {
+        "id": "finite-development-fixture",
+        "version": "1",
+        "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+        "config": {
+          "genre": "simulation",
+          "theme": "fantasy",
+          "name_prefix": "Roster route",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "1",
+      "case_id": "sports",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "roster-sports",
+          "studio_name": "Roster sports",
+          "specialty": "sports",
+          "traits": [],
+          "seed": "4420"
+        }
+      },
+      "max_commands": 120,
+      "target_release_count": 3,
+      "policy": {
+        "id": "finite-development-fixture",
+        "version": "1",
+        "source_identity": "e168d3a6ea700eed8cad3b02a276003a359048d0c04e620b9e285f19b5197a00",
+        "config": {
+          "genre": "sports",
+          "theme": "fantasy",
+          "name_prefix": "Roster route",
+          "selection": "features_first",
+          "hands": {
+            "design": 2,
+            "alpha": 2,
+            "beta": 2
+          }
+        }
+      }
+    }
+  ]
+}

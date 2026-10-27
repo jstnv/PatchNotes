@@ -7,6 +7,9 @@ signal main_menu_requested
 signal main_menu_confirmed
 
 const CANCEL_OWNER_GROUP := &"pause_cancel_owner"
+const ENTER_SECONDS := MenuTransitions.ENTRANCE_SECONDS
+const EXIT_SECONDS := 0.18
+const SLIDE_PIXELS := 20.0
 
 var can_pause: Callable
 var settings_open: Callable
@@ -21,6 +24,8 @@ var main_menu_button: Button
 var confirming := false
 var _owns_pause := false
 var _return_focus: Control
+var _content: Control
+var _animation: Tween
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -35,6 +40,7 @@ func _ready() -> void:
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.add_child(dim)
 	var center := CenterContainer.new()
+	_content = center
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.add_child(center)
 	var surface := PanelContainer.new()
@@ -70,7 +76,8 @@ func _button(parent: Control, id: String, caption: String, action: Callable) -> 
 	button.name = id
 	button.text = caption
 	button.custom_minimum_size.y = 44
-	button.pressed.connect(action)
+	button.pressed.connect(func():
+		if _owns_pause: action.call())
 	parent.add_child(button)
 	return button
 
@@ -84,8 +91,13 @@ func open() -> void:
 	get_tree().paused = true
 	var soundtrack := get_node_or_null("/root/Soundtrack")
 	if soundtrack != null: soundtrack.begin_gameplay_pause()
+	if not panel.visible:
+		panel.modulate.a = 0.0
+		_content.position.y = SLIDE_PIXELS
 	panel.show()
+	_set_interactive(true)
 	show_choices()
+	_animate(true)
 
 func show_choices() -> void:
 	confirming = false
@@ -111,10 +123,27 @@ func close() -> void:
 	if not _owns_pause: return
 	_owns_pause = false
 	confirming = false
-	panel.hide()
+	_set_interactive(false)
 	get_tree().paused = false
 	if is_instance_valid(_return_focus) and _return_focus.is_visible_in_tree():
 		_return_focus.grab_focus()
+	_animate(false)
+
+func _set_interactive(active: bool) -> void:
+	# The exit is visual only: its fading controls must not intercept resumed
+	# gameplay, including descendants with their own mouse/focus settings.
+	panel.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_ENABLED if active else Control.MOUSE_BEHAVIOR_DISABLED
+	panel.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_ENABLED if active else Control.FOCUS_BEHAVIOR_DISABLED
+
+func _animate(entering: bool) -> void:
+	if _animation != null and _animation.is_valid(): _animation.kill()
+	_animation = create_tween().set_parallel().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_ignore_time_scale(true)
+	_animation.set_trans(Tween.TRANS_CUBIC if entering else Tween.TRANS_QUAD)
+	_animation.set_ease(Tween.EASE_OUT if entering else Tween.EASE_IN)
+	var duration := ENTER_SECONDS if entering else EXIT_SECONDS
+	_animation.tween_property(panel, "modulate:a", 1.0 if entering else 0.0, duration)
+	_animation.tween_property(_content, "position:y", 0.0 if entering else SLIDE_PIXELS, duration)
+	if not entering: _animation.chain().tween_callback(panel.hide)
 
 func _input(event: InputEvent) -> void:
 	# Settings owns Escape and keyboard navigation until its Back action completes.
@@ -145,4 +174,5 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _exit_tree() -> void:
+	if _animation != null and _animation.is_valid(): _animation.kill()
 	if _owns_pause: get_tree().paused = false

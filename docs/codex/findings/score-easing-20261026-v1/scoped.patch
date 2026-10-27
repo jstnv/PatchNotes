@@ -1,0 +1,95 @@
+--- before/scripts/ui/card_score_floats.gd
++++ after/scripts/ui/card_score_floats.gd
+@@ -82,6 +82,12 @@
+ 	var u := clampf(value, 0.0, 1.0) - 1.0
+ 	return 1.0 + 2.70158 * u * u * u + 1.70158 * u * u
+ 
++func _ease_in(value: float) -> float:
++	return pow(clampf(value, 0.0, 1.0), 2.0)
++
++func _ease_out(value: float) -> float:
++	return 1.0 - pow(1.0 - clampf(value, 0.0, 1.0), 3.0)
++
+ func _value_text(value: int) -> String:
+ 	if divisor == 2:
+ 		@warning_ignore("integer_division")
+@@ -146,7 +152,7 @@
+ 				if age < 1.0:
+ 					_pose(token, at, token.base, multiplier_text, minf(1.0, age * 4.0), 74.0 * (1.0 - _back(age * 2.0)), 0, true)
+ 				elif age < 2.0:
+-					_pose(token, at, token.base, multiplier_text, 2.0 - age)
++					_pose(token, at, token.base, multiplier_text, 1.0 - _ease_in(age - 1.0))
+ 				else:
+ 					var shake := sin((age - 2.0) * 32.0) * exp(-(age - 2.0) * 4.0)
+ 					_pose(token, at, token.final, "", 0, 0, shake)
+@@ -168,13 +174,13 @@
+ 	for value in category_values: boosted += int(value)
+ 	center.y = maxf(22.0, center.y - 12.0)
+ 	if age < 0.5:
+-		for token in tokens: _pose(token, _anchor(token).lerp(center, age * 2.0), token.base)
++		for token in tokens: _pose(token, _anchor(token).lerp(center, _ease_in(age * 2.0)), token.base)
+ 		return
+ 	for token in tokens: token.window.hide()
+ 	if age < 1.0:
+-		_pose(hub, center, sum, "×1.25", _back((age - 0.5) * 2.0))
++		_pose(hub, center, sum, "×1.25", _ease_out((age - 0.5) * 2.0))
+ 	elif age < 2.0:
+-		_pose(hub, center, sum, "×1.25", 2.0 - age)
++		_pose(hub, center, sum, "×1.25", 1.0 - _ease_in(age - 1.0))
+ 	elif age < 2.15:
+ 		_pose(hub, center, boosted, "", 0, 0, sin((age - 2.0) * 32.0))
+ 	else:
+@@ -184,4 +190,4 @@
+ 			var token: Dictionary = tokens[index]
+ 			token.color = COLORS[index % 4]
+ 			token.caption = NAMES[index % 4]
+-			_pose(token, center.lerp(_anchor(token), _back(travel)), int(category_values[index % 4]))
++			_pose(token, center.lerp(_anchor(token), _ease_out(travel)), int(category_values[index % 4]))
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -25,7 +25,7 @@
+ ## Positive one-point Balanced allowance is prospective; saved state stays exact.
+ const BALANCED_SMALL_HAND_PREDECESSORS := ["9d30a157bfbcdec10be0de7120979ca282c137b23d327bb5b4e24fe2842c6cac"]
+ ## Floating score presentation only; exact preceding player/world/RNG retained.
+-const SCORE_FLOAT_PREDECESSORS := ["8593779f9afa7deab4ca218fab64118864efe5d763ff088485f8d6ad43be7ab8"]
++const SCORE_FLOAT_PREDECESSORS := ["8593779f9afa7deab4ca218fab64118864efe5d763ff088485f8d6ad43be7ab8", "02e62ac6d53d7b50c642ffb2a6e70fd64afcf01eec07dee4c919d4394773c3cc"]
+ ## New grants change prospectively; existing world ownership/RNG is retained.
+ const EMPLOYEE_PRE_SEARCH_SOURCES := ["5dd56b5b84e8e72065c4394ca301f89694461a8a32b62486565fb1f9c49400bd","9216e53b16f5381247b2d4f6a7bfcfd168523cfc6ef5e9d0e11107280367bb31"]
+ const ROOT_FIRST_PREDECESSOR_SOURCES := [
+--- before/scripts/debug/verify_score_floats.gd
++++ after/scripts/debug/verify_score_floats.gd
+@@ -86,7 +86,7 @@
+ 		first=motion._first_beat*step
+ 		if kind!="normal":
+ 			var popup:=first+4*step
+-			jump(motion,popup+0.75*step)
++			jump(motion,popup+(0.25 if kind=="balanced" else 0.75)*step)
+ 			if kind=="specialization":
+ 				check(flow.tokens.all(func(t):return t.mult.visible and t.mult.text=="×1.5"),"All specialization multipliers appear together")
+ 				for token in flow.tokens:
+@@ -96,14 +96,24 @@
+ 				jump(motion,popup+1.5*step)
+ 				for token in flow.tokens:
+ 					var gap: float=token.mult.position.x-token.value.position.x
+-					check(absf(gap-token.window.size.x/4)<1.1,"Both texts move inward during the merge")
++					check(gap>token.window.size.x/4+1 and gap<token.window.size.x/2,"Merge eases in: less than half the inward travel at its midpoint")
+ 				jump(motion,popup+2.05*step)
+ 				check(flow.tokens.all(func(t):return t.value.text=="+3" and not t.mult.visible),"Specialization merges to exact resolved per-card values")
+ 			else:
++				# Sample travel, not the implementation's easing formula.
++				jump(motion,popup+0.25*step)
++				var token: Dictionary=flow.tokens[0]
++				var origin: Vector2=flow._anchor(token)
++				check(absf(token.window.position.x+token.window.size.x/2-origin.x)<absf(root.size.x/2.0-origin.x)/2,"Balanced gathering eases into the central merge")
++				jump(motion,popup+0.75*step)
+ 				check(flow.hub.window.visible and flow.hub.value.text=="+9" and flow.hub.mult.text=="×1.25","Balanced collects total and splits sum/multiplier")
+ 				await shot(kind+"-pair-"+str(root.size.x))
+ 				jump(motion,popup+2.05*step)
+ 				check(flow.hub.value.text=="+11","Balanced merge uses floored boosted total")
++				jump(motion,popup+2.575*step)
++				var settled_x: float=flow._anchor(flow.tokens[0]).x
++				var current_x: float=flow.tokens[0].window.position.x+flow.tokens[0].window.size.x/2
++				check(absf(current_x-root.size.x/2.0)>absf(settled_x-root.size.x/2.0)/2 and current_x>=settled_x,"Mitosis eases outward quickly then settles without overshoot")
+ 				jump(motion,popup+3.05*step)
+ 				check(flow.tokens.map(func(t):return t.value.text)==["+3","+3","+3","+2"],"Balanced splits exact whole-category values to four cards")
+ 				await shot(kind+"-split-"+str(root.size.x))

@@ -1,0 +1,1318 @@
+{
+  "source_hashes": {
+    "patch-notes/scripts/studio_specialties.gd": "D617066C2585DA1AB9C59D0C3CE3EBB20406A3136EFFCA337231EEFA01FFEBDF",
+    "patch-notes/scripts/cards/feature_store_catalog.gd": "12487E4C089E102D8A47C008D94B9B6223A1AF3D00A9297ABAA0F51BC1F5425E",
+    "patch-notes/data/card_ledger.json": "0F093B0BA907043120C3E6E529511322E6E0B99358ADF6D69C80D5C174CFC83C",
+    "patch-notes/scripts/contracts/contract_challenges.gd": "6BE5F579DB1CC556522FFD00D772FCCD3EE1282A9EEF0D423448AF6BF54114A9",
+    "patch-notes/scripts/contracts/contract_state.gd": "7178F7011C0780000885CB774CC83C7B05FE988BAB8A7F31969EB32C78A80375"
+  },
+  "witnesses": {
+    "action": {
+      "roster": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects"
+      ],
+      "witnesses": {
+        "current_12_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": null,
+          "miss": null
+        },
+        "A_4_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "sprites",
+              "split_screen",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 5,
+            "completion_bp": 7916,
+            "promise_grade_bp": 7500
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "sprites",
+              "8_bit_sound",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "B_5_3": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "text",
+              "sprites",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 6,
+            "completion_bp": 8750,
+            "promise_grade_bp": 6667
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "sprites",
+              "8_bit_sound",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "C_6_2": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "sprites",
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 7,
+            "completion_bp": 10000,
+            "promise_grade_bp": 5000
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "sprites",
+              "8_bit_sound",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "all_pass": {
+          "ids": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "scope": 0,
+          "completion_bp": 1250
+        },
+        "max_scope": {
+          "ids": [
+            "sprites",
+            "8_bit_sound",
+            "scrolling",
+            "split_screen"
+          ],
+          "scope": 9,
+          "completion_bp": 10000
+        }
+      }
+    },
+    "adventure": {
+      "roster": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "local_leaderboards",
+        "split_screen",
+        "score_system",
+        "lives_system",
+        "simple_story",
+        "dialogue",
+        "character_backstories",
+        "multiple_endings",
+        "controls",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "secrets"
+      ],
+      "witnesses": {
+        "current_12_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": null,
+          "miss": null
+        },
+        "A_4_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 5,
+            "completion_bp": 9166,
+            "promise_grade_bp": 7500
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "multiple_endings"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "B_5_3": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 6,
+            "completion_bp": 10000,
+            "promise_grade_bp": 6667
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "multiple_endings"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "C_6_2": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "split_screen",
+              "multiple_endings",
+              "graphics_pass"
+            ],
+            "scope": 7,
+            "completion_bp": 9583,
+            "promise_grade_bp": 5000
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "multiple_endings"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "all_pass": {
+          "ids": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "scope": 0,
+          "completion_bp": 1250
+        },
+        "max_scope": {
+          "ids": [
+            "8_bit_sound",
+            "split_screen",
+            "multiple_endings",
+            "general_combat"
+          ],
+          "scope": 9,
+          "completion_bp": 8750
+        }
+      }
+    },
+    "role_playing": {
+      "roster": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "menu_system",
+        "local_leaderboards",
+        "split_screen",
+        "score_system",
+        "lives_system",
+        "simple_story",
+        "dialogue",
+        "character_backstories",
+        "multiple_endings",
+        "controls",
+        "general_combat",
+        "levels",
+        "maps",
+        "secrets"
+      ],
+      "witnesses": {
+        "current_12_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": null,
+          "miss": null
+        },
+        "A_4_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 5,
+            "completion_bp": 9166,
+            "promise_grade_bp": 7500
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "menu_system",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "B_5_3": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 6,
+            "completion_bp": 10000,
+            "promise_grade_bp": 6667
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "menu_system",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "C_6_2": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "menu_system",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 7,
+            "completion_bp": 9583,
+            "promise_grade_bp": 5000
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "menu_system",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "all_pass": {
+          "ids": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "scope": 0,
+          "completion_bp": 1250
+        },
+        "max_scope": {
+          "ids": [
+            "8_bit_sound",
+            "menu_system",
+            "split_screen",
+            "multiple_endings"
+          ],
+          "scope": 9,
+          "completion_bp": 8750
+        }
+      }
+    },
+    "strategy": {
+      "roster": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "score_system",
+        "lives_system",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "maps",
+        "sound_effects"
+      ],
+      "witnesses": {
+        "current_12_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": null,
+          "miss": null
+        },
+        "A_4_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 5,
+            "completion_bp": 9166,
+            "promise_grade_bp": 7500
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "B_5_3": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 6,
+            "completion_bp": 10000,
+            "promise_grade_bp": 6667
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "C_6_2": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "scrolling",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 7,
+            "completion_bp": 9583,
+            "promise_grade_bp": 5000
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "all_pass": {
+          "ids": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "scope": 0,
+          "completion_bp": 1250
+        },
+        "max_scope": {
+          "ids": [
+            "8_bit_sound",
+            "scrolling",
+            "menu_system",
+            "split_screen"
+          ],
+          "scope": 9,
+          "completion_bp": 8750
+        }
+      }
+    },
+    "simulation": {
+      "roster": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "local_leaderboards",
+        "split_screen",
+        "score_system",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "maps",
+        "sound_effects"
+      ],
+      "witnesses": {
+        "current_12_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": null,
+          "miss": null
+        },
+        "A_4_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 5,
+            "completion_bp": 9166,
+            "promise_grade_bp": 7500
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "B_5_3": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 6,
+            "completion_bp": 10000,
+            "promise_grade_bp": 6667
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "C_6_2": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "scrolling",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 7,
+            "completion_bp": 9583,
+            "promise_grade_bp": 5000
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "all_pass": {
+          "ids": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "scope": 0,
+          "completion_bp": 1250
+        },
+        "max_scope": {
+          "ids": [
+            "8_bit_sound",
+            "scrolling",
+            "menu_system",
+            "split_screen"
+          ],
+          "scope": 9,
+          "completion_bp": 8750
+        }
+      }
+    },
+    "puzzle": {
+      "roster": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "local_leaderboards",
+        "split_screen",
+        "score_system",
+        "lives_system",
+        "simple_story",
+        "dialogue",
+        "character_backstories",
+        "multiple_endings",
+        "controls",
+        "general_combat",
+        "levels",
+        "secrets"
+      ],
+      "witnesses": {
+        "current_12_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": null,
+          "miss": null
+        },
+        "A_4_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 5,
+            "completion_bp": 9166,
+            "promise_grade_bp": 7500
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "B_5_3": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 6,
+            "completion_bp": 10000,
+            "promise_grade_bp": 6667
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "C_6_2": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "scrolling",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 7,
+            "completion_bp": 9583,
+            "promise_grade_bp": 5000
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "all_pass": {
+          "ids": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "scope": 0,
+          "completion_bp": 1250
+        },
+        "max_scope": {
+          "ids": [
+            "8_bit_sound",
+            "scrolling",
+            "menu_system",
+            "split_screen"
+          ],
+          "scope": 9,
+          "completion_bp": 8750
+        }
+      }
+    },
+    "sports": {
+      "roster": [
+        "text",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "maps",
+        "sound_effects",
+        "music"
+      ],
+      "witnesses": {
+        "current_12_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": null,
+          "miss": null
+        },
+        "A_4_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 5,
+            "completion_bp": 9166,
+            "promise_grade_bp": 7500
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "B_5_3": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 6,
+            "completion_bp": 10000,
+            "promise_grade_bp": 6667
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "C_6_2": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "8_bit_sound",
+              "scrolling",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 7,
+            "completion_bp": 9583,
+            "promise_grade_bp": 5000
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "8_bit_sound",
+              "scrolling",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "all_pass": {
+          "ids": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "scope": 0,
+          "completion_bp": 1250
+        },
+        "max_scope": {
+          "ids": [
+            "8_bit_sound",
+            "scrolling",
+            "menu_system",
+            "split_screen"
+          ],
+          "scope": 9,
+          "completion_bp": 8750
+        }
+      }
+    },
+    "racing": {
+      "roster": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "levels",
+        "maps",
+        "sound_effects"
+      ],
+      "witnesses": {
+        "current_12_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": null,
+          "miss": null
+        },
+        "A_4_4": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "sprites",
+              "split_screen",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 5,
+            "completion_bp": 7916,
+            "promise_grade_bp": 7500
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "sprites",
+              "8_bit_sound",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "B_5_3": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "text",
+              "sprites",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 6,
+            "completion_bp": 8750,
+            "promise_grade_bp": 6667
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "sprites",
+              "8_bit_sound",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "C_6_2": {
+          "full": {
+            "ids": [
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass",
+              "graphics_pass"
+            ],
+            "scope": 0,
+            "completion_bp": 1250,
+            "promise_grade_bp": 10000
+          },
+          "partial": {
+            "ids": [
+              "sprites",
+              "8_bit_sound",
+              "split_screen",
+              "graphics_pass"
+            ],
+            "scope": 7,
+            "completion_bp": 10000,
+            "promise_grade_bp": 5000
+          },
+          "miss": {
+            "ids": [
+              "text",
+              "sprites",
+              "8_bit_sound",
+              "split_screen"
+            ],
+            "scope": 8,
+            "completion_bp": 10000,
+            "promise_grade_bp": 0
+          }
+        },
+        "all_pass": {
+          "ids": [
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass",
+            "graphics_pass"
+          ],
+          "scope": 0,
+          "completion_bp": 1250
+        },
+        "max_scope": {
+          "ids": [
+            "sprites",
+            "8_bit_sound",
+            "scrolling",
+            "split_screen"
+          ],
+          "scope": 9,
+          "completion_bp": 10000
+        }
+      }
+    }
+  }
+}

@@ -619,7 +619,7 @@ func _on_play_alpha_hand_pressed() -> void:
 		_workspace.show_synergy("%s Specialization!" % str(final_production.specialization_stat).capitalize(), "Production ×1.50")
 	elif final_production.balanced_production:
 		print(_build_balanced_production_debug_message(final_production.score_additions))
-		_workspace.show_synergy("Balanced Production!", "Hand total shared across four categories")
+		_workspace.show_synergy("Balanced Production!", "1.25× Core total shared across four categories")
 
 
 func _validate_and_calculate_base_action() -> Dictionary:

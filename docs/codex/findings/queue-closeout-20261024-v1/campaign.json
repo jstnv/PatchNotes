@@ -1,0 +1,55 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "campaign-policy.gd",
+    "id": "sidestreet-p1-commission-prefix",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "sports-1112",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "commission-p1-sports-1112",
+          "studio_name": "Commission sports-1112",
+          "specialty": "sports",
+          "traits": [],
+          "seed": "1112"
+        }
+      },
+      "max_commands": 200,
+      "target_release_count": 4,
+      "telemetry": true,
+      "policy": {
+        "config": {
+          "arm": "balanced",
+          "label": "sports-1112",
+          "development_first": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "Commission Study",
+            "selection": "features_first",
+            "hands": {
+              "design": 3,
+              "alpha": 5,
+              "beta": 4
+            }
+          },
+          "development_later": {
+            "genre": "sports",
+            "theme": "fantasy",
+            "name_prefix": "Commission Study",
+            "selection": "features_first",
+            "hands": {
+              "design": 2,
+              "alpha": 2,
+              "beta": 2
+            }
+          }
+        }
+      }
+    }
+  ]
+}

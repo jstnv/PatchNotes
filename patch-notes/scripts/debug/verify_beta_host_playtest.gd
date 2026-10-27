@@ -132,7 +132,7 @@ func _verify_pending_and_injection() -> void:
 	_expect(fixture.beta.get_pending_corrective_pass_ids() == ([&"sound_pass", &"technology_pass"] as Array[StringName]), "Weakness ranking snapshots Sound then Technology using enum tie order")
 	_expect([fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_marketing_output(), fixture.state.is_competitor_snapshot_revealed(), fixture.state.is_market_forecast_snapshot_revealed(), fixture.state.get_exhausted_beta_card_ids()] == values_before, "Activation changes no Bugs, Marketing, snapshots, or lifecycle")
 	var pending: Array[StringName] = fixture.beta.get_pending_corrective_pass_ids()
-	_expect(fixture.beta.set_priority_distribution({&"qa": 50, &"marketing": 40, &"insider": 10}), "Changed committed priorities succeed")
+	_expect(fixture.beta.set_priority_distribution({&"qa": 75, &"marketing": 25, &"insider": 0}), "Changed committed priorities succeed")
 	_expect(fixture.state.get_current_cycle() == 2, "Host and priority commit each consume one cycle")
 	fixture.state.add_core_score(ProjectState.CoreScore.SOUND, 100)
 	fixture.beta.setup(fixture.state, fixture.run, _snapshots)

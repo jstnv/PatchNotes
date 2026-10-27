@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_identity_includes_executed_market_query_and_ignores_other_queries (tools.tests.test_compare_simulations.ComparisonTests.test_identity_includes_executed_market_query_and_ignores_other_queries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\tools\tests\test_compare_simulations.py", line 58, in test_identity_includes_executed_market_query_and_ignores_other_queries
+    self.assertEqual(compare.mechanics_identity(manifest), expected)
+AssertionError: 'd09df14de91fad80860d8f248320e54cfdb814fb4a3dc57ffcce9ee549a65500' != 'cd506f82ae738ab0220a34e18783a686c80a170796da16af621b7ab25afa78f5'
+- d09df14de91fad80860d8f248320e54cfdb814fb4a3dc57ffcce9ee549a65500
++ cd506f82ae738ab0220a34e18783a686c80a170796da16af621b7ab25afa78f5
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.214s
+
+FAILED (failures=1)

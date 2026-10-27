@@ -1,0 +1,10 @@
+clean-import 3221225477 ['ERROR: Parameter "mem" is null.', 'ERROR: Parameter "mem_new" is null.', 'ERROR: Condition "buffer.resize(write_buffer_size) != OK" is true. Returning: false']
+Traceback (most recent call last):
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\docs\codex\findings\overnight-market-20261022-v1\build_final_delta.py", line 24, in <module>
+    exporter.main()
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\docs\codex\findings\export-queue-v3\export.py", line 98, in main
+    run('clean-import',[GODOT,'--headless','--path',project,'--editor','--import','--quit'],env,workspace)
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\docs\codex\findings\export-queue-v3\export.py", line 49, in run
+    if code != 0 or result['errors']: raise RuntimeError(name+' failed; see evidence')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: clean-import failed; see evidence

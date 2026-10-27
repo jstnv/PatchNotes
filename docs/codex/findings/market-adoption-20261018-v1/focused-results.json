@@ -1,0 +1,68 @@
+[
+  {
+    "name": "verify_game_lifespan_sales",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 3.1695699999982025, \"process_cpu_seconds\": 2.4375, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_game_lifespan_sales.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Revenue overflow is rejected\", \"PASS: Corrupt unit history is rejected before advancing\", \"PASS: Corrupt campaign quote history is rejected\", \"PASS: Corrupt fractional Awareness is rejected\", \"PASS: Duplicate cycle cannot mint a second sales half\", \"Game lifespan sales verification: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_monthly_sales_report",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 23.245325600000797, \"process_cpu_seconds\": 19.328125, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_monthly_sales_report.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Older release may be selected independently\", \"PASS: Monthly report fits supported viewport\", \"PASS: Monthly report fits supported viewport\", \"PASS: History navigation and reconstruction are passive\", \"PASS: Editor capture writes locally\", \"PASS: Capture preserves exact cash, title inputs and observed cycle\", \"PASS: Local capture does not advance or alter gameplay\", \"Monthly report verification: 0 failures; 6326 row checks\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_lifespan_reporting_integrity",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 4.450157599989325, \"process_cpu_seconds\": 2.984375, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_lifespan_reporting_integrity.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Older duplicate remains separately selectable\", \"PASS: Menu animation and rapid reopen do not delay or repeat a transaction\", \"PASS: Freed menu before deferred binding preserves transactions\", \"PASS: Missing provenance displays unavailable with no invented rows\", \"PASS: Fractional invalid release cycle cannot be coerced into fabricated history\", \"PASS: Wrong historical alignment is unavailable\", \"PASS: Report forecast fits supported1152x648\", \"Reporting integrity failures: 0\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_studio_fanbase",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 2.5085569999937434, \"process_cpu_seconds\": 2.21875, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_studio_fanbase.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"Studio fanbase: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_fanbase_incremental",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 3.123310599999968, \"process_cpu_seconds\": 2.15625, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_fanbase_incremental.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"Incremental loss: 208 checks, 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_fanbase_checkpoint",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 10.371274000004632, \"process_cpu_seconds\": 9.6875, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_fanbase_checkpoint.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Stale Fan snapshot cannot register a new release\", \"PASS: Duplicate existing launch stays idempotent after Fan changes\", \"PASS: Real pre-Fanbase shape remains unsupported without migration\", \"PASS: Unsupported prior checkpoint bytes preserved\", \"PASS: Fan accounting preserves exact finance\", \"Fanbase checkpoint: 0 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_contract_challenge_publishers",
+    "exit": 1,
+    "stdout": "{\"elapsed_seconds\": 9.146877200022573, \"process_cpu_seconds\": 8.640625, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_contract_challenge_publishers.gd\"], \"exit\": 1, \"errors\": [\"ERROR: FAIL: Historical rule revision restores without retroactive bonus\"], \"tail\": [\"ERROR: FAIL: Historical rule revision restores without retroactive bonus\", \"   at: push_error (core/variant/variant_utility.cpp:1023)\", \"   GDScript backtrace (most recent call first):\", \"       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)\", \"       [1] _run (res://scripts/debug/verify_contract_challenge_publishers.gd:61)\", \"Contract challenge publishers: 1 failures\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_studio_roster_versions",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\market-adoption-20261018-v1\\run.py\", line 28, in <module>\n    result.wait(timeout=300)\n  File \"C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1264, in wait\n    return self._wait(timeout=timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\64jus\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1593, in _wait\n    raise TimeoutExpired(self.args, timeout)\nsubprocess.TimeoutExpired: Command '['C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe', '--headless', '--audio-driver', 'Dummy', '--path', 'C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes', '--script', 'res://scripts/debug/verify_studio_roster_versions.gd']' timed out after 300 seconds\n"
+  },
+  {
+    "name": "verify_rival_synergy",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 106.24570209998637, \"process_cpu_seconds\": 100.328125, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_rival_synergy.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"RIVAL_SYNERGY checks=817 failures=0 first=16 second=4 beta_changes=12\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_production_extraction",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 4.385939400002826, \"process_cpu_seconds\": 3.921875, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_production_extraction.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"PASS: production characterization: 80 cases, input and project unchanged\", \"Loaded 40 cards.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "verify_primitive_review",
+    "exit": 0,
+    "stdout": "{\"elapsed_seconds\": 3.6244402999873273, \"process_cpu_seconds\": 3.34375, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_primitive_review.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"PASS: Marketing, cash-independent snapshot identity, reveal-independent state, and cycles do not affect Review\", \"PASS: LaunchPhase reads the committed Review result\", \"PASS: Launch UI displays the permitted Review breakdown\", \"PASS: Launch UI conceals Bugs, snapshots, and cash results\", \"PASS: Launch reconstruction preserves the same one-shot result without recalculation\", \"Primitive Review verification passed.\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  }
+]

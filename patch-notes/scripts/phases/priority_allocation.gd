@@ -5,7 +5,7 @@ signal allocation_changed
 
 const MIN_PRIORITY := 10
 const SAVED_MIN_PRIORITY := 5
-const MAX_PRIORITY := 50
+const MAX_PRIORITY := 75
 const PRIORITY_STEP := 5
 const MAX_TOTAL_PRIORITY := 100
 const INITIAL_PRIORITY := 25

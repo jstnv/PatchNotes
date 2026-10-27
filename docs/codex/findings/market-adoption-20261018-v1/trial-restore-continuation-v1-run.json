@@ -1,0 +1,37 @@
+{
+  "elapsed_seconds": 15.327787900052499,
+  "process_cpu_seconds": 12.515625,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/diagnose_trial_continuation.gd"
+  ],
+  "exit": 1,
+  "errors": [
+    "ERROR: Rival trial: every other session field matches across Continue",
+    "ERROR: Rival trial: every other session field matches across Continue",
+    "ERROR: Rival trial: full session except scratch agrees after continuation",
+    "ERROR: Rival trial: scratch overwritten: full raw session now agrees",
+    "ERROR: Rival trial: full session except scratch agrees after continuation",
+    "ERROR: Rival trial: scratch overwritten: full raw session now agrees",
+    "ERROR: Rival trial: full session except scratch agrees after continuation",
+    "ERROR: Rival trial: scratch overwritten: full raw session now agrees",
+    "ERROR: Rival trial: full session except scratch agrees after continuation",
+    "ERROR: Rival trial: scratch overwritten: full raw session now agrees"
+  ],
+  "tail": [
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/diagnose_trial_continuation.gd:101)",
+    "ERROR: Rival trial: scratch overwritten: full raw session now agrees",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/diagnose_trial_continuation.gd:24)",
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/market-adoption-20261018-v1/diagnose_trial_continuation.gd:102)",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

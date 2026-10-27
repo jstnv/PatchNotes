@@ -7,7 +7,7 @@ const Map := preload("res://scripts/audio/theme_map.gd")
 const Blend := preload("res://scripts/audio/theme_blend.gd")
 const A := Map.MAIN_A
 const B := Map.MAIN_B
-const PAUSE_FADE := 0.3
+const PAUSE_FADE := 0.9
 const PAUSE_REVERB_WET := 0.38
 var player: AudioStreamPlayer
 var themes: AudioStreamSynchronized
@@ -92,7 +92,9 @@ func _build_pause_effects() -> void:
 func _apply_pause_effects() -> void:
 	# Keep the full original track; pause changes only the room's wet signal.
 	pause_reverb.dry = 1.0
-	pause_reverb.wet = PAUSE_REVERB_WET * pause_weight
+	# Ease the room in/out over real time. Reversing pause reuses the current
+	# progress so rapid toggles cannot reset or jump the wet signal.
+	pause_reverb.wet = PAUSE_REVERB_WET * smoothstep(0.0, 1.0, pause_weight)
 	var bus := AudioServer.get_bus_index(&"Music")
 	if bus < 0: return
 	for i in range(AudioServer.get_bus_effect_count(bus)):

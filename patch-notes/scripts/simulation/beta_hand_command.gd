@@ -177,6 +177,8 @@ func _build_hand_preflight(selected_ids: Array[int], insight_rolls: Array[int], 
 			continue
 		if card.phase != CardData.PHASE_BETA or card.card_type != &"beta" or card.scope != 0:
 			return _invalid_play("A selected definition is not an authoritative Primitive Beta card.")
+		if not BetaPriorityAllocation.category_enabled(card.beta_category):
+			return _invalid_play("Insider cards are temporarily disabled.")
 		if not card.renewable:
 			if not FINITE_IDS.has(card.id) or finite_ids.has(card.id) or _project_state.is_beta_card_exhausted(card.id):
 				return _invalid_play("A selected finite definition is invalid or exhausted.")
@@ -422,7 +424,7 @@ func _group_definitions(definitions: Array[CardData], excluded_ids: Array[String
 	for category: StringName in BetaPriorityAllocation.CATEGORIES:
 		grouped[category] = [] as Array[CardData]
 	for card: CardData in definitions:
-		if not excluded_ids.has(card.id):
+		if BetaPriorityAllocation.category_enabled(card.beta_category) and not excluded_ids.has(card.id):
 			(grouped[card.beta_category] as Array[CardData]).append(card)
 	return grouped
 

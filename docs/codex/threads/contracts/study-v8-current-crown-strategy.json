@@ -1,0 +1,8 @@
+{
+  "schema_version": "1",
+  "policy": {"script": "current_crown_policy_v1.gd", "id": "contracts-current-crown-strategy", "version": "1"},
+  "cases": [
+    {"schema_version": "1", "case_id": "sports-4417-visible", "initial": {"recipe": {"schema_version": 1, "studio_id": "contracts-v8-visible", "studio_name": "Contracts Crown v8", "specialty": "sports", "traits": ["lean_production", "studio_buzz", "expensive_lease"], "seed": "4417"}}, "max_commands": 60, "target_release_count": 1, "policy": {"config": {"strategy": "visible"}}},
+    {"schema_version": "1", "case_id": "sports-4417-synergy-qa", "initial": {"recipe": {"schema_version": 1, "studio_id": "contracts-v8-synergy-qa", "studio_name": "Contracts Crown v8", "specialty": "sports", "traits": ["lean_production", "studio_buzz", "expensive_lease"], "seed": "4417"}}, "max_commands": 60, "target_release_count": 1, "policy": {"config": {"strategy": "synergy_qa"}}}
+  ]
+}

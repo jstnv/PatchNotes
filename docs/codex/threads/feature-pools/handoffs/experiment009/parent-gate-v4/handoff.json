@@ -1,0 +1,136 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-11T22:18:03.632236+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "parent-gate-proto-v4",
+    "owner": "feature-pools",
+    "created_utc": "2026-10-11T22:12:38.864900+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "ab152c2c263867e6b19da0446488bd47469a85e017dc4f4db47de50030aa779e",
+    "creation_identity": "a03af52a5f0939c348ccde0ca15b227ee7178ccfaf32caceb73b635b648650f5",
+    "lineage": [
+      {
+        "id": "parent-gate-base-v1",
+        "owner": "feature-pools",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\feature-pools\\simulators\\experiment009\\parent-gate-base-v1",
+        "metadata_sha256": "a34ccbeb3f324edb00b490202d53910fe030d6c98d43910a6ce0f2d325606978",
+        "source_identity": "ab152c2c263867e6b19da0446488bd47469a85e017dc4f4db47de50030aa779e"
+      },
+      {
+        "id": "parent-gate-proto-v1",
+        "owner": "feature-pools",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\feature-pools\\simulators\\experiment009\\parent-gate-proto-v1",
+        "metadata_sha256": "2eaa45403799578d9a019488969996d5af79b91137426c40eb68fbcd2a90e664",
+        "source_identity": "b922adc205d341ffe8068288e0a5a35091cc4c566394b254e19dec8490038a1b"
+      },
+      {
+        "id": "parent-gate-proto-v2",
+        "owner": "feature-pools",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\feature-pools\\simulators\\experiment009\\parent-gate-proto-v2",
+        "metadata_sha256": "4370753de179af690d4bc2a20f6b9cad9b79a71fffcac84a5df17aea449b51d0",
+        "source_identity": "6b9f78ac981b1bec032e3e3180a5431381a4100418d366ccec2230345b943982"
+      },
+      {
+        "id": "parent-gate-proto-v3",
+        "owner": "feature-pools",
+        "variant_path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\feature-pools\\simulators\\experiment009\\parent-gate-proto-v3",
+        "metadata_sha256": "47769a7908320f7bd97d2c80bab082549441991e2f51ad9d06d701220cea1b5c",
+        "source_identity": "a03af52a5f0939c348ccde0ca15b227ee7178ccfaf32caceb73b635b648650f5"
+      }
+    ],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "Add dormant two-parent Store quote and acquisition-path capability: AND ownership and one shared familiarity cap; keep live ledger unchanged and complete UI and graph validation during canonical adoption.",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes\\design-logs\\feature-pools\\decision-009-two-parent-structure-2026-10-11.md",
+    "sha256": "16fdb1eb99d5d33980b855c126bb73d52e1a8b358ae4980041b6a7562f8d2016",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "All named parents are owned before admission; a queued parent never unlocks a child; rejected quotes do not mutate cash, cycle, queue, ownership or RNG.",
+    "Sum committed distinct-project credits per named parent under one 50 percent cap; recompute only unpaid Research installments and preserve the half-base down payment and existing single-parent and Gameplay-count rules.",
+    "Validate duplicate, missing, self and cyclic named-parent graphs; show each parent, credit contribution and blocker in Store details with an additional-parent AND badge and no duplicated map node.",
+    "Run focused mechanics, current Store regressions, native and checkpoint continuation, both supported rendered sizes and representative fresh-process replays on the integrated source; add no new live card or price."
+  ],
+  "base_identity": "ab152c2c263867e6b19da0446488bd47469a85e017dc4f4db47de50030aa779e",
+  "candidate_identity": "65386bf34d045586c9d954120a3cb45ab80fbcdd59cae88e144a3b29fac5d3a4",
+  "canonical_identity": "ab152c2c263867e6b19da0446488bd47469a85e017dc4f4db47de50030aa779e",
+  "baseline_drift": false,
+  "changes": [
+    {
+      "path": "scripts/debug/verify_two_parent_prototype.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "d4b44ce884705d6aafd0d43e81b5a833d14c3d127f2d0071da571f4a42c29e18"
+    },
+    {
+      "path": "scripts/run_state.gd",
+      "change": "modified",
+      "before_sha256": "07dde3a867ee916bdd8b813f214289037c270e1e78fb92b7c1e1e0b320d5f8e5",
+      "after_sha256": "e27f9df6b82762b779d288fe5d872fbae0cee5dbf2d50815692b921d1e7a17f7"
+    }
+  ],
+  "canonical_changes_since_base": [],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\feature-pools\\sims\\experiment009\\proto-v4-parent-route-v1",
+      "ok": true,
+      "error": null,
+      "source_identity": "65386bf34d045586c9d954120a3cb45ab80fbcdd59cae88e144a3b29fac5d3a4",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "0ff3cbf3b8c42291ba4b60aecb1d6ac09402b0e5d19180d2699192d72604b000",
+        "cases/parent-route-4417/case.json": "b949b7c439a32b55e2704a78a37357156de9fc6a08ca0472bcba201893c8dc9c",
+        "cases/parent-route-4417/case.variant.json": "8cc1c1201a7606c9fe69129eeb7acf70a2ba9f660916a07a9274ea5f3668f9d7",
+        "cases/parent-route-4417/final_state.variant.json": "737f2135787f64556378c8fe23c55c7010fe38e058584121427f57e3a91dbc3c",
+        "cases/parent-route-4417/initial.json": "5df666f60b26a86f3ba5e07557e483bd9d6dcc363275aa03da7c1fbfe7a9c5c0",
+        "cases/parent-route-4417/metrics.json": "cbad3cbf645fefc759d867dcaee4b20b402fb5206cf1073dd5fe6cf33f42958f",
+        "cases/parent-route-4417/replay.tape.json": "283a4a4917e07acbdb180505e69bcdf633f3887e7c162a70b849a5709ddcd7c1",
+        "cases/parent-route-4417/result.json": "9842dac7c887b895130d304dac14cd8ef567e15c4549835425426c5b00006697",
+        "cases/parent-route-4417/studio_checkpoint.json": "058c9b44c402c81af31a15ed3f387eb2dc96c94c37db6302b5e6b8a8d4a0d677",
+        "cases/parent-route-90210/case.json": "81ae19b402622a2b1a15955f82d3514f91f281941943fc43ff4678c3778d2425",
+        "cases/parent-route-90210/case.variant.json": "2aa89fc0fa40953937344649c66a711a7450760b8c858b2abb3b04dcddca7213",
+        "cases/parent-route-90210/final_state.variant.json": "dd6ec4800eaceeccc8f01ee47c1c6cc6abd9f4558e7fd87bd23a3e07f4748fe4",
+        "cases/parent-route-90210/initial.json": "cf8d54e16b7031a2aba99838bd3b8505443970d4897e858991112cf3275fc6b6",
+        "cases/parent-route-90210/metrics.json": "17c9c991d7e9ea1028f026459af9c4be9be42a38978841b39de289ec0dbf5a40",
+        "cases/parent-route-90210/replay.tape.json": "cd048c75b0f6f3a6bd05a5303ece563bc3b250ead709dc56a33d9d8ba7338179",
+        "cases/parent-route-90210/result.json": "c2e3b5b84bb6f869cdba592118f3cb330e9babe87dd9b9836aef3ec59c469562",
+        "cases/parent-route-90210/studio_checkpoint.json": "b99f71f03064e661e51305588ca9c67e8f96c04bd309187eb7938185fe4edf90",
+        "experiment-report.json": "7292162894000503d5107a4e548d13f8b0a30bc878f476d92e3b089e8205aa90",
+        "experiment.command.json": "67155ee4280f6eca59bb8a9cbf44984370839f6cd4e6c3ed083c4f66c068b08e",
+        "experiment.log": "23f0c851b622a9d8469a237cbce35b8e721c74f16f7de77c39cd3f9f374a90be",
+        "git-provenance.json": "f6b5e0598371a3da5edda76b043f607a03e4f95e4a7f80278d0868592a20fba7",
+        "godot-version.command.json": "a87d75b51e9fa2c80882637aa69fb5a7ed767b3ac1aac431a62271d09eaf655e",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "48766f3826ec84a0c98ed051e9aa1bedd8b32ead54d6045ffd677208beb59a2c",
+        "import.command.json": "3e404a485fe568afc6d3189d6fc525b31949f4bdd0c6594abb30fa86b41191b4",
+        "import.log": "8abde80ec120ac91f5b1a5d430c1b498d656d9d078606dfc51711ba3c05baf24",
+        "inputs/experiment.json": "f1fd70decbdd390e4a81a45e08cb7b144634c3c350a8f4129c59ef0d5a1b90cf",
+        "inputs/requested.json": "317e59a35acb324f9a708d0c72d85523bc0df212e53ebe1f9974cfac0c69b663",
+        "run-report.json": "1e72bd5fb329ddedb224820a8c44cd2053005c67632a6dbdb9ed7092fddcd470",
+        "runner.py": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "7e2c87bcb154d15665e00e8e5170cd9b4437ef2f78fca4affadfe01bfcc8088e",
+        "source.diff.patch": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "variant-base-manifest.json": "0ff3cbf3b8c42291ba4b60aecb1d6ac09402b0e5d19180d2699192d72604b000",
+        "variant-creation-manifest.json": "5a84e08798da654cac9e7da1329e3b6c81629e348aad32263420e7942cd15d1e",
+        "variant-integrity.json": "51ff919c2d8e8a919edacdd793446cc083720803f9f84cd07ae653739e8a259e",
+        "variant-provenance.json": "b8c41b4faabf63775447c79ad3f63278c7ef56438956a30a6735acaa6e572e04",
+        "variant-variant.json": "62f18850968cd4ccf371886c83afee240ed62328b245191b9056ff750240415f",
+        "workspace-source-manifest.json": "ccfc95a0e3e8599bc04169304366461cf9ae270237cfa597754770701b2f53a2"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

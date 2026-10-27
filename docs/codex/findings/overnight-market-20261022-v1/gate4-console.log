@@ -1,0 +1,77 @@
+import 0 []
+verify_alpha_command 0 []
+verify_alpha_exit_arrears 0 ['Alpha free-exit arrears regression: 0 failures']
+verify_alpha_finalization 0 []
+verify_alpha_pack_ui 0 ['ALPHA_PACK_UI checks=58 failures=0']
+verify_alpha_phase 0 []
+verify_alpha_shop_pack 0 ['ALPHA_PACK checks=174 failures=0']
+verify_alpha_shop_pack_cold 0 ['ALPHA_PACK_COLD checks=28 failures=0']
+verify_atomic_selected_redraw 0 []
+verify_balanced_primitive_contract 0 ['Balanced Primitive Contract verification: 0 failures']
+verify_bank_finance 0 ['Bank finance: 207 checks, 0 failures']
+verify_bank_integration 0 ['Bank integration: 0 failures']
+verify_bank_loan 0 ['Bank loan arithmetic: 14112 checks, 0 failures']
+verify_begin_project_extraction 0 ['Begin project extraction verification: 0 failures; 6 original/live/headless fixtures']
+verify_beta_balanced_operations 0 []
+verify_beta_base_hand_resolution 0 ['       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:236)', '       [1] _verify_atomic_failures (res://scripts/debug/verify_beta_base_hand_resolution.gd:238)']
+verify_beta_card_data 0 []
+verify_beta_command 0 ['PASS: Controlled failures still commit payout/finite exhaustion', 'PASS: Controlled failures still commit payout/finite exhaustion']
+verify_beta_finalization_and_launch 0 []
+verify_beta_host_playtest 0 []
+verify_beta_marketing_insider_state 0 []
+verify_beta_marketing_specialization 0 []
+verify_beta_planning 0 []
+verify_beta_qa_specialization 0 []
+verify_beta_qa_state 0 []
+verify_campaign_batch 0 ['Campaign batch verification: 38 checks, 0 failures']
+verify_campaign_continuation 0 ['Campaign continuation: 0 failures, 23 suffix commands, 9 financial comparisons']
+verify_campaign_live_parity 0 ['Continuous campaign parity: 0 failures, 94 matched boundaries']
+verify_campaign_reducer 0 ['Campaign reducer verification: 52 checks, 0 failures']
+verify_campaign_seeded_parity 0 ['Seeded campaign parity: 0 failures, 138 boundaries, 3 routes']
+verify_campaign_session 0 ['Campaign session verification: 0 failures; 81 steps; 55 reentrant checks']
+verify_campaign_stress 0 ['Campaign stress verification: 389 checks, 0 failures, 87 commands across 1 routes']
+verify_campaign_stress_cult 0 ['Campaign stress verification: 196 checks, 0 failures, 87 commands across 1 routes']
+verify_campaign_stress_education 0 ['Campaign stress verification: 192 checks, 0 failures, 85 commands across 1 routes']
+verify_campaign_stress_puzzle 0 ['Campaign stress verification: 192 checks, 0 failures, 85 commands across 1 routes']
+verify_campaign_telemetry 0 ['Campaign telemetry verification: 374 checks, 0 failures']
+verify_candidate_retention 0 ['Candidate retention verification: 0 failures; 144 native hands; seeds [61001, 61002, 61003, 61004, 61005, 61006, 61007, 61008]']
+verify_card_frame 0 ['Card frame verification: 1841 checks, 0 failures, 55 catalog cards, 0 abbreviated catalog fields']
+verify_card_motion 0 ['Card motion verification: 0 failures']
+verify_checkpoint_codec 0 ['Checkpoint codec: 46 checks, 0 failures']
+verify_checkpoint_recovery_ui 0 ['Checkpoint recovery UI: 0 failures']
+verify_checkpoint_rng 0 ['Checkpoint RNG verification: 0 failures']
+verify_checkpoint_runtime 0 ['Checkpoint runtime verification: 0 failures']
+verify_checkpoint_store 0 ['Checkpoint store: 18 checks, 0 failures']
+verify_contract_challenge_matrix 0 ['CHALLENGE_MATRIX failures=0']
+verify_contract_challenge_publishers 0 ['Contract challenge publishers: 0 failures']
+verify_contract_challenge_runtime 0 ['Contract challenge runtime: 0 failures']
+verify_contract_definitions 0 ['Contract definition foundation: 0 failures']
+verify_contract_extraction 0 ['Contract extraction: 0 failures, 52 comparisons']
+verify_contract_presentation 0 ['Contract presentation verification: 0 failures']
+verify_cult_following 0 ['CULT v8 checks=205 failures=0']
+verify_demo_settings 0 ['Demo settings verification: 0 failures']
+verify_design_command 0 []
+verify_design_phase 0 []
+verify_development_protocol 0 []
+verify_development_replay 0 ace (most recent call first):
+       [0] development_cases (res://scripts/debug/verify_development_replay.gd:135)
+       [1] _initialize (res://scripts/debug/verify_development_replay.gd:14)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:137)
+ERROR: Parameter "mem_new" is null.
+   at: _realloc_exact (./core/templates/cowdata.h:494)
+   GDScript backtrace (most recent call first):
+       [0] development_cases (res://scripts/debug/verify_development_replay.gd:135)
+       [1] _initialize (res://scripts/debug/verify_development_replay.gd:14)
+       [2] development_cases (res://scripts/debug/verify_development_replay.gd:137)
+Development replay: 12 routes (headless)
+
+Traceback (most recent call last):
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\tools\release_gate.py", line 247, in <module>
+    if __name__=='__main__':sys.exit(main())
+                                     ^^^^^^
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\tools\release_gate.py", line 214, in main
+    checks.run(name,verifier_arguments(out,name,script),timeout=verifier_timeout(name),profile=profile)
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\docs\codex\findings\checkpoint-runtime-v1\run_checks.py", line 40, in run
+    if result.returncode or errors:raise RuntimeError(name)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: verify_development_replay

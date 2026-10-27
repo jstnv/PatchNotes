@@ -517,6 +517,7 @@ func _can_attempt_play() -> bool:
 	for view: CardView in _selected_card_views:
 		if not _is_current_candidate_view(view) or seen_views.has(view.get_instance_id()):
 			return false
+		if view.card_data.beta_category == CardData.BETA_CATEGORY_INSIDER and not BetaPriorityAllocation.insiders_enabled(): return false
 		seen_views[view.get_instance_id()] = true
 	return true
 
@@ -756,7 +757,7 @@ func _update_all_actions() -> void:
 	var editing_disabled := _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED
 	%QAPriority.editable = not editing_disabled
 	%MarketingPriority.editable = not editing_disabled
-	%InsiderPriority.editable = not editing_disabled
+	%InsiderPriority.editable = not editing_disabled and BetaPriorityAllocation.insiders_enabled()
 
 
 func _on_qa_priority_value_changed(value: float) -> void:
@@ -772,6 +773,7 @@ func _on_insider_priority_value_changed(value: float) -> void:
 
 
 func _update_priority_draft(category: StringName, value: float) -> void:
+	if not BetaPriorityAllocation.category_enabled(category): return
 	if _syncing_priority_controls or _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED:
 		return
 	if not is_finite(value) or value < BetaPriorityAllocation.MIN_PRIORITY or value > BetaPriorityAllocation.MAX_PRIORITY or int(value) != value or int(value) % BetaPriorityAllocation.PRIORITY_STEP != 0:
@@ -790,8 +792,9 @@ func _sync_priority_controls(reset_draft: bool = true) -> void:
 	if not is_node_ready():
 		return
 	if reset_draft:
-		_priority_draft = _priority_allocation.get_distribution()
+		_priority_draft = BetaPriorityAllocation.editable_distribution(_priority_allocation.get_distribution())
 	_syncing_priority_controls = true
+	%InsiderPriority.min_value = BetaPriorityAllocation.MIN_PRIORITY if BetaPriorityAllocation.insiders_enabled() else 0
 	%QAPriority.value = _priority_draft[CardData.BETA_CATEGORY_QA]
 	%MarketingPriority.value = _priority_draft[CardData.BETA_CATEGORY_MARKETING]
 	%InsiderPriority.value = _priority_draft[CardData.BETA_CATEGORY_INSIDER]
@@ -841,8 +844,7 @@ func open_priority_overlay() -> bool:
 
 
 func reset_priority_draft() -> void:
-	_priority_draft = get_priority_distribution()
-	for key in _priority_draft: _priority_draft[key] = maxi(10,_priority_draft[key])
+	_priority_draft = BetaPriorityAllocation.editable_distribution(get_priority_distribution())
 	_sync_priority_controls(false)
 
 

@@ -1,0 +1,52 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_root_first_rosters.gd"
+  ],
+  "exit": 24,
+  "elapsed_seconds": 2.532,
+  "errors": [
+    "FAIL: New starts use explicit v4: action",
+    "FAIL: Independent exact v4 roster/count/Scope: action",
+    "FAIL: V4 exact saved-state/RNG round trip: action",
+    "FAIL: New starts use explicit v4: adventure",
+    "FAIL: Independent exact v4 roster/count/Scope: adventure",
+    "FAIL: V4 exact saved-state/RNG round trip: adventure",
+    "FAIL: New starts use explicit v4: role_playing",
+    "FAIL: Independent exact v4 roster/count/Scope: role_playing",
+    "FAIL: V4 exact saved-state/RNG round trip: role_playing",
+    "FAIL: New starts use explicit v4: strategy",
+    "FAIL: Independent exact v4 roster/count/Scope: strategy",
+    "FAIL: V4 exact saved-state/RNG round trip: strategy",
+    "FAIL: New starts use explicit v4: simulation",
+    "FAIL: Independent exact v4 roster/count/Scope: simulation",
+    "FAIL: V4 exact saved-state/RNG round trip: simulation",
+    "FAIL: New starts use explicit v4: puzzle",
+    "FAIL: Independent exact v4 roster/count/Scope: puzzle",
+    "FAIL: V4 exact saved-state/RNG round trip: puzzle",
+    "FAIL: New starts use explicit v4: sports",
+    "FAIL: Independent exact v4 roster/count/Scope: sports",
+    "FAIL: V4 exact saved-state/RNG round trip: sports",
+    "FAIL: New starts use explicit v4: racing",
+    "FAIL: Independent exact v4 roster/count/Scope: racing",
+    "FAIL: V4 exact saved-state/RNG round trip: racing"
+  ],
+  "tail": [
+    "PASS: Starting grants never credit plays: racing/lives_system",
+    "PASS: Every owned starting node has all named parents: racing/simple_story",
+    "PASS: Starting grants never credit plays: racing/simple_story",
+    "FAIL: V4 exact saved-state/RNG round trip: racing",
+    "PASS: No passive or repeat grant: racing",
+    "PASS: Root sound and no free advanced/crossover branch: racing",
+    "PASS: New project uses the exact granted pool: racing",
+    "ROOT_FIRST_ROSTERS checks=318 failures=24",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

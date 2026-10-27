@@ -48,6 +48,10 @@ func run() -> void:
 	await create_timer(0.1).timeout
 	check(music.pause_weight > 0 and music.pause_weight < 1, "Pause treatment fades in")
 	check(music.pause_reverb.dry == 1.0 and music.player.volume_db == player_volume and AudioServer.get_bus_volume_db(bus) == volume, "Fade-in preserves full dry signal and music gain")
+	var entry_wet: float = music.pause_reverb.wet
+	check(entry_wet < music.PAUSE_REVERB_WET * music.pause_weight, "Gentle entry eases in instead of jumping to linear wetness")
+	await create_timer(0.35).timeout
+	check(music.pause_weight < 1.0 and music.pause_reverb.wet > entry_wet, "Filter is still gradually entering after nearly half a second")
 	var before: float = music.presentation_seconds()
 	await create_timer(1.0).timeout
 	check(music.presentation_seconds() > before + 0.7 and music.grid.loops >= 1, "Pause clock crosses real loop boundary")
@@ -63,9 +67,29 @@ func run() -> void:
 	check(resumes.size() == 1 and resumes[0] > 0, "One shared subdivision shift on resume")
 	check(is_equal_approx(banner._started - banner_started, resumes[0] * Map.STEP), "Popup uses the identical hand grid shift")
 	check(banner.banner.scale.x >= scale_before.x and banner.banner.modulate.a >= alpha_before, "Partly visible popup never rewinds on rejoin")
-	await create_timer(0.4).timeout
+	await create_timer(0.3).timeout
+	check(music.pause_weight > 0.0 and music.pause_weight < 1.0 and AudioServer.is_bus_effect_enabled(bus, 0), "Resume gradually removes reverb instead of bypassing it immediately")
+	await create_timer(music.PAUSE_FADE).timeout
 	check(music.pause_weight == 0 and not AudioServer.is_bus_effect_enabled(bus, 0) and music.pause_reverb.dry == 1.0, "Resume clears reverb with original dry level intact")
 	banner.queue_free()
+	# Reverse the envelope midway, including at zero gameplay time scale.
+	paused = true
+	await create_timer(0.22).timeout
+	var partial_wet: float = music.pause_reverb.wet
+	paused = false
+	await process_frame
+	check(absf(music.pause_reverb.wet - partial_wet) < 0.03, "Rapid reversal retains current wetness without a jump")
+	await create_timer(0.08).timeout
+	var reversed_wet: float = music.pause_reverb.wet
+	check(reversed_wet > 0.0 and reversed_wet < partial_wet, "Partial resume reverses the existing envelope")
+	paused = true
+	Engine.time_scale = 0.0
+	await create_timer(0.2, true, false, true).timeout
+	check(music.pause_reverb.wet > reversed_wet and music.pause_weight < 1.0, "Filter gradually advances with gameplay time scale zero")
+	Engine.time_scale = 1.0
+	paused = false
+	await create_timer(music.PAUSE_FADE + 0.15).timeout
+	check(music.pause_weight == 0.0 and not AudioServer.is_bus_effect_enabled(bus, 0), "Rapid toggles finish cleanly and bypass at zero wetness")
 	# Rapid pause toggles, low FPS and settings changes cannot duplicate effects,
 	# restart playback, or leave reverb latched on after scene/menu teardown.
 	Engine.max_fps = 5
@@ -78,7 +102,7 @@ func run() -> void:
 		DemoSettingsStore.apply_audio(settings)
 		check(AudioServer.is_bus_mute(bus), "Mute works during pause")
 		paused = false
-		await create_timer(0.45).timeout
+		await create_timer(music.PAUSE_FADE + 0.25).timeout
 		check(music.pause_weight == 0 and AudioServer.is_bus_mute(bus), "Resume preserves saved mute and clears treatment")
 	Engine.max_fps = 0
 	DemoSettingsStore.apply_audio(DemoSettingsStore.defaults())
@@ -105,7 +129,7 @@ func run() -> void:
 			"wall_elapsed": (Time.get_ticks_msec() - began) / 1000.0})
 		check(music.grid.loops >= laps + 2 and music.presentation_seconds() >= before + 2 * Map.LENGTH, "Two full real-time paused loops retain continuous beat count")
 		paused = false
-		await create_timer(0.4).timeout
+		await create_timer(music.PAUSE_FADE + 0.15).timeout
 	var path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
 	if not path.is_empty(): FileAccess.open(path, FileAccess.WRITE).store_string(JSON.stringify({"checks": checks, "failures": failures, "resumes": resumes, "traces": traces}, "\t"))
 	print("PAUSE_MUSIC checks=%d failures=%d" % [checks, failures])
@@ -198,7 +222,7 @@ func verify_dsp(bus: int) -> void:
 	var measurements: Array = []
 	for filtered in [false, true]:
 		paused = filtered
-		await create_timer(0.5).timeout
+		await create_timer(music.PAUSE_FADE + 0.2).timeout
 		capture.clear_buffer()
 		probe.play()
 		await create_timer(0.8).timeout
@@ -217,7 +241,7 @@ func verify_dsp(bus: int) -> void:
 	check(measurements[1].tail_energy > maxf(0.000001, measurements[0].tail_energy * 10), "Paused Music adds a measurable room reverb tail")
 	traces.append({"dsp": measurements})
 	paused = false
-	await create_timer(0.4).timeout
+	await create_timer(music.PAUSE_FADE + 0.15).timeout
 	music.player.volume_db = 0
 	probe.queue_free()
 	for i in range(AudioServer.get_bus_effect_count(bus) - 1, -1, -1):

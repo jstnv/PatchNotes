@@ -2,6 +2,8 @@
 
 **Historical benefit proposal:** The QA card-switch pairing below was replaced by [Feature synergy replay Bug search](2026-10-25-qa-synergy-search-design-v2.md) for the same-hand challenge. The user later revived the swap as a [separate pure-hand QA challenge](2026-10-25-qa-two-challenges-decision-v4.md). The same-hand training challenge below remains selected.
 
+**Research trigger supersession, 2026-10-26:** The shared employee duty still applies regardless of specialty training, but the passive-after-any-productive-cycle wording below was superseded by [active Store Research only](2026-10-26-active-research-falloff-direction-v1.md).
+
 ## Scope and status
 
 This is an Employees/Challenges **design** record. Affordability, wages and the player-facing hiring rule are outside this pass. Employee implementation and reopening the Employees button remain on hold. No gameplay or shared To Do List change is authorized here.

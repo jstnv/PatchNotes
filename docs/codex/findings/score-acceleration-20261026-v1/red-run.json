@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_score_floats.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 2.89,
+  "errors": [
+    "ERROR: FAIL: Strongest acceleration is in the third quarter"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "ERROR: FAIL: Strongest acceleration is in the third quarter",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (res://scripts/debug/verify_score_floats.gd:8)",
+    "       [1] _run (res://scripts/debug/verify_score_floats.gd:29)"
+  ]
+}

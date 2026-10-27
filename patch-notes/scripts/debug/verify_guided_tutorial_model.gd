@@ -24,7 +24,7 @@ func _run() -> void:
 	expect(model.next_lesson(),"Continue after first hand")
 	var balanced: Dictionary = model.play([0,1,2,3])
 	expect(balanced.ok and balanced.balanced_production,"Next hand triggers actual Balanced Production")
-	expect(balanced.scores=={0:2,1:2,2:2,3:2} and balanced.scope==1,"Balanced shares original total without changing Scope")
+	expect(balanced.scores=={0:3,1:3,2:2,3:2} and balanced.scope==1,"Balanced boosts eight to ten, shares whole points and keeps Scope")
 	expect(model.next_lesson(),"Continue to Specialization")
 	var specialized: Dictionary = model.play([0,1,2,3])
 	expect(specialized.ok and specialized.specialization_stat==&"graphics" and specialized.scores[0]==20,"Specialization uses real ×1.5 category rounding")

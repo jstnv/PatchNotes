@@ -1,0 +1,323 @@
+# Patch Notes — UI Design System & Folder Navigation Implementation
+
+We are beginning a visual overhaul of Patch Notes' interface.
+
+The goal is to establish a reusable, cohesive UI design system based on our newly approved logo, typography, color palette, and folder-based navigation.
+
+**This is an implementation task.** Inspect the existing project architecture, implement the foundation, and use Studio Creation as our first complete reference screen.
+
+Preserve existing gameplay mechanics, data, and functionality.
+
+## 1. Inspect the existing UI architecture
+
+Before making changes:
+
+- Inspect the existing Godot scenes, UI scripts, themes, and navigation logic.
+- Review the internal project logs and relevant design documentation.
+- Identify existing reusable UI components.
+- Locate the Main Menu, Studio Creation, and How to Play implementations.
+- Identify any existing folder navigation patterns that can be extended.
+- Follow our established internal logging conventions.
+
+Reuse existing systems wherever practical. Avoid unnecessary rewrites.
+
+## 2. Establish the global visual identity
+
+We have approved a contemporary, minimalist retro-tech aesthetic.
+
+### Color palette
+
+Use these as the initial reference colors:
+
+| Purpose | Hex |
+|---|---|
+| Primary background | `#20252B` |
+| Secondary background | `#252C33` |
+| Folder surface | `#303943` |
+| Active folder surface | `#354852` |
+| Primary text | `#F5EEDF` |
+| Secondary text | `#A7B1BA` |
+| Cyan accent | `#40C9CF` |
+| Orange accent | `#F28A62` |
+| Borders | `#46515B` |
+
+Centralize these colors in the Godot theme rather than hardcoding them across individual scenes.
+
+Visual principles:
+
+- Dark charcoal should dominate.
+- Cyan indicates active navigation, selection, and focus.
+- Orange emphasizes primary actions and important decisions.
+- Cream is the primary text color.
+- Avoid excessive decorative geometry, neon effects, gradients, and unnecessary background artwork.
+- Preserve generous negative space.
+- Use subtle pixel-inspired geometry and restrained corner cuts.
+
+The UI should feel contemporary, cozy, approachable, and retro-tech rather than aggressively futuristic or arcade-themed.
+
+## 3. Typography
+
+Our approved Patch Notes logo uses thick geometric lettering, squared corners, and subtle pixel-cut details.
+
+The interface typography should complement the logo without imitating it exactly.
+
+Use:
+
+**Chakra Petch**
+- Major headings: Bold
+- Folder titles: SemiBold/Bold
+- Tabs: SemiBold
+- Buttons: Medium/SemiBold
+
+**IBM Plex Sans**
+- Descriptions
+- Instructions
+- Tooltips
+- Longer text
+
+**IBM Plex Mono**
+- Currency
+- Core Scores
+- Scope
+- Dates and years
+- Version numbers
+- Technical metadata
+
+Use appropriately licensed font resources and document their licenses.
+
+Create reusable font styles in the global Godot theme.
+
+Do not replace the custom Patch Notes logo with ordinary font text. If the approved logo artwork is not yet available in the repository, preserve a clearly identified placeholder and report the missing asset.
+
+## 4. Build reusable folder components
+
+We want menus to resemble physical file folders while retaining modern software-interface functionality.
+
+Create or adapt reusable components for:
+
+- `FolderPanel`
+- `FolderTabBar`
+- `FolderHeader`
+- `FolderSidebar`
+- `DocumentPanel`
+- Shared action buttons
+- Shared input fields
+
+These names are suggestions; adapt them to the existing architecture.
+
+### Folder appearance
+
+- Folder tabs should have slightly angular silhouettes.
+- Selected tabs should visually connect to their content panel.
+- Inactive tabs should use darker surfaces.
+- Active tabs should use restrained cyan highlighting.
+- Folder content should remain clean and readable.
+- Avoid excessive borders and nested decorative frames.
+
+Preserve the current horizontal-tab, vertical-sidebar, and content-panel layout patterns where appropriate.
+
+## 5. Implement navigation-stack architecture
+
+We want folder navigation to behave like opening and closing folders.
+
+### Navigation rules
+
+1. The Main Menu is the root navigation screen.
+2. Opening a major menu pushes a new destination onto the navigation stack.
+3. The new folder slides into frame from the right.
+4. The top-left Back button returns to the previous menu.
+5. Going backward reverses the transition.
+6. Switching tabs within a folder does not push another navigation destination.
+7. Escape should trigger Back when appropriate.
+8. Navigation should restore focus and relevant UI state.
+
+Target transition duration: approximately 200–250 ms.
+
+Use Godot's existing animation/tween systems where appropriate.
+
+Avoid building a second competing navigation system if one already exists. Extend or refactor the current implementation safely.
+
+Prevent duplicate transitions, input during unsafe transition states, and accidental navigation-stack corruption.
+
+### Navigation boundaries
+
+Back navigation must not undo committed gameplay actions or studio creation.
+
+Unsaved Studio Creation selections should remain intact when temporarily returning to the Main Menu, unless the player explicitly discards them or starts a fresh setup.
+
+## 6. Redesign Studio Creation
+
+Studio Creation is our first full-screen folder implementation.
+
+It should occupy nearly the entire available viewport, with modest outer margins.
+
+### Header
+
+Top-left:
+- Back button with left arrow
+- Studio Creation title
+- Small contextual subtitle
+
+Top-right:
+- Optional version or setup metadata
+
+The Back button must navigate to the previous menu.
+
+### Studio Name
+
+Place a permanent Studio Name input near the top of the folder, beneath the header and above the folder tabs.
+
+The field should:
+
+- Remain accessible regardless of the active tab.
+- Preserve the player's entered text when switching tabs.
+- Respect existing name validation rules.
+- Use the new global typography and input styling.
+
+### Folder tabs
+
+Preserve these existing sections:
+
+1. Genre Specializations
+2. Traits
+3. Overview
+
+These should appear as connected folder tabs.
+
+Keep their existing data, selection rules, and gameplay functionality.
+
+### Genre Specialization
+
+Use the larger available screen area to improve presentation.
+
+Consider a responsive selection grid or another appropriate layout, but do not remove existing functionality.
+
+Display the selected specialization and its starting Feature roster clearly.
+
+Do not invent new genres, Features, or specialization bonuses.
+
+### Traits
+
+Preserve the current trait selection and validation mechanics.
+
+Update only the visual layout and styling unless a technical adjustment is necessary.
+
+### Overview
+
+Present a readable summary of:
+
+- Studio name
+- Genre specialization
+- Selected traits
+- Other existing relevant setup information
+
+### Primary action
+
+Keep the final studio creation action clearly visible, preferably toward the bottom-right.
+
+Preserve all existing validation and creation behavior.
+
+## 7. Main Menu integration
+
+Update the Main Menu to complement the new visual identity.
+
+Preferred layout:
+
+- Approved Patch Notes logo prominently displayed.
+- Compact vertical navigation on the left.
+- Dark charcoal background.
+- Minimal decoration.
+- Cyan selected-state highlighting.
+- Orange reserved for appropriate accents or actions.
+- Generous negative space.
+
+The Main Menu should serve as the root from which major folder menus open.
+
+Preserve all currently available menu actions, including disabled-state behavior.
+
+Do not invent additional menu functionality.
+
+## 8. Implementation constraints
+
+- Preserve all existing game systems.
+- Do not modify game balance.
+- Do not change the mechanics of genre specialization or traits.
+- Do not alter simulation or financial calculations.
+- Avoid unnecessary scene rewrites.
+- Maintain keyboard and mouse navigation.
+- Support the project's existing resolution and scaling behavior.
+- Prefer reusable themes and components over per-screen overrides.
+- Ensure text remains readable at supported resolutions.
+- Keep animation optional or safely bypassable when necessary.
+
+## 9. Verification
+
+After implementation:
+
+1. Run existing project verification suites.
+2. Verify Main Menu navigation.
+3. Verify Studio Creation entry and Back behavior.
+4. Verify all three Studio Creation tabs.
+5. Verify Studio Name input and persistence.
+6. Verify Genre Specialization selection.
+7. Verify Traits selection and validation.
+8. Verify Overview information.
+9. Verify studio creation and subsequent gameplay entry.
+10. Verify keyboard focus and Escape behavior.
+11. Check for UI clipping, overlapping elements, and scaling problems.
+
+Where practical, capture screenshots of the updated Main Menu and Studio Creation screens.
+
+If the environment cannot render the game, report that limitation rather than claiming visual verification.
+
+## 10. Internal documentation
+
+Document the new UI system using our established internal logging structure.
+
+Include:
+
+- Theme colors and typography
+- Reusable folder components
+- Navigation architecture
+- Transition behavior
+- Scene integration
+- Verification results
+- Remaining visual or technical issues
+
+Update the internal To Do List according to the project's existing workflow.
+
+Do not create a separate competing task-tracking system.
+
+## Implementation order
+
+Work in this order:
+
+**Phase 1:** Inspect architecture and identify reusable systems.
+
+**Phase 2:** Implement global typography, colors, and shared theme resources.
+
+**Phase 3:** Implement reusable folder components and navigation-stack behavior.
+
+**Phase 4:** Redesign Studio Creation using the new components.
+
+**Phase 5:** Integrate the Main Menu and transitions.
+
+**Phase 6:** Run verification, document results, and report outstanding issues.
+
+Complete the foundation and reference screens before expanding the redesign to unrelated menus.
+
+## Expected outcome
+
+We should finish with:
+
+- A consistent Patch Notes visual identity.
+- A reusable folder-based UI framework.
+- Working forward/backward folder navigation.
+- An updated Main Menu.
+- A full-screen Studio Creation interface.
+- Preserved gameplay functionality.
+- A documented foundation for redesigning the remaining menus.
+
+**Important:** Prioritize maintainability and consistency over decorative complexity. The purpose of this work is to create the foundation for every future Patch Notes menu, not just make one screen look attractive.
+
+Proceed with implementation, verify your work, and report what was completed and what remains.

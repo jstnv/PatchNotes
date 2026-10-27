@@ -1,0 +1,13 @@
+--- current/scripts/contracts/publisher_relationship_rules.gd
+
++++ private/scripts/contracts/publisher_relationship_rules.gd
+
+@@ -49,6 +49,7 @@
+
+ 	return {"event_id":StringName(str(id)+":reputation"),"source_id":id,"publisher_id":&"sidestreet","kind":KIND,"cycle":found.cycle}
+ 
+ static func resolve(run: Variant,request: Dictionary) -> Dictionary:
++	if request.get("kind") == preload("res://scripts/contracts/crown_relationship_rules.gd").KIND: return preload("res://scripts/contracts/crown_relationship_rules.gd").resolve(run,request)
+ 	if request.get("kind") == preload("res://scripts/contracts/publisher_support.gd").KIND: return preload("res://scripts/contracts/publisher_support.gd").resolve(run,request)
+ 	if request.get("kind") == preload("res://scripts/contracts/publisher_commission_trial.gd").KIND: return preload("res://scripts/contracts/publisher_commission_trial.gd").resolve(run,request)
+ 	if request.size() != 5 or request.get("publisher_id") != &"sidestreet" or request.get("kind") != KIND or not request.get("source_id") is StringName: return {}

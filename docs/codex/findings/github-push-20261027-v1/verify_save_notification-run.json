@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_save_notification.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 9.985,
+  "errors": [],
+  "tail": [
+    "PASS: Success notification disappears automatically",
+    "PASS: A durable status refresh neither reopens the toast nor changes save data",
+    "PASS: In-flight saves do not announce success or expire early",
+    "PASS: Failure remains visible rather than fading as a success",
+    "PASS: A later success replaces the failure cleanly",
+    "PASS: Notification animation completes while the game is paused",
+    "PASS: All presentation checks preserve the actual checkpoint",
+    "Save notification: 36 checks, 0 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

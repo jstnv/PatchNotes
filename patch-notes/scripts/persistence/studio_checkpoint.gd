@@ -230,7 +230,7 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 	var resolver := func(request: Dictionary) -> Dictionary: return RunState.RelationshipRules.resolve(r,request)
 	if RunState.RelationshipLedger.reconstruct(r.publisher_relationships,r.bank_run_id,r.completed_run_cycles,resolver).is_empty(): return "Invalid publisher relationship provenance"
 	var roster_version: int = r.get("founding_roster_version",1)
-	if roster_version not in [1,2,3]: return "Invalid founding roster version"
+	if roster_version not in [1,2,3,4]: return "Invalid founding roster version"
 	if r.has("founding_roster_version") and payload.content_revision != revision(): return "Invalid historical founding roster metadata"
 	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
 	if r.studio_name.is_empty() or r.studio_name != r.studio_name.strip_edges() or r.studio_name.length()>80 or StudioSpecialties.preview(r.studio_specialty).is_empty(): return "Invalid Studio identity"

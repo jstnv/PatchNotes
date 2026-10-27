@@ -1,0 +1,14 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+ERROR: Queue migration: all prior rival state/RNG/finance/hands survive; only explicit market/source provenance is new
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_queue_source_migration.gd:9)
+       [1] _initialize (res://scripts/debug/verify_queue_source_migration.gd:39)
+ERROR: Queue migration: player cash/history/RNG unchanged through named upgrade
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_queue_source_migration.gd:9)
+       [1] _initialize (res://scripts/debug/verify_queue_source_migration.gd:40)
+QUEUE_MIGRATION checks=11 failures=2

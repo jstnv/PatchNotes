@@ -1,0 +1,26 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_menu_visualizer.gd"
+  ],
+  "exit": 124,
+  "elapsed_seconds": 130.0,
+  "errors": [
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'max' in base 'PackedFloat32Array'."
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'max' in base 'PackedFloat32Array'.",
+    "   at: _run (res://scripts/debug/verify_menu_visualizer.gd:35)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _run (res://scripts/debug/verify_menu_visualizer.gd:35)"
+  ]
+}

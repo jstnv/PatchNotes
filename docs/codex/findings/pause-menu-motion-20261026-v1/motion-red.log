@@ -1,0 +1,10 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+ERROR: Rival Gameplay: Pause menu has an interruptible visual transition
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] _initialize (res://scripts/debug/verify_pause_motion.gd:21)
+       [2] skip_save_invitation (res://scripts/debug/verify_pause_menu.gd:112)
+PAUSE_MOTION checks=2 failures=1

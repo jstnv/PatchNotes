@@ -1,0 +1,37 @@
+# Eight specialist rivals and a 1977 opening history — 2026-10-26
+
+**SUPERSEDED in part:** The later [first-release standards decision](2026-10-26-first-release-generates-genre-standards-decision-v2.md) replaces this record's guaranteed exact 7.0 founding result and pre-authored persistent standard. First 1977 Reviews now target 6.0–7.0, and a Genre's persistent standard is generated after its first actual release. The eight-rival 1977 and specialty Store direction remains.
+
+**Status:** user-directed qualitative design. No canonical gameplay adoption, numerical target table, generated career, or implementation handoff.
+
+## Selected direction
+
+- A new January 1980 save should contain **one initial persistent rival studio for each of the eight live Genres**. Each studio's permanent specialty matches its assigned Genre. The player's January 1980 start is unchanged.
+- Those studios' histories begin in **1977**. The opening history should show the ordinary progression from an initial **7.0 Review** in each assigned Genre toward stronger late-1970s games, with capable rivals already working on a new project at the player start. The initial 7.0 is a guaranteed **frozen historical seed result**, not a minimum or override for a later game played through Design, Alpha and Beta. The user wants these titles to establish initial standards; the four-Core evidence and benchmark rule needed to make that true remain OPEN below.
+- Initial four-Core Review standards should be **lower in all eight Genres and all four categories** than the present 1980 table, then develop with the historical market. The size, 1977–79 schedule, and whether any reduction remains at the January 1980 player boundary are OPEN. Preserve ordinary Review arithmetic, actual legal hands, full played Scope before release, and possible-Feature exhaustion. A 7.0 historical title is not evidence that a legal live project is ready to release.
+- Rival Store progression should improve the four-Core mix needed by its **permanent specialty Genre**, obeying real ownership, prerequisite, era, finance and Research rules. This develops the existing October 9 specialty-target shopping direction. Project Genre selection still needs a legal, funded attainable Core fit before Begin; do not force a specialty project when the studio cannot make it competently. The desired eventual result is that each specialist can legally publish strong games in its own Genre.
+
+## Boundary and reconciliation
+
+The current ACTIVE/TRIAL base target table totals 132 per Genre and begins with the player in 1980. Current live Market benchmark lift requires an actual same-Genre release of at least 7.0 **with its four Core scores**. Existing frozen archives hold Review but no Core vector and are excluded from active releases, saturation, following-month news and 1980-only ranking. A 7.0 label alone therefore cannot set Graphics, Sound, Technology and Design standards. The historical benchmark needs a separately versioned four-Core record and an explicit effective-date rule. Frozen historical games must continue earning no post-start sales or Fans and must not count as recent Genre/Theme saturation.
+
+This direction replaces the two-rival fixed opening cohort with eight specialists and supersedes the previously OPEN opening-history recipe wherever it assumed those two exact archives or an earlier-than-1977 title. The prior wish for late-1970s 8.x–9.x history is compatible with a first 7.0 title, but the number, dates and legal provenance of later games remain OPEN. The existing user rule to select only a project Genre suited to achievable Core still governs. The 1977 start does not authorize setting the global player clock to 1977, fabricating January project state, or granting a guaranteed Review to an active project.
+
+## Recommended candidate for study, not an approved rule
+
+Use a versioned pre-1980 career recipe or legally validated tape for each of the eight rivals. Give each one dated historical releases, owned Features, cash/Fans and (if valid) an in-progress January project. The founding 1977 7.0 title may be authored as a typed historical anchor with a dated four-Core vector. Keep historical benchmark input separate from recent active Market density and sales crowding. Freeze the applicable standards when each project begins, including pre-1980 projects. Persist the generated January state once; Continue must restore it exactly. Offline preparation or a compact validated recipe is preferable to silently simulating three years for eight rivals on each new-save creation, pending CPU evidence.
+
+## OPEN design and proof gates
+
+1. Exact 1977 targets in all 32 Genre/category cells, progression to 1980, floor/ceiling, and whether the present 1980 table is retained. The lower-target effect on the player's first game and the usual-at-most-7.0 objective must be measured, not assumed.
+2. Meaning of the historical 7.0 guarantee: one founding title per studio is the recommended reading. Exact release month, Core vector, Scope/Bugs provenance and whether it may influence later Review standards need a design contract. It cannot be inserted into current active Market facts without changing frozen-history accounting.
+3. Historical market benchmark math: eligible dates, which prior Core vector establishes each category, how standards rise, whether an incumbent's own past work counts for its future project, and how a 1980 player sees the benchmark. A rating alone cannot determine four category values.
+4. Eight distinct legal specialty-owned Feature pools, Store paths and historical cash/Fan states, including at least required Scope in actually playable supply. Starting bankroll and Fans, later 8.x–9.x success frequency, and first live 1980 Review remain OPEN.
+5. Real pre-start calendar/provenance and January active-project hydration. Current rival/player clocks and finance checkpoints reject simple cycle rewrites; do not fake a six-cycle head start.
+6. Per-save generation and replay identity, old-save cohort preservation or explicit migration, 8-rival CPU/save costs, release frequency, player Review/sales, Genre/Theme variety, and no historical saturation leakage.
+
+## Predeclared next simulator comparison
+
+Before running, pin source and fresh legal starting conditions in a separate plan. Compare (A) current two-rival January baseline, (B) eight specialists with only typed frozen 1977–79 history and no target change, (C) reduced pre-1980 standards that return to the current 1980 table, and (D) a reduced January 1980 table. Keep historical-anchor and live-release scores separate. Use the same declared seeds but verify full initial state/RNG identity within a rule revision; regenerate legal prefixes across revisions. Measure first player Review, first live rival Review, Scope/Bugs/Core, release dates/count, 1980 top Review, historical visibility, live Market standards, saturation, cash/Fans, save/Continue, CPU and failures. Put any gameplay prototype only in a named private thread variant via the isolated runner. No number is approved by this direction alone.
+
+**Source inspection:** `main` HEAD `087df09d` with pre-existing shared edits on 2026-10-26. Relevant source: `patch-notes/scripts/review/primitive_review_calculator.gd`, `patch-notes/scripts/market/market_transaction_trial.gd`, `patch-notes/scripts/market/rival_trial.gd`, `patch-notes/scripts/run_state.gd`. Existing two-rival trial archives include a 1976 title and 1977/1979 examples. No simulator run was made for this decision record.

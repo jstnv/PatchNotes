@@ -1,0 +1,29 @@
+{
+  "elapsed_seconds": 11.241328399977647,
+  "process_cpu_seconds": 10.6875,
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_alpha_command.gd"
+  ],
+  "exit": 1,
+  "errors": [
+    "ERROR: FAIL: live full state/RNG/signal trace matches pre-extraction oracle",
+    "ERROR: FAIL: headless full state/RNG/signal trace matches pre-extraction oracle"
+  ],
+  "tail": [
+    "ERROR: FAIL: headless full state/RNG/signal trace matches pre-extraction oracle",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _expect (res://scripts/debug/verify_design_phase.gd:1289)",
+    "       [1] run_cases (res://scripts/debug/verify_alpha_command.gd:159)",
+    "       [2] _initialize (res://scripts/debug/verify_alpha_command.gd:40)",
+    "       [3] run_cases (res://scripts/debug/verify_alpha_command.gd:168)",
+    "Alpha command trace capture: 57 scenarios (headless)"
+  ]
+}

@@ -1,0 +1,194 @@
+diff --git a/patch-notes/scripts/audio/soundtrack.gd b/patch-notes/scripts/audio/soundtrack.gd
+index 288460f9..69225a5c 100644
+--- a/patch-notes/scripts/audio/soundtrack.gd
++++ b/patch-notes/scripts/audio/soundtrack.gd
+@@ -7,7 +7,7 @@ const Map := preload("res://scripts/audio/theme_map.gd")
+ const Blend := preload("res://scripts/audio/theme_blend.gd")
+ const A := Map.MAIN_A
+ const B := Map.MAIN_B
+-const PAUSE_FADE := 0.3
++const PAUSE_FADE := 0.9
+ const PAUSE_REVERB_WET := 0.38
+ var player: AudioStreamPlayer
+ var themes: AudioStreamSynchronized
+@@ -92,7 +92,9 @@ func _build_pause_effects() -> void:
+ func _apply_pause_effects() -> void:
+ 	# Keep the full original track; pause changes only the room's wet signal.
+ 	pause_reverb.dry = 1.0
+-	pause_reverb.wet = PAUSE_REVERB_WET * pause_weight
++	# Ease the room in/out over real time. Reversing pause reuses the current
++	# progress so rapid toggles cannot reset or jump the wet signal.
++	pause_reverb.wet = PAUSE_REVERB_WET * smoothstep(0.0, 1.0, pause_weight)
+ 	var bus := AudioServer.get_bus_index(&"Music")
+ 	if bus < 0: return
+ 	for i in range(AudioServer.get_bus_effect_count(bus)):
+diff --git a/patch-notes/scripts/debug/verify_pause_audibility.gd b/patch-notes/scripts/debug/verify_pause_audibility.gd
+index 52db144c..9a9e8b20 100644
+--- a/patch-notes/scripts/debug/verify_pause_audibility.gd
++++ b/patch-notes/scripts/debug/verify_pause_audibility.gd
+@@ -10,6 +10,8 @@ func _initialize() -> void:
+ 	music = root.get_node("Soundtrack")
+ 	await process_frame
+ 	game._on_studio_created("Pause audibility", &"action", [], game._active_phase)
++	await process_frame
++	await skip_save_invitation()
+ 	var prefs := DemoSettingsStore.defaults()
+ 	prefs.Music = 13
+ 	DemoSettingsStore.apply_audio(prefs)
+@@ -31,7 +33,7 @@ func _initialize() -> void:
+ 		await create_timer(1.0).timeout
+ 		await key(KEY_ESCAPE)
+ 		var frozen := game_state()
+-		await create_timer(0.7).timeout
++		await create_timer(music.PAUSE_FADE + 0.2).timeout
+ 		var source_power := 0.0
+ 		var filtered_power := 0.0
+ 		var prior_clock: float = music.presentation_seconds()
+@@ -59,7 +61,7 @@ func _initialize() -> void:
+ 		# but no material song attenuation. Dry unity is checked separately above.
+ 		expect(source_power > 0.001 and gain >= 0.95, "Paused %s retains the dry song level with room reverb: %.2f dB" % [theme,linear_to_db(gain)])
+ 		await key(KEY_ESCAPE)
+-		await create_timer(0.5).timeout
++		await create_timer(music.PAUSE_FADE + 0.2).timeout
+ 		expect(not paused and music.pause_weight == 0.0, "Resume clears pause treatment")
+ 	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT"),FileAccess.WRITE).store_string(JSON.stringify({"backend":AudioServer.get_driver_name(),"rows":rows,"levels":levels,"checks":checks,"failures":failures},"\t"))
+ 	print("PAUSE_AUDIBILITY checks=%d failures=%d" % [checks,failures])
+diff --git a/patch-notes/scripts/debug/verify_pause_menu.gd b/patch-notes/scripts/debug/verify_pause_menu.gd
+index d714b593..bcd34b98 100644
+--- a/patch-notes/scripts/debug/verify_pause_menu.gd
++++ b/patch-notes/scripts/debug/verify_pause_menu.gd
+@@ -149,7 +149,7 @@ func check_pause_and_settings() -> void:
+ 	expect(root.gui_get_focus_owner() == game.pause_menu.resume_button, "Resume owns initial focus")
+ 	var time_left := timer.time_left
+ 	var music_before: float = music.presentation_seconds()
+-	await create_timer(0.7).timeout
++	await create_timer(music.PAUSE_FADE + 0.2).timeout
+ 	expect(timer.time_left == time_left, "Gameplay Timer is frozen")
+ 	expect(not music.player.stream_paused and music.presentation_seconds() > music_before + 0.4 and music.pause_weight == 1.0, "Music and grid keep running with full pause treatment")
+ 	await key(KEY_TAB,true)
+diff --git a/patch-notes/scripts/debug/verify_pause_music.gd b/patch-notes/scripts/debug/verify_pause_music.gd
+index a012ee46..96959fd4 100644
+--- a/patch-notes/scripts/debug/verify_pause_music.gd
++++ b/patch-notes/scripts/debug/verify_pause_music.gd
+@@ -48,6 +48,10 @@ func run() -> void:
+ 	await create_timer(0.1).timeout
+ 	check(music.pause_weight > 0 and music.pause_weight < 1, "Pause treatment fades in")
+ 	check(music.pause_reverb.dry == 1.0 and music.player.volume_db == player_volume and AudioServer.get_bus_volume_db(bus) == volume, "Fade-in preserves full dry signal and music gain")
++	var entry_wet: float = music.pause_reverb.wet
++	check(entry_wet < music.PAUSE_REVERB_WET * music.pause_weight, "Gentle entry eases in instead of jumping to linear wetness")
++	await create_timer(0.35).timeout
++	check(music.pause_weight < 1.0 and music.pause_reverb.wet > entry_wet, "Filter is still gradually entering after nearly half a second")
+ 	var before: float = music.presentation_seconds()
+ 	await create_timer(1.0).timeout
+ 	check(music.presentation_seconds() > before + 0.7 and music.grid.loops >= 1, "Pause clock crosses real loop boundary")
+@@ -63,9 +67,29 @@ func run() -> void:
+ 	check(resumes.size() == 1 and resumes[0] > 0, "One shared subdivision shift on resume")
+ 	check(is_equal_approx(banner._started - banner_started, resumes[0] * Map.STEP), "Popup uses the identical hand grid shift")
+ 	check(banner.banner.scale.x >= scale_before.x and banner.banner.modulate.a >= alpha_before, "Partly visible popup never rewinds on rejoin")
+-	await create_timer(0.4).timeout
++	await create_timer(0.3).timeout
++	check(music.pause_weight > 0.0 and music.pause_weight < 1.0 and AudioServer.is_bus_effect_enabled(bus, 0), "Resume gradually removes reverb instead of bypassing it immediately")
++	await create_timer(music.PAUSE_FADE).timeout
+ 	check(music.pause_weight == 0 and not AudioServer.is_bus_effect_enabled(bus, 0) and music.pause_reverb.dry == 1.0, "Resume clears reverb with original dry level intact")
+ 	banner.queue_free()
++	# Reverse the envelope midway, including at zero gameplay time scale.
++	paused = true
++	await create_timer(0.22).timeout
++	var partial_wet: float = music.pause_reverb.wet
++	paused = false
++	await process_frame
++	check(absf(music.pause_reverb.wet - partial_wet) < 0.03, "Rapid reversal retains current wetness without a jump")
++	await create_timer(0.08).timeout
++	var reversed_wet: float = music.pause_reverb.wet
++	check(reversed_wet > 0.0 and reversed_wet < partial_wet, "Partial resume reverses the existing envelope")
++	paused = true
++	Engine.time_scale = 0.0
++	await create_timer(0.2, true, false, true).timeout
++	check(music.pause_reverb.wet > reversed_wet and music.pause_weight < 1.0, "Filter gradually advances with gameplay time scale zero")
++	Engine.time_scale = 1.0
++	paused = false
++	await create_timer(music.PAUSE_FADE + 0.15).timeout
++	check(music.pause_weight == 0.0 and not AudioServer.is_bus_effect_enabled(bus, 0), "Rapid toggles finish cleanly and bypass at zero wetness")
+ 	# Rapid pause toggles, low FPS and settings changes cannot duplicate effects,
+ 	# restart playback, or leave reverb latched on after scene/menu teardown.
+ 	Engine.max_fps = 5
+@@ -78,7 +102,7 @@ func run() -> void:
+ 		DemoSettingsStore.apply_audio(settings)
+ 		check(AudioServer.is_bus_mute(bus), "Mute works during pause")
+ 		paused = false
+-		await create_timer(0.45).timeout
++		await create_timer(music.PAUSE_FADE + 0.25).timeout
+ 		check(music.pause_weight == 0 and AudioServer.is_bus_mute(bus), "Resume preserves saved mute and clears treatment")
+ 	Engine.max_fps = 0
+ 	DemoSettingsStore.apply_audio(DemoSettingsStore.defaults())
+@@ -105,7 +129,7 @@ func run() -> void:
+ 			"wall_elapsed": (Time.get_ticks_msec() - began) / 1000.0})
+ 		check(music.grid.loops >= laps + 2 and music.presentation_seconds() >= before + 2 * Map.LENGTH, "Two full real-time paused loops retain continuous beat count")
+ 		paused = false
+-		await create_timer(0.4).timeout
++		await create_timer(music.PAUSE_FADE + 0.15).timeout
+ 	var path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
+ 	if not path.is_empty(): FileAccess.open(path, FileAccess.WRITE).store_string(JSON.stringify({"checks": checks, "failures": failures, "resumes": resumes, "traces": traces}, "\t"))
+ 	print("PAUSE_MUSIC checks=%d failures=%d" % [checks, failures])
+@@ -198,7 +222,7 @@ func verify_dsp(bus: int) -> void:
+ 	var measurements: Array = []
+ 	for filtered in [false, true]:
+ 		paused = filtered
+-		await create_timer(0.5).timeout
++		await create_timer(music.PAUSE_FADE + 0.2).timeout
+ 		capture.clear_buffer()
+ 		probe.play()
+ 		await create_timer(0.8).timeout
+@@ -217,7 +241,7 @@ func verify_dsp(bus: int) -> void:
+ 	check(measurements[1].tail_energy > maxf(0.000001, measurements[0].tail_energy * 10), "Paused Music adds a measurable room reverb tail")
+ 	traces.append({"dsp": measurements})
+ 	paused = false
+-	await create_timer(0.4).timeout
++	await create_timer(music.PAUSE_FADE + 0.15).timeout
+ 	music.player.volume_db = 0
+ 	probe.queue_free()
+ 	for i in range(AudioServer.get_bus_effect_count(bus) - 1, -1, -1):
+diff --git a/patch-notes/scripts/debug/verify_pause_track_continuity.gd b/patch-notes/scripts/debug/verify_pause_track_continuity.gd
+index 08ee0f9f..a06fc88f 100644
+--- a/patch-notes/scripts/debug/verify_pause_track_continuity.gd
++++ b/patch-notes/scripts/debug/verify_pause_track_continuity.gd
+@@ -14,6 +14,8 @@ func _initialize() -> void:
+ 	music = root.get_node("Soundtrack")
+ 	await process_frame
+ 	game._on_studio_created("Pause music transport", &"action", [], game._active_phase)
++	await process_frame
++	await skip_save_invitation()
+ 	await create_timer(1.5).timeout
+ 	var bus := AudioServer.get_bus_index(&"Master")
+ 	var capture := AudioEffectCapture.new()
+@@ -55,7 +57,7 @@ func _initialize() -> void:
+ 	await key(KEY_ESCAPE)
+ 	expect(paused,"Closing Settings retains gameplay pause")
+ 	await key(KEY_ESCAPE)
+-	await create_timer(0.5, true, false, true).timeout
++	await create_timer(music.PAUSE_FADE + 0.2, true, false, true).timeout
+ 	expect(not paused and music.pause_weight == 0.0, "Esc resumes gameplay and clears filter")
+ 	music.set_paused(true)
+ 	expect(music.player.stream_paused,"Constructed latched transport pause")
+diff --git a/patch-notes/scripts/market/rival_world_checkpoint.gd b/patch-notes/scripts/market/rival_world_checkpoint.gd
+index aa6ed3d7..9c3f1cc2 100644
+--- a/patch-notes/scripts/market/rival_world_checkpoint.gd
++++ b/patch-notes/scripts/market/rival_world_checkpoint.gd
+@@ -9,6 +9,8 @@ const Session := preload("res://scripts/simulation/campaign_session.gd")
+ const LATENCY_PREDECESSOR_SOURCES := ["a866e98020c0018f943ce8b98bbbd564b83d4ecd356bc6a4fd5cf66b0c483fa7", "617a97c83aabe2bba6613a8b4e5bddca7f1b9c4a974b8efb06e3595ad7334c94", "ce24d2a07703a664edd86574b2c678666f9307c5160710a62ce55603c7a74692", "a458650917031ee5dddd23c8a5b7c79986254f731f03a0113ddab4377aab0435"]
+ ## Exact preceding Search editor/compiled presentation; saved fields unchanged.
+ const SEARCH_PRESENTATION_SOURCES := ["efc6ef13b947a784ad4db20d7220920498b3e43c28923c9965baafcf61016580","c1be4bc1ac2c8818d69b00e6e523e475382b0b6047e6e99a42891d7b8960304b","3eecb919ab1e100c930dfd792abeaca8066fe1f9977ed2e7785188f78e8b1fd2"]
++## Exact editor source before the gradual pause blend; saved fields unchanged.
++const PAUSE_TRANSITION_SOURCES := ["3a8f41da6754dcf17269623586337daf39e1523263cbdb1aefcf0e8a9dba3ccc"]
+ ## New grants change prospectively; existing world ownership/RNG is retained.
+ const EMPLOYEE_PRE_SEARCH_SOURCES := ["5dd56b5b84e8e72065c4394ca301f89694461a8a32b62486565fb1f9c49400bd","9216e53b16f5381247b2d4f6a7bfcfd168523cfc6ef5e9d0e11107280367bb31"]
+ const ROOT_FIRST_PREDECESSOR_SOURCES := [
+@@ -306,7 +308,7 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
+ 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
+ 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
+ 	var current_source := Replay.source_identity() if captured_source_identity.is_empty() else captured_source_identity
+-	var source_ok: bool = predecessor_source==current_source or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
++	var source_ok: bool = predecessor_source==current_source or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+ 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
+ 	if predecessor_source!=current_source and predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES+USABILITY_PRESENTATION_SOURCES:
+ 		paired_revision=StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_EMPLOYEE_RULES)

@@ -1,0 +1,127 @@
+{
+  "format": "patch-notes-simulator-handoff-v1",
+  "status": "READY_FOR_IMPLEMENTATION_REVIEW",
+  "created_utc": "2026-10-18T01:38:59.198174+00:00",
+  "variant": {
+    "format": "patch-notes-simulator-variant-v1",
+    "status": "CANDIDATE",
+    "id": "founder-victory-ledger-v1",
+    "owner": "founder-legacy-ownership",
+    "created_utc": "2026-10-18T01:26:55.454656+00:00",
+    "canonical_project": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "base_identity": "9382c90ec435272f4caf577d3c8bcd4b59ab89b0d86086db7f4b776c2c0bd1be",
+    "creation_identity": "9382c90ec435272f4caf577d3c8bcd4b59ab89b0d86086db7f4b776c2c0bd1be",
+    "lineage": [],
+    "canonical_git": {
+      "branch": "main",
+      "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+      "dirty": true
+    },
+    "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"
+  },
+  "summary": "Versioned founder victory ledger with a committed-ownership evaluator for the ten-subsidiary milestone; other routes remain inactive",
+  "design_record": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\founder-legacy-ownership\\2026-10-17-victory-ledger-candidate-decision-v1.md",
+    "sha256": "4a906b459ba98c5be26f42205a16e6df3ba7bdd677822742a65e8ba3ab6d8fbe",
+    "copy": "design-decision.md"
+  },
+  "acceptance": [
+    "Tenth unique majority-controlled subsidiary records one founder claim only after valid atomic ownership settlement; ties, offers, repeats and corrupt evidence reject",
+    "Whole-world checkpoint and fresh-process Continue preserve the ledger; same-source v1 Founder data remains readable; ordinary Studio gameplay remains unchanged"
+  ],
+  "base_identity": "9382c90ec435272f4caf577d3c8bcd4b59ab89b0d86086db7f4b776c2c0bd1be",
+  "candidate_identity": "88b54414bdea9d24c242a286d39293b196eba9b663ae8556de7f5a4675575b32",
+  "canonical_identity": "9382c90ec435272f4caf577d3c8bcd4b59ab89b0d86086db7f4b776c2c0bd1be",
+  "baseline_drift": false,
+  "changes": [
+    {
+      "path": "scripts/debug/verify_founder_victory.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ac355f449083b06a34e2a3dd2184402eaf4dc191d333832ff69e791800b726ab"
+    },
+    {
+      "path": "scripts/debug/verify_founder_victory.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0df21a892af54798a2742b1c7b754c602fe89c3829434977fa8e7bc0d0f57cd8"
+    },
+    {
+      "path": "scripts/debug/verify_founder_victory_cold.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a6def52726202ef45731473d9954e3603d1f33952ddcd32c99a83975fde69582"
+    },
+    {
+      "path": "scripts/debug/verify_founder_victory_cold.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7c9ace9a0f24f11cf3ce90b44ed5daa8c6effac96e444ac9d5d42f9ef68c0d56"
+    },
+    {
+      "path": "scripts/legacy/legacy_world.gd",
+      "change": "modified",
+      "before_sha256": "a75529eb6b3aec17bb49d74d02e2d34209ca92e4d95dad8b1a1a3ee8d92b46a6",
+      "after_sha256": "0bd8fa8b0f61e7fd885eb77985deda6f278803a5c6d3b39abdd1fc10ca590200"
+    },
+    {
+      "path": "scripts/legacy/victory_ledger.gd",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "1075c42a86754eb8369c8b5acfea1f5e848e19f64428cf7a78abb0fc7e18e491"
+    },
+    {
+      "path": "scripts/legacy/victory_ledger.gd.uid",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "33610444260b565826f2ad9f7b8f9c90ce20da3b82076ede64ff3c81280269b9"
+    }
+  ],
+  "canonical_changes_since_base": [],
+  "conflicts_requiring_review": [],
+  "evidence": [
+    {
+      "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\founder-legacy-ownership\\sims\\victory-ledger-campaign-v3",
+      "ok": true,
+      "error": null,
+      "source_identity": "88b54414bdea9d24c242a286d39293b196eba9b663ae8556de7f5a4675575b32",
+      "files": {
+        ".gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonical-source-manifest.json": "b17168bb8e25d549af4f97e29ef2509f26437c9b14b6cd7f2d86a6fca748c67e",
+        "cases/action-4417/case.json": "04e83261da2c3e36dd60289225d6080ce1df1772856717536a80b3dfc2995cfd",
+        "cases/action-4417/case.variant.json": "b5d4f154f2e4615debf2cdb926cde5d408d2536b5b9c8d32047cecc05128ca1a",
+        "cases/action-4417/final_state.variant.json": "bfb18f99733603bba64dd2d9a265061fe75aa9937bd8216de59b97aca15a65fc",
+        "cases/action-4417/initial.json": "ce242580d3bc332d8f06865f0e9d14bb334bc42f790d0ebd68a675f8dd20ac8e",
+        "cases/action-4417/metrics.json": "96424d5d774c303e5d34934316a8e407569900e77e6a545a8559b0ac7762620c",
+        "cases/action-4417/replay.tape.json": "17b680b3218cfa163fe3ede4582f4e19f828e835617a9a7992950838f566e6e7",
+        "cases/action-4417/result.json": "10e797bbc8da4afca494923fc6a184b5e60a05922e4e00c89742ffe2aba94eb5",
+        "cases/action-4417/studio_checkpoint.json": "71f41129fb050dfc8c556be34eadf35035ddf84597a307cdd3a1025af908747b",
+        "experiment-report.json": "8b0a09209e2f298f26b8111f12075fe8646a53fdb300ea2f5d405002aec4bbc2",
+        "experiment.command.json": "55a5a723380ede51326c7a3b0337e369ff71d97b8843a0c029da5fb57c812568",
+        "experiment.log": "7c9de38b2ddd2108d049b7f82d6e47fe3726c994c2f1474b13ea12a0385f0f85",
+        "git-provenance.json": "78cb5d527b5cc72096f6a395a81310c9ff1c37fd34a75434286388855ab4fdab",
+        "godot-version.command.json": "11700336fd25074382f2ae905a3dac80986b97677b61c7df73113fb508cfa5d5",
+        "godot-version.log": "dd74c0293a4a7bf6f523bcfcdddc6ae49e9db474a86fbaa1981f8b010510a810",
+        "import-source-changes.json": "80ea25175a2c5cfa9995ef7f04df08b498c2747b076d6e2a3abb3f3efdc37830",
+        "import.command.json": "195f8fb4b3be834412c205d5b5ff86534b21b7a70b8af3eed6c68d2e3f41551a",
+        "import.log": "82a7bcf805d8afdca8816b03dd796140be3a903e131700380249ef63e7950b5c",
+        "inputs/experiment.json": "d15f5728376ccd3b148e4f3795b977ca9c1f00ea89211b137347a5c480a3b625",
+        "inputs/requested.json": "eb3f405c28435f9a48d9fc655f4a7e82a445e9090ce66c9de94620014fb525b7",
+        "run-report.json": "9c176d1c402f3d55649594bd15d19620dd4e36c9746718bf58c4c0a67c5eb048",
+        "runner.py": "b7a8a414b255b4c7b9602372880680bafca25f6ccb15d3e732ea49134bd84ae1",
+        "simulator_variant.py": "bbbe52bae5cbba7082777a3488e57b227d27fe161df6e5c122f2209a85c92fd4",
+        "snapshot-manifest.json": "969c37588cb2cdf8c648cd7f3bd7852b5ad6c10a4259a2dd6309648c9af0d561",
+        "source.diff.patch": "8afff47881dd35d15f7a30440b89523a468b55b05ac0b6f2d107e78e9dc410ca",
+        "variant-base-manifest.json": "b17168bb8e25d549af4f97e29ef2509f26437c9b14b6cd7f2d86a6fca748c67e",
+        "variant-creation-manifest.json": "b17168bb8e25d549af4f97e29ef2509f26437c9b14b6cd7f2d86a6fca748c67e",
+        "variant-integrity.json": "2b99fcba15fb84652467c20f377af14741127acb3e8ddfc65ee4dbe40eb8e351",
+        "variant-provenance.json": "904e156913bed209c501f85c23523b5972fedb0052a8db0bbad4ac3d9082f87d",
+        "variant-variant.json": "dd94c938a0ca6d6d5890f7b25327049c160e68f6d7bca71f6cb8e5c2f1b34ca9",
+        "workspace-source-manifest.json": "f8f46c3508a729307ffd3605bcf7c9cbfd83b219cb0c6fff8c806c32f26ea181"
+      },
+      "preserve_bundle": true
+    }
+  ],
+  "adopted": false,
+  "todo_updated": false
+}

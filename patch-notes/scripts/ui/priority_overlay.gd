@@ -60,13 +60,20 @@ func configure(controller: Control, priority_panel: Control, commit: Button) -> 
 	var beta: bool = phase.get_workspace().phase_name == "Beta"
 	var names := PriorityInfluenceChart.BETA_NAMES if beta else PriorityInfluenceChart.CORE_NAMES
 	var colors := PriorityInfluenceChart.BETA_COLORS if beta else PriorityInfluenceChart.CORE_COLORS
+	if beta and not BetaPriorityAllocation.insiders_enabled():
+		names = names.slice(0,2)
+		colors = colors.slice(0,2)
 	for column in columns.get_children():
 		if column is VBoxContainer:
+			if beta and column.name == "InsiderColumn" and not BetaPriorityAllocation.insiders_enabled():
+				column.hide()
+				continue
 			column.custom_minimum_size = Vector2(80, 168)
 			column.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 			var index := sliders.size()
 			for child in column.get_children():
 				if child is VSlider:
+					child.max_value = BetaPriorityAllocation.MAX_PRIORITY if beta else PriorityAllocation.MAX_PRIORITY
 					sliders.append(child)
 					child.custom_minimum_size = Vector2(32, 122)
 					child.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -124,8 +131,10 @@ func open() -> bool:
 	return true
 
 func _help_text(phase_name: String) -> String:
+	if phase_name == "Beta" and not BetaPriorityAllocation.insiders_enabled():
+		return "QA and Marketing weight future draws · total 100 · 10–75 · steps of 5.\nInsider cards and priorities are temporarily disabled.\n" + ("Beginning Beta is free." if initial_setup else "Changed priorities: 1 cycle and one redraw restored (up to 4). Cancel: free.")
 	if initial_setup and phase_name in ["Design", "Alpha"]:
-		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTech (systems), and Design (gameplay). Scope is how much you build.\nPriorities weight future cards, not scores. Total 100 · 10–50 · steps of 5.\nBegin %s is free." % phase_name
+		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTech (systems), and Design (gameplay). Scope is how much you build.\nPriorities weight future cards, not scores. Total 100 · 10–75 · steps of 5.\nBegin %s is free." % phase_name
 	if initial_setup:
 		return "Higher priorities make that category more likely in future draws and redraws.\nSet the initial %s allocation · total 100 · 5-point steps.\nBeginning the phase is free." % phase_name
 	return "Higher priorities make that category more likely in future draws and redraws.\nThe current pool and your scores stay the same. Total 100 · 5-point steps.\nCommit a changed allocation: 1 cycle and one redraw restored (up to 4). Cancel: free."
@@ -153,7 +162,7 @@ func commit_draft() -> bool:
 		_close()
 		return true
 	if not phase.commit_priority_distribution():
-		feedback.text = "Use a changed allocation totaling 100; each value must be 10–50."
+		feedback.text = "Use a changed allocation totaling 100; each active value must be 10–75."
 		return false
 	_close()
 	return true

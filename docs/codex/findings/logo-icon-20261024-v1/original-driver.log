@@ -1,0 +1,26 @@
+clean-import 0 []
+export-release 0 []
+{
+  "workspace": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-logo-icon-20261024-v1\\patch-notes-demo-20261007-u8q6ep3l",
+  "artifacts": {
+    "Patch Notes v0.02 - Logo.exe": {
+      "sha256": "066170bdb8228da2c8cae625f18bdbae355e2bd66eae311a823016db4b045683",
+      "bytes": 115446048
+    },
+    "Tiny5-OFL.txt": {
+      "sha256": "6fe7d64407c69d187748206265977654747d3e2fe9e38e45a62cd03ec4770df6",
+      "bytes": 4389
+    }
+  }
+}
+validation-pack 0 []
+PCK PASS 392 entries; all runtime files retained; every payload MD5 verified; excluded material absent
+embedded-probe 0 []
+headless-startup 0 []
+native-startup 0 []
+Actual PE icons PASS: [[16, 16], [32, 32], [48, 48], [64, 64], [128, 128], [256, 256]]
+Traceback (most recent call last):
+  File "C:\Users\64jus\OneDrive\Documents\GitHub\PatchNotes\docs\codex\findings\logo-icon-20261024-v1\build.py", line 98, in <module>
+    assert sim.source_hashes(ROOT/'patch-notes') == before, 'Canonical drift during export'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Canonical drift during export

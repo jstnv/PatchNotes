@@ -1,0 +1,291 @@
+--- base/scripts/contracts/contract_definitions.gd
++++ candidate/scripts/contracts/contract_definitions.gd
+@@ -0,0 +1,126 @@
++class_name ContractDefinitions
++extends RefCounted
++
++## Code-owned, versioned Contract rule definitions. Disk data cannot add a
++## definition or select an evaluator. Returned Dictionaries are detached.
++const VERSION := 1
++const IRONCLAD := &"balanced_primitive_contract_v1"
++const SIDESTREET := &"sidestreet_cash_contract_v1"
++const CROWN := &"crown_quill_primitive_trial_v1"
++const NEON := &"neon_circuit_primitive_trial_v1"
++const STARWAVE := &"starwave_primitive_trial_v1"
++const STATS := [&"graphics", &"sound", &"technology", &"design"]
++
++
++static func built_in_ids() -> Array[StringName]:
++	return [IRONCLAD, SIDESTREET, CROWN, NEON, STARWAVE]
++
++
++static func definition(id: StringName) -> Dictionary:
++	var common := {"version": VERSION, "id": id, "required_hands": 2, "scope_target": 12, "core_target": 12, "stored_terms": {}}
++	match id:
++		IRONCLAD:
++			common.merge({"publisher_id": &"ironclad", "title": "Balanced Primitive Contract", "cash_cents": 240000, "advance_cents": 40000, "promotion": 0, "denominator": 96, "score": _score(12, 4, 12, 1)}, true)
++		SIDESTREET:
++			common.merge({"publisher_id": &"sidestreet", "title": "SideStreet Cash Contract", "cash_cents": 120000, "advance_cents": 0, "promotion": 0, "denominator": 96, "score": _score(12, 4, 12, 1)}, true)
++		CROWN:
++			common.merge({"publisher_id": &"crown_quill", "title": "Crown & Quill Contract", "cash_cents": 192000, "advance_cents": 15000, "promotion": 12, "denominator": 66, "scope_target": 9, "core_target": 8, "score": _score(9, 2, 8, 1, 8, 2), "stored_terms": {"scope": 9, "cash_cents": 192000, "advance_cents": 15000, "promotion": 12, "denominator": 66}}, true)
++		NEON:
++			common.merge({"publisher_id": &"neon_circuit", "title": "Neon Circuit Contract", "cash_cents": 156000, "advance_cents": 0, "promotion": 20, "denominator": 86, "scope_target": 10, "core_target": 4, "focus_target": 18, "score": _score(10, 2, 0, 0, 0, 0, 18, 3, 4, 1), "stored_terms": {"scope": 10, "cash_cents": 156000, "advance_cents": 0, "promotion": 20, "denominator": 86}}, true)
++		STARWAVE:
++			common.merge({"publisher_id": &"starwave", "title": "Starwave Entertainment Contract", "cash_cents": 224000, "advance_cents": 0, "promotion": 0, "denominator": 112, "required_hands": 3, "scope_target": 14, "core_target": 14, "score": _score(14, 4, 14, 1), "stored_terms": {"scope": 14, "cash_cents": 224000, "advance_cents": 0, "promotion": 0, "denominator": 112, "required_hands": 3}}, true)
++		_: return {}
++	return common if is_valid_definition(common) else {}
++
++
++static func _score(scope_cap: int, scope_weight: int, core_cap: int, core_weight: int, weakest_cap: int = 0, weakest_weight: int = 0, focus_cap: int = 0, focus_weight: int = 0, other_cap: int = 0, other_weight: int = 0) -> Dictionary:
++	return {"scope_cap": scope_cap, "scope_weight": scope_weight, "core_cap": core_cap, "core_weight": core_weight, "weakest_cap": weakest_cap, "weakest_weight": weakest_weight, "focus_cap": focus_cap, "focus_weight": focus_weight, "other_cap": other_cap, "other_weight": other_weight}
++
++
++static func is_valid_definition(found: Dictionary) -> bool:
++	if found.get("version") != VERSION or found.get("id", &"") == &"" or str(found.get("publisher_id", "")).is_empty() or str(found.get("title", "")).is_empty(): return false
++	for key in ["required_hands", "scope_target", "core_target", "cash_cents", "advance_cents", "promotion", "denominator"]:
++		if typeof(found.get(key)) != TYPE_INT or int(found[key]) < 0: return false
++	if int(found.required_hands) == 0 or int(found.scope_target) == 0 or int(found.denominator) == 0 or int(found.advance_cents) > int(found.cash_cents): return false
++	if not found.get("stored_terms") is Dictionary or not found.get("score") is Dictionary: return false
++	var score: Dictionary = found.score
++	for key in ["scope_cap", "scope_weight", "core_cap", "core_weight", "weakest_cap", "weakest_weight", "focus_cap", "focus_weight", "other_cap", "other_weight"]:
++		if typeof(score.get(key)) != TYPE_INT or int(score[key]) < 0: return false
++	if int(score.scope_cap) != int(found.scope_target): return false
++	var maximum: int = int(score.scope_cap) * int(score.scope_weight)
++	if int(score.focus_weight) > 0:
++		if int(score.core_weight) != 0 or int(score.weakest_weight) != 0 or int(score.focus_cap) <= 0 or int(score.other_cap) <= 0: return false
++		maximum += int(score.focus_cap) * int(score.focus_weight) + 3 * int(score.other_cap) * int(score.other_weight)
++	else:
++		if int(score.focus_cap) != 0 or int(score.other_weight) != 0 or int(score.core_cap) <= 0: return false
++		maximum += 4 * int(score.core_cap) * int(score.core_weight) + int(score.weakest_cap) * int(score.weakest_weight)
++	if maximum != int(found.denominator): return false
++	var stored: Dictionary = found.stored_terms
++	if not stored.is_empty():
++		for key in ["scope", "cash_cents", "advance_cents", "promotion", "denominator"]:
++			var source: String = "scope_target" if key == "scope" else key
++			if stored.get(key) != found[source]: return false
++		if int(found.required_hands) != int(stored.get("required_hands", 2)): return false
++	return true
++
++
++static func first_unlock_contract_id(publisher: StringName) -> StringName:
++	match publisher:
++		&"crown_quill": return CROWN
++		&"neon_circuit": return NEON
++		&"starwave": return STARWAVE
++	return &""
++
++
++static func stored_terms(id: StringName) -> Dictionary:
++	var found := definition(id)
++	return found.get("stored_terms", {}).duplicate(true)
++
++
++static func required_hands(id: StringName) -> int:
++	return int(definition(id).get("required_hands", 0))
++
++
++static func scope_target(id: StringName) -> int:
++	return int(definition(id).get("scope_target", 0))
++
++
++static func core_target(id: StringName, category: int, focus: int = -1) -> int:
++	var found := definition(id)
++	if found.is_empty() or category < 0 or category > 3: return 0
++	if id == NEON and category == focus: return int(found.focus_target)
++	return int(found.core_target)
++
++
++static func title(id: StringName, focus: int = -1) -> String:
++	var found := definition(id)
++	if found.is_empty(): return ""
++	if id == NEON:
++		if focus < 0 or focus >= STATS.size(): return ""
++		return String(found.title) + " — " + String(STATS[focus]).capitalize()
++	return String(found.title)
++
++
++static func evaluate(id: StringName, scope: Variant, cores: Dictionary, focus: int = -1, advance_override: int = -1) -> Dictionary:
++	var found := definition(id)
++	if found.is_empty() or typeof(scope) != TYPE_INT or scope < 0 or cores.size() != 4: return {}
++	if id == NEON and (focus < 0 or focus > 3): return {}
++	for category in range(4):
++		if typeof(cores.get(category)) != TYPE_INT or cores[category] < 0: return {}
++	var score: Dictionary = found.score
++	var numerator: int = int(score.scope_weight) * mini(scope, int(score.scope_cap))
++	if int(score.focus_weight) > 0:
++		for category in range(4):
++			numerator += int(score.focus_weight) * mini(cores[category], int(score.focus_cap)) if category == focus else int(score.other_weight) * mini(cores[category], int(score.other_cap))
++	else:
++		var weakest: int = int(score.weakest_cap)
++		for category in range(4):
++			numerator += int(score.core_weight) * mini(cores[category], int(score.core_cap))
++			if int(score.weakest_weight) > 0: weakest = mini(weakest, cores[category])
++		numerator += int(score.weakest_weight) * weakest
++	var denominator: int = int(found.denominator)
++	if numerator < 0 or numerator > denominator: return {}
++	var advance: int = int(found.advance_cents) if advance_override < 0 else advance_override
++	if advance < 0 or advance > int(found.cash_cents): return {}
++	var remainder: int = (int(found.cash_cents) - advance) * numerator / denominator
++	return {"numerator": numerator, "denominator": denominator, "remainder_cents": remainder, "payout_cents": advance + remainder, "promotion": int(found.promotion) * numerator / denominator}
+--- base/scripts/contracts/contract_definitions.gd.uid
++++ candidate/scripts/contracts/contract_definitions.gd.uid
+@@ -0,0 +1 @@
++uid://7vfjm80ktvxh
+--- base/scripts/contracts/contract_state.gd
++++ candidate/scripts/contracts/contract_state.gd
+@@ -1,8 +1,8 @@
+ class_name ContractState
+ extends RefCounted
+ 
+-const CONTRACT_ID := &"balanced_primitive_contract_v1"
+-const SIDESTREET_CONTRACT_ID := &"sidestreet_cash_contract_v1"
++const CONTRACT_ID := ContractDefinitions.IRONCLAD
++const SIDESTREET_CONTRACT_ID := ContractDefinitions.SIDESTREET
+ const SIDESTREET_INVESTMENT_CENTS := 120000
+ const REQUIRED_HANDS := 2
+ const EXPECTED_SCOPE := 12
+@@ -73,7 +73,7 @@
+ 
+ 
+ func get_required_hands() -> int:
+-	return int(_trial_terms.get("required_hands", REQUIRED_HANDS))
++	return ContractDefinitions.required_hands(_contract_id)
+ 
+ 
+ func get_priority_distribution() -> Dictionary:
+@@ -271,24 +271,20 @@
+ 	if _contract_id in [PublisherTrialTerms.CROWN,PublisherTrialTerms.NEON,PublisherTrialTerms.STARWAVE]:
+ 		if _trial_terms!=PublisherTrialTerms.terms(_contract_id): return {}
+ 		return PublisherTrialTerms.completion(_contract_id,scope,cores,_neon_focus)
+-	if _contract_id==SIDESTREET_CONTRACT_ID: return calculate_sidestreet_completion(scope,cores)
+-	if _contract_id==CONTRACT_ID: return _calculate_completion_for_budget(scope,cores,PUBLISHER_INVESTMENT_CENTS-get_advance_cents(),get_advance_cents())
++	if _contract_id in [SIDESTREET_CONTRACT_ID,CONTRACT_ID]:
++		var calculated := ContractDefinitions.evaluate(_contract_id,scope,cores,-1,get_advance_cents())
++		if calculated.is_empty(): return {}
++		return {"numerator":calculated.numerator,"remainder_cents":calculated.remainder_cents,"payout_cents":calculated.payout_cents}
+ 	return {}
+ 
+ func get_advance_cents() -> int:
+ 	if not _trial_terms.is_empty(): return _trial_terms.advance_cents
+ 	return 0 if _contract_id==SIDESTREET_CONTRACT_ID else GUARANTEED_UPFRONT_CENTS + (15000 if _publisher_connections else 0)
+ 
+-func get_scope_target() -> int: return int(_trial_terms.get("scope",EXPECTED_SCOPE))
++func get_scope_target() -> int: return ContractDefinitions.scope_target(_contract_id)
+ 
+ func get_core_target(category: int) -> int:
+-	if _contract_id==PublisherTrialTerms.STARWAVE: return 14
+-	if _contract_id==PublisherTrialTerms.CROWN: return 8
+-	if _contract_id==PublisherTrialTerms.NEON: return 18 if category==_neon_focus else 4
+-	return EXPECTED_CORE_HALF_UNITS
++	return ContractDefinitions.core_target(_contract_id,category,_neon_focus)
+ 
+ func get_title() -> String:
+-	if _contract_id==PublisherTrialTerms.STARWAVE: return "Starwave Entertainment Contract"
+-	if _contract_id==PublisherTrialTerms.CROWN: return "Crown & Quill Contract"
+-	if _contract_id==PublisherTrialTerms.NEON: return "Neon Circuit Contract — "+String(PublisherTrialTerms.STATS[_neon_focus]).capitalize()
+-	return "SideStreet Cash Contract" if _contract_id==SIDESTREET_CONTRACT_ID else "Balanced Primitive Contract"
++	return ContractDefinitions.title(_contract_id,_neon_focus)
+--- base/scripts/contracts/publisher_trial_terms.gd
++++ candidate/scripts/contracts/publisher_trial_terms.gd
+@@ -1,19 +1,16 @@
+ class_name PublisherTrialTerms
+ extends RefCounted
+ 
+-const CROWN := &"crown_quill_primitive_trial_v1"
+-const NEON := &"neon_circuit_primitive_trial_v1"
+-const STARWAVE := &"starwave_primitive_trial_v1"
+-const STATS := [&"graphics",&"sound",&"technology",&"design"]
++const CROWN := ContractDefinitions.CROWN
++const NEON := ContractDefinitions.NEON
++const STARWAVE := ContractDefinitions.STARWAVE
++const STATS := ContractDefinitions.STATS
+ 
+ static func terms(id: StringName) -> Dictionary:
+-	if id==CROWN: return {"scope":9,"cash_cents":192000,"advance_cents":15000,"promotion":12,"denominator":66}
+-	if id==NEON: return {"scope":10,"cash_cents":156000,"advance_cents":0,"promotion":20,"denominator":86}
+-	if id==STARWAVE: return {"scope":14,"cash_cents":224000,"advance_cents":0,"promotion":0,"denominator":112,"required_hands":3}
+-	return {}
++	return ContractDefinitions.stored_terms(id)
+ 
+ static func contract_id(publisher: StringName) -> StringName:
+-	return CROWN if publisher==PublisherCatalog.CROWN_QUILL else NEON if publisher==PublisherCatalog.NEON_CIRCUIT else STARWAVE if publisher==PublisherCatalog.STARWAVE else &""
++	return ContractDefinitions.first_unlock_contract_id(publisher)
+ 
+ static func focus(eligible: Array[StringName]) -> int:
+ 	var totals: Array[int] = [0,0,0,0]
+@@ -27,25 +24,5 @@
+ 	return selected
+ 
+ static func completion(id: StringName, scope: int, cores: Dictionary, selected: int = -1) -> Dictionary:
+-	var t := terms(id)
+-	if t.is_empty() or scope<0 or cores.size()!=4: return {}
+-	for category in range(4):
+-		if typeof(cores.get(category))!=TYPE_INT or cores[category]<0: return {}
+-	# Approved fixed shares simplify exactly: 18*Scope/9 and 20*Scope/10.
+-	# All arithmetic below is integral, capped before multiplication.
+-	var numerator := 2*mini(scope,t.scope)
+-	if id==CROWN:
+-		var smallest := 8
+-		for category in range(4):
+-			var capped := mini(cores[category],8)
+-			numerator += capped
+-			smallest = mini(smallest,capped)
+-		numerator += 2*smallest
+-	elif id==STARWAVE:
+-		numerator = 4*mini(scope,14)
+-		for category in range(4): numerator += mini(cores[category],14)
+-	else:
+-		if selected<0 or selected>3: return {}
+-		for category in range(4): numerator += 3*mini(cores[category],18) if category==selected else mini(cores[category],4)
+-	var remainder: int = (int(t.cash_cents)-int(t.advance_cents))*numerator/int(t.denominator)
+-	return {"numerator":numerator,"denominator":t.denominator,"remainder_cents":remainder,"payout_cents":int(t.advance_cents)+remainder,"promotion":int(t.promotion)*numerator/int(t.denominator)}
++	if id not in [CROWN, NEON, STARWAVE]: return {}
++	return ContractDefinitions.evaluate(id, scope, cores, selected)
+--- base/scripts/debug/verify_contract_definitions.gd
++++ candidate/scripts/debug/verify_contract_definitions.gd
+@@ -0,0 +1,45 @@
++extends SceneTree
++
++var failures := 0
++
++func _initialize() -> void:
++	call_deferred("_run")
++
++func check(condition: bool, message: String) -> void:
++	if not condition:
++		failures += 1
++		push_error("FAIL: " + message)
++	else:
++		print("PASS: " + message)
++
++func _run() -> void:
++	var ids := ContractDefinitions.built_in_ids()
++	check(ids.size() == 5 and ids.has(ContractState.CONTRACT_ID) and ids.has(ContractState.SIDESTREET_CONTRACT_ID), "All existing Contract IDs remain registered")
++	for id in ids:
++		var found := ContractDefinitions.definition(id)
++		check(not found.is_empty() and ContractDefinitions.is_valid_definition(found), "Valid closed definition " + str(id))
++		check(ContractDefinitions.required_hands(id) == (3 if id == PublisherTrialTerms.STARWAVE else 2), "Hand count preserved " + str(id))
++		var original := found.duplicate(true)
++		found.score.scope_cap = 999
++		found.stored_terms.clear()
++		check(ContractDefinitions.definition(id) == original, "Definition caller cannot mutate registry " + str(id))
++	check(ContractDefinitions.definition(&"unsupported_contract").is_empty() and ContractDefinitions.evaluate(&"unsupported_contract", 0, {0:0,1:0,2:0,3:0}).is_empty(), "Unknown Contract rejects")
++	var malformed := ContractDefinitions.definition(PublisherTrialTerms.CROWN)
++	malformed.denominator = 1
++	check(not ContractDefinitions.is_valid_definition(malformed), "Inconsistent score denominator rejects")
++	check(PublisherTrialTerms.terms(PublisherTrialTerms.CROWN) == {"scope":9,"cash_cents":192000,"advance_cents":15000,"promotion":12,"denominator":66}, "Crown serialized terms unchanged")
++	check(PublisherTrialTerms.terms(PublisherTrialTerms.NEON) == {"scope":10,"cash_cents":156000,"advance_cents":0,"promotion":20,"denominator":86}, "Neon serialized terms unchanged")
++	check(PublisherTrialTerms.terms(PublisherTrialTerms.STARWAVE) == {"scope":14,"cash_cents":224000,"advance_cents":0,"promotion":0,"denominator":112,"required_hands":3}, "Starwave serialized terms unchanged")
++	var zero := {0:0,1:0,2:0,3:0}
++	check(ContractDefinitions.evaluate(ContractDefinitions.IRONCLAD, 12, {0:12,1:12,2:12,3:12}).payout_cents == 240000, "Ironclad full cash preserved")
++	check(ContractDefinitions.evaluate(ContractDefinitions.IRONCLAD, 0, zero, -1, 55000).payout_cents == 55000, "Publisher Connections advance override preserved")
++	check(ContractDefinitions.evaluate(ContractDefinitions.SIDESTREET, 12, {0:12,1:12,2:12,3:12}).payout_cents == 120000, "SideStreet full cash preserved")
++	check(ContractDefinitions.evaluate(PublisherTrialTerms.CROWN, 9, {0:8,1:8,2:8,3:8}).payout_cents == 192000, "Crown full cash preserved")
++	check(ContractDefinitions.evaluate(PublisherTrialTerms.NEON, 10, {0:18,1:4,2:4,3:4}, 0).promotion == 20, "Neon full Promotion preserved")
++	check(ContractDefinitions.evaluate(PublisherTrialTerms.STARWAVE, 14, {0:14,1:14,2:14,3:14}).payout_cents == 224000, "Starwave full cash preserved")
++	check(ContractDefinitions.evaluate(PublisherTrialTerms.NEON, 10, zero).is_empty(), "Neon without a frozen focus rejects")
++	check(ContractDefinitions.evaluate(PublisherTrialTerms.CROWN, -1, zero).is_empty(), "Negative Scope rejects")
++	check(ContractDefinitions.evaluate(PublisherTrialTerms.CROWN, 0, {0:0,1:0,2:0}).is_empty(), "Incomplete Core map rejects")
++	check(ContractDefinitions.evaluate(PublisherTrialTerms.CROWN, 0, {0:0,1:0,2:0,3:-1}).is_empty(), "Negative Core rejects")
++	print("Contract definition foundation: %d failures" % failures)
++	quit(0 if failures == 0 else 1)

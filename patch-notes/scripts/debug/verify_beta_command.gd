@@ -6,6 +6,8 @@ const SCENARIOS := ["mixed", "qa", "marketing", "balanced", "insiders", "reveale
 const REJECTIONS := ["unauthorized_pass", "invalid_snapshot", "duplicate_finite", "exhausted", "foreign_card", "cycle_ceiling", "cash_overflow", "marketing_overflow", "core_overflow", "bad_insight", "refill_reject", "view_reject", "run_ceiling", "bad_pending", "finance_reject"]
 
 func _initialize() -> void:
+	# Historical Insider coverage; ordinary runs keep the temporary hold.
+	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
 	await process_frame
 	mode = OS.get_environment("PN_BETA_COMMAND_MODE")
 	var modes := [mode] if not mode.is_empty() else ["live", "headless"]

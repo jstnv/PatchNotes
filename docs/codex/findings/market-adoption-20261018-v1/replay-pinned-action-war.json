@@ -1,0 +1,204 @@
+{
+	"checks": 31,
+	"commands": 54,
+	"coverage": {
+		"age_month_reuse": 0,
+		"completed_pressured_player": 0,
+		"disjoint": 0,
+		"expired_facts": 0,
+		"genre_only": 0,
+		"own_other_title": 0,
+		"pair": 0,
+		"rejected_atomic": 0,
+		"strong_player_release": 0,
+		"strong_player_to_rival": 0,
+		"theme_only": 0
+	},
+	"cpu_note": "Wall timings only; measure actual process CPU in external runner.",
+	"errors": [
+		"exact player/rival result and state replay step 2",
+		"fresh interleaved world final state/RNG exact"
+	],
+	"failure_reason": "",
+	"failures": 2,
+	"final": "f29def474308616a42ca9172687babf1912a88535b98450b56aa79ce960db5c1",
+	"harness_sha256": "ea48eaad9d391bda6bc429e1ff34df067af63ab549684ca34fc4644f1ea56e1c",
+	"mode": "replay",
+	"observations": [],
+	"projects": {
+		"incumbent-arcade-foundry:project:1": {
+			"cycle": 1,
+			"details": {
+				"base": [
+					40,
+					26,
+					40,
+					26
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 0,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-0-neutral",
+				"standards": [
+					40,
+					26,
+					40,
+					26
+				]
+			},
+			"genre": "action",
+			"owner": "incumbent-arcade-foundry",
+			"source": {
+				"cycle_start": 0,
+				"facts": [],
+				"id": "market-0-neutral",
+				"version": 2
+			},
+			"standards": [
+				40,
+				26,
+				40,
+				26
+			]
+		},
+		"incumbent-wayfinder-works:project:1": {
+			"cycle": 1,
+			"details": {
+				"base": [
+					33,
+					26,
+					20,
+					53
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 0,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-0-neutral",
+				"standards": [
+					33,
+					26,
+					20,
+					53
+				]
+			},
+			"genre": "adventure",
+			"owner": "incumbent-wayfinder-works",
+			"source": {
+				"cycle_start": 0,
+				"facts": [],
+				"id": "market-0-neutral",
+				"version": 2
+			},
+			"standards": [
+				33,
+				26,
+				20,
+				53
+			]
+		},
+		"market-acceptance-action-war:project:1": {
+			"cycle": 1,
+			"details": {
+				"base": [
+					40,
+					26,
+					40,
+					26
+				],
+				"benchmark_lifts": [
+					0,
+					0,
+					0,
+					0
+				],
+				"cycle_start": 0,
+				"density_lift": 0,
+				"historical": false,
+				"recent_count": 0,
+				"snapshot_id": "market-0-neutral",
+				"standards": [
+					40,
+					26,
+					40,
+					26
+				]
+			},
+			"genre": "action",
+			"owner": "market-acceptance-action-war",
+			"source": {
+				"cycle_start": 0,
+				"facts": [],
+				"id": "market-0-neutral",
+				"version": 2
+			},
+			"standards": [
+				40,
+				26,
+				40,
+				26
+			]
+		}
+	},
+	"recipe": {
+		"schema_version": 1,
+		"seed": "4417",
+		"specialty": "action",
+		"studio_id": "market-acceptance-action-war",
+		"studio_name": "Market action-war",
+		"traits": [
+			"cult_following"
+		]
+	},
+	"releases": [],
+	"route": "action-war",
+	"source_drift": false,
+	"source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+	"starting_source_identity": "5783246fcb2ecd6612eccf8e06cde72490db3ebb2944b8592e0943bfdaf94536",
+	"synthetic_gameplay_state": false,
+	"timings": [
+		{
+			"action_wall_us": 5631,
+			"cycle": 1,
+			"hash_wall_us": 83403,
+			"peak_static_memory_bytes": 101945471,
+			"sequence": 1,
+			"static_memory_bytes": 76582134,
+			"type": "begin_development",
+			"world_wall_us": 72882
+		},
+		{
+			"action_wall_us": 503,
+			"cycle": 1,
+			"hash_wall_us": 102186,
+			"peak_static_memory_bytes": 101945471,
+			"sequence": 2,
+			"static_memory_bytes": 76599470,
+			"type": "development",
+			"world_wall_us": 0
+		},
+		{
+			"action_wall_us": 1154,
+			"cycle": 2,
+			"hash_wall_us": 94390,
+			"peak_static_memory_bytes": 101945471,
+			"sequence": 3,
+			"static_memory_bytes": 76667938,
+			"type": "development",
+			"world_wall_us": 10649
+		}
+	]
+}

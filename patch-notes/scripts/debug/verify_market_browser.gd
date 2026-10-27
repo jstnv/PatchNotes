@@ -51,13 +51,18 @@ func _initialize() -> void:
 		var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 		game.run_state = player.run
 		game.rival_world = world
+		# This fixture exercises Studio/Market; invitation/Skip has its own suite.
+		# A fresh isolated profile otherwise hides Studio behind onboarding.
+		game._onboarding.answer(true)
 		root.add_child(game)
 		await settle_market()
 		root.size = resolution
+		root.content_scale_size = resolution
 		var studio: StudioPhase = game._active_phase
 		var hud: GameplayHUD = game.get_node("%GameplayHUD")
 		hud.contextual_tip.dismiss()
 		await settle_market()
+		expect(studio.is_visible_in_tree() and game.guided_tutorial == null,"Experienced-profile Market fixture reaches visible Studio")
 		expect(studio.get_global_rect().encloses(studio._market_button.get_global_rect()) and studio._market_button.get_global_rect().end.y < hud.footer_panel.get_global_rect().position.y,"Studio Market button fits between shared HUD bars")
 		var output := OS.get_environment("PN_MARKET_CAPTURE")
 		if not output.is_empty() and DisplayServer.get_name() != "headless":

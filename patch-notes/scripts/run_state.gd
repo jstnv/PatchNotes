@@ -1982,11 +1982,12 @@ func get_contract_search_catalog() -> Array:
 
 func get_contract_search_state() -> Dictionary:return _contract_search.duplicate(true)
 
-## Explicit isolated-simulation opt-in. No player UI enables an economically held trial.
+## Explicit trial activation: simulator opt-in or the unlocked Studio employee menu.
 func uses_employee_trial() -> bool:return EmployeeRoster.trial_active(_employees)
 func activate_employee_trial() -> bool:
 	if not can_mutate_checkpoint() or _productive_cycle_in_progress or _publishing_cycle:return false
 	var next:=EmployeeRoster.activate_trial(_employees,_completed_run_cycles)
 	if next.is_empty():return false
 	_employees=next;migrate_employee_wages()
+	_publishing_cycle=true;finance_changed.emit();employees_changed.emit();_publishing_cycle=false
 	return true

@@ -1,0 +1,26 @@
+[
+  {
+    "label": "ai-compare-final",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 74.23237889999291, \"process_cpu_seconds\": 69.296875, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_rival_synergy.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"RIVAL_SYNERGY checks=817 failures=0 first=16 second=4 beta_changes=12\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "ai-world-final",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 277.3251404000039, \"process_cpu_seconds\": 254.390625, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_rival_trial_activation.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"RIVAL_TRIAL_CYCLE cycle=16 phase=design active=true hand=7 revision=2 blocked= releases=4\", \"RIVAL_TRIAL_CYCLE cycle=17 phase=alpha active=true hand=7 revision=1 blocked= releases=4\", \"RIVAL_TRIAL_CYCLE cycle=18 phase=alpha active=true hand=7 revision=2 blocked= releases=4\", \"RIVAL_TRIAL_CYCLE cycle=19 phase=beta active=true hand=7 revision=1 blocked= releases=4\", \"RIVAL_TRIAL_CYCLE cycle=20 phase=beta active=true hand=7 revision=2 blocked= releases=4\", \"RIVAL_TRIAL_ACTIVATION checks=118 failures=0 cycles=20 restore_at=0 releases=4\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "ai-migration-final",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 9.424998300004518, \"process_cpu_seconds\": 7.96875, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_world_restore_file.gd\", \"--\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\queue-20261018-v2\\\\profile-ai-world-before\\\\APPDATA\\\\Godot\\\\app_userdata\\\\Patch Notes\\\\saves\\\\studio\\\\checkpoint.21.json\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\queue-20261018-v2\\\\ai-migration-final-restored.json\"], \"exit\": 0, \"errors\": [], \"tail\": [\"\", \"Loaded 40 cards.\", \"PASS: Player schema restores exact finance, traits and RNG\", \"PASS: World restores from unmodified file \", \"PASS: Every persisted rival action, finance, RNG, archive and ownership field survives\", \"PASS: Every persisted player field survives\", \"PASS: Unverified source still rejects\", \"Fresh world restore: 0 failures\"]}\n",
+    "stderr": ""
+  },
+  {
+    "label": "roster-closeout",
+    "exit": 0,
+    "output": "{\"elapsed_seconds\": 52.45176830000128, \"process_cpu_seconds\": 49.03125, \"command\": [\"C:\\\\Users\\\\64jus\\\\Downloads\\\\Godot_v4.7.1-stable_win64.exe\\\\Godot_v4.7.1-stable_win64.exe\", \"--headless\", \"--audio-driver\", \"Dummy\", \"--path\", \"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\patch-notes\", \"--script\", \"res://scripts/debug/verify_studio_roster_versions.gd\"], \"exit\": 0, \"errors\": [], \"tail\": [\"Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\", \"\", \"Loaded 40 cards.\", \"STUDIO_ROSTER_VERSIONS checks=239 failures=0\", \"WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\", \"   at: cleanup (core/object/object.cpp:2536)\"]}\n",
+    "stderr": ""
+  }
+]

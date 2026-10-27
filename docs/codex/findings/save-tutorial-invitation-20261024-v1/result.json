@@ -1,0 +1,31 @@
+{
+  "pass": true,
+  "head": "0132c4dab398a2a94dbeae3caa68a36505fbfa4f",
+  "branch": "main",
+  "raw": "C:\\Users\\64jus\\AppData\\Local\\Temp\\pn-save-tutorial-20261024-v1",
+  "runtime_identity": "900d63cc8e8ce4f2928ec127c3cb9d87e1ca6b5ec3ba18555ac49294fc7c2c1c",
+  "preceding_runtime_identity": "6800a07e9c01c2aa0476d8251afdfc3f0f3c61ad5989ff2c99bcd813d1c2ae65",
+  "red_failures": 3,
+  "save_invitation_checks": 26,
+  "tutorial_ui_checks": 115,
+  "suites": [
+    "verify_continue_loading",
+    "verify_guided_tutorial_preferences",
+    "verify_guided_tutorial_ui",
+    "verify_save_tutorial_invitation",
+    "verify_checkpoint_recovery_ui",
+    "verify_pause_menu"
+  ],
+  "final_debug_only_delta": [
+    "scripts/debug/verify_checkpoint_recovery_ui.gd",
+    "scripts/debug/verify_pause_menu.gd"
+  ],
+  "cold_restore": {
+    "exact_state_rng": true,
+    "pass": true,
+    "prior_source": "6800a07e9c01c2aa0476d8251afdfc3f0f3c61ad5989ff2c99bcd813d1c2ae65",
+    "source": "900d63cc8e8ce4f2928ec127c3cb9d87e1ca6b5ec3ba18555ac49294fc7c2c1c",
+    "unknown_mixed_reject": true
+  },
+  "release_ready": false
+}

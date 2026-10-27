@@ -1,0 +1,2211 @@
+diff --git a/patch-notes/Scenes/phases/alpha_phase.tscn b/patch-notes/Scenes/phases/alpha_phase.tscn
+index 0a03b21f..14d06103 100644
+--- a/patch-notes/Scenes/phases/alpha_phase.tscn
++++ b/patch-notes/Scenes/phases/alpha_phase.tscn
+@@ -54,7 +54,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -77,7 +77,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -100,7 +100,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -123,7 +123,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+diff --git a/patch-notes/Scenes/phases/beta_phase.tscn b/patch-notes/Scenes/phases/beta_phase.tscn
+index 2337fe55..a8a09ed7 100644
+--- a/patch-notes/Scenes/phases/beta_phase.tscn
++++ b/patch-notes/Scenes/phases/beta_phase.tscn
+@@ -69,7 +69,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 35.0
+ [node name="QAPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/QAColumn"]
+@@ -89,7 +89,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 35.0
+ [node name="MarketingPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/MarketingColumn"]
+@@ -109,7 +109,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 30.0
+ [node name="InsiderPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/InsiderColumn"]
+diff --git a/patch-notes/Scenes/phases/design_phase.tscn b/patch-notes/Scenes/phases/design_phase.tscn
+index a0361ede..3b54c2b9 100644
+--- a/patch-notes/Scenes/phases/design_phase.tscn
++++ b/patch-notes/Scenes/phases/design_phase.tscn
+@@ -89,7 +89,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -112,7 +112,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -135,7 +135,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -158,7 +158,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+diff --git a/patch-notes/export_presets.cfg b/patch-notes/export_presets.cfg
+index af06b305..2ae587c8 100644
+--- a/patch-notes/export_presets.cfg
++++ b/patch-notes/export_presets.cfg
+@@ -1,74 +1,74 @@
+-[runnable_presets]
+-
+-"Windows Desktop"="Patch Notes v0.03"
+-
+-[preset.0]
+-
+-name="Patch Notes v0.03"
+-platform="Windows Desktop"
+-dedicated_server=false
+-custom_features=""
+-export_filter="all_resources"
+-include_filter="data/*.json,assets/branding/*.ico,assets/fonts/LICENSES.json"
+-exclude_filter="analysis/*,design-logs/*,scripts/debug/*,builds/*,Godot/*,export_templates/*,.codex-*/*,*.md,*.txt,*.py,*.zip"
+-export_path="../../../../../Downloads/Patch Notes-v0.03.exe"
+-patches=PackedStringArray()
+-patch_delta_encoding=false
+-patch_delta_compression_level_zstd=19
+-patch_delta_min_reduction=0.1
+-patch_delta_include_filters="*"
+-patch_delta_exclude_filters=""
+-encryption_include_filters=""
+-encryption_exclude_filters=""
+-seed=0
+-encrypt_pck=false
+-encrypt_directory=false
+-script_export_mode=2
+-
+-[preset.0.options]
+-
+-custom_template/debug=""
+-custom_template/release=""
+-debug/export_console_wrapper=1
+-binary_format/embed_pck=false
+-texture_format/s3tc_bptc=true
+-texture_format/etc2_astc=false
+-shader_baker/enabled=false
+-binary_format/architecture="x86_64"
+-codesign/enable=false
+-codesign/timestamp=true
+-codesign/timestamp_server_url=""
+-codesign/digest_algorithm=1
+-codesign/description=""
+-codesign/custom_options=PackedStringArray()
+-application/modify_resources=true
+-application/icon="res://assets/branding/patch_notes_paper.ico"
+-application/console_wrapper_icon="res://assets/branding/patch_notes_paper.ico"
+-application/icon_interpolation=4
+-application/file_version=""
+-application/product_version=""
+-application/company_name="JooceBox Studios"
+-application/product_name="Patch Notes Demo"
+-application/file_description="Patch Notes Demo"
+-application/copyright=""
+-application/trademarks=""
+-application/export_angle=0
+-application/export_d3d12=0
+-application/d3d12_agility_sdk_multiarch=true
+-ssh_remote_deploy/enabled=false
+-ssh_remote_deploy/host="user@host_ip"
+-ssh_remote_deploy/port="22"
+-ssh_remote_deploy/extra_args_ssh=""
+-ssh_remote_deploy/extra_args_scp=""
+-ssh_remote_deploy/run_script="Expand-Archive -LiteralPath '{temp_dir}\\{archive_name}' -DestinationPath '{temp_dir}'
+-$action = New-ScheduledTaskAction -Execute '{temp_dir}\\{exe_name}' -Argument '{cmd_args}'
+-$trigger = New-ScheduledTaskTrigger -Once -At 00:00
+-$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+-$task = New-ScheduledTask -Action $action -Trigger $trigger -Settings $settings
+-Register-ScheduledTask godot_remote_debug -InputObject $task -Force:$true
+-Start-ScheduledTask -TaskName godot_remote_debug
+-while (Get-ScheduledTask -TaskName godot_remote_debug | ? State -eq running) { Start-Sleep -Milliseconds 100 }
+-Unregister-ScheduledTask -TaskName godot_remote_debug -Confirm:$false -ErrorAction:SilentlyContinue"
+-ssh_remote_deploy/cleanup_script="Stop-ScheduledTask -TaskName godot_remote_debug -ErrorAction:SilentlyContinue
+-Unregister-ScheduledTask -TaskName godot_remote_debug -Confirm:$false -ErrorAction:SilentlyContinue
+-Remove-Item -Recurse -Force '{temp_dir}'"
++[runnable_presets]
++
++"Windows Desktop"="Patch Notes v0.01"
++
++[preset.0]
++
++name="Patch Notes v0.01"
++platform="Windows Desktop"
++dedicated_server=false
++custom_features=""
++export_filter="all_resources"
++include_filter="data/*.json,assets/branding/*.ico,assets/fonts/LICENSES.json"
++exclude_filter="analysis/*,design-logs/*,scripts/debug/*,builds/*,Godot/*,export_templates/*,.codex-*/*,*.md,*.txt,*.py,*.zip"
++export_path="../../../../../Downloads/Patch Notes-v0.031.exe"
++patches=PackedStringArray()
++patch_delta_encoding=false
++patch_delta_compression_level_zstd=19
++patch_delta_min_reduction=0.1
++patch_delta_include_filters="*"
++patch_delta_exclude_filters=""
++encryption_include_filters=""
++encryption_exclude_filters=""
++seed=0
++encrypt_pck=false
++encrypt_directory=false
++script_export_mode=2
++
++[preset.0.options]
++
++custom_template/debug=""
++custom_template/release=""
++debug/export_console_wrapper=1
++binary_format/embed_pck=false
++texture_format/s3tc_bptc=true
++texture_format/etc2_astc=false
++shader_baker/enabled=false
++binary_format/architecture="x86_64"
++codesign/enable=false
++codesign/timestamp=true
++codesign/timestamp_server_url=""
++codesign/digest_algorithm=1
++codesign/description=""
++codesign/custom_options=PackedStringArray()
++application/modify_resources=true
++application/icon="res://assets/branding/patch_notes_paper.ico"
++application/console_wrapper_icon="res://assets/branding/patch_notes_paper.ico"
++application/icon_interpolation=4
++application/file_version=""
++application/product_version=""
++application/company_name="JooceBox Studios"
++application/product_name="Patch Notes Demo"
++application/file_description="Patch Notes Demo"
++application/copyright=""
++application/trademarks=""
++application/export_angle=0
++application/export_d3d12=0
++application/d3d12_agility_sdk_multiarch=true
++ssh_remote_deploy/enabled=false
++ssh_remote_deploy/host="user@host_ip"
++ssh_remote_deploy/port="22"
++ssh_remote_deploy/extra_args_ssh=""
++ssh_remote_deploy/extra_args_scp=""
++ssh_remote_deploy/run_script="Expand-Archive -LiteralPath '{temp_dir}\\{archive_name}' -DestinationPath '{temp_dir}'
++$action = New-ScheduledTaskAction -Execute '{temp_dir}\\{exe_name}' -Argument '{cmd_args}'
++$trigger = New-ScheduledTaskTrigger -Once -At 00:00
++$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
++$task = New-ScheduledTask -Action $action -Trigger $trigger -Settings $settings
++Register-ScheduledTask godot_remote_debug -InputObject $task -Force:$true
++Start-ScheduledTask -TaskName godot_remote_debug
++while (Get-ScheduledTask -TaskName godot_remote_debug | ? State -eq running) { Start-Sleep -Milliseconds 100 }
++Unregister-ScheduledTask -TaskName godot_remote_debug -Confirm:$false -ErrorAction:SilentlyContinue"
++ssh_remote_deploy/cleanup_script="Stop-ScheduledTask -TaskName godot_remote_debug -ErrorAction:SilentlyContinue
++Unregister-ScheduledTask -TaskName godot_remote_debug -Confirm:$false -ErrorAction:SilentlyContinue
++Remove-Item -Recurse -Force '{temp_dir}'"
+diff --git a/patch-notes/scenes/phases/alpha_phase.tscn b/patch-notes/scenes/phases/alpha_phase.tscn
+index 0a03b21f..14d06103 100644
+--- a/patch-notes/scenes/phases/alpha_phase.tscn
++++ b/patch-notes/scenes/phases/alpha_phase.tscn
+@@ -54,7 +54,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -77,7 +77,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -100,7 +100,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -123,7 +123,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+diff --git a/patch-notes/scenes/phases/beta_phase.tscn b/patch-notes/scenes/phases/beta_phase.tscn
+index 2337fe55..a8a09ed7 100644
+--- a/patch-notes/scenes/phases/beta_phase.tscn
++++ b/patch-notes/scenes/phases/beta_phase.tscn
+@@ -69,7 +69,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 35.0
+ [node name="QAPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/QAColumn"]
+@@ -89,7 +89,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 35.0
+ [node name="MarketingPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/MarketingColumn"]
+@@ -109,7 +109,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 30.0
+ [node name="InsiderPriorityValue" type="Label" parent="PhaseLayout/PriorityPanel/PriorityLayout/InsiderColumn"]
+diff --git a/patch-notes/scenes/phases/design_phase.tscn b/patch-notes/scenes/phases/design_phase.tscn
+index a0361ede..3b54c2b9 100644
+--- a/patch-notes/scenes/phases/design_phase.tscn
++++ b/patch-notes/scenes/phases/design_phase.tscn
+@@ -89,7 +89,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -112,7 +112,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -135,7 +135,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+@@ -158,7 +158,7 @@ horizontal_alignment = 1
+ unique_name_in_owner = true
+ layout_mode = 2
+ min_value = 10.0
+-max_value = 50.0
++max_value = 75.0
+ step = 5.0
+ value = 25.0
+ 
+diff --git a/patch-notes/scripts/audio/soundtrack.gd b/patch-notes/scripts/audio/soundtrack.gd
+index 288460f9..69225a5c 100644
+--- a/patch-notes/scripts/audio/soundtrack.gd
++++ b/patch-notes/scripts/audio/soundtrack.gd
+@@ -7,7 +7,7 @@ const Map := preload("res://scripts/audio/theme_map.gd")
+ const Blend := preload("res://scripts/audio/theme_blend.gd")
+ const A := Map.MAIN_A
+ const B := Map.MAIN_B
+-const PAUSE_FADE := 0.3
++const PAUSE_FADE := 0.9
+ const PAUSE_REVERB_WET := 0.38
+ var player: AudioStreamPlayer
+ var themes: AudioStreamSynchronized
+@@ -92,7 +92,9 @@ func _build_pause_effects() -> void:
+ func _apply_pause_effects() -> void:
+ 	# Keep the full original track; pause changes only the room's wet signal.
+ 	pause_reverb.dry = 1.0
+-	pause_reverb.wet = PAUSE_REVERB_WET * pause_weight
++	# Ease the room in/out over real time. Reversing pause reuses the current
++	# progress so rapid toggles cannot reset or jump the wet signal.
++	pause_reverb.wet = PAUSE_REVERB_WET * smoothstep(0.0, 1.0, pause_weight)
+ 	var bus := AudioServer.get_bus_index(&"Music")
+ 	if bus < 0: return
+ 	for i in range(AudioServer.get_bus_effect_count(bus)):
+diff --git a/patch-notes/scripts/cards/balanced_production.gd b/patch-notes/scripts/cards/balanced_production.gd
+index 71d801f1..cefd2457 100644
+--- a/patch-notes/scripts/cards/balanced_production.gd
++++ b/patch-notes/scripts/cards/balanced_production.gd
+@@ -15,6 +15,9 @@ static func qualifies(scores: Dictionary) -> bool:
+ static func redistribute(scores: Dictionary) -> Dictionary[ProjectState.CoreScore, int]:
+ 	var total := 0
+ 	for category in range(4): total += int(scores.get(category, 0))
++	# Apply the 25% bonus once to the hand total; discard fractional points.
++	@warning_ignore("integer_division")
++	total += total / 4
+ 	var result: Dictionary[ProjectState.CoreScore, int] = {}
+ 	@warning_ignore("integer_division")
+ 	var share := total / 4
+diff --git a/patch-notes/scripts/debug/employee_test_actions.gd b/patch-notes/scripts/debug/employee_test_actions.gd
+index d443ec09..b89e0928 100644
+--- a/patch-notes/scripts/debug/employee_test_actions.gd
++++ b/patch-notes/scripts/debug/employee_test_actions.gd
+@@ -3,6 +3,9 @@ static func fresh_two_releases(catalog: RefCounted,employee_trial: bool=true) ->
+ 	var factory=preload("res://scripts/simulation/run_factory.gd")
+ 	var policy=preload("res://scripts/simulation/finite_fixture_policy.gd")
+ 	var session=factory.create_fresh_session({"schema_version":1,"studio_id":"employee_checks","studio_name":"Employees Studio","specialty":"action","traits":[],"seed":"4417","employee_trial":employee_trial},catalog)
++	# Fund fixed mechanics/UI paths while Insider income is on hold. This is a
++	# synthetic fixture receipt, not ordinary income or solvency evidence.
++	if not BetaPriorityAllocation.insiders_enabled(): assert(session.run.add_cash(20000))
+ 	var choose=policy.factory({"genre":"action","theme":"fantasy","name_prefix":"Employee Check","selection":"features_first","hands":{"design":2,"alpha":2,"beta":2}})
+ 	for step in range(100):
+ 		if session.in_studio and session.run.get_released_game_ids().size()==2:return session.run
+diff --git a/patch-notes/scripts/debug/verify_alpha_command.gd b/patch-notes/scripts/debug/verify_alpha_command.gd
+index daf34eb4..18396651 100644
+--- a/patch-notes/scripts/debug/verify_alpha_command.gd
++++ b/patch-notes/scripts/debug/verify_alpha_command.gd
+@@ -159,7 +159,11 @@ func run_cases(database: Node) -> void:
+ 	if mode != "oracle": _expect(FileAccess.file_exists(expected_path), "Pinned oracle digests exist")
+ 	if mode != "oracle" and FileAccess.file_exists(expected_path):
+ 		var expected = JSON.parse_string(FileAccess.get_file_as_string(expected_path))
+-		_expect(JSON.parse_string(JSON.stringify(digests)) == expected, "%s full state/RNG/signal trace matches pre-extraction oracle" % mode)
++		# Retain the historical oracle. The approved 1.25 Balanced change has
++		# exact current live/headless coverage in verify_balanced_boost_parity.
++		expected = expected.filter(func(row: Dictionary) -> bool: return row.scenario != "balanced")
++		var unchanged := digests.filter(func(row: Dictionary) -> bool: return row.scenario != "balanced")
++		_expect(JSON.parse_string(JSON.stringify(unchanged)) == expected, "%s unchanged state/RNG/signal trace matches pre-extraction oracle" % mode)
+ 	var output_path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
+ 	if not output_path.is_empty():
+ 		# Keep both paths when the default maintained verifier runs live + headless.
+@@ -187,7 +191,7 @@ func check_invariants(before: Dictionary, after: Dictionary, scenario: String, s
+ 		if scenario == "production_overflow":
+ 			_expect(after == before, "Authorized overflow correction rejects without mutation")
+ 		if scenario == "balanced":
+-			_expect(_values(project) == [6,5,5,5,4], "Balanced conserves 21 points")
++			_expect(_values(project) == [7,7,6,6,4], "Balanced boosts 21 to26 and splits whole points")
+ 		if scenario == "passes":
+ 			_expect(project.get_current_scope() == 0 and project.get_accumulated_alpha_bug_pressure() == 0.0 and phase.get("_exhausted_feature_ids").is_empty(), "Pass lifecycle unchanged")
+ 	var old_streams: Dictionary = before["run"]["random_streams"]["streams"]
+diff --git a/patch-notes/scripts/debug/verify_alpha_phase.gd b/patch-notes/scripts/debug/verify_alpha_phase.gd
+index 05fb0300..6164818f 100644
+--- a/patch-notes/scripts/debug/verify_alpha_phase.gd
++++ b/patch-notes/scripts/debug/verify_alpha_phase.gd
+@@ -397,9 +397,9 @@ func _verify_alpha_balanced_production_calculation() -> void:
+ 	})
+ 	_expect(qualifying.provisional_scores == {graphics: 8, sound: 8, technology: 10, design: 12}, "Alpha provisional totals include cumulative Design carryover plus unmodified current-action base production")
+ 	_expect(qualifying.specialization_stat.is_empty() and qualifying.balanced_production, "A mixed Alpha Feature-and-Pass action activates Balanced Production from hand totals")
+-	_expect(qualifying.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Alpha Balanced aggregates primary, secondary, and Pass production per Core Score before equal total-preserving redistribution")
+-	_expect(qualifying.score_additions[design] == 5 and qualifying.score_additions[technology] == 5, "Redistribution equalizes the smaller categories")
+-	_expect(alpha.call("_build_balanced_production_debug_message", qualifying.score_additions) == "Alpha Balanced Production hit! Added scores: Graphics +6, Sound +5, Technology +5, Design +5", "Alpha Balanced feedback identifies activation and deterministic final gains")
++	_expect(qualifying.score_additions == {graphics: 7, sound: 7, technology: 6, design: 6}, "Alpha Balanced aggregates primary, secondary, and Pass production per Core Score before boosting the total1.25 and splitting whole points")
++	_expect(qualifying.score_additions[design] == 6 and qualifying.score_additions[technology] == 6, "Redistribution equalizes the smaller categories")
++	_expect(alpha.call("_build_balanced_production_debug_message", qualifying.score_additions) == "Alpha Balanced Production hit! Added scores: Graphics +7, Sound +7, Technology +6, Design +6", "Alpha Balanced feedback identifies activation and deterministic final gains")
+ 
+ 	var unbalanced_state := ProjectState.new(30)
+ 	alpha.setup(unbalanced_state)
+@@ -492,7 +492,7 @@ func _verify_alpha_balanced_production_resolution() -> void:
+ 	_expect(state.finalize_design_bugs(false, 7, [&"text"] as Array[StringName], [] as Array[StringName]), "Alpha Balanced fixture stores existing finalized Hidden Bugs")
+ 	var expected_additions: Dictionary[ProjectState.CoreScore, int] = {}
+ 	for category: ProjectState.CoreScore in CATEGORIES:
+-		expected_additions[category] = 2
++		expected_additions[category] = 3 if category < 2 else 2
+ 	var final_action: Dictionary = alpha.call("_calculate_final_action_production", base_action)
+ 	_expect(final_action.specialization_stat.is_empty() and final_action.balanced_production, "Balanced Production is the winning synergy for the controlled Alpha lifecycle action")
+ 	_expect(final_action.provisional_scores.values().all(func(value: int) -> bool: return value == target), "Provisional scoreboard is retained for diagnostics; hand alone qualifies")
+@@ -624,7 +624,7 @@ func _verify_host_playtest() -> void:
+ 		&"cards": balanced_cards,
+ 		&"score_additions": {graphics: 5, sound: 5, technology: 5, design: 6},
+ 	})
+-	_expect(injected_balanced.balanced_production and injected_balanced.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Injected Pass definitions participate normally in Alpha Balanced Production")
++	_expect(injected_balanced.balanced_production and injected_balanced.score_additions == {graphics: 7, sound: 7, technology: 6, design: 6}, "Injected Pass definitions participate normally in Alpha Balanced Production")
+ 
+ 	alpha.queue_free()
+ 	await process_frame
+@@ -729,7 +729,7 @@ func _instance_ids(views: Array) -> Array[int]:
+ func _verify_controls(alpha: AlphaPhase) -> void:
+ 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
+ 		var slider := alpha.get_node("%%%s" % node_name) as VSlider
+-		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 10-50 bounds in five-point steps" % node_name)
++		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 75.0 and slider.step == 5.0, "%s uses 10-75 bounds in five-point steps" % node_name)
+ 	var panel := alpha.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
+ 	_expect(panel.size.x <= 1008.0 and panel.size.y <= 463.0, "Corrected Alpha allocation panel fits the established phase bounds")
+ 	_verify_distribution(alpha, "Initial Alpha allocation uses the complete budget")
+@@ -752,7 +752,7 @@ func _verify_distribution(alpha: AlphaPhase, description: String) -> void:
+ 	for category: ProjectState.CoreScore in CATEGORIES:
+ 		var value: int = distribution.get(category, 0)
+ 		total += value
+-		valid = valid and value >= 5 and value <= 50 and value % 5 == 0
++		valid = valid and value >= 10 and value <= 75 and value % 5 == 0
+ 	_expect(valid and total <= 100 and alpha.get_available_priority() == 100 - total, description)
+ 
+ 
+diff --git a/patch-notes/scripts/debug/verify_background_checkpoint.gd b/patch-notes/scripts/debug/verify_background_checkpoint.gd
+index f985941f..5876d029 100644
+--- a/patch-notes/scripts/debug/verify_background_checkpoint.gd
++++ b/patch-notes/scripts/debug/verify_background_checkpoint.gd
+@@ -87,17 +87,20 @@ func _initialize() -> void:
+ 	saved.sequence="1"
+ 	expect(saved==StudioCheckpoint.new().capture(run),"Newest detached player/RNG state is durable")
+ 	expect(current.sequence==2,"Intervening signals coalesce to exactly one follow-up generation")
++	expect(owner.completed_saves==2,"Only the two durable publications advance notification state")
+ 	var prior_sequence: int=current.sequence
+ 	run.cash_changed.emit()
+ 	await process_frame
+ 	expect(await owner.wait_saved(),"Identical notifications finish without a new publication")
+ 	expect(owner.store.inspect().sequence==prior_sequence,"Background identical-state notifications do not create another generation")
++	expect(owner.completed_saves==prior_sequence,"Identical notifications do not create a new Saved notification token")
+ 	owner.store.fault=&"before_rename"
+ 	expect(run.add_cash(1),"Fault fixture commits a new Studio action")
+ 	await process_frame
+ 	expect(not await owner.wait_saved(),"Failed background publication surfaces failure")
+ 	expect(not run.checkpoint_mutations_allowed and not owner.before_departure(),"Save failure blocks mutations and departure")
+ 	expect(owner.store.inspect().sequence==prior_sequence,"Failed write preserves last good generation")
++	expect(owner.completed_saves==prior_sequence,"Failed publication cannot announce another successful save")
+ 	owner.store.fault=&""
+ 	owner.failure=""
+ 	owner.pending=true
+@@ -117,6 +120,7 @@ func _initialize() -> void:
+ 	fresh.background_saves=true
+ 	var cold: RunState=fresh.load_current()
+ 	expect(cold!=null and fresh.store.inspect().get("sequence")==prior_sequence+2,"Teardown drains and releases its writer before a fresh Continue")
++	expect(fresh.completed_saves==0,"Loading a saved Studio does not announce a new publication")
+ 	expect(cold.get_cash_cents()==run.get_cash_cents(),"Teardown persisted the latest committed action")
+ 	fresh.entered_studio(true)
+ 	expect(cold.add_cash(1),"Fresh Continue allows a new committed action")
+diff --git a/patch-notes/scripts/debug/verify_beta_balanced_operations.gd b/patch-notes/scripts/debug/verify_beta_balanced_operations.gd
+index 660af232..5b55fc9e 100644
+--- a/patch-notes/scripts/debug/verify_beta_balanced_operations.gd
++++ b/patch-notes/scripts/debug/verify_beta_balanced_operations.gd
+@@ -9,7 +9,9 @@ var _snapshots: PrimitiveSnapshotDatabase
+ var _failures := 0
+ 
+ 
+-func _initialize() -> void:
++func _initialize() -> void:
++	# Historical Insider coverage; ordinary runs keep the temporary hold.
++	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
+ 	await process_frame
+ 	_database = root.get_node("CardDatabase")
+ 	_snapshots = PrimitiveSnapshotDatabase.new()
+diff --git a/patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd b/patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd
+index 5dedd749..bb9014bd 100644
+--- a/patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd
++++ b/patch-notes/scripts/debug/verify_beta_base_hand_resolution.gd
+@@ -8,7 +8,9 @@ var _snapshots: PrimitiveSnapshotDatabase
+ var _failures := 0
+ 
+ 
+-func _initialize() -> void:
++func _initialize() -> void:
++	# Historical Insider coverage; ordinary runs keep the temporary hold.
++	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
+ 	await process_frame
+ 	_database = root.get_node("CardDatabase")
+ 	_snapshots = PrimitiveSnapshotDatabase.new()
+diff --git a/patch-notes/scripts/debug/verify_beta_command.gd b/patch-notes/scripts/debug/verify_beta_command.gd
+index 102315cc..8a9c5a49 100644
+--- a/patch-notes/scripts/debug/verify_beta_command.gd
++++ b/patch-notes/scripts/debug/verify_beta_command.gd
+@@ -5,7 +5,9 @@ const CARD_VIEW_SCENE := preload("res://scenes/cards/card_view.tscn")
+ const SCENARIOS := ["mixed", "qa", "marketing", "balanced", "insiders", "revealed", "depleted", "pending", "retained_corrective", "corrective", "unauthorized_pass", "invalid_snapshot", "duplicate_finite", "exhausted", "foreign_card", "cycle_ceiling", "cash_overflow", "marketing_overflow", "core_overflow", "bad_insight", "refill_reject", "view_reject", "run_ceiling", "bad_pending", "finance_reject", "insight_success", "insight_failure", "controlled_refill"]
+ const REJECTIONS := ["unauthorized_pass", "invalid_snapshot", "duplicate_finite", "exhausted", "foreign_card", "cycle_ceiling", "cash_overflow", "marketing_overflow", "core_overflow", "bad_insight", "refill_reject", "view_reject", "run_ceiling", "bad_pending", "finance_reject"]
+ 
+-func _initialize() -> void:
++func _initialize() -> void:
++	# Historical Insider coverage; ordinary runs keep the temporary hold.
++	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
+ 	await process_frame
+ 	mode = OS.get_environment("PN_BETA_COMMAND_MODE")
+ 	var modes := [mode] if not mode.is_empty() else ["live", "headless"]
+diff --git a/patch-notes/scripts/debug/verify_beta_finalization_and_launch.gd b/patch-notes/scripts/debug/verify_beta_finalization_and_launch.gd
+index a7a723ea..eb25e6ae 100644
+--- a/patch-notes/scripts/debug/verify_beta_finalization_and_launch.gd
++++ b/patch-notes/scripts/debug/verify_beta_finalization_and_launch.gd
+@@ -9,6 +9,8 @@ var _failures := 0
+ 
+ 
+ func _initialize() -> void:
++	# Historical Insider coverage; ordinary runs keep the temporary hold.
++	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
+ 	await process_frame
+ 	_snapshots = PrimitiveSnapshotDatabase.new()
+ 	_snapshots.load_ledgers()
+diff --git a/patch-notes/scripts/debug/verify_beta_host_playtest.gd b/patch-notes/scripts/debug/verify_beta_host_playtest.gd
+index 6d06915c..f5b9d316 100644
+--- a/patch-notes/scripts/debug/verify_beta_host_playtest.gd
++++ b/patch-notes/scripts/debug/verify_beta_host_playtest.gd
+@@ -132,7 +132,7 @@ func _verify_pending_and_injection() -> void:
+ 	_expect(fixture.beta.get_pending_corrective_pass_ids() == ([&"sound_pass", &"technology_pass"] as Array[StringName]), "Weakness ranking snapshots Sound then Technology using enum tie order")
+ 	_expect([fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_marketing_output(), fixture.state.is_competitor_snapshot_revealed(), fixture.state.is_market_forecast_snapshot_revealed(), fixture.state.get_exhausted_beta_card_ids()] == values_before, "Activation changes no Bugs, Marketing, snapshots, or lifecycle")
+ 	var pending: Array[StringName] = fixture.beta.get_pending_corrective_pass_ids()
+-	_expect(fixture.beta.set_priority_distribution({&"qa": 50, &"marketing": 40, &"insider": 10}), "Changed committed priorities succeed")
++	_expect(fixture.beta.set_priority_distribution({&"qa": 75, &"marketing": 25, &"insider": 0}), "Changed committed priorities succeed")
+ 	_expect(fixture.state.get_current_cycle() == 2, "Host and priority commit each consume one cycle")
+ 	fixture.state.add_core_score(ProjectState.CoreScore.SOUND, 100)
+ 	fixture.beta.setup(fixture.state, fixture.run, _snapshots)
+diff --git a/patch-notes/scripts/debug/verify_beta_marketing_insider_state.gd b/patch-notes/scripts/debug/verify_beta_marketing_insider_state.gd
+index 16fd3744..02a65f8e 100644
+--- a/patch-notes/scripts/debug/verify_beta_marketing_insider_state.gd
++++ b/patch-notes/scripts/debug/verify_beta_marketing_insider_state.gd
+@@ -8,7 +8,9 @@ const CARD_DATABASE_SCRIPT := preload("res://scripts/cards/card_database.gd")
+ var _failures := 0
+ 
+ 
+-func _initialize() -> void:
++func _initialize() -> void:
++	# Historical Insider coverage; ordinary runs keep the temporary hold.
++	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
+ 	var database := CARD_DATABASE_SCRIPT.new()
+ 	database.name = "CardDatabase"
+ 	root.add_child(database)
+diff --git a/patch-notes/scripts/debug/verify_beta_planning.gd b/patch-notes/scripts/debug/verify_beta_planning.gd
+index c412eb1d..f51d8239 100644
+--- a/patch-notes/scripts/debug/verify_beta_planning.gd
++++ b/patch-notes/scripts/debug/verify_beta_planning.gd
+@@ -10,7 +10,9 @@ var _failures := 0
+ var _database: Node
+ 
+ 
+-func _initialize() -> void:
++func _initialize() -> void:
++	# Historical Insider coverage; ordinary runs keep the temporary hold.
++	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
+ 	_database = CARD_DATABASE_SCRIPT.new()
+ 	_database.name = "CardDatabase"
+ 	root.add_child(_database)
+@@ -33,7 +35,7 @@ func _verify_priority_allocator() -> void:
+ 	_expect(allocation.set_distribution(_distribution(50, 25, 25)), "Exact-total step-aligned Beta allocation is accepted")
+ 	_expect(emissions[0] == 1 and allocation.get_distribution() == _distribution(50, 25, 25), "Valid allocation commits atomically and emits once")
+ 	for invalid: Dictionary in [
+-		_distribution(35, 35, 25), _distribution(55, 25, 20), _distribution(0, 50, 50),
++		_distribution(35, 35, 25), _distribution(80, 10, 10), _distribution(0, 50, 50),
+ 		_distribution(34, 36, 30), {CardData.BETA_CATEGORY_QA: 35.0, CardData.BETA_CATEGORY_MARKETING: 35, CardData.BETA_CATEGORY_INSIDER: 30},
+ 		{CardData.BETA_CATEGORY_QA: NAN, CardData.BETA_CATEGORY_MARKETING: 35, CardData.BETA_CATEGORY_INSIDER: 30},
+ 		{CardData.BETA_CATEGORY_QA: "35", CardData.BETA_CATEGORY_MARKETING: 35, CardData.BETA_CATEGORY_INSIDER: 30},
+diff --git a/patch-notes/scripts/debug/verify_beta_qa_specialization.gd b/patch-notes/scripts/debug/verify_beta_qa_specialization.gd
+index 1ecd19dd..d2edd57b 100644
+--- a/patch-notes/scripts/debug/verify_beta_qa_specialization.gd
++++ b/patch-notes/scripts/debug/verify_beta_qa_specialization.gd
+@@ -9,7 +9,9 @@ var _snapshots: PrimitiveSnapshotDatabase
+ var _failures := 0
+ 
+ 
+-func _initialize() -> void:
++func _initialize() -> void:
++	# Historical Insider coverage; ordinary runs keep the temporary hold.
++	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
+ 	await process_frame
+ 	_database = root.get_node("CardDatabase")
+ 	_snapshots = PrimitiveSnapshotDatabase.new()
+diff --git a/patch-notes/scripts/debug/verify_campaign_session.gd b/patch-notes/scripts/debug/verify_campaign_session.gd
+index 64f46d1a..a3784cb5 100644
+--- a/patch-notes/scripts/debug/verify_campaign_session.gd
++++ b/patch-notes/scripts/debug/verify_campaign_session.gd
+@@ -12,7 +12,11 @@ func expect(ok: bool,message: String) -> void:
+ 		push_error("FAIL: "+message)
+ 
+ func fresh(recipe: Dictionary) -> RefCounted:
+-	return Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
++	var session: RefCounted = Bootstrap.create_fresh_session(recipe,root.get_node("CardDatabase"))
++	# Explicit synthetic finance fixture for fixed-path mechanics/replay coverage,
++	# not a legal income command or an early-game solvency/balance assertion.
++	if session != null: expect(session.run.add_cash(20000),"Controlled campaign fixture funding")
++	return session
+ 
+ func act(session: RefCounted,kind: StringName,payload: Dictionary = {},accepted: bool = true) -> Dictionary:
+ 	var before := Replay.state(session)
+diff --git a/patch-notes/scripts/debug/verify_design_command.gd b/patch-notes/scripts/debug/verify_design_command.gd
+index 2c002cab..024dd970 100644
+--- a/patch-notes/scripts/debug/verify_design_command.gd
++++ b/patch-notes/scripts/debug/verify_design_command.gd
+@@ -150,9 +150,10 @@ func run_cases(database: Node) -> void:
+ 	if mode != "oracle" and FileAccess.file_exists(expected_path):
+ 		var expected = JSON.parse_string(FileAccess.get_file_as_string(expected_path))
+ 		# The user authorized correcting the legacy overflow case. Keep the old
+-		# oracle immutable; compare every other case and assert rejection above.
+-		expected = expected.filter(func(row: Dictionary) -> bool: return row.scenario != "production_overflow")
+-		var unchanged_digests := digests.filter(func(row: Dictionary) -> bool: return row.scenario != "production_overflow")
++		# oracle immutable; exclude the approved 1.25 Balanced change too.
++		# New Balanced full-state parity: verify_balanced_boost_parity.gd.
++		expected = expected.filter(func(row: Dictionary) -> bool: return row.scenario not in ["production_overflow", "balanced"])
++		var unchanged_digests := digests.filter(func(row: Dictionary) -> bool: return row.scenario not in ["production_overflow", "balanced"])
+ 		_expect(JSON.parse_string(JSON.stringify(unchanged_digests)) == expected, "%s full state/RNG/signal trace matches pre-extraction oracle" % mode)
+ 	var output_path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
+ 	if not output_path.is_empty():
+@@ -169,7 +170,7 @@ func check_invariants(before: Dictionary, after: Dictionary, scenario: String, s
+ 		if scenario == "production_overflow":
+ 			_expect(after == before, "Authorized overflow correction rejects without mutation")
+ 		if scenario == "balanced":
+-			_expect(_values(project) == [6,5,5,5,4], "Balanced conserves 21 points")
++			_expect(_values(project) == [7,7,6,6,4], "Balanced boosts 21 to26 and splits whole points")
+ 		if scenario == "passes":
+ 			_expect(project.get_current_scope() == 0 and project.get_accumulated_bug_pressure() == 0.0 and phase.get("_exhausted_card_ids").is_empty(), "Pass lifecycle unchanged")
+ 	var old_streams: Dictionary = before["run"]["random_streams"]["streams"]
+diff --git a/patch-notes/scripts/debug/verify_design_phase.gd b/patch-notes/scripts/debug/verify_design_phase.gd
+index fd7d3c6d..918e69c2 100644
+--- a/patch-notes/scripts/debug/verify_design_phase.gd
++++ b/patch-notes/scripts/debug/verify_design_phase.gd
+@@ -343,7 +343,7 @@ func _card_ids(cards: Array) -> Array[StringName]:
+ func _verify_priority_controls(phase: DesignPhase, categories: Array[ProjectState.CoreScore]) -> void:
+ 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
+ 		var slider := phase.get_node("%%%s" % node_name) as VSlider
+-		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 10-50 bounds in five-point steps" % node_name)
++		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 75.0 and slider.step == 5.0, "%s uses 10-75 bounds in five-point steps" % node_name)
+ 	var priority_panel := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
+ 	var priority_columns := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel/PriorityLayout").get_children().filter(func(child: Node): return child is VBoxContainer)
+ 	_expect(priority_panel.size.x <= 1008.0 and priority_panel.size.y >= 72.0, "Compact Design priority panel fits the established phase width")
+@@ -360,7 +360,7 @@ func _verify_priority_distribution(phase: DesignPhase, categories: Array[Project
+ 	for category: ProjectState.CoreScore in categories:
+ 		var value: int = distribution.get(category, 0)
+ 		total += value
+-		valid_values = valid_values and value >= 5 and value <= 50 and value % 5 == 0
++		valid_values = valid_values and value >= 10 and value <= 75 and value % 5 == 0
+ 	_expect(total <= 100 and phase.get_available_priority() == 100 - total and valid_values, description)
+ 
+ 
+@@ -653,11 +653,13 @@ func _verify_balanced_production(design_phase: Node) -> void:
+ 	_expect(not design_phase.call("_are_core_scores_balanced", {graphics: 16, sound: 20, technology: 20, design: 24}), "Outside the 15% endpoints does not proc")
+ 	for total in [20, 21, 22, 23]:
+ 		var split: Dictionary = design_phase.call("_apply_balanced_production", {graphics: total})
++		@warning_ignore("integer_division")
++		var boosted: int = int(total) * 5 / 4
+ 		var sum := 0
+ 		for category in range(4):
+ 			sum += split[category]
+-			_expect(split[category] == 5 + (1 if category < total % 4 else 0), "Remainder follows fixed Core order")
+-		_expect(sum == total, "Redistribution conserves every whole point")
++			_expect(split[category] == int(boosted / 4) + (1 if category < boosted % 4 else 0), "Remainder follows fixed Core order")
++		_expect(sum == boosted, "Redistribution retains the whole-point 1.25 bonus")
+ 
+ 	var project_state := _reset_project_state(design_phase)
+ 	var current: Dictionary[ProjectState.CoreScore, int] = {graphics: 3, sound: 3, technology: 5, design: 6}
+@@ -673,7 +675,7 @@ func _verify_balanced_production(design_phase: Node) -> void:
+ 	_expect(result.base_hand.score_additions == {graphics: 5, sound: 5, technology: 5, design: 6}, "Balanced base aggregate includes secondary contributions normally")
+ 	_expect(result.provisional_scores == {graphics: 8, sound: 8, technology: 10, design: 12}, "Provisional scores equal cumulative scores plus unmodified base production")
+ 	_expect(_values(project_state) == values_before, "Provisional and synergy calculation does not mutate ProjectState or Scope")
+-	_expect(result.balanced_production and result.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Balanced hand total21 redistributes6/5/5/5 without a multiplier")
++	_expect(result.balanced_production and result.score_additions == {graphics: 7, sound: 7, technology: 6, design: 6}, "Balanced hand total21 boosts to26 and redistributes7/7/6/6")
+ 	_expect(result.scope == 4, "Balanced Production leaves printed Scope unmodified")
+ 
+ 	var reversed := cards.duplicate()
+@@ -737,7 +739,7 @@ func _verify_balanced_success(design_phase: Node) -> void:
+ 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+ 	_expect(design_phase.get_workspace().hand_motion._specialization_header.is_valid() and not design_phase.get_workspace().synergy_notification.banner.visible, "Balanced Design popup is deferred until music-grid bonus presentation")
+ 	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
+-	_expect(_values(project_state) == [9, 8, 10, 11, 4], "Balanced success adds only adjusted current production and unmodified Scope")
++	_expect(_values(project_state) == [10, 10, 11, 12, 4], "Balanced success adds only adjusted current production and unmodified Scope")
+ 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 21.0 / 18.0), "Balanced success accumulates fractional Bug Pressure from unadjusted printed values")
+ 	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: 1.17", "Successful Feature action refreshes the Bug Pressure label through values_changed")
+ 	_expect(emissions[0] == 1, "Balanced success commits through one values_changed emission")
+@@ -761,20 +763,20 @@ func _verify_balanced_pass_success(design_phase: Node, database: Node) -> void:
+ 	var base_hand: Dictionary = design_phase.call("_validate_and_calculate_base_action")
+ 	var final_action: Dictionary = design_phase.call("_calculate_final_action_production", base_hand)
+ 	_expect(final_action.balanced_production and final_action.score_additions == {
+-		ProjectState.CoreScore.GRAPHICS: 2,
+-		ProjectState.CoreScore.SOUND: 2,
++		ProjectState.CoreScore.GRAPHICS: 3,
++		ProjectState.CoreScore.SOUND: 3,
+ 		ProjectState.CoreScore.TECHNOLOGY: 2,
+ 		ProjectState.CoreScore.DESIGN: 2,
+-	}, "One Feature plus three real Passes triggers Balanced; each +2 aggregate remains +2 after nearest rounding")
++	}, "One Feature plus three real Passes triggers Balanced; eight raw points become10, split3/3/2/2")
+ 	var emissions := [0]
+ 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
+ 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
+ 	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
+-	_expect(_values(project_state) == [2, 2, 2, 2, 1], "Pass-assisted Balanced action commits adjusted production and normal Feature Scope")
++	_expect(_values(project_state) == [3, 3, 2, 2, 1], "Pass-assisted Balanced action commits adjusted production and normal Feature Scope")
+ 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 2.0 / 18.0), "Feature-plus-Pass action accumulates only the Feature's fractional Bug Pressure")
+ 	_expect(
+-		design_phase.get_node("%GraphicsValue").text == "Graphics: 2"
+-		and design_phase.get_node("%SoundValue").text == "Sound: 2"
++		design_phase.get_node("%GraphicsValue").text == "Graphics: 3"
++		and design_phase.get_node("%SoundValue").text == "Sound: 3"
+ 		and design_phase.get_node("%TechnologyValue").text == "Technology: 2"
+ 		and design_phase.get_node("%DesignValue").text == "Design: 2"
+ 		and design_phase.get_node("%ScopeValue").text == "Scope: 1 / 30",
+diff --git a/patch-notes/scripts/debug/verify_guided_tutorial_model.gd b/patch-notes/scripts/debug/verify_guided_tutorial_model.gd
+index 5e0ade5a..184bdef7 100644
+--- a/patch-notes/scripts/debug/verify_guided_tutorial_model.gd
++++ b/patch-notes/scripts/debug/verify_guided_tutorial_model.gd
+@@ -24,7 +24,7 @@ func _run() -> void:
+ 	expect(model.next_lesson(),"Continue after first hand")
+ 	var balanced: Dictionary = model.play([0,1,2,3])
+ 	expect(balanced.ok and balanced.balanced_production,"Next hand triggers actual Balanced Production")
+-	expect(balanced.scores=={0:2,1:2,2:2,3:2} and balanced.scope==1,"Balanced shares original total without changing Scope")
++	expect(balanced.scores=={0:3,1:3,2:2,3:2} and balanced.scope==1,"Balanced boosts eight to ten, shares whole points and keeps Scope")
+ 	expect(model.next_lesson(),"Continue to Specialization")
+ 	var specialized: Dictionary = model.play([0,1,2,3])
+ 	expect(specialized.ok and specialized.specialization_stat==&"graphics" and specialized.scores[0]==20,"Specialization uses real ×1.5 category rounding")
+diff --git a/patch-notes/scripts/debug/verify_pause_audibility.gd b/patch-notes/scripts/debug/verify_pause_audibility.gd
+index 52db144c..9a9e8b20 100644
+--- a/patch-notes/scripts/debug/verify_pause_audibility.gd
++++ b/patch-notes/scripts/debug/verify_pause_audibility.gd
+@@ -10,6 +10,8 @@ func _initialize() -> void:
+ 	music = root.get_node("Soundtrack")
+ 	await process_frame
+ 	game._on_studio_created("Pause audibility", &"action", [], game._active_phase)
++	await process_frame
++	await skip_save_invitation()
+ 	var prefs := DemoSettingsStore.defaults()
+ 	prefs.Music = 13
+ 	DemoSettingsStore.apply_audio(prefs)
+@@ -31,7 +33,7 @@ func _initialize() -> void:
+ 		await create_timer(1.0).timeout
+ 		await key(KEY_ESCAPE)
+ 		var frozen := game_state()
+-		await create_timer(0.7).timeout
++		await create_timer(music.PAUSE_FADE + 0.2).timeout
+ 		var source_power := 0.0
+ 		var filtered_power := 0.0
+ 		var prior_clock: float = music.presentation_seconds()
+@@ -59,7 +61,7 @@ func _initialize() -> void:
+ 		# but no material song attenuation. Dry unity is checked separately above.
+ 		expect(source_power > 0.001 and gain >= 0.95, "Paused %s retains the dry song level with room reverb: %.2f dB" % [theme,linear_to_db(gain)])
+ 		await key(KEY_ESCAPE)
+-		await create_timer(0.5).timeout
++		await create_timer(music.PAUSE_FADE + 0.2).timeout
+ 		expect(not paused and music.pause_weight == 0.0, "Resume clears pause treatment")
+ 	FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT"),FileAccess.WRITE).store_string(JSON.stringify({"backend":AudioServer.get_driver_name(),"rows":rows,"levels":levels,"checks":checks,"failures":failures},"\t"))
+ 	print("PAUSE_AUDIBILITY checks=%d failures=%d" % [checks,failures])
+diff --git a/patch-notes/scripts/debug/verify_pause_menu.gd b/patch-notes/scripts/debug/verify_pause_menu.gd
+index d714b593..0407eb04 100644
+--- a/patch-notes/scripts/debug/verify_pause_menu.gd
++++ b/patch-notes/scripts/debug/verify_pause_menu.gd
+@@ -104,6 +104,11 @@ func _initialize() -> void:
+ 	quit(0 if failures == 0 else 1)
+ 
+ func skip_save_invitation() -> void:
++	# New-save loading spans several rendered frames; a fixed single-frame wait
++	# can arrive before the invitation on a slower host. Keep the test bounded.
++	var deadline := Time.get_ticks_msec() + 3000
++	while (game.guided_tutorial == null or not game.guided_tutorial.asking) and Time.get_ticks_msec() < deadline:
++		await process_frame
+ 	var view: GuidedProductionTutorial = game.guided_tutorial
+ 	expect(view != null and view.asking, "Save restore offers the optional tutorial before pause testing")
+ 	if view != null:
+@@ -149,7 +154,7 @@ func check_pause_and_settings() -> void:
+ 	expect(root.gui_get_focus_owner() == game.pause_menu.resume_button, "Resume owns initial focus")
+ 	var time_left := timer.time_left
+ 	var music_before: float = music.presentation_seconds()
+-	await create_timer(0.7).timeout
++	await create_timer(music.PAUSE_FADE + 0.2).timeout
+ 	expect(timer.time_left == time_left, "Gameplay Timer is frozen")
+ 	expect(not music.player.stream_paused and music.presentation_seconds() > music_before + 0.4 and music.pause_weight == 1.0, "Music and grid keep running with full pause treatment")
+ 	await key(KEY_TAB,true)
+diff --git a/patch-notes/scripts/debug/verify_pause_music.gd b/patch-notes/scripts/debug/verify_pause_music.gd
+index a012ee46..96959fd4 100644
+--- a/patch-notes/scripts/debug/verify_pause_music.gd
++++ b/patch-notes/scripts/debug/verify_pause_music.gd
+@@ -48,6 +48,10 @@ func run() -> void:
+ 	await create_timer(0.1).timeout
+ 	check(music.pause_weight > 0 and music.pause_weight < 1, "Pause treatment fades in")
+ 	check(music.pause_reverb.dry == 1.0 and music.player.volume_db == player_volume and AudioServer.get_bus_volume_db(bus) == volume, "Fade-in preserves full dry signal and music gain")
++	var entry_wet: float = music.pause_reverb.wet
++	check(entry_wet < music.PAUSE_REVERB_WET * music.pause_weight, "Gentle entry eases in instead of jumping to linear wetness")
++	await create_timer(0.35).timeout
++	check(music.pause_weight < 1.0 and music.pause_reverb.wet > entry_wet, "Filter is still gradually entering after nearly half a second")
+ 	var before: float = music.presentation_seconds()
+ 	await create_timer(1.0).timeout
+ 	check(music.presentation_seconds() > before + 0.7 and music.grid.loops >= 1, "Pause clock crosses real loop boundary")
+@@ -63,9 +67,29 @@ func run() -> void:
+ 	check(resumes.size() == 1 and resumes[0] > 0, "One shared subdivision shift on resume")
+ 	check(is_equal_approx(banner._started - banner_started, resumes[0] * Map.STEP), "Popup uses the identical hand grid shift")
+ 	check(banner.banner.scale.x >= scale_before.x and banner.banner.modulate.a >= alpha_before, "Partly visible popup never rewinds on rejoin")
+-	await create_timer(0.4).timeout
++	await create_timer(0.3).timeout
++	check(music.pause_weight > 0.0 and music.pause_weight < 1.0 and AudioServer.is_bus_effect_enabled(bus, 0), "Resume gradually removes reverb instead of bypassing it immediately")
++	await create_timer(music.PAUSE_FADE).timeout
+ 	check(music.pause_weight == 0 and not AudioServer.is_bus_effect_enabled(bus, 0) and music.pause_reverb.dry == 1.0, "Resume clears reverb with original dry level intact")
+ 	banner.queue_free()
++	# Reverse the envelope midway, including at zero gameplay time scale.
++	paused = true
++	await create_timer(0.22).timeout
++	var partial_wet: float = music.pause_reverb.wet
++	paused = false
++	await process_frame
++	check(absf(music.pause_reverb.wet - partial_wet) < 0.03, "Rapid reversal retains current wetness without a jump")
++	await create_timer(0.08).timeout
++	var reversed_wet: float = music.pause_reverb.wet
++	check(reversed_wet > 0.0 and reversed_wet < partial_wet, "Partial resume reverses the existing envelope")
++	paused = true
++	Engine.time_scale = 0.0
++	await create_timer(0.2, true, false, true).timeout
++	check(music.pause_reverb.wet > reversed_wet and music.pause_weight < 1.0, "Filter gradually advances with gameplay time scale zero")
++	Engine.time_scale = 1.0
++	paused = false
++	await create_timer(music.PAUSE_FADE + 0.15).timeout
++	check(music.pause_weight == 0.0 and not AudioServer.is_bus_effect_enabled(bus, 0), "Rapid toggles finish cleanly and bypass at zero wetness")
+ 	# Rapid pause toggles, low FPS and settings changes cannot duplicate effects,
+ 	# restart playback, or leave reverb latched on after scene/menu teardown.
+ 	Engine.max_fps = 5
+@@ -78,7 +102,7 @@ func run() -> void:
+ 		DemoSettingsStore.apply_audio(settings)
+ 		check(AudioServer.is_bus_mute(bus), "Mute works during pause")
+ 		paused = false
+-		await create_timer(0.45).timeout
++		await create_timer(music.PAUSE_FADE + 0.25).timeout
+ 		check(music.pause_weight == 0 and AudioServer.is_bus_mute(bus), "Resume preserves saved mute and clears treatment")
+ 	Engine.max_fps = 0
+ 	DemoSettingsStore.apply_audio(DemoSettingsStore.defaults())
+@@ -105,7 +129,7 @@ func run() -> void:
+ 			"wall_elapsed": (Time.get_ticks_msec() - began) / 1000.0})
+ 		check(music.grid.loops >= laps + 2 and music.presentation_seconds() >= before + 2 * Map.LENGTH, "Two full real-time paused loops retain continuous beat count")
+ 		paused = false
+-		await create_timer(0.4).timeout
++		await create_timer(music.PAUSE_FADE + 0.15).timeout
+ 	var path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
+ 	if not path.is_empty(): FileAccess.open(path, FileAccess.WRITE).store_string(JSON.stringify({"checks": checks, "failures": failures, "resumes": resumes, "traces": traces}, "\t"))
+ 	print("PAUSE_MUSIC checks=%d failures=%d" % [checks, failures])
+@@ -198,7 +222,7 @@ func verify_dsp(bus: int) -> void:
+ 	var measurements: Array = []
+ 	for filtered in [false, true]:
+ 		paused = filtered
+-		await create_timer(0.5).timeout
++		await create_timer(music.PAUSE_FADE + 0.2).timeout
+ 		capture.clear_buffer()
+ 		probe.play()
+ 		await create_timer(0.8).timeout
+@@ -217,7 +241,7 @@ func verify_dsp(bus: int) -> void:
+ 	check(measurements[1].tail_energy > maxf(0.000001, measurements[0].tail_energy * 10), "Paused Music adds a measurable room reverb tail")
+ 	traces.append({"dsp": measurements})
+ 	paused = false
+-	await create_timer(0.4).timeout
++	await create_timer(music.PAUSE_FADE + 0.15).timeout
+ 	music.player.volume_db = 0
+ 	probe.queue_free()
+ 	for i in range(AudioServer.get_bus_effect_count(bus) - 1, -1, -1):
+diff --git a/patch-notes/scripts/debug/verify_pause_track_continuity.gd b/patch-notes/scripts/debug/verify_pause_track_continuity.gd
+index 08ee0f9f..a06fc88f 100644
+--- a/patch-notes/scripts/debug/verify_pause_track_continuity.gd
++++ b/patch-notes/scripts/debug/verify_pause_track_continuity.gd
+@@ -14,6 +14,8 @@ func _initialize() -> void:
+ 	music = root.get_node("Soundtrack")
+ 	await process_frame
+ 	game._on_studio_created("Pause music transport", &"action", [], game._active_phase)
++	await process_frame
++	await skip_save_invitation()
+ 	await create_timer(1.5).timeout
+ 	var bus := AudioServer.get_bus_index(&"Master")
+ 	var capture := AudioEffectCapture.new()
+@@ -55,7 +57,7 @@ func _initialize() -> void:
+ 	await key(KEY_ESCAPE)
+ 	expect(paused,"Closing Settings retains gameplay pause")
+ 	await key(KEY_ESCAPE)
+-	await create_timer(0.5, true, false, true).timeout
++	await create_timer(music.PAUSE_FADE + 0.2, true, false, true).timeout
+ 	expect(not paused and music.pause_weight == 0.0, "Esc resumes gameplay and clears filter")
+ 	music.set_paused(true)
+ 	expect(music.player.stream_paused,"Constructed latched transport pause")
+diff --git a/patch-notes/scripts/debug/verify_priority_influence.gd b/patch-notes/scripts/debug/verify_priority_influence.gd
+index 2970fbaf..08fb3ce6 100644
+--- a/patch-notes/scripts/debug/verify_priority_influence.gd
++++ b/patch-notes/scripts/debug/verify_priority_influence.gd
+@@ -125,16 +125,16 @@ func _verify_phase_chart(title: String, resolution: Vector2i) -> void:
+ 	expect(overlay.open(), title + ": initialization opens")
+ 	await _settle_chart()
+ 	var chart: Control = overlay.get("priority_chart")
+-	var defaults := [35, 35, 30] if title == "Beta" else [25, 25, 25, 25]
+-	var default_shares := [.35, .35, .3] if title == "Beta" else [.25, .25, .25, .25]
+-	var names := BETA_INPUTS if title == "Beta" else CORE_INPUTS
++	var defaults := [50, 50] if title == "Beta" else [25, 25, 25, 25]
++	var default_shares := [.5, .5] if title == "Beta" else [.25, .25, .25, .25]
++	var names := BETA_INPUTS.slice(0,2) if title == "Beta" else CORE_INPUTS
+ 	_assert_chart(chart, defaults, default_shares, title + " default")
+-	expect(chart.get("category_names") == (["QA", "Marketing", "Insider"] if title == "Beta" else CORE_NAMES), title + ": chart names match phase categories")
++	expect(chart.get("category_names") == (["QA", "Marketing"] if title == "Beta" else CORE_NAMES), title + ": chart names match phase categories")
+ 	_assert_bounds(chart, overlay.dialog, resolution, title + " %s" % resolution)
+ 	var before := _snapshot(project, run)
+ 	var committed: Dictionary = phase.get_priority_distribution()
+-	var values := [50, 20, 30] if title == "Beta" else [50, 15, 15, 20]
+-	var shares := [.5, .2, .3] if title == "Beta" else [.5, .15, .15, .2]
++	var values := [75, 25] if title == "Beta" else [50, 15, 15, 20]
++	var shares := [.75, .25] if title == "Beta" else [.5, .15, .15, .2]
+ 	for i in range(names.size()): (phase.get_node("%" + names[i]) as Range).value = values[i]
+ 	await _settle_chart()
+ 	_assert_chart(chart, values, shares, title + " staged initialization")
+diff --git a/patch-notes/scripts/debug/verify_production_extraction.gd b/patch-notes/scripts/debug/verify_production_extraction.gd
+index f469fce8..7e7d3856 100644
+--- a/patch-notes/scripts/debug/verify_production_extraction.gd
++++ b/patch-notes/scripts/debug/verify_production_extraction.gd
+@@ -26,10 +26,24 @@ func _initialize() -> void:
+ 					results.append(result)
+ 		phase.free()
+ 	var expected = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/production_hand_pre_extraction.json"))
+-	assert(JSON.parse_string(JSON.stringify(results)) == expected, "Pre-extraction production parity failed")
++	# Preserve the frozen extraction fixture; only its explicitly superseded
++	# Balanced reward changes. Trigger flags and every other field stay exact.
++	for row in expected:
++		if row.balanced_production:
++			var total := 0
++			for value in row.score_additions.values(): total += int(value)
++			@warning_ignore("integer_division")
++			var boosted := total * 5 / 4
++			for category in range(4):
++				@warning_ignore("integer_division")
++				row.score_additions[str(category)] = boosted / 4 + (1 if category < boosted % 4 else 0)
+ 	var output_path := OS.get_environment("PN_CARD_FRAME_OUTPUT")
+ 	if not output_path.is_empty():
+ 		var file := FileAccess.open(output_path, FileAccess.WRITE)
+ 		file.store_string(JSON.stringify(results, "\t"))
+-	print("PASS: production characterization: %d cases, input and project unchanged" % results.size())
++	if JSON.parse_string(JSON.stringify(results)) != JSON.parse_string(JSON.stringify(expected)):
++		push_error("FAIL: Production fixture with approved 1.25 Balanced delta failed")
++		quit(1)
++		return
++	print("PASS: production characterization with Balanced 1.25 delta: %d cases, input and project unchanged" % results.size())
+ 	quit()
+diff --git a/patch-notes/scripts/debug/verify_run_finance_and_beta_insider_state.gd b/patch-notes/scripts/debug/verify_run_finance_and_beta_insider_state.gd
+index bfcde4ee..6de84a7f 100644
+--- a/patch-notes/scripts/debug/verify_run_finance_and_beta_insider_state.gd
++++ b/patch-notes/scripts/debug/verify_run_finance_and_beta_insider_state.gd
+@@ -9,7 +9,9 @@ const CARD_DATABASE_SCRIPT := preload("res://scripts/cards/card_database.gd")
+ var _failures := 0
+ 
+ 
+-func _initialize() -> void:
++func _initialize() -> void:
++	# Historical Insider coverage; ordinary runs keep the temporary hold.
++	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
+ 	var database := CARD_DATABASE_SCRIPT.new()
+ 	database.name = "CardDatabase"
+ 	root.add_child(database)
+diff --git a/patch-notes/scripts/debug/verify_soundtrack_sync.gd b/patch-notes/scripts/debug/verify_soundtrack_sync.gd
+index b93ada71..295dd31e 100644
+--- a/patch-notes/scripts/debug/verify_soundtrack_sync.gd
++++ b/patch-notes/scripts/debug/verify_soundtrack_sync.gd
+@@ -164,7 +164,7 @@ func balanced_sequence(frame_step: float) -> void:
+ 	var action := func():
+ 		calls[0] += 1
+ 		state._cycle += 1
+-		for i in range(4): state[HandPresentation.CORE[i]] += 6 if i == 0 else 5
++		for i in range(4): state[HandPresentation.CORE[i]] += 7 if i < 2 else 6
+ 		motion.note_specialization(Callable(), true)
+ 	check(motion.play("play", fan, selected, action, func(): return state.duplicate(), Callable(), Callable()), "Balanced visual sequence accepted")
+ 	for i in range(10): motion.advance_music(fake_time)
+@@ -176,7 +176,7 @@ func balanced_sequence(frame_step: float) -> void:
+ 	var played := snapshots.filter(func(row): return row.event == "score")
+ 	check(played.size() == 4 and played[-1].values[&"graphics"] == 105 and played[-1].values[&"design"] == 7, "Balanced first displays printed hand gains")
+ 	var shared := snapshots.filter(func(row): return row.event == "balanced_redistributed")
+-	check(shared.size() == 1 and shared[0].values[&"graphics"] == 106 and shared[0].values[&"design"] == 6, "Balanced applies signed transfer once after cards play")
++	check(shared.size() == 1 and shared[0].values[&"graphics"] == 107 and shared[0].values[&"design"] == 7, "Balanced applies boosted split once after cards play")
+ 	check(calls[0] == 1 and state._cycle == 1, "Balanced presentation never replays gameplay")
+ 	for key in HandPresentation.CORE: check(motion.display_values[key] == state[key], "Balanced display matches authoritative final score")
+ 	var starts := motion.trace.filter(func(e): return e.event == "specialization_started")
+diff --git a/patch-notes/scripts/gameplay.gd b/patch-notes/scripts/gameplay.gd
+index eda8fea2..41d26bdf 100644
+--- a/patch-notes/scripts/gameplay.gd
++++ b/patch-notes/scripts/gameplay.gd
+@@ -11,6 +11,7 @@ const REQUIRED_SCOPE := 30
+ const LaunchSettlement := preload("res://scripts/simulation/launch_settlement.gd")
+ const BeginProject := preload("res://scripts/simulation/begin_project.gd")
+ const RivalTrial := preload("res://scripts/market/rival_trial.gd")
++const SaveNotification := preload("res://scripts/ui/save_notification.gd")
+ 
+ var project_state: ProjectState
+ var run_state: RunState
+@@ -24,13 +25,13 @@ var active_contract_state: ContractState
+ var checkpoints: CheckpointCoordinator
+ var rival_world: RivalWorld
+ var _save_label: Label
++var _save_notice: Control
+ var _save_failure_dialog: AcceptDialog
+ var _quit_dialog: ConfirmationDialog
+ var _return_checkpoint_dialog: ConfirmationDialog
+ var _recovery_dialog: ConfirmationDialog
+ var _loading_checkpoint := false
+ var _save_navigation_pending := false
+-var _session_quit: Button
+ var _startup_panel: PanelContainer
+ var pause_menu: PauseMenu
+ var guided_tutorial: GuidedProductionTutorial
+@@ -277,7 +278,6 @@ func _create_guided_tutorial() -> void:
+ 	guided_tutorial.finished.connect(_close_guided_tutorial)
+ 	_active_phase.hide()
+ 	%GameplayHUD.hide()
+-	if _session_quit != null: _session_quit.hide()
+ 
+ func _on_tutorial_choice(experienced: bool, accepted: bool) -> void:
+ 	_onboarding.answer(experienced)
+@@ -303,7 +303,6 @@ func _close_guided_tutorial(completed: bool) -> void:
+ 	if _active_phase is StudioPhase:
+ 		_active_phase.show()
+ 		%GameplayHUD.show()
+-		if _session_quit != null: _session_quit.show()
+ 		_active_phase.get_node("%StartNextGame").grab_focus()
+ 	get_node("/root/Soundtrack").request_theme(&"studio",true)
+ 
+@@ -666,27 +665,13 @@ func _ensure_month_one_sales_revenue_result() -> bool:
+ func _build_checkpoint_controls() -> void:
+ 	get_tree().auto_accept_quit = false
+ 	var layer := CanvasLayer.new()
++	layer.name = "SavePresentation"
+ 	layer.layer = 80
+ 	add_child(layer)
+-	var panel := VBoxContainer.new()
+-	panel.mouse_filter=Control.MOUSE_FILTER_IGNORE
+-	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+-	panel.position = Vector2(-248,-72)
+-	panel.custom_minimum_size = Vector2(236,32)
+-	layer.add_child(panel)
+-	_save_label = Label.new()
+-	var status_row := HBoxContainer.new()
+-	status_row.mouse_filter=Control.MOUSE_FILTER_IGNORE
+-	panel.add_child(status_row)
+-	_save_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+-	_save_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
+-	_save_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+-	status_row.add_child(_save_label)
+-	_session_quit = Button.new()
+-	_session_quit.text = "Quit"
+-	_session_quit.pressed.connect(_request_quit)
+-	_session_quit.hide()
+-	status_row.add_child(_session_quit)
++	_save_notice = SaveNotification.new()
++	_save_notice.name = "SaveNotification"
++	layer.add_child(_save_notice)
++	_save_label = _save_notice.message
+ 	_save_failure_dialog = AcceptDialog.new()
+ 	_save_failure_dialog.title = "Not saved"
+ 	_save_failure_dialog.dialog_text = "Your last action happened, but it has not been saved.\nRetry to continue, return to your last saved Studio, or quit without saving."
+@@ -707,9 +692,7 @@ func _build_checkpoint_controls() -> void:
+ 
+ func _checkpoint_status() -> void:
+ 	if _save_label == null: return
+-	_save_label.text = "Not saved" if not checkpoints.failure.is_empty() else ("Saving Studio…" if checkpoints.is_saving() else "Studio saved")
+-	_session_quit.visible = not run_state.get_studio_name().is_empty()
+-	_save_label.tooltip_text = checkpoints.failure
++	_save_notice.update_status(checkpoints.is_saving(),checkpoints.failure,checkpoints.completed_saves)
+ 	if checkpoints.failure.is_empty(): _save_failure_dialog.hide()
+ 	# load_current can emit failure synchronously. Continue owns that failure's
+ 	# recovery prompt; opening a second exclusive window here would collide.
+diff --git a/patch-notes/scripts/market/rival_beta_synergy_choice.gd b/patch-notes/scripts/market/rival_beta_synergy_choice.gd
+index 18f74117..a94e7b2c 100644
+--- a/patch-notes/scripts/market/rival_beta_synergy_choice.gd
++++ b/patch-notes/scripts/market/rival_beta_synergy_choice.gd
+@@ -51,6 +51,7 @@ static func _assess(cards: Array) -> Dictionary:
+ 			if finite.has(definition): return {}
+ 			finite[definition] = true
+ 		var category := str(card.get("beta_category", ""))
++		if not BetaPriorityAllocation.category_enabled(StringName(category)): return {}
+ 		if not counts.has(category): return {}
+ 		counts[category] += 1
+ 		var value := int(card.get("beta_value", -1))
+diff --git a/patch-notes/scripts/market/rival_trial.gd b/patch-notes/scripts/market/rival_trial.gd
+index 526f7d12..8ef5dada 100644
+--- a/patch-notes/scripts/market/rival_trial.gd
++++ b/patch-notes/scripts/market/rival_trial.gd
+@@ -118,6 +118,8 @@ static func choose(view: Dictionary, genre: String, label: String, beta_aware: b
+ 	# revision is one real productive hand. No policy counter needs restoration.
+ 	if current.phase == "beta" and current.get("hand_revision",0) >= BETA_HANDS+1 and current.get("can_exit",false): return _development(view,&"request_exit")
+ 	var cards: Array = current.candidates.duplicate(true)
++	if current.phase == "beta":
++		cards = cards.filter(func(card): return card.type != "beta" or BetaPriorityAllocation.category_enabled(StringName(card.beta_category)))
+ 	cards.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
+ 		if (a.type == "feature") != (b.type == "feature"): return a.type == "feature"
+ 		return int(a.token) < int(b.token))
+diff --git a/patch-notes/scripts/market/rival_world_checkpoint.gd b/patch-notes/scripts/market/rival_world_checkpoint.gd
+index aa6ed3d7..824d7292 100644
+--- a/patch-notes/scripts/market/rival_world_checkpoint.gd
++++ b/patch-notes/scripts/market/rival_world_checkpoint.gd
+@@ -9,6 +9,19 @@ const Session := preload("res://scripts/simulation/campaign_session.gd")
+ const LATENCY_PREDECESSOR_SOURCES := ["a866e98020c0018f943ce8b98bbbd564b83d4ecd356bc6a4fd5cf66b0c483fa7", "617a97c83aabe2bba6613a8b4e5bddca7f1b9c4a974b8efb06e3595ad7334c94", "ce24d2a07703a664edd86574b2c678666f9307c5160710a62ce55603c7a74692", "a458650917031ee5dddd23c8a5b7c79986254f731f03a0113ddab4377aab0435"]
+ ## Exact preceding Search editor/compiled presentation; saved fields unchanged.
+ const SEARCH_PRESENTATION_SOURCES := ["efc6ef13b947a784ad4db20d7220920498b3e43c28923c9965baafcf61016580","c1be4bc1ac2c8818d69b00e6e523e475382b0b6047e6e99a42891d7b8960304b","3eecb919ab1e100c930dfd792abeaca8066fe1f9977ed2e7785188f78e8b1fd2"]
++## Exact editor sources before gradual pause audio/menu; saved fields unchanged.
++const PAUSE_TRANSITION_SOURCES := [
++	"3a8f41da6754dcf17269623586337daf39e1523263cbdb1aefcf0e8a9dba3ccc",
++	"abbfa387743973cc6c727912041bee407ebeebe4fa370fd26751a1d9d87eace7",
++]
++## Temporary Insider hold/cap expansion is prospective; retain old world/RNG.
++const INSIDER_HOLD_PREDECESSORS := ["f479c5b654d756972e5cb822756328ae3fae7eff2fdf66eb4e7badf967d20311"]
++## Employee navigation only; retain the exact preceding saved world and RNG.
++const EMPLOYEE_MENU_PREDECESSORS := ["71f86b840b0af8d425f8166caf169b853229e6c6ff3f4f32db22ecd7712ad019"]
++## Exact pre-card-pop presentation; retained gameplay, world and RNG fields.
++const CARD_POP_PREDECESSORS := ["a4d9fc318694ef143ea9d59147ae8c5e33a823d31d05a68b35d74203025b51c5"]
++## Balanced 1.25 reward is prospective: retain historical scores and RNG.
++const BALANCED_BOOST_PREDECESSORS := ["1c28c28f1f82b53cfb76f246f66562d476ffeb23d1ca152cd455108a693c5b4e"]
+ ## New grants change prospectively; existing world ownership/RNG is retained.
+ const EMPLOYEE_PRE_SEARCH_SOURCES := ["5dd56b5b84e8e72065c4394ca301f89694461a8a32b62486565fb1f9c49400bd","9216e53b16f5381247b2d4f6a7bfcfd168523cfc6ef5e9d0e11107280367bb31"]
+ const ROOT_FIRST_PREDECESSOR_SOURCES := [
+@@ -306,7 +319,7 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
+ 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
+ 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
+ 	var current_source := Replay.source_identity() if captured_source_identity.is_empty() else captured_source_identity
+-	var source_ok: bool = predecessor_source==current_source or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
++	var source_ok: bool = predecessor_source==current_source or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+ 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
+ 	if predecessor_source!=current_source and predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES+USABILITY_PRESENTATION_SOURCES:
+ 		paired_revision=StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_EMPLOYEE_RULES)
+diff --git a/patch-notes/scripts/persistence/checkpoint_coordinator.gd b/patch-notes/scripts/persistence/checkpoint_coordinator.gd
+index 1c6af5f0..281f4117 100644
+--- a/patch-notes/scripts/persistence/checkpoint_coordinator.gd
++++ b/patch-notes/scripts/persistence/checkpoint_coordinator.gd
+@@ -11,6 +11,8 @@ var in_studio := false
+ var pending := false
+ var failure := ""
+ var last_payload: Dictionary = {}
++## Process-local UI token; only durable publications increment it, never loads.
++var completed_saves := 0
+ var replace_on_save := false
+ var _migration_input := ""
+ var _migration_output: Dictionary = {}
+@@ -88,6 +90,7 @@ func _finish_write() -> void:
+ 	pending=revision!=_change_revision
+ 	failure=""
+ 	run.checkpoint_mutations_allowed=true
++	if result.status == &"saved": completed_saves += 1
+ 	_notify_status()
+ 
+ func wait_saved() -> bool:
+@@ -228,6 +231,7 @@ func flush() -> bool:
+ 	pending = false
+ 	failure = ""
+ 	run.checkpoint_mutations_allowed = true
++	completed_saves += 1
+ 	_notify_status()
+ 	return true
+ 
+diff --git a/patch-notes/scripts/phases/alpha_phase.gd b/patch-notes/scripts/phases/alpha_phase.gd
+index f132de4b..89497a12 100644
+--- a/patch-notes/scripts/phases/alpha_phase.gd
++++ b/patch-notes/scripts/phases/alpha_phase.gd
+@@ -619,7 +619,7 @@ func _on_play_alpha_hand_pressed() -> void:
+ 		_workspace.show_synergy("%s Specialization!" % str(final_production.specialization_stat).capitalize(), "Production ×1.50")
+ 	elif final_production.balanced_production:
+ 		print(_build_balanced_production_debug_message(final_production.score_additions))
+-		_workspace.show_synergy("Balanced Production!", "Hand total shared across four categories")
++		_workspace.show_synergy("Balanced Production!", "1.25× Core total shared across four categories")
+ 
+ 
+ func _validate_and_calculate_base_action() -> Dictionary:
+diff --git a/patch-notes/scripts/phases/beta_phase.gd b/patch-notes/scripts/phases/beta_phase.gd
+index f3f5fa00..2c7b08ce 100644
+--- a/patch-notes/scripts/phases/beta_phase.gd
++++ b/patch-notes/scripts/phases/beta_phase.gd
+@@ -517,6 +517,7 @@ func _can_attempt_play() -> bool:
+ 	for view: CardView in _selected_card_views:
+ 		if not _is_current_candidate_view(view) or seen_views.has(view.get_instance_id()):
+ 			return false
++		if view.card_data.beta_category == CardData.BETA_CATEGORY_INSIDER and not BetaPriorityAllocation.insiders_enabled(): return false
+ 		seen_views[view.get_instance_id()] = true
+ 	return true
+ 
+@@ -756,7 +757,7 @@ func _update_all_actions() -> void:
+ 	var editing_disabled := _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED
+ 	%QAPriority.editable = not editing_disabled
+ 	%MarketingPriority.editable = not editing_disabled
+-	%InsiderPriority.editable = not editing_disabled
++	%InsiderPriority.editable = not editing_disabled and BetaPriorityAllocation.insiders_enabled()
+ 
+ 
+ func _on_qa_priority_value_changed(value: float) -> void:
+@@ -772,6 +773,7 @@ func _on_insider_priority_value_changed(value: float) -> void:
+ 
+ 
+ func _update_priority_draft(category: StringName, value: float) -> void:
++	if not BetaPriorityAllocation.category_enabled(category): return
+ 	if _syncing_priority_controls or _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED:
+ 		return
+ 	if not is_finite(value) or value < BetaPriorityAllocation.MIN_PRIORITY or value > BetaPriorityAllocation.MAX_PRIORITY or int(value) != value or int(value) % BetaPriorityAllocation.PRIORITY_STEP != 0:
+@@ -790,8 +792,9 @@ func _sync_priority_controls(reset_draft: bool = true) -> void:
+ 	if not is_node_ready():
+ 		return
+ 	if reset_draft:
+-		_priority_draft = _priority_allocation.get_distribution()
++		_priority_draft = BetaPriorityAllocation.editable_distribution(_priority_allocation.get_distribution())
+ 	_syncing_priority_controls = true
++	%InsiderPriority.min_value = BetaPriorityAllocation.MIN_PRIORITY if BetaPriorityAllocation.insiders_enabled() else 0
+ 	%QAPriority.value = _priority_draft[CardData.BETA_CATEGORY_QA]
+ 	%MarketingPriority.value = _priority_draft[CardData.BETA_CATEGORY_MARKETING]
+ 	%InsiderPriority.value = _priority_draft[CardData.BETA_CATEGORY_INSIDER]
+@@ -841,8 +844,7 @@ func open_priority_overlay() -> bool:
+ 
+ 
+ func reset_priority_draft() -> void:
+-	_priority_draft = get_priority_distribution()
+-	for key in _priority_draft: _priority_draft[key] = maxi(10,_priority_draft[key])
++	_priority_draft = BetaPriorityAllocation.editable_distribution(get_priority_distribution())
+ 	_sync_priority_controls(false)
+ 
+ 
+diff --git a/patch-notes/scripts/phases/beta_priority_allocation.gd b/patch-notes/scripts/phases/beta_priority_allocation.gd
+index 685ada60..867a4e7a 100644
+--- a/patch-notes/scripts/phases/beta_priority_allocation.gd
++++ b/patch-notes/scripts/phases/beta_priority_allocation.gd
+@@ -5,7 +5,7 @@ signal allocation_changed
+ 
+ const MIN_PRIORITY := 10
+ const SAVED_MIN_PRIORITY := 5
+-const MAX_PRIORITY := 50
++const MAX_PRIORITY := 75
+ const PRIORITY_STEP := 5
+ const REQUIRED_TOTAL_PRIORITY := 100
+ const CATEGORIES: Array[StringName] = [CardData.BETA_CATEGORY_QA, CardData.BETA_CATEGORY_MARKETING, CardData.BETA_CATEGORY_INSIDER]
+@@ -16,6 +16,29 @@ var _priorities: Dictionary[StringName, int] = {
+ 	CardData.BETA_CATEGORY_INSIDER: 30,
+ }
+ 
++## Temporary pool switch. Historical verifiers/isolated variants may explicitly
++## enable the old pool; ordinary gameplay and headless runs default to the hold.
++static func insiders_enabled() -> bool:
++	return bool(ProjectSettings.get_setting("gameplay/beta/insider_enabled", false))
++
++static func category_enabled(category: StringName) -> bool:
++	return category in CATEGORIES and (category != CardData.BETA_CATEGORY_INSIDER or insiders_enabled())
++
++func _init() -> void:
++	if not insiders_enabled():
++		_priorities = {CardData.BETA_CATEGORY_QA:50,CardData.BETA_CATEGORY_MARKETING:50,CardData.BETA_CATEGORY_INSIDER:0}
++
++## Only an editable draft is normalized; hydration preserves historical weights.
++static func editable_distribution(distribution: Dictionary) -> Dictionary[StringName, int]:
++	var result: Dictionary[StringName, int] = {}
++	for category in CATEGORIES: result[category] = distribution[category]
++	if insiders_enabled():
++		for category in CATEGORIES: result[category] = maxi(MIN_PRIORITY,result[category])
++		return result
++	var active_total := int(result[CardData.BETA_CATEGORY_QA]) + int(result[CardData.BETA_CATEGORY_MARKETING])
++	var qa := clampi(floori(float(result[CardData.BETA_CATEGORY_QA]) / maxi(1,active_total) * 20.0 + 0.5) * 5,25,75)
++	return {CardData.BETA_CATEGORY_QA:qa,CardData.BETA_CATEGORY_MARKETING:100-qa,CardData.BETA_CATEGORY_INSIDER:0}
++
+ 
+ func set_distribution(distribution: Dictionary) -> bool:
+ 	if not is_valid_distribution(distribution):
+@@ -50,7 +73,7 @@ static func is_valid_distribution(distribution: Dictionary) -> bool:
+ 		if not distribution.has(category) or typeof(distribution[category]) != TYPE_INT:
+ 			return false
+ 		var value: int = distribution[category]
+-		if value < SAVED_MIN_PRIORITY or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
++		if (value < SAVED_MIN_PRIORITY and not (category == CardData.BETA_CATEGORY_INSIDER and value == 0)) or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
+ 			return false
+ 		total += value
+ 	return total == REQUIRED_TOTAL_PRIORITY
+@@ -58,6 +81,8 @@ static func is_valid_distribution(distribution: Dictionary) -> bool:
+ 
+ static func is_valid_new_distribution(distribution: Dictionary) -> bool:
+ 	if not is_valid_distribution(distribution): return false
+-	for amount: int in distribution.values():
+-		if amount < MIN_PRIORITY: return false
++	for category: StringName in CATEGORIES:
++		if not category_enabled(category):
++			if distribution[category] != 0: return false
++		elif distribution[category] < MIN_PRIORITY: return false
+ 	return true
+diff --git a/patch-notes/scripts/phases/contract_phase.gd b/patch-notes/scripts/phases/contract_phase.gd
+index 42fc27d6..9f841ddf 100644
+--- a/patch-notes/scripts/phases/contract_phase.gd
++++ b/patch-notes/scripts/phases/contract_phase.gd
+@@ -123,7 +123,7 @@ func _build_ui() -> void:
+ 	priority_title.add_theme_font_size_override("font_size", 24)
+ 	priority_content.add_child(priority_title)
+ 	var help := Label.new()
+-	help.text = "Future draws only · 10–50% in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
++	help.text = "Future draws only · 10–75% in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
+ 	priority_content.add_child(help)
+ 	var priority_body := HBoxContainer.new()
+ 	priority_body.add_theme_constant_override("separation", 24)
+diff --git a/patch-notes/scripts/phases/design_phase.gd b/patch-notes/scripts/phases/design_phase.gd
+index e0590108..9eaf955f 100644
+--- a/patch-notes/scripts/phases/design_phase.gd
++++ b/patch-notes/scripts/phases/design_phase.gd
+@@ -468,7 +468,7 @@ func _on_play_card_pressed() -> void:
+ 	if not final_action.specialization_stat.is_empty():
+ 		_workspace.show_synergy("%s Specialization!" % str(final_action.specialization_stat).capitalize(), "Production ×1.50")
+ 	elif final_action.balanced_production:
+-		_workspace.show_synergy("Balanced Production!", "Hand total shared across four categories")
++		_workspace.show_synergy("Balanced Production!", "1.25× Core total shared across four categories")
+ 
+ 
+ func _on_proceed_to_alpha_pressed() -> void:
+diff --git a/patch-notes/scripts/phases/priority_allocation.gd b/patch-notes/scripts/phases/priority_allocation.gd
+index e8c78046..d4ee51d6 100644
+--- a/patch-notes/scripts/phases/priority_allocation.gd
++++ b/patch-notes/scripts/phases/priority_allocation.gd
+@@ -5,7 +5,7 @@ signal allocation_changed
+ 
+ const MIN_PRIORITY := 10
+ const SAVED_MIN_PRIORITY := 5
+-const MAX_PRIORITY := 50
++const MAX_PRIORITY := 75
+ const PRIORITY_STEP := 5
+ const MAX_TOTAL_PRIORITY := 100
+ const INITIAL_PRIORITY := 25
+diff --git a/patch-notes/scripts/phases/studio_phase.gd b/patch-notes/scripts/phases/studio_phase.gd
+index 071ba9ef..9dd97d8f 100644
+--- a/patch-notes/scripts/phases/studio_phase.gd
++++ b/patch-notes/scripts/phases/studio_phase.gd
+@@ -63,7 +63,7 @@ func _ready() -> void:
+ 	%PostGameSummaries.get_parent().move_child(_market_button,1)
+ 	%FeatureStoreButton.pressed.connect(_open_feature_store)
+ 	%Employees.disabled = true
+-	%Employees.tooltip_text = "Temporarily unavailable."
++	%Employees.tooltip_text = "Unlocks after releasing 2 games."
+ 	%Employees.pressed.connect(_open_employees)
+ 	%PublisherList.pressed.connect(_open_publishers)
+ 	%PostGameSummaries.pressed.connect(open_summary)
+@@ -525,6 +525,8 @@ func _refresh_dashboard_actions() -> void:
+ 	%PostGameSummaries.disabled = not has_releases
+ 	%StartNextGame.text = "Produce Next Game" if has_releases else "Produce First Game"
+ 	%StartNextGame.disabled = false
++	%Employees.disabled = _run_state.get_released_game_ids().size() < 2
++	%Employees.tooltip_text = "Unlocks after releasing 2 games." if %Employees.disabled else "Manage specialists, courses and training."
+ 
+ func _refresh_game_list() -> void:
+ 	if _run_state == null or not is_node_ready(): return
+@@ -662,11 +664,22 @@ func get_predevelopment_support_quote() -> Dictionary:
+ 
+ 
+ func _open_employees() -> void:
+-	if _run_state == null: return
++	if _run_state == null or _run_state.get_released_game_ids().size() < 2: return
++	# Browsing is free. A save/mutation guard may defer first-time activation,
++	# but must not turn an enabled navigation button into a silent no-op.
++	var read_only := not _run_state.uses_employee_trial() and not _run_state.activate_employee_trial()
+ 	if _employees_panel == null:
+ 		_employees_panel = EmployeePanel.new()
+ 		add_child(_employees_panel)
++		_employees_panel.closed.connect(func():
++			%Dashboard.show()
++			%Employees.grab_focus())
++	%SummaryPanel.hide()
++	%Dashboard.hide()
+ 	_employees_panel.open_for(_run_state)
++	if read_only:
++		_employees_panel.status.text = "Employee management is temporarily read-only. Resolve any save warning, then reopen this menu to retry."
++		_employees_panel.status.show()
+ 
+ func _refresh_contract_search() -> void:
+ 	if _search_work==null or _run_state==null:return
+diff --git a/patch-notes/scripts/run_state.gd b/patch-notes/scripts/run_state.gd
+index 5ae71b7e..69cd2d72 100644
+--- a/patch-notes/scripts/run_state.gd
++++ b/patch-notes/scripts/run_state.gd
+@@ -1982,11 +1982,12 @@ func get_contract_search_catalog() -> Array:
+ 
+ func get_contract_search_state() -> Dictionary:return _contract_search.duplicate(true)
+ 
+-## Explicit isolated-simulation opt-in. No player UI enables an economically held trial.
++## Explicit trial activation: simulator opt-in or the unlocked Studio employee menu.
+ func uses_employee_trial() -> bool:return EmployeeRoster.trial_active(_employees)
+ func activate_employee_trial() -> bool:
+ 	if not can_mutate_checkpoint() or _productive_cycle_in_progress or _publishing_cycle:return false
+ 	var next:=EmployeeRoster.activate_trial(_employees,_completed_run_cycles)
+ 	if next.is_empty():return false
+ 	_employees=next;migrate_employee_wages()
++	_publishing_cycle=true;finance_changed.emit();employees_changed.emit();_publishing_cycle=false
+ 	return true
+diff --git a/patch-notes/scripts/simulation/beta_hand_command.gd b/patch-notes/scripts/simulation/beta_hand_command.gd
+index c181d205..e9edeea0 100644
+--- a/patch-notes/scripts/simulation/beta_hand_command.gd
++++ b/patch-notes/scripts/simulation/beta_hand_command.gd
+@@ -177,6 +177,8 @@ func _build_hand_preflight(selected_ids: Array[int], insight_rolls: Array[int],
+ 			continue
+ 		if card.phase != CardData.PHASE_BETA or card.card_type != &"beta" or card.scope != 0:
+ 			return _invalid_play("A selected definition is not an authoritative Primitive Beta card.")
++		if not BetaPriorityAllocation.category_enabled(card.beta_category):
++			return _invalid_play("Insider cards are temporarily disabled.")
+ 		if not card.renewable:
+ 			if not FINITE_IDS.has(card.id) or finite_ids.has(card.id) or _project_state.is_beta_card_exhausted(card.id):
+ 				return _invalid_play("A selected finite definition is invalid or exhausted.")
+@@ -422,7 +424,7 @@ func _group_definitions(definitions: Array[CardData], excluded_ids: Array[String
+ 	for category: StringName in BetaPriorityAllocation.CATEGORIES:
+ 		grouped[category] = [] as Array[CardData]
+ 	for card: CardData in definitions:
+-		if not excluded_ids.has(card.id):
++		if BetaPriorityAllocation.category_enabled(card.beta_category) and not excluded_ids.has(card.id):
+ 			(grouped[card.beta_category] as Array[CardData]).append(card)
+ 	return grouped
+ 
+diff --git a/patch-notes/scripts/simulation/finite_fixture_policy.gd b/patch-notes/scripts/simulation/finite_fixture_policy.gd
+index 7e2eeb25..1f7f8998 100644
+--- a/patch-notes/scripts/simulation/finite_fixture_policy.gd
++++ b/patch-notes/scripts/simulation/finite_fixture_policy.gd
+@@ -38,6 +38,8 @@ func choose(view: Dictionary) -> Dictionary:
+ 	var key := "%s:%s" % [view.project_id,current.phase]
+ 	if int(_hands.get(key,0)) >= int(_config.hands[current.phase]): return _development(view,&"request_exit")
+ 	var cards: Array = current.candidates.duplicate(true)
++	if current.phase == "beta":
++		cards = cards.filter(func(card): return card.type != "beta" or BetaPriorityAllocation.category_enabled(StringName(card.beta_category)))
+ 	if _config.selection == "features_first":
+ 		cards.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
+ 			if (a.type == "feature") != (b.type == "feature"): return a.type == "feature"
+diff --git a/patch-notes/scripts/ui/card_fan.gd b/patch-notes/scripts/ui/card_fan.gd
+index a30bb345..53220bae 100644
+--- a/patch-notes/scripts/ui/card_fan.gd
++++ b/patch-notes/scripts/ui/card_fan.gd
+@@ -82,6 +82,18 @@ func ordered_cards() -> Array[CardView]:
+ 		if card is CardView and card not in result: result.append(card)
+ 	return result
+ 
++## Selected Search cards lead; pool slots and the chosen organization stay intact.
++static func search_first(cards: Array[CardView]) -> Array[CardView]:
++	var searches: Array[CardView] = []
++	var remaining: Array[CardView] = []
++	for card in cards:
++		if card.card_data != null and card.card_data.qa_operation == &"search":
++			searches.append(card)
++		else:
++			remaining.append(card)
++	searches.append_array(remaining)
++	return searches
++
+ func retain_order(previous: Array) -> void:
+ 	_visual_order.clear()
+ 	for card in previous:
+@@ -154,14 +166,17 @@ func card_at(point: Vector2) -> CardView:
+ 	var cards := ordered_cards()
+ 	cards.sort_custom(func(a: CardView, b: CardView): return a.z_index > b.z_index)
+ 	for card: CardView in cards:
++		if not card.is_visible_in_tree() or not card.is_node_ready(): continue
+ 		if Rect2(Vector2.ZERO, card.size).has_point(card.get_transform().affine_inverse() * point): return card
+ 	return null
+ 
++func _get_tooltip(at_position: Vector2) -> String:
++	# Godot queries before _gui_input; caching text there leaves stale hover areas.
++	var card := card_at(at_position)
++	return card.input_button.tooltip_text if card != null else ""
++
+ func _gui_input(event: InputEvent) -> void:
+-	if event is InputEventMouseMotion:
+-		var card := card_at(event.position)
+-		tooltip_text = card.input_button.tooltip_text if card != null else ""
+-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
++	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+ 		var card := card_at(event.position)
+ 		if event.pressed: _pressed = card if card != null and not card.input_button.disabled else null
+ 		else:
+@@ -172,6 +187,7 @@ func _gui_input(event: InputEvent) -> void:
+ 		accept_event()
+ 
+ func _make_custom_tooltip(for_text: String) -> Object:
++	if for_text.strip_edges().is_empty(): return null
+ 	var label := Label.new()
+ 	label.custom_minimum_size.x = minf(440.0, get_viewport_rect().size.x - 48.0)
+ 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+@@ -189,7 +205,7 @@ func arrange(immediate := false) -> void:
+ 	var visible_width := minf(size.x, get_viewport_rect().size.x - global_position.x - 16.0)
+ 	var factor := clampf((size.y - 100.0) / CARD_SIZE.y, 0.45, 0.76)
+ 	var spacing := minf(124.0, (size.x - CARD_SIZE.x * factor - 70.0) / maxf(1, count - 1))
+-	var upper := cards.filter(func(card): return card.is_selected())
++	var upper := search_first(cards.filter(func(card): return card.is_selected()))
+ 	var lower := cards.filter(func(card): return not card.is_selected())
+ 	# Separate groups diagonally: preserve readable card scale instead of
+ 	# shrinking two complete rows into the same short viewport.
+diff --git a/patch-notes/scripts/ui/employee_panel.gd b/patch-notes/scripts/ui/employee_panel.gd
+index 56ff8b73..848a1162 100644
+--- a/patch-notes/scripts/ui/employee_panel.gd
++++ b/patch-notes/scripts/ui/employee_panel.gd
+@@ -39,6 +39,7 @@ func open_for(value: RunState) -> void:
+ 			if run.finance_changed.is_connected(_refresh):run.finance_changed.disconnect(_refresh)
+ 		run=value;run.employees_changed.connect(_refresh);run.finance_changed.connect(_refresh)
+ 	_return_focus=get_viewport().gui_get_focus_owner()
++	status.hide()
+ 	show();_refresh();back_button.grab_focus()
+ func close() -> void:
+ 	if confirmation.visible:confirmation.hide();pending={};return
+diff --git a/patch-notes/scripts/ui/employee_planning_dialog.gd b/patch-notes/scripts/ui/employee_planning_dialog.gd
+index 876f4bcc..21a5b892 100644
+--- a/patch-notes/scripts/ui/employee_planning_dialog.gd
++++ b/patch-notes/scripts/ui/employee_planning_dialog.gd
+@@ -29,7 +29,7 @@ func _ready() -> void:
+ 		column.add_child(label)
+ 		var input := VSlider.new()
+ 		input.min_value = 10
+-		input.max_value = 50
++		input.max_value = PriorityAllocation.MAX_PRIORITY
+ 		input.step = 5
+ 		input.custom_minimum_size = Vector2(32,120)
+ 		input.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+diff --git a/patch-notes/scripts/ui/gameplay_hud.gd b/patch-notes/scripts/ui/gameplay_hud.gd
+index 87d8c564..91fd71f7 100644
+--- a/patch-notes/scripts/ui/gameplay_hud.gd
++++ b/patch-notes/scripts/ui/gameplay_hud.gd
+@@ -370,7 +370,7 @@ func _production_guidance() -> Dictionary:
+ 					var category := str(final_production.specialization_stat).capitalize()
+ 					return {"key": name + "_specialization_" + str(final_production.specialization_stat), "title": "%s Specialization ready" % category, "body": "All four cards share %s as their primary Core label. This hand earns ×1.5 Core gains, rounded by category; Scope stays printed." % category}
+ 				if final_production.get("balanced_production", false):
+-					return {"key": name + "_balanced", "title": "Balanced Production ready", "body": "A Feature and hand Core gains within ±15% of their average share the original hand total evenly after playing. Spare points follow Graphics, Sound, Technology, Design. Scope stays printed."}
++					return {"key": name + "_balanced", "title": "Balanced Production ready", "body": "A Feature and hand Core gains within ±15% of their average boost the hand Core total ×1.25, round down, then share it evenly after playing. Spare points follow Graphics, Sound, Technology, Design. Scope stays printed."}
+ 		return {"key": name + "_ready", "title": "Four cards selected", "body": "Play the hand to advance one cycle. Selected Features exhaust for this project; Passes can return."}
+ 	var available := workspace.get_pool_specialization_guidance()
+ 	if not available.is_empty(): return available
+diff --git a/patch-notes/scripts/ui/guided_production_tutorial.gd b/patch-notes/scripts/ui/guided_production_tutorial.gd
+index eae5a089..96b87495 100644
+--- a/patch-notes/scripts/ui/guided_production_tutorial.gd
++++ b/patch-notes/scripts/ui/guided_production_tutorial.gd
+@@ -8,7 +8,7 @@ const CARD_SCENE := preload("res://scenes/cards/card_view.tscn")
+ const TITLES := ["Core quality and Scope", "Balanced Production", "Specialization", "Build a synergy with a redraw", "Play the redrawn synergy", "Alpha: expand the game", "Beta: Marketing and Awareness", "QA: find Hidden Bugs", "QA: fix Known Bugs"]
+ const INSTRUCTIONS := [
+ 	"Graphics, Sound, Technology and Design are Core quality. Scope measures how much game you have built. Features add their printed Scope; Passes add Core but no Scope. Select all four cards, then Implement.",
+-	"A Feature plus four category gains within ±15% of their average triggers Balanced Production. The original total is shared evenly; it does not create extra points. These eight points already divide into two per category. Play all four.",
++	"A Feature plus four category gains within ±15% of their average triggers Balanced Production. Multiply the Core total by 1.25, round down to whole points, then share evenly. These eight points become ten: 3 Graphics, 3 Sound, 2 Tech, 2 Design. Play all four.",
+ 	"Match all four PRIMARY Core labels for Specialization. Secondary labels do not decide the match. This Graphics hand gets ×1.5 Core gains, rounded by category; its printed Scope stays the same. Select all four.",
+ 	"Three extra candidates now make the normal seven-card pool. Keep the three Graphics Passes. Select Sound Pass and press Redraw: this lesson guarantees the fourth Graphics Pass. Normal redraws follow priorities and are not guaranteed.",
+ 	"The redraw used one redraw and no productive cycle. Select the four Graphics Passes, then Implement. Renewable Passes can return in later hands. A successful hand restores one redraw, up to the shared cap.",
+@@ -286,7 +286,7 @@ func play_selected() -> void:
+ 		var resolved: Dictionary = model.play(slots)
+ 		if not resolved.ok: return
+ 		if resolved.balanced_production:
+-			motion.note_specialization(func(): synergy.show_message("Balanced Production!","Original hand total shared evenly"),true)
++			motion.note_specialization(func(): synergy.show_message("Balanced Production!","1.25× Core total shared evenly"),true)
+ 		elif not resolved.specialization_stat.is_empty():
+ 			motion.note_specialization(func(): synergy.show_message(String(resolved.specialization_stat).capitalize()+" Specialization!","Current production/QA bonus"))
+ 		_deal_views()
+diff --git a/patch-notes/scripts/ui/hand_presentation.gd b/patch-notes/scripts/ui/hand_presentation.gd
+index a3b00eb2..2c6acbf9 100644
+--- a/patch-notes/scripts/ui/hand_presentation.gd
++++ b/patch-notes/scripts/ui/hand_presentation.gd
+@@ -14,6 +14,10 @@ const SPECIALIZATION_LEAD_BEATS := 1
+ const SPECIALIZATION_BEATS := 4
+ const SPECIALIZATION_SECONDS := BEAT_SECONDS * SPECIALIZATION_BEATS
+ const CORE := [&"graphics", &"sound", &"technology", &"design"]
++const PlayBurst := preload("res://scripts/ui/card_play_burst.gd")
++const CHARGE_SECONDS := 0.06
++const CHARGE_SCALE := 0.94
++const POP_SCALE := 1.14
+ var busy := false
+ var action_kind := ""
+ var display_values: Dictionary = {}
+@@ -42,6 +46,7 @@ var _first_beat := 0
+ var _play_sound: AudioStreamPlayer
+ var _remove_sound: AudioStreamPlayer
+ var _bonus_labels: Array[Dictionary] = []
++var _card_bursts: Array[Dictionary] = []
+ 
+ func _music_seconds() -> float:
+ 	if clock_source.is_valid(): return float(clock_source.call())
+@@ -62,6 +67,12 @@ func advance_music(now: float) -> void:
+ 	_music_cursor = maxf(_music_cursor, now)
+ 	if elapsed > 0.0 and _tween != null and _tween.is_valid():
+ 		_tween.custom_step(elapsed)
++	for i in range(_card_bursts.size()-1,-1,-1):
++		var effect: Dictionary=_card_bursts[i]
++		var age := maxf(0.0,now-float(effect.started))
++		if age>=PlayBurst.LIFETIME:
++			remove_child(effect.node);effect.node.queue_free();_card_bursts.remove_at(i)
++		else:effect.node.sample(age)
+ 	for effect in _bonus_labels:
+ 		if not is_instance_valid(effect.label): continue
+ 		var age: float = maxf(0.0, now - effect.started)
+@@ -74,6 +85,7 @@ func _rejoin_music_grid(skipped_beats: int) -> void:
+ 	_music_cursor += shift
+ 	_first_beat += skipped_beats
+ 	for effect in _bonus_labels: effect.started += shift
++	for effect in _card_bursts: effect.started += shift
+ 	trace.append({"index": -1, "event": "music_resume", "skipped_beats": skipped_beats,
+ 		"msec": Time.get_ticks_msec(), "beat_index": -1.0, "scheduled_seconds": -BEAT_SECONDS,
+ 		"music_seconds": _music_seconds(), "resume_seconds": _music_cursor, "lateness_seconds": 0.0})
+@@ -135,7 +147,9 @@ func play(kind: String, fan: Control, selected: Array, action: Callable, snapsho
+ 		_ghosts.append(ghost)
+ 		if source in selected:
+ 			_hand.append(ghost)
+-			_cards.append(source.card_data)
++	_hand = CardFan.search_first(_hand)
++	for ghost in _hand:
++		_cards.append(ghost.card_data)
+ 	# Hold the old scoreboard before project/run signals publish the committed totals.
+ 	display_values = before.duplicate()
+ 	if _update.is_valid(): _update.call(display_values, {})
+@@ -248,12 +262,7 @@ func _animate(kind: String) -> void:
+ 	else:
+ 		_tween.chain().tween_interval(maxf(0.0, _first_beat * BEAT_SECONDS - _music_cursor - BEAT_SECONDS))
+ 		for i in range(_hand.size()):
+-			var ghost := _hand[i]
+-			_tween.chain().tween_callback(_record.bind(i, "rise"))
+-			_tween.chain().tween_property(ghost, "position:y", -28.0, BEAT_SECONDS / 2.0).as_relative()
+-			_tween.chain().tween_callback(_score_card.bind(i))
+-			_tween.chain().tween_property(ghost, "position:y", 28.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
+-			_tween.chain().tween_callback(_record.bind(i, "grounded"))
++			_activation_bounce(i,scale_value,false)
+ 		if _balanced:
+ 			_tween.chain().tween_callback(_begin_specialization)
+ 			_tween.chain().tween_interval(SPECIALIZATION_LEAD_BEATS * BEAT_SECONDS)
+@@ -263,11 +272,7 @@ func _animate(kind: String) -> void:
+ 			_tween.chain().tween_callback(_begin_specialization)
+ 			_tween.chain().tween_interval(SPECIALIZATION_LEAD_BEATS * BEAT_SECONDS)
+ 			for i in range(_hand.size()):
+-				_tween.chain().tween_callback(_record.bind(i, "bonus_rise"))
+-				_tween.chain().tween_property(_hand[i], "position:y", -28.0, BEAT_SECONDS / 2.0).as_relative()
+-				_tween.chain().tween_callback(_score_bonus.bind(i))
+-				_tween.chain().tween_property(_hand[i], "position:y", 28.0, BEAT_SECONDS / 2.0).as_relative().set_ease(Tween.EASE_IN)
+-				_tween.chain().tween_callback(_record.bind(i, "bonus_grounded"))
++				_activation_bounce(i,scale_value,true)
+ 			_tween.chain().tween_callback(_record.bind(-1, "specialization_complete"))
+ 		if not _specialization:
+ 			# A purely visual victory wave after every resolved score/bonus is shown.
+@@ -283,6 +288,42 @@ func _animate(kind: String) -> void:
+ 			_tween.parallel().tween_property(ghost, "position:x", size.x + CardFan.CARD_SIZE.x, BEAT_SECONDS).as_relative().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+ 	_tween.chain().tween_callback(_return_fan)
+ 
++func _activation_bounce(index: int, base_scale: float, bonus: bool) -> void:
++	var ghost:=_hand[index]
++	_tween.chain().tween_callback(func():
++		ghost.z_index=100+index
++		_record(index,"bonus_rise" if bonus else "rise"))
++	# Anticipation and expansion share the original rise half; no extra beat.
++	_tween.chain().tween_property(ghost,"scale",Vector2.ONE*base_scale*CHARGE_SCALE,CHARGE_SECONDS).set_ease(Tween.EASE_IN)
++	_tween.parallel().tween_property(ghost,"position:y",4.0,CHARGE_SECONDS).as_relative().set_ease(Tween.EASE_IN)
++	_tween.chain().tween_property(ghost,"scale",Vector2.ONE*base_scale*POP_SCALE,BEAT_SECONDS/2.0-CHARGE_SECONDS).set_trans(Tween.TRANS_BACK)
++	_tween.parallel().tween_property(ghost,"position:y",-32.0,BEAT_SECONDS/2.0-CHARGE_SECONDS).as_relative()
++	_tween.chain().tween_callback(_score_bonus.bind(index) if bonus else _score_card.bind(index))
++	_tween.chain().tween_property(ghost,"scale",Vector2.ONE*base_scale,BEAT_SECONDS/2.0).set_ease(Tween.EASE_IN_OUT)
++	_tween.parallel().tween_property(ghost,"position:y",28.0,BEAT_SECONDS/2.0).as_relative().set_ease(Tween.EASE_IN)
++	_tween.chain().tween_callback(func():
++		ghost.z_index=20+index
++		_record(index,"bonus_grounded" if bonus else "grounded"))
++
++func _emit_card_burst(index: int, bonus: bool=false) -> void:
++	var beat := _first_beat+index+0.5+(_hand.size()+SPECIALIZATION_LEAD_BEATS if bonus else 0)
++	var started := beat*BEAT_SECONDS
++	var age := maxf(0.0,_music_seconds()-started)
++	if age>=PlayBurst.LIFETIME:return # Do not replay stale bursts after a long frame.
++	var ghost:=_hand[index]
++	var burst:=PlayBurst.new()
++	burst.name="CardPlayBurst"
++	burst.z_index=300
++	burst.position=(ghost.position+ghost.pivot_offset).round()
++	burst.half_extents=ghost.size*ghost.scale/2.0
++	burst.phase=float(index)*0.13
++	var colors: Dictionary={&"graphics":Color("#eb8b9b"),&"sound":Color("#efcd66"),&"technology":Color("#74d3de"),&"design":Color("#bfa3ed")}
++	burst.accent=colors.get(ghost.card_data.primary_stat,Color("#74d3de"))
++	burst.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
++	add_child(burst)
++	burst.sample(age)
++	_card_bursts.append({"node":burst,"started":started})
++
+ func _return_fan() -> void:
+ 	_music_driven = false
+ 	if not is_instance_valid(_fan):
+@@ -358,6 +399,7 @@ func _begin_specialization() -> void:
+ 		_specialization_header = Callable()
+ 
+ func _score_bonus(index: int) -> void:
++	_emit_card_burst(index,true)
+ 	var deltas := _bonus_timeline[index]
+ 	var parts: Array[String] = []
+ 	for key in deltas:
+@@ -406,6 +448,7 @@ func _redistribute_balanced() -> void:
+ 	_record(-1, "balanced_redistributed")
+ 
+ func _score_card(index: int) -> void:
++	_emit_card_burst(index)
+ 	var deltas: Dictionary = _timeline[index]
+ 	for key in deltas: display_values[key] += deltas[key]
+ 	if _update.is_valid(): _update.call(display_values.duplicate(), deltas)
+@@ -415,6 +458,7 @@ func cancel() -> void:
+ 	if is_instance_valid(_play_sound): _play_sound.stop()
+ 	if is_instance_valid(_remove_sound): _remove_sound.stop()
+ 	if _tween != null and _tween.is_valid(): _tween.kill()
++	_tween=null
+ 	_clear()
+ 
+ func _exit_tree() -> void:
+@@ -436,6 +480,9 @@ func _clear(restore_organization := true) -> void:
+ 	_timeline.clear()
+ 	_bonus_timeline.clear()
+ 	_bonus_labels.clear()
++	for effect in _card_bursts:
++		if is_instance_valid(effect.node):remove_child(effect.node);effect.node.queue_free()
++	_card_bursts.clear()
+ 	_balanced_deltas.clear()
+ 	_balanced = false
+ 	_specialization_header = Callable()
+diff --git a/patch-notes/scripts/ui/how_to_play_content.gd b/patch-notes/scripts/ui/how_to_play_content.gd
+index afade42b..e14f5316 100644
+--- a/patch-notes/scripts/ui/how_to_play_content.gd
++++ b/patch-notes/scripts/ui/how_to_play_content.gd
+@@ -20,17 +20,17 @@ static func sections() -> Array:
+ 			_page("history", "Release history", "Review what actually happened to each game.", "Open Post Game Summaries, then choose a release. Detailed Review explains its final rating. Monthly Sales separates earned revenue from paid cash. Run Campaign appears when that title is eligible.\n\nResults are frozen at launch. Looking at a report cannot reroll Reviews, pay a reward again or advance time.\n\nUse older games' results to judge your next Genre, pool and cash plan."),
+ 		]),
+ 		_section("development", "Development", "From four-card decisions to a finished game.", [
+-			_page("phases", "Design → Alpha → Beta", "Each phase asks a different question.", "[b]Design:[/b] implement Features and build the project's foundation.\n\n[b]Alpha:[/b] expand production, improve Core scores and test the game. Production generates Bug Pressure that affects later bug work.\n\n[b]Beta:[/b] Search, Debug, Marketing and Insider work prepare the release. Phase changes are not extra production hands.\n\nChoose when to move forward. More hands can improve a game but also use money and calendar time."),
+-			_page("priorities", "Category priorities", "Priorities influence future draws; they do not award points.", "In Design and Alpha, distribute 100 priority points in 5-point steps, keeping each Core category between 5 and 50. Higher priority favors that category in future draws and redraws.\n\nThe first priority setup for a phase is free. Changing an already committed distribution costs one productive cycle and keeps the current candidates.\n\nBeta has its own QA, Marketing and Insider priorities. Check the displayed total and valid range before committing. A trained Production employee may offer a bundled change during Design or Alpha."),
++			_page("phases", "Design → Alpha → Beta", "Each phase asks a different question.", "[b]Design:[/b] implement Features and build the project's foundation.\n\n[b]Alpha:[/b] expand production, improve Core scores and test the game. Production generates Bug Pressure that affects later bug work.\n\n[b]Beta:[/b] Search, Debug and Marketing prepare the release. Insider work is temporarily disabled. Phase changes are not extra production hands.\n\nChoose when to move forward. More hands can improve a game but also use money and calendar time."),
++			_page("priorities", "Category priorities", "Priorities influence future draws; they do not award points.", "In Design and Alpha, distribute 100 priority points in 5-point steps, keeping each Core category between 10 and 75. Higher priority favors that category in future draws and redraws.\n\nThe first priority setup for a phase is free. Changing an already committed distribution costs one productive cycle and keeps the current candidates.\n\nBeta uses QA and Marketing priorities; Insider cards and priorities are temporarily disabled. Each slider reaches 75. With the 10-point floor and total 100, four-category plans can commit at most 70 in one category. Check the displayed total and valid range before committing. A trained Production employee may offer a bundled change during Design or Alpha."),
+ 			_page("core", "Core scores", "Graphics, Sound, Technology and Design measure quality.", "Cards add their printed Core contributions to the project. Multi-score Features contribute to every printed Core field; Scope is separate.\n\nReview compares each score with that project's Genre standard. Compare percentages, not just raw points: 20/20 is further along than 30/60.\n\nBalanced progress toward those four standards matters. Raising one category far past its standard cannot fully hide three neglected categories. The HUD shows your current values and targets."),
+ 			_page("genre_targets", "Genre standards", "Different Genres emphasize different kinds of quality.", _genre_targets()),
+ 			_page("scope", "Scope & completion", "Scope measures how much game you built, not how polished it is.", "Features add their printed Scope toward the current target. The standard project target is 30. Production specializations do not multiply Scope.\n\nMissing Scope reduces the production contribution to Review. Exceeding the target does not increase the completion multiplier above 100%.\n\nA below-target project may be launchable with a warning, but zero-work or Pass-only projects cannot generate a sales-bearing release. Keep checking Core quality and Bugs as well as completion."),
+ 			_page("hands", "Cards & four-card hands", "Pick exactly four candidates and inspect the hand before committing.", "You draw seven candidate instances and choose four. Selected cards rise into their own fan. The remaining cards stay available; playing a hand replaces played slots rather than throwing away every unselected card.\n\nFeatures are finite within the project. Renewable Core Passes can return. A card's primary category affects Specialization eligibility even if it also contributes to another category.\n\nA successful productive hand spends one cycle and its displayed cost. Failed or unaffordable actions do not secretly resolve cards."),
+-			_page("redraw", "Redraw & sorting", "Use redraws to improve the hand without spending a cycle.", "Select a card to replace it. Each one-card replacement consumes one shared redraw. The budget caps at four; successful productive cycles restore one, and successful development phase entry refreshes it.\n\nA replaced card clears its selection. The replacement follows the phase's legal supply and priority rules.\n\nSorting only changes the arrangement of the fan. Design, Alpha and Contracts offer category/Scope organization; Beta groups QA, Marketing and Insider cards. Sorting does not create a new draw."),
+-			_page("synergies", "Production synergies", "Specialization rewards a focus; Balanced Production redistributes an even hand.", "[b]Specialization[/b]\nFour cards sharing the same primary Core category give +50% hand Core gains. Passes count. Scope stays printed.\n\n[b]Balanced Production[/b]\nOtherwise, a hand with at least one Feature qualifies when each of its four unmodified Core gains is within ±15% of the hand's four-category average. Count all printed Core contributions, not accumulated project scores or Genre percentages.\n\nThe original hand total is divided evenly across the four categories. Whole-point remainders go Graphics, Sound, Technology, Design: 21 points becomes 6/5/5/5. No extra points are created. Specialization takes precedence; they do not stack."),
++			_page("redraw", "Redraw & sorting", "Use redraws to improve the hand without spending a cycle.", "Select a card to replace it. Each one-card replacement consumes one shared redraw. The budget caps at four; successful productive cycles restore one, and successful development phase entry refreshes it.\n\nA replaced card clears its selection. The replacement follows the phase's legal supply and priority rules.\n\nSorting only changes the arrangement of the fan. Design, Alpha and Contracts offer category/Scope organization; Beta groups QA and Marketing cards while Insider cards are temporarily disabled. Sorting does not create a new draw."),
++			_page("synergies", "Production synergies", "Specialization rewards a focus; Balanced Production boosts and redistributes an even hand.", "[b]Specialization[/b]\nFour cards sharing the same primary Core category give +50% hand Core gains. Passes count. Scope stays printed.\n\n[b]Balanced Production[/b]\nOtherwise, a hand with at least one Feature qualifies when each of its four unmodified Core gains is within ±15% of the hand's four-category average. Count all printed Core contributions, not accumulated project scores or Genre percentages.\n\nMultiply the hand Core total by 1.25, round down to whole points, then divide evenly across the four categories. Spare points go Graphics, Sound, Technology, Design: 21 points becomes 26, split 7/7/6/6. Specialization takes precedence; they do not stack."),
+ 			_page("playtests", "Host Playtest", "Correct the weakest percentages of your Genre standards.", "Host Playtest in Alpha or Beta supplies corrective Core opportunities. Selection looks for the lowest current Core score divided by its Genre standard, rather than simply the lowest raw score.\n\nExample: 20/40 is weaker than 15/20, even though 20 is the larger number.\n\nCheck the displayed cash and cycle cost before confirming. Playtests do not replace the need to play useful cards or finish Scope."),
+ 			_page("bugs", "Bug Pressure & QA", "Hidden Bugs must be found before they can be fixed.", "Production's Bug Pressure contributes to the Bugs you carry into later development. In Beta, Search reveals Hidden Bugs as Known Bugs; Debug removes Known Bugs.\n\nSearch resolves before Debug within a hand, so a combined QA hand can reveal then fix. Debug cannot fix Bugs that remain hidden.\n\nBoth remaining Hidden and Known Bugs affect Review. Fixed Bugs are no longer remaining Bugs. Watch the Known / Fixed readout and use Search when your known count is low but you suspect hidden work remains."),
+-			_page("beta", "Marketing & Insider", "Beta can build audience as well as polish.", "Marketing cards build output used in launch Awareness. Insider work can reveal competitor or market information, and some actions may provide income. Read the card text for its actual effect.\n\nFour QA cards trigger QA Specialization; four Marketing cards trigger Marketing Specialization. Each gives a 50% boost to its eligible work.\n\nA 2/1/1 mix of QA, Marketing and Insider triggers Balanced Operations: +25% eligible bug work, Marketing and insight chances, without a cash multiplier. It is separate from Design/Alpha's score-redistributing Balanced Production."),
++			_page("beta", "Marketing & QA", "Beta can build audience as well as polish.", "Marketing cards build output used in launch Awareness. Insider cards and their priorities are temporarily disabled; there are no Insider income or reveal actions during this hold.\n\nFour QA cards trigger QA Specialization; four Marketing cards trigger Marketing Specialization. Each gives a 50% boost to its eligible work.\n\nBalanced Operations is unavailable while Insider cards are disabled. Design/Alpha's score-redistributing Balanced Production is unchanged."),
+ 			_page("review", "How Review works", "Quality, completion and remaining Bugs combine into the final rating.", "[b]Core quality[/b]\nEach Core score is divided by its Genre standard, capped at 125%. Review rewards the average progress and penalizes uneven ratios.\n\n[b]Completion and polish[/b]\nScope completion scales that production rating up to 100%; remaining Hidden and Known Bugs reduce it. A small review variation is then applied and the final result is rounded to one decimal, capped at 10.0.\n\nMarketing does not directly increase this base rating. After launch, Detailed Review shows the frozen calculation; reopening it does not roll again."),
+ 		]),
+ 		_section("store", "Feature Store", "Turn cash and time into a broader production pool.", [
+diff --git a/patch-notes/scripts/ui/pause_menu.gd b/patch-notes/scripts/ui/pause_menu.gd
+index 5342f681..191eeec9 100644
+--- a/patch-notes/scripts/ui/pause_menu.gd
++++ b/patch-notes/scripts/ui/pause_menu.gd
+@@ -7,6 +7,9 @@ signal main_menu_requested
+ signal main_menu_confirmed
+ 
+ const CANCEL_OWNER_GROUP := &"pause_cancel_owner"
++const ENTER_SECONDS := MenuTransitions.ENTRANCE_SECONDS
++const EXIT_SECONDS := 0.18
++const SLIDE_PIXELS := 20.0
+ 
+ var can_pause: Callable
+ var settings_open: Callable
+@@ -21,6 +24,8 @@ var main_menu_button: Button
+ var confirming := false
+ var _owns_pause := false
+ var _return_focus: Control
++var _content: Control
++var _animation: Tween
+ 
+ func _ready() -> void:
+ 	process_mode = Node.PROCESS_MODE_ALWAYS
+@@ -35,6 +40,7 @@ func _ready() -> void:
+ 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ 	panel.add_child(dim)
+ 	var center := CenterContainer.new()
++	_content = center
+ 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ 	panel.add_child(center)
+ 	var surface := PanelContainer.new()
+@@ -70,7 +76,8 @@ func _button(parent: Control, id: String, caption: String, action: Callable) ->
+ 	button.name = id
+ 	button.text = caption
+ 	button.custom_minimum_size.y = 44
+-	button.pressed.connect(action)
++	button.pressed.connect(func():
++		if _owns_pause: action.call())
+ 	parent.add_child(button)
+ 	return button
+ 
+@@ -84,8 +91,13 @@ func open() -> void:
+ 	get_tree().paused = true
+ 	var soundtrack := get_node_or_null("/root/Soundtrack")
+ 	if soundtrack != null: soundtrack.begin_gameplay_pause()
++	if not panel.visible:
++		panel.modulate.a = 0.0
++		_content.position.y = SLIDE_PIXELS
+ 	panel.show()
++	_set_interactive(true)
+ 	show_choices()
++	_animate(true)
+ 
+ func show_choices() -> void:
+ 	confirming = false
+@@ -111,10 +123,27 @@ func close() -> void:
+ 	if not _owns_pause: return
+ 	_owns_pause = false
+ 	confirming = false
+-	panel.hide()
++	_set_interactive(false)
+ 	get_tree().paused = false
+ 	if is_instance_valid(_return_focus) and _return_focus.is_visible_in_tree():
+ 		_return_focus.grab_focus()
++	_animate(false)
++
++func _set_interactive(active: bool) -> void:
++	# The exit is visual only: its fading controls must not intercept resumed
++	# gameplay, including descendants with their own mouse/focus settings.
++	panel.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_ENABLED if active else Control.MOUSE_BEHAVIOR_DISABLED
++	panel.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_ENABLED if active else Control.FOCUS_BEHAVIOR_DISABLED
++
++func _animate(entering: bool) -> void:
++	if _animation != null and _animation.is_valid(): _animation.kill()
++	_animation = create_tween().set_parallel().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_ignore_time_scale(true)
++	_animation.set_trans(Tween.TRANS_CUBIC if entering else Tween.TRANS_QUAD)
++	_animation.set_ease(Tween.EASE_OUT if entering else Tween.EASE_IN)
++	var duration := ENTER_SECONDS if entering else EXIT_SECONDS
++	_animation.tween_property(panel, "modulate:a", 1.0 if entering else 0.0, duration)
++	_animation.tween_property(_content, "position:y", 0.0 if entering else SLIDE_PIXELS, duration)
++	if not entering: _animation.chain().tween_callback(panel.hide)
+ 
+ func _input(event: InputEvent) -> void:
+ 	# Settings owns Escape and keyboard navigation until its Back action completes.
+@@ -145,4 +174,5 @@ func _input(event: InputEvent) -> void:
+ 		get_viewport().set_input_as_handled()
+ 
+ func _exit_tree() -> void:
++	if _animation != null and _animation.is_valid(): _animation.kill()
+ 	if _owns_pause: get_tree().paused = false
+diff --git a/patch-notes/scripts/ui/phase_workspace.gd b/patch-notes/scripts/ui/phase_workspace.gd
+index 51c7cfc2..01792bb4 100644
+--- a/patch-notes/scripts/ui/phase_workspace.gd
++++ b/patch-notes/scripts/ui/phase_workspace.gd
+@@ -86,6 +86,8 @@ func configure(controller: Control, title: String) -> void:
+ 		if hand_motion != null and hand_motion.busy: return
+ 		organize_button.text = phase.get_node("%HandContainer").cycle_organization()
+ 		refresh())
++	if fan.beta_sort_only and not BetaPriorityAllocation.insiders_enabled():
++		organize_button.tooltip_text = "Group QA, then Marketing cards; corrective Core Passes follow. Insider cards are temporarily disabled. No cash, cycle or redraw cost."
+ 	backlog_title = pool_title
+ 	backlog_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+ 	pool_title.add_theme_color_override("font_color", Color("#79d4da"))
+@@ -268,7 +270,7 @@ func _synergy_tip() -> Dictionary:
+ 			var stat_name := str(final_production.specialization_stat).capitalize()
+ 			return {"label": "%s ×1.5" % stat_name, "title": "%s Specialization ready" % stat_name, "body": "All four cards share %s as their primary Core label. Playing this hand multiplies its Core gains by 1.5, rounded by category. Printed Scope and Bug Pressure do not multiply." % stat_name}
+ 		if final_production.get("balanced_production", false):
+-			return {"label": "Balanced split", "title": "Balanced Production ready", "body": "This hand includes a Feature and all four hand Core gains are within ±15% of their average. After the cards play, their original total is shared evenly. Spare points go to Graphics, Sound, Technology, then Design. Scope stays unchanged."}
++			return {"label": "Balanced split", "title": "Balanced Production ready", "body": "This hand includes a Feature and all four hand Core gains are within ±15% of their average. After the cards play, their Core total gets ×1.25, rounded down to whole points, then shared evenly. Spare points go to Graphics, Sound, Technology, then Design. Scope stays unchanged."}
+ 	return {"label": "Synergy: none", "title": "No synergy on this hand", "body": "The hand can still play normally. Four matching primary Core labels give Specialization; a Feature plus evenly distributed hand Core gains can give Balanced Production. Only one bonus applies."}
+ 
+ 
+@@ -309,12 +311,19 @@ func get_selected_production_synergy() -> Dictionary:
+ 
+ func _beta_synergy_tip(selected: Array[CardView]) -> Dictionary:
+ 	var overview := {"label": "Synergy ?", "title": "What is a Beta synergy?", "body": "Four QA cards boost Search and Debug card values ×1.5. Four Marketing cards boost their combined Marketing Output ×1.5. A 2/1/1 mix of QA, Marketing and Insider boosts qualifying outputs ×1.25. Only one bonus applies."}
++	if not BetaPriorityAllocation.insiders_enabled():
++		overview.body = "Four QA cards boost Search and Debug card values ×1.5. Four Marketing cards boost combined Marketing Output ×1.5. Insider cards/priorities are temporarily disabled, so Balanced Operations is unavailable."
+ 	if selected.is_empty(): return overview
+ 	var counts := {CardData.BETA_CATEGORY_QA: 0, CardData.BETA_CATEGORY_MARKETING: 0, CardData.BETA_CATEGORY_INSIDER: 0}
+ 	for view: CardView in selected:
+ 		if view.card_data == null or not counts.has(view.card_data.beta_category):
+ 			return {"label": "Synergy: none", "title": "Corrective Pass selected", "body": "A Host Playtest corrective Pass can still add Core score when played, but a hand containing one does not qualify for QA, Marketing or Balanced Operations synergy."}
+ 		counts[view.card_data.beta_category] += 1
++	if not BetaPriorityAllocation.insiders_enabled():
++		if counts[CardData.BETA_CATEGORY_INSIDER] > 0:
++			return {"label":"Unavailable", "title":"Insider temporarily disabled", "body":"Replace this retained Insider card with a QA or Marketing card before playing."}
++		if counts[CardData.BETA_CATEGORY_QA] != selected.size() and counts[CardData.BETA_CATEGORY_MARKETING] != selected.size():
++			return {"label":"Synergy: mixed", "title":"Look for a Beta combo", "body":"Four QA or four Marketing cards specialize. Balanced Operations is unavailable while Insider cards are disabled."}
+ 	if selected.size() < 4:
+ 		if counts[CardData.BETA_CATEGORY_QA] == selected.size():
+ 			return {"label": "Synergy: %d/4 QA" % selected.size(), "title": "Build a QA combo", "body": "Add %d more QA cards for QA Specialization. Search and Debug card values get ×1.5 before their bug formulas and caps." % (4 - selected.size())}
+diff --git a/patch-notes/scripts/ui/predevelopment_overlay.gd b/patch-notes/scripts/ui/predevelopment_overlay.gd
+index a4ed4059..a7f76cd6 100644
+--- a/patch-notes/scripts/ui/predevelopment_overlay.gd
++++ b/patch-notes/scripts/ui/predevelopment_overlay.gd
+@@ -72,7 +72,7 @@ func _ready() -> void:
+ 	theme_input = _add_options(identity, "themes")
+ 	theme_input.tooltip_text = "Genre and Theme determine which other releases crowd this game's future sales."
+ 	_add_label(priorities, "Initial Design priorities", 20)
+-	_add_label(priorities, "Priorities weight future draws, not scores.\nAllocate 100 total, 10-50 each in steps of 5.", 14)
++	_add_label(priorities, "Priorities weight future draws, not scores.\nAllocate 100 total, 10-75 each in steps of 5.", 14)
+ 	priorities.tooltip_text = "Graphics: visuals. Sound: audio. Tech: systems. Design: gameplay. Core scores measure quality; Scope measures how much game you build."
+ 	var priority_body := HBoxContainer.new()
+ 	priority_body.add_theme_constant_override("separation", 16)
+@@ -91,7 +91,7 @@ func _ready() -> void:
+ 		priority_labels.append(value)
+ 		var slider := HSlider.new()
+ 		slider.min_value = 10
+-		slider.max_value = 50
++		slider.max_value = PriorityAllocation.MAX_PRIORITY
+ 		slider.step = 5
+ 		slider.value = 25
+ 		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+diff --git a/patch-notes/scripts/ui/priority_overlay.gd b/patch-notes/scripts/ui/priority_overlay.gd
+index 3be6ee4a..4eff0ccb 100644
+--- a/patch-notes/scripts/ui/priority_overlay.gd
++++ b/patch-notes/scripts/ui/priority_overlay.gd
+@@ -60,13 +60,20 @@ func configure(controller: Control, priority_panel: Control, commit: Button) ->
+ 	var beta: bool = phase.get_workspace().phase_name == "Beta"
+ 	var names := PriorityInfluenceChart.BETA_NAMES if beta else PriorityInfluenceChart.CORE_NAMES
+ 	var colors := PriorityInfluenceChart.BETA_COLORS if beta else PriorityInfluenceChart.CORE_COLORS
++	if beta and not BetaPriorityAllocation.insiders_enabled():
++		names = names.slice(0,2)
++		colors = colors.slice(0,2)
+ 	for column in columns.get_children():
+ 		if column is VBoxContainer:
++			if beta and column.name == "InsiderColumn" and not BetaPriorityAllocation.insiders_enabled():
++				column.hide()
++				continue
+ 			column.custom_minimum_size = Vector2(80, 168)
+ 			column.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+ 			var index := sliders.size()
+ 			for child in column.get_children():
+ 				if child is VSlider:
++					child.max_value = BetaPriorityAllocation.MAX_PRIORITY if beta else PriorityAllocation.MAX_PRIORITY
+ 					sliders.append(child)
+ 					child.custom_minimum_size = Vector2(32, 122)
+ 					child.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+@@ -124,8 +131,10 @@ func open() -> bool:
+ 	return true
+ 
+ func _help_text(phase_name: String) -> String:
++	if phase_name == "Beta" and not BetaPriorityAllocation.insiders_enabled():
++		return "QA and Marketing weight future draws · total 100 · 10–75 · steps of 5.\nInsider cards and priorities are temporarily disabled.\n" + ("Beginning Beta is free." if initial_setup else "Changed priorities: 1 cycle and one redraw restored (up to 4). Cancel: free.")
+ 	if initial_setup and phase_name in ["Design", "Alpha"]:
+-		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTech (systems), and Design (gameplay). Scope is how much you build.\nPriorities weight future cards, not scores. Total 100 · 10–50 · steps of 5.\nBegin %s is free." % phase_name
++		return "Core scores measure quality: Graphics (visuals), Sound (audio),\nTech (systems), and Design (gameplay). Scope is how much you build.\nPriorities weight future cards, not scores. Total 100 · 10–75 · steps of 5.\nBegin %s is free." % phase_name
+ 	if initial_setup:
+ 		return "Higher priorities make that category more likely in future draws and redraws.\nSet the initial %s allocation · total 100 · 5-point steps.\nBeginning the phase is free." % phase_name
+ 	return "Higher priorities make that category more likely in future draws and redraws.\nThe current pool and your scores stay the same. Total 100 · 5-point steps.\nCommit a changed allocation: 1 cycle and one redraw restored (up to 4). Cancel: free."
+@@ -153,7 +162,7 @@ func commit_draft() -> bool:
+ 		_close()
+ 		return true
+ 	if not phase.commit_priority_distribution():
+-		feedback.text = "Use a changed allocation totaling 100; each value must be 10–50."
++		feedback.text = "Use a changed allocation totaling 100; each active value must be 10–75."
+ 		return false
+ 	_close()
+ 	return true
+diff --git a/patch-notes/scripts/ui/studio_finances.gd b/patch-notes/scripts/ui/studio_finances.gd
+index 44db2933..0c2b7889 100644
+--- a/patch-notes/scripts/ui/studio_finances.gd
++++ b/patch-notes/scripts/ui/studio_finances.gd
+@@ -31,6 +31,11 @@ var payoff_button: Button
+ var loan_selector: OptionButton
+ var _selected_loan: StringName = &""
+ var quote_details: RichTextLabel
++var payment_details_button: Button
++var payment_details: RichTextLabel
++var _payment_page: VBoxContainer
++var _payment_previous: Button
++var _payment_next: Button
+ var _quote: Dictionary = {}
+ var _payoff: Dictionary = {}
+ var _schedule_page := 0
+@@ -175,7 +180,7 @@ func _ready() -> void:
+ 	term_input.text_changed.connect(_invalidate_quote)
+ 	quote_details = RichTextLabel.new()
+ 	quote_details.name = "BankQuote"
+-	quote_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
++	quote_details.size_flags_vertical = Control.SIZE_FILL
+ 	quote_details.scroll_active = true
+ 	quote_details.custom_minimum_size.y = 130
+ 	_bank_page.add_child(quote_details)
+@@ -186,20 +191,38 @@ func _ready() -> void:
+ 	loan_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ 	loan_selector.item_selected.connect(_select_active_loan)
+ 	pages.add_child(loan_selector)
+-	for direction in [-1,1]:
+-		var button := Button.new()
+-		button.text = "Previous payments" if direction < 0 else "Next payments"
+-		button.pressed.connect(func():
+-			_schedule_page = maxi(0,_schedule_page + direction)
+-			_show_quote())
+-		pages.add_child(button)
++	payment_details_button = Button.new()
++	payment_details_button.name = "PaymentBreakdownButton"
++	payment_details_button.text = "Payment breakdown"
++	payment_details_button.pressed.connect(_open_payment_details)
++	pages.add_child(payment_details_button)
+ 	_label("Financial history", _bank_page, 18)
+ 	bank_history = RichTextLabel.new()
+ 	bank_history.name = "BankHistory"
+ 	bank_history.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ 	bank_history.scroll_active = true
+ 	_bank_page.add_child(bank_history)
+-	_label("Rate: 1% of scheduled opening principal per month. Credit uses prototype defaults; score does not set eligibility or price.", _bank_page)
++	_label("1% monthly interest. Credit history does not change loan pricing.", _bank_page)
++	_payment_page = VBoxContainer.new()
++	_payment_page.size_flags_vertical = Control.SIZE_EXPAND_FILL
++	layout.add_child(_payment_page)
++	var payment_controls := HBoxContainer.new()
++	_payment_page.add_child(payment_controls)
++	for direction in [-1,1]:
++		var button := Button.new()
++		button.name = "PreviousPaymentPage" if direction < 0 else "NextPaymentPage"
++		button.text = "Previous payments" if direction < 0 else "Next payments"
++		if direction < 0: _payment_previous = button
++		else: _payment_next = button
++		button.pressed.connect(func():
++			_schedule_page = maxi(0,_schedule_page + direction)
++			_show_quote())
++		payment_controls.add_child(button)
++	payment_details = RichTextLabel.new()
++	payment_details.name = "BankPaymentDetails"
++	payment_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
++	payment_details.scroll_active = true
++	_payment_page.add_child(payment_details)
+ 	_confirm = ConfirmationDialog.new()
+ 	_confirm.title = "Confirm Bank transaction"
+ 	_confirm.dialog_autowrap = true
+@@ -259,7 +282,10 @@ func open_bank() -> void:
+ 
+ 
+ func back() -> void:
+-	if page == &"bank":
++	if page == &"bank_payments":
++		_set_page(&"bank")
++		payment_details_button.grab_focus()
++	elif page == &"bank":
+ 		_set_page(&"finances")
+ 		bank_button.grab_focus()
+ 	else:
+@@ -269,11 +295,19 @@ func back() -> void:
+ func _set_page(value: StringName) -> void:
+ 	_cancel_confirmation()
+ 	page = value
+-	_title.text = "Visit Bank" if page == &"bank" else "Studio Finances"
++	_title.text = "Payment breakdown" if page == &"bank_payments" else ("Visit Bank" if page == &"bank" else "Studio Finances")
+ 	_finance_page.visible = page == &"finances"
+ 	_bank_page.visible = page == &"bank"
++	_payment_page.visible = page == &"bank_payments"
+ 	bank_button.visible = page == &"finances"
+-	back_button.text = "Back to Finances" if page == &"bank" else _return_label
++	back_button.text = "Back to Bank" if page == &"bank_payments" else ("Back to Finances" if page == &"bank" else _return_label)
++
++
++func _open_payment_details() -> void:
++	if not visible or page != &"bank" or not _quote.has("schedule"): return
++	_set_page(&"bank_payments")
++	back_button.grab_focus()
++	_animate_entrance.call_deferred()
+ 
+ 
+ func _on_finance_changed() -> void:
+@@ -290,6 +324,10 @@ func refresh() -> void:
+ 	accept_button.disabled = true
+ 	payoff_button.disabled = true
+ 	quote_details.text = "Enter an amount and term, then preview the exact quote."
++	payment_details.text = "No current repayment schedule."
++	payment_details_button.disabled = true
++	_payment_previous.disabled = true
++	_payment_next.disabled = true
+ 	loan_selector.clear()
+ 	var selected_index := 0
+ 	if available:
+@@ -457,7 +495,7 @@ func _select_active_loan(index: int) -> void:
+ 	for loan: Dictionary in report.get("bank_loans",[]):
+ 		if loan.loan_id != _selected_loan or loan.closed: continue
+ 		_payoff = run.get_bank_payoff_quote(_selected_loan)
+-		_quote = {"schedule":loan.schedule,"reason":"Active loan: " + String(_selected_loan)}
++		_quote = {"schedule":loan.schedule,"reason":"Active loan"}
+ 		payoff_button.disabled = _payoff.is_empty()
+ 		_show_quote()
+ 		return
+@@ -465,6 +503,8 @@ func _select_active_loan(index: int) -> void:
+ func _invalidate_quote(_text: String) -> void:
+ 	_quote = {}
+ 	accept_button.disabled = true
++	payment_details_button.disabled = true
++	quote_details.text = "Amount or term changed. Preview the new quote."
+ 	_cancel_confirmation()
+ 
+ 
+@@ -484,6 +524,10 @@ func _preview_quote() -> void:
+ 
+ func _show_quote() -> void:
+ 	var lines: Array[String] = [_quote.get("reason", "Quote unavailable.")]
++	var summary: Array[String] = lines.duplicate()
++	payment_details_button.disabled = not _quote.has("schedule")
++	_payment_previous.disabled = true
++	_payment_next.disabled = true
+ 	if _quote.has("capacity_cents"):
+ 		lines.append("Settled sales: older %s · latest %s · conservative basis %s" % [_money(_quote.older_sales_cents),_money(_quote.latest_sales_cents),_money(_quote.basis_cents)])
+ 		lines.append("Monthly rent %s · Other required obligations %s · Payment capacity %s" % [_money(_quote.rent_cents),_money(_quote.obligations_cents),_money(_quote.capacity_cents)])
+@@ -495,13 +539,33 @@ func _show_quote() -> void:
+ 	if _quote.has("schedule"):
+ 		var terms: Dictionary = _quote.schedule
+ 		lines.append("%s over %d months · 1%% monthly · Total interest %s · Total repayment %s" % [_money(terms.principal_cents),terms.term_months,_money(terms.total_interest_cents),_money(terms.total_payment_cents)])
++		summary.append("%s over %d months · 1%% monthly" % [_money(terms.principal_cents),terms.term_months])
++		summary.append("Total interest %s · Total repayment %s" % [_money(terms.total_interest_cents),_money(terms.total_payment_cents)])
++		var issued := 0
++		if not _quote.get("accepted", false):
++			for loan: Dictionary in report.get("bank_loans", []):
++				if loan.loan_id == _selected_loan: issued = int(loan.issued)
++		if issued < int(terms.term_months):
++			var upcoming := BankLoan.installment(terms, issued + 1)
++			summary.append("Next scheduled payment: %s · Month %d" % [_money(upcoming.payment_cents),upcoming.due_cycle/2])
++		if _quote.get("rules_version") == 2 and _quote.get("accepted", false):
++			if _quote.requested_principal_cents != terms.principal_cents:
++				summary.append("Requested %s → Qualified %s" % [_money(_quote.requested_principal_cents),_money(terms.principal_cents)])
++			if _quote.recovery_cents > 0:
++				summary.append("Overdue paid %s · Cash received %s" % [_money(_quote.recovery_cents),_money(_quote.net_proceeds_cents)])
+ 		_schedule_page = mini(_schedule_page, (int(terms.term_months)-1)/12)
++		_payment_previous.disabled = _schedule_page == 0
++		_payment_next.disabled = (_schedule_page + 1) * 12 >= int(terms.term_months)
+ 		for number in range(_schedule_page*12+1,mini((_schedule_page+1)*12+1,int(terms.term_months)+1)):
+ 			var due := BankLoan.installment(terms,number)
+ 			lines.append("%d. Month %d / cycle %d: %s = %s principal + %s interest" % [number,due.due_cycle/2,due.due_cycle,_money(due.payment_cents),_money(due.principal_cents),_money(due.interest_cents)])
+ 	if not _payoff.is_empty():
+ 		lines.append("Outstanding principal %s · Due unpaid interest %s · Payoff now %s. Future interest is waived; no fee." % [_money(_payoff.principal_cents),_money(_payoff.interest_cents),_money(_payoff.total_cents)])
+-	quote_details.text = "\n".join(lines)
++		summary.append("Remaining principal %s · Payoff now %s" % [_money(_payoff.principal_cents),_money(_payoff.total_cents)])
++	if not _quote.has("schedule") and _quote.has("maximum_principal_cents"):
++		summary.append("Maximum principal for this term: %s" % _money(_quote.maximum_principal_cents))
++	quote_details.text = "\n".join(summary)
++	payment_details.text = "\n".join(lines)
+ 
+ 
+ func _confirm_accept() -> void:
+diff --git a/patch-notes/scripts/ui/tutorial_overlay.gd b/patch-notes/scripts/ui/tutorial_overlay.gd
+index abf87e0c..0ab41345 100644
+--- a/patch-notes/scripts/ui/tutorial_overlay.gd
++++ b/patch-notes/scripts/ui/tutorial_overlay.gd
+@@ -16,16 +16,16 @@ const TOPICS := {
+ 	],
+ 	&"design": [
+ 		{"title": "Design: Quality and Scope", "body": "Your four Core scores measure quality: Graphics for visuals, Sound for audio, Technology for technical systems, and Design for gameplay. Cards build these scores toward Review. Scope measures how much game you have built. Feature cards add their printed Scope toward the HUD target. A complete game still needs strong Core scores. Hover over a HUD score for a reminder."},
+-		{"title": "Design: Priorities and Hands", "body": "Allocate 100 priority points in 5-point steps, with each category from 5 to 50. Higher priorities favor that category in future draws and redraws; they do not add scores. Begin Design is free. Later priority changes cost one cycle. Select exactly four cards, then Implement: a successful hand costs one cycle. Features exhaust for this project; Passes can return."},
+-		{"title": "Design: Redraw and Synergy", "body": "Redraw selected cards for one shared redraw each and no cycle; successful production restores one. Four cards sharing a primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature triggers Balanced Production when its four Core gains are within ±15% of their average. After playing, its total is shared evenly; spare points go Graphics, Sound, Tech, Design. Scope stays printed."},
++		{"title": "Design: Priorities and Hands", "body": "Allocate 100 priority points in 5-point steps, with each category from 10 to 75. Higher priorities favor that category in future draws and redraws; they do not add scores. Begin Design is free. Later priority changes cost one cycle. Select exactly four cards, then Implement: a successful hand costs one cycle. Features exhaust for this project; Passes can return."},
++		{"title": "Design: Redraw and Synergy", "body": "Redraw selected cards for one shared redraw each and no cycle; successful production restores one. Four cards sharing a primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature triggers Balanced Production when its four Core gains are within ±15% of their average. After playing, its Core total gets ×1.25, rounds down to whole points and is shared evenly; spare points go Graphics, Sound, Tech, Design. Scope stays printed."},
+ 	],
+ 	&"alpha": [
+ 		{"title": "Alpha: Expand and Test", "body": "Set Alpha priorities, then build four-card hands to expand your game. Host Playtests help you evaluate the project. Features are finite, Passes are renewable, and productive actions advance time."},
+-		{"title": "Alpha: Synergy and Beta", "body": "Four cards, including Passes, with the same primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature triggers Balanced Production if its four Core gains are within ±15% of their average. It redistributes the original hand total evenly, with spare points going Graphics, Sound, Tech, Design. Scope and Bug Pressure stay unchanged. Check those values before moving to Beta."},
++		{"title": "Alpha: Synergy and Beta", "body": "Four cards, including Passes, with the same primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature triggers Balanced Production if its four Core gains are within ±15% of their average. It multiplies the hand Core total by 1.25, rounds down to whole points and redistributes evenly, with spare points going Graphics, Sound, Tech, Design. Scope and Bug Pressure stay unchanged. Check those values before moving to Beta."},
+ 	],
+ 	&"beta": [
+ 		{"title": "Beta: Focused Hands", "body": "Set priorities and choose four-card hands. Search reveals Hidden Bugs; Debug fixes Known Bugs. Four QA cards trigger QA Specialization: each card's value is multiplied by 1.50 before its bug formula. Four Marketing cards trigger Marketing Specialization: the summed printed Marketing value is multiplied by 1.50, then rounded down once."},
+-		{"title": "Beta: Balance and Launch", "body": "A hand with a 2/1/1 mix of QA, Marketing and Insider cards triggers Balanced Operations. It boosts eligible bug work, Marketing and insight chances by 25%, but not cash. Synergy bonuses do not stack. Launch freezes the release results and enters Studio for free."},
++		{"title": "Beta: Balance and Launch", "body": "Insider cards and their priorities are temporarily disabled. Beta uses QA and Marketing. Balanced Operations is unavailable during this hold; four QA or four Marketing cards still specialize. Launch freezes the release results and enters Studio for free."},
+ 	],
+ 	&"studio": [
+ 		{"title": "Studio: Between Games", "body": "Entering Studio refills your redraws to four, including after a release or completed Contract. Browse release summaries, the Feature Store and available Contracts. Browsing costs no cycles or cash."},

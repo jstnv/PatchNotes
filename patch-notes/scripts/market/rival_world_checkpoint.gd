@@ -4,11 +4,32 @@
 extends RefCounted
 
 const Session := preload("res://scripts/simulation/campaign_session.gd")
+## Title audio observer only; preceding saved world, ownership and RNG stay exact.
+const MENU_VISUALIZER_PREDECESSORS := ["6e31125897228a4a80f175f449f0fdd52400079450a310b4ee6f40a71d063d4a"]
+## Twelve-Scope grants apply to new Studios only; retain old ownership and RNG.
+const STARTER_SCOPE_PREDECESSORS := ["3eb0f864ee07afc000f7ac087b5b1b7c2396d93e89056b53a84900b9e4954560"]
 ## Exact pre-optimization editor and shipped v0.03 sources. Rules, persisted
 ## fields and RNG are unchanged; every ordinary field check still applies.
 const LATENCY_PREDECESSOR_SOURCES := ["a866e98020c0018f943ce8b98bbbd564b83d4ecd356bc6a4fd5cf66b0c483fa7", "617a97c83aabe2bba6613a8b4e5bddca7f1b9c4a974b8efb06e3595ad7334c94", "ce24d2a07703a664edd86574b2c678666f9307c5160710a62ce55603c7a74692", "a458650917031ee5dddd23c8a5b7c79986254f731f03a0113ddab4377aab0435"]
 ## Exact preceding Search editor/compiled presentation; saved fields unchanged.
 const SEARCH_PRESENTATION_SOURCES := ["efc6ef13b947a784ad4db20d7220920498b3e43c28923c9965baafcf61016580","c1be4bc1ac2c8818d69b00e6e523e475382b0b6047e6e99a42891d7b8960304b","3eecb919ab1e100c930dfd792abeaca8066fe1f9977ed2e7785188f78e8b1fd2"]
+## Exact editor sources before gradual pause audio/menu; saved fields unchanged.
+const PAUSE_TRANSITION_SOURCES := [
+	"3a8f41da6754dcf17269623586337daf39e1523263cbdb1aefcf0e8a9dba3ccc",
+	"abbfa387743973cc6c727912041bee407ebeebe4fa370fd26751a1d9d87eace7",
+]
+## Temporary Insider hold/cap expansion is prospective; retain old world/RNG.
+const INSIDER_HOLD_PREDECESSORS := ["f479c5b654d756972e5cb822756328ae3fae7eff2fdf66eb4e7badf967d20311"]
+## Employee navigation only; retain the exact preceding saved world and RNG.
+const EMPLOYEE_MENU_PREDECESSORS := ["71f86b840b0af8d425f8166caf169b853229e6c6ff3f4f32db22ecd7712ad019"]
+## Exact pre-card-pop presentation; retained gameplay, world and RNG fields.
+const CARD_POP_PREDECESSORS := ["a4d9fc318694ef143ea9d59147ae8c5e33a823d31d05a68b35d74203025b51c5"]
+## Balanced 1.25 reward is prospective: retain historical scores and RNG.
+const BALANCED_BOOST_PREDECESSORS := ["1c28c28f1f82b53cfb76f246f66562d476ffeb23d1ca152cd455108a693c5b4e"]
+## Positive one-point Balanced allowance is prospective; saved state stays exact.
+const BALANCED_SMALL_HAND_PREDECESSORS := ["9d30a157bfbcdec10be0de7120979ca282c137b23d327bb5b4e24fe2842c6cac"]
+## Floating score presentation only; exact preceding player/world/RNG retained.
+const SCORE_FLOAT_PREDECESSORS := ["8593779f9afa7deab4ca218fab64118864efe5d763ff088485f8d6ad43be7ab8", "02e62ac6d53d7b50c642ffb2a6e70fd64afcf01eec07dee4c919d4394773c3cc", "c3e80e9a7118d84803ef047dbf11e641030b3c6ebfcaeabc12dc6344f12d4c78", "797d2689941140d51cb8637fd2d03efa1f2011a6794a3803b65af68ac6213d4c", "6b46939ffd7efda8229858ecdbf9790cb9b12444180e7eea0db729ae22f82635", "f9854f69fe47880510e5c933b80aefbbc7f6469226328321f8ff55e33bdbe3b4", "4bc1caa6263cc6a965101c5231288465b97d4c1b76c2890d4e507441c58be0e0"]
 ## New grants change prospectively; existing world ownership/RNG is retained.
 const EMPLOYEE_PRE_SEARCH_SOURCES := ["5dd56b5b84e8e72065c4394ca301f89694461a8a32b62486565fb1f9c49400bd","9216e53b16f5381247b2d4f6a7bfcfd168523cfc6ef5e9d0e11107280367bb31"]
 const ROOT_FIRST_PREDECESSOR_SOURCES := [
@@ -306,7 +327,7 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
 	var current_source := Replay.source_identity() if captured_source_identity.is_empty() else captured_source_identity
-	var source_ok: bool = predecessor_source==current_source or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+	var source_ok: bool = predecessor_source==current_source or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
 	if predecessor_source!=current_source and predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES+USABILITY_PRESENTATION_SOURCES:
 		paired_revision=StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_EMPLOYEE_RULES)

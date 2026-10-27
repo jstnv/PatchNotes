@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_title_settings_motion.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 2.172,
+  "errors": [],
+  "tail": [
+    "PASS: Settings navigation completes within bound",
+    "PASS: Settings visibly slides through intermediate positions: true",
+    "PASS: Settings navigation releases input lock",
+    "SETTINGS_TRAJECTORY back [20.0269393920898, 20.2155132293701, 20.7273559570313, 21.7241039276123, 23.3673934936523, 25.8188533782959, 29.2401218414307, 33.792839050293, 39.6386337280273, 46.9391403198242, 55.8559837341309, 66.5508270263672, 79.1852722167969, 93.9209747314453, 110.919578552246, 130.342697143555, 152.351959228516, 177.10905456543, 204.775543212891, 235.513122558594, 269.483306884766, 306.847869873047, 347.768432617188, 392.406616210938, 440.923889160156, 493.482177734375, 550.242919921875, 611.367797851563, 677.018493652344, 747.356628417969, 822.543762207031, 902.741577148438, 988.111755371094, 1078.81567382813, 20.0]",
+    "PASS: Settings navigation completes within bound",
+    "PASS: Settings visibly slides through intermediate positions: false",
+    "PASS: Settings navigation releases input lock",
+    "TITLE_SETTINGS_MOTION checks=14 failures=0",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

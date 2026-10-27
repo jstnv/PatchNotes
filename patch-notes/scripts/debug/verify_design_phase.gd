@@ -343,7 +343,7 @@ func _card_ids(cards: Array) -> Array[StringName]:
 func _verify_priority_controls(phase: DesignPhase, categories: Array[ProjectState.CoreScore]) -> void:
 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
 		var slider := phase.get_node("%%%s" % node_name) as VSlider
-		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 50.0 and slider.step == 5.0, "%s uses 10-50 bounds in five-point steps" % node_name)
+		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 75.0 and slider.step == 5.0, "%s uses 10-75 bounds in five-point steps" % node_name)
 	var priority_panel := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
 	var priority_columns := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel/PriorityLayout").get_children().filter(func(child: Node): return child is VBoxContainer)
 	_expect(priority_panel.size.x <= 1008.0 and priority_panel.size.y >= 72.0, "Compact Design priority panel fits the established phase width")
@@ -360,7 +360,7 @@ func _verify_priority_distribution(phase: DesignPhase, categories: Array[Project
 	for category: ProjectState.CoreScore in categories:
 		var value: int = distribution.get(category, 0)
 		total += value
-		valid_values = valid_values and value >= 5 and value <= 50 and value % 5 == 0
+		valid_values = valid_values and value >= 10 and value <= 75 and value % 5 == 0
 	_expect(total <= 100 and phase.get_available_priority() == 100 - total and valid_values, description)
 
 
@@ -653,11 +653,13 @@ func _verify_balanced_production(design_phase: Node) -> void:
 	_expect(not design_phase.call("_are_core_scores_balanced", {graphics: 16, sound: 20, technology: 20, design: 24}), "Outside the 15% endpoints does not proc")
 	for total in [20, 21, 22, 23]:
 		var split: Dictionary = design_phase.call("_apply_balanced_production", {graphics: total})
+		@warning_ignore("integer_division")
+		var boosted: int = int(total) * 5 / 4
 		var sum := 0
 		for category in range(4):
 			sum += split[category]
-			_expect(split[category] == 5 + (1 if category < total % 4 else 0), "Remainder follows fixed Core order")
-		_expect(sum == total, "Redistribution conserves every whole point")
+			_expect(split[category] == int(boosted / 4) + (1 if category < boosted % 4 else 0), "Remainder follows fixed Core order")
+		_expect(sum == boosted, "Redistribution retains the whole-point 1.25 bonus")
 
 	var project_state := _reset_project_state(design_phase)
 	var current: Dictionary[ProjectState.CoreScore, int] = {graphics: 3, sound: 3, technology: 5, design: 6}
@@ -673,7 +675,7 @@ func _verify_balanced_production(design_phase: Node) -> void:
 	_expect(result.base_hand.score_additions == {graphics: 5, sound: 5, technology: 5, design: 6}, "Balanced base aggregate includes secondary contributions normally")
 	_expect(result.provisional_scores == {graphics: 8, sound: 8, technology: 10, design: 12}, "Provisional scores equal cumulative scores plus unmodified base production")
 	_expect(_values(project_state) == values_before, "Provisional and synergy calculation does not mutate ProjectState or Scope")
-	_expect(result.balanced_production and result.score_additions == {graphics: 6, sound: 5, technology: 5, design: 5}, "Balanced hand total21 redistributes6/5/5/5 without a multiplier")
+	_expect(result.balanced_production and result.score_additions == {graphics: 7, sound: 7, technology: 6, design: 6}, "Balanced hand total21 boosts to26 and redistributes7/7/6/6")
 	_expect(result.scope == 4, "Balanced Production leaves printed Scope unmodified")
 
 	var reversed := cards.duplicate()
@@ -737,7 +739,7 @@ func _verify_balanced_success(design_phase: Node) -> void:
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
 	_expect(design_phase.get_workspace().hand_motion._specialization_header.is_valid() and not design_phase.get_workspace().synergy_notification.banner.visible, "Balanced Design popup is deferred until music-grid bonus presentation")
 	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
-	_expect(_values(project_state) == [9, 8, 10, 11, 4], "Balanced success adds only adjusted current production and unmodified Scope")
+	_expect(_values(project_state) == [10, 10, 11, 12, 4], "Balanced success adds only adjusted current production and unmodified Scope")
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 21.0 / 18.0), "Balanced success accumulates fractional Bug Pressure from unadjusted printed values")
 	_expect(design_phase.get_node("%BugPressureValue").text == "Bug Pressure: 1.17", "Successful Feature action refreshes the Bug Pressure label through values_changed")
 	_expect(emissions[0] == 1, "Balanced success commits through one values_changed emission")
@@ -761,20 +763,20 @@ func _verify_balanced_pass_success(design_phase: Node, database: Node) -> void:
 	var base_hand: Dictionary = design_phase.call("_validate_and_calculate_base_action")
 	var final_action: Dictionary = design_phase.call("_calculate_final_action_production", base_hand)
 	_expect(final_action.balanced_production and final_action.score_additions == {
-		ProjectState.CoreScore.GRAPHICS: 2,
-		ProjectState.CoreScore.SOUND: 2,
+		ProjectState.CoreScore.GRAPHICS: 3,
+		ProjectState.CoreScore.SOUND: 3,
 		ProjectState.CoreScore.TECHNOLOGY: 2,
 		ProjectState.CoreScore.DESIGN: 2,
-	}, "One Feature plus three real Passes triggers Balanced; each +2 aggregate remains +2 after nearest rounding")
+	}, "One Feature plus three real Passes triggers Balanced; eight raw points become10, split3/3/2/2")
 	var emissions := [0]
 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
 	(design_phase.get_node("%PlayCardButton") as Button).pressed.emit()
 	design_phase.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
-	_expect(_values(project_state) == [2, 2, 2, 2, 1], "Pass-assisted Balanced action commits adjusted production and normal Feature Scope")
+	_expect(_values(project_state) == [3, 3, 2, 2, 1], "Pass-assisted Balanced action commits adjusted production and normal Feature Scope")
 	_expect(_approximately_equal(project_state.get_accumulated_bug_pressure(), 2.0 / 18.0), "Feature-plus-Pass action accumulates only the Feature's fractional Bug Pressure")
 	_expect(
-		design_phase.get_node("%GraphicsValue").text == "Graphics: 2"
-		and design_phase.get_node("%SoundValue").text == "Sound: 2"
+		design_phase.get_node("%GraphicsValue").text == "Graphics: 3"
+		and design_phase.get_node("%SoundValue").text == "Sound: 3"
 		and design_phase.get_node("%TechnologyValue").text == "Technology: 2"
 		and design_phase.get_node("%DesignValue").text == "Design: 2"
 		and design_phase.get_node("%ScopeValue").text == "Scope: 1 / 30",

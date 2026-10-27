@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_background_checkpoint.gd"
+  ],
+  "exit": 124,
+  "elapsed_seconds": 130.016,
+  "errors": [
+    "ERROR: Parse JSON failed. Error at line 0: Unknown error getting token",
+    "SCRIPT ERROR: Trying to assign value of type 'Nil' to a variable of type 'Dictionary'."
+  ],
+  "tail": [
+    "",
+    "Loaded 40 cards.",
+    "ERROR: Parse JSON failed. Error at line 0: Unknown error getting token",
+    "   at: parse_string (core/io/json.cpp:629)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _initialize (res://scripts/debug/verify_background_checkpoint.gd:52)",
+    "SCRIPT ERROR: Trying to assign value of type 'Nil' to a variable of type 'Dictionary'.",
+    "   at: _initialize (res://scripts/debug/verify_background_checkpoint.gd:52)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _initialize (res://scripts/debug/verify_background_checkpoint.gd:52)"
+  ]
+}

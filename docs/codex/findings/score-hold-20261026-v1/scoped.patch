@@ -1,0 +1,131 @@
+--- before/scripts/ui/card_score_floats.gd
++++ after/scripts/ui/card_score_floats.gd
+@@ -2,6 +2,8 @@
+ 
+ ## Read-only text poses sampled from the presentation music clock.
+ const STEP := 60.0 / 140.0
++const RISE_HEIGHT := 74.0
++const LANDING_DROP := 10.0
+ const COLORS := [Color("#eb8b9b"), Color("#efcd66"), Color("#74d3de"), Color("#bfa3ed")]
+ const CORE := [&"graphics", &"sound", &"technology", &"design"]
+ const NAMES := ["GFX", "SOUND", "TECH", "DESIGN"]
+@@ -80,8 +82,14 @@
+ 
+ func _rise(value: float) -> float:
+ 	var t := clampf(value, 0.0, 1.0)
+-	# Fast upward launch, constant downward gravity; apex at 80%.
+-	return (8.0 * t - 5.0 * t * t) / 3.0
++	var peak := 1.0 + LANDING_DROP / RISE_HEIGHT
++	# Reach the apex halfway through the same rise interval, leaving a
++	# full quarter subdivision to fall visibly into place under soft gravity.
++	if t < 0.5:
++		var up := t * 2.0
++		return peak * (2.0 * up - up * up)
++	var down := (t - 0.5) * 2.0
++	return peak - (peak - 1.0) * down * down
+ 
+ func _toward_merge(value: float) -> float:
+ 	var t := clampf(value, 0.0, 1.0)
+@@ -154,7 +162,7 @@
+ 			for token in tokens:
+ 				var at := _anchor(token)
+ 				if age < 1.0:
+-					_pose(token, at, token.base, multiplier_text, _away_from_merge(age * 4.0), 74.0 * (1.0 - _rise(age * 2.0)))
++					_pose(token, at, token.base, multiplier_text, _away_from_merge(age * 4.0), RISE_HEIGHT * (1.0 - _rise(age * 2.0)))
+ 				elif age < 2.0:
+ 					_pose(token, at, token.base, multiplier_text, 1.0 - _toward_merge(age - 1.0))
+ 				else:
+@@ -165,7 +173,7 @@
+ 		if token.started < 0: continue
+ 		var age := maxf(0.0, (now - float(token.started)) / (STEP / 2.0))
+ 		var at := _anchor(token)
+-		at.y += 74.0 * (1.0 - _rise(age))
++		at.y += RISE_HEIGHT * (1.0 - _rise(age))
+ 		_pose(token, at, token.base)
+ 
+ func _balanced(age: float) -> void:
+@@ -183,8 +191,12 @@
+ 	for token in tokens: token.window.hide()
+ 	if age < 1.0:
+ 		_pose(hub, center, sum, "×1.25", _away_from_merge((age - 0.5) * 2.0))
++	elif age < 1.5:
++		# Hold the completed mitosis for half a subdivision, then accelerate
++		# inward and still reach the existing merge boundary at subdivision 2.
++		_pose(hub, center, sum, "×1.25", 1.0)
+ 	elif age < 2.0:
+-		_pose(hub, center, sum, "×1.25", 1.0 - _toward_merge(age - 1.0))
++		_pose(hub, center, sum, "×1.25", 1.0 - _toward_merge((age - 1.5) * 2.0))
+ 	elif age < 2.15:
+ 		_pose(hub, center, boosted, "", 0, 0, sin((age - 2.0) * 32.0))
+ 	else:
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -25,7 +25,7 @@
+ ## Positive one-point Balanced allowance is prospective; saved state stays exact.
+ const BALANCED_SMALL_HAND_PREDECESSORS := ["9d30a157bfbcdec10be0de7120979ca282c137b23d327bb5b4e24fe2842c6cac"]
+ ## Floating score presentation only; exact preceding player/world/RNG retained.
+-const SCORE_FLOAT_PREDECESSORS := ["8593779f9afa7deab4ca218fab64118864efe5d763ff088485f8d6ad43be7ab8", "02e62ac6d53d7b50c642ffb2a6e70fd64afcf01eec07dee4c919d4394773c3cc", "c3e80e9a7118d84803ef047dbf11e641030b3c6ebfcaeabc12dc6344f12d4c78", "797d2689941140d51cb8637fd2d03efa1f2011a6794a3803b65af68ac6213d4c"]
++const SCORE_FLOAT_PREDECESSORS := ["8593779f9afa7deab4ca218fab64118864efe5d763ff088485f8d6ad43be7ab8", "02e62ac6d53d7b50c642ffb2a6e70fd64afcf01eec07dee4c919d4394773c3cc", "c3e80e9a7118d84803ef047dbf11e641030b3c6ebfcaeabc12dc6344f12d4c78", "797d2689941140d51cb8637fd2d03efa1f2011a6794a3803b65af68ac6213d4c", "6b46939ffd7efda8229858ecdbf9790cb9b12444180e7eea0db729ae22f82635"]
+ ## New grants change prospectively; existing world ownership/RNG is retained.
+ const EMPLOYEE_PRE_SEARCH_SOURCES := ["5dd56b5b84e8e72065c4394ca301f89694461a8a32b62486565fb1f9c49400bd","9216e53b16f5381247b2d4f6a7bfcfd168523cfc6ef5e9d0e11107280367bb31"]
+ const ROOT_FIRST_PREDECESSOR_SOURCES := [
+--- before/scripts/debug/verify_score_floats.gd
++++ after/scripts/debug/verify_score_floats.gd
+@@ -21,8 +21,10 @@
+ 	check(motion.has_method("_deposit_scores"),"HUD deposit is separate from card score events")
+ 	var easing: Control=load("res://scripts/ui/card_score_floats.gd").new()
+ 	check(easing._rise(0.25)>0.5,"Card text launches with strong initial upward velocity")
+-	check(easing._rise(0.25)-easing._rise(0.0)>easing._rise(0.75)-easing._rise(0.5),"Upward travel decelerates under downward gravity")
+-	check(easing._rise(0.8)>1.0 and easing._rise(0.8)<1.12 and is_equal_approx(easing._rise(1.0),1.0),"Text goes slightly above rest then falls into place on time")
++	check(easing._rise(0.25)-easing._rise(0.0)>easing._rise(0.5)-easing._rise(0.25),"Upward travel decelerates under downward gravity")
++	var drop: float=74.0*(easing._rise(0.5)-easing._rise(1.0))
++	check(drop>=8 and drop<=12 and easing._rise(0.5)>easing._rise(0.75) and easing._rise(0.75)>easing._rise(1.0),"Popups peak early then visibly descend about ten pixels")
++	check(is_equal_approx(easing._rise(1.0),1.0),"Popup descent ends on the original half-subdivision boundary")
+ 	check(easing.has_method("_toward_merge") and easing.has_method("_away_from_merge"),"Merge-point gravity supplies inward and outward motion")
+ 	if easing.has_method("_toward_merge") and easing.has_method("_away_from_merge"):
+ 		var inward: Array=[];var outward: Array=[]
+@@ -97,15 +99,27 @@
+ 		jump(motion,clock+2*step)
+ 		check(flow.tokens[0].value.position==pose,"Resume rejoin preserves text age and pose")
+ 		first=motion._first_beat*step
++		if kind=="normal":
++			jump(motion,first+0.75*step)
++			var peak: float=flow.tokens[0].value.position.y-flow._anchor(flow.tokens[0]).y
++			await shot("score-apex-"+str(root.size.x))
++			jump(motion,first+1.0*step)
++			var resting: float=flow.tokens[0].value.position.y-flow._anchor(flow.tokens[0]).y
++			check(resting-peak>=8 and resting-peak<=12,"Score visibly drops from apex to rest before the next card")
++			await shot("score-rest-"+str(root.size.x))
+ 		if kind!="normal":
+ 			var popup:=first+4*step
+ 			jump(motion,popup+(0.25 if kind=="balanced" else 0.1)*step)
+ 			if kind=="specialization":
+ 				check(flow.tokens.all(func(t):return t.mult.position.y>t.value.position.y),"Multiplier launches upward out of the border below its resting height")
+ 				await shot("multiplier-launch-"+str(root.size.x))
+-				jump(motion,popup+0.4*step)
++				jump(motion,popup+0.25*step)
+ 				check(flow.tokens.all(func(t):return t.mult.position.y<t.value.position.y),"Multiplier reaches a small apex above its resting height")
+ 				await shot("multiplier-apex-"+str(root.size.x))
++				var apex_y: float=flow.tokens[0].mult.position.y
++				jump(motion,popup+0.375*step)
++				check(flow.tokens[0].mult.position.y>apex_y and flow.tokens[0].mult.position.y<flow.tokens[0].value.position.y,"Multiplier visibly descends below its turning point before resting")
++				await shot("multiplier-descending-"+str(root.size.x))
+ 				jump(motion,popup+0.75*step)
+ 				check(flow.tokens.all(func(t):return t.mult.position.y==t.value.position.y),"Multiplier falls slightly into its resting alignment")
+ 				check(flow.tokens.all(func(t):return t.mult.visible and t.mult.text=="×1.5"),"All specialization multipliers appear together")
+@@ -129,6 +143,15 @@
+ 				check(flow.hub.window.visible and flow.hub.value.text=="+9" and flow.hub.mult.text=="×1.25","Balanced collects total and splits sum/multiplier")
+ 				check(flow.hub.mult.position.x-flow.hub.value.position.x>flow.hub.window.size.x/4,"Sum/multiplier mitosis launches outward then slows")
+ 				await shot(kind+"-pair-"+str(root.size.x))
++				jump(motion,popup+1.0*step)
++				var split_pose: Array=[flow.hub.value.position,flow.hub.mult.position]
++				jump(motion,popup+1.25*step)
++				check([flow.hub.value.position,flow.hub.mult.position]==split_pose,"Balanced holds the fully separated pair before merging")
++				await shot("balanced-hold-"+str(root.size.x))
++				jump(motion,popup+1.5*step)
++				check([flow.hub.value.position,flow.hub.mult.position]==split_pose,"Balanced hold lasts exactly half a music subdivision")
++				jump(motion,popup+1.75*step)
++				check(flow.hub.mult.position.x-flow.hub.value.position.x<split_pose[1].x-split_pose[0].x,"Balanced merges after the hold within its original interval")
+ 				jump(motion,popup+2.05*step)
+ 				check(flow.hub.value.text=="+11","Balanced merge uses floored boosted total")
+ 				jump(motion,popup+2.575*step)

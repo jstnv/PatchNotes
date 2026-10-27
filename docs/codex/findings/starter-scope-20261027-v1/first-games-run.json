@@ -1,0 +1,26 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://../docs/codex/findings/starter-scope-20261027-v1/first_games.gd"
+  ],
+  "exit": 124,
+  "elapsed_seconds": 130.016,
+  "errors": [
+    "SCRIPT ERROR: Invalid access to property or key 'payload' on a base object of type 'Dictionary'."
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "SCRIPT ERROR: Invalid access to property or key 'payload' on a base object of type 'Dictionary'.",
+    "   at: _run (res://../docs/codex/findings/starter-scope-20261027-v1/first_games.gd:26)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _run (res://../docs/codex/findings/starter-scope-20261027-v1/first_games.gd:26)"
+  ]
+}

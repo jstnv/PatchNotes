@@ -1,0 +1,526 @@
+{
+  "checks": 24512,
+  "failures": [],
+  "files": {
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\bank-before-cold\\checkpoint.33.json": "1019e3ef983edee4302ae581fc0386f85555bf90779bd47de231f046320907ab",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\bank-before-cold\\checkpoint.34.json": "e8b27e5fb85d0c2389ecf921738e792d00db2185c2ecb1dd00b5a3e621b08dd0",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\bank-after-cold\\checkpoint.33.json": "1019e3ef983edee4302ae581fc0386f85555bf90779bd47de231f046320907ab",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\bank-after-cold\\checkpoint.34.json": "e8b27e5fb85d0c2389ecf921738e792d00db2185c2ecb1dd00b5a3e621b08dd0",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-before-cold\\checkpoint.14.json": "418bb3a3fe5d40a9306c1e77f5b6fd6ebb769bc32c544b8529e30fc63953d5b1",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-before-cold\\checkpoint.15.json": "da777cea135b2de82dfd6f23db793243dd5801766e0a965b7f74eb53c012514f",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-after-cold\\checkpoint.14.json": "418bb3a3fe5d40a9306c1e77f5b6fd6ebb769bc32c544b8529e30fc63953d5b1",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-after-cold\\checkpoint.15.json": "da777cea135b2de82dfd6f23db793243dd5801766e0a965b7f74eb53c012514f",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-promoted\\checkpoint.15.json": "da777cea135b2de82dfd6f23db793243dd5801766e0a965b7f74eb53c012514f",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-promoted\\checkpoint.16.json": "d874a0cccb61b48acc96e065c6e4767b16a44165a4d7fe88ccf8b98dd51080ee",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\starwave-preaccept\\checkpoint.11.json": "4ab2d6c14216ef01c19199869b1018f008dd2fa1aba9aef22563ed227c03f401",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\starwave-preaccept\\checkpoint.12.json": "3d4be71474432157eb7f6548f4d402f5608f52190438d9288b2dd6861f16c4d2",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\starwave-rollback-restored\\checkpoint.11.json": "4ab2d6c14216ef01c19199869b1018f008dd2fa1aba9aef22563ed227c03f401",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\starwave-rollback-restored\\checkpoint.12.json": "3d4be71474432157eb7f6548f4d402f5608f52190438d9288b2dd6861f16c4d2",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\starwave-before-cold\\checkpoint.12.json": "3d4be71474432157eb7f6548f4d402f5608f52190438d9288b2dd6861f16c4d2",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\starwave-before-cold\\checkpoint.13.json": "3f3ff356b37c59196cf6d0ff8033a84fda2ed5bd0423b6604dd75ce30c90f4ee",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\starwave-after-cold\\checkpoint.12.json": "3d4be71474432157eb7f6548f4d402f5608f52190438d9288b2dd6861f16c4d2",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\starwave-after-cold\\checkpoint.13.json": "3f3ff356b37c59196cf6d0ff8033a84fda2ed5bd0423b6604dd75ce30c90f4ee",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\neon-before-cold\\checkpoint.2.json": "9dd057270228c817705860c004a479057be507f5d8dbfc8ee6d96df9526be009",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\neon-before-cold\\checkpoint.3.json": "915985e91a88ac468c358bceecdb07524fc06d2423bc200ea8c1e489e4d638a5",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\neon-after-cold\\checkpoint.2.json": "9dd057270228c817705860c004a479057be507f5d8dbfc8ee6d96df9526be009",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\neon-after-cold\\checkpoint.3.json": "915985e91a88ac468c358bceecdb07524fc06d2423bc200ea8c1e489e4d638a5",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\neon-promoted\\checkpoint.3.json": "915985e91a88ac468c358bceecdb07524fc06d2423bc200ea8c1e489e4d638a5",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\neon-promoted\\checkpoint.4.json": "4f544049982531937d71b8fb73f698028a4d8337320f2779af840cfd9ae3b6ca",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-after-launch-before-cold\\checkpoint.16.json": "d874a0cccb61b48acc96e065c6e4767b16a44165a4d7fe88ccf8b98dd51080ee",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-after-launch-before-cold\\checkpoint.17.json": "d02eadc3135fa783cf932db39ef40ee37053b90471cdaffcc23eb21c47bd33c5",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-after-launch-cold\\checkpoint.16.json": "d874a0cccb61b48acc96e065c6e4767b16a44165a4d7fe88ccf8b98dd51080ee",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\crown-after-launch-cold\\checkpoint.17.json": "d02eadc3135fa783cf932db39ef40ee37053b90471cdaffcc23eb21c47bd33c5",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\neon-after-launch-cold\\checkpoint.3.json": "915985e91a88ac468c358bceecdb07524fc06d2423bc200ea8c1e489e4d638a5",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\neon-after-launch-cold\\checkpoint.4.json": "4f544049982531937d71b8fb73f698028a4d8337320f2779af840cfd9ae3b6ca",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\legal-age-probe.json": "1b8920783be7c7808ce54bf2314eedaec4574c80d751d7174eafbb15179e65c0",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\profiles\\crown-small\\APPDATA\\Godot\\app_userdata\\Patch Notes Demo\\saves\\studio\\checkpoint.15.json": "da777cea135b2de82dfd6f23db793243dd5801766e0a965b7f74eb53c012514f",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\profiles\\starwave-small\\APPDATA\\Godot\\app_userdata\\Patch Notes Demo\\saves\\studio\\checkpoint.12.json": "ca01f5b8b96b0e17dd592263fe759c3850f337af91f7da1f4ff63cb7eb1566fc",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\profiles\\crown\\APPDATA\\Godot\\app_userdata\\Patch Notes Demo\\saves\\studio\\checkpoint.17.json": "d02eadc3135fa783cf932db39ef40ee37053b90471cdaffcc23eb21c47bd33c5",
+    "docs\\codex\\findings\\queue-execution-20261017-v2\\final-delivery-v4\\build-manifest.json": "14453bbe8f3fd2659313260a3a3f139388bd763aadb78edb145dcc5982ddfe9d",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\focused\\results.json": "7d9589eda4362b6324bd6fdd910e667f9e479368d5e2dbf9743294f5263eba66",
+    "docs\\codex\\findings\\bank-publisher-final-20261017-v1\\recovery-credit-result.json": "5da5ac1571059af5b5dcd54a4457d6489421b202702f9236901426ddc3075106"
+  },
+  "outcomes": {
+    "bank_age": {
+      "bills": {
+        "rent": {
+          "bill_id": "rent:25",
+          "due_cents": "50000",
+          "due_cycle": "50",
+          "expense_type": "rent",
+          "late": true,
+          "month": "25",
+          "paid_cents": "50000",
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": "33374",
+              "cycle": "50",
+              "month": "25"
+            },
+            {
+              "cents": "16626",
+              "cycle": "51",
+              "month": "26"
+            }
+          ],
+          "recovery_overdue_cycles": "1",
+          "settled_cycle": "51",
+          "source_id": "studio_rent",
+          "unpaid_cents": "0"
+        },
+        "bank_installment": {
+          "bill_id": "fbb1b3826590f65e3e5cac223552f476:bank:1:5",
+          "due_cents": "4500",
+          "due_cycle": "50",
+          "expense_type": "bank_installment",
+          "interest_cents": "333",
+          "interest_paid_cents": "333",
+          "late": true,
+          "month": "25",
+          "paid_cents": "4500",
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": "4500",
+              "cycle": "51",
+              "month": "26"
+            }
+          ],
+          "principal_cents": "4167",
+          "principal_paid_cents": "4167",
+          "recovery_overdue_cycles": "1",
+          "settled_cycle": "51",
+          "source_id": "fbb1b3826590f65e3e5cac223552f476:bank:1",
+          "unpaid_cents": "0"
+        },
+        "student_loan": {
+          "bill_id": "fbb1b3826590f65e3e5cac223552f476:education:13",
+          "due_cents": "7068",
+          "due_cycle": "50",
+          "expense_type": "student_loan",
+          "interest_cents": "3023",
+          "interest_paid_cents": "3023",
+          "late": true,
+          "month": "25",
+          "paid_cents": "7068",
+          "paid_on_time": false,
+          "payments": [
+            {
+              "cents": "7068",
+              "cycle": "51",
+              "month": "26"
+            }
+          ],
+          "principal_cents": "4045",
+          "principal_paid_cents": "4045",
+          "recovery_overdue_cycles": "1",
+          "settled_cycle": "51",
+          "source_id": "fbb1b3826590f65e3e5cac223552f476:education",
+          "unpaid_cents": "0"
+        }
+      },
+      "credit": {
+        "after": "607",
+        "before": "627",
+        "change": "-20",
+        "cycle": "50",
+        "month": "25",
+        "operating_profit_cents": "-45174",
+        "policy_version": "typed_expenses_v1",
+        "reasons": [
+          {
+            "bill_id": "rent:25",
+            "due_cycle": "50",
+            "evaluated_cycle": "50",
+            "overdue_cycles": "0",
+            "points": "-5",
+            "recovered": false,
+            "type": "rent"
+          },
+          {
+            "bill_id": "fbb1b3826590f65e3e5cac223552f476:bank:1:5",
+            "due_cycle": "50",
+            "evaluated_cycle": "50",
+            "overdue_cycles": "0",
+            "points": "-10",
+            "recovered": false,
+            "type": "bank_installment"
+          },
+          {
+            "bill_id": "fbb1b3826590f65e3e5cac223552f476:education:13",
+            "due_cycle": "50",
+            "evaluated_cycle": "50",
+            "overdue_cycles": "0",
+            "points": "-5",
+            "recovered": false,
+            "type": "student_loan"
+          }
+        ],
+        "requested_change": "-20"
+      },
+      "cash_cents": 51619
+    },
+    "bank-neon-focus": {
+      "eligible": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects"
+      ],
+      "primary_totals": [
+        21,
+        8,
+        19,
+        13
+      ],
+      "focus": 0
+    },
+    "bank-neon": {
+      "numerator": 44,
+      "denominator": 86,
+      "upfront": 0,
+      "remainder": 79813,
+      "payout": 79813,
+      "promotion": 10,
+      "scope": 10,
+      "core_half_units": [
+        4,
+        8,
+        40,
+        12
+      ],
+      "offer_id": "fbb1b3826590f65e3e5cac223552f476:neon_circuit:first",
+      "receipts": [
+        {
+          "amount_cents": "79813",
+          "cash_after_cents": "79813",
+          "cash_before_cents": "0",
+          "cash_delta_cents": "79813",
+          "cycle": "51",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "26",
+          "sequence": "213",
+          "source_id": "fbb1b3826590f65e3e5cac223552f476:neon_circuit:first"
+        }
+      ],
+      "focus": "0"
+    },
+    "crown": {
+      "numerator": 48,
+      "denominator": 66,
+      "upfront": 15000,
+      "remainder": 128727,
+      "payout": 143727,
+      "promotion": 8,
+      "scope": 10,
+      "core_half_units": [
+        2,
+        14,
+        24,
+        12
+      ],
+      "offer_id": "f4447cfb81304a74f9d20ec63c2f013e:crown_quill:first",
+      "receipts": [
+        {
+          "amount_cents": "15000",
+          "cash_after_cents": "1470368",
+          "cash_before_cents": "1455368",
+          "cash_delta_cents": "15000",
+          "cycle": "59",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "30",
+          "sequence": "237",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:crown_quill:first"
+        },
+        {
+          "amount_cents": "128727",
+          "cash_after_cents": "1871171",
+          "cash_before_cents": "1742444",
+          "cash_delta_cents": "128727",
+          "cycle": "61",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "31",
+          "sequence": "245",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:crown_quill:first"
+        }
+      ],
+      "focus": "-1"
+    },
+    "neon-focus": {
+      "eligible": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects"
+      ],
+      "primary_totals": [
+        21,
+        8,
+        19,
+        13
+      ],
+      "focus": 0
+    },
+    "neon": {
+      "numerator": 86,
+      "denominator": 86,
+      "upfront": 0,
+      "remainder": 156000,
+      "payout": 156000,
+      "promotion": 20,
+      "scope": 14,
+      "core_half_units": [
+        20,
+        8,
+        22,
+        26
+      ],
+      "offer_id": "f4447cfb81304a74f9d20ec63c2f013e:neon_circuit:first",
+      "receipts": [
+        {
+          "amount_cents": "156000",
+          "cash_after_cents": "540244",
+          "cash_before_cents": "384244",
+          "cash_delta_cents": "156000",
+          "cycle": "17",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "9",
+          "sequence": "37",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:neon_circuit:first"
+        }
+      ],
+      "focus": "0"
+    },
+    "starwave": {
+      "numerator": 112,
+      "denominator": 112,
+      "upfront": 0,
+      "remainder": 224000,
+      "payout": 224000,
+      "promotion": 0,
+      "scope": 18,
+      "core_half_units": [
+        18,
+        16,
+        42,
+        26
+      ],
+      "offer_id": "f4447cfb81304a74f9d20ec63c2f013e:starwave:first",
+      "receipts": [
+        {
+          "amount_cents": "224000",
+          "cash_after_cents": "1893449",
+          "cash_before_cents": "1669449",
+          "cash_delta_cents": "224000",
+          "cycle": "37",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "19",
+          "sequence": "144",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:starwave:first"
+        }
+      ],
+      "focus": "-1"
+    },
+    "crown-small": {
+      "numerator": 48,
+      "denominator": 66,
+      "upfront": 15000,
+      "remainder": 128727,
+      "payout": 143727,
+      "promotion": 8,
+      "scope": 10,
+      "core_half_units": [
+        2,
+        14,
+        24,
+        12
+      ],
+      "offer_id": "f4447cfb81304a74f9d20ec63c2f013e:crown_quill:first",
+      "receipts": [
+        {
+          "amount_cents": "15000",
+          "cash_after_cents": "1470368",
+          "cash_before_cents": "1455368",
+          "cash_delta_cents": "15000",
+          "cycle": "59",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "30",
+          "sequence": "237",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:crown_quill:first"
+        },
+        {
+          "amount_cents": "128727",
+          "cash_after_cents": "1871171",
+          "cash_before_cents": "1742444",
+          "cash_delta_cents": "128727",
+          "cycle": "61",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "31",
+          "sequence": "245",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:crown_quill:first"
+        }
+      ],
+      "focus": "-1"
+    },
+    "starwave-small": {
+      "numerator": 102,
+      "denominator": 112,
+      "upfront": 0,
+      "remainder": 204000,
+      "payout": 204000,
+      "promotion": 0,
+      "scope": 18,
+      "core_half_units": [
+        4,
+        16,
+        56,
+        30
+      ],
+      "offer_id": "f4447cfb81304a74f9d20ec63c2f013e:starwave:first",
+      "receipts": [
+        {
+          "amount_cents": "204000",
+          "cash_after_cents": "1828116",
+          "cash_before_cents": "1624116",
+          "cash_delta_cents": "204000",
+          "cycle": "37",
+          "due_month": "0",
+          "kind": "publisher_receipt",
+          "month": "19",
+          "sequence": "141",
+          "source_id": "f4447cfb81304a74f9d20ec63c2f013e:starwave:first"
+        }
+      ],
+      "focus": "-1"
+    },
+    "crown-promoted": {
+      "release": {
+        "active_awareness_scaled": "0",
+        "base_name": "p",
+        "campaign_count": "0",
+        "campaign_months": [],
+        "earned_cycles": "0",
+        "earned_units": "0",
+        "entitlement_cents": "0",
+        "exhausted": false,
+        "last_processed_run_cycle": "-1",
+        "last_settlement_run_cycle": "-1",
+        "later_enabled": true,
+        "launch_awareness": "153",
+        "market_bp": "9000",
+        "monthly_units": "0",
+        "organic_awareness_scaled": "0",
+        "release_id": "f4447cfb81304a74f9d20ec63c2f013e:project:5",
+        "release_title": "p",
+        "release_year": "1982",
+        "review_tenths": "6",
+        "settled_cents": "0",
+        "total_earned_cycles": "0",
+        "total_units": "68"
+      },
+      "awards": {
+        "f4447cfb81304a74f9d20ec63c2f013e:neon_circuit:first": "20",
+        "f4447cfb81304a74f9d20ec63c2f013e:crown_quill:first": "8"
+      },
+      "consumed": {
+        "f4447cfb81304a74f9d20ec63c2f013e:neon_circuit:first": "f4447cfb81304a74f9d20ec63c2f013e:project:2",
+        "f4447cfb81304a74f9d20ec63c2f013e:crown_quill:first": "f4447cfb81304a74f9d20ec63c2f013e:project:5"
+      }
+    },
+    "neon-promoted": {
+      "release": {
+        "active_awareness_scaled": "0",
+        "base_name": "n",
+        "campaign_count": "0",
+        "campaign_months": [],
+        "earned_cycles": "0",
+        "earned_units": "0",
+        "entitlement_cents": "0",
+        "exhausted": false,
+        "last_processed_run_cycle": "-1",
+        "last_settlement_run_cycle": "-1",
+        "later_enabled": true,
+        "launch_awareness": "144",
+        "market_bp": "10000",
+        "monthly_units": "0",
+        "organic_awareness_scaled": "0",
+        "release_id": "f4447cfb81304a74f9d20ec63c2f013e:project:2",
+        "release_title": "n",
+        "release_year": "1980",
+        "review_tenths": "0",
+        "settled_cents": "0",
+        "total_earned_cycles": "0",
+        "total_units": "0"
+      },
+      "awards": {
+        "f4447cfb81304a74f9d20ec63c2f013e:neon_circuit:first": "20"
+      },
+      "consumed": {
+        "f4447cfb81304a74f9d20ec63c2f013e:neon_circuit:first": "f4447cfb81304a74f9d20ec63c2f013e:project:2"
+      }
+    },
+    "crown_next_release": {
+      "active_awareness_scaled": "0",
+      "base_name": "q",
+      "campaign_count": "0",
+      "campaign_months": [],
+      "earned_cycles": "0",
+      "earned_units": "0",
+      "entitlement_cents": "0",
+      "exhausted": false,
+      "last_processed_run_cycle": "-1",
+      "last_settlement_run_cycle": "-1",
+      "later_enabled": true,
+      "launch_awareness": "121",
+      "market_bp": "13000",
+      "monthly_units": "0",
+      "organic_awareness_scaled": "0",
+      "release_id": "f4447cfb81304a74f9d20ec63c2f013e:project:6",
+      "release_title": "q",
+      "release_year": "1982",
+      "review_tenths": "0",
+      "settled_cents": "0",
+      "total_earned_cycles": "0",
+      "total_units": "0"
+    }
+  },
+  "process_count": 15,
+  "capture_count": 114,
+  "utc": "2026-10-17T23:48:23.609584+00:00"
+}

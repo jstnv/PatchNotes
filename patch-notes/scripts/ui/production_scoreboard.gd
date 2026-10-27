@@ -7,6 +7,45 @@ var stats: Array[Label] = []
 var header_title: Label
 var hidden_bugs: Label
 var show_hidden_bugs := false
+var _punches: Dictionary = {}
+
+func punch(deltas: Dictionary) -> void:
+	var indices := {}
+	for key in deltas:
+		if int(deltas[key]) == 0: continue
+		var index := [&"graphics", &"sound", &"technology", &"design"].find(key) + 1
+		if key == &"scope": index = 5
+		elif key == &"marketing": index = 0
+		elif key in [&"fixed", &"discovered"]: index = 6
+		elif index == 0: continue
+		indices[index] = true
+	for index in indices:
+		if _punches.has(index): _punches[index].kill()
+		var tween := animate_number(stats[index])
+		_punches[index] = tween
+		tween.finished.connect(func():
+			if _punches.get(index) == tween: _punches.erase(index))
+
+static func animate_number(label: Label) -> Tween:
+	label.pivot_offset = label.size / 2.0
+	label.scale = Vector2.ONE * 0.9
+	label.rotation = -0.025
+	label.self_modulate = Color("#f5ce69")
+	var tween := label.create_tween().set_parallel()
+	tween.tween_property(label, "scale", Vector2.ONE * 1.18, 0.075).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(label, "rotation", 0.025, 0.075)
+	tween.chain().tween_property(label, "scale", Vector2.ONE, 0.34).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "rotation", 0.0, 0.22)
+	tween.parallel().tween_property(label, "self_modulate", Color.WHITE, 0.22)
+	return tween
+
+func reset_punches() -> void:
+	for tween in _punches.values(): tween.kill()
+	_punches.clear()
+	for label in stats:
+		label.scale = Vector2.ONE
+		label.rotation = 0.0
+		label.self_modulate = Color.WHITE
 
 func _ready() -> void:
 	row = HBoxContainer.new()
@@ -58,7 +97,7 @@ func render(project: ProjectState, context: StringName, presented: Dictionary = 
 		var known := maxi(0,int(presented.get(&"discovered",project.get_known_bugs()+project.get_fixed_bugs()))-fixed)
 		stats[6].text = "Known / Fixed\n%d / %d"%[known,fixed]
 	else:
-		stats[6].text = "Bug Pressure\n%.2f"%(project.get_accumulated_alpha_bug_pressure() if context==&"alpha" else project.get_accumulated_bug_pressure())
+		stats[6].text = "Bug Pressure\n%.2f"%presented.get("_alpha_pressure" if context==&"alpha" else "_design_pressure", project.get_accumulated_alpha_bug_pressure() if context==&"alpha" else project.get_accumulated_bug_pressure())
 	hidden_bugs.visible = show_hidden_bugs and context==&"beta"
 	if hidden_bugs.visible:
 		var hidden: int = maxi(0,int(presented._bug_total)-int(presented.discovered)) if presented.has("_bug_total") else project.get_hidden_bugs()

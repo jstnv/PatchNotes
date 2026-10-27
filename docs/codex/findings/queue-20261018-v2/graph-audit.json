@@ -1,0 +1,351 @@
+{
+  "inputs": {
+    "patch-notes/data/card_ledger.json": "0f093b0ba907043120c3e6e529511322e6e0b99358adf6d69c80d5c174cfc83c",
+    "patch-notes/data/feature_store_ledger.json": "0f4bd970b66333fd5f5d5358571ac428dc0b60fd8fe410e2381af1d214521c4e",
+    "patch-notes/scripts/cards/feature_store_catalog.gd": "a164e6dbaf50569c6c1c3a801d974343d0e039747a53f6e361554fa29aeb662c",
+    "patch-notes/scripts/ui/feature_store.gd": "0b0b4b6ca85962ba04a0b694f3bd3ce30d634cc3cc631ce9b4e849bf39bbed03",
+    "patch-notes/scripts/ui/feature_store_map.gd": "dde23ea9767c9464ba2db69992318126f133a00101b4cac2bd705325df02f4e7",
+    "patch-notes/scripts/cards/feature_research.gd": "9d71afe61c975fcc1557754321aeaf7c4a8eb05a0face5e987d920498ae81bb6",
+    "patch-notes/scripts/persistence/checkpoint_schema.gd": "775f688c84524cbe1b3707251487971a5f25ed77a6b62dcb0c763bfa33192ba5",
+    "patch-notes/scripts/legacy/victory_ledger.gd": "b678f29d4de6966880ec99783ed4ae909eaa25b8df8fa8dc9c889d0b055dc4ab",
+    "patch-notes/scripts/legacy/legacy_world.gd": "c7cdff7e49cadf367979bee39b40e98364176396c92b99c1680645287decda93",
+    "patch-notes/scripts/studio_specialties.gd": "640a418c8a75f26b8fc1322d5adf77e249355cc88a9dab82f9c620839f0f828e"
+  },
+  "parents": {
+    "text": [],
+    "sprites": [
+      "4_color_palette"
+    ],
+    "4_color_palette": [],
+    "8_bit_sound": [
+      "sound_effects"
+    ],
+    "8_bit_music": [
+      "music"
+    ],
+    "keyboard_and_mouse": [],
+    "controller": [],
+    "scrolling": [
+      "text"
+    ],
+    "menu_system": [],
+    "local_leaderboards": [
+      "high_scores"
+    ],
+    "split_screen": [],
+    "score_system": [],
+    "lives_system": [],
+    "simple_story": [],
+    "dialogue": [
+      "simple_story"
+    ],
+    "character_backstories": [
+      "simple_story"
+    ],
+    "multiple_endings": [
+      "branching_dialogue"
+    ],
+    "controls": [],
+    "enemies": [
+      "lives_system"
+    ],
+    "power_ups": [],
+    "general_combat": [
+      "enemies"
+    ],
+    "levels": [],
+    "maps": [
+      "levels"
+    ],
+    "exploration": [
+      "levels"
+    ],
+    "secrets": [
+      "exploration"
+    ],
+    "sound_effects": [],
+    "music": [],
+    "colored_text": [
+      "text"
+    ],
+    "animated_sprites": [
+      "sprites"
+    ],
+    "8_color_palette": [
+      "4_color_palette"
+    ],
+    "recorded_sounds": [
+      "8_bit_sound"
+    ],
+    "16_bit_music": [
+      "8_bit_music"
+    ],
+    "save_files": [],
+    "scripted_ai": [
+      "enemies"
+    ],
+    "multi_directional_scrolling": [
+      "scrolling"
+    ],
+    "branching_nodes": [
+      "save_files"
+    ],
+    "difficulty_levels": [
+      "turn_based_combat",
+      "scripted_ai"
+    ],
+    "high_scores": [
+      "score_system"
+    ],
+    "turn_based_combat": [
+      "general_combat"
+    ],
+    "character_classes": [
+      "general_combat",
+      "save_files"
+    ],
+    "character_development": [
+      "character_backstories",
+      "save_files"
+    ],
+    "branching_dialogue": [
+      "dialogue",
+      "branching_nodes"
+    ]
+  },
+  "lanes": {
+    "text": "Visuals",
+    "colored_text": "Visuals",
+    "sprites": "Visuals",
+    "animated_sprites": "Visuals",
+    "4_color_palette": "Visuals",
+    "8_color_palette": "Visuals",
+    "scrolling": "Visuals",
+    "multi_directional_scrolling": "Visuals",
+    "8_bit_sound": "Audio",
+    "recorded_sounds": "Audio",
+    "8_bit_music": "Audio",
+    "16_bit_music": "Audio",
+    "sound_effects": "Audio",
+    "music": "Audio",
+    "keyboard_and_mouse": "Technology & Tools",
+    "controller": "Technology & Tools",
+    "menu_system": "Technology & Tools",
+    "split_screen": "Technology & Tools",
+    "save_files": "Technology & Tools",
+    "branching_nodes": "Technology & Tools",
+    "score_system": "Gameplay",
+    "high_scores": "Gameplay",
+    "local_leaderboards": "Gameplay",
+    "lives_system": "Gameplay",
+    "controls": "Gameplay",
+    "enemies": "Gameplay",
+    "scripted_ai": "Gameplay",
+    "power_ups": "Gameplay",
+    "general_combat": "Gameplay",
+    "turn_based_combat": "Gameplay",
+    "character_classes": "Gameplay",
+    "difficulty_levels": "Gameplay",
+    "simple_story": "Story & World",
+    "dialogue": "Story & World",
+    "branching_dialogue": "Story & World",
+    "character_backstories": "Story & World",
+    "character_development": "Story & World",
+    "multiple_endings": "Story & World",
+    "levels": "Story & World",
+    "maps": "Story & World",
+    "exploration": "Story & World",
+    "secrets": "Story & World"
+  },
+  "routes": {
+    "action": {
+      "character_development": [
+        "simple_story",
+        "character_backstories",
+        "save_files",
+        "character_development"
+      ],
+      "difficulty_levels": [
+        "turn_based_combat",
+        "scripted_ai",
+        "difficulty_levels"
+      ],
+      "branching_dialogue": [
+        "simple_story",
+        "dialogue",
+        "save_files",
+        "branching_nodes",
+        "branching_dialogue"
+      ],
+      "character_classes": [
+        "save_files",
+        "character_classes"
+      ]
+    },
+    "adventure": {
+      "character_development": [
+        "save_files",
+        "character_development"
+      ],
+      "difficulty_levels": [
+        "turn_based_combat",
+        "enemies",
+        "scripted_ai",
+        "difficulty_levels"
+      ],
+      "branching_dialogue": [
+        "save_files",
+        "branching_nodes",
+        "branching_dialogue"
+      ],
+      "character_classes": [
+        "save_files",
+        "character_classes"
+      ]
+    },
+    "role_playing": {
+      "character_development": [
+        "save_files",
+        "character_development"
+      ],
+      "difficulty_levels": [
+        "turn_based_combat",
+        "enemies",
+        "scripted_ai",
+        "difficulty_levels"
+      ],
+      "branching_dialogue": [
+        "save_files",
+        "branching_nodes",
+        "branching_dialogue"
+      ],
+      "character_classes": [
+        "save_files",
+        "character_classes"
+      ]
+    },
+    "strategy": {
+      "character_development": [
+        "simple_story",
+        "character_backstories",
+        "save_files",
+        "character_development"
+      ],
+      "difficulty_levels": [
+        "turn_based_combat",
+        "scripted_ai",
+        "difficulty_levels"
+      ],
+      "branching_dialogue": [
+        "simple_story",
+        "dialogue",
+        "save_files",
+        "branching_nodes",
+        "branching_dialogue"
+      ],
+      "character_classes": [
+        "save_files",
+        "character_classes"
+      ]
+    },
+    "simulation": {
+      "character_development": [
+        "simple_story",
+        "character_backstories",
+        "save_files",
+        "character_development"
+      ],
+      "difficulty_levels": [
+        "general_combat",
+        "turn_based_combat",
+        "scripted_ai",
+        "difficulty_levels"
+      ],
+      "branching_dialogue": [
+        "simple_story",
+        "dialogue",
+        "save_files",
+        "branching_nodes",
+        "branching_dialogue"
+      ],
+      "character_classes": [
+        "general_combat",
+        "save_files",
+        "character_classes"
+      ]
+    },
+    "puzzle": {
+      "character_development": [
+        "save_files",
+        "character_development"
+      ],
+      "difficulty_levels": [
+        "turn_based_combat",
+        "enemies",
+        "scripted_ai",
+        "difficulty_levels"
+      ],
+      "branching_dialogue": [
+        "save_files",
+        "branching_nodes",
+        "branching_dialogue"
+      ],
+      "character_classes": [
+        "save_files",
+        "character_classes"
+      ]
+    },
+    "sports": {
+      "character_development": [
+        "simple_story",
+        "character_backstories",
+        "save_files",
+        "character_development"
+      ],
+      "difficulty_levels": [
+        "general_combat",
+        "turn_based_combat",
+        "scripted_ai",
+        "difficulty_levels"
+      ],
+      "branching_dialogue": [
+        "simple_story",
+        "dialogue",
+        "save_files",
+        "branching_nodes",
+        "branching_dialogue"
+      ],
+      "character_classes": [
+        "general_combat",
+        "save_files",
+        "character_classes"
+      ]
+    },
+    "racing": {
+      "character_development": [
+        "simple_story",
+        "character_backstories",
+        "save_files",
+        "character_development"
+      ],
+      "difficulty_levels": [
+        "general_combat",
+        "turn_based_combat",
+        "scripted_ai",
+        "difficulty_levels"
+      ],
+      "branching_dialogue": [
+        "simple_story",
+        "dialogue",
+        "save_files",
+        "branching_nodes",
+        "branching_dialogue"
+      ],
+      "character_classes": [
+        "general_combat",
+        "save_files",
+        "character_classes"
+      ]
+    }
+  }
+}
