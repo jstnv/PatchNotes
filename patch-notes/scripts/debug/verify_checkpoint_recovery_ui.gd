@@ -43,15 +43,34 @@ func _run() -> void:
 		await process_frame
 		var baseline: Dictionary = game.checkpoints.store.inspect()
 		expect(baseline.status==&"valid","Initial valid Studio")
+		if game.guided_tutorial != null:
+			game.guided_tutorial.experienced_button.pressed.emit()
+			game.guided_tutorial.skip_button.pressed.emit()
 		game.get_node("%GameplayHUD").tutorial_overlay.close()
 		expect(game._begin_next_project(game._active_phase,"Discardable",&"action",&"fantasy"),"Real unsaved development")
 		await process_frame
-		game._request_quit()
+		game._notification(Node.NOTIFICATION_WM_CLOSE_REQUEST)
 		await process_frame
 		expect(game._quit_dialog.visible and game._quit_dialog.get_cancel_button().has_focus(),"Quit explains rollback with Cancel focus")
 		expect(game._quit_dialog.dialog_text.contains("cycle 0"),"Quit names original committed boundary")
+		expect(game._quit_dialog.borderless and game._quit_dialog.has_node("QuitCopy/Header/Heading") and game._quit_dialog.get_node("QuitCopy/Header/Heading").get_theme_font("font") == FolderUI.THEME.get_font("font","FolderHeading"),"Quit uses the shared heading without the default window chrome")
+		expect(game._quit_dialog.get_ok_button().text == "Quit" and game._quit_dialog.get_cancel_button().custom_minimum_size.y >= 44,"Quit has explicit, menu-sized action controls")
+		expect(game._quit_dialog.dialog_autowrap,"Quit warning wraps within a bounded menu surface")
+		await create_timer(0.3).timeout
+		expect(game._quit_dialog.size.x <= size.x - 80 and game._quit_dialog.size.y <= size.y - 80,"Quit confirmation fits the supported viewport")
+		expect(game._quit_dialog.transparent_bg,"Quit has transparent clipped corners")
+		if DisplayServer.get_name() != "headless":
+			expect(game._quit_dialog.position == (size - game._quit_dialog.size) / 2,"Quit slide lands centered in the native viewport")
+		var capture := OS.get_environment("PN_CARD_FRAME_OUTPUT")
+		if not capture.is_empty() and DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(capture.get_basename()+"-%d.png"%size.x)
 		await escape()
 		expect(not game._quit_dialog.visible and game.checkpoints.store.inspect().payload==baseline.payload,"Keyboard Cancel preserves run checkpoint")
+		game._notification(Node.NOTIFICATION_WM_CLOSE_REQUEST)
+		game._quit_dialog.get_node("QuitCopy/Header/Close").pressed.emit()
+		await process_frame
+		expect(not game._quit_dialog.visible and game.checkpoints.store.inspect().payload==baseline.payload,"Themed close button cancels without quitting or changing the checkpoint")
 		game._continue_checkpoint()
 		await process_frame
 		# Explicitly Skip the save-opening invitation before recovery testing.

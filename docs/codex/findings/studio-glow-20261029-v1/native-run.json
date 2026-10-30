@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--audio-driver",
+    "WASAPI",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_studio_audio_glow.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 24.875,
+  "errors": [],
+  "tail": [
+    "PASS: Hidden HUD releases its analyzer",
+    "PASS: HUD return reacquires one observer without altering other effects",
+    "PASS: Paused Studio keeps music and observer running",
+    "PASS: Studio Store browsing retains one header glow",
+    "PASS: Decoration and passive browsing preserve all run state/RNG",
+    "PASS: Legal project departure succeeds",
+    "PASS: Production releases Studio FFT work",
+    "PASS: Observer preserves player identity and mix gain",
+    "PASS: Gameplay teardown leaves no owned analyzer",
+    "STUDIO_GLOW {\"checks\":33,\"failures\":0,\"peak\":0.570798993110657,\"runtime_source\":\"b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17\"}"
+  ],
+  "runtime_identity": "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17",
+  "runtime_source_unchanged": true
+}

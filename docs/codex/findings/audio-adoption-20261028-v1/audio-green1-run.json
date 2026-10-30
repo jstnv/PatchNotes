@@ -1,0 +1,35 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_audio_branch.gd"
+  ],
+  "exit": 5,
+  "elapsed_seconds": 2.422,
+  "errors": [
+    "ERROR: FAIL: Approved values/phase 16_bit_sound",
+    "ERROR: FAIL: Approved values/phase main_theme",
+    "ERROR: FAIL: Approved values/phase multiple_soundtracks",
+    "ERROR: FAIL: Approved values/phase instrumental_sounds",
+    "ERROR: FAIL: Approved values/phase dynamic_sequencing"
+  ],
+  "tail": [
+    "       [0] check (res://scripts/debug/verify_audio_branch.gd:8)",
+    "       [1] run (res://scripts/debug/verify_audio_branch.gd:37)",
+    "ERROR: FAIL: Approved values/phase dynamic_sequencing",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (res://scripts/debug/verify_audio_branch.gd:8)",
+    "       [1] run (res://scripts/debug/verify_audio_branch.gd:37)",
+    "AUDIO_CHECKS 63 failures 5",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "4321b73943e8d0c7cfd7503b6bf70a05eda516478826f9c508b2bd1a0b1e5c54",
+  "runtime_source_unchanged": true
+}

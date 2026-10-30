@@ -60,7 +60,7 @@ func _initialize() -> void:
 			var entered:=Replay.state(session)
 			_expect(not Replay.record(session,tape,session.command(&"enter_next_phase")).ok and Replay.state(session)==entered,"Repeated entry cannot mint redraws")
 			_expect(Replay.record(session,tape,session.command(&"begin")).ok,"Begin next phase")
-		var changed: Dictionary = {&"qa":40,&"marketing":30,&"insider":30} if phase==2 else {0:20,1:40,2:20,3:20}
+		var changed: Dictionary = {&"qa":70,&"marketing":30,&"insider":0} if phase==2 else {0:20,1:40,2:20,3:20}
 		_expect(Replay.record(session,tape,session.command(&"priorities",{"distribution":changed})).ok,"Active priority change")
 		for attempt in range(3):
 			var selected: Array[int] = session.hand.candidate_ids.slice(0,4)

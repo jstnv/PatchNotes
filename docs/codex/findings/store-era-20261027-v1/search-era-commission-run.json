@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_contract_search.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 0.485,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"research\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"commission_meta\" variable because the value doesn't have a set type.",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_contract_search.gd\" with error \"Parse error\"."
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"research\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (res://scripts/debug/verify_contract_search.gd:125)",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"commission_meta\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (res://scripts/debug/verify_contract_search.gd:141)",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_contract_search.gd\" with error \"Parse error\".",
+    "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)"
+  ]
+}

@@ -51,7 +51,11 @@ func open_for(value: Control) -> void:
 	var status: Dictionary = phase.get_employee_hand_status()
 	if not status.get("available",false) or not status.get("qualifying",false): return
 	previous = phase.get_priority_distribution()
-	for i in range(4): inputs[i].value = previous[i]
+	var run: RefCounted=phase.get("_run_state")
+	var limits:=PriorityAllocation.bounds(run)
+	var draft:=PriorityAllocation.editable_distribution(previous,run)
+	for i in range(4):
+		inputs[i].min_value=limits.x;inputs[i].max_value=limits.y;inputs[i].value=draft[i]
 	var base: Dictionary = phase._validate_and_calculate_base_action()
 	var names: Array[String] = []
 	for card: CardData in base.cards: names.append(card.card_name)
@@ -70,7 +74,7 @@ func _refresh() -> void:
 		var total := 0
 		for amount: int in value.values(): total += amount
 		total_label.text = "%d/100" % total
-	get_ok_button().disabled = value == previous or not PriorityAllocation.is_valid_new_distribution(value)
+	get_ok_button().disabled = value == previous or not PriorityAllocation.is_valid_new_distribution(value, phase.get("_run_state") if is_instance_valid(phase) else null)
 
 func _commit() -> void:
 	if not is_instance_valid(phase): return

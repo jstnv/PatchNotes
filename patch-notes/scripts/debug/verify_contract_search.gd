@@ -47,6 +47,14 @@ func search(work: StringName) -> bool:
 func cash_work() -> bool:
 	if not search(&"cash"):return false
 	return contract({"kind":&"sidestreet","offer_id":session.run.get_next_sidestreet_offer().offer_id})
+func ensure_cash(cents: int) -> bool:
+	# Reserve-aware public cash work; no injected funding or relaxed Bank gate.
+	for attempt in range(150):
+		if attempt%10==0: print("COMMISSION_RESERVE target=",cents," cash=",session.run.get_cash_cents()," attempt=",attempt)
+		if session.run.get_cash_cents()>=cents:return true
+		if not cash_work():return false
+	expect(false,"Declared cash-work reserve bound reached")
+	return false
 func _initialize() -> void:_run.call_deferred()
 func _run() -> void:
 	for arg in OS.get_cmdline_user_args():
@@ -107,17 +115,38 @@ func _run() -> void:
 	expect(not quote_a.is_empty() and not quote_b.is_empty() and quote_a.search_offer_id==invitation.offer_id and Replay.state(session)==unchanged,"Free cancel/reprepare retains the same unconsumed invitation")
 	var failed: Dictionary=Begin.execute(session.run,session.snapshots,"Commission",&"action",&"fantasy",func(_project):return false,[],quote_a)
 	expect(not failed.ok and Replay.state(session)==unchanged,"Rejected scene readiness preserves invitation, cash, serial and RNG")
+	# Supply/finance changed with v4 starts. Acquire legal printed Scope before
+	# this full-delivery commission fixture and reserve its normal production bill.
+	for id: StringName in [&"lives_system",&"enemies",&"general_combat",&"scrolling",&"menu_system",&"split_screen",&"power_ups",&"maps",&"dialogue",&"character_backstories",&"secrets",&"music",&"8_bit_sound",&"8_bit_music",&"colored_text",&"save_files",&"animated_sprites"]:
+		var total_scope:=0
+		for owned: StringName in session.run.get_owned_feature_ids():total_scope+=int(session.run._feature_definitions[owned].scope)
+		if total_scope>=30:break
+		if session.run.owns_feature(id):continue
+		if not ensure_cash(400000):quit(1);return
+		var research:Dictionary=session.run.get_feature_research_quote(id)
+		if not research.can_admit:continue
+		if not act(&"admit_research",{"quote":research}).ok:quit(1);return
+		if not act(&"research",{"quote":session.run.get_feature_research_quote(id)}).ok:quit(1);return
+	if not ensure_cash(1000000):quit(1);return
+	# Research/cash work invalidates the earlier preview: refresh exact quote.
+	quote_a=session.run.get_commission_quote("Commission",&"action",&"fantasy")
+	var era_before:Dictionary=session.run._store_era_receipts.duplicate(true)
+	var commission_policy:=Policy.factory({"genre":"action","theme":"fantasy","name_prefix":"Commission","selection":"features_first","hands":{"design":12,"alpha":12,"beta":2}})
 	act(&"quote_commission",{"name":"Commission","genre":&"action","theme":&"fantasy"})
 	if not act(&"begin_development",{"name":"Commission","genre":&"action","theme":&"fantasy","commission_quote":quote_a}).ok:quit(1);return
 	expect(session.run.ContractSearch.invitation(session.run).is_empty() and session.run._contract_search.offers[invitation.offer_id].project_id==session.development.project.get_release_id(),"Successful Begin binds the paid invitation once")
 	for n in range(70):
 		if session.in_studio:break
-		var decision: Dictionary=choose.call(session.observation())
+		var decision: Dictionary=commission_policy.call(session.observation())
 		if not act(decision.type,decision.get("payload",{})).ok:quit(1);return
+	var commission_meta:Dictionary=session.run.get_release_metadata(session.development.project.get_release_id())
+	expect(session.in_studio and commission_meta.get("owner")==&"publisher" and commission_meta.review.scope>=commission_meta.review.required_scope,"Actual publisher-owned commission commits full required Scope")
+	expect(session.run._store_era_receipts==era_before,"Actual full-Scope commission publication earns no Studio era receipt")
 	var adapter:=StudioCheckpoint.new();var dto:=adapter.capture(session.run)
 	expect(not dto.is_empty(),"Completed searched cash/Brief/commission sources validate: "+adapter.error)
 	var cold:=adapter.hydrate(dto)
 	expect(cold!=null and adapter.capture(cold)==dto,"Full searched career checkpoint roundtrip is exact")
+	expect(cold!=null and cold._store_era_receipts==era_before,"Cold commission restore preserves exclusion from era receipts")
 	# Adversarial fixtures are separate from the legal career above.
 	for mutation in ["orphan", "fee", "standing", "publisher", "receipt", "duplicate"]:
 		var altered: Dictionary=bytes_to_var(var_to_bytes(session.run.get_contract_search_state()))

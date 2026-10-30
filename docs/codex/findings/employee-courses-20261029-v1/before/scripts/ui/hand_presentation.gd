@@ -1,0 +1,557 @@
+class_name HandPresentation
+extends Control
+
+## Presentation consumes confirmed state differences. It never resolves cards,
+## spends cash/redraws, advances time, exhausts supply, or calls gameplay twice.
+signal finished
+signal busy_changed
+signal card_step(index: int, event: String)
+
+const CARD_SCENE := preload("res://scenes/cards/card_view.tscn")
+const BPM := 140.0
+const BEAT_SECONDS := 60.0 / BPM
+const SPECIALIZATION_LEAD_BEATS := 1
+const SPECIALIZATION_BEATS := 4
+const SPECIALIZATION_SECONDS := BEAT_SECONDS * SPECIALIZATION_BEATS
+const CORE := [&"graphics", &"sound", &"technology", &"design"]
+const ScoreFloats := preload("res://scripts/ui/card_score_floats.gd")
+const PlayBurst := preload("res://scripts/ui/card_play_burst.gd")
+const CHARGE_SECONDS := 0.06
+const CHARGE_SCALE := 0.94
+const POP_SCALE := 1.14
+var busy := false
+var action_kind := ""
+var display_values: Dictionary = {}
+var trace: Array[Dictionary] = []
+var _fan: Control
+var _ghosts: Array[CardView] = []
+var _hand: Array[CardView] = []
+var _cards: Array[CardData] = []
+var _timeline: Array[Dictionary] = []
+var _tween: Tween
+var _update: Callable
+var _restore: Callable
+var _prior_focus: Control
+var _sources: Array = []
+var _specialization := false
+var _balanced := false
+var _balanced_deltas: Dictionary = {}
+var _bonus_timeline: Array[Dictionary] = []
+var capturing := false
+var _specialization_header: Callable
+# Injectable clock for deterministic presentation verification; runtime uses music.
+var clock_source: Callable
+var _music_driven := false
+var _music_cursor := 0.0
+var _first_beat := 0
+var _play_sound: AudioStreamPlayer
+var _remove_sound: AudioStreamPlayer
+var _bonus_labels: Array[Dictionary] = []
+var _card_bursts: Array[Dictionary] = []
+var _score_flow: Control
+var _confirmed_values: Dictionary = {}
+var _starting_values: Dictionary = {}
+var _deposit_beat := 0.0
+var _deposited := false
+var _number_multiplier := 1.5
+
+func _music_seconds() -> float:
+	if clock_source.is_valid(): return float(clock_source.call())
+	return get_node("/root/Soundtrack").presentation_seconds()
+
+func _process(_delta: float) -> void:
+	if is_instance_valid(_play_sound):
+		var paused: bool = get_node("/root/Soundtrack").manually_paused
+		_play_sound.stream_paused = paused
+		_remove_sound.stream_paused = paused
+	if not _music_driven or not busy: return
+	advance_music(_music_seconds())
+
+func advance_music(now: float) -> void:
+	if not _music_driven or not busy: return
+	if now < _music_cursor: return # Hold every pose, including bonus labels, until rejoin.
+	var elapsed := maxf(0.0, now - _music_cursor)
+	_music_cursor = maxf(_music_cursor, now)
+	if elapsed > 0.0 and _tween != null and _tween.is_valid():
+		_tween.custom_step(elapsed)
+	for i in range(_card_bursts.size()-1,-1,-1):
+		var effect: Dictionary=_card_bursts[i]
+		var age := maxf(0.0,now-float(effect.started))
+		if age>=PlayBurst.LIFETIME:
+			remove_child(effect.node);effect.node.queue_free();_card_bursts.remove_at(i)
+		else:effect.node.sample(age)
+	if is_instance_valid(_score_flow): _score_flow.sample(now)
+	for effect in _bonus_labels:
+		if not is_instance_valid(effect.label): continue
+		var age: float = maxf(0.0, now - effect.started)
+		effect.label.position.y = lerpf(90.0, 65.0, minf(1.0, age / (BEAT_SECONDS / 2.0)))
+		effect.label.modulate.a = 1.0 - clampf((age - BEAT_SECONDS / 2.0) / BEAT_SECONDS, 0.0, 1.0)
+
+func _rejoin_music_grid(skipped_beats: int) -> void:
+	if not busy or not _music_driven: return
+	var shift := skipped_beats * BEAT_SECONDS
+	_music_cursor += shift
+	_first_beat += skipped_beats
+	_deposit_beat += skipped_beats
+	if is_instance_valid(_score_flow): _score_flow.rejoin(shift)
+	for effect in _bonus_labels: effect.started += shift
+	for effect in _card_bursts: effect.started += shift
+	trace.append({"index": -1, "event": "music_resume", "skipped_beats": skipped_beats,
+		"msec": Time.get_ticks_msec(), "beat_index": -1.0, "scheduled_seconds": -BEAT_SECONDS,
+		"music_seconds": _music_seconds(), "resume_seconds": _music_cursor, "lateness_seconds": 0.0})
+
+
+func note_specialization(header: Callable, balanced := false, multiplier := 1.5) -> void:
+	if capturing:
+		_specialization = true
+		_balanced = balanced
+		_number_multiplier = multiplier
+		_specialization_header = header
+
+func _ready() -> void:
+	get_node("/root/Soundtrack").presentation_resumed.connect(_rejoin_music_grid)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	z_index = 100
+	focus_mode = Control.FOCUS_ALL
+	_play_sound = _sound_player("res://assets/audio/card_sfx/card_play.wav", -5.0)
+	_remove_sound = _sound_player("res://assets/audio/card_sfx/card_whoosh.wav", -3.0)
+	hide()
+	resized.connect(func(): if busy: cancel())
+
+func _sound_player(path: String, volume: float) -> AudioStreamPlayer:
+	var player := AudioStreamPlayer.new()
+	player.stream = load(path)
+	player.bus = &"SFX"
+	player.volume_db = volume
+	add_child(player)
+	return player
+
+func _gui_input(event: InputEvent) -> void:
+	# Block gameplay gestures during motion, but let the global Pause action through.
+	if busy and not event.is_action("ui_cancel"): accept_event()
+
+func play(kind: String, fan: Control, selected: Array, action: Callable, snapshot: Callable, update: Callable, restore: Callable) -> bool:
+	if busy or selected.is_empty() or not action.is_valid() or not snapshot.is_valid(): return false
+	var before: Dictionary = snapshot.call()
+	if before.is_empty(): return false
+	_fan = fan
+	_update = update
+	_restore = restore
+	trace.clear()
+	_specialization = false
+	_number_multiplier = 1.5
+	_balanced = false
+	_balanced_deltas.clear()
+	_sources = fan.ordered_cards() if fan is CardFan else fan.get_children()
+	# Capture the old pool before the authoritative action replaces/frees it.
+	for source: CardView in _sources:
+		var ghost: CardView = CARD_SCENE.instantiate()
+		ghost.set_card(source.card_data)
+		add_child(ghost)
+		ghost.size = CardFan.CARD_SIZE
+		ghost.pivot_offset = ghost.size / 2.0
+		ghost.position = get_global_transform().affine_inverse() * source.get_global_transform() * (source.size / 2.0) - ghost.size / 2.0
+		ghost.scale = source.get_global_transform().get_scale() / get_global_transform().get_scale()
+		ghost.rotation = source.get_global_transform().get_rotation() - get_global_transform().get_rotation()
+		ghost.input_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ghost.set_selected(source in selected)
+		_ghosts.append(ghost)
+		if source in selected:
+			_hand.append(ghost)
+	_hand = CardFan.search_first(_hand)
+	for ghost in _hand:
+		_cards.append(ghost.card_data)
+	# Hold the old scoreboard before project/run signals publish the committed totals.
+	display_values = before.duplicate()
+	if _update.is_valid(): _update.call(display_values, {})
+	capturing = true
+	action.call()
+	capturing = false
+	var after: Dictionary = snapshot.call()
+	var accepted: bool = after.get("_redraws") != before.get("_redraws") if kind == "redraw" else after.get("_cycle") != before.get("_cycle")
+	if not accepted:
+		_clear()
+		return false
+	busy = true
+	_deposited = false
+	_starting_values = before.duplicate()
+	_confirmed_values = after.duplicate()
+	action_kind = kind
+	_prior_focus = get_viewport().gui_get_focus_owner()
+	show()
+	grab_focus()
+	fan.hide()
+	_timeline = build_timeline(_cards, before, after)
+	_bonus_timeline.clear()
+	for i in range(_cards.size()):
+		var bonus := {}
+		for key in _timeline[i]:
+			# Only split uncapped production/Marketing gains. QA has ordered,
+			# capped effects, so its resolved contribution stays in the first pass.
+			var extra: int = maxi(0, int(_timeline[i][key]) - _weight(_cards[i], key)) if _specialization and (key in CORE or key == &"marketing") else 0
+			bonus[key] = extra
+			_timeline[i][key] -= extra
+		_bonus_timeline.append(bonus)
+	if _balanced:
+		# Show printed card gains first, then one signed redistribution. The
+		# authoritative action has already committed exactly once above.
+		for key in CORE:
+			var printed := 0
+			for i in range(_cards.size()):
+				var amount := _weight(_cards[i], key)
+				_timeline[i][key] = amount
+				printed += amount
+			_balanced_deltas[key] = int(after[key]) - int(before[key]) - printed
+	busy_changed.emit()
+	_animate(kind)
+	return true
+
+static func project_snapshot(project: ProjectState, run: RunState) -> Dictionary:
+	if project == null: return {}
+	var result := {&"scope": project.get_current_scope(), &"fixed": project.get_fixed_bugs(),
+		&"discovered": project.get_known_bugs() + project.get_fixed_bugs(), &"marketing": project.get_marketing_output(),
+		"_design_pressure": project.get_accumulated_bug_pressure(), "_alpha_pressure": project.get_accumulated_alpha_bug_pressure(),
+		"_cycle": project.get_current_cycle(), "_redraws": run.get_available_redraws() if run != null else 0}
+	for i in range(4): result[CORE[i]] = project.get_core_score(i)
+	return result
+
+static func _weight(card: CardData, key: StringName) -> int:
+	if key == &"scope": return card.scope
+	if key == &"marketing": return card.beta_value if card.beta_category == CardData.BETA_CATEGORY_MARKETING else 0
+	if key == &"fixed": return card.beta_value if card.qa_operation == &"debug" else 0
+	if key == &"discovered": return card.beta_value if card.qa_operation == &"search" else 0
+	var total := 0
+	for entry in card.core_contributions():
+		if entry.stat == key: total += int(entry.value)
+	return total
+
+static func build_timeline(cards: Array[CardData], before: Dictionary, after: Dictionary) -> Array[Dictionary]:
+	# Allocate the already-resolved hand gain by cumulative printed contribution.
+	# This carries hand-level rounding into the display without inventing extra points.
+	var rows: Array[Dictionary] = []
+	for i in range(cards.size()): rows.append({})
+	for key: StringName in before:
+		if str(key).begins_with("_"): continue
+		var total_weight := 0
+		for card in cards: total_weight += _weight(card, key)
+		var cumulative := 0
+		var last := 0
+		var gain: int = int(after.get(key, before[key])) - int(before[key])
+		for i in range(cards.size()):
+			cumulative += _weight(cards[i], key)
+			@warning_ignore("integer_division")
+			var resolved: int = (gain / total_weight) * cumulative + ((gain % total_weight) * cumulative) / total_weight if total_weight > 0 else (gain if i == cards.size() - 1 else 0)
+			rows[i][key] = resolved - last
+			last = resolved
+	return rows
+
+func _animate(kind: String) -> void:
+	_music_cursor = _music_seconds()
+	_first_beat = ceili((_music_cursor + BEAT_SECONDS) / BEAT_SECONDS)
+	_deposit_beat = _first_beat + _hand.size() + (5 if _specialization else 1)
+	if kind != "redraw": _create_score_flow()
+	_music_driven = true
+	_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).set_parallel()
+	_tween.pause()
+	var center := size / 2.0
+	# Reserve a score lane even in the shorter tutorial/Contract stage.
+	var scale_value := minf(0.68, minf((size.x - 70.0) / (_hand.size() * 258.0), maxf(0.25, (size.y - 110.0) / CardFan.CARD_SIZE.y)))
+	center.y = maxf(center.y, 120.0 + CardFan.CARD_SIZE.y * scale_value / 2.0)
+	var remaining := _ghosts.filter(func(card): return card not in _hand)
+	for ghost in _ghosts:
+		if ghost in _hand:
+			var index := _hand.find(ghost)
+			var target := center + Vector2((index - (_hand.size() - 1) / 2.0) * 258.0 * scale_value, -10.0) - ghost.size / 2.0
+			ghost.z_index = 20 + index
+			_tween.tween_property(ghost, "position", target, BEAT_SECONDS)
+			_tween.tween_property(ghost, "scale", Vector2.ONE * scale_value, BEAT_SECONDS)
+			_tween.tween_property(ghost, "rotation", 0.0, BEAT_SECONDS)
+		else:
+			var offset: float = remaining.find(ghost) - (remaining.size() - 1) / 2.0
+			_tween.tween_property(ghost, "position", Vector2(size.x / 2.0 + offset * 58.0, size.y - 85.0 + offset * offset * 3.0) - ghost.size / 2.0, BEAT_SECONDS)
+			_tween.tween_property(ghost, "rotation", offset * deg_to_rad(7.0), BEAT_SECONDS)
+			_tween.tween_property(ghost, "scale", Vector2.ONE * 0.34, BEAT_SECONDS)
+			_tween.tween_property(ghost, "modulate:a", 0.65, BEAT_SECONDS)
+	_tween.chain().tween_callback(func(): _record(-1, "centered"))
+	if kind == "redraw":
+		_tween.chain().tween_callback(_record.bind(-1, "redraw_exit"))
+		_tween.chain()
+		for ghost in _hand:
+			_tween.parallel().tween_property(ghost, "position:x", size.x + 260.0 + _hand.find(ghost) * 150.0, BEAT_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	else:
+		_tween.chain().tween_interval(maxf(0.0, _first_beat * BEAT_SECONDS - _music_cursor - BEAT_SECONDS))
+		for i in range(_hand.size()): _activation_bounce(i, scale_value, false)
+		if _specialization:
+			_tween.chain().tween_callback(_begin_specialization)
+			_tween.chain().tween_interval(2 * BEAT_SECONDS)
+			_tween.chain().tween_callback(_merge_numbers)
+			_tween.chain().tween_interval(BEAT_SECONDS)
+			_tween.chain().tween_callback(_numbers_ready)
+			_tween.chain().tween_interval(BEAT_SECONDS)
+			_tween.chain().tween_callback(_record.bind(-1, "specialization_complete"))
+		_tween.chain().tween_callback(_begin_number_exit)
+		_tween.chain().tween_interval(BEAT_SECONDS)
+		_tween.chain().tween_callback(_deposit_scores)
+		_tween.chain().tween_callback(_record.bind(-1, "exit_slide"))
+		_tween.chain()
+		for ghost in _hand:
+			_tween.parallel().tween_property(ghost, "position:x", size.x + CardFan.CARD_SIZE.x, BEAT_SECONDS).as_relative().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	_tween.chain().tween_callback(_return_fan)
+
+func _activation_bounce(index: int, base_scale: float, bonus: bool) -> void:
+	var ghost:=_hand[index]
+	_tween.chain().tween_callback(func():
+		ghost.z_index=100+index
+		_record(index,"bonus_rise" if bonus else "rise"))
+	# Anticipation and expansion share the original rise half; no extra beat.
+	_tween.chain().tween_property(ghost,"scale",Vector2.ONE*base_scale*CHARGE_SCALE,CHARGE_SECONDS).set_ease(Tween.EASE_IN)
+	_tween.parallel().tween_property(ghost,"position:y",4.0,CHARGE_SECONDS).as_relative().set_ease(Tween.EASE_IN)
+	_tween.chain().tween_property(ghost,"scale",Vector2.ONE*base_scale*POP_SCALE,BEAT_SECONDS/2.0-CHARGE_SECONDS).set_trans(Tween.TRANS_BACK)
+	_tween.parallel().tween_property(ghost,"position:y",-32.0,BEAT_SECONDS/2.0-CHARGE_SECONDS).as_relative()
+	_tween.chain().tween_callback(_score_bonus.bind(index) if bonus else _score_card.bind(index))
+	_tween.chain().tween_property(ghost,"scale",Vector2.ONE*base_scale,BEAT_SECONDS/2.0).set_ease(Tween.EASE_IN_OUT)
+	_tween.parallel().tween_property(ghost,"position:y",28.0,BEAT_SECONDS/2.0).as_relative().set_ease(Tween.EASE_IN)
+	_tween.chain().tween_callback(func():
+		ghost.z_index=20+index
+		_record(index,"bonus_grounded" if bonus else "grounded"))
+
+func _emit_card_burst(index: int, bonus: bool=false) -> void:
+	var beat := _first_beat+index+0.5+(_hand.size()+SPECIALIZATION_LEAD_BEATS if bonus else 0)
+	var started := beat*BEAT_SECONDS
+	var age := maxf(0.0,_music_seconds()-started)
+	if age>=PlayBurst.LIFETIME:return # Do not replay stale bursts after a long frame.
+	var ghost:=_hand[index]
+	var burst:=PlayBurst.new()
+	burst.name="CardPlayBurst"
+	burst.z_index=300
+	burst.position=(ghost.position+ghost.pivot_offset).round()
+	burst.half_extents=ghost.size*ghost.scale/2.0
+	burst.phase=float(index)*0.13
+	var colors: Dictionary={&"graphics":Color("#eb8b9b"),&"sound":Color("#efcd66"),&"technology":Color("#74d3de"),&"design":Color("#bfa3ed")}
+	burst.accent=colors.get(ghost.card_data.primary_stat,Color("#74d3de"))
+	burst.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
+	add_child(burst)
+	burst.sample(age)
+	_card_bursts.append({"node":burst,"started":started})
+
+func _return_fan() -> void:
+	_music_driven = false
+	if not is_instance_valid(_fan):
+		_clear()
+		return
+	var targets: Array = _fan.ordered_cards() if _fan is CardFan else _fan.get_children()
+	# Only surviving instances return. A fresh copy of the same renewable card
+	# is still a new draw, not the card the player reserved.
+	var returning: Array = []
+	var matches := {}
+	for i in range(_sources.size()):
+		if _ghosts[i] in _hand: continue
+		if is_instance_valid(_sources[i]) and _sources[i] in targets:
+			returning.append(_sources[i])
+			matches[_sources[i]] = i
+	if _fan is CardFan: _fan.retain_order(returning)
+	targets = _fan.ordered_cards() if _fan is CardFan else targets
+	_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	var retained: Array = []
+	for source in targets:
+		var target: Vector2 = get_global_transform().affine_inverse() * source.get_global_transform() * (source.size / 2.0) - CardFan.CARD_SIZE / 2.0
+		var old_index: int = matches.get(source, -1)
+		var ghost: CardView
+		var is_new := old_index < 0
+		if not is_new:
+			ghost = _ghosts[old_index]
+			retained.append(ghost)
+			# Reuse the visible bottom-fan card, preserving its current transform.
+		else:
+			ghost = CARD_SCENE.instantiate()
+			ghost.set_card(source.card_data)
+			add_child(ghost)
+			ghost.size = CardFan.CARD_SIZE
+			ghost.pivot_offset = ghost.size / 2.0
+			# New candidates drop into their own slot from above the viewport.
+			ghost.position = Vector2(target.x, -ghost.size.y - get_global_transform().origin.y)
+			ghost.scale = Vector2.ONE * 0.34
+			ghost.modulate.a = 0.0
+			_ghosts.append(ghost)
+		ghost.z_index = targets.find(source)
+		if is_new: _tween.chain().tween_callback(_record.bind(targets.find(source), "deal"))
+		else:
+			_tween.parallel().tween_callback(_record.bind(targets.find(source), "return_from_bottom"))
+			_tween.parallel()
+		_tween.tween_property(ghost, "position", target, BEAT_SECONDS / 2.0)
+		_tween.parallel().tween_property(ghost, "rotation", source.get_global_transform().get_rotation() - get_global_transform().get_rotation(), BEAT_SECONDS / 2.0)
+		_tween.parallel().tween_property(ghost, "scale", source.get_global_transform().get_scale() / get_global_transform().get_scale(), BEAT_SECONDS / 2.0)
+		_tween.parallel().tween_property(ghost, "modulate:a", 1.0, BEAT_SECONDS / 2.0)
+	for ghost in _ghosts:
+		if ghost not in retained and ghost not in _hand and ghost.get_index() < _sources.size():
+			_tween.parallel().tween_property(ghost, "modulate:a", 0.0, BEAT_SECONDS / 2.0)
+	_tween.chain().tween_callback(_finish_return)
+
+func _finish_return() -> void:
+	_record(-1, "fan_restored")
+	if not _fan is CardFan or not _fan.has_organization():
+		_clear()
+		return
+	# Arrivals finish in retained-first order before the live fan moves into its
+	# chosen grouping. Keep input blocked until that short movement completes.
+	for ghost in _ghosts: ghost.hide()
+	_fan.show()
+	_fan.reapply_organization()
+	_record(-1, "sort_started")
+	_tween = create_tween()
+	_tween.tween_interval(BEAT_SECONDS / 2.0)
+	_tween.tween_callback(func(): _record(-1, "sorted"); _clear(false))
+
+func _scalar(card: CardData, row: Dictionary) -> int:
+	var core := 0
+	for key in CORE: core += int(row.get(key, 0))
+	if not card.core_contributions().is_empty(): return core
+	if card.qa_operation == &"debug": return int(row.get(&"fixed", 0))
+	if card.qa_operation == &"search": return int(row.get(&"discovered", 0))
+	return int(row.get(&"marketing", 0))
+
+func _create_score_flow() -> void:
+	_score_flow = ScoreFloats.new()
+	_score_flow.name = "FloatingScores"
+	_score_flow.z_index = 400
+	add_child(_score_flow)
+	var bases: Array = []
+	var finals: Array = []
+	for index in range(_cards.size()):
+		var raw := {}
+		var resolved := _timeline[index].duplicate()
+		for key in resolved: resolved[key] += int(_bonus_timeline[index].get(key, 0))
+		for key in CORE + [&"marketing", &"fixed", &"discovered"]: raw[key] = _weight(_cards[index], key)
+		bases.append(_scalar(_cards[index], raw) * int(_starting_values.get("_score_divisor", 1)) if _specialization else _scalar(_cards[index], resolved))
+		finals.append(_scalar(_cards[index], resolved))
+	var categories: Array = []
+	for key in CORE: categories.append(int(_confirmed_values.get(key, 0)) - int(_starting_values.get(key, 0)))
+	_score_flow.configure(_hand, bases, finals, categories)
+	_score_flow.divisor = int(_starting_values.get("_score_divisor", 1))
+	_score_flow.multiplier_text = "×%s" % str(_number_multiplier)
+
+func _begin_specialization() -> void:
+	_record(-1, "specialization_started")
+	_score_flow.begin_synergy(_balanced, (_first_beat + _hand.size()) * BEAT_SECONDS)
+	if not _balanced:
+		for index in range(_hand.size()): _record(index, "bonus_rise")
+	if _specialization_header.is_valid():
+		_specialization_header.call()
+		_specialization_header = Callable()
+
+func _merge_numbers() -> void:
+	if _balanced: _record(-1, "balanced_merge")
+	else:
+		for index in range(_hand.size()): _score_bonus(index)
+
+func _numbers_ready() -> void:
+	if _balanced: _record(-1, "balanced_split")
+	else:
+		for index in range(_hand.size()): _record(index, "bonus_grounded")
+
+func _score_bonus(index: int) -> void:
+	# The simultaneous number merge is visual; gameplay already committed.
+	_record(index, "bonus")
+
+func _begin_number_exit() -> void:
+	_score_flow.begin_exit((_deposit_beat - 1.0) * BEAT_SECONDS)
+	_record(-1, "numbers_exit")
+
+func _deposit_scores() -> void:
+	if _deposited: return
+	_deposited = true
+	_score_flow.sample(_deposit_beat * BEAT_SECONDS)
+	_score_flow.finish_exit()
+	_record(-1, "numbers_hidden")
+	var deltas := {}
+	for key in _confirmed_values:
+		if not str(key).begins_with("_"): deltas[key] = int(_confirmed_values[key]) - int(_starting_values.get(key, 0))
+	display_values = _confirmed_values.duplicate()
+	if _update.is_valid(): _update.call(display_values.duplicate(), deltas)
+	_record(-1, "hud_deposit")
+	if _balanced: _record(-1, "balanced_redistributed")
+
+func _record(index: int, event: String) -> void:
+	var beat := -1.0
+	var count := _hand.size()
+	match event:
+		"rise": beat = _first_beat + index
+		"score": beat = _first_beat + index + 0.5
+		"grounded": beat = _first_beat + index + 1.0
+		"bonus_rise": beat = _first_beat + count
+		"bonus": beat = _first_beat + count + 2
+		"bonus_grounded": beat = _first_beat + count + 3
+		"specialization_started": beat = _first_beat + count
+		"specialization_complete": beat = _first_beat + count + 4
+		"balanced_merge": beat = _first_beat + count + 2
+		"balanced_split": beat = _first_beat + count + 3
+		"numbers_exit": beat = _deposit_beat - 1
+		"numbers_hidden", "hud_deposit", "balanced_redistributed", "exit_slide": beat = _deposit_beat
+	var now := _music_seconds()
+	# Suppress stale audio bursts after a long frame.
+	if (event == "score" or (event == "bonus" and index == 0)) and now - beat * BEAT_SECONDS < 0.12: _play_sound.play()
+	if event in ["exit_slide", "redraw_exit"]: _remove_sound.play()
+	trace.append({"index": index, "event": event, "msec": Time.get_ticks_msec(),
+		"beat_index": beat, "scheduled_seconds": beat * BEAT_SECONDS,
+		"music_seconds": now, "lateness_seconds": now - beat * BEAT_SECONDS if beat >= 0 else 0.0})
+	card_step.emit(index, event)
+
+func _redistribute_balanced() -> void:
+	_deposit_scores()
+
+func _score_card(index: int) -> void:
+	_emit_card_burst(index)
+	_score_flow.reveal(index, (_first_beat + index + 0.5) * BEAT_SECONDS)
+	_record(index, "score")
+
+func cancel() -> void:
+	if is_instance_valid(_play_sound): _play_sound.stop()
+	if is_instance_valid(_remove_sound): _remove_sound.stop()
+	if _tween != null and _tween.is_valid(): _tween.kill()
+	_tween=null
+	_clear()
+
+func _exit_tree() -> void:
+	if busy: cancel()
+
+func _clear(restore_organization := true) -> void:
+	_music_driven = false
+	var was_busy := busy
+	busy = false
+	action_kind = ""
+	display_values.clear()
+	for ghost in _ghosts:
+		if is_instance_valid(ghost):
+			remove_child(ghost)
+			ghost.queue_free()
+	_ghosts.clear()
+	_hand.clear()
+	_cards.clear()
+	_timeline.clear()
+	_bonus_timeline.clear()
+	_bonus_labels.clear()
+	for effect in _card_bursts:
+		if is_instance_valid(effect.node):remove_child(effect.node);effect.node.queue_free()
+	_card_bursts.clear()
+	_balanced_deltas.clear()
+	if is_instance_valid(_score_flow):
+		remove_child(_score_flow)
+		_score_flow.queue_free()
+	_score_flow = null
+	_confirmed_values.clear()
+	_starting_values.clear()
+	_balanced = false
+	_specialization_header = Callable()
+	_sources.clear()
+	if is_instance_valid(_fan):
+		_fan.show()
+		if was_busy and restore_organization and _fan is CardFan: _fan.reapply_organization()
+	hide()
+	# Restore old focus before phase navigation can open a new modal.
+	if is_instance_valid(_prior_focus) and _prior_focus.is_inside_tree() and _prior_focus.is_visible_in_tree(): _prior_focus.grab_focus()
+	_prior_focus = null
+	if _restore.is_valid(): _restore.call()
+	if was_busy:
+		busy_changed.emit()
+		finished.emit()

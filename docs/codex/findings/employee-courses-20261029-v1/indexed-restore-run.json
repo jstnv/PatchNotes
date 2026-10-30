@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_restore.gd",
+    "--",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\employee-courses-20261029-v1\\tail-tier4.json.final.json"
+  ],
+  "exit": 125,
+  "elapsed_seconds": 17.875,
+  "errors": [
+    "SCRIPT ERROR: Trying to assign a dictionary of type \"Dictionary\" to a variable of type \"Dictionary[StringName, int]\".",
+    "FAIL: Trained phase hand commits 2"
+  ],
+  "tail": [
+    "       [3] _execute (res://scripts/simulation/development_session.gd:138)",
+    "       [4] execute (res://scripts/simulation/development_session.gd:71)",
+    "       [5] _run (res://scripts/debug/verify_employee_course_restore.gd:64)",
+    "FAIL: Trained phase hand commits 2",
+    "PASS: Live Beta accepts the same finalized project",
+    "PASS: Live trained slider agrees with headless: QAPriority",
+    "PASS: Live trained slider agrees with headless: MarketingPriority",
+    "PASS: Trained phase finalization requests 2",
+    "PASS: Trained phase warning confirms 2",
+    "CAREER_RESTORE checks=359 failures=1"
+  ],
+  "runtime_identity": "53e5d843a3e40c7615aef6297d73f2cd348763711903a930e812e8d21fc82112",
+  "runtime_source_unchanged": true
+}

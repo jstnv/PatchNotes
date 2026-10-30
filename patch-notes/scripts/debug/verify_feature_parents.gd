@@ -102,6 +102,8 @@ func _run() -> void:
 func _fresh_session() -> RefCounted:
 	var session := Bootstrap.create_fresh_session({"schema_version":1,"studio_id":"parents_fixture","studio_name":"Parents","specialty":"action","traits":[],"seed":"4417"},root.get_node("CardDatabase"))
 	session.run.finalize_starter_selection()
+	# Establish the two-parent test premise under the current smaller starter.
+	for id: StringName in [&"8_bit_sound",&"text"]: check(acquire(session.run,id),"Prepare owned parent "+str(id))
 	_apply_fixture(session.run)
 	return session
 
@@ -161,8 +163,11 @@ func _graph_checks() -> void:
 		check(bad.get_feature_store_offer(&"recorded_sounds").is_empty() and not bad.get_feature_acquisition_quote(&"recorded_sounds").available and not bad.purchase_feature(&"recorded_sounds") and snapshot(bad) == before, "Invalid graph fails closed: " + str(invalid))
 	offers[&"root"] = {"purchase_parent":"child"}
 	check(FeatureStoreCatalog.graph(definitions, offers).has("error"), "Indirect cycle rejected before quote")
+	run._owned_features.erase(&"8_bit_sound")
+	run._owned_features.erase(&"text")
 	var path := run.get_feature_acquisition_quote(&"recorded_sounds")
-	check(path.steps.size() == 3 and path.steps[0].id == &"8_bit_sound" and path.steps[1].id == &"text", "Live acquisition includes both named parents")
+	var path_ids: Array=path.steps.map(func(step):return step.id)
+	check(path_ids.has(&"8_bit_sound") and path_ids.has(&"text") and path_ids.back()==&"recorded_sounds" and path_ids.find(&"8_bit_sound")<path_ids.size()-1 and path_ids.find(&"text")<path_ids.size()-1, "Live acquisition includes both missing named parents before their child")
 	var starters := FeatureStoreCatalog.starting_features()
 	var entries := FeatureStoreCatalog.entries()
 	check(FeatureStoreCatalog.validate_entries(starters,entries).is_empty(), "Current catalog remains valid")
@@ -219,3 +224,11 @@ func _ui_checks() -> void:
 		store._admission_dialog.hide()
 		store.queue_free()
 		await process_frame
+
+func acquire(run: RunState,id: StringName) -> bool:
+	if run.owns_feature(id):return true
+	var graph:=FeatureStoreCatalog.graph(run._feature_definitions,run._feature_offers)
+	for parent in graph.parents.get(id,[]):
+		if not acquire(run,StringName(parent)):return false
+	var quote:=run.get_feature_research_quote(id)
+	return quote.get("can_admit",false) and run.admit_feature_research(quote) and run.research_feature(run.get_feature_research_quote(id))

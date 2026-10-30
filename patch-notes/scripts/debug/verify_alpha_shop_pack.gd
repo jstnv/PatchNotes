@@ -51,7 +51,7 @@ func _initialize() -> void:
 			var result:=Replay.replay(fresh(index),Replay.load_tape(output+"."+str(index)+".tape.json"))
 			check(result.ok,"fresh exact action replay "+str(IDS[index])+": "+str(result.get("error","")))
 		print("ALPHA_PACK_COLD checks=%d failures=%d"%[checks,failures]);quit(failures);return
-	check(FeatureStoreCatalog.entries().size()==15 and FeatureStoreCatalog.starting_features().size()==27,"exactly four later nodes; Primitive ledger untouched")
+	check(FeatureStoreCatalog.entries().size()==19 and FeatureStoreCatalog.starting_features().size()==27,"original four Alpha nodes plus approved child pack; Primitive ledger untouched")
 	for index in IDS.size():
 		var id: StringName=IDS[index]
 		var card: CardData=catalog.cards[id]

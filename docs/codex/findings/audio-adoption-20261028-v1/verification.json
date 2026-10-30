@@ -1,0 +1,658 @@
+{
+  "source": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+  "receipts": {
+    "final-audio": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_audio_branch.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.734,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "AUDIO_CHECKS 143 failures 0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "grid2": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_common_grid.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 1.719,
+      "errors": [],
+      "tail": [
+        "PASS: Bounded route avoids every card/label/header 8_bit_sound->main_theme",
+        "PASS: Bounded route avoids every card/label/header main_theme->multiple_soundtracks",
+        "PASS: Bounded route avoids every card/label/header recorded_sounds->instrumental_sounds",
+        "PASS: Bounded route avoids every card/label/header multiple_soundtracks->dynamic_sequencing",
+        "PASS: Bounded route avoids every card/label/header instrumental_sounds->dynamic_sequencing",
+        "PASS: Four category connectors avoid all cards, names and headers",
+        "PASS: Cross-category prerequisite remains explicit in details",
+        "PASS: Hidden cross-category arrow still permits direct prerequisite navigation",
+        "PASS: Layout and routing consume no gameplay RNG",
+        "Store common grid: 68 checks, 0 failures"
+      ],
+      "runtime_identity": "e5efc3b1a2105661edbcd5b184484e3f95fb187c89ca0af61903c3db7d18ff42",
+      "runtime_source_unchanged": true
+    },
+    "campaign-final": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_audio_campaign.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.703,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "AUDIO_CAMPAIGN {\"checks\":58,\"commands\":46,\"failures\":0,\"played\":[\"dynamic_sequencing\",\"multiple_soundtracks\",\"16_bit_sound\",\"instrumental_sounds\",\"main_theme\"],\"replay_ok\":true,\"scope\":\"Funded mechanics and exact replay; not solvency/balance acceptance\",\"source\":\"c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "fresh1": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_audio_campaign.gd",
+        "--",
+        "--fresh"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.938,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "AUDIO_FRESH {\"cash\":150370,\"checks\":38,\"commands\":36,\"failures\":0,\"releases\":2,\"replay_ok\":true,\"scope\":\"Unfunded fixed-policy two-release route; not final balance\",\"source\":\"c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "refresh1": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_ui_refresh.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.859,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "{\"checks\":12,\"failures\":0,\"ok\":true}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "rosters2": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_studio_roster_versions.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.578,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "STUDIO_ROSTER_VERSIONS checks=220 failures=0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "current-rosters2": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_studio_specialties.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.484,
+      "errors": [],
+      "tail": [
+        "PASS: Duplicate confirmation does not grant again",
+        "PASS: New-Studio save is ready before project commands",
+        "PASS: Failed first start preserves optional zero-cycle purchase window",
+        "PASS: Successful nonmatching first game commits independent Genre",
+        "PASS: First-project boundary closes initial window with usual cost",
+        "PASS: Unowned Primitive costs one cycle and the boundary pays rent",
+        "PASS: New ownership feeds next supply without changing current frozen supply",
+        "Studio specialties verification: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "checkpoint": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_studio_checkpoint.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.875,
+      "errors": [],
+      "tail": [
+        "PASS: Future RNG beta_insight",
+        "PASS: Future RNG beta_insight",
+        "PASS: Future RNG contract_deal",
+        "PASS: Future RNG contract_deal",
+        "PASS: Future RNG contract_deal",
+        "PASS: Future RNG contract_deal",
+        "PASS: Future RNG contract_deal",
+        "Studio checkpoint verification: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "research": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_integration.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 3.563,
+      "errors": [],
+      "tail": [
+        "PASS: Queued Menu System never satisfies Save Files ownership gate",
+        "PASS: Unmet two-parent Difficulty gate remains enforced",
+        "PASS: Corrupt installment fails whole checkpoint",
+        "PASS: Unproven trait consumption fails whole checkpoint",
+        "PASS: Cheap hypothetical final installment floors at zero",
+        "PASS: Otherwise-paid zero final installment still consumes opportunity",
+        "PASS: Already-free hypothetical acquisition does not consume opportunity",
+        "Research integration: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "supply-parity": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_campaign_seeded_parity.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 22.219,
+      "errors": [],
+      "tail": [
+        "       [7] _finalize_alpha (res://scripts/phases/alpha_phase.gd:283)",
+        "       [8] _finalize_with_run_rng (res://scripts/phases/alpha_phase.gd:812)",
+        "       [9] _on_under_scope_confirmed (res://scripts/phases/alpha_phase.gd:231)",
+        "       [10] exit_phase (res://scripts/debug/verify_campaign_live_parity.gd:141)",
+        "       [11] _project (res://scripts/debug/verify_campaign_seeded_parity.gd:89)",
+        "Alpha completed! Pressure 1.4444; stochastic result 1; variance +0; Alpha Hidden Bugs 1; total Hidden Bugs 2; implemented 3; unimplemented 0",
+        "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 6 | Finite cards exhausted: press_interview | Cycle advanced: 1",
+        "Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Technology Pass, Design Pass",
+        "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 4 | Beta Host Playtest corrective Passes injected: Technology Pass, Design Pass | Cycle advanced: 1",
+        "Seeded campaign parity: 0 failures, 138 boundaries, 3 routes"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "spend-advice": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_spending_guidance.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.391,
+      "errors": [],
+      "tail": [
+        "PASS: Internal average is not a player-facing stat",
+        "PASS: Advisory leaves reachable legal Purchase at (1280, 720)",
+        "PASS: Closing details restores owned-only diagnostic budget",
+        "PASS: Browse/reopen/animate has zero transactions",
+        "PASS: Editor capture writes hidden tracker",
+        "PASS: Capture contains observed average and advisory inputs/results",
+        "PASS: Capture remains passive",
+        "Spending guidance: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "store-final2": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.422,
+      "errors": [],
+      "tail": [
+        "       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)",
+        "       [1] refresh (res://scripts/cards/card_view.gd:114)",
+        "       [2] _ready (res://scripts/cards/card_view.gd:46)",
+        "       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)",
+        "       [4] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:122)",
+        "       [5] _verify_phase_credits (res://scripts/debug/verify_feature_store.gd:96)",
+        "       [6] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:123)",
+        "PASS: Alpha parent resolution discounts direct Core child",
+        "PASS: Credit cannot repeat after phase transition",
+        "Feature Store verification: 0 failures"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "native-links-final": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store_radial.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80",
+        "--",
+        "--capture",
+        "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/native-links-final"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 26.86,
+      "errors": [],
+      "tail": [
+        "PASS: Back to Map is reachable for save_files at 1280",
+        "PASS: Back to Map dismisses details and restores map focus without closing Store",
+        "PASS: Back to Map is reachable for difficulty_levels at 1280",
+        "PASS: Back to Map dismisses details and restores map focus without closing Store",
+        "PASS: Back to Map is reachable for branching_nodes at 1280",
+        "PASS: Back to Map dismisses details and restores map focus without closing Store",
+        "PASS: Category browsing preserves cash, calendar, redraws, ownership and exact finance history",
+        "Bloom Feature Store verification: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "cold-final": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-roots-20261028-v1/cold-roots.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/cold-final.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 3.578,
+      "errors": [],
+      "tail": [
+        "PASS: Player schema restores exact finance, traits and RNG",
+        "PASS: World restores from unmodified file ",
+        "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+        "PASS: Every persisted player field survives",
+        "PASS: Unverified source still rejects",
+        "PASS: Presentation predecessor cannot pair with older Studio rules",
+        "PASS: Presentation predecessor cannot pair with older rival rules",
+        "Fresh world restore: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "navigation-final": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store_navigation.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 16.171,
+      "errors": [],
+      "tail": [
+        "PASS: Map arrow navigation resumes after closing Tutorial",
+        "PASS: All navigation remains zero-cost",
+        "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 0",
+        "PASS: First Escape dismisses hovered details",
+        "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 1",
+        "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 2",
+        "PASS: Tooltip, details and Pause navigation remain zero-cost",
+        "Feature Store navigation verification: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "early-profile": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/profile_campaign_latency.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 3.375,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "{\"actions\":3,\"checkpoint_capture_ms\":28.411,\"cycle\":0,\"ledger_validate_ms\":0.03,\"store_quotes_ms\":26.595,\"store_refresh_ms\":9.049}",
+        "{\"actions\":15,\"checkpoint_capture_ms\":54.804,\"cycle\":12,\"ledger_validate_ms\":0.127,\"store_quotes_ms\":31.432,\"store_refresh_ms\":27.706}",
+        "{\"actions\":27,\"checkpoint_capture_ms\":23.849,\"cycle\":24,\"ledger_validate_ms\":0.467,\"store_quotes_ms\":34.052,\"store_refresh_ms\":10.836}",
+        "{\"actions\":51,\"checkpoint_capture_ms\":31.816,\"cycle\":48,\"ledger_validate_ms\":0.468,\"store_quotes_ms\":34.473,\"store_refresh_ms\":10.665}",
+        "{\"actions\":99,\"checkpoint_capture_ms\":53.664,\"cycle\":96,\"ledger_validate_ms\":0.972,\"store_quotes_ms\":43.724,\"store_refresh_ms\":14.294}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "latency-before-native": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 75.891,
+      "errors": [
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle192"
+      ],
+      "tail": [
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":34.229,\"max_frame_gap_ms\":49.873,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":51.553,\"worker_was_active\":false}",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":115.271,\"max_frame_gap_ms\":122.545,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":124.082,\"worker_was_active\":true}",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"8_color_palette\",\"frames\":2,\"handler_ms\":189.409,\"max_frame_gap_ms\":272.77,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":280.474,\"worker_was_active\":false}",
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle192",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:24)",
+        "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:67)",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"8_color_palette\",\"frames\":2,\"handler_ms\":526.06,\"max_frame_gap_ms\":553.963,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":558.73,\"worker_was_active\":true}",
+        "RESEARCH_LATENCY {\"actions\":8,\"failures\":[\"No500ms+ synchronous research stall atcycle192\"],\"ok\":false,\"stages\":[{\"actions\":6,\"durability\":[{\"frames\":602,\"max_frame_gap_ms\":96.013,\"wait_ms\":4166.11},{\"frames\":750,\"max_frame_gap_ms\":101.697,\"wait_ms\":5189.413},{\"frames\":772,\"max_frame_gap_ms\":122.545,\"wait_ms\":5343.313}],\"end_cycle\":99,\"first_action\":0,\"idle_max_frame_gap_ms\":8.126,\"open_store_ms\":69.73,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19},{\"actions\":2,\"durability\":[{\"frames\":4850,\"max_frame_gap_ms\":553.963,\"wait_ms\":33724.559}],\"end_cycle\":193,\"first_action\":6,\"idle_max_frame_gap_ms\":7.282,\"open_store_ms\":39.528,\"rivals\":2,\"start_cycle\":192,\"world_release_records\":39}]}"
+      ],
+      "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+      "runtime_source_unchanged": true
+    },
+    "latency-after-first": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 122.281,
+      "errors": [
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle192"
+      ],
+      "tail": [
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":38.317,\"max_frame_gap_ms\":54.977,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":56.789,\"worker_was_active\":false}",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":136.722,\"max_frame_gap_ms\":147.522,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":149.61,\"worker_was_active\":true}",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"16_bit_sound\",\"frames\":2,\"handler_ms\":186.421,\"max_frame_gap_ms\":261.459,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":265.847,\"worker_was_active\":false}",
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle192",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:24)",
+        "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:67)",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"16_bit_sound\",\"frames\":2,\"handler_ms\":552.409,\"max_frame_gap_ms\":595.321,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":599.796,\"worker_was_active\":true}",
+        "RESEARCH_LATENCY {\"actions\":8,\"failures\":[\"No500ms+ synchronous research stall atcycle192\"],\"ok\":false,\"stages\":[{\"actions\":6,\"durability\":[{\"frames\":609,\"max_frame_gap_ms\":97.497,\"wait_ms\":4211.431},{\"frames\":737,\"max_frame_gap_ms\":106.267,\"wait_ms\":5099.906},{\"frames\":776,\"max_frame_gap_ms\":147.522,\"wait_ms\":5365.733}],\"end_cycle\":99,\"first_action\":0,\"idle_max_frame_gap_ms\":7.481,\"open_store_ms\":76.287,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19},{\"actions\":2,\"durability\":[{\"frames\":8863,\"max_frame_gap_ms\":595.321,\"wait_ms\":61705.37}],\"end_cycle\":193,\"first_action\":6,\"idle_max_frame_gap_ms\":7.213,\"open_store_ms\":40.18,\"rivals\":2,\"start_cycle\":192,\"world_release_records\":40}]}"
+      ],
+      "runtime_identity": "4321b73943e8d0c7cfd7503b6bf70a05eda516478826f9c508b2bd1a0b1e5c54",
+      "runtime_source_unchanged": true
+    },
+    "latency-split-matched": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80",
+        "--",
+        "--split"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 85.203,
+      "errors": [
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle98"
+      ],
+      "tail": [
+        "RESEARCH_ACTION {\"core_ms\":12.425,\"cycle\":97,\"feature\":\"character_backstories\",\"frames\":2,\"handler_ms\":182.805,\"max_frame_gap_ms\":244.057,\"operation\":\"queue\",\"refresh_ms\":163.512,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":250.163,\"worker_was_active\":false}",
+        "RESEARCH_ACTION {\"core_ms\":281.538,\"cycle\":97,\"feature\":\"character_backstories\",\"frames\":2,\"handler_ms\":362.207,\"max_frame_gap_ms\":390.345,\"operation\":\"research\",\"refresh_ms\":48.792,\"rival_ms\":250.431,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":397.116,\"worker_was_active\":true}",
+        "RESEARCH_ACTION {\"core_ms\":31.695,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":190.235,\"max_frame_gap_ms\":260.995,\"operation\":\"queue\",\"refresh_ms\":149.246,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":269.096,\"worker_was_active\":false}",
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle98",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:24)",
+        "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:67)",
+        "RESEARCH_ACTION {\"core_ms\":470.596,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":564.315,\"max_frame_gap_ms\":594.692,\"operation\":\"research\",\"refresh_ms\":53.681,\"rival_ms\":444.226,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":604.929,\"worker_was_active\":true}",
+        "RESEARCH_LATENCY {\"actions\":6,\"failures\":[\"No500ms+ synchronous research stall atcycle98\"],\"ok\":false,\"stages\":[{\"actions\":6,\"durability\":[{\"frames\":1667,\"max_frame_gap_ms\":352.884,\"wait_ms\":11569.122},{\"frames\":2502,\"max_frame_gap_ms\":390.345,\"wait_ms\":18027.903},{\"frames\":3266,\"max_frame_gap_ms\":594.692,\"wait_ms\":24362.206}],\"end_cycle\":99,\"first_action\":0,\"idle_max_frame_gap_ms\":14.046,\"open_store_ms\":221.664,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19}]}"
+      ],
+      "runtime_identity": "e5efc3b1a2105661edbcd5b184484e3f95fb187c89ca0af61903c3db7d18ff42",
+      "runtime_source_unchanged": true
+    },
+    "latency-final-matched": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 189.046,
+      "errors": [
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle192"
+      ],
+      "tail": [
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":118.434,\"max_frame_gap_ms\":169.934,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":176.17,\"worker_was_active\":false}",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":394.761,\"max_frame_gap_ms\":421.889,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":426.322,\"worker_was_active\":true}",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"8_color_palette\",\"frames\":2,\"handler_ms\":151.026,\"max_frame_gap_ms\":233.999,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":242.311,\"worker_was_active\":false}",
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle192",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:24)",
+        "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:67)",
+        "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"8_color_palette\",\"frames\":2,\"handler_ms\":593.966,\"max_frame_gap_ms\":624.877,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":631.917,\"worker_was_active\":true}",
+        "RESEARCH_LATENCY {\"actions\":8,\"failures\":[\"No500ms+ synchronous research stall atcycle192\"],\"ok\":false,\"stages\":[{\"actions\":6,\"durability\":[{\"frames\":1702,\"max_frame_gap_ms\":330.946,\"wait_ms\":11815.859},{\"frames\":2330,\"max_frame_gap_ms\":358.447,\"wait_ms\":16189.912},{\"frames\":2162,\"max_frame_gap_ms\":421.889,\"wait_ms\":15038.419}],\"end_cycle\":99,\"first_action\":0,\"idle_max_frame_gap_ms\":11.926,\"open_store_ms\":238.666,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19},{\"actions\":2,\"durability\":[{\"frames\":8974,\"max_frame_gap_ms\":624.877,\"wait_ms\":62442.986}],\"end_cycle\":193,\"first_action\":6,\"idle_max_frame_gap_ms\":7.937,\"open_store_ms\":39.229,\"rivals\":2,\"start_cycle\":192,\"world_release_records\":40}]}"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    }
+  },
+  "matched_original_actions": [
+    [
+      96,
+      "queue",
+      "secrets"
+    ],
+    [
+      96,
+      "research",
+      "secrets"
+    ],
+    [
+      97,
+      "queue",
+      "character_backstories"
+    ],
+    [
+      97,
+      "research",
+      "character_backstories"
+    ],
+    [
+      98,
+      "queue",
+      "dialogue"
+    ],
+    [
+      98,
+      "research",
+      "dialogue"
+    ],
+    [
+      192,
+      "queue",
+      "8_color_palette"
+    ],
+    [
+      192,
+      "research",
+      "8_color_palette"
+    ]
+  ],
+  "performance_acceptance": "FAIL: unchanged500ms bound at cycle192",
+  "baseline_c192_research_ms": 526.06,
+  "final_c192_research_ms": 593.966,
+  "final_c192_durable_wait_ms": 62442.986,
+  "no_lag_guarantee": false,
+  "full_release_gate": "NOT RUN",
+  "public_build": "UNCHANGED",
+  "automatic_checks": "DISABLED"
+}

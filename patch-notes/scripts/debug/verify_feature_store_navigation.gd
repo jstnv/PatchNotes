@@ -17,6 +17,11 @@ func _run() -> void:
 		var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 		root.add_child(game)
 		await process_frame
+		# A bounded Store stress viewport, overriding the startup Settings minimum.
+		root.min_size=Vector2i.ZERO
+		root.size=dimensions
+		root.content_scale_size=dimensions
+		expect(root.size==dimensions,"Actual requested navigation viewport "+str(dimensions))
 		var menu: MainMenu = game.get("_active_phase")
 		menu.navigation.animate=false
 		menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
@@ -34,6 +39,7 @@ func _run() -> void:
 		var studio: StudioPhase = game.get("_active_phase")
 		studio.get_node("%FeatureStoreButton").pressed.emit()
 		store = studio.get("_feature_store")
+		game.get_node("%GameplayHUD").contextual_tip.dismiss()
 		await process_frame
 		await process_frame
 		await _verify_interactions(dimensions.x, game.get_node("%GameplayHUD"))
@@ -79,6 +85,16 @@ func _key(code: Key, echo := false) -> void:
 func _offset() -> Vector2i:
 	return Vector2i(store._scroll.scroll_horizontal, store._scroll.scroll_vertical)
 
+func _settle_focus() -> void:
+	var deadline := Time.get_ticks_msec()+3000
+	var map := store._map
+	while map.focusing or (map._menu_tween!=null and map._menu_tween.is_running()):
+		if Time.get_ticks_msec()>deadline:
+			expect(false,"Focus/entry animation finishes within bounded wait")
+			return
+		await process_frame
+	for frame in 2: await process_frame
+
 func _reset_view() -> void:
 	store._map.set_zoom(1.0)
 	await process_frame
@@ -93,15 +109,17 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	var map := store._map
 	var text: Button = store._nodes[&"text"]
 	var at := text.get_global_rect().get_center()
+	print("INITIAL_MAP_INPUT ",width," point=",at," map=",map._map_rect()," at=",map._node_at(at)," focus=",root.gui_get_focus_owner()," body=",store._body.get_global_rect()," zoom=",map.zoom)
 	_mouse(at, true)
+	print("INITIAL_MAP_PRESS ",map._drag_button," pressed-node=",map._pressed_node)
 	_motion(at + Vector2(2, 1), Vector2(2, 1))
 	_mouse(at + Vector2(2, 1), false)
 	expect(store._selected == &"text" and map.popup.visible and not map.dragging, "Small mouse jitter remains a node click (%d)" % width)
 	expect(store._details.text.contains("Graphics") and store._owned_summary.text.contains("Graphics") and store._owned_summary.text.contains("Sound") and store._owned_summary.text.contains("Tech") and store._owned_summary.text.contains("Design"), "Details and totals spell out Core categories")
 	_key(KEY_LEFT)
 	await process_frame
-	expect(store._selected == &"scrolling" and root.gui_get_focus_owner() == store._nodes[&"scrolling"], "Left selects and focuses outward Visuals child")
-	expect(store._details.text.begins_with("Scrolling\n") and map.popup.visible, "Arrow selection opens correct details")
+	expect(store._selected == &"colored_text" and root.gui_get_focus_owner() == store._nodes[&"colored_text"], "Left selects the directly adjacent Colored Text cell")
+	expect(store._details.text.begins_with("Colored Text\n") and map.popup.visible, "Arrow selection opens correct details")
 	_key(KEY_RIGHT)
 	expect(store._selected == &"text", "Right returns to inward Visuals parent")
 	_key(KEY_UP)
@@ -156,16 +174,17 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 		await process_frame
 		map._focus_node(&"text")
 		for step in range(8): _key(KEY_RIGHT, step > 0)
-		await create_timer(0.56).timeout
+		await _settle_focus()
 		var focused: Button = store._nodes[store._selected]
 		expect(map._map_rect().encloses(focused.get_global_rect()), "Keyboard keeps focused node visible at zoom %.1f" % scale_value)
+		if not store.get_global_rect().encloses(map.popup.get_global_rect()): print("DETAIL_BOUNDS ",width," zoom=",scale_value," selected=",store._selected," store=",store.get_global_rect()," popup=",map.popup.get_global_rect()," map=",map._map_rect()," node=",focused.get_global_rect())
 		expect(store.get_global_rect().encloses(map.popup.get_global_rect()), "Details stay within Store at zoom %.1f" % scale_value)
 		_key(KEY_LEFT)
 		expect(store._selected != &"", "Held/repeated arrows keep browsing")
 	await _reset_view()
 	# Clicking details is not a pan; pressing its disabled button cannot purchase.
 	map._focus_node(&"text")
-	await create_timer(0.56).timeout
+	await _settle_focus()
 	var menu_point := map.popup.get_global_rect().position + Vector2(12, 12)
 	_mouse(menu_point, true)
 	_motion(menu_point + Vector2(20, 15), Vector2(20, 15))
@@ -177,7 +196,7 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	expect(_snapshot() == before, "Passive navigation and owned purchase button preserve cash, cycles, redraws, ownership, familiarity and finance history")
 	# Native Tab focus signal also opens and reveals a Tech card.
 	store._nodes[&"keyboard_and_mouse"].grab_focus()
-	await create_timer(0.56).timeout
+	await _settle_focus()
 	expect(store._selected == &"keyboard_and_mouse" and store._details.text.contains("Tech") and not store._details.text.contains("Technology"), "Focused Tech node opens full-name score detail")
 	expect(store._nodes[&"keyboard_and_mouse"].tooltip_text.contains("Tech"), "Tech abbreviation also appears in tooltip")
 	if "--capture" in OS.get_cmdline_user_args():
@@ -205,7 +224,7 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	expect(_offset() == reopened and not map.dragging, "Losing window focus cancels pending pan")
 	await _reset_view()
 	map._focus_node(&"text")
-	await create_timer(0.56).timeout
+	await _settle_focus()
 	var selected_before := store._selected
 	var offset_before := _offset()
 	hud.show_tutorial()

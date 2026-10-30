@@ -1,0 +1,52 @@
+--- before/scripts/persistence/studio_checkpoint.gd
++++ after/scripts/persistence/studio_checkpoint.gd
+@@ -32,6 +32,13 @@
+ var _previous_revision := ""
+ var _pre_grid_revision := ""
+ var _pre_audio_revision := ""
++var _pre_gameplay_revision := ""
++const PRE_GAMEPLAY_CATALOG_HASH := "073226e2e5714cdf2abac2bf72428013dc340ea0a17efdc8384d0a5041520d41"
++
++func pre_gameplay_revision() -> String:
++	if _pre_gameplay_revision.is_empty(): _pre_gameplay_revision=_rules_revision(RULES,"",PRE_GAMEPLAY_CATALOG_HASH)
++	return _pre_gameplay_revision
++
+ const PRE_AUDIO_CATALOG_HASH := "59e9ef24e0112ea2276e695bd48799f6ff295799dfc8e2750928e9ee8dabbccb"
+ 
+ func pre_audio_revision() -> String:
+@@ -213,7 +220,7 @@
+ 	return ""
+ 
+ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
+-	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision()]:
++	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+ 		var upgraded := upgrade_grid_predecessor(payload,active_rival)
+ 		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
+ 	var is_current: bool = payload.get("content_revision", "") == revision()
+@@ -520,7 +527,7 @@
+ 	return c.result == expected_result
+ 
+ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
+-	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision()]:
++	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+ 		var upgraded := upgrade_grid_predecessor(payload,active_rival)
+ 		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
+ 	var is_current: bool = payload.get("content_revision", "") == revision()
+@@ -661,7 +668,7 @@
+ 	return encoded if error.is_empty() and encoded is Dictionary else {}
+ 
+ func _decode_payload(payload: Dictionary, active_rival: bool = false) -> Dictionary:
+-	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision()]:
++	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+ 		var upgraded := upgrade_grid_predecessor(payload,active_rival)
+ 		return {} if upgraded.is_empty() else _decode_payload(upgraded,active_rival)
+ 	var is_current: bool = payload.get("content_revision", "") == revision()
+@@ -750,7 +757,7 @@
+ ## Every ordinary schema/finance/payment/receipt/RNG check still runs.
+ func upgrade_grid_predecessor(payload: Dictionary, active_rival: bool = false) -> Dictionary:
+ 	error = ""
+-	if payload.get("content_revision") not in [pre_grid_revision(),pre_audio_revision()]: error="Unknown Store grid predecessor"; return {}
++	if payload.get("content_revision") not in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]: error="Unknown Store grid predecessor"; return {}
+ 	var candidate := payload.duplicate(true)
+ 	candidate.content_revision = revision()
+ 	error = _validate(candidate,active_rival)

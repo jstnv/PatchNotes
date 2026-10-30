@@ -1,0 +1,35 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-latency-20261027-v1/research_latency.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 54.297,
+  "errors": [
+    "ERROR: FAIL: No500ms+ synchronous queue stall atcycle96",
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle96"
+  ],
+  "tail": [
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-latency-20261027-v1/research_latency.gd:22)",
+    "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-latency-20261027-v1/research_latency.gd:51)",
+    "RESEARCH_ACTION {\"cycle\":96,\"feature\":\"secrets\",\"frames\":2,\"handler_ms\":607.374,\"max_frame_gap_ms\":734.049,\"operation\":\"queue\",\"saving_after\":true,\"through_two_frames_ms\":778.087,\"worker_was_active\":false}",
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle96",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-latency-20261027-v1/research_latency.gd:22)",
+    "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-latency-20261027-v1/research_latency.gd:51)",
+    "RESEARCH_ACTION {\"cycle\":96,\"feature\":\"secrets\",\"frames\":2,\"handler_ms\":2497.323,\"max_frame_gap_ms\":2564.554,\"operation\":\"research\",\"saving_after\":true,\"through_two_frames_ms\":2593.319,\"worker_was_active\":true}",
+    "RESEARCH_LATENCY {\"actions\":2,\"failures\":[\"No500ms+ synchronous queue stall atcycle96\",\"No500ms+ synchronous research stall atcycle96\"],\"ok\":false,\"stages\":[{\"actions\":2,\"durability\":[{\"frames\":170,\"max_frame_gap_ms\":2564.554,\"wait_ms\":15534.759}],\"end_cycle\":97,\"first_action\":0,\"idle_max_frame_gap_ms\":253.126,\"open_store_ms\":718.264,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19}]}"
+  ]
+}

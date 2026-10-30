@@ -9,7 +9,7 @@ const Beta := preload("res://scripts/simulation/beta_hand_command.gd")
 const Production := preload("res://scripts/simulation/production_hand.gd")
 enum Lesson { CORE, BALANCED, SPECIALIZATION, REDRAW, REDRAW_HAND, ALPHA, MARKETING, SEARCH, DEBUG, COMPLETE }
 const POOLS := [
-	[&"text",&"sound_pass",&"technology_pass",&"design_pass"],
+	[&"text",&"sound_pass",&"technology_pass",&"graphics_pass"],
 	[&"4_color_palette",&"sound_pass",&"technology_pass",&"design_pass"],
 	[&"sprites",&"graphics_pass",&"graphics_pass",&"graphics_pass"],
 	[&"graphics_pass",&"graphics_pass",&"graphics_pass",&"sound_pass",&"technology_pass",&"design_pass",&"score_system"],

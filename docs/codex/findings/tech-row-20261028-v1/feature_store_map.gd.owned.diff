@@ -1,0 +1,14 @@
+--- before/res://scripts/ui/feature_store_map.gd
++++ after/res://scripts/ui/feature_store_map.gd
+@@ -327,8 +327,9 @@
+ 		heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+ 		heading.add_theme_font_size_override("font_size", 36)
+ 		if lane == &"Technology & Tools":
+-			heading.size = Vector2(area.size.x, 44)
+-			heading.position = area.position + Vector2(0, 16)
++			var row_center := node_footprint(store._nodes[&"keyboard_and_mouse"]).get_center().x
++			heading.size = Vector2(2.0*minf(row_center-area.position.x,area.end.x-row_center),44)
++			heading.position = Vector2(row_center-heading.size.x/2.0,area.position.y+16.0)
+ 		else:
+ 			# Bound the rotated label to its text zone instead of letting its
+ 			# control extend through the neighboring Technology root row.

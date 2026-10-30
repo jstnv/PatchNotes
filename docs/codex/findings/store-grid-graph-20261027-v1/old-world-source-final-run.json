@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_world_restore_file.gd",
+    "--",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-grid-20261027-v1/cold-utf8.json",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-grid-graph-20261027-v1/cold-final.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 4.031,
+  "errors": [],
+  "tail": [
+    "PASS: World restores from unmodified file ",
+    "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+    "PASS: Every persisted player field survives",
+    "PASS: Unverified source still rejects",
+    "PASS: Presentation predecessor cannot pair with older Studio rules",
+    "PASS: Presentation predecessor cannot pair with older rival rules",
+    "PASS: Pre-grid world cannot pair with current-catalog player bytes",
+    "Fresh world restore: 0 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "0c86786e04d95976d42933e18e1b37580bca4dba88d27818d4560376394997f6",
+  "runtime_source_unchanged": true
+}

@@ -1,0 +1,6 @@
+# Eight-rival adoption readiness session — 2026-10-27
+
+- Branch `main`, HEAD `f3e0f2b5d35270c879327bc297b389748571feb4`; read CURRENT_STATE, TODO, README, relevant AI decisions/findings and current `rival_trial.gd`; inspected targeted status/diff. Concurrent Store, checkpoint and queue edits remained untouched, as did `.codex-godot-temp`.
+- User clarified that the intended implementation is the **legal eight-rival opening plan**, with the demonstrated 8+ potential acceptable for now as a quality direction. This does not authorize the synthetic free 27-Primitive grant or specialty-Genre force from the ceiling tests.
+- [Source-pinned readiness audit](2026-10-27-eight-rival-adoption-readiness-audit-v1.md) finds no exact legal 1977 prefix, generated standard, shared January world or population acceptance packet. Current two-rival runtime already has synergy-aware hand selection; the trace-only result adds no gameplay rule. Item22 already records DESIGN review needed. Therefore no minimal QUEUED implementation entry is defensible yet; no TODO edit, gameplay change, simulator run, commit or push.
+- Follow-up: produce and test the legal opening packet, then re-read TODO and make the minimal QUEUED handoff entry when that packet is ready.

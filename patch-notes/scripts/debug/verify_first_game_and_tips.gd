@@ -46,12 +46,13 @@ func _run() -> void:
 	menu.call("_confirm_studio")
 	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	var studio: StudioPhase = game.get("_active_phase")
-	expect(studio != null and run.get_studio_name() == "First Studio" and run.get_cash_cents() == 570000 and run.get_owned_feature_ids().size() == 18, "Naming studio funds $5,500 + $200 point cash and grants the free Action roster")
+	expect(studio != null and run.get_studio_name() == "First Studio" and run.get_cash_cents() == 570000 and run.get_owned_feature_ids().size() == StudioSpecialties.preview(&"action",4).ids.size() and run.get_starter_pool_summary().scope == 12, "Naming studio funds $5,500 + $200 point cash and grants the free Action roster")
 	expect(studio.get_node_or_null("%StoreHint") == null and not studio.get_node("%StartNextGame").disabled, "First Studio leaves production available without unsolicited Store advice")
 	var before := snapshot(run)
 	expect(run.needs_starter_selection() and before[0] == 0 and before[1] == 570000, "Starter purchases remain open until the first project begins")
 	studio.get_node("%StartNextGame").pressed.emit()
-	expect(not studio.get_node("%LowScopeWarning").visible and snapshot(run) == before, "Specialty roster opens game setup without mutating the run")
+	expect(not studio.get_node("%LowScopeWarning").visible and studio.get("_predevelopment") != null and snapshot(run) == before, "Expected twelve-Scope starter opens project setup directly without mutating the run")
+	if studio.get("_predevelopment") == null: quit(1); return
 	var overlay: PredevelopmentOverlay = studio.get("_predevelopment")
 	expect(hud.tutorial_context == &"predevelopment" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "First game setup presents nonblocking Pre-Development guidance")
 	hud.contextual_tip.dismiss()
@@ -67,7 +68,7 @@ func _run() -> void:
 	overlay.back_button.pressed.emit()
 	expect(not overlay.visible and game.project_state == null and snapshot(run) == before, "Cancelling setup is free and does not bypass it")
 	studio.get_node("%StartNextGame").pressed.emit()
-	expect(not studio.get_node("%LowScopeWarning").visible and run.needs_starter_selection(), "Cancelling setup leaves starter purchases open")
+	expect(not studio.get_node("%LowScopeWarning").visible and run.needs_starter_selection(), "Reopening setup stays direct and leaves starter purchases open")
 	expect(overlay.visible and overlay.name_input.text == "First Game" and snapshot(run) == before, "Reopening preserves draft and costs nothing")
 	for size: Vector2i in [Vector2i(900, 600), Vector2i(1152, 648)]:
 		root.size = size

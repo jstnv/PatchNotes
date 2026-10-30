@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_world_restore_file.gd",
+    "--",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/menu-visualizer-20261027-v1/before-pair.json",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/restored-world.json"
+  ],
+  "exit": 124,
+  "elapsed_seconds": 130.031,
+  "errors": [
+    "SCRIPT ERROR: Invalid access to property or key 'player' on a base object of type 'Dictionary'."
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "SCRIPT ERROR: Invalid access to property or key 'player' on a base object of type 'Dictionary'.",
+    "   at: _run (res://scripts/debug/verify_world_restore_file.gd:18)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _run (res://scripts/debug/verify_world_restore_file.gd:18)"
+  ]
+}

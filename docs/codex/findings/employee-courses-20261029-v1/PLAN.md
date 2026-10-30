@@ -1,0 +1,24 @@
+# Employee courses coordinated implementation —2026-10-29
+
+Authority: Production handoff2026-10-29 and its selected table/Redraw/legacy rulings; Project Manager handoff2026-10-28 and exact tier/readiness table. Both are queued. Numeric terms remain ACTIVE/TRIAL, not final balance. Employee Research, rival hiring, three-category Insider return, unresolved Feature Store choices and release publishing are excluded.
+
+Baseline: main, HEAD f3e0f2b5d35270c879327bc297b389748571feb4, dirty runtime2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6. One canonical implementer, retain .codex-godot-temp and all existing edits. No commit/push/export. Ruling: work in the existing coordinated canonical checkout, preserving its exact dirty baseline rather than forking HEAD and omitting approved uncommitted systems. Isolated test profiles/ports protect player saves.
+
+## Tasks and completion contracts
+
+1. Capture exact previous trained/untrained Production saves and current active world. Baseline QA/employee checks; failing new-course tests. Retain failures and source identities.
+2. Add a focused employee career-rules module, explicit versioned activation/migration, course purchase/hand/release journal events and closed checkpoint schemas. Preserve old employee event rebuilds. Purchase unlocks only tracking; course1 training excludes the training hand from its optional use; course2 requires post-enrollment Design+Alpha in one committed release; PM requires two actual minimum-priority Specializations in each of four distinct releases per sequential course. Replay duplicates/rejected/old/unreleased events grant nothing. Wire exact-cent course payments and prospective payroll (including $1,300/$1,400), preserving issued bills and old wages. Version content and accept only verified prior source/content pairs.
+3. Add deterministic chosen-Pass replacement to shared DevelopmentActions and headless command/observation. Bind candidate tokens, revision, visible Feature, target and budget to one preflight. No deal RNG sample; preserve fan size/finite supply/protected Alpha injections. Add the existing Redraw choice menu with preview, normal redraw and cancel in both live phases; share their normal view publication. Verify stale, duplicate Pass definitions, no budget and failed preflight paths.
+4. Centralize new-command priority bounds (four-category20–40 through0–60, Insider-held Beta40–60 through20–80) using earned PM level. Apply to player/headless/rival planning and every slider/validator, including Contracts and bundled Specialist planning. Preserve saved/frozen distributions, normalize only editable drafts. Keep exact100/five-point totals. Explicit historical Insider-enabled fixtures retain their separate old3-category behavior; no new3-category range is inferred.
+5. Extend Employees roster/course/progress UI using current folder design and themed confirmations. Show level/range/progress/tuition/current and scheduled pay. Verify pointer/keyboard/Back and both sizes. Cold restore, migration/re-save, duplicate receipts, payroll/debt/rules/RNG, live/headless replay and fresh full campaigns. Run bounded matched no-hire/hired/course economy and specialization studies with actual earned/settled revenue and retained failures; synthetic funded mechanics never establish affordability.
+6. One final fresh read-only review, fix material issues, record exact final source/checks and update design/CURRENT_STATE/TODO/session log. Mark only verified functional acceptance complete; balance, human/device and unreachable/deferred tasks remain explicit. Re-scan TODO at closure for new approved handoffs.
+
+## Implementation rulings
+
+- A career activation event upgrades existing Production metadata only on explicit employee-system activation, preserving old hand and project-use journals. An already trained employee receives course1 completion without tuition plus a separate prospective raise. Existing untrained employees enroll normally. Future hires get the new course gate. Hydration itself is passive.
+- Post-enrollment means journal order, not requiring an extra idle cycle: buying a zero-cycle course then committing a hand is eligible. Career hand events use the successful boundary's completed cycle; old Production hand identities stay unchanged.
+- Preserve authoritative old allocations in saved state. New editable commands use the current earned bounds; historical hand execution and draw validation permit valid stored values, including earned zero Core values. No founder/card/Core/Bank/AI resource changes.
+
+## Review focus
+
+Stale quote/source token or reentrant save rejection must be atomic; duplicate renewable definitions must not alias slots; tuition and raises must reconcile against finance journal; old trained/untrained and issued bills must survive cold restore; range limits must agree across every live/headless/rival entry point.

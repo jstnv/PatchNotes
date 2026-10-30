@@ -1,0 +1,24 @@
+--- feature_store_ledger.json.before
++++ data/feature_store_ledger.json
+@@ -14,7 +14,11 @@
+     "artwork": "",
+     "purchase_parent": "text",
+     "gameplay_features_required": 0,
+-    "base_price_cents": 65000
++    "base_price_cents": 65000,
++    "purchase_parents": [
++      "text",
++      "4_color_palette"
++    ]
+   },
+   {
+     "id": "animated_sprites",
+@@ -97,7 +101,7 @@
+     "scope": 2,
+     "renewable": false,
+     "artwork": "",
+-    "purchase_parent": "",
++    "purchase_parent": "menu_system",
+     "gameplay_features_required": 0,
+     "base_price_cents": 220000
+   },

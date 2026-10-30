@@ -130,6 +130,9 @@ func _initialize() -> void:
 	expect(restored != null and Replay.digest(Replay.state(restored)) == original.results[0].final_state,"Persisted Studio checkpoint is ready for another thread to continue")
 	expect(loaded_run.results[0].artifacts.studio_checkpoint == "studio_checkpoint.json","Studio-only checkpoint artifact is explicitly advertised")
 	var checkpoint_case := _case("checkpoint")
+	# Controlled continuation funding isolates absolute-target mechanics from
+	# the separate unfunded current-roster campaign/balance test.
+	expect(resumed.run.add_cash_cents(2000000,&"other_income",&"batch_continuation_fixture"),"Explicit funded continuation fixture")
 	checkpoint_case.initial = {"checkpoint":resumed.export_checkpoint()}
 	checkpoint_case.target_release_count = 3
 	var continued := Batch.run_cases([checkpoint_case],definitions,Fixture.factory,directory.path_join("checkpoint"))

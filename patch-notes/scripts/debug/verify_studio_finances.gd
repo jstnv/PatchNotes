@@ -53,6 +53,7 @@ func _verify_resolution(resolution: Vector2i) -> void:
 	game.run_state = run
 	root.add_child(game)
 	await _settle()
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	var hud := game.get_node("%GameplayHUD") as GameplayHUD
 	var menu: StudioFinances = hud.studio_finances
 	expect(game.get("_active_phase") is StudioPhase, "Named studio starts in actual Studio")
@@ -105,7 +106,8 @@ func _verify_resolution(resolution: Vector2i) -> void:
 	# A small-cash arrears fixture proves the displayed blocked state and exact cents.
 	expect(run.spend_cash_cents(run.get_cash_cents() - 12345), "Fixture leaves exact-cent partial rent funding")
 	expect(run.complete_productive_action(), "Boundary records an unpaid rent fixture")
-	expect(hud.footer.text.begins_with("Unpaid rent $376.55") and hud.footer.text.contains("Cash → Finances"), "Overdue rent is immediately visible in HUD with a finance entry direction")
+	await _settle()
+	expect(hud.footer.text.begins_with("Unpaid rent $376.55") and hud.footer.text.contains("Cash → Finances"), "Overdue rent is visible after the coalesced HUD refresh with a finance entry direction")
 	var footer_font := hud.footer.get_theme_font("font")
 	expect(footer_font.get_string_size("Unpaid rent $376.55 · Cash → Finances", HORIZONTAL_ALIGNMENT_LEFT, -1, hud.footer.get_theme_font_size("font_size")).x <= hud.footer.size.x, "HUD arrears amount and finance direction fit before ellipsis")
 	await _capture("overdue-hud", resolution)
@@ -153,8 +155,8 @@ func _verify_resolution(resolution: Vector2i) -> void:
 	# Binding is independent from old run notifications and unknown legacy history.
 	var replacement := _named_run("Second finance fixture")
 	hud.setup(null, replacement)
-	expect(not run.finance_changed.is_connected(hud.refresh) and not run.finance_changed.is_connected(menu._on_finance_changed), "HUD and report detach old run finance signals")
-	expect(replacement.finance_changed.is_connected(hud.refresh) and replacement.finance_changed.is_connected(menu._on_finance_changed), "HUD and report bind the replacement run")
+	expect(not run.finance_changed.is_connected(hud._queue_refresh) and not run.finance_changed.is_connected(menu._on_finance_changed), "HUD and report detach old run finance signals")
+	expect(replacement.finance_changed.is_connected(hud._queue_refresh) and replacement.finance_changed.is_connected(menu._on_finance_changed), "HUD and report bind the replacement run")
 	hud.show_finances()
 	await _settle()
 	var fresh_report := menu.report.duplicate(true)

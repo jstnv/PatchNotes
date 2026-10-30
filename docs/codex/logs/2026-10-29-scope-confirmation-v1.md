@@ -1,0 +1,9 @@
+# Incomplete Project Scope confirmation —2026-10-29
+
+User requested the existing under-Scope Alpha→Beta confirmation match the current menu design. Branch `main`, HEAD `f3e0f2b5d35270c879327bc297b389748571feb4`; inherited dirty edits and `.codex-godot-temp` preserved. No commit/push/export.
+
+Only production change: `scenes/phases/alpha_phase.tscn` attaches the existing `ui/quit_confirmation.gd` to UnderScopeDialog and uses its680×300 surface. Shared chamfered dark panel, fonts, orange Confirm, Cancel, header× and0.24s slide-in replace stock gray chrome. Exact title, four-line warning, Confirm/Cancel labels and all Alpha callbacks/Scope rules remain. Scene SHA `0d3c87297f43af40a7fdb32c1fa5cdabcca4158f69b45a1d515fe22acbb68d41`; script/data runtime remains `56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d`. [Owned scene diff](../findings/scope-confirmation-20261029-v1/owned-scene.diff).
+
+RED50 checks/12 expected style failures retained. GREEN74/0 headless and74/0 native at1152×648 and1280×720; both rendered captures inspected. Cancel, Escape and× preserve project/hand/RNG; Confirm finalizes once with actual Scope1 and stale callbacks cannot duplicate. Existing Alpha finalization and149-assertion arrears regression pass, preserving finance/debt/clocks and free-exit rules. Three seeded campaigns pass138 live/headless boundaries with exact replay.
+
+Initial broader parity launch failed `writer_busy`: its debug fixture used production port62741 despite a private profile. Test-only repair selects the existing TestStore when PN_CHECKPOINT_TEST_PORT is supplied; production locking/validation unchanged. Failed receipts retained. Existing fixture ObjectDB/artwork warnings remain. [Exact commands, hashes, captures and checks](../findings/scope-confirmation-20261029-v1/verification.json). Focused local acceptance only; existing EXE/ZIP and late Research OPEN status unchanged.

@@ -3,6 +3,16 @@ const Session := preload("res://scripts/simulation/campaign_session.gd")
 var checks := 0
 var financial_comparisons := 0
 
+## Historical fixed Bank/payroll route. Preserve its original v3 supply;
+## current v4 solvency is exercised by the separate fresh public-command route.
+func fresh(recipe: Dictionary) -> RefCounted:
+	var session:RefCounted=super.fresh(recipe)
+	if session!=null:
+		session.run._owned_features.clear()
+		for id:StringName in StudioSpecialties.preview(&"action",3).ids:session.run._owned_features[id]=true
+		session.run._founding_roster_version=3
+	return session
+
 func game(session: RefCounted,title: String) -> void:
 	act(session,&"begin_development",{"name":title,"genre":&"action","theme":&"fantasy"})
 	if session.in_studio: return

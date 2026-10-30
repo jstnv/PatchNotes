@@ -75,6 +75,8 @@ func _run() -> void:
 	store.call("_select_node", &"scrolling")
 	(store.get("_buy") as Button).pressed.emit()
 	check(run.owns_feature(&"sprites") and run.owns_feature(&"scrolling") and run.get_cash_cents() == 460000 and run.get_completed_run_cycles() == 0 and run.get_starter_pool_summary().scope == 30, "Store buys multiple starter Features one click each for exact cash and zero cycles")
+	await process_frame
+	await process_frame
 	check(owned_summary.text.contains("Scope 30") and owned_summary.text.contains("Graphics 19 · Sound 7 · Tech 22 · Design 29") and store._debug.tooltip_text.contains("$1370.00"), "Indicator and Debug refresh after sequential starter purchases")
 	root.size = Vector2i(900, 600)
 	root.content_scale_size = Vector2i(900, 600)
@@ -93,10 +95,18 @@ func _run() -> void:
 	check(run.finalize_starter_selection() and not run.finalize_starter_selection(), "Starter window can close only once")
 	var reserve := run.get_primitive_reserve_offer(&"sprites")
 	check(reserve.owned and not reserve.initial, "Purchased starter remains owned after the first game boundary")
+	store.open_store() # Visible Store participates in its coalesced refresh.
+	await process_frame
+	await process_frame
 	check(ResearchTestActions.acquire(run,&"enemies") and run.owns_feature(&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Later Studio reserve purchase spends exact cents and one productive cycle")
+	await process_frame
+	await process_frame
 	check(owned_summary.text.contains("Scope 32") and owned_summary.text.contains("Graphics 21 · Sound 7 · Tech 25 · Design 29") and store._debug.tooltip_text.contains("$1460.00"), "Indicator refreshes after a reserve purchase")
 	check(not ResearchTestActions.acquire(run,&"enemies") and run.get_cash_cents() == 415000 and run.get_completed_run_cycles() == 1, "Duplicate reserve purchase changes nothing")
-	check(ResearchTestActions.acquire(run,&"colored_text") and run.get_cash_cents() == 300000 and run.get_completed_run_cycles() == 2 and owned_summary.text.contains("Scope 33") and owned_summary.text.contains("Graphics 23 · Sound 7 · Tech 25 · Design 29") and store._debug.tooltip_text.contains("$1460.00") and store._debug.tooltip_text.contains("1 Store Feature with play cost TBD"), "Owned later Feature costs one cycle and contributes Scope and Core; Debug retains undefined play costs")
+	var acquired_colored := ResearchTestActions.acquire(run,&"colored_text")
+	await process_frame
+	await process_frame
+	check(acquired_colored and run.get_cash_cents() == 300000 and run.get_completed_run_cycles() == 2 and owned_summary.text.contains("Scope 33") and owned_summary.text.contains("Graphics 23 · Sound 7 · Tech 25 · Design 29") and store._debug.tooltip_text.contains("$1460.00") and store._debug.tooltip_text.contains("1 Store Feature with play cost TBD"), "Owned later Feature costs one cycle and contributes Scope and Core; Debug retains undefined play costs")
 	var project := PrimitivePredevelopment.prepare_project("Economy Game", &"action", &"fantasy", run)
 	check(project.get_feature_supply_ids().has(&"enemies") and project.get_feature_supply_ids().has(&"scrolling"), "Next project snapshots store-purchased starter and reserve Features")
 	var cards: Array[CardData] = [database.get_card(&"text"), database.get_card(&"controls"), database.get_card(&"graphics_pass")]

@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_debug_sandbox.gd"
+  ],
+  "exit": 2,
+  "elapsed_seconds": 5.266,
+  "errors": [
+    "FAIL: Developer sandbox exists",
+    "FAIL: Coordinator has an explicit unsaved sandbox boundary",
+    "ERROR: 3 resources still in use at exit (run with --verbose for details)."
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "FAIL: Developer sandbox exists",
+    "FAIL: Coordinator has an explicit unsaved sandbox boundary",
+    "WARNING: 14 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)",
+    "ERROR: 3 resources still in use at exit (run with --verbose for details).",
+    "   at: clear (core/io/resource.cpp:822)"
+  ],
+  "runtime_identity": "1adf78bf24a48db4e9494588e00d9c6426ff54fb5eeebfda8e0bc74b0b3091b4",
+  "runtime_source_unchanged": true
+}

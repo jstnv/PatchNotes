@@ -1,0 +1,318 @@
+{
+  "scope": "3 exact-checkpoint triplets; all 9 game-two arms censored at rejection",
+  "cohorts": {
+    "control-4417": {
+      "initial_state": "fd596f865f87884ce1839d47ac244a182da5bf0645743ad620db55da198d4357",
+      "studio_cash_cents": 73552,
+      "arms": {
+        "no-loan": {
+          "status": "rejected_policy_action",
+          "failure": "Unaffordable hand",
+          "final_cycle": 20,
+          "accepted_commands": 5,
+          "research_actions": 0,
+          "cash_low_cents": 160,
+          "final_cash_cents": 160,
+          "overdue_cents": 0,
+          "credit_score": 609,
+          "bank_quote": null,
+          "bank_principal_outstanding_cents": null,
+          "bank_interest_paid_cents": null
+        },
+        "borrow-500-12": {
+          "status": "rejected_policy_action",
+          "failure": "Unaffordable hand",
+          "final_cycle": 19,
+          "accepted_commands": 5,
+          "research_actions": 1,
+          "cash_low_cents": 7720,
+          "final_cash_cents": 7720,
+          "overdue_cents": 0,
+          "credit_score": 609,
+          "bank_quote": {
+            "accepted": true,
+            "basis_cents": 173776,
+            "capacity_cents": 30944,
+            "eligible": true,
+            "latest_sales_cents": 196504,
+            "loan_id": "bank-eligible-control-4417:bank:1",
+            "maximum_principal_cents": 331548,
+            "obligations_cents": 0,
+            "older_sales_cents": 151048,
+            "quote_id": "bank-eligible-control-4417:quote:22:50000:12",
+            "reason": "Quote ready. Acceptance adds financing without advancing time.",
+            "rent_cents": 50000,
+            "revision": 22,
+            "run_id": "bank-eligible-control-4417",
+            "schedule": {
+              "accepted_cycle": 16,
+              "first_due_cycle": 18,
+              "last_due_cycle": 40,
+              "maximum_installment_cents": 4667,
+              "principal_cents": 50000,
+              "schema_version": 1,
+              "term_months": 12,
+              "total_interest_cents": 3250,
+              "total_payment_cents": 53250
+            }
+          },
+          "bank_principal_outstanding_cents": 45833,
+          "bank_interest_paid_cents": 500
+        },
+        "borrow-1000-12": {
+          "status": "rejected_policy_action",
+          "failure": "Unaffordable hand",
+          "final_cycle": 19,
+          "accepted_commands": 5,
+          "research_actions": 2,
+          "cash_low_cents": 16553,
+          "final_cash_cents": 16553,
+          "overdue_cents": 0,
+          "credit_score": 609,
+          "bank_quote": {
+            "accepted": true,
+            "basis_cents": 173776,
+            "capacity_cents": 30944,
+            "eligible": true,
+            "latest_sales_cents": 196504,
+            "loan_id": "bank-eligible-control-4417:bank:1",
+            "maximum_principal_cents": 331548,
+            "obligations_cents": 0,
+            "older_sales_cents": 151048,
+            "quote_id": "bank-eligible-control-4417:quote:22:100000:12",
+            "reason": "Quote ready. Acceptance adds financing without advancing time.",
+            "rent_cents": 50000,
+            "revision": 22,
+            "run_id": "bank-eligible-control-4417",
+            "schedule": {
+              "accepted_cycle": 16,
+              "first_due_cycle": 18,
+              "last_due_cycle": 40,
+              "maximum_installment_cents": 9334,
+              "principal_cents": 100000,
+              "schema_version": 1,
+              "term_months": 12,
+              "total_interest_cents": 6500,
+              "total_payment_cents": 106500
+            }
+          },
+          "bank_principal_outstanding_cents": 91666,
+          "bank_interest_paid_cents": 1000
+        }
+      }
+    },
+    "graduate-4417": {
+      "initial_state": "2157e508ef4cd93c609758fdbd8ba69099420165308099744e0e25066c557ff3",
+      "studio_cash_cents": 48552,
+      "arms": {
+        "no-loan": {
+          "status": "rejected_policy_action",
+          "failure": "Unaffordable hand",
+          "final_cycle": 19,
+          "accepted_commands": 4,
+          "research_actions": 0,
+          "cash_low_cents": 11887,
+          "final_cash_cents": 11887,
+          "overdue_cents": 0,
+          "credit_score": 609,
+          "bank_quote": null,
+          "bank_principal_outstanding_cents": null,
+          "bank_interest_paid_cents": null
+        },
+        "borrow-500-12": {
+          "status": "rejected_policy_action",
+          "failure": "Unaffordable hand",
+          "final_cycle": 18,
+          "accepted_commands": 4,
+          "research_actions": 1,
+          "cash_low_cents": 13052,
+          "final_cash_cents": 22720,
+          "overdue_cents": 0,
+          "credit_score": 609,
+          "bank_quote": {
+            "accepted": true,
+            "basis_cents": 173776,
+            "capacity_cents": 23875,
+            "eligible": true,
+            "latest_sales_cents": 196504,
+            "loan_id": "bank-eligible-graduate-4417:bank:1",
+            "maximum_principal_cents": 255804,
+            "obligations_cents": 28273,
+            "older_sales_cents": 151048,
+            "quote_id": "bank-eligible-graduate-4417:quote:24:50000:12",
+            "reason": "Quote ready. Acceptance adds financing without advancing time.",
+            "rent_cents": 50000,
+            "revision": 24,
+            "run_id": "bank-eligible-graduate-4417",
+            "schedule": {
+              "accepted_cycle": 16,
+              "first_due_cycle": 18,
+              "last_due_cycle": 40,
+              "maximum_installment_cents": 4667,
+              "principal_cents": 50000,
+              "schema_version": 1,
+              "term_months": 12,
+              "total_interest_cents": 3250,
+              "total_payment_cents": 53250
+            }
+          },
+          "bank_principal_outstanding_cents": 45833,
+          "bank_interest_paid_cents": 500
+        },
+        "borrow-1000-12": {
+          "status": "rejected_policy_action",
+          "failure": "Calendar cannot advance",
+          "final_cycle": 20,
+          "accepted_commands": 6,
+          "research_actions": 1,
+          "cash_low_cents": 0,
+          "final_cash_cents": 0,
+          "overdue_cents": 19925,
+          "credit_score": 594,
+          "bank_quote": {
+            "accepted": true,
+            "basis_cents": 173776,
+            "capacity_cents": 23875,
+            "eligible": true,
+            "latest_sales_cents": 196504,
+            "loan_id": "bank-eligible-graduate-4417:bank:1",
+            "maximum_principal_cents": 255804,
+            "obligations_cents": 28273,
+            "older_sales_cents": 151048,
+            "quote_id": "bank-eligible-graduate-4417:quote:24:100000:12",
+            "reason": "Quote ready. Acceptance adds financing without advancing time.",
+            "rent_cents": 50000,
+            "revision": 24,
+            "run_id": "bank-eligible-graduate-4417",
+            "schedule": {
+              "accepted_cycle": 16,
+              "first_due_cycle": 18,
+              "last_due_cycle": 40,
+              "maximum_installment_cents": 9334,
+              "principal_cents": 100000,
+              "schema_version": 1,
+              "term_months": 12,
+              "total_interest_cents": 6500,
+              "total_payment_cents": 106500
+            }
+          },
+          "bank_principal_outstanding_cents": 91666,
+          "bank_interest_paid_cents": 1000
+        }
+      }
+    },
+    "control-90210": {
+      "initial_state": "aa3195742b3a36125545490d0f032eaffd6e2616cec7fdf4dfdd9bfb0dd0a7eb",
+      "studio_cash_cents": 83377,
+      "arms": {
+        "no-loan": {
+          "status": "rejected_policy_action",
+          "failure": "Unaffordable hand",
+          "final_cycle": 23,
+          "accepted_commands": 11,
+          "research_actions": 0,
+          "cash_low_cents": 7684,
+          "final_cash_cents": 7684,
+          "overdue_cents": 0,
+          "credit_score": 609,
+          "bank_quote": null,
+          "bank_principal_outstanding_cents": null,
+          "bank_interest_paid_cents": null
+        },
+        "borrow-500-12": {
+          "status": "rejected_policy_action",
+          "failure": "Unaffordable hand",
+          "final_cycle": 22,
+          "accepted_commands": 11,
+          "research_actions": 1,
+          "cash_low_cents": 7308,
+          "final_cash_cents": 7308,
+          "overdue_cents": 0,
+          "credit_score": 609,
+          "bank_quote": {
+            "accepted": true,
+            "basis_cents": 261188,
+            "capacity_cents": 52797,
+            "eligible": true,
+            "latest_sales_cents": 295804,
+            "loan_id": "bank-eligible-control-90210:bank:1",
+            "maximum_principal_cents": 565680,
+            "obligations_cents": 0,
+            "older_sales_cents": 226573,
+            "quote_id": "bank-eligible-control-90210:quote:24:50000:12",
+            "reason": "Quote ready. Acceptance adds financing without advancing time.",
+            "rent_cents": 50000,
+            "revision": 24,
+            "run_id": "bank-eligible-control-90210",
+            "schedule": {
+              "accepted_cycle": 16,
+              "first_due_cycle": 18,
+              "last_due_cycle": 40,
+              "maximum_installment_cents": 4667,
+              "principal_cents": 50000,
+              "schema_version": 1,
+              "term_months": 12,
+              "total_interest_cents": 3250,
+              "total_payment_cents": 53250
+            }
+          },
+          "bank_principal_outstanding_cents": 37499,
+          "bank_interest_paid_cents": 1375
+        },
+        "borrow-1000-12": {
+          "status": "rejected_policy_action",
+          "failure": "Unaffordable hand",
+          "final_cycle": 21,
+          "accepted_commands": 7,
+          "research_actions": 2,
+          "cash_low_cents": 4631,
+          "final_cash_cents": 4631,
+          "overdue_cents": 0,
+          "credit_score": 609,
+          "bank_quote": {
+            "accepted": true,
+            "basis_cents": 261188,
+            "capacity_cents": 52797,
+            "eligible": true,
+            "latest_sales_cents": 295804,
+            "loan_id": "bank-eligible-control-90210:bank:1",
+            "maximum_principal_cents": 565680,
+            "obligations_cents": 0,
+            "older_sales_cents": 226573,
+            "quote_id": "bank-eligible-control-90210:quote:24:100000:12",
+            "reason": "Quote ready. Acceptance adds financing without advancing time.",
+            "rent_cents": 50000,
+            "revision": 24,
+            "run_id": "bank-eligible-control-90210",
+            "schedule": {
+              "accepted_cycle": 16,
+              "first_due_cycle": 18,
+              "last_due_cycle": 40,
+              "maximum_installment_cents": 9334,
+              "principal_cents": 100000,
+              "schema_version": 1,
+              "term_months": 12,
+              "total_interest_cents": 6500,
+              "total_payment_cents": 106500
+            }
+          },
+          "bank_principal_outstanding_cents": 83332,
+          "bank_interest_paid_cents": 1917
+        }
+      }
+    }
+  },
+  "excluded": {
+    "graduate-90210": "fifth declared admission rejected; 16_bit_music parent absent"
+  },
+  "fresh_process_replays": 12,
+  "focused_checks": [
+    "import",
+    "verify_campaign_session",
+    "verify_finance_observation",
+    "verify_bank_loan",
+    "verify_feature_research",
+    "verify_research_integration",
+    "verify_education_atomicity"
+  ]
+}

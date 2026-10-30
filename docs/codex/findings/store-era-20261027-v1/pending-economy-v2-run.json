@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_first_studio_feature_economy.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 7.328,
+  "errors": [],
+  "tail": [
+    "   at: push_warning (core/variant/variant_utility.cpp:1033)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)",
+    "       [1] refresh (res://scripts/cards/card_view.gd:114)",
+    "       [2] _ready (res://scripts/cards/card_view.gd:46)",
+    "       [3] play (res://scripts/ui/hand_presentation.gd:150)",
+    "       [4] _present_action (res://scripts/ui/phase_workspace.gd:163)",
+    "       [5] _verify_design_hand_cost (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_first_studio_feature_economy.gd:152)",
+    "PASS: Successful real Design hand charges exact printed cost once at productive boundary",
+    "First-Studio Feature economy verification: 0 failures"
+  ]
+}

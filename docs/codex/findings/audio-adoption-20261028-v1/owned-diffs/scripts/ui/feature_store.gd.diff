@@ -1,0 +1,56 @@
+--- before/scripts/ui/feature_store.gd
++++ after/scripts/ui/feature_store.gd
+@@ -17,7 +17,7 @@
+ # Presentation only. Card definitions, prerequisites, and purchase rules remain in the ledger.
+ const LANE_MEMBERS := {
+ 	&"Visuals": [&"text", &"colored_text", &"sprites", &"animated_sprites", &"4_color_palette", &"8_color_palette", &"scrolling", &"multi_directional_scrolling"],
+-	&"Audio": [&"8_bit_sound", &"recorded_sounds", &"8_bit_music", &"16_bit_music", &"sound_effects", &"music"],
++	&"Audio": [&"8_bit_sound", &"16_bit_sound", &"main_theme", &"recorded_sounds", &"multiple_soundtracks", &"instrumental_sounds", &"dynamic_sequencing"],
+ 	&"Technology & Tools": [&"keyboard_and_mouse", &"controller", &"menu_system", &"split_screen", &"save_files", &"branching_nodes", &"player_level_editor"],
+ 	&"Gameplay": [&"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"turn_based_combat", &"character_classes", &"difficulty_levels"],
+ 	&"Story & World": [&"simple_story", &"dialogue", &"branching_dialogue", &"character_backstories", &"character_development", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets", &"ability_gated_exploration", &"switchable_protagonists", &"character_skill_checks"],
+@@ -251,8 +251,7 @@
+ 		(button.get_node("MapStatus") as Label).text = status
+ 		button.tooltip_text = card.card_name + " · Scope %d" % card.scope
+ 		for entry in card.core_contributions(): button.tooltip_text += " · +%d %s" % [entry.value,score_label(entry.stat)]
+-		var single: Array[CardData] = [card]
+-		button.tooltip_text += "\nPlay cost: " + ("TBD" if _run._feature_offers.has(id) else CashFormatter.format_exact_cents(_run.primitive_feature_hand_cost_cents(single)))
++		button.tooltip_text += "\nPlay cost: " + (play_cost_text(card))
+ 		var visual := [color,id==_selected]
+ 		if button.get_meta("store_visual",[])==visual: continue
+ 		button.set_meta("store_visual",visual)
+@@ -326,7 +325,7 @@
+ 
+ 
+ func _build_tree() -> void:
+-	var entries: Array = _run._feature_definitions.values()
++	var entries: Array = _run._feature_definitions.values().filter(func(entry: Dictionary): return FeatureStoreCatalog.is_active(StringName(entry.id)))
+ 	var graph := FeatureStoreCatalog.graph(_run._feature_definitions, _run._feature_offers)
+ 	if graph.has("error"): return
+ 	var children: Dictionary = {}
+@@ -388,7 +387,16 @@
+ 		_tree.draw_colored_polygon(PackedVector2Array([end, end - direction * 9.0 + across, end - direction * 9.0 - across]), color)
+ 
+ 
++func play_cost_text(card: CardData) -> String:
++	if _run._feature_offers.has(card.id):
++		var entry: Dictionary=_run._feature_offers[card.id]
++		return CashFormatter.format_exact_cents(int(entry.play_cost_cents)) if entry.has("play_cost_cents") else "TBD"
++	var single: Array[CardData] = [card]
++	return CashFormatter.format_exact_cents(_run.primitive_feature_hand_cost_cents(single))
++
++
+ func _select_node(id: StringName) -> void:
++	if not _nodes.has(id): return # Historical paid queue remains actionable from Research.
+ 	_debug_popup.hide()
+ 	_selected = id
+ 	_refresh()
+@@ -481,6 +489,8 @@
+ 	_admission_dialog = ConfirmationDialog.new()
+ 	_admission_dialog.title = "Queue Feature research?"
+ 	_admission_dialog.dialog_text = "Pay %s now (0 cycles). This down payment is irreversible.\nNo cancellation or reordering. Ownership begins only after research finishes.\nNext installment at current familiarity: %s; 1 productive cycle.\nFuture familiarity can change the remaining price." % [CashFormatter.format_exact_cents(quote.down_cents),CashFormatter.format_exact_cents(quote.due_cents)]
++	if _run._feature_offers.get(_selected,{}).has("replaces_id"):
++		_admission_dialog.dialog_text += "\n\nUpgrade: replaces 8-Bit Sound in future project draws. Keeps ownership and already-started projects."
+ 	_admission_dialog.dialog_text += "\n\nAfter research completes, the Feature can enter games you start later. It is not guaranteed to be drawn or played."
+ 	_admission_dialog.get_label().custom_minimum_size.x = minf(560, get_viewport_rect().size.x - 100)
+ 	_admission_dialog.get_label().autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

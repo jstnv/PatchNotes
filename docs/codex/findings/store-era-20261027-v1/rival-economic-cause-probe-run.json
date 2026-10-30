@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/rival_economic_cause_probe.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 9.844,
+  "errors": [
+    "ERROR: RIVAL_FEATURE_EXHAUSTION: rival world advances one legal player cycle 28"
+  ],
+  "tail": [
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/rival_economic_cause_probe.gd:17)",
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/rival_economic_cause_probe.gd:125)",
+    "UNFUNDED_RIVAL_BLOCK {\"completed_studios\":[{\"ok\":false,\"reason\":\"Rival idle calendar rejected\"}],\"cycle\":28,\"ok\":false,\"reason\":\"Rival idle calendar rejected\",\"studio_id\":\"incumbent-arcade-foundry\"}",
+    "RIVAL_BALANCE incumbent-arcade-foundry 0 {  }",
+    "RIVAL_BALANCE incumbent-wayfinder-works 47299 {  }",
+    "PLAN_BEFORE_CONTROLLED_FUNDING true",
+    "PLAN_AFTER_CONTROLLED_FUNDING false",
+    "RIVAL_FEATURE_EXHAUSTION checks=147 failures=1 late_revision_probes=1 short_pool=true cash_block=true disabled_tie=true"
+  ]
+}

@@ -1,0 +1,12 @@
+--- feature_store_map-before
++++ scripts/ui/feature_store_map.gd
+@@ -624,6 +624,9 @@
+ 	if _missing_targets.is_empty():
+ 		store._purchase()
+ 		return
++	if _missing_targets.size() == 1:
++		_focus_node(_missing_targets[0])
++		return
+ 	if _parents_expanded:
+ 		_close_parent_links()
+ 		return

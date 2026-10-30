@@ -9,7 +9,7 @@ func _initialize() -> void:
 func _run_boost() -> void:
 	var database := root.get_node("CardDatabase")
 	for alpha in [false, true]:
-		for raw in [[2,2,2,2], [2,2,3,2], [5,5,5,6], [17,20,20,23]]:
+		for raw in [[2,2,2,2], [2,2,3,2], [3,2,3,3], [5,5,5,6], [17,20,20,23]]:
 			var live := await exercise(database, alpha, raw, false)
 			var headless := await exercise(database, alpha, raw, true)
 			_expect(live == headless, "Exact live/headless state, refill RNG and ordered signals: %s %s" % ["Alpha" if alpha else "Design", raw])

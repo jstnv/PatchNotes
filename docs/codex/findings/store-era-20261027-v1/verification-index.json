@@ -1,0 +1,2898 @@
+{
+  "generated_utc": "2026-10-27T20:01:16.450917+00:00",
+  "head": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "branch": "main",
+  "current_runtime": "274023dedb8414b9b7ba852d470b36091a25fb954fde32f44325a5689109ac06",
+  "scope": "Approved Store Handoff020; bounded snapshot responsiveness correction and maintained acceptance harnesses. Per-receipt source epochs and retained failures remain distinct; no release/balance/AI-policy approval.",
+  "fixtures": [
+    {
+      "file": "tools\\fixtures\\background_checkpoint_v003_c96.json",
+      "sha256": "83e8e896a0641f95037b1ff908c1cba8daf7576252ad0aa9cda93efba1ba03be"
+    },
+    {
+      "file": "tools\\fixtures\\latency_restore_pre_store_era_v1.json",
+      "sha256": "eb9101ef0e86256b87c95203199d54bd2272335849879ef2dc841ceebdc746bc"
+    },
+    {
+      "file": "tools\\fixtures\\queue_migration_pre_alpha_v1.json",
+      "sha256": "6eab99d004e0bb7844bb03fc0cd24147c02226103caeb3316ac08a6fb6b2b67b"
+    },
+    {
+      "file": "tools\\fixtures\\gameplay_parents_pre_change_v1.json",
+      "sha256": "91d1152845b571b3f831652de6deed03ba998cc1dd3ddff1162c4aabf644492b"
+    }
+  ],
+  "gates": [
+    {
+      "file": "diagnostic-matrix-v1\\gate-result.json",
+      "sha256": "103bbc5cbf2347544e0a6b08430059cb1a0354cb41ad8a9434ae562e040ef4fd",
+      "checks_completed": 188,
+      "automated_pass": false,
+      "release_ready": false,
+      "failure": "Diagnostic matrix has 33 failed or dependency-blocked suites",
+      "error": null,
+      "failure_is_historical_after_successful_resume": false,
+      "blocked": null,
+      "remaining": [
+        "Exported legal Bank/exit/Continue/installment/payoff/two-game interaction",
+        "Approved asset/license set and audible music/SFX acceptance"
+      ]
+    },
+    {
+      "file": "release-gate-final-v3\\gate-result.json",
+      "sha256": "b5c95fff557d27e8507974a77f12db9a022cb87df5df6664e3b0125f4d590be6",
+      "checks_completed": 9,
+      "automated_pass": false,
+      "release_ready": false,
+      "failure": "verify_background_gameplay",
+      "error": null,
+      "failure_is_historical_after_successful_resume": false,
+      "blocked": null,
+      "remaining": [
+        "Exported legal Bank/exit/Continue/installment/payoff/two-game interaction",
+        "Approved asset/license set and audible music/SFX acceptance"
+      ]
+    },
+    {
+      "file": "release-gate-final-v4\\gate-result.json",
+      "sha256": "77a859ad5dbf9a998768ee829ccc3587b9085f133ab73ae810a80639919e5d97",
+      "checks_completed": 222,
+      "automated_pass": true,
+      "release_ready": false,
+      "failure": null,
+      "error": null,
+      "failure_is_historical_after_successful_resume": false,
+      "blocked": null,
+      "remaining": [
+        "Exported legal Bank/exit/Continue/installment/payoff/two-game interaction",
+        "Approved asset/license set and audible music/SFX acceptance"
+      ]
+    },
+    {
+      "file": "release-gate-v1\\gate-result.json",
+      "sha256": "6ee15551dc90e7d4a083c775b2d9b6e87fe3de5ae0d82b4c585247949fa23094",
+      "checks_completed": 0,
+      "automated_pass": false,
+      "release_ready": false,
+      "failure": "verify_alpha_command",
+      "error": null,
+      "failure_is_historical_after_successful_resume": false,
+      "blocked": null,
+      "remaining": [
+        "Exported legal Bank/exit/Continue/installment/payoff/two-game interaction",
+        "Approved asset/license set and audible music/SFX acceptance"
+      ]
+    },
+    {
+      "file": "release-gate-v2\\gate-result.json",
+      "sha256": "9ccbc3c6fedef28831be565971b0d04b1c05172c5a9a6f9e94b06a5e406607ef",
+      "checks_completed": 1,
+      "automated_pass": false,
+      "release_ready": false,
+      "failure": "verify_alpha_exit_arrears",
+      "error": null,
+      "failure_is_historical_after_successful_resume": false,
+      "blocked": null,
+      "remaining": [
+        "Exported legal Bank/exit/Continue/installment/payoff/two-game interaction",
+        "Approved asset/license set and audible music/SFX acceptance"
+      ]
+    }
+  ],
+  "receipts": [
+    {
+      "file": "access-green-run.json",
+      "sha256": "c934936b0f930d49f57a807028520eb02ec69511ee37ef678bad8a97eaff32e4",
+      "exit": 124,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"era_qualified\" variable because the value doesn't have a set type.",
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"unlocked\" variable because the value doesn't have a set type.",
+        "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+        "ERROR: Failed to load script \"res://scripts/debug/verify_store_era_access.gd\" with error \"Compilation failed\".",
+        "SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'."
+      ],
+      "elapsed_seconds": 130.016,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd"
+      ]
+    },
+    {
+      "file": "access-green-v2-run.json",
+      "sha256": "f090211eea624c2fec7119e01f2bfacd9ad5bc8942d0bd9cbd878ceac69af27b",
+      "exit": 1,
+      "errors": [
+        "FAIL: Central Research admission cannot bypass era gates"
+      ],
+      "elapsed_seconds": 2.625,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd"
+      ]
+    },
+    {
+      "file": "access-green-v3-run.json",
+      "sha256": "84e4ee181ccdd31f6ad483453630aaee76cc9d1f8027851d73a3a8bd45d3d27e",
+      "exit": 1,
+      "errors": [
+        "FAIL: Central Research admission cannot bypass era gates"
+      ],
+      "elapsed_seconds": 2.813,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd"
+      ]
+    },
+    {
+      "file": "access-green-v4-run.json",
+      "sha256": "464490bb3d2dc25f40101b99a78c090f0a50eb3ab9a4d6061564fc1d2f302a25",
+      "exit": 0,
+      "errors": [
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'.",
+        "SCRIPT ERROR: Invalid access to property or key 'can_admit' on a base object of type 'Dictionary'."
+      ],
+      "elapsed_seconds": 2.125,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd"
+      ]
+    },
+    {
+      "file": "access-green-v5-run.json",
+      "sha256": "71fec9fda065db4fbfc7a3901acaa74a33c55dc7c73a2f3b2847897b6d606c3d",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 5.906,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd"
+      ]
+    },
+    {
+      "file": "access-red-run.json",
+      "sha256": "ec9dc7cef3fc80dfc44a12bdfa46409076334c1fa211937159b7f9e9368dd472",
+      "exit": 37,
+      "errors": [
+        "FAIL: Separate date and qualifying-release fields",
+        "FAIL: Both date and receipt required, independent of owned parent",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details separately explain missing qualifying release",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details separately explain missing qualifying release",
+        "FAIL: Separate date and qualifying-release fields",
+        "FAIL: Both date and receipt required, independent of owned parent",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Separate date and qualifying-release fields",
+        "FAIL: Both date and receipt required, independent of owned parent",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details separately explain missing qualifying release",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details separately explain missing qualifying release",
+        "FAIL: Separate date and qualifying-release fields",
+        "FAIL: Both date and receipt required, independent of owned parent",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Separate date and qualifying-release fields",
+        "FAIL: Both date and receipt required, independent of owned parent",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details separately explain missing qualifying release",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details separately explain missing qualifying release",
+        "FAIL: Separate date and qualifying-release fields",
+        "FAIL: Both date and receipt required, independent of owned parent",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Details visibly explain missing card year",
+        "FAIL: Separate date and qualifying-release fields",
+        "FAIL: Both date and receipt required, independent of owned parent",
+        "FAIL: Details separately explain missing qualifying release",
+        "FAIL: Details separately explain missing qualifying release",
+        "FAIL: Separate date and qualifying-release fields",
+        "FAIL: Central Research admission cannot bypass era gates",
+        "FAIL: First-era1983 card remains year-locked at71"
+      ],
+      "elapsed_seconds": 2.531,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd"
+      ]
+    },
+    {
+      "file": "access-rival-run.json",
+      "sha256": "503cb55062d2c67fbfa1afb68e720df5b6f61985a703a25a563a453d2d7816e6",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 9.797,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd"
+      ]
+    },
+    {
+      "file": "alpha-oracle-run.json",
+      "sha256": "1f79d2d9fabcbd96d6be20b108a184edb22cb055b983972d110bb2ae3b58c4f3",
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: live unchanged state/RNG/signal trace matches pre-extraction oracle",
+        "ERROR: FAIL: headless unchanged state/RNG/signal trace matches pre-extraction oracle"
+      ],
+      "elapsed_seconds": 62.813,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_alpha_command.gd"
+      ]
+    },
+    {
+      "file": "alpha-oracle-v2-run.json",
+      "sha256": "6529d65a27e62e53cad0e9e68033b8abc5fd01074d19917325e8ec5b9febd30d",
+      "exit": 1,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Could not resolve class \"res://scripts/debug/verify_design_phase.gd\".",
+        "ERROR: Failed to load script \"res://scripts/debug/verify_alpha_command.gd\" with error \"Parse error\"."
+      ],
+      "elapsed_seconds": 8.937,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_alpha_command.gd"
+      ]
+    },
+    {
+      "file": "alpha-oracle-v3-run.json",
+      "sha256": "7de53c615986a905aa0145242c7cbd39b7c7312e25240339b213c95cf98a39c8",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 85.015,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_alpha_command.gd"
+      ]
+    },
+    {
+      "file": "arrears-fixture-run.json",
+      "sha256": "53f6feab2a08f12a1c5ee80f55d2e6f4847e922ef9f8e8ff31ef9bcfba345af9",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 6.859,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_alpha_exit_arrears.gd"
+      ]
+    },
+    {
+      "file": "campaign-audit-run.json",
+      "sha256": "4e80d91d1bcd54280c046bb16d4174bd4e3ac533c5d9f373bd0f5a474d657866",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 3.281,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/audit_campaign.gd"
+      ]
+    },
+    {
+      "file": "campaign-current-audit-v6-run.json",
+      "sha256": "5cce2d4a1a9e27a662be3443aa20b844e6b613a97ca3c03114d584945ec991bf",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 14.672,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/audit_campaign.gd"
+      ]
+    },
+    {
+      "file": "campaign-final-audit-run.json",
+      "sha256": "c2e2300fccedb2cc39b864f42db2a1506f8baf035bf51cd65194643e7760f67b",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 3.063,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/audit_campaign.gd"
+      ]
+    },
+    {
+      "file": "checkpoint-cold-run.json",
+      "sha256": "7119cfec1c2acc05afdc71e8c89b28f4b0116d169adaf56e01a78977b2c71e2f",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.531,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd",
+        "--",
+        "--cold=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/checkpoint-green-v2.json.checkpoint.json"
+      ]
+    },
+    {
+      "file": "checkpoint-expanded-run.json",
+      "sha256": "d91ce79901a5489b5e8d77981b3dd20e43a2919b9e6cbd1191d466f7b8d22fae",
+      "exit": 1,
+      "errors": [
+        "FAIL: Missing frozen required Scope cannot masquerade as known old evidence"
+      ],
+      "elapsed_seconds": 3.828,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "checkpoint-expanded-v2-run.json",
+      "sha256": "f7cd3858746de2cafe7b0a758c357fc40d59c2c40005bcba88a519d945dcb915",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.797,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "checkpoint-green-run.json",
+      "sha256": "c9d27feb83d7d3c74cc19f7fb5ed3950bc30f6bdd7d93f774fd1973e30de8947",
+      "exit": 1,
+      "errors": [
+        "FAIL: Genuine previous release save migrates: INCOMPATIBLE_CONTENT_OR_RNG"
+      ],
+      "elapsed_seconds": 2.734,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "checkpoint-green-v2-run.json",
+      "sha256": "f01c7506ecbc9a4711328ba07d5c2c0448758c391994e9219b9f2490b380f990",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.156,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "checkpoint-provenance-run.json",
+      "sha256": "303e2cda76dc1ff31b7ce6b99986236c226c726a01869c9bda5e97c23e6b08a2",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.984,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "checkpoint-red-run.json",
+      "sha256": "b84ff1ae0e608db9d4f20bdaddfc91c43a21eecadce3ce9807f9103aa2647c6f",
+      "exit": 1,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Identifier \"SnapshotLibrary\" not declared in the current scope.",
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"snapshots\" variable because the value doesn't have a set type.",
+        "ERROR: Failed to load script \"res://scripts/debug/verify_store_era_checkpoint.gd\" with error \"Parse error\"."
+      ],
+      "elapsed_seconds": 0.484,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "checkpoint-red-v2-run.json",
+      "sha256": "1189813831d22f3189413028ba372367bbbd23aed35295291e75862171e6e1c9",
+      "exit": 1,
+      "errors": [
+        "FAIL: Run exposes durable era status"
+      ],
+      "elapsed_seconds": 2.625,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "children-checkpoint-run.json",
+      "sha256": "7e79225235584f683f825e3970eb6c5c41ddefd88a14ddad60f9ab834ee48d74",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.531,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "children-green-run.json",
+      "sha256": "f4ae7c7954596464070ba0fb81343073ed13c709b4a9e78a11f0d6e278568dac",
+      "exit": 2,
+      "errors": [
+        "FAIL: New node footprint does not overlap multiple_endings",
+        "FAIL: New node footprint does not overlap multiple_endings"
+      ],
+      "elapsed_seconds": 1.625,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd"
+      ]
+    },
+    {
+      "file": "children-layout-green-run.json",
+      "sha256": "9874731a52402d628054768f69d6390533877eebe753c18d9b046fa5a07ace2a",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.438,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd"
+      ]
+    },
+    {
+      "file": "children-layout-red-run.json",
+      "sha256": "37125afac137b2d5b8d8c56a4a40319f10abed32e070c0753c14e825fc056455",
+      "exit": 2,
+      "errors": [
+        "FAIL: New node character_skill_checks at (3608.0, 1824.0) does not overlap multiple_endings at (3608.0, 1824.0)",
+        "FAIL: New node character_skill_checks at (3608.0, 1824.0) does not overlap multiple_endings at (3608.0, 1824.0)"
+      ],
+      "elapsed_seconds": 2.0,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd"
+      ]
+    },
+    {
+      "file": "children-parents-run.json",
+      "sha256": "927ab61435ccae907ac8b686982ad0e2c5392765b6b1f9b17369edb15e5cd0a8",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 3.375,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_cone_parents.gd"
+      ]
+    },
+    {
+      "file": "children-red-run.json",
+      "sha256": "31783f17b02cae87436cfb3cece78a865c33dad987667fe1b65bd048da52da63",
+      "exit": 1,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Static function \"entries()\" not found in base \"StudioSpecialties\".",
+        "ERROR: Failed to load script \"res://scripts/debug/verify_store_four_children.gd\" with error \"Parse error\"."
+      ],
+      "elapsed_seconds": 0.329,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd"
+      ]
+    },
+    {
+      "file": "children-red-v2-run.json",
+      "sha256": "0351ebeba5d78dcede1d31e7c82d421fa4e95fc30c15f48e61b6f0c44da7e496",
+      "exit": 4,
+      "errors": [
+        "FAIL: New finite Store child exists: player_level_editor",
+        "FAIL: New finite Store child exists: ability_gated_exploration",
+        "FAIL: New finite Store child exists: switchable_protagonists",
+        "FAIL: New finite Store child exists: character_skill_checks"
+      ],
+      "elapsed_seconds": 1.156,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd"
+      ]
+    },
+    {
+      "file": "counterfactual-development-run.json",
+      "sha256": "6c67ba3474b2d833ff457a63f26fbc8be80c773d092b9781211f9c4014e88dde",
+      "exit": 444,
+      "errors": [
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 1104.0/normal",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 1104.0/tutorial",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 1104.0/lean",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 1104.0/under_scope",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 4417.0/normal",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 4417.0/tutorial",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 4417.0/lean",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 4417.0/under_scope",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 90210.0/normal",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 90210.0/tutorial",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 90210.0/lean",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Historical hand oracle has no world provider or releases",
+        "ERROR: FAIL: Complete pinned development digest: 90210.0/under_scope"
+      ],
+      "elapsed_seconds": 24.829,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/counterfactual_development.gd"
+      ]
+    },
+    {
+      "file": "counterfactual-development-v2-run.json",
+      "sha256": "c4b2bb820af7a1f2d371a313a60c16b67ef5a762d85e98fe2ae94199f3ba603c",
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: Complete pinned development digest: 90210/tutorial"
+      ],
+      "elapsed_seconds": 25.891,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/counterfactual_development.gd"
+      ]
+    },
+    {
+      "file": "counterfactual-development-v3-run.json",
+      "sha256": "30abbdd5a87afc27599358870a05dd83446f2cedf0c8ce27642fab57875fbd7b",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 24.109,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/counterfactual_development.gd"
+      ]
+    },
+    {
+      "file": "current-checkpoint-run.json",
+      "sha256": "7e79225235584f683f825e3970eb6c5c41ddefd88a14ddad60f9ab834ee48d74",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.531,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "current-radial-run.json",
+      "sha256": "071945f436c1783587542f03994b8d7179642b2a70b26dc5e85986e87999c2e8",
+      "exit": 2,
+      "errors": [
+        "FAIL: Back to Map is reachable for difficulty_levels at 1152",
+        "FAIL: Back to Map is reachable for difficulty_levels at 900"
+      ],
+      "elapsed_seconds": 16.0,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store_radial.gd"
+      ]
+    },
+    {
+      "file": "current-research-run.json",
+      "sha256": "294739f3b1377ae9b5feb4278da1bc78a82f0b4ccc67bca0988741f78bc432bf",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 3.468,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_integration.gd"
+      ]
+    },
+    {
+      "file": "current-root-run.json",
+      "sha256": "8540062b0b2e72894e279f4c84fc9ffb5af683c280a3dd6a9133fae85f11cefc",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.766,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_root_first_rosters.gd"
+      ]
+    },
+    {
+      "file": "current-store-run.json",
+      "sha256": "c0157c47606c9dbed33264fb581896e5fd5e48def4dafaa798588a5c8da45794",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 5.344,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store.gd"
+      ]
+    },
+    {
+      "file": "final-background-verify_background_checkpoint-run.json",
+      "sha256": "d41a7d342b566ff144254d6af2cc804df9e1d42183ce5e6e1566f857c1eb80ed",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 110.266,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_background_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "final-background-verify_background_gameplay-run.json",
+      "sha256": "bfb11a3fef7e6f4d1eb29d7fc25feabf539c484053b57e41e0c21126526db2ed",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 80.187,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_background_gameplay.gd"
+      ]
+    },
+    {
+      "file": "final-core-verify_background_checkpoint-run.json",
+      "sha256": "f444114c3a9b62a5e2367b5c123dd2459502a2d183516b06587f1ee752d1530f",
+      "exit": 124,
+      "errors": [
+        "ERROR: Parse JSON failed. Error at line 0: Unknown error getting token",
+        "SCRIPT ERROR: Trying to assign value of type 'Nil' to a variable of type 'Dictionary'."
+      ],
+      "elapsed_seconds": 130.032,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_background_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "final-core-verify_campaign_latency-run.json",
+      "sha256": "80ea348df8f8f3ef7c3ce26a5d851f49fe32fb81e5df3d2b752aa9e1d3988b8b",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 13.187,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_campaign_latency.gd"
+      ]
+    },
+    {
+      "file": "final-core-verify_guided_tutorial_model-run.json",
+      "sha256": "f1eab7ce058d253ee640b962238fd6622ce43ce8e6d73aefb901c87d18ce198f",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.391,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_guided_tutorial_model.gd"
+      ]
+    },
+    {
+      "file": "final-core-verify_store_era-run.json",
+      "sha256": "e9ca7dbd1405942e0cf1a6ba58f59db39913aed6fe3376c6bb32834e01ef2ed2",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.5,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era.gd"
+      ]
+    },
+    {
+      "file": "final-core-verify_store_era_access-run.json",
+      "sha256": "d8ae2b5e40fe5348c2a77f09844f84c61a0dd0faeb6247c26cbfb5a65f830b0b",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 23.875,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd"
+      ]
+    },
+    {
+      "file": "final-core-verify_store_era_checkpoint-run.json",
+      "sha256": "8c1ef7a94624791c67206cc41337e3d3e3a00ee8079ff74b6fbd761eaa856ed6",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.984,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "final-core-verify_store_era_research-run.json",
+      "sha256": "a87ba94dd55cfdd1dd2cf5d569228de9554edfa583e4082a4283853ab6f0e73a",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 43.235,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_research.gd"
+      ]
+    },
+    {
+      "file": "final-core-verify_store_four_children-run.json",
+      "sha256": "ac39cb56e33957ff462fcd89b48a57bc364de8f58579b052bcf0790721e02cf0",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.563,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd"
+      ]
+    },
+    {
+      "file": "final-parity-verify_alpha_command-run.json",
+      "sha256": "1f1efd834507efa21c9d9a78be82bd6aef3b6805791ee4c871ea01103b9bebd2",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 78.313,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_alpha_command.gd"
+      ]
+    },
+    {
+      "file": "final-parity-verify_campaign_seeded_parity-run.json",
+      "sha256": "fe9d34f50b3c3eea1c0f71276eb14f83691c0bb2508c6e9d53015a530a82d9f0",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 99.688,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_campaign_seeded_parity.gd"
+      ]
+    },
+    {
+      "file": "final-parity-verify_development_replay-run.json",
+      "sha256": "0c603e1b4b3358771350f22297f4ad44747dad79ef5537818228ed4bab19ac59",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 73.172,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_development_replay.gd"
+      ]
+    },
+    {
+      "file": "final-parity-verify_latency_restore-run.json",
+      "sha256": "6698b82c531adca0ad2fe45e081ff3aa97995c0994ed568e59d30bbbd770cde7",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 68.297,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_latency_restore.gd"
+      ]
+    },
+    {
+      "file": "final-parity-verify_qa_career-run.json",
+      "sha256": "bea69f8d5ef42a8126d3ca3f7382d0214d49d0bcf52e64183dd5f50c1f461d0c",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 121.828,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_qa_career.gd"
+      ]
+    },
+    {
+      "file": "final-ui-native-verify_guided_tutorial_ui-run.json",
+      "sha256": "b30237675445b9302a29380a55056756c10841262054ccf37339b3973e24b5ed",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 75.484,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_guided_tutorial_ui.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ]
+    },
+    {
+      "file": "final-ui-native-verify_store_four_children-run.json",
+      "sha256": "a55b7fa03e4cbf0631e667f7338533ad816f9de6333d2bfdb376c1c9ad042278",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 9.938,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ]
+    },
+    {
+      "file": "historical-ids-green-run.json",
+      "sha256": "424c9f495b445e467c2959e07b3323c003b88e72cb5b2d6e46ca77ed1c7dfeb0",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 4.547,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "historical-ids-red-run.json",
+      "sha256": "b8e5a985c521ba17aa4d066a4df3fd4378ebfb8a3775f7f36bff64afd65cd989",
+      "exit": 2,
+      "errors": [
+        "FAIL: Original42-ID revision cannot smuggle a future child as legacy ownership",
+        "FAIL: Current finite child ownership requires its completed paid Research source"
+      ],
+      "elapsed_seconds": 2.89,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "historical-world-run.json",
+      "sha256": "cfb3f95e4c7a3f79da9e6234352aacdb44fbecc5754fd7228f36584b2bee7e74",
+      "exit": 124,
+      "errors": [
+        "SCRIPT ERROR: Invalid access to property or key 'player' on a base object of type 'Dictionary'."
+      ],
+      "elapsed_seconds": 130.031,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/menu-visualizer-20261027-v1/before-pair.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/restored-world.json"
+      ]
+    },
+    {
+      "file": "historical-world-v2-run.json",
+      "sha256": "d1ec89ba92f868f24b5f394b50466c1e9a9adce268fe8eb35c990f4afc4a40af",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 2.703,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/menu-visualizer-20261027-v1/before-pair.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/restored-world.json"
+      ]
+    },
+    {
+      "file": "integrated-research-run.json",
+      "sha256": "6e71fd36b6998610887ad423eb85ebe84773407548d5383e9a2d4d8307a950d6",
+      "exit": 5,
+      "errors": [
+        "FAIL: Paid queue/receipt/RNG survive Continue",
+        "FAIL: Paid queue/receipt/RNG survive Continue",
+        "FAIL: Paid queue/receipt/RNG survive Continue",
+        "FAIL: Paid queue/receipt/RNG survive Continue",
+        "FAIL: Final integrated finance/release/Research checkpoint validates: Invalid release catalog/year"
+      ],
+      "elapsed_seconds": 9.672,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_research.gd"
+      ]
+    },
+    {
+      "file": "integrated-research-v2-run.json",
+      "sha256": "cf3572025ddd98db36a0fdd50c1f2c30f72ce4c3b9fe47a15dfb202805954b7d",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 8.047,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_research.gd"
+      ]
+    },
+    {
+      "file": "known-zero-advice-red-run.json",
+      "sha256": "bcd8aebf7417b1c6290328eecce2ad0ab1cce44bbd8888b2aa169f04c5a346b4",
+      "exit": 2,
+      "errors": [
+        "FAIL: Approved zero-fee children do not inflate unknown-cost advice",
+        "FAIL: Owned-pool tooltip counts only genuinely TBD Store play costs"
+      ],
+      "elapsed_seconds": 9.047,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/research_advice_pending.gd"
+      ]
+    },
+    {
+      "file": "latency-next-legacy-probe-run.json",
+      "sha256": "d91dc3b7c9be45a0e44be7bf7da514e99871619d3286cdc04a8c48968f337396",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 43.656,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/latency_next_legacy_probe.gd"
+      ]
+    },
+    {
+      "file": "latency-next-probe-run.json",
+      "sha256": "f20e1e2cd970604eba63bc9e283b3c084089f9ccc065d826fc9bbff144188107",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 38.907,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/latency_next_probe.gd"
+      ]
+    },
+    {
+      "file": "latency-structure-probe-run.json",
+      "sha256": "645e42cf0e0488d268ca41e8d5b35cd2f0b64837359dfd74be3083e20356572b",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 32.266,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/latency_probe.gd"
+      ]
+    },
+    {
+      "file": "motion-paid-probe-run.json",
+      "sha256": "4470503b2d5d438fab6c915c9061f21db4797b45d8373a6e9b194c299836b732",
+      "exit": 1,
+      "errors": [
+        "ERROR: Attempt to open script 'res://docs/codex/findings/store-era-20261027-v1/probe_paid_motion.gd' resulted in error 'File not found'.",
+        "ERROR: Failed loading resource: res://docs/codex/findings/store-era-20261027-v1/probe_paid_motion.gd.",
+        "ERROR: Can't load script: docs/codex/findings/store-era-20261027-v1/probe_paid_motion.gd"
+      ],
+      "elapsed_seconds": 0.328,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "docs/codex/findings/store-era-20261027-v1/probe_paid_motion.gd"
+      ]
+    },
+    {
+      "file": "motion-paid-probe-v2-run.json",
+      "sha256": "91f70b97ab9d09ca0a64e5ddc9d37d8cb3d2741e8e0b1d3ed2d5d62055dd3441",
+      "exit": 1,
+      "errors": [
+        "FAIL: Animated Feature play grants normal familiarity and finite exhaustion exactly once"
+      ],
+      "elapsed_seconds": 7.985,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/probe_paid_motion.gd"
+      ]
+    },
+    {
+      "file": "native-children-run.json",
+      "sha256": "b62c0bb9e7ab7a5db9bb6de0f78617b4ba41ffd7786d063a13ee3420eec8d7fe",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 14.109,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ]
+    },
+    {
+      "file": "native-themed-run.json",
+      "sha256": "0f5316250a96ac071c741a7bdbc4cefce193db36c7ae580fce959a3e2851ef2f",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 21.109,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_four_children.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ]
+    },
+    {
+      "file": "oracle-counterfactual-run.json",
+      "sha256": "e9cf4e5f7d13fd7975ff8da4e4154c9358ae17ebc63c4cd39e915385b7d890fe",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 12.922,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/counterfactual_alpha.gd"
+      ]
+    },
+    {
+      "file": "oracle-parse-run.json",
+      "sha256": "3f2e20c2c1dfd16b5b39bf4920b03cfe71bb43f56a8b74d64c80ea043fb6bb1a",
+      "exit": 1,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Function \"get_node()\" not found in base self.",
+        "ERROR: Failed to load script \"res://scripts/debug/verify_design_phase.gd\" with error \"Parse error\"."
+      ],
+      "elapsed_seconds": 5.141,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_design_phase.gd",
+        "--check-only"
+      ]
+    },
+    {
+      "file": "oracle-parse-v2-run.json",
+      "sha256": "c757a45fe46198d3a6f416a7b44c22e0a397dc030d9bdd85e8f874e48825bc8b",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 5.078,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_design_phase.gd",
+        "--check-only"
+      ]
+    },
+    {
+      "file": "pending-card-motion-run.json",
+      "sha256": "3b76094fbc071f6ceee1a6e2645d466504f727b55be13977172c344fcb350e24",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 94.0,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_card_motion.gd"
+      ]
+    },
+    {
+      "file": "pending-continuation-run.json",
+      "sha256": "e6092e5b00be1b3b2f0552dbe0991d7f1da8e8850a93cefc30d5d1ed8d11c128",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 39.516,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_campaign_continuation.gd"
+      ]
+    },
+    {
+      "file": "pending-cult-run.json",
+      "sha256": "9380ce6bfc7268a1223260133479730fb0c8cb27058d9104465961341f426192",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 32.766,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_cult_following.gd"
+      ]
+    },
+    {
+      "file": "pending-development-replay-run.json",
+      "sha256": "8dafbd3109c805506773da4b12a111cdc7333fd8539464ce5c2c1c1722acb42e",
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: live development traces match original",
+        "ERROR: FAIL: headless development traces match original"
+      ],
+      "elapsed_seconds": 80.484,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_development_replay.gd"
+      ]
+    },
+    {
+      "file": "pending-economy-run.json",
+      "sha256": "a62038bac44b4f8c5ce80b3fbce2fa018ace8b89b4f8196a23e3188bc5bb7924",
+      "exit": 2,
+      "errors": [
+        "ERROR: FAIL: Indicator refreshes after a reserve purchase",
+        "ERROR: FAIL: Owned later Feature costs one cycle and contributes Scope and Core; Debug retains undefined play costs"
+      ],
+      "elapsed_seconds": 6.359,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_first_studio_feature_economy.gd"
+      ]
+    },
+    {
+      "file": "pending-economy-v2-run.json",
+      "sha256": "be98d328a5839c49a9f7e6cb410390283ce780842bbaaa9f338d0252ae588fad",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 7.328,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_first_studio_feature_economy.gd"
+      ]
+    },
+    {
+      "file": "pending-first-game-run.json",
+      "sha256": "1c2e55805ce0c276da3185b41f7bd4144b0526c4db93eefe6dbda61f887f1491",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 13.437,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_first_game_and_tips.gd"
+      ]
+    },
+    {
+      "file": "pending-guide-run.json",
+      "sha256": "ab462d3c234807f36927f6a4bb08a84ba086f5ace15570aabf74ca15271efb8c",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 23.547,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_how_to_play.gd"
+      ]
+    },
+    {
+      "file": "pending-latency-restore-run.json",
+      "sha256": "64c371cd438ffb58ec0327dcf7afd3b859a9dec5f3483a8c1c5f77b20ec6108b",
+      "exit": 17,
+      "errors": [
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: actions-before-v3: every rival/market field and RNG is exact",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: compiled-v003: every rival/market field and RNG is exact",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: long-v003: every rival/market field and RNG is exact",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: Current strict schema validates before historical comparison",
+        "ERROR: long-final: every rival/market field and RNG is exact"
+      ],
+      "elapsed_seconds": 61.765,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd"
+      ]
+    },
+    {
+      "file": "pending-latency-restore-v2-run.json",
+      "sha256": "c1ba16daf797b756175eba2e48a82dd5264cb25aa1e43e582c91fb6642cdd62c",
+      "exit": 2,
+      "errors": [
+        "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime",
+        "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime"
+      ],
+      "elapsed_seconds": 62.031,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd"
+      ]
+    },
+    {
+      "file": "pending-latency-restore-v3-run.json",
+      "sha256": "dc4aa273cea0103717d4ac2fc533bdf39d12f7a8f2de80e8e009b7e7bfa1292a",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 71.141,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd"
+      ]
+    },
+    {
+      "file": "pending-matrix-run.json",
+      "sha256": "047cb3de22ccdfb38972712a62b6c96dd7f47ce1f36c45a9e1f09e9ddb80d0ab",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 22.125,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_contract_challenge_matrix.gd"
+      ]
+    },
+    {
+      "file": "pending-parents-run.json",
+      "sha256": "e1e3543a385c640c3f2ddbea8e59aff4a2eecdc2770af09f45e51bc1b52e32ef",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 11.39,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_feature_parents.gd"
+      ]
+    },
+    {
+      "file": "pending-pause-track-run.json",
+      "sha256": "0a68384908a782efc84cd6504ec6926e24e1878aa906d370941f18539c3be247",
+      "exit": 1,
+      "errors": [
+        "ERROR: Rival Gameplay: Esc resumes gameplay and clears filter"
+      ],
+      "elapsed_seconds": 18.718,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_pause_track.gd"
+      ]
+    },
+    {
+      "file": "pending-protocol-run.json",
+      "sha256": "0e262bd4b97d7dbba966b657290c15d27968ab7f6af0a9e234645a4945b2d3d3",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 32.984,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_development_protocol.gd"
+      ]
+    },
+    {
+      "file": "pending-qa-career-run.json",
+      "sha256": "838ce064bb869f4509e0099c3da027597123ba37533031398ecdca8b951240fd",
+      "exit": 124,
+      "errors": [],
+      "elapsed_seconds": 130.015,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_qa_career.gd"
+      ]
+    },
+    {
+      "file": "pending-rival-selector-run.json",
+      "sha256": "c08d7195fa7ed608929821b69b536f733cc6c013adaefcda3fac43ebbc6cb018",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 47.359,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_rival_feature_exhaustion.gd"
+      ]
+    },
+    {
+      "file": "pending-search-first-run.json",
+      "sha256": "137945e0f0cb818b48442a07eaf5466ea8f0a332d3ebd8155f941a99692355f0",
+      "exit": 0,
+      "errors": [
+        "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+      ],
+      "elapsed_seconds": 1.297,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_search_first.gd"
+      ]
+    },
+    {
+      "file": "pending-search-first-v2-run.json",
+      "sha256": "94f56e4bcacc310bb7f2971a6b4c22708e7e5790afc5e3ced3a3c191c67aa9a5",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.64,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_search_first.gd"
+      ]
+    },
+    {
+      "file": "pending-search-first-v3-run.json",
+      "sha256": "4d5936a349648ad54c25e8b9a4a4194c7b6da1de74e3ed267f9ca030ea1533a3",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.25,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_search_first.gd"
+      ]
+    },
+    {
+      "file": "pending-store-study-run.json",
+      "sha256": "c9b5e27638f33f26c1a8fb225ba7cbc2d6d99bf14e528eb66bbba137fa9c004b",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 83.25,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_store_study.gd"
+      ]
+    },
+    {
+      "file": "provenance-green-run.json",
+      "sha256": "8b271d24f605288ce40ea504c8800c39ef949957f1197cfc25154208f31378ec",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.14,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era.gd"
+      ]
+    },
+    {
+      "file": "provenance-red-run.json",
+      "sha256": "bdcbe713110083560b6c3e35a1adc997597624cd9967d98de17d9f619322ba9d",
+      "exit": 6,
+      "errors": [
+        "FAIL: Contradictory/unknown frozen Scope completion cannot mint receipt",
+        "FAIL: Contradictory/unknown frozen Scope completion cannot mint receipt",
+        "FAIL: Contradictory/unknown frozen Scope completion cannot mint receipt",
+        "FAIL: Contradictory/unknown frozen Scope completion cannot mint receipt",
+        "FAIL: Missing completion provenance grants no receipt",
+        "FAIL: Reject invalid catalog era metadata { \"min_year\": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000.0 }"
+      ],
+      "elapsed_seconds": 1.141,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era.gd"
+      ]
+    },
+    {
+      "file": "pure-green-run.json",
+      "sha256": "73f5b452d650b8489efca1e62e03376012b440fc8529117286fcef660a0e3918",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.391,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era.gd"
+      ]
+    },
+    {
+      "file": "pure-red-run.json",
+      "sha256": "a8dffef1f8c083eae1a2ed37f2c7acfe8cb74127d8550a1ad53a9974f7cb89c0",
+      "exit": 1,
+      "errors": [
+        "FAIL: Pure Store era rule exists"
+      ],
+      "elapsed_seconds": 1.766,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era.gd"
+      ]
+    },
+    {
+      "file": "radial-v2-run.json",
+      "sha256": "28af7d60232b8aaba9387ad5f8e8b0c70d008b99780c44f129a1a3d06ed6abef",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 16.625,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store_radial.gd"
+      ]
+    },
+    {
+      "file": "research-expanded-run.json",
+      "sha256": "8414bca94e1eee0c3afea5022da43743660389a397393a733e32f8958a19ff95",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 10.406,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_research.gd"
+      ]
+    },
+    {
+      "file": "research-provenance-run.json",
+      "sha256": "d7be6af545058d9c20dc6d3c17b49a975c5f66f442480ca40e0ef8e5d333123a",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 11.687,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_research.gd"
+      ]
+    },
+    {
+      "file": "rival-economic-cause-probe-run.json",
+      "sha256": "eac38931c4db7d8a65e5fc635ee15cceab51622db4f3ad28a38b868022440d6b",
+      "exit": 1,
+      "errors": [
+        "ERROR: RIVAL_FEATURE_EXHAUSTION: rival world advances one legal player cycle 28"
+      ],
+      "elapsed_seconds": 9.844,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/rival_economic_cause_probe.gd"
+      ]
+    },
+    {
+      "file": "rival-economic-probe-run.json",
+      "sha256": "8aab4e38a00c8e4f2b4ac56824aa4a33043741d60e88ad8b2d70133e25020be7",
+      "exit": 1,
+      "errors": [
+        "ERROR: RIVAL_FEATURE_EXHAUSTION: rival world advances one legal player cycle 28"
+      ],
+      "elapsed_seconds": 10.797,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/rival_economic_probe.gd"
+      ]
+    },
+    {
+      "file": "save-fast-path-v2-verify_background_checkpoint-run.json",
+      "sha256": "76680abe1f815fa5b72a1f128e758b3b014d09788f6f25583fd4013dffa33cba",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 107.25,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_background_checkpoint.gd"
+      ]
+    },
+    {
+      "file": "save-fast-path-v2-verify_background_gameplay-run.json",
+      "sha256": "a37662e703bae86c11cd2ed0b6a1fccab32978523435638f64f8ea4ada58bbd1",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 66.64,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_background_gameplay.gd"
+      ]
+    },
+    {
+      "file": "save-fast-path-v2-verify_snapshot_ownership-run.json",
+      "sha256": "d05222400b3d364bed546f49254fd0cc866ff9679c683a34206afeb8c8455cd5",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 18.907,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_snapshot_ownership.gd"
+      ]
+    },
+    {
+      "file": "save-fast-path-verify_snapshot_ownership-run.json",
+      "sha256": "c678b775c7635ff50f8487e733ae5f5c5185011c2f5047c48f51d32f16be0c90",
+      "exit": 1,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"path\" variable because the value doesn't have a set type.",
+        "ERROR: Failed to load script \"res://scripts/debug/verify_snapshot_ownership.gd\" with error \"Parse error\"."
+      ],
+      "elapsed_seconds": 0.344,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_snapshot_ownership.gd"
+      ]
+    },
+    {
+      "file": "save-kickoff-detail-profile-run.json",
+      "sha256": "4e7403cabf7df8c64b20a55bfe321319a43df13c6fca34cccbe10a320ddbca09",
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: Real Studio save kickoff stays within100ms"
+      ],
+      "elapsed_seconds": 99.313,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/profile_verify_background_gameplay.gd"
+      ]
+    },
+    {
+      "file": "save-kickoff-profile-run.json",
+      "sha256": "9ff3706c2c5ef7e74e7d40b13f4235927a253ef0b224b70f97840e0a818b5695",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 70.703,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/profile_verify_background_gameplay.gd"
+      ]
+    },
+    {
+      "file": "save-snapshot-acceptance-verify_campaign_latency-run.json",
+      "sha256": "1eb59795a40e9c798fdf1b43ffaebdf59a25147f5e26ddf1195b38d162191614",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 18.718,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_campaign_latency.gd"
+      ]
+    },
+    {
+      "file": "save-snapshot-acceptance-verify_latency_restore-run.json",
+      "sha256": "7f14f959ad0fefbc20b3a2673bb2b0b913f2f4ef5b44a6b5031cf39a68d7d226",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 92.156,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_latency_restore.gd"
+      ]
+    },
+    {
+      "file": "save-snapshot-acceptance-verify_snapshot_ownership-run.json",
+      "sha256": "1538a934447b259412ed6917e7c76dfc57b9d81aa1c80ed09663274671e7df8f",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 24.75,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_snapshot_ownership.gd"
+      ]
+    },
+    {
+      "file": "save-tutorial-native-verify_guided_tutorial_ui-run.json",
+      "sha256": "38e00f5583b3492907221641fa1c6da4171b42e4672e657bc384d4efc260ce94",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 76.609,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_guided_tutorial_ui.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ]
+    },
+    {
+      "file": "search-current-run.json",
+      "sha256": "3eea04c400a7d5ebc43ef48aaca24fae731270c058de3ea8af357a839442a0ff",
+      "exit": 1,
+      "errors": [
+        "ERROR: Expected acceptance: development Calendar cannot advance"
+      ],
+      "elapsed_seconds": 6.25,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_contract_search.gd"
+      ]
+    },
+    {
+      "file": "search-era-commission-run.json",
+      "sha256": "171b15b688fe1b3e5862301b5062481b8a3e1948e2a1f8f632ba0576153eda1b",
+      "exit": 1,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"research\" variable because the value doesn't have a set type.",
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"commission_meta\" variable because the value doesn't have a set type.",
+        "ERROR: Failed to load script \"res://scripts/debug/verify_contract_search.gd\" with error \"Parse error\"."
+      ],
+      "elapsed_seconds": 0.485,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_contract_search.gd"
+      ]
+    },
+    {
+      "file": "search-era-commission-v2-run.json",
+      "sha256": "dfe2ca07a3f1a7e372a89af35de61b3b5c7af764e3e5553b04b577c5546ba553",
+      "exit": 124,
+      "errors": [],
+      "elapsed_seconds": 130.016,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_contract_search.gd"
+      ]
+    },
+    {
+      "file": "search-era-commission-v3-run.json",
+      "sha256": "2a9d76468ab0f84e69a2af3e9d5590f2fe4b314d1132210f2e728d24060e6081",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 177.375,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_contract_search.gd"
+      ]
+    },
+    {
+      "file": "search-final-control-run.json",
+      "sha256": "a3c458f06d4d88f0466f5a2272fffc9358fc8206405fd26439fc5a1aef8be059",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1394.829,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_contract_search.gd"
+      ]
+    },
+    {
+      "file": "search-leak-probe-run.json",
+      "sha256": "1fbcc4007511dd945746b1d94dd23736268d32b5e77d7bb7433af31cfda24360",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.5,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--verbose",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_search_first.gd"
+      ]
+    },
+    {
+      "file": "snapshot-ownership-after-run.json",
+      "sha256": "5b6a6e5a08e8e390c3b8519bed7ccfb4df81cd428c150270dc70eda2cb222ce9",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 19.172,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_snapshot_ownership.gd"
+      ]
+    },
+    {
+      "file": "snapshot-ownership-before-run.json",
+      "sha256": "caa9e1b42256fdade95338003bbbc7005e616864eb4c97090a95c4992635775d",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 15.375,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_snapshot_ownership.gd"
+      ]
+    },
+    {
+      "file": "stage-a-codec-run.json",
+      "sha256": "eb7e0534f77d2a155e8536b0b8ed8ce2a4a80bb070261868d44722d988751f23",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.047,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_checkpoint_codec.gd"
+      ]
+    },
+    {
+      "file": "stage-a-native-run.json",
+      "sha256": "8bf26b886b9df74048fee223d47b4280eb1ac2d8b12b00f8aa4f21d129b34503",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 26.235,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_era_access.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ]
+    },
+    {
+      "file": "stage-a-navigation-run.json",
+      "sha256": "9a1b82c02695519f61b5a027f7e32f9e7b90b18616070d2459a6693cdd53386d",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 18.421,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store_navigation.gd"
+      ]
+    },
+    {
+      "file": "stage-a-research-run.json",
+      "sha256": "84d9e977eb362083678c6a35467b5dd6f861779537d09e22728916ff4b4d97a4",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.812,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_research.gd"
+      ]
+    },
+    {
+      "file": "stage-a-studio-run.json",
+      "sha256": "b35ad47bb49fbf274794ca10e6dd9c4adf97885f2dd891ce2d3bc0197ded08c8",
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 4.141,
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_studio_checkpoint.gd"
+      ]
+    }
+  ],
+  "final_campaign": {
+    "case_id": "action-4417-three-releases",
+    "ok": true,
+    "status": "completed",
+    "commands": 397,
+    "final_run_cycle": 213,
+    "final_release_count": 3,
+    "source_identity": "274023dedb8414b9b7ba852d470b36091a25fb954fde32f44325a5689109ac06"
+  },
+  "final_replay": {
+    "file": "campaign-replay-final-v6\\run-report.json",
+    "sha256": "1581f0e6273a062f93ca709c4cfe8af86fe1956d77c8f93b93b96ec4564aa387",
+    "ok": true,
+    "commands": 397,
+    "telemetry_samples": 398,
+    "telemetry_verified": true,
+    "final_state": "2a1af4c41afca141793b0b55ed95df92d6df2fff6180631790e794b37299d3d2"
+  },
+  "final_gate_receipt": "final-gate-receipt.json"
+}

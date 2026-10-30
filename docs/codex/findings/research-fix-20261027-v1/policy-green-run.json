@@ -1,0 +1,37 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_rival_policy_observation.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 0.657,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Could not parse global class \"RivalWorld\" from \"res://scripts/market/rival_world.gd\".",
+    "SCRIPT ERROR: Parse Error: Could not resolve external class member \"restore\".",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"choice\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Could not parse global class \"RivalWorld\" from \"res://scripts/market/rival_world.gd\".",
+    "SCRIPT ERROR: Parse Error: Could not resolve external class member \"policies\".",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"current\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"prior\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Could not resolve external class member \"snapshot\".",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_rival_policy_observation.gd\" with error \"Parse error\"."
+  ],
+  "tail": [
+    "SCRIPT ERROR: Parse Error: Could not resolve external class member \"policies\".",
+    "   at: GDScript::reload (res://scripts/debug/verify_rival_policy_observation.gd:53)",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"current\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (res://scripts/debug/verify_rival_policy_observation.gd:53)",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"prior\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (res://scripts/debug/verify_rival_policy_observation.gd:54)",
+    "SCRIPT ERROR: Parse Error: Could not resolve external class member \"snapshot\".",
+    "   at: GDScript::reload (res://scripts/debug/verify_rival_policy_observation.gd:56)",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_rival_policy_observation.gd\" with error \"Parse error\".",
+    "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)"
+  ]
+}

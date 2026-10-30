@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_ui_folder_navigation.gd"
+  ],
+  "exit": 4,
+  "elapsed_seconds": 16.484,
+  "errors": [
+    "FAIL: Discard uses the shared in-panel confirmation design",
+    "FAIL: Discard action is explicitly named",
+    "FAIL: Discard uses the shared in-panel confirmation design",
+    "FAIL: Discard action is explicitly named"
+  ],
+  "tail": [
+    "FAIL: Discard action is explicitly named",
+    "PASS: Discard confirmation fits the supported viewport",
+    "PASS: Cancel discard retains name, Genre and traits",
+    "PASS: Escape cancels discard without clearing the draft",
+    "PASS: Confirmed discard clears draft without committing",
+    "PASS: Discard preserves existing saved-Studio metadata",
+    "PASS: Animation bypass preserves navigation semantics without locks",
+    "PASS: Studio creation emits once and Back cannot reverse a commit",
+    "PASS: Scene teardown leaves GUI input usable",
+    "UI folder navigation: 79 checks, 4 failures"
+  ]
+}

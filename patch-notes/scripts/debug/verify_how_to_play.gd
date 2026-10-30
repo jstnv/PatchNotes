@@ -60,6 +60,7 @@ func _initialize() -> void:
 	expect(not guide.is_open() and root.gui_get_focus_owner() == title_button,"Esc returns focus to title entry")
 	game._on_studio_created("Guide test Studio",&"action",[],game._active_phase)
 	await process_frame
+	await skip_save_invitation()
 	var saved: Dictionary = game.checkpoints.store.inspect().payload.duplicate(true)
 	before = game_state()
 	await key(KEY_ESCAPE)

@@ -3,9 +3,10 @@ extends RefCounted
 
 signal allocation_changed
 
-const MIN_PRIORITY := 10
+const MIN_PRIORITY := 40
 const SAVED_MIN_PRIORITY := 5
-const MAX_PRIORITY := 75
+const MAX_PRIORITY := 60
+const SAVED_MAX_PRIORITY := 80
 const PRIORITY_STEP := 5
 const REQUIRED_TOTAL_PRIORITY := 100
 const CATEGORIES: Array[StringName] = [CardData.BETA_CATEGORY_QA, CardData.BETA_CATEGORY_MARKETING, CardData.BETA_CATEGORY_INSIDER]
@@ -29,15 +30,19 @@ func _init() -> void:
 		_priorities = {CardData.BETA_CATEGORY_QA:50,CardData.BETA_CATEGORY_MARKETING:50,CardData.BETA_CATEGORY_INSIDER:0}
 
 ## Only an editable draft is normalized; hydration preserves historical weights.
-static func editable_distribution(distribution: Dictionary) -> Dictionary[StringName, int]:
-	var result: Dictionary[StringName, int] = {}
-	for category in CATEGORIES: result[category] = distribution[category]
-	if insiders_enabled():
-		for category in CATEGORIES: result[category] = maxi(MIN_PRIORITY,result[category])
-		return result
-	var active_total := int(result[CardData.BETA_CATEGORY_QA]) + int(result[CardData.BETA_CATEGORY_MARKETING])
-	var qa := clampi(floori(float(result[CardData.BETA_CATEGORY_QA]) / maxi(1,active_total) * 20.0 + 0.5) * 5,25,75)
-	return {CardData.BETA_CATEGORY_QA:qa,CardData.BETA_CATEGORY_MARKETING:100-qa,CardData.BETA_CATEGORY_INSIDER:0}
+static func bounds(run: RefCounted=null) -> Vector2i:
+	# Explicit historical Insider-enabled fixtures retain the old three-category rules.
+	# Returning Insider to ordinary play still needs its own range decision.
+	if insiders_enabled():return Vector2i(10,75)
+	var state: Variant={} if run==null else run.get("_employees")
+	return EmployeeRoster.Career.limits(state if state is Dictionary else {},true)
+
+static func editable_distribution(distribution: Dictionary,run: RefCounted=null) -> Dictionary[StringName,int]:
+	var categories: Array=CATEGORIES.duplicate() if insiders_enabled() else CATEGORIES.slice(0,2)
+	var normalized:=PriorityAllocation.normalize(distribution,categories,bounds(run))
+	var result: Dictionary[StringName,int]={}
+	for key: StringName in CATEGORIES:result[key]=int(normalized.get(key,0))
+	return result
 
 
 func set_distribution(distribution: Dictionary) -> bool:
@@ -73,16 +78,17 @@ static func is_valid_distribution(distribution: Dictionary) -> bool:
 		if not distribution.has(category) or typeof(distribution[category]) != TYPE_INT:
 			return false
 		var value: int = distribution[category]
-		if (value < SAVED_MIN_PRIORITY and not (category == CardData.BETA_CATEGORY_INSIDER and value == 0)) or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
+		if (value < SAVED_MIN_PRIORITY and not (category == CardData.BETA_CATEGORY_INSIDER and value == 0)) or value > SAVED_MAX_PRIORITY or value % PRIORITY_STEP != 0:
 			return false
 		total += value
 	return total == REQUIRED_TOTAL_PRIORITY
 
 
-static func is_valid_new_distribution(distribution: Dictionary) -> bool:
-	if not is_valid_distribution(distribution): return false
+static func is_valid_new_distribution(distribution: Dictionary,run: RefCounted=null) -> bool:
+	if not is_valid_distribution(distribution):return false
+	var limits:=bounds(run)
 	for category: StringName in CATEGORIES:
 		if not category_enabled(category):
-			if distribution[category] != 0: return false
-		elif distribution[category] < MIN_PRIORITY: return false
+			if distribution[category]!=0:return false
+		elif distribution[category]<limits.x or distribution[category]>limits.y:return false
 	return true

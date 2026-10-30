@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--text-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\store-era-20261027-v1\\release-gate-final-v4\\patch-notes-demo-20261007-7kp9uypl\\source",
+    "--export-release",
+    "Windows Desktop",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\store-era-20261027-v1\\release-gate-final-v4\\patch-notes-demo-20261007-7kp9uypl\\demo\\Patch Notes Demo.exe"
+  ],
+  "cwd": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\store-era-20261027-v1\\release-gate-final-v4\\patch-notes-demo-20261007-7kp9uypl",
+  "exit": 1,
+  "profile": {
+    "APPDATA": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\store-era-20261027-v1\\release-gate-final-v4\\patch-notes-demo-20261007-7kp9uypl\\APPDATA",
+    "LOCALAPPDATA": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\store-era-20261027-v1\\release-gate-final-v4\\patch-notes-demo-20261007-7kp9uypl\\LOCALAPPDATA",
+    "TMP": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\store-era-20261027-v1\\release-gate-final-v4\\patch-notes-demo-20261007-7kp9uypl\\temp",
+    "TEMP": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\store-era-20261027-v1\\release-gate-final-v4\\patch-notes-demo-20261007-7kp9uypl\\temp",
+    "TMPDIR": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\store-era-20261027-v1\\release-gate-final-v4\\patch-notes-demo-20261007-7kp9uypl\\temp"
+  },
+  "errors": [
+    "ERROR: Invalid export preset name: Windows Desktop."
+  ],
+  "original_log_sha256": "7dcd631cbe7255926ada4da7e77346cdae15d4de7a46f5cf24a696ae4793aa6b",
+  "correction": "Exporter now selects the unique preset by Windows Desktop platform; no canonical export config or gameplay changes.",
+  "focused_tests": {
+    "red": "export-preset-red-v2.log",
+    "red_result": "5 missing-function errors before implementation",
+    "intermediate": "export-preset-green.log",
+    "intermediate_result": "Real Godot multiline options reject generic INI parser; retained",
+    "green": "export-preset-green-v2.log",
+    "green_result": "5 tests PASS"
+  },
+  "export_helper_sha256": "a466930b275b3825e7928a0f6dbf14e9319d93e798a67a6f3710832c04942997"
+}

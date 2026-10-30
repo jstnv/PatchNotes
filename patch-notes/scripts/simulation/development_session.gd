@@ -95,7 +95,7 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 	if kind==&"priorities":
 		var distribution: Variant = payload.get("distribution")
 		if payload.size()!=1 or not distribution is Dictionary: return reject("Malformed priorities")
-		var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution) if phase_index==2 else PriorityAllocation.is_valid_new_distribution(distribution)
+		var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution, run) if phase_index==2 else PriorityAllocation.is_valid_new_distribution(distribution, run)
 		if not valid or distribution==hand.priorities: return reject("Invalid or unchanged priorities")
 		if not hand.active:
 			hand.priorities=distribution.duplicate()
@@ -116,6 +116,9 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 		hand.active=true
 		return {"ok":true,"events":[{"type":"initial_deal","candidate_ids":hand.candidate_ids.duplicate()}]}
 	if not hand.active: return reject("Phase not begun")
+	if kind==&"align_pass":
+		if payload.size()!=1 or not payload.get("quote") is Dictionary:return reject("Exact alignment quote required")
+		return actions.replace_pass(payload.quote)
 	if kind in [&"play",&"redraw"]:
 		var ids: Variant = payload.get("candidate_ids")
 		if not ids is Array: return reject("Missing candidate tokens")
@@ -158,7 +161,7 @@ func _finish() -> Dictionary:
 
 ## Policies receive only plain observations and return command payloads. No
 ## default AI policy or balance/exit budget is implied by this interface.
-func observation() -> Dictionary:
+func observation(include_action_availability: bool = true) -> Dictionary:
 	var candidates: Array = []
 	for index in range(hand.candidate_ids.size()):
 		var card: CardData = hand._candidate_cards[index]
@@ -170,7 +173,18 @@ func observation() -> Dictionary:
 	if phase_index==1: pending=hand._pending_playtest_categories.duplicate()
 	if phase_index==2: pending=hand._pending_corrective_pass_ids.duplicate()
 	var swaps: Array[int]=[]
-	if phase_index==2:
+	if phase_index==2 and include_action_availability:
 		for index in range(hand.candidate_ids.size()):
 			if actions.can_swap([index] as Array[int]):swaps.append(hand.candidate_ids[index])
-	return {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize(),"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending,"swap_candidate_ids":swaps}
+	var result := {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize() if include_action_availability else false,"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending,"swap_candidate_ids":swaps}
+	if phase_index<2 and include_action_availability:
+		var alignment: Array=[]
+		for slot in hand.candidate_ids.size():alignment.append_array(actions.alignment_options([slot] as Array[int]))
+		result.pass_alignment_options=alignment
+	var limits:=BetaPriorityAllocation.bounds(run) if phase_index==2 else PriorityAllocation.bounds(run)
+	result.priority_bounds={"minimum":limits.x,"maximum":limits.y,"step":5}
+	if phase_index==1 or phase_index==2:result.redraw_protected_ids=hand.injected_candidate_ids.duplicate()
+	if not include_action_availability:
+		result.erase("can_exit")
+		result.erase("swap_candidate_ids")
+	return result

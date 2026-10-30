@@ -29,7 +29,7 @@ func _ready() -> void:
 	var scroll:=ScrollContainer.new();scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;scroll.follow_focus=true;scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;box.add_child(scroll)
 	content=VBoxContainer.new();content.add_theme_constant_override("separation",14);content.size_flags_horizontal=Control.SIZE_EXPAND_FILL;scroll.add_child(content)
 	footer=FolderUI.label(box,"",&"SecondaryLabel")
-	confirmation=ConfirmationDialog.new();confirmation.exclusive=true;add_child(confirmation)
+	confirmation=preload("res://scripts/ui/quit_confirmation.gd").new();confirmation.wrap_controls=false;confirmation.min_size=Vector2i(680,300);confirmation.exclusive=true;add_child(confirmation)
 	confirmation.confirmed.connect(_commit_pending);confirmation.canceled.connect(func():pending={})
 	hide()
 func open_for(value: RunState) -> void:
@@ -61,46 +61,95 @@ func _refresh() -> void:
 	footer.text="Monthly payroll: current %s · scheduled %s · Cash %s"%[CashFormatter.format_exact_cents(current),CashFormatter.format_exact_cents(total),CashFormatter.format_exact_cents(run.get_cash_cents())]
 	if section==&"roster":
 		FolderUI.label(content,"One specialist per role · Hiring unlocks after your second release",&"SubheadingLabel")
-		for role in [&"production",&"qa"]:
+		for role in [&"production",&"qa",&"project_manager"]:
 			var e: Dictionary={}
 			for candidate: Dictionary in roster.employees.values():
 				if candidate.type==role:e=candidate
 			var card:=FolderUI.surface(content,true);var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);card.add_child(body)
-			FolderUI.label(body,"Production Specialist" if role==&"production" else "QA Specialist",&"SubheadingLabel")
-			FolderUI.label(body,"Match a printed Pass and Feature to unlock bundled priority planning." if role==&"production" else "Enroll in QA courses to earn specialization Bug searches and one-card Swap.")
+			FolderUI.label(body,_role_name(role),&"SubheadingLabel")
+			FolderUI.label(body,_role_description(role))
 			if e.is_empty():
 				var offer:=run.get_employee_hire_quote(role)
 				FolderUI.label(body,"$1,000.00 / month · Hire $100.00"+(" · First payday: cycle %d"%offer.first_due_cycle if not offer.is_empty() else " · Requires two releases, current bills and enough cash"))
 				var button:=FolderUI.button(body,"Hire for $100.00",func():request_purchase(&"hire",run.get_employee_hire_quote(role)))
 				button.disabled=offer.is_empty() or not run.uses_employee_trial();_hire_buttons[role]=button
 			else:
-				FolderUI.label(body,"Hired · "+("Training complete" if e.trained else "Training in progress"));_payroll_copy(body,e,payroll)
+				FolderUI.label(body,"Hired · "+("Courses completed: %d"%EmployeeRoster.Career.completed(e) if e.has("career") else ("Training complete" if e.trained else "Enroll in a course to train")));_payroll_copy(body,e,payroll)
 	elif section==&"courses":
-		var qa: Dictionary={}
+		if roster.employees.is_empty():FolderUI.label(content,"Hire a Specialist after your second release to enroll in courses.")
 		for e: Dictionary in roster.employees.values():
-			if e.type==&"qa":qa=e
-		if qa.is_empty():FolderUI.label(content,"Hire a QA Specialist after your second release to enroll in courses.")
-		else:
-			for course in [&"mixed",&"pure"]:
-				var document:=FolderUI.surface(content,true);var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);document.add_child(body)
-				FolderUI.label(body,"Search & Fix" if course==&"mixed" else "QA Versatility",&"SubheadingLabel")
-				FolderUI.label(body,_criterion(course))
-				FolderUI.label(body,_benefit(course))
-				if qa.courses.has(course):FolderUI.label(body,"Completed · +$100.00/month" if qa.courses[course].completed_cycle>=0 else "Enrolled · Future committed hands count")
-				else:
-					var offer:=run.get_qa_course_quote(course)
-					var button:=FolderUI.button(body,"Enroll for $150.00",func():request_purchase(&"course",run.get_qa_course_quote(course)))
-					button.disabled=offer.is_empty()
+			FolderUI.label(content,_role_name(e.type),&"SubheadingLabel")
+			if e.type==&"qa":
+				for course in [&"mixed",&"pure"]:_qa_course_card(e,course)
+			else:
+				_career_summary(content,e)
+				for course: StringName in EmployeeRoster.Career.course_ids(e.type):_career_course_card(e,course)
 	else:
 		if roster.employees.is_empty():FolderUI.label(content,"Your hired specialists and their permanent progress will appear here.")
 		for e: Dictionary in roster.employees.values():
-			FolderUI.label(content,str(e.type).capitalize()+" Specialist",&"SubheadingLabel");_payroll_copy(content,e,payroll)
-			if e.type==&"production":FolderUI.label(content,"Training: commit a Design hand with a Core Pass and matching printed primary/secondary Feature. Once trained, optionally change priorities with a later matching hand, once per project.")
-			else:
+			FolderUI.label(content,_role_name(e.type),&"SubheadingLabel");_payroll_copy(content,e,payroll)
+			if e.type==&"qa":
 				for course in [&"mixed",&"pure"]:
 					FolderUI.label(content,_criterion(course))
 					var progress: String="Not enrolled" if not e.courses.has(course) else ("Complete" if e.courses[course].completed_cycle>=0 else ("Search %d/3 · Debug %d/3"%[e.search_count,e.debug_count] if course==&"pure" else "Discover and fix in the same hand"))
 					FolderUI.label(content,progress+" · "+_benefit(course))
+			else:
+				_career_summary(content,e)
+				for course: StringName in EmployeeRoster.Career.course_ids(e.type):
+					FolderUI.label(content,_career_name(course)+" · "+_career_progress(e,course))
+
+static func _role_name(role: StringName) -> String:
+	return {&"production":"Production Specialist",&"qa":"QA Specialist",&"project_manager":"Project Manager"}.get(role,str(role).capitalize())
+
+static func _role_description(role: StringName) -> String:
+	return {&"production":"Enroll in Production courses to earn bundled priority planning and chosen matching Pass replacement.",&"qa":"Enroll in QA courses to earn specialization Bug searches and one-card Swap.",&"project_manager":"Complete sequential course challenges to widen priority ranges across planning screens."}.get(role,"")
+
+func _qa_course_card(e: Dictionary,course: StringName) -> void:
+	var document:=FolderUI.surface(content,true);var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);document.add_child(body)
+	FolderUI.label(body,"Search & Fix" if course==&"mixed" else "QA Versatility",&"SubheadingLabel")
+	FolderUI.label(body,_criterion(course));FolderUI.label(body,_benefit(course))
+	if e.courses.has(course):FolderUI.label(body,"Completed · +$100.00/month" if e.courses[course].completed_cycle>=0 else "Enrolled · Future committed hands count")
+	else:
+		var offer:=run.get_qa_course_quote(course)
+		var button:=FolderUI.button(body,"Enroll for $150.00",func():request_purchase(&"course",run.get_qa_course_quote(course)))
+		button.disabled=offer.is_empty()
+
+static func _career_name(course: StringName) -> String:
+	return "Production Planning" if course==&"production_planning" else "Pass Alignment" if course==&"pass_alignment" else "Project Management %s"%str(course).get_slice("_",1)
+
+static func _career_criterion(course: StringName) -> String:
+	if course==&"production_planning":return "After enrollment, commit a Design hand with a Core Pass and a Feature matching its printed primary or secondary Core. A later matching hand can use bundled priority planning once per project."
+	if course==&"pass_alignment":return "After enrollment, commit a printed Pass/Feature match in Design and Alpha of the same game, then release it. Earn chosen matching Core Pass replacement through Redraw, one normal redraw per use."
+	return "After enrollment, release four distinct games with two actual Design, Alpha or Beta Specializations each, in categories at that hand's legal minimum. Each completion widens both priority limits by 5 points. Contracts do not train this challenge."
+
+static func _career_progress(e: Dictionary,course: StringName) -> String:
+	var record: Dictionary=e.get("career",{}).get("courses",{}).get(course,{})
+	if record.is_empty():return "Not enrolled"
+	if record.completed_cycle>=0:return "Completed · +$100.00/month"+(" · legacy training retained" if record.legacy else "")
+	if e.type==&"project_manager":return "Enrolled · %d/4 qualifying released games"%e.career.games.get(course,[]).size()
+	if course==&"production_planning":return "Enrolled · Commit one matching Design hand"
+	var pending:=0
+	for project: Dictionary in e.career.projects.values():
+		if not project.design.is_empty() and not project.alpha.is_empty():pending+=1
+	return "Enrolled · %d game(s) have both matches; successful release required"%pending
+
+func _career_summary(parent: Node,e: Dictionary) -> void:
+	if e.type==&"project_manager":
+		var level:=EmployeeRoster.Career.completed(e)
+		var core:=PriorityAllocation.bounds(run);var beta:=BetaPriorityAllocation.bounds(run)
+		FolderUI.label(parent,"Level %d/4 · Core %d–%d%% · Beta %d–%d%% · exact 100 in 5-point steps"%[level,core.x,core.y,beta.x,beta.y])
+	else:FolderUI.label(parent,"Completed courses: %d/2 · Course purchase starts training; completion earns the benefit and raise."%EmployeeRoster.Career.completed(e))
+
+func _career_course_card(e: Dictionary,course: StringName) -> void:
+	var document:=FolderUI.surface(content,true);var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);document.add_child(body)
+	FolderUI.label(body,_career_name(course),&"SubheadingLabel")
+	FolderUI.label(body,_career_criterion(course));FolderUI.label(body,_career_progress(e,course))
+	if not e.get("career",{}).get("courses",{}).has(course):
+		var offer:=run.get_employee_course_quote(e.employee_id,course)
+		var button:=FolderUI.button(body,"Enroll for $150.00",func():request_purchase(&"course",run.get_employee_course_quote(e.employee_id,course)))
+		button.name="Enroll_"+str(course);button.disabled=offer.is_empty()
+		if button.disabled:button.tooltip_text="Complete the preceding course first; enrollment also requires current bills, enough cash and an active employee system."
+
 func _payroll_copy(parent: Node,e: Dictionary,payroll: Dictionary) -> void:
 	for pay: Dictionary in payroll.employees:
 		if pay.employee_id!=e.employee_id:continue
@@ -117,7 +166,7 @@ func request_purchase(kind: StringName,offer: Dictionary) -> void:
 	pending={"kind":kind,"quote":offer.duplicate(true)};quote=offer.duplicate(true)
 	confirmation.title="Confirm hiring" if kind==&"hire" else "Confirm course"
 	confirmation.dialog_text="Hire for $100.00? Monthly base pay is $1,000.00. First payday: cycle %d."%offer.first_due_cycle if kind==&"hire" else "Enroll for $150.00? Only future hands count. Completing this challenge permanently adds $100.00/month to this employee's wage."
-	confirmation.get_ok_button().text="Confirm";confirmation.popup_centered(Vector2i(600,220));confirmation.get_cancel_button().grab_focus()
+	confirmation.get_ok_button().text="Confirm";confirmation.popup_centered(Vector2i(680,300));confirmation.get_cancel_button().grab_focus()
 func _commit_pending() -> void:
 	if pending.is_empty() or run==null:return
 	var choice:=pending.duplicate(true);pending={}

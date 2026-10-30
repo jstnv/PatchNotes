@@ -206,14 +206,17 @@ func open_setup() -> void:
 	if checkpoint_info.status != &"empty" and not _replacement_acknowledged:
 		if is_instance_valid(_replace_dialog) and _replace_dialog.visible: return
 		if is_instance_valid(_replace_dialog): _replace_dialog.queue_free()
-		_replace_dialog=ConfirmationDialog.new()
+		_replace_dialog=preload("res://scripts/ui/quit_confirmation.gd").new()
+		_replace_dialog.wrap_controls=false
+		_replace_dialog.min_size=Vector2i(680,220)
+		_replace_dialog.ok_button_text="Continue setup"
 		_replace_dialog.title="Replace saved Studio?"
-		_replace_dialog.dialog_text="Your existing checkpoint will be archived. Replacement happens only after the new Studio is created."
 		add_child(_replace_dialog)
+		_replace_dialog.dialog_text="Your existing checkpoint will be archived. Replacement happens only after the new Studio is created."
 		_replace_dialog.confirmed.connect(func():
 			_replacement_acknowledged=true
 			_push_setup())
-		_replace_dialog.popup_centered()
+		_replace_dialog.popup_centered(Vector2i(680,220))
 		_replace_dialog.get_cancel_button().grab_focus()
 		return
 	_push_setup()
@@ -238,12 +241,17 @@ func navigate_back() -> void:
 func _confirm_discard() -> void:
 	if navigation.busy or _submitted: return
 	if is_instance_valid(_discard_dialog): _discard_dialog.queue_free()
-	_discard_dialog=ConfirmationDialog.new()
+	_discard_dialog=preload("res://scripts/ui/quit_confirmation.gd").new()
+	# This fixed copy fits the authored surface; avoid Window retaining a
+	# transient autowrap minimum while the new folder controls are laid out.
+	_discard_dialog.wrap_controls=false
+	_discard_dialog.min_size=Vector2i(680,220)
+	_discard_dialog.ok_button_text="Discard setup"
 	_discard_dialog.title="Discard this setup?"
-	_discard_dialog.dialog_text="Clear the studio name, Genre and trait choices? Your saved Studio will not change."
 	add_child(_discard_dialog)
+	_discard_dialog.dialog_text="Clear the studio name, Genre and trait choices? Your saved Studio will not change."
 	_discard_dialog.confirmed.connect(discard_setup)
-	_discard_dialog.popup_centered()
+	_discard_dialog.popup_centered(Vector2i(680,220))
 	_discard_dialog.get_cancel_button().grab_focus()
 
 func discard_setup() -> void:

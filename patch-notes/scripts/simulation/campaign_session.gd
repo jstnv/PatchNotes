@@ -89,7 +89,7 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 		run.refresh_redraws()
 		result.events.append({"type":"studio_entered","release_id":development.project.get_release_id()})
 		return result
-	if kind in [&"hire",&"course",&"search_contracts",&"accept_contract"]:
+	if kind in [&"activate_employees",&"hire",&"course",&"search_contracts",&"accept_contract"]:
 		var result := StudioActions.execute(run,kind,payload,true)
 		if result.ok and kind == &"accept_contract":
 			contract = Contract.new(result.state,run,catalog)
@@ -110,7 +110,7 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 		for field in ["name","genre","theme"]:
 			if not payload.get(field) is String and not payload.get(field) is StringName: return reject("Missing project choice")
 		var priorities: Variant = payload.get("priorities",{})
-		if not priorities is Dictionary or (not priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(priorities)) or not payload.get("commission_quote",{}) is Dictionary or not payload.get("support_quote",{}) is Dictionary or payload.size() != 3 + int(payload.has("priorities")) + int(payload.has("commission_quote")) + int(payload.has("support_quote")): return reject("Invalid priorities or project payload")
+		if not priorities is Dictionary or (not priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(priorities, run)) or not payload.get("commission_quote",{}) is Dictionary or not payload.get("support_quote",{}) is Dictionary or payload.size() != 3 + int(payload.has("priorities")) + int(payload.has("commission_quote")) + int(payload.has("support_quote")): return reject("Invalid priorities or project payload")
 		var result := BeginProject.execute(run,snapshots,str(payload.name),StringName(payload.genre),StringName(payload.theme),Callable(),[],payload.get("commission_quote",{}),payload.get("support_quote",{}))
 		if not result.ok: return reject(result.error)
 		development = Development.new()

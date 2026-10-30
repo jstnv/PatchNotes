@@ -1,0 +1,5 @@
+# Studio header reactive light —2026-10-29
+
+Direct user asks for a trial visualizer: really dim audio-reactive light behind the Studio top UI. Reuse the existing Music spectrum observer and its lifecycle/gain/mute handling; draw three broad cyan/warm radial lights capped at7.5% alpha rather than a chart. Place inside the existing header panel before the text/chart row; no new border, layout minimum, input or focus. Studio phase and its browsing overlays only; hide/release when HUD is hidden or production/title becomes active. Continue observing music while paused. Keep music transport/mix and rules untouched.
+
+Focused verifier: actual fresh Gameplay Studio, live FFT changes, bounded alpha/clip/layer/geometry at1152/1280/1920, mute/volume/silence, hide/show/pause/Store and phase departure, effect ownership and teardown, passive state/RNG. Native real WASAPI screenshots and existing title visualizer, HUD/previous-world checks. Preserve existing edits/.codex-godot-temp; no build/commit/push, no blanket performance result. Exact previous-source compatibility remains paired with current content.

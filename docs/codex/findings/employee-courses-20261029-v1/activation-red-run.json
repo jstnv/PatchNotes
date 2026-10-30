@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_transactions.gd"
+  ],
+  "exit": 2,
+  "elapsed_seconds": 3.75,
+  "errors": [
+    "ERROR: FAIL: Headless observations require current activation before hiring",
+    "ERROR: FAIL: Public headless commands cannot bypass courses with a legacy hire"
+  ],
+  "tail": [
+    "       [0] check (res://scripts/debug/verify_employee_course_transactions.gd:6)",
+    "       [1] _run (res://scripts/debug/verify_employee_course_transactions.gd:14)",
+    "ERROR: FAIL: Public headless commands cannot bypass courses with a legacy hire",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (res://scripts/debug/verify_employee_course_transactions.gd:6)",
+    "       [1] _run (res://scripts/debug/verify_employee_course_transactions.gd:16)",
+    "CAREER_TRANSACTIONS checks=14 failures=2",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "3b6eba994505a819eb79d14dc7ed13689ac5c9b68b830bf7a09cff23d3ec5cd5",
+  "runtime_source_unchanged": true
+}

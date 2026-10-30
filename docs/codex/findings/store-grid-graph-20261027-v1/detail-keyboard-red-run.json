@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_detail_bounds.gd"
+  ],
+  "exit": 8,
+  "elapsed_seconds": 8.516,
+  "errors": [
+    "FAIL: Description supports keyboard focus",
+    "FAIL: Keyboard scrolls explanation without navigating map",
+    "FAIL: Description supports keyboard focus",
+    "FAIL: Keyboard scrolls explanation without navigating map",
+    "FAIL: Description supports keyboard focus",
+    "FAIL: Keyboard scrolls explanation without navigating map",
+    "FAIL: Description supports keyboard focus",
+    "FAIL: Keyboard scrolls explanation without navigating map"
+  ],
+  "tail": [
+    "PASS: Description wheel reveals remaining lock text without zooming map",
+    "WARNING: This control can't grab focus. Use set_focus_mode() and set_focus_behavior_recursive() to allow a control to get focus.",
+    "   at: grab_focus (scene/gui/control.cpp:3006)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _verify_interactions (res://scripts/debug/verify_store_detail_bounds.gd:23)",
+    "FAIL: Description supports keyboard focus",
+    "FAIL: Keyboard scrolls explanation without navigating map",
+    "Feature Store navigation verification: 8 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

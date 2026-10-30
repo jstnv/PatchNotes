@@ -1,0 +1,39 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_ui.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 4,
+  "elapsed_seconds": 20.407,
+  "errors": [
+    "FAIL: Redraw opens live choice with selected ordinary Pass design",
+    "FAIL: Redraw opens live choice with selected ordinary Pass alpha",
+    "FAIL: Redraw opens live choice with selected ordinary Pass design",
+    "FAIL: Redraw opens live choice with selected ordinary Pass alpha"
+  ],
+  "tail": [
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _invalid_action (res://scripts/simulation/alpha_hand_command.gd:340)",
+    "       [1] _invalid_action (res://scripts/phases/alpha_phase.gd:688)",
+    "       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:637)",
+    "       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:812)",
+    "       [4] refresh (res://scripts/ui/phase_workspace.gd:214)",
+    "       [5] _clear (res://scripts/ui/hand_presentation.gd:556)",
+    "       [6] cancel (res://scripts/ui/hand_presentation.gd:513)",
+    "       [7] _exit_tree (res://scripts/ui/hand_presentation.gd:516)",
+    "CAREER_UI checks=32 failures=4"
+  ],
+  "runtime_identity": "3b6eba994505a819eb79d14dc7ed13689ac5c9b68b830bf7a09cff23d3ec5cd5",
+  "runtime_source_unchanged": true
+}

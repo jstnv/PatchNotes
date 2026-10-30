@@ -1,0 +1,9 @@
+# AI Competitors post-release Market session log — 2026-10-29
+
+**Workspace:** branch `main`, HEAD `f3e0f2b5d35270c879327bc297b389748571feb4`; shared worktree dirty before and during this session, including concurrent canonical gameplay and TODO edits. Preserve all existing edits and `.codex-godot-temp`. No canonical gameplay, shared TODO, commit or push from this thread.
+
+**Thread-owned files:** [pre-run plan](2026-10-29-one-action-post-release-market-plan-v1.md), [diagnostic plan](2026-10-29-post-release-preflight-diagnostic-plan-v1.md), [sales-clock trial](2026-10-29-projected-sales-clock-trial-v1.md), [Market-index follow-up](2026-10-29-projected-market-index-followup-v1.md), [finding](2026-10-29-one-action-post-release-market-finding-v1.md), this log, README pointer, `run_one_action_post_release_v1.py`, and private v25→v28 simulator `project/` revisions. Baseline archives, variant ancestry, v25/v26/v27 failures and v28 drift output retained; only private v28b is the passing source bundle.
+
+**Checks and results:** The finding records exact commands/hashes. v25 isolated smoke PASS, post-release c7 FAIL; v26 isolated smoke PASS and reproduced diagnostic FAIL; v27 isolated smoke and legal prefix PASS, post-release c8 fact FAIL; v28 first smoke blocked by concurrent canonical source drift; v28b isolated smoke, regenerated legal c72/c2 prefix, c6 release/c8 Market check, fresh-process cold Continue and source-matched fresh prelude replay all PASS. No 1980 player project, eight-rival/CPU or migration run. Godot 4.7.1 regular headless executable and bundled Python were used with separate source copies/profiles/output folders.
+
+**Next gate:** Validate tampered projected sales clock/factor/history rejection, then compare an actual legal player project with and without the new c8 rival fact under compatible starts. Do not adopt coefficients or queue canonical implementation from one Action case.

@@ -47,6 +47,8 @@ func _run() -> void:
 		check(old.get_fans() == 40 and StudioTraits.starting_fans(old.get_studio_traits()) == 40 and StudioFanbase.awareness_for(old.get_fans()) == 10, "Version7 retains original forty-Fan seed and Awareness")
 		var payload := adapter.capture(old)
 		check(not payload.is_empty(), "Version7 selection can be saved under current rules")
+		var era_receipts: Dictionary = payload.run.store_era_receipts.duplicate(true)
+		payload.run.erase("store_era_receipts") # Named predecessor has no era ledger.
 		var search: Dictionary = payload.run.contract_search.duplicate(true)
 		payload.run.erase("contract_search") # Construct the real pre-Search shape.
 		var relationships: Dictionary = payload.run.publisher_relationships.duplicate(true)
@@ -60,6 +62,7 @@ func _run() -> void:
 		payload.content_revision = adapter._rules_revision(StudioCheckpoint.PRE_CULT20_RULES)
 		var restored := adapter.hydrate(payload)
 		var expected := payload.duplicate(true); expected.content_revision = adapter.revision()
+		expected.run.store_era_receipts = era_receipts
 		expected.run.contract_search = search
 		expected.run.publisher_relationships = relationships
 		expected.run.commission_deals = []
@@ -83,6 +86,7 @@ func _run() -> void:
 		var old := make_run([&"cult_following"],version)
 		check(old.get_fans() == 0 and old.get_cash_cents() == 570000 and not StudioTraits.is_active(old.get_studio_traits(), &"cult_following"), "Historical Cult stays preview")
 		var payload := adapter.capture(old)
+		payload.run.erase("store_era_receipts") # Named predecessor has no era ledger.
 		payload.run.erase("contract_search") # Historical previews predate Search.
 		payload.run.erase("publisher_relationships") # Historical previews predate P1.
 		check(payload.run.commission_deals == [] and payload.run.sidestreet_briefs == [], "Historical preview fixture has no P2/P3 activity")

@@ -125,7 +125,7 @@ func _exit_tree() -> void:
 
 
 func set_priority_distribution(distribution: Dictionary) -> bool:
-	if _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(distribution):
+	if _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(distribution, _run_state):
 		return false
 	if _phase_state == PhaseState.ACTIVE_DEVELOPMENT:
 		if _run_state != null:
@@ -143,7 +143,7 @@ func set_priority_distribution(distribution: Dictionary) -> bool:
 
 func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
 	if not is_inside_tree(): return false
-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_new_distribution(distribution, _run_state) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
 	var publish:=func() -> void:
 		_priority_draft=_priority_allocation.get_distribution()
 	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
@@ -189,7 +189,7 @@ func begin_beta(category_rolls: Array[float] = [], definition_rolls: Array[float
 	if is_gameplay_input_blocked(): return false
 	if _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization():
 		return false
-	if not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft):
+	if not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state):
 		return false
 	var database := get_node_or_null("/root/CardDatabase")
 	if database == null:
@@ -776,7 +776,7 @@ func _update_priority_draft(category: StringName, value: float) -> void:
 	if not BetaPriorityAllocation.category_enabled(category): return
 	if _syncing_priority_controls or _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED:
 		return
-	if not is_finite(value) or value < BetaPriorityAllocation.MIN_PRIORITY or value > BetaPriorityAllocation.MAX_PRIORITY or int(value) != value or int(value) % BetaPriorityAllocation.PRIORITY_STEP != 0:
+	if not is_finite(value) or value < BetaPriorityAllocation.bounds(_run_state).x or value > BetaPriorityAllocation.bounds(_run_state).y or int(value) != value or int(value) % BetaPriorityAllocation.PRIORITY_STEP != 0:
 		_sync_priority_controls()
 		return
 	_priority_draft[category] = int(value)
@@ -792,9 +792,12 @@ func _sync_priority_controls(reset_draft: bool = true) -> void:
 	if not is_node_ready():
 		return
 	if reset_draft:
-		_priority_draft = BetaPriorityAllocation.editable_distribution(_priority_allocation.get_distribution())
+		_priority_draft = BetaPriorityAllocation.editable_distribution(_priority_allocation.get_distribution(), _run_state)
 	_syncing_priority_controls = true
-	%InsiderPriority.min_value = BetaPriorityAllocation.MIN_PRIORITY if BetaPriorityAllocation.insiders_enabled() else 0
+	var limits:=BetaPriorityAllocation.bounds(_run_state)
+	for control: VSlider in [%QAPriority,%MarketingPriority]:control.min_value=limits.x;control.max_value=limits.y
+	%InsiderPriority.max_value=75 if BetaPriorityAllocation.insiders_enabled() else 0
+	%InsiderPriority.min_value = 10 if BetaPriorityAllocation.insiders_enabled() else 0
 	%QAPriority.value = _priority_draft[CardData.BETA_CATEGORY_QA]
 	%MarketingPriority.value = _priority_draft[CardData.BETA_CATEGORY_MARKETING]
 	%InsiderPriority.value = _priority_draft[CardData.BETA_CATEGORY_INSIDER]
@@ -805,14 +808,14 @@ func _sync_priority_controls(reset_draft: bool = true) -> void:
 	for value: int in _priority_draft.values():
 		total += value
 	%PriorityTotal.text = "%d/100" % total
-	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft) or (_phase_state != PhaseState.PLANNING and _priority_draft == get_priority_distribution()) or _transaction_in_progress or _launch_confirmation_pending
+	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state) or (_phase_state != PhaseState.PLANNING and _priority_draft == get_priority_distribution()) or _transaction_in_progress or _launch_confirmation_pending
 	_syncing_priority_controls = false
 
 
 func _update_begin_action() -> void:
 	if not is_node_ready():
 		return
-	%BeginBetaButton.disabled = _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization() or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft)
+	%BeginBetaButton.disabled = _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization() or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state)
 
 
 func get_workspace() -> PhaseWorkspace:
@@ -836,7 +839,7 @@ func is_initial_priority_planning() -> bool:
 
 
 func can_initialize_priorities() -> bool:
-	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and _project_state.has_alpha_finalization() and not _launch_confirmation_pending and not _transaction_in_progress and BetaPriorityAllocation.is_valid_new_distribution(_priority_draft)
+	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and _project_state.has_alpha_finalization() and not _launch_confirmation_pending and not _transaction_in_progress and BetaPriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state)
 
 
 func open_priority_overlay() -> bool:
@@ -844,7 +847,7 @@ func open_priority_overlay() -> bool:
 
 
 func reset_priority_draft() -> void:
-	_priority_draft = BetaPriorityAllocation.editable_distribution(get_priority_distribution())
+	_priority_draft = BetaPriorityAllocation.editable_distribution(get_priority_distribution(), _run_state)
 	_sync_priority_controls(false)
 
 

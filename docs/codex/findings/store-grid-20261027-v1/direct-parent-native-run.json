@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_prerequisite_links.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80",
+    "--",
+    "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-grid-20261027-v1"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 84.0,
+  "errors": [],
+  "tail": [
+    "PASS: Expanded buttons fit the Store at (900, 600)",
+    "PASS: Expanded row does not cover detail actions",
+    "PASS: Entrance finishes with visible controls",
+    "PASS: Actual pointer click outside the popup follows the right-side link",
+    "PASS: Inspecting prerequisites preserves complete Studio state/RNG",
+    "PASS: Second Missing click collapses links",
+    "PASS: Single missing prerequisite navigates directly without chooser",
+    "PASS: Direct prerequisite navigation preserves complete state/RNG",
+    "PASS: Escape closes details and external links together",
+    "Store prerequisite links: 48 checks, 0 failures"
+  ]
+}

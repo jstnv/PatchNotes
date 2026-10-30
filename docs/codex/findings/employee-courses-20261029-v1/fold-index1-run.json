@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_fold_indices.gd",
+    "--",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/employee-courses-20261029-v1/campaign-full2.json.final.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 20.859,
+  "errors": [],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "EMPLOYEE_FOLD_INDICES checks=7 failures=0",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "53e5d843a3e40c7615aef6297d73f2cd348763711903a930e812e8d21fc82112",
+  "runtime_source_unchanged": true
+}

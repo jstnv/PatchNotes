@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd",
+    "--",
+    "--split"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 14.359,
+  "errors": [
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle96"
+  ],
+  "tail": [
+    "RESEARCH_ACTION {\"core_ms\":22.868,\"cycle\":96,\"feature\":\"secrets\",\"frames\":2,\"handler_ms\":165.059,\"max_frame_gap_ms\":191.306,\"operation\":\"queue\",\"profile\":{\"scripts/finance/studio_finance_ledger.gd:_apply\":{\"count\":107,\"max_us\":1180,\"us\":17807},\"scripts/finance/studio_finance_ledger.gd:_is_valid\":{\"count\":38,\"max_us\":15324,\"us\":59655},\"scripts/finance/studio_finance_ledger.gd:_validate_journal\":{\"count\":1,\"max_us\":14191,\"us\":14191},\"scripts/finance/studio_finance_ledger.gd:report\":{\"count\":4,\"max_us\":15603,\"us\":20846},\"scripts/run_state.gd:get_feature_research_quote\":{\"count\":52,\"max_us\":15734,\"us\":94764},\"scripts/run_state.gd:get_feature_spending_advice\":{\"count\":1,\"max_us\":20109,\"us\":20109},\"scripts/run_state.gd:get_feature_store_offer\":{\"count\":153,\"max_us\":262,\"us\":10361},\"scripts/run_state.gd:get_financial_block_reason\":{\"count\":28,\"max_us\":2003,\"us\":32628},\"scripts/run_state.gd:get_primitive_reserve_offer\":{\"count\":66,\"max_us\":413,\"us\":15318},\"scripts/ui/feature_store.gd:_refresh\":{\"count\":1,\"max_us\":140435,\"us\":140435}},\"refresh_ms\":140.448,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":200.297,\"worker_was_active\":false}",
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle96",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd:24)",
+    "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd:69)",
+    "RESEARCH_ACTION {\"core_ms\":627.602,\"cycle\":96,\"feature\":\"secrets\",\"frames\":2,\"handler_ms\":720.746,\"max_frame_gap_ms\":743.646,\"operation\":\"research\",\"profile\":{\"scripts/finance/studio_finance_ledger.gd:_apply\":{\"count\":423,\"max_us\":1463,\"us\":81744},\"scripts/finance/studio_finance_ledger.gd:_is_valid\":{\"count\":85,\"max_us\":19176,\"us\":185773},\"scripts/finance/studio_finance_ledger.gd:_validate_journal\":{\"count\":4,\"max_us\":17323,\"us\":66069},\"scripts/finance/studio_finance_ledger.gd:report\":{\"count\":12,\"max_us\":19030,\"us\":39592},\"scripts/market/rival_trial.gd:_feature_maximal_choice\":{\"count\":8,\"max_us\":3328,\"us\":8341},\"scripts/market/rival_trial.gd:_legal_visible_feature_hand\":{\"count\":4,\"max_us\":3304,\"us\":7788},\"scripts/run_state.gd:complete_productive_action\":{\"count\":3,\"max_us\":615495,\"us\":653606},\"scripts/run_state.gd:get_feature_research_quote\":{\"count\":48,\"max_us\":12061,\"us\":59194},\"scripts/run_state.gd:get_feature_spending_advice\":{\"count\":1,\"max_us\":3447,\"us\":3447},\"scripts/run_state.gd:get_feature_store_offer\":{\"count\":150,\"max_us\":300,\"us\":10833},\"scripts/run_state.gd:get_financial_block_reason\":{\"count\":26,\"max_us\":1500,\"us\":31656},\"scripts/run_state.gd:get_primitive_reserve_offer\":{\"count\":61,\"max_us\":305,\"us\":12738},\"scripts/simulation/campaign_session.gd:execute\":{\"count\":6,\"max_us\":41922,\"us\":93817},\"scripts/simulation/campaign_session.gd:observation\":{\"count\":8,\"max_us\":171811,\"us\":446296},\"scripts/ui/feature_store.gd:_refresh\":{\"count\":1,\"max_us\":81282,\"us\":81282},\"section:development\":{\"count\":8,\"max_us\":6946,\"us\":35745},\"section:releases\":{\"count\":8,\"max_us\":160046,\"us\":339638},\"section:research_quotes\":{\"count\":8,\"max_us\":1,\"us\":1},\"section:studio_actions\":{\"count\":8,\"max_us\":21151,\"us\":70229}},\"refresh_ms\":81.289,\"rival_ms\":551.955,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":753.597,\"worker_was_active\":true}",
+    "RESEARCH_LATENCY {\"actions\":2,\"failures\":[\"No500ms+ synchronous research stall atcycle96\"],\"ok\":false,\"stages\":[{\"actions\":2,\"durability\":[{\"frames\":686,\"max_frame_gap_ms\":743.646,\"wait_ms\":4715.003}],\"end_cycle\":97,\"first_action\":0,\"idle_max_frame_gap_ms\":6.922,\"open_store_ms\":194.274,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19}]}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

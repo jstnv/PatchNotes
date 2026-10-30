@@ -38,7 +38,7 @@ func _verify_normal_prototype_run() -> void:
 	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(gameplay)
 	var studio: StudioPhase = gameplay.get("_active_phase")
 	_expect(studio != null and run.get_studio_name() == "Test Studio" and run.get_completed_run_cycles() == 0, "Studio identity commits before the first game without a cycle")
-	_expect(run.get_cash() == 5700 and run.get_owned_feature_ids().size() == 18, "Named first Studio receives funding and the Action roster")
+	_expect(run.get_cash() == 5700 and run.get_owned_feature_ids().size() == StudioSpecialties.preview(&"action",4).ids.size() and run.get_starter_pool_summary().scope == 12, "Named first Studio receives funding and the Action roster")
 	_expect(gameplay.call("_begin_next_project", studio, "First Game", &"action", &"fantasy"), "First game uses the shared Pre-Development transaction")
 	_expect(not run.needs_starter_selection(), "First-project commit closes starter purchasing")
 	_expect(run.get_completed_run_cycles() == 1 and gameplay.project_state.get_current_cycle() == 0, "First game costs one run cycle and begins at project zero")

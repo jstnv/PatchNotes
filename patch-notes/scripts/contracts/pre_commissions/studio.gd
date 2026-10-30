@@ -50,6 +50,7 @@ func _legacy_revisions(rules: String) -> Array[String]:
 	return result
 
 func _rules_revision(rules: String, legacy_audio_hash: String = "", prior_catalog_hash: String = "") -> String:
+	if prior_catalog_hash.is_empty(): prior_catalog_hash = "0f4bd970b66333fd5f5d5358571ac428dc0b60fd8fe410e2381af1d214521c4e"
 	var data := rules
 	var paths: Array[String] = []
 	_collect_data("res://data", paths)

@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/profile_campaign_latency.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 3.375,
+  "errors": [],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "{\"actions\":3,\"checkpoint_capture_ms\":28.411,\"cycle\":0,\"ledger_validate_ms\":0.03,\"store_quotes_ms\":26.595,\"store_refresh_ms\":9.049}",
+    "{\"actions\":15,\"checkpoint_capture_ms\":54.804,\"cycle\":12,\"ledger_validate_ms\":0.127,\"store_quotes_ms\":31.432,\"store_refresh_ms\":27.706}",
+    "{\"actions\":27,\"checkpoint_capture_ms\":23.849,\"cycle\":24,\"ledger_validate_ms\":0.467,\"store_quotes_ms\":34.052,\"store_refresh_ms\":10.836}",
+    "{\"actions\":51,\"checkpoint_capture_ms\":31.816,\"cycle\":48,\"ledger_validate_ms\":0.468,\"store_quotes_ms\":34.473,\"store_refresh_ms\":10.665}",
+    "{\"actions\":99,\"checkpoint_capture_ms\":53.664,\"cycle\":96,\"ledger_validate_ms\":0.972,\"store_quotes_ms\":43.724,\"store_refresh_ms\":14.294}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+  "runtime_source_unchanged": true
+}

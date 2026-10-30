@@ -145,6 +145,8 @@ func _verify_studio() -> void:
 	expect(studio.setup(p, run, snapshots), "Studio entry registers release")
 	expect(run.get_released_game_sales(p.get_release_id()).earned_cycles == 0 and run.get_cash_cents() == 1, "Launch/Studio starts with zero earned and settled sales")
 	run.complete_productive_action()
+	await process_frame
+	await process_frame
 	expect(studio.get_node("%ProjectedRevenueLabel").text.contains("$5251.74") and studio.get_node("%EntitledLabel").text.contains("$2622.37") and studio.get_node("%SettledLabel").text.contains("$0.00") and studio.get_node("%UnpaidLabel").text.contains("$2622.37"), "Studio distinguishes projection, earned, settled and unpaid values")
 	var before := snapshot(run, p)
 	expect(studio.setup(p, run, snapshots) and snapshot(run, p) == before, "Studio reconstruction neither earns nor settles")
@@ -152,7 +154,10 @@ func _verify_studio() -> void:
 	var store: FeatureStore = studio.get("_feature_store")
 	store.hide()
 	expect(snapshot(run, p) == before, "Feature Store browsing stays zero-cycle")
+	studio.open_summary()
 	run.complete_productive_action()
+	await process_frame
+	await process_frame
 	expect(studio.get_node("%SettledLabel").text.contains("$5251.74") and studio.get_node("%UnpaidLabel").text.contains("$0.00") and studio.get_node("%ExhaustionLabel").text.contains("Month 1 sales complete"), "Live summary updates at settlement and Month 1 completion")
 	studio.queue_free()
 	await process_frame

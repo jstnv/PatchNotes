@@ -1,0 +1,43 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_manager_priority_bounds.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 0.531,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "SCRIPT ERROR: Parse Error: Static function \"editable_distribution()\" not found in base \"PriorityAllocation\".",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"normalized\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "SCRIPT ERROR: Parse Error: Static function \"bounds()\" not found in base \"PriorityAllocation\".",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"core\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Static function \"bounds()\" not found in base \"BetaPriorityAllocation\".",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"beta\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_manager_priority_bounds.gd\" with error \"Parse error\"."
+  ],
+  "tail": [
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "   at: GDScript::reload (res://scripts/debug/verify_manager_priority_bounds.gd:28)",
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "   at: GDScript::reload (res://scripts/debug/verify_manager_priority_bounds.gd:31)",
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "   at: GDScript::reload (res://scripts/debug/verify_manager_priority_bounds.gd:33)",
+    "SCRIPT ERROR: Parse Error: Too many arguments for \"is_valid_new_distribution()\" call. Expected at most 1 but received 2.",
+    "   at: GDScript::reload (res://scripts/debug/verify_manager_priority_bounds.gd:34)",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_manager_priority_bounds.gd\" with error \"Parse error\".",
+    "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)"
+  ],
+  "runtime_identity": "5dfdedeefcc5f83fbb65e680e07acc855d328a76c319e78f81695365a8f23904",
+  "runtime_source_unchanged": true
+}

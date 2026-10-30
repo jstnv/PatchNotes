@@ -20,6 +20,7 @@ var _candidate_cards: Array[CardData] = []
 var _exhausted_feature_ids: Dictionary[StringName, bool] = {}
 var priorities: Dictionary = {}
 var candidate_ids: Array[int] = []
+var injected_candidate_ids: Array[int] = []
 var next_candidate_id := 0
 var revision := 0
 var active := false
@@ -128,9 +129,13 @@ func _execute(request: Dictionary) -> Dictionary:
 		_deal_rng.state = rng_before
 		return reject("Productive transaction rejected")
 	if _run_state != null: events.append({"type":"productive_cycle", "cycle":_run_state.get_completed_run_cycles(), "cash_cents":_run_state.get_cash_cents(), "play_cost_cents":play_cost})
+	injected_candidate_ids.assign(injected_candidate_ids.filter(func(id):return id in candidate_ids))
+	var refill_index:=0
 	for card in refill.cards:
 		_candidate_cards.append(card)
 		candidate_ids.append(next_candidate_id)
+		if refill_index<int(refill.get("injected_count",0)):injected_candidate_ids.append(next_candidate_id)
+		refill_index+=1
 		next_candidate_id += 1
 	_pending_playtest_categories.clear()
 	revision += 1
@@ -196,7 +201,7 @@ func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, cont
 		return weighted_deal
 	var cards := injected_cards.duplicate()
 	cards.append_array(weighted_deal.cards)
-	return {&"valid": true, &"cards": cards}
+	return {&"valid": true, &"cards": cards, &"injected_count":injected_cards.size()}
 
 func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE, excluded_ids: Array[StringName] = []) -> Dictionary:
 	var validation_error := _get_deal_input_validation_error(priority_snapshot, controlled_rolls, candidate_count)
@@ -238,7 +243,7 @@ func _get_deal_input_validation_error(priority_snapshot: Dictionary, controlled_
 		if not priority_snapshot.has(category) or typeof(priority_snapshot[category]) != TYPE_INT:
 			return "Priority snapshot contains a missing or malformed category."
 		var value: int = priority_snapshot[category]
-		if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
+		if value < PriorityAllocation.SAVED_MIN_PRIORITY or value > PriorityAllocation.SAVED_MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
 			return "Priority snapshot contains an out-of-range or non-step value."
 		total_priority += value
 	if total_priority > PriorityAllocation.MAX_TOTAL_PRIORITY:

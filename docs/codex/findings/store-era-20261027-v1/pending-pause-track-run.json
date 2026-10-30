@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_pause_track.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 18.718,
+  "errors": [
+    "ERROR: Rival Gameplay: Esc resumes gameplay and clears filter"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "PAUSE_PRECONDITIONS { \"can_pause\": true, \"guided\": false, \"settings\": false, \"guide\": false, \"owners\": [] }",
+    "ERROR: Rival Gameplay: Esc resumes gameplay and clears filter",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)",
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_pause_track.gd:44)",
+    "PAUSE_TRACK backend=Dummy checks=30 failures=1"
+  ]
+}

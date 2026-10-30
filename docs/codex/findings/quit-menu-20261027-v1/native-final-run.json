@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_checkpoint_recovery_ui.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 1.843,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Identifier \"NOTIFICATION_WM_CLOSE_REQUEST\" not declared in the current scope.",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_checkpoint_recovery_ui.gd\" with error \"Parse error\"."
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "OpenGL API 3.3.0 NVIDIA 546.18 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU",
+    "",
+    "SCRIPT ERROR: Parse Error: Identifier \"NOTIFICATION_WM_CLOSE_REQUEST\" not declared in the current scope.",
+    "   at: GDScript::reload (res://scripts/debug/verify_checkpoint_recovery_ui.gd:52)",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_checkpoint_recovery_ui.gd\" with error \"Parse error\".",
+    "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)"
+  ]
+}

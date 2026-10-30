@@ -3,6 +3,15 @@ extends RefCounted
 
 const Market := preload("res://scripts/market/market_transaction_trial.gd")
 
+## Quotes and rival observations repeatedly read the same historical records.
+## Cache only complete, typed Variant bytes after full validation. Never keep
+## mutable records or trust IDs/revisions/hashes: nested edits must miss.
+## Bounded across titles, fan shadows and prospective campaign calculations.
+const VALIDATED_RECORD_LIMIT := 256
+const VALIDATED_RECORD_BYTES := 8 * 1024 * 1024
+static var _validated_records: Array[PackedByteArray] = []
+static var _validated_record_bytes := 0
+static var _validation_lock := Mutex.new()
 ## Pure, checked cumulative calculations. Returned records are value snapshots.
 ## Two-argument fixtures intentionally retain the original Month 1-only model.
 static func create(release_id: StringName, total_units: Variant, review_tenths: int = -1,
@@ -28,6 +37,28 @@ static func create(release_id: StringName, total_units: Variant, review_tenths: 
 
 
 static func is_valid(record: Dictionary) -> bool:
+	var key := var_to_bytes(record)
+	if key.size() > VALIDATED_RECORD_BYTES: return _validate_record(record)
+	_validation_lock.lock()
+	var index := _validated_records.find(key)
+	if index >= 0:
+		_validated_records.remove_at(index)
+		_validated_records.append(key)
+		_validation_lock.unlock()
+		return true
+	_validation_lock.unlock()
+	if not _validate_record(record): return false
+	_validation_lock.lock()
+	if not _validated_records.has(key):
+		_validated_records.append(key)
+		_validated_record_bytes += key.size()
+	while _validated_records.size() > VALIDATED_RECORD_LIMIT or _validated_record_bytes > VALIDATED_RECORD_BYTES:
+		_validated_record_bytes -= _validated_records.pop_front().size()
+	_validation_lock.unlock()
+	return true
+
+
+static func _validate_record(record: Dictionary) -> bool:
 	for key: String in ["total_units", "earned_cycles", "total_earned_cycles", "earned_units",
 		"entitlement_cents", "settled_cents", "last_processed_run_cycle", "last_settlement_run_cycle",
 		"review_tenths", "launch_awareness", "market_bp", "campaign_count",

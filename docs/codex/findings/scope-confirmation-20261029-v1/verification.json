@@ -1,0 +1,166 @@
+{
+  "date": "2026-10-29",
+  "branch": "main",
+  "HEAD": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "runtime_identity": "56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d",
+  "worktree": "Inherited dirty tree preserved; no commit/push/export. .codex-godot-temp preserved.",
+  "warnings": "Existing ObjectDB fixture/artwork warnings retained; no leak/artwork repair claim.",
+  "limits": "Focused acceptance only. Late Research performance FAIL/OPEN; no release or universal parity claim.",
+  "scene_sha256": "0d3c87297f43af40a7fdb32c1fa5cdabcca4158f69b45a1d515fe22acbb68d41",
+  "passes": [
+    {
+      "receipt": "docs/codex/findings/scope-confirmation-20261029-v1/theme-green-run.json",
+      "sha256": "922c0883becf622cb715f0a3160cf8947d6c2cdd90b4598225f12dc786c40afc",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_scope_confirmation_theme.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.641,
+      "tail": [
+        "PASS: Cancel/Escape/close dismisses and clears pending warning",
+        "PASS: Dismissal preserves all project/hand/RNG fields",
+        "PASS: Warning reopens after dismissal",
+        "Alpha completed! Pressure 0.0000; stochastic result 0; variance +1; Alpha Hidden Bugs 1; total Hidden Bugs 5; implemented 0; unimplemented 14",
+        "PASS: Confirm commits Alpha transition exactly once",
+        "PASS: Confirmation preserves actual incomplete Scope",
+        "PASS: Stale confirmation cannot repeat transition",
+        "SCOPE_CONFIRMATION {\"checks\":74,\"failures\":0,\"runtime_source\":\"56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d\",\"scene_sha256\":\"0d3c87297f43af40a7fdb32c1fa5cdabcca4158f69b45a1d515fe22acbb68d41\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/scope-confirmation-20261029-v1/theme-native-run.json",
+      "sha256": "4f30d6f08aa90bd2fa939c72db6f0e19d45693fb04fb6fc717ecf29e5d877a2e",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_scope_confirmation_theme.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 13.953,
+      "tail": [
+        "PASS: Cancel/Escape/close dismisses and clears pending warning",
+        "PASS: Dismissal preserves all project/hand/RNG fields",
+        "PASS: Warning reopens after dismissal",
+        "Alpha completed! Pressure 0.0000; stochastic result 0; variance +1; Alpha Hidden Bugs 1; total Hidden Bugs 5; implemented 0; unimplemented 14",
+        "PASS: Confirm commits Alpha transition exactly once",
+        "PASS: Confirmation preserves actual incomplete Scope",
+        "PASS: Stale confirmation cannot repeat transition",
+        "SCOPE_CONFIRMATION {\"checks\":74,\"failures\":0,\"runtime_source\":\"56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d\",\"scene_sha256\":\"0d3c87297f43af40a7fdb32c1fa5cdabcca4158f69b45a1d515fe22acbb68d41\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/scope-confirmation-20261029-v1/alpha-finalization-run.json",
+      "sha256": "3968f07965eb849a3960dbc586fecf1b29647a4e28e26677cc1ac4a935dc751f",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_alpha_finalization.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.641,
+      "tail": [
+        "       [1] refresh (res://scripts/cards/card_view.gd:114)",
+        "       [2] _ready (res://scripts/cards/card_view.gd:46)",
+        "       [3] _deal_next_candidate_pool (res://scripts/phases/alpha_phase.gd:406)",
+        "       [4] begin_alpha (res://scripts/phases/alpha_phase.gd:171)",
+        "       [5] _make_fixture (res://scripts/debug/verify_alpha_finalization.gd:223)",
+        "PASS: Fixture begins Alpha through the public lifecycle",
+        "PASS: Failure fixture queues a corrective Playtest",
+        "PASS: Invalid Alpha Feature history rejects finalization",
+        "PASS: Failed finalization atomically preserves state, pending Playtest, lifecycle, and active phase",
+        "Alpha finalization verification passed."
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/scope-confirmation-20261029-v1/alpha-arrears-run.json",
+      "sha256": "cd378664c47ba7029feda14170139ac8ed4276a186f91ded6d112ac10a9b0f58",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_alpha_exit_arrears.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 9.36,
+      "tail": [
+        "PASS: Controlled native deal provides the intended income/no-income hand",
+        "Beta hand resolved: Known Bugs fixed: 0 | Cash gained: $1000 | No rival insight gained | Finite cards exhausted: playtest_rival_games | Cycle advanced: 1",
+        "PASS: Genuine Beta Insider income can recover arrears through the productive boundary",
+        "PASS: One $1000 receipt services exactly $141.61 overdue rent",
+        "PASS: Repeated hand callback cannot duplicate income or recovery",
+        "PASS: Valid project may still take the existing zero-cycle launch",
+        "PASS: Free launch returns to Studio without forgiving or servicing rent",
+        "Alpha free-exit arrears regression: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/scope-confirmation-20261029-v1/source-parity-private-run.json",
+      "sha256": "303ee8be9375f9a962283e504d66963b62a7aa1cb9c07dbb237bf116ec94f46d",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_campaign_seeded_parity.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 29.844,
+      "tail": [
+        "       [9] _on_under_scope_confirmed (res://scripts/phases/alpha_phase.gd:231)",
+        "       [10] exit_phase (res://scripts/debug/verify_campaign_live_parity.gd:141)",
+        "       [11] _project (res://scripts/debug/verify_campaign_seeded_parity.gd:89)",
+        "Alpha completed! Pressure 1.4444; stochastic result 1; variance +0; Alpha Hidden Bugs 1; total Hidden Bugs 2; implemented 3; unimplemented 0",
+        "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 6 | Finite cards exhausted: press_interview | Cycle advanced: 1",
+        "Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Technology Pass, Design Pass",
+        "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 4 | Beta Host Playtest corrective Passes injected: Technology Pass, Design Pass | Cycle advanced: 1",
+        "Seeded campaign parity: 0 failures, 138 boundaries, 3 routes",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    }
+  ],
+  "retained_failures": [
+    "theme-red: 50 checks, 12 expected styling failures",
+    "source-parity and source-parity-diagnostic: initial writer_busy before test isolation repair"
+  ],
+  "test_isolation": "Debug campaign fixture now uses existing TestStore with PN_CHECKPOINT_TEST_PORT when supplied; production writer port/validation unchanged.",
+  "native_captures_inspected": [
+    "theme-native.json-1152.png",
+    "theme-native.json-1280.png"
+  ]
+}

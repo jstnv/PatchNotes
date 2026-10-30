@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_research_integration.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 7.047,
+  "errors": [],
+  "tail": [
+    "PASS: Queued Menu System never satisfies Save Files ownership gate",
+    "PASS: Unmet two-parent Difficulty gate remains enforced",
+    "PASS: Corrupt installment fails whole checkpoint",
+    "PASS: Unproven trait consumption fails whole checkpoint",
+    "PASS: Cheap hypothetical final installment floors at zero",
+    "PASS: Otherwise-paid zero final installment still consumes opportunity",
+    "PASS: Already-free hypothetical acquisition does not consume opportunity",
+    "Research integration: 0 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d",
+  "runtime_source_unchanged": true
+}

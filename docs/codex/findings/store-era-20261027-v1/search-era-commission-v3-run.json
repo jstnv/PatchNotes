@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_contract_search.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 177.375,
+  "errors": [],
+  "tail": [
+    "COMMISSION_RESERVE target=400000 cash=339129 attempt=0",
+    "COMMISSION_RESERVE target=400000 cash=361629 attempt=0",
+    "COMMISSION_RESERVE target=400000 cash=346629 attempt=0",
+    "COMMISSION_RESERVE target=400000 cash=384129 attempt=0",
+    "COMMISSION_RESERVE target=1000000 cash=379129 attempt=0",
+    "COMMISSION_RESERVE target=1000000 cash=721629 attempt=10",
+    "COMMISSION_RESERVE target=1000000 cash=1044129 attempt=20",
+    "CONTRACT_SEARCH checks=558 failures=0 commands=521 cycle=264",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -1,0 +1,26 @@
+--- before/scripts/ui/feature_store.gd
++++ after/scripts/ui/feature_store.gd
+@@ -486,17 +486,19 @@
+ 	var quote := _run.get_feature_research_quote(_selected)
+ 	if quote.is_empty() or not quote.can_admit: return
+ 	if is_instance_valid(_admission_dialog): _admission_dialog.queue_free()
+-	_admission_dialog = ConfirmationDialog.new()
++	_admission_dialog = preload("res://scripts/ui/quit_confirmation.gd").new()
++	_admission_dialog.ok_button_text = "OK"
++	# Match the fixed confirmation surface without retaining an initial autowrap minimum.
++	_admission_dialog.wrap_controls = false
++	_admission_dialog.min_size = Vector2i(680, 480)
+ 	_admission_dialog.title = "Queue Feature research?"
+ 	_admission_dialog.dialog_text = "Pay %s now (0 cycles). This down payment is irreversible.\nNo cancellation or reordering. Ownership begins only after research finishes.\nNext installment at current familiarity: %s; 1 productive cycle.\nFuture familiarity can change the remaining price." % [CashFormatter.format_exact_cents(quote.down_cents),CashFormatter.format_exact_cents(quote.due_cents)]
+ 	if _run._feature_offers.get(_selected,{}).has("replaces_id"):
+ 		_admission_dialog.dialog_text += "\n\nUpgrade: replaces 8-Bit Sound in future project draws. Keeps ownership and already-started projects."
+ 	_admission_dialog.dialog_text += "\n\nAfter research completes, the Feature can enter games you start later. It is not guaranteed to be drawn or played."
+-	_admission_dialog.get_label().custom_minimum_size.x = minf(560, get_viewport_rect().size.x - 100)
+-	_admission_dialog.get_label().autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ 	_admission_dialog.confirmed.connect(func():
+ 		_run.admit_feature_research(quote)
+ 		_refresh())
+ 	add_child(_admission_dialog)
+-	_admission_dialog.popup_centered()
++	_admission_dialog.popup_centered(Vector2i(680, 480))
+ 	_admission_dialog.get_cancel_button().grab_focus()

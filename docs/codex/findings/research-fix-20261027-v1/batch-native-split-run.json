@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80",
+    "--",
+    "--split"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 42.735,
+  "errors": [
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle96"
+  ],
+  "tail": [
+    "RESEARCH_ACTION {\"core_ms\":80.574,\"cycle\":96,\"feature\":\"secrets\",\"frames\":2,\"handler_ms\":208.019,\"max_frame_gap_ms\":255.864,\"operation\":\"queue\",\"refresh_ms\":120.866,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":270.522,\"worker_was_active\":false}",
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle96",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd:24)",
+    "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd:67)",
+    "RESEARCH_ACTION {\"core_ms\":619.105,\"cycle\":96,\"feature\":\"secrets\",\"frames\":2,\"handler_ms\":689.466,\"max_frame_gap_ms\":707.033,\"operation\":\"research\",\"refresh_ms\":44.25,\"rival_ms\":428.177,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":719.225,\"worker_was_active\":true}",
+    "RESEARCH_LATENCY {\"actions\":2,\"failures\":[\"No500ms+ synchronous research stall atcycle96\"],\"ok\":false,\"stages\":[{\"actions\":2,\"durability\":[{\"frames\":126,\"max_frame_gap_ms\":707.033,\"wait_ms\":13175.478}],\"end_cycle\":97,\"first_action\":0,\"idle_max_frame_gap_ms\":259.996,\"open_store_ms\":213.663,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19}]}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

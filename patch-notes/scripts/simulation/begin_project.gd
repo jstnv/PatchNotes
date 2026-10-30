@@ -42,13 +42,13 @@ static func execute(run: RunState, snapshots: PrimitiveSnapshotDatabase, base_na
 	if next == null or targets.is_empty() or not next.freeze_market_standards(str(targets.snapshot_id),targets.standards,targets) or not initialize_snapshots(next,run,snapshots,controlled):
 		run.random_streams.restore(before)
 		return {"ok":false,"error":"Could not prepare the new project"}
-	var prepared := Fence.authority(next)
-	var context := Fence.authority(run)
+	var prepared := Fence.fingerprint(next)
+	var context := Fence.fingerprint(run)
 	if readiness.is_valid():
 		run._preparing_project = true
 		var ready: bool = readiness.call(next)
 		run._preparing_project = false
-		if not ready or prepared != Fence.authority(next) or context != Fence.authority(run):
+		if not ready or prepared != Fence.fingerprint(next) or context != Fence.fingerprint(run):
 			run.random_streams.restore(before)
 			return {"ok":false,"error":"Prepared project changed during readiness"}
 	if not frozen_commission.is_empty() and not run.can_bind_commission_quote(frozen_commission,next):
@@ -58,7 +58,7 @@ static func execute(run: RunState, snapshots: PrimitiveSnapshotDatabase, base_na
 		run.random_streams.restore(before)
 		return {"ok":false,"error":"Prepared support changed"}
 	var bind := func() -> bool:
-		if run.get_completed_run_cycles() != expected_cycle or run.next_project_serial != expected_serial or prepared != Fence.authority(next) or context != Fence.authority(run): return false
+		if run.get_completed_run_cycles() != expected_cycle or run.next_project_serial != expected_serial or prepared != Fence.fingerprint(next) or context != Fence.fingerprint(run): return false
 		if not frozen_commission.is_empty() and not run._bind_commission(frozen_commission): return false
 		if not frozen_support.is_empty() and not run._bind_support(frozen_support): return false
 		run.next_project_serial += 1

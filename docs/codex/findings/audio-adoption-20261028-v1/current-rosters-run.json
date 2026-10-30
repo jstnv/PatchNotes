@@ -1,0 +1,43 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_studio_specialties.gd"
+  ],
+  "exit": 12,
+  "elapsed_seconds": 5.219,
+  "errors": [
+    "FAIL: Exact deterministic roster / count / Scope: action",
+    "FAIL: Exact deterministic roster / count / Scope: adventure",
+    "FAIL: Exact deterministic roster / count / Scope: role_playing",
+    "FAIL: Exact deterministic roster / count / Scope: strategy",
+    "FAIL: Exact deterministic roster / count / Scope: simulation",
+    "FAIL: Exact deterministic roster / count / Scope: puzzle",
+    "FAIL: Exact deterministic roster / count / Scope: sports",
+    "FAIL: Only Primitive ownership, no familiarity: main_theme",
+    "FAIL: Exact deterministic roster / count / Scope: racing",
+    "FAIL: Successful nonmatching first game commits independent Genre",
+    "FAIL: First-project boundary closes initial window with usual cost",
+    "FAIL: Unowned Primitive costs one cycle and the boundary pays rent",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get_feature_supply_ids' in base 'Nil'."
+  ],
+  "tail": [
+    "FAIL: First-project boundary closes initial window with usual cost",
+    "FAIL: Unowned Primitive costs one cycle and the boundary pays rent",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get_feature_supply_ids' in base 'Nil'.",
+    "   at: _verify_ui (res://scripts/debug/verify_studio_specialties.gd:105)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _verify_ui (res://scripts/debug/verify_studio_specialties.gd:105)",
+    "       [1] finish_new_save (res://scripts/debug/ui_test_actions.gd:11)",
+    "Studio specialties verification: 12 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+  "runtime_source_unchanged": true
+}

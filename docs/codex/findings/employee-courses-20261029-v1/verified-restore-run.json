@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_restore.gd",
+    "--",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\employee-courses-20261029-v1\\tail-tier4.json.final.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 17.25,
+  "errors": [],
+  "tail": [
+    "PASS: Trained phase deals 2",
+    "PASS: Trained phase hand commits 2",
+    "PASS: Live Beta accepts the same finalized project",
+    "PASS: Live trained slider agrees with headless: QAPriority",
+    "PASS: Live trained slider agrees with headless: MarketingPriority",
+    "PASS: Trained phase finalization requests 2",
+    "PASS: Trained phase warning confirms 2",
+    "CAREER_RESTORE checks=359 failures=0",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "bf3dffde495d7149a9556091c4434c06af9db8b7c16ac27b6415378c0590b4f3",
+  "runtime_source_unchanged": true
+}

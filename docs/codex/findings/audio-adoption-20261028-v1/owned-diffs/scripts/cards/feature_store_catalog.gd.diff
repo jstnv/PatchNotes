@@ -1,0 +1,33 @@
+--- before/scripts/cards/feature_store_catalog.gd
++++ after/scripts/cards/feature_store_catalog.gd
+@@ -3,13 +3,29 @@
+ 
+ ## Core Feature Ledger (1981–1983). Prices are the prototype store baseline.
+ ## Keep separate from the fixed Primitive draw/contract ledger.
++## Retained definitions support old saves and frozen projects; not new supply.
++const RETIRED_IDS: Array[StringName] = [&"music", &"sound_effects", &"8_bit_music", &"16_bit_music"]
++
++static func is_active(id: StringName) -> bool:
++	return id not in RETIRED_IDS
++
++static func future_supply(owned: Array[StringName], offers: Dictionary) -> Array[StringName]:
++	var result: Array[StringName] = []
++	var replaced: Array[StringName] = []
++	for id: StringName in owned:
++		if is_active(id) and offers.get(id,{}).has("replaces_id"):
++			replaced.append(StringName(offers[id].replaces_id))
++	for id: StringName in owned:
++		if is_active(id) and id not in replaced: result.append(id)
++	return result
++
+ const PATH := "res://data/feature_store_ledger.json"
+ ## Acquisition only: specialty grants and historical ownership are retained.
+ const PRIMITIVE_PARENTS := {
+ 	&"dialogue": &"simple_story", &"character_backstories": &"simple_story",
+ 	&"maps": &"levels", &"exploration": &"levels",
+ 	&"multiple_endings": &"branching_dialogue", &"secrets": &"exploration",
+-	&"8_bit_music": &"music", &"8_bit_sound": &"sound_effects",
++	&"8_bit_music": &"music",
+ 	&"scrolling": &"text", &"sprites": &"4_color_palette",
+ 	&"local_leaderboards": &"high_scores", &"enemies": &"lives_system",
+ 	&"general_combat": &"enemies",

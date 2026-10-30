@@ -1,0 +1,260 @@
+{
+  "status": "COMPLETE_SCOPED_PRESENTATION",
+  "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+  "runtime_source_unchanged": true,
+  "checks": {
+    "grid-final": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_common_grid.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 2.5,
+      "errors": [],
+      "tail": [
+        "PASS: Bounded route avoids every card/label/header save_files->player_level_editor",
+        "PASS: Bounded route avoids every card/label/header exploration->ability_gated_exploration",
+        "PASS: Bounded route avoids every card/label/header character_backstories->switchable_protagonists",
+        "PASS: Bounded route avoids every card/label/header character_development->character_skill_checks",
+        "PASS: Bounded route avoids every card/label/header exploration->character_skill_checks",
+        "PASS: Four category connectors avoid all cards, names and headers",
+        "PASS: Cross-category prerequisite remains explicit in details",
+        "PASS: Hidden cross-category arrow still permits direct prerequisite navigation",
+        "PASS: Layout and routing consume no gameplay RNG",
+        "Store common grid: 65 checks, 0 failures"
+      ],
+      "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+      "runtime_source_unchanged": true
+    },
+    "cold-roots": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/tools/fixtures/store_roots_predecessor.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-roots-20261028-v1/cold-roots.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.422,
+      "errors": [],
+      "tail": [
+        "PASS: Player schema restores exact finance, traits and RNG",
+        "PASS: World restores from unmodified file ",
+        "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+        "PASS: Every persisted player field survives",
+        "PASS: Unverified source still rejects",
+        "PASS: Root presentation predecessor rejects older player catalog",
+        "PASS: Root presentation predecessor rejects older rival catalog",
+        "Fresh world restore: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+      "runtime_source_unchanged": true
+    },
+    "focus-lifecycle": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_focus_lifecycle.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.282,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "{\"checks\":9,\"failures\":0,\"ok\":true}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+      "runtime_source_unchanged": true
+    },
+    "overview-native": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store_radial.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80",
+        "--",
+        "--capture",
+        "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-roots-20261028-v1"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 20.172,
+      "errors": [],
+      "tail": [
+        "PASS: Back to Map is reachable for text at 1280",
+        "PASS: Back to Map dismisses details and restores map focus without closing Store",
+        "PASS: Back to Map is reachable for save_files at 1280",
+        "PASS: Back to Map dismisses details and restores map focus without closing Store",
+        "PASS: Back to Map is reachable for difficulty_levels at 1280",
+        "PASS: Back to Map dismisses details and restores map focus without closing Store",
+        "PASS: Back to Map is reachable for branching_nodes at 1280",
+        "PASS: Back to Map dismisses details and restores map focus without closing Store",
+        "PASS: Category browsing preserves cash, calendar, redraws, ownership and exact finance history",
+        "Bloom Feature Store verification: 0 failures"
+      ],
+      "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+      "runtime_source_unchanged": true
+    },
+    "links-headless": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_prerequisite_links.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 27.875,
+      "errors": [],
+      "tail": [
+        "PASS: Second Missing click collapses links",
+        "PASS: Single missing prerequisite navigates directly without chooser",
+        "PASS: Direct prerequisite navigation preserves complete state/RNG",
+        "PASS: Direct target details remain inside the Store",
+        "PASS: Keyboard activation directly follows the single prerequisite",
+        "PASS: Keyboard navigation preserves state/RNG",
+        "PASS: Escape closes details and external links together",
+        "Store prerequisite links: 57 checks, 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+      "runtime_source_unchanged": true
+    },
+    "store-rules-settled": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.297,
+      "errors": [],
+      "tail": [
+        "       [0] _refresh_artwork (res://scripts/cards/card_view.gd:165)",
+        "       [1] refresh (res://scripts/cards/card_view.gd:114)",
+        "       [2] _ready (res://scripts/cards/card_view.gd:46)",
+        "       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)",
+        "       [4] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:122)",
+        "       [5] _verify_phase_credits (res://scripts/debug/verify_feature_store.gd:96)",
+        "       [6] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:123)",
+        "PASS: Alpha parent resolution discounts direct Core child",
+        "PASS: Credit cannot repeat after phase transition",
+        "Feature Store verification: 0 failures"
+      ],
+      "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+      "runtime_source_unchanged": true
+    },
+    "navigation": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store_navigation.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 17.125,
+      "errors": [],
+      "tail": [
+        "PASS: Map arrow navigation resumes after closing Tutorial",
+        "PASS: All navigation remains zero-cost",
+        "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 0",
+        "PASS: First Escape dismisses hovered details",
+        "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 1",
+        "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 2",
+        "PASS: Tooltip, details and Pause navigation remain zero-cost",
+        "Feature Store navigation verification: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+      "runtime_source_unchanged": true
+    }
+  },
+  "captures": [
+    {
+      "file": "detail-1152.png",
+      "sha256": "106c651f5ad061ded228d630d93631fd2bfa4f8101030f04c31ec84fb2b61271",
+      "inspected": true
+    },
+    {
+      "file": "detail-1280.png",
+      "sha256": "f1064c71a6d4588274f754513a00133db820936c837abcd9eecf5afd30e1045a",
+      "inspected": true
+    },
+    {
+      "file": "detail-900.png",
+      "sha256": "84625898b9460d86f8b65c961c4361867645ae60eaa688960029a64fe090651b",
+      "inspected": true
+    },
+    {
+      "file": "overview-1152.png",
+      "sha256": "7b86490c5ca4096c4ac382507d6a71dcfce55d3363a3bc231dff96a1e5161b31",
+      "inspected": true
+    },
+    {
+      "file": "overview-1280.png",
+      "sha256": "28b87f4f67d5c26762dd35066686f2da5ed85aeb3c6ec3a53ec052b222a5dc8e",
+      "inspected": true
+    },
+    {
+      "file": "overview-900.png",
+      "sha256": "85b53dc471cdf11717884cb3d9424b7415ff509bf4fa6834d70fce5030c454fb",
+      "inspected": true
+    }
+  ],
+  "rules_data_unchanged": true,
+  "automatic_followup": "disabled",
+  "not_claimed": [
+    "new build",
+    "commit",
+    "push",
+    "balance changes",
+    "full release gate",
+    "performance",
+    "new gameplay parity"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_rival_policy_observation.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 21.032,
+  "errors": [
+    "ERROR: FAIL: Explicit policy observer supplies its view exactly once"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "ERROR: FAIL: Explicit policy observer supplies its view exactly once",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (res://scripts/debug/verify_rival_policy_observation.gd:20)",
+    "       [1] _initialize (res://scripts/debug/verify_rival_policy_observation.gd:33)",
+    "{\"checks\":75,\"failures\":1,\"ok\":false,\"phases\":[\"alpha\",\"beta\",\"studio\",\"design\"],\"source_identity\":\"2e53c239ec6357d35eb5b2d45e52e323cd177a002a37bfe9c84ce0869a8f6d47\"}"
+  ]
+}

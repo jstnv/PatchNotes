@@ -18,17 +18,42 @@ const PRE_SUPPORT_RULES := PRE_COMMISSION_RULES + "-sidestreet-brief1-commission
 const PRE_USABILITY_RULES := PRE_SUPPORT_RULES + "-support1"
 const PRE_EMPLOYEE_RULES := PRE_USABILITY_RULES + "-traits9-bank2-priority10"
 const PRE_SEARCH_RULES := PRE_EMPLOYEE_RULES + "-employees2"
-const RULES := PRE_SEARCH_RULES + "-contractsearch1"
+const PRE_ERA_RULES := PRE_SEARCH_RULES + "-contractsearch1"
+const PRE_COURSE_RULES := PRE_ERA_RULES + "-storeera1"
+const RULES := PRE_COURSE_RULES + "-careers1"
 const PreSearchSchema := preload("res://scripts/persistence/pre_contract_search/schema.gd")
 const UsabilityPrevious := preload("res://scripts/persistence/pre_usability/studio.gd")
 const SupportPrevious := preload("res://scripts/contracts/pre_support/studio.gd")
 const CommissionPrevious := preload("res://scripts/contracts/pre_commissions/studio.gd")
 const RelationshipPrevious := preload("res://scripts/contracts/pre_relationships/studio.gd")
-const FIELDS := ["_contract_search","_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed","_publisher_relationships","_commission_deals"]
+const FIELDS := ["_store_era_receipts","_contract_search","_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed","_publisher_relationships","_commission_deals"]
 const SUPPORT_FIELDS := ["_support_deals","_support_rights","_support_assessments"]
 var error := ""
 var _revision := ""
 var _previous_revision := ""
+var _pre_grid_revision := ""
+var _pre_audio_revision := ""
+var _pre_gameplay_revision := ""
+var _pre_course_revision := ""
+const PRE_GAMEPLAY_CATALOG_HASH := "073226e2e5714cdf2abac2bf72428013dc340ea0a17efdc8384d0a5041520d41"
+
+func pre_gameplay_revision() -> String:
+	if _pre_gameplay_revision.is_empty(): _pre_gameplay_revision=_rules_revision(PRE_COURSE_RULES,"",PRE_GAMEPLAY_CATALOG_HASH)
+	return _pre_gameplay_revision
+
+const PRE_AUDIO_CATALOG_HASH := "59e9ef24e0112ea2276e695bd48799f6ff295799dfc8e2750928e9ee8dabbccb"
+
+func pre_audio_revision() -> String:
+	if _pre_audio_revision.is_empty(): _pre_audio_revision=_rules_revision(PRE_COURSE_RULES,"",PRE_AUDIO_CATALOG_HASH)
+	return _pre_audio_revision
+
+## Handoff022 changes acquisition metadata only; this exact prior catalog uses
+## the same schema, prices, card effects and historical validation.
+const PRE_GRID_CATALOG_HASH := "55c76c86c19363228be5138af752b038961a61655eb2fba4bc9a3a0961803dcf"
+
+func pre_grid_revision() -> String:
+	if _pre_grid_revision.is_empty(): _pre_grid_revision = _rules_revision(PRE_COURSE_RULES,"",PRE_GRID_CATALOG_HASH)
+	return _pre_grid_revision
 ## Bounded proofs for the pure current-format validator, shared by detached
 ## adapters. Keys retain every exact Variant type/value and current data hashes;
 ## only a separately checked positive generation number is normalized. No Run,
@@ -69,6 +94,7 @@ func _legacy_revisions(rules: String) -> Array[String]:
 	return result
 
 func _rules_revision(rules: String, legacy_audio_hash: String = "", prior_catalog_hash: String = "") -> String:
+	if prior_catalog_hash.is_empty() and rules not in [RULES,PRE_COURSE_RULES]: prior_catalog_hash = "0f4bd970b66333fd5f5d5358571ac428dc0b60fd8fe410e2381af1d214521c4e"
 	var data := rules
 	var paths: Array[String] = []
 	_collect_data("res://data", paths)
@@ -80,7 +106,7 @@ func _rules_revision(rules: String, legacy_audio_hash: String = "", prior_catalo
 		if path == "res://data/audio_credits.json":
 			# Version 7 already excluded audio credits. Preserve its real save
 			# identity when it becomes a supported historical revision.
-			if rules in [RULES, PRE_SEARCH_RULES, PRE_EMPLOYEE_RULES, PRE_USABILITY_RULES, PRE_RELATIONSHIP_RULES, PRE_MARKET_RULES, PRE_ROSTER_RULES, PRE_GAMEPLAY_TREE_RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
+			if rules in [RULES, PRE_COURSE_RULES, PRE_ERA_RULES, PRE_SEARCH_RULES, PRE_EMPLOYEE_RULES, PRE_USABILITY_RULES, PRE_RELATIONSHIP_RULES, PRE_MARKET_RULES, PRE_ROSTER_RULES, PRE_GAMEPLAY_TREE_RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
 			if not legacy_audio_hash.is_empty():
 				data += path + legacy_audio_hash
 				continue
@@ -162,6 +188,11 @@ func validate_active_rival(payload: Dictionary) -> String:
 	return _validate(payload,true)
 
 func _validate(payload: Dictionary, active_rival: bool) -> String:
+	if payload.get("content_revision", "") != revision() and EmployeeRoster.Career.payload_active(payload):
+		error="Legacy content cannot contain career events"; return "Legacy content cannot contain career events"
+	if payload.get("content_revision", "") == pre_course_revision():
+		var upgraded:=upgrade_course_predecessor(payload,active_rival)
+		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
 	if payload.get("content_revision", "") != revision(): return _validate_uncached(payload,active_rival)
 	var sequence_codec := CheckpointCodec.new()
 	var sequence: Variant = sequence_codec.integer(payload.get("sequence"))
@@ -196,7 +227,13 @@ func _validate(payload: Dictionary, active_rival: bool) -> String:
 	return ""
 
 func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
+	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+		var upgraded := upgrade_grid_predecessor(payload,active_rival)
+		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
 	var is_current: bool = payload.get("content_revision", "") == revision()
+	if not is_current and payload.get("content_revision", "") == _rules_revision(PRE_ERA_RULES):
+		var upgraded := upgrade_store_era_predecessor(payload,active_rival)
+		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
 	if not is_current and payload.get("content_revision", "") in [_rules_revision(PRE_EMPLOYEE_RULES),_rules_revision(PRE_SEARCH_RULES)]:
 		var upgraded := upgrade_employee_predecessor(payload,active_rival)
 		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
@@ -230,7 +267,7 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 	var resolver := func(request: Dictionary) -> Dictionary: return RunState.RelationshipRules.resolve(r,request)
 	if RunState.RelationshipLedger.reconstruct(r.publisher_relationships,r.bank_run_id,r.completed_run_cycles,resolver).is_empty(): return "Invalid publisher relationship provenance"
 	var roster_version: int = r.get("founding_roster_version",1)
-	if roster_version not in [1,2,3,4]: return "Invalid founding roster version"
+	if roster_version not in [1,2,3,4,5]: return "Invalid founding roster version"
 	if r.has("founding_roster_version") and payload.content_revision != revision(): return "Invalid historical founding roster metadata"
 	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
 	if r.studio_name.is_empty() or r.studio_name != r.studio_name.strip_edges() or r.studio_name.length()>80 or StudioSpecialties.preview(r.studio_specialty).is_empty(): return "Invalid Studio identity"
@@ -243,6 +280,8 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 		var catalog_base: int = definition._feature_offers[research.feature_id].base_price_cents if definition._feature_offers.has(research.feature_id) else (int(definition._feature_definitions[research.feature_id].scope)+1)*15000
 		if research.base_cents != catalog_base or r.starter_selection_confirmed == false: return "Invalid research terms"
 	if r.employees.owner != value.run_id or not EmployeeRoster.valid(r.employees): return "Invalid employee provenance"
+	var career_error:=EmployeeRoster.Career.validate_saved(r.employees,r.studio_finance,r.release_metadata,active_id)
+	if not career_error.is_empty():return career_error
 	if r.employees.employees.size() != r.studio_finance.employees.size(): return "Payroll roster mismatch"
 	for employee: Dictionary in r.studio_finance.employees:
 		if not r.employees.employees.has(employee.employee_id) or r.employees.employees[employee.employee_id].hire_cycle != employee.hire_cycle: return "Payroll identity mismatch"
@@ -319,6 +358,7 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 			if paid.saving_cents > 0 and r.resourceful_claims.get(paid.window,&"") != entry.id: return "Missing Resourceful consumption"
 	if r.studio_finance.monthly_rent_cents != (51500 if StudioTraits.is_active(r.studio_traits,&"expensive_lease") else 50000): return "Trait rent mismatch"
 	var catalog := RunState.new()
+	if not RunState.StoreEra.valid_research(r,catalog._feature_definitions): return "Invalid era Feature Research provenance"
 	for id: StringName in r.owned_features:
 		if not catalog._feature_definitions.has(id) or not r.owned_features[id]: return "Unknown owned Feature"
 	var counts := {}
@@ -329,6 +369,7 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 			counts[feature] = int(counts.get(feature,0))+1
 	if counts != r.familiarity: return "Familiarity count mismatch"
 	if not StudioFanbase.validate(r.fanbase, r.released_games, r.release_metadata, r.completed_run_cycles, StudioTraits.starting_fans(r.studio_traits)): return "Invalid Fanbase provenance"
+	if not RunState.StoreEra.valid(r.store_era_receipts,r.release_metadata): return "Invalid Store era receipt provenance"
 	if r.released_games.keys() != r.release_metadata.keys(): return "Release order/identity mismatch"
 	for id: StringName in r.released_games:
 		var sales: Dictionary = r.released_games[id]
@@ -495,7 +536,18 @@ func _valid_contract(c: Variant, r: Dictionary, kind: StringName, offer: StringN
 	return c.result == expected_result
 
 func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
+	if payload.get("content_revision", "") != revision() and EmployeeRoster.Career.payload_active(payload):
+		error="Legacy content cannot contain career events"; return null
+	if payload.get("content_revision", "") == pre_course_revision():
+		var upgraded:=upgrade_course_predecessor(payload,active_rival)
+		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
+	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+		var upgraded := upgrade_grid_predecessor(payload,active_rival)
+		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
 	var is_current: bool = payload.get("content_revision", "") == revision()
+	if not is_current and payload.get("content_revision", "") == _rules_revision(PRE_ERA_RULES):
+		var upgraded := upgrade_store_era_predecessor(payload,active_rival)
+		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
 	if not is_current and payload.get("content_revision", "") in [_rules_revision(PRE_EMPLOYEE_RULES),_rules_revision(PRE_SEARCH_RULES)]:
 		var upgraded := upgrade_employee_predecessor(payload,active_rival)
 		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
@@ -559,6 +611,8 @@ func upgrade_relationship_predecessor(payload: Dictionary, active_rival: bool = 
 	native.run.commission_deals = {}
 	_empty_support(native)
 	native.run.contract_search=RunState.ContractSearch.from_legacy(native.run)
+	if not RunState.StoreEra.predecessor_features_known(native.run): error="Unknown historical Feature cohort"; return {}
+	native.run.store_era_receipts = RunState.StoreEra.from_releases(native.run.release_metadata)
 	native.content_revision = revision()
 	var codec := CheckpointCodec.new()
 	var upgraded: Variant = codec.encode(native,CheckpointSchema.root(true,active_rival))
@@ -579,6 +633,8 @@ func upgrade_commission_predecessor(payload: Dictionary, active_rival: bool = fa
 	native.run.commission_deals = {}
 	_empty_support(native)
 	native.run.contract_search=RunState.ContractSearch.from_legacy(native.run)
+	if not RunState.StoreEra.predecessor_features_known(native.run): error="Unknown historical Feature cohort"; return {}
+	native.run.store_era_receipts = RunState.StoreEra.from_releases(native.run.release_metadata)
 	native.content_revision = revision()
 	var codec := CheckpointCodec.new()
 	var upgraded: Variant = codec.encode(native,CheckpointSchema.root(true,active_rival))
@@ -600,6 +656,8 @@ func upgrade_support_predecessor(payload: Dictionary, active_rival: bool = false
 	if native.is_empty(): error=previous.error; return {}
 	_empty_support(native)
 	native.run.contract_search=RunState.ContractSearch.from_legacy(native.run)
+	if not RunState.StoreEra.predecessor_features_known(native.run): error="Unknown historical Feature cohort"; return {}
+	native.run.store_era_receipts = RunState.StoreEra.from_releases(native.run.release_metadata)
 	native.content_revision = revision()
 	var codec := CheckpointCodec.new()
 	var encoded: Variant = codec.encode(native,CheckpointSchema.root(true,active_rival))
@@ -615,6 +673,8 @@ func upgrade_usability_predecessor(payload: Dictionary, active_rival: bool = fal
 	if native.is_empty(): error=previous.error; return {}
 	# No cash, Traits, old quote, active allocation or RNG is rewritten.
 	native.run.contract_search=RunState.ContractSearch.from_legacy(native.run)
+	if not RunState.StoreEra.predecessor_features_known(native.run): error="Unknown historical Feature cohort"; return {}
+	native.run.store_era_receipts = RunState.StoreEra.from_releases(native.run.release_metadata)
 	native.content_revision = revision()
 	var codec := CheckpointCodec.new()
 	var encoded: Variant = codec.encode(native,CheckpointSchema.root(true,active_rival))
@@ -622,7 +682,13 @@ func upgrade_usability_predecessor(payload: Dictionary, active_rival: bool = fal
 	return encoded if error.is_empty() and encoded is Dictionary else {}
 
 func _decode_payload(payload: Dictionary, active_rival: bool = false) -> Dictionary:
+	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+		var upgraded := upgrade_grid_predecessor(payload,active_rival)
+		return {} if upgraded.is_empty() else _decode_payload(upgraded,active_rival)
 	var is_current: bool = payload.get("content_revision", "") == revision()
+	if not is_current and payload.get("content_revision", "") == _rules_revision(PRE_ERA_RULES):
+		var upgraded := upgrade_store_era_predecessor(payload,active_rival)
+		return {} if upgraded.is_empty() else _decode_payload(upgraded,active_rival)
 	if not is_current and payload.get("content_revision", "") in [_rules_revision(PRE_EMPLOYEE_RULES),_rules_revision(PRE_SEARCH_RULES)]:
 		var upgraded := upgrade_employee_predecessor(payload,active_rival)
 		return {} if upgraded.is_empty() else _decode_payload(upgraded,active_rival)
@@ -677,8 +743,48 @@ func upgrade_employee_predecessor(payload: Dictionary, active_rival: bool = fals
 	var native: Variant=codec.decode(payload,PreSearchSchema.root(true,active_rival))
 	if not codec.error.is_empty() or not native is Dictionary:error=codec.error;return {}
 	native.run.contract_search=RunState.ContractSearch.from_legacy(native.run)
+	if not RunState.StoreEra.predecessor_features_known(native.run): error="Unknown historical Feature cohort"; return {}
+	native.run.store_era_receipts = RunState.StoreEra.from_releases(native.run.release_metadata)
 	native.content_revision=revision()
 	var candidate: Variant=codec.encode(native,CheckpointSchema.root(true,active_rival))
 	if not codec.error.is_empty() or not candidate is Dictionary:error=codec.error;return {}
+	error=_validate(candidate,active_rival)
+	return candidate if error.is_empty() else {}
+
+## Only a named original schema/revision may establish historical owner meaning.
+## Current content identity without its mandatory receipt field is rejected.
+func upgrade_store_era_predecessor(payload: Dictionary, active_rival: bool = false) -> Dictionary:
+	error = ""
+	if payload.get("content_revision") != _rules_revision(PRE_ERA_RULES): error="Unknown Store era predecessor"; return {}
+	var codec := CheckpointCodec.new()
+	var native: Variant = codec.decode(payload,CheckpointSchema.root(true,active_rival,false))
+	if not codec.error.is_empty() or not native is Dictionary: error=codec.error; return {}
+	if not RunState.StoreEra.predecessor_features_known(native.run): error="Unknown historical Feature cohort"; return {}
+	native.run.store_era_receipts = RunState.StoreEra.from_releases(native.run.release_metadata)
+	native.content_revision = revision()
+	var encoded: Variant = codec.encode(native,CheckpointSchema.root(true,active_rival))
+	if not codec.error.is_empty() or not encoded is Dictionary: error=codec.error; return {}
+	error = _validate(encoded,active_rival)
+	return encoded if error.is_empty() else {}
+
+## No ownership, accepted queue, historical purchase or frozen supply is edited.
+## Every ordinary schema/finance/payment/receipt/RNG check still runs.
+func upgrade_grid_predecessor(payload: Dictionary, active_rival: bool = false) -> Dictionary:
+	error = ""
+	if payload.get("content_revision") not in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]: error="Unknown Store grid predecessor"; return {}
+	var candidate := payload.duplicate(true)
+	candidate.content_revision = revision()
+	error = _validate(candidate,active_rival)
+	return candidate if error.is_empty() else {}
+
+func pre_course_revision() -> String:
+	if _pre_course_revision.is_empty():_pre_course_revision=_rules_revision(PRE_COURSE_RULES)
+	return _pre_course_revision
+
+func upgrade_course_predecessor(payload: Dictionary,active_rival: bool=false) -> Dictionary:
+	error=""
+	if payload.get("content_revision")!=pre_course_revision() or EmployeeRoster.Career.payload_active(payload):error="Invalid career predecessor";return {}
+	var candidate:=payload.duplicate(true)
+	candidate.content_revision=revision()
 	error=_validate(candidate,active_rival)
 	return candidate if error.is_empty() else {}

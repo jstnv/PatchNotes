@@ -1,0 +1,67 @@
+--- before/data/feature_store_ledger.json
++++ after/data/feature_store_ledger.json
+@@ -466,5 +466,64 @@
+       "multiple_soundtracks",
+       "instrumental_sounds"
+     ]
++  },
++  {
++    "id": "timer_system",
++    "name": "Timer System",
++    "type": "feature",
++    "phase": "design",
++    "department": "",
++    "primary_stat": "technology",
++    "primary_value": 2,
++    "secondary_stat": "design",
++    "secondary_value": 1,
++    "scope": 1,
++    "renewable": false,
++    "artwork": "",
++    "purchase_parent": "",
++    "gameplay_features_required": 0,
++    "base_price_cents": 95000,
++    "play_cost_cents": 0
++  },
++  {
++    "id": "inventory_system",
++    "name": "Inventory System",
++    "type": "feature",
++    "phase": "design",
++    "department": "",
++    "primary_stat": "technology",
++    "primary_value": 3,
++    "secondary_stat": "design",
++    "secondary_value": 2,
++    "scope": 2,
++    "renewable": false,
++    "artwork": "",
++    "purchase_parent": "",
++    "gameplay_features_required": 0,
++    "base_price_cents": 170000,
++    "play_cost_cents": 0
++  },
++  {
++    "id": "categorized_scores",
++    "name": "Categorized Scores",
++    "type": "feature",
++    "phase": "design",
++    "department": "",
++    "primary_stat": "design",
++    "primary_value": 7,
++    "secondary_stat": "technology",
++    "secondary_value": 2,
++    "scope": 3,
++    "renewable": false,
++    "artwork": "",
++    "purchase_parent": "timer_system",
++    "gameplay_features_required": 0,
++    "base_price_cents": 240000,
++    "play_cost_cents": 0,
++    "purchase_parents": [
++      "timer_system",
++      "score_system",
++      "lives_system"
++    ]
+   }
+ ]

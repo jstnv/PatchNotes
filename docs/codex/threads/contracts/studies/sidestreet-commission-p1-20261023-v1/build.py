@@ -1,0 +1,51 @@
+from pathlib import Path
+import json,hashlib,subprocess
+H=Path(__file__).resolve().parent; R=H.parents[5]; T=H.parents[1]
+P=T/'simulators/sidestreet-commission-p1-v1/project'
+def edit(path,old,new):
+    p=P/path;s=p.read_text(encoding='utf-8');assert old in s,(path,old[:150]);p.write_text(s.replace(old,new,1),encoding='utf-8')
+def put(path,text): (P/path).write_text(text,encoding='utf-8')
+assert not (P/'scripts/contracts/publisher_commission_trial.gd').exists()
+(H/'canonical-before.json').write_text(json.dumps({str(p.relative_to(R/'patch-notes')):hashlib.sha256(p.read_bytes()).hexdigest() for p in (R/'patch-notes').rglob('*') if p.is_file() and '.godot' not in p.parts and p.suffix in ['.gd','.json','.godot','.tscn']},indent=2))
+(H/'git-before.json').write_text(json.dumps({k:subprocess.check_output(['git',*v],cwd=R,text=True) for k,v in {'branch':['branch','--show-current'],'head':['rev-parse','HEAD'],'status':['status','--porcelain'],'diff':['diff','--stat']}.items()},indent=2))
+put('scripts/contracts/publisher_commission_trial.gd',(H/'commission.gd').read_text().replace('\t\t earned','\t\tearned').replace('\t\t settled','\t\tsettled'))
+edit('scripts/contracts/publisher_relationship_rules.gd','static func resolve(run: Variant,request: Dictionary) -> Dictionary:\n','static func resolve(run: Variant,request: Dictionary) -> Dictionary:\n\tif request.get("kind") == preload("res://scripts/contracts/publisher_commission_trial.gd").KIND: return preload("res://scripts/contracts/publisher_commission_trial.gd").resolve(run,request)\n')
+run='scripts/run_state.gd'
+edit(run,'var _sidestreet_briefs: Dictionary = {}','const Commission := preload("res://scripts/contracts/publisher_commission_trial.gd")\nvar _commission_deals: Dictionary = {}\nvar _sidestreet_briefs: Dictionary = {}')
+edit(run,'func can_register_release(project: ProjectState) -> bool:',(H/'run_methods.gd').read_text()+'\nfunc can_register_release(project: ProjectState) -> bool:')
+edit(run,'\treturn project.get_awareness_result().get_promotion_awards()==get_pending_promotion_awards()', '\tif _plan_commission_release(project).is_empty(): return false\n\treturn project.get_awareness_result().get_promotion_awards()==get_pending_promotion_awards()')
+edit(run,'\tvar year := get_current_year()\n\tvar title := _resolve_release_title', '\tvar commission := _plan_commission_release(project)\n\tif commission.is_empty(): return false\n\tvar year := get_current_year()\n\tvar title := _resolve_release_title')
+edit(run,'\t_released_games[id] = record\n\t_fanbase = next_fans','\tvar cash_before := _cash_cents\n\tvar publishers_before := _unlocked_publishers.duplicate()\n\tvar was_blocked := is_blocking_signals()\n\t_publishing_cycle = true\n\tset_block_signals(true)\n\t_released_games[id] = record\n\t_fanbase = next_fans')
+edit(run,'\tfor offer_id: StringName in project.get_awareness_result().get_promotion_awards():','\tif commission.applicable:\n\t\t_commission_deals[id] = commission.deal\n\t\t_studio_finance = commission.finance\n\t\t_cash_cents = _studio_finance.cash_cents\n\t\t_publisher_relationships = commission.relationships\n\t\t_release_metadata[id].merge({"owner":&"publisher","publisher_id":&"sidestreet","commission_quote_id":commission.deal.terms.quote_id})\n\tfor offer_id: StringName in project.get_awareness_result().get_promotion_awards():')
+edit(run,'\t\t_issue_sidestreet_brief(id)\n\tsales_changed.emit()\n\tfans_changed.emit()\n\treturn true','\t\t_issue_sidestreet_brief(id)\n\tset_block_signals(was_blocked)\n\tif _cash_cents != cash_before: cash_changed.emit()\n\tif commission.applicable:\n\t\tfinance_changed.emit()\n\t\tpublisher_relationships_changed.emit()\n\tif _unlocked_publishers != publishers_before: publishers_changed.emit()\n\tsales_changed.emit()\n\tfans_changed.emit()\n\t_publishing_cycle = false\n\treturn true')
+edit(run,'\treturn ReleasedGameMonthlyReport.build(_released_games[release_id], release_cycle)','\tvar report := ReleasedGameMonthlyReport.build(_released_games[release_id], release_cycle)\n\tif report.is_empty(): return {}\n\tvar publisher_owned := _commission_deals.has(release_id)\n\treport.owner = &"publisher" if publisher_owned else &"studio"\n\treport.studio_net_cents = 0 if publisher_owned else report.net_cents\n\treport.studio_settled_cents = 0 if publisher_owned else report.settled_cents\n\treturn report')
+edit(run,'func get_post_launch_campaign_offer(release_id: StringName) -> Dictionary:\n','func get_post_launch_campaign_offer(release_id: StringName) -> Dictionary:\n\tif _commission_deals.has(release_id): return {}\n')
+edit(run,'not ReleasedGameSales.can_campaign(_released_games[campaign_release_id])):', 'not ReleasedGameSales.can_campaign(_released_games[campaign_release_id]) or _commission_deals.has(campaign_release_id)):')
+edit(run,'\t\tvar release_payable: int = next.settled_cents', '\t\tif _commission_deals.has(id):\n\t\t\tnext_records[id] = next\n\t\t\tcontinue\n\t\tvar release_payable: int = next.settled_cents')
+begin='scripts/simulation/begin_project.gd'
+edit(begin,'controlled: Array[int] = []) -> Dictionary:', 'controlled: Array[int] = [], commission_quote: Dictionary = {}) -> Dictionary:')
+edit(begin,'\tvar before := run.random_streams.snapshot()', '\tif run.has_pending_commission(): return {"ok":false,"error":"Commission already active"}\n\tvar before := run.random_streams.snapshot()')
+edit(begin,'\tvar market: Dictionary=', '\tif not commission_quote.is_empty() and not run.can_bind_commission_quote(commission_quote,next): return {"ok":false,"error":"Commission quote rejected"}\n\tvar market: Dictionary=')
+edit(begin,'\tif not run.complete_productive_action(Callable(),0,-1,', '\tvar bind := Callable()\n\tif not commission_quote.is_empty(): bind = func() -> bool: return run._bind_commission(commission_quote)\n\tif not run.complete_productive_action(bind,0,-1,')
+session='scripts/simulation/campaign_session.gd'
+edit(session,'var _busy := false','var _busy := false\nvar _commission_request: Dictionary = {}')
+edit(session,'\tif result.ok:\n\t\tsequence += 1', '\tif result.ok:\n\t\tif StringName(request.type) != &"quote_commission": _commission_request = {}\n\t\tsequence += 1')
+edit(session,'\tif kind == &"begin_development":', '\tif kind == &"quote_commission":\n\t\tif payload.size() != 3: return reject("Malformed quote request")\n\t\tfor key: String in ["name","genre","theme"]:\n\t\t\tif not payload.get(key) is String and not payload.get(key) is StringName: return reject("Malformed quote choice")\n\t\tvar quote := run.get_commission_quote(str(payload.name),StringName(payload.genre),StringName(payload.theme))\n\t\tif quote.is_empty(): return reject("Commission unavailable")\n\t\t_commission_request = {"name":str(payload.name),"genre":str(payload.genre),"theme":str(payload.theme)}\n\t\treturn {"ok":true,"events":[{"type":"commission_quoted","quote":quote}]}\n\tif kind == &"begin_development":')
+edit(session,'payload.size() != (4 if payload.has("priorities") else 3)', 'not payload.get("commission_quote",{}) is Dictionary or payload.size() != 3 + int(payload.has("priorities")) + int(payload.has("commission_quote"))')
+edit(session,'StringName(payload.genre),StringName(payload.theme))\n\t\tif not result.ok', 'StringName(payload.genre),StringName(payload.theme),Callable(),[],payload.get("commission_quote",{}))\n\t\tif not result.ok')
+edit(session,'func observation() -> Dictionary:\n','func observation() -> Dictionary:\n\tvar commission_quote := {}\n\tif in_studio and not _commission_request.is_empty(): commission_quote = run.get_commission_quote(_commission_request.name,StringName(_commission_request.genre),StringName(_commission_request.theme))\n')
+edit(session,'"publisher_relationships":run.get_publisher_relationships(),','"publisher_relationships":run.get_publisher_relationships(),"commission_quote":commission_quote,"commission_deals":run.get_commission_deals(),')
+edit(session,'return {"kind":"campaign_v2","run":run_state,','return {"kind":"campaign_v2","commission_request":_commission_request.duplicate(true),"run":run_state,')
+edit(session,'"accepted_sequence":str(sequence),"studio_payload":payload}', '"accepted_sequence":str(sequence),"studio_payload":payload,"commission_request":_commission_request.duplicate(true)}')
+edit(session,'\trun = restored\n\tcatalog', '\tvar pending: Variant = envelope.get("commission_request",{})\n\tif not pending is Dictionary or (not pending.is_empty() and pending.size() != 3): return false\n\tif not pending.is_empty():\n\t\tfor key: String in ["name","genre","theme"]:\n\t\t\tif not pending.get(key) is String: return false\n\t\tif restored.get_commission_quote(pending.name,StringName(pending.genre),StringName(pending.theme)).is_empty(): return false\n\t_commission_request = pending.duplicate(true)\n\trun = restored\n\tcatalog')
+schema='scripts/persistence/checkpoint_schema.gd'
+old='\treturn {"base_name":"text","genre":"id","theme":"id","genre_ratios":array_of("uint"),"release_title":"text","release_year":"uint","release_cycle":"uint","review":union_of([review,market_review])}'
+edit(schema,old,old.replace('\treturn','\tvar own :=')+'\n\tvar commission := own.duplicate(true)\n\tcommission.merge({"owner":"id","publisher_id":"id","commission_quote_id":"id"})\n\treturn union_of([own,commission])')
+edit(schema,'\trun.sidestreet_briefs =', '\trun.commission_deals = preload("res://scripts/contracts/publisher_commission_trial.gd").schema()\n\trun.sidestreet_briefs =')
+save='scripts/persistence/studio_checkpoint.gd'
+edit(save,'-relationships1-sidestreet-p2-private1"','-relationships1-sidestreet-p2-private1-commission-p3-private1"')
+edit(save,'"_publisher_relationships"]','"_publisher_relationships","_commission_deals"]')
+edit(save,'or run.get_active_contract() != null:', 'or run.get_active_contract() != null or run.has_pending_commission():')
+edit(save,'completed_briefs != r.publisher_relationships.events.size()', 'completed_briefs + r.commission_deals.size() != r.publisher_relationships.events.size()')
+edit(save,'\tif pending_briefs > 1 or completed_briefs', '\tif not RunState.Commission.valid_save(r): return "Invalid commission rights/finance provenance"\n\tif pending_briefs > 1 or completed_briefs')
+print('Private candidate assembled')

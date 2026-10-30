@@ -1,0 +1,47 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_research_confirmation_theme.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 12,
+  "elapsed_seconds": 16.078,
+  "errors": [
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport",
+    "ERROR: FAIL: Entire confirmation fits supported viewport"
+  ],
+  "tail": [
+    "       [2] _run (res://scripts/debug/verify_research_confirmation_theme.gd:53)",
+    "PASS: Shared primary button and timed entrance",
+    "PASS: Cancel/Escape/close preserve cash, history, ownership, queue and RNG",
+    "PASS: Confirmed admission charges exact deposit and zero cycles",
+    "PASS: Confirmed admission queues without ownership",
+    "PASS: Stale confirm cannot duplicate deposit or queue",
+    "PASS: Existing productive Research completes acquisition",
+    "RESEARCH_CONFIRMATION {\"checks\":152,\"failures\":12,\"runtime_source\":\"c76600155c2ba9d3f12b65ca8e063c2cac792dbd704ea2b9f9df39cb11ee9348\"}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "c76600155c2ba9d3f12b65ca8e063c2cac792dbd704ea2b9f9df39cb11ee9348",
+  "runtime_source_unchanged": true
+}

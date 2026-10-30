@@ -19,6 +19,9 @@ var _migration_output: Dictionary = {}
 var _publishing_source_identity := ""
 ## Gameplay opts in; tools retain their explicit synchronous durability API.
 var background_saves := false
+## Explicit developer sandbox: preserve the durable normal Studio and never
+## publish cheated state. A new Gameplay scene resets this process-local flag.
+var debug_session:=false
 var _write_job: RefCounted
 var _change_revision := 0
 var _write_catalog: RefCounted
@@ -33,6 +36,7 @@ func _ready() -> void:
 	process_mode=Node.PROCESS_MODE_ALWAYS
 
 func is_saving() -> bool:
+	if debug_session:return false
 	return _write_job!=null or (background_saves and pending and failure.is_empty() and in_studio and run!=null and run.get_active_contract()==null)
 
 func _process(_delta: float) -> void:
@@ -41,6 +45,7 @@ func _process(_delta: float) -> void:
 		if pending and failure.is_empty(): _request_save.call_deferred()
 
 func _request_save() -> void:
+	if debug_session:return
 	if not background_saves:
 		flush()
 		return
@@ -55,7 +60,7 @@ func _request_save() -> void:
 	var world: Dictionary={}
 	if rival_world!=null:
 		var codec:=preload("res://scripts/market/rival_world_checkpoint.gd").new()
-		world=codec.snapshot(rival_world)
+		world=codec.snapshot(rival_world,adapter)
 		if world.is_empty():
 			_failed(codec.error)
 			return
@@ -94,6 +99,7 @@ func _finish_write() -> void:
 	_notify_status()
 
 func wait_saved() -> bool:
+	if debug_session:return true
 	if not background_saves: return flush()
 	if not failure.is_empty(): return false
 	_request_save()
@@ -165,6 +171,9 @@ func attach_rivals(world: RivalWorld, definitions: RefCounted) -> bool:
 
 func attach(value: RunState) -> void:
 	if _write_job!=null: flush()
+	# Bind/load pays the catalog hash once; autosaves reuse this current identity.
+	# Worker validation still rechecks the executable data before publication.
+	adapter.revision()
 	if run!=null:
 		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"publisher_relationships_changed"]:
 			if run.is_connected(name,_changed): run.disconnect(name,_changed)
@@ -177,6 +186,7 @@ func attach(value: RunState) -> void:
 		run.connect(name,_changed)
 
 func _changed() -> void:
+	if debug_session:pending=false;return
 	if not in_studio: return
 	_change_revision+=1
 	pending = true
@@ -184,6 +194,7 @@ func _changed() -> void:
 
 func entered_studio(restored: bool = false) -> void:
 	in_studio = true
+	if debug_session:pending=false;_notify_status();return
 	pending = not restored
 	if pending:
 		_change_revision+=1
@@ -195,12 +206,14 @@ func before_departure() -> bool:
 	return flush()
 
 func before_mutation() -> bool:
+	if debug_session:return true
 	if not failure.is_empty(): return false
 	if background_saves: return true
 	if not in_studio or run._productive_cycle_in_progress or run._publishing_cycle or run._feature_purchase_in_progress or run._committing_cycle_cash: return true
 	return flush()
 
 func flush() -> bool:
+	if debug_session:pending=false;return true
 	# Explicit durability barrier for synchronous tools/guards. Interactive
 	# routes await wait_saved() before invoking these guards.
 	if _write_job!=null: _finish_write()
@@ -234,6 +247,13 @@ func flush() -> bool:
 	completed_saves += 1
 	_notify_status()
 	return true
+
+func begin_debug_session() -> bool:
+	if debug_session:return true
+	if not in_studio or run==null or run.get_active_contract()!=null:return false
+	if not await wait_saved() or not failure.is_empty() or _write_job!=null:return false
+	debug_session=true;pending=false;run.checkpoint_mutations_allowed=true
+	_notify_status();return true
 
 func _failed(reason: String) -> bool:
 	failure = reason

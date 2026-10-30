@@ -2,6 +2,8 @@
 
 **Status: DESIGN evidence. No gameplay adoption or balance approval.** This follows the [actual two-rival QA/Bank finding](2026-10-27-rival-world-qa-loan-finding-v1.md). The question was whether the frozen 35-Scope rivals can reach 8.0 by the intended opening date through better existing hand selection, one legal specialty Store purchase, or shorter Bug-safe Beta. The predeclared [Core-hand](2026-10-27-rival-core-hand-study-plan-v1.md), [Store](2026-10-27-rival-store-core-acquisition-plan-v1.md), [second-game Store](2026-10-27-rival-second-game-store-plan-v1.md), [solo-career replacement](2026-10-27-rival-solo-store-career-plan-v1.md), [parent correction](2026-10-27-rival-solo-store-parent-correction-v1.md), [five-hand](2026-10-27-rival-beta-marginal-qa-plan-v1.md), [six-hand](2026-10-27-rival-six-hand-sensitivity-plan-v1.md), and [Search-receipt](2026-10-27-rival-search-receipt-exit-plan-v1.md) plans record hypotheses, starting conditions, seeds, bounds, measurements, and stopping rules before each run.
 
+**Later same-day calendar correction:** source advances one year per **24 cycles**. Thus this c48 study covers only two years; c36 is 18 months, not the January1980 boundary of a January1977 start. The c34 8.0 result is valid, but claims about a full 1977–79 opening need the separately predeclared [72-cycle follow-up](2026-10-27-three-year-rival-career-plan-v1.md).
+
 ## Source and execution
 
 - Checkout when frozen: `main` at `087df09d653858b72c6e2dc344352237433dd3ac`, dirty shared worktree. All changes are in thread-owned private variants. Godot `4.7.1.stable.official.a13da4feb`, executable SHA-256 `35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef`.

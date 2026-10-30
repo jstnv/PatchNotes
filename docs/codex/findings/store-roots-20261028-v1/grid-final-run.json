@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_common_grid.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 2.5,
+  "errors": [],
+  "tail": [
+    "PASS: Bounded route avoids every card/label/header save_files->player_level_editor",
+    "PASS: Bounded route avoids every card/label/header exploration->ability_gated_exploration",
+    "PASS: Bounded route avoids every card/label/header character_backstories->switchable_protagonists",
+    "PASS: Bounded route avoids every card/label/header character_development->character_skill_checks",
+    "PASS: Bounded route avoids every card/label/header exploration->character_skill_checks",
+    "PASS: Four category connectors avoid all cards, names and headers",
+    "PASS: Cross-category prerequisite remains explicit in details",
+    "PASS: Hidden cross-category arrow still permits direct prerequisite navigation",
+    "PASS: Layout and routing consume no gameplay RNG",
+    "Store common grid: 65 checks, 0 failures"
+  ],
+  "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+  "runtime_source_unchanged": true
+}

@@ -3,9 +3,10 @@ extends RefCounted
 
 signal allocation_changed
 
-const MIN_PRIORITY := 10
-const SAVED_MIN_PRIORITY := 5
-const MAX_PRIORITY := 75
+const MIN_PRIORITY := 20
+const SAVED_MIN_PRIORITY := 0
+const SAVED_MAX_PRIORITY := 75
+const MAX_PRIORITY := 40
 const PRIORITY_STEP := 5
 const MAX_TOTAL_PRIORITY := 100
 const INITIAL_PRIORITY := 25
@@ -24,6 +25,42 @@ var _priorities: Dictionary[ProjectState.CoreScore, int] = {
 }
 
 
+var _bounds := Vector2i(MIN_PRIORITY,MAX_PRIORITY)
+
+func configure(run: RefCounted=null) -> void:
+	_bounds=bounds(run)
+
+static func bounds(run: RefCounted=null) -> Vector2i:
+	var state: Variant={} if run==null else run.get("_employees")
+	return EmployeeRoster.Career.limits(state if state is Dictionary else {})
+
+static func is_valid_with_bounds(distribution: Dictionary, limits: Vector2i) -> bool:
+	if not is_valid_distribution(distribution):return false
+	for amount: int in distribution.values():
+		if amount<limits.x or amount>limits.y:return false
+	return true
+
+static func normalize(distribution: Dictionary,categories: Array,limits: Vector2i) -> Dictionary:
+	var result: Dictionary={}
+	var total:=0
+	for key in categories:
+		var amount:=clampi(roundi(float(distribution.get(key,25))/5.0)*5,limits.x,limits.y)
+		result[key]=amount;total+=amount
+	for iteration in 400:
+		if total==100:return result
+		var changed:=false
+		for key in categories:
+			if total<100 and result[key]<limits.y:result[key]+=5;total+=5;changed=true
+			elif total>100 and result[key]>limits.x:result[key]-=5;total-=5;changed=true
+			if total==100:return result
+		if not changed:break
+	return {}
+
+static func editable_distribution(distribution: Dictionary,run: RefCounted=null) -> Dictionary[ProjectState.CoreScore,int]:
+	var result: Dictionary[ProjectState.CoreScore,int]={}
+	result.assign(normalize(distribution,CORE_CATEGORIES,bounds(run)))
+	return result
+
 func set_priority(category: int, requested_value: Variant) -> bool:
 	if not _priorities.has(category):
 		push_warning("Invalid priority category: %s" % category)
@@ -38,15 +75,15 @@ func set_priority(category: int, requested_value: Variant) -> bool:
 
 	# Clamp first, then snap to the nearest multiple of five. Exact halfway
 	# values round upward, making programmatic normalization deterministic.
-	var clamped_value := clampf(numeric_value, MIN_PRIORITY, MAX_PRIORITY)
+	var clamped_value := clampf(numeric_value, _bounds.x, _bounds.y)
 	var normalized_value := clampi(
 		floori(clamped_value / PRIORITY_STEP + 0.5) * PRIORITY_STEP,
-		MIN_PRIORITY,
-		MAX_PRIORITY,
+		_bounds.x,
+		_bounds.y,
 	)
 	var current_value: int = _priorities[category]
 	var total_without_category := get_total_allocated_priority() - current_value
-	var maximum_fitting_value := mini(MAX_PRIORITY, MAX_TOTAL_PRIORITY - total_without_category)
+	var maximum_fitting_value := mini(_bounds.y, MAX_TOTAL_PRIORITY - total_without_category)
 	normalized_value = mini(normalized_value, maximum_fitting_value)
 	if normalized_value == current_value:
 		return true
@@ -86,7 +123,7 @@ static func is_valid_distribution(distribution: Dictionary) -> bool:
 		if not distribution.has(category) or typeof(distribution[category]) != TYPE_INT:
 			return false
 		var value: int = distribution[category]
-		if value < SAVED_MIN_PRIORITY or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
+		if value < SAVED_MIN_PRIORITY or value > SAVED_MAX_PRIORITY or value % PRIORITY_STEP != 0:
 			return false
 		total += value
 	return total == MAX_TOTAL_PRIORITY
@@ -94,11 +131,8 @@ static func is_valid_distribution(distribution: Dictionary) -> bool:
 
 ## Saved weights and historical journals may contain the former 5% floor.
 ## Every new command uses this stricter gate; reading a save never reweights it.
-static func is_valid_new_distribution(distribution: Dictionary) -> bool:
-	if not is_valid_distribution(distribution): return false
-	for amount: int in distribution.values():
-		if amount < MIN_PRIORITY: return false
-	return true
+static func is_valid_new_distribution(distribution: Dictionary,run: RefCounted=null) -> bool:
+	return is_valid_with_bounds(distribution,bounds(run))
 
 
 func set_distribution(distribution: Dictionary) -> bool:

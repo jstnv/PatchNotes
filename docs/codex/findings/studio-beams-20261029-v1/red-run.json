@@ -1,0 +1,28 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_studio_audio_glow.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 4.953,
+  "errors": [
+    "FAIL: Studio light extends into a dedicated downward beam layer"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "PASS: Actual Studio HUD contains dim music observer",
+    "FAIL: Studio light extends into a dedicated downward beam layer",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17",
+  "runtime_source_unchanged": true
+}

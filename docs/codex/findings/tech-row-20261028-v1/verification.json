@@ -1,0 +1,168 @@
+{
+  "baseline": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+  "source": "39413580c9c5addc58d5ed5e3b60de49be3e2a77c2ebc6fa4bb65c4c8a2add9d",
+  "changed_runtime_files": [
+    "res://scripts/market/rival_world_checkpoint.gd",
+    "res://scripts/ui/feature_store_layout.gd",
+    "res://scripts/ui/feature_store_map.gd"
+  ],
+  "checks": {
+    "adjacent-red": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_common_grid.gd"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 1.703,
+      "errors": [
+        "FAIL: Adjacent Technology roots with Keyboard centered between Menu and Controller"
+      ],
+      "tail": [
+        "PASS: Bounded route avoids every card/label/header 8_bit_sound->main_theme",
+        "PASS: Bounded route avoids every card/label/header main_theme->multiple_soundtracks",
+        "PASS: Bounded route avoids every card/label/header recorded_sounds->instrumental_sounds",
+        "PASS: Bounded route avoids every card/label/header multiple_soundtracks->dynamic_sequencing",
+        "PASS: Bounded route avoids every card/label/header instrumental_sounds->dynamic_sequencing",
+        "PASS: Four category connectors avoid all cards, names and headers",
+        "PASS: Cross-category prerequisite remains explicit in details",
+        "PASS: Hidden cross-category arrow still permits direct prerequisite navigation",
+        "PASS: Layout and routing consume no gameplay RNG",
+        "Store common grid: 68 checks, 1 failures"
+      ],
+      "runtime_identity": "c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409",
+      "runtime_source_unchanged": true
+    },
+    "heading-red": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_common_grid.gd"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 1.64,
+      "errors": [
+        "FAIL: Technology heading centered above Keyboard and Mouse"
+      ],
+      "tail": [
+        "PASS: Bounded route avoids every card/label/header recorded_sounds->instrumental_sounds",
+        "PASS: Bounded route avoids every card/label/header multiple_soundtracks->dynamic_sequencing",
+        "PASS: Bounded route avoids every card/label/header instrumental_sounds->dynamic_sequencing",
+        "PASS: Four category connectors avoid all cards, names and headers",
+        "PASS: Cross-category prerequisite remains explicit in details",
+        "PASS: Hidden cross-category arrow still permits direct prerequisite navigation",
+        "PASS: Layout and routing consume no gameplay RNG",
+        "Store common grid: 69 checks, 1 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "03ebdd795c99ef82393bb901a992b31daa0c5bff49a80565fd7a428c67e7983e",
+      "runtime_source_unchanged": true
+    },
+    "final-grid": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_common_grid.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 1.656,
+      "errors": [],
+      "tail": [
+        "PASS: Bounded route avoids every card/label/header recorded_sounds->instrumental_sounds",
+        "PASS: Bounded route avoids every card/label/header multiple_soundtracks->dynamic_sequencing",
+        "PASS: Bounded route avoids every card/label/header instrumental_sounds->dynamic_sequencing",
+        "PASS: Four category connectors avoid all cards, names and headers",
+        "PASS: Cross-category prerequisite remains explicit in details",
+        "PASS: Hidden cross-category arrow still permits direct prerequisite navigation",
+        "PASS: Layout and routing consume no gameplay RNG",
+        "Store common grid: 69 checks, 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ],
+      "runtime_identity": "39413580c9c5addc58d5ed5e3b60de49be3e2a77c2ebc6fa4bb65c4c8a2add9d",
+      "runtime_source_unchanged": true
+    },
+    "final-native": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/tech-row-20261028-v1/native_row.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 13.094,
+      "errors": [],
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "OpenGL API 3.3.0 NVIDIA 546.18 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU",
+        "",
+        "Loaded 40 cards.",
+        "PASS: Normal new Studio",
+        "PASS: Keyboard centered between adjacent roots",
+        "PASS: Three roots share one row",
+        "Technology native row failures: 0"
+      ],
+      "runtime_identity": "39413580c9c5addc58d5ed5e3b60de49be3e2a77c2ebc6fa4bb65c4c8a2add9d",
+      "runtime_source_unchanged": true
+    },
+    "final-cold": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/cold-final.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/tech-row-20261028-v1/final-cold.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.609,
+      "errors": [],
+      "tail": [
+        "",
+        "Loaded 40 cards.",
+        "PASS: Player schema restores exact finance, traits and RNG",
+        "PASS: World restores from unmodified file ",
+        "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+        "PASS: Every persisted player field survives",
+        "PASS: Unverified source still rejects",
+        "PASS: Presentation predecessor cannot pair with older Studio rules",
+        "PASS: Presentation predecessor cannot pair with older rival rules",
+        "Fresh world restore: 0 failures"
+      ],
+      "runtime_identity": "39413580c9c5addc58d5ed5e3b60de49be3e2a77c2ebc6fa4bb65c4c8a2add9d",
+      "runtime_source_unchanged": true
+    }
+  },
+  "native_capture_inspected": "final-native.json.png",
+  "performance": "Not rerun for presentation spacing; prior lag remains OPEN"
+}

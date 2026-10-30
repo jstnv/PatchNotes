@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_grid_graph.gd",
+    "--",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/tools/fixtures/store_grid_graph_predecessor.json"
+  ],
+  "exit": 6,
+  "elapsed_seconds": 2.875,
+  "errors": [
+    "FAIL: Save Files follows Menu System",
+    "FAIL: Primitive Split Screen has ordered Branching Nodes AND Scrolling",
+    "FAIL: Colored Text requires Text AND 4-Color Palette",
+    "FAIL: Missing Menu System blocks new Save Files admission",
+    "FAIL: Missing two parents blocks new Split Screen admission",
+    "FAIL: Rejected acquisitions preserve all saved fields/RNG"
+  ],
+  "tail": [
+    "PASS: Paid queue grants only its purchased card colored_text",
+    "PASS: No free ancestor grants during migration/completion",
+    "PASS: Completed migrated queue revalidates under current rules",
+    "PASS: Exact pre-grid owned checkpoint restores: ",
+    "PASS: Every historical owned field survives apart from revision",
+    "PASS: Corrupt prior cash/finance pair still rejects",
+    "PASS: Unknown catalog revision still rejects",
+    "Store grid graph: 27 checks, 6 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

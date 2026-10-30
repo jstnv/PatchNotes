@@ -7,7 +7,7 @@ const Factory := preload("res://scripts/simulation/run_factory.gd")
 const Fixture := preload("res://scripts/simulation/finite_fixture_policy.gd")
 const Study := preload("res://scripts/debug/store_study_policy.gd")
 const Replay := preload("res://scripts/simulation/development_replay.gd")
-const TARGET := &"recorded_sounds"
+const TARGET := &"colored_text" # Text is owned in the current root-connected12-Scope Action start.
 var checks := 0
 var failures := 0
 var reports: Array = []
@@ -129,7 +129,7 @@ func _run_seed(seed_value: String,directory: String,catalog: RefCounted) -> void
 	expect(restored != null,"Seed "+seed_value+": played prefix emits a valid Studio checkpoint")
 	if restored == null: return
 	expect(Replay.digest(Replay.state(restored)) == prefix_result.final_state and restored.run.get_released_game_ids().size() == 1,"Seed "+seed_value+": checkpoint is exactly the completed first release")
-	expect(TARGET not in restored.run.get_owned_feature_ids() and &"8_bit_sound" in restored.run.get_owned_feature_ids() and restored.run.get_feature_research_queue().is_empty(),"Seed "+seed_value+": live target initially unowned, prerequisite owned and queue empty")
+	expect(TARGET not in restored.run.get_owned_feature_ids() and &"text" in restored.run.get_owned_feature_ids() and restored.run.get_feature_research_queue().is_empty(),"Seed "+seed_value+": live target initially unowned, prerequisite owned and queue empty")
 	var now := _arm(seed_value,"research_now",checkpoint)
 	var defer := _arm(seed_value,"defer",checkpoint)
 	expect(now.initial == defer.initial and now.policy.config.development == defer.policy.config.development and now.max_commands == defer.max_commands and now.target_release_count == defer.target_release_count,"Seed "+seed_value+": only declared policy arm differs across matching inputs")

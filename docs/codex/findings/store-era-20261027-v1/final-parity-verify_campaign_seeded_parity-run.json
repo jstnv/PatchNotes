@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_campaign_seeded_parity.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 99.688,
+  "errors": [],
+  "tail": [
+    "       [7] _finalize_alpha (res://scripts/phases/alpha_phase.gd:283)",
+    "       [8] _finalize_with_run_rng (res://scripts/phases/alpha_phase.gd:812)",
+    "       [9] _on_under_scope_confirmed (res://scripts/phases/alpha_phase.gd:231)",
+    "       [10] exit_phase (res://scripts/debug/verify_campaign_live_parity.gd:141)",
+    "       [11] _project (res://scripts/debug/verify_campaign_seeded_parity.gd:89)",
+    "Alpha completed! Pressure 1.5556; stochastic result 1; variance +0; Alpha Hidden Bugs 1; total Hidden Bugs 1; implemented 4; unimplemented 1",
+    "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 6 | Finite cards exhausted: press_interview | Cycle advanced: 1",
+    "Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Technology Pass, Graphics Pass",
+    "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 4 | Beta Host Playtest corrective Passes injected: Technology Pass, Graphics Pass | Cycle advanced: 1",
+    "Seeded campaign parity: 0 failures, 138 boundaries, 3 routes"
+  ]
+}

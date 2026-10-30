@@ -40,8 +40,8 @@ func _run() -> void:
 		var choice: Dictionary=choose.call(view)
 		if not session.in_studio and session.development.phase_index==2:
 			var dev: Dictionary=view.development
-			if not dev.active and not dev.finalized and not dev.confirmation_pending and dev.priorities!={&"qa":50,&"marketing":25,&"insider":25}:
-				choice={"type":&"development","payload":{"request":session.development.command(&"priorities",{"distribution":{&"qa":50,&"marketing":25,&"insider":25}})}}
+			if not dev.active and not dev.finalized and not dev.confirmation_pending and dev.priorities!={&"qa":50,&"marketing":50,&"insider":0}:
+				choice={"type":&"development","payload":{"request":session.development.command(&"priorities",{"distribution":{&"qa":50,&"marketing":50,&"insider":0}})}}
 			elif choice.type==&"development" and choice.payload.request.type==&"play":
 				var cards: Array=dev.candidates.duplicate(true)
 				# Prefer QA cards using only visible facts. A mixed hand can earn its

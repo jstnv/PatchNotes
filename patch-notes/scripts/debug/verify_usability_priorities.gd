@@ -5,7 +5,7 @@ func check(ok:bool,message:String) -> void:
 	print("PASS: " if ok else "FAIL: ",message)
 	if not ok: failures+=1
 func _run() -> void:
-	check(PriorityAllocation.MIN_PRIORITY==10 and BetaPriorityAllocation.MIN_PRIORITY==10,"New Core and Beta floor is ten percent")
+	check(PriorityAllocation.MIN_PRIORITY==20 and BetaPriorityAllocation.MIN_PRIORITY==40,"Untrained Core20–40 and Beta40–60 floors match the Manager trial")
 	var historic:Dictionary={0:50,1:5,2:20,3:25}
 	check(PriorityAllocation.is_valid_distribution(historic) and not PriorityAllocation.is_valid_new_distribution(historic),"Historic five-percent weights remain readable but cannot be newly committed")
 	var path:="res://scripts/ui/priority_budget_feedback.gd"
@@ -30,7 +30,7 @@ func _run() -> void:
 	# The contract UI is inspected without changing the live game or its profile.
 	var phase:=ContractPhase.new();root.add_child(phase);await process_frame
 	check(phase._priority_inputs.size()==4,"Contract has four priority controls")
-	for input in phase._priority_inputs.values():check(input is VSlider and input.min_value==10,"Contract uses ten-percent vertical slider")
+	for input in phase._priority_inputs.values():check(input is VSlider and input.min_value==20 and input.max_value==40,"Contract uses current untrained vertical slider bounds")
 	check(phase._priority_chart!=null,"Contract uses the shared influence pie chart")
 	phase.queue_free();await process_frame
 	print("Usability priorities: %d failures"%failures);quit(failures)

@@ -1,0 +1,306 @@
+{
+  "schema_version": "1",
+  "audit": "4 matched completed pairs; exact checkpoint and RNG; quote/loan/interest reconciliation",
+  "cases": [
+    {
+      "cohort": "control-4417",
+      "start_cash_cents": "570000",
+      "first_review": 4.0,
+      "studio_cash_cents": 338552,
+      "store_purchases": [
+        {
+          "feature_id": "colored_text",
+          "down_cents": 32500,
+          "due_cents": 29250
+        },
+        {
+          "feature_id": "8_color_palette",
+          "down_cents": 37500,
+          "due_cents": 33750
+        }
+      ],
+      "settled_sales_months": [
+        [
+          7,
+          151048
+        ],
+        [
+          8,
+          196504
+        ]
+      ],
+      "bank_quote": {
+        "accepted": true,
+        "basis_cents": 173776,
+        "capacity_cents": 30944,
+        "eligible": true,
+        "latest_sales_cents": 196504,
+        "loan_id": "bank-eligible-control-4417:bank:1",
+        "maximum_principal_cents": 331548,
+        "obligations_cents": 0,
+        "older_sales_cents": 151048,
+        "quote_id": "bank-eligible-control-4417:quote:19:50000:12",
+        "reason": "Quote ready. Acceptance adds financing without advancing time.",
+        "rent_cents": 50000,
+        "revision": 19,
+        "run_id": "bank-eligible-control-4417",
+        "schedule": {
+          "accepted_cycle": 16,
+          "first_due_cycle": 18,
+          "last_due_cycle": 40,
+          "maximum_installment_cents": 4667,
+          "principal_cents": 50000,
+          "schema_version": 1,
+          "term_months": 12,
+          "total_interest_cents": 3250,
+          "total_payment_cents": 53250
+        }
+      },
+      "second_reviews": [
+        [
+          13,
+          4.0
+        ],
+        [
+          29,
+          5.2
+        ]
+      ],
+      "cash_no_loan_cents": 116538,
+      "cash_loan_cents": 139161,
+      "cash_delta_cents": 22623,
+      "bank_principal_outstanding_cents": 24998,
+      "interest_paid_cents": 2375,
+      "debt_adjusted_cash_delta_cents": -2375,
+      "education_principal_paid_cents": 0,
+      "education_interest_paid_cents": 0,
+      "credit": 612,
+      "overdue_cents": 0
+    },
+    {
+      "cohort": "graduate-4417",
+      "start_cash_cents": "600000",
+      "first_review": 4.0,
+      "studio_cash_cents": 368552,
+      "store_purchases": [
+        {
+          "feature_id": "colored_text",
+          "down_cents": 32500,
+          "due_cents": 29250
+        },
+        {
+          "feature_id": "8_color_palette",
+          "down_cents": 37500,
+          "due_cents": 33750
+        }
+      ],
+      "settled_sales_months": [
+        [
+          7,
+          151048
+        ],
+        [
+          8,
+          196504
+        ]
+      ],
+      "bank_quote": {
+        "accepted": true,
+        "basis_cents": 173776,
+        "capacity_cents": 23875,
+        "eligible": true,
+        "latest_sales_cents": 196504,
+        "loan_id": "bank-eligible-graduate-4417:bank:1",
+        "maximum_principal_cents": 255804,
+        "obligations_cents": 28273,
+        "older_sales_cents": 151048,
+        "quote_id": "bank-eligible-graduate-4417:quote:20:50000:12",
+        "reason": "Quote ready. Acceptance adds financing without advancing time.",
+        "rent_cents": 50000,
+        "revision": 20,
+        "run_id": "bank-eligible-graduate-4417",
+        "schedule": {
+          "accepted_cycle": 16,
+          "first_due_cycle": 18,
+          "last_due_cycle": 40,
+          "maximum_installment_cents": 4667,
+          "principal_cents": 50000,
+          "schema_version": 1,
+          "term_months": 12,
+          "total_interest_cents": 3250,
+          "total_payment_cents": 53250
+        }
+      },
+      "second_reviews": [
+        [
+          13,
+          4.0
+        ],
+        [
+          29,
+          5.2
+        ]
+      ],
+      "cash_no_loan_cents": 89992,
+      "cash_loan_cents": 112615,
+      "cash_delta_cents": 22623,
+      "bank_principal_outstanding_cents": 24998,
+      "interest_paid_cents": 2375,
+      "debt_adjusted_cash_delta_cents": -2375,
+      "education_principal_paid_cents": 29979,
+      "education_interest_paid_cents": 26567,
+      "credit": 612,
+      "overdue_cents": 0
+    },
+    {
+      "cohort": "control-90210",
+      "start_cash_cents": "570000",
+      "first_review": 5.8,
+      "studio_cash_cents": 513377,
+      "store_purchases": [
+        {
+          "feature_id": "colored_text",
+          "down_cents": 32500,
+          "due_cents": 29250
+        },
+        {
+          "feature_id": "8_color_palette",
+          "down_cents": 37500,
+          "due_cents": 33750
+        }
+      ],
+      "settled_sales_months": [
+        [
+          7,
+          226573
+        ],
+        [
+          8,
+          295804
+        ]
+      ],
+      "bank_quote": {
+        "accepted": true,
+        "basis_cents": 261188,
+        "capacity_cents": 52797,
+        "eligible": true,
+        "latest_sales_cents": 295804,
+        "loan_id": "bank-eligible-control-90210:bank:1",
+        "maximum_principal_cents": 565680,
+        "obligations_cents": 0,
+        "older_sales_cents": 226573,
+        "quote_id": "bank-eligible-control-90210:quote:19:50000:12",
+        "reason": "Quote ready. Acceptance adds financing without advancing time.",
+        "rent_cents": 50000,
+        "revision": 19,
+        "run_id": "bank-eligible-control-90210",
+        "schedule": {
+          "accepted_cycle": 16,
+          "first_due_cycle": 18,
+          "last_due_cycle": 40,
+          "maximum_installment_cents": 4667,
+          "principal_cents": 50000,
+          "schema_version": 1,
+          "term_months": 12,
+          "total_interest_cents": 3250,
+          "total_payment_cents": 53250
+        }
+      },
+      "second_reviews": [
+        [
+          13,
+          5.8
+        ],
+        [
+          29,
+          4.6
+        ]
+      ],
+      "cash_no_loan_cents": 403251,
+      "cash_loan_cents": 425874,
+      "cash_delta_cents": 22623,
+      "bank_principal_outstanding_cents": 24998,
+      "interest_paid_cents": 2375,
+      "debt_adjusted_cash_delta_cents": -2375,
+      "education_principal_paid_cents": 0,
+      "education_interest_paid_cents": 0,
+      "credit": 615,
+      "overdue_cents": 0
+    },
+    {
+      "cohort": "graduate-90210",
+      "start_cash_cents": "600000",
+      "first_review": 5.8,
+      "studio_cash_cents": 543377,
+      "store_purchases": [
+        {
+          "feature_id": "colored_text",
+          "down_cents": 32500,
+          "due_cents": 29250
+        },
+        {
+          "feature_id": "8_color_palette",
+          "down_cents": 37500,
+          "due_cents": 33750
+        }
+      ],
+      "settled_sales_months": [
+        [
+          7,
+          226573
+        ],
+        [
+          8,
+          295804
+        ]
+      ],
+      "bank_quote": {
+        "accepted": true,
+        "basis_cents": 261188,
+        "capacity_cents": 45728,
+        "eligible": true,
+        "latest_sales_cents": 295804,
+        "loan_id": "bank-eligible-graduate-90210:bank:1",
+        "maximum_principal_cents": 489948,
+        "obligations_cents": 28273,
+        "older_sales_cents": 226573,
+        "quote_id": "bank-eligible-graduate-90210:quote:20:50000:12",
+        "reason": "Quote ready. Acceptance adds financing without advancing time.",
+        "rent_cents": 50000,
+        "revision": 20,
+        "run_id": "bank-eligible-graduate-90210",
+        "schedule": {
+          "accepted_cycle": 16,
+          "first_due_cycle": 18,
+          "last_due_cycle": 40,
+          "maximum_installment_cents": 4667,
+          "principal_cents": 50000,
+          "schema_version": 1,
+          "term_months": 12,
+          "total_interest_cents": 3250,
+          "total_payment_cents": 53250
+        }
+      },
+      "second_reviews": [
+        [
+          13,
+          5.8
+        ],
+        [
+          29,
+          4.6
+        ]
+      ],
+      "cash_no_loan_cents": 376705,
+      "cash_loan_cents": 399328,
+      "cash_delta_cents": 22623,
+      "bank_principal_outstanding_cents": 24998,
+      "interest_paid_cents": 2375,
+      "debt_adjusted_cash_delta_cents": -2375,
+      "education_principal_paid_cents": 29979,
+      "education_interest_paid_cents": 26567,
+      "credit": 615,
+      "overdue_cents": 0
+    }
+  ]
+}

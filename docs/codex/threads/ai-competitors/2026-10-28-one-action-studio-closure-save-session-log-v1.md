@@ -1,0 +1,7 @@
+# One-Action Studio closure save session log — 2026-10-28
+
+**Scope/state:** private v19 Studio checkpoint prototype. Branch `main`, HEAD `f3e0f2b5d35270c879327bc297b389748571feb4`, dirty shared checkout; concurrent canonical source edits and `.codex-godot-temp` preserved. Changed only thread-owned plan, private v19 `project/`, unique isolated outputs, audit, finding, log and README. No canonical gameplay, TODO, player save, commit or push.
+
+**Checks:** v19 isolated `tools/simulate.py run --variant` smoke PASS. Two fresh 128-action legal prefixes and two c0→c2/c72→c74 projected boundaries PASS with exact old-title closure. Player and rival Studio capture/validate/hydrate PASS in both seeds; tampered closure ID/cycle rejection PASS. Fresh-process v19 5607 legal-prefix replay PASS. `python -m py_compile` and [audit](sims/action-studio-closure-save-audit-20261028-v19.json) PASS Studio gate with zero issues. The world checkpoint returns `Rival clock or Contract unavailable` in both cases, so cold Continue is NOT RUN/PASS. [Finding](2026-10-28-one-action-studio-closure-save-finding-v1.md) holds exact commands, identities, evidence and limits.
+
+**Next:** private versioned world-offset/archive schema and restore, including source/market and active development provenance; then legal continued project release and current-source rebaseline. Capital, midpoint standard and opening population remain OPEN. No handoff/TODO queue.

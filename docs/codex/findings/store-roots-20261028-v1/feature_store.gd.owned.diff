@@ -1,0 +1,16 @@
+--- feature_store.gd.before
++++ scripts/ui/feature_store.gd
+@@ -342,10 +342,10 @@
+ 		if not parent.is_empty():
+ 			if not children.has(parent): children[parent] = []
+ 			children[parent].append(id)
+-		# Every named parent has its own obstacle-safe connector, including
+-		# cross-tree AND arms. The first parent remains the semantic map anchor.
++		# Draw local branches only. Cross-category requirements remain in the
++		# catalog/AND badge and prerequisite navigation, without long map arrows.
+ 		for required: StringName in parents:
+-			_edges.append([required, id])
++			if _lane_by_id[required]==_lane_by_id[id]: _edges.append([required, id])
+ 		var button := Button.new()
+ 		button.size = NODE_SIZE
+ 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

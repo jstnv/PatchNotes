@@ -3,17 +3,36 @@ extends RefCounted
 
 ## Core Feature Ledger (1981–1983). Prices are the prototype store baseline.
 ## Keep separate from the fixed Primitive draw/contract ledger.
+## Retained definitions support old saves and frozen projects; not new supply.
+const RETIRED_IDS: Array[StringName] = [&"music", &"sound_effects", &"8_bit_music", &"16_bit_music"]
+
+static func is_active(id: StringName) -> bool:
+	return id not in RETIRED_IDS
+
+static func future_supply(owned: Array[StringName], offers: Dictionary) -> Array[StringName]:
+	var result: Array[StringName] = []
+	var replaced: Array[StringName] = []
+	for id: StringName in owned:
+		if is_active(id) and offers.get(id,{}).has("replaces_id"):
+			replaced.append(StringName(offers[id].replaces_id))
+	for id: StringName in owned:
+		if is_active(id) and id not in replaced: result.append(id)
+	return result
+
 const PATH := "res://data/feature_store_ledger.json"
 ## Acquisition only: specialty grants and historical ownership are retained.
 const PRIMITIVE_PARENTS := {
 	&"dialogue": &"simple_story", &"character_backstories": &"simple_story",
 	&"maps": &"levels", &"exploration": &"levels",
 	&"multiple_endings": &"branching_dialogue", &"secrets": &"exploration",
-	&"8_bit_music": &"music", &"8_bit_sound": &"sound_effects",
+	&"8_bit_music": &"music",
 	&"scrolling": &"text", &"sprites": &"4_color_palette",
 	&"local_leaderboards": &"high_scores", &"enemies": &"lives_system",
-	&"general_combat": &"enemies",
+	&"general_combat": &"enemies", &"power_ups": &"categorized_scores",
 }
+
+## Ordered AND parents for existing Primitive cards; historical grants stay owned.
+const PRIMITIVE_PARENT_SETS := {&"split_screen": [&"branching_nodes", &"scrolling"]}
 
 static func entries() -> Array:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
@@ -29,7 +48,7 @@ static func starting_features() -> Array:
 	return result
 
 ## Validate the entire prerequisite graph before any quote can use it. The first
-## named parent is the sole map anchor; the second is an additional AND gate.
+## named parent is the sole map anchor; every additional parent is an AND gate.
 static func graph(definitions: Dictionary, offers: Dictionary) -> Dictionary:
 	var parents := {}
 	for id: StringName in definitions:
@@ -38,13 +57,16 @@ static func graph(definitions: Dictionary, offers: Dictionary) -> Dictionary:
 		if not definitions.has(id): return {"error":"Missing Feature definition: " + str(id)}
 	for id: StringName in definitions:
 		var entry: Dictionary = offers.get(id, definitions[id])
+		var era_error: String = preload("res://scripts/cards/store_era_eligibility.gd").metadata_error(entry)
+		if not era_error.is_empty(): return {"error":era_error + ": " + str(id)}
 		var legacy: Variant = entry.get("purchase_parent", PRIMITIVE_PARENTS.get(id, ""))
 		if not legacy is String and not legacy is StringName: return {"error":"Invalid parent: " + str(id)}
 		var named: Array = []
-		if entry.has("purchase_parents"):
-			if not entry.purchase_parents is Array or entry.purchase_parents.size() not in [1, 2]:
-				return {"error":"Expected one or two named parents: " + str(id)}
-			for value: Variant in entry.purchase_parents:
+		if entry.has("purchase_parents") or PRIMITIVE_PARENT_SETS.has(id):
+			var requested: Variant = entry.get("purchase_parents", PRIMITIVE_PARENT_SETS.get(id, []))
+			if not requested is Array or requested.size() not in [1, 2, 3]:
+				return {"error":"Expected one to three named parents: " + str(id)}
+			for value: Variant in requested:
 				if not value is String and not value is StringName: return {"error":"Invalid named parent: " + str(id)}
 				named.append(StringName(value))
 			if not str(legacy).is_empty() and StringName(legacy) != named[0]: return {"error":"Parent anchor mismatch: " + str(id)}

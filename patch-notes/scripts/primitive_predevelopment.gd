@@ -29,6 +29,6 @@ static func prepare_project(base_name: String, genre: StringName, theme: StringN
 	if run == null or not validation_error(base_name, genre, theme).is_empty():
 		return null
 	var project := ProjectState.new(REQUIRED_SCOPE)
-	if not project.configure_predevelopment(base_name, genre, theme, run.get_owned_feature_ids()):
+	if not project.configure_predevelopment(base_name, genre, theme, run.get_future_project_feature_ids()):
 		return null
 	return project

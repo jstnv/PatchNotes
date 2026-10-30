@@ -300,14 +300,15 @@ func start_route(recipe: Dictionary,roster_version: int = StudioSpecialties.ROST
 	game.run_state = native.run
 	root.add_child(game)
 	var coordinator := CheckpointCoordinator.new()
-	coordinator.store = StudioCheckpointStore.new("user://parity/"+route_id,coordinator.adapter.validate)
+	# Isolated profiles must also own isolated writer ports; production keeps62741.
+	coordinator.store = preload("res://scripts/debug/verify_rival_gameplay_activation.gd").TestStore.new("user://parity/"+route_id,coordinator.adapter.validate) if not OS.get_environment("PN_CHECKPOINT_TEST_PORT").is_empty() else StudioCheckpointStore.new("user://parity/"+route_id,coordinator.adapter.validate)
 	game.checkpoints = coordinator
 	game.add_child(coordinator)
 	coordinator.attach(game.run_state)
 	coordinator.status_changed.connect(game._checkpoint_status)
 	game._build_checkpoint_controls()
 	coordinator.entered_studio()
-	expect(coordinator.failure.is_empty(),"Native initial Studio saved")
+	expect(coordinator.failure.is_empty(),"Native initial Studio saved: "+coordinator.failure)
 	watch(game.run_state,live_signals)
 	watch(session.run,sim_signals)
 	tape = Replay.begin(session)

@@ -1,0 +1,35 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_feature_store_radial.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80",
+    "--",
+    "--capture",
+    "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-grid-graph-20261027-v1"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 53.015,
+  "errors": [],
+  "tail": [
+    "PASS: Back to Map is reachable for save_files at 1280",
+    "PASS: Back to Map dismisses details and restores map focus without closing Store",
+    "PASS: Back to Map is reachable for difficulty_levels at 1280",
+    "PASS: Back to Map dismisses details and restores map focus without closing Store",
+    "PASS: Back to Map is reachable for branching_nodes at 1280",
+    "PASS: Back to Map dismisses details and restores map focus without closing Store",
+    "PASS: Category browsing preserves cash, calendar, redraws, ownership and exact finance history",
+    "Bloom Feature Store verification: 0 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

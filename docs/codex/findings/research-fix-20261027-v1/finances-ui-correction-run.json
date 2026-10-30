@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_studio_finances.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 13.391,
+  "errors": [],
+  "tail": [
+    "PASS: Named studio initializes actual finance history",
+    "PASS: HUD and report detach old run finance signals",
+    "PASS: HUD and report bind the replacement run",
+    "PASS: Old run notification cannot replace visible new-run finance data",
+    "PASS: Unknown legacy history shows unavailable, without invented rows",
+    "PASS: Unknown legacy Bank history remains unavailable",
+    "PASS: Changing phase closes finance navigation safely",
+    "PASS: Missing RunState disables finance entry",
+    "PASS: Main Menu cannot open studio finance history",
+    "Studio finance UI verification: 118 checks, 0 failures"
+  ]
+}

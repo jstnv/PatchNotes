@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_feature_store.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 8.562,
+  "errors": [],
+  "tail": [
+    "       [2] _ready (res://scripts/cards/card_view.gd:46)",
+    "       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)",
+    "       [4] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:122)",
+    "       [5] _verify_phase_credits (res://scripts/debug/verify_feature_store.gd:96)",
+    "       [6] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:123)",
+    "PASS: Alpha parent resolution discounts direct Core child",
+    "PASS: Credit cannot repeat after phase transition",
+    "Feature Store verification: 0 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d",
+  "runtime_source_unchanged": true
+}

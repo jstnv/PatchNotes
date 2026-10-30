@@ -1,0 +1,61 @@
+--- studio_checkpoint.gd.before
++++ scripts/persistence/studio_checkpoint.gd
+@@ -30,6 +30,14 @@
+ var error := ""
+ var _revision := ""
+ var _previous_revision := ""
++var _pre_grid_revision := ""
++## Handoff022 changes acquisition metadata only; this exact prior catalog uses
++## the same schema, prices, card effects and historical validation.
++const PRE_GRID_CATALOG_HASH := "55c76c86c19363228be5138af752b038961a61655eb2fba4bc9a3a0961803dcf"
++
++func pre_grid_revision() -> String:
++	if _pre_grid_revision.is_empty(): _pre_grid_revision = _rules_revision(RULES,"",PRE_GRID_CATALOG_HASH)
++	return _pre_grid_revision
+ ## Bounded proofs for the pure current-format validator, shared by detached
+ ## adapters. Keys retain every exact Variant type/value and current data hashes;
+ ## only a separately checked positive generation number is normalized. No Run,
+@@ -198,6 +206,9 @@
+ 	return ""
+ 
+ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
++	if payload.get("content_revision", "") == pre_grid_revision():
++		var upgraded := upgrade_grid_predecessor(payload,active_rival)
++		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
+ 	var is_current: bool = payload.get("content_revision", "") == revision()
+ 	if not is_current and payload.get("content_revision", "") == _rules_revision(PRE_ERA_RULES):
+ 		var upgraded := upgrade_store_era_predecessor(payload,active_rival)
+@@ -502,6 +513,9 @@
+ 	return c.result == expected_result
+ 
+ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
++	if payload.get("content_revision", "") == pre_grid_revision():
++		var upgraded := upgrade_grid_predecessor(payload,active_rival)
++		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
+ 	var is_current: bool = payload.get("content_revision", "") == revision()
+ 	if not is_current and payload.get("content_revision", "") == _rules_revision(PRE_ERA_RULES):
+ 		var upgraded := upgrade_store_era_predecessor(payload,active_rival)
+@@ -640,6 +654,9 @@
+ 	return encoded if error.is_empty() and encoded is Dictionary else {}
+ 
+ func _decode_payload(payload: Dictionary, active_rival: bool = false) -> Dictionary:
++	if payload.get("content_revision", "") == pre_grid_revision():
++		var upgraded := upgrade_grid_predecessor(payload,active_rival)
++		return {} if upgraded.is_empty() else _decode_payload(upgraded,active_rival)
+ 	var is_current: bool = payload.get("content_revision", "") == revision()
+ 	if not is_current and payload.get("content_revision", "") == _rules_revision(PRE_ERA_RULES):
+ 		var upgraded := upgrade_store_era_predecessor(payload,active_rival)
+@@ -721,3 +738,13 @@
+ 	if not codec.error.is_empty() or not encoded is Dictionary: error=codec.error; return {}
+ 	error = _validate(encoded,active_rival)
+ 	return encoded if error.is_empty() else {}
++
++## No ownership, accepted queue, historical purchase or frozen supply is edited.
++## Every ordinary schema/finance/payment/receipt/RNG check still runs.
++func upgrade_grid_predecessor(payload: Dictionary, active_rival: bool = false) -> Dictionary:
++	error = ""
++	if payload.get("content_revision") != pre_grid_revision(): error="Unknown Store grid predecessor"; return {}
++	var candidate := payload.duplicate(true)
++	candidate.content_revision = revision()
++	error = _validate(candidate,active_rival)
++	return candidate if error.is_empty() else {}

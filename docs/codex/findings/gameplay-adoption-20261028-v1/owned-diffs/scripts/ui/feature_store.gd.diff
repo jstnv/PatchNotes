@@ -1,0 +1,11 @@
+--- before/scripts/ui/feature_store.gd
++++ after/scripts/ui/feature_store.gd
+@@ -19,7 +19,7 @@
+ 	&"Visuals": [&"text", &"colored_text", &"sprites", &"animated_sprites", &"4_color_palette", &"8_color_palette", &"scrolling", &"multi_directional_scrolling"],
+ 	&"Audio": [&"8_bit_sound", &"16_bit_sound", &"main_theme", &"recorded_sounds", &"multiple_soundtracks", &"instrumental_sounds", &"dynamic_sequencing"],
+ 	&"Technology & Tools": [&"keyboard_and_mouse", &"controller", &"menu_system", &"split_screen", &"save_files", &"branching_nodes", &"player_level_editor"],
+-	&"Gameplay": [&"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"turn_based_combat", &"character_classes", &"difficulty_levels"],
++	&"Gameplay": [&"timer_system", &"inventory_system", &"categorized_scores", &"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"turn_based_combat", &"character_classes", &"difficulty_levels"],
+ 	&"Story & World": [&"simple_story", &"dialogue", &"branching_dialogue", &"character_backstories", &"character_development", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets", &"ability_gated_exploration", &"switchable_protagonists", &"character_skill_checks"],
+ }
+ var _lane_by_id: Dictionary = {}

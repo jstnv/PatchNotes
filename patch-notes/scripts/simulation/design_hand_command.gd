@@ -246,7 +246,7 @@ func _get_deal_input_validation_error(priority_snapshot: Dictionary) -> String:
 		if not priority_snapshot.has(category) or typeof(priority_snapshot[category]) != TYPE_INT:
 			return "Priority snapshot contains a missing or malformed category."
 		var value: int = priority_snapshot[category]
-		if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
+		if value < PriorityAllocation.SAVED_MIN_PRIORITY or value > PriorityAllocation.SAVED_MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
 			return "Priority snapshot contains an out-of-range or non-step value."
 		priority_total += value
 	if priority_total > PriorityAllocation.MAX_TOTAL_PRIORITY:

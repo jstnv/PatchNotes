@@ -1,0 +1,25 @@
+--- feature_store_map.gd.before
++++ scripts/ui/feature_store_map.gd
+@@ -342,16 +342,18 @@
+ 		origins[lane] = area.get_center()
+ 	# Five category trees share four connecting paths, with no center root.
+ 	# These neutral lines organize categories; arrows alone denote prerequisites.
+-	center = Vector2.ZERO
+-	var crown_end := Vector2(0, category_regions[&"Technology & Tools"].end.y)
++	# Shared central corridor between the inward-facing category headings.
++	var spine_x: float=(category_regions[&"Visuals"].end.x+category_regions[&"Audio"].position.x)/2.0
++	center = Vector2(spine_x,0)
++	var crown_end := Vector2(spine_x, category_regions[&"Technology & Tools"].end.y)
+ 	for pair: Array in [[&"Visuals", &"Gameplay"], [&"Audio", &"Story & World"]]:
+ 		var upper: Rect2 = category_regions[pair[0]]
+ 		var lower: Rect2 = category_regions[pair[1]]
+ 		var side := -1.0 if pair[0] == &"Visuals" else 1.0
+ 		var a := Vector2(upper.end.x if side<0 else upper.position.x, upper.get_center().y)
+ 		var b := Vector2(lower.end.x if side<0 else lower.position.x, lower.get_center().y)
+-		category_paths.append(PackedVector2Array([crown_end, Vector2(0, a.y), a]))
+-		category_paths.append(PackedVector2Array([a, Vector2(side * 40, a.y), Vector2(side * 40, b.y), b]))
++		category_paths.append(PackedVector2Array([crown_end, Vector2(spine_x, a.y), a]))
++		category_paths.append(PackedVector2Array([a, Vector2(spine_x+side*42, a.y), Vector2(spine_x+side*42, b.y), b]))
+ 	var extent: Rect2 = category_regions[&"Technology & Tools"]
+ 	for area: Rect2 in category_regions.values(): extent = extent.merge(area)
+ 	extent = extent.grow(32.0)

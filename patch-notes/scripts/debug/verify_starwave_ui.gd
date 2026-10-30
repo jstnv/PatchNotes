@@ -16,6 +16,7 @@ func _run()->void:
 		game.run_state=run
 		root.add_child(game)
 		await process_frame
+		await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 		game.get_node("%GameplayHUD").tutorial_overlay.close()
 		game.get_node("%GameplayHUD").contextual_tip.dismiss()
 		await process_frame

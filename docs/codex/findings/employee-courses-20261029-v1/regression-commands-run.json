@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_shared_redraw_and_priority_adjustment.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 2.891,
+  "errors": [],
+  "tail": [
+    "       [1] refresh (res://scripts/cards/card_view.gd:114)",
+    "       [2] _ready (res://scripts/cards/card_view.gd:46)",
+    "       [3] _publish_refill (res://scripts/phases/design_phase.gd:297)",
+    "       [4] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:281)",
+    "       [5] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:269)",
+    "       [6] begin_design (res://scripts/phases/design_phase.gd:171)",
+    "       [7] _run (res://scripts/debug/verify_shared_redraw_and_priority_adjustment.gd:39)",
+    "Shared redraw and priority-adjustment verification passed.",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "5912b41cbd44c7cbcdc268f7d366ce6f366a54b851936dd00535b4a75db57e7b",
+  "runtime_source_unchanged": true
+}

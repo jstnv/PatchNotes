@@ -8,6 +8,19 @@ const BetaChoice := preload("res://scripts/market/rival_beta_synergy_choice.gd")
 const ZERO_STEPS := 12
 const BETA_HANDS := 2
 
+## This stock policy reads only the current hand, identities and release count.
+## Building every unused campaign/Bank/Store offer on every zero-cycle choice
+## used to re-plan the entire sales history repeatedly during player Research.
+## Generic Callables still receive the complete public observation.
+class TrialPolicy extends "res://scripts/simulation/decision_policy.gd":
+	var decision: Callable
+	func observation(current: RefCounted) -> Dictionary:
+		return {"run_id":current.run._bank_run_id,"project_id":current.project_id(),"phase":current.phase(),
+			"releases":current.run.get_released_game_ids(),
+			"development":{} if current.in_studio or current.contract!=null else current.development.observation(false)}
+	func choose(view: Dictionary, _lifetime: RefCounted) -> Dictionary:
+		return decision.call(view)
+
 static func create_world(player: RunState, catalog: RefCounted) -> RivalWorld:
 	if player == null or catalog == null or player.get_completed_run_cycles()!=0 or player.get_studio_name().is_empty(): return null
 	var definitions := [
@@ -40,19 +53,20 @@ static func policies(world: RivalWorld) -> Dictionary:
 	var result := {}
 	for id: StringName in world.studios:
 		var session: RefCounted = world.studios[id]
-		var genre: String = String(session.run.get_studio_specialty())
-		var label: String = session.run.get_studio_name()
-		var enabled := uses_synergy_trial(id, session.run)
-		result[id] = func(view: Dictionary) -> Dictionary: return _feature_maximal_choice(view,session,genre,label,enabled)
+		var policy := TrialPolicy.new()
+		policy.decision=_feature_maximal_choice.bind(session,String(session.run.get_studio_specialty()),session.run.get_studio_name(),uses_synergy_trial(id,session.run))
+		# A method Callable alone does not retain its RefCounted target. The bound
+		# argument owns it for exactly the lifetime of this returned decision.
+		result[id] = policy.choose.bind(policy)
 	return result
 
 static func _feature_maximal_choice(view: Dictionary, session: RefCounted, genre: String, label: String, enabled: bool) -> Dictionary:
-	if view.phase not in [&"design",&"alpha"]: return choose(view,genre,label,enabled,enabled)
+	if view.phase not in [&"design",&"alpha"]: return choose(view,genre,label,enabled,enabled,session)
 	var current: Dictionary = view.development
-	if current.finalized or current.confirmation_pending or not current.active: return choose(view,genre,label,enabled,enabled)
+	if current.finalized or current.confirmation_pending or not current.active: return choose(view,genre,label,enabled,enabled,session)
 	var tokens := _legal_visible_feature_hand(current,session,enabled)
 	if not tokens.is_empty(): return _development(view,&"play",{"candidate_ids":tokens})
-	if current.get("can_exit",false): return _development(view,&"request_exit")
+	if _can_exit(current,session): return _development(view,&"request_exit")
 	return {"type":&"blocked","payload":{"reason":"No legal affordable visible Feature hand; phase exit unavailable"}}
 
 ## The authoritative phase hand validates each combination; the current
@@ -106,7 +120,13 @@ static func uses_synergy_trial(id: StringName, run: RunState) -> bool:
 	# Only the explicitly approved incumbent Primitive cohort uses this screen.
 	return id in [&"incumbent-arcade-foundry", &"incumbent-wayfinder-works"] and run.get_owned_feature_ids().all(func(feature: StringName) -> bool: return str(feature) in StudioSpecialties.PRIMITIVE_IDS)
 
-static func choose(view: Dictionary, genre: String, label: String, beta_aware: bool = true, production_aware: bool = true) -> Dictionary:
+static func _can_exit(current: Dictionary, session: RefCounted) -> bool:
+	# Full observations retain their existing public fact. The stock policy
+	# asks the same authority lazily, only after it actually needs an exit.
+	return bool(current.can_exit) if current.has("can_exit") else session!=null and session.development.actions.can_finalize()
+
+
+static func choose(view: Dictionary, genre: String, label: String, beta_aware: bool = true, production_aware: bool = true, session: RefCounted = null) -> Dictionary:
 	if view.phase == &"studio":
 		return {"type":&"begin_development","payload":{"name":"%s %d" % [label,view.releases.size()+1],"genre":genre,"theme":"fantasy"}}
 	if view.phase == &"contract": return {}
@@ -116,7 +136,7 @@ static func choose(view: Dictionary, genre: String, label: String, beta_aware: b
 	if not current.active: return _development(view,&"begin")
 	# This trial never redraws, so revision 1 is the initial deal and each later
 	# revision is one real productive hand. No policy counter needs restoration.
-	if current.phase == "beta" and current.get("hand_revision",0) >= BETA_HANDS+1 and current.get("can_exit",false): return _development(view,&"request_exit")
+	if current.phase == "beta" and current.get("hand_revision",0) >= BETA_HANDS+1 and _can_exit(current,session): return _development(view,&"request_exit")
 	var cards: Array = current.candidates.duplicate(true)
 	if current.phase == "beta":
 		cards = cards.filter(func(card): return card.type != "beta" or BetaPriorityAllocation.category_enabled(StringName(card.beta_category)))

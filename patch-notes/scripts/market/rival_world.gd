@@ -4,6 +4,8 @@
 class_name RivalWorld
 extends RefCounted
 
+const DecisionPolicy := preload("res://scripts/simulation/decision_policy.gd")
+
 var player: RunState
 var cycle := -1
 var studios: Dictionary = {}
@@ -127,7 +129,9 @@ func _advance_studio(id: StringName, policy: Callable, target: int, limit: int) 
 	return {"ok":true,"studio_id":id,"productive":productive,"blocked_reason":blocked,"zero_steps":zero_steps,"actions":accepted,"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"releases":releases}
 
 func _choice(policy: Callable, session: RefCounted) -> Dictionary:
-	var raw: Variant = policy.call(session.observation())
+	var owner := policy.get_object()
+	var view: Dictionary = owner.observation(session) if owner is DecisionPolicy else session.observation()
+	var raw: Variant = policy.call(view)
 	if not raw is Dictionary or (not raw.get("type") is String and not raw.get("type") is StringName) or not raw.get("payload",{}) is Dictionary: return {}
 	var kind := StringName(raw.type)
 	if kind == &"blocked":

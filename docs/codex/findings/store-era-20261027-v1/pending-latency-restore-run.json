@@ -1,0 +1,45 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd"
+  ],
+  "exit": 17,
+  "elapsed_seconds": 61.765,
+  "errors": [
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: actions-before-v3: every rival/market field and RNG is exact",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: compiled-v003: every rival/market field and RNG is exact",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: long-v003: every rival/market field and RNG is exact",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: Current strict schema validates before historical comparison",
+    "ERROR: long-final: every rival/market field and RNG is exact"
+  ],
+  "tail": [
+    "       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:10)",
+    "       [1] before_era_player (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:16)",
+    "       [2] before_era_world (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:28)",
+    "       [3] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:54)",
+    "ERROR: long-final: every rival/market field and RNG is exact",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:10)",
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:54)",
+    "{\"checks\":67,\"failures\":17,\"ok\":false}"
+  ]
+}

@@ -1,0 +1,41 @@
+--- before/scripts/ui/gameplay_hud.gd
++++ after/scripts/ui/gameplay_hud.gd
+@@ -17,6 +17,7 @@
+ var settings_button: Button
+ var sales_hud: SalesRevenueHUD
+ var header_title: Label
++var studio_glow: Control
+ var change_priorities: Button
+ var synergy_notification: SynergyNotification
+ var tutorial_overlay: TutorialOverlay
+@@ -42,6 +43,11 @@
+ 	header.offset_bottom = 78
+ 	add_child(header)
+ 	scoreboard = header
++	studio_glow = preload("res://scripts/ui/studio_audio_glow.gd").new()
++	studio_glow.name = "StudioAudioGlow"
++	header.add_child(studio_glow)
++	header.move_child(studio_glow, 0)
++	visibility_changed.connect(_update_studio_glow)
+ 	var row := header.row
+ 	header_title = header.header_title
+ 	stats = header.stats
+@@ -177,6 +183,7 @@
+ 	if is_instance_valid(phase) and phase.has_signal("guidance_changed") and phase.guidance_changed.is_connected(_refresh_guidance):
+ 		phase.guidance_changed.disconnect(_refresh_guidance)
+ 	phase = controller
++	_update_studio_glow()
+ 	var release_menu := phase is StudioPhase or phase is PostGameReview or phase is ContractPhase or phase is FirstProjectSetup or phase is MainMenu
+ 	get_node("PersistentFooter").visible = not (phase is MainMenu)
+ 	get_node("PersistentHeader").visible = not (phase is MainMenu)
+@@ -211,6 +218,10 @@
+ 	elif phase is ContractPhase: context = &"contract"
+ 	elif phase is MainMenu: context = &"main_menu"
+ 	set_tutorial_context(context)
++
++func _update_studio_glow() -> void:
++	if is_instance_valid(studio_glow):
++		studio_glow.set_active(phase is StudioPhase and is_visible_in_tree())
+ 
+ func _layout_sales_hud() -> void:
+ 	# The chart is part of the same persistent top panel as phase information.

@@ -143,12 +143,12 @@ func get_challenge_terms() -> Dictionary: return _challenge_terms.duplicate(true
 func get_challenge_redraws() -> int: return _challenge_redraws
 
 
-func can_commit_priorities(distribution: Dictionary) -> bool:
-	return not is_completed() and PriorityAllocation.is_valid_new_distribution(distribution) and distribution != _priorities
+func can_commit_priorities(distribution: Dictionary,context: RefCounted=null) -> bool:
+	return not is_completed() and PriorityAllocation.is_valid_new_distribution(distribution,context) and distribution != _priorities
 
 
-func commit_priorities(distribution: Dictionary) -> bool:
-	if not can_commit_priorities(distribution):
+func commit_priorities(distribution: Dictionary,context: RefCounted=null) -> bool:
+	if not can_commit_priorities(distribution,context):
 		return false
 	_priorities = distribution.duplicate()
 	return true

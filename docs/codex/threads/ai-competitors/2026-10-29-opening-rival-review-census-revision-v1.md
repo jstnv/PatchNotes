@@ -1,0 +1,5 @@
+# Opening rival census revision — 2026-10-29
+
+The first private v1 probe restored and advanced both seeds, but `_live_rows` iterated `RivalWorld.live_releases` as an Array. The current world stores a Dictionary; Godot logged `SCRIPT ERROR: Trying to assign value of type 'StringName' to a variable of type 'Dictionary'` while the probe erroneously reported `ok=true`. The wrapper also checked only process exit and JSON status. **Reject both v1 probe results** as Review evidence; retain the outputs/logs.
+
+Before v2 runs, change only the private diagnostic to iterate `live_releases.values()`, capture release rows from the world ledger, and assert those rows match each rival's own release records. Change the wrapper to fail on any `SCRIPT ERROR`, parse error or explicit Godot error in the raw log. Use the same two seeds, cycle-12 bound, player calendar-only policy, source-compatible legal start and measurements in the original plan. New output folders only. No player project or player Review test.

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_prerequisite_links.gd"
+  ],
+  "exit": 3,
+  "elapsed_seconds": 22.125,
+  "errors": [
+    "FAIL: Single missing prerequisite navigates directly without chooser",
+    "FAIL: Single missing prerequisite navigates directly without chooser",
+    "FAIL: Single missing prerequisite navigates directly without chooser"
+  ],
+  "tail": [
+    "PASS: Entrance finishes with visible controls",
+    "PASS: Actual pointer click outside the popup follows the right-side link",
+    "PASS: Inspecting prerequisites preserves complete Studio state/RNG",
+    "PASS: Second Missing click collapses links",
+    "FAIL: Single missing prerequisite navigates directly without chooser",
+    "PASS: Direct prerequisite navigation preserves complete state/RNG",
+    "PASS: Escape closes details and external links together",
+    "Store prerequisite links: 48 checks, 3 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

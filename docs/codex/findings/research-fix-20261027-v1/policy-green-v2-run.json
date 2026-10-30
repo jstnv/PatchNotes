@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_rival_policy_observation.gd"
+  ],
+  "exit": 4294967295,
+  "elapsed_seconds": 52.047,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Function \"_feature_maximal_choice()\" not found in base self.",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_rival_policy_observation.gd\" with error \"Compilation failed\".",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'uses_synergy_trial' in base 'GDScript'."
+  ],
+  "tail": [
+    "   at: GDScript::reload (res://scripts/market/rival_trial.gd:25)",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "   at: GDScript::reload (res://scripts/debug/verify_rival_policy_observation.gd:0)",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_rival_policy_observation.gd\" with error \"Compilation failed\".",
+    "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)",
+    "Loaded 40 cards.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'uses_synergy_trial' in base 'GDScript'.",
+    "   at: _initialize (res://scripts/debug/verify_rival_policy_observation.gd:46)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _initialize (res://scripts/debug/verify_rival_policy_observation.gd:46)"
+  ]
+}

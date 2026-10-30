@@ -1,0 +1,337 @@
+{
+  "date": "2026-10-29",
+  "branch": "main",
+  "HEAD": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "runtime_identity": "56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d",
+  "worktree": "Inherited dirty tree preserved; no commit/push/export. .codex-godot-temp preserved.",
+  "warnings": "Existing ObjectDB fixture/artwork warnings retained; no leak/artwork repair claim.",
+  "limits": "Focused acceptance only. Late Research performance FAIL/OPEN; no release or universal parity claim.",
+  "passes": [
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/mechanics-final-run.json",
+      "sha256": "b5dc3ebd194d73b7671f3700201cc5fe9c37818a6a8cbc94428fd46f14f879e7",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_gameplay_restoration.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.281,
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "GAMEPLAY_CHECKS 51 failures 0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/actual-play-final-run.json",
+      "sha256": "d99ce0ea1ad5c4c4fc9d4202ebdfe827d32997135c01cfde1324f4d4284b9a95",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_gameplay_restoration_campaign.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 29.859,
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "AUDIO_CAMPAIGN {\"checks\":56,\"commands\":46,\"failures\":0,\"played\":[\"inventory_system\",\"categorized_scores\",\"timer_system\",\"power_ups\"],\"replay_ok\":true,\"scope\":\"Funded mechanics and exact replay; not solvency/balance acceptance\",\"source\":\"56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/fresh-final-run.json",
+      "sha256": "72347b61025b9c273e6addbd7d71591274562fa51c6e9b19bf55ed4b10658cb5",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_gameplay_restoration_campaign.gd",
+        "--",
+        "--fresh"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 7.921,
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "AUDIO_FRESH {\"cash\":150370,\"checks\":38,\"commands\":36,\"failures\":0,\"releases\":2,\"replay_ok\":true,\"scope\":\"Unfunded fixed-policy two-release route; not final balance\",\"source\":\"56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d\"}"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/final-grid-run.json",
+      "sha256": "7743702f3efe28fd831d37c48338c8edd8202d72180119662fd8ec943d0a7c02",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_store_common_grid.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 1.703,
+      "tail": [
+        "PASS: Bounded route avoids every card/label/header timer_system->categorized_scores",
+        "PASS: Bounded route avoids every card/label/header score_system->categorized_scores",
+        "PASS: Bounded route avoids every card/label/header lives_system->categorized_scores",
+        "PASS: Four category connectors avoid all cards, names and headers",
+        "PASS: Cross-category prerequisite remains explicit in details",
+        "PASS: Hidden cross-category arrow still permits direct prerequisite navigation",
+        "PASS: Layout and routing consume no gameplay RNG",
+        "Store common grid: 74 checks, 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/final-cold-run.json",
+      "sha256": "cdfea358ff50509276459f875916385fcbda16d7206a85f364e2e6d6cf1bee5c",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/tech-row-20261028-v1/final-cold.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/gameplay-adoption-20261028-v1/final-cold.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 3.344,
+      "tail": [
+        "PASS: Player schema restores exact finance, traits and RNG",
+        "PASS: World restores from unmodified file ",
+        "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+        "PASS: Every persisted player field survives",
+        "PASS: Unverified source still rejects",
+        "PASS: Presentation predecessor cannot pair with older Studio rules",
+        "PASS: Presentation predecessor cannot pair with older rival rules",
+        "Fresh world restore: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/three-ui-final-run.json",
+      "sha256": "bf9de3e7a6a01ae5f7121fcf93c46eec4c02360f858e28fcb3f2648cc3f041d6",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_gameplay_three_parent_ui.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 31.406,
+      "tail": [
+        "PASS: Three-parent link fits viewport Timer System",
+        "PASS: Parent name never ellipsized",
+        "PASS: Link animation completes and keyboard focus enabled",
+        "PASS: Three-parent link fits viewport Score System",
+        "PASS: Parent name never ellipsized",
+        "PASS: Link animation completes and keyboard focus enabled",
+        "PASS: Three-parent link fits viewport Lives System",
+        "PASS: Parent name never ellipsized",
+        "PASS: Actual link navigates to lives_system",
+        "GAMEPLAY_UI {\"checks\":129,\"failures\":0,\"source\":\"56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d\"}"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/refresh-final-run.json",
+      "sha256": "1b6554ab12ca590b5c16bd8ef059616dcae1a9e1598596594230e95df93ded78",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_ui_refresh.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 7.532,
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "{\"checks\":12,\"failures\":0,\"ok\":true}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/retained-audio-final-run.json",
+      "sha256": "9e548c56c19a740c3148b674d8c50da26982353e85098c122238105788e179fc",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_audio_branch.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.375,
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "AUDIO_CHECKS 143 failures 0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/research-final-run.json",
+      "sha256": "83f1530937a992308eabcda5a24f61bb52635c59749f9c0a2cc6ab118eb6ad86",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_integration.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 7.047,
+      "tail": [
+        "PASS: Queued Menu System never satisfies Save Files ownership gate",
+        "PASS: Unmet two-parent Difficulty gate remains enforced",
+        "PASS: Corrupt installment fails whole checkpoint",
+        "PASS: Unproven trait consumption fails whole checkpoint",
+        "PASS: Cheap hypothetical final installment floors at zero",
+        "PASS: Otherwise-paid zero final installment still consumes opportunity",
+        "PASS: Already-free hypothetical acquisition does not consume opportunity",
+        "Research integration: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/store-final-run.json",
+      "sha256": "72a93fa86f005a09a94a69d627d8b5efa48db9f9e3463c9aa7d2f5a2991f008f",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_feature_store.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 8.562,
+      "tail": [
+        "       [2] _ready (res://scripts/cards/card_view.gd:46)",
+        "       [3] _on_play_alpha_hand_pressed (res://scripts/phases/alpha_phase.gd:605)",
+        "       [4] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:122)",
+        "       [5] _verify_phase_credits (res://scripts/debug/verify_feature_store.gd:96)",
+        "       [6] _resolve_fixture (res://scripts/debug/verify_feature_store.gd:123)",
+        "PASS: Alpha parent resolution discounts direct Core child",
+        "PASS: Credit cannot repeat after phase transition",
+        "Feature Store verification: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "docs/codex/findings/gameplay-adoption-20261028-v1/old-gameplay-run.json",
+      "sha256": "70df16f69b53b3e5139378cbe3776ab4bbc5a70e6e5437b0aa4732ad6a3ca94b",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_gameplay_tree.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.797,
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "GAMEPLAY_TREE checks=119 failures=0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    }
+  ],
+  "integration": {
+    "receipt": "docs/codex/findings/scope-confirmation-20261029-v1/source-parity-private-run.json",
+    "sha256": "303ee8be9375f9a962283e504d66963b62a7aa1cb9c07dbb237bf116ec94f46d",
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_campaign_seeded_parity.gd"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 29.844,
+    "tail": [
+      "       [9] _on_under_scope_confirmed (res://scripts/phases/alpha_phase.gd:231)",
+      "       [10] exit_phase (res://scripts/debug/verify_campaign_live_parity.gd:141)",
+      "       [11] _project (res://scripts/debug/verify_campaign_seeded_parity.gd:89)",
+      "Alpha completed! Pressure 1.4444; stochastic result 1; variance +0; Alpha Hidden Bugs 1; total Hidden Bugs 2; implemented 3; unimplemented 0",
+      "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 6 | Finite cards exhausted: press_interview | Cycle advanced: 1",
+      "Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: Technology Pass, Design Pass",
+      "Beta hand resolved: Known Bugs fixed: 0 | Marketing Output gained: 4 | Beta Host Playtest corrective Passes injected: Technology Pass, Design Pass | Cycle advanced: 1",
+      "Seeded campaign parity: 0 failures, 138 boundaries, 3 routes",
+      "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "   at: cleanup (core/object/object.cpp:2536)"
+    ]
+  },
+  "retained_failures": [
+    "graph-red",
+    "three-card-red2",
+    "three-card-red launch failure (missing console executable)"
+  ],
+  "pending": "Inventory System -> Score System remains unanswered; Score System remains a root."
+}

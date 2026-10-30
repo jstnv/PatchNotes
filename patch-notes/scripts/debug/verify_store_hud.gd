@@ -26,6 +26,7 @@ func _initialize() -> void:
 		game.run_state = fixture
 		root.add_child(game)
 		await settle()
+		await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 		root.min_size = Vector2i.ZERO
 		root.size = resolution
 		root.content_scale_size = resolution

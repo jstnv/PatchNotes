@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_fixed_campaign.gd",
+    "--",
+    "--tiers=1",
+    "--exercise-alignment"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 35.297,
+  "errors": [],
+  "tail": [
+    "CAREER_PROGRESS {\"cash\":300621300,\"cycle\":26,\"releases\":3,\"step\":33,\"tier\":0}",
+    "PASS: Release checkpoint and career/payroll provenance 4 ",
+    "CAREER_PROGRESS {\"cash\":299655558,\"cycle\":34,\"releases\":4,\"step\":63,\"tier\":0}",
+    "PASS: Release checkpoint and career/payroll provenance 5 ",
+    "CAREER_PROGRESS {\"cash\":298414606,\"cycle\":44,\"releases\":5,\"step\":97,\"tier\":0}",
+    "PASS: Release checkpoint and career/payroll provenance 6 ",
+    "CAREER_PROGRESS {\"cash\":296949598,\"cycle\":57,\"releases\":6,\"step\":135,\"tier\":1}",
+    "PASS: Actual committed hands/releases complete requested courses",
+    "PASS: Source-pinned complete action tape retained",
+    "CAREER_CAMPAIGN {\"alignment_uses\":1,\"cash_cents\":296949598,\"cash_low_cents\":296949598,\"completed\":true,\"cycles\":57,\"failures\":0,\"functional_funding_cents\":300000000,\"releases\":6,\"source\":\"a3e14823c57ecde8bd46429aa0472a590dc3c69480a563fafce9a4830e94085b\",\"steps\":136,\"tier\":1}"
+  ],
+  "runtime_identity": "a3e14823c57ecde8bd46429aa0472a590dc3c69480a563fafce9a4830e94085b",
+  "runtime_source_unchanged": true
+}

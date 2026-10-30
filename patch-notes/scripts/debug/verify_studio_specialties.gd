@@ -3,6 +3,9 @@ extends SceneTree
 var failures := 0
 
 func _initialize() -> void:
+	if not OS.get_environment("PN_CHECKPOINT_TEST_PORT").is_empty():
+		node_added.connect(func(node: Node):
+			if node is CheckpointCoordinator: node.store = preload("res://scripts/debug/verify_rival_gameplay_activation.gd").TestStore.new("user://saves/studio",node._validate_payload))
 	_run.call_deferred()
 
 func check(ok: bool, message: String) -> void:
@@ -13,7 +16,7 @@ func snapshot(run: RunState) -> Array:
 	return [run.get_studio_name(), run.get_studio_specialty(), run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.needs_starter_selection()]
 
 func _run() -> void:
-	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v4.json"))
+	var fixtures: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/studio_specialties_v5.json"))
 	for genre: String in fixtures:
 		var run := RunState.new()
 		run.initialize_cash_cents(0)
@@ -29,7 +32,7 @@ func _run() -> void:
 		before = snapshot(run)
 		check(not run.set_studio_name("Changed", &"racing") and snapshot(run) == before, "Specialty and grant cannot repeat or switch: " + genre)
 		for id: StringName in run.get_owned_feature_ids():
-			check(run.get_feature_familiarity(id) == 0 and StudioSpecialties.PRIMITIVE_IDS.has(str(id)), "Only Primitive ownership, no familiarity: " + str(id))
+			check(run.get_feature_familiarity(id) == 0 and (StudioSpecialties.PRIMITIVE_IDS.has(str(id)) or id==&"main_theme"), "Only declared founder ownership, no familiarity: " + str(id))
 		check(not run.owns_feature(&"colored_text") and run.get_feature_store_offer(&"colored_text").unlocked and not ResearchTestActions.acquire(run,&"colored_text"), "Owned parent unlocks branch without free descendant or early branch purchase")
 		for chosen: StringName in [StringName(genre), &"puzzle" if genre != "puzzle" else &"action"]:
 			var project := PrimitivePredevelopment.prepare_project("Independent Genre", chosen, &"fantasy", run)
@@ -96,6 +99,7 @@ func _verify_ui() -> void:
 	check(run.get_studio_specialty() == &"action" and run.get_owned_feature_ids() == StudioSpecialties.preview(&"action").ids, "Menu commits exactly one specialty")
 	before = snapshot(run)
 	check(snapshot(run) == before, "Duplicate confirmation does not grant again")
+	check(await game.checkpoints.wait_saved(),"New-Studio save is ready before project commands")
 	var studio: StudioPhase = game.get("_active_phase")
 	check(not game.call("_begin_next_project", studio, "", &"puzzle", &"fantasy") and snapshot(run) == before and run.needs_starter_selection(), "Failed first start preserves optional zero-cycle purchase window")
 	check(game.call("_begin_next_project", studio, "Puzzle Game", &"puzzle", &"fantasy") and game.project_state.get_genre_id() == &"puzzle" and run.get_studio_specialty() == &"action", "Successful nonmatching first game commits independent Genre")

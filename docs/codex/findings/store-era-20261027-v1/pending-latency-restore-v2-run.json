@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd"
+  ],
+  "exit": 2,
+  "elapsed_seconds": 62.031,
+  "errors": [
+    "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime",
+    "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime"
+  ],
+  "tail": [
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:10)",
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:59)",
+    "ERROR: Next rival decisions, outcomes and RNG equal the old compiled runtime",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:10)",
+    "       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/pending/verify_latency_restore.gd:59)",
+    "{\"checks\":78,\"failures\":2,\"ok\":false}"
+  ]
+}

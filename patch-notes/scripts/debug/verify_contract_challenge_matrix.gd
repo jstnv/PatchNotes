@@ -15,15 +15,12 @@ func _run() -> void:
 	var evidence:=[]
 	for key:String in HANDS:
 		var run:=starwave_fixture() if key.begins_with("star") or key.begins_with("side") else trial_run()
-		if key=="side_miss":
-			# The authored historical miss uses General Combat, which root-first
-			# founding no longer grants. Acquire its real parent path before the
-			# new paid Search freezes this offer's eligible owned pool.
-			for id: StringName in [&"enemies",&"general_combat"]:
-				if run.owns_feature(id):continue
-				var quote:=run.get_feature_research_quote(id)
-				expect(quote.can_admit and run.admit_feature_research(quote),"Research missing authored prerequisite "+str(id))
-				expect(run.research_feature(run.get_feature_research_quote(id)),"Complete authored prerequisite "+str(id))
+		# Authored outcome fixtures predate the twelve-Scope starter. Buy every
+		# missing root/parent legally before accepting an owned-pool offer.
+		for ids: Array in HANDS[key]:
+			for id: String in ids:
+				if root.get_node("CardDatabase").get_card(StringName(id)).card_type == &"feature":
+					expect(acquire(run,StringName(id)), "Research authored supply " + id)
 		if key.begins_with("side"):expect(run.search_contracts(run.get_contract_search_quote(&"sidestreet",&"cash")),"Paid Search finds "+key)
 		var state:ContractState
 		if key.begins_with("side"):state=run.accept_sidestreet_offer(run.get_next_sidestreet_offer().offer_id)
@@ -65,3 +62,11 @@ func _run() -> void:
 	var output:=OS.get_environment("PN_CARD_FRAME_OUTPUT")
 	if not output.is_empty():FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify({"cases":evidence,"neon_partial_miss":"Unreachable with current authored pool; minimum Core/Scope is2, required1.5"},"\t"))
 	print("CHALLENGE_MATRIX failures=%d"%failures);quit(failures)
+
+func acquire(run: RunState, id: StringName) -> bool:
+	if run.owns_feature(id): return true
+	if not run._feature_definitions.has(id): return false
+	for parent in FeatureStoreCatalog.graph(run._feature_definitions,run._feature_offers).parents.get(id,[]):
+		if not acquire(run,StringName(parent)): return false
+	var quote := run.get_feature_research_quote(id)
+	return quote.get("can_admit",false) and run.admit_feature_research(quote) and run.research_feature(run.get_feature_research_quote(id))

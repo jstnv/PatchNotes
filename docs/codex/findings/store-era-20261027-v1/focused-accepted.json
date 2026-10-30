@@ -1,0 +1,142 @@
+{
+  "runtime_identity": "1eb74aabda9665f4f79df167b7e006d47cf635f3498cecb58c8d7c0ba3365bfa",
+  "records": [
+    {
+      "batch": "final-core",
+      "name": "verify_store_era",
+      "ok": true,
+      "exit": 0,
+      "seconds": 1.5,
+      "receipt": "final-core-verify_store_era-run.json"
+    },
+    {
+      "batch": "final-core",
+      "name": "verify_store_era_checkpoint",
+      "ok": true,
+      "exit": 0,
+      "seconds": 2.984,
+      "receipt": "final-core-verify_store_era_checkpoint-run.json"
+    },
+    {
+      "batch": "final-core",
+      "name": "verify_store_era_access",
+      "ok": true,
+      "exit": 0,
+      "seconds": 23.875,
+      "receipt": "final-core-verify_store_era_access-run.json"
+    },
+    {
+      "batch": "final-core",
+      "name": "verify_store_era_research",
+      "ok": true,
+      "exit": 0,
+      "seconds": 43.235,
+      "receipt": "final-core-verify_store_era_research-run.json"
+    },
+    {
+      "batch": "final-core",
+      "name": "verify_store_four_children",
+      "ok": true,
+      "exit": 0,
+      "seconds": 1.563,
+      "receipt": "final-core-verify_store_four_children-run.json"
+    },
+    {
+      "batch": "final-core",
+      "name": "verify_guided_tutorial_model",
+      "ok": true,
+      "exit": 0,
+      "seconds": 1.391,
+      "receipt": "final-core-verify_guided_tutorial_model-run.json"
+    },
+    {
+      "batch": "final-core",
+      "name": "verify_campaign_latency",
+      "ok": true,
+      "exit": 0,
+      "seconds": 13.187,
+      "receipt": "final-core-verify_campaign_latency-run.json"
+    },
+    {
+      "batch": "final-core",
+      "name": "verify_background_checkpoint",
+      "ok": false,
+      "exit": 124,
+      "seconds": 130.032,
+      "receipt": "final-core-verify_background_checkpoint-run.json"
+    },
+    {
+      "batch": "final-background",
+      "name": "verify_background_checkpoint",
+      "ok": true,
+      "exit": 0,
+      "seconds": 110.266,
+      "receipt": "final-background-verify_background_checkpoint-run.json"
+    },
+    {
+      "batch": "final-background",
+      "name": "verify_background_gameplay",
+      "ok": true,
+      "exit": 0,
+      "seconds": 80.187,
+      "receipt": "final-background-verify_background_gameplay-run.json"
+    },
+    {
+      "batch": "final-parity",
+      "name": "verify_alpha_command",
+      "ok": true,
+      "exit": 0,
+      "seconds": 78.313,
+      "receipt": "final-parity-verify_alpha_command-run.json"
+    },
+    {
+      "batch": "final-parity",
+      "name": "verify_development_replay",
+      "ok": true,
+      "exit": 0,
+      "seconds": 73.172,
+      "receipt": "final-parity-verify_development_replay-run.json"
+    },
+    {
+      "batch": "final-parity",
+      "name": "verify_qa_career",
+      "ok": true,
+      "exit": 0,
+      "seconds": 121.828,
+      "receipt": "final-parity-verify_qa_career-run.json"
+    },
+    {
+      "batch": "final-parity",
+      "name": "verify_campaign_seeded_parity",
+      "ok": true,
+      "exit": 0,
+      "seconds": 99.688,
+      "receipt": "final-parity-verify_campaign_seeded_parity-run.json"
+    },
+    {
+      "batch": "final-parity",
+      "name": "verify_latency_restore",
+      "ok": true,
+      "exit": 0,
+      "seconds": 68.297,
+      "receipt": "final-parity-verify_latency_restore-run.json"
+    },
+    {
+      "batch": "final-ui-native",
+      "name": "verify_store_four_children",
+      "ok": true,
+      "exit": 0,
+      "seconds": 9.938,
+      "receipt": "final-ui-native-verify_store_four_children-run.json"
+    },
+    {
+      "batch": "final-ui-native",
+      "name": "verify_guided_tutorial_ui",
+      "ok": true,
+      "exit": 0,
+      "seconds": 75.484,
+      "receipt": "final-ui-native-verify_guided_tutorial_ui-run.json"
+    }
+  ],
+  "note": "final-core stopped at a missing private fixture environment input; corrected final-background explicitly verifies the pinned portable inputs and passes both suites. No production change for that harness repair."
+}

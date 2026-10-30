@@ -11,6 +11,9 @@ func _run() -> void:
 	if args.size()!=2: quit(2);return
 	var input: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(args[0]))
 	var source: Dictionary=input
+	if input.has("rival_world"):
+		var player:=input.duplicate(true);player.erase("rival_world")
+		source={"player":player,"world":input.rival_world}
 	if input.has("payload_utf8"):
 		var raw := CheckpointCodec.new().open_envelope(JSON.stringify(input))
 		var player := raw.duplicate(true);player.erase("rival_world")
@@ -26,12 +29,46 @@ func _run() -> void:
 	var before: Dictionary=source.world.duplicate(true);before.erase("source_identity")
 	for row: Dictionary in before.studios: row.run.content_revision=StudioCheckpoint.new().revision()
 	var after: Dictionary=saved.duplicate(true);after.erase("source_identity")
+	for index in before.studios.size():
+		if not before.studios[index].run.run.has("store_era_receipts"): after.studios[index].run.run.erase("store_era_receipts")
 	check(JSON.parse_string(JSON.stringify(before))==JSON.parse_string(JSON.stringify(after)),"Every persisted rival action, finance, RNG, archive and ownership field survives")
 	var player_saved := StudioCheckpoint.new().capture(run)
 	var prior: Dictionary=source.player.duplicate(true);prior.sequence="1";prior.content_revision=StudioCheckpoint.new().revision()
-	check(JSON.stringify(prior)==JSON.stringify(player_saved),"Every persisted player field survives")
+	var player_projection:=player_saved.duplicate(true)
+	if not prior.run.has("store_era_receipts"): player_projection.run.erase("store_era_receipts")
+	check(JSON.stringify(prior)==JSON.stringify(player_projection),"Every persisted player field survives")
 	var corrupted := saved.duplicate(true);corrupted.source_identity="unverified-source"
 	check(not codec.validate(corrupted,player_saved).is_empty(),"Unverified source still rejects")
+	if source.world.source_identity in WorldCodec.QUIT_PRESENTATION_PREDECESSORS+WorldCodec.STORE_NAVIGATION_PREDECESSORS+WorldCodec.GRID_PREDECESSOR_SOURCES+WorldCodec.AUDIO_PREDECESSOR_SOURCES+WorldCodec.TECH_ROW_PRESENTATION_PREDECESSORS+WorldCodec.GAMEPLAY_RESTORATION_PREDECESSORS+WorldCodec.RESEARCH_CONFIRMATION_PREDECESSORS+WorldCodec.STUDIO_GLOW_PREDECESSORS:
+		var wrong_pair: Dictionary = source.player.duplicate(true)
+		wrong_pair.content_revision = StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_ERA_RULES)
+		check(not codec.validate(source.world,wrong_pair).is_empty(),"Presentation predecessor cannot pair with older Studio rules")
+		var wrong_rival: Dictionary = source.world.duplicate(true)
+		wrong_rival.studios[0].run.content_revision = wrong_pair.content_revision
+		check(not codec.validate(wrong_rival,source.player).is_empty(),"Presentation predecessor cannot pair with older rival rules")
+	if source.world.source_identity in WorldCodec.RESEARCH_CONFIRMATION_PREDECESSORS+WorldCodec.STUDIO_GLOW_PREDECESSORS:
+		var wrong_pair: Dictionary = source.player.duplicate(true)
+		wrong_pair.content_revision = StudioCheckpoint.new().pre_gameplay_revision()
+		check(not codec.validate(source.world,wrong_pair).is_empty(),"Current-content presentation predecessor rejects pre-Gameplay player catalog")
+		var wrong_rival: Dictionary = source.world.duplicate(true)
+		wrong_rival.studios[0].run.content_revision = wrong_pair.content_revision
+		check(not codec.validate(wrong_rival,source.player).is_empty(),"Current-content presentation predecessor rejects pre-Gameplay rival catalog")
+	if source.world.source_identity in WorldCodec.GRID_PREDECESSOR_SOURCES+WorldCodec.RESEARCH_PERFORMANCE_PREDECESSORS+WorldCodec.QUIT_PRESENTATION_PREDECESSORS+WorldCodec.STORE_NAVIGATION_PREDECESSORS:
+		var wrong_current: Dictionary=source.player.duplicate(true)
+		wrong_current.content_revision=StudioCheckpoint.new().revision()
+		check(not codec.validate(source.world,wrong_current).is_empty(),"Pre-grid world cannot pair with current-catalog player bytes")
+	if source.world.source_identity in WorldCodec.STORE_ROOT_PRESENTATION_PREDECESSORS:
+		var wrong_pair: Dictionary=source.player.duplicate(true)
+		wrong_pair.content_revision=StudioCheckpoint.new().pre_grid_revision()
+		check(not codec.validate(source.world,wrong_pair).is_empty(),"Root presentation predecessor rejects older player catalog")
+		var wrong_rival: Dictionary=source.world.duplicate(true)
+		wrong_rival.studios[0].run.content_revision=wrong_pair.content_revision
+		check(not codec.validate(wrong_rival,source.player).is_empty(),"Root presentation predecessor rejects older rival catalog")
 	var output := {"player":player_saved,"world":saved,"digest":Replay.digest(saved)}
+	if source.world.source_identity in WorldCodec.CAREER_PREDECESSORS:
+		var wrong_pair: Dictionary=source.player.duplicate(true);wrong_pair.content_revision=StudioCheckpoint.new().revision()
+		check(not codec.validate(source.world,wrong_pair).is_empty(),"Pre-course world rejects new-career player content")
+		var wrong_rival: Dictionary=source.world.duplicate(true);wrong_rival.studios[0].run.content_revision=wrong_pair.content_revision
+		check(not codec.validate(wrong_rival,source.player).is_empty(),"Pre-course world rejects mixed new-career rival content")
 	FileAccess.open(args[1],FileAccess.WRITE).store_string(JSON.stringify(output,"\t"))
 	print("Fresh world restore: %d failures"%failures);quit(failures)

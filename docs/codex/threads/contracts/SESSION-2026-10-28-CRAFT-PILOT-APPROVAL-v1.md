@@ -1,0 +1,9 @@
+# Session — full Craft Package pilot approval
+
+2026-10-28. `main`, HEAD `f3e0f2b5d35270c879327bc297b389748571feb4`;98 dirty tracked files existed before this update. Read CURRENT_STATE/TODO, relevant prior approval/handoff and memory guidance; inspected branch/HEAD/status/diff. User answered “Yes” to the bundled remaining pilot rules.
+
+Added [full approval](CROWN-CRAFT-PILOT-APPROVAL-2026-10-28-v1.md) and [v4 isolated-pilot handoff](COMPACT-PACKAGE-HANDOFF-2026-10-28-v4.md). Updated the existing Crown paid-work TODO paragraph to QUEUED approved isolated implementation/validation, with canonical adoption held; prepended superseding status to thread README/HANDOFF, original terms and v3. All other queue entries and prior document bodies preserved. Earlier evidence/approval boundaries remain available.
+
+Exact publication command: `& 'C:/Users/64jus/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' docs/codex/threads/contracts/studies/crown-pilot-approval-20261028-v1/publish.py`. PASS, exit0: inverse-byte preservation checks and16 local links. [Receipt/preimages](studies/crown-pilot-approval-20261028-v1/receipt.json). `git -c core.whitespace=cr-at-eol diff --check -- docs/codex/TODO.md docs/codex/threads/contracts/README.md docs/codex/threads/contracts/HANDOFF.md docs/codex/threads/contracts/CROWN-PAID-WORK-TERMS-2026-10-26-v1.md docs/codex/threads/contracts/COMPACT-PACKAGE-HANDOFF-2026-10-26-v3.md` also passed.
+
+Gameplay checks/simulations NOT RUN in this approval/queue pass. No canonical code, tests, assets, configuration, player saves, .codex-godot-temp, other-thread files, commits/pushes, Drive writes or cross-chat dispatch. Existing rewards unchanged. Next deliverable: a distinct private cash-definition candidate with legally earned R5 prefixes and actual settlement, payroll/sales, replay and Continue evidence; canonical catalog/trust exposure and migration/native/export/human acceptance remain separate.

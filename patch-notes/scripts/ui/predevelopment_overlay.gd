@@ -147,6 +147,12 @@ func _add_options(parent: Node, kind: String) -> OptionButton:
 	return options
 
 func open() -> void:
+	var values: Dictionary=PriorityAllocation.editable_distribution(get_initial_priorities(),market_run)
+	var limits:=PriorityAllocation.bounds(market_run)
+	for index in priority_sliders.size():
+		priority_sliders[index].min_value=limits.x;priority_sliders[index].max_value=limits.y
+		priority_sliders[index].set_value_no_signal(values[index])
+	_refresh_priorities()
 	_commission_quote = {}
 	_support_quote = {}
 	begin_button.text = "Review commission quote" if commission_mode else "Begin Development"
@@ -181,7 +187,7 @@ func _refresh_priorities() -> void:
 	if total == 100 and error_label != null and error_label.text == "Allocate exactly 100 priority points before beginning.": error_label.text = ""
 
 func _confirm() -> void:
-	if not PriorityAllocation.is_valid_new_distribution(get_initial_priorities()):
+	if not PriorityAllocation.is_valid_new_distribution(get_initial_priorities(), market_run):
 		error_label.text = "Allocate exactly 100 priority points before beginning."
 		return
 	var genre: StringName = genre_input.get_selected_metadata()

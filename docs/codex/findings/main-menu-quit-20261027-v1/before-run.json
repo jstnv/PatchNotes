@@ -1,0 +1,28 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_main_menu_quit.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 13.406,
+  "errors": [
+    "ERROR: FAIL: Title Quit opens confirmation before exiting"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "ERROR: FAIL: Title Quit opens confirmation before exiting",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (res://scripts/debug/verify_main_menu_quit.gd:10)",
+    "       [1] _initialize (res://scripts/debug/verify_main_menu_quit.gd:32)",
+    "{\"checks\":2,\"failures\":1,\"ok\":false,\"phase\":\"bypassed_confirmation\"}"
+  ]
+}

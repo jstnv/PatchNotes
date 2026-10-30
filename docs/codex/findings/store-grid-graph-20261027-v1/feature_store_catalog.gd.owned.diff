@@ -1,0 +1,27 @@
+--- feature_store_catalog.gd.before
++++ scripts/cards/feature_store_catalog.gd
+@@ -14,6 +14,9 @@
+ 	&"local_leaderboards": &"high_scores", &"enemies": &"lives_system",
+ 	&"general_combat": &"enemies",
+ }
++
++## Ordered AND parents for existing Primitive cards; historical grants stay owned.
++const PRIMITIVE_PARENT_SETS := {&"split_screen": [&"branching_nodes", &"scrolling"]}
+ 
+ static func entries() -> Array:
+ 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
+@@ -43,10 +46,11 @@
+ 		var legacy: Variant = entry.get("purchase_parent", PRIMITIVE_PARENTS.get(id, ""))
+ 		if not legacy is String and not legacy is StringName: return {"error":"Invalid parent: " + str(id)}
+ 		var named: Array = []
+-		if entry.has("purchase_parents"):
+-			if not entry.purchase_parents is Array or entry.purchase_parents.size() not in [1, 2]:
++		if entry.has("purchase_parents") or PRIMITIVE_PARENT_SETS.has(id):
++			var requested: Variant = entry.get("purchase_parents", PRIMITIVE_PARENT_SETS.get(id, []))
++			if not requested is Array or requested.size() not in [1, 2]:
+ 				return {"error":"Expected one or two named parents: " + str(id)}
+-			for value: Variant in entry.purchase_parents:
++			for value: Variant in requested:
+ 				if not value is String and not value is StringName: return {"error":"Invalid named parent: " + str(id)}
+ 				named.append(StringName(value))
+ 			if not str(legacy).is_empty() and StringName(legacy) != named[0]: return {"error":"Parent anchor mismatch: " + str(id)}

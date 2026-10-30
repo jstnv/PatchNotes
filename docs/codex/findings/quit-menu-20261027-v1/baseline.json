@@ -1,0 +1,119 @@
+{
+  "branch": "main",
+  "head": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "prior_runtime": "274023dedb8414b9b7ba852d470b36091a25fb954fde32f44325a5689109ac06",
+  "current_runtime": "0aaa98ba2e0eef306dc0c046d8732a2b3a5a80226649bc01729c3ff2d0ee9f7d",
+  "prior_world_sha256": "d908d522f0d9ec238b99c71c4cd16489b153775dbdc00fd2695122daabc5f15e",
+  "prior_source_manifest": "../store-era-20261027-v1/release-gate-final-v4/source.json",
+  "files": {
+    "patch-notes/scripts/gameplay.gd": "e081ef1100589790a99689c7a03ac698a945a5510f81f32620c6932863c408ee",
+    "patch-notes/scripts/ui/quit_confirmation.gd": "a8278a586d388c9611e3104017ad9f7b29a1b4b1b73d37539687dd4e8daf9241",
+    "patch-notes/scripts/market/rival_world_checkpoint.gd": "73c3f19baa26a940b30c8e3f8560f844358509ae42599c68ed10521a63e2e5e5",
+    "patch-notes/scripts/debug/verify_checkpoint_recovery_ui.gd": "6db32a0877082046d4ac9cd6c9969129373f0618e5c6d702021ab9f00c11c827",
+    "patch-notes/scripts/debug/verify_world_restore_file.gd": "72c004b501d4f34e1a7e2a7a462cf4962eef4e182f94ce77b7caf460c912303b"
+  },
+  "checks": {
+    "checked-headless": {
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_checkpoint_recovery_ui.gd"
+      ],
+      "elapsed_seconds": 13.828,
+      "passing_assertions": 64,
+      "receipt_sha256": "2a97a06b1a53d199133514d8badf3e7fb05a28631c997e2a0474b3c44bb94b5f"
+    },
+    "checked-native": {
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_checkpoint_recovery_ui.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "elapsed_seconds": 16.594,
+      "passing_assertions": 66,
+      "receipt_sha256": "e85900c643a36d6b6205901ee8e7d9fe06b47451c15cfb4b5107d9bf76944971"
+    },
+    "checked-quit": {
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/quit-menu-20261027-v1/confirm_probe.gd"
+      ],
+      "elapsed_seconds": 5.313,
+      "passing_assertions": 0,
+      "receipt_sha256": "0860fb46dfd4da4959220853e58c34705a2e4c045790b23edc929f932b874050"
+    },
+    "checked-cold": {
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/quit-menu-20261027-v1/predecessor.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/quit-menu-20261027-v1/checked-cold.json"
+      ],
+      "elapsed_seconds": 3.781,
+      "passing_assertions": 7,
+      "receipt_sha256": "94d3cb79b7c2b6ba5d5f4ea81d83fb58d6cb4f452029996eb87e1cb30f6d5b72"
+    },
+    "checked-pause": {
+      "exit": 0,
+      "errors": [],
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_pause_menu.gd"
+      ],
+      "elapsed_seconds": 14.656,
+      "passing_assertions": 0,
+      "receipt_sha256": "2ca662ef8a08f6fa0857ee090f63b93fbd72a19429f2bd0cdcc6b34f7dca771e"
+    }
+  },
+  "captures": {
+    "1152": "f853b5246fdcf4af53ffaf4ffd582b51b826ee0d0703ff851530e32d532365a5",
+    "1280": "3aacc6cae208f884f36a51af89c18bb04395077e52b5b1d10ad684d20ab22ff1"
+  },
+  "limits": [
+    "Synthetic OS-close notification and actual callback/keyboard checks, not a physical Alt+F4 device test.",
+    "No new EXE, export, commit or push.",
+    "Previous222-suite gate remains pinned to the preceding Store source; this UI delta has focused verification only."
+  ]
+}

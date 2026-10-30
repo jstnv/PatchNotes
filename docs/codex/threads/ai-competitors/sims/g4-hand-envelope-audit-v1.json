@@ -1,0 +1,1585 @@
+{
+  "status": "passed",
+  "bundle": "docs\\codex\\threads\\ai-competitors\\sims\\g4-hand-envelope-v1",
+  "frozen_source_identity": "1a8aed27145314253b98f8566f627972b747e75c467205804f7229f2778d09eb",
+  "requested_config_sha256": "e8e2a90c81a6d651d5e36f148aae72c08658659014a0ff2dc8e7f06316b2070b",
+  "checks": {
+    "twelve_declared_cases": true,
+    "same_initial_states_and_rng": true,
+    "legal_opening": true,
+    "completed_without_rejection": true,
+    "all_studio_releases": true,
+    "no_arrears_or_negative_cash": true,
+    "archive_separate": true,
+    "same_archive_within_triples": true
+  },
+  "triples": [
+    {
+      "genre": "action",
+      "seed": "4417",
+      "equal_initial_state": true,
+      "equal_initial_rng": true,
+      "equal_archive": true,
+      "reviews": [
+        4.5,
+        5.5,
+        6.1
+      ],
+      "release_cycles": [
+        11,
+        13,
+        16
+      ],
+      "final_cash_cents": [
+        285000,
+        230000,
+        130000
+      ]
+    },
+    {
+      "genre": "action",
+      "seed": "90210",
+      "equal_initial_state": true,
+      "equal_initial_rng": true,
+      "equal_archive": true,
+      "reviews": [
+        5.5,
+        6.2,
+        7.0
+      ],
+      "release_cycles": [
+        11,
+        13,
+        16
+      ],
+      "final_cash_cents": [
+        284000,
+        230000,
+        130000
+      ]
+    },
+    {
+      "genre": "adventure",
+      "seed": "4417",
+      "equal_initial_state": true,
+      "equal_initial_rng": true,
+      "equal_archive": true,
+      "reviews": [
+        4.2,
+        5.1,
+        5.8
+      ],
+      "release_cycles": [
+        11,
+        13,
+        16
+      ],
+      "final_cash_cents": [
+        299000,
+        244000,
+        144000
+      ]
+    },
+    {
+      "genre": "adventure",
+      "seed": "90210",
+      "equal_initial_state": true,
+      "equal_initial_rng": true,
+      "equal_archive": true,
+      "reviews": [
+        4.8,
+        5.7,
+        6.3
+      ],
+      "release_cycles": [
+        11,
+        13,
+        16
+      ],
+      "final_cash_cents": [
+        306000,
+        252000,
+        148000
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "cohort-action-baseline-4417",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 20,
+      "accepted_commands": 20,
+      "initial_state": "d6d93d254f5a56d21064c3f2e9ace7979470f32cb2a5c6ca8a007b63b8b72bb5",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "4421"
+          },
+          "state": {
+            "integer": "-3769052622640144973"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "4422"
+          },
+          "state": {
+            "integer": "2595083601206648032"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "4423"
+          },
+          "state": {
+            "integer": "8959219825053441037"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "4424"
+          },
+          "state": {
+            "integer": "-3123388024809317574"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "4425"
+          },
+          "state": {
+            "integer": "3240748199037475431"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "4419"
+          },
+          "state": {
+            "integer": "1949419003375820633"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "4420"
+          },
+          "state": {
+            "integer": "8313555227222613638"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "4418"
+          },
+          "state": {
+            "integer": "-4414717220470972372"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "4417"
+          },
+          "state": {
+            "integer": "7667890629391786239"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 21,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 3,
+        "alpha": 5,
+        "beta": 2
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 185000,
+      "min_transaction_cash_cents": 185000,
+      "final_cash_cents": 285000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 11,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 4.5,
+      "cores": [
+        33,
+        19,
+        31,
+        27
+      ],
+      "scope": 32,
+      "required_scope": 30,
+      "bugs": 6,
+      "archive_ids": [
+        "arcade-history-1977",
+        "arcade-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-action-medium-4417",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 22,
+      "accepted_commands": 22,
+      "initial_state": "d6d93d254f5a56d21064c3f2e9ace7979470f32cb2a5c6ca8a007b63b8b72bb5",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "4421"
+          },
+          "state": {
+            "integer": "-3769052622640144973"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "4422"
+          },
+          "state": {
+            "integer": "2595083601206648032"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "4423"
+          },
+          "state": {
+            "integer": "8959219825053441037"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "4424"
+          },
+          "state": {
+            "integer": "-3123388024809317574"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "4425"
+          },
+          "state": {
+            "integer": "3240748199037475431"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "4419"
+          },
+          "state": {
+            "integer": "1949419003375820633"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "4420"
+          },
+          "state": {
+            "integer": "8313555227222613638"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "4418"
+          },
+          "state": {
+            "integer": "-4414717220470972372"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "4417"
+          },
+          "state": {
+            "integer": "7667890629391786239"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 21,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 4,
+        "alpha": 6,
+        "beta": 2
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 130000,
+      "min_transaction_cash_cents": 130000,
+      "final_cash_cents": 230000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 13,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 5.5,
+      "cores": [
+        39,
+        23,
+        38,
+        27
+      ],
+      "scope": 33,
+      "required_scope": 30,
+      "bugs": 6,
+      "archive_ids": [
+        "arcade-history-1977",
+        "arcade-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-action-long-4417",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 25,
+      "accepted_commands": 25,
+      "initial_state": "d6d93d254f5a56d21064c3f2e9ace7979470f32cb2a5c6ca8a007b63b8b72bb5",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "4421"
+          },
+          "state": {
+            "integer": "-3769052622640144973"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "4422"
+          },
+          "state": {
+            "integer": "2595083601206648032"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "4423"
+          },
+          "state": {
+            "integer": "8959219825053441037"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "4424"
+          },
+          "state": {
+            "integer": "-3123388024809317574"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "4425"
+          },
+          "state": {
+            "integer": "3240748199037475431"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "4419"
+          },
+          "state": {
+            "integer": "1949419003375820633"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "4420"
+          },
+          "state": {
+            "integer": "8313555227222613638"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "4418"
+          },
+          "state": {
+            "integer": "-4414717220470972372"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "4417"
+          },
+          "state": {
+            "integer": "7667890629391786239"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 21,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 5,
+        "alpha": 7,
+        "beta": 3
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 80000,
+      "min_transaction_cash_cents": 80000,
+      "final_cash_cents": 130000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 16,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 6.1,
+      "cores": [
+        49,
+        25,
+        40,
+        29
+      ],
+      "scope": 33,
+      "required_scope": 30,
+      "bugs": 6,
+      "archive_ids": [
+        "arcade-history-1977",
+        "arcade-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-action-baseline-90210",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 21,
+      "accepted_commands": 21,
+      "initial_state": "5a3560e028e3ef1f09d8f1da92048bad48d0759476b9f260c0603d6d8f76fe55",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "90214"
+          },
+          "state": {
+            "integer": "7838906209963402624"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "90215"
+          },
+          "state": {
+            "integer": "-4243701639899355987"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "90216"
+          },
+          "state": {
+            "integer": "2120434583947437018"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "90217"
+          },
+          "state": {
+            "integer": "8484570807794230023"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "90218"
+          },
+          "state": {
+            "integer": "-3598037042068528588"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "90212"
+          },
+          "state": {
+            "integer": "-4889366237730183386"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "90213"
+          },
+          "state": {
+            "integer": "1474769986116609619"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "90211"
+          },
+          "state": {
+            "integer": "7193241612132575225"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "90210"
+          },
+          "state": {
+            "integer": "829105388285782220"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 21,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 3,
+        "alpha": 5,
+        "beta": 2
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 234000,
+      "min_transaction_cash_cents": 234000,
+      "final_cash_cents": 284000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 11,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 5.5,
+      "cores": [
+        26,
+        26,
+        34,
+        25
+      ],
+      "scope": 32,
+      "required_scope": 30,
+      "bugs": 4,
+      "archive_ids": [
+        "arcade-history-1977",
+        "arcade-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-action-medium-90210",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 23,
+      "accepted_commands": 23,
+      "initial_state": "5a3560e028e3ef1f09d8f1da92048bad48d0759476b9f260c0603d6d8f76fe55",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "90214"
+          },
+          "state": {
+            "integer": "7838906209963402624"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "90215"
+          },
+          "state": {
+            "integer": "-4243701639899355987"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "90216"
+          },
+          "state": {
+            "integer": "2120434583947437018"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "90217"
+          },
+          "state": {
+            "integer": "8484570807794230023"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "90218"
+          },
+          "state": {
+            "integer": "-3598037042068528588"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "90212"
+          },
+          "state": {
+            "integer": "-4889366237730183386"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "90213"
+          },
+          "state": {
+            "integer": "1474769986116609619"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "90211"
+          },
+          "state": {
+            "integer": "7193241612132575225"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "90210"
+          },
+          "state": {
+            "integer": "829105388285782220"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 21,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 4,
+        "alpha": 6,
+        "beta": 2
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 180000,
+      "min_transaction_cash_cents": 180000,
+      "final_cash_cents": 230000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 13,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 6.2,
+      "cores": [
+        33,
+        35,
+        34,
+        25
+      ],
+      "scope": 33,
+      "required_scope": 30,
+      "bugs": 4,
+      "archive_ids": [
+        "arcade-history-1977",
+        "arcade-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-action-long-90210",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 26,
+      "accepted_commands": 26,
+      "initial_state": "5a3560e028e3ef1f09d8f1da92048bad48d0759476b9f260c0603d6d8f76fe55",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "90214"
+          },
+          "state": {
+            "integer": "7838906209963402624"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "90215"
+          },
+          "state": {
+            "integer": "-4243701639899355987"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "90216"
+          },
+          "state": {
+            "integer": "2120434583947437018"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "90217"
+          },
+          "state": {
+            "integer": "8484570807794230023"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "90218"
+          },
+          "state": {
+            "integer": "-3598037042068528588"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "90212"
+          },
+          "state": {
+            "integer": "-4889366237730183386"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "90213"
+          },
+          "state": {
+            "integer": "1474769986116609619"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "90211"
+          },
+          "state": {
+            "integer": "7193241612132575225"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "90210"
+          },
+          "state": {
+            "integer": "829105388285782220"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 21,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 5,
+        "alpha": 7,
+        "beta": 3
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 130000,
+      "min_transaction_cash_cents": 130000,
+      "final_cash_cents": 130000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 16,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 7.0,
+      "cores": [
+        37,
+        37,
+        40,
+        29
+      ],
+      "scope": 33,
+      "required_scope": 30,
+      "bugs": 4,
+      "archive_ids": [
+        "arcade-history-1977",
+        "arcade-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-adventure-baseline-4417",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 20,
+      "accepted_commands": 20,
+      "initial_state": "04337298526ed81cb0d5271496fab6ec72c9d0989383f47fdece6d00fefcb2ce",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "4421"
+          },
+          "state": {
+            "integer": "-3769052622640144973"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "4422"
+          },
+          "state": {
+            "integer": "2595083601206648032"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "4423"
+          },
+          "state": {
+            "integer": "8959219825053441037"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "4424"
+          },
+          "state": {
+            "integer": "-3123388024809317574"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "4425"
+          },
+          "state": {
+            "integer": "3240748199037475431"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "4419"
+          },
+          "state": {
+            "integer": "1949419003375820633"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "4420"
+          },
+          "state": {
+            "integer": "8313555227222613638"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "4418"
+          },
+          "state": {
+            "integer": "-4414717220470972372"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "4417"
+          },
+          "state": {
+            "integer": "7667890629391786239"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 22,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 3,
+        "alpha": 5,
+        "beta": 2
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 199000,
+      "min_transaction_cash_cents": 199000,
+      "final_cash_cents": 299000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 11,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 4.2,
+      "cores": [
+        31,
+        22,
+        14,
+        31
+      ],
+      "scope": 30,
+      "required_scope": 30,
+      "bugs": 5,
+      "archive_ids": [
+        "wayfinder-history-1976",
+        "wayfinder-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-adventure-medium-4417",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 22,
+      "accepted_commands": 22,
+      "initial_state": "04337298526ed81cb0d5271496fab6ec72c9d0989383f47fdece6d00fefcb2ce",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "4421"
+          },
+          "state": {
+            "integer": "-3769052622640144973"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "4422"
+          },
+          "state": {
+            "integer": "2595083601206648032"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "4423"
+          },
+          "state": {
+            "integer": "8959219825053441037"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "4424"
+          },
+          "state": {
+            "integer": "-3123388024809317574"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "4425"
+          },
+          "state": {
+            "integer": "3240748199037475431"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "4419"
+          },
+          "state": {
+            "integer": "1949419003375820633"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "4420"
+          },
+          "state": {
+            "integer": "8313555227222613638"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "4418"
+          },
+          "state": {
+            "integer": "-4414717220470972372"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "4417"
+          },
+          "state": {
+            "integer": "7667890629391786239"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 22,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 4,
+        "alpha": 6,
+        "beta": 2
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 144000,
+      "min_transaction_cash_cents": 144000,
+      "final_cash_cents": 244000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 13,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 5.1,
+      "cores": [
+        33,
+        30,
+        19,
+        33
+      ],
+      "scope": 31,
+      "required_scope": 30,
+      "bugs": 5,
+      "archive_ids": [
+        "wayfinder-history-1976",
+        "wayfinder-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-adventure-long-4417",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 25,
+      "accepted_commands": 25,
+      "initial_state": "04337298526ed81cb0d5271496fab6ec72c9d0989383f47fdece6d00fefcb2ce",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "4421"
+          },
+          "state": {
+            "integer": "-3769052622640144973"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "4422"
+          },
+          "state": {
+            "integer": "2595083601206648032"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "4423"
+          },
+          "state": {
+            "integer": "8959219825053441037"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "4424"
+          },
+          "state": {
+            "integer": "-3123388024809317574"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "4425"
+          },
+          "state": {
+            "integer": "3240748199037475431"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "4419"
+          },
+          "state": {
+            "integer": "1949419003375820633"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "4420"
+          },
+          "state": {
+            "integer": "8313555227222613638"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "4418"
+          },
+          "state": {
+            "integer": "-4414717220470972372"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "4417"
+          },
+          "state": {
+            "integer": "7667890629391786239"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 22,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 5,
+        "alpha": 7,
+        "beta": 3
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 94000,
+      "min_transaction_cash_cents": 94000,
+      "final_cash_cents": 144000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 16,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 5.8,
+      "cores": [
+        41,
+        32,
+        21,
+        37
+      ],
+      "scope": 31,
+      "required_scope": 30,
+      "bugs": 5,
+      "archive_ids": [
+        "wayfinder-history-1976",
+        "wayfinder-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-adventure-baseline-90210",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 22,
+      "accepted_commands": 22,
+      "initial_state": "d1a6ac97babc9086a1278a2a9f165df586af885ffff2f0969366a913237a8503",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "90214"
+          },
+          "state": {
+            "integer": "7838906209963402624"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "90215"
+          },
+          "state": {
+            "integer": "-4243701639899355987"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "90216"
+          },
+          "state": {
+            "integer": "2120434583947437018"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "90217"
+          },
+          "state": {
+            "integer": "8484570807794230023"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "90218"
+          },
+          "state": {
+            "integer": "-3598037042068528588"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "90212"
+          },
+          "state": {
+            "integer": "-4889366237730183386"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "90213"
+          },
+          "state": {
+            "integer": "1474769986116609619"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "90211"
+          },
+          "state": {
+            "integer": "7193241612132575225"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "90210"
+          },
+          "state": {
+            "integer": "829105388285782220"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 22,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 3,
+        "alpha": 5,
+        "beta": 2
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 256000,
+      "min_transaction_cash_cents": 256000,
+      "final_cash_cents": 306000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 11,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 4.8,
+      "cores": [
+        23,
+        28,
+        19,
+        29
+      ],
+      "scope": 28,
+      "required_scope": 30,
+      "bugs": 3,
+      "archive_ids": [
+        "wayfinder-history-1976",
+        "wayfinder-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-adventure-medium-90210",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 24,
+      "accepted_commands": 24,
+      "initial_state": "d1a6ac97babc9086a1278a2a9f165df586af885ffff2f0969366a913237a8503",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "90214"
+          },
+          "state": {
+            "integer": "7838906209963402624"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "90215"
+          },
+          "state": {
+            "integer": "-4243701639899355987"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "90216"
+          },
+          "state": {
+            "integer": "2120434583947437018"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "90217"
+          },
+          "state": {
+            "integer": "8484570807794230023"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "90218"
+          },
+          "state": {
+            "integer": "-3598037042068528588"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "90212"
+          },
+          "state": {
+            "integer": "-4889366237730183386"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "90213"
+          },
+          "state": {
+            "integer": "1474769986116609619"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "90211"
+          },
+          "state": {
+            "integer": "7193241612132575225"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "90210"
+          },
+          "state": {
+            "integer": "829105388285782220"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 22,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 4,
+        "alpha": 6,
+        "beta": 2
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 202000,
+      "min_transaction_cash_cents": 202000,
+      "final_cash_cents": 252000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 13,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 5.7,
+      "cores": [
+        25,
+        34,
+        21,
+        35
+      ],
+      "scope": 29,
+      "required_scope": 30,
+      "bugs": 3,
+      "archive_ids": [
+        "wayfinder-history-1976",
+        "wayfinder-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    },
+    {
+      "case_id": "cohort-adventure-long-90210",
+      "ok": true,
+      "status": "completed",
+      "error": "",
+      "commands": 26,
+      "accepted_commands": 26,
+      "initial_state": "d1a6ac97babc9086a1278a2a9f165df586af885ffff2f0969366a913237a8503",
+      "initial_rng": {
+        "alpha_deal": {
+          "seed": {
+            "integer": "90214"
+          },
+          "state": {
+            "integer": "7838906209963402624"
+          }
+        },
+        "alpha_finalize": {
+          "seed": {
+            "integer": "90215"
+          },
+          "state": {
+            "integer": "-4243701639899355987"
+          }
+        },
+        "beta_deal": {
+          "seed": {
+            "integer": "90216"
+          },
+          "state": {
+            "integer": "2120434583947437018"
+          }
+        },
+        "beta_insight": {
+          "seed": {
+            "integer": "90217"
+          },
+          "state": {
+            "integer": "8484570807794230023"
+          }
+        },
+        "contract_deal": {
+          "seed": {
+            "integer": "90218"
+          },
+          "state": {
+            "integer": "-3598037042068528588"
+          }
+        },
+        "design_deal": {
+          "seed": {
+            "integer": "90212"
+          },
+          "state": {
+            "integer": "-4889366237730183386"
+          }
+        },
+        "design_finalize": {
+          "seed": {
+            "integer": "90213"
+          },
+          "state": {
+            "integer": "1474769986116609619"
+          }
+        },
+        "review": {
+          "seed": {
+            "integer": "90211"
+          },
+          "state": {
+            "integer": "7193241612132575225"
+          }
+        },
+        "snapshot": {
+          "seed": {
+            "integer": "90210"
+          },
+          "state": {
+            "integer": "829105388285782220"
+          }
+        }
+      },
+      "initial_cash_cents": 585000,
+      "initial_fans": 20,
+      "initial_owned": 22,
+      "initial_queue_empty": true,
+      "initial_live_count": 0,
+      "accepted_play_hands": {
+        "design": 5,
+        "alpha": 7,
+        "beta": 3
+      },
+      "phase_exits": {
+        "design": 1,
+        "alpha": 1,
+        "beta": 1
+      },
+      "rejected_steps": [],
+      "min_sample_cash_cents": 148000,
+      "min_transaction_cash_cents": 148000,
+      "final_cash_cents": 148000,
+      "final_overdue_cents": 0,
+      "final_fans": 20,
+      "release_cycle": 16,
+      "final_phase": "studio",
+      "live_count": 1,
+      "review": 6.3,
+      "cores": [
+        27,
+        34,
+        33,
+        37
+      ],
+      "scope": 30,
+      "required_scope": 30,
+      "bugs": 3,
+      "archive_ids": [
+        "wayfinder-history-1976",
+        "wayfinder-history-1979"
+      ],
+      "archive_separate": true,
+      "opening_snapshot_unchanged": true
+    }
+  ],
+  "scope": "Independent first-release campaigns; no approval of hand counts or shared AI world"
+}

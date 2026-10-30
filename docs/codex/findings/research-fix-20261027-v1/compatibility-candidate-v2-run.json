@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_research_compatibility_candidate.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 2.468,
+  "errors": [
+    "ERROR: FAIL: Every persisted player field and RNG is byte-exact",
+    "ERROR: FAIL: Every persisted world/rival/history/ownership/RNG field is byte-exact"
+  ],
+  "tail": [
+    "       [0] expect (res://scripts/debug/verify_research_compatibility_candidate.gd:8)",
+    "       [1] _initialize (res://scripts/debug/verify_research_compatibility_candidate.gd:25)",
+    "ERROR: FAIL: Every persisted world/rival/history/ownership/RNG field is byte-exact",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (res://scripts/debug/verify_research_compatibility_candidate.gd:8)",
+    "       [1] _initialize (res://scripts/debug/verify_research_compatibility_candidate.gd:28)",
+    "{\"candidate_only\":true,\"checks\":10,\"failures\":2,\"ok\":false,\"prior\":\"25dc0a8892df95b95b93690b5224d12e4242a97426ad5d4dbf4c98d42696af59\"}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -1,0 +1,11 @@
+# Research queue confirmation —2026-10-29
+
+User request: make Queue Feature research? match the existing menu design. Branch main, HEAD f3e0f2b5d35270c879327bc297b389748571feb4. Inherited dirty work and .codex-godot-temp preserved; no commit/push/export.
+
+Production changes: feature_store.gd instantiates the existing quit_confirmation.gd component, explicitly retains OK/Cancel, and fixes its680×480 surface with wrap_controls=false. Existing title, quoted deposit/installment cents, irreversible/no-cancellation warning, ownership timing, upgrade/frozen-project explanation and future-draw warning remain verbatim. Original admission and refresh callbacks, zero-cycle deposit and Cancel focus remain. rival_world_checkpoint.gd recognizes only exact previous source56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d with the current content revision; ordinary validation and unknown/mixed-pair rejection remain.
+
+Final script/data runtime962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd. [Exact manifests, owned byte diffs, commands, receipts and limits](../findings/research-confirmation-20261029-v1/verification.json).
+
+Baseline104 assertions/24 expected style failures retained. Initial themed152/12 failed because a dynamically created Window retained a transient autowrap minimum and expanded beyond the viewport; native capture confirmed buttons below screen. Reused the existing main-menu fixed-layout handling rather than changing the shared component. Final152/0 headless and152/0 native cover standard and upgrade confirmations at1152×648 and1280×720: exact copy, body/action bounds, animated entrance, dismissals preserving cash/history/queue/ownership/RNG, exact once-only deposit with zero cycles, no early ownership and productive Research completion. Two representative final captures inspected, four retained.
+
+Final maintained Research UI and integration pass; Scope confirmation74/0 regression passes. Exact preceding player/rival world restores every persisted field, with9 checks including unknown source, older player/rival rules and wrong pre-Gameplay catalog rejection. CRLF-aware owned diff check passes. Debug verifier added/updated only for these cases. Existing ObjectDB fixture warnings retained. No latency test or no-lag claim; known late Research performance stays FAIL/OPEN. Existing EXE/ZIP unchanged.

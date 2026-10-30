@@ -1,0 +1,11 @@
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -5,7 +5,7 @@
+ 
+ const Session := preload("res://scripts/simulation/campaign_session.gd")
+ ## Studio header observer only; exact previous editor source with current content.
+-const STUDIO_GLOW_PREDECESSORS := ["962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd"]
++const STUDIO_GLOW_PREDECESSORS := ["962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd", "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17"]
+ ## Research admission dialog presentation only; exact preceding current-content world.
+ const RESEARCH_CONFIRMATION_PREDECESSORS := ["56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d"]
+ ## Central roots/local-arrow presentation only; current rules and state stay exact.

@@ -1,0 +1,39 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_ui.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 4,
+  "elapsed_seconds": 32.281,
+  "errors": [
+    "FAIL: Pass choice fits viewport",
+    "FAIL: Pass choice fits viewport",
+    "FAIL: Pass choice fits viewport",
+    "FAIL: Pass choice fits viewport"
+  ],
+  "tail": [
+    "       [4] refresh (res://scripts/ui/phase_workspace.gd:220)",
+    "       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:770)",
+    "       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:557)",
+    "       [7] _on_card_pressed (res://scripts/phases/alpha_phase.gd:549)",
+    "       [8] phase_ui (res://scripts/debug/verify_employee_course_ui.gd:114)",
+    "       [9] motion_idle (res://scripts/debug/verify_employee_course_ui.gd:28)",
+    "PASS: Live injected Alpha Pass remains protected",
+    "CAREER_UI checks=66 failures=4",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "5912b41cbd44c7cbcdc268f7d366ce6f366a54b851936dd00535b4a75db57e7b",
+  "runtime_source_unchanged": true
+}

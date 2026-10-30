@@ -50,6 +50,10 @@ func verify() -> void:
 		now += 0.05
 		motion.advance_music(now)
 	expect(calls[0] == 1 and state._cycle == 1, "Music-grid playback does not replay the action")
+	expect(motion.display_values[&"discovered"] == 0 and motion.display_values[&"fixed"] == 0 and motion.display_values[&"marketing"] == 0,"Floating values hold the HUD before the music-grid deposit")
+	while not motion.trace.any(func(row):return row.event=="hud_deposit") and now<6.0:
+		now+=0.05
+		motion.advance_music(now)
 	expect(motion.display_values[&"discovered"] == 2 and motion.display_values[&"fixed"] == 1 and motion.display_values[&"marketing"] == 1, "Displayed totals match the single committed result")
 	expect(motion.trace.filter(func(row): return row.event == "score").size() == 4, "Every selected instance scores once")
 	expect(fan.card_views() == original, "Playback does not remap candidate slots")
@@ -62,5 +66,8 @@ func verify() -> void:
 	motion.free()
 	fan.free()
 	await process_frame
+	await process_frame
+	# Allow the audio mixer to release stopped SFX after the freed presenter.
+	await create_timer(0.10).timeout
 	print("Search-first verification: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

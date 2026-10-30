@@ -1,0 +1,11 @@
+--- before/scripts/ui/feature_store_map.gd
++++ after/scripts/ui/feature_store_map.gd
+@@ -517,6 +517,8 @@
+ 	var catalog_entry: Dictionary = store._run._feature_offers.get(card.id,{})
+ 	var play_cost := CashFormatter.format_exact_cents(int(catalog_entry.play_cost_cents)) if catalog_entry.has("play_cost_cents") else "TBD" if not catalog_entry.is_empty() else CashFormatter.format_exact_cents(store._run.primitive_feature_hand_cost_cents(single))
+ 	store._details.text += "\nPlay cost: " + play_cost
++	if catalog_entry.has("replaces_id"):
++		store._details.text += "\nReplaces 8-Bit Sound in future project draws."
+ 	var offer := store._run.get_feature_store_offer(store._selected)
+ 	var parent_text := _parent_details(offer)
+ 	var reserve := store._run.get_primitive_reserve_offer(store._selected)

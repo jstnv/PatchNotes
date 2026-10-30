@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_first_game_and_tips.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 9.5,
+  "errors": [
+    "ERROR: FAIL: Expected twelve-Scope starter opens project setup directly without mutating the run"
+  ],
+  "tail": [
+    "PASS: First Studio leaves production available without unsolicited Store advice",
+    "PASS: Starter purchases remain open until the first project begins",
+    "ERROR: FAIL: Expected twelve-Scope starter opens project setup directly without mutating the run",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (res://scripts/debug/verify_first_game_and_tips.gd:12)",
+    "       [1] _run (res://scripts/debug/verify_first_game_and_tips.gd:54)",
+    "       [2] finish_new_save (res://scripts/debug/ui_test_actions.gd:11)",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_scope_confirmation_theme.gd"
+  ],
+  "exit": 12,
+  "elapsed_seconds": 7.36,
+  "errors": [
+    "ERROR: FAIL: Shared folder confirmation is installed",
+    "ERROR: FAIL: Shared transparent chamfered surface",
+    "ERROR: FAIL: Shared folder confirmation is installed",
+    "ERROR: FAIL: Shared transparent chamfered surface",
+    "ERROR: FAIL: Shared folder confirmation is installed",
+    "ERROR: FAIL: Shared transparent chamfered surface",
+    "ERROR: FAIL: Shared folder confirmation is installed",
+    "ERROR: FAIL: Shared transparent chamfered surface",
+    "ERROR: FAIL: Shared folder confirmation is installed",
+    "ERROR: FAIL: Shared transparent chamfered surface",
+    "ERROR: FAIL: Shared folder confirmation is installed",
+    "ERROR: FAIL: Shared transparent chamfered surface"
+  ],
+  "tail": [
+    "PASS: Cancel/Escape/close dismisses and clears pending warning",
+    "PASS: Dismissal preserves all project/hand/RNG fields",
+    "PASS: Warning reopens after dismissal",
+    "Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 4; implemented 0; unimplemented 14",
+    "PASS: Confirm commits Alpha transition exactly once",
+    "PASS: Confirmation preserves actual incomplete Scope",
+    "PASS: Stale confirmation cannot repeat transition",
+    "SCOPE_CONFIRMATION {\"checks\":50,\"failures\":12,\"runtime_source\":\"56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d\",\"scene_sha256\":\"f53c2377be25a32b1ff994202e5be5e6322546f268efb22f85a35569cab77b3c\"}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d",
+  "runtime_source_unchanged": true
+}

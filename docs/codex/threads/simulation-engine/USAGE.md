@@ -31,6 +31,8 @@ Copy either [finite-fixture.json](examples/finite-fixture.json) or [custom-polic
 
 Policies implement `static func factory(config: Dictionary) -> Callable`. The returned callable receives a detached `CampaignSession.observation()` and returns `{ "type": <command>, "payload": <dictionary> }` (payload can be omitted). Commands remain subject to the existing legality, counter, affordability and RNG rules. A rejected or malformed decision fails that case and is retained; the runner does not silently retry, change the seed, increase budgets or edit rules.
 
+**In-process rival-world observation optimization,2026-10-27:** ordinary Callables retain that full observation. A policy object extending `scripts/simulation/decision_policy.gd` may explicitly override `observation(session)` for `RivalWorld` scheduling; this is not a change to the batch factory contract or legal commands. The stock trial uses a narrow hand/identity/release view and requests exit legality lazily from the same action authority. Its returned method Callable binds the policy owner to retain its `RefCounted` lifetime.75 paired checks over24 Design/Alpha/Beta/Studio boundaries preserve decisions, events, world/finance/releases and RNG. [Research repair evidence and performance limits](../../findings/research-fix-20261027-v1/README.md). Candidate policy/balance approval remains separate.
+
 `policy.script` can be an existing `res://...gd` path or a filesystem `.gd` path relative to the input JSON. An external policy is copied into the frozen project's debug folder. Only that single file is copied: dependencies must already exist at `res://` paths in the frozen project. Use one self-contained script or existing project dependencies; external adjacent files and relative filesystem imports are unsupported. [custom-policy.gd](examples/custom-policy.gd) shows the contract.
 
 Policies are **trusted local executable code**, not sandboxed plug-ins. They must not load the live workspace, player saves, use network services, mutate rules, or inspect hidden future state. The runner isolates ordinary project and `user://` paths; it cannot restrict malicious GDScript or prove that an arbitrary policy uses only its observation.
@@ -112,6 +114,14 @@ To check a gameplay change, regenerate the declared prefix and pair against curr
 2. Run into a fresh folder owned by the requesting thread. Keep failures and out-of-budget routes.
 3. Inspect status/outcomes and replay a retained representative case. Never use a failed/incomplete run as a successful comparison.
 4. Write a dated finding with source identities, exact commands, accepted scope and remaining limits. Findings do not approve new numerical values or gameplay changes.
+
+## Employee courses and earned planning ranges (2026-10-29)
+
+The public Studio observation exposes `employee_activation_available` after two releases. Send the zero-cost `activate_employees` command before requesting current `hire_quotes` / `course_quotes`; historical low-level roster profiles remain compatibility inputs, not an alternative public hiring route. Submit the exact observed quote to `hire` or `course`. Production courses are `production_planning`, then `pass_alignment`; Project Manager courses are `manager_1` through `manager_4`. Buying enrollment grants no immediate benefit. Only committed hands/releases earn progress and prospective pay.
+
+Development observations include `priority_bounds` (`minimum`, `maximum`, `step`) for the current earned Manager level. Use those bounds and an exact100 total instead of hardcoding old10–75 assumptions. `pass_alignment_options` offers exact, source-token-bound quotes after both Production courses are earned. The Development command `align_pass` takes `{"quote": offer.quote}`; it costs one ordinary redraw, replaces one existing Pass with an existing value2 matching Pass, and consumes no gameplay RNG. Stale or protected choices reject. Ordinary `redraw` remains available. Player and headless commands use the same owner; player Continue remains Studio-only.
+
+F8 Developer Tools are an explicitly unsaved player sandbox. Their debug cash/ownership grants are not ordinary simulation commands, save inputs or balance evidence. See [the sandbox boundary](../../design/debug-mode.md).
 
 ## Candidate versions and simultaneous runs
 

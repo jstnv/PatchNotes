@@ -1,0 +1,37 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_developer_tools_ui.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 125,
+  "elapsed_seconds": 4.562,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"supply\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"cycle\" variable because the value doesn't have a set type.",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_developer_tools_ui.gd\" with error \"Parse error\"."
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "OpenGL API 3.3.0 NVIDIA 546.18 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU",
+    "",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"supply\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (res://scripts/debug/verify_developer_tools_ui.gd:49)",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"cycle\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (res://scripts/debug/verify_developer_tools_ui.gd:55)",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_developer_tools_ui.gd\" with error \"Parse error\".",
+    "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)"
+  ],
+  "runtime_identity": "a3e14823c57ecde8bd46429aa0472a590dc3c69480a563fafce9a4830e94085b",
+  "runtime_source_unchanged": true
+}

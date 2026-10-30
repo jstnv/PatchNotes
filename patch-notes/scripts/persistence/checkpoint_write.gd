@@ -18,7 +18,10 @@ func start() -> Error:
 	_validator=Validator.new()
 	_validator.rival_catalog=catalog
 	store.validator=_validator._validate_payload
-	return thread.start(_write)
+	# Full history validation can be CPU-heavy. It must yield scheduling priority
+	# to input/rendering and the synchronous authoritative action, while explicit
+	# departure/Quit still waits for the same complete durable result.
+	return thread.start(_write,Thread.PRIORITY_LOW)
 
 func _write() -> Dictionary:
 	var adapter:=StudioCheckpoint.new()

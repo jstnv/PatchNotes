@@ -1,0 +1,5 @@
+Retained auxiliary audit failure, 2026-10-23:
+Command: python docs/codex/threads/contracts/studies/publisher-p1-20261023-v1/audit.py v1
+Exit 1. KeyError: 'steps' at audit.py line34.
+Cause: replay.tape.json stores an object-disabled Godot Variant in a JSON envelope, not a plain steps array. No audit report was emitted; the aborted invocation is not passing evidence.
+Correction: runtime_audit.gd decodes the retained trusted local artifacts with bytes_to_var (Objects disabled), verifies complete per-command outputs/RNG and final runtime fields. audit_final.py handles ordinary JSON/native DTO state and references that explicit decoded audit. No source identities or tape contents were rewritten.

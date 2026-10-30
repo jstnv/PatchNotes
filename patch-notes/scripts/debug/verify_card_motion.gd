@@ -130,10 +130,10 @@ func _production(width: int) -> void:
 	expect(order == expected, "Cards bounce left to right only after the previous card lands, independent of click order")
 	var beats: Array = motion.trace.filter(func(e): return e.event == "rise")
 	for i in range(1, beats.size()):
-		expect(absf((beats[i].msec-beats[i-1].msec)/1000.0-HandPresentation.BEAT_SECONDS)<0.10,"Left-to-right bounces maintain140 BPM")
+		expect(absf((beats[i].music_seconds-beats[i-1].music_seconds)-HandPresentation.BEAT_SECONDS)<0.10,"Left-to-right bounces maintain140 BPM")
 	var timed_bonuses: Array = motion.trace.filter(func(e): return e.event == "bonus_rise")
 	var ends: Array = motion.trace.filter(func(e): return e.event == "specialization_complete")
-	expect(timed_bonuses.size()==4 and ends.size()==1 and absf((ends[0].msec-timed_bonuses[0].msec)/1000.0-HandPresentation.SPECIALIZATION_SECONDS)<0.15,"Simultaneous multipliers finish the four-subdivision merge cycle")
+	expect(timed_bonuses.size()==4 and ends.size()==1 and absf((ends[0].music_seconds-timed_bonuses[0].music_seconds)-HandPresentation.SPECIALIZATION_SECONDS)<0.15,"Simultaneous multipliers finish the four-subdivision merge cycle")
 	var return_count := 0
 	for event in motion.trace:
 		if event.event == "return_from_bottom": return_count += 1
@@ -336,6 +336,8 @@ func _paid_hand() -> void:
 	game.run_state = RunState.new()
 	game.run_state.initialize_cash_cents(0)
 	expect(game.run_state.set_studio_name("Paid animation fixture", &"action") and game.run_state.add_cash_cents(450001) and game.run_state.finalize_starter_selection(), "Paid fixture uses the named-Studio economy and native Action ownership")
+	# Freeze the named Studio's current legal supply before dealing.
+	game.project_state = PrimitivePredevelopment.prepare_project("Paid hand", &"action", &"fantasy", game.run_state)
 	root.add_child(game)
 	await process_frame
 	var phase: DesignPhase = game.get("_active_phase")

@@ -1,0 +1,33 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_common_grid.gd"
+  ],
+  "exit": 3,
+  "elapsed_seconds": 2.016,
+  "errors": [
+    "FAIL: Side-category roots share a compact central corridor",
+    "FAIL: Only same-category parents have map arrows",
+    "FAIL: No cross-category connector is drawn"
+  ],
+  "tail": [
+    "PASS: Bounded route avoids every card/label/header levels->player_level_editor",
+    "PASS: Bounded route avoids every card/label/header exploration->ability_gated_exploration",
+    "PASS: Bounded route avoids every card/label/header power_ups->ability_gated_exploration",
+    "PASS: Bounded route avoids every card/label/header character_backstories->switchable_protagonists",
+    "PASS: Bounded route avoids every card/label/header controls->switchable_protagonists",
+    "PASS: Bounded route avoids every card/label/header character_development->character_skill_checks",
+    "PASS: Bounded route avoids every card/label/header exploration->character_skill_checks",
+    "PASS: Four category connectors avoid all cards, names and headers",
+    "PASS: Layout and routing consume no gameplay RNG",
+    "Store common grid: 70 checks, 3 failures"
+  ],
+  "runtime_identity": "0c86786e04d95976d42933e18e1b37580bca4dba88d27818d4560376394997f6",
+  "runtime_source_unchanged": true
+}

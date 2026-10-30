@@ -10,12 +10,13 @@ const Bills := preload("res://scripts/finance/outstanding_expenses.gd")
 const MAX_INT: int = 9223372036854775807
 const MONTHLY_RENT_CENTS := 50000
 ## Repeated read-only quotes/checkpoint checks share exact validated bytes.
-## Nine bounded entries cover a player and the checkpoint's maximum eight rivals.
+## Four sets cover live/prospective journals and the background writer's current
+## and previous generations for a player and the maximum eight rivals.
 ## Variant encoding preserves types: Dictionary equality alone would also match
 ## an invalid float for an integer, or String for StringName. Never trust a
 ## revision counter, mutable Dictionary reference, or a hash alone.
-const VALIDATED_JOURNAL_LIMIT := 9
-const VALIDATED_JOURNAL_BYTES := 4 * 1024 * 1024
+const VALIDATED_JOURNAL_LIMIT := 36
+const VALIDATED_JOURNAL_BYTES := 16 * 1024 * 1024
 static var _validated_journals: Array[PackedByteArray] = []
 static var _validated_journal_bytes := 0
 static var _validation_lock := Mutex.new()
@@ -52,7 +53,13 @@ static func plan(ledger: Dictionary, cycle: int, cash_before: int, direct_delta:
 		kind: StringName, sales_earned: int = 0, settled: int = 0, productive: bool = false,
 		source_id: StringName = &"") -> Dictionary:
 	if not _is_valid(ledger) or ledger.cash_cents != cash_before: return {}
-	return _apply(ledger, cycle, cash_before, direct_delta, kind, sales_earned, settled, productive, source_id)
+	var result := _apply(ledger, cycle, cash_before, direct_delta, kind, sales_earned, settled, productive, source_id)
+	# The full prefix has just validated and this is the same checked transition
+	# used by journal replay. Remember the exact detached result, so its next
+	# read need not replay that prefix again. A caller edit changes typed bytes
+	# and still takes the ordinary full-validation path.
+	if not result.is_empty(): _remember_valid_journal(var_to_bytes(result.ledger))
+	return result
 
 
 
@@ -148,14 +155,16 @@ static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, del
 		return not expected.is_empty() and operation==expected and delta==-10000 and kind==&"other_expense" and source_id==expected.employee_id
 	if operation.get("type") == &"payroll_schedule":
 		if operation.keys().size()!=7 or operation.get("rules_version")!=2 or typeof(operation.get("employee_id"))!=TYPE_STRING_NAME or typeof(operation.get("receipt_id"))!=TYPE_STRING_NAME or operation.receipt_id.is_empty(): return false
-		if operation.get("revision")!=ledger.actions.size() or typeof(operation.get("wage_cents"))!=TYPE_INT or operation.wage_cents not in [100000,110000,120000] or typeof(operation.get("effective_cycle"))!=TYPE_INT or operation.effective_cycle<=ledger.last_cycle or operation.effective_cycle%2!=0: return false
+		if operation.get("revision")!=ledger.actions.size() or typeof(operation.get("wage_cents"))!=TYPE_INT or operation.wage_cents not in [100000,110000,120000,130000,140000] or typeof(operation.get("effective_cycle"))!=TYPE_INT or operation.effective_cycle<=ledger.last_cycle or operation.effective_cycle%2!=0: return false
 		for action: Dictionary in ledger.actions:
 			if action.get("operation",{}).get("receipt_id",&"")==operation.receipt_id: return false
 		for e: Dictionary in ledger.employees:
 			if e.employee_id==operation.employee_id: return delta==0 and kind==&"calendar" and source_id==e.employee_id
 		return false
 	if operation.get("type") == &"course":
-		if operation.keys().size()!=7 or operation.get("rules_version")!=2 or operation.get("fee_cents")!=15000 or operation.get("revision")!=ledger.actions.size() or operation.get("course") not in [&"mixed",&"pure"]: return false
+		if operation.keys().size()!=7 or operation.get("rules_version") not in [2,3] or operation.get("fee_cents")!=15000 or operation.get("revision")!=ledger.actions.size(): return false
+		var allowed: Array= [&"mixed",&"pure"] if operation.rules_version==2 else preload("res://scripts/employees/employee_career_rules.gd").PRODUCTION+preload("res://scripts/employees/employee_career_rules.gd").MANAGER
+		if operation.get("course") not in allowed:return false
 		if typeof(operation.get("employee_id"))!=TYPE_STRING_NAME or operation.get("receipt_id")!=StringName("%s:course:%s"%[operation.employee_id,operation.course]): return false
 		for action: Dictionary in ledger.actions:
 			if action.get("operation",{}).get("receipt_id",&"")==operation.receipt_id: return false
@@ -555,6 +564,12 @@ static func _is_valid(ledger: Dictionary) -> bool:
 		return true
 	_validation_lock.unlock()
 	if not _validate_journal(ledger): return false
+	_remember_valid_journal(key)
+	return true
+
+
+static func _remember_valid_journal(key: PackedByteArray) -> void:
+	if key.size() > VALIDATED_JOURNAL_BYTES: return
 	_validation_lock.lock()
 	if not _validated_journals.has(key):
 		_validated_journals.append(key)
@@ -562,7 +577,6 @@ static func _is_valid(ledger: Dictionary) -> bool:
 	while _validated_journals.size() > VALIDATED_JOURNAL_LIMIT or _validated_journal_bytes > VALIDATED_JOURNAL_BYTES:
 		_validated_journal_bytes -= _validated_journals.pop_front().size()
 	_validation_lock.unlock()
-	return true
 
 static func _validate_journal(ledger: Dictionary) -> bool:
 	for key: String in ["schema_version", "initial_cash_cents", "last_cycle", "cash_cents", "unsettled_sales_net_cents"]:
@@ -666,10 +680,10 @@ static func payroll_wage(e: Dictionary, cycle: int) -> int:
 	return amount
 static func specialist_hire_quote(ledger: Dictionary, owner: StringName, role: StringName, validate: bool = true) -> Dictionary:
 	if validate and not _is_valid(ledger): return {}
-	if owner.is_empty() or role not in [&"production",&"qa"] or _unpaid_unchecked(ledger)!=0 or ledger.cash_cents<10000: return {}
+	if owner.is_empty() or role not in [&"production",&"qa",&"project_manager"] or _unpaid_unchecked(ledger)!=0 or ledger.cash_cents<10000: return {}
 	var id:=StringName("%s:%s:1"%[owner,role])
 	for e: Dictionary in ledger.employees:
-		if e.employee_id==id or (role==&"production" and not str(e.employee_id).contains(":qa:")): return {}
+		if e.employee_id==id: return {}
 	var cycle: int=ledger.last_cycle
 	if cycle>MAX_INT-3:return {}
 	return {"type":&"hire_v2","run_id":owner,"role":role,"employee_id":id,"revision":ledger.actions.size(),"fee_cents":10000,"wage_cents":100000,"hire_cycle":cycle,"first_due_cycle":cycle+2+cycle%2}

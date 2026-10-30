@@ -1,0 +1,55 @@
+--- before/scripts/ui/feature_store_map.gd
++++ after/scripts/ui/feature_store_map.gd
+@@ -559,7 +559,7 @@
+ 	guidance_scroll.hide()
+ 	# Long AND names and multi-Core rows must fit above the bottom HUD.
+ 	# Use available width before wrapping them into an over-tall detail panel.
+-	popup.custom_minimum_size.x=clampf(_map_rect().size.x*0.5,342.0,480.0)
++	popup.custom_minimum_size.x=342.0 if _missing_targets.size()==3 else clampf(_map_rect().size.x*0.5,342.0,480.0)
+ 	_queue_description_fit()
+ 	popup.show()
+ 	popup.reset_size()
+@@ -608,7 +608,7 @@
+ func _layout_parent_links() -> void:
+ 	var count := parent_links.get_child_count()
+ 	if count == 0: return
+-	var card_width: float = store._nodes[store._selected].get_global_rect().size.x
++	var card_width: float = FeatureStore.NODE_SIZE.x if count==3 else store._nodes[store._selected].get_global_rect().size.x
+ 	var room := _map_rect().size.x - popup.size.x - card_width - PARENT_GAP * 3.0 - MenuTransitions.ENTRANCE_DISTANCE
+ 	var width := floorf(clampf((room - PARENT_BUTTON_GAP * (count - 1)) / count, 96.0, 160.0))
+ 	var height := maxf(40.0, store._buy.size.y)
+@@ -747,6 +747,15 @@
+ 		store._buy.mouse_filter = Control.MOUSE_FILTER_STOP
+ 		store._buy.focus_mode = Control.FOCUS_ALL
+ 
++## Three-parent menus reserve width for the selected card as well as all links.
++## Link width uses the fixed card size so refitting zoom cannot widen them again.
++func _focus_zoom_for_view(view_size: Vector2) -> float:
++	var value := maxf(0.6,minf(1.25,(view_size.y-24.0)/(LABEL_OFFSET.y+LABEL_SIZE.y)))
++	if _parents_expanded and _missing_targets.size()==3:
++		var width := node_footprint(store._nodes[store._selected]).size.x
++		value=minf(value,maxf(0.25,(view_size.x-popup.size.x-_parent_width()-36.0)/width))
++	return value
++
+ func focus_selection(id: StringName) -> void:
+ 	_stop_focus_animation()
+ 	_view_revision += 1
+@@ -758,8 +767,7 @@
+ 	view_size.y -= _toolbar_height()
+ 	var old_zoom := zoom
+ 	var old_center := (Vector2(scroll.scroll_horizontal, scroll.scroll_vertical) + _camera_center() - tree.position) / zoom
+-	var final_zoom := minf(1.25, (view_size.y - 24.0) / (LABEL_OFFSET.y + LABEL_SIZE.y))
+-	final_zoom = maxf(0.6, final_zoom)
++	var final_zoom := _focus_zoom_for_view(view_size)
+ 	# Leave room on the right for the detail menu, including at outermost nodes.
+ 	_focus_padding = view_size / 2.0
+ 	var target: Vector2 = node_footprint(store._nodes[id]).get_center() + Vector2((popup.size.x + _parent_width() + 20.0) / (2.0 * final_zoom), 0.0)
+@@ -783,7 +791,7 @@
+ 		# Selecting a costly node can reveal the budget-warning row. Containers
+ 		# settle after focus starts; refit against that real viewport and allow
+ 		# the changed scroll ranges to settle before revealing details.
+-		final_zoom=maxf(0.6,minf(1.25,(settled_view.y-24.0)/(LABEL_OFFSET.y+LABEL_SIZE.y)))
++		final_zoom=_focus_zoom_for_view(settled_view)
+ 		_focus_padding=settled_view/2.0
+ 		target=node_footprint(store._nodes[id]).get_center()+Vector2((popup.size.x+_parent_width()+20.0)/(2.0*final_zoom),0)
+ 		_camera_frame(final_zoom,target)

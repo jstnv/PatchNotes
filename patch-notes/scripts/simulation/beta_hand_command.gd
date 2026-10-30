@@ -92,7 +92,7 @@ func _execute(request: Dictionary, insight_rolls: Array[int], replacement_catego
 	for amount: int in preflight.debug_requests:debug_total+=amount
 	var expected_discovered:=mini(_project_state.get_hidden_bugs(),search_total)
 	var expected_fixed:=mini(_project_state.get_known_bugs()+expected_discovered,debug_total)
-	var employee_plan:=_run_state.plan_qa_beta_hand(_project_state,selected,expected_discovered,expected_fixed)
+	var employee_plan:=_run_state.plan_qa_beta_hand(_project_state,selected,expected_discovered,expected_fixed,priorities)
 	if employee_plan.is_empty():
 		_deal_rng.state=deal_before;_insight_rng.state=insight_before
 		return reject("QA progress plan rejected")

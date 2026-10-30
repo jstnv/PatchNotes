@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_audio_branch.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 3.203,
+  "errors": [
+    "ERROR: FAIL: Upgrade details explain future-supply replacement"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "ERROR: FAIL: Upgrade details explain future-supply replacement",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (res://scripts/debug/verify_audio_branch.gd:8)",
+    "       [1] run (res://scripts/debug/verify_audio_branch.gd:55)",
+    "AUDIO_CHECKS 139 failures 1"
+  ],
+  "runtime_identity": "4321b73943e8d0c7cfd7503b6bf70a05eda516478826f9c508b2bd1a0b1e5c54",
+  "runtime_source_unchanged": true
+}

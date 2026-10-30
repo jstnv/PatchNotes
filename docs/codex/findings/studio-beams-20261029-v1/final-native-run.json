@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--audio-driver",
+    "WASAPI",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_studio_audio_glow.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 13.282,
+  "errors": [
+    "FAIL: Dim downward beam actually reaches pixels below the header"
+  ],
+  "tail": [
+    "PASS: Hidden HUD releases its analyzer and beam paint",
+    "PASS: HUD return reacquires one observer without altering other effects",
+    "PASS: Paused Studio keeps music and observer running",
+    "PASS: Studio Store browsing retains one header glow",
+    "PASS: Decoration and passive browsing preserve all run state/RNG",
+    "PASS: Legal project departure succeeds",
+    "PASS: Production releases Studio FFT work and beams",
+    "PASS: Observer preserves player identity and mix gain",
+    "PASS: Gameplay teardown leaves no owned analyzer",
+    "STUDIO_GLOW {\"checks\":43,\"failures\":1,\"peak\":0.609948694705963,\"runtime_source\":\"505047e957ceebc67551d784da363f25f0c6e094ec0c3d83a85dd35d5297f0c2\"}"
+  ],
+  "runtime_identity": "505047e957ceebc67551d784da363f25f0c6e094ec0c3d83a85dd35d5297f0c2",
+  "runtime_source_unchanged": true
+}

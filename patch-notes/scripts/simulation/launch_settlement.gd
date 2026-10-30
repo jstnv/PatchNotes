@@ -37,7 +37,7 @@ func plan() -> Dictionary:
 	if not frozen.ok: return {}
 	var registration := run_state.plan_release(draft)
 	if registration.is_empty(): return {}
-	return {"project_before":Fence.authority(project_state),"draft":draft,"registration":registration,"review_before":_review_rng.state,"review_after":probe._review_rng.state,"controlled_before":_controlled_review_roll,"controlled_after":probe._controlled_review_roll,"events":frozen.events}
+	return {"project_before":Fence.fingerprint(project_state),"draft":draft,"registration":registration,"review_before":_review_rng.state,"review_after":probe._review_rng.state,"controlled_before":_controlled_review_roll,"controlled_after":probe._controlled_review_roll,"events":frozen.events}
 
 func commit(prepared: Dictionary) -> Dictionary:
 	if _busy or prepared.is_empty(): return {"ok":false,"error":"Release preflight rejected","events":[]}
@@ -45,7 +45,7 @@ func commit(prepared: Dictionary) -> Dictionary:
 	# Revalidate after the only fallible external guard, including presentation
 	# mutations to the detached draft or to authoritative Project/Run state.
 	var allowed := run_state.can_mutate_checkpoint()
-	if not allowed or prepared.project_before != Fence.authority(project_state) or prepared.review_before != _review_rng.state or prepared.controlled_before != _controlled_review_roll or not run_state.can_commit_release_plan(prepared.draft,prepared.registration):
+	if not allowed or prepared.project_before != Fence.fingerprint(project_state) or prepared.review_before != _review_rng.state or prepared.controlled_before != _controlled_review_roll or not run_state.can_commit_release_plan(prepared.draft,prepared.registration):
 		_busy = false
 		return {"ok":false,"error":"Release changed during preparation","events":[]}
 	run_state.commit_release_fields(prepared.registration)

@@ -3,7 +3,7 @@ extends RefCounted
 
 ## Historical v1/v2, root-first v3;2026-10-27 twelve-Scope new starts (v4).
 ## Fixed Primitive membership: future cards and Store ancestors never auto-grant.
-const ROSTER_VERSION := 4
+const ROSTER_VERSION := 5
 const STARTING_SCOPE := 12
 const LEVELS_SWAP := [&"strategy", &"simulation", &"sports"]
 const COMMON_IDS: Array[StringName] = [&"text", &"4_color_palette", &"8_bit_sound", &"keyboard_and_mouse", &"controller", &"controls"]
@@ -43,6 +43,7 @@ const RULES := {
 }
 
 static func preview(specialty: StringName, roster_version: int = ROSTER_VERSION) -> Dictionary:
+	if roster_version == 5: return _audio_roster(specialty)
 	var genre := PrimitivePredevelopment.find_entry("genres", specialty)
 	if roster_version not in [1, 2, 3, 4] or not RULES.has(specialty) or genre.is_empty(): return {}
 	var rule: Dictionary = RULES[specialty]
@@ -91,3 +92,26 @@ static func preview(specialty: StringName, roster_version: int = ROSTER_VERSION)
 	elif roster_version < 3: note = "Starts with Levels instead of Maps. Maps is an optional Store purchase unlocked by Levels." if swap else ""
 	return {"id": specialty, "name": genre.name, "ids": ids, "names": names, "scope": scope, "count": ids.size(), "emphasis": rule.emphasis,
 		"roster_version":roster_version,"note":note}
+
+## v5 changes only new founding pools. Read the exact v4 membership first so
+## historical grants, previews and saved provenance retain their old meanings.
+static func _audio_roster(specialty: StringName) -> Dictionary:
+	var old := preview(specialty,4)
+	if old.is_empty(): return {}
+	var offsets := {&"action":&"exploration",&"adventure":&"character_backstories",&"role_playing":&"score_system",&"strategy":&"lives_system",&"simulation":&"lives_system",&"puzzle":&"score_system",&"sports":&"power_ups",&"racing":&"controller"}
+	var ids: Array[StringName] = []
+	for id: StringName in old.ids:
+		if id==offsets[specialty]: continue
+		ids.append(&"8_bit_sound" if id==&"sound_effects" else &"main_theme" if id==&"music" else id)
+	var definitions := {}
+	for entry: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries(): definitions[StringName(entry.id)]=entry
+	var names: Array[String] = []
+	var scope := 0
+	for id: StringName in ids:
+		if not definitions.has(id) or not FeatureStoreCatalog.is_active(id): return {}
+		names.append(str(definitions[id].name))
+		scope+=int(definitions[id].scope)
+	if scope!=STARTING_SCOPE: return {}
+	old.ids=ids;old.names=names;old.scope=scope;old.count=ids.size();old.roster_version=5
+	old.note="Starts with 12 printed Scope and connected parent paths. 8-Bit Sound anchors Audio."
+	return old

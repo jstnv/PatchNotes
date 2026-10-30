@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_prerequisite_links.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 26.796,
+  "errors": [],
+  "tail": [
+    "PASS: Actual pointer click outside the popup follows the right-side link",
+    "PASS: Inspecting prerequisites preserves complete Studio state/RNG",
+    "PASS: Second Missing click collapses links",
+    "PASS: Single missing prerequisite navigates directly without chooser",
+    "PASS: Direct prerequisite navigation preserves complete state/RNG",
+    "PASS: Direct target details remain inside the Store",
+    "PASS: Keyboard activation directly follows the single prerequisite",
+    "PASS: Keyboard navigation preserves state/RNG",
+    "PASS: Escape closes details and external links together",
+    "Store prerequisite links: 57 checks, 0 failures"
+  ]
+}

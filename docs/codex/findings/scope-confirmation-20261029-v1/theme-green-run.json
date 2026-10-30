@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_scope_confirmation_theme.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 5.641,
+  "errors": [],
+  "tail": [
+    "PASS: Cancel/Escape/close dismisses and clears pending warning",
+    "PASS: Dismissal preserves all project/hand/RNG fields",
+    "PASS: Warning reopens after dismissal",
+    "Alpha completed! Pressure 0.0000; stochastic result 0; variance +1; Alpha Hidden Bugs 1; total Hidden Bugs 5; implemented 0; unimplemented 14",
+    "PASS: Confirm commits Alpha transition exactly once",
+    "PASS: Confirmation preserves actual incomplete Scope",
+    "PASS: Stale confirmation cannot repeat transition",
+    "SCOPE_CONFIRMATION {\"checks\":74,\"failures\":0,\"runtime_source\":\"56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d\",\"scene_sha256\":\"0d3c87297f43af40a7fdb32c1fa5cdabcca4158f69b45a1d515fe22acbb68d41\"}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d",
+  "runtime_source_unchanged": true
+}

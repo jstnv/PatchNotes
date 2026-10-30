@@ -1,0 +1,749 @@
+{
+  "status": "formula_only_design_screen",
+  "created_utc": "2026-10-28T21:13:42.542707+00:00",
+  "source_identity": "a7ec583cd23d1b33cea1dbea747f5804bd583da79184a9de3eb9916e59c02afa",
+  "calculator_sha256": "e58090fbb1562a653a4883058b1577dc9c45f49e86a48f208208b8fce4ea9098",
+  "script_sha256": "34e5eb36f870bacd011514ae28e88d558ecf1436ba1543f7447dbd4c0162f7d8",
+  "base": [
+    40,
+    26,
+    40,
+    26
+  ],
+  "candidate_bounds": {
+    "lower": [
+      30,
+      20,
+      30,
+      20
+    ],
+    "upper": [
+      50,
+      32,
+      50,
+      32
+    ],
+    "fixed_total": 132
+  },
+  "tested_vectors": 2821,
+  "coverage_histogram": {
+    "0": 0,
+    "1": 1,
+    "2": 1694,
+    "3": 1126,
+    "4": 0,
+    "5": 0,
+    "6": 0
+  },
+  "best_diagnostic": {
+    "targets": [
+      40,
+      26,
+      43,
+      23
+    ],
+    "scores": [
+      6.2,
+      7.9,
+      7.9,
+      6.4,
+      5.7,
+      7.0
+    ],
+    "coverage": 3
+  },
+  "uniform_multipliers": {
+    "3/4": {
+      "targets": [
+        30,
+        20,
+        30,
+        20
+      ],
+      "scores": [
+        8.5,
+        9.4,
+        9.5,
+        8.2,
+        7.6,
+        8.8
+      ],
+      "coverage": 0
+    },
+    "17/20": {
+      "targets": [
+        34,
+        22,
+        34,
+        22
+      ],
+      "scores": [
+        7.6,
+        8.9,
+        9.0,
+        7.4,
+        6.9,
+        8.1
+      ],
+      "coverage": 1
+    },
+    "19/20": {
+      "targets": [
+        38,
+        25,
+        38,
+        25
+      ],
+      "scores": [
+        6.7,
+        8.3,
+        8.4,
+        6.6,
+        6.0,
+        7.5
+      ],
+      "coverage": 3
+    },
+    "1/1": {
+      "targets": [
+        40,
+        26,
+        40,
+        26
+      ],
+      "scores": [
+        6.3,
+        7.9,
+        8.0,
+        6.3,
+        5.7,
+        7.2
+      ],
+      "coverage": 2
+    },
+    "21/20": {
+      "targets": [
+        42,
+        27,
+        42,
+        27
+      ],
+      "scores": [
+        6.0,
+        7.6,
+        7.7,
+        6.0,
+        5.5,
+        6.9
+      ],
+      "coverage": 3
+    },
+    "23/20": {
+      "targets": [
+        46,
+        30,
+        46,
+        30
+      ],
+      "scores": [
+        5.4,
+        6.9,
+        7.0,
+        5.5,
+        4.9,
+        6.3
+      ],
+      "coverage": 3
+    }
+  },
+  "rows": [
+    {
+      "seed": "4417",
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\one-action-full_pool-4417-20261027-v9\\prelude.json",
+      "sha256": "78cd27f947e4cdc16ac4a015fc3fe007eadb517463d3d48223a7066c9f852c4f",
+      "first": {
+        "id": "prelude-action-4417:project:1",
+        "cycle": 17,
+        "core": [
+          35,
+          23,
+          32,
+          26
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": -0.5,
+        "review": 6.3,
+        "production": 6.833196106292225
+      },
+      "second": {
+        "id": "prelude-action-4417:project:2",
+        "cycle": 35,
+        "core": [
+          31,
+          27,
+          38,
+          28
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": -0.25,
+        "review": 7.0,
+        "production": 7.215356803119677
+      },
+      "third": {
+        "id": "prelude-action-4417:project:3",
+        "cycle": 53,
+        "core": [
+          26,
+          30,
+          42,
+          28
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": -0.5,
+        "review": 6.6,
+        "production": 7.078243947413673
+      },
+      "game3_begin_cycle": 35,
+      "first_standard_effective_cycle": 18,
+      "standard_vectors": {
+        "N": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "M": [
+          38,
+          25,
+          36,
+          26
+        ],
+        "P": [
+          39,
+          27,
+          36,
+          30
+        ]
+      },
+      "game3_static_reviews": {
+        "N": 6.6,
+        "M": 6.9,
+        "P": 6.5
+      }
+    },
+    {
+      "seed": "4423",
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\one-action-full_pool-4423-20261027-v9\\prelude.json",
+      "sha256": "be99ae3df24b931a49bc8c69e6ba28642e39f183579abce00445264e0006807b",
+      "first": {
+        "id": "prelude-action-4423:project:1",
+        "cycle": 20,
+        "core": [
+          33,
+          35,
+          42,
+          30
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": 0.0,
+        "review": 7.9,
+        "production": 7.925695963796058
+      },
+      "second": {
+        "id": "prelude-action-4423:project:2",
+        "cycle": 38,
+        "core": [
+          29,
+          25,
+          46,
+          29
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": -0.5,
+        "review": 6.7,
+        "production": 7.233502803688496
+      },
+      "third": {
+        "id": "prelude-action-4423:project:3",
+        "cycle": 53,
+        "core": [
+          24,
+          20,
+          32,
+          26
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 1,
+        "variance": 0.5,
+        "review": 6.1,
+        "production": 5.770271221150173
+      },
+      "game3_begin_cycle": 38,
+      "first_standard_effective_cycle": 22,
+      "standard_vectors": {
+        "N": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "M": [
+          37,
+          31,
+          41,
+          28
+        ],
+        "P": [
+          37,
+          39,
+          46,
+          34
+        ]
+      },
+      "game3_static_reviews": {
+        "N": 6.1,
+        "M": 5.9,
+        "P": 5.2
+      }
+    },
+    {
+      "seed": "5501",
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\one-action-full_pool-5501-20261028-v10\\prelude.json",
+      "sha256": "3bc4ce0a4de6a452856e5815f0dcc23b27f0f0031c873bfd2815d171f9f4c46f",
+      "first": {
+        "id": "prelude-action-5501:project:1",
+        "cycle": 18,
+        "core": [
+          34,
+          30,
+          44,
+          30
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 1,
+        "variance": 0.25,
+        "review": 8.0,
+        "production": 8.012449443635564
+      },
+      "second": {
+        "id": "prelude-action-5501:project:2",
+        "cycle": 35,
+        "core": [
+          31,
+          25,
+          30,
+          36
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 1,
+        "variance": 0.0,
+        "review": 6.5,
+        "production": 6.673698928937234
+      },
+      "third": {
+        "id": "prelude-action-5501:project:3",
+        "cycle": 54,
+        "core": [
+          35,
+          29,
+          42,
+          30
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": 0.0,
+        "review": 8.0,
+        "production": 7.9610233530278265
+      },
+      "game3_begin_cycle": 35,
+      "first_standard_effective_cycle": 20,
+      "standard_vectors": {
+        "N": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "M": [
+          37,
+          28,
+          42,
+          28
+        ],
+        "P": [
+          38,
+          34,
+          48,
+          34
+        ]
+      },
+      "game3_static_reviews": {
+        "N": 8.0,
+        "M": 7.9,
+        "P": 7.0
+      }
+    },
+    {
+      "seed": "5507",
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\one-action-full_pool-5507-20261028-v10\\prelude.json",
+      "sha256": "2a851b23dc0250b579388a5e20d21c4f652d4a4c19115dcb135d5add13db686a",
+      "first": {
+        "id": "prelude-action-5507:project:1",
+        "cycle": 16,
+        "core": [
+          25,
+          29,
+          34,
+          24
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": 0.0,
+        "review": 6.3,
+        "production": 6.324994731315875
+      },
+      "second": {
+        "id": "prelude-action-5507:project:2",
+        "cycle": 32,
+        "core": [
+          25,
+          25,
+          34,
+          24
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": 0.0,
+        "review": 6.2,
+        "production": 6.197700958773815
+      },
+      "third": {
+        "id": "prelude-action-5507:project:3",
+        "cycle": 51,
+        "core": [
+          35,
+          29,
+          40,
+          32
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 1,
+        "variance": -0.5,
+        "review": 7.1,
+        "production": 7.913286742173889
+      },
+      "game3_begin_cycle": 32,
+      "first_standard_effective_cycle": 18,
+      "standard_vectors": {
+        "N": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "M": [
+          33,
+          28,
+          37,
+          25
+        ],
+        "P": [
+          30,
+          33,
+          38,
+          28
+        ]
+      },
+      "game3_static_reviews": {
+        "N": 7.1,
+        "M": 7.7,
+        "P": 7.3
+      }
+    },
+    {
+      "seed": "5513",
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\one-action-full_pool-5513-20261028-v10\\prelude.json",
+      "sha256": "8a6362ab01f2fc12e16db9d0354919cb4cff47cde3372586b59cfa80c49176ea",
+      "first": {
+        "id": "prelude-action-5513:project:1",
+        "cycle": 16,
+        "core": [
+          24,
+          26,
+          34,
+          26
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": -0.5,
+        "review": 5.7,
+        "production": 6.2461651584689
+      },
+      "second": {
+        "id": "prelude-action-5513:project:2",
+        "cycle": 34,
+        "core": [
+          38,
+          30,
+          34,
+          28
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": 0.25,
+        "review": 7.8,
+        "production": 7.595280539671023
+      },
+      "third": {
+        "id": "prelude-action-5513:project:3",
+        "cycle": 50,
+        "core": [
+          30,
+          22,
+          30,
+          28
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": 0.5,
+        "review": 6.8,
+        "production": 6.311829077328854
+      },
+      "game3_begin_cycle": 34,
+      "first_standard_effective_cycle": 18,
+      "standard_vectors": {
+        "N": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "M": [
+          32,
+          26,
+          37,
+          26
+        ],
+        "P": [
+          30,
+          30,
+          38,
+          30
+        ]
+      },
+      "game3_static_reviews": {
+        "N": 6.8,
+        "M": 7.4,
+        "P": 7.0
+      }
+    },
+    {
+      "seed": "5519",
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\ai-competitors\\sims\\one-action-full_pool-5519-20261028-v10\\prelude.json",
+      "sha256": "802ead8439d1f4137f42adfa01e7fb7b7095e8b39a01aa45b256e35b55662d78",
+      "first": {
+        "id": "prelude-action-5519:project:1",
+        "cycle": 18,
+        "core": [
+          30,
+          30,
+          34,
+          32
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 1,
+        "variance": 0.25,
+        "review": 7.2,
+        "production": 7.164584498313061
+      },
+      "second": {
+        "id": "prelude-action-5519:project:2",
+        "cycle": 35,
+        "core": [
+          31,
+          25,
+          36,
+          24
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": -0.25,
+        "review": 6.6,
+        "production": 6.839682581346977
+      },
+      "third": {
+        "id": "prelude-action-5519:project:3",
+        "cycle": 51,
+        "core": [
+          27,
+          23,
+          30,
+          28
+        ],
+        "targets": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "scope": 36,
+        "required": 30,
+        "bugs": 0,
+        "variance": 0.0,
+        "review": 6.2,
+        "production": 6.162267609336965
+      },
+      "game3_begin_cycle": 35,
+      "first_standard_effective_cycle": 20,
+      "standard_vectors": {
+        "N": [
+          40,
+          26,
+          40,
+          26
+        ],
+        "M": [
+          35,
+          28,
+          37,
+          29
+        ],
+        "P": [
+          34,
+          34,
+          38,
+          36
+        ]
+      },
+      "game3_static_reviews": {
+        "N": 6.2,
+        "M": 6.4,
+        "P": 5.9
+      }
+    }
+  ]
+}

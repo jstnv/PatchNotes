@@ -22,7 +22,9 @@ func _initial_priorities(route_index: int,project_index: int,phase_index: int) -
 	clear_signals()
 	var distribution: Dictionary
 	if phase_index == 2:
-		distribution = {&"qa":50,&"marketing":30,&"insider":20} if (route_index+project_index)%2 == 0 else {&"qa":20,&"marketing":50,&"insider":30}
+		# Current untrained held-Insider bounds are40–60; saved historical plans
+		# retain separate read/negative controls in the Manager bounds verifier.
+		distribution = {&"qa":60,&"marketing":40,&"insider":0} if (route_index+project_index)%2 == 0 else {&"qa":40,&"marketing":60,&"insider":0}
 	else:
 		distribution = {0:20,1:20,2:20,3:20}
 		distribution[(route_index+project_index+phase_index)%4] = 40

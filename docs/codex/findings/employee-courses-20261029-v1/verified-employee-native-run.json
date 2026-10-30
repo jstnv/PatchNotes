@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_ui.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 26.797,
+  "errors": [],
+  "tail": [
+    "       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:637)",
+    "       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:812)",
+    "       [4] refresh (res://scripts/ui/phase_workspace.gd:220)",
+    "       [5] refresh_workspace (res://scripts/phases/alpha_phase.gd:770)",
+    "       [6] _update_play_action (res://scripts/phases/alpha_phase.gd:557)",
+    "       [7] _on_card_pressed (res://scripts/phases/alpha_phase.gd:549)",
+    "       [8] phase_ui (res://scripts/debug/verify_employee_course_ui.gd:114)",
+    "       [9] motion_idle (res://scripts/debug/verify_employee_course_ui.gd:28)",
+    "PASS: Live injected Alpha Pass remains protected",
+    "CAREER_UI checks=66 failures=0"
+  ],
+  "runtime_identity": "bf3dffde495d7149a9556091c4434c06af9db8b7c16ac27b6415378c0590b4f3",
+  "runtime_source_unchanged": true
+}

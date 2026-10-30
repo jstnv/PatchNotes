@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_world_restore_file.gd",
+    "--",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/tech-row-20261028-v1/final-cold.json",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/gameplay-adoption-20261028-v1/final-cold.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 3.344,
+  "errors": [],
+  "tail": [
+    "PASS: Player schema restores exact finance, traits and RNG",
+    "PASS: World restores from unmodified file ",
+    "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+    "PASS: Every persisted player field survives",
+    "PASS: Unverified source still rejects",
+    "PASS: Presentation predecessor cannot pair with older Studio rules",
+    "PASS: Presentation predecessor cannot pair with older rival rules",
+    "Fresh world restore: 0 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d",
+  "runtime_source_unchanged": true
+}

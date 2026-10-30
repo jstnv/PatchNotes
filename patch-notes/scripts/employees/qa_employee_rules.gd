@@ -14,8 +14,8 @@ static func available(state: Dictionary, project: StringName) -> bool:
 			var p: Dictionary = e.projects.get(project,{})
 			if not p.get("armed_action",&"").is_empty() and p.get("used_action",&"").is_empty(): return true
 	return false
-static func apply(state: Dictionary, event: Dictionary) -> Dictionary:
-	var next := state.duplicate(true)
+static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) -> Dictionary:
+	var next := state.duplicate(true) if copy_source else state
 	var kind: StringName = event.get("type",&"")
 	if typeof(event.get("cycle"))!=TYPE_INT:return {}
 	for prior: Dictionary in state.events:

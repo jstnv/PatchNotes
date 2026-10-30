@@ -31,6 +31,7 @@ func publish_initial(plan: Dictionary) -> void:
 	hand.candidate_ids.clear()
 	for card: CardData in plan.cards:
 		hand.candidate_ids.append(hand.next_candidate_id)
+		if phase==&"alpha" and hand.candidate_ids.size()<=int(plan.get("injected_count",0)):hand.injected_candidate_ids.append(hand.next_candidate_id)
 		hand.next_candidate_id+=1
 	if phase==&"design":
 		for card: CardData in plan.selected_features: hand._available_features.erase(card)
@@ -58,8 +59,55 @@ func valid_redraw(slots: Array[int], rolls: Array[float]) -> bool:
 		seen.append(slot)
 		if phase==&"beta":
 			if hand.candidate_ids[slot] in hand.injected_candidate_ids: return false
+		elif phase==&"alpha" and hand.candidate_ids[slot] in hand.injected_candidate_ids:return false
 		elif hand._candidate_cards[slot].card_type not in [&"feature",&"pass"]: return false
 	return true
+
+func alignment_options(slots: Array[int]) -> Array:
+	var result: Array=[]
+	if slots.size()!=1 or phase not in [&"design",&"alpha"] or not hand.active or hand._run_state==null or not hand._run_state.can_consume_redraw(1) or not EmployeeRoster.Career.alignment_available(hand._run_state.get_employees()) or not valid_pool():return result
+	var slot:=slots[0]
+	if slot<0 or slot>=hand._candidate_cards.size() or hand.candidate_ids.size()!=hand._candidate_cards.size():return result
+	if phase==&"alpha" and hand.candidate_ids[slot] in hand.injected_candidate_ids:return result
+	var old: CardData=hand._candidate_cards[slot]
+	if old.card_type!=&"pass" or not hand._pass_definitions.has(old):return result
+	for target: CardData in hand._pass_definitions:
+		if target.id==old.id or target.primary_value!=2 or not target.renewable:continue
+		for index in hand._candidate_cards.size():
+			var feature: CardData=hand._candidate_cards[index]
+			if feature.card_type!=&"feature" or target.primary_stat not in [feature.primary_stat,feature.secondary_stat]:continue
+			var quote:=alignment_quote(hand.candidate_ids[slot],target.id,hand.candidate_ids[index])
+			if not quote.is_empty():result.append({"quote":quote,"target_id":target.id,"target_name":target.card_name,"feature_name":feature.card_name,"primary":target.primary_stat,"value":target.primary_value})
+			break
+	return result
+
+func alignment_quote(source_token: int,target_id: StringName,feature_token: int) -> Dictionary:
+	if phase not in [&"design",&"alpha"] or not hand.active or hand._run_state==null or hand.candidate_ids.size()!=7 or not valid_pool() or not hand._run_state.can_consume_redraw(1) or not EmployeeRoster.Career.alignment_available(hand._run_state.get_employees()):return {}
+	if source_token not in hand.candidate_ids or feature_token not in hand.candidate_ids or hand.revision>=ProjectState.MAX_SIGNED_INT or hand.next_candidate_id>=ProjectState.MAX_SIGNED_INT:return {}
+	if phase==&"alpha" and source_token in hand.injected_candidate_ids:return {}
+	if (phase==&"design" and (hand.finalization_requested or hand._project_state.has_design_bug_finalization())) or (phase==&"alpha" and hand._project_state.has_alpha_finalization()):return {}
+	var old: CardData=hand._candidate_cards[hand.candidate_ids.find(source_token)]
+	var feature: CardData=hand._candidate_cards[hand.candidate_ids.find(feature_token)]
+	var target: CardData=catalog.get_card(target_id) if catalog!=null else null
+	if old.card_type!=&"pass" or not hand._pass_definitions.has(old) or target==null or not hand._pass_definitions.has(target) or target.id==old.id or target.primary_value!=2 or not target.renewable or feature.card_type!=&"feature" or target.primary_stat not in [feature.primary_stat,feature.secondary_stat]:return {}
+	return {"source_token":source_token,"target_id":target_id,"feature_token":feature_token,"revision":hand.revision,"project_id":hand._project_state.get_release_id(),"project_cycle":hand._project_state.get_current_cycle(),"run_cycle":hand._run_state.get_completed_run_cycles(),"redraws":hand._run_state.get_available_redraws()}
+
+func replace_pass(quote: Dictionary,readiness: Callable=Callable(),publication: Callable=Callable()) -> Dictionary:
+	var rejected:={"ok":false,"events":[],"plan":{"cards":[],"failed_features":[]}}
+	if quote.size()!=8 or typeof(quote.get("source_token"))!=TYPE_INT or typeof(quote.get("feature_token"))!=TYPE_INT or (not quote.get("target_id") is StringName and not quote.get("target_id") is String):return rejected
+	var current:=alignment_quote(quote.source_token,StringName(quote.target_id),quote.feature_token)
+	if current.is_empty() or current!=quote or not hand._run_state.can_mutate_checkpoint():return rejected
+	var cards: Array[CardData]=[catalog.get_card(quote.target_id)]
+	if readiness.is_valid() and not readiness.call(cards):return rejected
+	if alignment_quote(quote.source_token,StringName(quote.target_id),quote.feature_token)!=quote:return rejected
+	var plan:={"valid":true,"cards":cards,"failed_features":[],"alignment":true}
+	var publish:=func() -> void:
+		var slot: int=hand.candidate_ids.find(quote.source_token)
+		hand._candidate_cards[slot]=cards[0]
+		hand.candidate_ids[slot]=hand.next_candidate_id;hand.next_candidate_id+=1;hand.revision+=1
+		if publication.is_valid():publication.call(plan)
+	if not hand._run_state.consume_redraw(1,publish):return rejected
+	return {"ok":true,"events":[{"type":"pass_alignment","source_token":quote.source_token,"target_id":quote.target_id}],"plan":plan}
 
 func redraw_plan(slots: Array[int], rolls: Array[float]) -> Dictionary:
 	if can_swap(slots):
@@ -85,37 +133,44 @@ func redraw_plan(slots: Array[int], rolls: Array[float]) -> Dictionary:
 
 func redraw(slots: Array[int], rolls: Array[float] = [], readiness: Callable = Callable(), publication: Callable = Callable()) -> Dictionary:
 	var before: int = hand._deal_rng.state
+	var revision: int=hand.revision
+	var tokens: Array=hand.candidate_ids.duplicate()
 	var plan:=redraw_plan(slots,rolls)
-	if not plan.valid or (readiness.is_valid() and not readiness.call(plan.cards)):
+	if not plan.valid or (readiness.is_valid() and not readiness.call(plan.cards)) or hand.revision!=revision or hand.candidate_ids!=tokens:
 		hand._deal_rng.state=before
 		return {"ok":false,"events":[],"plan":plan}
+	var run: RunState=hand._run_state
+	var roster: Dictionary={}
 	if plan.get("swap",false):
-		var run: RunState=hand._run_state
-		var roster:=EmployeeRoster.qa_swap(run.get_employees(),hand._project_state.get_release_id(),hand._project_state.get_current_cycle(),run.get_completed_run_cycles())
-		if roster.is_empty():return {"ok":false,"events":[],"plan":plan}
-		run._employees=roster
-	for index in range(slots.size()):
-		var slot:=slots[index]
-		var old: CardData = hand._candidate_cards[slot]
-		var replacement: CardData = plan.cards[index]
-		if phase==&"design":
-			if replacement.card_type==&"feature": hand._available_features.erase(replacement)
-			if old.card_type==&"feature" and not hand._exhausted_card_ids.has(old.id) and not hand._available_features.has(old): hand._available_features.append(old)
-		hand._candidate_cards[slot]=replacement
-		hand.candidate_ids[slot]=hand.next_candidate_id
-		hand.next_candidate_id+=1
-	if plan.get("guided_redraw",false): hand._get_first_game_tutorial().record_successful_redraw()
-	# The live adapter publishes the complete replacement pool before the one
-	# budget notification, matching the existing observable transaction boundary.
-	if publication.is_valid(): publication.call(plan)
-	if not plan.get("swap",false): hand._run_state.consume_redraw(slots.size())
-	else: hand._run_state.employees_changed.emit()
-	hand.revision+=1
+		roster=EmployeeRoster.qa_swap(run.get_employees(),hand._project_state.get_release_id(),hand._project_state.get_current_cycle(),run.get_completed_run_cycles())
+		if roster.is_empty() or not run.can_mutate_checkpoint():
+			hand._deal_rng.state=before
+			return {"ok":false,"events":[],"plan":plan}
+	var publish:=func() -> void:
+		if plan.get("swap",false):run._employees=roster
+		for index in range(slots.size()):
+			var slot:=slots[index]
+			var old: CardData = hand._candidate_cards[slot]
+			var replacement: CardData = plan.cards[index]
+			if phase==&"design":
+				if replacement.card_type==&"feature": hand._available_features.erase(replacement)
+				if old.card_type==&"feature" and not hand._exhausted_card_ids.has(old.id) and not hand._available_features.has(old): hand._available_features.append(old)
+			hand._candidate_cards[slot]=replacement
+			hand.candidate_ids[slot]=hand.next_candidate_id
+			hand.next_candidate_id+=1
+		if plan.get("guided_redraw",false): hand._get_first_game_tutorial().record_successful_redraw()
+		hand.revision+=1
+		if publication.is_valid(): publication.call(plan)
+	if plan.get("swap",false):
+		run._publishing_cycle=true;publish.call();run.employees_changed.emit();run._publishing_cycle=false
+	elif not run.consume_redraw(slots.size(),publish):
+		hand._deal_rng.state=before
+		return {"ok":false,"events":[],"plan":plan}
 	return {"ok":true,"events":[{"type":"qa_swap" if plan.get("swap",false) else "redraw","slots":slots.duplicate()}],"plan":plan}
 
 static func commit_priorities(project: ProjectState, run: RunState, allocation: RefCounted, distribution: Dictionary, draft_publication: Callable = Callable()) -> bool:
 	var old: Dictionary = allocation.get_distribution() if allocation is BetaPriorityAllocation else allocation.get_priority_distribution()
-	var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution) if allocation is BetaPriorityAllocation else PriorityAllocation.is_valid_new_distribution(distribution)
+	var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution, run) if allocation is BetaPriorityAllocation else PriorityAllocation.is_valid_new_distribution(distribution, run)
 	if project==null or run==null or not valid or distribution==old or not project.can_advance_cycle() or not run.can_advance_calendar_cycle(): return false
 	var commit:=func() -> bool:
 		if not allocation.set_distribution(distribution): return false
@@ -168,6 +223,10 @@ func host_playtest() -> bool:
 func valid_pool() -> bool:
 	if hand._candidate_cards.size()!=7: return false
 	if phase!=&"alpha": return true
+	var protected: Array[int]=[]
+	for token: int in hand.injected_candidate_ids:
+		if token not in hand.candidate_ids or token in protected or hand._candidate_cards[hand.candidate_ids.find(token)].card_type!=&"pass":return false
+		protected.append(token)
 	var seen: Array[StringName] = []
 	for card: CardData in hand._candidate_cards:
 		if card==null: return false

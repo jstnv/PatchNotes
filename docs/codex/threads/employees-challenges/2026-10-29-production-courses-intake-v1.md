@@ -1,0 +1,16 @@
+# Production Specialist courses — intake, 2026-10-29
+
+**Later ruling:** The user chose [a first course that gates the existing challenge and benefit](2026-10-29-production-first-course-gate-decision-v1.md). The fork below is historical; course economics, later courses and migration remain OPEN.
+
+**DESIGN IN PROGRESS; no new course approved or queued.** The user wants Production Specialist courses and supplied two Employees-menu screenshots. They show a hired Production Specialist marked “Training in progress” on Roster, while Courses offers only QA enrollment. Those screenshots are current UI evidence, not a new rule. The local source agrees: `employee_panel.gd` builds QA-only course cards; `employee_roster.gd` trains Production automatically on its first qualifying committed Design hand after hire, without a course event.
+
+The existing Production challenge and reward remain the approved ACTIVE/TRIAL package: a committed Design hand with a Core Pass and Feature matching that Pass's printed primary/secondary Core trains the employee; on a **later** matching Design/Alpha hand, the trained employee may bundle one valid changed priority distribution once per project. This adds no free Core score, card or redraw. The later cross-employee course rule says a purchase unlocks its challenge/tracker and grants no immediate buff. Production currently predates and does not follow that course pattern.
+
+## First design fork
+
+1. **Recommended candidate:** make the existing Production challenge and bundled-planning benefit the first $150-style course's challenge/reward. Hiring alone would no longer start training for newly created employees. The user still needs to decide any second course's challenge and benefit. This is consistent with QA and the cross-employee course rule, but requires versioned treatment of already trained employees and in-progress project facts.
+2. **Alternative:** retain the existing automatic first benefit and make courses unlock additional, separate Production challenges. This preserves present training, but the new course system would have a different entry structure from QA and Project Manager.
+
+The question presented to the user is which first-course relationship they want. Tuition, wage raise, number of Production courses, later challenge/benefit, enrollment timing for in-flight projects and old-save migration remain **OPEN**. The QA $150 tuition and $100/month completed-challenge raise are available comparison values, not an automatic Production approval. Avoid the underperforming curated-redraw trial and any unearned Core score.
+
+Sources inspected locally at branch `main`, HEAD `f3e0f2b5d35270c879327bc297b389748571feb4`: `docs/codex/CURRENT_STATE.md`, `TODO.md`, `README.md`, `design/employees-courses.md`, the [course-unlocks-challenge ruling](2026-10-28-course-unlocks-challenge-decision-v1.md), [first Production trial approval](2026-10-06-trial-package-decision-v1.md), `patch-notes/scripts/ui/employee_panel.gd`, and `patch-notes/scripts/employees/employee_roster.gd`. Relevant menu and unlock logs were checked. The shared worktree was already dirty; existing edits were preserved. This intake changed only this thread note and its index. No gameplay code, test, simulator, Google Drive, shared TODO, commit or push.

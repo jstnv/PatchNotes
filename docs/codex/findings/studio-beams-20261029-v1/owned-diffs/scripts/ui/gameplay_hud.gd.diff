@@ -1,0 +1,10 @@
+--- before/scripts/ui/gameplay_hud.gd
++++ after/scripts/ui/gameplay_hud.gd
+@@ -47,6 +47,7 @@
+ 	studio_glow.name = "StudioAudioGlow"
+ 	header.add_child(studio_glow)
+ 	header.move_child(studio_glow, 0)
++	studio_glow.attach_beams(self)
+ 	visibility_changed.connect(_update_studio_glow)
+ 	var row := header.row
+ 	header_title = header.header_title

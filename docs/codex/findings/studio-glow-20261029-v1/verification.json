@@ -1,0 +1,201 @@
+{
+  "date": "2026-10-29",
+  "branch": "main",
+  "HEAD": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "baseline": "962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd",
+  "runtime_identity": "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17",
+  "owned_runtime_changes": [
+    {
+      "path": "res://scripts/market/rival_world_checkpoint.gd",
+      "before": "1f7725d90e51b3d73892e314496e853db094e52ca5f151fb415ffc60d06b44ca",
+      "after": "d00ea9ad023fee0b120f902da296a5c6057f1fa3110fe58f7a8ab1e7f1961f01"
+    },
+    {
+      "path": "res://scripts/ui/gameplay_hud.gd",
+      "before": "b93bef2647be31a499ae9d0de713786033b5919f923237586b420c6a9cb88e58",
+      "after": "c8db1f29b6decf0bd7a9f993be546ab35875ab093879b66c5d6fd172973c5d65"
+    },
+    {
+      "path": "res://scripts/ui/studio_audio_glow.gd",
+      "before": null,
+      "after": "fe32311d7d7a2034811cd691236df442c79db18307765a3ecd3e42754b140919"
+    }
+  ],
+  "passes": [
+    {
+      "receipt": "fixture-fixed-run.json",
+      "sha256": "c1c0acbf9e317c9348b22b8dcc315113a92d0578445aeac3cda8bce2d07ca910",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_studio_audio_glow.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 11.625,
+      "tail": [
+        "PASS: Paused Studio keeps music and observer running",
+        "PASS: Studio Store browsing retains one header glow",
+        "PASS: Decoration and passive browsing preserve all run state/RNG",
+        "PASS: Legal project departure succeeds",
+        "PASS: Production releases Studio FFT work",
+        "PASS: Observer preserves player identity and mix gain",
+        "PASS: Gameplay teardown leaves no owned analyzer",
+        "STUDIO_GLOW {\"checks\":33,\"failures\":0,\"peak\":0.644203841686249,\"runtime_source\":\"b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "native-run.json",
+      "sha256": "b4019ea6dd7e91f0cc1ba8714fd36a1aabc89b7bce3005acd2cb3c69f19bb119",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--audio-driver",
+        "WASAPI",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_studio_audio_glow.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 24.875,
+      "tail": [
+        "PASS: Hidden HUD releases its analyzer",
+        "PASS: HUD return reacquires one observer without altering other effects",
+        "PASS: Paused Studio keeps music and observer running",
+        "PASS: Studio Store browsing retains one header glow",
+        "PASS: Decoration and passive browsing preserve all run state/RNG",
+        "PASS: Legal project departure succeeds",
+        "PASS: Production releases Studio FFT work",
+        "PASS: Observer preserves player identity and mix gain",
+        "PASS: Gameplay teardown leaves no owned analyzer",
+        "STUDIO_GLOW {\"checks\":33,\"failures\":0,\"peak\":0.570798993110657,\"runtime_source\":\"b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17\"}"
+      ]
+    },
+    {
+      "receipt": "retained-title-run.json",
+      "sha256": "9c550ec582edf8b16a285ec15aa499d081ce0a60c431a198ac383f01a9c0c41e",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_menu_visualizer.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.875,
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "MENU_VISUALIZER checks=116 failures=0 peak=0.633478"
+      ]
+    },
+    {
+      "receipt": "cold-world-run.json",
+      "sha256": "ac371050a718426b037038d3a9de327498aff68763aaa1f2c1f55d21b9ffeca5",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-confirmation-20261029-v1/final-cold.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/studio-glow-20261029-v1/cold-world.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 3.75,
+      "tail": [
+        "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+        "PASS: Every persisted player field survives",
+        "PASS: Unverified source still rejects",
+        "PASS: Presentation predecessor cannot pair with older Studio rules",
+        "PASS: Presentation predecessor cannot pair with older rival rules",
+        "PASS: Current-content presentation predecessor rejects pre-Gameplay player catalog",
+        "PASS: Current-content presentation predecessor rejects pre-Gameplay rival catalog",
+        "Fresh world restore: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "hud-regression-run.json",
+      "sha256": "d7602d1bc86914d82db31b002930534a246eb75e52f55f3312aa3b1f3e3bcbfd",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_gameplay_hud_overlay.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.282,
+      "tail": [
+        "       [4] refresh (res://scripts/ui/phase_workspace.gd:214)",
+        "       [5] finalize_alpha (res://scripts/project_state.gd:571)",
+        "       [6] finalize (res://scripts/simulation/development_actions.gd:213)",
+        "       [7] _finalize_alpha (res://scripts/phases/alpha_phase.gd:283)",
+        "       [8] _run (res://scripts/debug/verify_gameplay_hud_overlay.gd:68)",
+        "       [9] verify_overlay (res://scripts/debug/verify_gameplay_hud_overlay.gd:233)",
+        "Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 0; implemented 0; unimplemented 14",
+        "Gameplay HUD and priority overlay verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "sales-regression-run.json",
+      "sha256": "1bdbba8622912b40652a70d4391f546c67721fae33c41720c2aef9e278ad1fae",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_sales_revenue_hud.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.031,
+      "tail": [
+        "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+        "",
+        "Loaded 40 cards.",
+        "SALES_REVENUE_HUD checks=458 failures=0",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    }
+  ],
+  "retained_failures": [
+    "red: expected missing observer",
+    "green: test fixture ran before deferred tutorial prompt, then dereferenced optional null checkpoints; preserved failed receipt/timeout; debug fixture corrected, runtime unchanged"
+  ],
+  "native_inspected": [
+    "native.json-1152.png",
+    "native.json-1280.png"
+  ],
+  "limits": "Trial styling, focused acceptance. Native WASAPI uses real music; no audible/mix preference or broad latency result. Existing ObjectDB/artwork warnings retained; late Research stays FAIL/OPEN. No commit/push/export."
+}

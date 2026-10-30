@@ -1,0 +1,211 @@
+{
+  "date": "2026-10-29",
+  "branch": "main",
+  "HEAD": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "baseline": "56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d",
+  "runtime_identity": "962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd",
+  "owned_runtime_changes": [
+    {
+      "path": "res://scripts/market/rival_world_checkpoint.gd",
+      "before": "cb0921010a7d9fdbd3a57db94cf9f0ce6bc65a08510a10710f6c3db17c01dff3",
+      "after": "1f7725d90e51b3d73892e314496e853db094e52ca5f151fb415ffc60d06b44ca"
+    },
+    {
+      "path": "res://scripts/ui/feature_store.gd",
+      "before": "1d5b65522b7a0cea0b0775f1d7b8f9f763d37e749a25960c9d5c1d0c8d592aec",
+      "after": "e873c585cd7a5e8cd8e32a9d485b847864ddfc229076f6d0b31417788fa3b81f"
+    }
+  ],
+  "old_world": {
+    "path": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\gameplay-adoption-20261028-v1\\final-cold.json",
+    "sha256": "35fe74d463541a10350df4cb47d8485767b42a0bdc2822d06ee41374008edfee"
+  },
+  "passes": [
+    {
+      "receipt": "theme-final-run.json",
+      "sha256": "bc52bce709d30c41e24674daac8931bcd5366dbe2c028a2319f673836a4ed6b6",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_confirmation_theme.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 12.5,
+      "summary": [
+        "PASS: Entire confirmation fits supported viewport",
+        "PASS: Shared primary button and timed entrance",
+        "PASS: Cancel/Escape/close preserve cash, history, ownership, queue and RNG",
+        "PASS: Confirmed admission charges exact deposit and zero cycles",
+        "PASS: Confirmed admission queues without ownership",
+        "PASS: Stale confirm cannot duplicate deposit or queue",
+        "PASS: Existing productive Research completes acquisition",
+        "RESEARCH_CONFIRMATION {\"checks\":152,\"failures\":0,\"runtime_source\":\"962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "theme-final-native-run.json",
+      "sha256": "08d052af1e5787716d93584e9ffef33ce8b2b9c82099fa286f8e4fad4579ab89",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_confirmation_theme.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 16.656,
+      "summary": [
+        "PASS: Custom title/body display complete authoritative copy",
+        "PASS: Long warning fits above buttons without overlap",
+        "PASS: Entire confirmation fits supported viewport",
+        "PASS: Shared primary button and timed entrance",
+        "PASS: Cancel/Escape/close preserve cash, history, ownership, queue and RNG",
+        "PASS: Confirmed admission charges exact deposit and zero cycles",
+        "PASS: Confirmed admission queues without ownership",
+        "PASS: Stale confirm cannot duplicate deposit or queue",
+        "PASS: Existing productive Research completes acquisition",
+        "RESEARCH_CONFIRMATION {\"checks\":152,\"failures\":0,\"runtime_source\":\"962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd\"}"
+      ]
+    },
+    {
+      "receipt": "final-cold-run.json",
+      "sha256": "63057b6010c99817a6c20aa3d45cfd22574ed4dec7acde7b25f570f0d82f0252",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/gameplay-adoption-20261028-v1/final-cold.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-confirmation-20261029-v1/final-cold.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.532,
+      "summary": [
+        "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+        "PASS: Every persisted player field survives",
+        "PASS: Unverified source still rejects",
+        "PASS: Presentation predecessor cannot pair with older Studio rules",
+        "PASS: Presentation predecessor cannot pair with older rival rules",
+        "PASS: Research presentation predecessor rejects pre-Gameplay player catalog",
+        "PASS: Research presentation predecessor rejects pre-Gameplay rival catalog",
+        "Fresh world restore: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "final-research-ui-run.json",
+      "sha256": "0ef89e586548a4c7a16032786afaf28e643b3ad16ac0234f2e2186654f0225b0",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_ui.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.562,
+      "summary": [
+        "PASS: Browsing is passive",
+        "PASS: Split-cost admission amount appears on action button",
+        "PASS: Research detail fits viewport",
+        "PASS: Admission requires explicit irreversible-payment confirmation",
+        "PASS: Confirmed queue shown without ownership",
+        "PASS: Research button shows live final amount",
+        "PASS: Queue controls fit (1280, 720)",
+        "PASS: Queue controls fit (1280, 720)",
+        "PASS: Visible Research completes queue",
+        "Research UI: 0 failures"
+      ]
+    },
+    {
+      "receipt": "final-research-integration-run.json",
+      "sha256": "92c7cfeef4862129b3cc0731b71af46a7e8a9ac673b32c7eef8545ace8306fb6",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_research_integration.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.297,
+      "summary": [
+        "PASS: Queued Menu System never satisfies Save Files ownership gate",
+        "PASS: Unmet two-parent Difficulty gate remains enforced",
+        "PASS: Corrupt installment fails whole checkpoint",
+        "PASS: Unproven trait consumption fails whole checkpoint",
+        "PASS: Cheap hypothetical final installment floors at zero",
+        "PASS: Otherwise-paid zero final installment still consumes opportunity",
+        "PASS: Already-free hypothetical acquisition does not consume opportunity",
+        "Research integration: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "final-scope-regression-run.json",
+      "sha256": "8af0b343d93dcbbb5e1673fa9967deb161221e799e33e22ef2cba186df142890",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_scope_confirmation_theme.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.469,
+      "summary": [
+        "PASS: Cancel/Escape/close dismisses and clears pending warning",
+        "PASS: Dismissal preserves all project/hand/RNG fields",
+        "PASS: Warning reopens after dismissal",
+        "Alpha completed! Pressure 0.0000; stochastic result 0; variance +1; Alpha Hidden Bugs 1; total Hidden Bugs 5; implemented 0; unimplemented 14",
+        "PASS: Confirm commits Alpha transition exactly once",
+        "PASS: Confirmation preserves actual incomplete Scope",
+        "PASS: Stale confirmation cannot repeat transition",
+        "SCOPE_CONFIRMATION {\"checks\":74,\"failures\":0,\"runtime_source\":\"962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd\",\"scene_sha256\":\"0d3c87297f43af40a7fdb32c1fa5cdabcca4158f69b45a1d515fe22acbb68d41\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    }
+  ],
+  "retained_failures": [
+    "theme-red:104 checks/24 expected presentation failures",
+    "theme-green and theme-native:152 checks/12 viewport-sizing failures before fixed Window layout"
+  ],
+  "native_captures_inspected": [
+    "theme-final-native.json-inventory_system-1152.png",
+    "theme-final-native.json-16_bit_sound-1280.png"
+  ],
+  "diff_check": "git -c core.whitespace=cr-at-eol diff --check on owned runtime/debug/docs paths: PASS",
+  "limits": "Focused UI, transaction and exact predecessor acceptance. Existing ObjectDB fixture warnings retained. Late Research lag remains FAIL/OPEN. No commit/push/export or release claim."
+}

@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 220.359,
+  "errors": [
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle192"
+  ],
+  "tail": [
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":132.13,\"max_frame_gap_ms\":182.675,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":187.954,\"worker_was_active\":false}",
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":457.432,\"max_frame_gap_ms\":481.454,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":487.481,\"worker_was_active\":true}",
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"8_color_palette\",\"frames\":2,\"handler_ms\":195.059,\"max_frame_gap_ms\":270.942,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":276.306,\"worker_was_active\":false}",
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle192",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd:24)",
+    "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd:67)",
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"8_color_palette\",\"frames\":2,\"handler_ms\":599.3,\"max_frame_gap_ms\":631.2,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":636.787,\"worker_was_active\":true}",
+    "RESEARCH_LATENCY {\"actions\":8,\"failures\":[\"No500ms+ synchronous research stall atcycle192\"],\"ok\":false,\"stages\":[{\"actions\":6,\"durability\":[{\"frames\":110,\"max_frame_gap_ms\":548.605,\"wait_ms\":12635.311},{\"frames\":165,\"max_frame_gap_ms\":543.608,\"wait_ms\":18085.784},{\"frames\":173,\"max_frame_gap_ms\":579.636,\"wait_ms\":18623.467}],\"end_cycle\":99,\"first_action\":0,\"idle_max_frame_gap_ms\":497.333,\"open_store_ms\":210.136,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19},{\"actions\":2,\"durability\":[{\"frames\":720,\"max_frame_gap_ms\":631.2,\"wait_ms\":78045.117}],\"end_cycle\":193,\"first_action\":6,\"idle_max_frame_gap_ms\":593.965,\"open_store_ms\":50.151,\"rivals\":2,\"start_cycle\":192,\"world_release_records\":39}]}"
+  ]
+}

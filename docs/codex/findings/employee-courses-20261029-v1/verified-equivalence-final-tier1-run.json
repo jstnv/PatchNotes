@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_source_equivalence.gd",
+    "--",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\employee-courses-20261029-v1\\final-tier1.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 49.453,
+  "errors": [],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "CAREER_SOURCE_EQUIVALENCE {\"current_source\":\"bf3dffde495d7149a9556091c4434c06af9db8b7c16ac27b6415378c0590b4f3\",\"failures\":0,\"initial_sha256\":\"ea94d6d1b9b629f55f8f2423e423fdbf036ec4397893bf264a2034491f1e241e\",\"input\":\"C:\\\\Users\\\\64jus\\\\OneDrive\\\\Documents\\\\GitHub\\\\PatchNotes\\\\docs\\\\codex\\\\findings\\\\employee-courses-20261029-v1\\\\final-tier1.json\",\"input_tape_sha256\":\"f0e65a7cc05db0d37ca0a2d59edf85925c8d15ac1647235a72b7aeeaea558155\",\"old_source\":\"a3e14823c57ecde8bd46429aa0472a590dc3c69480a563fafce9a4830e94085b\",\"steps\":136}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "bf3dffde495d7149a9556091c4434c06af9db8b7c16ac27b6415378c0590b4f3",
+  "runtime_source_unchanged": true
+}

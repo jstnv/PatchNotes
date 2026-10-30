@@ -18,7 +18,7 @@ func _run() -> void:
 	expect(not model.play([0,0,1,2]).ok and model.snapshot()==original,"Duplicate selection cannot advance or mutate practice")
 	var mixed: Dictionary = model.play([0,1,2,3])
 	expect(mixed.ok and mixed.specialization_stat.is_empty() and not mixed.balanced_production,"First mixed hand has no synergy")
-	expect(model.project.get_current_scope()==1 and model.project.get_core_score(0)==3,"Printed Core and Scope are separate")
+	expect(model.project.get_current_scope()==1 and model.project.get_core_score(0)==5,"Printed Core and Scope are separate")
 	var after: Dictionary = model.snapshot()
 	expect(not model.play([0,1,2,3]).ok and model.snapshot()==after,"Already-resolved lesson cannot resolve twice")
 	expect(model.next_lesson(),"Continue after first hand")

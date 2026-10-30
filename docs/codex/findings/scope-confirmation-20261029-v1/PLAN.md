@@ -1,0 +1,5 @@
+# Incomplete Scope confirmation theme —2026-10-29
+
+Direct user asks the existing Alpha→Beta Incomplete Project Scope menu to match current menu design. Reuse `ui/quit_confirmation.gd` (shared by Quit, Discard and replacement); attach it to the existing uniquely named scene node, keep title and exact four-line warning and Confirm/Cancel strings, and set the fixed680×300 content surface. Preserve all Alpha warning/pending/confirm/cancel callbacks, no Scope-rule change. One scene-only presentation change, separately hash-pinned because runtime identity covers scripts/data, not scenes. Preserve prior Gameplay work and its evidence; no commit/push/build.
+
+RED current actual Alpha fixture: themed script/custom copy/transparent borderless surface absent. GREEN headless and native exact body/size/cancel/Escape/×/confirm-once, entry motion, text/button bounds at1152/1280; maintained Alpha finalization, free-exit arrears and seeded live/headless parity. No new gameplay/RNG/finance or latency claim.

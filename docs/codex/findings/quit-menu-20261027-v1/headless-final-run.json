@@ -1,0 +1,38 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_checkpoint_recovery_ui.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 11.281,
+  "errors": [
+    "ERROR: FAIL: Isolated UI checkpoint writer",
+    "ERROR: FAIL: Quit confirmation fits the supported viewport",
+    "ERROR: FAIL: Retry after lease release restores Studio without stale dialogs",
+    "ERROR: FAIL: Second valid storage generation fixture",
+    "ERROR: Window 0 spawned at invalid position: (272, -1338).",
+    "ERROR: FAIL: Isolated UI checkpoint writer",
+    "ERROR: FAIL: Quit confirmation fits the supported viewport",
+    "ERROR: FAIL: Retry after lease release restores Studio without stale dialogs",
+    "ERROR: FAIL: Second valid storage generation fixture",
+    "ERROR: Window 0 spawned at invalid position: (336, -1302)."
+  ],
+  "tail": [
+    "ERROR: Window 0 spawned at invalid position: (336, -1302).",
+    "   at: _popup_base (scene/main/window.cpp:2282)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _request_quit (res://scripts/gameplay.gd:733)",
+    "       [1] _run (res://scripts/debug/verify_checkpoint_recovery_ui.gd:131)",
+    "PASS: Quit replaces recovery without modal collision",
+    "PASS: Quit Cancel leaves original save bytes untouched",
+    "Checkpoint recovery UI: 8 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

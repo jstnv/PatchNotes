@@ -1309,17 +1309,65 @@ func _is_lexically_sorted(values: Array) -> bool:
 	return true
 
 
+## The approved neighboring-integer Balanced rule can affect ordinary deal
+## scenarios too. Detect only committed hands newly qualifying under that rule;
+## current live/headless full traces still compare without any projection.
+func oracle_uses_new_small_hand(trace: Dictionary) -> bool:
+	var db:Node=root.get_node("CardDatabase")
+	for step:Dictionary in trace.steps:
+		if step.before.project._current_cycle == step.after.project._current_cycle: continue
+		var ids:Array=step.before.get("candidates",[]).slice(0,4)
+		if ids.size()!=4: continue
+		var scores:Dictionary={0:0,1:0,2:0,3:0}
+		var primary:Array=[]
+		var features:=0
+		var known:=true
+		for id:String in ids:
+			if not db._cards.has(StringName(id)) and not db._store_cards.has(StringName(id)):known=false;break
+			var card:CardData=db.get_card(StringName(id))
+			primary.append(card.primary_stat)
+			if card.card_type==&"feature":features+=1
+			for contribution:Dictionary in card.core_contributions():
+				var category:int=[&"graphics",&"sound",&"technology",&"design"].find(contribution.stat)
+				if category>=0:scores[category]+=int(contribution.value)
+		if not known or features==0 or primary.all(func(stat):return stat==primary[0]):continue
+		if not preload("res://scripts/cards/balanced_production.gd").qualifies(scores):continue
+		var total:int=scores.values().reduce(func(a,b):return a+b,0)
+		for value:int in scores.values():
+			if value*400<total*85 or value*400>total*115:return true
+	return false
+
 func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "after"]) -> String:
 	# The extraction oracles predate the approved v8 Cult seed revision. These
 	# scenarios contain no Cult trait. Compare all mechanics/RNG/events intact,
 	# translating only that known metadata field in a detached digest copy.
 	# Raw captures and live/headless assertions retain the actual v8 state.
 	var historical := trace.duplicate(true)
+	# The approved small-hand allowance changes only two deposited points in
+	# these last-hand fixtures. Reconstruct their old-rule comparison exactly,
+	# retaining the complete historical RNG, signals, finance and other state.
+	if not trace.steps.is_empty() and trace.steps[0].get("before",{}).has("pending") and trace.steps[0].get("before",{}).has("available") and int(trace.seed)==90210 and trace.scenario in ["mixed","economy","lean","employee"]:
+		_expect(trace.steps.size()==3 and oracle_uses_new_small_hand(trace),"Only the documented approved neighboring-integer hand changed")
+		var last:Dictionary=historical.steps.back()
+		_expect(last.before.candidates.slice(0,4)==["secrets","power_ups","maps","simple_story"],"Exact historical deal preserved before counterfactual score projection")
+		for key:String in ["0","1"]:
+			last.after.project._core_scores[key].integer=str(int(last.after.project._core_scores[key].integer)-1)
+	# One full-development historical tutorial trace has the same approved
+	# neighboring-hand change at its last Design hand. Its two extra points
+	# persist through later snapshots; every other field/RNG stays compared.
+	if boundaries==["state"] and int(trace.seed)==90210 and trace.scenario=="tutorial":
+		_expect(trace.steps.size()==36 and trace.steps[8].state.candidates.slice(0,4)==["controller","design_pass","text","sound_pass"] and trace.steps[9].state.project._core_scores=={"0":{"integer":"14"},"1":{"integer":"14"},"2":{"integer":"6"},"3":{"integer":"3"}},"Only the documented3/2/3/2 tutorial hand changes the historical development oracle")
+		_expect(trace.steps[34].action=="playtest" and trace.steps[34].state.pending==["graphics_pass","design_pass"],"The approved Core change reorders only this final unconsumed corrective pair")
+		historical.steps[34].state.pending=["design_pass","graphics_pass"]
+		for step: Dictionary in historical.steps.slice(9):
+			for key: String in ["1","3"]:step.state.project._core_scores[key].integer=str(int(step.state.project._core_scores[key].integer)-1)
 	for step: Dictionary in historical.steps:
 		for boundary in boundaries:
 			var roster_state: Dictionary = step[boundary].run
 			_expect(roster_state._contract_search.receipts.is_empty() and roster_state._contract_search.offers.is_empty() and roster_state._contract_search.legacy_offers.is_empty() and roster_state._contract_search.intro_offer_id=="", "Historical hand oracle has no Contract Search activity")
 			roster_state.erase("_contract_search")
+			_expect(roster_state._store_era_receipts == {"version":{"integer":"1"},"assignments":{}}, "Historical hand oracle has no era release entitlement")
+			roster_state.erase("_store_era_receipts")
 			# P1 adds dormant storage only. Keep historical digests immutable and
 			# assert exact empty ownership/no active commit before omitting it.
 			_expect(roster_state._publisher_relationships == {"version":{"integer":"1"},"owner":roster_state._bank_run_id,"events":[]} and not roster_state._relationship_commit_in_progress, "Historical oracle has only dormant Studio-owned P1 state")
@@ -1361,7 +1409,7 @@ func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "a
 			# fixtures neither own nor draw them. Preserve the original digest
 			# by removing only their catalog metadata from this detached copy.
 			# Current live/headless captures and the pack verifier retain them.
-			for id: String in ["turn_based_combat", "character_classes", "character_development", "branching_dialogue"]:
+			for id: String in ["turn_based_combat", "character_classes", "character_development", "branching_dialogue", "player_level_editor", "ability_gated_exploration", "switchable_protagonists", "character_skill_checks"]:
 				var state: Dictionary = step[boundary]
 				_expect(not state.run._owned_features.has(id) and not state.get("available", []).has(id) and not state.get("candidates", []).has(id), "Historical oracle excludes only unowned unused Alpha shop metadata")
 				state.run._feature_definitions.erase(id)

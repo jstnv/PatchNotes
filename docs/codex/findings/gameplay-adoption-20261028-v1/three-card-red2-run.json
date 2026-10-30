@@ -1,0 +1,41 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_gameplay_three_parent_ui.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80",
+    "--",
+    "--layout-only"
+  ],
+  "exit": 4,
+  "elapsed_seconds": 16.14,
+  "errors": [
+    "FAIL: Selected three-parent card and name stay fully visible",
+    "FAIL: Three-parent popup never covers selected card",
+    "FAIL: Selected three-parent card and name stay fully visible",
+    "FAIL: Selected three-parent card and name stay fully visible"
+  ],
+  "tail": [
+    "PASS: Link animation completes and keyboard focus enabled",
+    "PASS: Three-parent link fits viewport Score System",
+    "PASS: Parent name never ellipsized",
+    "PASS: Link animation completes and keyboard focus enabled",
+    "PASS: Three-parent link fits viewport Lives System",
+    "PASS: Parent name never ellipsized",
+    "PASS: Actual link navigates to timer_system",
+    "GAMEPLAY_UI {\"checks\":45,\"failures\":4,\"source\":\"c569093a10514b2adfd1e8a87107c1c8168f1aad85bb9011f657e346258b824a\"}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "c569093a10514b2adfd1e8a87107c1c8168f1aad85bb9011f657e346258b824a",
+  "runtime_source_unchanged": true
+}

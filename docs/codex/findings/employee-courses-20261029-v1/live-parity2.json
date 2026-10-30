@@ -1,0 +1,337 @@
+{
+	"comparisons": 15,
+	"coverage": {
+		"genres": {
+			"puzzle": true
+		},
+		"host_playtests": {
+			"alpha": 1,
+			"beta": 0
+		},
+		"planned_priorities": {
+			"alpha": 1,
+			"beta": 0,
+			"design": 1
+		},
+		"redraws": {
+			"alpha": 1,
+			"beta": 0,
+			"design": 1
+		},
+		"selections": {
+			"front": true
+		},
+		"specialties": {
+			"puzzle": true
+		}
+	},
+	"failures": 1,
+	"limits": "Bounded native scene methods versus shared headless commands; original HUD/coordinator exclusions; no visual/audio acceptance or AI policy claim",
+	"ok": false,
+	"routes": [
+		{
+			"boundaries": 15,
+			"commands": 17,
+			"final_state": "a0a6d29e0a04ed31f24f700aac515c92f1047929c307fcbd65285e7b1332ff0c",
+			"id": "seeded_1104_puzzle",
+			"ok": false,
+			"recipe": {
+				"schema_version": 1,
+				"seed": "1104",
+				"specialty": "puzzle",
+				"studio_id": "seeded_1104_puzzle",
+				"studio_name": "Seeded live parity",
+				"traits": []
+			},
+			"releases": 0,
+			"route": {
+				"genres": [
+					"puzzle",
+					"adventure"
+				],
+				"seed": "1104",
+				"selection": "front",
+				"specialty": "puzzle"
+			},
+			"strict_replay_ok": false
+		}
+	],
+	"traces": [
+		{
+			"headless": "88fb30b7ee01bda916097b6e405179d376bdc458b0cb5e8ad9664f60336f380c",
+			"hud_seen_topics": {},
+			"live_signals": [],
+			"matched": true,
+			"native": "88fb30b7ee01bda916097b6e405179d376bdc458b0cb5e8ad9664f60336f380c",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial Studio"
+		},
+		{
+			"headless": "51048c21f8973e55f13efb9a92050ba3f7c51e5ac6b5a96787caa884ad58815c",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"finance_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "51048c21f8973e55f13efb9a92050ba3f7c51e5ac6b5a96787caa884ad58815c",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"finance_changed",
+				"calendar_changed"
+			],
+			"step": "Begin Seeded 1104 1"
+		},
+		{
+			"headless": "d6788a4969bb14268ca9313def988d3453d744b0202f9c1fe40baf603311e216",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "d6788a4969bb14268ca9313def988d3453d744b0202f9c1fe40baf603311e216",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Planned priorities design"
+		},
+		{
+			"headless": "83269e82420f633a38af8560887faabb769aa0810b744ed741e931f76669a6dd",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "83269e82420f633a38af8560887faabb769aa0810b744ed741e931f76669a6dd",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial design"
+		},
+		{
+			"headless": "39c41efdaab7ecb19b6debebdee40916e0f5600fe7aa95c083fc7289f6739749",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "39c41efdaab7ecb19b6debebdee40916e0f5600fe7aa95c083fc7289f6739749",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw design"
+		},
+		{
+			"headless": "119aa5357fac5067cf323c482d829f84e4154c8f6adc23807b4418f36011400d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "119aa5357fac5067cf323c482d829f84e4154c8f6adc23807b4418f36011400d",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected front design"
+		},
+		{
+			"headless": "9369b84e5139d356e79dda3b206ef60373dbc5d086a6849a4bf9e353b4a8812b",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "9369b84e5139d356e79dda3b206ef60373dbc5d086a6849a4bf9e353b4a8812b",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "bd7fcbb69ca77342d1408592fb6f265d7a95ac472aac7fc202c1af7062a567f5",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "bd7fcbb69ca77342d1408592fb6f265d7a95ac472aac7fc202c1af7062a567f5",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 0"
+		},
+		{
+			"headless": "c4ce4063777295bdbde805a98ae496612551c82245efaccd32ba08c7d668f65b",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "c4ce4063777295bdbde805a98ae496612551c82245efaccd32ba08c7d668f65b",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Planned priorities alpha"
+		},
+		{
+			"headless": "77ed108a1d543121d61fe4d945bb7aa4401a5b0751e2ca6de87329544be9793d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "77ed108a1d543121d61fe4d945bb7aa4401a5b0751e2ca6de87329544be9793d",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial alpha"
+		},
+		{
+			"headless": "2a7df200e22da34931eb5c83591f8b177516e59d5858432259cce31115d11b82",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "2a7df200e22da34931eb5c83591f8b177516e59d5858432259cce31115d11b82",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw alpha"
+		},
+		{
+			"headless": "378f343cdfd8682a5c39b3cf7b73d7b3f9bb37938099b11dbb8b5cd4b9c63dda",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "378f343cdfd8682a5c39b3cf7b73d7b3f9bb37938099b11dbb8b5cd4b9c63dda",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected front alpha"
+		},
+		{
+			"headless": "ad701488e3bd11c9984e3ece9797bb4e14b6cf17288b04842168921e44bd70a0",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "ad701488e3bd11c9984e3ece9797bb4e14b6cf17288b04842168921e44bd70a0",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"step": "Seeded Host Playtest alpha"
+		},
+		{
+			"headless": "3a1533ab80e002d486a12a9a84db4012c7aea6b862125767cf0e32cd5af3c4a2",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "3a1533ab80e002d486a12a9a84db4012c7aea6b862125767cf0e32cd5af3c4a2",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "4d5bc941aed48033460300e4c997be44aa5a8357ea7963eaa864b7e387a4f5a6",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "4d5bc941aed48033460300e4c997be44aa5a8357ea7963eaa864b7e387a4f5a6",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 1"
+		}
+	]
+}

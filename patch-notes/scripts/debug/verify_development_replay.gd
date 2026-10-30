@@ -5,13 +5,19 @@ const PHASE_NAMES := ["design", "alpha", "beta"]
 var route_events: Array = []
 
 func _initialize() -> void:
+	# Retain this pinned pre-hold oracle; current hold is tested separately.
+	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
 	await process_frame
 	mode = OS.get_environment("PN_DEVELOPMENT_MODE")
 	var modes := [mode] if not mode.is_empty() else ["live", "headless"]
+	var live_hashes: Array = []
 	for selected_mode in modes:
 		mode = selected_mode
 		traces.clear()
 		await development_cases(root.get_node("CardDatabase"))
+		var hashes: Array = traces.map(func(trace): return JSON.stringify(trace).sha256_text())
+		if selected_mode=="live": live_hashes=hashes
+		elif selected_mode=="headless" and not live_hashes.is_empty(): _expect(hashes==live_hashes,"All complete current live/headless legacy traces match")
 	quit(1 if _failures else 0)
 
 func development_snapshot(phase: Object, index: int, project: ProjectState, run: RunState) -> Dictionary:

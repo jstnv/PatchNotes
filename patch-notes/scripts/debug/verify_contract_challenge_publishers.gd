@@ -56,6 +56,7 @@ func _run() -> void:
 		expect(not old_record.is_empty(),"Historical-shaped completed Contract captures")
 		if not old_record.is_empty():
 			old_record.content_revision = old_adapter._rules_revision(StudioCheckpoint.PRE_CHALLENGE_RULES)
+			old_record.run.erase("store_era_receipts") # Not present in this named predecessor.
 			old_record.run.erase("contract_search") # Actual historical schema predates Search.
 			old_record.run.erase("publisher_relationships") # Constructed old shape predates P1.
 			old_record.run.erase("sidestreet_briefs") # Also predates the bounded pilot.

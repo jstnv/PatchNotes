@@ -1,0 +1,97 @@
+{
+  "branch": "main",
+  "head": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "prior_runtime": "0aaa98ba2e0eef306dc0c046d8732a2b3a5a80226649bc01729c3ff2d0ee9f7d",
+  "current_runtime": "25dc0a8892df95b95b93690b5224d12e4242a97426ad5d4dbf4c98d42696af59",
+  "prior_world_sha256": "293c41fd165f463908e399105fe519c26f2e3231b626920c277e918d51cf14a8",
+  "files": {
+    "patch-notes/scripts/phases/main_menu.gd": "d22178d15a1ddf998f8f9e0de7baf71045f00cd212992c8de1ca0104b2528d4d",
+    "patch-notes/scripts/ui/quit_confirmation.gd": "800fc5d3821e25f46546bd12221dd98efabf8a038b6fcb0fbc1ea4f32d8cb4dc",
+    "patch-notes/scripts/market/rival_world_checkpoint.gd": "62e34a8067ce733b0d4f5e20482f67bab22dac16685bab842b00feba0f87347f",
+    "patch-notes/scripts/debug/verify_ui_folder_navigation.gd": "4d2abb7b7bf36965cce94a9143354cad3e0fd7ce2901c492fc038cee110f9a66"
+  },
+  "checks": {
+    "final-headless": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_ui_folder_navigation.gd"
+      ],
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 24.5,
+      "receipt_sha256": "46f1d895a1dee4cafd551d130d3fc44598f1e58c5009b41a880072b0eb76e985"
+    },
+    "final-native": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_ui_folder_navigation.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80",
+        "--",
+        "--out=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/discard-menu-20261027-v1/native-captures-final"
+      ],
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 24.829,
+      "receipt_sha256": "da70f4f9e7ad436b10a1536ac2571e32d14551a8a3b4bb23e266ba2bd2bd9724"
+    },
+    "final-quit": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_checkpoint_recovery_ui.gd"
+      ],
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 19.64,
+      "receipt_sha256": "aeb511c29040894fede3b69f655f43040a5f54380a2c96b16dd35028f60e75fe"
+    },
+    "final-cold": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/discard-menu-20261027-v1/predecessor.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/discard-menu-20261027-v1/final-cold.json"
+      ],
+      "exit": 0,
+      "errors": [],
+      "elapsed_seconds": 4.734,
+      "receipt_sha256": "79c9598e87c0935760121c67af3874c30485cb21a30c72a02ec5dec71ac449b3"
+    }
+  },
+  "captures": {
+    "1152": "bdb7b23d676d2767c4a16ed546e0036996b6087eff495c5d1c0534b7f39161ec",
+    "1280": "e7e18424c794304f6bd10387b5951532b0401184a59585004dcd78bdc424f964"
+  },
+  "limits": [
+    "Focused UI/persistence checks only, not a new full222-suite acceptance.",
+    "No new EXE/ZIP, commit, push or Drive change."
+  ]
+}

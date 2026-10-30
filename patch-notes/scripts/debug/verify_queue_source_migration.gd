@@ -13,6 +13,13 @@ func pre_market_fields(value: Variant) -> Variant:
 	if value is Dictionary:
 		var result := {}
 		for key in value:
+			if key=="store_era_receipts":
+				var decoder := CheckpointCodec.new()
+				var metadata: Variant=decoder.decode(value.release_metadata,CheckpointSchema.map_of("id",CheckpointSchema.metadata()))
+				check(decoder.error.is_empty() and metadata is Dictionary,"Current frozen release facts strictly decode before migration projection")
+				var receipts: Variant=decoder.decode(value[key],{"version":"uint","assignments":CheckpointSchema.map_of("uint","id")})
+				check(decoder.error.is_empty() and metadata is Dictionary and receipts==RunState.StoreEra.from_releases(metadata),"Only fully justified era receipts are added by historical migration")
+				continue
 			if key=="contract_search":
 				check(value[key].get("version")=="1" and value[key].get("receipts",[]).is_empty() and value[key].get("offers",[]).is_empty() and value[key].get("intro_offer_id","").is_empty(),"Historical migration adds no Search activity")
 				continue

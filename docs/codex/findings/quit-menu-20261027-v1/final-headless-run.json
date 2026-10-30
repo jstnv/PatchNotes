@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_checkpoint_recovery_ui.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 14.75,
+  "errors": [
+    "ERROR: FAIL: Quit lands centered with transparent clipped corners",
+    "ERROR: FAIL: Themed close button cancels without quitting or changing the checkpoint",
+    "ERROR: FAIL: Quit lands centered with transparent clipped corners",
+    "ERROR: FAIL: Themed close button cancels without quitting or changing the checkpoint"
+  ],
+  "tail": [
+    "PASS: Recovery fits supported viewport",
+    "PASS: Keyboard recovery Cancel preserves corrupt bytes",
+    "PASS: Recovery button path is read-only on Cancel",
+    "PASS: Ordinary save failure still prompts Retry",
+    "PASS: Direct recovery replaces a visible save-failure dialog",
+    "PASS: Quit replaces recovery without modal collision",
+    "PASS: Quit Cancel leaves original save bytes untouched",
+    "Checkpoint recovery UI: 4 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

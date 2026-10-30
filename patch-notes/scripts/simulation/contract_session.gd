@@ -126,8 +126,8 @@ func valid_pool() -> bool:
 	return true
 
 func commit_priorities(distribution: Dictionary) -> bool:
-	if _state == null or not _state.can_commit_priorities(distribution) or not _run.can_complete_productive_cycle(): return false
-	var commit := func() -> bool: return _state.commit_priorities(distribution)
+	if _state == null or not _state.can_commit_priorities(distribution,_run) or not _run.can_complete_productive_cycle(): return false
+	var commit := func() -> bool: return _state.commit_priorities(distribution,_run)
 	return _run.complete_productive_action(commit,0,_run.get_completed_run_cycles(),&"",&"priority_change",_state.get_offer_id())
 
 func redraw(slots: Array[int],category_rolls: Array[float] = [],definition_rolls: Array[float] = [],readiness: Callable = Callable(),publication: Callable = Callable()) -> Dictionary:

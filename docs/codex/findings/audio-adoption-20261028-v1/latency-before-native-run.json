@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1152x648",
+    "--position",
+    "80,80"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 75.891,
+  "errors": [
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle192"
+  ],
+  "tail": [
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":34.229,\"max_frame_gap_ms\":49.873,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":51.553,\"worker_was_active\":false}",
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":98,\"feature\":\"dialogue\",\"frames\":2,\"handler_ms\":115.271,\"max_frame_gap_ms\":122.545,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":124.082,\"worker_was_active\":true}",
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"8_color_palette\",\"frames\":2,\"handler_ms\":189.409,\"max_frame_gap_ms\":272.77,\"operation\":\"queue\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":280.474,\"worker_was_active\":false}",
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle192",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:24)",
+    "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/audio-adoption-20261028-v1/research_latency.gd:67)",
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"8_color_palette\",\"frames\":2,\"handler_ms\":526.06,\"max_frame_gap_ms\":553.963,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":558.73,\"worker_was_active\":true}",
+    "RESEARCH_LATENCY {\"actions\":8,\"failures\":[\"No500ms+ synchronous research stall atcycle192\"],\"ok\":false,\"stages\":[{\"actions\":6,\"durability\":[{\"frames\":602,\"max_frame_gap_ms\":96.013,\"wait_ms\":4166.11},{\"frames\":750,\"max_frame_gap_ms\":101.697,\"wait_ms\":5189.413},{\"frames\":772,\"max_frame_gap_ms\":122.545,\"wait_ms\":5343.313}],\"end_cycle\":99,\"first_action\":0,\"idle_max_frame_gap_ms\":8.126,\"open_store_ms\":69.73,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19},{\"actions\":2,\"durability\":[{\"frames\":4850,\"max_frame_gap_ms\":553.963,\"wait_ms\":33724.559}],\"end_cycle\":193,\"first_action\":6,\"idle_max_frame_gap_ms\":7.282,\"open_store_ms\":39.528,\"rivals\":2,\"start_cycle\":192,\"world_release_records\":39}]}"
+  ],
+  "runtime_identity": "8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6",
+  "runtime_source_unchanged": true
+}

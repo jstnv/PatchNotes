@@ -1,0 +1,2836 @@
+{
+	"comparisons": 138,
+	"coverage": {
+		"genres": {
+			"adventure": true,
+			"puzzle": true,
+			"racing": true,
+			"role_playing": true,
+			"sports": true,
+			"strategy": true
+		},
+		"host_playtests": {
+			"alpha": 3,
+			"beta": 3
+		},
+		"planned_priorities": {
+			"alpha": 6,
+			"beta": 6,
+			"design": 6
+		},
+		"redraws": {
+			"alpha": 6,
+			"beta": 6,
+			"design": 6
+		},
+		"selections": {
+			"features_first": true,
+			"front": true,
+			"reverse": true
+		},
+		"specialties": {
+			"puzzle": true,
+			"sports": true,
+			"strategy": true
+		}
+	},
+	"failures": 0,
+	"limits": "Bounded native scene methods versus shared headless commands; original HUD/coordinator exclusions; no visual/audio acceptance or AI policy claim",
+	"ok": true,
+	"routes": [
+		{
+			"boundaries": 46,
+			"commands": 59,
+			"final_state": "aa6d764e1afe3a7dc0b833eb3323f2e0ce011c1baa67a8025a19fae84e21f354",
+			"id": "seeded_1104_puzzle",
+			"ok": true,
+			"recipe": {
+				"schema_version": 1,
+				"seed": "1104",
+				"specialty": "puzzle",
+				"studio_id": "seeded_1104_puzzle",
+				"studio_name": "Seeded live parity",
+				"traits": []
+			},
+			"releases": 2,
+			"route": {
+				"genres": [
+					"puzzle",
+					"adventure"
+				],
+				"seed": "1104",
+				"selection": "front",
+				"specialty": "puzzle"
+			},
+			"strict_replay_ok": true
+		},
+		{
+			"boundaries": 46,
+			"commands": 59,
+			"final_state": "65bbced47d125e55f1a98026451d4734661b1cf6e1053b6cd6bbc83a22da7461",
+			"id": "seeded_4417_strategy",
+			"ok": true,
+			"recipe": {
+				"schema_version": 1,
+				"seed": "4417",
+				"specialty": "strategy",
+				"studio_id": "seeded_4417_strategy",
+				"studio_name": "Seeded live parity",
+				"traits": []
+			},
+			"releases": 2,
+			"route": {
+				"genres": [
+					"strategy",
+					"role_playing"
+				],
+				"seed": "4417",
+				"selection": "reverse",
+				"specialty": "strategy"
+			},
+			"strict_replay_ok": true
+		},
+		{
+			"boundaries": 46,
+			"commands": 59,
+			"final_state": "d43ffee30c487ff67a6dd2e7776ad53d7862f122ec024bdfc7af7ca604247e2e",
+			"id": "seeded_90210_sports",
+			"ok": true,
+			"recipe": {
+				"schema_version": 1,
+				"seed": "90210",
+				"specialty": "sports",
+				"studio_id": "seeded_90210_sports",
+				"studio_name": "Seeded live parity",
+				"traits": []
+			},
+			"releases": 2,
+			"route": {
+				"genres": [
+					"racing",
+					"sports"
+				],
+				"seed": "90210",
+				"selection": "features_first",
+				"specialty": "sports"
+			},
+			"strict_replay_ok": true
+		}
+	],
+	"traces": [
+		{
+			"headless": "88fb30b7ee01bda916097b6e405179d376bdc458b0cb5e8ad9664f60336f380c",
+			"hud_seen_topics": {},
+			"live_signals": [],
+			"matched": true,
+			"native": "88fb30b7ee01bda916097b6e405179d376bdc458b0cb5e8ad9664f60336f380c",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial Studio"
+		},
+		{
+			"headless": "51048c21f8973e55f13efb9a92050ba3f7c51e5ac6b5a96787caa884ad58815c",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"finance_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "51048c21f8973e55f13efb9a92050ba3f7c51e5ac6b5a96787caa884ad58815c",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"finance_changed",
+				"calendar_changed"
+			],
+			"step": "Begin Seeded 1104 1"
+		},
+		{
+			"headless": "d6788a4969bb14268ca9313def988d3453d744b0202f9c1fe40baf603311e216",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "d6788a4969bb14268ca9313def988d3453d744b0202f9c1fe40baf603311e216",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Planned priorities design"
+		},
+		{
+			"headless": "83269e82420f633a38af8560887faabb769aa0810b744ed741e931f76669a6dd",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "83269e82420f633a38af8560887faabb769aa0810b744ed741e931f76669a6dd",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial design"
+		},
+		{
+			"headless": "39c41efdaab7ecb19b6debebdee40916e0f5600fe7aa95c083fc7289f6739749",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "39c41efdaab7ecb19b6debebdee40916e0f5600fe7aa95c083fc7289f6739749",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw design"
+		},
+		{
+			"headless": "119aa5357fac5067cf323c482d829f84e4154c8f6adc23807b4418f36011400d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "119aa5357fac5067cf323c482d829f84e4154c8f6adc23807b4418f36011400d",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected front design"
+		},
+		{
+			"headless": "9369b84e5139d356e79dda3b206ef60373dbc5d086a6849a4bf9e353b4a8812b",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "9369b84e5139d356e79dda3b206ef60373dbc5d086a6849a4bf9e353b4a8812b",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "bd7fcbb69ca77342d1408592fb6f265d7a95ac472aac7fc202c1af7062a567f5",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "bd7fcbb69ca77342d1408592fb6f265d7a95ac472aac7fc202c1af7062a567f5",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 0"
+		},
+		{
+			"headless": "c4ce4063777295bdbde805a98ae496612551c82245efaccd32ba08c7d668f65b",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "c4ce4063777295bdbde805a98ae496612551c82245efaccd32ba08c7d668f65b",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Planned priorities alpha"
+		},
+		{
+			"headless": "77ed108a1d543121d61fe4d945bb7aa4401a5b0751e2ca6de87329544be9793d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "77ed108a1d543121d61fe4d945bb7aa4401a5b0751e2ca6de87329544be9793d",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial alpha"
+		},
+		{
+			"headless": "2a7df200e22da34931eb5c83591f8b177516e59d5858432259cce31115d11b82",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "2a7df200e22da34931eb5c83591f8b177516e59d5858432259cce31115d11b82",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw alpha"
+		},
+		{
+			"headless": "378f343cdfd8682a5c39b3cf7b73d7b3f9bb37938099b11dbb8b5cd4b9c63dda",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "378f343cdfd8682a5c39b3cf7b73d7b3f9bb37938099b11dbb8b5cd4b9c63dda",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected front alpha"
+		},
+		{
+			"headless": "ad701488e3bd11c9984e3ece9797bb4e14b6cf17288b04842168921e44bd70a0",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "ad701488e3bd11c9984e3ece9797bb4e14b6cf17288b04842168921e44bd70a0",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"step": "Seeded Host Playtest alpha"
+		},
+		{
+			"headless": "3a1533ab80e002d486a12a9a84db4012c7aea6b862125767cf0e32cd5af3c4a2",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "3a1533ab80e002d486a12a9a84db4012c7aea6b862125767cf0e32cd5af3c4a2",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "4d5bc941aed48033460300e4c997be44aa5a8357ea7963eaa864b7e387a4f5a6",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "4d5bc941aed48033460300e4c997be44aa5a8357ea7963eaa864b7e387a4f5a6",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 1"
+		},
+		{
+			"headless": "2d69dfecbe124c293a9bd77313621697641585271a5e65443483dfb776b61762",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "2d69dfecbe124c293a9bd77313621697641585271a5e65443483dfb776b61762",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Planned priorities beta"
+		},
+		{
+			"headless": "9adc180cd6b589c4000e5139308089efb50cd8ee806e641a2361841e68fb7541",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "9adc180cd6b589c4000e5139308089efb50cd8ee806e641a2361841e68fb7541",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial beta"
+		},
+		{
+			"headless": "81263ea2c71ebed8ccb2d88b5d8b7be572705e70fa77fc8c458167d1067de33a",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "81263ea2c71ebed8ccb2d88b5d8b7be572705e70fa77fc8c458167d1067de33a",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw beta"
+		},
+		{
+			"headless": "0aa9717128f48f3194258f0e7c9007b1d9a2f6ce53f7f45413008173c4ed714c",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "0aa9717128f48f3194258f0e7c9007b1d9a2f6ce53f7f45413008173c4ed714c",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"step": "Selected front beta"
+		},
+		{
+			"headless": "640dea78dc3d11f9ba06d717af95e1c977d7f9f42d7dbf357428e3264d841cc3",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "640dea78dc3d11f9ba06d717af95e1c977d7f9f42d7dbf357428e3264d841cc3",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first beta"
+		},
+		{
+			"headless": "ec5f62819db985527944f142fb4d6895954796c4b4daa7c5555583e0f4e41b9e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"matched": true,
+			"native": "ec5f62819db985527944f142fb4d6895954796c4b4daa7c5555583e0f4e41b9e",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"step": "Exit phase 2"
+		},
+		{
+			"headless": "a94982a5094c43196f819c836dee42884032ad30c7e64c2e9024f72dd87480cb",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"contracts_changed",
+				"finance_changed"
+			],
+			"matched": true,
+			"native": "a94982a5094c43196f819c836dee42884032ad30c7e64c2e9024f72dd87480cb",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"cash_changed",
+				"contracts_changed",
+				"finance_changed"
+			],
+			"step": "Accept and deal Ironclad"
+		},
+		{
+			"headless": "822a83912add94adb07682229cb7d5386fe7b6972d348b64cd40a5c944f2fb27",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "822a83912add94adb07682229cb7d5386fe7b6972d348b64cd40a5c944f2fb27",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Contract priorities"
+		},
+		{
+			"headless": "c311b3bbf4654ad354251bd8f27dde781b422fc9aab1954ae2dc88da1e0a4557",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "c311b3bbf4654ad354251bd8f27dde781b422fc9aab1954ae2dc88da1e0a4557",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Contract hand 0"
+		},
+		{
+			"headless": "1a8655bda3a39575554d7419ee25150901e099914b089d3dafe3495bc2a37e38",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "1a8655bda3a39575554d7419ee25150901e099914b089d3dafe3495bc2a37e38",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Contract hand 1"
+		},
+		{
+			"headless": "b73e0c96695ae03434b64c8723a73c012c376c73a722e968cb4f022296f9a618",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "b73e0c96695ae03434b64c8723a73c012c376c73a722e968cb4f022296f9a618",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Contract returns Studio"
+		},
+		{
+			"headless": "03841e1d95beff67cb9ca57a9e4e81906efd3c7d90f9c78c54851d86f99a4f08",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "03841e1d95beff67cb9ca57a9e4e81906efd3c7d90f9c78c54851d86f99a4f08",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Begin Seeded 1104 2"
+		},
+		{
+			"headless": "0e3601c0a14792c6d61cd485436a7d1fc9b8bd59e5b8abcb6bee079b953b7faf",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "0e3601c0a14792c6d61cd485436a7d1fc9b8bd59e5b8abcb6bee079b953b7faf",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Planned priorities design"
+		},
+		{
+			"headless": "67fe2cc2d2cb8f857b6b2d9fbb2f1cd4da8183df1b6145d46f2dbc1f3ce45e7a",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "67fe2cc2d2cb8f857b6b2d9fbb2f1cd4da8183df1b6145d46f2dbc1f3ce45e7a",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial design"
+		},
+		{
+			"headless": "f854029c51dbe356e995e315ffbaea1e86ad2e90cf4c0a99e7fd228ba396aefd",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "f854029c51dbe356e995e315ffbaea1e86ad2e90cf4c0a99e7fd228ba396aefd",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw design"
+		},
+		{
+			"headless": "e1db52a660043e4bd256e8029d5d051df7c002bef33f664f256e3f2a0c1e359f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "e1db52a660043e4bd256e8029d5d051df7c002bef33f664f256e3f2a0c1e359f",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected front design"
+		},
+		{
+			"headless": "e642893f5732f6d7b4894e01eaa52a36a956ba306ea0e396a185ee62a6f0292e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "e642893f5732f6d7b4894e01eaa52a36a956ba306ea0e396a185ee62a6f0292e",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "518a0bdc5e129355d412b2daeb5df08c24e6942ee0986d62c7978bb83ef29223",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "518a0bdc5e129355d412b2daeb5df08c24e6942ee0986d62c7978bb83ef29223",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 0"
+		},
+		{
+			"headless": "b4481e377653aac884daa960e8a12e1e517fdb92f7f8a3563f97afd6b63c0dd4",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "b4481e377653aac884daa960e8a12e1e517fdb92f7f8a3563f97afd6b63c0dd4",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Planned priorities alpha"
+		},
+		{
+			"headless": "5039d1671ac9a24695162f974001b767e85b5f7061862f1b2d29ead13c53c08e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "5039d1671ac9a24695162f974001b767e85b5f7061862f1b2d29ead13c53c08e",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial alpha"
+		},
+		{
+			"headless": "67c1d5ee8d36ada9dce2bdfb3f974f22310420ef46abddca3f915ad290518fec",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "67c1d5ee8d36ada9dce2bdfb3f974f22310420ef46abddca3f915ad290518fec",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw alpha"
+		},
+		{
+			"headless": "b48a9b245cc1cb0379325566537cfbefb0a3346b72cc508dc4d9edcec8b97495",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "b48a9b245cc1cb0379325566537cfbefb0a3346b72cc508dc4d9edcec8b97495",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected front alpha"
+		},
+		{
+			"headless": "f5677477311776e6bee09b745290f36d36d0b9c67c83556bd1a5d5308ba9d1ed",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "f5677477311776e6bee09b745290f36d36d0b9c67c83556bd1a5d5308ba9d1ed",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "f621b2513ed4adc711288d0b6977d2d667dd813ea71acf570c090225db086a6f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "f621b2513ed4adc711288d0b6977d2d667dd813ea71acf570c090225db086a6f",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 1"
+		},
+		{
+			"headless": "212e19ced8c3e64b43f087ac5b95aa5ba44370cc4c70dce8b249a6f445b458e1",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "212e19ced8c3e64b43f087ac5b95aa5ba44370cc4c70dce8b249a6f445b458e1",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Planned priorities beta"
+		},
+		{
+			"headless": "755924168f24726c9c80c9bae64455f6fda3249309c6bc8a0e1da9c41efeed53",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "755924168f24726c9c80c9bae64455f6fda3249309c6bc8a0e1da9c41efeed53",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [],
+			"step": "Initial beta"
+		},
+		{
+			"headless": "9b731e63a9bb5d9195468cb85e70544496454291f38a42b97bfd77be95659d63",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "9b731e63a9bb5d9195468cb85e70544496454291f38a42b97bfd77be95659d63",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw beta"
+		},
+		{
+			"headless": "6e11ce51079c26dac20d5f131f0beaad66ce9584161d3f3797ff4bb764f0231f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "6e11ce51079c26dac20d5f131f0beaad66ce9584161d3f3797ff4bb764f0231f",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected front beta"
+		},
+		{
+			"headless": "c00cb8a748c39d3a212faca38535baaf014042bc0b9ee8439e5fc752c64d84a6",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "c00cb8a748c39d3a212faca38535baaf014042bc0b9ee8439e5fc752c64d84a6",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Seeded Host Playtest beta"
+		},
+		{
+			"headless": "87c0e41b60a94b7b5df75cb0c7348acf94f98e4d1c5a9857fed3f9a99fa8b0b9",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "87c0e41b60a94b7b5df75cb0c7348acf94f98e4d1c5a9857fed3f9a99fa8b0b9",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first beta"
+		},
+		{
+			"headless": "a61cfdac3c3813b552a6670da80b7febc22311354ac4ba16ac509559690d7645",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"matched": true,
+			"native": "a61cfdac3c3813b552a6670da80b7febc22311354ac4ba16ac509559690d7645",
+			"route": "seeded_1104_puzzle",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"step": "Exit phase 2"
+		},
+		{
+			"headless": "94860393051899be8bfd38746c7516d5bce534bb6fb0e7bd5e9edc36390fc433",
+			"hud_seen_topics": {},
+			"live_signals": [],
+			"matched": true,
+			"native": "94860393051899be8bfd38746c7516d5bce534bb6fb0e7bd5e9edc36390fc433",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Initial Studio"
+		},
+		{
+			"headless": "b4837d91609d9b5de7be97612e328d2e27040c00b5db2ea5a89180a6438855d5",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"finance_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "b4837d91609d9b5de7be97612e328d2e27040c00b5db2ea5a89180a6438855d5",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"finance_changed",
+				"calendar_changed"
+			],
+			"step": "Begin Seeded 4417 1"
+		},
+		{
+			"headless": "4f84fc21e70782cc596a1f343013264d0589f55a7ea82a9cfffbf0f7a7d4fe5c",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "4f84fc21e70782cc596a1f343013264d0589f55a7ea82a9cfffbf0f7a7d4fe5c",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Planned priorities design"
+		},
+		{
+			"headless": "44358a3aa606b16725eb77dcc0f34cc572c4f09ecee1c0f5e2a13d3c3063b3be",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "44358a3aa606b16725eb77dcc0f34cc572c4f09ecee1c0f5e2a13d3c3063b3be",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Initial design"
+		},
+		{
+			"headless": "4f8d23c596035d6ec4af5a6ea358611825d2865524694896d21fd4edad1b3df3",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "4f8d23c596035d6ec4af5a6ea358611825d2865524694896d21fd4edad1b3df3",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw design"
+		},
+		{
+			"headless": "24eb68362e2272276dc23937b11f85997ddec98ba9babea032ff2269d60bf915",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "24eb68362e2272276dc23937b11f85997ddec98ba9babea032ff2269d60bf915",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected reverse design"
+		},
+		{
+			"headless": "b10b01c7617b61f0072cb6f2da5843ada0870b1cd4b6fc384bee92b2d6790cee",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "b10b01c7617b61f0072cb6f2da5843ada0870b1cd4b6fc384bee92b2d6790cee",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "783916ea21ce2c4461a5ecbfbb36f42ad41ae4fb4c8d3685797a4f89d540862d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "783916ea21ce2c4461a5ecbfbb36f42ad41ae4fb4c8d3685797a4f89d540862d",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 0"
+		},
+		{
+			"headless": "b2341dc59c24b7e996cb2dedc543dc469ce9940e06a4a7e668eb9c0fe0b10e3e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "b2341dc59c24b7e996cb2dedc543dc469ce9940e06a4a7e668eb9c0fe0b10e3e",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Planned priorities alpha"
+		},
+		{
+			"headless": "092db7d2d529939f3d13db1737c636961f2e15e7f90db7710ed293b7a31e55de",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "092db7d2d529939f3d13db1737c636961f2e15e7f90db7710ed293b7a31e55de",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Initial alpha"
+		},
+		{
+			"headless": "fcdcd15f4a74efe41e0d404740dbb91f2a77a8ef538c9d31daff427f2de9e0a6",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "fcdcd15f4a74efe41e0d404740dbb91f2a77a8ef538c9d31daff427f2de9e0a6",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw alpha"
+		},
+		{
+			"headless": "2614aeca132162ffe4dca997e6e0f301d13d49d9f24e94f7de6f121481ec1e01",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "2614aeca132162ffe4dca997e6e0f301d13d49d9f24e94f7de6f121481ec1e01",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected reverse alpha"
+		},
+		{
+			"headless": "9d2dc9ee3bc616554e0eb7071ad51db31c2fc114ef9c7523d4093b4298e6da91",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cycle_changed",
+				"finance_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "9d2dc9ee3bc616554e0eb7071ad51db31c2fc114ef9c7523d4093b4298e6da91",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"cycle_changed",
+				"finance_changed",
+				"calendar_changed"
+			],
+			"step": "Seeded Host Playtest alpha"
+		},
+		{
+			"headless": "27e65703882404c4d5c1dfc07ed33ff2358ed0612e6bdb62c4f443b29e764a7f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "27e65703882404c4d5c1dfc07ed33ff2358ed0612e6bdb62c4f443b29e764a7f",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "52d1a75990d82b70c861ea0cb3cd13920180310b3a57b66d7b9e931730387b0e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "52d1a75990d82b70c861ea0cb3cd13920180310b3a57b66d7b9e931730387b0e",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 1"
+		},
+		{
+			"headless": "0ec00ebb17fef05ca91b93c31be05433761e9ced9140b0b48b948c64efef9279",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "0ec00ebb17fef05ca91b93c31be05433761e9ced9140b0b48b948c64efef9279",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Planned priorities beta"
+		},
+		{
+			"headless": "d96be18cc95631840e5ed7c3b5fdffd783d3bbad8fd0cfaec000cddeb0950d32",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "d96be18cc95631840e5ed7c3b5fdffd783d3bbad8fd0cfaec000cddeb0950d32",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Initial beta"
+		},
+		{
+			"headless": "7a4879a45e5317fe9b29b25cc19246d1c99469b4628f69d12aeed093c6d1d493",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "7a4879a45e5317fe9b29b25cc19246d1c99469b4628f69d12aeed093c6d1d493",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw beta"
+		},
+		{
+			"headless": "f347bdba592f78e9def1763fea078930c8c24bba7b78e75c711dba7a4aa2d410",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "f347bdba592f78e9def1763fea078930c8c24bba7b78e75c711dba7a4aa2d410",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"step": "Selected reverse beta"
+		},
+		{
+			"headless": "af030ab7dc082047cf11086d099e41ade144a2717908b0797348bfc629207034",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "af030ab7dc082047cf11086d099e41ade144a2717908b0797348bfc629207034",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first beta"
+		},
+		{
+			"headless": "b6ec83b3d921ae52fdff1e2b2597bb6c590f3dcd8140039c2ab004cca244a1ee",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"matched": true,
+			"native": "b6ec83b3d921ae52fdff1e2b2597bb6c590f3dcd8140039c2ab004cca244a1ee",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"step": "Exit phase 2"
+		},
+		{
+			"headless": "edd1e149202028f489102e6b31618bee67193f7ab7772d701cc35d20a92e652f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"contracts_changed",
+				"finance_changed"
+			],
+			"matched": true,
+			"native": "edd1e149202028f489102e6b31618bee67193f7ab7772d701cc35d20a92e652f",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"cash_changed",
+				"contracts_changed",
+				"finance_changed"
+			],
+			"step": "Accept and deal Ironclad"
+		},
+		{
+			"headless": "96d5b2be130bbe6240155913262272f3bfdb65470b0fee886ab8568f4bb75364",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "96d5b2be130bbe6240155913262272f3bfdb65470b0fee886ab8568f4bb75364",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Contract priorities"
+		},
+		{
+			"headless": "134d4355692e7a3543694f36d4c854015bd771a846a1da45fdc91940d74c93d6",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "134d4355692e7a3543694f36d4c854015bd771a846a1da45fdc91940d74c93d6",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Contract hand 0"
+		},
+		{
+			"headless": "98351777459ef3086f5c120a163c49ffc4e1c3dc7c977a1fdc05d5b5932130db",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "98351777459ef3086f5c120a163c49ffc4e1c3dc7c977a1fdc05d5b5932130db",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Contract hand 1"
+		},
+		{
+			"headless": "6be08fd74d21d5ff0a8929fa626dbc93b20aee4b5c61b9c44c47be8a47c78d35",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "6be08fd74d21d5ff0a8929fa626dbc93b20aee4b5c61b9c44c47be8a47c78d35",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Contract returns Studio"
+		},
+		{
+			"headless": "7b42eb4410f58f125860fed4c75524698614b9a38c8ce5688e211f41f80dc90c",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "7b42eb4410f58f125860fed4c75524698614b9a38c8ce5688e211f41f80dc90c",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Begin Seeded 4417 2"
+		},
+		{
+			"headless": "d20c6abfd2126f1c48ac7e612698be2292c550985cb34fdd2fb01be0579db4f4",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "d20c6abfd2126f1c48ac7e612698be2292c550985cb34fdd2fb01be0579db4f4",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Planned priorities design"
+		},
+		{
+			"headless": "8b27361a33f5acb0a2d423e9a8c70e1d340e4aa413d3d6000417ec928cbdbdb4",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "8b27361a33f5acb0a2d423e9a8c70e1d340e4aa413d3d6000417ec928cbdbdb4",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Initial design"
+		},
+		{
+			"headless": "a7bf8ca9b721f1ca19f13847fbbe88a48a27818c7d96e11ad583a2a3ceca21f0",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "a7bf8ca9b721f1ca19f13847fbbe88a48a27818c7d96e11ad583a2a3ceca21f0",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw design"
+		},
+		{
+			"headless": "e32fd8082ea3e7d9df014410aaf00bde2278b324b33b825718d37684e23d541d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "e32fd8082ea3e7d9df014410aaf00bde2278b324b33b825718d37684e23d541d",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected reverse design"
+		},
+		{
+			"headless": "b79a0e3d6a4b7c334d1d5bea74ec2e2515151e6188bcf679d3322fd316e0cb8a",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "b79a0e3d6a4b7c334d1d5bea74ec2e2515151e6188bcf679d3322fd316e0cb8a",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "f9f776c4898d270a9b113e4261b134d44a759d51ae0be47b13443cbda8aa1073",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "f9f776c4898d270a9b113e4261b134d44a759d51ae0be47b13443cbda8aa1073",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 0"
+		},
+		{
+			"headless": "1847c17a1e375dbe513750700b19ac2e14f628b572b3e60277991b9fb1546cb4",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "1847c17a1e375dbe513750700b19ac2e14f628b572b3e60277991b9fb1546cb4",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Planned priorities alpha"
+		},
+		{
+			"headless": "af152354e07f69c207b7c9731e3dcf96bc5b0ec05bb7d4066a763e7fd6c4498d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "af152354e07f69c207b7c9731e3dcf96bc5b0ec05bb7d4066a763e7fd6c4498d",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Initial alpha"
+		},
+		{
+			"headless": "93f8603e9e4c810969cea05c37d459b7cf5256f2e9f99edb0eaa038d0ad0949f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "93f8603e9e4c810969cea05c37d459b7cf5256f2e9f99edb0eaa038d0ad0949f",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw alpha"
+		},
+		{
+			"headless": "b1ce68c80f536ec86aa4703a7940a9ed5294887dd6559cedf02053404af9cef8",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "b1ce68c80f536ec86aa4703a7940a9ed5294887dd6559cedf02053404af9cef8",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected reverse alpha"
+		},
+		{
+			"headless": "82f325552a9c3074328564a71948d85ad58038b60abea3727a73b66daa2e316d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "82f325552a9c3074328564a71948d85ad58038b60abea3727a73b66daa2e316d",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "76fa7010cc89eb1375ad3a09097f037652b324ebc964bae32a519cade5f65dc0",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "76fa7010cc89eb1375ad3a09097f037652b324ebc964bae32a519cade5f65dc0",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 1"
+		},
+		{
+			"headless": "c6de195929f338c5b28348620980ece6a136467ce56d87a889e9af08b4330014",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "c6de195929f338c5b28348620980ece6a136467ce56d87a889e9af08b4330014",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Planned priorities beta"
+		},
+		{
+			"headless": "52d99db929de883a2a04e0fdb6be524459a92b9b02c02df5e9de1d118be72a60",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "52d99db929de883a2a04e0fdb6be524459a92b9b02c02df5e9de1d118be72a60",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [],
+			"step": "Initial beta"
+		},
+		{
+			"headless": "4c352efc23aba3ce4050ff8b8721c094c6099e647b2736d99dd2255b0fa745be",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "4c352efc23aba3ce4050ff8b8721c094c6099e647b2736d99dd2255b0fa745be",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw beta"
+		},
+		{
+			"headless": "134916d2d969baeb9b71b0a1764c668b1b44e1891d3dadc20b8eeb7e192a222e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "134916d2d969baeb9b71b0a1764c668b1b44e1891d3dadc20b8eeb7e192a222e",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected reverse beta"
+		},
+		{
+			"headless": "21c99950d47f78171c0286114acb9f8652fff11c3acfbf61aeb8476ca79263d6",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "21c99950d47f78171c0286114acb9f8652fff11c3acfbf61aeb8476ca79263d6",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Seeded Host Playtest beta"
+		},
+		{
+			"headless": "6e2e9c9ca0cf9608f5400737a14b98a40180e3cfed739f02c631318e73d4ea9a",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "6e2e9c9ca0cf9608f5400737a14b98a40180e3cfed739f02c631318e73d4ea9a",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first beta"
+		},
+		{
+			"headless": "4926a69a0e1f7e8391d9545ea8d809135d2c52d66f593cb05d6a1d1849c2daee",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"matched": true,
+			"native": "4926a69a0e1f7e8391d9545ea8d809135d2c52d66f593cb05d6a1d1849c2daee",
+			"route": "seeded_4417_strategy",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"step": "Exit phase 2"
+		},
+		{
+			"headless": "9c635009fb16522de102ad7dce45659b5e8159a65b98af2ac263ae5085de56cd",
+			"hud_seen_topics": {},
+			"live_signals": [],
+			"matched": true,
+			"native": "9c635009fb16522de102ad7dce45659b5e8159a65b98af2ac263ae5085de56cd",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Initial Studio"
+		},
+		{
+			"headless": "6ac85eb6d3e1478087fe72706ba827c919fabc2231a01d8a220a21736a8ac11f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"finance_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "6ac85eb6d3e1478087fe72706ba827c919fabc2231a01d8a220a21736a8ac11f",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"finance_changed",
+				"calendar_changed"
+			],
+			"step": "Begin Seeded 90210 1"
+		},
+		{
+			"headless": "cfddbfa0f3813031173f81ba06326c3936c0351637c5579c1c342344858e5c98",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "cfddbfa0f3813031173f81ba06326c3936c0351637c5579c1c342344858e5c98",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Planned priorities design"
+		},
+		{
+			"headless": "315db9999e8346f6154ae7ffe8e3153136f960cf955f224bd3385b3a0b0d6f36",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "315db9999e8346f6154ae7ffe8e3153136f960cf955f224bd3385b3a0b0d6f36",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Initial design"
+		},
+		{
+			"headless": "ee3460b6db88a7290e970ad354b1f4fc74b7d7f58a5e1643c71a617a1842fc2e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "ee3460b6db88a7290e970ad354b1f4fc74b7d7f58a5e1643c71a617a1842fc2e",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw design"
+		},
+		{
+			"headless": "3c4e47f997ec93839573184b9a3dd8f1f9590e278a434ec47198578d56c36edc",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "3c4e47f997ec93839573184b9a3dd8f1f9590e278a434ec47198578d56c36edc",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "b428f46f9c2c0f35ea8f01b4577e6140fc06f7a121ea6b9f1ff2affe178cbfab",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "b428f46f9c2c0f35ea8f01b4577e6140fc06f7a121ea6b9f1ff2affe178cbfab",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "3a87e4dc7169e83677bf3a547a413b4a6b77da6a3cffa56e4666b7496cdacaf6",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "3a87e4dc7169e83677bf3a547a413b4a6b77da6a3cffa56e4666b7496cdacaf6",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 0"
+		},
+		{
+			"headless": "ae2b0bd47bb9c0cb3a93fdd6aeae8da28fa959279964245872f6cba5a4f6af13",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "ae2b0bd47bb9c0cb3a93fdd6aeae8da28fa959279964245872f6cba5a4f6af13",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Planned priorities alpha"
+		},
+		{
+			"headless": "c82ee4b7e1fe147086181a16e58003ce0dff72721a402ea291b92c2606eecfd8",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "c82ee4b7e1fe147086181a16e58003ce0dff72721a402ea291b92c2606eecfd8",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Initial alpha"
+		},
+		{
+			"headless": "98414534a50e5676c0b57091b77b19014c2ef4334cd9941b17d091b501e3dc64",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "98414534a50e5676c0b57091b77b19014c2ef4334cd9941b17d091b501e3dc64",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw alpha"
+		},
+		{
+			"headless": "c75e4baeb9b18505c8efdf315c87bc61213720ad506db4e1eb8d659ee40b9c5d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "c75e4baeb9b18505c8efdf315c87bc61213720ad506db4e1eb8d659ee40b9c5d",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "5b08ca97fff258c1eb130d6e8eca310e481accb721b62d69716a5d1d770f4171",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "5b08ca97fff258c1eb130d6e8eca310e481accb721b62d69716a5d1d770f4171",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"step": "Seeded Host Playtest alpha"
+		},
+		{
+			"headless": "9df92ee6d72df3cb6c84fe3d22c05915393e9411037511b25ef8d2c55a84467c",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "9df92ee6d72df3cb6c84fe3d22c05915393e9411037511b25ef8d2c55a84467c",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "9e69206ce34c3bcb5436d5e1e53c127e16c9924a7911dc02bd41f662fae7b7c9",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "9e69206ce34c3bcb5436d5e1e53c127e16c9924a7911dc02bd41f662fae7b7c9",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 1"
+		},
+		{
+			"headless": "5afce73bbef1d0ed10ec3af056d0e8d61259862daa753a371e66934a0668850f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "5afce73bbef1d0ed10ec3af056d0e8d61259862daa753a371e66934a0668850f",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Planned priorities beta"
+		},
+		{
+			"headless": "816064d595d581779aa85981b88e9d6fcdbbad934247cf35c0d4d6e54a660af9",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "816064d595d581779aa85981b88e9d6fcdbbad934247cf35c0d4d6e54a660af9",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Initial beta"
+		},
+		{
+			"headless": "cdba62700bd020a97b4b8582bc08242271f78f4486e0019dc3fdae4022a3dfc8",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "cdba62700bd020a97b4b8582bc08242271f78f4486e0019dc3fdae4022a3dfc8",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw beta"
+		},
+		{
+			"headless": "b94fec81ad4099655743d1e6469ea9a85ae72aa70da4ebf66094adfecdd5f63a",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "b94fec81ad4099655743d1e6469ea9a85ae72aa70da4ebf66094adfecdd5f63a",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first beta"
+		},
+		{
+			"headless": "01e46db68817e840a198dabbc2a38cce18e8d45382a0c4de555bdb0a07caa9f3",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "01e46db68817e840a198dabbc2a38cce18e8d45382a0c4de555bdb0a07caa9f3",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first beta"
+		},
+		{
+			"headless": "fb831010fe544531f6a1a058374e2112b9a0ccb64eaae9a033a43553e1783b1b",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"matched": true,
+			"native": "fb831010fe544531f6a1a058374e2112b9a0ccb64eaae9a033a43553e1783b1b",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"step": "Exit phase 2"
+		},
+		{
+			"headless": "c2558f97b985b2297e85f04e262f6201c255a41d67b15318a75d0ce5d062ca61",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"contracts_changed",
+				"finance_changed"
+			],
+			"matched": true,
+			"native": "c2558f97b985b2297e85f04e262f6201c255a41d67b15318a75d0ce5d062ca61",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"cash_changed",
+				"contracts_changed",
+				"finance_changed"
+			],
+			"step": "Accept and deal Ironclad"
+		},
+		{
+			"headless": "9f800d45a1e127a851ca0e1662ac89a41e0242d2bf46cc1dc490ea528e056cd4",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "9f800d45a1e127a851ca0e1662ac89a41e0242d2bf46cc1dc490ea528e056cd4",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Contract priorities"
+		},
+		{
+			"headless": "3a0877d7066561e0f1ae788fea74813f7026b622295b8fbd2555d5c3f86c3f8b",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "3a0877d7066561e0f1ae788fea74813f7026b622295b8fbd2555d5c3f86c3f8b",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Contract hand 0"
+		},
+		{
+			"headless": "3b8177959790151a4675a1f0d2a3e754db5f9a7149f39af980946cd5713d91b8",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "3b8177959790151a4675a1f0d2a3e754db5f9a7149f39af980946cd5713d91b8",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"publishers_changed",
+				"contracts_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Contract hand 1"
+		},
+		{
+			"headless": "0f03ffddb131b47ff07509f418a63bd0b6320457effbe32bec842ba57ebf4d85",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "0f03ffddb131b47ff07509f418a63bd0b6320457effbe32bec842ba57ebf4d85",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Contract returns Studio"
+		},
+		{
+			"headless": "3dddb3b52862f1fde41fceea1b45fc1fb5f2aa355b93b2a161a5c4fe92741460",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "3dddb3b52862f1fde41fceea1b45fc1fb5f2aa355b93b2a161a5c4fe92741460",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Begin Seeded 90210 2"
+		},
+		{
+			"headless": "36ec56ecace9020028721671618b207ce890531ec5e981b5cf571d3ddb97230e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "36ec56ecace9020028721671618b207ce890531ec5e981b5cf571d3ddb97230e",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Planned priorities design"
+		},
+		{
+			"headless": "442c1b94dc01a3ce68813c588b70c3610ee08e1c30e0aee50e630db21eacbd51",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "442c1b94dc01a3ce68813c588b70c3610ee08e1c30e0aee50e630db21eacbd51",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Initial design"
+		},
+		{
+			"headless": "377bf2ef4015087e5527e041a2f518e6c0e9326bf86d445fa3e0572260f33ca6",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "377bf2ef4015087e5527e041a2f518e6c0e9326bf86d445fa3e0572260f33ca6",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw design"
+		},
+		{
+			"headless": "04342ffa621486de733183e7cc72dc206d2a418e1ca132111a13e4ee91723703",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "04342ffa621486de733183e7cc72dc206d2a418e1ca132111a13e4ee91723703",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "70bacd606f2c8553bfbd79ba84d909a01c99e05de0cf6d6b1137623d6334a171",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "70bacd606f2c8553bfbd79ba84d909a01c99e05de0cf6d6b1137623d6334a171",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"features_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first design"
+		},
+		{
+			"headless": "aae28463486c8628f71c6fb12d9489c285589aa02f6abff89b085cc8a79fedfb",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "aae28463486c8628f71c6fb12d9489c285589aa02f6abff89b085cc8a79fedfb",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 0"
+		},
+		{
+			"headless": "1734f501ac3e1d013486cdcc0c886c65aa344978804966d9d8932ceee24b2306",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "1734f501ac3e1d013486cdcc0c886c65aa344978804966d9d8932ceee24b2306",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Planned priorities alpha"
+		},
+		{
+			"headless": "15d0fb44614a858a300d9e0dd8c41e4cd222d25d60c3b34ad520ab469851341e",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "15d0fb44614a858a300d9e0dd8c41e4cd222d25d60c3b34ad520ab469851341e",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Initial alpha"
+		},
+		{
+			"headless": "dbd9b45d8ba2c2c056a372b6007d239aedaf9b1ffe19069b21f604f0953d1943",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "dbd9b45d8ba2c2c056a372b6007d239aedaf9b1ffe19069b21f604f0953d1943",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw alpha"
+		},
+		{
+			"headless": "716d43230e7bc9fa958fc4c1fd1ea3caac684d345a33315bddbe6a8e15f9aa1f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "716d43230e7bc9fa958fc4c1fd1ea3caac684d345a33315bddbe6a8e15f9aa1f",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"features_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "8b667a46b2d33eb3de84bfc532ea35709f1c86fb42cd6c97e2dfeb514d3cd618",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "8b667a46b2d33eb3de84bfc532ea35709f1c86fb42cd6c97e2dfeb514d3cd618",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first alpha"
+		},
+		{
+			"headless": "e67048dc8fc3b07bc1f832229d8daa90ba1437c3c5d67e1ad4c556b8aaed3636",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed"
+			],
+			"matched": true,
+			"native": "e67048dc8fc3b07bc1f832229d8daa90ba1437c3c5d67e1ad4c556b8aaed3636",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed"
+			],
+			"step": "Exit phase 1"
+		},
+		{
+			"headless": "f00d76e4c0a20277e37948f6383a5a4ea24be384a1a625d143a7cc319ce57e66",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "f00d76e4c0a20277e37948f6383a5a4ea24be384a1a625d143a7cc319ce57e66",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Planned priorities beta"
+		},
+		{
+			"headless": "9805e0f954712f13fd020bda3538763177fff678b6712f26389f7487837f5dca",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [],
+			"matched": true,
+			"native": "9805e0f954712f13fd020bda3538763177fff678b6712f26389f7487837f5dca",
+			"route": "seeded_90210_sports",
+			"sim_signals": [],
+			"step": "Initial beta"
+		},
+		{
+			"headless": "43f283959188239b98d9556f3d208cfae1584ffaf42367e53188907a5c076a49",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"redraws_changed"
+			],
+			"matched": true,
+			"native": "43f283959188239b98d9556f3d208cfae1584ffaf42367e53188907a5c076a49",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"redraws_changed"
+			],
+			"step": "Seeded redraw beta"
+		},
+		{
+			"headless": "39d1048ed19b04aaac5a6ab8f654da185f1fc0ca62894dfc3de7b83763191ea4",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "39d1048ed19b04aaac5a6ab8f654da185f1fc0ca62894dfc3de7b83763191ea4",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"redraws_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first beta"
+		},
+		{
+			"headless": "06fd28333c26d39457bfb4871a94faee3dc604062d97d268fb8c8eca943ac97f",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "06fd28333c26d39457bfb4871a94faee3dc604062d97d268fb8c8eca943ac97f",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"cycle_changed",
+				"cash_changed",
+				"finance_changed",
+				"sales_changed",
+				"fans_changed",
+				"calendar_changed"
+			],
+			"step": "Seeded Host Playtest beta"
+		},
+		{
+			"headless": "eb5dbff7fc3cbb398c35c40f357f882edfce374ba75ca5a765def1bc39f84f30",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"matched": true,
+			"native": "eb5dbff7fc3cbb398c35c40f357f882edfce374ba75ca5a765def1bc39f84f30",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"cycle_changed",
+				"finance_changed",
+				"sales_changed",
+				"calendar_changed"
+			],
+			"step": "Selected features_first beta"
+		},
+		{
+			"headless": "99d648deefc46ab3ce9ee336c5df581c93b782b696fb1a3aeac008d3413bad2d",
+			"hud_seen_topics": {
+				"studio_between_games": true
+			},
+			"live_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"matched": true,
+			"native": "99d648deefc46ab3ce9ee336c5df581c93b782b696fb1a3aeac008d3413bad2d",
+			"route": "seeded_90210_sports",
+			"sim_signals": [
+				"values_changed",
+				"values_changed",
+				"employees_changed",
+				"contracts_changed",
+				"sales_changed",
+				"fans_changed"
+			],
+			"step": "Exit phase 2"
+		}
+	]
+}

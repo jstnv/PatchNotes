@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_focus_lifecycle.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 8.859,
+  "errors": [
+    "ERROR: Resumed function '_finish_focus()' after await, but class instance is gone. At script: res://scripts/ui/feature_store_map.gd:789",
+    "ERROR: Resumed function '_finish_focus()' after await, but class instance is gone. At script: res://scripts/ui/feature_store_map.gd:790",
+    "ERROR: Resumed function '_finish_focus()' after await, but class instance is gone. At script: res://scripts/ui/feature_store_map.gd:793"
+  ],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "ERROR: Resumed function '_finish_focus()' after await, but class instance is gone. At script: res://scripts/ui/feature_store_map.gd:789",
+    "   at: resume (modules/gdscript/gdscript_function.cpp:323)",
+    "ERROR: Resumed function '_finish_focus()' after await, but class instance is gone. At script: res://scripts/ui/feature_store_map.gd:790",
+    "   at: resume (modules/gdscript/gdscript_function.cpp:323)",
+    "ERROR: Resumed function '_finish_focus()' after await, but class instance is gone. At script: res://scripts/ui/feature_store_map.gd:793",
+    "   at: resume (modules/gdscript/gdscript_function.cpp:323)",
+    "{\"checks\":6,\"failures\":0,\"ok\":true}"
+  ]
+}

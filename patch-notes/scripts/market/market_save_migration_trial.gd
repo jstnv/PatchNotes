@@ -86,6 +86,8 @@ func _upgrade_run(payload: Dictionary, active: bool, source_id: String) -> Dicti
 	native.run.commission_deals = {}
 	StudioCheckpoint._empty_support(native)
 	native.run.contract_search=RunState.ContractSearch.from_legacy(native.run)
+	if not RunState.StoreEra.predecessor_features_known(native.run): error="Unknown historical Feature cohort"; return {}
+	native.run.store_era_receipts = RunState.StoreEra.from_releases(native.run.release_metadata)
 	native.content_revision = StudioCheckpoint.new().revision()
 	var codec := CheckpointCodec.new()
 	var encoded: Variant = codec.encode(native, CheckpointSchema.root(true, active))

@@ -90,6 +90,9 @@ func _run() -> void:
 	expect(before == [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_released_game_sales(first_id), run.get_released_game_sales(second_id)], "History browsing is passive")
 	review.get_node("%ContinueButton").pressed.emit()
 	expect(run.advance_calendar_cycle(), "One productive cycle earns both historical releases")
+	# Atomic Run signals coalesce into the next displayed UI state.
+	await process_frame
+	await process_frame
 	var earned := run.get_released_game_sales(first_id)
 	expect(earned.earned_units > 0 and rebuilt.get_node("%EarnedLabel").text.contains(CashFormatter.format_exact_cents(earned.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS)), "Selected history updates its exact earned gross after sales progress")
 	history.review.final_review = 0.0

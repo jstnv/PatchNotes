@@ -1,0 +1,253 @@
+{
+  "status": "REGRESSION_REPRODUCED_NOT_FIXED",
+  "branch": "main",
+  "head": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "runtime_identity": "25dc0a8892df95b95b93690b5224d12e4242a97426ad5d4dbf4c98d42696af59",
+  "runtime_unchanged_from_preceding_discard_pass": true,
+  "fixture": "tools\\fixtures\\background_checkpoint_v003_c96.json",
+  "fixture_sha256": "83e8e896a0641f95037b1ff908c1cba8daf7576252ad0aa9cda93efba1ba03be",
+  "probe_before_repeat_sha256": "23969c204c1014a65e7ad6d4d914dd2cfd94c15f9651c781cd5888ae69663403",
+  "probe_limits": "Native button callbacks versus separately labeled headless public-transaction/callback clocks. No physical mouse stopwatch or native frame-rate guarantee.",
+  "validation": {
+    "command": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_campaign_latency.gd"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 5.953,
+    "errors": [],
+    "tail": [
+      "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+      "",
+      "Loaded 40 cards.",
+      "{\"checks\":197,\"failures\":0,\"measurements\":{\"cycle\":96,\"original_validation_us\":25814,\"repeated_validation_us\":987},\"ok\":true}"
+    ]
+  },
+  "cases": {
+    "research-native-v2": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-latency-20261027-v1/research_latency.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: No500ms+ synchronous queue stall atcycle96",
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle96"
+      ],
+      "report_sha256": "fc779a73d5de572128bdd0a6d3684a6f5892d1aa7965ed30a828a12dfd9bf5ba",
+      "receipt_sha256": "3acf22975ba92e69f86b50be5f41fa9636a1817d135d5fda20360d8c7e49f3e1",
+      "actions": [
+        {
+          "cycle": 96,
+          "feature": "secrets",
+          "frames": 2,
+          "handler_ms": 607.374,
+          "max_frame_gap_ms": 734.049,
+          "operation": "queue",
+          "saving_after": true,
+          "through_two_frames_ms": 778.087,
+          "worker_was_active": false
+        },
+        {
+          "cycle": 96,
+          "feature": "secrets",
+          "frames": 2,
+          "handler_ms": 2497.323,
+          "max_frame_gap_ms": 2564.554,
+          "operation": "research",
+          "saving_after": true,
+          "through_two_frames_ms": 2593.319,
+          "worker_was_active": true
+        }
+      ],
+      "stages": [
+        {
+          "actions": 2,
+          "durability": [
+            {
+              "frames": 170,
+              "max_frame_gap_ms": 2564.554,
+              "wait_ms": 15534.759
+            }
+          ],
+          "end_cycle": 97,
+          "first_action": 0,
+          "idle_max_frame_gap_ms": 253.126,
+          "open_store_ms": 718.264,
+          "rivals": 2,
+          "start_cycle": 96,
+          "world_release_records": 19
+        }
+      ]
+    },
+    "research-native-repeat": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-latency-20261027-v1/research_latency.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: No500ms+ synchronous queue stall atcycle96",
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle96"
+      ],
+      "report_sha256": "f9269e53840e6dc040a1cda3ed9a69c992256a864c528dbca09b5a5b6a9200a2",
+      "receipt_sha256": "5a8794b2e5ca59e5c1d2d540c23c6cc2ecd6afb5293fce42b7aa96454c49a12d",
+      "actions": [
+        {
+          "core_ms": 0.0,
+          "cycle": 96,
+          "feature": "secrets",
+          "frames": 2,
+          "handler_ms": 504.811,
+          "max_frame_gap_ms": 613.824,
+          "operation": "queue",
+          "refresh_ms": 0.0,
+          "rival_ms": 0.0,
+          "saving_after": true,
+          "split_profile": false,
+          "through_two_frames_ms": 649.976,
+          "worker_was_active": false
+        },
+        {
+          "core_ms": 0.0,
+          "cycle": 96,
+          "feature": "secrets",
+          "frames": 2,
+          "handler_ms": 2229.43,
+          "max_frame_gap_ms": 2304.0,
+          "operation": "research",
+          "refresh_ms": 0.0,
+          "rival_ms": 0.0,
+          "saving_after": true,
+          "split_profile": false,
+          "through_two_frames_ms": 2344.527,
+          "worker_was_active": true
+        }
+      ],
+      "stages": [
+        {
+          "actions": 2,
+          "durability": [
+            {
+              "frames": 170,
+              "max_frame_gap_ms": 2304.0,
+              "wait_ms": 15360.998
+            }
+          ],
+          "end_cycle": 97,
+          "first_action": 0,
+          "idle_max_frame_gap_ms": 253.478,
+          "open_store_ms": 642.324,
+          "rivals": 2,
+          "start_cycle": 96,
+          "world_release_records": 19
+        }
+      ]
+    },
+    "split-headless-v2": {
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-latency-20261027-v1/research_latency.gd",
+        "--",
+        "--split"
+      ],
+      "exit": 1,
+      "errors": [
+        "ERROR: FAIL: No500ms+ synchronous research stall atcycle96"
+      ],
+      "report_sha256": "6f20528d5ec1c885e661369f1431f2a88ea261090b89823cff02a22b19ce785f",
+      "receipt_sha256": "3f66e93e17987b27a4519934fceb846177aa4ac2399d81f50da4e62d00809a19",
+      "actions": [
+        {
+          "core_ms": 29.74,
+          "cycle": 96,
+          "feature": "secrets",
+          "frames": 2,
+          "handler_ms": 162.566,
+          "max_frame_gap_ms": 187.581,
+          "operation": "queue",
+          "refresh_ms": 129.55,
+          "rival_ms": 0.0,
+          "saving_after": true,
+          "split_profile": true,
+          "through_two_frames_ms": 194.912,
+          "worker_was_active": false
+        },
+        {
+          "core_ms": 724.618,
+          "cycle": 96,
+          "feature": "secrets",
+          "frames": 2,
+          "handler_ms": 824.338,
+          "max_frame_gap_ms": 847.552,
+          "operation": "research",
+          "refresh_ms": 86.002,
+          "rival_ms": 647.163,
+          "saving_after": true,
+          "split_profile": true,
+          "through_two_frames_ms": 858.665,
+          "worker_was_active": true
+        }
+      ],
+      "stages": [
+        {
+          "actions": 2,
+          "durability": [
+            {
+              "frames": 729,
+              "max_frame_gap_ms": 847.552,
+              "wait_ms": 5013.568
+            }
+          ],
+          "end_cycle": 97,
+          "first_action": 0,
+          "idle_max_frame_gap_ms": 7.077,
+          "open_store_ms": 192.153,
+          "rivals": 2,
+          "start_cycle": 96,
+          "world_release_records": 19
+        }
+      ]
+    }
+  },
+  "not_run": [
+    "Cycle192 stage",
+    "Broader long-history/fresh-founder campaign",
+    "New EXE/player package"
+  ],
+  "no_gameplay_source_changed": true
+}

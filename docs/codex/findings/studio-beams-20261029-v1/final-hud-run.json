@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_gameplay_hud_overlay.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 4.109,
+  "errors": [],
+  "tail": [
+    "       [2] _validate_and_calculate_base_action (res://scripts/phases/alpha_phase.gd:626)",
+    "       [3] get_employee_hand_status (res://scripts/phases/alpha_phase.gd:798)",
+    "       [4] refresh (res://scripts/ui/phase_workspace.gd:214)",
+    "       [5] finalize_alpha (res://scripts/project_state.gd:571)",
+    "       [6] finalize (res://scripts/simulation/development_actions.gd:213)",
+    "       [7] _finalize_alpha (res://scripts/phases/alpha_phase.gd:283)",
+    "       [8] _run (res://scripts/debug/verify_gameplay_hud_overlay.gd:68)",
+    "       [9] verify_overlay (res://scripts/debug/verify_gameplay_hud_overlay.gd:233)",
+    "Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 0; implemented 0; unimplemented 14",
+    "Gameplay HUD and priority overlay verification passed."
+  ],
+  "runtime_identity": "505047e957ceebc67551d784da363f25f0c6e094ec0c3d83a85dd35d5297f0c2",
+  "runtime_source_unchanged": true
+}

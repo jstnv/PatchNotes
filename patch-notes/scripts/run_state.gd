@@ -40,6 +40,8 @@ var _released_games: Dictionary = {}
 var _market_provider: Callable = Callable()
 var _market_committed_candidate: Dictionary = {}
 var _release_metadata: Dictionary = {}
+var _store_era_receipts: Dictionary = {"version":1,"assignments":{}}
+const StoreEra := preload("res://scripts/cards/store_era_eligibility.gd")
 var _productive_cycle_in_progress := false
 var _committing_cycle_cash := false
 var _publishing_cycle := false
@@ -298,6 +300,7 @@ func get_feature_spending_advice(purchase_id: StringName = &"") -> Dictionary:
 	if not path.available: return path
 	for step: Dictionary in path.steps:
 		if not ids.has(step.id): ids.append(step.id)
+	ids=FeatureStoreCatalog.future_supply(ids,_feature_offers)
 	var price: int = path.price_cents
 	var purchase_cycles: int = path.cycles
 	var cards: Array[CardData] = []
@@ -306,7 +309,7 @@ func get_feature_spending_advice(purchase_id: StringName = &"") -> Dictionary:
 		if not _feature_definitions.has(id): return {"available": false}
 		var entry: Dictionary = _feature_definitions[id]
 		if _feature_offers.has(id):
-			unpriced += 1
+			if not _feature_offers[id].has("play_cost_cents"): unpriced += 1
 			continue
 		# Reuse the actual charge path; no parallel play-price formula.
 		var card := CardData.new()
@@ -417,6 +420,11 @@ func get_primitive_reserve_offer(id: StringName) -> Dictionary:
 		return {}
 	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
 	if graph.has("error"): return {}
+	return _primitive_reserve_offer(id,graph)
+
+
+func _primitive_reserve_offer(id: StringName, graph: Dictionary) -> Dictionary:
+	if not _first_studio_economy or not _feature_definitions.has(id) or _feature_offers.has(id): return {}
 	var parents: Array = graph.parents[id]
 	var missing: Array[StringName] = []
 	var names: Array[String] = []
@@ -436,7 +444,7 @@ func get_primitive_reserve_offer(id: StringName) -> Dictionary:
 		"parents": parents, "missing_parents": missing, "unlocked": missing.is_empty(),
 		"prerequisite": "Own " + " AND ".join(names) if not names.is_empty() else "Primitive reserve",
 		"grant_exception": owns_feature(id) and not missing.is_empty(),
-		"initial": initial, "can_purchase": not owns_feature(id) and missing.is_empty() and _cash_initialized and _cash_cents >= price}
+		"initial": initial, "can_purchase": FeatureStoreCatalog.is_active(id) and not owns_feature(id) and missing.is_empty() and _cash_initialized and _cash_cents >= price}
 
 
 func purchase_starter_feature(id: StringName) -> bool:
@@ -531,6 +539,10 @@ func get_owned_feature_ids() -> Array[StringName]:
 	return result
 
 
+func get_future_project_feature_ids() -> Array[StringName]:
+	return FeatureStoreCatalog.future_supply(get_owned_feature_ids(),_feature_offers)
+
+
 func get_feature_familiarity(id: StringName) -> int:
 	return _familiarity.get(id, 0)
 
@@ -554,10 +566,21 @@ func record_resolved_feature(project: ProjectState, id: StringName, phase: Strin
 	return true
 
 
+func get_store_era_status(era_year: int) -> Dictionary:
+	var receipt: StringName = _store_era_receipts.assignments.get(era_year,&"")
+	var reached := era_year in StoreEra.ERAS and get_current_year() >= era_year
+	return {"year_reached":reached,"receipt_id":receipt,"eligible":reached and not receipt.is_empty()}
+
+
 func get_feature_store_offer(id: StringName) -> Dictionary:
 	if not _feature_offers.has(id): return {}
 	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
 	if graph.has("error"): return {}
+	return _feature_store_offer(id,graph)
+
+
+func _feature_store_offer(id: StringName, graph: Dictionary) -> Dictionary:
+	if not _feature_offers.has(id): return {}
 	var entry: Dictionary = _feature_offers[id]
 	var parents: Array = graph.parents[id]
 	var parent: StringName = parents[0] if not parents.is_empty() else &""
@@ -576,7 +599,9 @@ func get_feature_store_offer(id: StringName) -> Dictionary:
 	var gameplay_owned := 0
 	for owned_id: StringName in _owned_features:
 		if _feature_definitions[owned_id].get("department", "") == "gameplay": gameplay_owned += 1
-	var unlocked := missing.is_empty() and gameplay_owned >= required
+	var year_reached := get_current_year() >= int(entry.get("min_year",START_YEAR))
+	var era_qualified: bool = not entry.has("era_year") or not get_store_era_status(int(entry.era_year)).receipt_id.is_empty()
+	var unlocked: bool = missing.is_empty() and gameplay_owned >= required and year_reached and era_qualified
 	var discount := mini(credits, 5) * 10
 	var base_price := int(entry.base_price_cents)
 	# Exact integer cents, without multiplying a potentially large base first.
@@ -584,10 +609,13 @@ func get_feature_store_offer(id: StringName) -> Dictionary:
 	var prerequisite := "New root"
 	if not parents.is_empty(): prerequisite = "Own " + " AND ".join(names)
 	elif required > 0: prerequisite = "Own %d distinct Gameplay Features (%d owned)" % [required, gameplay_owned]
-	return {"id":id,"name":entry.name,"parent":parent,"parents":parents.duplicate(),"missing_parents":missing,
+	var offer := {"id":id,"name":entry.name,"parent":parent,"parents":parents.duplicate(),"missing_parents":missing,
 		"parent_contributions":contributions,"parent_credits":credits,"prerequisite":prerequisite,
 		"owned":owns_feature(id),"unlocked":unlocked,"base_price_cents":base_price,
 		"discount_percent":discount,"price_cents":price,"affordable":_cash_initialized and _cash_cents >= price}
+	if entry.has("min_year") or entry.has("era_year"):
+		offer.merge({"min_year":int(entry.get("min_year",START_YEAR)),"era_year":int(entry.get("era_year",0)),"year_reached":year_reached,"era_qualified":era_qualified})
+	return offer
 
 
 func purchase_feature(id: StringName) -> bool:
@@ -606,11 +634,38 @@ func get_feature_research_queue() -> Array:
 
 
 func get_feature_research_quote(id: StringName) -> Dictionary:
+	return _get_feature_research_quote(id,true)
+
+
+func _get_feature_research_quote(id: StringName, check_action: bool) -> Dictionary:
 	if FeatureStoreCatalog.graph(_feature_definitions, _feature_offers).has("error"): return {}
 	var offer := get_feature_store_offer(id)
 	var primitive := offer.is_empty()
 	if primitive: offer = get_primitive_reserve_offer(id)
 	if offer.is_empty(): return {}
+	return _feature_research_quote(id,offer,get_feature_research_queue(),null,check_action)
+
+
+## One synchronous UI read; no snapshot survives a command or bypasses its
+## ordinary quote/finance validation. Graph and bill status are shared only
+## within this call, instead of rebuilding them separately for every map node.
+func get_feature_store_view() -> Dictionary:
+	var graph := FeatureStoreCatalog.graph(_feature_definitions,_feature_offers)
+	if graph.has("error"): return graph
+	var pending := get_feature_research_queue()
+	var blocked := get_financial_block_reason()
+	var result := {"offers":{},"reserves":{},"quotes":{},"financial_block_reason":blocked}
+	for id: StringName in _feature_definitions:
+		var offer := _feature_store_offer(id,graph)
+		var reserve := _primitive_reserve_offer(id,graph) if offer.is_empty() else {}
+		result.offers[id]=offer
+		result.reserves[id]=reserve
+		var available: Dictionary=reserve if offer.is_empty() else offer
+		result.quotes[id]={} if available.is_empty() else _feature_research_quote(id,available,pending,blocked)
+	return result
+
+
+func _feature_research_quote(id: StringName, offer: Dictionary, pending: Array, blocked: Variant, check_action: bool = true) -> Dictionary:
 	var base: int = offer.base_price_cents
 	var entry: Dictionary = {}
 	for candidate: Dictionary in _feature_research:
@@ -627,15 +682,14 @@ func get_feature_research_quote(id: StringName) -> Dictionary:
 	if done < actions: remaining -= resourceful_saving(int(FeatureResearch.payment(base,actions,actions-1,discount).due_cents))
 	var paid := 0 if entry.is_empty() else int(arithmetic.down_cents)
 	for installment: Dictionary in entry.get("payments",[]): paid += int(installment.paid_cents)
-	var pending := get_feature_research_queue()
 	var head: bool = queued and not pending.is_empty() and pending[0].feature_id == id
 	var unlocked: bool = offer.get("unlocked",false)
 	return {"feature_id":id,"entry_id":StringName("%s:research:%s" % [_bank_run_id,id]),
 		"base_cents":base,"down_cents":arithmetic.down_cents,"due_cents":arithmetic.due_cents-saving,"saving_cents":saving,
 		"nominal_cents":arithmetic.nominal_cents,"discount_percent":discount,"actions":actions,"completed":done,
 		"paid_cents":paid,"remaining_actions":actions-done,"remaining_cents":remaining,"queued":queued,"head":head,"unlocked":unlocked,
-		"can_admit":not needs_starter_selection() and not offer.owned and unlocked and not queued and _cash_initialized and _cash_cents>=arithmetic.down_cents and get_financial_block_reason().is_empty(),
-		"can_research":head and can_complete_productive_cycle(-int(arithmetic.due_cents-saving)),
+		"can_admit":FeatureStoreCatalog.is_active(id) and not needs_starter_selection() and not offer.owned and unlocked and not queued and _cash_initialized and _cash_cents>=arithmetic.down_cents and (get_financial_block_reason().is_empty() if blocked==null else blocked.is_empty()),
+		"can_research":head and check_action and can_complete_productive_cycle(-int(arithmetic.due_cents-saving)),
 		"cycle":_completed_run_cycles,"cash_cents":_cash_cents,"revision":_studio_finance.get("actions",[]).size(),"queue_size":_feature_research.size(),"resourceful_window":_released_games.size()}
 
 
@@ -659,7 +713,15 @@ func admit_feature_research(quote: Dictionary) -> bool:
 func research_feature(quote: Dictionary) -> bool:
 	if not can_mutate_checkpoint() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle: return false
 	if quote.is_empty() or typeof(quote.get("feature_id")) != TYPE_STRING_NAME: return false
-	if quote != get_feature_research_quote(quote.get("feature_id",&"")) or not quote.can_research: return false
+	if typeof(quote.get("can_research")) != TYPE_BOOL or not quote.can_research: return false
+	# Compare every fresh quote fact and require the actual FIFO head. The full
+	# money/sales/bill preflight runs once inside complete_productive_action,
+	# before its direct-effects callback. Do not compute that same plan here
+	# merely to discard it as a Boolean. Forged permission still cannot spend.
+	var current := _get_feature_research_quote(quote.feature_id,false)
+	var supplied := quote.duplicate(true)
+	supplied.can_research=false
+	if current.is_empty() or not current.head or supplied != current: return false
 	var commit := func() -> bool:
 		for entry: Dictionary in _feature_research:
 			if entry.id != quote.entry_id: continue
@@ -989,7 +1051,7 @@ func _create_release_sales_record(project: ProjectState) -> Dictionary:
 
 ## Release planning reuses the arithmetic owner on detached containers. The
 ## resulting field set is committed before Project or Run observers can fire.
-const RELEASE_FIELDS := ["_released_games","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs"]
+const RELEASE_FIELDS := ["_employees","_store_era_receipts","_released_games","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs"]
 
 func plan_release(project: ProjectState) -> Dictionary:
 	if _publishing_cycle or _productive_cycle_in_progress or not can_register_release(project): return {}
@@ -1002,11 +1064,11 @@ func plan_release(project: ProjectState) -> Dictionary:
 	if not probe._register_release_unpublished(project): return {}
 	var fields := {}
 	for field: String in RELEASE_FIELDS: fields[field] = probe.get(field)
-	return {"before":fence.authority(self),"project":fence.authority(project),"fields":fields,"changed":not _released_games.has(project.get_release_id()),"cash_changed":probe._cash_cents != _cash_cents,"finance_changed":probe._studio_finance != _studio_finance,"standing_changed":probe._publisher_relationships != _publisher_relationships,"publishers_changed":probe._unlocked_publishers != _unlocked_publishers}
+	return {"before":fence.fingerprint(self),"project":fence.fingerprint(project),"fields":fields,"changed":not _released_games.has(project.get_release_id()),"cash_changed":probe._cash_cents != _cash_cents,"finance_changed":probe._studio_finance != _studio_finance,"standing_changed":probe._publisher_relationships != _publisher_relationships,"publishers_changed":probe._unlocked_publishers != _unlocked_publishers}
 
 func can_commit_release_plan(project: ProjectState, plan: Dictionary) -> bool:
 	var fence := preload("res://scripts/simulation/transaction_projection.gd")
-	return not plan.is_empty() and not _publishing_cycle and not _productive_cycle_in_progress and plan.before == fence.authority(self) and plan.project == fence.authority(project)
+	return not plan.is_empty() and not _publishing_cycle and not _productive_cycle_in_progress and plan.before == fence.fingerprint(self) and plan.project == fence.fingerprint(project)
 
 ## Internal infallible seam: caller validates the plan immediately beforehand.
 func commit_release_fields(plan: Dictionary) -> void:
@@ -1015,6 +1077,7 @@ func commit_release_fields(plan: Dictionary) -> void:
 
 func publish_release_plan(plan: Dictionary) -> void:
 	if plan.changed:
+		employees_changed.emit()
 		if plan.cash_changed: cash_changed.emit()
 		if plan.finance_changed: finance_changed.emit()
 		if plan.standing_changed: publisher_relationships_changed.emit()
@@ -1070,6 +1133,12 @@ func _register_release_unpublished(project: ProjectState) -> bool:
 		_cash_cents = _studio_finance.cash_cents
 		_publisher_relationships = commission.relationships
 		_release_metadata[id].merge({"owner":&"publisher","publisher_id":&"sidestreet","commission_quote_id":commission.deal.terms.quote_id})
+	_store_era_receipts = StoreEra.from_releases(_release_metadata)
+	if uses_employee_courses() and _employees.employees.values().any(func(e):return e.has("career")):
+		var career_release:=EmployeeRoster.Career.release(_employees,id,_completed_run_cycles)
+		if career_release.is_empty():return false
+		_employees=career_release
+		_sync_employee_raises()
 	for offer_id: StringName in project.get_awareness_result().get_promotion_awards():
 		_promotion_consumed[offer_id] = id
 	# Qualification is captured only on the first committed registration. Existing
@@ -1534,6 +1603,60 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 	if _market_provider.is_valid():
 		market = _market_provider.call(_bank_run_id,_completed_run_cycles+1)
 		if not preload("res://scripts/market/market_transaction_trial.gd").valid(market): return {}
+	return _plan_cycle_records(direct_cash_delta_cents,campaign_release_id,finance_kind,source_id,market,cash_after_action)
+
+
+func _plan_cycle_records(direct_cash_delta_cents: int,campaign_release_id: StringName,finance_kind: StringName,source_id: StringName,market: Dictionary,cash_after_action: int) -> Dictionary:
+	# Cache only sales/Fan calculations, not a financial decision. Every guard,
+	# provider read, cash overflow check and full finance plan still runs. The
+	# key contains all typed inputs read by _plan_sales_cycle. Support's wider
+	# assessment path deliberately computes afresh.
+	var cache := preload("res://scripts/simulation/productive_cycle_plan_cache.gd")
+	var key:=PackedByteArray()
+	var sales: Dictionary={}
+	if _support_deals.is_empty():
+		key=var_to_bytes([campaign_release_id,_completed_run_cycles,_cash_initialized,
+			_market_provider.is_valid(),market,_bank_run_id,_released_games,_release_metadata,
+			_commission_deals,_support_rights,_support_assessments,_fanbase])
+		sales=cache.read(key)
+	if sales.is_empty():
+		sales=_plan_sales_cycle(campaign_release_id,market)
+		if not key.is_empty():cache.remember(key,sales)
+	if sales.is_empty():return {}
+	var next_records: Dictionary=sales.records
+	var payable: int=sales.payable
+	var earned: int=sales.earned
+	var fan_plan: Dictionary=sales.fans
+	var support_rights: Dictionary=sales.support_rights
+	var support_assessments: Dictionary=sales.support_assessments
+	if payable > MAX_SIGNED_INT - cash_after_action:
+		return {}
+	var finance_plan: Dictionary = {}
+	if _first_studio_economy:
+		if finance_kind.is_empty():
+			finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
+		finance_plan = StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles + 1, _cash_cents, direct_cash_delta_cents, finance_kind, earned, payable, true, source_id)
+		if finance_plan.is_empty(): return {}
+	var relationships := _publisher_relationships.duplicate(true)
+	if support_assessments != _support_assessments:
+		var prospective := RunState.new()
+		preload("res://scripts/simulation/transaction_projection.gd").copy_fields(self,prospective)
+		prospective._completed_run_cycles += 1
+		prospective._released_games = next_records
+		prospective._support_rights = support_rights
+		prospective._support_assessments = support_assessments
+		prospective._studio_finance = finance_plan.ledger
+		for id: StringName in support_assessments:
+			if _support_assessments.has(id): continue
+			var request := Support.request_for(prospective,id)
+			var resolver := func(source: Dictionary) -> Dictionary: return RelationshipRules.resolve(prospective,source)
+			var award := RelationshipLedger.plan(relationships,_bank_run_id,request,prospective._completed_run_cycles,resolver)
+			if award.is_empty(): return {}
+			relationships = award.ledger
+	return {"records":next_records,"payable":payable,"finance":finance_plan,"fans":fan_plan,"market":market,"support_rights":support_rights,"support_assessments":support_assessments,"relationships":relationships}
+
+
+func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Dictionary:
 	var next_records: Dictionary = {}
 	var payable := 0
 	var earned := 0
@@ -1575,31 +1698,7 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 		next_records[id] = next
 	var fan_plan := StudioFanbase.plan(_fanbase, _released_games, next_records, _completed_run_cycles + 1)
 	if fan_plan.is_empty(): return {}
-	if payable > MAX_SIGNED_INT - cash_after_action:
-		return {}
-	var finance_plan: Dictionary = {}
-	if _first_studio_economy:
-		if finance_kind.is_empty():
-			finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
-		finance_plan = StudioFinanceLedger.plan(_studio_finance, _completed_run_cycles + 1, _cash_cents, direct_cash_delta_cents, finance_kind, earned, payable, true, source_id)
-		if finance_plan.is_empty(): return {}
-	var relationships := _publisher_relationships.duplicate(true)
-	if support_assessments != _support_assessments:
-		var prospective := RunState.new()
-		preload("res://scripts/simulation/transaction_projection.gd").copy_fields(self,prospective)
-		prospective._completed_run_cycles += 1
-		prospective._released_games = next_records
-		prospective._support_rights = support_rights
-		prospective._support_assessments = support_assessments
-		prospective._studio_finance = finance_plan.ledger
-		for id: StringName in support_assessments:
-			if _support_assessments.has(id): continue
-			var request := Support.request_for(prospective,id)
-			var resolver := func(source: Dictionary) -> Dictionary: return RelationshipRules.resolve(prospective,source)
-			var award := RelationshipLedger.plan(relationships,_bank_run_id,request,prospective._completed_run_cycles,resolver)
-			if award.is_empty(): return {}
-			relationships = award.ledger
-	return {"records":next_records,"payable":payable,"finance":finance_plan,"fans":fan_plan,"market":market,"support_rights":support_rights,"support_assessments":support_assessments,"relationships":relationships}
+	return {"records":next_records,"payable":payable,"earned":earned,"fans":fan_plan,"support_rights":support_rights,"support_assessments":support_assessments}
 
 
 ## The direct-effects callback must be synchronous and atomic on false, using
@@ -1704,6 +1803,7 @@ func get_employee_observation() -> Dictionary:
 	return result
 
 func get_employee_hire_quote(role: StringName) -> Dictionary:
+	if role==&"project_manager" and not uses_employee_courses():return {}
 	if not uses_employee_trial():
 		if role!=&"production" or not _first_studio_economy or _released_games.is_empty() or not EmployeeRoster.valid(_employees) or not _employees.employees.is_empty():return {}
 		return StudioFinanceLedger.hire_quote(_studio_finance,_bank_run_id)
@@ -1731,6 +1831,32 @@ func get_qa_course_quote(course: StringName) -> Dictionary:
 			return {"type":&"course","employee_id":e.employee_id,"course":course,"receipt_id":StringName("%s:course:%s"%[e.employee_id,course]),"revision":_studio_finance.actions.size(),"fee_cents":15000,"rules_version":2}
 	return {}
 
+func get_employee_course_quote(id: StringName, course: StringName) -> Dictionary:
+	var employee: Dictionary=_employees.employees.get(id,{})
+	if employee.is_empty():return {}
+	if employee.type==&"qa":return get_qa_course_quote(course)
+	if not uses_employee_courses() or not EmployeeRoster.valid(_employees) or not _first_studio_economy or _released_games.size()<2 or _cash_cents<15000 or StudioFinanceLedger.get_unpaid(_studio_finance)!=0:return {}
+	if course not in EmployeeRoster.Career.course_ids(employee.type) or EmployeeRoster.Career.next_course(employee)!=course:return {}
+	return {"type":&"course","employee_id":id,"course":course,"receipt_id":StringName("%s:course:%s"%[id,course]),"revision":_studio_finance.actions.size(),"fee_cents":15000,"rules_version":3}
+
+func get_employee_course_quotes() -> Array:
+	var result: Array=[]
+	for employee: Dictionary in _employees.employees.values():
+		for course: StringName in EmployeeRoster.Career.course_ids(employee.type):
+			var quote:=get_employee_course_quote(employee.employee_id,course)
+			if not quote.is_empty():result.append(quote)
+	return result
+
+func purchase_employee_course(quote: Dictionary) -> bool:
+	if quote.get("rules_version")==2:return purchase_qa_course(quote)
+	if not can_mutate_checkpoint() or not _bank_action_available() or quote.is_empty() or quote!=get_employee_course_quote(quote.get("employee_id",&""),quote.get("course",&"")):return false
+	var roster:=EmployeeRoster.Career.enroll(_employees,quote.employee_id,quote.course,_completed_run_cycles)
+	var finance:=StudioFinanceLedger.course_payment(_studio_finance,quote)
+	if roster.is_empty() or finance.is_empty():return false
+	_employees=roster;_studio_finance=finance.ledger;_cash_cents=finance.cash_cents
+	_publishing_cycle=true;cash_changed.emit();finance_changed.emit();employees_changed.emit();_publishing_cycle=false
+	return true
+
 func purchase_qa_course(quote: Dictionary) -> bool:
 	if not can_mutate_checkpoint() or not _bank_action_available() or quote.is_empty() or quote!=get_qa_course_quote(quote.get("course",&"")): return false
 	var roster:=EmployeeRoster.buy_course(_employees,quote.employee_id,quote.course,_completed_run_cycles)
@@ -1756,8 +1882,8 @@ func _sync_employee_raises() -> void:
 	if not uses_employee_trial():return
 	for payroll: Dictionary in _studio_finance.employees:
 		var e: Dictionary=_employees.employees.get(payroll.employee_id,{})
-		if e.get("type")!=&"qa": continue
-		var desired:=EmployeeRoster.qa_wage(e)
+		if e.get("type")!=&"qa" and not e.has("career"): continue
+		var desired:=EmployeeRoster.Career.wage(e) if e.has("career") else EmployeeRoster.qa_wage(e)
 		if StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT)>=desired: continue
 		var due:=2*(_completed_run_cycles/2+2)
 		var step:=StudioFinanceLedger.schedule_payroll(_studio_finance,e.employee_id,desired,due,StringName("%s:raise:%d"%[e.employee_id,desired]))
@@ -1782,6 +1908,9 @@ func plan_employee_hand(project: ProjectState, phase: StringName, cards: Array, 
 				if rng.randi_range(1,100)<=EmployeeRoster.QA.PROC_PERCENT: discoveries+=1
 			roster=EmployeeRoster.qa_proc(roster,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles,phase,count)
 			if roster.is_empty():return {}
+	if uses_employee_courses() and roster.employees.values().any(func(e):return e.has("career")):
+		roster=EmployeeRoster.Career.hand(roster,project.get_release_id(),phase,project.get_current_cycle(),_completed_run_cycles+1,EmployeeRoster.Career.facts(cards),before)
+		if roster.is_empty():return {}
 	return {"before":_employees.duplicate(true),"after":roster,"cycle":_completed_run_cycles,"qa_discoveries":discoveries if phase==&"alpha" else 0}
 
 
@@ -1907,13 +2036,17 @@ func _plan_finishing_brief(state: ContractState, cards: Array[CardData], payment
 	var planned := RelationshipLedger.plan(prospective._publisher_relationships,_bank_run_id,request,prospective._completed_run_cycles,resolver)
 	return {} if planned.is_empty() else {"applicable":true,"ledger":planned.ledger}
 
-func plan_qa_beta_hand(project: ProjectState,cards: Array,discovered: int,fixed: int) -> Dictionary:
+func plan_qa_beta_hand(project: ProjectState,cards: Array,discovered: int,fixed: int,priorities: Dictionary={}) -> Dictionary:
 	var before:=_employees.duplicate(true)
-	if not _employees.employees.values().any(func(e):return e.type==&"qa"):
-		return {"before":before,"after":before.duplicate(true),"cycle":_completed_run_cycles}
 	var search: int=cards.filter(func(c):return c.id==&"search_for_bugs").size()
 	var debug: int=cards.filter(func(c):return c.id==&"debug").size()
-	var state:=EmployeeRoster.qa_beta_hand(_employees,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles+1,search,debug,discovered,fixed)
+	var state:=before.duplicate(true)
+	if _employees.employees.values().any(func(e):return e.type==&"qa"):
+		state=EmployeeRoster.qa_beta_hand(state,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles+1,search,debug,discovered,fixed)
+	if state.is_empty():return {}
+	if uses_employee_courses() and state.employees.values().any(func(e):return e.has("career")):
+		var weights: Dictionary=BetaPriorityAllocation.new().get_distribution() if priorities.is_empty() else priorities
+		state=EmployeeRoster.Career.hand(state,project.get_release_id(),&"beta",project.get_current_cycle(),_completed_run_cycles+1,EmployeeRoster.Career.facts(cards),weights)
 	return {} if state.is_empty() else {"before":before,"after":state,"cycle":_completed_run_cycles}
 
 
@@ -1984,10 +2117,14 @@ func get_contract_search_state() -> Dictionary:return _contract_search.duplicate
 
 ## Explicit trial activation: simulator opt-in or the unlocked Studio employee menu.
 func uses_employee_trial() -> bool:return EmployeeRoster.trial_active(_employees)
+func uses_employee_courses() -> bool:return EmployeeRoster.Career.active(_employees)
 func activate_employee_trial() -> bool:
 	if not can_mutate_checkpoint() or _productive_cycle_in_progress or _publishing_cycle:return false
-	var next:=EmployeeRoster.activate_trial(_employees,_completed_run_cycles)
+	if uses_employee_courses():return false
+	var next:=_employees.duplicate(true) if uses_employee_trial() else EmployeeRoster.activate_trial(_employees,_completed_run_cycles)
 	if next.is_empty():return false
-	_employees=next;migrate_employee_wages()
+	next=EmployeeRoster.Career.enable(next,_completed_run_cycles)
+	if next.is_empty():return false
+	_employees=next;migrate_employee_wages();_sync_employee_raises()
 	_publishing_cycle=true;finance_changed.emit();employees_changed.emit();_publishing_cycle=false
 	return true

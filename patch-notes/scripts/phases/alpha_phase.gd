@@ -47,6 +47,8 @@ var _phase_state := PhaseState.PLANNING
 var _priority_allocation := PRIORITY_ALLOCATION_SCRIPT.new()
 var _priority_draft: Dictionary[ProjectState.CoreScore, int] = {}
 var _employee_priority_choice: Dictionary = {}
+var _pass_choice_menu: CanvasLayer
+var _command_injected_ids: Array[int]=[]
 var _syncing_priority_controls := false
 var _available_features: Array[CardData] = []
 var _pass_definitions: Array[CardData] = []
@@ -91,6 +93,7 @@ func setup(project_state: ProjectState, run_state: RunState = null) -> void:
 		_project_state.values_changed.disconnect(_refresh_alpha_bug_pressure)
 	_project_state = project_state
 	_run_state = run_state
+	_priority_allocation.configure(run_state)
 	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"alpha_finalize")
 	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"alpha_deal")
 	if _run_state != null and not _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
@@ -114,7 +117,7 @@ func set_priority(category: int, requested_value: Variant) -> bool:
 		return accepted
 	if not _priority_draft.has(category) or (typeof(requested_value) != TYPE_INT and typeof(requested_value) != TYPE_FLOAT): return false
 	var value := int(requested_value)
-	if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0: return false
+	if value < PriorityAllocation.bounds(_run_state).x or value > PriorityAllocation.bounds(_run_state).y or value % PriorityAllocation.PRIORITY_STEP != 0: return false
 	_priority_draft[category] = value
 	_sync_priority_controls()
 	return true
@@ -122,7 +125,7 @@ func set_priority(category: int, requested_value: Variant) -> bool:
 
 func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
 	if not is_inside_tree(): return false
-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or not PriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or not PriorityAllocation.is_valid_new_distribution(distribution, _run_state) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
 	var publish:=func() -> void:
 		_priority_draft=_priority_allocation.get_priority_distribution()
 	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
@@ -147,7 +150,7 @@ func get_available_priority() -> int:
 
 
 func set_priority_distribution(distribution: Dictionary) -> bool:
-	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_new_distribution(distribution): return false
+	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_new_distribution(distribution, _run_state): return false
 	if not _priority_allocation.set_distribution(distribution): return false
 	_priority_draft = _priority_allocation.get_priority_distribution()
 	_sync_priority_controls()
@@ -166,7 +169,7 @@ func begin_alpha(controlled_rolls: Array[float] = []) -> bool:
 	if is_gameplay_input_blocked(): return false
 	if _phase_state != PhaseState.PLANNING:
 		return false
-	if not PriorityAllocation.is_valid_new_distribution(_priority_draft) or not _priority_allocation.set_distribution(_priority_draft) or not _load_source_definitions():
+	if not PriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state) or not _priority_allocation.set_distribution(_priority_draft) or not _load_source_definitions():
 		return false
 	if not _deal_next_candidate_pool(controlled_rolls):
 		push_warning("Could not begin Alpha because its weighted candidate pool is invalid.")
@@ -417,13 +420,14 @@ func _can_redraw_selection() -> bool:
 		return false
 	var seen: Array[CardView] = []
 	for view: CardView in _selected_card_views:
+		if _command_view_ids.get(view.get_instance_id(),-1) in _command_injected_ids:return false
 		if not _is_current_candidate_view(view) or view.card_data == null or seen.has(view) or view.card_data.card_type not in [&"feature", &"pass"]:
 			return false
 		seen.append(view)
 	return true
 
 
-func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
+func redraw_selected_cards(controlled_rolls: Array[float] = [], alignment_quote: Dictionary = {}) -> bool:
 	if not _can_redraw_selection(): return false
 	_hand_command_busy=true
 	var actions:=_capture_development_actions()
@@ -450,7 +454,7 @@ func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
 
 		_selected_card_views.clear()
 		_sync_command_tokens(actions.hand)
-	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish)
+	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish) if alignment_quote.is_empty() else actions.replace_pass(alignment_quote,prepare,publish)
 	if not result.ok:
 		for view in prepared: view.free()
 		if not result.plan.failed_features.is_empty():
@@ -466,7 +470,13 @@ func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
 
 
 func _on_redraw_pressed() -> void:
-	redraw_selected_cards()
+	if not _can_redraw_selection():return
+	var offers: Array=_capture_development_actions().alignment_options(_redraw_slots())
+	if offers.is_empty():_workspace.present_redraw(Callable(self,"redraw_selected_cards"));return
+	if not is_instance_valid(_pass_choice_menu):
+		_pass_choice_menu=preload("res://scripts/ui/production_pass_choice.gd").new()
+		add_child(_pass_choice_menu)
+	_pass_choice_menu.open_for(self,offers)
 
 
 func _refresh_redraw_controls() -> void:
@@ -603,6 +613,7 @@ func _on_play_alpha_hand_pressed() -> void:
 		view.set_card(card)
 		view.card_pressed.connect(_on_card_pressed)
 		%HandContainer.add_child(view)
+	_command_injected_ids.assign(resolver.injected_candidate_ids)
 	_command_revision = resolver.revision
 	_command_next_id = resolver.next_candidate_id
 	_command_view_ids.clear()
@@ -732,6 +743,9 @@ func _sync_priority_controls() -> void:
 	if not is_node_ready():
 		return
 	_syncing_priority_controls = true
+	var limits:=PriorityAllocation.bounds(_run_state)
+	for control: VSlider in [%GraphicsPriority,%SoundPriority,%TechnologyPriority,%DesignPriority]:
+		control.min_value=limits.x;control.max_value=limits.y
 	var values := _priority_draft if not _priority_draft.is_empty() else get_priority_distribution()
 	%GraphicsPriority.value = values[ProjectState.CoreScore.GRAPHICS]
 	%SoundPriority.value = values[ProjectState.CoreScore.SOUND]
@@ -744,7 +758,7 @@ func _sync_priority_controls() -> void:
 	var total := 0
 	for amount: int in values.values(): total += amount
 	%AvailablePriority.text = "%d/100" % total
-	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not PriorityAllocation.is_valid_new_distribution(values) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
+	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not PriorityAllocation.is_valid_new_distribution(values, _run_state) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
 	_syncing_priority_controls = false
 
 
@@ -757,6 +771,7 @@ func refresh_workspace() -> void:
 
 
 func is_gameplay_input_blocked() -> bool:
+	if is_instance_valid(_pass_choice_menu) and _pass_choice_menu.visible:return true
 	return _hand_command_busy or not is_inside_tree() or (_workspace != null and _workspace.overlay != null and _workspace.overlay.visible)
 
 
@@ -769,7 +784,7 @@ func is_initial_priority_planning() -> bool:
 
 
 func can_initialize_priorities() -> bool:
-	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and not _scope_warning_pending and PriorityAllocation.is_valid_new_distribution(_priority_draft)
+	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and not _scope_warning_pending and PriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state)
 
 
 func open_priority_overlay() -> bool:
@@ -777,8 +792,7 @@ func open_priority_overlay() -> bool:
 
 
 func reset_priority_draft() -> void:
-	_priority_draft = get_priority_distribution()
-	for key in _priority_draft: _priority_draft[key] = maxi(10,_priority_draft[key])
+	_priority_draft = PriorityAllocation.editable_distribution(get_priority_distribution(),_run_state)
 	_sync_priority_controls()
 
 
@@ -800,7 +814,7 @@ func get_employee_hand_status() -> Dictionary:
 
 
 func play_hand_with_employee_plan(distribution: Dictionary) -> bool:
-	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution(): return false
+	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_new_distribution(distribution, _run_state) or distribution == get_priority_distribution(): return false
 	var before := _project_state.get_current_cycle()
 	_employee_priority_choice = distribution.duplicate()
 	_on_play_alpha_hand_pressed()
@@ -827,6 +841,7 @@ func _capture_alpha_command() -> RefCounted:
 	state.priorities = get_priority_distribution()
 	state.active = _phase_state == PhaseState.ACTIVE_DEVELOPMENT
 	state._pending_playtest_categories.assign(_pending_playtest_categories)
+	state.injected_candidate_ids.assign(_command_injected_ids)
 	state.revision = _command_revision
 	if is_inside_tree() and get_node_or_null("%HandContainer")!=null:
 		for view in %HandContainer.card_views():
@@ -855,6 +870,7 @@ func _redraw_slots() -> Array[int]:
 	return slots
 
 func _sync_command_tokens(state: RefCounted) -> void:
+	_command_injected_ids.assign(state.injected_candidate_ids)
 	_command_revision=state.revision
 	_command_next_id=state.next_candidate_id
 	_command_view_ids.clear()

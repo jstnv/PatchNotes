@@ -10,6 +10,7 @@ func _initialize() -> void:
 	music = root.get_node("Soundtrack")
 	await process_frame
 	game._on_studio_created("Pause music transport", &"action", [], game._active_phase)
+	await skip_save_invitation()
 	await create_timer(1.5).timeout
 	var bus := AudioServer.get_bus_index(&"Music")
 	var capture := AudioEffectCapture.new()
@@ -39,7 +40,7 @@ func _initialize() -> void:
 	expect(music.presentation_seconds() > heard_start + 4.5, "Shared music time map advances with real song")
 	expect(music.player.get_stream_playback().get_instance_id() == identity, "No restart or replacement while paused")
 	await key(KEY_ESCAPE)
-	await create_timer(0.5).timeout
+	await create_timer(music.PAUSE_FADE+0.2).timeout
 	expect(not paused and music.pause_weight == 0.0, "Esc resumes gameplay and clears filter")
 	AudioServer.remove_bus_effect(bus, AudioServer.get_bus_effect_count(bus)-1)
 	record.checks = checks

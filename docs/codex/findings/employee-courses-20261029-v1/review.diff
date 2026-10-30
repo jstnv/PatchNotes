@@ -1,0 +1,2258 @@
+--- before/scripts/contracts/contract_state.gd
++++ patch-notes/scripts/contracts/contract_state.gd
+@@ -143,12 +143,12 @@
+ func get_challenge_redraws() -> int: return _challenge_redraws
+ 
+ 
+-func can_commit_priorities(distribution: Dictionary) -> bool:
+-	return not is_completed() and PriorityAllocation.is_valid_new_distribution(distribution) and distribution != _priorities
+-
+-
+-func commit_priorities(distribution: Dictionary) -> bool:
+-	if not can_commit_priorities(distribution):
++func can_commit_priorities(distribution: Dictionary,context: RefCounted=null) -> bool:
++	return not is_completed() and PriorityAllocation.is_valid_new_distribution(distribution,context) and distribution != _priorities
++
++
++func commit_priorities(distribution: Dictionary,context: RefCounted=null) -> bool:
++	if not can_commit_priorities(distribution,context):
+ 		return false
+ 	_priorities = distribution.duplicate()
+ 	return true
+--- before/scripts/developer/debug_sandbox.gd
++++ patch-notes/scripts/developer/debug_sandbox.gd
+@@ -0,0 +1,50 @@
++extends RefCounted
++
++## Explicit, session-only cheats; ordinary cents/history stay authoritative.
++const CASH_RESERVE_CENTS:=100000000000
++var run: RunState
++var coordinator: CheckpointCoordinator
++var unlimited:=false
++var _queued:=false
++var _disposed:=false
++
++func _init(value: RunState,owner: CheckpointCoordinator) -> void:
++	run=value;coordinator=owner
++	run.finance_changed.connect(_on_finance_changed)
++
++func active() -> bool:
++	return not _disposed and is_instance_valid(coordinator) and coordinator.debug_session and coordinator.run==run
++
++func set_unlimited(value: bool) -> bool:
++	if not active():return false
++	unlimited=value;run.set_meta(&"debug_unlimited_cash",value)
++	var ok:=refill() if value else true
++	run.cash_changed.emit();return ok
++
++func refill() -> bool:
++	_queued=false
++	if not active() or not unlimited:return false
++	var amount:=maxi(0,CASH_RESERVE_CENTS-run.get_cash_cents())
++	if amount>0:
++		var unpaid:=StudioFinanceLedger.get_unpaid(run._studio_finance)
++		if unpaid>RunState.MAX_SIGNED_INT-CASH_RESERVE_CENTS:return false
++		amount+=unpaid
++	return amount==0 or run.add_cash_cents(amount,&"other_income",&"debug_cash")
++
++func _on_finance_changed() -> void:
++	if not active() or not unlimited or _queued or run.get_cash_cents()>=CASH_RESERVE_CENTS:return
++	_queued=true;refill.call_deferred()
++
++func unlock_features() -> bool:
++	if not active() or not coordinator.in_studio or run.get_active_contract()!=null or not run.can_mutate_checkpoint():return false
++	var changed:=false
++	for id: StringName in run._feature_definitions:
++		if FeatureStoreCatalog.is_active(id) and not run._owned_features.has(id):run._owned_features[id]=true;changed=true
++	if changed:run.features_changed.emit()
++	return true
++
++func dispose() -> void:
++	_disposed=true;unlimited=false
++	if run!=null:
++		run.remove_meta(&"debug_unlimited_cash")
++		if run.finance_changed.is_connected(_on_finance_changed):run.finance_changed.disconnect(_on_finance_changed)
+--- before/scripts/developer/developer_tools.gd
++++ patch-notes/scripts/developer/developer_tools.gd
+@@ -0,0 +1,104 @@
++extends CanvasLayer
++
++const Sandbox:=preload("res://scripts/developer/debug_sandbox.gd")
++var game: Control
++var sandbox: RefCounted
++var panel: Control
++var surface: PanelContainer
++var badge: Label
++var status: Label
++var unlimited: CheckButton
++var unlock: Button
++var back: Button
++var _busy:=false
++var _motion: Tween
++var _focus: Control
++
++class CenteredHost extends Container:
++	func _notification(what: int) -> void:
++		if what!=NOTIFICATION_SORT_CHILDREN:return
++		var target:=Vector2(minf(720,size.x-40),minf(400,size.y-40))
++		for child in get_children():
++			if child is Control:fit_child_in_rect(child,Rect2((size-target)/2,target))
++
++func _ready() -> void:
++	process_mode=Node.PROCESS_MODE_ALWAYS;layer=130
++	panel=Control.new();panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);add_child(panel)
++	panel.add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
++	var shade:=ColorRect.new();panel.add_child(shade);shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);shade.color=Color(0.015,0.02,0.025,0.85)
++	var host:=CenteredHost.new();panel.add_child(host);host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);host.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	surface=FolderUI.surface(host)
++	var body:=VBoxContainer.new();body.add_theme_constant_override("separation",14);surface.add_child(body)
++	back=FolderUI.header(body,"Developer Tools","F8 · Session-only sandbox",close).get_node("Back")
++	var explanation:=FolderUI.label(body,"Your normal Studio is saved before debug starts. Debug progress is not saved. Main Menu or Quit returns you to ordinary Continue.")
++	explanation.custom_minimum_size.x=620
++	unlimited=CheckButton.new();unlimited.text="Unlimited money";unlimited.custom_minimum_size.y=44;body.add_child(unlimited)
++	unlimited.toggled.connect(_money_toggled)
++	unlock=FolderUI.button(body,"Unlock all current Features",_unlock_features,&"PrimaryButton")
++	FolderUI.label(body,"Features are owned immediately for games you start next. Existing project pools and Research history stay as recorded. Retired cards remain retired.")
++	status=FolderUI.label(body,"");status.custom_minimum_size.y=40
++	badge=Label.new();badge.text="DEBUG · unsaved · F8";badge.position=Vector2(24,2);badge.add_theme_font_size_override("font_size",13);badge.add_theme_color_override("font_color",Color("f68b5d"));badge.mouse_filter=Control.MOUSE_FILTER_IGNORE;add_child(badge);badge.hide()
++	panel.hide();hide()
++
++func _safe_studio() -> bool:
++	return game!=null and game._active_phase is StudioPhase and game.checkpoints!=null and game.checkpoints.in_studio and game.run_state.get_active_contract()==null and not game._transition_in_progress and not game._loading_checkpoint and not game._save_navigation_pending and game.guided_tutorial==null
++
++func open() -> void:
++	if _busy:return
++	_focus=get_viewport().gui_get_focus_owner()
++	if game.pause_menu!=null and game.pause_menu.is_open():game.pause_menu.close()
++	if sandbox==null or sandbox.run!=game.run_state:
++		if sandbox!=null:sandbox.dispose()
++		sandbox=Sandbox.new(game.run_state,game.checkpoints)
++	status.text="" if _safe_studio() or sandbox.active() else "Create or load a Studio first. Start debug from Studio, outside an active project."
++	_refresh();show();panel.show();back.grab_focus()
++	if _motion!=null and _motion.is_valid():_motion.kill()
++	panel.modulate.a=0
++	_motion=create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
++	_motion.tween_property(panel,"modulate:a",1.0,MenuTransitions.ENTRANCE_SECONDS)
++
++func close() -> void:
++	if _busy:return
++	panel.hide()
++	if not is_instance_valid(game.checkpoints) or not game.checkpoints.debug_session:hide()
++	if is_instance_valid(_focus) and _focus.is_visible_in_tree():_focus.grab_focus()
++
++func _ensure_active() -> bool:
++	if sandbox.active():return true
++	if not _safe_studio():status.text="Start debug from a safe Studio first.";return false
++	_busy=true;_refresh();status.text="Saving your normal Studio first…"
++	var ok: bool=await game.checkpoints.begin_debug_session()
++	_busy=false
++	if not ok:status.text="The normal Studio could not be saved. No cheats were applied."
++	else:status.text="Debug active · this session will not save.";badge.show()
++	_refresh();return ok
++
++func _money_toggled(value: bool) -> void:
++	if _busy:return
++	if not value and not sandbox.active():return
++	if not await _ensure_active():unlimited.set_pressed_no_signal(false);return
++	if not sandbox.set_unlimited(value):status.text="Cash refill is unavailable while another action is publishing."
++	else:status.text="Unlimited money on · debug credits refill after spending." if value else "Refills off · granted cash remains in this unsaved session."
++	_refresh()
++
++func _unlock_features() -> void:
++	if _busy or not await _ensure_active():return
++	status.text="All current Features are owned. Start your next game to use the expanded pool." if sandbox.unlock_features() else "Unlock Features from Studio. Your begun project keeps its frozen pool."
++	_refresh()
++
++func _refresh() -> void:
++	unlimited.disabled=_busy or not (_safe_studio() or sandbox!=null and sandbox.active())
++	unlock.disabled=_busy or not _safe_studio()
++	if sandbox!=null:unlimited.set_pressed_no_signal(sandbox.unlimited)
++
++func _input(event: InputEvent) -> void:
++	if event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_F8:
++		if panel.visible:close()
++		else:open()
++		get_viewport().set_input_as_handled()
++	elif panel.visible and event.is_action_pressed("ui_cancel"):
++		close();get_viewport().set_input_as_handled()
++
++func _exit_tree() -> void:
++	if sandbox!=null:sandbox.dispose()
++	if _motion!=null and _motion.is_valid():_motion.kill()
+--- before/scripts/employees/employee_career_rules.gd
++++ patch-notes/scripts/employees/employee_career_rules.gd
+@@ -0,0 +1,202 @@
++extends RefCounted
++
++## Versioned, event-sourced Production and Project Manager trial courses.
++const PRODUCTION: Array[StringName] = [&"production_planning", &"pass_alignment"]
++const MANAGER: Array[StringName] = [&"manager_1", &"manager_2", &"manager_3", &"manager_4"]
++const CORE: Array[StringName] = [&"graphics", &"sound", &"technology", &"design"]
++
++static func active(state: Dictionary) -> bool:
++	var events: Variant=state.get("events",[])
++	return events is Array and events.any(func(e):return e is Dictionary and e.get("type")==&"career_activate")
++
++## Called before typed decoding to reject new events under legacy revisions.
++## Malformed containers still go through the ordinary schema/recovery error path.
++static func payload_active(payload: Dictionary) -> bool:
++	var record: Variant=payload.get("run",{})
++	if not record is Dictionary:return false
++	var employees: Variant=record.get("employees",{})
++	return employees is Dictionary and active(employees)
++
++static func course_ids(role: StringName) -> Array[StringName]:
++	return PRODUCTION.duplicate() if role==&"production" else MANAGER.duplicate() if role==&"project_manager" else [] as Array[StringName]
++
++static func progress() -> Dictionary:
++	return {"courses":{},"projects":{},"games":{},"releases":[]}
++
++static func completed(employee: Dictionary) -> int:
++	var count:=0
++	for course: Dictionary in employee.get("career",{}).get("courses",{}).values():
++		if course.completed_cycle>=0:count+=1
++	return count
++
++static func wage(employee: Dictionary) -> int:return 100000+10000*completed(employee)
++
++static func level(state: Dictionary) -> int:
++	for employee: Dictionary in state.get("employees",{}).values():
++		if employee.type==&"project_manager":return completed(employee)
++	return 0
++
++static func limits(state: Dictionary, beta: bool=false) -> Vector2i:
++	var trained:=level(state)
++	return Vector2i(40-5*trained,60+5*trained) if beta else Vector2i(20-5*trained,40+5*trained)
++
++static func alignment_available(state: Dictionary) -> bool:
++	for employee: Dictionary in state.get("employees",{}).values():
++		if employee.type==&"production" and completed(employee)==2:return true
++	return false
++
++static func next_course(employee: Dictionary) -> StringName:
++	var courses: Dictionary=employee.get("career",{}).get("courses",{})
++	for id: StringName in course_ids(employee.type):
++		if not courses.has(id):return id
++		if courses[id].completed_cycle<0:return &""
++	return &""
++
++static func current_course(employee: Dictionary) -> StringName:
++	for id: StringName in course_ids(employee.type):
++		if employee.get("career",{}).get("courses",{}).has(id) and employee.career.courses[id].completed_cycle<0:return id
++	return &""
++
++static func enable(state: Dictionary, cycle: int) -> Dictionary:
++	return EmployeeRoster._apply(state,{"type":&"career_activate","cycle":cycle,"rules_version":1}) if EmployeeRoster.valid(state) else {}
++
++static func enroll(state: Dictionary, id: StringName, course: StringName, cycle: int) -> Dictionary:
++	return EmployeeRoster._apply(state,{"type":&"career_course","employee_id":id,"course":course,"cycle":cycle,"fee_cents":15000}) if EmployeeRoster.valid(state) else {}
++
++static func facts(cards: Array) -> Array:
++	var result:=EmployeeRoster.card_facts(cards)
++	for i in result.size():result[i].beta=cards[i].beta_category
++	return result
++
++static func hand(state: Dictionary, project: StringName, phase: StringName, project_cycle: int, cycle: int, cards: Array, priorities: Dictionary) -> Dictionary:
++	return EmployeeRoster._apply(state,{"type":&"career_hand","project_id":project,"phase":phase,"project_cycle":project_cycle,"cycle":cycle,"cards":cards.duplicate(true),"priorities":priorities.duplicate()}) if EmployeeRoster.valid(state) else {}
++
++static func release(state: Dictionary, project: StringName, cycle: int) -> Dictionary:
++	return EmployeeRoster._apply(state,{"type":&"career_release","project_id":project,"cycle":cycle}) if EmployeeRoster.valid(state) else {}
++
++static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) -> Dictionary:
++	if typeof(event.get("cycle"))!=TYPE_INT or event.cycle<0:return {}
++	# Public plans inspect their proven prefix. Private reconstruction enforces
++	# these predicates with local indices in EmployeeRoster._validate_uncached.
++	if copy_source:
++		for prior: Dictionary in state.events:
++			if prior.get("cycle",0)>event.cycle:return {}
++	var next:=state.duplicate(true) if copy_source else state
++	var kind: StringName=event.get("type",&"")
++	if kind==&"career_activate":
++		if event.size()!=3 or event.get("rules_version")!=1 or active(state):return {}
++		for employee: Dictionary in next.employees.values():
++			if employee.type!=&"production":continue
++			employee.career=progress()
++			if employee.trained:
++				employee.career.courses[PRODUCTION[0]]={"cycle":event.cycle,"completed_cycle":event.cycle,"legacy":true}
++	elif not active(state):return {}
++	elif kind==&"career_hire":
++		if event.size()!=3 or event.get("role") not in [&"production",&"project_manager"] or state.owner.is_empty():return {}
++		if next.employees.values().any(func(e):return e.type==event.role):return {}
++		var id:=StringName("%s:%s:1"%[state.owner,event.role])
++		next.employees[id]={"employee_id":id,"owner":state.owner,"type":event.role,"hire_cycle":event.cycle,"trained":false,"projects":{},"career":progress()}
++	elif kind==&"career_course":
++		if event.size()!=5 or event.get("fee_cents")!=15000 or typeof(event.get("employee_id"))!=TYPE_STRING_NAME or typeof(event.get("course"))!=TYPE_STRING_NAME:return {}
++		var employee: Dictionary=next.employees.get(event.employee_id,{})
++		if employee.is_empty() or not employee.has("career") or event.cycle<employee.hire_cycle or event.course not in course_ids(employee.type) or next_course(employee)!=event.course:return {}
++		employee.career.courses[event.course]={"cycle":event.cycle,"completed_cycle":-1,"legacy":false}
++		employee.career.games[event.course]=[]
++		employee.career.projects={}
++	elif kind==&"career_hand":
++		if event.size()!=7 or typeof(event.get("project_id"))!=TYPE_STRING_NAME or event.project_id.is_empty() or typeof(event.get("project_cycle"))!=TYPE_INT or event.project_cycle<0 or event.get("phase") not in [&"design",&"alpha",&"beta"] or not event.get("cards") is Array or event.cards.size()!=4 or not event.get("priorities") is Dictionary:return {}
++		for card in event.cards:
++			if not card is Dictionary or card.size()!=5:return {}
++			for key in ["id","type","primary","secondary","beta"]:
++				if typeof(card.get(key))!=TYPE_STRING_NAME:return {}
++			if card.id.is_empty() or card.type not in [&"pass",&"feature",&"beta"]:return {}
++		var weights_ok:=BetaPriorityAllocation.is_valid_distribution(event.priorities) if event.phase==&"beta" else PriorityAllocation.is_valid_distribution(event.priorities)
++		if not weights_ok:return {}
++		if event.phase!=&"beta":
++			if not PriorityAllocation.is_valid_with_bounds(event.priorities,limits(state)):return {}
++		elif not BetaPriorityAllocation.insiders_enabled():
++			var beta_limits:=limits(state,true)
++			if event.priorities.get(&"insider",-1)!=0:return {}
++			for category: StringName in [&"qa",&"marketing"]:
++				if event.priorities[category]<beta_limits.x or event.priorities[category]>beta_limits.y:return {}
++		if copy_source:
++			for prior: Dictionary in state.events:
++				if prior.type==kind and (prior.cycle==event.cycle or (prior.project_id==event.project_id and prior.phase==event.phase and prior.project_cycle==event.project_cycle)):return {}
++		var action:=StringName("%s:%s:%d"%[event.project_id,event.phase,event.project_cycle])
++		for employee: Dictionary in next.employees.values():
++			if not employee.has("career"):continue
++			var course:=current_course(employee)
++			if course.is_empty():continue
++			if event.cycle<=employee.career.courses[course].cycle:continue
++			var project: Dictionary=employee.career.projects.get(event.project_id,{"design":[],"alpha":[],"specializations":[]})
++			if employee.type==&"production":
++				if event.phase in [&"design",&"alpha"] and EmployeeRoster.matches(event.cards):
++					project[event.phase].append(action)
++					if course==PRODUCTION[0] and event.phase==&"design":
++						employee.trained=true;employee.career.courses[course].completed_cycle=event.cycle
++			else:
++				var stat: StringName=event.cards[0].beta if event.phase==&"beta" else event.cards[0].primary
++				var same: bool=event.cards.all(func(card):return (card.beta if event.phase==&"beta" else card.primary)==stat)
++				var key: Variant=stat if event.phase==&"beta" else CORE.find(stat)
++				var eligible: bool=stat in [&"qa",&"marketing"] and event.priorities.get(&"insider",-1)==0 if event.phase==&"beta" else stat in CORE
++				if same and eligible and event.priorities.get(key,-1)==limits(state,event.phase==&"beta").x and project.specializations.size()<2:project.specializations.append(action)
++			employee.career.projects[event.project_id]=project
++	elif kind==&"career_release":
++		if event.size()!=3 or typeof(event.get("project_id"))!=TYPE_STRING_NAME or event.project_id.is_empty():return {}
++		for employee: Dictionary in next.employees.values():
++			if not employee.has("career"):continue
++			if event.project_id in employee.career.releases:return {}
++			employee.career.releases.append(event.project_id)
++			var course:=current_course(employee)
++			if course.is_empty():continue
++			var project: Dictionary=employee.career.projects.get(event.project_id,{})
++			if employee.type==&"production":
++				if course==PRODUCTION[1] and not project.get("design",[]).is_empty() and not project.get("alpha",[]).is_empty():employee.career.courses[course].completed_cycle=event.cycle
++			elif project.get("specializations",[]).size()==2:
++				employee.career.games[course].append(event.project_id)
++				if employee.career.games[course].size()==4:
++					employee.career.courses[course].completed_cycle=event.cycle;employee.trained=true
++	else:return {}
++	next.events.append(event.duplicate(true));return next
++
++static func employee_schema() -> Dictionary:
++	var s=CheckpointSchema
++	var employee:=s.fields("employee_id owner type","id")
++	employee.hire_cycle="uint";employee.trained="bool"
++	employee.projects=s.map_of("id",{"trained_action":"id","used_action":"id","actions":s.array_of("id")})
++	employee.career={"courses":s.map_of("id",{"cycle":"uint","completed_cycle":"int","legacy":"bool"}),"projects":s.map_of("id",{"design":s.array_of("id"),"alpha":s.array_of("id"),"specializations":s.array_of("id")}),"games":s.map_of("id",s.array_of("id")),"releases":s.array_of("id")}
++	return employee
++
++static func validate_saved(state: Dictionary, finance: Dictionary, metadata: Dictionary, active_project: StringName=&"") -> String:
++	for event: Dictionary in state.events:
++		if event.type==&"career_hand":
++			if not metadata.has(event.project_id) and event.project_id!=active_project:return "Unknown career project"
++			var kind: StringName=&"beta_income" if event.phase==&"beta" else &"feature_play"
++			var commits:=0
++			for action: Dictionary in finance.actions:
++				if action.productive and action.cycle==event.cycle and action.source_id==event.project_id and action.kind==kind:commits+=1
++			if commits!=1:return "Career hand has no committed action"
++			if metadata.has(event.project_id) and event.project_cycle>=metadata[event.project_id].review.development_cycles:return "Career hand outside project lifetime"
++		elif event.type==&"career_release":
++			if not metadata.has(event.project_id) or metadata[event.project_id].release_cycle!=event.cycle:return "Career release has no committed game"
++	for employee: Dictionary in state.employees.values():
++		if not employee.has("career"):continue
++		for course: StringName in employee.career.courses:
++			var enrollment: Dictionary=employee.career.courses[course]
++			if enrollment.legacy:continue
++			var receipt:=StringName("%s:course:%s"%[employee.employee_id,course])
++			var payments:=0
++			for action: Dictionary in finance.actions:
++				if action.source_id!=receipt:continue
++				if action.cycle!=enrollment.cycle or action.direct_delta!=-15000 or action.get("operation",{}).get("course")!=course or action.get("operation",{}).get("rules_version")!=3:return "Career tuition mismatch"
++				payments+=1
++			if payments!=1:return "Missing career tuition"
++		var payroll: Dictionary={}
++		for pay: Dictionary in finance.employees:
++			if pay.employee_id==employee.employee_id:payroll=pay
++		if payroll.is_empty() or StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT)!=wage(employee):return "Career wage/progress mismatch"
++	return ""
++
++static func event_schemas() -> Array:
++	var s=CheckpointSchema
++	return [{"type":"id","cycle":"uint","rules_version":"uint"},{"type":"id","role":"id","cycle":"uint"},{"type":"id","employee_id":"id","course":"id","cycle":"uint","fee_cents":"uint"},{"type":"id","project_id":"id","cycle":"uint"},{"type":"id","project_id":"id","phase":"id","project_cycle":"uint","cycle":"uint","cards":s.array_of(s.fields("id type primary secondary beta","id")),"priorities":s.union_of([s.map_of("uint","uint"),s.map_of("id","uint")])}]
+--- before/scripts/employees/employee_roster.gd
++++ patch-notes/scripts/employees/employee_roster.gd
+@@ -2,7 +2,7 @@
+ extends RefCounted
+ const SCHEMA_VERSION := 1
+ const QA := preload("res://scripts/employees/qa_employee_rules.gd")
+-
++const Career := preload("res://scripts/employees/employee_career_rules.gd")
+ static func create(owner: StringName) -> Dictionary:
+ 	return {"schema_version":SCHEMA_VERSION,"owner":owner,"employees":{},"events":[]}
+ 
+@@ -29,7 +29,7 @@
+ 	var facts := card_facts(cards)
+ 	if facts.size() != 4 or project_id.is_empty() or project_cycle < 0 or run_cycle < 0 or phase not in [&"design",&"alpha"]: return {}
+ 	var changed := not proposed.is_empty()
+-	if changed and (not PriorityAllocation.is_valid_new_distribution(proposed) or proposed == before): return {}
++	if changed and (not PriorityAllocation.is_valid_with_bounds(proposed,Career.limits(state)) or proposed == before): return {}
+ 	return _apply(state,{"type":&"hand","project_id":project_id,"phase":phase,"project_cycle":project_cycle,"cycle":run_cycle,"cards":facts,"before":before.duplicate(),"proposed":proposed.duplicate()})
+ 
+ static func available(state: Dictionary, project_id: StringName) -> bool:
+@@ -38,9 +38,10 @@
+ 		if employee.type == &"production" and employee.trained and employee.projects.get(project_id,{}).get("used_action",&"").is_empty(): return true
+ 	return false
+ 
+-static func _apply(state: Dictionary, event: Dictionary) -> Dictionary:
+-	if event.get("type") in [&"employee_trial",&"hire_specialist",&"course",&"qa_beta",&"qa_proc",&"qa_finalize",&"qa_swap"]: return QA.apply(state,event)
+-	var next := state.duplicate(true)
++static func _apply(state: Dictionary, event: Dictionary, copy_source: bool=true) -> Dictionary:
++	if str(event.get("type",&"")).begins_with("career_"):return Career.apply(state,event,copy_source)
++	if event.get("type") in [&"employee_trial",&"hire_specialist",&"course",&"qa_beta",&"qa_proc",&"qa_finalize",&"qa_swap"]: return QA.apply(state,event,copy_source)
++	var next := state.duplicate(true) if copy_source else state
+ 	if event.get("type") == &"hire":
+ 		if typeof(event.get("employee_id")) != TYPE_STRING_NAME or event.employee_id.is_empty() or typeof(event.get("cycle")) != TYPE_INT or event.cycle < 0 or next.employees.has(event.employee_id): return {}
+ 		next.employees[event.employee_id] = {"employee_id":event.employee_id,"owner":state.owner,"type":&"production","hire_cycle":event.cycle,"trained":false,"projects":{}}
+@@ -70,7 +71,8 @@
+ 			if use and not used and qualifying and employee.trained and progress.used_action.is_empty():
+ 				progress.used_action = action
+ 				used = true
+-			if qualifying and event.phase == &"design" and progress.trained_action.is_empty():
++			var enrolled: bool=not employee.has("career") or employee.career.courses.has(&"production_planning")
++			if qualifying and enrolled and event.phase == &"design" and progress.trained_action.is_empty():
+ 				progress.trained_action = action
+ 				employee.trained = true
+ 			progress.actions.append(action)
+@@ -81,15 +83,36 @@
+ 	return next
+ 
+ static func valid(state: Dictionary) -> bool:
++	return _validate_uncached(state)
++
++static func _validate_uncached(state: Dictionary) -> bool:
+ 	if state.get("schema_version") != SCHEMA_VERSION or typeof(state.get("owner")) != TYPE_STRING_NAME or typeof(state.get("events")) != TYPE_ARRAY: return false
+ 	var rebuilt := create(state.owner)
++	var maximum_cycle: int=-1
++	var hand_cycles: Dictionary={}
++	var hand_identities: Dictionary={}
+ 	for event in state.events:
+ 		if typeof(event)!=TYPE_DICTIONARY: return false
+-		rebuilt = _apply(rebuilt,event)
++		# Rebuild into a private state. Public plans still copy their input; copying
++		# the entire growing journal on every replayed event caused quadratic stalls.
++		rebuilt = _apply(rebuilt,event,false)
+ 		if rebuilt.is_empty(): return false
++		# The private Career reducer omits repeated prefix scans. These local
++		# indices prove the same predicates across every fully replayed event;
++		# no roster, revision or validation result survives this call.
++		if str(event.type).begins_with("career_") and event.cycle<maximum_cycle:return false
++		maximum_cycle=maxi(maximum_cycle,event.cycle)
++		if event.type==&"career_hand":
++			# phase historically accepts String and StringName by value. Preserve
++			# that equality; use typed tuple bytes rather than delimiter strings.
++			var identity:=var_to_bytes([event.project_id,StringName(event.phase),event.project_cycle])
++			if hand_cycles.has(event.cycle) or hand_identities.has(identity):return false
++			hand_cycles[event.cycle]=true;hand_identities[identity]=true
+ 	return rebuilt == state
+ 
+ static func hire_specialist(state: Dictionary, role: StringName, cycle: int) -> Dictionary:
++	if Career.active(state) and role in [&"production",&"project_manager"]:
++		return _apply(state,{"type":&"career_hire","role":role,"cycle":cycle}) if valid(state) else {}
+ 	return _apply(state,{"type":&"hire_specialist","role":role,"cycle":cycle}) if valid(state) else {}
+ static func buy_course(state: Dictionary, id: StringName, course: StringName, cycle: int) -> Dictionary:
+ 	return _apply(state,{"type":&"course","employee_id":id,"course":course,"cycle":cycle,"fee_cents":15000}) if valid(state) else {}
+--- before/scripts/employees/qa_employee_rules.gd
++++ patch-notes/scripts/employees/qa_employee_rules.gd
+@@ -14,8 +14,8 @@
+ 			var p: Dictionary = e.projects.get(project,{})
+ 			if not p.get("armed_action",&"").is_empty() and p.get("used_action",&"").is_empty(): return true
+ 	return false
+-static func apply(state: Dictionary, event: Dictionary) -> Dictionary:
+-	var next := state.duplicate(true)
++static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) -> Dictionary:
++	var next := state.duplicate(true) if copy_source else state
+ 	var kind: StringName = event.get("type",&"")
+ 	if typeof(event.get("cycle"))!=TYPE_INT:return {}
+ 	for prior: Dictionary in state.events:
+--- before/scripts/finance/studio_finance_ledger.gd
++++ patch-notes/scripts/finance/studio_finance_ledger.gd
+@@ -155,14 +155,16 @@
+ 		return not expected.is_empty() and operation==expected and delta==-10000 and kind==&"other_expense" and source_id==expected.employee_id
+ 	if operation.get("type") == &"payroll_schedule":
+ 		if operation.keys().size()!=7 or operation.get("rules_version")!=2 or typeof(operation.get("employee_id"))!=TYPE_STRING_NAME or typeof(operation.get("receipt_id"))!=TYPE_STRING_NAME or operation.receipt_id.is_empty(): return false
+-		if operation.get("revision")!=ledger.actions.size() or typeof(operation.get("wage_cents"))!=TYPE_INT or operation.wage_cents not in [100000,110000,120000] or typeof(operation.get("effective_cycle"))!=TYPE_INT or operation.effective_cycle<=ledger.last_cycle or operation.effective_cycle%2!=0: return false
++		if operation.get("revision")!=ledger.actions.size() or typeof(operation.get("wage_cents"))!=TYPE_INT or operation.wage_cents not in [100000,110000,120000,130000,140000] or typeof(operation.get("effective_cycle"))!=TYPE_INT or operation.effective_cycle<=ledger.last_cycle or operation.effective_cycle%2!=0: return false
+ 		for action: Dictionary in ledger.actions:
+ 			if action.get("operation",{}).get("receipt_id",&"")==operation.receipt_id: return false
+ 		for e: Dictionary in ledger.employees:
+ 			if e.employee_id==operation.employee_id: return delta==0 and kind==&"calendar" and source_id==e.employee_id
+ 		return false
+ 	if operation.get("type") == &"course":
+-		if operation.keys().size()!=7 or operation.get("rules_version")!=2 or operation.get("fee_cents")!=15000 or operation.get("revision")!=ledger.actions.size() or operation.get("course") not in [&"mixed",&"pure"]: return false
++		if operation.keys().size()!=7 or operation.get("rules_version") not in [2,3] or operation.get("fee_cents")!=15000 or operation.get("revision")!=ledger.actions.size(): return false
++		var allowed: Array= [&"mixed",&"pure"] if operation.rules_version==2 else preload("res://scripts/employees/employee_career_rules.gd").PRODUCTION+preload("res://scripts/employees/employee_career_rules.gd").MANAGER
++		if operation.get("course") not in allowed:return false
+ 		if typeof(operation.get("employee_id"))!=TYPE_STRING_NAME or operation.get("receipt_id")!=StringName("%s:course:%s"%[operation.employee_id,operation.course]): return false
+ 		for action: Dictionary in ledger.actions:
+ 			if action.get("operation",{}).get("receipt_id",&"")==operation.receipt_id: return false
+@@ -678,10 +680,10 @@
+ 	return amount
+ static func specialist_hire_quote(ledger: Dictionary, owner: StringName, role: StringName, validate: bool = true) -> Dictionary:
+ 	if validate and not _is_valid(ledger): return {}
+-	if owner.is_empty() or role not in [&"production",&"qa"] or _unpaid_unchecked(ledger)!=0 or ledger.cash_cents<10000: return {}
++	if owner.is_empty() or role not in [&"production",&"qa",&"project_manager"] or _unpaid_unchecked(ledger)!=0 or ledger.cash_cents<10000: return {}
+ 	var id:=StringName("%s:%s:1"%[owner,role])
+ 	for e: Dictionary in ledger.employees:
+-		if e.employee_id==id or (role==&"production" and not str(e.employee_id).contains(":qa:")): return {}
++		if e.employee_id==id: return {}
+ 	var cycle: int=ledger.last_cycle
+ 	if cycle>MAX_INT-3:return {}
+ 	return {"type":&"hire_v2","run_id":owner,"role":role,"employee_id":id,"revision":ledger.actions.size(),"fee_cents":10000,"wage_cents":100000,"hire_cycle":cycle,"first_due_cycle":cycle+2+cycle%2}
+--- before/scripts/gameplay.gd
++++ patch-notes/scripts/gameplay.gd
+@@ -36,6 +36,7 @@
+ var pause_menu: PauseMenu
+ var guided_tutorial: GuidedProductionTutorial
+ var _onboarding := OnboardingPreferences.new()
++var developer_tools: CanvasLayer
+ 
+ func _ready() -> void:
+ 	get_node("Background").color=FolderUI.color(&"background")
+@@ -50,6 +51,8 @@
+ 		_build_checkpoint_controls()
+ 	_start_gameplay()
+ 	_build_pause_menu()
++	developer_tools=preload("res://scripts/developer/developer_tools.gd").new()
++	developer_tools.game=self;add_child(developer_tools)
+ 	%GameplayHUD.tutorial_overlay.practice_requested.connect(_start_guided_practice)
+ 
+ func _build_pause_menu() -> void:
+@@ -71,6 +74,9 @@
+ 		pause_menu.close()
+ 
+ func _request_main_menu() -> void:
++	if checkpoints!=null and checkpoints.debug_session:
++		pause_menu.confirm_main_menu("Debug progress is not saved. Ordinary Continue will return to your normal Studio.")
++		return
+ 	if not pause_menu.is_open() or _save_navigation_pending: return
+ 	if checkpoints != null and checkpoints.in_studio:
+ 		_save_navigation_pending=true
+@@ -572,7 +578,7 @@
+ 	if _transition_in_progress or not is_instance_valid(source_studio) or source_studio != _active_phase or source_studio.get_parent() != %PhaseRoot:
+ 		return false
+ 	var initial_priorities: Dictionary = source_studio.get_predevelopment_priorities() if source_studio.has_method("get_predevelopment_priorities") else {}
+-	if not initial_priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(initial_priorities):
++	if not initial_priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(initial_priorities, run_state):
+ 		source_studio.show_development_error("Allocate exactly 100 priority points.")
+ 		return false
+ 	var validation := PrimitivePredevelopment.validation_error(base_name, genre, theme_id)
+@@ -715,6 +721,9 @@
+ func _request_quit() -> void:
+ 	if _loading_checkpoint or _save_navigation_pending: return
+ 	_resume_from_pause()
++	if checkpoints!=null and checkpoints.debug_session:
++		_show_quit_confirmation("Quit debug session?","Debug progress is not saved. Your normal Studio checkpoint stays unchanged.")
++		return
+ 	if checkpoints!=null and checkpoints.in_studio and checkpoints.failure.is_empty():
+ 		_save_navigation_pending=true
+ 		await checkpoints.wait_saved()
+--- before/scripts/market/rival_world_checkpoint.gd
++++ patch-notes/scripts/market/rival_world_checkpoint.gd
+@@ -3,6 +3,7 @@
+ ## no classes, resource paths, constructors or executable Variant objects.
+ extends RefCounted
+ 
++const CAREER_PREDECESSORS := ["2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6"]
+ const Session := preload("res://scripts/simulation/campaign_session.gd")
+ ## Studio header observer only; exact previous editor source with current content.
+ const STUDIO_GLOW_PREDECESSORS := ["962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd", "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17"]
+@@ -183,6 +184,10 @@
+ 		schema.injected_candidate_ids = CheckpointSchema.array_of("uint")
+ 		schema.pending_corrective_pass_ids = CheckpointSchema.array_of("id")
+ 		schema.launch_confirmation_pending = "bool"
++	if phase==1:
++		var protected_schema:=schema.duplicate(true)
++		protected_schema.injected_candidate_ids=CheckpointSchema.array_of("uint")
++		return CheckpointSchema.union_of([schema,protected_schema])
+ 	return schema
+ 
+ static func _development_schema(phase: int) -> Dictionary:
+@@ -270,7 +275,9 @@
+ 		result.available_features = hand._available_features.map(func(card: CardData) -> StringName: return card.id)
+ 		result.exhausted = hand._exhausted_card_ids if phase == 0 else hand._exhausted_feature_ids
+ 		if phase == 0: result.finalization_requested = hand.finalization_requested
+-		else: result.pending_playtest = hand._pending_playtest_categories
++		else:
++			result.pending_playtest = hand._pending_playtest_categories
++			if not hand.injected_candidate_ids.is_empty():result.injected_candidate_ids=hand.injected_candidate_ids
+ 	else:
+ 		result.injected_candidate_ids = hand.injected_candidate_ids
+ 		result.pending_corrective_pass_ids = hand._pending_corrective_pass_ids
+@@ -355,8 +362,10 @@
+ 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
+ 	var current_source := Replay.source_identity() if captured_source_identity.is_empty() else captured_source_identity
+ 	var grid_predecessor: bool = predecessor_source in GRID_PREDECESSOR_SOURCES+RESEARCH_PERFORMANCE_PREDECESSORS+QUIT_PRESENTATION_PREDECESSORS+STORE_NAVIGATION_PREDECESSORS
+-	var source_ok: bool = predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS or predecessor_source in TECH_ROW_PRESENTATION_PREDECESSORS or predecessor_source in AUDIO_PREDECESSOR_SOURCES or grid_predecessor or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS or predecessor_source==current_source or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ERA_PREDECESSORS or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+-	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision() if predecessor_source==current_source or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS else StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_ERA_RULES)
++	var source_ok: bool = predecessor_source in CAREER_PREDECESSORS or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS or predecessor_source in TECH_ROW_PRESENTATION_PREDECESSORS or predecessor_source in AUDIO_PREDECESSOR_SOURCES or grid_predecessor or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS or predecessor_source==current_source or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ERA_PREDECESSORS or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
++	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().pre_course_revision() if predecessor_source==current_source or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS else StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_ERA_RULES)
++	if predecessor_source==current_source:paired_revision=StudioCheckpoint.new().revision()
++	if predecessor_source in CAREER_PREDECESSORS:paired_revision=StudioCheckpoint.new().pre_course_revision()
+ 	if predecessor_source in AUDIO_PREDECESSOR_SOURCES+STORE_ROOT_PRESENTATION_PREDECESSORS: paired_revision=StudioCheckpoint.new().pre_audio_revision()
+ 	if predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS+TECH_ROW_PRESENTATION_PREDECESSORS: paired_revision=StudioCheckpoint.new().pre_gameplay_revision()
+ 	if grid_predecessor: paired_revision=StudioCheckpoint.new().pre_grid_revision()
+@@ -600,6 +609,9 @@
+ 					var pending_playtest: Array[ProjectState.CoreScore] = []
+ 					pending_playtest.assign(hand_state.pending_playtest)
+ 					dev.hand.set("_pending_playtest_categories",pending_playtest)
++					var injected: Array[int]=[]
++					injected.assign(hand_state.get("injected_candidate_ids",[]))
++					dev.hand.set("injected_candidate_ids",injected)
+ 			else:
+ 				var injected_ids: Array[int] = []
+ 				injected_ids.assign(hand_state.injected_candidate_ids)
+--- before/scripts/persistence/checkpoint_coordinator.gd
++++ patch-notes/scripts/persistence/checkpoint_coordinator.gd
+@@ -19,6 +19,9 @@
+ var _publishing_source_identity := ""
+ ## Gameplay opts in; tools retain their explicit synchronous durability API.
+ var background_saves := false
++## Explicit developer sandbox: preserve the durable normal Studio and never
++## publish cheated state. A new Gameplay scene resets this process-local flag.
++var debug_session:=false
+ var _write_job: RefCounted
+ var _change_revision := 0
+ var _write_catalog: RefCounted
+@@ -33,6 +36,7 @@
+ 	process_mode=Node.PROCESS_MODE_ALWAYS
+ 
+ func is_saving() -> bool:
++	if debug_session:return false
+ 	return _write_job!=null or (background_saves and pending and failure.is_empty() and in_studio and run!=null and run.get_active_contract()==null)
+ 
+ func _process(_delta: float) -> void:
+@@ -41,6 +45,7 @@
+ 		if pending and failure.is_empty(): _request_save.call_deferred()
+ 
+ func _request_save() -> void:
++	if debug_session:return
+ 	if not background_saves:
+ 		flush()
+ 		return
+@@ -94,6 +99,7 @@
+ 	_notify_status()
+ 
+ func wait_saved() -> bool:
++	if debug_session:return true
+ 	if not background_saves: return flush()
+ 	if not failure.is_empty(): return false
+ 	_request_save()
+@@ -180,6 +186,7 @@
+ 		run.connect(name,_changed)
+ 
+ func _changed() -> void:
++	if debug_session:pending=false;return
+ 	if not in_studio: return
+ 	_change_revision+=1
+ 	pending = true
+@@ -187,6 +194,7 @@
+ 
+ func entered_studio(restored: bool = false) -> void:
+ 	in_studio = true
++	if debug_session:pending=false;_notify_status();return
+ 	pending = not restored
+ 	if pending:
+ 		_change_revision+=1
+@@ -198,12 +206,14 @@
+ 	return flush()
+ 
+ func before_mutation() -> bool:
++	if debug_session:return true
+ 	if not failure.is_empty(): return false
+ 	if background_saves: return true
+ 	if not in_studio or run._productive_cycle_in_progress or run._publishing_cycle or run._feature_purchase_in_progress or run._committing_cycle_cash: return true
+ 	return flush()
+ 
+ func flush() -> bool:
++	if debug_session:pending=false;return true
+ 	# Explicit durability barrier for synchronous tools/guards. Interactive
+ 	# routes await wait_saved() before invoking these guards.
+ 	if _write_job!=null: _finish_write()
+@@ -238,6 +248,13 @@
+ 	_notify_status()
+ 	return true
+ 
++func begin_debug_session() -> bool:
++	if debug_session:return true
++	if not in_studio or run==null or run.get_active_contract()!=null:return false
++	if not await wait_saved() or not failure.is_empty() or _write_job!=null:return false
++	debug_session=true;pending=false;run.checkpoint_mutations_allowed=true
++	_notify_status();return true
++
+ func _failed(reason: String) -> bool:
+ 	failure = reason
+ 	run.checkpoint_mutations_allowed = false
+--- before/scripts/persistence/checkpoint_schema.gd
++++ patch-notes/scripts/persistence/checkpoint_schema.gd
+@@ -99,7 +99,7 @@
+ 	employee.hire_cycle = "uint"
+ 	employee.trained = "bool"
+ 	employee.projects = map_of("id", {"trained_action":"id","used_action":"id","actions":array_of("id")})
+-	return {"schema_version":"uint","owner":"id","employees":map_of("id",union_of([employee,preload("res://scripts/employees/qa_employee_rules.gd").schema()])),"events":array_of(union_of([{"type":"id","employee_id":"id","cycle":"uint"},hand]+preload("res://scripts/employees/qa_employee_rules.gd").event_schemas()))}
++	return {"schema_version":"uint","owner":"id","employees":map_of("id",union_of([employee,preload("res://scripts/employees/qa_employee_rules.gd").schema(),preload("res://scripts/employees/employee_career_rules.gd").employee_schema()])),"events":array_of(union_of([{"type":"id","employee_id":"id","cycle":"uint"},hand]+preload("res://scripts/employees/qa_employee_rules.gd").event_schemas()+preload("res://scripts/employees/employee_career_rules.gd").event_schemas()))}
+ 
+ static func market_factor() -> Dictionary:
+ 	return {"factor_bp":"uint","snapshot_id":"text","cycle_start":"uint","genre_only":"uint","theme_only":"uint","pair":"uint","historical":"bool"}
+--- before/scripts/persistence/studio_checkpoint.gd
++++ patch-notes/scripts/persistence/studio_checkpoint.gd
+@@ -19,7 +19,8 @@
+ const PRE_EMPLOYEE_RULES := PRE_USABILITY_RULES + "-traits9-bank2-priority10"
+ const PRE_SEARCH_RULES := PRE_EMPLOYEE_RULES + "-employees2"
+ const PRE_ERA_RULES := PRE_SEARCH_RULES + "-contractsearch1"
+-const RULES := PRE_ERA_RULES + "-storeera1"
++const PRE_COURSE_RULES := PRE_ERA_RULES + "-storeera1"
++const RULES := PRE_COURSE_RULES + "-careers1"
+ const PreSearchSchema := preload("res://scripts/persistence/pre_contract_search/schema.gd")
+ const UsabilityPrevious := preload("res://scripts/persistence/pre_usability/studio.gd")
+ const SupportPrevious := preload("res://scripts/contracts/pre_support/studio.gd")
+@@ -33,16 +34,17 @@
+ var _pre_grid_revision := ""
+ var _pre_audio_revision := ""
+ var _pre_gameplay_revision := ""
++var _pre_course_revision := ""
+ const PRE_GAMEPLAY_CATALOG_HASH := "073226e2e5714cdf2abac2bf72428013dc340ea0a17efdc8384d0a5041520d41"
+ 
+ func pre_gameplay_revision() -> String:
+-	if _pre_gameplay_revision.is_empty(): _pre_gameplay_revision=_rules_revision(RULES,"",PRE_GAMEPLAY_CATALOG_HASH)
++	if _pre_gameplay_revision.is_empty(): _pre_gameplay_revision=_rules_revision(PRE_COURSE_RULES,"",PRE_GAMEPLAY_CATALOG_HASH)
+ 	return _pre_gameplay_revision
+ 
+ const PRE_AUDIO_CATALOG_HASH := "59e9ef24e0112ea2276e695bd48799f6ff295799dfc8e2750928e9ee8dabbccb"
+ 
+ func pre_audio_revision() -> String:
+-	if _pre_audio_revision.is_empty(): _pre_audio_revision=_rules_revision(RULES,"",PRE_AUDIO_CATALOG_HASH)
++	if _pre_audio_revision.is_empty(): _pre_audio_revision=_rules_revision(PRE_COURSE_RULES,"",PRE_AUDIO_CATALOG_HASH)
+ 	return _pre_audio_revision
+ 
+ ## Handoff022 changes acquisition metadata only; this exact prior catalog uses
+@@ -50,7 +52,7 @@
+ const PRE_GRID_CATALOG_HASH := "55c76c86c19363228be5138af752b038961a61655eb2fba4bc9a3a0961803dcf"
+ 
+ func pre_grid_revision() -> String:
+-	if _pre_grid_revision.is_empty(): _pre_grid_revision = _rules_revision(RULES,"",PRE_GRID_CATALOG_HASH)
++	if _pre_grid_revision.is_empty(): _pre_grid_revision = _rules_revision(PRE_COURSE_RULES,"",PRE_GRID_CATALOG_HASH)
+ 	return _pre_grid_revision
+ ## Bounded proofs for the pure current-format validator, shared by detached
+ ## adapters. Keys retain every exact Variant type/value and current data hashes;
+@@ -92,7 +94,7 @@
+ 	return result
+ 
+ func _rules_revision(rules: String, legacy_audio_hash: String = "", prior_catalog_hash: String = "") -> String:
+-	if prior_catalog_hash.is_empty() and rules != RULES: prior_catalog_hash = "0f4bd970b66333fd5f5d5358571ac428dc0b60fd8fe410e2381af1d214521c4e"
++	if prior_catalog_hash.is_empty() and rules not in [RULES,PRE_COURSE_RULES]: prior_catalog_hash = "0f4bd970b66333fd5f5d5358571ac428dc0b60fd8fe410e2381af1d214521c4e"
+ 	var data := rules
+ 	var paths: Array[String] = []
+ 	_collect_data("res://data", paths)
+@@ -104,7 +106,7 @@
+ 		if path == "res://data/audio_credits.json":
+ 			# Version 7 already excluded audio credits. Preserve its real save
+ 			# identity when it becomes a supported historical revision.
+-			if rules in [RULES, PRE_ERA_RULES, PRE_SEARCH_RULES, PRE_EMPLOYEE_RULES, PRE_USABILITY_RULES, PRE_RELATIONSHIP_RULES, PRE_MARKET_RULES, PRE_ROSTER_RULES, PRE_GAMEPLAY_TREE_RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
++			if rules in [RULES, PRE_COURSE_RULES, PRE_ERA_RULES, PRE_SEARCH_RULES, PRE_EMPLOYEE_RULES, PRE_USABILITY_RULES, PRE_RELATIONSHIP_RULES, PRE_MARKET_RULES, PRE_ROSTER_RULES, PRE_GAMEPLAY_TREE_RULES, PRE_CONE_RULES, PRE_CHALLENGE_RULES, PRE_BRANCH_RULES, PRE_CULT20_RULES]: continue
+ 			if not legacy_audio_hash.is_empty():
+ 				data += path + legacy_audio_hash
+ 				continue
+@@ -186,6 +188,11 @@
+ 	return _validate(payload,true)
+ 
+ func _validate(payload: Dictionary, active_rival: bool) -> String:
++	if payload.get("content_revision", "") != revision() and EmployeeRoster.Career.payload_active(payload):
++		error="Legacy content cannot contain career events"; return "Legacy content cannot contain career events"
++	if payload.get("content_revision", "") == pre_course_revision():
++		var upgraded:=upgrade_course_predecessor(payload,active_rival)
++		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
+ 	if payload.get("content_revision", "") != revision(): return _validate_uncached(payload,active_rival)
+ 	var sequence_codec := CheckpointCodec.new()
+ 	var sequence: Variant = sequence_codec.integer(payload.get("sequence"))
+@@ -273,6 +280,8 @@
+ 		var catalog_base: int = definition._feature_offers[research.feature_id].base_price_cents if definition._feature_offers.has(research.feature_id) else (int(definition._feature_definitions[research.feature_id].scope)+1)*15000
+ 		if research.base_cents != catalog_base or r.starter_selection_confirmed == false: return "Invalid research terms"
+ 	if r.employees.owner != value.run_id or not EmployeeRoster.valid(r.employees): return "Invalid employee provenance"
++	var career_error:=EmployeeRoster.Career.validate_saved(r.employees,r.studio_finance,r.release_metadata,active_id)
++	if not career_error.is_empty():return career_error
+ 	if r.employees.employees.size() != r.studio_finance.employees.size(): return "Payroll roster mismatch"
+ 	for employee: Dictionary in r.studio_finance.employees:
+ 		if not r.employees.employees.has(employee.employee_id) or r.employees.employees[employee.employee_id].hire_cycle != employee.hire_cycle: return "Payroll identity mismatch"
+@@ -527,6 +536,11 @@
+ 	return c.result == expected_result
+ 
+ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
++	if payload.get("content_revision", "") != revision() and EmployeeRoster.Career.payload_active(payload):
++		error="Legacy content cannot contain career events"; return null
++	if payload.get("content_revision", "") == pre_course_revision():
++		var upgraded:=upgrade_course_predecessor(payload,active_rival)
++		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
+ 	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+ 		var upgraded := upgrade_grid_predecessor(payload,active_rival)
+ 		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
+@@ -762,3 +776,15 @@
+ 	candidate.content_revision = revision()
+ 	error = _validate(candidate,active_rival)
+ 	return candidate if error.is_empty() else {}
++
++func pre_course_revision() -> String:
++	if _pre_course_revision.is_empty():_pre_course_revision=_rules_revision(PRE_COURSE_RULES)
++	return _pre_course_revision
++
++func upgrade_course_predecessor(payload: Dictionary,active_rival: bool=false) -> Dictionary:
++	error=""
++	if payload.get("content_revision")!=pre_course_revision() or EmployeeRoster.Career.payload_active(payload):error="Invalid career predecessor";return {}
++	var candidate:=payload.duplicate(true)
++	candidate.content_revision=revision()
++	error=_validate(candidate,active_rival)
++	return candidate if error.is_empty() else {}
+--- before/scripts/phases/alpha_phase.gd
++++ patch-notes/scripts/phases/alpha_phase.gd
+@@ -47,6 +47,8 @@
+ var _priority_allocation := PRIORITY_ALLOCATION_SCRIPT.new()
+ var _priority_draft: Dictionary[ProjectState.CoreScore, int] = {}
+ var _employee_priority_choice: Dictionary = {}
++var _pass_choice_menu: CanvasLayer
++var _command_injected_ids: Array[int]=[]
+ var _syncing_priority_controls := false
+ var _available_features: Array[CardData] = []
+ var _pass_definitions: Array[CardData] = []
+@@ -91,6 +93,7 @@
+ 		_project_state.values_changed.disconnect(_refresh_alpha_bug_pressure)
+ 	_project_state = project_state
+ 	_run_state = run_state
++	_priority_allocation.configure(run_state)
+ 	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"alpha_finalize")
+ 	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"alpha_deal")
+ 	if _run_state != null and not _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
+@@ -114,7 +117,7 @@
+ 		return accepted
+ 	if not _priority_draft.has(category) or (typeof(requested_value) != TYPE_INT and typeof(requested_value) != TYPE_FLOAT): return false
+ 	var value := int(requested_value)
+-	if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0: return false
++	if value < PriorityAllocation.bounds(_run_state).x or value > PriorityAllocation.bounds(_run_state).y or value % PriorityAllocation.PRIORITY_STEP != 0: return false
+ 	_priority_draft[category] = value
+ 	_sync_priority_controls()
+ 	return true
+@@ -122,7 +125,7 @@
+ 
+ func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
+ 	if not is_inside_tree(): return false
+-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or not PriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
++	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or not PriorityAllocation.is_valid_new_distribution(distribution, _run_state) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+ 	var publish:=func() -> void:
+ 		_priority_draft=_priority_allocation.get_priority_distribution()
+ 	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
+@@ -147,7 +150,7 @@
+ 
+ 
+ func set_priority_distribution(distribution: Dictionary) -> bool:
+-	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_new_distribution(distribution): return false
++	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_new_distribution(distribution, _run_state): return false
+ 	if not _priority_allocation.set_distribution(distribution): return false
+ 	_priority_draft = _priority_allocation.get_priority_distribution()
+ 	_sync_priority_controls()
+@@ -166,7 +169,7 @@
+ 	if is_gameplay_input_blocked(): return false
+ 	if _phase_state != PhaseState.PLANNING:
+ 		return false
+-	if not PriorityAllocation.is_valid_new_distribution(_priority_draft) or not _priority_allocation.set_distribution(_priority_draft) or not _load_source_definitions():
++	if not PriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state) or not _priority_allocation.set_distribution(_priority_draft) or not _load_source_definitions():
+ 		return false
+ 	if not _deal_next_candidate_pool(controlled_rolls):
+ 		push_warning("Could not begin Alpha because its weighted candidate pool is invalid.")
+@@ -417,13 +420,14 @@
+ 		return false
+ 	var seen: Array[CardView] = []
+ 	for view: CardView in _selected_card_views:
++		if _command_view_ids.get(view.get_instance_id(),-1) in _command_injected_ids:return false
+ 		if not _is_current_candidate_view(view) or view.card_data == null or seen.has(view) or view.card_data.card_type not in [&"feature", &"pass"]:
+ 			return false
+ 		seen.append(view)
+ 	return true
+ 
+ 
+-func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
++func redraw_selected_cards(controlled_rolls: Array[float] = [], alignment_quote: Dictionary = {}) -> bool:
+ 	if not _can_redraw_selection(): return false
+ 	_hand_command_busy=true
+ 	var actions:=_capture_development_actions()
+@@ -450,7 +454,7 @@
+ 
+ 		_selected_card_views.clear()
+ 		_sync_command_tokens(actions.hand)
+-	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish)
++	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish) if alignment_quote.is_empty() else actions.replace_pass(alignment_quote,prepare,publish)
+ 	if not result.ok:
+ 		for view in prepared: view.free()
+ 		if not result.plan.failed_features.is_empty():
+@@ -466,7 +470,13 @@
+ 
+ 
+ func _on_redraw_pressed() -> void:
+-	redraw_selected_cards()
++	if not _can_redraw_selection():return
++	var offers: Array=_capture_development_actions().alignment_options(_redraw_slots())
++	if offers.is_empty():_workspace.present_redraw(Callable(self,"redraw_selected_cards"));return
++	if not is_instance_valid(_pass_choice_menu):
++		_pass_choice_menu=preload("res://scripts/ui/production_pass_choice.gd").new()
++		add_child(_pass_choice_menu)
++	_pass_choice_menu.open_for(self,offers)
+ 
+ 
+ func _refresh_redraw_controls() -> void:
+@@ -603,6 +613,7 @@
+ 		view.set_card(card)
+ 		view.card_pressed.connect(_on_card_pressed)
+ 		%HandContainer.add_child(view)
++	_command_injected_ids.assign(resolver.injected_candidate_ids)
+ 	_command_revision = resolver.revision
+ 	_command_next_id = resolver.next_candidate_id
+ 	_command_view_ids.clear()
+@@ -732,6 +743,9 @@
+ 	if not is_node_ready():
+ 		return
+ 	_syncing_priority_controls = true
++	var limits:=PriorityAllocation.bounds(_run_state)
++	for control: VSlider in [%GraphicsPriority,%SoundPriority,%TechnologyPriority,%DesignPriority]:
++		control.min_value=limits.x;control.max_value=limits.y
+ 	var values := _priority_draft if not _priority_draft.is_empty() else get_priority_distribution()
+ 	%GraphicsPriority.value = values[ProjectState.CoreScore.GRAPHICS]
+ 	%SoundPriority.value = values[ProjectState.CoreScore.SOUND]
+@@ -744,7 +758,7 @@
+ 	var total := 0
+ 	for amount: int in values.values(): total += amount
+ 	%AvailablePriority.text = "%d/100" % total
+-	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not PriorityAllocation.is_valid_new_distribution(values) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
++	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not PriorityAllocation.is_valid_new_distribution(values, _run_state) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
+ 	_syncing_priority_controls = false
+ 
+ 
+@@ -757,6 +771,7 @@
+ 
+ 
+ func is_gameplay_input_blocked() -> bool:
++	if is_instance_valid(_pass_choice_menu) and _pass_choice_menu.visible:return true
+ 	return _hand_command_busy or not is_inside_tree() or (_workspace != null and _workspace.overlay != null and _workspace.overlay.visible)
+ 
+ 
+@@ -769,7 +784,7 @@
+ 
+ 
+ func can_initialize_priorities() -> bool:
+-	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and not _scope_warning_pending and PriorityAllocation.is_valid_new_distribution(_priority_draft)
++	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and not _scope_warning_pending and PriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state)
+ 
+ 
+ func open_priority_overlay() -> bool:
+@@ -777,8 +792,7 @@
+ 
+ 
+ func reset_priority_draft() -> void:
+-	_priority_draft = get_priority_distribution()
+-	for key in _priority_draft: _priority_draft[key] = maxi(10,_priority_draft[key])
++	_priority_draft = PriorityAllocation.editable_distribution(get_priority_distribution(),_run_state)
+ 	_sync_priority_controls()
+ 
+ 
+@@ -800,7 +814,7 @@
+ 
+ 
+ func play_hand_with_employee_plan(distribution: Dictionary) -> bool:
+-	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution(): return false
++	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_new_distribution(distribution, _run_state) or distribution == get_priority_distribution(): return false
+ 	var before := _project_state.get_current_cycle()
+ 	_employee_priority_choice = distribution.duplicate()
+ 	_on_play_alpha_hand_pressed()
+@@ -827,6 +841,7 @@
+ 	state.priorities = get_priority_distribution()
+ 	state.active = _phase_state == PhaseState.ACTIVE_DEVELOPMENT
+ 	state._pending_playtest_categories.assign(_pending_playtest_categories)
++	state.injected_candidate_ids.assign(_command_injected_ids)
+ 	state.revision = _command_revision
+ 	if is_inside_tree() and get_node_or_null("%HandContainer")!=null:
+ 		for view in %HandContainer.card_views():
+@@ -855,6 +870,7 @@
+ 	return slots
+ 
+ func _sync_command_tokens(state: RefCounted) -> void:
++	_command_injected_ids.assign(state.injected_candidate_ids)
+ 	_command_revision=state.revision
+ 	_command_next_id=state.next_candidate_id
+ 	_command_view_ids.clear()
+--- before/scripts/phases/beta_phase.gd
++++ patch-notes/scripts/phases/beta_phase.gd
+@@ -125,7 +125,7 @@
+ 
+ 
+ func set_priority_distribution(distribution: Dictionary) -> bool:
+-	if _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(distribution):
++	if _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(distribution, _run_state):
+ 		return false
+ 	if _phase_state == PhaseState.ACTIVE_DEVELOPMENT:
+ 		if _run_state != null:
+@@ -143,7 +143,7 @@
+ 
+ func commit_priority_distribution(distribution: Dictionary = _priority_draft) -> bool:
+ 	if not is_inside_tree(): return false
+-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
++	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _launch_confirmation_pending or _transaction_in_progress or _project_state == null or _run_state == null or not BetaPriorityAllocation.is_valid_new_distribution(distribution, _run_state) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle(): return false
+ 	var publish:=func() -> void:
+ 		_priority_draft=_priority_allocation.get_distribution()
+ 	if not DevelopmentActions.commit_priorities(_project_state,_run_state,_priority_allocation,distribution,publish): return false
+@@ -189,7 +189,7 @@
+ 	if is_gameplay_input_blocked(): return false
+ 	if _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization():
+ 		return false
+-	if not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft):
++	if not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state):
+ 		return false
+ 	var database := get_node_or_null("/root/CardDatabase")
+ 	if database == null:
+@@ -776,7 +776,7 @@
+ 	if not BetaPriorityAllocation.category_enabled(category): return
+ 	if _syncing_priority_controls or _launch_confirmation_pending or _transaction_in_progress or _phase_state == PhaseState.FINALIZED:
+ 		return
+-	if not is_finite(value) or value < BetaPriorityAllocation.MIN_PRIORITY or value > BetaPriorityAllocation.MAX_PRIORITY or int(value) != value or int(value) % BetaPriorityAllocation.PRIORITY_STEP != 0:
++	if not is_finite(value) or value < BetaPriorityAllocation.bounds(_run_state).x or value > BetaPriorityAllocation.bounds(_run_state).y or int(value) != value or int(value) % BetaPriorityAllocation.PRIORITY_STEP != 0:
+ 		_sync_priority_controls()
+ 		return
+ 	_priority_draft[category] = int(value)
+@@ -792,9 +792,12 @@
+ 	if not is_node_ready():
+ 		return
+ 	if reset_draft:
+-		_priority_draft = BetaPriorityAllocation.editable_distribution(_priority_allocation.get_distribution())
++		_priority_draft = BetaPriorityAllocation.editable_distribution(_priority_allocation.get_distribution(), _run_state)
+ 	_syncing_priority_controls = true
+-	%InsiderPriority.min_value = BetaPriorityAllocation.MIN_PRIORITY if BetaPriorityAllocation.insiders_enabled() else 0
++	var limits:=BetaPriorityAllocation.bounds(_run_state)
++	for control: VSlider in [%QAPriority,%MarketingPriority]:control.min_value=limits.x;control.max_value=limits.y
++	%InsiderPriority.max_value=75 if BetaPriorityAllocation.insiders_enabled() else 0
++	%InsiderPriority.min_value = 10 if BetaPriorityAllocation.insiders_enabled() else 0
+ 	%QAPriority.value = _priority_draft[CardData.BETA_CATEGORY_QA]
+ 	%MarketingPriority.value = _priority_draft[CardData.BETA_CATEGORY_MARKETING]
+ 	%InsiderPriority.value = _priority_draft[CardData.BETA_CATEGORY_INSIDER]
+@@ -805,14 +808,14 @@
+ 	for value: int in _priority_draft.values():
+ 		total += value
+ 	%PriorityTotal.text = "%d/100" % total
+-	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft) or (_phase_state != PhaseState.PLANNING and _priority_draft == get_priority_distribution()) or _transaction_in_progress or _launch_confirmation_pending
++	%CommitPrioritiesButton.disabled = _phase_state == PhaseState.FINALIZED or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state) or (_phase_state != PhaseState.PLANNING and _priority_draft == get_priority_distribution()) or _transaction_in_progress or _launch_confirmation_pending
+ 	_syncing_priority_controls = false
+ 
+ 
+ func _update_begin_action() -> void:
+ 	if not is_node_ready():
+ 		return
+-	%BeginBetaButton.disabled = _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization() or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft)
++	%BeginBetaButton.disabled = _phase_state != PhaseState.PLANNING or _project_state == null or not _project_state.has_alpha_finalization() or not BetaPriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state)
+ 
+ 
+ func get_workspace() -> PhaseWorkspace:
+@@ -836,7 +839,7 @@
+ 
+ 
+ func can_initialize_priorities() -> bool:
+-	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and _project_state.has_alpha_finalization() and not _launch_confirmation_pending and not _transaction_in_progress and BetaPriorityAllocation.is_valid_new_distribution(_priority_draft)
++	return is_inside_tree() and _phase_state == PhaseState.PLANNING and _project_state != null and _project_state.has_alpha_finalization() and not _launch_confirmation_pending and not _transaction_in_progress and BetaPriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state)
+ 
+ 
+ func open_priority_overlay() -> bool:
+@@ -844,7 +847,7 @@
+ 
+ 
+ func reset_priority_draft() -> void:
+-	_priority_draft = BetaPriorityAllocation.editable_distribution(get_priority_distribution())
++	_priority_draft = BetaPriorityAllocation.editable_distribution(get_priority_distribution(), _run_state)
+ 	_sync_priority_controls(false)
+ 
+ 
+--- before/scripts/phases/beta_priority_allocation.gd
++++ patch-notes/scripts/phases/beta_priority_allocation.gd
+@@ -3,9 +3,10 @@
+ 
+ signal allocation_changed
+ 
+-const MIN_PRIORITY := 10
++const MIN_PRIORITY := 40
+ const SAVED_MIN_PRIORITY := 5
+-const MAX_PRIORITY := 75
++const MAX_PRIORITY := 60
++const SAVED_MAX_PRIORITY := 80
+ const PRIORITY_STEP := 5
+ const REQUIRED_TOTAL_PRIORITY := 100
+ const CATEGORIES: Array[StringName] = [CardData.BETA_CATEGORY_QA, CardData.BETA_CATEGORY_MARKETING, CardData.BETA_CATEGORY_INSIDER]
+@@ -29,15 +30,19 @@
+ 		_priorities = {CardData.BETA_CATEGORY_QA:50,CardData.BETA_CATEGORY_MARKETING:50,CardData.BETA_CATEGORY_INSIDER:0}
+ 
+ ## Only an editable draft is normalized; hydration preserves historical weights.
+-static func editable_distribution(distribution: Dictionary) -> Dictionary[StringName, int]:
+-	var result: Dictionary[StringName, int] = {}
+-	for category in CATEGORIES: result[category] = distribution[category]
+-	if insiders_enabled():
+-		for category in CATEGORIES: result[category] = maxi(MIN_PRIORITY,result[category])
+-		return result
+-	var active_total := int(result[CardData.BETA_CATEGORY_QA]) + int(result[CardData.BETA_CATEGORY_MARKETING])
+-	var qa := clampi(floori(float(result[CardData.BETA_CATEGORY_QA]) / maxi(1,active_total) * 20.0 + 0.5) * 5,25,75)
+-	return {CardData.BETA_CATEGORY_QA:qa,CardData.BETA_CATEGORY_MARKETING:100-qa,CardData.BETA_CATEGORY_INSIDER:0}
++static func bounds(run: RefCounted=null) -> Vector2i:
++	# Explicit historical Insider-enabled fixtures retain the old three-category rules.
++	# Returning Insider to ordinary play still needs its own range decision.
++	if insiders_enabled():return Vector2i(10,75)
++	var state: Variant={} if run==null else run.get("_employees")
++	return EmployeeRoster.Career.limits(state if state is Dictionary else {},true)
++
++static func editable_distribution(distribution: Dictionary,run: RefCounted=null) -> Dictionary[StringName,int]:
++	var categories: Array=CATEGORIES.duplicate() if insiders_enabled() else CATEGORIES.slice(0,2)
++	var normalized:=PriorityAllocation.normalize(distribution,categories,bounds(run))
++	var result: Dictionary[StringName,int]={}
++	for key: StringName in CATEGORIES:result[key]=int(normalized.get(key,0))
++	return result
+ 
+ 
+ func set_distribution(distribution: Dictionary) -> bool:
+@@ -73,16 +78,17 @@
+ 		if not distribution.has(category) or typeof(distribution[category]) != TYPE_INT:
+ 			return false
+ 		var value: int = distribution[category]
+-		if (value < SAVED_MIN_PRIORITY and not (category == CardData.BETA_CATEGORY_INSIDER and value == 0)) or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
++		if (value < SAVED_MIN_PRIORITY and not (category == CardData.BETA_CATEGORY_INSIDER and value == 0)) or value > SAVED_MAX_PRIORITY or value % PRIORITY_STEP != 0:
+ 			return false
+ 		total += value
+ 	return total == REQUIRED_TOTAL_PRIORITY
+ 
+ 
+-static func is_valid_new_distribution(distribution: Dictionary) -> bool:
+-	if not is_valid_distribution(distribution): return false
++static func is_valid_new_distribution(distribution: Dictionary,run: RefCounted=null) -> bool:
++	if not is_valid_distribution(distribution):return false
++	var limits:=bounds(run)
+ 	for category: StringName in CATEGORIES:
+ 		if not category_enabled(category):
+-			if distribution[category] != 0: return false
+-		elif distribution[category] < MIN_PRIORITY: return false
++			if distribution[category]!=0:return false
++		elif distribution[category]<limits.x or distribution[category]>limits.y:return false
+ 	return true
+--- before/scripts/phases/contract_phase.gd
++++ patch-notes/scripts/phases/contract_phase.gd
+@@ -141,8 +141,8 @@
+ 		label.add_theme_color_override("font_color", PriorityInfluenceChart.CORE_COLORS[category])
+ 		box.add_child(label)
+ 		var input := VSlider.new()
+-		input.min_value = PriorityAllocation.MIN_PRIORITY
+-		input.max_value = PriorityAllocation.MAX_PRIORITY
++		input.min_value = PriorityAllocation.bounds(_run).x
++		input.max_value = PriorityAllocation.bounds(_run).y
+ 		input.step = PriorityAllocation.PRIORITY_STEP
+ 		input.value = 25
+ 		input.custom_minimum_size = Vector2(32,140)
+@@ -177,7 +177,7 @@
+ 	var cancel := Button.new()
+ 	cancel.text = "Cancel"
+ 	cancel.pressed.connect(func():
+-		_priority_draft = _state.get_priority_distribution()
++		_priority_draft = PriorityAllocation.editable_distribution(_state.get_priority_distribution(),_run)
+ 		_sync_priority_inputs()
+ 		_priority_modal.hide()
+ 		_change_priorities.grab_focus())
+@@ -286,7 +286,7 @@
+ 
+ func open_priority_overlay() -> void:
+ 	if not can_edit_priorities() or hand_motion.busy: return
+-	_priority_draft = _state.get_priority_distribution()
++	_priority_draft = PriorityAllocation.editable_distribution(_state.get_priority_distribution(),_run)
+ 	_sync_priority_inputs()
+ 	_refresh_actions()
+ 	_priority_modal.show()
+@@ -320,7 +320,7 @@
+ 
+ func _initialize_presentation() -> bool:
+ 	_title.text = _state.get_title()
+-	_priority_draft = _state.get_priority_distribution()
++	_priority_draft = PriorityAllocation.editable_distribution(_state.get_priority_distribution(),_run)
+ 	_sync_priority_inputs()
+ 	if _state.is_completed():
+ 		_show_completion()
+@@ -355,7 +355,7 @@
+ 
+ 
+ func set_priority_draft(distribution: Dictionary) -> bool:
+-	if not PriorityAllocation.is_valid_new_distribution(distribution):
++	if not PriorityAllocation.is_valid_new_distribution(distribution, _run):
+ 		return false
+ 	_priority_draft = distribution.duplicate()
+ 	_sync_priority_inputs()
+@@ -370,7 +370,7 @@
+ 	_command_busy = false
+ 	if not ok: return false
+ 	_command_sequence += 1
+-	_priority_draft = _state.get_priority_distribution()
++	_priority_draft = PriorityAllocation.editable_distribution(_state.get_priority_distribution(),_run)
+ 	_sync_priority_inputs()
+ 	_feedback_label.text = "Priorities committed. The current draw is unchanged."
+ 	_refresh_all()
+@@ -565,7 +565,8 @@
+ func _sync_priority_inputs() -> void:
+ 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
+ 		var input: VSlider = _priority_inputs[category]
+-		input.set_value_no_signal(maxi(PriorityAllocation.MIN_PRIORITY,_priority_draft[category]))
++		input.min_value=PriorityAllocation.bounds(_run).x;input.max_value=PriorityAllocation.bounds(_run).y
++		input.set_value_no_signal(_priority_draft[category])
+ 		_priority_draft[category] = int(input.value)
+ 		(input.get_parent().get_child(2) as Label).text = str(int(input.value))
+ 	_priority_chart.refresh_from_controls()
+--- before/scripts/phases/design_phase.gd
++++ patch-notes/scripts/phases/design_phase.gd
+@@ -50,6 +50,7 @@
+ var _priority_allocation := PRIORITY_ALLOCATION_SCRIPT.new()
+ var _priority_draft: Dictionary[ProjectState.CoreScore, int] = {}
+ var _employee_priority_choice: Dictionary = {}
++var _pass_choice_menu: CanvasLayer
+ var _syncing_priority_controls := false
+ 
+ @onready var graphics_value: Label = %GraphicsValue
+@@ -91,6 +92,7 @@
+ 
+ 	_project_state = project_state
+ 	_run_state = run_state
++	_priority_allocation.configure(run_state)
+ 	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"design_finalize")
+ 	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"design_deal")
+ 	if _run_state != null and not _run_state.redraws_changed.is_connected(_refresh_redraw_controls):
+@@ -115,7 +117,7 @@
+ 	if not _priority_draft.has(category) or (typeof(requested_value) != TYPE_INT and typeof(requested_value) != TYPE_FLOAT):
+ 		return false
+ 	var value := int(requested_value)
+-	if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
++	if value < PriorityAllocation.bounds(_run_state).x or value > PriorityAllocation.bounds(_run_state).y or value % PriorityAllocation.PRIORITY_STEP != 0:
+ 		return false
+ 	_priority_draft[category] = value
+ 	_sync_priority_controls()
+@@ -129,7 +131,7 @@
+ 		return set_priority_distribution(distribution)
+ 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested or _project_state == null or _run_state == null:
+ 		return false
+-	if not PriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle():
++	if not PriorityAllocation.is_valid_new_distribution(distribution, _run_state) or distribution == get_priority_distribution() or not _project_state.can_advance_cycle() or not _run_state.can_advance_calendar_cycle():
+ 		return false
+ 	var publish:=func() -> void:
+ 		_priority_draft=_priority_allocation.get_priority_distribution()
+@@ -155,7 +157,7 @@
+ 
+ 
+ func set_priority_distribution(distribution: Dictionary) -> bool:
+-	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_new_distribution(distribution): return false
++	if _phase_state != PhaseState.PLANNING or not PriorityAllocation.is_valid_new_distribution(distribution, _run_state): return false
+ 	if not _priority_allocation.set_distribution(distribution): return false
+ 	_priority_draft = _priority_allocation.get_priority_distribution()
+ 	_sync_priority_controls()
+@@ -166,7 +168,7 @@
+ 	if is_gameplay_input_blocked(): return false
+ 	if _phase_state != PhaseState.PLANNING or _finalization_requested:
+ 		return false
+-	if not PriorityAllocation.is_valid_new_distribution(_priority_draft) or not _priority_allocation.set_distribution(_priority_draft) or not _initialize_design_lifecycle():
++	if not PriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state) or not _priority_allocation.set_distribution(_priority_draft) or not _initialize_design_lifecycle():
+ 		push_warning("Could not begin Design because the initial weighted candidate pool could not be dealt.")
+ 		return false
+ 	_phase_state = PhaseState.ACTIVE_DEVELOPMENT
+@@ -216,6 +218,9 @@
+ 	if not is_node_ready():
+ 		return
+ 	_syncing_priority_controls = true
++	var limits:=PriorityAllocation.bounds(_run_state)
++	for control: VSlider in [%GraphicsPriority,%SoundPriority,%TechnologyPriority,%DesignPriority]:
++		control.min_value=limits.x;control.max_value=limits.y
+ 	var values := _priority_draft if not _priority_draft.is_empty() else get_priority_distribution()
+ 	%GraphicsPriority.value = values[ProjectState.CoreScore.GRAPHICS]
+ 	%SoundPriority.value = values[ProjectState.CoreScore.SOUND]
+@@ -228,7 +233,7 @@
+ 	var total := 0
+ 	for amount: int in values.values(): total += amount
+ 	%DesignAvailablePriority.text = "%d/100" % total
+-	%CommitPrioritiesButton.disabled = _finalization_requested or not PriorityAllocation.is_valid_new_distribution(values) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
++	%CommitPrioritiesButton.disabled = _finalization_requested or not PriorityAllocation.is_valid_new_distribution(values, _run_state) or (_phase_state != PhaseState.PLANNING and values == get_priority_distribution())
+ 	_syncing_priority_controls = false
+ 
+ 
+@@ -307,7 +312,7 @@
+ 	return true
+ 
+ 
+-func redraw_selected_cards(controlled_rolls: Array[float] = []) -> bool:
++func redraw_selected_cards(controlled_rolls: Array[float] = [], alignment_quote: Dictionary = {}) -> bool:
+ 	if not _can_redraw_selection(): return false
+ 	_hand_command_busy=true
+ 	var actions:=_capture_development_actions()
+@@ -334,7 +339,7 @@
+ 
+ 		_selected_card_views.clear()
+ 		_sync_command_tokens(actions.hand)
+-	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish)
++	var result: Dictionary = actions.redraw(slots,controlled_rolls,prepare,publish) if alignment_quote.is_empty() else actions.replace_pass(alignment_quote,prepare,publish)
+ 	if not result.ok:
+ 		for view in prepared: view.free()
+ 		if not result.plan.failed_features.is_empty():
+@@ -350,7 +355,13 @@
+ 
+ 
+ func _on_redraw_pressed() -> void:
+-	redraw_selected_cards()
++	if not _can_redraw_selection():return
++	var offers: Array=_capture_development_actions().alignment_options(_redraw_slots())
++	if offers.is_empty():_workspace.present_redraw(Callable(self,"redraw_selected_cards"));return
++	if not is_instance_valid(_pass_choice_menu):
++		_pass_choice_menu=preload("res://scripts/ui/production_pass_choice.gd").new()
++		add_child(_pass_choice_menu)
++	_pass_choice_menu.open_for(self,offers)
+ 
+ 
+ func _refresh_redraw_controls() -> void:
+@@ -690,6 +701,7 @@
+ 
+ 
+ func is_gameplay_input_blocked() -> bool:
++	if is_instance_valid(_pass_choice_menu) and _pass_choice_menu.visible:return true
+ 	return _hand_command_busy or not is_inside_tree() or (_workspace != null and _workspace.overlay != null and _workspace.overlay.visible)
+ 
+ 
+@@ -702,7 +714,7 @@
+ 
+ 
+ func can_initialize_priorities() -> bool:
+-	return is_inside_tree() and _phase_state == PhaseState.PLANNING and not _finalization_requested and PriorityAllocation.is_valid_new_distribution(_priority_draft)
++	return is_inside_tree() and _phase_state == PhaseState.PLANNING and not _finalization_requested and PriorityAllocation.is_valid_new_distribution(_priority_draft, _run_state)
+ 
+ 
+ func open_priority_overlay() -> bool:
+@@ -710,8 +722,7 @@
+ 
+ 
+ func reset_priority_draft() -> void:
+-	_priority_draft = get_priority_distribution()
+-	for key in _priority_draft: _priority_draft[key] = maxi(10,_priority_draft[key])
++	_priority_draft = PriorityAllocation.editable_distribution(get_priority_distribution(),_run_state)
+ 	_sync_priority_controls()
+ 
+ 
+@@ -731,7 +742,7 @@
+ 
+ 
+ func play_hand_with_employee_plan(distribution: Dictionary) -> bool:
+-	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_new_distribution(distribution) or distribution == get_priority_distribution(): return false
++	if not _employee_priority_choice.is_empty() or not PriorityAllocation.is_valid_new_distribution(distribution, _run_state) or distribution == get_priority_distribution(): return false
+ 	var before := _project_state.get_current_cycle()
+ 	_employee_priority_choice = distribution.duplicate()
+ 	_on_play_card_pressed()
+--- before/scripts/phases/priority_allocation.gd
++++ patch-notes/scripts/phases/priority_allocation.gd
+@@ -3,9 +3,10 @@
+ 
+ signal allocation_changed
+ 
+-const MIN_PRIORITY := 10
+-const SAVED_MIN_PRIORITY := 5
+-const MAX_PRIORITY := 75
++const MIN_PRIORITY := 20
++const SAVED_MIN_PRIORITY := 0
++const SAVED_MAX_PRIORITY := 75
++const MAX_PRIORITY := 40
+ const PRIORITY_STEP := 5
+ const MAX_TOTAL_PRIORITY := 100
+ const INITIAL_PRIORITY := 25
+@@ -24,6 +25,42 @@
+ }
+ 
+ 
++var _bounds := Vector2i(MIN_PRIORITY,MAX_PRIORITY)
++
++func configure(run: RefCounted=null) -> void:
++	_bounds=bounds(run)
++
++static func bounds(run: RefCounted=null) -> Vector2i:
++	var state: Variant={} if run==null else run.get("_employees")
++	return EmployeeRoster.Career.limits(state if state is Dictionary else {})
++
++static func is_valid_with_bounds(distribution: Dictionary, limits: Vector2i) -> bool:
++	if not is_valid_distribution(distribution):return false
++	for amount: int in distribution.values():
++		if amount<limits.x or amount>limits.y:return false
++	return true
++
++static func normalize(distribution: Dictionary,categories: Array,limits: Vector2i) -> Dictionary:
++	var result: Dictionary={}
++	var total:=0
++	for key in categories:
++		var amount:=clampi(roundi(float(distribution.get(key,25))/5.0)*5,limits.x,limits.y)
++		result[key]=amount;total+=amount
++	for iteration in 400:
++		if total==100:return result
++		var changed:=false
++		for key in categories:
++			if total<100 and result[key]<limits.y:result[key]+=5;total+=5;changed=true
++			elif total>100 and result[key]>limits.x:result[key]-=5;total-=5;changed=true
++			if total==100:return result
++		if not changed:break
++	return {}
++
++static func editable_distribution(distribution: Dictionary,run: RefCounted=null) -> Dictionary[ProjectState.CoreScore,int]:
++	var result: Dictionary[ProjectState.CoreScore,int]={}
++	result.assign(normalize(distribution,CORE_CATEGORIES,bounds(run)))
++	return result
++
+ func set_priority(category: int, requested_value: Variant) -> bool:
+ 	if not _priorities.has(category):
+ 		push_warning("Invalid priority category: %s" % category)
+@@ -38,15 +75,15 @@
+ 
+ 	# Clamp first, then snap to the nearest multiple of five. Exact halfway
+ 	# values round upward, making programmatic normalization deterministic.
+-	var clamped_value := clampf(numeric_value, MIN_PRIORITY, MAX_PRIORITY)
++	var clamped_value := clampf(numeric_value, _bounds.x, _bounds.y)
+ 	var normalized_value := clampi(
+ 		floori(clamped_value / PRIORITY_STEP + 0.5) * PRIORITY_STEP,
+-		MIN_PRIORITY,
+-		MAX_PRIORITY,
++		_bounds.x,
++		_bounds.y,
+ 	)
+ 	var current_value: int = _priorities[category]
+ 	var total_without_category := get_total_allocated_priority() - current_value
+-	var maximum_fitting_value := mini(MAX_PRIORITY, MAX_TOTAL_PRIORITY - total_without_category)
++	var maximum_fitting_value := mini(_bounds.y, MAX_TOTAL_PRIORITY - total_without_category)
+ 	normalized_value = mini(normalized_value, maximum_fitting_value)
+ 	if normalized_value == current_value:
+ 		return true
+@@ -86,7 +123,7 @@
+ 		if not distribution.has(category) or typeof(distribution[category]) != TYPE_INT:
+ 			return false
+ 		var value: int = distribution[category]
+-		if value < SAVED_MIN_PRIORITY or value > MAX_PRIORITY or value % PRIORITY_STEP != 0:
++		if value < SAVED_MIN_PRIORITY or value > SAVED_MAX_PRIORITY or value % PRIORITY_STEP != 0:
+ 			return false
+ 		total += value
+ 	return total == MAX_TOTAL_PRIORITY
+@@ -94,11 +131,8 @@
+ 
+ ## Saved weights and historical journals may contain the former 5% floor.
+ ## Every new command uses this stricter gate; reading a save never reweights it.
+-static func is_valid_new_distribution(distribution: Dictionary) -> bool:
+-	if not is_valid_distribution(distribution): return false
+-	for amount: int in distribution.values():
+-		if amount < MIN_PRIORITY: return false
+-	return true
++static func is_valid_new_distribution(distribution: Dictionary,run: RefCounted=null) -> bool:
++	return is_valid_with_bounds(distribution,bounds(run))
+ 
+ 
+ func set_distribution(distribution: Dictionary) -> bool:
+--- before/scripts/phases/studio_phase.gd
++++ patch-notes/scripts/phases/studio_phase.gd
+@@ -681,7 +681,7 @@
+ 	if _run_state == null or _run_state.get_released_game_ids().size() < 2: return
+ 	# Browsing is free. A save/mutation guard may defer first-time activation,
+ 	# but must not turn an enabled navigation button into a silent no-op.
+-	var read_only := not _run_state.uses_employee_trial() and not _run_state.activate_employee_trial()
++	var read_only := not _run_state.uses_employee_courses() and not _run_state.activate_employee_trial()
+ 	if _employees_panel == null:
+ 		_employees_panel = EmployeePanel.new()
+ 		add_child(_employees_panel)
+--- before/scripts/run_state.gd
++++ patch-notes/scripts/run_state.gd
+@@ -1051,7 +1051,7 @@
+ 
+ ## Release planning reuses the arithmetic owner on detached containers. The
+ ## resulting field set is committed before Project or Run observers can fire.
+-const RELEASE_FIELDS := ["_store_era_receipts","_released_games","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs"]
++const RELEASE_FIELDS := ["_employees","_store_era_receipts","_released_games","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs"]
+ 
+ func plan_release(project: ProjectState) -> Dictionary:
+ 	if _publishing_cycle or _productive_cycle_in_progress or not can_register_release(project): return {}
+@@ -1077,6 +1077,7 @@
+ 
+ func publish_release_plan(plan: Dictionary) -> void:
+ 	if plan.changed:
++		employees_changed.emit()
+ 		if plan.cash_changed: cash_changed.emit()
+ 		if plan.finance_changed: finance_changed.emit()
+ 		if plan.standing_changed: publisher_relationships_changed.emit()
+@@ -1133,6 +1134,11 @@
+ 		_publisher_relationships = commission.relationships
+ 		_release_metadata[id].merge({"owner":&"publisher","publisher_id":&"sidestreet","commission_quote_id":commission.deal.terms.quote_id})
+ 	_store_era_receipts = StoreEra.from_releases(_release_metadata)
++	if uses_employee_courses() and _employees.employees.values().any(func(e):return e.has("career")):
++		var career_release:=EmployeeRoster.Career.release(_employees,id,_completed_run_cycles)
++		if career_release.is_empty():return false
++		_employees=career_release
++		_sync_employee_raises()
+ 	for offer_id: StringName in project.get_awareness_result().get_promotion_awards():
+ 		_promotion_consumed[offer_id] = id
+ 	# Qualification is captured only on the first committed registration. Existing
+@@ -1797,6 +1803,7 @@
+ 	return result
+ 
+ func get_employee_hire_quote(role: StringName) -> Dictionary:
++	if role==&"project_manager" and not uses_employee_courses():return {}
+ 	if not uses_employee_trial():
+ 		if role!=&"production" or not _first_studio_economy or _released_games.is_empty() or not EmployeeRoster.valid(_employees) or not _employees.employees.is_empty():return {}
+ 		return StudioFinanceLedger.hire_quote(_studio_finance,_bank_run_id)
+@@ -1823,6 +1830,32 @@
+ 		if e.type==&"qa" and not e.courses.has(course):
+ 			return {"type":&"course","employee_id":e.employee_id,"course":course,"receipt_id":StringName("%s:course:%s"%[e.employee_id,course]),"revision":_studio_finance.actions.size(),"fee_cents":15000,"rules_version":2}
+ 	return {}
++
++func get_employee_course_quote(id: StringName, course: StringName) -> Dictionary:
++	var employee: Dictionary=_employees.employees.get(id,{})
++	if employee.is_empty():return {}
++	if employee.type==&"qa":return get_qa_course_quote(course)
++	if not uses_employee_courses() or not EmployeeRoster.valid(_employees) or not _first_studio_economy or _released_games.size()<2 or _cash_cents<15000 or StudioFinanceLedger.get_unpaid(_studio_finance)!=0:return {}
++	if course not in EmployeeRoster.Career.course_ids(employee.type) or EmployeeRoster.Career.next_course(employee)!=course:return {}
++	return {"type":&"course","employee_id":id,"course":course,"receipt_id":StringName("%s:course:%s"%[id,course]),"revision":_studio_finance.actions.size(),"fee_cents":15000,"rules_version":3}
++
++func get_employee_course_quotes() -> Array:
++	var result: Array=[]
++	for employee: Dictionary in _employees.employees.values():
++		for course: StringName in EmployeeRoster.Career.course_ids(employee.type):
++			var quote:=get_employee_course_quote(employee.employee_id,course)
++			if not quote.is_empty():result.append(quote)
++	return result
++
++func purchase_employee_course(quote: Dictionary) -> bool:
++	if quote.get("rules_version")==2:return purchase_qa_course(quote)
++	if not can_mutate_checkpoint() or not _bank_action_available() or quote.is_empty() or quote!=get_employee_course_quote(quote.get("employee_id",&""),quote.get("course",&"")):return false
++	var roster:=EmployeeRoster.Career.enroll(_employees,quote.employee_id,quote.course,_completed_run_cycles)
++	var finance:=StudioFinanceLedger.course_payment(_studio_finance,quote)
++	if roster.is_empty() or finance.is_empty():return false
++	_employees=roster;_studio_finance=finance.ledger;_cash_cents=finance.cash_cents
++	_publishing_cycle=true;cash_changed.emit();finance_changed.emit();employees_changed.emit();_publishing_cycle=false
++	return true
+ 
+ func purchase_qa_course(quote: Dictionary) -> bool:
+ 	if not can_mutate_checkpoint() or not _bank_action_available() or quote.is_empty() or quote!=get_qa_course_quote(quote.get("course",&"")): return false
+@@ -1849,8 +1882,8 @@
+ 	if not uses_employee_trial():return
+ 	for payroll: Dictionary in _studio_finance.employees:
+ 		var e: Dictionary=_employees.employees.get(payroll.employee_id,{})
+-		if e.get("type")!=&"qa": continue
+-		var desired:=EmployeeRoster.qa_wage(e)
++		if e.get("type")!=&"qa" and not e.has("career"): continue
++		var desired:=EmployeeRoster.Career.wage(e) if e.has("career") else EmployeeRoster.qa_wage(e)
+ 		if StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT)>=desired: continue
+ 		var due:=2*(_completed_run_cycles/2+2)
+ 		var step:=StudioFinanceLedger.schedule_payroll(_studio_finance,e.employee_id,desired,due,StringName("%s:raise:%d"%[e.employee_id,desired]))
+@@ -1875,6 +1908,9 @@
+ 				if rng.randi_range(1,100)<=EmployeeRoster.QA.PROC_PERCENT: discoveries+=1
+ 			roster=EmployeeRoster.qa_proc(roster,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles,phase,count)
+ 			if roster.is_empty():return {}
++	if uses_employee_courses() and roster.employees.values().any(func(e):return e.has("career")):
++		roster=EmployeeRoster.Career.hand(roster,project.get_release_id(),phase,project.get_current_cycle(),_completed_run_cycles+1,EmployeeRoster.Career.facts(cards),before)
++		if roster.is_empty():return {}
+ 	return {"before":_employees.duplicate(true),"after":roster,"cycle":_completed_run_cycles,"qa_discoveries":discoveries if phase==&"alpha" else 0}
+ 
+ 
+@@ -2000,13 +2036,17 @@
+ 	var planned := RelationshipLedger.plan(prospective._publisher_relationships,_bank_run_id,request,prospective._completed_run_cycles,resolver)
+ 	return {} if planned.is_empty() else {"applicable":true,"ledger":planned.ledger}
+ 
+-func plan_qa_beta_hand(project: ProjectState,cards: Array,discovered: int,fixed: int) -> Dictionary:
++func plan_qa_beta_hand(project: ProjectState,cards: Array,discovered: int,fixed: int,priorities: Dictionary={}) -> Dictionary:
+ 	var before:=_employees.duplicate(true)
+-	if not _employees.employees.values().any(func(e):return e.type==&"qa"):
+-		return {"before":before,"after":before.duplicate(true),"cycle":_completed_run_cycles}
+ 	var search: int=cards.filter(func(c):return c.id==&"search_for_bugs").size()
+ 	var debug: int=cards.filter(func(c):return c.id==&"debug").size()
+-	var state:=EmployeeRoster.qa_beta_hand(_employees,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles+1,search,debug,discovered,fixed)
++	var state:=before.duplicate(true)
++	if _employees.employees.values().any(func(e):return e.type==&"qa"):
++		state=EmployeeRoster.qa_beta_hand(state,project.get_release_id(),project.get_current_cycle(),_completed_run_cycles+1,search,debug,discovered,fixed)
++	if state.is_empty():return {}
++	if uses_employee_courses() and state.employees.values().any(func(e):return e.has("career")):
++		var weights: Dictionary=BetaPriorityAllocation.new().get_distribution() if priorities.is_empty() else priorities
++		state=EmployeeRoster.Career.hand(state,project.get_release_id(),&"beta",project.get_current_cycle(),_completed_run_cycles+1,EmployeeRoster.Career.facts(cards),weights)
+ 	return {} if state.is_empty() else {"before":before,"after":state,"cycle":_completed_run_cycles}
+ 
+ 
+@@ -2077,10 +2117,14 @@
+ 
+ ## Explicit trial activation: simulator opt-in or the unlocked Studio employee menu.
+ func uses_employee_trial() -> bool:return EmployeeRoster.trial_active(_employees)
++func uses_employee_courses() -> bool:return EmployeeRoster.Career.active(_employees)
+ func activate_employee_trial() -> bool:
+ 	if not can_mutate_checkpoint() or _productive_cycle_in_progress or _publishing_cycle:return false
+-	var next:=EmployeeRoster.activate_trial(_employees,_completed_run_cycles)
++	if uses_employee_courses():return false
++	var next:=_employees.duplicate(true) if uses_employee_trial() else EmployeeRoster.activate_trial(_employees,_completed_run_cycles)
+ 	if next.is_empty():return false
+-	_employees=next;migrate_employee_wages()
++	next=EmployeeRoster.Career.enable(next,_completed_run_cycles)
++	if next.is_empty():return false
++	_employees=next;migrate_employee_wages();_sync_employee_raises()
+ 	_publishing_cycle=true;finance_changed.emit();employees_changed.emit();_publishing_cycle=false
+ 	return true
+--- before/scripts/simulation/alpha_hand_command.gd
++++ patch-notes/scripts/simulation/alpha_hand_command.gd
+@@ -20,6 +20,7 @@
+ var _exhausted_feature_ids: Dictionary[StringName, bool] = {}
+ var priorities: Dictionary = {}
+ var candidate_ids: Array[int] = []
++var injected_candidate_ids: Array[int] = []
+ var next_candidate_id := 0
+ var revision := 0
+ var active := false
+@@ -128,9 +129,13 @@
+ 		_deal_rng.state = rng_before
+ 		return reject("Productive transaction rejected")
+ 	if _run_state != null: events.append({"type":"productive_cycle", "cycle":_run_state.get_completed_run_cycles(), "cash_cents":_run_state.get_cash_cents(), "play_cost_cents":play_cost})
++	injected_candidate_ids.assign(injected_candidate_ids.filter(func(id):return id in candidate_ids))
++	var refill_index:=0
+ 	for card in refill.cards:
+ 		_candidate_cards.append(card)
+ 		candidate_ids.append(next_candidate_id)
++		if refill_index<int(refill.get("injected_count",0)):injected_candidate_ids.append(next_candidate_id)
++		refill_index+=1
+ 		next_candidate_id += 1
+ 	_pending_playtest_categories.clear()
+ 	revision += 1
+@@ -196,7 +201,7 @@
+ 		return weighted_deal
+ 	var cards := injected_cards.duplicate()
+ 	cards.append_array(weighted_deal.cards)
+-	return {&"valid": true, &"cards": cards}
++	return {&"valid": true, &"cards": cards, &"injected_count":injected_cards.size()}
+ 
+ func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, controlled_rolls: Array[float] = [], candidate_count: int = CANDIDATE_POOL_SIZE, excluded_ids: Array[StringName] = []) -> Dictionary:
+ 	var validation_error := _get_deal_input_validation_error(priority_snapshot, controlled_rolls, candidate_count)
+@@ -238,7 +243,7 @@
+ 		if not priority_snapshot.has(category) or typeof(priority_snapshot[category]) != TYPE_INT:
+ 			return "Priority snapshot contains a missing or malformed category."
+ 		var value: int = priority_snapshot[category]
+-		if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
++		if value < PriorityAllocation.SAVED_MIN_PRIORITY or value > PriorityAllocation.SAVED_MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
+ 			return "Priority snapshot contains an out-of-range or non-step value."
+ 		total_priority += value
+ 	if total_priority > PriorityAllocation.MAX_TOTAL_PRIORITY:
+--- before/scripts/simulation/beta_hand_command.gd
++++ patch-notes/scripts/simulation/beta_hand_command.gd
+@@ -92,7 +92,7 @@
+ 	for amount: int in preflight.debug_requests:debug_total+=amount
+ 	var expected_discovered:=mini(_project_state.get_hidden_bugs(),search_total)
+ 	var expected_fixed:=mini(_project_state.get_known_bugs()+expected_discovered,debug_total)
+-	var employee_plan:=_run_state.plan_qa_beta_hand(_project_state,selected,expected_discovered,expected_fixed)
++	var employee_plan:=_run_state.plan_qa_beta_hand(_project_state,selected,expected_discovered,expected_fixed,priorities)
+ 	if employee_plan.is_empty():
+ 		_deal_rng.state=deal_before;_insight_rng.state=insight_before
+ 		return reject("QA progress plan rejected")
+--- before/scripts/simulation/campaign_session.gd
++++ patch-notes/scripts/simulation/campaign_session.gd
+@@ -89,7 +89,7 @@
+ 		run.refresh_redraws()
+ 		result.events.append({"type":"studio_entered","release_id":development.project.get_release_id()})
+ 		return result
+-	if kind in [&"hire",&"course",&"search_contracts",&"accept_contract"]:
++	if kind in [&"activate_employees",&"hire",&"course",&"search_contracts",&"accept_contract"]:
+ 		var result := StudioActions.execute(run,kind,payload,true)
+ 		if result.ok and kind == &"accept_contract":
+ 			contract = Contract.new(result.state,run,catalog)
+@@ -110,7 +110,7 @@
+ 		for field in ["name","genre","theme"]:
+ 			if not payload.get(field) is String and not payload.get(field) is StringName: return reject("Missing project choice")
+ 		var priorities: Variant = payload.get("priorities",{})
+-		if not priorities is Dictionary or (not priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(priorities)) or not payload.get("commission_quote",{}) is Dictionary or not payload.get("support_quote",{}) is Dictionary or payload.size() != 3 + int(payload.has("priorities")) + int(payload.has("commission_quote")) + int(payload.has("support_quote")): return reject("Invalid priorities or project payload")
++		if not priorities is Dictionary or (not priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(priorities, run)) or not payload.get("commission_quote",{}) is Dictionary or not payload.get("support_quote",{}) is Dictionary or payload.size() != 3 + int(payload.has("priorities")) + int(payload.has("commission_quote")) + int(payload.has("support_quote")): return reject("Invalid priorities or project payload")
+ 		var result := BeginProject.execute(run,snapshots,str(payload.name),StringName(payload.genre),StringName(payload.theme),Callable(),[],payload.get("commission_quote",{}),payload.get("support_quote",{}))
+ 		if not result.ok: return reject(result.error)
+ 		development = Development.new()
+--- before/scripts/simulation/contract_session.gd
++++ patch-notes/scripts/simulation/contract_session.gd
+@@ -126,8 +126,8 @@
+ 	return true
+ 
+ func commit_priorities(distribution: Dictionary) -> bool:
+-	if _state == null or not _state.can_commit_priorities(distribution) or not _run.can_complete_productive_cycle(): return false
+-	var commit := func() -> bool: return _state.commit_priorities(distribution)
++	if _state == null or not _state.can_commit_priorities(distribution,_run) or not _run.can_complete_productive_cycle(): return false
++	var commit := func() -> bool: return _state.commit_priorities(distribution,_run)
+ 	return _run.complete_productive_action(commit,0,_run.get_completed_run_cycles(),&"",&"priority_change",_state.get_offer_id())
+ 
+ func redraw(slots: Array[int],category_rolls: Array[float] = [],definition_rolls: Array[float] = [],readiness: Callable = Callable(),publication: Callable = Callable()) -> Dictionary:
+--- before/scripts/simulation/design_hand_command.gd
++++ patch-notes/scripts/simulation/design_hand_command.gd
+@@ -246,7 +246,7 @@
+ 		if not priority_snapshot.has(category) or typeof(priority_snapshot[category]) != TYPE_INT:
+ 			return "Priority snapshot contains a missing or malformed category."
+ 		var value: int = priority_snapshot[category]
+-		if value < PriorityAllocation.MIN_PRIORITY or value > PriorityAllocation.MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
++		if value < PriorityAllocation.SAVED_MIN_PRIORITY or value > PriorityAllocation.SAVED_MAX_PRIORITY or value % PriorityAllocation.PRIORITY_STEP != 0:
+ 			return "Priority snapshot contains an out-of-range or non-step value."
+ 		priority_total += value
+ 	if priority_total > PriorityAllocation.MAX_TOTAL_PRIORITY:
+--- before/scripts/simulation/development_actions.gd
++++ patch-notes/scripts/simulation/development_actions.gd
+@@ -31,6 +31,7 @@
+ 	hand.candidate_ids.clear()
+ 	for card: CardData in plan.cards:
+ 		hand.candidate_ids.append(hand.next_candidate_id)
++		if phase==&"alpha" and hand.candidate_ids.size()<=int(plan.get("injected_count",0)):hand.injected_candidate_ids.append(hand.next_candidate_id)
+ 		hand.next_candidate_id+=1
+ 	if phase==&"design":
+ 		for card: CardData in plan.selected_features: hand._available_features.erase(card)
+@@ -58,8 +59,55 @@
+ 		seen.append(slot)
+ 		if phase==&"beta":
+ 			if hand.candidate_ids[slot] in hand.injected_candidate_ids: return false
++		elif phase==&"alpha" and hand.candidate_ids[slot] in hand.injected_candidate_ids:return false
+ 		elif hand._candidate_cards[slot].card_type not in [&"feature",&"pass"]: return false
+ 	return true
++
++func alignment_options(slots: Array[int]) -> Array:
++	var result: Array=[]
++	if slots.size()!=1 or phase not in [&"design",&"alpha"] or not hand.active or hand._run_state==null or not hand._run_state.can_consume_redraw(1) or not EmployeeRoster.Career.alignment_available(hand._run_state.get_employees()) or not valid_pool():return result
++	var slot:=slots[0]
++	if slot<0 or slot>=hand._candidate_cards.size() or hand.candidate_ids.size()!=hand._candidate_cards.size():return result
++	if phase==&"alpha" and hand.candidate_ids[slot] in hand.injected_candidate_ids:return result
++	var old: CardData=hand._candidate_cards[slot]
++	if old.card_type!=&"pass" or not hand._pass_definitions.has(old):return result
++	for target: CardData in hand._pass_definitions:
++		if target.id==old.id or target.primary_value!=2 or not target.renewable:continue
++		for index in hand._candidate_cards.size():
++			var feature: CardData=hand._candidate_cards[index]
++			if feature.card_type!=&"feature" or target.primary_stat not in [feature.primary_stat,feature.secondary_stat]:continue
++			var quote:=alignment_quote(hand.candidate_ids[slot],target.id,hand.candidate_ids[index])
++			if not quote.is_empty():result.append({"quote":quote,"target_id":target.id,"target_name":target.card_name,"feature_name":feature.card_name,"primary":target.primary_stat,"value":target.primary_value})
++			break
++	return result
++
++func alignment_quote(source_token: int,target_id: StringName,feature_token: int) -> Dictionary:
++	if phase not in [&"design",&"alpha"] or not hand.active or hand._run_state==null or hand.candidate_ids.size()!=7 or not valid_pool() or not hand._run_state.can_consume_redraw(1) or not EmployeeRoster.Career.alignment_available(hand._run_state.get_employees()):return {}
++	if source_token not in hand.candidate_ids or feature_token not in hand.candidate_ids or hand.revision>=ProjectState.MAX_SIGNED_INT or hand.next_candidate_id>=ProjectState.MAX_SIGNED_INT:return {}
++	if phase==&"alpha" and source_token in hand.injected_candidate_ids:return {}
++	if (phase==&"design" and (hand.finalization_requested or hand._project_state.has_design_bug_finalization())) or (phase==&"alpha" and hand._project_state.has_alpha_finalization()):return {}
++	var old: CardData=hand._candidate_cards[hand.candidate_ids.find(source_token)]
++	var feature: CardData=hand._candidate_cards[hand.candidate_ids.find(feature_token)]
++	var target: CardData=catalog.get_card(target_id) if catalog!=null else null
++	if old.card_type!=&"pass" or not hand._pass_definitions.has(old) or target==null or not hand._pass_definitions.has(target) or target.id==old.id or target.primary_value!=2 or not target.renewable or feature.card_type!=&"feature" or target.primary_stat not in [feature.primary_stat,feature.secondary_stat]:return {}
++	return {"source_token":source_token,"target_id":target_id,"feature_token":feature_token,"revision":hand.revision,"project_id":hand._project_state.get_release_id(),"project_cycle":hand._project_state.get_current_cycle(),"run_cycle":hand._run_state.get_completed_run_cycles(),"redraws":hand._run_state.get_available_redraws()}
++
++func replace_pass(quote: Dictionary,readiness: Callable=Callable(),publication: Callable=Callable()) -> Dictionary:
++	var rejected:={"ok":false,"events":[],"plan":{"cards":[],"failed_features":[]}}
++	if quote.size()!=8 or typeof(quote.get("source_token"))!=TYPE_INT or typeof(quote.get("feature_token"))!=TYPE_INT or (not quote.get("target_id") is StringName and not quote.get("target_id") is String):return rejected
++	var current:=alignment_quote(quote.source_token,StringName(quote.target_id),quote.feature_token)
++	if current.is_empty() or current!=quote or not hand._run_state.can_mutate_checkpoint():return rejected
++	var cards: Array[CardData]=[catalog.get_card(quote.target_id)]
++	if readiness.is_valid() and not readiness.call(cards):return rejected
++	if alignment_quote(quote.source_token,StringName(quote.target_id),quote.feature_token)!=quote:return rejected
++	var plan:={"valid":true,"cards":cards,"failed_features":[],"alignment":true}
++	var publish:=func() -> void:
++		var slot: int=hand.candidate_ids.find(quote.source_token)
++		hand._candidate_cards[slot]=cards[0]
++		hand.candidate_ids[slot]=hand.next_candidate_id;hand.next_candidate_id+=1;hand.revision+=1
++		if publication.is_valid():publication.call(plan)
++	if not hand._run_state.consume_redraw(1,publish):return rejected
++	return {"ok":true,"events":[{"type":"pass_alignment","source_token":quote.source_token,"target_id":quote.target_id}],"plan":plan}
+ 
+ func redraw_plan(slots: Array[int], rolls: Array[float]) -> Dictionary:
+ 	if can_swap(slots):
+@@ -85,37 +133,44 @@
+ 
+ func redraw(slots: Array[int], rolls: Array[float] = [], readiness: Callable = Callable(), publication: Callable = Callable()) -> Dictionary:
+ 	var before: int = hand._deal_rng.state
++	var revision: int=hand.revision
++	var tokens: Array=hand.candidate_ids.duplicate()
+ 	var plan:=redraw_plan(slots,rolls)
+-	if not plan.valid or (readiness.is_valid() and not readiness.call(plan.cards)):
++	if not plan.valid or (readiness.is_valid() and not readiness.call(plan.cards)) or hand.revision!=revision or hand.candidate_ids!=tokens:
+ 		hand._deal_rng.state=before
+ 		return {"ok":false,"events":[],"plan":plan}
++	var run: RunState=hand._run_state
++	var roster: Dictionary={}
+ 	if plan.get("swap",false):
+-		var run: RunState=hand._run_state
+-		var roster:=EmployeeRoster.qa_swap(run.get_employees(),hand._project_state.get_release_id(),hand._project_state.get_current_cycle(),run.get_completed_run_cycles())
+-		if roster.is_empty():return {"ok":false,"events":[],"plan":plan}
+-		run._employees=roster
+-	for index in range(slots.size()):
+-		var slot:=slots[index]
+-		var old: CardData = hand._candidate_cards[slot]
+-		var replacement: CardData = plan.cards[index]
+-		if phase==&"design":
+-			if replacement.card_type==&"feature": hand._available_features.erase(replacement)
+-			if old.card_type==&"feature" and not hand._exhausted_card_ids.has(old.id) and not hand._available_features.has(old): hand._available_features.append(old)
+-		hand._candidate_cards[slot]=replacement
+-		hand.candidate_ids[slot]=hand.next_candidate_id
+-		hand.next_candidate_id+=1
+-	if plan.get("guided_redraw",false): hand._get_first_game_tutorial().record_successful_redraw()
+-	# The live adapter publishes the complete replacement pool before the one
+-	# budget notification, matching the existing observable transaction boundary.
+-	if publication.is_valid(): publication.call(plan)
+-	if not plan.get("swap",false): hand._run_state.consume_redraw(slots.size())
+-	else: hand._run_state.employees_changed.emit()
+-	hand.revision+=1
++		roster=EmployeeRoster.qa_swap(run.get_employees(),hand._project_state.get_release_id(),hand._project_state.get_current_cycle(),run.get_completed_run_cycles())
++		if roster.is_empty() or not run.can_mutate_checkpoint():
++			hand._deal_rng.state=before
++			return {"ok":false,"events":[],"plan":plan}
++	var publish:=func() -> void:
++		if plan.get("swap",false):run._employees=roster
++		for index in range(slots.size()):
++			var slot:=slots[index]
++			var old: CardData = hand._candidate_cards[slot]
++			var replacement: CardData = plan.cards[index]
++			if phase==&"design":
++				if replacement.card_type==&"feature": hand._available_features.erase(replacement)
++				if old.card_type==&"feature" and not hand._exhausted_card_ids.has(old.id) and not hand._available_features.has(old): hand._available_features.append(old)
++			hand._candidate_cards[slot]=replacement
++			hand.candidate_ids[slot]=hand.next_candidate_id
++			hand.next_candidate_id+=1
++		if plan.get("guided_redraw",false): hand._get_first_game_tutorial().record_successful_redraw()
++		hand.revision+=1
++		if publication.is_valid(): publication.call(plan)
++	if plan.get("swap",false):
++		run._publishing_cycle=true;publish.call();run.employees_changed.emit();run._publishing_cycle=false
++	elif not run.consume_redraw(slots.size(),publish):
++		hand._deal_rng.state=before
++		return {"ok":false,"events":[],"plan":plan}
+ 	return {"ok":true,"events":[{"type":"qa_swap" if plan.get("swap",false) else "redraw","slots":slots.duplicate()}],"plan":plan}
+ 
+ static func commit_priorities(project: ProjectState, run: RunState, allocation: RefCounted, distribution: Dictionary, draft_publication: Callable = Callable()) -> bool:
+ 	var old: Dictionary = allocation.get_distribution() if allocation is BetaPriorityAllocation else allocation.get_priority_distribution()
+-	var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution) if allocation is BetaPriorityAllocation else PriorityAllocation.is_valid_new_distribution(distribution)
++	var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution, run) if allocation is BetaPriorityAllocation else PriorityAllocation.is_valid_new_distribution(distribution, run)
+ 	if project==null or run==null or not valid or distribution==old or not project.can_advance_cycle() or not run.can_advance_calendar_cycle(): return false
+ 	var commit:=func() -> bool:
+ 		if not allocation.set_distribution(distribution): return false
+@@ -168,6 +223,10 @@
+ func valid_pool() -> bool:
+ 	if hand._candidate_cards.size()!=7: return false
+ 	if phase!=&"alpha": return true
++	var protected: Array[int]=[]
++	for token: int in hand.injected_candidate_ids:
++		if token not in hand.candidate_ids or token in protected or hand._candidate_cards[hand.candidate_ids.find(token)].card_type!=&"pass":return false
++		protected.append(token)
+ 	var seen: Array[StringName] = []
+ 	for card: CardData in hand._candidate_cards:
+ 		if card==null: return false
+--- before/scripts/simulation/development_session.gd
++++ patch-notes/scripts/simulation/development_session.gd
+@@ -95,7 +95,7 @@
+ 	if kind==&"priorities":
+ 		var distribution: Variant = payload.get("distribution")
+ 		if payload.size()!=1 or not distribution is Dictionary: return reject("Malformed priorities")
+-		var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution) if phase_index==2 else PriorityAllocation.is_valid_new_distribution(distribution)
++		var valid: bool = BetaPriorityAllocation.is_valid_new_distribution(distribution, run) if phase_index==2 else PriorityAllocation.is_valid_new_distribution(distribution, run)
+ 		if not valid or distribution==hand.priorities: return reject("Invalid or unchanged priorities")
+ 		if not hand.active:
+ 			hand.priorities=distribution.duplicate()
+@@ -116,6 +116,9 @@
+ 		hand.active=true
+ 		return {"ok":true,"events":[{"type":"initial_deal","candidate_ids":hand.candidate_ids.duplicate()}]}
+ 	if not hand.active: return reject("Phase not begun")
++	if kind==&"align_pass":
++		if payload.size()!=1 or not payload.get("quote") is Dictionary:return reject("Exact alignment quote required")
++		return actions.replace_pass(payload.quote)
+ 	if kind in [&"play",&"redraw"]:
+ 		var ids: Variant = payload.get("candidate_ids")
+ 		if not ids is Array: return reject("Missing candidate tokens")
+@@ -174,6 +177,13 @@
+ 		for index in range(hand.candidate_ids.size()):
+ 			if actions.can_swap([index] as Array[int]):swaps.append(hand.candidate_ids[index])
+ 	var result := {"phase":str(PHASES[phase_index]),"sequence":sequence,"active":hand.active,"finalized":finalized,"confirmation_pending":awaiting_confirmation,"hand_revision":hand.revision,"can_exit":actions.can_finalize() if include_action_availability else false,"candidates":candidates,"priorities":hand.priorities.duplicate(),"project_cycle":project.get_current_cycle(),"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"redraws":run.get_available_redraws(),"genre":str(project.get_genre_id()),"core":core,"scope":project.get_current_scope(),"required_scope":project.get_required_scope(),"known_bugs":project.get_known_bugs(),"fixed_bugs":project.get_fixed_bugs(),"marketing":project.get_marketing_output(),"pending_playtest":pending,"swap_candidate_ids":swaps}
++	if phase_index<2 and include_action_availability:
++		var alignment: Array=[]
++		for slot in hand.candidate_ids.size():alignment.append_array(actions.alignment_options([slot] as Array[int]))
++		result.pass_alignment_options=alignment
++	var limits:=BetaPriorityAllocation.bounds(run) if phase_index==2 else PriorityAllocation.bounds(run)
++	result.priority_bounds={"minimum":limits.x,"maximum":limits.y,"step":5}
++	if phase_index==1 or phase_index==2:result.redraw_protected_ids=hand.injected_candidate_ids.duplicate()
+ 	if not include_action_availability:
+ 		result.erase("can_exit")
+ 		result.erase("swap_candidate_ids")
+--- before/scripts/simulation/studio_actions.gd
++++ patch-notes/scripts/simulation/studio_actions.gd
+@@ -4,10 +4,14 @@
+ const MONEY_ACTIONS := {&"bank_borrow":&"accept_bank_loan",&"bank_payoff":&"pay_off_bank_loan",&"education_payoff":&"pay_off_education"}
+ 
+ static func execute(run: RunState,kind: StringName,payload: Dictionary,in_studio: bool) -> Dictionary:
++	if kind==&"activate_employees":
++		if not in_studio or not payload.is_empty() or run.get_released_game_ids().size()<2 or not run.activate_employee_trial():return reject("Employee activation unavailable")
++		return {"ok":true,"events":[{"type":"employee_courses_activated"}]}
+ 	if kind in MONEY_ACTIONS or kind in [&"hire",&"course"]:
+ 		if kind in [&"hire",&"course"] and not in_studio: return reject("Hiring requires Studio")
++		if kind in [&"hire",&"course"] and not run.uses_employee_courses():return reject("Activate the current employee system after Game 2")
+ 		if payload.size() != 1 or not payload.get("quote") is Dictionary: return reject("Exact quote required")
+-		var method: StringName = (&"hire_specialist" if kind==&"hire" else &"purchase_qa_course") if kind in [&"hire",&"course"] else MONEY_ACTIONS[kind]
++		var method: StringName = (&"hire_specialist" if kind==&"hire" else &"purchase_employee_course") if kind in [&"hire",&"course"] else MONEY_ACTIONS[kind]
+ 		if not run.call(method,payload.quote): return reject("Financial action rejected")
+ 		return {"ok":true,"events":[{"type":str(kind)+"_committed"}]}
+ 	if kind==&"search_contracts":
+@@ -51,4 +55,5 @@
+ 	for id: StringName in run.get_pending_publisher_offer_ids():
+ 		var quote := run.get_publisher_contract_offer(id)
+ 		if not quote.is_empty(): offers.append({"kind":&"publisher","quote":quote})
+-	return {"finance":money.finance,"employees":run.get_employee_observation(),"hire_quote":money.hire_quote,"education_payoff_quote":money.education_payoff_quote,"bank_payoff_quotes":money.bank_payoff_quotes,"contract_offers":offers,"contract_search":run.get_contract_search_catalog(),"search_history":run.get_contract_search_state(),"hire_quotes":[run.get_employee_hire_quote(&"production"),run.get_employee_hire_quote(&"qa")],"course_quotes":[run.get_qa_course_quote(&"mixed"),run.get_qa_course_quote(&"pure")]}
++	var enabled:=run.uses_employee_courses()
++	return {"finance":money.finance,"employees":run.get_employee_observation(),"hire_quote":money.hire_quote if enabled else {},"education_payoff_quote":money.education_payoff_quote,"bank_payoff_quotes":money.bank_payoff_quotes,"contract_offers":offers,"contract_search":run.get_contract_search_catalog(),"search_history":run.get_contract_search_state(),"hire_quotes":[run.get_employee_hire_quote(&"production"),run.get_employee_hire_quote(&"qa"),run.get_employee_hire_quote(&"project_manager")] if enabled else [],"course_quotes":[run.get_qa_course_quote(&"mixed"),run.get_qa_course_quote(&"pure")]+run.get_employee_course_quotes() if enabled else [],"employee_activation_available":run.get_released_game_ids().size()>=2 and not enabled}
+--- before/scripts/ui/employee_panel.gd
++++ patch-notes/scripts/ui/employee_panel.gd
+@@ -29,7 +29,7 @@
+ 	var scroll:=ScrollContainer.new();scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;scroll.follow_focus=true;scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;box.add_child(scroll)
+ 	content=VBoxContainer.new();content.add_theme_constant_override("separation",14);content.size_flags_horizontal=Control.SIZE_EXPAND_FILL;scroll.add_child(content)
+ 	footer=FolderUI.label(box,"",&"SecondaryLabel")
+-	confirmation=ConfirmationDialog.new();confirmation.exclusive=true;add_child(confirmation)
++	confirmation=preload("res://scripts/ui/quit_confirmation.gd").new();confirmation.wrap_controls=false;confirmation.min_size=Vector2i(680,300);confirmation.exclusive=true;add_child(confirmation)
+ 	confirmation.confirmed.connect(_commit_pending);confirmation.canceled.connect(func():pending={})
+ 	hide()
+ func open_for(value: RunState) -> void:
+@@ -61,46 +61,95 @@
+ 	footer.text="Monthly payroll: current %s · scheduled %s · Cash %s"%[CashFormatter.format_exact_cents(current),CashFormatter.format_exact_cents(total),CashFormatter.format_exact_cents(run.get_cash_cents())]
+ 	if section==&"roster":
+ 		FolderUI.label(content,"One specialist per role · Hiring unlocks after your second release",&"SubheadingLabel")
+-		for role in [&"production",&"qa"]:
++		for role in [&"production",&"qa",&"project_manager"]:
+ 			var e: Dictionary={}
+ 			for candidate: Dictionary in roster.employees.values():
+ 				if candidate.type==role:e=candidate
+ 			var card:=FolderUI.surface(content,true);var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);card.add_child(body)
+-			FolderUI.label(body,"Production Specialist" if role==&"production" else "QA Specialist",&"SubheadingLabel")
+-			FolderUI.label(body,"Match a printed Pass and Feature to unlock bundled priority planning." if role==&"production" else "Enroll in QA courses to earn specialization Bug searches and one-card Swap.")
++			FolderUI.label(body,_role_name(role),&"SubheadingLabel")
++			FolderUI.label(body,_role_description(role))
+ 			if e.is_empty():
+ 				var offer:=run.get_employee_hire_quote(role)
+ 				FolderUI.label(body,"$1,000.00 / month · Hire $100.00"+(" · First payday: cycle %d"%offer.first_due_cycle if not offer.is_empty() else " · Requires two releases, current bills and enough cash"))
+ 				var button:=FolderUI.button(body,"Hire for $100.00",func():request_purchase(&"hire",run.get_employee_hire_quote(role)))
+ 				button.disabled=offer.is_empty() or not run.uses_employee_trial();_hire_buttons[role]=button
+ 			else:
+-				FolderUI.label(body,"Hired · "+("Training complete" if e.trained else "Training in progress"));_payroll_copy(body,e,payroll)
++				FolderUI.label(body,"Hired · "+("Courses completed: %d"%EmployeeRoster.Career.completed(e) if e.has("career") else ("Training complete" if e.trained else "Enroll in a course to train")));_payroll_copy(body,e,payroll)
+ 	elif section==&"courses":
+-		var qa: Dictionary={}
++		if roster.employees.is_empty():FolderUI.label(content,"Hire a Specialist after your second release to enroll in courses.")
+ 		for e: Dictionary in roster.employees.values():
+-			if e.type==&"qa":qa=e
+-		if qa.is_empty():FolderUI.label(content,"Hire a QA Specialist after your second release to enroll in courses.")
+-		else:
+-			for course in [&"mixed",&"pure"]:
+-				var document:=FolderUI.surface(content,true);var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);document.add_child(body)
+-				FolderUI.label(body,"Search & Fix" if course==&"mixed" else "QA Versatility",&"SubheadingLabel")
+-				FolderUI.label(body,_criterion(course))
+-				FolderUI.label(body,_benefit(course))
+-				if qa.courses.has(course):FolderUI.label(body,"Completed · +$100.00/month" if qa.courses[course].completed_cycle>=0 else "Enrolled · Future committed hands count")
+-				else:
+-					var offer:=run.get_qa_course_quote(course)
+-					var button:=FolderUI.button(body,"Enroll for $150.00",func():request_purchase(&"course",run.get_qa_course_quote(course)))
+-					button.disabled=offer.is_empty()
++			FolderUI.label(content,_role_name(e.type),&"SubheadingLabel")
++			if e.type==&"qa":
++				for course in [&"mixed",&"pure"]:_qa_course_card(e,course)
++			else:
++				_career_summary(content,e)
++				for course: StringName in EmployeeRoster.Career.course_ids(e.type):_career_course_card(e,course)
+ 	else:
+ 		if roster.employees.is_empty():FolderUI.label(content,"Your hired specialists and their permanent progress will appear here.")
+ 		for e: Dictionary in roster.employees.values():
+-			FolderUI.label(content,str(e.type).capitalize()+" Specialist",&"SubheadingLabel");_payroll_copy(content,e,payroll)
+-			if e.type==&"production":FolderUI.label(content,"Training: commit a Design hand with a Core Pass and matching printed primary/secondary Feature. Once trained, optionally change priorities with a later matching hand, once per project.")
+-			else:
++			FolderUI.label(content,_role_name(e.type),&"SubheadingLabel");_payroll_copy(content,e,payroll)
++			if e.type==&"qa":
+ 				for course in [&"mixed",&"pure"]:
+ 					FolderUI.label(content,_criterion(course))
+ 					var progress: String="Not enrolled" if not e.courses.has(course) else ("Complete" if e.courses[course].completed_cycle>=0 else ("Search %d/3 · Debug %d/3"%[e.search_count,e.debug_count] if course==&"pure" else "Discover and fix in the same hand"))
+ 					FolderUI.label(content,progress+" · "+_benefit(course))
++			else:
++				_career_summary(content,e)
++				for course: StringName in EmployeeRoster.Career.course_ids(e.type):
++					FolderUI.label(content,_career_name(course)+" · "+_career_progress(e,course))
++
++static func _role_name(role: StringName) -> String:
++	return {&"production":"Production Specialist",&"qa":"QA Specialist",&"project_manager":"Project Manager"}.get(role,str(role).capitalize())
++
++static func _role_description(role: StringName) -> String:
++	return {&"production":"Enroll in Production courses to earn bundled priority planning and chosen matching Pass replacement.",&"qa":"Enroll in QA courses to earn specialization Bug searches and one-card Swap.",&"project_manager":"Complete sequential course challenges to widen priority ranges across planning screens."}.get(role,"")
++
++func _qa_course_card(e: Dictionary,course: StringName) -> void:
++	var document:=FolderUI.surface(content,true);var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);document.add_child(body)
++	FolderUI.label(body,"Search & Fix" if course==&"mixed" else "QA Versatility",&"SubheadingLabel")
++	FolderUI.label(body,_criterion(course));FolderUI.label(body,_benefit(course))
++	if e.courses.has(course):FolderUI.label(body,"Completed · +$100.00/month" if e.courses[course].completed_cycle>=0 else "Enrolled · Future committed hands count")
++	else:
++		var offer:=run.get_qa_course_quote(course)
++		var button:=FolderUI.button(body,"Enroll for $150.00",func():request_purchase(&"course",run.get_qa_course_quote(course)))
++		button.disabled=offer.is_empty()
++
++static func _career_name(course: StringName) -> String:
++	return "Production Planning" if course==&"production_planning" else "Pass Alignment" if course==&"pass_alignment" else "Project Management %s"%str(course).get_slice("_",1)
++
++static func _career_criterion(course: StringName) -> String:
++	if course==&"production_planning":return "After enrollment, commit a Design hand with a Core Pass and a Feature matching its printed primary or secondary Core. A later matching hand can use bundled priority planning once per project."
++	if course==&"pass_alignment":return "After enrollment, commit a printed Pass/Feature match in Design and Alpha of the same game, then release it. Earn chosen matching Core Pass replacement through Redraw, one normal redraw per use."
++	return "After enrollment, release four distinct games with two actual Design, Alpha or Beta Specializations each, in categories at that hand's legal minimum. Each completion widens both priority limits by 5 points. Contracts do not train this challenge."
++
++static func _career_progress(e: Dictionary,course: StringName) -> String:
++	var record: Dictionary=e.get("career",{}).get("courses",{}).get(course,{})
++	if record.is_empty():return "Not enrolled"
++	if record.completed_cycle>=0:return "Completed · +$100.00/month"+(" · legacy training retained" if record.legacy else "")
++	if e.type==&"project_manager":return "Enrolled · %d/4 qualifying released games"%e.career.games.get(course,[]).size()
++	if course==&"production_planning":return "Enrolled · Commit one matching Design hand"
++	var pending:=0
++	for project: Dictionary in e.career.projects.values():
++		if not project.design.is_empty() and not project.alpha.is_empty():pending+=1
++	return "Enrolled · %d game(s) have both matches; successful release required"%pending
++
++func _career_summary(parent: Node,e: Dictionary) -> void:
++	if e.type==&"project_manager":
++		var level:=EmployeeRoster.Career.completed(e)
++		var core:=PriorityAllocation.bounds(run);var beta:=BetaPriorityAllocation.bounds(run)
++		FolderUI.label(parent,"Level %d/4 · Core %d–%d%% · Beta %d–%d%% · exact 100 in 5-point steps"%[level,core.x,core.y,beta.x,beta.y])
++	else:FolderUI.label(parent,"Completed courses: %d/2 · Course purchase starts training; completion earns the benefit and raise."%EmployeeRoster.Career.completed(e))
++
++func _career_course_card(e: Dictionary,course: StringName) -> void:
++	var document:=FolderUI.surface(content,true);var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);document.add_child(body)
++	FolderUI.label(body,_career_name(course),&"SubheadingLabel")
++	FolderUI.label(body,_career_criterion(course));FolderUI.label(body,_career_progress(e,course))
++	if not e.get("career",{}).get("courses",{}).has(course):
++		var offer:=run.get_employee_course_quote(e.employee_id,course)
++		var button:=FolderUI.button(body,"Enroll for $150.00",func():request_purchase(&"course",run.get_employee_course_quote(e.employee_id,course)))
++		button.name="Enroll_"+str(course);button.disabled=offer.is_empty()
++		if button.disabled:button.tooltip_text="Complete the preceding course first; enrollment also requires current bills, enough cash and an active employee system."
++
+ func _payroll_copy(parent: Node,e: Dictionary,payroll: Dictionary) -> void:
+ 	for pay: Dictionary in payroll.employees:
+ 		if pay.employee_id!=e.employee_id:continue
+@@ -117,7 +166,7 @@
+ 	pending={"kind":kind,"quote":offer.duplicate(true)};quote=offer.duplicate(true)
+ 	confirmation.title="Confirm hiring" if kind==&"hire" else "Confirm course"
+ 	confirmation.dialog_text="Hire for $100.00? Monthly base pay is $1,000.00. First payday: cycle %d."%offer.first_due_cycle if kind==&"hire" else "Enroll for $150.00? Only future hands count. Completing this challenge permanently adds $100.00/month to this employee's wage."
+-	confirmation.get_ok_button().text="Confirm";confirmation.popup_centered(Vector2i(600,220));confirmation.get_cancel_button().grab_focus()
++	confirmation.get_ok_button().text="Confirm";confirmation.popup_centered(Vector2i(680,300));confirmation.get_cancel_button().grab_focus()
+ func _commit_pending() -> void:
+ 	if pending.is_empty() or run==null:return
+ 	var choice:=pending.duplicate(true);pending={}
+--- before/scripts/ui/employee_planning_dialog.gd
++++ patch-notes/scripts/ui/employee_planning_dialog.gd
+@@ -51,7 +51,11 @@
+ 	var status: Dictionary = phase.get_employee_hand_status()
+ 	if not status.get("available",false) or not status.get("qualifying",false): return
+ 	previous = phase.get_priority_distribution()
+-	for i in range(4): inputs[i].value = previous[i]
++	var run: RefCounted=phase.get("_run_state")
++	var limits:=PriorityAllocation.bounds(run)
++	var draft:=PriorityAllocation.editable_distribution(previous,run)
++	for i in range(4):
++		inputs[i].min_value=limits.x;inputs[i].max_value=limits.y;inputs[i].value=draft[i]
+ 	var base: Dictionary = phase._validate_and_calculate_base_action()
+ 	var names: Array[String] = []
+ 	for card: CardData in base.cards: names.append(card.card_name)
+@@ -70,7 +74,7 @@
+ 		var total := 0
+ 		for amount: int in value.values(): total += amount
+ 		total_label.text = "%d/100" % total
+-	get_ok_button().disabled = value == previous or not PriorityAllocation.is_valid_new_distribution(value)
++	get_ok_button().disabled = value == previous or not PriorityAllocation.is_valid_new_distribution(value, phase.get("_run_state") if is_instance_valid(phase) else null)
+ 
+ func _commit() -> void:
+ 	if not is_instance_valid(phase): return
+--- before/scripts/ui/gameplay_hud.gd
++++ patch-notes/scripts/ui/gameplay_hud.gd
+@@ -452,6 +452,7 @@
+ 	var fan_history: Array = run.get_fanbase_history()
+ 	fans_button.tooltip_text = "Monthly Fan history. No monthly boundary yet." if fan_history.is_empty() else "Month %d · +%d gained · -%d lost · %d total" % [fan_history[-1].month, fan_history[-1].gained, fan_history[-1].lost, fan_history[-1].ending]
+ 	cash_button.text = "Cash: %s" % (CashFormatter.format_exact_cents(cents) if cents >= 0 else "—")
++	if run.get_meta(&"debug_unlimited_cash",false):cash_button.text="Cash: ∞"
+ 	cash_button.disabled = phase is MainMenu or not is_instance_valid(phase)
+ 	var finances := run.get_studio_finance_report()
+ 	var next_bill := "—"
+--- before/scripts/ui/phase_workspace.gd
++++ patch-notes/scripts/ui/phase_workspace.gd
+@@ -156,7 +156,13 @@
+ 	play.pressed.connect(_present_action.bind("play", play_action))
+ 	var redraw := phase.get_node("%RedrawButton") as Button
+ 	for connection in redraw.pressed.get_connections(): redraw.pressed.disconnect(connection.callable)
+-	redraw.pressed.connect(_present_action.bind("redraw", Callable(phase, "redraw_selected_cards")))
++	if title in ["Design","Alpha"]:redraw.pressed.connect(Callable(phase,"_on_redraw_pressed"))
++	else:redraw.pressed.connect(_present_action.bind("redraw", Callable(phase, "redraw_selected_cards")))
++
++func present_redraw(action: Callable) -> bool:
++	if hand_motion.busy:return false
++	return hand_motion.play("redraw",phase.get_node("%HandContainer"),phase.get_selected_candidate_views(),action,
++		func():return HandPresentation.project_snapshot(project,run),_update_presented_scores,_restore_presented_scores)
+ 
+ func _present_action(kind: String, action: Callable) -> void:
+ 	if hand_motion.busy: return
+--- before/scripts/ui/predevelopment_overlay.gd
++++ patch-notes/scripts/ui/predevelopment_overlay.gd
+@@ -147,6 +147,12 @@
+ 	return options
+ 
+ func open() -> void:
++	var values: Dictionary=PriorityAllocation.editable_distribution(get_initial_priorities(),market_run)
++	var limits:=PriorityAllocation.bounds(market_run)
++	for index in priority_sliders.size():
++		priority_sliders[index].min_value=limits.x;priority_sliders[index].max_value=limits.y
++		priority_sliders[index].set_value_no_signal(values[index])
++	_refresh_priorities()
+ 	_commission_quote = {}
+ 	_support_quote = {}
+ 	begin_button.text = "Review commission quote" if commission_mode else "Begin Development"
+@@ -181,7 +187,7 @@
+ 	if total == 100 and error_label != null and error_label.text == "Allocate exactly 100 priority points before beginning.": error_label.text = ""
+ 
+ func _confirm() -> void:
+-	if not PriorityAllocation.is_valid_new_distribution(get_initial_priorities()):
++	if not PriorityAllocation.is_valid_new_distribution(get_initial_priorities(), market_run):
+ 		error_label.text = "Allocate exactly 100 priority points before beginning."
+ 		return
+ 	var genre: StringName = genre_input.get_selected_metadata()
+--- before/scripts/ui/priority_overlay.gd
++++ patch-notes/scripts/ui/priority_overlay.gd
+@@ -73,7 +73,9 @@
+ 			var index := sliders.size()
+ 			for child in column.get_children():
+ 				if child is VSlider:
+-					child.max_value = BetaPriorityAllocation.MAX_PRIORITY if beta else PriorityAllocation.MAX_PRIORITY
++					var run: RefCounted=phase.get("_run_state")
++					var limits:=BetaPriorityAllocation.bounds(run) if beta else PriorityAllocation.bounds(run)
++					child.min_value=limits.x;child.max_value=limits.y
+ 					sliders.append(child)
+ 					child.custom_minimum_size = Vector2(32, 122)
+ 					child.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+@@ -116,7 +118,7 @@
+ 	shade.color = Color("#080409") if initial_setup else Color(0.015, 0.01, 0.015, 0.82)
+ 	shade.offset_bottom = -INITIAL_FOOTER_REVEAL if initial_setup else 0.0
+ 	title_label.text = "Initialize Priorities" if initial_setup else "Change Priorities"
+-	help.text = _help_text(phase_name)
++	help.text = _help_text(phase_name).replace("10–75",_range_text())
+ 	commit_button.text = "Begin " + phase_name if initial_setup else "Commit Priorities"
+ 	cancel_button.visible = not initial_setup
+ 	previous_focus = phase.get_viewport().gui_get_focus_owner()
+@@ -129,6 +131,11 @@
+ 	else:
+ 		cancel_button.grab_focus()
+ 	return true
++
++func _range_text() -> String:
++	var run: RefCounted=phase.get("_run_state")
++	var limits:=BetaPriorityAllocation.bounds(run) if phase.get_workspace().phase_name=="Beta" else PriorityAllocation.bounds(run)
++	return "%d–%d"%[limits.x,limits.y]
+ 
+ func _help_text(phase_name: String) -> String:
+ 	if phase_name == "Beta" and not BetaPriorityAllocation.insiders_enabled():
+@@ -162,7 +169,7 @@
+ 		_close()
+ 		return true
+ 	if not phase.commit_priority_distribution():
+-		feedback.text = "Use a changed allocation totaling 100; each active value must be 10–75."
++		feedback.text = "Use a changed allocation totaling 100; each active value must be %s."%_range_text()
+ 		return false
+ 	_close()
+ 	return true
+--- before/scripts/ui/production_pass_choice.gd
++++ patch-notes/scripts/ui/production_pass_choice.gd
+@@ -0,0 +1,96 @@
++extends CanvasLayer
++
++## A choice over the existing Redraw action. Preview/cancel never mutate the fan.
++var phase: Control
++var choices: Array=[]
++var selected: Dictionary={}
++var panel: PanelContainer
++var options: VBoxContainer
++var preview: CardView
++var description: Label
++var confirm_button: Button
++var back_button: Button
++var ordinary_button: Button
++var _entrance: Tween
++var _host: Container
++
++class CenteredHost extends Container:
++	func _notification(what: int) -> void:
++		if what!=NOTIFICATION_SORT_CHILDREN:return
++		var target:=Vector2(minf(720,size.x-40),minf(496,size.y-40))
++		for child in get_children():
++			if child is Control:fit_child_in_rect(child,Rect2((size-target)/2,target))
++
++func _ready() -> void:
++	layer=25
++	add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
++	var shade:=ColorRect.new();shade.color=Color(0.015,0.02,0.025,0.85)
++	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);add_child(shade)
++	_host=CenteredHost.new();shade.add_child(_host);_host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
++	_host.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	panel=FolderUI.surface(_host)
++	var body:=VBoxContainer.new();body.add_theme_constant_override("separation",12);panel.add_child(body)
++	back_button=FolderUI.header(body,"Align a Pass","Production Specialist · one normal redraw",close).get_node("Back")
++	var row:=HBoxContainer.new();row.add_theme_constant_override("separation",24);row.size_flags_vertical=Control.SIZE_EXPAND_FILL;body.add_child(row)
++	var left:=VBoxContainer.new();left.size_flags_horizontal=Control.SIZE_EXPAND_FILL;left.add_theme_constant_override("separation",8);row.add_child(left)
++	description=FolderUI.label(left,"");description.custom_minimum_size=Vector2(360,80)
++	options=VBoxContainer.new();options.add_theme_constant_override("separation",8);left.add_child(options)
++	var card_host:=Control.new();card_host.custom_minimum_size=Vector2(168,236);row.add_child(card_host)
++	preview=preload("res://scenes/cards/card_view.tscn").instantiate();card_host.add_child(preview);preview.scale=Vector2.ONE*0.7;preview.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	var actions:=HBoxContainer.new();actions.add_theme_constant_override("separation",12);body.add_child(actions)
++	confirm_button=FolderUI.button(actions,"Replace Pass · 1 redraw",_replace,&"PrimaryButton")
++	ordinary_button=FolderUI.button(actions,"Ordinary redraw · 1",_ordinary)
++	hide()
++
++func open_for(controller: Control, offers: Array) -> void:
++	phase=controller;choices=offers.duplicate(true);selected={}
++	ordinary_button.disabled=false
++	if _entrance!=null and _entrance.is_valid():_entrance.kill()
++	_host.queue_sort()
++	for child in options.get_children():options.remove_child(child);child.queue_free()
++	for offer: Dictionary in choices:
++		FolderUI.button(options,offer.target_name+" · +2 "+str(offer.primary).capitalize(),func():_select(offer))
++	if choices.is_empty():return
++	_select(choices[0]);show();back_button.grab_focus()
++	var resting:=(get_viewport().get_visible_rect().size-Vector2(720,496))/2
++	panel.position=resting+Vector2(28,0);panel.modulate.a=0.0
++	_entrance=create_tween().set_parallel();var tween:=_entrance;tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
++	tween.tween_property(panel,"position",resting,MenuTransitions.ENTRANCE_SECONDS)
++	tween.tween_property(panel,"modulate:a",1.0,MenuTransitions.ENTRANCE_SECONDS)
++
++func _select(offer: Dictionary) -> void:
++	selected=offer.duplicate(true)
++	var actions: RefCounted=phase._capture_development_actions()
++	preview.set_card(actions.catalog.get_card(offer.target_id))
++	description.text="Choose the exact Pass to receive.\nMatches visible %s.\nOne slot changes · 0 cycles · no extra card."%offer.feature_name
++	confirm_button.disabled=false
++	for index in options.get_child_count():options.get_child(index).theme_type_variation=&"PrimaryButton" if choices[index].target_id==offer.target_id else &"Button"
++
++func _still_current() -> bool:
++	if not is_instance_valid(phase) or selected.is_empty():return false
++	var actions: RefCounted=phase._capture_development_actions()
++	var slots: Array[int]=phase._redraw_slots()
++	if slots.size()!=1 or actions.hand.candidate_ids[slots[0]]!=selected.quote.source_token:return false
++	return actions.alignment_quote(selected.quote.source_token,selected.quote.target_id,selected.quote.feature_token)==selected.quote
++
++func _replace() -> void:
++	if not _still_current():_stale();return
++	hide()
++	if not phase._workspace.present_redraw(func():phase.redraw_selected_cards([] as Array[float],selected.quote)):show();_stale()
++
++func _ordinary() -> void:
++	if not _still_current():_stale();return
++	hide()
++	if not phase._workspace.present_redraw(Callable(phase,"redraw_selected_cards")):show();_stale()
++
++func _stale() -> void:
++	description.text="This hand, redraw budget or save state changed. Return to the hand and review a fresh choice. Nothing was spent."
++	confirm_button.disabled=true;ordinary_button.disabled=true;back_button.grab_focus()
++
++func close() -> void:
++	hide()
++	if is_instance_valid(phase):phase.get_node("%RedrawButton").grab_focus()
++
++func _input(event: InputEvent) -> void:
++	if visible and event.is_action_pressed("ui_cancel"):
++		close();get_viewport().set_input_as_handled()

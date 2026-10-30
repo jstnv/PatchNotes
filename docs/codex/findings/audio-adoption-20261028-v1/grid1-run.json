@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_common_grid.gd"
+  ],
+  "exit": 124,
+  "elapsed_seconds": 130.0,
+  "errors": [
+    "SCRIPT ERROR: Invalid access to property or key 'music' on a base object of type 'Dictionary'."
+  ],
+  "tail": [
+    "PASS: Left roots share the inward column: power_ups",
+    "PASS: Right roots share the inward column: simple_story",
+    "PASS: Right roots share the inward column: levels",
+    "PASS: Technology root order Menu / Keyboard / Controller",
+    "PASS: Save Files follows Menu without the old root gap",
+    "PASS: Branching Nodes follows Save Files",
+    "SCRIPT ERROR: Invalid access to property or key 'music' on a base object of type 'Dictionary'.",
+    "   at: _run (res://scripts/debug/verify_store_common_grid.gd:70)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _run (res://scripts/debug/verify_store_common_grid.gd:70)"
+  ],
+  "runtime_identity": "4321b73943e8d0c7cfd7503b6bf70a05eda516478826f9c508b2bd1a0b1e5c54",
+  "runtime_source_unchanged": true
+}

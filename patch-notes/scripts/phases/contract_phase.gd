@@ -141,8 +141,8 @@ func _build_ui() -> void:
 		label.add_theme_color_override("font_color", PriorityInfluenceChart.CORE_COLORS[category])
 		box.add_child(label)
 		var input := VSlider.new()
-		input.min_value = PriorityAllocation.MIN_PRIORITY
-		input.max_value = PriorityAllocation.MAX_PRIORITY
+		input.min_value = PriorityAllocation.bounds(_run).x
+		input.max_value = PriorityAllocation.bounds(_run).y
 		input.step = PriorityAllocation.PRIORITY_STEP
 		input.value = 25
 		input.custom_minimum_size = Vector2(32,140)
@@ -177,7 +177,7 @@ func _build_ui() -> void:
 	var cancel := Button.new()
 	cancel.text = "Cancel"
 	cancel.pressed.connect(func():
-		_priority_draft = _state.get_priority_distribution()
+		_priority_draft = PriorityAllocation.editable_distribution(_state.get_priority_distribution(),_run)
 		_sync_priority_inputs()
 		_priority_modal.hide()
 		_change_priorities.grab_focus())
@@ -286,7 +286,7 @@ func _modal_content(layer: CanvasLayer, minimum: Vector2) -> VBoxContainer:
 
 func open_priority_overlay() -> void:
 	if not can_edit_priorities() or hand_motion.busy: return
-	_priority_draft = _state.get_priority_distribution()
+	_priority_draft = PriorityAllocation.editable_distribution(_state.get_priority_distribution(),_run)
 	_sync_priority_inputs()
 	_refresh_actions()
 	_priority_modal.show()
@@ -320,7 +320,7 @@ func _build_completion_panel() -> void:
 
 func _initialize_presentation() -> bool:
 	_title.text = _state.get_title()
-	_priority_draft = _state.get_priority_distribution()
+	_priority_draft = PriorityAllocation.editable_distribution(_state.get_priority_distribution(),_run)
 	_sync_priority_inputs()
 	if _state.is_completed():
 		_show_completion()
@@ -355,7 +355,7 @@ func can_edit_priorities() -> bool:
 
 
 func set_priority_draft(distribution: Dictionary) -> bool:
-	if not PriorityAllocation.is_valid_new_distribution(distribution):
+	if not PriorityAllocation.is_valid_new_distribution(distribution, _run):
 		return false
 	_priority_draft = distribution.duplicate()
 	_sync_priority_inputs()
@@ -370,7 +370,7 @@ func commit_priority_distribution(distribution: Dictionary = _priority_draft) ->
 	_command_busy = false
 	if not ok: return false
 	_command_sequence += 1
-	_priority_draft = _state.get_priority_distribution()
+	_priority_draft = PriorityAllocation.editable_distribution(_state.get_priority_distribution(),_run)
 	_sync_priority_inputs()
 	_feedback_label.text = "Priorities committed. The current draw is unchanged."
 	_refresh_all()
@@ -565,7 +565,8 @@ func _selected_cards() -> Array[CardData]:
 func _sync_priority_inputs() -> void:
 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
 		var input: VSlider = _priority_inputs[category]
-		input.set_value_no_signal(maxi(PriorityAllocation.MIN_PRIORITY,_priority_draft[category]))
+		input.min_value=PriorityAllocation.bounds(_run).x;input.max_value=PriorityAllocation.bounds(_run).y
+		input.set_value_no_signal(_priority_draft[category])
 		_priority_draft[category] = int(input.value)
 		(input.get_parent().get_child(2) as Label).text = str(int(input.value))
 	_priority_chart.refresh_from_controls()

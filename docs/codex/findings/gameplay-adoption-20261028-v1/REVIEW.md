@@ -1,0 +1,3 @@
+# Gameplay restoration review —2026-10-29
+
+Read-only reviewer `/root/gameplay_restoration_review` compared the seven owned runtime changes against the recorded baseline. No specific actionable defect found. Approved definitions, ordered three-parent acquisition, shared familiarity cap, grandfathered queues, exact source/content compatibility pairs, frozen supply and the pending Score-root choice were preserved. The900px capture showed all links and selected card visible without overlap. No Godot runs were performed by the reviewer; executed main-task checks are recorded in verification.json. No new per-cycle hook/cache was introduced. Late Research latency remains OPEN.

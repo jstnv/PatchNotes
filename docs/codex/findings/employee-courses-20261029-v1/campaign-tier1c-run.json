@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_campaign.gd",
+    "--",
+    "--tiers=1"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 15.25,
+  "errors": [],
+  "tail": [
+    "CAREER_PROGRESS {\"cash\":299655558,\"cycle\":34,\"releases\":4,\"step\":63,\"tier\":0}",
+    "PASS: Release checkpoint and career/payroll provenance 5 ",
+    "CAREER_PROGRESS {\"cash\":298683907,\"cycle\":43,\"releases\":5,\"step\":94,\"tier\":0}",
+    "PASS: Release checkpoint and career/payroll provenance 6 ",
+    "CAREER_PROGRESS {\"cash\":297724039,\"cycle\":50,\"releases\":6,\"step\":118,\"tier\":1}",
+    "PASS: Actual committed hands/releases complete requested courses",
+    "PASS: Source-pinned complete action tape retained",
+    "CAREER_CAMPAIGN {\"alignment_uses\":0,\"cash_cents\":297724039,\"cash_low_cents\":297724039,\"completed\":true,\"cycles\":50,\"failures\":0,\"functional_funding_cents\":300000000,\"releases\":6,\"source\":\"3b6eba994505a819eb79d14dc7ed13689ac5c9b68b830bf7a09cff23d3ec5cd5\",\"steps\":119,\"tier\":1}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "3b6eba994505a819eb79d14dc7ed13689ac5c9b68b830bf7a09cff23d3ec5cd5",
+  "runtime_source_unchanged": true
+}

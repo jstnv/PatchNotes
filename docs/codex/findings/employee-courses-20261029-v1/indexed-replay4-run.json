@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_fixed_campaign.gd",
+    "--",
+    "--replay=C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\employee-courses-20261029-v1\\tail-tier4.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 112.063,
+  "errors": [],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "PASS: Fresh process restores exact campaign start",
+    "PASS: Independent exact replay  step -1",
+    "CAREER_REPLAY {\"failures\":0,\"steps\":54}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "53e5d843a3e40c7615aef6297d73f2cd348763711903a930e812e8d21fc82112",
+  "runtime_source_unchanged": true
+}

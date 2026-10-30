@@ -1,0 +1,23 @@
+--- before/scripts/ui/feature_store_layout.gd
++++ after/scripts/ui/feature_store_layout.gd
+@@ -16,12 +16,14 @@
+ 	&"controller":Vector2i(1,-3), &"save_files":Vector2i(-1,-4),
+ 	&"branching_nodes":Vector2i(-1,-5), &"split_screen":Vector2i(-2,-6),
+ 	&"player_level_editor":Vector2i(1,-6),
+-	&"score_system":Vector2i(-1,3), &"high_scores":Vector2i(-2,3),
+-	&"local_leaderboards":Vector2i(-3,3), &"lives_system":Vector2i(-1,5),
+-	&"enemies":Vector2i(-2,5), &"general_combat":Vector2i(-3,5),
+-	&"turn_based_combat":Vector2i(-4,5), &"character_classes":Vector2i(-4,6),
+-	&"scripted_ai":Vector2i(-3,7), &"difficulty_levels":Vector2i(-5,6),
+-	&"controls":Vector2i(-1,7), &"power_ups":Vector2i(-1,9),
++	&"lives_system":Vector2i(-1,3), &"enemies":Vector2i(-2,3),
++	&"general_combat":Vector2i(-3,3), &"turn_based_combat":Vector2i(-4,3),
++	&"character_classes":Vector2i(-4,4), &"timer_system":Vector2i(-1,5),
++	&"categorized_scores":Vector2i(-3,5), &"power_ups":Vector2i(-4,5),
++	&"score_system":Vector2i(-1,7), &"high_scores":Vector2i(-2,7),
++	&"local_leaderboards":Vector2i(-3,7), &"inventory_system":Vector2i(-1,8),
++	&"scripted_ai":Vector2i(-3,9), &"difficulty_levels":Vector2i(-5,7),
++	&"controls":Vector2i(-1,9),
+ 	&"simple_story":Vector2i(2,3), &"dialogue":Vector2i(3,3),
+ 	&"character_backstories":Vector2i(3,4), &"branching_dialogue":Vector2i(4,3),
+ 	&"character_development":Vector2i(4,4), &"multiple_endings":Vector2i(5,3),

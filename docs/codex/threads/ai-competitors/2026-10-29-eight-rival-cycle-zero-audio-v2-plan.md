@@ -1,0 +1,15 @@
+# Audio-current eight-specialty cycle-zero rerun plan — 2026-10-29
+
+**DESIGN/TRIAL experiment, not canonical gameplay.** Fork the preserved v1 private simulator into v2. Apply the currently ACTIVE/TRIAL Audio catalog, retirement, root, replacement and future-project supply rules from the inspected canonical source. Preserve historical definitions and v1 outputs. The current Audio trial does not author a `min_year` for its five new nodes; this private 1977 extension follows literal source eligibility and records the historical-timing ambiguity. The fixed `full_pool` policy buys Primitive cards, so it is not expected to buy those five Store nodes before January.
+
+## Hypothesis and comparison
+
+- The active Audio roster will change historical Reviews and perhaps Genre coverage, especially Sports. It may keep several 8+ titles but the v1 nine-per-seed count is not guaranteed. Compare to [v1 source-pinned finding](2026-10-29-eight-rival-cycle-zero-forecast-finding-v1.md), reporting changed rules rather than claiming state/RNG parity across revisions.
+- Sixteen independent Studio careers: eight permanent specialties, seeds **5607** and **5613**, Family Funding + Cult Following, Fantasy Theme, $25,000 **trial** capital, 1977 founding, `full_pool` policy, `midpoint` first historical standard, legal paid later purchases, 72 productive cycles. Same seed/policy/bounds as v1: at most340 commands and240 seconds per fresh Godot process. Regenerate each legal prefix from fresh Studio. No prior tape is cross-revision compatible.
+- Rival-only founder candidate derived from v3 historical membership: remove retired Sound Effects and Music; ensure 8-Bit Sound root (add it where absent); Sports replaces Music with active Recorded Sounds (same printed Scope, owned 8-Bit Sound parent). Retired IDs never enter future project supply. This is a **TRIAL roster mapping**, not selected canonical roster or final balance; record actual per-Genre Scope.
+- Reuse current Audio ledger rows: exact five new card Core/Scope/price/play-cost/parents, 16-Bit Sound replacement of 8-Bit Sound, and current retained Recorded Sounds. Do not alter non-Audio ratings, finance, standards, AI choices, player roster or market coefficients.
+- Measure per release Review, Core, Scope, Bugs, cycle and January owned future Scope, active phase, cash/Fans. Audit no retired IDs in new-project supply, original ownership retention, Audio graph/upgrade metadata, and current Audio row hashes. Run all16 through the isolated runner; fresh-process replay one strong and one weak case. Retain rejections, crashes or timeouts. Stop at the declared bounds; no seed/budget rescue.
+
+## Interpretation limit
+
+This is a controlled Audio-rule backport onto the v1 private career source, not a current canonical shared `RivalWorld`. Its 1977 work is separate per Studio; cross-rival standards, saturation, player interaction, save/Continue and eight-rival CPU stay **OPEN**. The prospective 1977 founder roster is unapproved. Passing a Review screen does not approve score balance or historical Audio access.

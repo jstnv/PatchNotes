@@ -1,0 +1,39 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_common_grid.gd"
+  ],
+  "exit": 11,
+  "elapsed_seconds": 1.656,
+  "errors": [
+    "FAIL: All46 node centers share one global integer lattice",
+    "FAIL: All46 occupied cells and card/label footprints are unique",
+    "FAIL: Palette directly above Text",
+    "FAIL: Colored Text directly left of Text",
+    "FAIL: Sprites directly left of Palette",
+    "FAIL: Animated Sprites directly left of Sprites",
+    "FAIL: Second left-of-Sprites request uses a separate outward cell",
+    "FAIL: Technology root order Menu / Keyboard / Controller",
+    "FAIL: Save Files follows Menu without the old root gap",
+    "FAIL: Branching Nodes follows Save Files",
+    "FAIL: Map exposes precomputed obstacle-safe routes"
+  ],
+  "tail": [
+    "PASS: Scrolling directly below Colored Text",
+    "FAIL: Second left-of-Sprites request uses a separate outward cell",
+    "FAIL: Technology root order Menu / Keyboard / Controller",
+    "FAIL: Save Files follows Menu without the old root gap",
+    "FAIL: Branching Nodes follows Save Files",
+    "FAIL: Map exposes precomputed obstacle-safe routes",
+    "PASS: Layout and routing consume no gameplay RNG",
+    "Store common grid: 14 checks, 11 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

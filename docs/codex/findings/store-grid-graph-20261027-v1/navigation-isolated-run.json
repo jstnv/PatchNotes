@@ -1,0 +1,50 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_feature_store_navigation.gd"
+  ],
+  "exit": 22,
+  "elapsed_seconds": 16.094,
+  "errors": [
+    "FAIL: Small mouse jitter remains a node click (1152)",
+    "FAIL: Details and totals spell out Core categories",
+    "FAIL: Left selects the directly adjacent Colored Text cell",
+    "FAIL: Arrow selection opens correct details",
+    "FAIL: Right returns to inward Visuals parent",
+    "FAIL: Up follows the inner root axis to 4-Color Palette",
+    "FAIL: Down returns to Text on the inner root axis",
+    "FAIL: Escape dismisses keyboard-opened details",
+    "FAIL: Arrow browsing resumes from focused node after dismissal",
+    "FAIL: Equal-distance inward tie prefers parent at zoom 0.75",
+    "FAIL: Equal-distance inward tie prefers parent at zoom 1.00010396295693",
+    "FAIL: Equal-distance inward tie prefers parent at zoom 1.5",
+    "FAIL: Left-drag begun on artwork pans both axes",
+    "FAIL: Blank-map drag continues outside viewport and releases cleanly",
+    "FAIL: Existing middle-button pan remains available",
+    "FAIL: Panning clamps at map origin",
+    "FAIL: Click outside details dismisses",
+    "FAIL: Tutorial Next Tip remains clickable above map",
+    "FAIL: Escape closes Tutorial overlay",
+    "FAIL: Map arrow navigation resumes after closing Tutorial",
+    "FAIL: First Escape dismisses hovered details",
+    "FAIL: Hovered Store details dismiss, next Escape pauses, third resumes: 1"
+  ],
+  "tail": [
+    "PASS: Tutorial Next Tip remains clickable above map",
+    "PASS: Escape closes Tutorial overlay",
+    "PASS: Map arrow navigation resumes after closing Tutorial",
+    "PASS: All navigation remains zero-cost",
+    "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 0",
+    "PASS: First Escape dismisses hovered details",
+    "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 1",
+    "PASS: Hovered Store details dismiss, next Escape pauses, third resumes: 2",
+    "PASS: Tooltip, details and Pause navigation remain zero-cost",
+    "Feature Store navigation verification: 22 failures"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "exe": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\research-fix-20261027-v1\\internal-release\\patch-notes-demo-20261007-rya0n0hi\\demo\\Research Performance Probe.exe",
+  "exe_sha256": "ab693d9e0b22a163fab8ed4fe70b83f152600313fd2730c8b101131c872078dd",
+  "checks": [
+    {
+      "label": "probe-import",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\research-fix-20261027-v1\\internal-release\\patch-notes-demo-20261007-rya0n0hi\\source",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "exit": 0,
+      "errors": []
+    },
+    {
+      "label": "probe-export",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+        "--headless",
+        "--text-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\research-fix-20261027-v1\\internal-release\\patch-notes-demo-20261007-rya0n0hi\\source",
+        "--export-release",
+        "Patch Notes v0.01",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\research-fix-20261027-v1\\internal-release\\patch-notes-demo-20261007-rya0n0hi\\demo\\Research Performance Probe.exe"
+      ],
+      "exit": 0,
+      "errors": []
+    }
+  ],
+  "build_only_probe_files": [
+    "perf_probe.gd",
+    "perf_boot.gd",
+    "perf_boot.tscn"
+  ],
+  "canonical_modified": false
+}

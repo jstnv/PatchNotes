@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_detail_bounds.gd"
+  ],
+  "exit": 2,
+  "elapsed_seconds": 8.0,
+  "errors": [
+    "FAIL: Long Core/AND details remain inside Store at 1152",
+    "FAIL: Long Core/AND details remain inside Store at 1152"
+  ],
+  "tail": [
+    "PASS: Long Core/AND details remain inside Store at 900",
+    "DETAIL_MINIMUMS 900 character_skill_checks popup=(480.0001, 276.0) minimum=(480.0, 276.0) label=(448.0, 147.0) label-min=(228.0, 147.0) label-text=Character Skill Checks",
+    "4 Design \u00b7 1 Tech \u00b7 2 Scope",
+    "Play cost: $0.00",
+    "Locked \u2014 Available in 1988",
+    "Locked \u2014 1984 era needs a qualifying Studio-owned release (played Scope meets required Scope) buy=(448.0, 40.0) buy-min=(310.0, 40.0) buy-text=Missing: Character Development",
+    "PASS: Long Core/AND details remain inside Store at 900",
+    "Feature Store navigation verification: 2 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

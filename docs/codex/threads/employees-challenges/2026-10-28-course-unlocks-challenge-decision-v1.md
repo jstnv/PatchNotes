@@ -1,0 +1,11 @@
+# Employee courses unlock challenges — 2026-10-28
+
+**LOCKED design rule; no new gameplay implemented:** Buying an employee course unlocks its challenge and tracker. The purchase itself grants **no immediate buff**. The corresponding buff becomes available only when that course's challenge is completed. The user stated this applies to **all employee courses**, not only the proposed Project Manager. This follows the established employee architecture in which challenge completion grants the permanent employee-owned benefit.
+
+For the [Project Manager priority-range direction](2026-10-28-project-manager-priority-range-direction-v1.md), each future course level unlocks the next instance of its priority challenge. Completing that instance, not paying tuition, lowers the allowed slider minimum and raises the maximum together. The user proposed repeating the same challenge requirement at every level. Exact tier values, number of courses, challenge counting/reset, tuition, raises, historical-progress treatment and save representation remain OPEN. The candidate 20%–40% four-category and 40%–60% two-category Beta starting ranges are still trial design values; no current slider changes.
+
+This ruling does not alter the already implemented QA course/challenge/payroll trial. Existing courses can have prices and other non-buff accounting consequences; the precise effect and timing of future Project Manager costs and salary are separate decisions.
+
+## Session record
+
+2026-10-28, branch `main`, HEAD `f3e0f2b5d35270c879327bc297b389748571feb4` at inspection. Read current local state/TODO and relevant design first, then inspected branch, HEAD, status and diff before editing. Added this thread note; updated its Project Manager direction, thread README/working notes and minimal summaries in `CURRENT_STATE.md`, `DECISIONS.md`, Employees and Core design. Preserved concurrent edits. Targeted `git diff --check` passed; this note has no trailing whitespace and its relative link resolves. No gameplay code, tests, simulation, Google Drive, commit or push. The shared TODO was already dirty and was not edited in this session. Next decisions are exact repeated-challenge counting and the tier table.

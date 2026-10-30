@@ -91,15 +91,30 @@ func _run() -> void:
 		await click(store._buy)
 		await settle()
 		check(not store._map.parent_links.is_visible_in_tree(),"Second Missing click collapses links")
-		# A single remaining prerequisite follows the same explicit link interaction.
+		# Handoff 022: one missing parent follows directly without a chooser.
 		run._owned_features[&"turn_based_combat"] = true
 		store._refresh()
 		store._map._focus_node(&"difficulty_levels")
 		await settle(0.8)
+		var single_before := Replay.digest(StudioCheckpoint.new().capture(run))
 		await click(store._buy)
-		await opened(store._map.parent_links)
-		await settle(0.4)
-		check(store._selected==&"difficulty_levels" and store._map.parent_links.is_visible_in_tree() and store._map.parent_links.get_child_count()==1,"Single prerequisite also expands instead of navigating immediately")
+		await settle(0.8)
+		check(store._selected==&"scripted_ai" and not store._map.parent_links.is_visible_in_tree(),"Single missing prerequisite navigates directly without chooser")
+		check(single_before==Replay.digest(StudioCheckpoint.new().capture(run)),"Direct prerequisite navigation preserves complete state/RNG")
+		check(store._body.get_global_rect().encloses(store._map.popup.get_global_rect()),"Direct target details remain inside the Store")
+		await capture("single-prerequisite-%d"%resolution.x)
+		store._map._focus_node(&"difficulty_levels")
+		await settle(0.8)
+		store._buy.grab_focus()
+		for pressed in [true, false]:
+			var accept := InputEventKey.new()
+			accept.keycode = KEY_ENTER
+			accept.pressed = pressed
+			Input.parse_input_event(accept)
+			await process_frame
+		await settle(0.8)
+		check(store._selected==&"scripted_ai" and not store._map.parent_links.is_visible_in_tree(),"Keyboard activation directly follows the single prerequisite")
+		check(single_before==Replay.digest(StudioCheckpoint.new().capture(run)),"Keyboard navigation preserves state/RNG")
 		var escape := InputEventKey.new()
 		escape.keycode = KEY_ESCAPE
 		escape.pressed = true

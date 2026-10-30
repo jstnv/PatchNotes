@@ -35,10 +35,13 @@ func _initialize() -> void:
 	root.add_child(database)
 	await process_frame
 	var modes := [mode] if not mode.is_empty() else ["live", "headless"]
+	var live_traces:Array=[]
 	for selected_mode in modes:
 		mode = selected_mode
 		traces.clear()
 		await run_cases(database)
+		if mode=="live":live_traces=traces.duplicate(true)
+		elif mode=="headless" and not live_traces.is_empty():_expect(traces==live_traces,"Every current full state/RNG/signal trace matches live and headless, including newly Balanced hands")
 	quit(1 if _failures else 0)
 
 func run_cases(database: Node) -> void:

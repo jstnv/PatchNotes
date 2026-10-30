@@ -28,10 +28,14 @@ func action_snapshot(alpha: AlphaPhase, project: ProjectState, run: RunState) ->
 func go() -> void:
 	await verify_case(false)
 	await verify_case(true)
+	ProjectSettings.set_setting("gameplay/beta/insider_enabled",false)
 	print("Alpha free-exit arrears regression: ", failures, " failures")
 	quit(failures)
 
 func verify_case(with_income: bool) -> void:
+	# Default pool stays on hold. The historical income resolver is tested only
+	# with its existing explicit, process-local opt-in. Never save this setting.
+	ProjectSettings.set_setting("gameplay/beta/insider_enabled",with_income)
 	var run := RunState.new()
 	check(run.initialize_cash_cents(0) and run.set_studio_name("Arrears regression", &"adventure"), "Create actual $5500 finance ledger")
 	# Synthetic accounting fixture: exactly $6858.39 available for 14 $500 dues.

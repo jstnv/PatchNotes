@@ -1,0 +1,39 @@
+--- feature_store.gd.before
++++ scripts/ui/feature_store.gd
+@@ -342,10 +342,10 @@
+ 		if not parent.is_empty():
+ 			if not children.has(parent): children[parent] = []
+ 			children[parent].append(id)
+-		# Layout follows the first parent only. Every same-tree AND parent gets
+-		# its own real connector; cross-tree gates retain their inspect links.
++		# Every named parent has its own obstacle-safe connector, including
++		# cross-tree AND arms. The first parent remains the semantic map anchor.
+ 		for required: StringName in parents:
+-			if _lane_by_id[required] == _lane_by_id[id]: _edges.append([required, id])
++			_edges.append([required, id])
+ 		var button := Button.new()
+ 		button.size = NODE_SIZE
+ 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+@@ -376,17 +376,14 @@
+ func _draw_connections() -> void:
+ 	_map.draw_core()
+ 	for edge: Array in _edges:
+-		var parent: Control = _nodes[edge[0]]
+-		var child: Control = _nodes[edge[1]]
+-		var parent_rect := _map.node_footprint(parent)
+-		var child_rect := _map.node_footprint(child)
+-		var direction := (child_rect.get_center() - parent_rect.get_center()).normalized()
+-		var start := _map.edge_port(parent_rect, direction)
+-		var end := _map.edge_port(child_rect, -direction)
++		var path: PackedVector2Array = _map.edge_routes.get(str(edge[0])+"->"+str(edge[1]),PackedVector2Array())
++		if path.size()<2: continue
++		var end := path[-1]
++		var direction := (end-path[-2]).normalized()
+ 		# Lines use the same completed synchronous view as their node labels.
+ 		var offer: Dictionary = _map_offers.get(edge[1],{})
+ 		var color := Color("7ed6be") if offer.get("unlocked", false) else Color("8993a5")
+-		_tree.draw_line(start, end, color, 3, true)
++		_tree.draw_polyline(path, color, 3, true)
+ 		var across := direction.orthogonal() * 6.0
+ 		_tree.draw_colored_polygon(PackedVector2Array([end, end - direction * 9.0 + across, end - direction * 9.0 - across]), color)
+ 

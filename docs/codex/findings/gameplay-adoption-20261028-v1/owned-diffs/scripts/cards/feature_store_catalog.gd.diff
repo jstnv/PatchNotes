@@ -1,0 +1,31 @@
+--- before/scripts/cards/feature_store_catalog.gd
++++ after/scripts/cards/feature_store_catalog.gd
+@@ -28,7 +28,7 @@
+ 	&"8_bit_music": &"music",
+ 	&"scrolling": &"text", &"sprites": &"4_color_palette",
+ 	&"local_leaderboards": &"high_scores", &"enemies": &"lives_system",
+-	&"general_combat": &"enemies",
++	&"general_combat": &"enemies", &"power_ups": &"categorized_scores",
+ }
+ 
+ ## Ordered AND parents for existing Primitive cards; historical grants stay owned.
+@@ -48,7 +48,7 @@
+ 	return result
+ 
+ ## Validate the entire prerequisite graph before any quote can use it. The first
+-## named parent is the sole map anchor; the second is an additional AND gate.
++## named parent is the sole map anchor; every additional parent is an AND gate.
+ static func graph(definitions: Dictionary, offers: Dictionary) -> Dictionary:
+ 	var parents := {}
+ 	for id: StringName in definitions:
+@@ -64,8 +64,8 @@
+ 		var named: Array = []
+ 		if entry.has("purchase_parents") or PRIMITIVE_PARENT_SETS.has(id):
+ 			var requested: Variant = entry.get("purchase_parents", PRIMITIVE_PARENT_SETS.get(id, []))
+-			if not requested is Array or requested.size() not in [1, 2]:
+-				return {"error":"Expected one or two named parents: " + str(id)}
++			if not requested is Array or requested.size() not in [1, 2, 3]:
++				return {"error":"Expected one to three named parents: " + str(id)}
+ 			for value: Variant in requested:
+ 				if not value is String and not value is StringName: return {"error":"Invalid named parent: " + str(id)}
+ 				named.append(StringName(value))

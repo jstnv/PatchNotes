@@ -1,0 +1,35 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_studio_audio_glow.gd"
+  ],
+  "exit": 2,
+  "elapsed_seconds": 114.421,
+  "errors": [
+    "FAIL: Studio attaches exactly one FFT observer",
+    "FAIL: Running Studio soundtrack produces genuine FFT energy",
+    "FAIL: Glow tracks changing audio, not a fake beat",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'is_saving' in base 'Nil'.",
+    "ERROR: Store verifier timed out"
+  ],
+  "tail": [
+    "PASS: Studio Store browsing retains one header glow",
+    "PASS: Decoration and passive browsing preserve all run state/RNG",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'is_saving' in base 'Nil'.",
+    "   at: _verify (res://scripts/debug/verify_studio_audio_glow.gd:70)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _verify (res://scripts/debug/verify_studio_audio_glow.gd:70)",
+    "ERROR: Store verifier timed out",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] <anonymous lambda> (res://scripts/debug/verify_feature_store_radial.gd:6)"
+  ],
+  "runtime_identity": "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17",
+  "runtime_source_unchanged": true
+}

@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-29",
+  "branch": "main",
+  "HEAD": "f3e0f2b5d35270c879327bc297b389748571feb4",
+  "baseline": "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17",
+  "runtime_identity": "2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6",
+  "owned_runtime_changes": [
+    {
+      "path": "res://scripts/market/rival_world_checkpoint.gd",
+      "before": "d00ea9ad023fee0b120f902da296a5c6057f1fa3110fe58f7a8ab1e7f1961f01",
+      "after": "d392aa7255bd5a2381f74a7a9ab5f6f619b72c4ca39d0dcc764cff655b6645a4"
+    },
+    {
+      "path": "res://scripts/ui/gameplay_hud.gd",
+      "before": "c8db1f29b6decf0bd7a9f993be546ab35875ab093879b66c5d6fd172973c5d65",
+      "after": "c8c6b0a9c935b71b412c8c177de31a73c2ee855948433bd4fba147feacd8a0f6"
+    },
+    {
+      "path": "res://scripts/ui/studio_audio_glow.gd",
+      "before": "fe32311d7d7a2034811cd691236df442c79db18307765a3ecd3e42754b140919",
+      "after": "0aa44185efe95c7a56da7e73ae56e94b457cab991ae0044d8f01da6f0886bb27"
+    }
+  ],
+  "passes": [
+    {
+      "receipt": "texture-headless-run.json",
+      "sha256": "1e591b4da6407cd52f42e5669a49c1fcd6fc17e7e649495fbec83de4cdb26e11",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_studio_audio_glow.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 11.828,
+      "tail": [
+        "PASS: Paused Studio keeps music and observer running",
+        "PASS: Studio Store browsing retains one header glow",
+        "PASS: Decoration and passive browsing preserve all run state/RNG",
+        "PASS: Legal project departure succeeds",
+        "PASS: Production releases Studio FFT work and beams",
+        "PASS: Observer preserves player identity and mix gain",
+        "PASS: Gameplay teardown leaves no owned analyzer",
+        "STUDIO_GLOW {\"checks\":42,\"failures\":0,\"peak\":0.638969957828522,\"runtime_source\":\"2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6\"}",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "texture-native-run.json",
+      "sha256": "9840f6619c0c62099f47d07937a26acc163a8e2e67b417b57b7cc0a3bc0f0c28",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--audio-driver",
+        "WASAPI",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_studio_audio_glow.gd",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1152x648",
+        "--position",
+        "80,80"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 12.875,
+      "tail": [
+        "PASS: Hidden HUD releases its analyzer and beam paint",
+        "PASS: HUD return reacquires one observer without altering other effects",
+        "PASS: Paused Studio keeps music and observer running",
+        "PASS: Studio Store browsing retains one header glow",
+        "PASS: Decoration and passive browsing preserve all run state/RNG",
+        "PASS: Legal project departure succeeds",
+        "PASS: Production releases Studio FFT work and beams",
+        "PASS: Observer preserves player identity and mix gain",
+        "PASS: Gameplay teardown leaves no owned analyzer",
+        "STUDIO_GLOW {\"checks\":43,\"failures\":0,\"peak\":0.619855105876923,\"runtime_source\":\"2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6\"}"
+      ]
+    },
+    {
+      "receipt": "texture-cold-run.json",
+      "sha256": "e51984864d8d6b2d491994ab71cefb386fed46cc9606e60da02c59909753e235",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_world_restore_file.gd",
+        "--",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/studio-glow-20261029-v1/cold-world.json",
+        "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/studio-beams-20261029-v1/texture-cold.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.265,
+      "tail": [
+        "PASS: Every persisted rival action, finance, RNG, archive and ownership field survives",
+        "PASS: Every persisted player field survives",
+        "PASS: Unverified source still rejects",
+        "PASS: Presentation predecessor cannot pair with older Studio rules",
+        "PASS: Presentation predecessor cannot pair with older rival rules",
+        "PASS: Current-content presentation predecessor rejects pre-Gameplay player catalog",
+        "PASS: Current-content presentation predecessor rejects pre-Gameplay rival catalog",
+        "Fresh world restore: 0 failures",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    },
+    {
+      "receipt": "texture-hud-run.json",
+      "sha256": "d112d713fd4b49bf8891409fdc0110094d6cbadf4b935c7a86025b1d87b1f478",
+      "command": [
+        "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+        "--headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+        "--script",
+        "res://scripts/debug/verify_gameplay_hud_overlay.gd"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.297,
+      "tail": [
+        "       [4] refresh (res://scripts/ui/phase_workspace.gd:214)",
+        "       [5] finalize_alpha (res://scripts/project_state.gd:571)",
+        "       [6] finalize (res://scripts/simulation/development_actions.gd:213)",
+        "       [7] _finalize_alpha (res://scripts/phases/alpha_phase.gd:283)",
+        "       [8] _run (res://scripts/debug/verify_gameplay_hud_overlay.gd:68)",
+        "       [9] verify_overlay (res://scripts/debug/verify_gameplay_hud_overlay.gd:233)",
+        "Alpha completed! Pressure 0.0000; stochastic result 0; variance +0; Alpha Hidden Bugs 0; total Hidden Bugs 0; implemented 0; unimplemented 14",
+        "Gameplay HUD and priority overlay verification passed.",
+        "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "   at: cleanup (core/object/object.cpp:2536)"
+      ]
+    }
+  ],
+  "retained_failures": [
+    "red: missing beam layer",
+    "final-native: textured tapered quad failed moderate-level native pixel visibility; corrected by baking taper into texture"
+  ],
+  "earlier_iterations": "Initial nested quads passed behavior/native pixel checks but looked too faint; preserved captures/receipts. Final texture uses three rectangular draw calls, soft horizontal falloff, widening taper and monotonic downward fade.",
+  "native_inspected": [
+    "texture-native.json-1152.png"
+  ],
+  "limits": "Trial visual intensity, focused local acceptance only. Existing ObjectDB/artwork warnings and late Research FAIL/OPEN remain. No commit/push/export."
+}

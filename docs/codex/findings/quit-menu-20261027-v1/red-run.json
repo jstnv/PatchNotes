@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_checkpoint_recovery_ui.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 13.578,
+  "errors": [
+    "ERROR: FAIL: Quit uses the shared heading font instead of the default window theme",
+    "ERROR: FAIL: Quit has explicit, menu-sized action controls",
+    "ERROR: FAIL: Quit warning wraps within a bounded menu surface",
+    "ERROR: FAIL: Quit uses the shared heading font instead of the default window theme",
+    "ERROR: FAIL: Quit has explicit, menu-sized action controls",
+    "ERROR: FAIL: Quit warning wraps within a bounded menu surface"
+  ],
+  "tail": [
+    "PASS: Second valid storage generation fixture",
+    "PASS: Recovery opens with Cancel focus",
+    "PASS: Recovery fits supported viewport",
+    "PASS: Keyboard recovery Cancel preserves corrupt bytes",
+    "PASS: Recovery button path is read-only on Cancel",
+    "PASS: Ordinary save failure still prompts Retry",
+    "PASS: Direct recovery replaces a visible save-failure dialog",
+    "PASS: Quit replaces recovery without modal collision",
+    "PASS: Quit Cancel leaves original save bytes untouched",
+    "Checkpoint recovery UI: 6 failures"
+  ]
+}

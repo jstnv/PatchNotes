@@ -1,0 +1,99 @@
+extends "res://scripts/ui/menu_audio_visualizer.gd"
+
+## A faint header wash driven by the existing read-only Music spectrum observer.
+const MAX_ALPHA := 0.075
+var _light: GradientTexture2D
+var _beam: ImageTexture
+var beam_layer: Control
+
+class BeamLayer extends Control:
+	var observer: Control
+	func _draw() -> void:
+		if is_instance_valid(observer): observer.draw_beams(self)
+
+func attach_beams(host: Control) -> void:
+	beam_layer = BeamLayer.new()
+	beam_layer.name = "StudioLightBeams"
+	beam_layer.observer = self
+	beam_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	beam_layer.focus_mode = Control.FOCUS_NONE
+	beam_layer.clip_contents = true
+	host.add_child(beam_layer)
+	host.move_child(beam_layer, 0)
+	beam_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	beam_layer.offset_left = 16
+	beam_layer.offset_right = -16
+	beam_layer.offset_bottom = -52
+	get_parent().resized.connect(_layout_beams)
+	_layout_beams()
+	beam_layer.visible = _active
+
+func _layout_beams() -> void:
+	if is_instance_valid(beam_layer): beam_layer.offset_top = get_parent().get_rect().end.y
+
+func set_active(value: bool) -> void:
+	super.set_active(value)
+	if is_instance_valid(beam_layer): beam_layer.visible = value
+
+func _process(delta: float) -> void:
+	super._process(delta)
+	if is_instance_valid(beam_layer): beam_layer.queue_redraw()
+
+func beam_height(area: Vector2) -> float:
+	return minf(520.0, area.y * 0.78)
+
+func draw_beams(canvas: Control) -> void:
+	var alphas := light_alphas()
+	var height := beam_height(canvas.size)
+	if _beam == null: return
+	# The reusable texture contains the cone, avoiding distorted UVs on a tapered quad.
+	for group in 3:
+		var center := canvas.size.x * (0.18 + group * 0.32)
+		var color := FolderUI.color(&"orange" if group == 1 else &"cyan")
+		color.a = alphas[group]
+		var bottom_width := canvas.size.x * 0.19
+		canvas.draw_texture_rect(_beam,Rect2(center-bottom_width,0,bottom_width*2.0,height),false,color)
+
+func _exit_tree() -> void:
+	if is_instance_valid(beam_layer): beam_layer.queue_free()
+	super._exit_tree()
+
+func _ready() -> void:
+	super._ready()
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_light = GradientTexture2D.new()
+	_light.width = 128
+	_light.height = 64
+	_light.fill = GradientTexture2D.FILL_RADIAL
+	_light.fill_from = Vector2(0.5, 0.5)
+	_light.fill_to = Vector2(1.0, 0.5)
+	_light.gradient = Gradient.new()
+	_light.gradient.offsets = PackedFloat32Array([0.0, 0.5, 1.0])
+	_light.gradient.colors = PackedColorArray([Color.WHITE, Color(1,1,1,0.25), Color(1,1,1,0)])
+	# Built once: a broad soft center and monotonic downward fade, without per-frame mesh work.
+	var image := Image.create(128,256,false,Image.FORMAT_RGBA8)
+	for y in 256:
+		var down := float(y)/255.0
+		var width := lerpf(0.012/0.19,1.0,down)
+		for x in 128:
+			var horizontal := (float(x)/127.0*2.0-1.0)/width
+			var falloff := pow(maxf(0.0,1.0-horizontal*horizontal),2.0)*pow(1.0-down,1.7)
+			image.set_pixel(x,y,Color(1,1,1,falloff))
+	_beam = ImageTexture.create_from_image(image)
+
+func light_alphas() -> PackedFloat32Array:
+	var result := PackedFloat32Array([0.0, 0.0, 0.0])
+	if levels.size() != BANDS: return result
+	for group in 3:
+		for index in range(group * 8, (group + 1) * 8):
+			result[group] += clampf(levels[index], 0.0, 1.0) / 8.0 * MAX_ALPHA
+	return result
+
+func _draw() -> void:
+	if _light == null or size.x <= 0.0: return
+	var alphas := light_alphas()
+	for group in 3:
+		var center := 0.18 + group * 0.32
+		var color := FolderUI.color(&"orange" if group == 1 else &"cyan")
+		color.a = alphas[group]
+		draw_texture_rect(_light, Rect2(size.x*(center-0.36), -size.y*0.45, size.x*0.72, size.y*2.0), false, color)

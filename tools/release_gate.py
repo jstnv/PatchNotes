@@ -31,7 +31,7 @@ def verifier_jobs():
 
 def verifier_environment(output,name):
  """Only consume a successful producer's artifact from this exact gate run."""
- env={'PN_INDEX_COLD':'','PN_ALPHA_PACK_COLD':'','PN_OLD_WORLD_FRAME':'','PN_GAMEPLAY_PRIOR_SAVES':''}
+ env={'PN_INDEX_COLD':'','PN_ALPHA_PACK_COLD':'','PN_OLD_WORLD_FRAME':'','PN_GAMEPLAY_PRIOR_SAVES':'','PN_BG_FIXTURE':'','PN_LATENCY_PRIOR_SAVES':'','PN_STORE_GRID_PRIOR_SAVES':''}
  producer=COLD_PRODUCERS.get(name)
  artifact=output/'verifier-artifacts'/(producer or name)/'result.json'
  if producer:
@@ -45,11 +45,21 @@ def verifier_environment(output,name):
   manifest=json.loads(fixture.with_suffix('.provenance.json').read_text())
   if sha(fixture)!=manifest['sha256']:raise RuntimeError('Gameplay parent fixture hash changed')
   env['PN_GAMEPLAY_PRIOR_SAVES']=str(fixture)
+ if name=='verify_store_grid_graph':
+  fixture=REPO/'tools/fixtures/store_grid_graph_predecessor.json'
+  manifest=json.loads(fixture.with_suffix('.provenance.json').read_text())
+  if sha(fixture)!=manifest['sha256']:raise RuntimeError('Store grid predecessor fixture hash changed')
+  env['PN_STORE_GRID_PRIOR_SAVES']=str(fixture)
  if name=='verify_queue_source_migration':
   fixture=REPO/'tools/fixtures/queue_migration_pre_alpha_v1.json'
   manifest=json.loads(fixture.with_suffix('.provenance.json').read_text())
   if sha(fixture)!=manifest['sha256']:raise RuntimeError('Migration fixture hash changed')
   env['PN_OLD_WORLD_FRAME']=str(fixture)
+ if name in ('verify_background_checkpoint','verify_background_gameplay','verify_latency_restore'):
+  fixture=REPO/'tools/fixtures'/('latency_restore_pre_store_era_v1.json' if name=='verify_latency_restore' else 'background_checkpoint_v003_c96.json')
+  manifest=json.loads(fixture.with_suffix('.provenance.json').read_text())
+  if sha(fixture)!=manifest['sha256']:raise RuntimeError('Historical latency fixture hash changed')
+  env['PN_LATENCY_PRIOR_SAVES' if name=='verify_latency_restore' else 'PN_BG_FIXTURE']=str(fixture)
  env['PN_CARD_FRAME_OUTPUT']=str(artifact)
  return env
 def load(name,path):
@@ -78,7 +88,7 @@ def verifier_arguments(output,name,script):
 def verifier_timeout(name):
  # This finite 96-cycle calendar fixture now also advances the real trial world.
  # Keep its bound explicit; do not raise every verifier's limit.
- return 1200 if name=='verify_sidestreet_scope_and_year' else 240
+ return 1200 if name=='verify_sidestreet_scope_and_year' else 600 if name in ('verify_contract_search','verify_qa_career') else 240
 
 def verifier_has_initializer(path):
  # Some older verifiers schedule _run from _init and do not implement the

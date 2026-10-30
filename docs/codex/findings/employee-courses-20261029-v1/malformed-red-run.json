@@ -1,0 +1,47 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_career_predecessor_malformed.gd"
+  ],
+  "exit": 125,
+  "elapsed_seconds": 6.985,
+  "errors": [
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get' in base 'Nil'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get' in base 'Nil'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get' in base 'Nil'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get' in base 'Nil'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'any' in base 'Dictionary'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'any' in base 'Dictionary'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'any' in base 'Dictionary'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'any' in base 'Dictionary'.",
+    "SCRIPT ERROR: Invalid type in function 'active' in base 'GDScript'. Cannot convert argument 1 from Array to Dictionary.",
+    "ERROR: Malformed predecessor validation accepted",
+    "SCRIPT ERROR: Invalid type in function 'active' in base 'GDScript'. Cannot convert argument 1 from Array to Dictionary.",
+    "SCRIPT ERROR: Invalid call to function 'get' in base 'Array'. Expected 1 argument(s).",
+    "ERROR: Malformed predecessor validation accepted",
+    "SCRIPT ERROR: Invalid call to function 'get' in base 'Array'. Expected 1 argument(s).",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get' in base 'Nil'.",
+    "ERROR: Malformed predecessor validation accepted",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get' in base 'Nil'."
+  ],
+  "tail": [
+    "ERROR: Malformed predecessor validation accepted",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] _run (res://scripts/debug/verify_career_predecessor_malformed.gd:10)",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'get' in base 'Nil'.",
+    "   at: StudioCheckpoint.hydrate (res://scripts/persistence/studio_checkpoint.gd:539)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] hydrate (res://scripts/persistence/studio_checkpoint.gd:539)",
+    "       [1] _run (res://scripts/debug/verify_career_predecessor_malformed.gd:11)",
+    "MALFORMED_CAREER_PREDECESSOR checks=10 failures=3"
+  ],
+  "runtime_identity": "a3e14823c57ecde8bd46429aa0472a590dc3c69480a563fafce9a4830e94085b",
+  "runtime_source_unchanged": true
+}

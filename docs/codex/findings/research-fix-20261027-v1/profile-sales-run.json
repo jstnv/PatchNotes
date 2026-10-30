@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd",
+    "--",
+    "--split"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 16.031,
+  "errors": [
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle96"
+  ],
+  "tail": [
+    "RESEARCH_ACTION {\"core_ms\":35.843,\"cycle\":96,\"feature\":\"secrets\",\"frames\":2,\"handler_ms\":170.761,\"max_frame_gap_ms\":198.088,\"operation\":\"queue\",\"profile\":{\"scripts/fanbase/studio_fanbase.gd:plan\":{\"count\":5,\"max_us\":4966,\"us\":23214},\"scripts/finance/studio_finance_ledger.gd:_apply\":{\"count\":107,\"max_us\":1216,\"us\":26602},\"scripts/finance/studio_finance_ledger.gd:_is_valid\":{\"count\":38,\"max_us\":25913,\"us\":68766},\"scripts/finance/studio_finance_ledger.gd:_validate_journal\":{\"count\":1,\"max_us\":24014,\"us\":24014},\"scripts/finance/studio_finance_ledger.gd:report\":{\"count\":4,\"max_us\":26446,\"us\":30796},\"scripts/run_state.gd:get_feature_research_quote\":{\"count\":52,\"max_us\":11187,\"us\":92095},\"scripts/run_state.gd:get_feature_spending_advice\":{\"count\":1,\"max_us\":13334,\"us\":13334},\"scripts/run_state.gd:get_feature_store_offer\":{\"count\":153,\"max_us\":247,\"us\":10186},\"scripts/run_state.gd:get_financial_block_reason\":{\"count\":28,\"max_us\":1697,\"us\":32595},\"scripts/run_state.gd:get_primitive_reserve_offer\":{\"count\":66,\"max_us\":414,\"us\":14510},\"scripts/sales/released_game_sales.gd:_recalculate\":{\"count\":100,\"max_us\":235,\"us\":16176},\"scripts/sales/released_game_sales.gd:is_valid\":{\"count\":100,\"max_us\":596,\"us\":34558},\"scripts/sales/released_game_sales.gd:next_cycle\":{\"count\":40,\"max_us\":1016,\"us\":29598},\"scripts/ui/feature_store.gd:_refresh\":{\"count\":1,\"max_us\":132324,\"us\":132324}},\"refresh_ms\":132.332,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":207.081,\"worker_was_active\":false}",
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle96",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd:24)",
+    "       [1] measure (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/research-fix-20261027-v1/research_latency.gd:69)",
+    "RESEARCH_ACTION {\"core_ms\":633.084,\"cycle\":96,\"feature\":\"secrets\",\"frames\":2,\"handler_ms\":792.808,\"max_frame_gap_ms\":830.097,\"operation\":\"research\",\"profile\":{\"scripts/fanbase/studio_fanbase.gd:plan\":{\"count\":118,\"max_us\":15496,\"us\":490125},\"scripts/finance/studio_finance_ledger.gd:_apply\":{\"count\":423,\"max_us\":1750,\"us\":80392},\"scripts/finance/studio_finance_ledger.gd:_is_valid\":{\"count\":85,\"max_us\":20380,\"us\":211690},\"scripts/finance/studio_finance_ledger.gd:_validate_journal\":{\"count\":4,\"max_us\":17504,\"us\":64606},\"scripts/finance/studio_finance_ledger.gd:report\":{\"count\":12,\"max_us\":17057,\"us\":42054},\"scripts/market/rival_trial.gd:_feature_maximal_choice\":{\"count\":8,\"max_us\":3078,\"us\":7633},\"scripts/market/rival_trial.gd:_legal_visible_feature_hand\":{\"count\":4,\"max_us\":3055,\"us\":7103},\"scripts/run_state.gd:complete_productive_action\":{\"count\":3,\"max_us\":621499,\"us\":667585},\"scripts/run_state.gd:get_feature_research_quote\":{\"count\":48,\"max_us\":13735,\"us\":71926},\"scripts/run_state.gd:get_feature_spending_advice\":{\"count\":1,\"max_us\":8314,\"us\":8314},\"scripts/run_state.gd:get_feature_store_offer\":{\"count\":150,\"max_us\":3209,\"us\":26561},\"scripts/run_state.gd:get_financial_block_reason\":{\"count\":26,\"max_us\":7989,\"us\":54541},\"scripts/run_state.gd:get_primitive_reserve_offer\":{\"count\":61,\"max_us\":626,\"us\":13692},\"scripts/sales/released_game_sales.gd:_recalculate\":{\"count\":2751,\"max_us\":4826,\"us\":451797},\"scripts/sales/released_game_sales.gd:can_campaign\":{\"count\":143,\"max_us\":918,\"us\":50590},\"scripts/sales/released_game_sales.gd:is_valid\":{\"count\":2751,\"max_us\":4916,\"us\":794699},\"scripts/sales/released_game_sales.gd:next_cycle\":{\"count\":998,\"max_us\":5136,\"us\":627996},\"scripts/simulation/campaign_session.gd:execute\":{\"count\":6,\"max_us\":46657,\"us\":100706},\"scripts/simulation/campaign_session.gd:observation\":{\"count\":8,\"max_us\":168996,\"us\":452741},\"scripts/ui/feature_store.gd:_refresh\":{\"count\":1,\"max_us\":145956,\"us\":145956},\"section:development\":{\"count\":8,\"max_us\":7638,\"us\":37681},\"section:releases\":{\"count\":8,\"max_us\":156968,\"us\":343696},\"section:research_quotes\":{\"count\":8,\"max_us\":1,\"us\":4},\"section:studio_actions\":{\"count\":8,\"max_us\":23283,\"us\":70835}},\"refresh_ms\":145.97,\"rival_ms\":564.064,\"saving_after\":true,\"split_profile\":true,\"through_two_frames_ms\":839.21,\"worker_was_active\":true}",
+    "RESEARCH_LATENCY {\"actions\":2,\"failures\":[\"No500ms+ synchronous research stall atcycle96\"],\"ok\":false,\"stages\":[{\"actions\":2,\"durability\":[{\"frames\":750,\"max_frame_gap_ms\":830.097,\"wait_ms\":5155.234}],\"end_cycle\":97,\"first_action\":0,\"idle_max_frame_gap_ms\":6.934,\"open_store_ms\":185.723,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19}]}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

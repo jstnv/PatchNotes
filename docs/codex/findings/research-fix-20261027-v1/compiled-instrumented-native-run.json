@@ -1,0 +1,26 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\research-fix-20261027-v1\\internal-release\\patch-notes-demo-20261007-rya0n0hi\\demo\\Research Performance Probe.exe",
+    "--audio-driver",
+    "Dummy",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1280x720",
+    "--position",
+    "80,80"
+  ],
+  "exit": 1,
+  "errors": [
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle192"
+  ],
+  "elapsed_seconds": 184.31200000000536,
+  "exe_sha256": "ab693d9e0b22a163fab8ed4fe70b83f152600313fd2730c8b101131c872078dd",
+  "probe_sha256": "b62de4c0d59dfbe5bc158bdf897c9bd3e59b631193b9e3ae130bae98da2905ee",
+  "tail": [
+    "ERROR: FAIL: No500ms+ synchronous research stall atcycle192",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "RESEARCH_ACTION {\"core_ms\":0.0,\"cycle\":192,\"feature\":\"music\",\"frames\":2,\"handler_ms\":751.201,\"max_frame_gap_ms\":847.683,\"operation\":\"research\",\"refresh_ms\":0.0,\"rival_ms\":0.0,\"saving_after\":true,\"split_profile\":false,\"through_two_frames_ms\":857.13,\"worker_was_active\":true}",
+    "RESEARCH_LATENCY {\"actions\":8,\"failures\":[\"No500ms+ synchronous research stall atcycle192\"],\"ok\":false,\"stages\":[{\"actions\":6,\"durability\":[{\"frames\":50,\"max_frame_gap_ms\":518.357,\"wait_ms\":9666.213},{\"frames\":85,\"max_frame_gap_ms\":761.732,\"wait_ms\":13879.28},{\"frames\":86,\"max_frame_gap_ms\":753.423,\"wait_ms\":14909.568}],\"end_cycle\":99,\"first_action\":0,\"idle_max_frame_gap_ms\":623.0,\"open_store_ms\":183.598,\"rivals\":2,\"start_cycle\":96,\"world_release_records\":19},{\"actions\":2,\"durability\":[{\"frames\":372,\"max_frame_gap_ms\":847.683,\"wait_ms\":62541.764}],\"end_cycle\":193,\"first_action\":6,\"idle_max_frame_gap_ms\":670.063,\"open_store_ms\":30.243,\"rivals\":2,\"start_cycle\":192,\"world_release_records\":39}]}"
+  ]
+}

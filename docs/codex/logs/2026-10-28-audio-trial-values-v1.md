@@ -1,0 +1,7 @@
+# Audio trial-value review — 2026-10-28
+
+- Branch main; HEAD f3e0f2b5d35270c879327bc297b389748571feb4. Read current state/TODO, inspected status/diff and prior exact Audio ruling/source fence. Preserved inherited dirty source and `.codex-godot-temp`.
+- User confirmed scrapping8-Bit Music→16-Bit Music and requested a compact trial-value proposal. Created `docs/codex/design/audio-feature-values-trial-v1.md`; synchronized exact Audio ruling, Feature Store design, CURRENT_STATE, TODO and DECISIONS. Latest explicit retirement supersedes the earlier pending Music-branch choice.
+- Proposed five rows, all with$0 committed-play cost and1980/no additional release gate:16-Bit Sound S7/Scope2/$1,700; Main Theme S7/Scope2/$1,700; Multiple Soundtracks S5→D2/Scope2/$1,900; Instrumental Sounds S7/Scope2/$1,900; Dynamic Sequencing S7→T2/Scope3/$2,400. All are PROPOSED FOR REVIEW, not approved balance. Existing root/Recorded Sounds numeric identity preserved; Recorded Sounds play fee remains unspecified.
+- Verified all10 recorded canonical source hashes remain unchanged. Documentation whitespace/link/row checks performed separately. No runtime/simulation/native tests run because this pass proposes values only. No new claim of migration, parity, economics or release readiness. No commit/push/build; automatic checks remain disabled.
+- Next: user selects/revises trial values and availability; reconcile exact future-roster/paid-queue/supply compatibility, then implement and test the narrow Audio slice.

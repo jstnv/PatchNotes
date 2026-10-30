@@ -156,7 +156,13 @@ func configure(controller: Control, title: String) -> void:
 	play.pressed.connect(_present_action.bind("play", play_action))
 	var redraw := phase.get_node("%RedrawButton") as Button
 	for connection in redraw.pressed.get_connections(): redraw.pressed.disconnect(connection.callable)
-	redraw.pressed.connect(_present_action.bind("redraw", Callable(phase, "redraw_selected_cards")))
+	if title in ["Design","Alpha"]:redraw.pressed.connect(Callable(phase,"_on_redraw_pressed"))
+	else:redraw.pressed.connect(_present_action.bind("redraw", Callable(phase, "redraw_selected_cards")))
+
+func present_redraw(action: Callable) -> bool:
+	if hand_motion.busy:return false
+	return hand_motion.play("redraw",phase.get_node("%HandContainer"),phase.get_selected_candidate_views(),action,
+		func():return HandPresentation.project_snapshot(project,run),_update_presented_scores,_restore_presented_scores)
 
 func _present_action(kind: String, action: Callable) -> void:
 	if hand_motion.busy: return

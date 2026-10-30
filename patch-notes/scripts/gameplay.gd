@@ -36,6 +36,7 @@ var _startup_panel: PanelContainer
 var pause_menu: PauseMenu
 var guided_tutorial: GuidedProductionTutorial
 var _onboarding := OnboardingPreferences.new()
+var developer_tools: CanvasLayer
 
 func _ready() -> void:
 	get_node("Background").color=FolderUI.color(&"background")
@@ -50,6 +51,8 @@ func _ready() -> void:
 		_build_checkpoint_controls()
 	_start_gameplay()
 	_build_pause_menu()
+	developer_tools=preload("res://scripts/developer/developer_tools.gd").new()
+	developer_tools.game=self;add_child(developer_tools)
 	%GameplayHUD.tutorial_overlay.practice_requested.connect(_start_guided_practice)
 
 func _build_pause_menu() -> void:
@@ -71,6 +74,9 @@ func _resume_from_pause() -> void:
 		pause_menu.close()
 
 func _request_main_menu() -> void:
+	if checkpoints!=null and checkpoints.debug_session:
+		pause_menu.confirm_main_menu("Debug progress is not saved. Ordinary Continue will return to your normal Studio.")
+		return
 	if not pause_menu.is_open() or _save_navigation_pending: return
 	if checkpoints != null and checkpoints.in_studio:
 		_save_navigation_pending=true
@@ -572,7 +578,7 @@ func _begin_next_project(source_studio: Control, base_name: String, genre: Strin
 	if _transition_in_progress or not is_instance_valid(source_studio) or source_studio != _active_phase or source_studio.get_parent() != %PhaseRoot:
 		return false
 	var initial_priorities: Dictionary = source_studio.get_predevelopment_priorities() if source_studio.has_method("get_predevelopment_priorities") else {}
-	if not initial_priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(initial_priorities):
+	if not initial_priorities.is_empty() and not PriorityAllocation.is_valid_new_distribution(initial_priorities, run_state):
 		source_studio.show_development_error("Allocate exactly 100 priority points.")
 		return false
 	var validation := PrimitivePredevelopment.validation_error(base_name, genre, theme_id)
@@ -685,7 +691,7 @@ func _build_checkpoint_controls() -> void:
 		_save_failure_dialog.hide()
 		_request_quit())
 	add_child(_save_failure_dialog)
-	_quit_dialog = ConfirmationDialog.new()
+	_quit_dialog = preload("res://scripts/ui/quit_confirmation.gd").new()
 	_quit_dialog.title = "Quit Patch Notes?"
 	_quit_dialog.confirmed.connect(func(): get_tree().quit())
 	add_child(_quit_dialog)
@@ -715,20 +721,27 @@ func _notification(what: int) -> void:
 func _request_quit() -> void:
 	if _loading_checkpoint or _save_navigation_pending: return
 	_resume_from_pause()
-	if checkpoints==null:
-		get_tree().quit()
+	if checkpoints!=null and checkpoints.debug_session:
+		_show_quit_confirmation("Quit debug session?","Debug progress is not saved. Your normal Studio checkpoint stays unchanged.")
 		return
-	if checkpoints.in_studio and checkpoints.failure.is_empty():
+	if checkpoints!=null and checkpoints.in_studio and checkpoints.failure.is_empty():
 		_save_navigation_pending=true
 		await checkpoints.wait_saved()
 		_save_navigation_pending=false
-	if (_active_phase is MainMenu) or (checkpoints.in_studio and checkpoints.failure.is_empty()):
+	if _active_phase is MainMenu:
+		_show_quit_confirmation("Are you sure you want to quit?", "Don't delay your releases too much")
+		return
+	if checkpoints==null or (checkpoints.in_studio and checkpoints.failure.is_empty()):
 		get_tree().quit()
 		return
 	var info := checkpoints.store.inspect()
 	var destination := "your last saved Studio"
 	if info.status==&"valid": destination = "%s, cycle %s" % [info.payload.run.studio_name,info.payload.run.completed_run_cycles]
-	_quit_dialog.dialog_text = "Progress since your last Studio checkpoint will be lost. Continue will return to %s. Quit anyway?" % destination
+	_show_quit_confirmation("Quit Patch Notes?", "Progress since your last Studio checkpoint will be lost. Continue will return to %s. Quit anyway?" % destination)
+
+func _show_quit_confirmation(heading: String, message: String) -> void:
+	_quit_dialog.title = heading
+	_quit_dialog.dialog_text = message
 	_hide_checkpoint_dialogs()
 	_quit_dialog.popup_centered()
 	_quit_dialog.get_cancel_button().grab_focus()

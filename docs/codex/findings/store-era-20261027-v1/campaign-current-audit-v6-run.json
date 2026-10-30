@@ -1,0 +1,23 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/store-era-20261027-v1/audit_campaign.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 14.672,
+  "errors": [],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "{\"commands\":397,\"events\":[{\"card\":\"player_level_editor\",\"event\":{\"event_id\":\"era-v4-4417:372:3\",\"id\":\"player_level_editor\",\"type\":\"feature_exhausted\"},\"project\":\"era-v4-4417:project:3\",\"step\":371},{\"card\":\"character_skill_checks\",\"event\":{\"event_id\":\"era-v4-4417:381:4\",\"id\":\"character_skill_checks\",\"type\":\"feature_exhausted\"},\"project\":\"era-v4-4417:project:3\",\"step\":380},{\"card\":\"switchable_protagonists\",\"event\":{\"event_id\":\"era-v4-4417:382:2\",\"id\":\"switchable_protagonists\",\"type\":\"feature_exhausted\"},\"project\":\"era-v4-4417:project:3\",\"step\":381},{\"card\":\"ability_gated_exploration\",\"event\":{\"event_id\":\"era-v4-4417:386:1\",\"id\":\"ability_gated_exploration\",\"type\":\"feature_exhausted\"},\"project\":\"era-v4-4417:project:3\",\"step\":385}],\"failures\":0,\"finite_play_counts\":{\"ability_gated_exploration\":1,\"character_skill_checks\":1,\"player_level_editor\":1,\"switchable_protagonists\":1},\"ok\":true,\"scope\":\"Unfunded fresh v4 campaign; public commands and actual committed Feature exhaustion. Not AI policy or final balance approval.\"}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

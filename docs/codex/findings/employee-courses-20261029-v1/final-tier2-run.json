@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_fixed_campaign.gd",
+    "--",
+    "--tiers=2",
+    "--resume=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/employee-courses-20261029-v1/final-tier1.json.final.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 125.375,
+  "errors": [],
+  "tail": [
+    "CAREER_PROGRESS {\"cash\":295694192,\"cycle\":67,\"releases\":7,\"step\":34,\"tier\":1}",
+    "PASS: Release checkpoint and career/payroll provenance 8 ",
+    "CAREER_PROGRESS {\"cash\":293929044,\"cycle\":80,\"releases\":8,\"step\":73,\"tier\":1}",
+    "PASS: Release checkpoint and career/payroll provenance 9 ",
+    "CAREER_PROGRESS {\"cash\":292217043,\"cycle\":94,\"releases\":9,\"step\":113,\"tier\":1}",
+    "PASS: Release checkpoint and career/payroll provenance 10 ",
+    "CAREER_PROGRESS {\"cash\":291362329,\"cycle\":102,\"releases\":10,\"step\":143,\"tier\":2}",
+    "PASS: Actual committed hands/releases complete requested courses",
+    "PASS: Source-pinned complete action tape retained",
+    "CAREER_CAMPAIGN {\"alignment_uses\":0,\"cash_cents\":291362329,\"cash_low_cents\":291362329,\"completed\":true,\"cycles\":102,\"failures\":0,\"functional_funding_cents\":0,\"releases\":10,\"source\":\"a3e14823c57ecde8bd46429aa0472a590dc3c69480a563fafce9a4830e94085b\",\"steps\":144,\"tier\":2}"
+  ],
+  "runtime_identity": "a3e14823c57ecde8bd46429aa0472a590dc3c69480a563fafce9a4830e94085b",
+  "runtime_source_unchanged": true
+}

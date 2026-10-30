@@ -1,0 +1,18 @@
+# Funded Core planning — predeclared staged study, 2026-10-27
+
+**Authority/status:** User asked to cook for legal funded Core/Feature planning after the bounded one-Store/QA result. The 2026-10-09 F1–F6 shopping priority and reserve-window decision are LOCKED qualitatively; exact finite legal mix, budget, CPU and implementation remain OPEN. This is private design evidence, not canonical gameplay or TODO adoption.
+
+## Question and hypotheses
+
+Can post-first-game rivals acquire more than one *currently unlocked, legally paid and project-playable* Store Feature, improving the actual second-title four-Core mix enough to put more than the one existing 8.0 title into the January-1980-equivalent c36 window? The null is that current cash/quotes, Research delay, project cost or actual hand play prevents a net gain. A positive result must be an ordinary Review from real hands, not a hardcoded score, Core injection or hidden-state read.
+
+Stage R is read-only instrumentation of P's private solo-career controller: at the first post-release Studio boundary, record all Store quotes, exact current cash, monthly rent, known Bank dues, owned Features, last actual four-Core/standards and parent availability. Do not alter policy. Use it to set a bounded Q acquisition allowance and avoid inventing funding. Stage Q, only if R shows plausible legal cash paths, will be a new child variant with a deterministic shopping screen. It may acquire at most two post-first Features before game 2, one FIFO head at a time, and must compare its actual candidate purchases to P on matched cycle-zero starts. A simpler printed-Core shortfall proxy is allowed only as a labelled diagnostic, not as the locked legal-mix planner; the variant must record its proxy and not claim F1–F6 adoption. No purchase may be counted as Core until Research completes and a later legal hand actually plays the Feature.
+
+## Declared cases and bounds
+
+- Baseline P: existing [three-seed finding](2026-10-27-core-store-beta-timing-finding-v1.md) and retained outputs, source identity `76407b2d02801d219e08286964b3df1d6cf94c2efee891cdb8141ae1bad86398`. Candidate R and any Q are children of P, retaining its seven-hand Beta and private accepted Search-receipt exit controller. Do not compare checkpoints across gameplay revisions; generate fresh legal starts in each version and compare the cycle-zero cash, owned pool, Genre, RNG digest and rules delta.
+- Cases: seeds `4417`, `4423`, `4431`; Arcade and Wayfinder per seed; two legal releases per studio. Ceiling: 150 policy decisions per studio, cycle48, 240-second Godot process, one 50-command smoke per variant. Any missed second release, rejected action or timeout is a measured failure, not a seed to replace.
+- R measures each first Studio cash, accepted quote/candidate costs, current Research queue, known rent/Bank dues, first four-Core deficits, purchased Features and source/runtime identity. Q (if attempted) measures every quote/selection/deferral, actual research payments, played Feature IDs, Scope/Bugs/Core/Review and release cycle of each title, finance and first-year c36 8.0 count. Retain 8.0 counts by c36 and c48 separately, all blocked cases, fresh replay and one same-seed cold repeat.
+- Stop after R three seeds and either document a legal two-purchase policy with a Q pre-run addendum or reject the route as unaffordable; after Q, stop after all three seeds or first invalid legal condition. No silent cash, Core, target, hand, Store, Bank or seed changes to improve results.
+
+This frozen old-35-Scope solo cohort does not establish current 12-Scope canonical rival balance, shared Market pressure, 1977 eight-Genre history, save/Continue or population CPU. Those are separate follow-up gates even if Q succeeds.

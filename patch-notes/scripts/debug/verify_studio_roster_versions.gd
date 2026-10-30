@@ -56,7 +56,7 @@ func _initialize() -> void:
 		check(not payload.is_empty() and payload.run.founding_roster_version == "2","explicit persisted v2 " + genre)
 		var restored := codec.hydrate(payload)
 		check(restored != null and restored.get_founding_roster_version() == 2 and codec.capture(restored) == payload,"v2 exact checkpoint round trip " + genre)
-		for invalid in ["0","5","2.5",2,null]:
+		for invalid in ["0","6","2.5",2,null]:
 			var malformed := payload.duplicate(true); malformed.run.founding_roster_version = invalid
 			check(codec.hydrate(malformed) == null,"invalid version rejects " + str(invalid))
 		var before := state(run)

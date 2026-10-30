@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_world_restore_file.gd",
+    "--",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/tools/fixtures/startup_prompts_predecessor.json",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/startup-prompts-20261027-v1/cold-before.json"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 2.375,
+  "errors": [
+    "ERROR: FAIL: World restores from unmodified file INCOMPATIBLE_RIVAL_WORLD_SOURCE_OR_SCHEMA"
+  ],
+  "tail": [
+    "",
+    "Loaded 40 cards.",
+    "PASS: Player schema restores exact finance, traits and RNG",
+    "ERROR: FAIL: World restores from unmodified file INCOMPATIBLE_RIVAL_WORLD_SOURCE_OR_SCHEMA",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] check (res://scripts/debug/verify_world_restore_file.gd:7)",
+    "       [1] _run (res://scripts/debug/verify_world_restore_file.gd:26)",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

@@ -1,6 +1,6 @@
 """Pinned, clean-profile Windows demo export. No gameplay source rewriting."""
 from pathlib import Path
-import argparse, hashlib, json, os, shutil, subprocess, tempfile, urllib.request, zipfile
+import argparse, hashlib, json, os, re, shutil, subprocess, tempfile, urllib.request, zipfile
 
 ROOT = Path(__file__).resolve().parents[4] / 'patch-notes'
 OUT = Path(__file__).resolve().parent
@@ -9,6 +9,31 @@ ARCHIVE = 'Godot_v4.7.1-stable_export_templates.tpz'
 URL = 'https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable/' + ARCHIVE
 SHA256 = '86409db6200b6f8fd3230989c2d2002851f3dd18acf11d7bdbafddf5a0dd0f72'
 GODOT = Path(r'C:\Users\64jus\Downloads\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe')
+
+def windows_export_preset(path):
+    # Godot options may contain multiline shell strings, so an INI parser is
+    # insufficient. Read only the two single-line fields in preset headers.
+    presets = []
+    fields = None
+    for line in path.read_text(encoding='utf-8-sig').splitlines():
+        line = line.strip()
+        if line.startswith('[') and line.endswith(']'):
+            fields = {} if re.fullmatch(r'\[preset\.\d+\]', line) else None
+            if fields is not None: presets.append(fields)
+        elif fields is not None:
+            key, separator, value = line.partition('=')
+            if separator and key.strip() in ('name', 'platform'):
+                key = key.strip()
+                if key in fields: raise ValueError('Duplicate preset field: '+key)
+                fields[key] = json.loads(value.strip())
+    names = []
+    for fields in presets:
+        if fields.get('platform') == 'Windows Desktop':
+            name = fields.get('name')
+            if not isinstance(name, str) or not name: raise ValueError('Windows preset has no name')
+            names.append(name)
+    if len(names) != 1: raise ValueError('Expected exactly one Windows Desktop preset: '+repr(names))
+    return names[0]
 
 def sha(path):
     h = hashlib.sha256()
@@ -94,13 +119,15 @@ def main():
     # Working display label only, build-local; runtime mechanics untouched.
     config=project/'project.godot';config.write_text(config.read_text(encoding='utf-8').replace('config/name="Patch Notes"','config/name="Patch Notes Demo"'),encoding='utf-8')
     manifest['build_only_override']='application/config/name=Patch Notes Demo'
+    manifest['export_preset']=windows_export_preset(project/'export_presets.cfg')
+    manifest['export_helper_sha256']=sha(Path(__file__))
     (OUT/'build-manifest.json').write_text(json.dumps(manifest,indent=2),encoding='utf-8')
     run('clean-import',[GODOT,'--headless','--path',project,'--editor','--import','--quit'],env,workspace)
     exe=artifact/'Patch Notes Demo.exe'
     # Export serializes already imported fonts; no editor text layout is needed.
     # Avoid the editor text server's extra allocations on constrained hosts.
     # Clean import and the shipped runtime retain their normal text drivers.
-    run('export-release',[GODOT,'--headless','--text-driver','Dummy','--path',project,'--export-release','Windows Desktop',exe],env,workspace)
+    run('export-release',[GODOT,'--headless','--text-driver','Dummy','--path',project,'--export-release',manifest['export_preset'],exe],env,workspace)
     # Ship the bundled font's original license alongside the executable.
     if (ROOT/'assets/card_frame_kit/fonts/Tiny5-Regular.ttf').exists():
         license_path=ROOT/'assets/card_frame_kit/fonts/OFL.txt'

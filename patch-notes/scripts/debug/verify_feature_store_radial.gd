@@ -16,7 +16,10 @@ func expect(ok: bool, message: String) -> void:
 func _capture(name: String, width: int) -> void:
 	if "--capture" not in OS.get_cmdline_user_args(): return
 	await RenderingServer.frame_post_draw
-	root.get_texture().get_image().save_png("res://design-logs/feature-bloom-map-v1/%s-%d.png" % [name, width])
+	var directory := "res://design-logs/feature-bloom-map-v1"
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--out="): directory=arg.trim_prefix("--out=")
+	root.get_texture().get_image().save_png(directory.path_join("%s-%d.png" % [name,width]))
 
 func _verify() -> void:
 	for dimensions in [Vector2i(1152, 648), Vector2i(900, 600), Vector2i(1280, 720)]:
@@ -53,7 +56,7 @@ func _verify() -> void:
 		var before := _passive_snapshot(run)
 		var primitive: Array[StringName] = []
 		for entry: Dictionary in FeatureStoreCatalog.starting_features(): primitive.append(StringName(entry.id))
-		expect(primitive.size() == 27 and store._nodes.size() == 42, "Complete ledger membership retained (%d)" % dimensions.x)
+		expect(primitive.size() == 27 and store._nodes.size() == 50, "Complete ledger membership retained (%d)" % dimensions.x)
 		_verify_category_layout(store)
 		var categorized := true
 		var labels := true
@@ -82,12 +85,34 @@ func _verify() -> void:
 			var child: Control = store._nodes[edge[1]]
 			var parent_rect := map.node_footprint(parent)
 			var lane: StringName = store._lane_by_id[edge[1]]
-			outward = outward and _outward_rects(parent_rect, map.node_footprint(child), map.CATEGORY_DIRECTIONS[lane])
-			outward = outward and store._lane_by_id[edge[0]] == lane
-		expect(outward and store._edges.size() == 28 and not store._edges.any(func(edge: Array): return edge[1] == &"save_files"), "Every real prerequisite grows outward within its category; independent roots gain no fabricated parent")
-		expect(visible and map.bounds.x * map.zoom <= map._map_rect().size.x and map.bounds.y * map.zoom <= map._map_rect().size.y, "Initial overview shows all 42 Features and their names")
+			if store._lane_by_id[edge[0]] == lane:
+				outward = outward and _outward_rects(parent_rect, map.node_footprint(child), map.CATEGORY_DIRECTIONS[lane])
+		var graph := FeatureStoreCatalog.graph(run._feature_definitions,run._feature_offers)
+		var expected_edges: Array=[]
+		for id: StringName in graph.parents:
+			for parent: StringName in graph.parents[id]:
+				if store._lane_by_id.has(id) and store._lane_by_id.has(parent) and store._lane_by_id[parent]==store._lane_by_id[id]: expected_edges.append([parent,id])
+		expect(outward and store._edges==expected_edges, "Every same-category prerequisite is shown and grows outward; cross-category arrows omitted")
+		expect(visible and map.bounds.x * map.zoom <= map._map_rect().size.x and map.bounds.y * map.zoom <= map._map_rect().size.y, "Initial overview shows all50 Features and their names")
 		print("Map geometry: ", JSON.stringify({"bounds": str(map.bounds), "viewport": str(map.scroll.size), "zoom": map.zoom}))
 		await _capture("overview", dimensions.x)
+		store._select_node(&"16_bit_sound")
+		await create_timer(1.1).timeout
+		expect(store._details.text.contains("Replaces 8-Bit Sound") and store._details.text.contains("$0.00"),"Upgrade details show replacement and approved zero play cost")
+		await _capture("audio-upgrade", dimensions.x)
+		store._select_node(&"dynamic_sequencing")
+		await create_timer(1.1).timeout
+		expect(store._buy.text.contains("Multiple Soundtracks") and store._buy.text.contains("Instrumental Sounds"),"Audio convergence names both missing parents")
+		map._activate_action()
+		var links_deadline := Time.get_ticks_msec()+3000
+		while not map.parent_links.visible and Time.get_ticks_msec()<links_deadline: await process_frame
+		var settle_deadline:=Time.get_ticks_msec()+3000
+		while map.parent_links.get_children().any(func(button: Button): return button.modulate.a<0.99) and Time.get_ticks_msec()<settle_deadline: await process_frame
+		expect(map.parent_links.visible and map.parent_links.get_child_count()==2,"Audio missing-parent chooser exposes both links")
+		for link: Button in map.parent_links.get_children():
+			expect(link.modulate.a>=0.99 and Rect2(Vector2.ZERO,Vector2(dimensions)).encloses(link.get_global_rect()),"Animated Audio prerequisite link settles fully inside viewport")
+		await _capture("audio-and", dimensions.x)
+		map.dismiss()
 		for lane: StringName in store.LANE_ORDER:
 			store._select_lane(lane)
 			await process_frame
@@ -113,6 +138,10 @@ func _verify() -> void:
 			if not store.get_global_rect().encloses(map.popup.get_global_rect()): print("STORE_POPUP_BOUNDS ",dimensions," ",id," store=",store.get_global_rect()," popup=",map.popup.get_global_rect())
 			expect(back != null and back.is_visible_in_tree() and not back.disabled and store.get_global_rect().encloses(map.popup.get_global_rect()) and map.popup.get_global_rect().encloses(back.get_global_rect()), "Back to Map is reachable for %s at %d" % [id, dimensions.x])
 			if back != null:
+				var motion := InputEventMouseMotion.new()
+				motion.position=back.get_global_rect().get_center()
+				root.push_input(motion,true)
+				await process_frame
 				for pressed in [true, false]:
 					var event := InputEventMouseButton.new()
 					event.position = back.get_global_rect().get_center()
@@ -120,6 +149,9 @@ func _verify() -> void:
 					event.button_index = MOUSE_BUTTON_LEFT
 					event.pressed = pressed
 					root.push_input(event, true)
+					await process_frame
+				await process_frame
+			if map.popup.visible: print("BACK_CLICK_STATE ",dimensions," / ",id," selected=",store._selected," focus=",root.gui_get_focus_owner())
 			expect(not map.popup.visible and store._selected.is_empty() and store.visible and root.gui_get_focus_owner() == map.scroll, "Back to Map dismisses details and restores map focus without closing Store")
 		expect(before == _passive_snapshot(run), "Category browsing preserves cash, calendar, redraws, ownership and exact finance history")
 		game.queue_free()
@@ -133,8 +165,8 @@ func _verify_category_layout(store: FeatureStore) -> void:
 	var tech_row_bottom := map.node_footprint(store._nodes[&"keyboard_and_mouse"]).end.y
 	for id: StringName in [&"menu_system", &"save_files", &"controller", &"split_screen"]:
 		tech_row_bottom = maxf(tech_row_bottom, map.node_footprint(store._nodes[id]).end.y)
-	var side_roots_top := minf(map.node_footprint(store._nodes[&"4_color_palette"]).position.y, map.node_footprint(store._nodes[&"music"]).position.y)
-	expect(side_roots_top - tech_row_bottom >= 32.0 and side_roots_top - tech_row_bottom <= 64.0, "Technology root row sits just above Palette and Music with room for labels")
+	var side_roots_top := minf(map.node_footprint(store._nodes[&"8_color_palette"]).position.y, map.node_footprint(store._nodes[&"16_bit_sound"]).position.y)
+	expect(side_roots_top - tech_row_bottom >= 32.0 and side_roots_top - tech_row_bottom <= 64.0, "Technology crown clears the closer Visuals and Audio branches with room for labels")
 	var complete := true
 	for lane: StringName in store.LANE_ORDER:
 		var area: Rect2 = map.category_regions[lane]
@@ -167,8 +199,9 @@ func _verify_category_layout(store: FeatureStore) -> void:
 			var a := path[index-1]
 			var b := path[index]
 			routes_clear = routes_clear and (is_equal_approx(a.x,b.x) or is_equal_approx(a.y,b.y))
-			for area: Rect2 in map.category_regions.values(): routes_clear = routes_clear and not _segment_crosses_interior(a,b,area)
-	expect(routes_clear and connected.size()==5,"Four clear orthogonal routes connect all five category borders")
+			for node: Control in store._nodes.values(): routes_clear = routes_clear and not _segment_crosses_interior(a,b,map.node_footprint(node))
+			for header: Label in map.category_headers.values(): routes_clear = routes_clear and not _segment_crosses_interior(a,b,map.header_rect(header))
+	expect(routes_clear and connected.size()==5,"Four orthogonal connectors join all five category borders without crossing cards or headings")
 
 func _passive_snapshot(run: RunState) -> Array:
 	return [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.get_studio_finance_snapshot()]

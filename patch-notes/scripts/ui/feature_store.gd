@@ -7,6 +7,7 @@ var _tree: Control
 var _scroll: ScrollContainer
 var _nodes: Dictionary = {}
 var _edges: Array = []
+var _map_offers: Dictionary = {}
 const NODE_SIZE := Vector2(128, 128)
 const SCORE_COLORS := {
 	&"graphics": Color("f08e9b"), &"sound": Color("e9c46a"),
@@ -16,10 +17,10 @@ const LANE_ORDER := [&"Visuals", &"Audio", &"Technology & Tools", &"Gameplay", &
 # Presentation only. Card definitions, prerequisites, and purchase rules remain in the ledger.
 const LANE_MEMBERS := {
 	&"Visuals": [&"text", &"colored_text", &"sprites", &"animated_sprites", &"4_color_palette", &"8_color_palette", &"scrolling", &"multi_directional_scrolling"],
-	&"Audio": [&"8_bit_sound", &"recorded_sounds", &"8_bit_music", &"16_bit_music", &"sound_effects", &"music"],
-	&"Technology & Tools": [&"keyboard_and_mouse", &"controller", &"menu_system", &"split_screen", &"save_files", &"branching_nodes"],
-	&"Gameplay": [&"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"turn_based_combat", &"character_classes", &"difficulty_levels"],
-	&"Story & World": [&"simple_story", &"dialogue", &"branching_dialogue", &"character_backstories", &"character_development", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets"],
+	&"Audio": [&"8_bit_sound", &"16_bit_sound", &"main_theme", &"recorded_sounds", &"multiple_soundtracks", &"instrumental_sounds", &"dynamic_sequencing"],
+	&"Technology & Tools": [&"keyboard_and_mouse", &"controller", &"menu_system", &"split_screen", &"save_files", &"branching_nodes", &"player_level_editor"],
+	&"Gameplay": [&"timer_system", &"inventory_system", &"categorized_scores", &"score_system", &"high_scores", &"local_leaderboards", &"lives_system", &"controls", &"enemies", &"scripted_ai", &"power_ups", &"general_combat", &"turn_based_combat", &"character_classes", &"difficulty_levels"],
+	&"Story & World": [&"simple_story", &"dialogue", &"branching_dialogue", &"character_backstories", &"character_development", &"multiple_endings", &"levels", &"maps", &"exploration", &"secrets", &"ability_gated_exploration", &"switchable_protagonists", &"character_skill_checks"],
 }
 var _lane_by_id: Dictionary = {}
 var _lane_scroll: Dictionary = {}
@@ -197,12 +198,16 @@ func _refresh() -> void:
 	# Deferred run signals can arrive after Studio has been detached for departure.
 	if not is_inside_tree() or _tree == null:
 		return
-	var graph := FeatureStoreCatalog.graph(_run._feature_definitions, _run._feature_offers)
-	if graph.has("error"):
-		_cash.text = "Feature Store unavailable: " + str(graph.error)
+	var view := _run.get_feature_store_view()
+	if view.has("error"):
+		_map_offers={}
+		_cash.text = "Feature Store unavailable: " + str(view.error)
 		_research_button.disabled = true
 		_map.popup.hide()
 		return
+	_map_offers=view.offers.duplicate()
+	for id: StringName in view.reserves:
+		if _map_offers[id].is_empty(): _map_offers[id]=view.reserves[id]
 	_cash.text = "Feature Store"
 	_research_list.clear()
 	_research_quote = {}
@@ -210,11 +215,11 @@ func _refresh() -> void:
 	_research_list.visible = not _run.needs_starter_selection()
 	_research_button.visible = not _run.needs_starter_selection()
 	for entry: Dictionary in pending:
-		var q := _run.get_feature_research_quote(entry.feature_id)
+		var q: Dictionary = view.quotes[entry.feature_id]
 		_research_list.add_item("%d. %s - %d action(s) left" % [_research_list.item_count+1,_run._feature_definitions[entry.feature_id].name,q.remaining_actions])
 		_research_list.set_item_metadata(_research_list.item_count-1,entry.feature_id)
 	if pending.is_empty(): _research_list.add_item("Research queue empty")
-	else: _research_quote = _run.get_feature_research_quote(pending[0].feature_id)
+	else: _research_quote = view.quotes[pending[0].feature_id]
 	_research_button.disabled = _research_quote.is_empty() or not _research_quote.can_research
 	_research_button.text = "Research" if _research_quote.is_empty() else "Research %s - 1 cycle" % CashFormatter.format_exact_cents(_research_quote.due_cents)
 	_research_button.tooltip_text = "Only the first queued Feature receives research. No automatic progress or due bills."
@@ -227,8 +232,8 @@ func _refresh() -> void:
 		_build_tree()
 	for id: StringName in _nodes:
 		var button: Button = _nodes[id]
-		var offer := _run.get_feature_store_offer(id)
-		var reserve := _run.get_primitive_reserve_offer(id) if offer.is_empty() else {}
+		var offer: Dictionary = view.offers[id]
+		var reserve: Dictionary = view.reserves[id]
 		var status := "Owned"
 		var color := Color("244b3d")
 		if not reserve.is_empty() and not reserve.owned:
@@ -237,17 +242,19 @@ func _refresh() -> void:
 			if not reserve.affordable:
 				status += " · Need cash"
 			color = Color("244b70") if reserve.can_purchase else Color("674c24")
-		var research := _run.get_feature_research_quote(id)
+		var research: Dictionary = view.quotes[id]
 		if not _run.owns_feature(id) and (not offer.is_empty() or not _run.needs_starter_selection()):
-			status = queue_status(research)
+			status = queue_status(research,view.financial_block_reason)
 			color = Color("244b70") if research.can_admit or research.queued else Color("674c24")
 		var card: CardData = get_node("/root/CardDatabase").get_card(id)
 		button.text = card.card_name + "\n" + status
 		(button.get_node("MapStatus") as Label).text = status
 		button.tooltip_text = card.card_name + " · Scope %d" % card.scope
 		for entry in card.core_contributions(): button.tooltip_text += " · +%d %s" % [entry.value,score_label(entry.stat)]
-		var single: Array[CardData] = [card]
-		button.tooltip_text += "\nPlay cost: " + ("TBD" if _run._feature_offers.has(id) else CashFormatter.format_exact_cents(_run.primitive_feature_hand_cost_cents(single)))
+		button.tooltip_text += "\nPlay cost: " + (play_cost_text(card))
+		var visual := [color,id==_selected]
+		if button.get_meta("store_visual",[])==visual: continue
+		button.set_meta("store_visual",visual)
 		for style_name: String in ["normal", "hover", "pressed", "focus"]:
 			var style := StyleBoxFlat.new()
 			style.bg_color = color.lightened(0.12) if style_name == "hover" else color
@@ -260,7 +267,7 @@ func _refresh() -> void:
 	_show_details()
 
 
-func queue_block_reasons(quote: Dictionary) -> Array[String]:
+func queue_block_reasons(quote: Dictionary, current_block: Variant = null) -> Array[String]:
 	# Explain the live quote; never substitute full-card affordability for its deposit.
 	var reasons: Array[String] = []
 	if quote.is_empty(): return ["Feature queue unavailable; check Finances."]
@@ -269,10 +276,13 @@ func queue_block_reasons(quote: Dictionary) -> Array[String]:
 	if not quote.unlocked:
 		var offer := _run.get_feature_store_offer(quote.feature_id)
 		if offer.is_empty(): offer = _run.get_primitive_reserve_offer(quote.feature_id)
-		reasons.append("Locked — " + str(offer.get("prerequisite", "Prerequisite required")))
+		if not offer.get("missing_parents",[]).is_empty() or not offer.has("year_reached"):
+			reasons.append("Locked — " + str(offer.get("prerequisite", "Prerequisite required")))
+		if not offer.get("year_reached",true): reasons.append("Locked — Available in %d"%offer.min_year)
+		if not offer.get("era_qualified",true): reasons.append("Locked — %d era needs a qualifying Studio-owned release (played Scope meets required Scope)"%offer.era_year)
 	if quote.cash_cents < quote.down_cents:
 		reasons.append("Need %s to queue" % CashFormatter.format_exact_cents(quote.down_cents))
-	var finance := _run.get_financial_block_reason()
+	var finance: String = _run.get_financial_block_reason() if current_block==null else current_block
 	if finance.begins_with("Unpaid bills:"):
 		reasons.append("Clear overdue bills to queue")
 	elif not finance.is_empty() or not _run.is_cash_initialized():
@@ -280,12 +290,12 @@ func queue_block_reasons(quote: Dictionary) -> Array[String]:
 	return reasons
 
 
-func queue_status(quote: Dictionary) -> String:
+func queue_status(quote: Dictionary, current_block: Variant = null) -> String:
 	if quote.is_empty(): return "Queue unavailable"
 	if quote.head: return "Research head"
 	if quote.queued: return "Queued"
 	if quote.can_admit: return "Queue available"
-	var reasons := queue_block_reasons(quote)
+	var reasons := queue_block_reasons(quote,current_block)
 	if reasons.is_empty(): return "Queue unavailable"
 	if reasons[0].begins_with("Locked —"): return "Locked"
 	if reasons[0].begins_with("Feature queue unavailable"): return "Queue unavailable"
@@ -304,9 +314,9 @@ func _summarize_owned_features() -> Dictionary:
 			continue
 		scope += card.scope
 		for entry in card.core_contributions(): scores[entry.stat] += int(entry.value)
-		if _run.get_feature_store_offer(id).is_empty():
+		if not _run._feature_offers.has(id):
 			priced_cards.append(card)
-		else:
+		elif not _run._feature_offers[id].has("play_cost_cents"):
 			unpriced_count += 1
 	var cost := _run.primitive_feature_hand_cost_cents(priced_cards)
 	return {"scope": scope, "total_score": scores[&"graphics"] + scores[&"sound"] + scores[&"technology"] + scores[&"design"],
@@ -315,7 +325,7 @@ func _summarize_owned_features() -> Dictionary:
 
 
 func _build_tree() -> void:
-	var entries: Array = _run._feature_definitions.values()
+	var entries: Array = _run._feature_definitions.values().filter(func(entry: Dictionary): return FeatureStoreCatalog.is_active(StringName(entry.id)))
 	var graph := FeatureStoreCatalog.graph(_run._feature_definitions, _run._feature_offers)
 	if graph.has("error"): return
 	var children: Dictionary = {}
@@ -331,10 +341,10 @@ func _build_tree() -> void:
 		if not parent.is_empty():
 			if not children.has(parent): children[parent] = []
 			children[parent].append(id)
-		# Layout follows the first parent only. Every same-tree AND parent gets
-		# its own real connector; cross-tree gates retain their inspect links.
+		# Draw local branches only. Cross-category requirements remain in the
+		# catalog/AND badge and prerequisite navigation, without long map arrows.
 		for required: StringName in parents:
-			if _lane_by_id[required] == _lane_by_id[id]: _edges.append([required, id])
+			if _lane_by_id[required]==_lane_by_id[id]: _edges.append([required, id])
 		var button := Button.new()
 		button.size = NODE_SIZE
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -365,22 +375,28 @@ func _select_lane(lane: StringName) -> void:
 func _draw_connections() -> void:
 	_map.draw_core()
 	for edge: Array in _edges:
-		var parent: Control = _nodes[edge[0]]
-		var child: Control = _nodes[edge[1]]
-		var parent_rect := _map.node_footprint(parent)
-		var child_rect := _map.node_footprint(child)
-		var direction := (child_rect.get_center() - parent_rect.get_center()).normalized()
-		var start := _map.edge_port(parent_rect, direction)
-		var end := _map.edge_port(child_rect, -direction)
-		var offer := _run.get_feature_store_offer(edge[1])
-		if offer.is_empty(): offer = _run.get_primitive_reserve_offer(edge[1])
+		var path: PackedVector2Array = _map.edge_routes.get(str(edge[0])+"->"+str(edge[1]),PackedVector2Array())
+		if path.size()<2: continue
+		var end := path[-1]
+		var direction := (end-path[-2]).normalized()
+		# Lines use the same completed synchronous view as their node labels.
+		var offer: Dictionary = _map_offers.get(edge[1],{})
 		var color := Color("7ed6be") if offer.get("unlocked", false) else Color("8993a5")
-		_tree.draw_line(start, end, color, 3, true)
+		_tree.draw_polyline(path, color, 3, true)
 		var across := direction.orthogonal() * 6.0
 		_tree.draw_colored_polygon(PackedVector2Array([end, end - direction * 9.0 + across, end - direction * 9.0 - across]), color)
 
 
+func play_cost_text(card: CardData) -> String:
+	if _run._feature_offers.has(card.id):
+		var entry: Dictionary=_run._feature_offers[card.id]
+		return CashFormatter.format_exact_cents(int(entry.play_cost_cents)) if entry.has("play_cost_cents") else "TBD"
+	var single: Array[CardData] = [card]
+	return CashFormatter.format_exact_cents(_run.primitive_feature_hand_cost_cents(single))
+
+
 func _select_node(id: StringName) -> void:
+	if not _nodes.has(id): return # Historical paid queue remains actionable from Research.
 	_debug_popup.hide()
 	_selected = id
 	_refresh()
@@ -470,15 +486,19 @@ func _purchase() -> void:
 	var quote := _run.get_feature_research_quote(_selected)
 	if quote.is_empty() or not quote.can_admit: return
 	if is_instance_valid(_admission_dialog): _admission_dialog.queue_free()
-	_admission_dialog = ConfirmationDialog.new()
+	_admission_dialog = preload("res://scripts/ui/quit_confirmation.gd").new()
+	_admission_dialog.ok_button_text = "OK"
+	# Match the fixed confirmation surface without retaining an initial autowrap minimum.
+	_admission_dialog.wrap_controls = false
+	_admission_dialog.min_size = Vector2i(680, 480)
 	_admission_dialog.title = "Queue Feature research?"
 	_admission_dialog.dialog_text = "Pay %s now (0 cycles). This down payment is irreversible.\nNo cancellation or reordering. Ownership begins only after research finishes.\nNext installment at current familiarity: %s; 1 productive cycle.\nFuture familiarity can change the remaining price." % [CashFormatter.format_exact_cents(quote.down_cents),CashFormatter.format_exact_cents(quote.due_cents)]
+	if _run._feature_offers.get(_selected,{}).has("replaces_id"):
+		_admission_dialog.dialog_text += "\n\nUpgrade: replaces 8-Bit Sound in future project draws. Keeps ownership and already-started projects."
 	_admission_dialog.dialog_text += "\n\nAfter research completes, the Feature can enter games you start later. It is not guaranteed to be drawn or played."
-	_admission_dialog.get_label().custom_minimum_size.x = minf(560, get_viewport_rect().size.x - 100)
-	_admission_dialog.get_label().autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_admission_dialog.confirmed.connect(func():
 		_run.admit_feature_research(quote)
 		_refresh())
 	add_child(_admission_dialog)
-	_admission_dialog.popup_centered()
+	_admission_dialog.popup_centered(Vector2i(680, 480))
 	_admission_dialog.get_cancel_button().grab_focus()

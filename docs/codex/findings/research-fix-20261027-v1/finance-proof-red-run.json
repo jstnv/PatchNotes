@@ -1,0 +1,29 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_finance_plan_proof.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 3.391,
+  "errors": [
+    "ERROR: FAIL: Validated transition avoids replaying its entire prefix on the next read"
+  ],
+  "tail": [
+    "",
+    "Loaded 40 cards.",
+    "ERROR: FAIL: Validated transition avoids replaying its entire prefix on the next read",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (res://scripts/debug/verify_finance_plan_proof.gd:7)",
+    "       [1] _initialize (res://scripts/debug/verify_finance_plan_proof.gd:22)",
+    "{\"checks\":63,\"failures\":1,\"first_read_us\":14586,\"full_replay_us\":14092,\"ok\":false}",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

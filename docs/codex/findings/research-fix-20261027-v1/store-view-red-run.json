@@ -1,0 +1,37 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_view.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 0.469,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: The member \"Projection\" cannot have the same name as a builtin type.",
+    "SCRIPT ERROR: Parse Error: Cannot find member \"copy_fields\" in base \"Projection\".",
+    "SCRIPT ERROR: Parse Error: Function \"copy_fields()\" not found in base Projection.",
+    "SCRIPT ERROR: Parse Error: Cannot find member \"authority\" in base \"Projection\".",
+    "SCRIPT ERROR: Parse Error: Function \"authority()\" not found in base Projection.",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"before\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Cannot find member \"authority\" in base \"Projection\".",
+    "SCRIPT ERROR: Parse Error: Function \"authority()\" not found in base Projection.",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_store_view.gd\" with error \"Parse error\"."
+  ],
+  "tail": [
+    "SCRIPT ERROR: Parse Error: Function \"authority()\" not found in base Projection.",
+    "   at: GDScript::reload (res://scripts/debug/verify_store_view.gd:21)",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"before\" variable because the value doesn't have a set type.",
+    "   at: GDScript::reload (res://scripts/debug/verify_store_view.gd:21)",
+    "SCRIPT ERROR: Parse Error: Cannot find member \"authority\" in base \"Projection\".",
+    "   at: GDScript::reload (res://scripts/debug/verify_store_view.gd:28)",
+    "SCRIPT ERROR: Parse Error: Function \"authority()\" not found in base Projection.",
+    "   at: GDScript::reload (res://scripts/debug/verify_store_view.gd:28)",
+    "ERROR: Failed to load script \"res://scripts/debug/verify_store_view.gd\" with error \"Parse error\".",
+    "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)"
+  ]
+}

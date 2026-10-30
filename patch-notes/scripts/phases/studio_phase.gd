@@ -34,6 +34,7 @@ var _market_button: Button
 var _commission_mode := false
 var _support_mode := false
 var _checkpoint_action_waiting := false
+var _run_refresh_pending := false
 
 func set_rival_world(world: RivalWorld) -> void:
 	_rival_world = world
@@ -49,7 +50,7 @@ func _refresh_rivals() -> void:
 
 func _ready() -> void:
 	resized.connect(_fit_dashboard)
-	%Dashboard.visibility_changed.connect(_fit_dashboard)
+	%Dashboard.visibility_changed.connect(_dashboard_visibility_changed)
 	%Dashboard.minimum_size_changed.connect(_fit_dashboard)
 	_fit_dashboard()
 	%StartNextGame.pressed.connect(_open_predevelopment)
@@ -73,7 +74,6 @@ func _ready() -> void:
 	%Contracts.pressed.connect(_open_contracts)
 	%CampaignButton.pressed.connect(_purchase_selected_campaign)
 	%GameList.item_selected.connect(_on_game_selected)
-	%LowScopeWarning.confirmed.connect(_show_predevelopment)
 	%PostGameSummaries.tooltip_text = "Browse every released game, its category Reviews, and earned versus projected sales. Opening is free."
 	%FeatureStoreButton.tooltip_text = "Browse owned Features, prices and prerequisites. Opening the Store costs no cycles."
 	%StartNextGame.tooltip_text = "Name the next game and choose its Genre and Theme. Opening setup is free."
@@ -101,6 +101,28 @@ func _fit_dashboard() -> void:
 	if not is_inside_tree(): return
 	if not get_tree().process_frame.is_connected(_apply_dashboard_fit):
 		get_tree().process_frame.connect(_apply_dashboard_fit, CONNECT_ONE_SHOT)
+
+
+func _dashboard_visibility_changed() -> void:
+	_fit_dashboard()
+	if is_inside_tree() and %Dashboard.is_visible_in_tree():
+		_refresh_summary()
+		_refresh_rivals()
+
+
+func _queue_run_refresh() -> void:
+	if _run_refresh_pending or not is_inside_tree():return
+	_run_refresh_pending=true
+	_flush_run_refresh.call_deferred()
+
+
+func _flush_run_refresh() -> void:
+	_run_refresh_pending=false
+	if not is_inside_tree():return
+	# Store/Employees/Bank browsing does not need hidden review forecasts.
+	# Opening Summary and returning to Dashboard explicitly refresh current data.
+	if %Dashboard.is_visible_in_tree() or %SummaryPanel.is_visible_in_tree():_refresh_summary()
+	if %Dashboard.is_visible_in_tree():_refresh_rivals()
 
 
 func _apply_dashboard_fit() -> void:
@@ -172,12 +194,8 @@ func _open_predevelopment() -> void:
 	_support_mode = false
 	if _run_state == null:
 		return
-	if _run_state.needs_starter_selection():
-		var pool := _run_state.get_starter_pool_summary()
-		if int(pool.scope) < 20:
-			%LowScopeWarning.dialog_text = "Your pool has %d printed Scope. The B standard is 30 played Scope; your first game can use this smaller pool. Continue to game setup?" % pool.scope
-			%LowScopeWarning.popup_centered()
-			return
+	# The small starter pool is intentional; planning is free. Keep the hidden
+	# legacy warning node for capture scripts, without an active modal path.
 	_show_predevelopment()
 
 
@@ -492,21 +510,17 @@ func setup(project_state: ProjectState, run_state: RunState, snapshot_database: 
 		return false
 	if project_state != null and not run_state.can_register_release(project_state):
 		return false
-	if _run_state != null and _run_state.calendar_changed.is_connected(_refresh_summary):
-		_run_state.calendar_changed.disconnect(_refresh_summary)
-	if _run_state != null and _run_state.sales_changed.is_connected(_refresh_summary):
-		_run_state.sales_changed.disconnect(_refresh_summary)
-	if _run_state != null and _run_state.calendar_changed.is_connected(_refresh_rivals):
-		_run_state.calendar_changed.disconnect(_refresh_rivals)
+	if _run_state != null:
+		for event in [&"calendar_changed",&"sales_changed"]:
+			if _run_state.is_connected(event,_queue_run_refresh):_run_state.disconnect(event,_queue_run_refresh)
 	_project_state = project_state
 	_run_state = run_state
 	_snapshot_database = snapshot_database
 	# The fully validated Studio-entry boundary is idempotent on reconstruction.
 	if project_state != null and not prepare_only and not _run_state.register_release(project_state):
 		return false
-	_run_state.calendar_changed.connect(_refresh_summary)
-	_run_state.calendar_changed.connect(_refresh_rivals)
-	_run_state.sales_changed.connect(_refresh_summary)
+	_run_state.calendar_changed.connect(_queue_run_refresh)
+	_run_state.sales_changed.connect(_queue_run_refresh)
 	if project_state != null:
 		_selected_release_id = project_state.get_release_id()
 	_refresh_game_list()
@@ -667,7 +681,7 @@ func _open_employees() -> void:
 	if _run_state == null or _run_state.get_released_game_ids().size() < 2: return
 	# Browsing is free. A save/mutation guard may defer first-time activation,
 	# but must not turn an enabled navigation button into a silent no-op.
-	var read_only := not _run_state.uses_employee_trial() and not _run_state.activate_employee_trial()
+	var read_only := not _run_state.uses_employee_courses() and not _run_state.activate_employee_trial()
 	if _employees_panel == null:
 		_employees_panel = EmployeePanel.new()
 		add_child(_employees_panel)

@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_store_grid_graph.gd",
+    "--",
+    "--capture",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/tools/fixtures/store_grid_graph_predecessor.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 2.625,
+  "errors": [],
+  "tail": [
+    "Loaded 40 cards.",
+    "PASS: Normal unfunded factory route initializes",
+    "PASS: Pre-change legal queue save_files",
+    "PASS: Pre-change legal queue split_screen",
+    "PASS: Pre-change legal queue colored_text",
+    "PASS: Old pending queue is a valid Studio checkpoint",
+    "PASS: Pre-change legal completion save_files",
+    "PASS: Pre-change legal completion split_screen",
+    "PASS: Pre-change legal completion colored_text",
+    "PASS: Old completed purchases form a valid Studio checkpoint"
+  ]
+}

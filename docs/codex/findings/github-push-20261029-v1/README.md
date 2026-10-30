@@ -1,0 +1,7 @@
+# Authorized repository snapshot — 2026-10-29
+
+User requested committing/pushing the current repository to the existing origin/main. Parent:f3e0f2b5d35270c879327bc297b389748571feb4. Runtime source identity:bf3dffde495d7149a9556091c4434c06af9db8b7c16ac27b6415378c0590b4f3. Snapshot includes coordinated runtime/UI/Store/checkpoint/course/debug work, maintained tests, authored cross-thread records and compact current evidence. Pending design records remain DESIGN/OPEN; publishing them is not gameplay adoption.
+
+See selection.json/selected-paths.json for the explicit bounded selection. All tracked changes are preserved; generated game copies/profiles, local captures/logs, temporary files, older/nested raw experiment bodies and large raw payloads remain on disk. .codex-godot-temp is preserved. Private variants and raw evidence are not claimed portable from published summary records alone. No files deleted or new EXE/ZIP produced.
+
+Fresh bounded checks are in push-checks.json and per-check receipts. The prior final-source19 focused checks,787 per-action comparisons,54-command independent replay and genuine18-release career remain separately pinned in the employee-courses findings. Current sync is not a whole-release or no-lag claim: unfunded affordability, late Research/performance, current-source AI-opening candidate, balance and human/device gates remain OPEN. Git outcome is reported only after actual commit/push and remote equality verification; local push-receipt.json retains that result separately.

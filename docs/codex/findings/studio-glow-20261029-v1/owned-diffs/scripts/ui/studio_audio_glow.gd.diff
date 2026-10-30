@@ -1,0 +1,38 @@
+--- before/scripts/ui/studio_audio_glow.gd
++++ after/scripts/ui/studio_audio_glow.gd
+@@ -0,0 +1,35 @@
++extends "res://scripts/ui/menu_audio_visualizer.gd"
++
++## A faint header wash driven by the existing read-only Music spectrum observer.
++const MAX_ALPHA := 0.075
++var _light: GradientTexture2D
++
++func _ready() -> void:
++	super._ready()
++	process_mode = Node.PROCESS_MODE_ALWAYS
++	_light = GradientTexture2D.new()
++	_light.width = 128
++	_light.height = 64
++	_light.fill = GradientTexture2D.FILL_RADIAL
++	_light.fill_from = Vector2(0.5, 0.5)
++	_light.fill_to = Vector2(1.0, 0.5)
++	_light.gradient = Gradient.new()
++	_light.gradient.offsets = PackedFloat32Array([0.0, 0.5, 1.0])
++	_light.gradient.colors = PackedColorArray([Color.WHITE, Color(1,1,1,0.25), Color(1,1,1,0)])
++
++func light_alphas() -> PackedFloat32Array:
++	var result := PackedFloat32Array([0.0, 0.0, 0.0])
++	if levels.size() != BANDS: return result
++	for group in 3:
++		for index in range(group * 8, (group + 1) * 8):
++			result[group] += clampf(levels[index], 0.0, 1.0) / 8.0 * MAX_ALPHA
++	return result
++
++func _draw() -> void:
++	if _light == null or size.x <= 0.0: return
++	var alphas := light_alphas()
++	for group in 3:
++		var center := 0.18 + group * 0.32
++		var color := FolderUI.color(&"orange" if group == 1 else &"cyan")
++		color.a = alphas[group]
++		draw_texture_rect(_light, Rect2(size.x*(center-0.36), -size.y*0.45, size.x*0.72, size.y*2.0), false, color)

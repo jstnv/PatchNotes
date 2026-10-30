@@ -85,6 +85,10 @@ func _initialize() -> void:
 	var world: RivalWorld = Trial.create_world(player.run, catalog)
 	expect(world != null, "fresh trial world")
 	if world == null: quit(1); return
+	# Fund only this long selector/mechanics fixture. The separate low-cash
+	# world below retains ordinary cash and validates genuine affordability.
+	# This is not evidence of AI recurring-income or campaign solvency.
+	for session: RefCounted in world.studios.values():expect(session.run.add_cash_cents(1000000),"Controlled rival selector fixture funding")
 	for cycle in range(56):
 		var policies: Dictionary = Trial.policies(world)
 		for id: StringName in world.studios:

@@ -1,0 +1,39 @@
+--- before/scripts/run_state.gd
++++ after/scripts/run_state.gd
+@@ -300,6 +300,7 @@
+ 	if not path.available: return path
+ 	for step: Dictionary in path.steps:
+ 		if not ids.has(step.id): ids.append(step.id)
++	ids=FeatureStoreCatalog.future_supply(ids,_feature_offers)
+ 	var price: int = path.price_cents
+ 	var purchase_cycles: int = path.cycles
+ 	var cards: Array[CardData] = []
+@@ -443,7 +444,7 @@
+ 		"parents": parents, "missing_parents": missing, "unlocked": missing.is_empty(),
+ 		"prerequisite": "Own " + " AND ".join(names) if not names.is_empty() else "Primitive reserve",
+ 		"grant_exception": owns_feature(id) and not missing.is_empty(),
+-		"initial": initial, "can_purchase": not owns_feature(id) and missing.is_empty() and _cash_initialized and _cash_cents >= price}
++		"initial": initial, "can_purchase": FeatureStoreCatalog.is_active(id) and not owns_feature(id) and missing.is_empty() and _cash_initialized and _cash_cents >= price}
+ 
+ 
+ func purchase_starter_feature(id: StringName) -> bool:
+@@ -536,6 +537,10 @@
+ 	var result: Array[StringName] = []
+ 	result.assign(_owned_features.keys())
+ 	return result
++
++
++func get_future_project_feature_ids() -> Array[StringName]:
++	return FeatureStoreCatalog.future_supply(get_owned_feature_ids(),_feature_offers)
+ 
+ 
+ func get_feature_familiarity(id: StringName) -> int:
+@@ -683,7 +688,7 @@
+ 		"base_cents":base,"down_cents":arithmetic.down_cents,"due_cents":arithmetic.due_cents-saving,"saving_cents":saving,
+ 		"nominal_cents":arithmetic.nominal_cents,"discount_percent":discount,"actions":actions,"completed":done,
+ 		"paid_cents":paid,"remaining_actions":actions-done,"remaining_cents":remaining,"queued":queued,"head":head,"unlocked":unlocked,
+-		"can_admit":not needs_starter_selection() and not offer.owned and unlocked and not queued and _cash_initialized and _cash_cents>=arithmetic.down_cents and (get_financial_block_reason().is_empty() if blocked==null else blocked.is_empty()),
++		"can_admit":FeatureStoreCatalog.is_active(id) and not needs_starter_selection() and not offer.owned and unlocked and not queued and _cash_initialized and _cash_cents>=arithmetic.down_cents and (get_financial_block_reason().is_empty() if blocked==null else blocked.is_empty()),
+ 		"can_research":head and check_action and can_complete_productive_cycle(-int(arithmetic.due_cents-saving)),
+ 		"cycle":_completed_run_cycles,"cash_cents":_cash_cents,"revision":_studio_finance.get("actions",[]).size(),"queue_size":_feature_research.size(),"resourceful_window":_released_games.size()}
+ 

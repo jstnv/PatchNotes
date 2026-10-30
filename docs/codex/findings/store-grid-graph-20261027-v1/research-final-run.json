@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_research_integration.gd"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 4.469,
+  "errors": [],
+  "tail": [
+    "PASS: One cent short cannot use next settlement; no partial mutation",
+    "PASS: Queue root Menu System parent",
+    "PASS: Queued Menu System never satisfies Save Files ownership gate",
+    "PASS: Unmet two-parent Difficulty gate remains enforced",
+    "PASS: Corrupt installment fails whole checkpoint",
+    "PASS: Unproven trait consumption fails whole checkpoint",
+    "PASS: Cheap hypothetical final installment floors at zero",
+    "PASS: Otherwise-paid zero final installment still consumes opportunity",
+    "PASS: Already-free hypothetical acquisition does not consume opportunity",
+    "Research integration: 0 failures"
+  ]
+}

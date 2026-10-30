@@ -3,8 +3,31 @@
 ## no classes, resource paths, constructors or executable Variant objects.
 extends RefCounted
 
+const CAREER_PREDECESSORS := ["2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6"]
 const Session := preload("res://scripts/simulation/campaign_session.gd")
+## Studio header observer only; exact previous editor source with current content.
+const STUDIO_GLOW_PREDECESSORS := ["962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd", "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17"]
+## Research admission dialog presentation only; exact preceding current-content world.
+const RESEARCH_CONFIRMATION_PREDECESSORS := ["56b304839cd4653d27baa368bcadb7f6cc83c8afc7ed4d813ef5d1c94766b60d"]
+## Central roots/local-arrow presentation only; current rules and state stay exact.
+## Exact pre-Audio editor catalog; preserve old player/rival state verbatim.
+## Technology root spacing only; exact prior Audio world, same content rules.
+## Exact preceding editor before additive Gameplay/three-parent acquisition.
+const GAMEPLAY_RESTORATION_PREDECESSORS := ["39413580c9c5addc58d5ed5e3b60de49be3e2a77c2ebc6fa4bb65c4c8a2add9d"]
+const TECH_ROW_PRESENTATION_PREDECESSORS := ["c15b025cf78073ccbed099f6d6df522279ead2a413de4636b8b37bd3a6714409"]
+const AUDIO_PREDECESSOR_SOURCES := ["8f88b96a3f39b7de4c6d3af3e6886c6168bfd749cbc6beb6b45671e67e5eeeb6"]
+const STORE_ROOT_PRESENTATION_PREDECESSORS := ["0c86786e04d95976d42933e18e1b37580bca4dba88d27818d4560376394997f6"]
+## Exact latest pre-grid presentation; content pairs use the pinned old catalog.
+const GRID_PREDECESSOR_SOURCES := ["a5c5d543474d24a1dc6ee2c901f4446380b1d0e572ddb414fe63e5d173439328"]
+## Store prerequisite navigation only; exact preceding world and rules retained.
+const STORE_NAVIGATION_PREDECESSORS := ["98e0b0926f13b8cf207ef375ff41bf2d8d9a82f6e7ac26d63aa447dc0fb50083"]
+## User-approved 2026-10-27: exact pre-Research-optimization editor only.
+## Current player/rival content revisions and all ordinary validation still apply.
+const RESEARCH_PERFORMANCE_PREDECESSORS := ["25dc0a8892df95b95b93690b5224d12e4242a97426ad5d4dbf4c98d42696af59"]
+## Confirmation presentation only; exact quit/discard predecessor worlds restore.
+const QUIT_PRESENTATION_PREDECESSORS := ["274023dedb8414b9b7ba852d470b36091a25fb954fde32f44325a5689109ac06", "0aaa98ba2e0eef306dc0c046d8732a2b3a5a80226649bc01729c3ff2d0ee9f7d", "e3b0d13708d22ce1755a99012dad6a6fbdc13cb5a4a28f47e6734d3a2a327421", "700d6a166649a7487ecc2abd87655435a69dfcdcaea4c5e6d09278abdc31bbee"]
 ## Title audio observer only; preceding saved world, ownership and RNG stay exact.
+const STORE_ERA_PREDECESSORS := ["3b2a7b9b837a714768da133f90d6ce893fd9385bebd4ad2795b3acc10e9ad760"]
 const MENU_VISUALIZER_PREDECESSORS := ["6e31125897228a4a80f175f449f0fdd52400079450a310b4ee6f40a71d063d4a"]
 ## Twelve-Scope grants apply to new Studios only; retain old ownership and RNG.
 const STARTER_SCOPE_PREDECESSORS := ["3eb0f864ee07afc000f7ac087b5b1b7c2396d93e89056b53a84900b9e4954560"]
@@ -161,6 +184,10 @@ static func _hand_schema(phase: int) -> Dictionary:
 		schema.injected_candidate_ids = CheckpointSchema.array_of("uint")
 		schema.pending_corrective_pass_ids = CheckpointSchema.array_of("id")
 		schema.launch_confirmation_pending = "bool"
+	if phase==1:
+		var protected_schema:=schema.duplicate(true)
+		protected_schema.injected_candidate_ids=CheckpointSchema.array_of("uint")
+		return CheckpointSchema.union_of([schema,protected_schema])
 	return schema
 
 static func _development_schema(phase: int) -> Dictionary:
@@ -248,7 +275,9 @@ func _hand_state(hand: RefCounted, phase: int) -> Dictionary:
 		result.available_features = hand._available_features.map(func(card: CardData) -> StringName: return card.id)
 		result.exhausted = hand._exhausted_card_ids if phase == 0 else hand._exhausted_feature_ids
 		if phase == 0: result.finalization_requested = hand.finalization_requested
-		else: result.pending_playtest = hand._pending_playtest_categories
+		else:
+			result.pending_playtest = hand._pending_playtest_categories
+			if not hand.injected_candidate_ids.is_empty():result.injected_candidate_ids=hand.injected_candidate_ids
 	else:
 		result.injected_candidate_ids = hand.injected_candidate_ids
 		result.pending_corrective_pass_ids = hand._pending_corrective_pass_ids
@@ -264,14 +293,14 @@ func _capture_development(session: RefCounted) -> Variant:
 	var state := {"phase_index":dev.phase_index,"sequence":dev.sequence,"awaiting_confirmation":dev.awaiting_confirmation,"finalized":dev.finalized,"project":project,"hand":_hand_state(dev.hand,dev.phase_index)}
 	return _encode(state,_development_schema(dev.phase_index))
 
-func snapshot(world: RivalWorld) -> Dictionary:
+func snapshot(world: RivalWorld, studio_adapter: StudioCheckpoint = null) -> Dictionary:
 	error = ""
 	if world == null or world.player == null or world._busy or world.cycle != world.player.get_completed_run_cycles() or world.studios.is_empty() or world.studios.size() > MAX_RIVALS: error = "World is not at a save boundary"; return {}
 	if not Market.valid(world.market_snapshot) or world.market_snapshot.cycle_start!=world.cycle-world.cycle%2: error = "Invalid committed market month"; return {}
 	var rows: Array = []
 	var ids: Array = world.studios.keys()
 	ids.sort_custom(func(a: StringName,b: StringName) -> bool: return str(a) < str(b))
-	var adapter := StudioCheckpoint.new()
+	var adapter := studio_adapter if studio_adapter != null else StudioCheckpoint.new()
 	for id: StringName in ids:
 		var session: RefCounted = world.studios[id]
 		if session.run.get_completed_run_cycles() != world.cycle or session.contract != null: error = "Rival clock or Contract unavailable"; return {}
@@ -281,20 +310,25 @@ func snapshot(world: RivalWorld) -> Dictionary:
 		var development: Variant = _capture_development(session)
 		if not error.is_empty(): return {}
 		var archive: Variant = world.historical_archive.get(id,[])
+		if not archive is Array: error="Invalid rival archive"; return {}
+		archive=archive.duplicate(true)
 		if not error.is_empty(): return {}
 		rows.append({"id":str(id),"run":saved_run,"sequence":str(session.sequence),"development":development,"archive":archive})
 	var history: Variant = world.observation().live_releases
 	if not error.is_empty(): return {}
-	var encoded_market: Variant = world.market_snapshot
+	var encoded_market: Variant = world.market_snapshot.duplicate(true)
 	if not error.is_empty(): return {}
 	var payload := {"schema_version":"1","rng_algorithm":RunRandom.ALGORITHM,"cycle":str(world.cycle),"studios":rows,"history":history,"market":encoded_market}
 	if not world.market_origin.is_empty():
-		payload.market_origin=world.market_origin
+		payload.market_origin=world.market_origin.duplicate(true)
 		if not error.is_empty(): return {}
 	if not world.legacy.is_empty():
 		if not Legacy.valid(world.legacy,world): error="Invalid founder world"; return {}
 		payload.legacy=Legacy.encode(world.legacy)
-	return payload.duplicate(true)
+	# Run snapshots, encoded development/legacy and observation history already
+	# own their values. Only the live archive/market/origin containers above need
+	# copying; re-copying every detached rival ledger stalls the main thread.
+	return payload
 
 func encode_snapshot(native: Dictionary) -> Dictionary:
 	error = ""
@@ -327,8 +361,14 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
 	var support_predecessor: bool = predecessor_source in SUPPORT_PREDECESSOR_SOURCES or predecessor_source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES
 	var usability_predecessor: bool = predecessor_source in USABILITY_PREDECESSOR_SOURCES
 	var current_source := Replay.source_identity() if captured_source_identity.is_empty() else captured_source_identity
-	var source_ok: bool = predecessor_source==current_source or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
-	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().revision()
+	var grid_predecessor: bool = predecessor_source in GRID_PREDECESSOR_SOURCES+RESEARCH_PERFORMANCE_PREDECESSORS+QUIT_PRESENTATION_PREDECESSORS+STORE_NAVIGATION_PREDECESSORS
+	var source_ok: bool = predecessor_source in CAREER_PREDECESSORS or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS or predecessor_source in TECH_ROW_PRESENTATION_PREDECESSORS or predecessor_source in AUDIO_PREDECESSOR_SOURCES or grid_predecessor or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS or predecessor_source==current_source or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ERA_PREDECESSORS or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
+	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().pre_course_revision() if predecessor_source==current_source or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS else StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_ERA_RULES)
+	if predecessor_source==current_source:paired_revision=StudioCheckpoint.new().revision()
+	if predecessor_source in CAREER_PREDECESSORS:paired_revision=StudioCheckpoint.new().pre_course_revision()
+	if predecessor_source in AUDIO_PREDECESSOR_SOURCES+STORE_ROOT_PRESENTATION_PREDECESSORS: paired_revision=StudioCheckpoint.new().pre_audio_revision()
+	if predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS+TECH_ROW_PRESENTATION_PREDECESSORS: paired_revision=StudioCheckpoint.new().pre_gameplay_revision()
+	if grid_predecessor: paired_revision=StudioCheckpoint.new().pre_grid_revision()
 	if predecessor_source!=current_source and predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES+USABILITY_PRESENTATION_SOURCES:
 		paired_revision=StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_EMPLOYEE_RULES)
 	if predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES:paired_revision=StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_SEARCH_RULES)
@@ -569,6 +609,9 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 					var pending_playtest: Array[ProjectState.CoreScore] = []
 					pending_playtest.assign(hand_state.pending_playtest)
 					dev.hand.set("_pending_playtest_categories",pending_playtest)
+					var injected: Array[int]=[]
+					injected.assign(hand_state.get("injected_candidate_ids",[]))
+					dev.hand.set("injected_candidate_ids",injected)
 			else:
 				var injected_ids: Array[int] = []
 				injected_ids.assign(hand_state.injected_candidate_ids)

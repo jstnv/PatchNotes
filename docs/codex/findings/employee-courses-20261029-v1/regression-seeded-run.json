@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_campaign_seeded_parity.gd"
+  ],
+  "exit": 125,
+  "elapsed_seconds": 5.906,
+  "errors": [
+    "SCRIPT ERROR: Trying to assign a dictionary of type \"Dictionary\" to a variable of type \"Dictionary[int, int]\"."
+  ],
+  "tail": [
+    "   at: DesignPhase.reset_priority_draft (res://scripts/phases/design_phase.gd:725)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] reset_priority_draft (res://scripts/phases/design_phase.gd:725)",
+    "       [1] open (res://scripts/ui/priority_overlay.gd:125)",
+    "       [2] open_priority_overlay (res://scripts/phases/design_phase.gd:721)",
+    "       [3] set_phase (res://scripts/ui/gameplay_hud.gd:210)",
+    "       [4] _begin_next_project (res://scripts/gameplay.gd:615)",
+    "       [5] begin_project (res://scripts/debug/verify_campaign_live_parity.gd:101)",
+    "       [6] _project (res://scripts/debug/verify_campaign_seeded_parity.gd:71)",
+    "       [7] _initialize (res://scripts/debug/verify_campaign_seeded_parity.gd:130)"
+  ],
+  "runtime_identity": "5912b41cbd44c7cbcdc268f7d366ce6f366a54b851936dd00535b4a75db57e7b",
+  "runtime_source_unchanged": true
+}

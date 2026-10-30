@@ -134,16 +134,17 @@ func _verify_tree_ui() -> void:
 	expect(store.visible and not studio.get_node("%Dashboard").visible, "Studio button opens tree")
 	var nodes: Dictionary = store.get("_nodes")
 	var edges: Array = store.get("_edges")
-	expect(nodes.size() == 42 and edges.size() == 28, "Full ledger has 42 nodes and twenty-eight same-tree parent edges")
+	expect(nodes.size() == 50 and edges.size() == 43, "Active ledger has50 nodes and43 same-category arrows; cross-category gates stay in details")
 	var lane_by_id: Dictionary = store.get("_lane_by_id")
 	expect(lane_by_id.size() == nodes.size() and store._map.category_regions.size() == 5, "Every ledger Feature appears once across five browsable lanes")
 	for entry: Dictionary in FeatureStoreCatalog.entries():
+		if not FeatureStoreCatalog.is_active(StringName(entry.id)): continue
 		var parent := StringName(entry.purchase_parent)
 		if not parent.is_empty():
 			store.call("_select_lane", lane_by_id[StringName(entry.id)])
 			expect(edges.has([parent, StringName(entry.id)]) and lane_by_id[parent] == lane_by_id[StringName(entry.id)] and _child_is_outward(store, nodes[parent], nodes[StringName(entry.id)], lane_by_id[parent]), "Correct outward category connector: " + entry.name)
 	store.call("_select_lane", &"Technology & Tools")
-	expect(_child_is_outward(store, nodes[&"save_files"], nodes[&"branching_nodes"], &"Technology & Tools") and edges.has([&"save_files", &"branching_nodes"]) and not edges.any(func(edge: Array): return edge[1] == &"save_files"), "Save Files is an independent root with an upward child")
+	expect(_child_is_outward(store, nodes[&"save_files"], nodes[&"branching_nodes"], &"Technology & Tools") and edges.has([&"save_files", &"branching_nodes"]) and edges.has([&"menu_system", &"save_files"]), "Menu System to Save Files to Branching Nodes grows upward")
 	store.call("_select_lane", &"Gameplay")
 	var tree: Control = store.get("_tree")
 	expect(edges.has([&"turn_based_combat", &"difficulty_levels"]) and edges.has([&"scripted_ai", &"difficulty_levels"]) and tree.get_node_or_null("GameplayGate") == null, "Difficulty has both named parent arrows and no count gate")
@@ -185,6 +186,12 @@ func _verify_tree_ui() -> void:
 	store.call("_select_node", &"colored_text")
 	await process_frame
 	await process_frame
+	var focus_deadline:=Time.get_ticks_msec()+3000
+	while store._map.focusing or (store._map._menu_tween!=null and store._map._menu_tween.is_running()):
+		if Time.get_ticks_msec()>focus_deadline: break
+		await process_frame
+	for frame in 2: await process_frame
+	expect(not store._map.focusing,"Popup focus animation reaches its settled bounds")
 	expect(store._map.popup.visible and store.get("_details").text.contains("2 Graphics · 1 Scope"), "Node popup spells out printed score categories and Scope")
 	expect(store.get_global_rect().encloses(store._map.popup.get_global_rect()), "Popup stays within Store bounds: %s / %s" % [store.get_global_rect(), store._map.popup.get_global_rect()])
 	var click := InputEventMouseButton.new()

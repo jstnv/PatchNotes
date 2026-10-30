@@ -4,10 +4,14 @@ extends RefCounted
 const MONEY_ACTIONS := {&"bank_borrow":&"accept_bank_loan",&"bank_payoff":&"pay_off_bank_loan",&"education_payoff":&"pay_off_education"}
 
 static func execute(run: RunState,kind: StringName,payload: Dictionary,in_studio: bool) -> Dictionary:
+	if kind==&"activate_employees":
+		if not in_studio or not payload.is_empty() or run.get_released_game_ids().size()<2 or not run.activate_employee_trial():return reject("Employee activation unavailable")
+		return {"ok":true,"events":[{"type":"employee_courses_activated"}]}
 	if kind in MONEY_ACTIONS or kind in [&"hire",&"course"]:
 		if kind in [&"hire",&"course"] and not in_studio: return reject("Hiring requires Studio")
+		if kind in [&"hire",&"course"] and not run.uses_employee_courses():return reject("Activate the current employee system after Game 2")
 		if payload.size() != 1 or not payload.get("quote") is Dictionary: return reject("Exact quote required")
-		var method: StringName = (&"hire_specialist" if kind==&"hire" else &"purchase_qa_course") if kind in [&"hire",&"course"] else MONEY_ACTIONS[kind]
+		var method: StringName = (&"hire_specialist" if kind==&"hire" else &"purchase_employee_course") if kind in [&"hire",&"course"] else MONEY_ACTIONS[kind]
 		if not run.call(method,payload.quote): return reject("Financial action rejected")
 		return {"ok":true,"events":[{"type":str(kind)+"_committed"}]}
 	if kind==&"search_contracts":
@@ -51,4 +55,5 @@ static func observation(run: RunState) -> Dictionary:
 	for id: StringName in run.get_pending_publisher_offer_ids():
 		var quote := run.get_publisher_contract_offer(id)
 		if not quote.is_empty(): offers.append({"kind":&"publisher","quote":quote})
-	return {"finance":money.finance,"employees":run.get_employee_observation(),"hire_quote":money.hire_quote,"education_payoff_quote":money.education_payoff_quote,"bank_payoff_quotes":money.bank_payoff_quotes,"contract_offers":offers,"contract_search":run.get_contract_search_catalog(),"search_history":run.get_contract_search_state(),"hire_quotes":[run.get_employee_hire_quote(&"production"),run.get_employee_hire_quote(&"qa")],"course_quotes":[run.get_qa_course_quote(&"mixed"),run.get_qa_course_quote(&"pure")]}
+	var enabled:=run.uses_employee_courses()
+	return {"finance":money.finance,"employees":run.get_employee_observation(),"hire_quote":money.hire_quote if enabled else {},"education_payoff_quote":money.education_payoff_quote,"bank_payoff_quotes":money.bank_payoff_quotes,"contract_offers":offers,"contract_search":run.get_contract_search_catalog(),"search_history":run.get_contract_search_state(),"hire_quotes":[run.get_employee_hire_quote(&"production"),run.get_employee_hire_quote(&"qa"),run.get_employee_hire_quote(&"project_manager")] if enabled else [],"course_quotes":[run.get_qa_course_quote(&"mixed"),run.get_qa_course_quote(&"pure")]+run.get_employee_course_quotes() if enabled else [],"employee_activation_available":run.get_released_game_ids().size()>=2 and not enabled}

@@ -99,7 +99,7 @@ static func employees() -> Dictionary:
 	employee.hire_cycle = "uint"
 	employee.trained = "bool"
 	employee.projects = map_of("id", {"trained_action":"id","used_action":"id","actions":array_of("id")})
-	return {"schema_version":"uint","owner":"id","employees":map_of("id",union_of([employee,preload("res://scripts/employees/qa_employee_rules.gd").schema()])),"events":array_of(union_of([{"type":"id","employee_id":"id","cycle":"uint"},hand]+preload("res://scripts/employees/qa_employee_rules.gd").event_schemas()))}
+	return {"schema_version":"uint","owner":"id","employees":map_of("id",union_of([employee,preload("res://scripts/employees/qa_employee_rules.gd").schema(),preload("res://scripts/employees/employee_career_rules.gd").employee_schema()])),"events":array_of(union_of([{"type":"id","employee_id":"id","cycle":"uint"},hand]+preload("res://scripts/employees/qa_employee_rules.gd").event_schemas()+preload("res://scripts/employees/employee_career_rules.gd").event_schemas()))}
 
 static func market_factor() -> Dictionary:
 	return {"factor_bp":"uint","snapshot_id":"text","cycle_start":"uint","genre_only":"uint","theme_only":"uint","pair":"uint","historical":"bool"}
@@ -146,7 +146,7 @@ static func contract() -> Dictionary:
 	current.result.merge(fields("challenge_grade_bp bonus_cash_cents bonus_promotion"))
 	return union_of([old,current])
 
-static func root(education_enabled: bool = true, active_rival: bool = false) -> Dictionary:
+static func root(education_enabled: bool = true, active_rival: bool = false, store_era: bool = true) -> Dictionary:
 	var traits := fields("version starting_points spent_points refunded_points remaining_points point_cash_cents family_funding_cents")
 	traits.merge({"valid":"bool","reason":"text","trait_ids":array_of("id"),"active_ids":array_of("id"),"effects_mode":"id"})
 	var run := fields("cash_cents completed_run_cycles available_redraws next_project_serial")
@@ -182,6 +182,7 @@ static func root(education_enabled: bool = true, active_rival: bool = false) -> 
 	run.studio_finance = finance(education_enabled)
 	run.fanbase = StudioFanbase.schema()
 	run.employees = employees()
+	if store_era: run.store_era_receipts = {"version":"uint","assignments":map_of("uint","id")}
 	var versioned_run: Dictionary = run.duplicate(true)
 	versioned_run.founding_roster_version = "uint"
 	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":union_of([run,versioned_run]),"rng":map_of("id",{"seed":"int","state":"int"})}

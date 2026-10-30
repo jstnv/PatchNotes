@@ -1,0 +1,1920 @@
+{
+  "schema_version": "1",
+  "kind": "paired_command_boundary_observations",
+  "pair_id": "control-90210-reserve-v1-two-hand",
+  "bundle": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\threads\\banking-system\\simulations\\reserve-two-hand-run-v2",
+  "overall_run_ok": false,
+  "both_cases_completed": true,
+  "provenance": {
+    "frozen_source_identity": "a620a3cb6abe78f64ab23d8d0ef8b41febba9208875029fb5cc36747ed0e1b6d",
+    "source_identity": "0629a2fef700cb555d368c80c3342f638cc55150b08ce3416362dc269b9d8691",
+    "engine_version": "4.7.1-stable (official)",
+    "rng_algorithm": "godot-4.7.1-rng-v1",
+    "initial_state": "aa3195742b3a36125545490d0f032eaffd6e2616cec7fdf4dfdd9bfb0dd0a7eb",
+    "initial_rng": {
+      "alpha_deal": {
+        "seed": {
+          "integer": "90214"
+        },
+        "state": {
+          "integer": "2386249731863157806"
+        }
+      },
+      "alpha_finalize": {
+        "seed": {
+          "integer": "90215"
+        },
+        "state": {
+          "integer": "-3165635781385347343"
+        }
+      },
+      "beta_deal": {
+        "seed": {
+          "integer": "90216"
+        },
+        "state": {
+          "integer": "-5396989351267116314"
+        }
+      },
+      "beta_insight": {
+        "seed": {
+          "integer": "90217"
+        },
+        "state": {
+          "integer": "3383605015617353201"
+        }
+      },
+      "contract_deal": {
+        "seed": {
+          "integer": "90218"
+        },
+        "state": {
+          "integer": "-3598037042068528588"
+        }
+      },
+      "design_deal": {
+        "seed": {
+          "integer": "90212"
+        },
+        "state": {
+          "integer": "-4795379952856751367"
+        }
+      },
+      "design_finalize": {
+        "seed": {
+          "integer": "90213"
+        },
+        "state": {
+          "integer": "87559963979607799"
+        }
+      },
+      "review": {
+        "seed": {
+          "integer": "90211"
+        },
+        "state": {
+          "integer": "-4218388648313565084"
+        }
+      },
+      "snapshot": {
+        "seed": {
+          "integer": "90210"
+        },
+        "state": {
+          "integer": "-2173522741778049218"
+        }
+      }
+    },
+    "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+    "comparison_tool_sha256": "06f8756b872d4bf1d8f2f8b697fccebd5a3fe334270729feedcd18163442565c",
+    "left_artifact_hashes": {
+      "case": "632a14ae1db6e9f5e8fb491a1f4ce84f45deb13a989a3e4b0710b9302d334062",
+      "result": "9b0af72a89469bf50b91dc52d8b633ee1481fd2b13f68085ea4c0b6e935f9bcf",
+      "telemetry": "fab2f3b877057b4735a57b4a9f02db9da62d9a8dbd81994bb2f145f492d783ff"
+    },
+    "right_artifact_hashes": {
+      "case": "f4faec9c5397aeec654ad0b3de9ddeeb7e478eaff31c44e87cfb887d8a3aa71b",
+      "result": "f5ab3b57a8d9d34fb632315516ec9fe6aa7f7553a5f5ffa560bb3b61ea735131",
+      "telemetry": "2064295cc4f6d86bf02adf66838ffd19fc4781c72d6762dd2a3c0937049665be"
+    }
+  },
+  "conventions": {
+    "delta": "right minus left",
+    "sampling": "initial_and_after_each_executed_command",
+    "cash_low": "Minimum among observed command-boundary samples, including the initial state; not transient cash inside a command",
+    "transaction_cash_low": "Minimum of boundary cash and cash before/after newly appended ledger transactions. Excludes pre-study ledger history; does not infer unrecorded intermediate cash.",
+    "calendar": "Last observed sample at each shared run_cycle; zero-cycle actions use their final observed boundary at that cycle. No interpolation, extrapolation or assumption of equal phase.",
+    "release": "First post-command sample attaining each new release ordinal; compared launch milestones may occur at different calendar cycles",
+    "censoring": "Failed/bounded cases retain their observed prefix. Missing releases are unobserved, never zero-valued. No rejected action means none observed, not proof of no financial blocker.",
+    "integrity": "Local source/input/artifact consistency checks; no signatures or malicious-tampering guarantee. Variant tapes are not decoded here; use the separate exact replay command.",
+    "scope": "Independent campaigns; no winner, balance approval, human feel or shared-world AI claim"
+  },
+  "left": {
+    "case_id": "control-90210-no-loan",
+    "arm": "no-loan",
+    "status": "completed",
+    "completed": true,
+    "censored": false,
+    "termination_error": "",
+    "commands": 18,
+    "accepted_commands": 18,
+    "target_release_count": 2,
+    "unreached_release_count": 0,
+    "initial": {
+      "step": 0,
+      "run_cycle": 16,
+      "cash_cents": "83377",
+      "fans": "23",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 1,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "colored_text",
+        "8_color_palette"
+      ],
+      "research_queue": [
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 190000,
+          "feature_id": "scripted_ai",
+          "id": "bank-eligible-control-90210:research:scripted_ai",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 170000,
+          "feature_id": "animated_sprites",
+          "id": "bank-eligible-control-90210:research:animated_sprites",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 170000,
+          "feature_id": "recorded_sounds",
+          "id": "bank-eligible-control-90210:research:recorded_sounds",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 220000,
+          "feature_id": "save_files",
+          "id": "bank-eligible-control-90210:research:save_files",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 110000,
+          "feature_id": "difficulty_levels",
+          "id": "bank-eligible-control-90210:research:difficulty_levels",
+          "payments": []
+        }
+      ],
+      "financially_blocked": false
+    },
+    "endpoint": {
+      "step": 18,
+      "run_cycle": 23,
+      "cash_cents": "112684",
+      "fans": "32",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 2,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "colored_text",
+        "8_color_palette"
+      ],
+      "research_queue": [
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 190000,
+          "feature_id": "scripted_ai",
+          "id": "bank-eligible-control-90210:research:scripted_ai",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 170000,
+          "feature_id": "animated_sprites",
+          "id": "bank-eligible-control-90210:research:animated_sprites",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 170000,
+          "feature_id": "recorded_sounds",
+          "id": "bank-eligible-control-90210:research:recorded_sounds",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 220000,
+          "feature_id": "save_files",
+          "id": "bank-eligible-control-90210:research:save_files",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 110000,
+          "feature_id": "difficulty_levels",
+          "id": "bank-eligible-control-90210:research:difficulty_levels",
+          "payments": []
+        }
+      ],
+      "financially_blocked": false
+    },
+    "command_boundary_cash_low_cents": "12684",
+    "transaction_cash_low_cents": "12684",
+    "transaction_samples_observed": 19,
+    "first_financially_blocked_sample": null,
+    "sampled_cash_low": {
+      "cash_cents": "12684",
+      "step": 14,
+      "run_cycle": 22
+    },
+    "sampled_arrears_peak": {
+      "overdue_cents": "0",
+      "step": 0,
+      "run_cycle": 16
+    },
+    "finance_unavailable_samples": 0,
+    "first_rejected_action": null,
+    "rejection_observation": "none observed",
+    "releases": [
+      {
+        "id": "bank-eligible-control-90210:project:1",
+        "release_cycle": 13,
+        "review": 5.8
+      },
+      {
+        "id": "bank-eligible-control-90210:project:2",
+        "release_cycle": 23,
+        "review": 2.1
+      }
+    ]
+  },
+  "right": {
+    "case_id": "control-90210-borrow-1000-12",
+    "arm": "borrow-1000-12",
+    "status": "completed",
+    "completed": true,
+    "censored": false,
+    "termination_error": "",
+    "commands": 20,
+    "accepted_commands": 20,
+    "target_release_count": 2,
+    "unreached_release_count": 0,
+    "initial": {
+      "step": 0,
+      "run_cycle": 16,
+      "cash_cents": "83377",
+      "fans": "23",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 1,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "colored_text",
+        "8_color_palette"
+      ],
+      "research_queue": [
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 190000,
+          "feature_id": "scripted_ai",
+          "id": "bank-eligible-control-90210:research:scripted_ai",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 170000,
+          "feature_id": "animated_sprites",
+          "id": "bank-eligible-control-90210:research:animated_sprites",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 170000,
+          "feature_id": "recorded_sounds",
+          "id": "bank-eligible-control-90210:research:recorded_sounds",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 220000,
+          "feature_id": "save_files",
+          "id": "bank-eligible-control-90210:research:save_files",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 110000,
+          "feature_id": "difficulty_levels",
+          "id": "bank-eligible-control-90210:research:difficulty_levels",
+          "payments": []
+        }
+      ],
+      "financially_blocked": false
+    },
+    "endpoint": {
+      "step": 20,
+      "run_cycle": 24,
+      "cash_cents": "77530",
+      "fans": "33",
+      "overdue_cents": "0",
+      "finance_available": true,
+      "release_count": 2,
+      "phase": "studio",
+      "in_studio": true,
+      "owned_features": [
+        "text",
+        "sprites",
+        "4_color_palette",
+        "8_bit_sound",
+        "keyboard_and_mouse",
+        "controller",
+        "scrolling",
+        "menu_system",
+        "split_screen",
+        "multiple_endings",
+        "controls",
+        "enemies",
+        "power_ups",
+        "general_combat",
+        "levels",
+        "maps",
+        "exploration",
+        "sound_effects",
+        "colored_text",
+        "8_color_palette",
+        "scripted_ai"
+      ],
+      "research_queue": [
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 170000,
+          "feature_id": "animated_sprites",
+          "id": "bank-eligible-control-90210:research:animated_sprites",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 170000,
+          "feature_id": "recorded_sounds",
+          "id": "bank-eligible-control-90210:research:recorded_sounds",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 220000,
+          "feature_id": "save_files",
+          "id": "bank-eligible-control-90210:research:save_files",
+          "payments": []
+        },
+        {
+          "actions": 1,
+          "admitted_cycle": 16,
+          "base_cents": 110000,
+          "feature_id": "difficulty_levels",
+          "id": "bank-eligible-control-90210:research:difficulty_levels",
+          "payments": []
+        }
+      ],
+      "financially_blocked": false
+    },
+    "command_boundary_cash_low_cents": "18432",
+    "transaction_cash_low_cents": "18432",
+    "transaction_samples_observed": 21,
+    "first_financially_blocked_sample": null,
+    "sampled_cash_low": {
+      "cash_cents": "18432",
+      "step": 11,
+      "run_cycle": 22
+    },
+    "sampled_arrears_peak": {
+      "overdue_cents": "0",
+      "step": 0,
+      "run_cycle": 16
+    },
+    "finance_unavailable_samples": 0,
+    "first_rejected_action": null,
+    "rejection_observation": "none observed",
+    "releases": [
+      {
+        "id": "bank-eligible-control-90210:project:1",
+        "release_cycle": 13,
+        "review": 5.8
+      },
+      {
+        "id": "bank-eligible-control-90210:project:2",
+        "release_cycle": 24,
+        "review": 1.9
+      }
+    ]
+  },
+  "initial_common_releases": [
+    {
+      "id": "bank-eligible-control-90210:project:1",
+      "release_cycle": 13,
+      "review": 5.8
+    }
+  ],
+  "matched_calendar": [
+    {
+      "run_cycle": 16,
+      "left": {
+        "step": 0,
+        "run_cycle": 16,
+        "cash_cents": "83377",
+        "fans": "23",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 1,
+        "run_cycle": 16,
+        "cash_cents": "183377",
+        "fans": "23",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "100000",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 17,
+      "left": {
+        "step": 2,
+        "run_cycle": 17,
+        "cash_cents": "83377",
+        "fans": "23",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "design",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 2,
+        "run_cycle": 17,
+        "cash_cents": "97877",
+        "fans": "23",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette",
+          "scripted_ai"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "14500",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 18,
+      "left": {
+        "step": 3,
+        "run_cycle": 18,
+        "cash_cents": "98272",
+        "fans": "28",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "design",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 4,
+        "run_cycle": 18,
+        "cash_cents": "143438",
+        "fans": "28",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "design",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette",
+          "scripted_ai"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "45166",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 19,
+      "left": {
+        "step": 7,
+        "run_cycle": 19,
+        "cash_cents": "69272",
+        "fans": "28",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "alpha",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 5,
+        "run_cycle": 19,
+        "cash_cents": "123438",
+        "fans": "28",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "design",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette",
+          "scripted_ai"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "54166",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 20,
+      "left": {
+        "step": 8,
+        "run_cycle": 20,
+        "cash_cents": "57216",
+        "fans": "31",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "alpha",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 9,
+        "run_cycle": 20,
+        "cash_cents": "90131",
+        "fans": "31",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "alpha",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette",
+          "scripted_ai"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "32915",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 21,
+      "left": {
+        "step": 13,
+        "run_cycle": 21,
+        "cash_cents": "31216",
+        "fans": "31",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "beta",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 10,
+        "run_cycle": 21,
+        "cash_cents": "72131",
+        "fans": "31",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "alpha",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette",
+          "scripted_ai"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "40915",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 22,
+      "left": {
+        "step": 14,
+        "run_cycle": 22,
+        "cash_cents": "12684",
+        "fans": "32",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "beta",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 15,
+        "run_cycle": 22,
+        "cash_cents": "18432",
+        "fans": "32",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "beta",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette",
+          "scripted_ai"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "5748",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 0
+      }
+    },
+    {
+      "run_cycle": 23,
+      "left": {
+        "step": 18,
+        "run_cycle": 23,
+        "cash_cents": "112684",
+        "fans": "32",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 2,
+        "phase": "studio",
+        "in_studio": true,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 190000,
+            "feature_id": "scripted_ai",
+            "id": "bank-eligible-control-90210:research:scripted_ai",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "right": {
+        "step": 16,
+        "run_cycle": 23,
+        "cash_cents": "18432",
+        "fans": "32",
+        "overdue_cents": "0",
+        "finance_available": true,
+        "release_count": 1,
+        "phase": "beta",
+        "in_studio": false,
+        "owned_features": [
+          "text",
+          "sprites",
+          "4_color_palette",
+          "8_bit_sound",
+          "keyboard_and_mouse",
+          "controller",
+          "scrolling",
+          "menu_system",
+          "split_screen",
+          "multiple_endings",
+          "controls",
+          "enemies",
+          "power_ups",
+          "general_combat",
+          "levels",
+          "maps",
+          "exploration",
+          "sound_effects",
+          "colored_text",
+          "8_color_palette",
+          "scripted_ai"
+        ],
+        "research_queue": [
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "animated_sprites",
+            "id": "bank-eligible-control-90210:research:animated_sprites",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 170000,
+            "feature_id": "recorded_sounds",
+            "id": "bank-eligible-control-90210:research:recorded_sounds",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 220000,
+            "feature_id": "save_files",
+            "id": "bank-eligible-control-90210:research:save_files",
+            "payments": []
+          },
+          {
+            "actions": 1,
+            "admitted_cycle": 16,
+            "base_cents": 110000,
+            "feature_id": "difficulty_levels",
+            "id": "bank-eligible-control-90210:research:difficulty_levels",
+            "payments": []
+          }
+        ],
+        "financially_blocked": false
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "-94252",
+        "fans": "0",
+        "overdue_cents": "0",
+        "release_count": -1,
+        "run_cycle": 0
+      }
+    }
+  ],
+  "matched_release_milestones": [
+    {
+      "release_ordinal": 2,
+      "left": {
+        "release": {
+          "id": "bank-eligible-control-90210:project:2",
+          "release_cycle": 23,
+          "review": 2.1
+        },
+        "sample": {
+          "step": 18,
+          "run_cycle": 23,
+          "cash_cents": "112684",
+          "fans": "32",
+          "overdue_cents": "0",
+          "finance_available": true,
+          "release_count": 2,
+          "phase": "studio",
+          "in_studio": true,
+          "owned_features": [
+            "text",
+            "sprites",
+            "4_color_palette",
+            "8_bit_sound",
+            "keyboard_and_mouse",
+            "controller",
+            "scrolling",
+            "menu_system",
+            "split_screen",
+            "multiple_endings",
+            "controls",
+            "enemies",
+            "power_ups",
+            "general_combat",
+            "levels",
+            "maps",
+            "exploration",
+            "sound_effects",
+            "colored_text",
+            "8_color_palette"
+          ],
+          "research_queue": [
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 190000,
+              "feature_id": "scripted_ai",
+              "id": "bank-eligible-control-90210:research:scripted_ai",
+              "payments": []
+            },
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 170000,
+              "feature_id": "animated_sprites",
+              "id": "bank-eligible-control-90210:research:animated_sprites",
+              "payments": []
+            },
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 170000,
+              "feature_id": "recorded_sounds",
+              "id": "bank-eligible-control-90210:research:recorded_sounds",
+              "payments": []
+            },
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 220000,
+              "feature_id": "save_files",
+              "id": "bank-eligible-control-90210:research:save_files",
+              "payments": []
+            },
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 110000,
+              "feature_id": "difficulty_levels",
+              "id": "bank-eligible-control-90210:research:difficulty_levels",
+              "payments": []
+            }
+          ],
+          "financially_blocked": false
+        }
+      },
+      "right": {
+        "release": {
+          "id": "bank-eligible-control-90210:project:2",
+          "release_cycle": 24,
+          "review": 1.9
+        },
+        "sample": {
+          "step": 20,
+          "run_cycle": 24,
+          "cash_cents": "77530",
+          "fans": "33",
+          "overdue_cents": "0",
+          "finance_available": true,
+          "release_count": 2,
+          "phase": "studio",
+          "in_studio": true,
+          "owned_features": [
+            "text",
+            "sprites",
+            "4_color_palette",
+            "8_bit_sound",
+            "keyboard_and_mouse",
+            "controller",
+            "scrolling",
+            "menu_system",
+            "split_screen",
+            "multiple_endings",
+            "controls",
+            "enemies",
+            "power_ups",
+            "general_combat",
+            "levels",
+            "maps",
+            "exploration",
+            "sound_effects",
+            "colored_text",
+            "8_color_palette",
+            "scripted_ai"
+          ],
+          "research_queue": [
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 170000,
+              "feature_id": "animated_sprites",
+              "id": "bank-eligible-control-90210:research:animated_sprites",
+              "payments": []
+            },
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 170000,
+              "feature_id": "recorded_sounds",
+              "id": "bank-eligible-control-90210:research:recorded_sounds",
+              "payments": []
+            },
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 220000,
+              "feature_id": "save_files",
+              "id": "bank-eligible-control-90210:research:save_files",
+              "payments": []
+            },
+            {
+              "actions": 1,
+              "admitted_cycle": 16,
+              "base_cents": 110000,
+              "feature_id": "difficulty_levels",
+              "id": "bank-eligible-control-90210:research:difficulty_levels",
+              "payments": []
+            }
+          ],
+          "financially_blocked": false
+        }
+      },
+      "delta_right_minus_left": {
+        "cash_cents": "-35154",
+        "fans": "1",
+        "overdue_cents": "0",
+        "release_count": 0,
+        "run_cycle": 1,
+        "review": "-0.2",
+        "release_cycle": 1
+      }
+    }
+  ]
+}

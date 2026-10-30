@@ -73,7 +73,9 @@ func configure(controller: Control, priority_panel: Control, commit: Button) -> 
 			var index := sliders.size()
 			for child in column.get_children():
 				if child is VSlider:
-					child.max_value = BetaPriorityAllocation.MAX_PRIORITY if beta else PriorityAllocation.MAX_PRIORITY
+					var run: RefCounted=phase.get("_run_state")
+					var limits:=BetaPriorityAllocation.bounds(run) if beta else PriorityAllocation.bounds(run)
+					child.min_value=limits.x;child.max_value=limits.y
 					sliders.append(child)
 					child.custom_minimum_size = Vector2(32, 122)
 					child.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -116,7 +118,7 @@ func open() -> bool:
 	shade.color = Color("#080409") if initial_setup else Color(0.015, 0.01, 0.015, 0.82)
 	shade.offset_bottom = -INITIAL_FOOTER_REVEAL if initial_setup else 0.0
 	title_label.text = "Initialize Priorities" if initial_setup else "Change Priorities"
-	help.text = _help_text(phase_name)
+	help.text = _help_text(phase_name).replace("10–75",_range_text())
 	commit_button.text = "Begin " + phase_name if initial_setup else "Commit Priorities"
 	cancel_button.visible = not initial_setup
 	previous_focus = phase.get_viewport().gui_get_focus_owner()
@@ -129,6 +131,11 @@ func open() -> bool:
 	else:
 		cancel_button.grab_focus()
 	return true
+
+func _range_text() -> String:
+	var run: RefCounted=phase.get("_run_state")
+	var limits:=BetaPriorityAllocation.bounds(run) if phase.get_workspace().phase_name=="Beta" else PriorityAllocation.bounds(run)
+	return "%d–%d"%[limits.x,limits.y]
 
 func _help_text(phase_name: String) -> String:
 	if phase_name == "Beta" and not BetaPriorityAllocation.insiders_enabled():
@@ -162,7 +169,7 @@ func commit_draft() -> bool:
 		_close()
 		return true
 	if not phase.commit_priority_distribution():
-		feedback.text = "Use a changed allocation totaling 100; each active value must be 10–75."
+		feedback.text = "Use a changed allocation totaling 100; each active value must be %s."%_range_text()
 		return false
 	_close()
 	return true

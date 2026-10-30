@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_campaign_seeded_parity.gd"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 6.968,
+  "errors": [
+    "ERROR: FAIL: Native explicit initial priorities"
+  ],
+  "tail": [
+    "Alpha completed! Pressure 0.8889; stochastic result 1; variance +0; Alpha Hidden Bugs 1; total Hidden Bugs 2; implemented 4; unimplemented 1",
+    "ERROR: FAIL: Native explicit initial priorities",
+    "   at: push_error (core/variant/variant_utility.cpp:1023)",
+    "   GDScript backtrace (most recent call first):",
+    "       [0] expect (res://scripts/debug/verify_campaign_live_parity.gd:21)",
+    "       [1] _initial_priorities (res://scripts/debug/verify_campaign_seeded_parity.gd:29)",
+    "       [2] _project (res://scripts/debug/verify_campaign_seeded_parity.gd:74)",
+    "Seeded campaign parity: 1 failures, 15 boundaries, 1 routes",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ],
+  "runtime_identity": "4aae3523d10c4af369548270114523736237cd9053867d04210517ade4c3f337",
+  "runtime_source_unchanged": true
+}

@@ -1,5 +1,11 @@
 # Crown Craft Package — concrete terms review handoff v3
 
+**2026-10-28 complete pilot rules APPROVED; isolated implementation/validation QUEUED.** [Full approval](CROWN-CRAFT-PILOT-APPROVAL-2026-10-28-v1.md) completes R5, proportional$1,500 base, separate$100/4 balance bonus, two hands, Scope9/Core4, balance2→6, normal redraws, no extra ceiling and zero advance/base Promotion/Reputation/Investment. [Current v4 handoff](COMPACT-PACKAGE-HANDOFF-2026-10-28-v4.md) supersedes earlier proposed/remaining-review labels for these pilot rules. Actual cash-pilot evidence and canonical exposure/migration acceptance remain pending; existing rewards unchanged.
+
+**2026-10-28 payout decision supersedes earlier proposed labels:** [User approved the bounded-pilot payout](CROWN-CRAFT-PAYOUT-APPROVAL-2026-10-28-v1.md): proportional base cash up to$1,500 plus a separate balance bonus up to$100 and4 Promotion; a missed bonus does not reduce earned base. [Crown discovery+R5 is already approved](CROWN-CRAFT-R5-APPROVAL-2026-10-28-v1.md). Remaining work/advance/other-reward rules and catalog activation retain their review status. Existing rewards unchanged.
+
+**2026-10-28 gate decision supersedes earlier proposed labels:** [User approved R5 after Crown discovery](CROWN-CRAFT-R5-APPROVAL-2026-10-28-v1.md). R0 is no longer selected. Remaining new-product terms and catalog activation retain their prior review status; existing rewards unchanged.
+
 2026-10-26. **DESIGN review needed; candidate values not approved.** [Terms](CROWN-PAID-WORK-TERMS-2026-10-26-v1.md) · [matching evidence](CROWN-PAID-WORK-TERMS-FINDINGS-2026-10-26-v1.md) · [v2](COMPACT-PACKAGE-HANDOFF-2026-10-26-v2.md).
 
 | Item | Status | Action and acceptance |

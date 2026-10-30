@@ -15,6 +15,7 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 ## System documents
 
 - [Shared UI identity, folder components and navigation](design/ui-design-system.md)
+- [F8 Developer Tools: session-only unlimited money and current Features](design/debug-mode.md)
 - [Headless simulation: isolated runs, paired studies/reports, custom policies, replay and Studio continuation](threads/simulation-engine/USAGE.md)
 - [Design-thread simulator versions and TODO adoption handoffs](threads/simulation-engine/VARIANTS.md)
 - [Simulation Engine implementation and evidence](threads/simulation-engine/README.md)

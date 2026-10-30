@@ -2,7 +2,7 @@ class_name EmployeeRoster
 extends RefCounted
 const SCHEMA_VERSION := 1
 const QA := preload("res://scripts/employees/qa_employee_rules.gd")
-
+const Career := preload("res://scripts/employees/employee_career_rules.gd")
 static func create(owner: StringName) -> Dictionary:
 	return {"schema_version":SCHEMA_VERSION,"owner":owner,"employees":{},"events":[]}
 
@@ -29,7 +29,7 @@ static func plan_hand(state: Dictionary, project_id: StringName, phase: StringNa
 	var facts := card_facts(cards)
 	if facts.size() != 4 or project_id.is_empty() or project_cycle < 0 or run_cycle < 0 or phase not in [&"design",&"alpha"]: return {}
 	var changed := not proposed.is_empty()
-	if changed and (not PriorityAllocation.is_valid_new_distribution(proposed) or proposed == before): return {}
+	if changed and (not PriorityAllocation.is_valid_with_bounds(proposed,Career.limits(state)) or proposed == before): return {}
 	return _apply(state,{"type":&"hand","project_id":project_id,"phase":phase,"project_cycle":project_cycle,"cycle":run_cycle,"cards":facts,"before":before.duplicate(),"proposed":proposed.duplicate()})
 
 static func available(state: Dictionary, project_id: StringName) -> bool:
@@ -38,9 +38,10 @@ static func available(state: Dictionary, project_id: StringName) -> bool:
 		if employee.type == &"production" and employee.trained and employee.projects.get(project_id,{}).get("used_action",&"").is_empty(): return true
 	return false
 
-static func _apply(state: Dictionary, event: Dictionary) -> Dictionary:
-	if event.get("type") in [&"employee_trial",&"hire_specialist",&"course",&"qa_beta",&"qa_proc",&"qa_finalize",&"qa_swap"]: return QA.apply(state,event)
-	var next := state.duplicate(true)
+static func _apply(state: Dictionary, event: Dictionary, copy_source: bool=true) -> Dictionary:
+	if str(event.get("type",&"")).begins_with("career_"):return Career.apply(state,event,copy_source)
+	if event.get("type") in [&"employee_trial",&"hire_specialist",&"course",&"qa_beta",&"qa_proc",&"qa_finalize",&"qa_swap"]: return QA.apply(state,event,copy_source)
+	var next := state.duplicate(true) if copy_source else state
 	if event.get("type") == &"hire":
 		if typeof(event.get("employee_id")) != TYPE_STRING_NAME or event.employee_id.is_empty() or typeof(event.get("cycle")) != TYPE_INT or event.cycle < 0 or next.employees.has(event.employee_id): return {}
 		next.employees[event.employee_id] = {"employee_id":event.employee_id,"owner":state.owner,"type":&"production","hire_cycle":event.cycle,"trained":false,"projects":{}}
@@ -70,7 +71,8 @@ static func _apply(state: Dictionary, event: Dictionary) -> Dictionary:
 			if use and not used and qualifying and employee.trained and progress.used_action.is_empty():
 				progress.used_action = action
 				used = true
-			if qualifying and event.phase == &"design" and progress.trained_action.is_empty():
+			var enrolled: bool=not employee.has("career") or employee.career.courses.has(&"production_planning")
+			if qualifying and enrolled and event.phase == &"design" and progress.trained_action.is_empty():
 				progress.trained_action = action
 				employee.trained = true
 			progress.actions.append(action)
@@ -81,15 +83,36 @@ static func _apply(state: Dictionary, event: Dictionary) -> Dictionary:
 	return next
 
 static func valid(state: Dictionary) -> bool:
+	return _validate_uncached(state)
+
+static func _validate_uncached(state: Dictionary) -> bool:
 	if state.get("schema_version") != SCHEMA_VERSION or typeof(state.get("owner")) != TYPE_STRING_NAME or typeof(state.get("events")) != TYPE_ARRAY: return false
 	var rebuilt := create(state.owner)
+	var maximum_cycle: int=-1
+	var hand_cycles: Dictionary={}
+	var hand_identities: Dictionary={}
 	for event in state.events:
 		if typeof(event)!=TYPE_DICTIONARY: return false
-		rebuilt = _apply(rebuilt,event)
+		# Rebuild into a private state. Public plans still copy their input; copying
+		# the entire growing journal on every replayed event caused quadratic stalls.
+		rebuilt = _apply(rebuilt,event,false)
 		if rebuilt.is_empty(): return false
+		# The private Career reducer omits repeated prefix scans. These local
+		# indices prove the same predicates across every fully replayed event;
+		# no roster, revision or validation result survives this call.
+		if str(event.type).begins_with("career_") and event.cycle<maximum_cycle:return false
+		maximum_cycle=maxi(maximum_cycle,event.cycle)
+		if event.type==&"career_hand":
+			# phase historically accepts String and StringName by value. Preserve
+			# that equality; use typed tuple bytes rather than delimiter strings.
+			var identity:=var_to_bytes([event.project_id,StringName(event.phase),event.project_cycle])
+			if hand_cycles.has(event.cycle) or hand_identities.has(identity):return false
+			hand_cycles[event.cycle]=true;hand_identities[identity]=true
 	return rebuilt == state
 
 static func hire_specialist(state: Dictionary, role: StringName, cycle: int) -> Dictionary:
+	if Career.active(state) and role in [&"production",&"project_manager"]:
+		return _apply(state,{"type":&"career_hire","role":role,"cycle":cycle}) if valid(state) else {}
 	return _apply(state,{"type":&"hire_specialist","role":role,"cycle":cycle}) if valid(state) else {}
 static func buy_course(state: Dictionary, id: StringName, course: StringName, cycle: int) -> Dictionary:
 	return _apply(state,{"type":&"course","employee_id":id,"course":course,"cycle":cycle,"fee_cents":15000}) if valid(state) else {}

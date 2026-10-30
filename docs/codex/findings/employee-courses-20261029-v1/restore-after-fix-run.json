@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_restore.gd",
+    "--",
+    "C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/employee-courses-20261029-v1/campaign-full2.json.final.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 38.828,
+  "errors": [],
+  "tail": [
+    "PASS: Cold session initializes at Studio-only boundary",
+    "PASS: Genuine next game starts",
+    "PASS: Headless accepts earned 0/20/40/40",
+    "PASS: Zero Core weighted pool deals without a zero-weight selection error",
+    "PASS: A zero-weight pure Graphics Pass is never drawn",
+    "PASS: A real hand commits under the earned zero floor",
+    "PASS: Player Continue still excludes active development",
+    "PASS: Contracts recognize earned Manager bounds",
+    "PASS: Contracts reject over-cap exact100 plans",
+    "CAREER_RESTORE checks=335 failures=0"
+  ],
+  "runtime_identity": "d74c5ce30b2d40b8db257f0b26c8c59ca47161341c6ec8bd8ee50dda55626ca3",
+  "runtime_source_unchanged": true
+}

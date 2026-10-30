@@ -62,6 +62,7 @@ func _verify_year_labels() -> void:
 	game.run_state = run
 	root.add_child(game)
 	await process_frame
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	# Synthetic year-label fixture: explicitly funded, not a played route.
 	check(run.add_cash_cents(3000000, &"financing_in"), "Calendar fixture funds its actual rent obligations")
 	var studio: StudioPhase = game.get("_active_phase")
@@ -71,6 +72,8 @@ func _verify_year_labels() -> void:
 			var advanced := run.complete_productive_action()
 			check(advanced, "Shared productive boundary advances")
 			if not advanced: break # Never hang if a future obligation rejects.
+		await process_frame
+		await process_frame
 		var year: int = 1980 + cycle / 24
 		check(run.get_current_year() == year and hud.footer.text.contains(str(year)) and hud.header_title.text.contains(str(year)), "Cycle %d shows year %d in Studio and shared HUD" % [cycle, year])
 		var before := snapshot(run, [])
@@ -126,6 +129,8 @@ func _verify_studio_purchase_years() -> void:
 		if action == "store": ok = ResearchTestActions.acquire(run,&"save_files")
 		elif action == "reserve": ok = ResearchTestActions.acquire(run,&"sprites")
 		else: ok = run.purchase_post_launch_campaign(project.get_release_id(), 95)
+		await process_frame
+		await process_frame
 		check(ok and run.get_completed_run_cycles() == 96 and hud.footer.text.contains("1984") and hud.header_title.text.contains("1984"), action + " updates both year labels at its successful boundary")
 		var before := snapshot(run, [project])
 		studio.setup(project, run, snapshots)

@@ -72,6 +72,8 @@ func _initialize() -> void:
 				check(not owned_expected.run.has(field),"Pinned owned fixture predates "+field)
 				owned_expected.run[field] = []
 			owned_expected.run.contract_search={"version":"1","owner":owned_expected.run.bank_run_id,"receipts":[],"offers":[],"legacy_offers":[],"intro_offer_id":""}
+			check(owned_expected.run.release_metadata.is_empty(),"Pinned owned fixture has no release entitlement")
+			owned_expected.run.store_era_receipts={"version":"1","assignments":[]}
 			owned_expected.content_revision=codec.revision()
 			check(owned!=null and codec.capture(owned)==owned_expected,"Owned checkpoint preserves every field")
 			var restored := codec.hydrate(prior[str(child)])
@@ -86,6 +88,8 @@ func _initialize() -> void:
 				check(not expected.run.has(field),"Pinned queue fixture predates "+field)
 				expected.run[field] = []
 			expected.run.contract_search={"version":"1","owner":expected.run.bank_run_id,"receipts":[],"offers":[],"legacy_offers":[],"intro_offer_id":""}
+			check(expected.run.release_metadata.is_empty(),"Pinned queue fixture has no release entitlement")
+			expected.run.store_era_receipts={"version":"1","assignments":[]}
 			expected.content_revision = codec.revision()
 			check(codec.capture(restored) == expected, "Only revision and empty prospective publisher fields change, all old fields retained")
 			check(CHANGED[child].any(func(parent): return not restored.owns_feature(parent)), "Prior queue genuinely lacks a new prerequisite")

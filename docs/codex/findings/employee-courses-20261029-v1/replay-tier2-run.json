@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_employee_course_fixed_campaign.gd",
+    "--",
+    "--replay=C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/employee-courses-20261029-v1/final-tier2.json"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 117.844,
+  "errors": [],
+  "tail": [
+    "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org",
+    "",
+    "Loaded 40 cards.",
+    "PASS: Fresh process restores exact campaign start",
+    "PASS: Independent exact replay  step -1",
+    "CAREER_REPLAY {\"failures\":0,\"steps\":144}"
+  ],
+  "runtime_identity": "a3e14823c57ecde8bd46429aa0472a590dc3c69480a563fafce9a4830e94085b",
+  "runtime_source_unchanged": true
+}

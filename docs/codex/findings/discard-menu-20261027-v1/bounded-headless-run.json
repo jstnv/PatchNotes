@@ -1,0 +1,30 @@
+{
+  "command": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64_console.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_ui_folder_navigation.gd"
+  ],
+  "exit": 2,
+  "elapsed_seconds": 18.14,
+  "errors": [
+    "FAIL: Discard confirmation fits the supported viewport",
+    "FAIL: Discard confirmation fits the supported viewport"
+  ],
+  "tail": [
+    "PASS: Discard header close preserves the draft",
+    "PASS: Escape cancels discard without clearing the draft",
+    "PASS: Confirmed discard clears draft without committing",
+    "PASS: Discard preserves existing saved-Studio metadata",
+    "PASS: Animation bypass preserves navigation semantics without locks",
+    "PASS: Studio creation emits once and Back cannot reverse a commit",
+    "PASS: Scene teardown leaves GUI input usable",
+    "UI folder navigation: 81 checks, 2 failures",
+    "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+    "   at: cleanup (core/object/object.cpp:2536)"
+  ]
+}

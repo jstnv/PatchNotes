@@ -5,6 +5,16 @@ extends RefCounted
 const Index := preload("res://queries/market_release_index.gd")
 const WINDOW_CYCLES := 12
 const VERSION := 2
+## Every sales record rechecks its complete dated factor history. Many records
+## contain identical immutable monthly factors. Reuse only an exact typed-byte
+## positive proof of this unchanged predicate; unknown/mutated factors still
+## execute every original check, and sales records retain full replay.
+const FACTOR_PROOF_LIMIT := 1024
+const FACTOR_PROOF_BYTES := 1024 * 1024
+static var _factor_proofs: Dictionary = {}
+static var _factor_order: Array[PackedByteArray] = []
+static var _factor_bytes := 0
+static var _factor_lock := Mutex.new()
 
 static func neutral() -> Dictionary:
 	return {"version":VERSION,"cycle_start":0,"id":"market-0-neutral","facts":[]}
@@ -110,6 +120,28 @@ static func valid_source(id: String, cycle: int, historical: bool) -> bool:
 	return id.length()==64 and id.to_lower()==id and id.is_valid_hex_number(false)
 
 static func valid_factor(value: Variant) -> bool:
+	if not value is Dictionary or value.size()!=7:return false
+	var key:=var_to_bytes(value)
+	if key.size()>FACTOR_PROOF_BYTES:return _validate_factor(value)
+	_factor_lock.lock()
+	var known:=_factor_proofs.has(key)
+	_factor_lock.unlock()
+	if known:return true
+	if not _validate_factor(value):return false
+	_factor_lock.lock()
+	if not _factor_proofs.has(key):
+		_factor_proofs[key]=true
+		_factor_order.append(key)
+		_factor_bytes+=key.size()
+	while _factor_order.size()>FACTOR_PROOF_LIMIT or _factor_bytes>FACTOR_PROOF_BYTES:
+		var expired: PackedByteArray=_factor_order.pop_front()
+		_factor_proofs.erase(expired)
+		_factor_bytes-=expired.size()
+	_factor_lock.unlock()
+	return true
+
+
+static func _validate_factor(value: Variant) -> bool:
 	if not value is Dictionary or value.size()!=7 or not value.get("snapshot_id") is String or value.snapshot_id.is_empty() or not value.get("historical") is bool: return false
 	for key: String in ["cycle_start","genre_only","theme_only","pair","factor_bp"]:
 		if not value.get(key) is int or value[key]<0: return false

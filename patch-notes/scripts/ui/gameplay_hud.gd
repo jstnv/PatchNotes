@@ -4,6 +4,7 @@ extends Control
 var project: ProjectState
 var run: RunState
 var phase: Control
+var _refresh_pending := false
 var stats: Array[Label] = []
 var scoreboard: ProductionScoreboard
 var footer: Label
@@ -16,6 +17,7 @@ var settings_menu: DemoSettingsMenu
 var settings_button: Button
 var sales_hud: SalesRevenueHUD
 var header_title: Label
+var studio_glow: Control
 var change_priorities: Button
 var synergy_notification: SynergyNotification
 var tutorial_overlay: TutorialOverlay
@@ -41,6 +43,12 @@ func _ready() -> void:
 	header.offset_bottom = 78
 	add_child(header)
 	scoreboard = header
+	studio_glow = preload("res://scripts/ui/studio_audio_glow.gd").new()
+	studio_glow.name = "StudioAudioGlow"
+	header.add_child(studio_glow)
+	header.move_child(studio_glow, 0)
+	studio_glow.attach_beams(self)
+	visibility_changed.connect(_update_studio_glow)
 	var row := header.row
 	header_title = header.header_title
 	stats = header.stats
@@ -122,25 +130,25 @@ func _ready() -> void:
 
 func setup(project_state: ProjectState, run_state: RunState) -> void:
 	if project != null:
-		if project.values_changed.is_connected(refresh): project.values_changed.disconnect(refresh)
-		if project.cycle_changed.is_connected(refresh): project.cycle_changed.disconnect(refresh)
+		if project.values_changed.is_connected(_queue_refresh): project.values_changed.disconnect(_queue_refresh)
+		if project.cycle_changed.is_connected(_queue_refresh): project.cycle_changed.disconnect(_queue_refresh)
 	if run != null:
-		if run.cash_changed.is_connected(refresh): run.cash_changed.disconnect(refresh)
-		if run.calendar_changed.is_connected(refresh): run.calendar_changed.disconnect(refresh)
-		if run.features_changed.is_connected(refresh): run.features_changed.disconnect(refresh)
-		if run.finance_changed.is_connected(refresh): run.finance_changed.disconnect(refresh)
-		if run.fans_changed.is_connected(refresh): run.fans_changed.disconnect(refresh)
+		if run.cash_changed.is_connected(_queue_refresh): run.cash_changed.disconnect(_queue_refresh)
+		if run.calendar_changed.is_connected(_queue_refresh): run.calendar_changed.disconnect(_queue_refresh)
+		if run.features_changed.is_connected(_queue_refresh): run.features_changed.disconnect(_queue_refresh)
+		if run.finance_changed.is_connected(_queue_refresh): run.finance_changed.disconnect(_queue_refresh)
+		if run.fans_changed.is_connected(_queue_refresh): run.fans_changed.disconnect(_queue_refresh)
 	project = project_state
 	run = run_state
 	if project != null:
-		project.values_changed.connect(refresh)
-		project.cycle_changed.connect(refresh)
+		project.values_changed.connect(_queue_refresh)
+		project.cycle_changed.connect(_queue_refresh)
 	if run != null:
-		run.cash_changed.connect(refresh)
-		run.calendar_changed.connect(refresh)
-		run.features_changed.connect(refresh)
-		run.finance_changed.connect(refresh)
-		run.fans_changed.connect(refresh)
+		run.cash_changed.connect(_queue_refresh)
+		run.calendar_changed.connect(_queue_refresh)
+		run.features_changed.connect(_queue_refresh)
+		run.finance_changed.connect(_queue_refresh)
+		run.fans_changed.connect(_queue_refresh)
 	studio_finances.bind_run(run)
 	sales_hud.bind_run(run)
 	refresh()
@@ -176,6 +184,7 @@ func set_phase(controller: Control) -> void:
 	if is_instance_valid(phase) and phase.has_signal("guidance_changed") and phase.guidance_changed.is_connected(_refresh_guidance):
 		phase.guidance_changed.disconnect(_refresh_guidance)
 	phase = controller
+	_update_studio_glow()
 	var release_menu := phase is StudioPhase or phase is PostGameReview or phase is ContractPhase or phase is FirstProjectSetup or phase is MainMenu
 	get_node("PersistentFooter").visible = not (phase is MainMenu)
 	get_node("PersistentHeader").visible = not (phase is MainMenu)
@@ -210,6 +219,10 @@ func set_phase(controller: Control) -> void:
 	elif phase is ContractPhase: context = &"contract"
 	elif phase is MainMenu: context = &"main_menu"
 	set_tutorial_context(context)
+
+func _update_studio_glow() -> void:
+	if is_instance_valid(studio_glow):
+		studio_glow.set_active(phase is StudioPhase and is_visible_in_tree())
 
 func _layout_sales_hud() -> void:
 	# The chart is part of the same persistent top panel as phase information.
@@ -388,7 +401,18 @@ func _production_guidance() -> Dictionary:
 		return {"key": "design_choose", "title": "Select four cards", "body": "Choose four cards. A synergy is a bonus for a matching hand. The first score on each card is its primary Core label; match all four for ×1.5 Core gains. Use Synergy ? for other combos."}
 	return {"key": name + "_choose", "title": "Select four cards", "body": "Choose four cards. Matching all four primary Core labels gives ×1.5 Core gains; the Synergy ? button explains other bonuses. Features exhaust; Passes return."}
 
+func _queue_refresh() -> void:
+	if _refresh_pending or not is_inside_tree(): return
+	_refresh_pending=true
+	_flush_refresh.call_deferred()
+
+
+func _flush_refresh() -> void:
+	if _refresh_pending and is_inside_tree():refresh()
+
+
 func refresh() -> void:
+	_refresh_pending=false
 	if run == null:
 		cash_button.disabled = true
 		fans_button.disabled = true
@@ -428,6 +452,7 @@ func _refresh_footer() -> void:
 	var fan_history: Array = run.get_fanbase_history()
 	fans_button.tooltip_text = "Monthly Fan history. No monthly boundary yet." if fan_history.is_empty() else "Month %d · +%d gained · -%d lost · %d total" % [fan_history[-1].month, fan_history[-1].gained, fan_history[-1].lost, fan_history[-1].ending]
 	cash_button.text = "Cash: %s" % (CashFormatter.format_exact_cents(cents) if cents >= 0 else "—")
+	if run.get_meta(&"debug_unlimited_cash",false):cash_button.text="Cash: ∞"
 	cash_button.disabled = phase is MainMenu or not is_instance_valid(phase)
 	var finances := run.get_studio_finance_report()
 	var next_bill := "—"
