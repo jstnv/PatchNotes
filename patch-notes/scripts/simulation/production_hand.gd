@@ -17,20 +17,21 @@ static func specialization_stat(records: Array) -> StringName:
 			return &""
 	return stat
 
-static func specialize(scores: Dictionary) -> Dictionary[ProjectState.CoreScore, int]:
+static func specialize(scores: Dictionary, category_bonus_bp: Dictionary = {}) -> Dictionary[ProjectState.CoreScore, int]:
 	var result: Dictionary[ProjectState.CoreScore, int] = {}
 	for category: ProjectState.CoreScore in scores:
-		result[category] = roundi(int(scores[category]) * SPECIALIZATION_MULTIPLIER)
+		var bonus: int = int(category_bonus_bp.get(category, 0))
+		result[category] = roundi(int(scores[category]) * (SPECIALIZATION_MULTIPLIER + float(bonus) / 10000.0))
 	return result
 
-static func calculate(records: Array, scores: Dictionary, has_feature: bool) -> Dictionary:
+static func calculate(records: Array, scores: Dictionary, has_feature: bool, category_bonus_bp: Dictionary = {}) -> Dictionary:
 	var stat := specialization_stat(records)
 	var eligible := has_feature and BalancedProduction.qualifies(scores)
 	var additions: Dictionary[ProjectState.CoreScore, int] = {}
 	for category: ProjectState.CoreScore in scores:
 		additions[category] = scores[category]
 	if not stat.is_empty():
-		additions = specialize(scores)
+		additions = specialize(scores, category_bonus_bp)
 	elif eligible:
 		additions = BalancedProduction.redistribute(scores)
 	return {

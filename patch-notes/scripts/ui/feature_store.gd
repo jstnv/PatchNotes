@@ -45,6 +45,9 @@ var _debug_notes: Label
 var _debug_scroll: ScrollContainer
 var _toolbar: VBoxContainer
 var _refresh_queued := false
+var _engine_selector: OptionButton
+var _configuration_commit: Button
+var _engine_note: Label
 
 class DebugButton extends Button:
 	func _make_custom_tooltip(for_text: String) -> Object:
@@ -82,8 +85,9 @@ func setup(run: RunState) -> void:
 	_header = HBoxContainer.new()
 	_header.name = "StoreHeader"
 	_header.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-	_header.offset_left = 16
-	_header.offset_right = -16
+	_header.offset_left = 32
+	_header.offset_right = -32
+	_header.offset_top = 28
 	_header.add_theme_constant_override("separation", 24)
 	_header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_header)
@@ -100,10 +104,12 @@ func setup(run: RunState) -> void:
 	_owned_summary.add_theme_font_size_override("font_size", 14)
 	_header.add_child(_owned_summary)
 	# Autowrapped labels can briefly request tall bounds during viewport resize.
-	_header.minimum_size_changed.connect(func(): _header.offset_bottom = _header.get_combined_minimum_size().y)
+	_header.minimum_size_changed.connect(func():
+		_header.offset_bottom=_header.offset_top+_header.get_combined_minimum_size().y
+		if _body!=null:_body.offset_top=_header.offset_bottom+12)
 	_body = PanelContainer.new()
 	_body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_body.offset_top = 50
+	_body.offset_top = 98
 	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_body)
 	var margin := MarginContainer.new()
@@ -124,6 +130,23 @@ func setup(run: RunState) -> void:
 	layout.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	layout.add_theme_constant_override("separation", 12)
 	map_host.add_child(layout)
+	var engine_bar:=HBoxContainer.new()
+	engine_bar.name="EngineConfigurationBar"
+	layout.add_child(engine_bar)
+	_engine_selector=OptionButton.new()
+	_engine_selector.name="EngineSelector"
+	_engine_selector.custom_minimum_size.x=220
+	_engine_selector.item_selected.connect(func(index: int):
+		if _run.select_engine(_engine_selector.get_item_metadata(index)):_refresh())
+	engine_bar.add_child(_engine_selector)
+	_engine_note=Label.new()
+	_engine_note.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	_engine_note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	engine_bar.add_child(_engine_note)
+	_configuration_commit=Button.new()
+	_configuration_commit.name="CommitEngineConfiguration"
+	_configuration_commit.pressed.connect(func():_confirm_configuration(_run.get_engine_configuration_quote()))
+	engine_bar.add_child(_configuration_commit)
 	var actions := HBoxContainer.new()
 	actions.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	actions.alignment = BoxContainer.ALIGNMENT_END
@@ -150,7 +173,8 @@ func setup(run: RunState) -> void:
 	_close.name = "CloseStore"
 	_close.text = "Close Store"
 	_close.pressed.connect(hide)
-	actions.add_child(_close)
+	_header.add_child(_close)
+	FolderUI.standard_back(_close)
 	for button: BaseButton in [_research_list, _research_button, _debug, _close]:
 		transparent_button(button)
 	_build_debug_popup()
@@ -171,6 +195,7 @@ func setup(run: RunState) -> void:
 	_run.cash_changed.connect(_request_refresh)
 	_run.sales_changed.connect(_request_refresh)
 	_run.calendar_changed.connect(_request_refresh)
+	_run.engines_changed.connect(_request_refresh)
 	_refresh()
 
 
@@ -209,23 +234,27 @@ func _refresh() -> void:
 	for id: StringName in view.reserves:
 		if _map_offers[id].is_empty(): _map_offers[id]=view.reserves[id]
 	_cash.text = "Feature Store"
+	var engine_state:=_run.get_engine_feature_state()
+	var selected_engine: StringName=_run.get_selected_engine_id()
+	var selected_record: Dictionary=engine_state.engines[selected_engine]
+	_refresh_engine_controls(engine_state)
 	_research_list.clear()
 	_research_quote = {}
 	var pending := _run.get_feature_research_queue()
 	_research_list.visible = not _run.needs_starter_selection()
 	_research_button.visible = not _run.needs_starter_selection()
 	for entry: Dictionary in pending:
-		var q: Dictionary = view.quotes[entry.feature_id]
-		_research_list.add_item("%d. %s - %d action(s) left" % [_research_list.item_count+1,_run._feature_definitions[entry.feature_id].name,q.remaining_actions])
+		var q: Dictionary = _run.get_feature_research_quote(entry.feature_id,entry.engine_id)
+		_research_list.add_item("%d. %s / %s - %d action(s) left" % [_research_list.item_count+1,engine_state.engines[entry.engine_id].name,_run._feature_definitions[entry.feature_id].name,q.remaining_actions])
 		_research_list.set_item_metadata(_research_list.item_count-1,entry.feature_id)
-	if pending.is_empty(): _research_list.add_item("Research queue empty")
-	else: _research_quote = view.quotes[pending[0].feature_id]
+	if pending.is_empty(): _research_list.add_item("Implementation queue empty")
+	else: _research_quote = _run.get_feature_research_quote(pending[0].feature_id,pending[0].engine_id)
 	_research_button.disabled = _research_quote.is_empty() or not _research_quote.can_research
-	_research_button.text = "Research" if _research_quote.is_empty() else "Research %s - 1 cycle" % CashFormatter.format_exact_cents(_research_quote.due_cents)
+	_research_button.text = "Implement" if _research_quote.is_empty() else "Implement %s - 1 cycle" % CashFormatter.format_exact_cents(_research_quote.due_cents)
 	_research_button.tooltip_text = "Only the first queued Feature receives research. No automatic progress or due bills."
 	var owned := _summarize_owned_features()
-	_owned_summary.text = "OWNED POOL  ·  Scope %d  ·  Graphics %d · Sound %d · Tech %d · Design %d" % [owned.scope, owned.graphics, owned.sound, owned.technology, owned.design]
-	_owned_summary.tooltip_text = "Printed Scope and Core scores for all owned Features. Known play cost once per owned Feature: %s; Passes are free.\n\nOwned Features join games started after you acquire them. Each game keeps the Feature supply it started with. Ownership does not guarantee a draw or play." % CashFormatter.format_exact_cents(owned.known_play_cost_cents)
+	_owned_summary.text = "CONFIGURED POOL  ·  Scope %d  ·  Graphics %d · Sound %d · Tech %d · Design %d" % [owned.scope, owned.graphics, owned.sound, owned.technology, owned.design]
+	_owned_summary.tooltip_text = "Committed Features for future games. Known cost per play: %s; Passes are free. Implement first, stage additions for free, then commit the batch for one cycle. Active games retain their frozen pool." % CashFormatter.format_exact_cents(owned.known_play_cost_cents)
 	if _run.needs_starter_selection():
 		_owned_summary.tooltip_text += "\n\nFirst-game pool: optional Primitive purchases cost 0 cycles."
 	if _nodes.is_empty():
@@ -234,7 +263,8 @@ func _refresh() -> void:
 		var button: Button = _nodes[id]
 		var offer: Dictionary = view.offers[id]
 		var reserve: Dictionary = view.reserves[id]
-		var status := "Owned"
+		var record: Dictionary=selected_record
+		var status := "Configured" if id in record.committed else "Staged" if id in record.staged else "Implemented"
 		var color := Color("244b3d")
 		if not reserve.is_empty() and not reserve.owned:
 			status = "Starter · 0 cycles" if reserve.initial else "Reserve · 1 cycle"
@@ -308,7 +338,7 @@ func _summarize_owned_features() -> Dictionary:
 	var unpriced_count := 0
 	var priced_cards: Array[CardData] = []
 	var database := get_node("/root/CardDatabase")
-	for id: StringName in _run.get_owned_feature_ids():
+	for id: StringName in _run.get_future_project_feature_ids():
 		var card: CardData = database.get_card(id)
 		if card == null or card.card_type != &"feature":
 			continue
@@ -479,6 +509,16 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _purchase() -> void:
+	if _run.owns_feature(_selected):
+		var row: Dictionary=_run.get_engine_feature_state().engines[_run.get_selected_engine_id()]
+		if row.kind!=&"proprietary":return
+		if _selected in row.committed:
+			var target: Array[StringName]=[];target.assign(row.committed);target.erase(_selected)
+			_confirm_configuration(_run.get_engine_configuration_quote(&"",target));return
+		var staged: Array[StringName]=[];staged.assign(row.staged)
+		if _selected in staged:staged.erase(_selected)
+		else:staged.append(_selected)
+		_run.stage_engine_features(staged);_refresh();return
 	var reserve := _run.get_primitive_reserve_offer(_selected)
 	if not reserve.is_empty() and _run.needs_starter_selection():
 		_run.purchase_starter_feature(_selected)
@@ -491,14 +531,40 @@ func _purchase() -> void:
 	# Match the fixed confirmation surface without retaining an initial autowrap minimum.
 	_admission_dialog.wrap_controls = false
 	_admission_dialog.min_size = Vector2i(680, 480)
-	_admission_dialog.title = "Queue Feature research?"
-	_admission_dialog.dialog_text = "Pay %s now (0 cycles). This down payment is irreversible.\nNo cancellation or reordering. Ownership begins only after research finishes.\nNext installment at current familiarity: %s; 1 productive cycle.\nFuture familiarity can change the remaining price." % [CashFormatter.format_exact_cents(quote.down_cents),CashFormatter.format_exact_cents(quote.due_cents)]
+	_admission_dialog.title = "Implement Feature in this engine?"
+	_admission_dialog.dialog_text = "Pay %s now (0 cycles). This down payment is irreversible.\nNo cancellation or reordering.\nComplete implementation: %s; 1 productive cycle. Familiarity may reduce the unpaid balance." % [CashFormatter.format_exact_cents(quote.down_cents),CashFormatter.format_exact_cents(quote.due_cents)]
 	if _run._feature_offers.get(_selected,{}).has("replaces_id"):
-		_admission_dialog.dialog_text += "\n\nUpgrade: replaces 8-Bit Sound in future project draws. Keeps ownership and already-started projects."
-	_admission_dialog.dialog_text += "\n\nAfter research completes, the Feature can enter games you start later. It is not guaranteed to be drawn or played."
+		_admission_dialog.dialog_text += "\n\nUpgrade: configuring replaces 8-Bit Sound and requires its removal respec fee."
+	_admission_dialog.dialog_text += "\n\nImplementation is permanent in this engine. Then stage and commit (1 cycle) for future games. A configured card is not guaranteed to be drawn or played."
 	_admission_dialog.confirmed.connect(func():
 		_run.admit_feature_research(quote)
 		_refresh())
 	add_child(_admission_dialog)
 	_admission_dialog.popup_centered(Vector2i(680, 480))
 	_admission_dialog.get_cancel_button().grab_focus()
+
+func _refresh_engine_controls(state: Dictionary) -> void:
+	_engine_selector.clear()
+	for id: StringName in state.engines:
+		var row: Dictionary=state.engines[id]
+		_engine_selector.add_item(row.name)
+		var index:=_engine_selector.item_count-1
+		_engine_selector.set_item_metadata(index,id)
+		if id==_run.get_selected_engine_id():_engine_selector.select(index)
+	var row: Dictionary=state.engines[_run.get_selected_engine_id()]
+	var quote:=_run.get_engine_configuration_quote()
+	_engine_note.text="Fixed library · read only" if row.kind!=&"proprietary" else "%d implemented · %d configured · %d staged"%[row.implemented.size(),row.committed.size(),row.staged.size()]
+	_configuration_commit.visible=row.kind==&"proprietary"
+	_configuration_commit.disabled=not quote.get("can_commit",false)
+	_configuration_commit.text="Commit · 1 cycle" if not quote.get("requires_respec",false) else "Commit respec · %s · 1 cycle"%CashFormatter.format_exact_cents(quote.cost_cents)
+
+func _confirm_configuration(quote: Dictionary) -> void:
+	if not quote.get("can_commit",false):return
+	var dialog:=preload("res://scripts/ui/quit_confirmation.gd").new()
+	dialog.title="Commit engine configuration?"
+	dialog.ok_button_text="Commit"
+	dialog.dialog_text="Commit this batch for one productive cycle. Only future games use this configuration."
+	if quote.requires_respec:dialog.dialog_text+="\n\nRespec: %s (10%% of removed Features' base implementation prices). Their implementation remains permanent."%CashFormatter.format_exact_cents(quote.cost_cents)
+	dialog.confirmed.connect(func():_run.commit_engine_configuration(quote,quote.requires_respec);_refresh())
+	dialog.canceled.connect(dialog.queue_free)
+	add_child(dialog);dialog.popup_centered(Vector2i(680,340))

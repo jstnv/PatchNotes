@@ -65,6 +65,11 @@ func _run() -> void:
 		wrong_rival.studios[0].run.content_revision=wrong_pair.content_revision
 		check(not codec.validate(wrong_rival,source.player).is_empty(),"Root presentation predecessor rejects older rival catalog")
 	var output := {"player":player_saved,"world":saved,"digest":Replay.digest(saved)}
+	if source.world.source_identity in WorldCodec.STUDIO_MANAGEMENT_PREDECESSORS+WorldCodec.MARKET_HISTORY_PREDECESSORS:
+		var wrong_pair: Dictionary=source.player.duplicate(true);wrong_pair.content_revision=StudioCheckpoint.new().pre_course_revision()
+		check(not codec.validate(source.world,wrong_pair).is_empty(),"Management predecessor rejects older player course rules")
+		var wrong_rival: Dictionary=source.world.duplicate(true);wrong_rival.studios[0].run.content_revision=wrong_pair.content_revision
+		check(not codec.validate(wrong_rival,source.player).is_empty(),"Management predecessor rejects older rival course rules")
 	if source.world.source_identity in WorldCodec.CAREER_PREDECESSORS:
 		var wrong_pair: Dictionary=source.player.duplicate(true);wrong_pair.content_revision=StudioCheckpoint.new().revision()
 		check(not codec.validate(source.world,wrong_pair).is_empty(),"Pre-course world rejects new-career player content")

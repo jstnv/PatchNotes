@@ -111,6 +111,9 @@ func begin_phase() -> void:
 	compare("Initial "+str(session.phase()))
 
 func play() -> void:
+	if session.development.hand.candidate_ids.size()<4:
+		compare("Short candidate pool requires phase exit")
+		return
 	play_slots([0,1,2,3],"Hand "+str(session.phase()))
 
 ## Shared native/headless adapter: selection is decided by each bounded test.

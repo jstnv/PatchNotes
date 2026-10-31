@@ -129,11 +129,22 @@ func close() -> void:
 		_return_focus.grab_focus()
 	_animate(false)
 
+var _compat_input_modes: Dictionary={}
 func _set_interactive(active: bool) -> void:
-	# The exit is visual only: its fading controls must not intercept resumed
-	# gameplay, including descendants with their own mouse/focus settings.
-	panel.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_ENABLED if active else Control.MOUSE_BEHAVIOR_DISABLED
-	panel.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_ENABLED if active else Control.FOCUS_BEHAVIOR_DISABLED
+	# Godot4.5+ provides recursive policies. Godot4.4 retains the same closing
+	# behavior by restoring the exact descendant mouse/focus modes on reopen.
+	if ClassDB.class_get_integer_constant_list("Control").has("MOUSE_BEHAVIOR_ENABLED"):
+		panel.set("mouse_behavior_recursive",ClassDB.class_get_integer_constant("Control","MOUSE_BEHAVIOR_ENABLED" if active else "MOUSE_BEHAVIOR_DISABLED"))
+		panel.set("focus_behavior_recursive",ClassDB.class_get_integer_constant("Control","FOCUS_BEHAVIOR_ENABLED" if active else "FOCUS_BEHAVIOR_DISABLED"))
+		return
+	if active:
+		for item: Variant in _compat_input_modes:
+			if is_instance_valid(item):item.mouse_filter=_compat_input_modes[item][0];item.focus_mode=_compat_input_modes[item][1]
+		_compat_input_modes.clear();return
+	var controls: Array=panel.find_children("*","Control",true,false);controls.append(panel)
+	for item: Control in controls:
+		if not _compat_input_modes.has(item):_compat_input_modes[item]=[item.mouse_filter,item.focus_mode]
+		item.mouse_filter=Control.MOUSE_FILTER_IGNORE;item.focus_mode=Control.FOCUS_NONE
 
 func _animate(entering: bool) -> void:
 	if _animation != null and _animation.is_valid(): _animation.kill()

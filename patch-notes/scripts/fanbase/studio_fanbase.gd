@@ -1,6 +1,5 @@
 class_name StudioFanbase
 extends RefCounted
-
 ## First playable fan rules. The numerical rates are deliberately kept here so
 ## the fan economy can be tuned without changing sales or settlement.
 const CONVERSION_PERCENT := 8
@@ -8,16 +7,13 @@ const LOSS_PERCENT_PER_REVIEW_POINT := 15
 const FAN_AWARENESS_LIMIT := 150
 const MAX_INT := 9223372036854775807
 
-
 static func create(starting_fans: int = 0) -> Dictionary:
 	return {"fans": starting_fans, "releases": {}, "months": [], "last_cycle": 0}
-
 
 static func awareness_for(fans: int) -> int:
 	if fans <= 0: return 0
 	# Selected trial: divide before clamping; even MAX_INT cannot overflow.
 	return mini(FAN_AWARENESS_LIMIT, fans / 4)
-
 
 static func register_release(state: Dictionary, record: Dictionary, launch_fans: int) -> Dictionary:
 	if launch_fans < 0 or not ReleasedGameSales.is_valid(record) or state.get("releases", {}).has(record.release_id): return {}
@@ -30,12 +26,11 @@ static func register_release(state: Dictionary, record: Dictionary, launch_fans:
 		"accounted_units": 0, "gained": 0, "lost": 0, "loss_exposure_accounted": 0, "neutral": neutral}
 	return next
 
-
 ## Preflight all fan changes before a productive action's direct callback.
 ## Both halves of a calendar month use the same settled fan snapshot; only the
 ## second half publishes a fan delta. A neutral shadow measures potential reach
 ## so Review-suppressed sales cannot shield a disappointing game from loss.
-static func plan(state: Dictionary, previous: Dictionary, next_records: Dictionary, run_cycle: int) -> Dictionary:
+static func plan(state: Dictionary, previous: Dictionary, next_records: Dictionary, run_cycle: int, closed_historical_ids: Dictionary = {}) -> Dictionary:
 	if run_cycle != int(state.get("last_cycle", -1)) + 1 or int(state.get("fans", -1)) < 0:
 		return {}
 	var updated := state.duplicate(true)
@@ -53,6 +48,9 @@ static func plan(state: Dictionary, previous: Dictionary, next_records: Dictiona
 		var current: Dictionary = next_records[id]
 		var entry: Dictionary = updated.releases[id]
 		if not ReleasedGameSales.is_valid(current) or current.earned_units < entry.accounted_units or current.earned_units < prior.earned_units: return {}
+		if closed_historical_ids.has(id):
+			if current != prior: return {}
+			continue
 		var campaign: bool = int(current.campaign_count) > int(prior.campaign_count)
 		var neutral: Dictionary = ReleasedGameSales.next_cycle(entry.neutral, run_cycle, run_cycle % 2 == 0, campaign)
 		if neutral.is_empty(): return {}
@@ -90,7 +88,6 @@ static func plan(state: Dictionary, previous: Dictionary, next_records: Dictiona
 			"lost": losses, "net": gains - losses, "ending": updated.fans, "releases": details})
 	return updated
 
-
 static func _floor_product(value: int, multiplier: int, divisor: int) -> int:
 	if value < 0 or multiplier < 0 or divisor <= 0: return -1
 	var whole := value / divisor
@@ -100,7 +97,6 @@ static func _floor_product(value: int, multiplier: int, divisor: int) -> int:
 	if base > MAX_INT - fraction: return -1
 	return base + fraction
 
-
 static func _neutral_month_one(awareness: int, market_bp: int) -> int:
 	if awareness < 0 or awareness > MAX_INT - 200 or market_bp <= 0: return -1
 	var numerators: Array[int] = [500, 50, 200 + awareness, market_bp]
@@ -109,7 +105,6 @@ static func _neutral_month_one(awareness: int, market_bp: int) -> int:
 	var top := PrimitiveUnitsSoldCalculator._checked_product(numerators)
 	var bottom := PrimitiveUnitsSoldCalculator._checked_product(denominators)
 	return top / bottom if top >= 0 and bottom > 0 else -1
-
 
 static func schema() -> Dictionary:
 	var neutral := CheckpointSchema.sales()
@@ -121,12 +116,12 @@ static func schema() -> Dictionary:
 	month.releases = CheckpointSchema.array_of({"release_id":"id", "earned_units":"uint", "new_fans":"uint", "lost_fans":"uint"})
 	return {"fans":"uint", "last_cycle":"uint", "releases":CheckpointSchema.map_of("id", release), "months":CheckpointSchema.array_of(month)}
 
-
 ## Validate the persisted ledger from immutable launches and actual productive
 ## sales history. This is validation only: Continue never applies this replay to
 ## the live RunState, nor does it manufacture Fan history for older saves.
-static func validate(state: Dictionary, records: Dictionary, metadata: Dictionary, cycle: int, starting_fans: int = 0) -> bool:
+static func validate(state: Dictionary, records: Dictionary, metadata: Dictionary, cycle: int, starting_fans: int = 0, closed_historical_ids: Dictionary = {}, historical_close_cycle: int = -1) -> bool:
 	if state.last_cycle != cycle or state.months.size() != cycle / 2 or records.keys() != metadata.keys() or records.keys() != state.releases.keys(): return false
+	if historical_close_cycle < -1 or historical_close_cycle > cycle or (historical_close_cycle == -1 and not closed_historical_ids.is_empty()): return false
 	var launches := {}
 	for id: StringName in records:
 		var record: Dictionary = records[id]
@@ -141,6 +136,9 @@ static func validate(state: Dictionary, records: Dictionary, metadata: Dictionar
 		if boundary > 0:
 			var next := {}
 			for id: StringName in current:
+				if boundary > historical_close_cycle and closed_historical_ids.has(id):
+					next[id] = current[id].duplicate(true)
+					continue
 				var age: int = current[id].total_earned_cycles + 1
 				var campaign: bool = age >= 3 and age % 2 == 1 and records[id].campaign_months.has(age / 2 + 1)
 				var age_month: int=age/2+age%2
@@ -148,13 +146,13 @@ static func validate(state: Dictionary, records: Dictionary, metadata: Dictionar
 				if not source_factor is Dictionary or source_factor.is_empty(): return false
 				next[id] = ReleasedGameSales.next_cycle(current[id], boundary, boundary % 2 == 0, campaign,int(source_factor.factor_bp),str(source_factor.snapshot_id),source_factor)
 				if next[id].is_empty(): return false
-			rebuilt = plan(rebuilt, current, next, boundary)
+			rebuilt = plan(rebuilt, current, next, boundary, closed_historical_ids if boundary > historical_close_cycle else {})
 			if rebuilt.is_empty(): return false
 			current = next
 		for id: StringName in launches.get(boundary, []):
 			if metadata[id].review.launch_fans != rebuilt.fans: return false
 			var final: Dictionary = records[id]
-			var initial := ReleasedGameSales.create(id, final.total_units, final.review_tenths, final.launch_awareness, final.market_bp)
+			var initial := ReleasedGameSales.create(id, final.total_units, final.review_tenths, final.launch_awareness, final.market_bp,int(final.get("market_clock_offset",0)))
 			rebuilt = register_release(rebuilt, initial, metadata[id].review.launch_fans)
 			if rebuilt.is_empty(): return false
 			current[id] = initial

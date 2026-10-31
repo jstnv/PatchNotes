@@ -18,8 +18,8 @@ func _ready() -> void:
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 20)
 	margin.add_theme_constant_override("margin_right", 20)
-	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_bottom", 16)
+	margin.add_theme_constant_override("margin_top", 20)
+	margin.add_theme_constant_override("margin_bottom", 20)
 	add_child(margin)
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 14)
@@ -37,6 +37,7 @@ func _ready() -> void:
 	back.custom_minimum_size = Vector2(165, 44)
 	back.pressed.connect(func(): closed.emit())
 	heading.add_child(back)
+	FolderUI.standard_back(back)
 	var columns := HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	columns.add_theme_constant_override("separation", 16)

@@ -50,7 +50,7 @@ func _initialize() -> void:
 		motion = view._animation
 		motion.pause()
 		expect(not paused and not view.is_open() and root.gui_get_focus_owner() == focus, "Resume and previous focus restore immediately during exit")
-		expect(view.panel.mouse_behavior_recursive == Control.MOUSE_BEHAVIOR_DISABLED and view.panel.focus_behavior_recursive == Control.FOCUS_BEHAVIOR_DISABLED, "Fading menu releases mouse and keyboard input recursively")
+		expect(_panel_input(view,false), "Fading menu releases mouse and keyboard input recursively")
 		view.settings_button.pressed.emit()
 		expect(signals[0] == 0, "Closing buttons cannot dispatch a stale menu action")
 		motion.custom_step(view.EXIT_SECONDS * 0.4)
@@ -62,7 +62,7 @@ func _initialize() -> void:
 		expect(is_equal_approx(view.panel.modulate.a,alpha) and is_equal_approx(view._content.position.y,offset), "Reopening during exit retains the current pose")
 		motion = view._animation
 		motion.pause(); motion.custom_step(view.ENTER_SECONDS + 0.1)
-		expect(paused and view.panel.visible and view.panel.mouse_behavior_recursive == Control.MOUSE_BEHAVIOR_ENABLED, "Reversal completes without an old hide callback or lost input")
+		expect(paused and view.panel.visible and _panel_input(view,true), "Reversal completes without an old hide callback or lost input")
 		view.close()
 		motion = view._animation
 		motion.pause(); motion.custom_step(view.EXIT_SECONDS + 0.1)
@@ -89,3 +89,9 @@ func capture_motion(label: String, dimensions: Vector2i) -> void:
 	if output.is_empty() or DisplayServer.get_name() == "headless": return
 	await RenderingServer.frame_post_draw
 	expect(root.get_texture().get_image().save_png(output.path_join("%s-%d.png" % [label,dimensions.x])) == OK, "Captured " + label)
+
+func _panel_input(view: PauseMenu,active: bool) -> bool:
+	if ClassDB.class_get_integer_constant_list("Control").has("MOUSE_BEHAVIOR_ENABLED"):
+		return view.panel.get("mouse_behavior_recursive")==ClassDB.class_get_integer_constant("Control","MOUSE_BEHAVIOR_ENABLED" if active else "MOUSE_BEHAVIOR_DISABLED") and view.panel.get("focus_behavior_recursive")==ClassDB.class_get_integer_constant("Control","FOCUS_BEHAVIOR_ENABLED" if active else "FOCUS_BEHAVIOR_DISABLED")
+	if active:return view._compat_input_modes.is_empty()
+	return view.resume_button.mouse_filter==Control.MOUSE_FILTER_IGNORE and view.resume_button.focus_mode==Control.FOCUS_NONE

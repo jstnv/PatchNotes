@@ -61,7 +61,7 @@ func _initialize() -> void:
 	var session: RefCounted=Factory.create_fresh_session({"schema_version":1,"studio_id":"market-player","studio_name":"Market Player","specialty":"action","traits":[],"seed":"4417"},catalog)
 	expect(session!=null,"fresh legal player")
 	if session==null: quit(1);return
-	var world: RivalWorld=Trial.create_world(session.run,catalog)
+	var world: RivalWorld=Trial.create_legacy_world(session.run,catalog)
 	expect(world!=null,"fresh two-rival world")
 	if world==null: quit(1);return
 	var policies:=fixed_market_policies(world)

@@ -1,7 +1,8 @@
 class_name StudioCheckpoint
 extends RefCounted
 
-const BUILD := "studio-checkpoint-runtime-v1"
+const BUILD := "studio-checkpoint-engine-features-v1"
+const LEGACY_BUILD := "studio-checkpoint-runtime-v1"
 const PREVIOUS_RULES := "finance5-bank1-employees1-traits5-sales1-contracts3-research1-review2"
 const PRE_EDUCATION_RULES := PREVIOUS_RULES + "-fanbase1-starwave1"
 const PRE_CULT_RULES := "finance6-bank1-employees1-traits6-sales1-contracts3-research1-review2-fanbase1-starwave1-education1"
@@ -19,15 +20,18 @@ const PRE_USABILITY_RULES := PRE_SUPPORT_RULES + "-support1"
 const PRE_EMPLOYEE_RULES := PRE_USABILITY_RULES + "-traits9-bank2-priority10"
 const PRE_SEARCH_RULES := PRE_EMPLOYEE_RULES + "-employees2"
 const PRE_ERA_RULES := PRE_SEARCH_RULES + "-contractsearch1"
+
 const PRE_COURSE_RULES := PRE_ERA_RULES + "-storeera1"
-const RULES := PRE_COURSE_RULES + "-careers1"
+const RULES := PRE_COURSE_RULES + "-careers1-preludeclose3-book1"
+
 const PreSearchSchema := preload("res://scripts/persistence/pre_contract_search/schema.gd")
 const UsabilityPrevious := preload("res://scripts/persistence/pre_usability/studio.gd")
 const SupportPrevious := preload("res://scripts/contracts/pre_support/studio.gd")
 const CommissionPrevious := preload("res://scripts/contracts/pre_commissions/studio.gd")
 const RelationshipPrevious := preload("res://scripts/contracts/pre_relationships/studio.gd")
-const FIELDS := ["_store_era_receipts","_contract_search","_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed","_publisher_relationships","_commission_deals"]
+const FIELDS := ["_store_era_receipts","_contract_search","_fanbase","_resourceful_claims","_feature_research","_cash_cents","_cash_initialized","_completed_run_cycles","_calendar_start_year","_rival_founder_profile","_historical_close_cycle","_closed_historical_ids","_available_redraws","_owned_features","_familiarity","_credited_projects","_released_games","_release_metadata","_ironclad_completion_committed","_sidestreet_results","_unlocked_publishers","_pending_publisher_notifications","_seen_tutorial_topics","_studio_name","_studio_specialty","_studio_traits","_lean_savings","_first_studio_economy","_starter_selection_confirmed","_first_tutorial_project_id","_studio_finance","_bank_run_id","_employees","_promotion_awards","_promotion_consumed","_publisher_relationships","_commission_deals"]
 const SUPPORT_FIELDS := ["_support_deals","_support_rights","_support_assessments"]
+const CareerPrevious := preload("res://scripts/persistence/pre_rival_career/studio.gd")
 var error := ""
 var _revision := ""
 var _previous_revision := ""
@@ -59,7 +63,7 @@ func pre_grid_revision() -> String:
 ## only a separately checked positive generation number is normalized. No Run,
 ## decoded mutable DTO, failed validation, or historical migration is cached.
 const VALIDATION_PROOF_LIMIT := 27
-const VALIDATION_PROOF_BYTES := 8 * 1024 * 1024
+const VALIDATION_PROOF_BYTES := 32 * 1024 * 1024
 static var _validation_proofs: Array[PackedByteArray] = []
 static var _validation_proof_bytes := 0
 static var _proof_lock := Mutex.new()
@@ -124,9 +128,16 @@ func snapshot(run: RunState, active_project_id: StringName = &"") -> Dictionary:
 	if run == null or run._feature_purchase_in_progress or run._productive_cycle_in_progress or run._committing_cycle_cash or run._publishing_cycle or run._preparing_project or run._pending_contract_completion != null or run.get_active_contract() != null or (run.has_pending_commission() and active_project_id.is_empty()):
 		error = "Checkpoint requires a quiescent Studio."
 		return {}
+	if not run.valid_engine_state():
+		error = "Invalid engine state"
+		return {}
 	var state := {}
 	for field: String in FIELDS + SUPPORT_FIELDS:
 		state[field.trim_prefix("_")] = run.get(field)
+	state.engine_entitlements = run.get_engine_entitlements()
+	state.engine_features = run.get_engine_feature_state()
+	state.release_engine_ids = run._release_engine_ids.duplicate(true)
+	state.engine_royalty_receipts = run._engine_royalty_receipts.duplicate(true)
 	# Keep original v1 provenance absent when re-saving old Studios, preserving
 	# their historical shape. New founding grants carry an explicit version.
 	if run.get_founding_roster_version() != 1:
@@ -188,9 +199,12 @@ func validate_active_rival(payload: Dictionary) -> String:
 	return _validate(payload,true)
 
 func _validate(payload: Dictionary, active_rival: bool) -> String:
+	if _pre_calendar(payload):
+		var upgraded:=upgrade_pre_calendar(payload,active_rival)
+		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
 	if payload.get("content_revision", "") != revision() and EmployeeRoster.Career.payload_active(payload):
 		error="Legacy content cannot contain career events"; return "Legacy content cannot contain career events"
-	if payload.get("content_revision", "") == pre_course_revision():
+	if payload.get("content_revision", "") != revision() and payload.get("content_revision", "") == pre_course_revision():
 		var upgraded:=upgrade_course_predecessor(payload,active_rival)
 		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
 	if payload.get("content_revision", "") != revision(): return _validate_uncached(payload,active_rival)
@@ -227,7 +241,9 @@ func _validate(payload: Dictionary, active_rival: bool) -> String:
 	return ""
 
 func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
-	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+	if payload.get("source_build") not in [BUILD,LEGACY_BUILD]:return "Unsupported Studio build"
+	if payload.source_build==BUILD and (not payload.get("run") is Dictionary or not payload.run.has("engine_features")):return "Missing engine Feature registry"
+	if payload.get("content_revision", "") != revision() and payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
 		var upgraded := upgrade_grid_predecessor(payload,active_rival)
 		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
 	var is_current: bool = payload.get("content_revision", "") == revision()
@@ -267,13 +283,26 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 	var resolver := func(request: Dictionary) -> Dictionary: return RunState.RelationshipRules.resolve(r,request)
 	if RunState.RelationshipLedger.reconstruct(r.publisher_relationships,r.bank_run_id,r.completed_run_cycles,resolver).is_empty(): return "Invalid publisher relationship provenance"
 	var roster_version: int = r.get("founding_roster_version",1)
+
 	if roster_version not in [1,2,3,4,5]: return "Invalid founding roster version"
+
 	if r.has("founding_roster_version") and payload.content_revision != revision(): return "Invalid historical founding roster metadata"
 	if value.run_id.is_empty() or value.run_id != r.bank_run_id: return "Invalid run identity"
 	if r.studio_name.is_empty() or r.studio_name != r.studio_name.strip_edges() or r.studio_name.length()>80 or StudioSpecialties.preview(r.studio_specialty).is_empty(): return "Invalid Studio identity"
 	if not r.cash_initialized or not r.first_studio_economy or r.available_redraws>4 or r.next_project_serial<1: return "Invalid run counters"
 	if r.studio_finance.cash_cents != r.cash_cents or r.studio_finance.last_cycle != r.completed_run_cycles or not StudioFinanceLedger._is_valid(r.studio_finance): return "Invalid finance provenance"
 	if not FeatureResearch.validate(r.feature_research,r.owned_features,r.studio_finance,r.completed_run_cycles,r.bank_run_id): return "Invalid research provenance"
+	if r.has("engine_features"):
+		var definitions: Dictionary={};var offers: Dictionary={}
+		for item: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries():definitions[StringName(item.id)]=item
+		for item: Dictionary in FeatureStoreCatalog.entries():offers[StringName(item.id)]=item
+		if not RunState.EngineFeatures.valid(r.engine_features,definitions,offers,r.studio_finance,r.completed_run_cycles,r.bank_run_id):return "Invalid engine Feature provenance"
+		if not RunState.EngineFeatures.bindings_valid(r.engine_features,r.engine_entitlements,r.owned_features,r.bank_run_id):return "Invalid engine Feature ownership/capacity"
+		if not r.engine_features.engines.has(&"legacy_engine") or r.engine_features.engines[&"legacy_engine"].implemented.size()!=r.owned_features.size():return "Legacy Feature preservation mismatch"
+		for id: StringName in r.owned_features:
+			if id not in r.engine_features.engines[&"legacy_engine"].implemented:return "Legacy Feature preservation mismatch"
+	for action: Dictionary in r.studio_finance.actions:
+		if action.kind==&"rival_wait" and (r.rival_founder_profile!=&"rival-founder-active-1977-v2" or action.source_id!=r.bank_run_id or action.direct_delta!=0 or not action.productive):return "Unproven passive rival calendar"
 	for research: Dictionary in r.feature_research:
 		var definition := RunState.new()
 		if not definition._feature_definitions.has(research.feature_id): return "Unknown research Feature"
@@ -347,16 +376,22 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 		for entry: Dictionary in r.feature_research:
 			for paid: Dictionary in entry.payments:
 				if entry.id == source and paid.saving_cents > 0 and paid.window == window: matched = true
+		for entry: Dictionary in r.get("engine_features",{}).get("entries",[]):
+			if entry.id==source and entry.payment!=null and entry.payment.saving_cents>0 and entry.payment.window==window:matched=true
 		if catalog_for_claims._feature_definitions.has(source) and not catalog_for_claims._feature_offers.has(source) and r.owned_features.has(source) and window == 0:
 			var base: int = (int(catalog_for_claims._feature_definitions[source].scope)+1)*15000
 			for action: Dictionary in r.studio_finance.actions:
 				if action.source_id==source and action.kind==&"store" and not action.productive and action.direct_delta==-(base-mini(10000,base)): matched = true
 		if not matched: return "Unproven Resourceful claim"
+	for entry: Dictionary in r.get("engine_features",{}).get("entries",[]):
+		if entry.payment!=null and entry.payment.window>r.released_games.size():return "Future engine implementation Resourceful window"
+		if entry.payment!=null and entry.payment.saving_cents>0 and r.resourceful_claims.get(entry.payment.window,&"")!=entry.id:return "Missing engine implementation Resourceful claim"
+
 	for entry: Dictionary in r.feature_research:
 		for paid: Dictionary in entry.payments:
 			if paid.window > r.released_games.size(): return "Future Resourceful window"
 			if paid.saving_cents > 0 and r.resourceful_claims.get(paid.window,&"") != entry.id: return "Missing Resourceful consumption"
-	if r.studio_finance.monthly_rent_cents != (51500 if StudioTraits.is_active(r.studio_traits,&"expensive_lease") else 50000): return "Trait rent mismatch"
+	if r.studio_finance.monthly_rent_cents not in ([31500,51500] if StudioTraits.is_active(r.studio_traits,&"expensive_lease") else [30000,50000]): return "Trait rent mismatch"
 	var catalog := RunState.new()
 	if not RunState.StoreEra.valid_research(r,catalog._feature_definitions): return "Invalid era Feature Research provenance"
 	for id: StringName in r.owned_features:
@@ -365,21 +400,40 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 	for id: StringName in r.credited_projects:
 		if not r.released_games.has(id) and id != active_id: return "Unreleased familiarity project"
 		for feature: StringName in r.credited_projects[id]:
-			if not r.owned_features.has(feature) or not r.credited_projects[id][feature]: return "Invalid familiarity Feature"
+			if not _implemented_anywhere(r,feature) or not r.credited_projects[id][feature]: return "Invalid familiarity Feature"
 			counts[feature] = int(counts.get(feature,0))+1
 	if counts != r.familiarity: return "Familiarity count mismatch"
-	if not StudioFanbase.validate(r.fanbase, r.released_games, r.release_metadata, r.completed_run_cycles, StudioTraits.starting_fans(r.studio_traits)): return "Invalid Fanbase provenance"
+	if not r.rival_founder_profile.is_empty():
+		if r.rival_founder_profile not in [preload("res://scripts/market/rival_founder_profile.gd").ID,preload("res://scripts/market/rival_founder_profile.gd").CONTROL] or r.calendar_start_year!=1977:return "Invalid rival founder profile"
+		var founder:=preload("res://scripts/market/rival_founder_profile.gd").describe(r.studio_specialty,RunState.new(),r.rival_founder_profile)
+		if founder.is_empty() or (r.rival_founder_profile!=preload("res://scripts/market/rival_founder_profile.gd").CONTROL and not founder.parent_connected):return "Invalid founder catalog"
+		for feature: StringName in founder.ids:
+			if not r.owned_features.has(feature):return "Missing rival founding Feature"
+	elif r.calendar_start_year!=1980:return "Unproven prelude epoch"
+	if r.calendar_start_year not in [1977,1980] or r.historical_close_cycle < -1 or r.historical_close_cycle > r.completed_run_cycles: return "Invalid projected calendar"
+	if r.historical_close_cycle == -1:
+		if not r.closed_historical_ids.is_empty(): return "Unproven historical closure"
+	else:
+		if r.calendar_start_year != 1977 or r.historical_close_cycle != 72: return "Invalid historical closure boundary"
+		var expected_closed: Dictionary={}
+		for release_id: StringName in r.released_games:
+			if int(r.release_metadata[release_id].release_cycle) < r.historical_close_cycle: expected_closed[release_id]=true
+		if expected_closed.is_empty() or expected_closed != r.closed_historical_ids: return "Historical closure/release mismatch"
+	if not StudioFanbase.validate(r.fanbase, r.released_games, r.release_metadata, r.completed_run_cycles, StudioTraits.starting_fans(r.studio_traits),r.closed_historical_ids,r.historical_close_cycle): return "Invalid Fanbase provenance"
 	if not RunState.StoreEra.valid(r.store_era_receipts,r.release_metadata): return "Invalid Store era receipt provenance"
 	if r.released_games.keys() != r.release_metadata.keys(): return "Release order/identity mismatch"
 	for id: StringName in r.released_games:
 		var sales: Dictionary = r.released_games[id]
 		var meta: Dictionary = r.release_metadata[id]
 		if id.is_empty() or sales.release_id != id or not ReleasedGameSales.is_valid(sales): return "Invalid release sales"
+		var projected_sale: bool=r.historical_close_cycle==72 and not r.closed_historical_ids.has(id) and int(meta.release_cycle)>=72
+		if projected_sale!=sales.has("market_clock_offset") or (projected_sale and int(sales.market_clock_offset)!=72): return "Unproven sales clock offset"
 		if meta.release_cycle>r.completed_run_cycles or sales.last_processed_run_cycle>r.completed_run_cycles or sales.last_settlement_run_cycle>r.completed_run_cycles: return "Future release accounting"
-		if sales.later_enabled and sales.total_earned_cycles != r.completed_run_cycles-meta.release_cycle: return "Release age mismatch"
+		var end_cycle: int = r.historical_close_cycle if r.closed_historical_ids.has(id) else r.completed_run_cycles
+		if sales.later_enabled and sales.total_earned_cycles != end_cycle-meta.release_cycle: return "Release age mismatch"
 		if sales.last_settlement_run_cycle>=0 and sales.last_settlement_run_cycle%2!=0: return "Invalid settlement boundary"
 		if sales.release_title!=meta.release_title or sales.release_year!=meta.release_year or sales.base_name!=meta.base_name: return "Release metadata mismatch"
-		if meta.release_year != RunState.START_YEAR+meta.release_cycle/24 or PrimitivePredevelopment.find_entry("genres",meta.genre).is_empty() or PrimitivePredevelopment.find_entry("themes",meta.theme).is_empty(): return "Invalid release catalog/year"
+		if meta.release_year != r.calendar_start_year+meta.release_cycle/24 or PrimitivePredevelopment.find_entry("genres",meta.genre).is_empty() or PrimitivePredevelopment.find_entry("themes",meta.theme).is_empty(): return "Invalid release catalog/year"
 		if meta.review.cores.size()!=4 or meta.review.standards.size()!=4 or meta.review.final_review<0 or meta.review.final_review>10 or meta.review.scope_completion<0: return "Invalid frozen Review"
 		if roundi(meta.review.final_review*10)!=sales.review_tenths or meta.review.awareness!=sales.launch_awareness or meta.review.projected_units!=sales.total_units: return "Frozen launch mismatch"
 		if meta.review.has("market") and (not preload("res://scripts/market/market_transaction_trial.gd").valid_details(meta.review.market,meta.genre) or meta.review.market.standards!=meta.review.standards or meta.review.market.cycle_start>meta.release_cycle): return "Invalid frozen market Review"
@@ -482,7 +536,7 @@ func _valid_contract(c: Variant, r: Dictionary, kind: StringName, offer: StringN
 	var required_hands := 3 if kind==PublisherTrialTerms.STARWAVE else 2
 	if c.contract_id!=kind or c.offer_id!=offer or c.source_release_id!=release or c.hands!=required_hands or not c.upfront or not c.paid or not PriorityAllocation.is_valid_distribution(c.priorities): return false
 	for id: StringName in c.eligible:
-		if not c.eligible[id] or not r.owned_features.has(id): return false
+		if not c.eligible[id] or not _implemented_anywhere(r,id): return false
 		var primitive := false
 		for entry: Dictionary in FeatureStoreCatalog.starting_features():
 			if StringName(entry.id)==id: primitive = true; break
@@ -523,8 +577,8 @@ func _valid_contract(c: Variant, r: Dictionary, kind: StringName, offer: StringN
 	var hands := 0
 	for action: Dictionary in r.studio_finance.actions:
 		if action.source_id!=offer: continue
-		if action.kind==&"publisher_receipt": paid += int(action.direct_delta)
-		if action.productive and action.kind in [&"contract_hand",&"publisher_receipt"]:
+		if action.kind in [&"publisher_receipt",&"contract_receipt"]: paid += int(action.direct_delta)
+		if action.productive and action.kind in [&"contract_hand",&"publisher_receipt",&"contract_receipt"]:
 			hands += 1
 			if action.direct_delta != (int(expected.remainder_cents)+bonus_cash if hands==required_hands else 0): return false
 	if paid!=int(expected.payout_cents)+bonus_cash or hands!=required_hands: return false
@@ -536,12 +590,15 @@ func _valid_contract(c: Variant, r: Dictionary, kind: StringName, offer: StringN
 	return c.result == expected_result
 
 func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
+	if _pre_calendar(payload):
+		var upgraded:=upgrade_pre_calendar(payload,active_rival)
+		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
 	if payload.get("content_revision", "") != revision() and EmployeeRoster.Career.payload_active(payload):
 		error="Legacy content cannot contain career events"; return null
-	if payload.get("content_revision", "") == pre_course_revision():
+	if payload.get("content_revision", "") != revision() and payload.get("content_revision", "") == pre_course_revision():
 		var upgraded:=upgrade_course_predecessor(payload,active_rival)
 		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
-	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+	if payload.get("content_revision", "") != revision() and payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
 		var upgraded := upgrade_grid_predecessor(payload,active_rival)
 		return null if upgraded.is_empty() else hydrate(upgraded,active_rival)
 	var is_current: bool = payload.get("content_revision", "") == revision()
@@ -578,6 +635,16 @@ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
 	for field: String in FIELDS + SUPPORT_FIELDS:
 		if field=="_pending_publisher_notifications": run._pending_publisher_notifications.assign(r.pending_publisher_notifications)
 		else: run.set(field,r[field.trim_prefix("_")])
+	run._engine_entitlements = r.get("engine_entitlements", RunState.EngineEntitlements.create(run._bank_run_id))
+	run._engine_features = r.get("engine_features",{}).duplicate(true)
+	run._release_engine_ids = r.get("release_engine_ids", {}).duplicate(true)
+	run._engine_royalty_receipts = r.get("engine_royalty_receipts", {}).duplicate(true)
+	if not RunState.EngineEntitlements.valid(run._engine_entitlements,run._registered_engine_ids()) or run._engine_entitlements.studio_id != run._bank_run_id:
+		error = "Invalid engine entitlement"
+		return null
+	if not run.valid_engine_state():
+		error = "Invalid release engine state"
+		return null
 	run.next_project_serial = r.next_project_serial
 	run.random_streams.restore(value.rng)
 	run._primitive_contract = _hydrate_contract(r.primitive_contract)
@@ -682,7 +749,10 @@ func upgrade_usability_predecessor(payload: Dictionary, active_rival: bool = fal
 	return encoded if error.is_empty() and encoded is Dictionary else {}
 
 func _decode_payload(payload: Dictionary, active_rival: bool = false) -> Dictionary:
-	if payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
+	if _pre_calendar(payload):
+		var upgraded:=upgrade_pre_calendar(payload,active_rival)
+		return {} if upgraded.is_empty() else _decode_payload(upgraded,active_rival)
+	if payload.get("content_revision", "") != revision() and payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
 		var upgraded := upgrade_grid_predecessor(payload,active_rival)
 		return {} if upgraded.is_empty() else _decode_payload(upgraded,active_rival)
 	var is_current: bool = payload.get("content_revision", "") == revision()
@@ -788,3 +858,22 @@ func upgrade_course_predecessor(payload: Dictionary,active_rival: bool=false) ->
 	candidate.content_revision=revision()
 	error=_validate(candidate,active_rival)
 	return candidate if error.is_empty() else {}
+
+func _pre_calendar(payload: Dictionary) -> bool:
+	return payload.get("run") is Dictionary and not payload.run.has("calendar_start_year")
+
+func upgrade_pre_calendar(payload: Dictionary,active_rival: bool=false) -> Dictionary:
+	var previous := CareerPrevious.new()
+	var reason: String=previous.validate_active_rival(payload) if active_rival else previous.validate(payload)
+	if not reason.is_empty():error=reason;return {}
+	var run: RunState=previous.hydrate(payload,active_rival)
+	if run==null:error=previous.error;return {}
+	# All original values came through the preceding validated codec. Only new
+	# defaults are supplied by RunState; never rebuild ownership or active work.
+	return capture(run,StringName(payload.get("active_project_id","")))
+
+func _implemented_anywhere(state: Dictionary,id: StringName) -> bool:
+	if state.owned_features.has(id):return true
+	for row: Dictionary in state.get("engine_features",{}).get("engines",{}).values():
+		if id in row.implemented:return true
+	return false

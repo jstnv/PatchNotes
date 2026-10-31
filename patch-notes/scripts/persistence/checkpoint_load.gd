@@ -69,3 +69,23 @@ func _reject(reason: String, block_mutations: bool = true) -> void:
 	# New Run after Cancel. Retain the pre-existing mutation-lock semantics.
 	if block_mutations: _owner.failure = reason
 	done = true
+
+var _read_job: RefCounted
+func advance_async() -> void:
+	if done:return
+	if stage!=0:
+		advance();return
+	if _read_job==null:
+		if not _owner.store.acquire():
+			_reject("Another Patch Notes process owns the save slot. Close it before continuing.");_owner.status_changed.emit();return
+		if _owner.rival_catalog==null:_reject("Rival definitions unavailable for Continue");return
+		_read_job=preload("res://scripts/persistence/checkpoint_read_job.gd").new()
+		_read_job.start(_owner.store.directory,_owner.rival_catalog)
+		return
+	if not _read_job.poll():return
+	inspected=_read_job.inspected
+	if inspected.get("status")!=&"valid" or _read_job.player==null:
+		_reject(_read_job.error,false);return
+	_candidate=_read_job.candidate;_player_payload=_read_job.player_payload
+	_run=_read_job.player;_world=_read_job.world;_read_job=null
+	stage=3

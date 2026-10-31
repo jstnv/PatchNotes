@@ -1,8 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/phases/beta_phase.gd" id="1_beta_phase"]
 
 [ext_resource type="Script" path="res://scripts/ui/card_fan.gd" id="fan_script"]
+[ext_resource type="Script" path="res://scripts/ui/quit_confirmation.gd" id="launch_confirmation"]
 
 [node name="BetaPhase" type="Control"]
 custom_minimum_size = Vector2(1008, 500)
@@ -189,6 +190,7 @@ disabled = true
 text = "Launch Game"
 
 [node name="LaunchWarningDialog" type="ConfirmationDialog" parent="."]
+script = ExtResource("launch_confirmation")
 unique_name_in_owner = true
 title = "Launch Warning"
 ok_button_text = "Launch Anyway"

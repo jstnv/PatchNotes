@@ -37,10 +37,24 @@ func _on_finance_changed() -> void:
 
 func unlock_features() -> bool:
 	if not active() or not coordinator.in_studio or run.get_active_contract()!=null or not run.can_mutate_checkpoint():return false
-	var changed:=false
+	var state:=run.get_engine_feature_state()
+	var engine: StringName=run.get_selected_engine_id()
+	var row: Dictionary=state.engines[engine]
+	if row.kind!=&"proprietary":return false
+	# A disposable debug session rebases only its selected proprietary library.
+	# CheckpointCoordinator forbids publishing debug state into normal saves.
+	var ids: Array[StringName]=[];ids.assign(row.implemented)
 	for id: StringName in run._feature_definitions:
-		if FeatureStoreCatalog.is_active(id) and not run._owned_features.has(id):run._owned_features[id]=true;changed=true
-	if changed:run.features_changed.emit()
+		if FeatureStoreCatalog.is_active(id) and id not in ids:ids.append(id)
+	row.initial=ids.duplicate();row.implemented=ids.duplicate()
+	row.committed=FeatureStoreCatalog.future_supply(ids,run._feature_offers)
+	row.staged.clear();row.revision=0
+	state.entries=state.entries.filter(func(item: Dictionary):return item.engine_id!=engine)
+	state.configurations=state.configurations.filter(func(item: Dictionary):return item.engine_id!=engine)
+	run._engine_features=state
+	if engine==&"legacy_engine":
+		for id: StringName in ids:run._owned_features[id]=true
+	run.features_changed.emit()
 	return true
 
 func dispose() -> void:

@@ -82,7 +82,7 @@ func alignment_options(slots: Array[int]) -> Array:
 	return result
 
 func alignment_quote(source_token: int,target_id: StringName,feature_token: int) -> Dictionary:
-	if phase not in [&"design",&"alpha"] or not hand.active or hand._run_state==null or hand.candidate_ids.size()!=7 or not valid_pool() or not hand._run_state.can_consume_redraw(1) or not EmployeeRoster.Career.alignment_available(hand._run_state.get_employees()):return {}
+	if phase not in [&"design",&"alpha"] or not hand.active or hand._run_state==null or not valid_pool() or not hand._run_state.can_consume_redraw(1) or not EmployeeRoster.Career.alignment_available(hand._run_state.get_employees()):return {}
 	if source_token not in hand.candidate_ids or feature_token not in hand.candidate_ids or hand.revision>=ProjectState.MAX_SIGNED_INT or hand.next_candidate_id>=ProjectState.MAX_SIGNED_INT:return {}
 	if phase==&"alpha" and source_token in hand.injected_candidate_ids:return {}
 	if (phase==&"design" and (hand.finalization_requested or hand._project_state.has_design_bug_finalization())) or (phase==&"alpha" and hand._project_state.has_alpha_finalization()):return {}
@@ -221,7 +221,12 @@ func host_playtest() -> bool:
 	return run.complete_productive_action(commit,-cost,-1,&"",&"playtest",project.get_release_id()) if run!=null else commit.call()
 
 func valid_pool() -> bool:
-	if hand._candidate_cards.size()!=7: return false
+	if phase==&"beta": return hand._candidate_cards.size()==7
+	if hand._candidate_cards.size()>7 or hand.candidate_ids.size()!=hand._candidate_cards.size(): return false
+	var held_passes:=0
+	for card: CardData in hand._candidate_cards:
+		if card.card_type==&"pass":held_passes+=1
+	if held_passes>hand.pass_budget_available():return false
 	if phase!=&"alpha": return true
 	var protected: Array[int]=[]
 	for token: int in hand.injected_candidate_ids:
@@ -242,6 +247,24 @@ func can_finalize() -> bool:
 	var project: ProjectState = hand._project_state
 	var run: RunState = hand._run_state
 	if project==null: return false
+	if run!=null and not run._rival_founder_profile.is_empty():
+		if phase in [&"alpha",&"beta"] and project.get_current_scope()<project.get_required_scope():return false
+		if phase in [&"design",&"alpha"]:
+			var remaining: Array[CardData]=[]
+			remaining.assign(hand._available_features)
+			for card: CardData in hand._candidate_cards:
+				if card.card_type==&"feature" and not remaining.has(card):remaining.append(card)
+			# A lone cheap Feature is not actionable without a complete hand.
+			# Cheapest necessary Features + free Pass fillers give the minimum
+			# possible fee, without consuming RNG or enumerating every subset.
+			var passes: int=hand.pass_budget_available() if not hand._pass_definitions.is_empty() else 0
+			var needed:=maxi(1,4-passes)
+			remaining.sort_custom(func(a: CardData,b: CardData):return run.primitive_feature_hand_cost_cents([a])<run.primitive_feature_hand_cost_cents([b]))
+			if remaining.size()>=needed:
+				var selected: Array[CardData]=[];selected.assign(remaining.slice(0,needed))
+				while selected.size()<4:selected.append(hand._pass_definitions[0])
+				var fee: int=run.primitive_feature_hand_cost_cents(selected,project.get_release_id())
+				if fee>=0 and run.can_complete_productive_cycle(-fee):return false
 	if phase==&"design": return not project.has_design_bug_finalization()
 	if not hand.active or not valid_pool(): return false
 	if phase==&"alpha":
@@ -282,13 +305,16 @@ func finalize(controlled_rolls: Array[float] = []) -> Dictionary:
 
 
 func core_redraw_plan(slots: Array[int], controlled_rolls: Array[float]) -> Dictionary:
+	var remaining_pass_room: int = hand.pass_budget_available()
+	for index in hand._candidate_cards.size():
+		if index not in slots and hand._candidate_cards[index].card_type==&"pass":remaining_pass_room-=1
 	if phase == &"design":
 		var tutorial: FirstGameTutorial = hand._get_first_game_tutorial()
 		if tutorial != null:
 			var selected: Array[CardData] = []
 			for slot in slots: selected.append(hand._candidate_cards[slot])
 			var guided := tutorial.guaranteed_redraw_cards(hand._candidate_cards,selected,hand._pass_definitions)
-			if guided != null: return {"valid":true,"cards":[guided] as Array[CardData],"failed_features":[],"guided_redraw":true}
+			if guided != null and (guided.card_type!=&"pass" or remaining_pass_room>0): return {"valid":true,"cards":[guided] as Array[CardData],"failed_features":[],"guided_redraw":true}
 	var cards: Array[CardData] = []
 	var reserved: Array[StringName] = []
 	var failed_features: Array[int] = []
@@ -307,6 +333,7 @@ func core_redraw_plan(slots: Array[int], controlled_rolls: Array[float]) -> Dict
 			var weight: float = hand._calculate_candidate_weight(card, hand.get_priority_distribution())
 			if weight > 0.0: feature_entries.append({&"card": card, &"weight": weight})
 		for card: CardData in hand._pass_definitions:
+			if remaining_pass_room<=0:break
 			if card.id == old_card.id: continue
 			var weight: float = hand._calculate_candidate_weight(card, hand.get_priority_distribution())
 			if weight > 0.0: pass_entries.append({&"card": card, &"weight": weight})
@@ -330,5 +357,6 @@ func core_redraw_plan(slots: Array[int], controlled_rolls: Array[float]) -> Dict
 			if old_card.card_type == &"feature": failed_features.append(slot)
 		else:
 			cards.append(replacement)
+			if replacement.card_type==&"pass":remaining_pass_room-=1
 			if not replacement.renewable: reserved.append(replacement.id)
 	return {&"valid": valid, &"cards": cards, &"failed_features": failed_features}

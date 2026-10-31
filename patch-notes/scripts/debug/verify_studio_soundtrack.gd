@@ -18,17 +18,25 @@ func check(ok: bool, message: String) -> void:
 
 func run() -> void:
 	var music := root.get_node("Soundtrack")
-	for path in [Map.MAIN_A, Map.MAIN_B, Map.STUDIO]:
+	for path in [Map.MAIN_A, Map.MAIN_B, Map.STUDIO, Map.MENU, Map.MENU_OPENER]:
 		check(Map.compatible(load(path)), "Theme WAV matches the common frame count/rate: " + path)
 	var wrong := AudioStreamWAV.new()
 	wrong.mix_rate = 22050
 	check(not Map.compatible(wrong), "Reject incompatible future arrangement")
 	check(Map.HARMONY.size() == Map.BARS and Map.STEPS_PER_LOOP == 64 and Map.STEP == 60.0 / 140.0, "Shared harmony and card tempo contract")
-	check(music.themes.stream_count == 2, "Both arrangements share one playback")
-	for i in range(2):
+	check(music.themes.stream_count == 4, "Opener and three repeating arrangements share one playback")
+	for i in range(4):
 		check(music.themes.get_sync_stream(i).loop_end == Map.FRAMES, "Exact common sample endpoint")
+	check(music.requested_theme == &"menu" and is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(3)), 1.0), "One-time opener starts audible at the shared phrase origin")
 	check(not music.request_theme(&"unknown"), "Unknown theme rejected without mutation")
-	check(music.requested_theme == &"main", "Unknown request leaves main selected")
+	check(music.requested_theme == &"menu", "Unknown request leaves menu selected")
+	music.player.seek(Map.LENGTH-0.12)
+	music.grid=Grid.new()
+	music.last_sample_usec=0
+	music.presentation_seconds()
+	await observe(music,0.25)
+	check(music.opener_retired and music.menu_blend.weight==1.0,"Opener retires after its first phrase")
+	check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(2)),1.0) and db_to_linear(music.themes.get_sync_stream_volume(3))==0.0,"Echo Reverb takes the repeating menu slot")
 	verify_quick_entry()
 	# Repeated loop transitions and sparse frames use an absolute-position fade.
 	for frame_step in [1.0 / 60.0, 0.2, 1.1, 5.0]:
@@ -222,7 +230,7 @@ func verify_phase_routes(music: Node) -> void:
 	second.run_state = RunState.new()
 	root.add_child(second)
 	await process_frame
-	check(second.get("_active_phase") is MainMenu and music.requested_theme == &"main", "New main-menu scene restores main music")
+	check(second.get("_active_phase") is MainMenu and music.requested_theme == &"menu", "New main-menu scene restores menu music")
 	check(music.player.get_stream_playback().get_instance_id() == identity, "Scene replacement never restarts transport")
 	# Real title controller -> Studio routes, with in-memory new/loaded states.
 	# Do not claim this presentation fixture is a disk-save/Continue test.
@@ -238,11 +246,15 @@ func verify_phase_routes(music: Node) -> void:
 		second.get_node("%GameplayHUD").set_phase(second.get("_active_phase"))
 		check(music.blend.boundary==entry_boundary,"Studio rebind preserves fast cue")
 		await observe(music,1.0)
-		check(music.blend.weight==1.0 and music.player.get_stream_playback().get_instance_id()==identity,"Native quick entry completes without transport restart")
+		check(music.blend.weight==1.0 and music.menu_blend.weight==0.0 and music.player.get_stream_playback().get_instance_id()==identity,"Native menu-to-Studio cue completes without transport restart")
+		check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(1)),1.0) and db_to_linear(music.themes.get_sync_stream_volume(2))==0.0,"Studio is audible and menu is silent after quick entry")
 		check(second.run_state.get_cash_cents()==cash and second.run_state.get_completed_run_cycles()==cycles,"Fast title cue leaves cash and calendar unchanged")
 		if not restored:
 			var title:=MainMenu.new()
 			second.get_node("%PhaseRoot").add_child(title)
 			second.get_node("%GameplayHUD").set_phase(title)
+			await observe(music,Blend.BAR+Blend.FADE+0.1)
+			check(music.requested_theme==&"menu" and music.menu_blend.weight==1.0,"Return to title completes on the shared bar map")
+			check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(2)),1.0) and db_to_linear(music.themes.get_sync_stream_volume(3))==0.0 and db_to_linear(music.themes.get_sync_stream_volume(1))==0.0,"Echo menu is audible, opener and Studio silent after title return")
 	second.queue_free()
 	await process_frame

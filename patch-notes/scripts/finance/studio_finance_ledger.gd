@@ -8,15 +8,20 @@ const Bank := preload("res://scripts/finance/bank_loan.gd")
 const Education := preload("res://scripts/finance/education_debt.gd")
 const Bills := preload("res://scripts/finance/outstanding_expenses.gd")
 const MAX_INT: int = 9223372036854775807
-const MONTHLY_RENT_CENTS := 50000
+const MONTHLY_RENT_CENTS := 30000
+const SUPPORTED_RENTS := [30000,31500,50000,51500]
+
+static func starting_rent_cents(expensive_lease: bool = false) -> int:
+	return MONTHLY_RENT_CENTS+(1500 if expensive_lease else 0)
+
 ## Repeated read-only quotes/checkpoint checks share exact validated bytes.
-## Four sets cover live/prospective journals and the background writer's current
-## and previous generations for a player and the maximum eight rivals.
+## Bound covers visible-hand fee alternatives, live/prospective journals and
+## background generations for the player and eight independent rivals.
 ## Variant encoding preserves types: Dictionary equality alone would also match
 ## an invalid float for an integer, or String for StringName. Never trust a
 ## revision counter, mutable Dictionary reference, or a hash alone.
-const VALIDATED_JOURNAL_LIMIT := 36
-const VALIDATED_JOURNAL_BYTES := 16 * 1024 * 1024
+const VALIDATED_JOURNAL_LIMIT := 128
+const VALIDATED_JOURNAL_BYTES := 32 * 1024 * 1024
 static var _validated_journals: Array[PackedByteArray] = []
 static var _validated_journal_bytes := 0
 static var _validation_lock := Mutex.new()
@@ -25,8 +30,8 @@ const EXPENSE_FIELDS := {
 	&"campaign": "campaign_cents", &"playtest": "playtest_cents",
 	&"other_expense": "other_expense_cents", &"principal_paid": "principal_paid_cents",
 	&"interest": "interest_cents"}
-const INCOME_KINDS: Array[StringName] = [&"publisher_receipt", &"beta_income", &"other_income", &"financing_in", &"publisher_support"]
-const FREE_KINDS: Array[StringName] = [&"development", &"priority_change", &"contract_hand", &"calendar", &"contract_search"]
+const INCOME_KINDS: Array[StringName] = [&"contract_receipt", &"publisher_receipt", &"beta_income", &"other_income", &"financing_in", &"publisher_support"]
+const FREE_KINDS: Array[StringName] = [&"rival_wait", &"development", &"priority_change", &"contract_hand", &"calendar", &"contract_search"]
 const NONNEGATIVE_ROW_FIELDS: Array[String] = ["opening_cash_cents", "closing_cash_cents",
 	"sales_net_earned_cents", "sales_settled_cents", "other_income_cents", "publisher_income_cents",
 	"beta_income_cents", "miscellaneous_income_cents", "feature_play_cents",
@@ -36,7 +41,7 @@ const NONNEGATIVE_ROW_FIELDS: Array[String] = ["opening_cash_cents", "closing_ca
 
 
 static func create(cash_cents: int, monthly_rent_cents: int = MONTHLY_RENT_CENTS) -> Dictionary:
-	if cash_cents < 0 or monthly_rent_cents not in [50000, 51500]: return {}
+	if cash_cents < 0 or monthly_rent_cents not in SUPPORTED_RENTS: return {}
 	var row := _new_row(1, 0)
 	row.financing_in_cents = cash_cents
 	row.closing_cash_cents = cash_cents
@@ -417,7 +422,7 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 		if kind == &"interest" and not _add(row, "interest_paid_cents", -direct_delta): return {}
 	elif direct_delta > 0:
 		if not _add(row, "financing_in_cents" if kind in [&"financing_in",&"publisher_support"] else "other_income_cents", direct_delta): return {}
-		var income_field := "publisher_income_cents" if kind == &"publisher_receipt" else ("beta_income_cents" if kind == &"beta_income" else "miscellaneous_income_cents")
+		var income_field := "publisher_income_cents" if kind in [&"publisher_receipt",&"contract_receipt"] else ("beta_income_cents" if kind == &"beta_income" else "miscellaneous_income_cents")
 		if kind not in [&"financing_in",&"publisher_support"] and not _add(row, income_field, direct_delta): return {}
 	_append_transaction(next, cycle, month, kind, absi(direct_delta), direct_delta, cash_before, cash, source_id)
 	if sales_earned > 0:
@@ -507,7 +512,7 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 			if category == &"rent": rows[int(obligation.month) - 1].rent_unpaid_cents = obligation.unpaid_cents
 			if category == &"payroll": rows[int(obligation.month) - 1].payroll_unpaid_cents = obligation.unpaid_cents
 	# The actual merged payment plan must clear blocking arrears on recovery.
-	if productive and blocking_unpaid > 0 and _blocking_unpaid_unchecked(next) > 0: return {}
+	if productive and blocking_unpaid > 0 and _blocking_unpaid_unchecked(next) > 0 and not (kind in [&"contract_hand",&"contract_receipt",&"rival_wait"] and not source_id.is_empty()): return {}
 	if operation.get("type") == &"education_payoff":
 		var account: Dictionary = next.education
 		var principal: int = account.schedule.principal_cents-account.principal_paid_cents
@@ -584,7 +589,7 @@ static func _validate_journal(ledger: Dictionary) -> bool:
 	if ledger.schema_version != SCHEMA_VERSION: return false
 	for key: String in ["monthly_rows", "obligations", "transactions", "actions"]:
 		if typeof(ledger.get(key)) != TYPE_ARRAY: return false
-	if typeof(ledger.get("monthly_rent_cents")) != TYPE_INT or ledger.monthly_rent_cents not in [50000,51500]: return false
+	if typeof(ledger.get("monthly_rent_cents")) != TYPE_INT or ledger.monthly_rent_cents not in SUPPORTED_RENTS: return false
 	var rebuilt := create(ledger.initial_cash_cents, ledger.monthly_rent_cents)
 	for action in ledger.actions:
 		if typeof(action) != TYPE_DICTIONARY: return false

@@ -26,7 +26,7 @@ static func fixed_index_policies(world: RivalWorld) -> Dictionary:
 
 func replay_world(tape: Dictionary, catalog: RefCounted, expected_world: String) -> Dictionary:
 	var session: RefCounted = Factory.create_fresh_session(recipe("foundation-player","action","1001"),catalog)
-	var world: RivalWorld = Trial.create_world(session.run,catalog)
+	var world: RivalWorld = Trial.create_legacy_world(session.run,catalog)
 	var initial := Replay.begin(session)
 	for field in ["schema_version","source_identity","engine_version","rng_algorithm","initial_state","initial_rng"]:
 		if not tape.has(field) or tape[field] != initial[field]: return {"ok":false,"error":"Initial world replay mismatch: "+field}
@@ -62,7 +62,7 @@ func _initialize() -> void:
 		expect(replay.ok,"fresh process identical command/state/RNG replay: "+str(replay.get("error","")))
 		print("MARKET_INDEX_COLD checks=%d failures=%d steps=%d"%[checks,failures,tape.steps.size()]);quit(failures);return
 	var player: RefCounted = Factory.create_fresh_session(recipe("foundation-player","action","1001"),catalog)
-	var world: RefCounted = Trial.create_world(player.run,catalog)
+	var world: RefCounted = Trial.create_legacy_world(player.run,catalog)
 	var action: RefCounted = world.studios[&"incumbent-arcade-foundry"]
 	var adventure: RefCounted = world.studios[&"incumbent-wayfinder-works"]
 	var tape := Replay.begin(player)

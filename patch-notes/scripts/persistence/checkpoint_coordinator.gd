@@ -175,14 +175,14 @@ func attach(value: RunState) -> void:
 	# Worker validation still rechecks the executable data before publication.
 	adapter.revision()
 	if run!=null:
-		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"publisher_relationships_changed"]:
+		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"engines_changed",&"publisher_relationships_changed"]:
 			if run.is_connected(name,_changed): run.disconnect(name,_changed)
 		run.studio_departure_guard = Callable()
 		run.checkpoint_before_mutation = Callable()
 	run = value
 	run.studio_departure_guard = before_departure
 	run.checkpoint_before_mutation = before_mutation
-	for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"publisher_relationships_changed"]:
+	for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"engines_changed",&"publisher_relationships_changed"]:
 		run.connect(name,_changed)
 
 func _changed() -> void:

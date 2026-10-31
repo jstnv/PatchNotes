@@ -1,0 +1,52 @@
+## Run with PN_CHECKPOINT_TEST_PORT set to an unused port.
+extends SceneTree
+
+class TestStore extends StudioCheckpointStore:
+	func acquire() -> bool:
+		if _writer != null: return true
+		var port := OS.get_environment("PN_CHECKPOINT_TEST_PORT")
+		if port.is_empty(): return false
+		var server := TCPServer.new()
+		if server.listen(int(port),"127.0.0.1") != OK: return false
+		_writer = server
+		return true
+
+var failures := 0
+func check(ok: bool, message: String) -> void:
+	if not ok:
+		failures += 1
+		push_error(message)
+
+func _replace_store(node: Node) -> void:
+	if node is CheckpointCoordinator:
+		node.store = TestStore.new("user://engine-world-continue-" + str(Time.get_ticks_usec()),node._validate_payload)
+
+func _initialize() -> void: _verify.call_deferred()
+
+func _verify() -> void:
+	node_added.connect(_replace_store)
+	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
+	root.add_child(game)
+	await process_frame
+	while game._loading_checkpoint: await process_frame
+	var menu: MainMenu = game._active_phase
+	game._on_studio_created("Engine Continue",&"action",[],menu)
+	var deadline := Time.get_ticks_msec() + 20000
+	while game._transition_in_progress and Time.get_ticks_msec() < deadline: await process_frame
+	await process_frame
+	check(game.rival_world != null and game.rival_world.studios.has(&"incumbent-action"),"Certified Action creator is active in the normal world")
+	if game.rival_world == null: quit(1);return
+	var creator_before: int = game.rival_world.studios[&"incumbent-action"].run.get_cash_cents()
+	check(game.run_state.add_cash_cents(200000),"Player funds the engine license")
+	check(game.rival_world.license_engine(&"action_engine").get("ok",false),"Normal world settles the license")
+	check(game.run_state.select_engine(&"action_engine"),"Player selects the licensed engine")
+	var creator_after: int = game.rival_world.studios[&"incumbent-action"].run.get_cash_cents()
+	check(creator_after == creator_before + 750000,"Real rival bankroll receives exactly $7,500")
+	check(await game.checkpoints.wait_saved() and game.checkpoints.store.inspect().status == &"valid","Player and rival world save together")
+	game._continue_checkpoint()
+	await process_frame
+	check(game.rival_world != null and game.run_state.get_selected_engine_id() == &"action_engine","Continue restores selected engine")
+	check(game.rival_world != null and game.rival_world.studios[&"incumbent-action"].run.get_cash_cents() == creator_after,"Continue restores creator bankroll without replaying purchase")
+	print("Engine world Continue: %d failures" % failures)
+	game.checkpoints.store.release_writer()
+	quit(1 if failures else 0)

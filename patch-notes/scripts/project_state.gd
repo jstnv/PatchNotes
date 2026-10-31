@@ -1,25 +1,22 @@
 class_name ProjectState
 extends RefCounted
-
 const MAX_SIGNED_INT: int = 9223372036854775807
-
 # Allocated once per project, retained through phase/release reconstruction.
 # Future save files must serialize this identity along with project state.
 var _release_id := StringName("release_" + Crypto.new().generate_random_bytes(16).hex_encode())
-
 func get_release_id() -> StringName:
 	return _release_id
-
+## Prospective project rules; unversioned active rival projects are grandfathered.
+var _pass_budget_version := 1
+var _pass_budget_origin := ""
 signal values_changed
 signal cycle_changed
-
 enum CoreScore {
 	GRAPHICS,
 	SOUND,
 	TECHNOLOGY,
 	DESIGN,
 }
-
 var _core_scores: Dictionary[CoreScore, int] = {
 	CoreScore.GRAPHICS: 0,
 	CoreScore.SOUND: 0,
@@ -53,6 +50,22 @@ var _alpha_hidden_bugs_generated := 0
 var _implemented_alpha_feature_ids: Array[StringName] = []
 var _unimplemented_alpha_feature_ids: Array[StringName] = []
 var _required_scope: int
+var _engine_id: StringName = &"legacy_engine"
+var _engine_capacity: int = 0 # Zero only on grandfathered, unfrozen profiles.
+
+func set_engine_id(id: StringName,capacity: int=0) -> bool:
+	if _current_cycle != 0 or _current_scope != 0 or _has_design_bug_finalization: return false
+	if id.is_empty() or capacity<0 or (capacity==0 and id != &"legacy_engine" and preload("res://scripts/engines/engine_marketplace.gd").find(id).is_empty()): return false
+	_engine_id = id
+	_engine_capacity=capacity
+	return true
+
+func get_engine_id() -> StringName: return _engine_id
+
+func get_engine_max_scope() -> int:
+	if _engine_capacity>0:return _engine_capacity
+	if _engine_id == &"legacy_engine": return MAX_SIGNED_INT
+	return int(preload("res://scripts/engines/engine_marketplace.gd").find(_engine_id).get("max_scope", 0))
 var _current_cycle: int = 0
 var _base_name := ""
 var _genre_id: StringName
@@ -62,7 +75,6 @@ var _market_standards: Array[int] = []
 var _market_snapshot_id := ""
 var _market_details: Dictionary = {}
 var _feature_supply_ids: Array[StringName] = []
-
 
 func configure_predevelopment(base_name: String, genre: StringName, theme: StringName, feature_ids: Array[StringName]) -> bool:
 	if has_predevelopment_identity() or _current_cycle != 0 or _current_scope != 0 or _has_design_bug_finalization or not PrimitivePredevelopment.validation_error(base_name, genre, theme).is_empty():
@@ -74,7 +86,6 @@ func configure_predevelopment(base_name: String, genre: StringName, theme: Strin
 	_feature_supply_ids.assign(feature_ids)
 	return true
 
-
 func has_predevelopment_identity() -> bool: return not _base_name.is_empty()
 func get_base_name() -> String: return _base_name
 func get_genre_id() -> StringName: return _genre_id
@@ -84,13 +95,15 @@ func get_genre_ratios() -> Array[int]: return _genre_ratios.duplicate()
 func get_market_standards() -> Array[int]: return _market_standards.duplicate()
 func get_market_snapshot_id() -> String: return _market_snapshot_id
 func get_market_details() -> Dictionary: return _market_details.duplicate(true)
-
 func freeze_market_standards(source_id: String, standards: Array, details: Dictionary = {}) -> bool:
 	if not has_predevelopment_identity() or not _market_standards.is_empty() or source_id.is_empty() or standards.size()!=4: return false
 	var base: Array=PrimitiveReviewCalculator.GENRE_TARGETS.get(_genre_id,[])
 	if base.size()!=4: return false
+	var historical_trial: bool=details.get("historical",false) and (str(source_id).begins_with("historical-core-v2:") or str(source_id).begins_with("historical-book-v1:"))
 	for i in range(4):
-		if not standards[i] is int or standards[i]<base[i] or standards[i]>base[i]+8: return false
+		if not standards[i] is int: return false
+		if not historical_trial and (standards[i]<base[i] or standards[i]>base[i]+8): return false
+	if historical_trial and details.is_empty(): return false
 	if not details.is_empty() and (not preload("res://scripts/market/market_transaction_trial.gd").valid_details(details,_genre_id) or details.snapshot_id!=source_id or details.standards!=standards): return false
 	_market_details=details.duplicate(true)
 	_market_standards.assign(standards)
@@ -98,23 +111,18 @@ func freeze_market_standards(source_id: String, standards: Array, details: Dicti
 	return true
 func get_feature_supply_ids() -> Array[StringName]: return _feature_supply_ids.duplicate()
 
-
 func _init(required_scope: int) -> void:
 	if required_scope < 0:
 		push_error("Required Scope cannot be negative.")
 		_required_scope = 0
 		return
-
 	_required_scope = required_scope
-
 
 func get_core_score(category: CoreScore) -> int:
 	if not _is_valid_core_score(category):
 		push_warning("Invalid Core Score category: %s" % category)
 		return 0
-
 	return _core_scores[category]
-
 
 func add_core_score(category: CoreScore, amount: int) -> bool:
 	if _has_beta_finalization:
@@ -128,17 +136,14 @@ func add_core_score(category: CoreScore, amount: int) -> bool:
 	if not _can_add_nonnegative(_core_scores[category], amount): return false
 	if amount == 0:
 		return true
-
 	_core_scores[category] += amount
 	values_changed.emit()
 	return true
-
 
 ## Applies one printed Core Score and Scope pair as a single validated update.
 func add_core_score_and_scope(category: CoreScore, score_amount: int, scope_amount: int) -> bool:
 	var score_additions: Dictionary[CoreScore, int] = {category: score_amount}
 	return add_core_scores_and_scope(score_additions, scope_amount)
-
 
 ## Validates and applies Core Scores, Scope, and fractional Bug Pressure together.
 ## The default preserves existing score-and-Scope-only callers.
@@ -155,7 +160,6 @@ func add_core_scores_and_scope(score_additions: Dictionary[CoreScore, int], scop
 	if not is_finite(resulting_bug_pressure) or resulting_bug_pressure < 0.0:
 		push_warning("Accumulated Bug Pressure must remain finite and nonnegative.")
 		return false
-
 	for category: CoreScore in score_additions:
 		if not _is_valid_core_score(category):
 			push_warning("Invalid Core Score category: %s" % category)
@@ -163,9 +167,7 @@ func add_core_scores_and_scope(score_additions: Dictionary[CoreScore, int], scop
 		if score_additions[category] < 0:
 			push_warning("Core Score additions cannot be negative.")
 			return false
-
 	if not _can_add_core_and_scope(score_additions, scope_amount): return false
-
 	var changed := scope_amount != 0 or bug_pressure_amount != 0.0
 	for category: CoreScore in score_additions:
 		var amount := score_additions[category]
@@ -177,22 +179,17 @@ func add_core_scores_and_scope(score_additions: Dictionary[CoreScore, int], scop
 		values_changed.emit()
 	return true
 
-
 func get_current_scope() -> int:
 	return _current_scope
-
 
 func get_required_scope() -> int:
 	return _required_scope
 
-
 func get_accumulated_bug_pressure() -> float:
 	return _accumulated_bug_pressure
 
-
 func get_accumulated_alpha_bug_pressure() -> float:
 	return _accumulated_alpha_bug_pressure
-
 
 ## Atomically applies base Alpha production without modifying Design Bug Pressure.
 func add_alpha_production(score_additions: Dictionary[CoreScore, int], scope_amount: int, alpha_bug_pressure_amount: Variant) -> bool:
@@ -219,9 +216,7 @@ func add_alpha_production(score_additions: Dictionary[CoreScore, int], scope_amo
 		if score_additions[category] < 0:
 			push_warning("Alpha Core Score additions cannot be negative.")
 			return false
-
 	if not _can_add_core_and_scope(score_additions, scope_amount): return false
-
 	var changed := scope_amount != 0 or pressure_amount != 0.0
 	for category: CoreScore in score_additions:
 		var amount := score_additions[category]
@@ -233,35 +228,27 @@ func add_alpha_production(score_additions: Dictionary[CoreScore, int], scope_amo
 		values_changed.emit()
 	return true
 
-
 func has_design_bug_finalization() -> bool:
 	return _has_design_bug_finalization
-
 
 func was_perfect_production() -> bool:
 	return _was_perfect_production
 
-
 func get_hidden_bugs() -> int:
 	return _hidden_bugs
-
 
 func get_known_bugs() -> int:
 	return _known_bugs
 
-
 func get_fixed_bugs() -> int:
 	return _fixed_bugs
-
 
 func get_remaining_bugs() -> int:
 	return _hidden_bugs + _known_bugs
 
-
 ## Returns Marketing Output accumulated for this project during Beta.
 func get_marketing_output() -> int:
 	return _marketing_output
-
 
 ## Adds already-calculated Marketing Output without resolving any card effect.
 func add_marketing_output(amount: Variant) -> bool:
@@ -280,7 +267,6 @@ func add_marketing_output(amount: Variant) -> bool:
 	values_changed.emit()
 	return true
 
-
 ## Atomically assigns both immutable-ledger identities at new-project creation.
 ## Assignment does not reveal either snapshot.
 func initialize_snapshots(competitor_id: Variant, forecast_id: Variant) -> bool:
@@ -298,26 +284,21 @@ func initialize_snapshots(competitor_id: Variant, forecast_id: Variant) -> bool:
 	values_changed.emit()
 	return true
 
-
 func has_competitor_snapshot() -> bool:
 	return not _competitor_snapshot_id.is_empty()
 
-
 func is_competitor_snapshot_revealed() -> bool:
 	return _competitor_snapshot_revealed
-
 
 ## Player-facing access remains empty until Study Competition eventually
 ## reveals the already-assigned snapshot.
 func get_revealed_competitor_snapshot_id() -> StringName:
 	return _competitor_snapshot_id if _competitor_snapshot_revealed else StringName()
 
-
 ## Narrow authority/verifier query; presentation code should use the revealed
 ## getter so concealed information cannot leak.
 func get_assigned_competitor_snapshot_id_for_authority() -> StringName:
 	return _competitor_snapshot_id
-
 
 ## Future competitor generation may assign one stable snapshot identifier.
 ## Assignment is one-time for this ProjectState and never reveals the payload.
@@ -333,7 +314,6 @@ func assign_competitor_snapshot_id(snapshot_id: Variant) -> bool:
 	values_changed.emit()
 	return true
 
-
 func reveal_competitor_snapshot() -> bool:
 	if _has_beta_finalization:
 		return false
@@ -346,25 +326,20 @@ func reveal_competitor_snapshot() -> bool:
 	values_changed.emit()
 	return true
 
-
 func has_market_forecast_snapshot() -> bool:
 	return not _market_forecast_snapshot_id.is_empty()
 
-
 func is_market_forecast_snapshot_revealed() -> bool:
 	return _market_forecast_snapshot_revealed
-
 
 ## Player-facing access remains empty until Predict Market Trends eventually
 ## reveals the already-assigned snapshot.
 func get_revealed_market_forecast_snapshot_id() -> StringName:
 	return _market_forecast_snapshot_id if _market_forecast_snapshot_revealed else StringName()
 
-
 ## Narrow authority/verifier query for the future forecast generator.
 func get_assigned_market_forecast_snapshot_id_for_authority() -> StringName:
 	return _market_forecast_snapshot_id
-
 
 func assign_market_forecast_snapshot_id(snapshot_id: Variant) -> bool:
 	if _has_beta_finalization:
@@ -378,7 +353,6 @@ func assign_market_forecast_snapshot_id(snapshot_id: Variant) -> bool:
 	values_changed.emit()
 	return true
 
-
 func reveal_market_forecast_snapshot() -> bool:
 	if _has_beta_finalization:
 		return false
@@ -391,14 +365,11 @@ func reveal_market_forecast_snapshot() -> bool:
 	values_changed.emit()
 	return true
 
-
 func get_exhausted_beta_card_ids() -> Array[StringName]:
 	return _exhausted_beta_card_ids.duplicate()
 
-
 func is_beta_card_exhausted(id: StringName) -> bool:
 	return _exhausted_beta_card_ids.has(id)
-
 
 ## Records successfully played finite Beta definitions after complete preflight.
 func exhaust_beta_cards(ids: Variant) -> bool:
@@ -422,7 +393,6 @@ func exhaust_beta_cards(ids: Variant) -> bool:
 	values_changed.emit()
 	return true
 
-
 func _normalize_snapshot_id(value: Variant, label: String) -> StringName:
 	if typeof(value) != TYPE_STRING and typeof(value) != TYPE_STRING_NAME:
 		push_warning("%s snapshot IDs must be strings." % label)
@@ -432,7 +402,6 @@ func _normalize_snapshot_id(value: Variant, label: String) -> StringName:
 		push_warning("%s snapshot IDs must be nonempty lowercase stable identifiers." % label)
 		return StringName()
 	return StringName(text)
-
 
 ## Transfers up to the requested number of Hidden Bugs into Known Bugs.
 ## Returns the actual transfer, or -1 when the request is invalid.
@@ -449,7 +418,6 @@ func discover_bugs(requested_amount: Variant) -> int:
 	_known_bugs += actual_discovery
 	values_changed.emit()
 	return actual_discovery
-
 
 ## Removes up to the requested number of Known Bugs. Hidden Bugs are protected.
 ## Returns the actual removal, or -1 when the request is invalid.
@@ -470,30 +438,23 @@ func fix_known_bugs(requested_amount: Variant) -> int:
 	values_changed.emit()
 	return actual_fixed
 
-
 func get_implemented_design_feature_ids() -> Array[StringName]:
 	return _implemented_design_feature_ids.duplicate()
-
 
 func get_unimplemented_design_feature_ids() -> Array[StringName]:
 	return _unimplemented_design_feature_ids.duplicate()
 
-
 func has_alpha_finalization() -> bool:
 	return _has_alpha_finalization
-
 
 func get_alpha_hidden_bugs_generated() -> int:
 	return _alpha_hidden_bugs_generated
 
-
 func get_implemented_alpha_feature_ids() -> Array[StringName]:
 	return _implemented_alpha_feature_ids.duplicate()
 
-
 func get_unimplemented_alpha_feature_ids() -> Array[StringName]:
 	return _unimplemented_alpha_feature_ids.duplicate()
-
 
 ## Stores the one-time Design finalization result as one authoritative update.
 func finalize_design_bugs(perfect_production: Variant, hidden_bugs: Variant, implemented_ids: Variant, unimplemented_ids: Variant) -> bool:
@@ -521,7 +482,6 @@ func finalize_design_bugs(perfect_production: Variant, hidden_bugs: Variant, imp
 		if implemented_seen.has(id):
 			push_warning("Design Feature history collections cannot overlap: %s" % id)
 			return false
-
 	_was_perfect_production = perfect_production
 	_hidden_bugs = hidden_bugs
 	_implemented_design_feature_ids.assign(normalized_implemented.ids)
@@ -529,7 +489,6 @@ func finalize_design_bugs(perfect_production: Variant, hidden_bugs: Variant, imp
 	_has_design_bug_finalization = true
 	values_changed.emit()
 	return true
-
 
 ## Adds Alpha's one-time Hidden Bug contribution and Feature-history snapshot as
 ## one authoritative update. Existing finalized Design Hidden Bugs are retained.
@@ -562,7 +521,6 @@ func finalize_alpha(alpha_hidden_bugs: Variant, implemented_ids: Variant, unimpl
 	if resulting_hidden_bugs < _hidden_bugs:
 		push_warning("Total Hidden Bugs overflowed during Alpha finalization.")
 		return false
-
 	_alpha_hidden_bugs_generated = alpha_hidden_bugs
 	_hidden_bugs = resulting_hidden_bugs
 	_implemented_alpha_feature_ids.assign(normalized_implemented.ids)
@@ -571,14 +529,11 @@ func finalize_alpha(alpha_hidden_bugs: Variant, implemented_ids: Variant, unimpl
 	values_changed.emit()
 	return true
 
-
 func has_beta_finalization() -> bool:
 	return _has_beta_finalization
 
-
 func is_launch_ready() -> bool:
 	return _has_beta_finalization and has_launch_feature_work()
-
 
 ## Phase histories contain successfully resolved finite Features, never selections.
 ## Alpha supplies its committed history before freezing it so an empty project stays playable.
@@ -595,14 +550,11 @@ func has_launch_feature_work(pending_alpha_ids: Array[StringName] = []) -> bool:
 			return true
 	return false
 
-
 func has_review_result() -> bool:
 	return _review_result != null
 
-
 func get_review_result() -> ReviewResult:
 	return _review_result
-
 
 func commit_review_result(result: ReviewResult) -> bool:
 	if not _has_beta_finalization or _review_result != null or result == null:
@@ -613,14 +565,11 @@ func commit_review_result(result: ReviewResult) -> bool:
 	values_changed.emit()
 	return true
 
-
 func has_awareness_result() -> bool:
 	return _awareness_result != null
 
-
 func get_awareness_result() -> AwarenessResult:
 	return _awareness_result
-
 
 func commit_awareness_result(result: AwarenessResult) -> bool:
 	if not _has_beta_finalization or _review_result == null or _awareness_result != null or result == null:
@@ -631,14 +580,11 @@ func commit_awareness_result(result: AwarenessResult) -> bool:
 	values_changed.emit()
 	return true
 
-
 func has_launch_market_context_result() -> bool:
 	return _launch_market_context_result != null
 
-
 func get_launch_market_context_result() -> LaunchMarketContextResult:
 	return _launch_market_context_result
-
 
 func commit_launch_market_context_result(result: LaunchMarketContextResult) -> bool:
 	if not _has_beta_finalization or _review_result == null or _awareness_result == null or _launch_market_context_result != null or result == null:
@@ -661,14 +607,11 @@ func commit_launch_market_context_result(result: LaunchMarketContextResult) -> b
 	values_changed.emit()
 	return true
 
-
 func has_units_sold_result() -> bool:
 	return _units_sold_result != null
 
-
 func get_units_sold_result() -> UnitsSoldResult:
 	return _units_sold_result
-
 
 func commit_units_sold_result(result: UnitsSoldResult) -> bool:
 	if not _has_beta_finalization or _review_result == null or _awareness_result == null or _launch_market_context_result == null or _units_sold_result != null or result == null:
@@ -700,14 +643,11 @@ func commit_units_sold_result(result: UnitsSoldResult) -> bool:
 	values_changed.emit()
 	return true
 
-
 func has_month_one_sales_revenue_result() -> bool:
 	return _month_one_sales_revenue_result != null
 
-
 func get_month_one_sales_revenue_result() -> MonthOneSalesRevenueResult:
 	return _month_one_sales_revenue_result
-
 
 func commit_month_one_sales_revenue_result(result: MonthOneSalesRevenueResult) -> bool:
 	if _units_sold_result == null or _month_one_sales_revenue_result != null or result == null:
@@ -718,7 +658,6 @@ func commit_month_one_sales_revenue_result(result: MonthOneSalesRevenueResult) -
 	_month_one_sales_revenue_result = result
 	values_changed.emit()
 	return true
-
 
 func _sales_revenue_results_match(result: MonthOneSalesRevenueResult, expected: MonthOneSalesRevenueResult) -> bool:
 	return (
@@ -739,7 +678,6 @@ func _sales_revenue_results_match(result: MonthOneSalesRevenueResult, expected: 
 		and result.get_newly_payable_cents() == 0
 	)
 
-
 ## Freezes the existing authoritative project fields as future Launch/Review inputs.
 func finalize_beta() -> bool:
 	if _has_beta_finalization or not _has_alpha_finalization or not has_launch_feature_work():
@@ -751,7 +689,6 @@ func finalize_beta() -> bool:
 	_has_beta_finalization = true
 	values_changed.emit()
 	return true
-
 
 func _normalize_feature_history_ids(value: Variant, phase_label: String = "Design") -> Dictionary:
 	if not value is Array:
@@ -771,15 +708,12 @@ func _normalize_feature_history_ids(value: Variant, phase_label: String = "Desig
 		normalized.append(id)
 	return {&"valid": true, &"ids": normalized}
 
-
 func get_current_cycle() -> int:
 	return _current_cycle
-
 
 ## One standard successful player action advances exactly one half-month cycle.
 func can_advance_cycle() -> bool:
 	return not _has_beta_finalization and _current_cycle < MAX_SIGNED_INT
-
 
 func advance_cycle() -> bool:
 	if _has_beta_finalization:
@@ -791,7 +725,6 @@ func advance_cycle() -> bool:
 	cycle_changed.emit()
 	return true
 
-
 ## Scope may exceed Required Scope. The excess is retained so project ambition is
 ## represented accurately; completion logic belongs to a later milestone.
 func add_scope(amount: int) -> bool:
@@ -802,24 +735,20 @@ func add_scope(amount: int) -> bool:
 		return false
 	if amount == 0:
 		return true
-
-	if not _can_add_nonnegative(_current_scope, amount): return false
+	if not _can_add_nonnegative(_current_scope, amount) or amount > get_engine_max_scope() - _current_scope: return false
 	_current_scope += amount
 	values_changed.emit()
 	return true
 
-
 func _is_valid_core_score(category: int) -> bool:
 	return _core_scores.has(category)
-
 
 ## Check before adding: subtraction stays within signed int range. No float
 ## conversion is permitted at this boundary, including MAX_SIGNED_INT itself.
 static func _can_add_nonnegative(current: int, amount: int) -> bool:
 	return current >= 0 and amount >= 0 and amount <= MAX_SIGNED_INT - current
-
 func _can_add_core_and_scope(additions: Dictionary[CoreScore, int], scope_amount: int) -> bool:
-	if not _can_add_nonnegative(_current_scope, scope_amount): return false
+	if not _can_add_nonnegative(_current_scope, scope_amount) or scope_amount > get_engine_max_scope() - _current_scope: return false
 	for category: CoreScore in additions:
 		if not _can_add_nonnegative(_core_scores[category], additions[category]): return false
 	return true

@@ -1,0 +1,11 @@
+# Pass Budget career acceptance — 2026-10-31
+
+Functional/career acceptance COMPLETE locally on Godot 4.7.1.2/K8 remains ACTIVE/TRIAL. [Dated assessment](../../logs/2026-10-31-pass-budget-career-acceptance-v1.md) contains source, exact scope, policy, outcomes and remaining gates. [Verified output index](verified-index.json) records only passing final source-fenced runs; failures remain in their original directories.
+
+- Final runtime `dabfdcc4484b44727f7cc0f772811346c13655c617ee0564562a110d723ef692`; main/HEAD `3a61522f18db7a2bae892cb8c5be1fee68cd4100`. All canonical project bytes match simulator-v9. Original certified opening bytes are preserved.
+- Seven normal 12-Scope careers reach eight releases: six neutral-market cases plus one actual eight-rival Market career at 249 cycles. No cash/Feature grants. The240-cycle live bound is retained, with an identical516-command prefix in the300-cycle extension.
+- Final six-case replay4756 checks; complete Studio DTOs and active-player Continue rejection; live-world335; maintained10; current cold169; genuine old saves28+24; authentic BF16; regression14; native162+8; actual game entry10; founder replay2088.
+- Before-source.zip and before-manifest.json retain the dirty task baseline. merge-preview and pre-adoption-canonical-scoped.zip document preservation/reconciliation. Historical-bf-copy-manifest.json and bf-active-generation prove the real old-source fixture; no save was relabelled. Each simulator version retains its tool-created ancestry/integrity and exact run outputs.
+- Reproduce with the exact argv in each result.json into NEW output directories/private profiles. Import a new candidate before parallel Godot work. Absolute profile paths are required. Normal-career-summary.json/live-career-summary.json describe the declared test policy; these are evidence, not balance or policy adoption.
+- Compact command hashes are scoped projections, not full raw states/save formats; release-boundary complete DTO equality supplements the newer Engine fields. The2088-check founder replay and native hand comparisons retain full objects/RNG.
+- Godot 4.4, public package/device acceptance, optimal build exposure, performance and final balance remain OPEN. Long timeout attempts, bounded funding stops and failed harness/source fences are retained and excluded from PASS counts.

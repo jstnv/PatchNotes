@@ -82,7 +82,7 @@ func _initialize() -> void:
 	expect(player != null, "fresh player session")
 	if player == null: quit(1); return
 	expect(player.run.add_cash_cents(10000000), "funded legal player calendar fixture")
-	var world: RivalWorld = Trial.create_world(player.run, catalog)
+	var world: RivalWorld = Trial.create_legacy_world(player.run, catalog)
 	expect(world != null, "fresh trial world")
 	if world == null: quit(1); return
 	# Fund only this long selector/mechanics fixture. The separate low-cash
@@ -131,7 +131,7 @@ func _initialize() -> void:
 	expect(late_revision_probes > 0, "post-two-hand observation branch exercised")
 	expect(short_pool_checked, "short-pool branch exercised")
 	var low_cash_player: RefCounted = Factory.create_fresh_session({"schema_version":1,"studio_id":"feature-cash-player","studio_name":"Feature Cash Player","specialty":"action","traits":[],"seed":"4418"}, catalog)
-	var low_cash_world: RivalWorld = Trial.create_world(low_cash_player.run, catalog)
+	var low_cash_world: RivalWorld = Trial.create_legacy_world(low_cash_player.run, catalog)
 	for cycle in range(3):
 		var low_policies: Dictionary = Trial.policies(low_cash_world)
 		expect(low_cash_player.run.complete_productive_action(Callable(), 0, cycle), "cash fixture player boundary")
@@ -165,7 +165,7 @@ func _initialize() -> void:
 	expect(cash_block_checked, "cash-blocked live session exercised")
 	expect(disabled_tie_checked, "G4-disabled tie branch exercised")
 	var blocked_player: RefCounted = Factory.create_fresh_session({"schema_version":1,"studio_id":"policy-block-player","studio_name":"Policy Block Player","specialty":"action","traits":[],"seed":"4419"}, catalog)
-	var blocked_world: RivalWorld = Trial.create_world(blocked_player.run, catalog)
+	var blocked_world: RivalWorld = Trial.create_legacy_world(blocked_player.run, catalog)
 	var blocked_policies := {}
 	for id: StringName in blocked_world.studios:
 		blocked_policies[id] = func(_view: Dictionary) -> Dictionary: return {"type":&"blocked","payload":{"reason":"Explicit policy block"}}

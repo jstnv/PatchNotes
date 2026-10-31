@@ -1,0 +1,5 @@
+# 2026-10-30 Action Pass Budget paired draw screen
+
+Branch `main`; HEAD `3a61522f18db7a2bae892cb8c5be1fee68cd4100`. The shared worktree already had unrelated tracked and untracked edits; those were preserved. New research files only: `docs/codex/threads/simulation-engine/action_pass_budget_draw_screen.mjs`, its JSON output, and the paired draw finding. No `patch-notes/` production files were changed.
+
+Check: `node docs/codex/threads/simulation-engine/action_pass_budget_draw_screen.mjs` — PASS, 100,000 deterministic paired seeds for each of 1/K6, 2/K8 and 1/K5. Mean and threshold results are in the finding and generated JSON. Source baseline guard checks the 24-Feature result and Pass definitions. Full-game replay, legal Store progression, finance, redraw, short-pool finalization and native behavior: **NOT RUN**. The production budget mechanic does not yet exist; current Alpha seven-candidate finalization would block capped short pools. Follow-up: an isolated simulator version with the complete candidate rule, source RNG, legal fresh Studio career policy and matched economics before any balance selection.

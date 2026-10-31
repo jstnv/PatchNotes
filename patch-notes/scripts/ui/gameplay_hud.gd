@@ -9,6 +9,7 @@ var stats: Array[Label] = []
 var scoreboard: ProductionScoreboard
 var footer: Label
 var footer_panel: PanelContainer
+var _cash_feedback: Control
 var cash_button: Button
 var fans_button: Button
 var fans_dialog: AcceptDialog
@@ -101,6 +102,9 @@ func _ready() -> void:
 	cash_button.tooltip_text = "Open Studio Finances: actual monthly revenue, costs, rent and available cash. Browsing is free."
 	cash_button.pressed.connect(show_finances)
 	footer_row.add_child(cash_button)
+	_cash_feedback=preload("res://scripts/ui/cash_feedback.gd").new()
+	add_child(_cash_feedback)
+	_cash_feedback.configure(cash_button)
 	fans_dialog = AcceptDialog.new()
 	fans_dialog.name = "FanHistory"
 	fans_dialog.title = "Studio Fans"
@@ -138,6 +142,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 		if run.features_changed.is_connected(_queue_refresh): run.features_changed.disconnect(_queue_refresh)
 		if run.finance_changed.is_connected(_queue_refresh): run.finance_changed.disconnect(_queue_refresh)
 		if run.fans_changed.is_connected(_queue_refresh): run.fans_changed.disconnect(_queue_refresh)
+	var changed_run:=run!=run_state
 	project = project_state
 	run = run_state
 	if project != null:
@@ -149,17 +154,20 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 		run.features_changed.connect(_queue_refresh)
 		run.finance_changed.connect(_queue_refresh)
 		run.fans_changed.connect(_queue_refresh)
+	if changed_run and run!=null and _cash_feedback!=null:
+		_cash_feedback.reset(run.get_cash_cents()-int(run.get_studio_finance_report().get("total_overdue_cents",0)),run.get_meta(&"debug_unlimited_cash",false))
 	studio_finances.bind_run(run)
 	sales_hud.bind_run(run)
 	refresh()
 
-func set_phase(controller: Control) -> void:
+func set_phase(controller: Control, cue_music: bool = true) -> void:
 	# Only successful visible phase changes cue music; browsing overlays do not.
 	var soundtrack := get_node_or_null("/root/Soundtrack")
-	if soundtrack != null:
+	if soundtrack != null and cue_music:
 		var studio_music := controller is StudioPhase or controller is PostGameReview or controller is FirstProjectSetup
 		var from_title := is_instance_valid(phase) and phase is MainMenu
-		soundtrack.request_theme(&"studio" if studio_music else &"main", studio_music and from_title)
+		var theme: StringName = &"menu" if controller is MainMenu else &"studio" if studio_music else &"main"
+		soundtrack.request_theme(theme, studio_music and from_title)
 	settings_menu.close()
 	studio_finances.close()
 	fans_dialog.hide()
@@ -451,10 +459,10 @@ func _refresh_footer() -> void:
 	fans_button.disabled = phase is MainMenu or not is_instance_valid(phase)
 	var fan_history: Array = run.get_fanbase_history()
 	fans_button.tooltip_text = "Monthly Fan history. No monthly boundary yet." if fan_history.is_empty() else "Month %d · +%d gained · -%d lost · %d total" % [fan_history[-1].month, fan_history[-1].gained, fan_history[-1].lost, fan_history[-1].ending]
-	cash_button.text = "Cash: %s" % (CashFormatter.format_exact_cents(cents) if cents >= 0 else "—")
-	if run.get_meta(&"debug_unlimited_cash",false):cash_button.text="Cash: ∞"
+
 	cash_button.disabled = phase is MainMenu or not is_instance_valid(phase)
 	var finances := run.get_studio_finance_report()
+	_cash_feedback.observe(cents-int(finances.get("total_overdue_cents",0)),run.get_meta(&"debug_unlimited_cash",false))
 	var next_bill := "—"
 	if finances.get("available", false):
 		var due: int = finances.get("next_due_cycle", 0)
@@ -476,3 +484,8 @@ func show_settings(navigation_host: MenuTransitions = null) -> void:
 	contextual_tip.dismiss()
 	tutorial_overlay.close()
 	settings_menu.open(navigation_host)
+
+func show_bank_from_studio() -> bool:
+	if run==null or not phase is StudioPhase:return false
+	contextual_tip.dismiss();tutorial_overlay.close()
+	return studio_finances.open("Back to Studio Management",&"bank")

@@ -38,6 +38,8 @@ var _project_state: ProjectState
 var _run_state: RunState
 var _available_features: Array[CardData] = []
 var _pass_definitions: Array[CardData] = []
+var _budget_printed := 0
+var _budget_spent := 0
 var _candidate_cards: Array[CardData] = []
 var _selected_card_views: Array[CardView] = []
 var _exhausted_card_ids: Dictionary[StringName, bool] = {}
@@ -90,8 +92,14 @@ func setup(project_state: ProjectState, run_state: RunState = null) -> void:
 	if _project_state != null and _project_state.values_changed.is_connected(_refresh_display):
 		_project_state.values_changed.disconnect(_refresh_display)
 
+	if _run_state!=null:
+		for event in [&"cash_changed",&"finance_changed"]:
+			if _run_state.is_connected(event,_on_funds_changed):_run_state.disconnect(event,_on_funds_changed)
 	_project_state = project_state
 	_run_state = run_state
+	if _run_state!=null:
+		for event in [&"cash_changed",&"finance_changed"]:
+			if not _run_state.is_connected(event,_on_funds_changed):_run_state.connect(event,_on_funds_changed)
 	_priority_allocation.configure(run_state)
 	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"design_finalize")
 	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"design_deal")
@@ -254,6 +262,8 @@ func _refresh_display() -> void:
 
 func _initialize_design_lifecycle() -> bool:
 	_clear_candidate_pool()
+	_budget_printed = 0
+	_budget_spent = 0
 	_available_features.clear()
 	_pass_definitions.clear()
 	_exhausted_card_ids.clear()
@@ -366,6 +376,8 @@ func _on_redraw_pressed() -> void:
 
 func _refresh_redraw_controls() -> void:
 	if not is_node_ready(): return
+	for view: CardView in %HandContainer.card_views():
+		view.set_shared_pass_budget(2 + _budget_printed / 8 - _budget_spent, posmod(_budget_printed, 8))
 	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
 	%RedrawButton.disabled = not _can_redraw_selection()
 	if not %RedrawButton.disabled:
@@ -450,6 +462,8 @@ func _on_play_card_pressed() -> void:
 		_hand_command_busy = false
 		return
 	_exhausted_card_ids.assign(resolver._exhausted_card_ids)
+	_budget_printed = resolver._budget_printed
+	_budget_spent = resolver._budget_spent
 	_available_features.assign(resolver._available_features)
 	_priority_allocation.set_distribution(resolver.priorities)
 	_priority_draft = _priority_allocation.get_priority_distribution()
@@ -755,6 +769,8 @@ func play_hand_with_employee_plan(distribution: Dictionary) -> bool:
 ## or global Object instance ID is passed to the resolver.
 func _capture_design_command() -> RefCounted:
 	var state := DesignHandCommand.new()
+	state._budget_printed = _budget_printed
+	state._budget_spent = _budget_spent
 	state._project_state = _project_state
 	state._run_state = _run_state
 	state._deal_rng = _deal_rng
@@ -793,8 +809,18 @@ func _redraw_slots() -> Array[int]:
 	return slots
 
 func _sync_command_tokens(state: RefCounted) -> void:
+	_budget_printed = state._budget_printed
+	_budget_spent = state._budget_spent
 	_command_revision=state.revision
 	_command_next_id=state.next_candidate_id
 	_command_view_ids.clear()
 	for index in range(%HandContainer.card_views().size()):
 		_command_view_ids[%HandContainer.card_views()[index].get_instance_id()]=state.candidate_ids[index]
+
+var _funds_refresh_pending:=false
+func _on_funds_changed() -> void:
+	if _funds_refresh_pending or not is_inside_tree():return
+	_funds_refresh_pending=true;_flush_funds.call_deferred()
+func _flush_funds() -> void:
+	_funds_refresh_pending=false
+	if is_node_ready():_update_play_button()

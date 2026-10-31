@@ -29,3 +29,6 @@ func _ready() -> void:
 
 func show_development_error(message: String) -> void:
 	overlay.error_label.text = message
+
+func get_predevelopment_intent() -> Dictionary:
+	return {} if overlay==null else overlay.get_start_intent()

@@ -1,3 +1,4 @@
+## Historical unlimited-Pass fixture (version0); new2/K8 coverage is separate.
 	## Separately invoked Alpha priority-allocation verification.
 ## Run with: godot --headless --path . --script res://scripts/debug/verify_alpha_phase.gd
 extends SceneTree
@@ -16,6 +17,7 @@ var _failures := 0
 
 func _verify_project_state_alpha_transactions() -> void:
 	var state := ProjectState.new(30)
+	state._pass_budget_version=0
 	var emissions := [0]
 	state.values_changed.connect(func() -> void: emissions[0] += 1)
 	var additions: Dictionary[ProjectState.CoreScore, int] = {
@@ -41,6 +43,7 @@ func _verify_project_state_alpha_transactions() -> void:
 func _initialize() -> void:
 	_verify_project_state_alpha_transactions()
 	var state := ProjectState.new(30)
+	state._pass_budget_version=0
 	var alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
 	alpha.setup(state)
 	root.add_child(alpha)
@@ -64,18 +67,18 @@ func _initialize() -> void:
 	_expect(_values(alpha) == [25, 25, 25, 25] and alpha.get_available_priority() == 0, "Alpha initializes independently at 25 / 25 / 25 / 25")
 	_verify_controls(alpha)
 	(alpha.get_node("%SoundPriority") as VSlider).value = 15.0
-	_expect(_values(alpha) == [25, 15, 25, 25] and alpha.get_available_priority() == 10, "Lowering changes only Sound and frees allocation")
+	_expect(_values(alpha) == [25, 20, 25, 25] and alpha.get_available_priority() == 5, "Lowering changes only Sound and frees allocation")
 	_expect(priority_emissions[0] == 1, "One slider adjustment emits exactly once")
 	_expect(alpha.set_priority(ProjectState.CoreScore.GRAPHICS, 35), "Raising Graphics can spend available allocation")
-	_expect(_values(alpha) == [35, 15, 25, 25] and alpha.get_available_priority() == 0, "Raising changes only Graphics and consumes allocation")
+	_expect(_values(alpha) == [30, 20, 25, 25] and alpha.get_available_priority() == 0, "Raising changes only Graphics and consumes allocation")
 	_expect(alpha.set_priority(ProjectState.CoreScore.GRAPHICS, 50), "Over-budget request is handled safely")
-	_expect(_values(alpha) == [35, 15, 25, 25], "Over-budget request clamps to the highest fitting value")
+	_expect(_values(alpha) == [30, 20, 25, 25], "Over-budget request clamps to the highest fitting value")
 	_expect(alpha.set_priority(ProjectState.CoreScore.TECHNOLOGY, -100), "Below-range numeric request is normalized")
-	_expect(_values(alpha) == [35, 15, 10, 25] and alpha.get_available_priority() == 15, "Below-range request clamps to 10 without redistribution")
+	_expect(_values(alpha) == [30, 20, 20, 25] and alpha.get_available_priority() == 5, "Below-range request clamps to20 without redistribution")
 	_expect(alpha.set_priority(ProjectState.CoreScore.DESIGN, 27.5), "Non-step numeric request is normalized")
 	_expect(alpha.get_priority(ProjectState.CoreScore.DESIGN) == 30, "Exact half-step snaps upward")
 	_expect(alpha.set_priority(ProjectState.CoreScore.TECHNOLOGY, 12.4), "Numeric request below half-step normalizes")
-	_expect(alpha.get_priority(ProjectState.CoreScore.TECHNOLOGY) == 10, "Nearest-step normalization rounds 12.4 to 10")
+	_expect(alpha.get_priority(ProjectState.CoreScore.TECHNOLOGY) == 20, "Current floor clamps12.4 to20")
 
 	var before_invalid := alpha.get_priority_distribution()
 	var emissions_before_invalid: int = priority_emissions[0]
@@ -294,6 +297,7 @@ func _verify_weighted_alpha_boundary(alpha: AlphaPhase, state: ProjectState, sta
 
 func _verify_alpha_specialization_resolution() -> void:
 	var state := ProjectState.new(30)
+	state._pass_budget_version=0
 	var alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
 	alpha.setup(state)
 	root.add_child(alpha)
@@ -373,6 +377,7 @@ func _verify_alpha_balanced_production_calculation() -> void:
 	var technology := ProjectState.CoreScore.TECHNOLOGY
 	var design := ProjectState.CoreScore.DESIGN
 	var state := ProjectState.new(30)
+	state._pass_budget_version=0
 	var alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
 	alpha.setup(state)
 	root.add_child(alpha)
@@ -402,6 +407,7 @@ func _verify_alpha_balanced_production_calculation() -> void:
 	_expect(alpha.call("_build_balanced_production_debug_message", qualifying.score_additions) == "Alpha Balanced Production hit! Added scores: Graphics +7, Sound +7, Technology +6, Design +6", "Alpha Balanced feedback identifies activation and deterministic final gains")
 
 	var unbalanced_state := ProjectState.new(30)
+	unbalanced_state._pass_budget_version=0
 	alpha.setup(unbalanced_state)
 	var same_hand_unbalanced: Dictionary = alpha.call("_calculate_final_action_production", {
 		&"cards": cards,
@@ -437,6 +443,7 @@ func _verify_alpha_balanced_production_calculation() -> void:
 		_make_fixture(&"both_2", &"feature", &"graphics", 2, &"", 0, 0),
 	]
 	var precedence_state := ProjectState.new(30)
+	precedence_state._pass_budget_version=0
 	precedence_state.add_core_scores_and_scope({graphics: 0, sound: 4, technology: 5, design: 5}, 0)
 	alpha.setup(precedence_state)
 	var precedence: Dictionary = alpha.call("_calculate_final_action_production", {
@@ -463,6 +470,7 @@ func _verify_alpha_balanced_production_calculation() -> void:
 
 func _verify_alpha_balanced_production_resolution() -> void:
 	var state := ProjectState.new(30)
+	state._pass_budget_version=0
 	var alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
 	alpha.setup(state)
 	root.add_child(alpha)
@@ -531,6 +539,7 @@ func _verify_host_playtest() -> void:
 	var technology := ProjectState.CoreScore.TECHNOLOGY
 	var design := ProjectState.CoreScore.DESIGN
 	var state := ProjectState.new(30)
+	state._pass_budget_version=0
 	var alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
 	alpha.setup(state)
 	root.add_child(alpha)
@@ -612,6 +621,7 @@ func _verify_host_playtest() -> void:
 	})
 	_expect(injected_specialization.specialization_stat == &"design" and injected_specialization.score_additions[design] == 12, "Injected Pass definitions participate normally in Alpha Specialization")
 	var balanced_state := ProjectState.new(30)
+	balanced_state._pass_budget_version=0
 	balanced_state.add_alpha_production({graphics: 3, sound: 3, technology: 5, design: 6}, 0, 0.0)
 	alpha.setup(balanced_state)
 	var balanced_cards: Array[CardData] = [
@@ -632,6 +642,7 @@ func _verify_host_playtest() -> void:
 
 func _verify_host_playtest_replacement_failure() -> void:
 	var state := ProjectState.new(30)
+	state._pass_budget_version=0
 	var alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
 	alpha.setup(state)
 	root.add_child(alpha)
@@ -684,6 +695,7 @@ func _card_ids(cards: Array) -> Array[StringName]:
 
 func _verify_post_hand_redeal_failure() -> void:
 	var state := ProjectState.new(30)
+	state._pass_budget_version=0
 	var alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
 	alpha.setup(state)
 	root.add_child(alpha)
@@ -729,7 +741,7 @@ func _instance_ids(views: Array) -> Array[int]:
 func _verify_controls(alpha: AlphaPhase) -> void:
 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
 		var slider := alpha.get_node("%%%s" % node_name) as VSlider
-		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 75.0 and slider.step == 5.0, "%s uses 10-75 bounds in five-point steps" % node_name)
+		_expect(slider != null and slider.min_value == 20.0 and slider.max_value == 40.0 and slider.step == 5.0, "%s uses current20-40 bounds in five-point steps" % node_name)
 	var panel := alpha.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
 	_expect(panel.size.x <= 1008.0 and panel.size.y <= 463.0, "Corrected Alpha allocation panel fits the established phase bounds")
 	_verify_distribution(alpha, "Initial Alpha allocation uses the complete budget")

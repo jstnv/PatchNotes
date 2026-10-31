@@ -54,8 +54,13 @@ func setup(state: ContractState, run: RunState, category_rolls: Array[float] = [
 		return false
 	for roll:float in category_rolls+definition_rolls:
 		if not is_finite(roll) or roll<0.0 or roll>=1.0:return false
+	if _run!=null:
+		for event in [&"cash_changed",&"finance_changed"]:
+			if _run.is_connected(event,_on_funds_changed):_run.disconnect(event,_on_funds_changed)
 	_state = state
 	_run = run
+	for event in [&"cash_changed",&"finance_changed"]:
+		if not _run.is_connected(event,_on_funds_changed):_run.connect(event,_on_funds_changed)
 	if _run != null: _rng = _run.random_streams.stream(&"contract_deal")
 	_initial_category_rolls = category_rolls.duplicate()
 	_initial_definition_rolls = definition_rolls.duplicate()
@@ -548,7 +553,7 @@ func _refresh_actions() -> void:
 	var animating := hand_motion != null and hand_motion.busy
 	_change_priorities.disabled = animating or not can_edit_priorities()
 	var plan := _state.plan_hand(_selected_cards()) if _selected_views.size() == HAND_SIZE else {}
-	_play_button.disabled = animating or _state.is_completed() or plan.is_empty() or not _run.can_complete_productive_cycle(int(plan.get("remainder_cents", 0)))
+	_play_button.disabled = animating or _state.is_completed() or plan.is_empty() or not _run.can_complete_contract_hand(_state,plan)
 	_play_button.tooltip_text = _run.get_financial_block_reason() if _play_button.disabled else ""
 	_redraw_button.text = "Redraw Selected (%d/4)" % _run.get_available_redraws()
 	_redraw_button.disabled = animating or _state.is_completed() or _selected_views.is_empty() or not _run.can_consume_redraw(_selected_views.size())
@@ -607,3 +612,11 @@ func _sync_contract_tokens(session: RefCounted) -> void:
 		index += 1
 	_command_next_id = session.next_id
 	_command_sequence = session.sequence
+
+var _funds_refresh_pending:=false
+func _on_funds_changed() -> void:
+	if _funds_refresh_pending or not is_inside_tree():return
+	_funds_refresh_pending=true;_flush_funds.call_deferred()
+func _flush_funds() -> void:
+	_funds_refresh_pending=false
+	if is_node_ready():_refresh_actions()

@@ -37,6 +37,7 @@ func _run() -> void:
 		(game.get_node("%GameplayHUD") as GameplayHUD).contextual_tip.dismiss()
 		var studio: StudioPhase=game._active_phase
 		expect(not studio.get_node("%Contracts").disabled,"Contracts remains accessible with an empty offer list")
+		studio._open_menu(&"production");await create_timer(0.6).timeout
 		var before:=run.get_completed_run_cycles()
 		await click(studio.get_node("%Contracts"))
 		await create_timer(0.3).timeout # Established 0.24s entrance must settle before geometry sampling.
@@ -62,6 +63,7 @@ func _run() -> void:
 		await click(phase.find_child("DismissCompletionButton",true,false))
 		studio=game._active_phase
 		expect(studio is StudioPhase and not studio.get_node("%Contracts").disabled,"Completing the last offer keeps Search reachable")
+		studio._open_menu(&"production");await create_timer(0.6).timeout
 		await click(studio.get_node("%Contracts"))
 		await create_timer(0.3).timeout # Established 0.24s entrance must settle before geometry sampling.
 		expect(not studio._search_action.disabled and run.get_pending_contract_choices().is_empty(),"No new release is needed to search again")

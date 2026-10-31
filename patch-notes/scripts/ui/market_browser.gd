@@ -18,7 +18,7 @@ func _ready() -> void:
 	add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
 	theme = preload("res://resources/ui/workspace_theme.tres")
 	var margin := MarginContainer.new()
-	for edge in ["left","right","top","bottom"]: margin.add_theme_constant_override("margin_"+edge,16)
+	for edge in ["left","right","top","bottom"]: margin.add_theme_constant_override("margin_"+edge,20)
 	add_child(margin)
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation",10)
@@ -26,7 +26,7 @@ func _ready() -> void:
 	var header := HBoxContainer.new()
 	layout.add_child(header)
 	var title := Label.new()
-	title.text = "Games on the Market"
+	title.text = "Market & History"
 	title.add_theme_font_size_override("font_size",24)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
@@ -39,6 +39,7 @@ func _ready() -> void:
 	back_button.text = "Back to Studio"
 	back_button.pressed.connect(close)
 	header.add_child(back_button)
+	FolderUI.standard_back(back_button)
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(status)
@@ -61,7 +62,7 @@ func _ready() -> void:
 	details.scroll_active = true
 	layout.add_child(details)
 	var note := Label.new()
-	note.text = "Newest releases first · Sales are actual, not forecasts. Dormant games remain on market.\nPre-1980 AI archives are historical records and are excluded from this live list."
+	note.text = "Live releases first · Sales are actual, not forecasts. Dormant games remain on market.\nHistorical records follow by year. They earn no post-start sales or Fans and do not affect the active Market."
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.add_theme_font_size_override("font_size",14)
 	layout.add_child(note)
@@ -79,8 +80,10 @@ func close() -> void:
 	closed.emit()
 
 func _input(event: InputEvent) -> void:
+	if is_visible_in_tree() and MenuTransitions.navigation_input_blocked(self):get_viewport().set_input_as_handled();return
 	# Cancel belongs to this overlay before a Tree or hover tooltip consumes it.
-	if is_visible_in_tree() and event.is_action_pressed("ui_cancel"):
+	var controller_back: bool = event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B
+	if is_visible_in_tree() and (event.is_action_pressed("ui_cancel") or controller_back):
 		close()
 		get_viewport().set_input_as_handled()
 
@@ -93,18 +96,22 @@ func refresh() -> void:
 		details.text = "Return to Studio to continue playing."
 		return
 	var all_rows: Array = result.rows
-	for row: Dictionary in all_rows:
+	var historical_rows: Array = result.historical_rows
+	for row: Dictionary in all_rows+historical_rows:
 		if filter.selected == 1 and not row.player_owned: continue
 		if filter.selected == 2 and row.player_owned: continue
 		rows.append(row)
-	status.text = "%d games shown · %d live releases across all Studios" % [rows.size(),all_rows.size()]
+	status.text = "%d games shown · %d live releases · %d historical records across all Studios" % [rows.size(),all_rows.size(),historical_rows.size()]
 	var tree_root := games.create_item()
 	var selected_item: TreeItem
 	for row: Dictionary in rows:
 		var item := games.create_item(tree_root)
 		item.set_metadata(0,_key(row))
 		var owner := str(row.studio_name) + (" (you)" if row.player_owned else " (AI)")
-		var values := [row.release_title,owner,_name("genres",row.genre),"%.1f / 10" % (row.review_tenths/10.0),str(row.earned_units)]
+		var historical: bool = row.get("record_type","") == "historical"
+		var title := "Historical · %d · %s" % [row.release_year,row.release_title] if historical else str(row.release_title)
+		var units := "—" if historical else str(row.earned_units)
+		var values := [title,owner,_name("genres",row.genre),"%.1f / 10" % (row.review_tenths/10.0),units]
 		for i in range(values.size()):
 			item.set_text(i,str(values[i]))
 			item.set_tooltip_text(i,str(values[i]))
@@ -115,7 +122,7 @@ func refresh() -> void:
 		_show_selection()
 	else:
 		_selected = ""
-		details.text = "No released games in this view yet. Launch a game or advance through productive actions to see new releases."
+		details.text = "No live releases or historical records in this view. Launch a game or choose another Studio filter."
 
 func _show_selection() -> void:
 	var item := games.get_selected()
@@ -123,6 +130,9 @@ func _show_selection() -> void:
 	_selected = str(item.get_metadata(0))
 	for row: Dictionary in rows:
 		if _key(row) != _selected: continue
+		if row.get("record_type","") == "historical":
+			details.text = "%s — %s\nHistorical record · Released %d · Final Review %.1f / 10\n%s / %s\nHistorical sales data is unavailable. This frozen pre-1980 title earns no post-start sales or Fans and does not affect active Market standards or saturation." % [row.release_title,row.studio_name,row.release_year,row.review_tenths/10.0,_name("genres",row.genre),_name("themes",row.theme)]
+			return
 		var cores := "Core scores unavailable for this older release."
 		if row.cores_available:
 			cores = "Graphics %d · Sound %d · Technology %d · Design %d" % row.cores
@@ -133,7 +143,7 @@ func _show_selection() -> void:
 		return
 
 static func _key(row: Dictionary) -> String:
-	return str(row.studio_id) + "/" + str(row.release_id)
+	return JSON.stringify([row.get("record_type","live"),str(row.studio_id),str(row.release_id)])
 
 static func _name(kind: String, id: String) -> String:
 	return str(PrimitivePredevelopment.find_entry(kind,StringName(id)).get("name",id))

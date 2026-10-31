@@ -6,7 +6,7 @@ func check(ok: bool, message: String) -> void:
 	print("PASS: " if ok else "FAIL: ",message)
 	if not ok: failures += 1
 func snap(run: RunState) -> Array:
-	return [run.get_cash_cents(),run.get_completed_run_cycles(),run.get_available_redraws(),run.get_owned_feature_ids(),run._feature_research.duplicate(true),run.get_studio_finance_snapshot(),run.random_streams.snapshot()]
+	return [run.get_cash_cents(),run.get_completed_run_cycles(),run.get_available_redraws(),run.get_owned_feature_ids(),run._feature_research.duplicate(true),run.get_engine_feature_state(),run.get_studio_finance_snapshot(),run.random_streams.snapshot()]
 func _run() -> void:
 	check(FeatureResearch.payment(150000,2,0,0)=={"down_cents":75000,"nominal_cents":37500,"due_cents":37500},"Two-action baseline arithmetic")
 	check(FeatureResearch.payment(150000,2,1,10).due_cents==33750,"Later familiarity discounts only later installment")
@@ -21,7 +21,7 @@ func _run() -> void:
 	var free_before := run.get_completed_run_cycles()
 	var starter: StringName
 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
-		if run.get_primitive_reserve_offer(StringName(entry.id)).can_purchase:
+		if run.get_primitive_reserve_offer(StringName(entry.id)).get("can_purchase",false):
 			starter = StringName(entry.id)
 			break
 	check(run.purchase_starter_feature(starter) and run.owns_feature(starter) and run.get_completed_run_cycles()==free_before,"Initial Primitive purchase stays instant")
@@ -36,7 +36,7 @@ func _run() -> void:
 	var second: StringName
 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
 		var id := StringName(entry.id)
-		if run.get_feature_research_quote(id).can_admit: second = id; break
+		if run.get_feature_research_quote(id).get("can_admit",false): second = id; break
 	check(run.admit_feature_research(run.get_feature_research_quote(second)),"Distinct Primitive reserve queues behind head")
 	before = snap(run)
 	check(not run.research_feature(run.get_feature_research_quote(second)) and snap(run)==before,"FIFO blocks non-head without mutation")

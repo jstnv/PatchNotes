@@ -1,0 +1,121 @@
+{
+  "model": "post-Feature weighted Pass draws; 25/25/25/25 priorities; seven candidate maximum; no redraw; greedy best-review four-card hands",
+  "source": {
+    "featureResultSha256": "c79336e646d105a6b6fb1ab6cc4cfe34517eb5665803310cee85ffeb80f60d94",
+    "cardLedgerSha256": "0f093b0ba907043120c3e6e529511322e6e0b99358adf6d69c80d5c174cfc83c"
+  },
+  "seeds": 100000,
+  "printed": {
+    "design": [
+      19,
+      13,
+      18
+    ],
+    "alpha": [
+      11,
+      11,
+      17
+    ]
+  },
+  "arms": {
+    "1/K6": {
+      "terminalBudget": {
+        "design": 9,
+        "alpha": 7
+      },
+      "meanReview": 7.151355000000876,
+      "medianReview": 7.1,
+      "p10Review": 6.6,
+      "p90Review": 7.8,
+      "atLeast8": 0.04963,
+      "meanCore": [
+        34.92704,
+        18.42078,
+        50.69394,
+        39.04392
+      ],
+      "meanPasses": {
+        "design": 8,
+        "alpha": 4
+      },
+      "prefixes": {
+        "design": [
+          4,
+          6,
+          9
+        ],
+        "alpha": [
+          2,
+          4,
+          7
+        ]
+      }
+    },
+    "2/K8": {
+      "terminalBudget": {
+        "design": 8,
+        "alpha": 6
+      },
+      "meanReview": 6.977086000000925,
+      "medianReview": 6.9,
+      "p10Review": 6.5,
+      "p90Review": 7.6,
+      "atLeast8": 0.02316,
+      "meanCore": [
+        34.13874,
+        17.3617,
+        51.31836,
+        40.18448
+      ],
+      "meanPasses": {
+        "design": 8,
+        "alpha": 4
+      },
+      "prefixes": {
+        "design": [
+          4,
+          6,
+          8
+        ],
+        "alpha": [
+          3,
+          4,
+          6
+        ]
+      }
+    },
+    "1/K5": {
+      "terminalBudget": {
+        "design": 11,
+        "alpha": 8
+      },
+      "meanReview": 7.479040000000868,
+      "medianReview": 7.4,
+      "p10Review": 6.9,
+      "p90Review": 8.2,
+      "atLeast8": 0.1649,
+      "meanCore": [
+        36.93472,
+        20.01504,
+        53.22648,
+        41.12008
+      ],
+      "meanPasses": {
+        "design": 8,
+        "alpha": 8
+      },
+      "prefixes": {
+        "design": [
+          4,
+          7,
+          11
+        ],
+        "alpha": [
+          3,
+          5,
+          8
+        ]
+      }
+    }
+  }
+}

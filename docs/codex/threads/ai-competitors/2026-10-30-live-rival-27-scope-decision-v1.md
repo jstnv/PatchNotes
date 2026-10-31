@@ -1,0 +1,11 @@
+# Live rival starting pools — 2026-10-30
+
+**IMPLEMENTED locally, ACTIVE/TRIAL.** Direct user instruction: “Make sure they use the27 scope feature pool when they spawn,” following low live Reviews around cycle20. This authorizes the existing live cohort's startup membership only. It supersedes the held exact-roster decision for these two fresh incumbents; the private1977/eight-rival opening, funding, historical standards and35-Scope target are separate and remain held.
+
+Current live rivals previously used the player's12-Scope v5 roster plus extras, giving14 future-eligible Scope each and retired Audio ownership. New Arcade Foundry/Action uses the declared active26-Scope candidate membership plus Dialogue1; Wayfinder Works/Adventure uses its active23-Scope membership plus Sprites2 and Scrolling2. Exact fixed lists and atomic active/phase/prerequisite/27 validation live in `patch-notes/scripts/market/rival_starting_pool.gd`, profile `incumbent-active-27-v1`. New catalog cards never expand these grants implicitly. Existing card stats/prices/phases do not change. Timer/Inventory retain incumbent synergy selection; richer purchases still use the existing fallback.
+
+Player v1–v5 definitions and12-Scope starts remain exact. Cash/traits, seed derivation, date, archive facts, finance and ordinary policy timing remain unchanged. Ownership is replaced only after fresh rival construction; hydration never reapplies it. Previously saved14-Scope rivals and frozen projects stay exact. The single33f44f predecessor source is accepted only with the exact existing player/rival content revision and all ordinary validation; no schema or header relabelling.
+
+Matched20-cycle seed4417 first Reviews change from Action0.9/Adventure0.3 to5.0/2.2. Seed4418 gives3.5/3.3 first Reviews and another Action3.4 before cycle20. These are actual legal launches, not Review targets or floors. First-seed release count changes5→2 because the larger real supply takes longer; several quality/funding/policy questions remain open. No no-lag, first-release quality, eight-rival adoption or packaged-build claim.
+
+[Plan](2026-10-30-live-rival-27-scope-plan-v1.md) · [exact checks, source and retained failures](../../logs/2026-10-30-live-rival-27-scope-v1.md).

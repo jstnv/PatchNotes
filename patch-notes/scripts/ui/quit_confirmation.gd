@@ -47,6 +47,7 @@ func _update_copy() -> void:
 	get_label().hide()
 	get_node("QuitCopy/Header/Heading").text = title
 	get_node("QuitCopy/Warning").text = dialog_text
+	_settle_copy.call_deferred()
 
 func _visibility_changed() -> void:
 	if _entrance != null and _entrance.is_valid(): _entrance.kill()
@@ -62,3 +63,19 @@ func _slide_in() -> void:
 
 func _exit_tree() -> void:
 	if _entrance != null and _entrance.is_valid(): _entrance.kill()
+
+func _settle_copy() -> void:
+	# Autowrap can report a transient one-word-wide minimum on first popup.
+	# Fit only after containers have laid out; this bound callback is removed on free.
+	if not visible or not is_inside_tree(): return
+	if not get_tree().process_frame.is_connected(_fit_copy):
+		get_tree().process_frame.connect(_fit_copy,CONNECT_ONE_SHOT)
+
+func _fit_copy() -> void:
+	if not visible or not is_inside_tree() or get_parent()==null: return
+	if _entrance != null and _entrance.is_valid():_entrance.kill()
+	reset_size()
+	var parent_window:=get_parent().get_window()
+	if is_embedded():position=Vector2i((parent_window.get_visible_rect().size-Vector2(size))*0.5)
+	else:position=parent_window.position+(parent_window.size-size)/2
+	_slide_in()

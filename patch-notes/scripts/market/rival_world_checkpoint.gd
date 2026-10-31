@@ -4,7 +4,21 @@
 extends RefCounted
 
 const CAREER_PREDECESSORS := ["2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6"]
+## Studio Management navigation only; exact preceding current-content world.
+## 2026-10-31 hub/cash feedback and prospective free Contract recovery; exact prior saved data.
+const STUDIO_MANAGEMENT_PREDECESSORS := ["2e5049b58267d27fbff11408109e37f43dea6b2cbd84fd570ffcc94acabe3015", "bf3dffde495d7149a9556091c4434c06af9db8b7c16ac27b6415378c0590b4f3"]
+## Spawn-only pool correction: restore exact old ownership/projects unchanged.
+const RIVAL_POOL_PREDECESSORS := ["33f44f0c61446daf6f464bee3c04f689a437d4b08704d2c3dbc65874778a1f27"]
+## Read-only historical Market presentation; persisted rules/fields are exact.
+const MARKET_HISTORY_PREDECESSORS := ["c4436b020d6580b0ddc79f40e18f085e43c742965e2bcfdce75104fe386255d1"]
+## Exact immediately preceding unversioned-budget builds; active projects finish
+## under explicit legacy rules, and all newly begun projects use2/K8.
+const VERSIONED_BUDGET_PREDECESSORS := [
+	"52a411b66e7b0856cc0cf280cff26d95275c6d2529d59111f4fc7bc5e224bf72", # Before prospective stored-rent admission; existing values/history retained.
+	"d7295bdcea8bd5093115b42ddba4913f4d7125ff6f697bf5945dc8c62fca0e09", "dabfdcc4484b44727f7cc0f772811346c13655c617ee0564562a110d723ef692", "b0f37941fa67561712612a41b31e2c7817ca7199156ce43883765324ced57bfa", "4a2cc02b5371a69f7b0c138b11eac6be863f1523975869d26895f725fb78fb0e", "4dfa8bc8f6520136df0757848f7931fc74e9baa48b373d67f004e796f16d0df0"]
+const BUDGET_PREDECESSORS := ["ac5b36c205824b47262a192e83fc7b8c724314088a1fa7578279a774b1920e07", "5b253e0c999d11652782544266cdb222ad052cd01d49ab8969f9669b074a70c2"]
 const Session := preload("res://scripts/simulation/campaign_session.gd")
+
 ## Studio header observer only; exact previous editor source with current content.
 const STUDIO_GLOW_PREDECESSORS := ["962fd5777112cef637936e53749b009f02c4eef1b4837e4086d47078fc9335cd", "b5f2bb073310a6524c0294335dfd4e88d89b716a21b94f26e7aa83409c75dc17"]
 ## Research admission dialog presentation only; exact preceding current-content world.
@@ -21,6 +35,10 @@ const STORE_ROOT_PRESENTATION_PREDECESSORS := ["0c86786e04d95976d42933e18e1b3758
 const GRID_PREDECESSOR_SOURCES := ["a5c5d543474d24a1dc6ee2c901f4446380b1d0e572ddb414fe63e5d173439328"]
 ## Store prerequisite navigation only; exact preceding world and rules retained.
 const STORE_NAVIGATION_PREDECESSORS := ["98e0b0926f13b8cf207ef375ff41bf2d8d9a82f6e7ac26d63aa447dc0fb50083"]
+
+const Book:=preload("res://scripts/market/rival_standard_book.gd")
+const Historical := preload("res://scripts/market/historical_standard_trial.gd")
+
 ## User-approved 2026-10-27: exact pre-Research-optimization editor only.
 ## Current player/rival content revisions and all ordinary validation still apply.
 const RESEARCH_PERFORMANCE_PREDECESSORS := ["25dc0a8892df95b95b93690b5224d12e4242a97426ad5d4dbf4c98d42696af59"]
@@ -159,6 +177,7 @@ const PROJECT_IDS := ["_release_id","_competitor_snapshot_id","_market_forecast_
 const PROJECT_ID_ARRAYS := ["_exhausted_beta_card_ids","_implemented_design_feature_ids","_unimplemented_design_feature_ids","_implemented_alpha_feature_ids","_unimplemented_alpha_feature_ids","_feature_supply_ids"]
 const RESULT_FIELDS := ["_review_result","_awareness_result","_launch_market_context_result","_units_sold_result","_month_one_sales_revenue_result"]
 const HAND_COMMON := ["priorities","candidate_ids","next_candidate_id","revision","active"]
+const CareerPreviousWorld := preload("res://scripts/persistence/pre_rival_career/world.gd")
 var error := ""
 
 static func _project_schema() -> Dictionary:
@@ -168,7 +187,11 @@ static func _project_schema() -> Dictionary:
 	for field: String in PROJECT_BOOLS: schema[field] = "bool"
 	for field: String in PROJECT_IDS: schema[field] = "id"
 	for field: String in PROJECT_ID_ARRAYS: schema[field] = CheckpointSchema.array_of("id")
-	return schema
+	var with_engine := schema.duplicate(true)
+	with_engine._engine_id = "id"
+	var frozen_engine:=with_engine.duplicate(true)
+	frozen_engine._engine_capacity="uint"
+	return CheckpointSchema.union_of([schema,with_engine,frozen_engine])
 
 static func _hand_schema(phase: int) -> Dictionary:
 	var schema := {"priorities":CheckpointSchema.map_of("id" if phase==2 else "uint","uint"),"candidate_ids":CheckpointSchema.array_of("uint"),"candidate_cards":CheckpointSchema.array_of("id"),"next_candidate_id":"uint","revision":"uint","active":"bool"}
@@ -191,41 +214,63 @@ static func _hand_schema(phase: int) -> Dictionary:
 	return schema
 
 static func _development_schema(phase: int) -> Dictionary:
-	return {"phase_index":"uint","sequence":"uint","awaiting_confirmation":"bool","finalized":"bool","project":_project_schema(),"hand":_hand_schema(phase)}
+	var legacy: Dictionary={"phase_index":"uint","sequence":"uint","awaiting_confirmation":"bool","finalized":"bool","project":_project_schema(),"hand":_hand_schema(phase)}
+	var current:=legacy.duplicate(true)
+	current.pass_budget={"version":"uint","origin":"text","printed":"uint","spent":"uint"}
+	return CheckpointSchema.union_of([current,legacy])
 
 static func _archive_schema() -> Dictionary:
 	return {"id":"id","title":"text","year":"uint","genre":"id","theme":"id","review_tenths":"uint"}
 
+static func _projected_archive_schema() -> Dictionary:
+	var result := _archive_schema()
+	result.release_cycle = "uint"
+	result.cores = CheckpointSchema.array_of("uint")
+	return result
+
 static func _release_schema() -> Dictionary:
 	return {"studio_id":"id","release_id":"id","release_cycle":"uint","title":"text","genre":"id","theme":"id","review_tenths":"uint"}
 
+static func _book_source_schema() -> Dictionary:
+	return {"studio_id":"text","release_id":"text","release_cycle":"uint","review_tenths":"uint","genre":"text","cores":CheckpointSchema.array_of("uint")}
 static func _market_schema() -> Dictionary:
-	return {"version":"uint","cycle_start":"uint","id":"text","facts":CheckpointSchema.array_of({
-		"studio_id":"text","release_id":"text","release_cycle":"uint","genre":"text","theme":"text",
-		"review_tenths":"uint","cores_available":"bool","cores":CheckpointSchema.array_of("uint")})}
+	var ordinary: Dictionary={"version":"uint","cycle_start":"uint","id":"text","facts":CheckpointSchema.array_of({"studio_id":"text","release_id":"text","release_cycle":"uint","genre":"text","theme":"text","review_tenths":"uint","cores_available":"bool","cores":CheckpointSchema.array_of("uint")})}
+	var book: Dictionary=ordinary.duplicate(true)
+	book.epoch_offset="uint";book.basis=CheckpointSchema.map_of("text",{"first":_book_source_schema(),"benchmarks":CheckpointSchema.array_of(_book_source_schema())})
+	return CheckpointSchema.union_of([ordinary,book])
 
 static func _origin_schema() -> Dictionary:
 	return {"source_id":"text","content_revision":"text","cycle":"uint","active_projects":CheckpointSchema.map_of("id","id")}
 
 func _expected_market_facts(market: Dictionary, player_payload: Dictionary, studio_rows: Array) -> Variant:
-	var sources: Array=[{"id":str(player_payload.get("run_id","")),"run":player_payload.get("run",{})}]
+	var sources: Array=[{"id":str(player_payload.get("run_id","")),"run":player_payload.get("run",{}),"offset":0}]
 	for studio: Variant in studio_rows:
 		if not studio is Dictionary or not studio.get("run") is Dictionary: return null
-		sources.append({"id":str(studio.get("id","")),"run":studio.run.get("run",{})})
+		var offset_codec:=CheckpointCodec.new()
+		var offset: Variant=offset_codec.integer(studio.get("offset","0"))
+		if not offset_codec.error.is_empty(): return null
+		sources.append({"id":str(studio.get("id","")),"run":studio.run.get("run",{}),"offset":offset})
 	var facts: Array=[]
 	for source: Dictionary in sources:
 		var run: Variant=source.run
 		if source.id.is_empty() or not run is Dictionary or not run.get("release_metadata") is Array or not run.get("released_games") is Array: return null
+		var closed: Dictionary={}
+		for closed_entry: Variant in run.get("closed_historical_ids",[]):
+			if not closed_entry is Dictionary or not closed_entry.get("key") is String: return null
+			closed[closed_entry.key]=true
 		var sales_by_id: Dictionary={}
 		for sale: Variant in run.released_games:
 			if not sale is Dictionary or not sale.get("key") is String or not sale.get("value") is Dictionary or sales_by_id.has(sale.key): return null
 			sales_by_id[sale.key]=sale.value
 		for entry: Variant in run.release_metadata:
 			if not entry is Dictionary or not entry.get("key") is String or not entry.get("value") is Dictionary or not sales_by_id.has(entry.key): return null
+			if closed.has(entry.key): continue
 			var meta: Dictionary=entry.value
 			var codec:=CheckpointCodec.new()
 			var release_cycle: Variant=codec.integer(meta.get("release_cycle"))
 			if not codec.error.is_empty(): return null
+			release_cycle-=int(source.offset)
+			if release_cycle<0: return null
 			if release_cycle>=market.cycle_start or market.cycle_start-release_cycle>Market.WINDOW_CYCLES: continue
 			var review_tenths: Variant=codec.integer(sales_by_id[entry.key].get("review_tenths"))
 			if not codec.error.is_empty() or not meta.get("review") is Dictionary: return null
@@ -264,6 +309,8 @@ func _project_state(project: ProjectState) -> Dictionary:
 	var result := {}
 	for field: String in PROJECT_INTS + PROJECT_FLOATS + PROJECT_BOOLS + PROJECT_IDS + PROJECT_ID_ARRAYS + ["_base_name","_core_scores","_genre_ratios","_market_standards","_market_snapshot_id","_market_details"]:
 		result[field] = project.get(field)
+	result._engine_id = project.get_engine_id()
+	result._engine_capacity=project._engine_capacity
 	return result
 
 func _hand_state(hand: RefCounted, phase: int) -> Dictionary:
@@ -284,18 +331,26 @@ func _hand_state(hand: RefCounted, phase: int) -> Dictionary:
 		result.launch_confirmation_pending = hand.launch_confirmation_pending
 	return result
 
-func _capture_development(session: RefCounted) -> Variant:
+func _snapshot_development(session: RefCounted) -> Variant:
 	if session.in_studio: return null
 	var dev: RefCounted = session.development
 	if dev == null or dev.phase_index < 0 or dev.phase_index > 2: error = "Invalid active rival phase"; return null
 	var project := _project_state(dev.project)
 	if not error.is_empty(): return null
-	var state := {"phase_index":dev.phase_index,"sequence":dev.sequence,"awaiting_confirmation":dev.awaiting_confirmation,"finalized":dev.finalized,"project":project,"hand":_hand_state(dev.hand,dev.phase_index)}
-	return _encode(state,_development_schema(dev.phase_index))
+	var state := {"phase_index":dev.phase_index,"sequence":dev.sequence,"awaiting_confirmation":dev.awaiting_confirmation,"finalized":dev.finalized,"project":project,"hand":_hand_state(dev.hand,dev.phase_index),"pass_budget":dev.pass_budget_state()}
+	# Only plain detached values cross to the writer; no Project/Hand/Card objects.
+	return state.duplicate(true)
+
+func _capture_development(session: RefCounted) -> Variant:
+	var state: Variant=_snapshot_development(session)
+	return null if state==null else _encode(state,_development_schema(state.phase_index))
 
 func snapshot(world: RivalWorld, studio_adapter: StudioCheckpoint = null) -> Dictionary:
 	error = ""
 	if world == null or world.player == null or world._busy or world.cycle != world.player.get_completed_run_cycles() or world.studios.is_empty() or world.studios.size() > MAX_RIVALS: error = "World is not at a save boundary"; return {}
+	var projected: bool=not world.calendar_offsets.is_empty()
+	if not world.policy_states.is_empty() and world.policy_states.size()!=world.studios.size():error="Unknown career policy owner";return {}
+	if projected and (world.calendar_offsets.size()!=world.studios.size() or world.player._calendar_start_year!=1980): error="Invalid projected world calendar"; return {}
 	if not Market.valid(world.market_snapshot) or world.market_snapshot.cycle_start!=world.cycle-world.cycle%2: error = "Invalid committed market month"; return {}
 	var rows: Array = []
 	var ids: Array = world.studios.keys()
@@ -303,22 +358,32 @@ func snapshot(world: RivalWorld, studio_adapter: StudioCheckpoint = null) -> Dic
 	var adapter := studio_adapter if studio_adapter != null else StudioCheckpoint.new()
 	for id: StringName in ids:
 		var session: RefCounted = world.studios[id]
-		if session.run.get_completed_run_cycles() != world.cycle or session.contract != null: error = "Rival clock or Contract unavailable"; return {}
+		if session.run._rival_founder_profile=="rival-founder-active-1977-v2" and not world.policy_states.has(id):error="Missing career policy memory";return {}
+		var offset: int=int(world.calendar_offsets.get(id,0))
+		if (projected and (offset!=72 or session.run._historical_close_cycle!=72 or session.run._calendar_start_year!=1977)) or session.run.get_completed_run_cycles() != world.cycle+offset or session.contract != null: error = "Rival clock or Contract unavailable"; return {}
 		var active_id: StringName = &"" if session.in_studio else session.project_id()
 		var saved_run := adapter.snapshot(session.run,active_id)
 		if saved_run.is_empty(): error = adapter.error; return {}
-		var development: Variant = _capture_development(session)
+		var development: Variant = _snapshot_development(session)
 		if not error.is_empty(): return {}
 		var archive: Variant = world.historical_archive.get(id,[])
 		if not archive is Array: error="Invalid rival archive"; return {}
 		archive=archive.duplicate(true)
+		if projected:
+			for title: Dictionary in archive:
+				for field: String in ["id","genre","theme"]: title[field]=StringName(title[field])
 		if not error.is_empty(): return {}
-		rows.append({"id":str(id),"run":saved_run,"sequence":str(session.sequence),"development":development,"archive":archive})
+		var row := {"id":str(id),"run":saved_run,"sequence":str(session.sequence),"development":development,"archive":archive}
+		if projected: row.offset = str(offset)
+		if not world.policy_states.is_empty():
+			if not world.policy_states.has(id):error="Missing career policy state";return {}
+			row.policy=world.policy_states[id].duplicate(true)
+		rows.append(row)
 	var history: Variant = world.observation().live_releases
 	if not error.is_empty(): return {}
 	var encoded_market: Variant = world.market_snapshot.duplicate(true)
 	if not error.is_empty(): return {}
-	var payload := {"schema_version":"1","rng_algorithm":RunRandom.ALGORITHM,"cycle":str(world.cycle),"studios":rows,"history":history,"market":encoded_market}
+	var payload := {"schema_version":("3" if not world.policy_states.is_empty() else "2") if projected else "1","rng_algorithm":RunRandom.ALGORITHM,"cycle":str(world.cycle),"studios":rows,"history":history,"market":encoded_market}
 	if not world.market_origin.is_empty():
 		payload.market_origin=world.market_origin.duplicate(true)
 		if not error.is_empty(): return {}
@@ -335,9 +400,15 @@ func encode_snapshot(native: Dictionary) -> Dictionary:
 	var payload := native.duplicate(true)
 	var adapter := StudioCheckpoint.new()
 	for row: Dictionary in payload.studios:
+		if row.development!=null:
+			row.development=_encode(row.development,_development_schema(int(row.development.phase_index)))
+			if not error.is_empty():return {}
+		if payload.schema_version=="3":
+			row.policy=_encode(row.policy,_policy_schema())
+			if not error.is_empty():return {}
 		row.run=adapter.encode_snapshot(row.run)
 		if row.run.is_empty(): error=adapter.error; return {}
-		row.archive=_encode(row.archive,CheckpointSchema.array_of(_archive_schema()))
+		row.archive=_encode(row.archive,CheckpointSchema.array_of(_projected_archive_schema() if payload.schema_version in ["2","3"] else _archive_schema()))
 		if not error.is_empty(): return {}
 	payload.history=_encode(payload.history,CheckpointSchema.array_of(_release_schema()))
 	if not error.is_empty(): return {}
@@ -353,7 +424,21 @@ func capture(world: RivalWorld) -> Dictionary:
 	var native := snapshot(world)
 	return {} if native.is_empty() else encode_snapshot(native)
 
-func _read(payload: Dictionary, player_payload: Dictionary, captured_source_identity: String = "") -> Dictionary:
+func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_source_identity: String = "") -> Dictionary:
+	if player_payload.get("run") is Dictionary and not player_payload.run.has("calendar_start_year"):
+		var previous:=CareerPreviousWorld.new()
+		# Code-owned exact prior runtime; never accept a source supplied by data.
+		var native: Dictionary=previous._read(payload,player_payload,"673d2891707ec1092aff6d929a92c96ff38f3f8a620754f5de3d0d3ffc9325d1")
+		if native.is_empty():error=previous.error;return {}
+		# The preceding reader has verified the exact source/content pair. Retain
+		# that generation provenance, rather than the adapter runtime identity.
+		var legacy_origin: String=str(payload.get("source_identity",""))
+		if not _known_budget_origin(legacy_origin):error="Unknown legacy Pass Budget source";return {}
+		for row: Dictionary in native.rows:
+			row.offset=0
+			if not row.development.is_empty():row.development.pass_budget={"version":0,"origin":legacy_origin,"printed":0,"spent":0}
+		return native
+
 	error = ""
 	var predecessor_source: Variant = payload.get("source_identity")
 	var relationship_predecessor: bool = predecessor_source == RELATIONSHIP_PREDECESSOR_SOURCE or predecessor_source in RELATIONSHIP_PREDECESSOR_EXPORTS or predecessor_source in COMPATIBLE_MARKET_PRESENTATION_SOURCES
@@ -365,6 +450,8 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
 	var source_ok: bool = predecessor_source in CAREER_PREDECESSORS or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS or predecessor_source in TECH_ROW_PRESENTATION_PREDECESSORS or predecessor_source in AUDIO_PREDECESSOR_SOURCES or grid_predecessor or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS or predecessor_source==current_source or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ERA_PREDECESSORS or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().pre_course_revision() if predecessor_source==current_source or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS else StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_ERA_RULES)
 	if predecessor_source==current_source:paired_revision=StudioCheckpoint.new().revision()
+	if predecessor_source in STUDIO_MANAGEMENT_PREDECESSORS+RIVAL_POOL_PREDECESSORS+MARKET_HISTORY_PREDECESSORS+BUDGET_PREDECESSORS+VERSIONED_BUDGET_PREDECESSORS:
+		source_ok=true;paired_revision=StudioCheckpoint.new().revision()
 	if predecessor_source in CAREER_PREDECESSORS:paired_revision=StudioCheckpoint.new().pre_course_revision()
 	if predecessor_source in AUDIO_PREDECESSOR_SOURCES+STORE_ROOT_PRESENTATION_PREDECESSORS: paired_revision=StudioCheckpoint.new().pre_audio_revision()
 	if predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS+TECH_ROW_PRESENTATION_PREDECESSORS: paired_revision=StudioCheckpoint.new().pre_gameplay_revision()
@@ -381,7 +468,9 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
 		for row: Variant in payload.studios:
 			if not row is Dictionary or not row.get("run") is Dictionary or row.run.get("content_revision") != paired_revision:
 				error = "Mismatched relationship Studio source/content pair"; return {}
-	if payload.size()!=7+int(payload.has("legacy"))+int(payload.has("market_origin")) or payload.get("schema_version")!="1" or not source_ok or payload.get("rng_algorithm")!=RunRandom.ALGORITHM or not payload.get("studios") is Array or not payload.get("history") is Array or not payload.get("market") is Dictionary:
+	var projected: bool=payload.get("schema_version") in ["2","3"]
+	var career: bool=payload.get("schema_version")=="3"
+	if payload.size()!=7+int(payload.has("legacy"))+int(payload.has("market_origin")) or payload.get("schema_version") not in ["1","2","3"] or not source_ok or payload.get("rng_algorithm")!=RunRandom.ALGORITHM or not payload.get("studios") is Array or not payload.get("history") is Array or not payload.get("market") is Dictionary:
 		error = "INCOMPATIBLE_RIVAL_WORLD_SOURCE_OR_SCHEMA"
 		return {}
 	var legacy := {}
@@ -406,25 +495,31 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
 	var seen := {}
 	var all_archive_ids := {}
 	var rows: Array = []
+	var budget_definitions: Dictionary={}
 	var adapter := StudioCheckpoint.new()
 	for row: Variant in payload.studios:
-		if not row is Dictionary or row.size()!=5 or not row.get("id") is String or not row.get("run") is Dictionary or not row.get("sequence") is String or not row.has("development") or not row.get("archive") is Array:
+		if not row is Dictionary or row.size()!=((7 if career else 6) if projected else 5) or not row.get("id") is String or not row.get("run") is Dictionary or not row.get("sequence") is String or not row.has("development") or not row.get("archive") is Array or (projected and not row.get("offset") is String):
 			error = "Malformed rival record"; return {}
 		var id := StringName(row.id)
 		if id.is_empty() or seen.has(id) or row.run.get("run_id")!=row.id or row.id==player_payload.run_id: error = "Duplicate or mismatched rival ID"; return {}
 		seen[id]=true
 		var sequence: Variant = codec.integer(row.sequence)
 		if not codec.error.is_empty() or sequence > RunState.MAX_SIGNED_INT: error = "Invalid rival sequence"; return {}
+		var offset: int=0
+		if projected:
+			var parsed_offset: Variant=codec.integer(row.offset)
+			if not codec.error.is_empty() or parsed_offset!=72: error="Invalid projected rival offset"; return {}
+			offset=parsed_offset
 		var active := row.development != null
 		var reason := adapter.validate_active_rival(row.run) if active else adapter.validate(row.run)
 		if not reason.is_empty(): error = reason; return {}
-		if row.run.run.completed_run_cycles != payload.cycle: error = "Rival run cycle mismatch"; return {}
-		var archive: Variant = _decode(row.archive,CheckpointSchema.array_of(_archive_schema()))
+		if int(row.run.run.completed_run_cycles) != cycle+offset: error = "Rival run cycle mismatch"; return {}
+		var archive: Variant = _decode(row.archive,CheckpointSchema.array_of(_projected_archive_schema() if projected else _archive_schema()))
 		if not error.is_empty(): return {}
 		if archive.is_empty() and (legacy.is_empty() or row.id not in legacy.founder.career_studio_ids): error = "Missing frozen rival archive"; return {}
 		var historical_ids := {}
 		for title: Dictionary in archive:
-			if title.id.is_empty() or all_archive_ids.has(title.id) or title.year>=RunState.START_YEAR or title.review_tenths>100 or PrimitivePredevelopment.find_entry("genres",title.genre).is_empty() or PrimitivePredevelopment.find_entry("themes",title.theme).is_empty(): error = "Invalid rival archive"; return {}
+			if title.id.is_empty() or all_archive_ids.has(title.id) or title.year>=(1980 if projected else RunState.START_YEAR) or title.review_tenths>100 or PrimitivePredevelopment.find_entry("genres",title.genre).is_empty() or PrimitivePredevelopment.find_entry("themes",title.theme).is_empty(): error = "Invalid rival archive"; return {}
 			historical_ids[title.id] = true
 			all_archive_ids[title.id] = true
 		var dev := {}
@@ -434,9 +529,25 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
 			if not codec.error.is_empty() or phase>2: error = "Invalid rival phase"; return {}
 			dev = _decode(row.development,_development_schema(phase))
 			if not error.is_empty() or dev.is_empty(): return {}
+			if not dev.has("pass_budget"):
+				if predecessor_source==current_source or predecessor_source in VERSIONED_BUDGET_PREDECESSORS:error="Missing current Pass Budget state";return {}
+				dev.pass_budget={"version":0,"origin":str(predecessor_source),"printed":0,"spent":0}
+			if budget_definitions.is_empty():
+				for entry: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries():budget_definitions[StringName(entry.id)]=entry
+			if not _valid_pass_budget(dev,budget_definitions):return {}
 			if not Market.valid_details(dev.project._market_details,dev.project._genre_id) or dev.project._market_details.standards!=dev.project._market_standards or dev.project._market_details.snapshot_id!=dev.project._market_snapshot_id: error="Invalid frozen rival market target"; return {}
 			if dev.project._release_id != StringName(row.run.active_project_id) or dev.project._release_id in historical_ids or dev.finalized or dev.project._has_beta_finalization: error = "Invalid active project boundary"; return {}
-			var active_native := adapter._decode_payload(row.run,true)
+			var active_native := _decode_run(adapter,row.run,true)
+			if predecessor_source==current_source and (not dev.project.has("_engine_id") or not dev.project.has("_engine_capacity")):error="Missing current frozen engine state";return {}
+			var engine_id: StringName=dev.project.get("_engine_id",&"legacy_engine")
+			var engine_capacity: int=dev.project.get("_engine_capacity",0)
+			var engine_state: Dictionary=active_native.run.get("engine_features",{})
+			if engine_capacity==0 and engine_id!=&"legacy_engine" and preload("res://scripts/engines/engine_marketplace.gd").find(engine_id).is_empty():error="Missing proprietary capacity";return {}
+			if not engine_state.is_empty():
+				if not engine_state.engines.has(engine_id) or (engine_capacity>0 and engine_capacity!=engine_state.engines[engine_id].capacity):error="Invalid frozen engine identity/capacity";return {}
+				for feature: StringName in dev.project._feature_supply_ids:
+					if feature not in engine_state.engines[engine_id].implemented:error="Unimplemented frozen engine Feature";return {}
+
 			if active_native.run.support_deals.has(dev.project._release_id):
 				var terms: Dictionary = active_native.run.support_deals[dev.project._release_id]
 				if terms.base_name != dev.project._base_name or terms.genre != dev.project._genre_id or terms.theme != dev.project._theme_id or terms.required_scope != dev.project._required_scope: error="Support/project mismatch"; return {}
@@ -444,13 +555,58 @@ func _read(payload: Dictionary, player_payload: Dictionary, captured_source_iden
 				var terms: Dictionary = active_native.run.commission_deals[dev.project._release_id].terms
 				if terms.base_name != dev.project._base_name or terms.genre != dev.project._genre_id or terms.theme != dev.project._theme_id or terms.required_scope != dev.project._required_scope: error="Commission/project mismatch"; return {}
 			if dev.hand.candidate_ids.size()!=dev.hand.candidate_cards.size() or dev.hand.candidate_ids.size()>32: error = "Invalid rival hand"; return {}
-		rows.append({"id":id,"run":row.run,"sequence":sequence,"development":dev,"archive":archive})
+		if projected and not _validate_projected_archive(adapter,row.run,archive,dev,offset): return {}
+		var memory: Dictionary={}
+		if career:
+			memory=_decode(row.get("policy",{}),_policy_schema())
+			if not error.is_empty() or memory.version!="career-v1" or memory.beta_hands>12 or memory.marketing_hands>12 or memory.loan_project< -1:error="Invalid career policy memory";return {}
+			var released: Array=row.run.run.released_games
+			var previous_project: String="" if released.is_empty() else str(released[-1].key)
+			var active_project: String="" if dev.is_empty() else str(dev.project._release_id)
+			if memory.project_id not in [previous_project,active_project] or (memory.loan_project!=-1 and (memory.loan_project<1 or memory.loan_project>released.size()+1)):error="Unproven career policy project";return {}
+		rows.append({"id":id,"run":row.run,"sequence":sequence,"development":dev,"archive":archive,"offset":offset,"policy":memory})
+	if career:
+		var project_ids: Dictionary={}
+		for row: Dictionary in rows:
+			var native: Dictionary=_decode_run(adapter,row.run,not row.development.is_empty())
+			for release_id: StringName in native.run.released_games:
+				if project_ids.has(release_id):error="Duplicate owner release identity";return {}
+				project_ids[release_id]=true
+		for row: Dictionary in rows:
+			if row.development.is_empty():continue
+			var active_id: StringName=row.development.project._release_id
+			if project_ids.has(active_id):error="Duplicate active owner project identity";return {}
+			project_ids[active_id]=true
 	var history: Variant = _decode(payload.history,CheckpointSchema.array_of(_release_schema()))
 	if not error.is_empty(): return {}
 	var expected_facts: Variant=_expected_market_facts(market,player_payload,payload.studios)
 	if expected_facts==null or expected_facts!=market.facts: error="Market owner provenance mismatch"; return {}
 	if not _validate_frozen_market(player_payload,payload.studios,rows,cycle,origin): return {}
+	if market.version==4 and not _book_matches_owners(market,rows):return {}
+
 	return {"cycle":cycle,"rows":rows,"history":history,"legacy":legacy,"market":market,"market_origin":origin}
+
+func _validate_projected_archive(adapter: StudioCheckpoint, encoded_run: Dictionary, archive: Array, development: Dictionary, offset: int) -> bool:
+	var native: Dictionary=_decode_run(adapter,encoded_run,not development.is_empty())
+	if native.is_empty(): error=adapter.error; return false
+	var run: Dictionary=native.run
+	if run.calendar_start_year!=1977 or run.historical_close_cycle!=offset or run.closed_historical_ids.size()!=archive.size(): error="Projected owner closure mismatch"; return false
+	var first_cycle:=RunState.MAX_SIGNED_INT
+	var first_id: StringName=&""
+	for title: Dictionary in archive:
+		var id: StringName=title.id
+		if not run.closed_historical_ids.has(id) or not run.release_metadata.has(id) or not run.released_games.has(id): error="Unproven projected archive ID"; return false
+		var meta: Dictionary=run.release_metadata[id]
+		var sales: Dictionary=run.released_games[id]
+		if title.year<1977 or title.release_cycle>=offset or title.release_cycle!=meta.release_cycle or title.year!=meta.release_year or title.title!=meta.release_title or title.genre!=meta.genre or title.theme!=meta.theme or title.review_tenths!=sales.review_tenths or title.cores!=meta.review.cores: error="Projected archive/owner mismatch"; return false
+		if title.release_cycle<first_cycle: first_cycle=title.release_cycle; first_id=id
+	if not development.is_empty() and str(development.project._market_details.snapshot_id).begins_with(Historical.PREFIX):
+		var details: Dictionary=development.project._market_details
+		var source: Dictionary=Historical.decoded_source(details.snapshot_id)
+		if source.is_empty() or source.release_id!=str(first_id) or source.release_cycle!=first_cycle: error="Projected historical source missing"; return false
+		var first: Dictionary=run.release_metadata[first_id]
+		if source.studio_id!=str(run.bank_run_id) or source.genre!=str(first.genre) or source.cores!=first.review.cores or source.review_tenths!=run.released_games[first_id].review_tenths: error="Projected historical source mismatch"; return false
+	return true
 
 ## All actual releases remain in owner ledgers, so past monthly inputs can be
 ## reconstructed without saving duplicate snapshots in every sales row.
@@ -458,20 +614,61 @@ func _validate_frozen_market(player_payload: Dictionary, encoded_rows: Array, de
 	var snapshots := {0:Market.neutral()}
 	var owners: Array=[{"id":player_payload.run_id,"run":player_payload,"development":{}}]
 	owners.append_array(decoded_rows)
+	var book_records: Array=[]
+	for owner: Dictionary in owners:
+		if int(owner.get("offset",0))!=72:continue
+		var data: Dictionary=_decode_run(StudioCheckpoint.new(),owner.run,not owner.development.is_empty()).get("run",{})
+		for id: StringName in data.get("released_games",{}):
+			var m: Dictionary=data.release_metadata[id]
+			if m.release_cycle>=72:continue
+			book_records.append({"studio_id":str(owner.id),"release_id":str(id),"release_cycle":int(m.release_cycle),"review_tenths":int(data.released_games[id].review_tenths),"genre":str(m.genre),"cores":m.review.cores.duplicate()})
+	var full_basis:=Book.build_records(book_records,72)
+	if not full_basis.is_empty():snapshots[0]=Book.snapshot(full_basis,0,72)
+
 	for owner: Dictionary in owners:
 		var adapter:=StudioCheckpoint.new()
-		var native: Dictionary=adapter._decode_payload(owner.run,not owner.development.is_empty())
+		var native: Dictionary=_decode_run(adapter,owner.run,not owner.development.is_empty())
 		if native.is_empty(): error=adapter.error; return false
 		var pending: Array=[]
 		for id: StringName in native.run.released_games:
 			var meta: Dictionary=native.run.release_metadata[id]
 			for age: int in native.run.released_games[id].market_factors:
 				var factor: Dictionary=native.run.released_games[id].market_factors[age]
-				pending.append({"details":factor,"release":str(id),"genre":meta.genre,"theme":meta.theme,"earning_cycle":meta.release_cycle+(age-1)*2+1})
-			if meta.review.has("market"): pending.append({"details":meta.review.market,"genre":meta.genre,"project_id":id})
+				pending.append({"details":factor,"release":str(id),"genre":meta.genre,"theme":meta.theme,"earning_cycle":meta.release_cycle+(age-1)*2+1,"prelude":int(owner.get("offset",0))==72 and meta.release_cycle<72})
+			if meta.review.has("market"): pending.append({"details":meta.review.market,"genre":meta.genre,"project_id":id,"prelude":int(owner.get("offset",0))==72 and meta.release_cycle<72})
 		if not owner.development.is_empty(): pending.append({"details":owner.development.project._market_details,"genre":owner.development.project._genre_id,"project_id":owner.development.project._release_id})
 		for item: Dictionary in pending:
 			var d: Dictionary=item.details
+			if item.get("prelude",false) and item.has("earning_cycle"):
+				if item.earning_cycle>72 or d!=Market.neutral_factor():error="Invalid prelude neutral sales";return false
+				continue
+			if str(d.snapshot_id).begins_with(Book.PREFIX):
+				var p:=Book.proof(d.snapshot_id)
+				var begin_cycle: int=_historical_begin_cycle(native.run,StringName(item.get("project_id",&"")))
+				if not Book.valid_details(d,item.genre):error="Invalid Book project proof";return false
+				# Book epoch dates its historical inputs; the owner's offset dates
+				# project work. The ordinary player's physical clock starts at0.
+				var owner_offset: int=int(owner.get("offset",0))
+				var freeze_clock: int=begin_cycle-(owner_offset if int(p.epoch_offset)==72 else 0)
+				if begin_cycle<1 or freeze_clock<0 or p.owner!=str(owner.id) or (p.epoch_offset==0 and (owner_offset!=72 or begin_cycle>72)) or d.cycle_start!=freeze_clock-freeze_clock%2:error="Book project freeze boundary mismatch";return false
+				var expected_basis: Dictionary=Book.build_records(book_records,int(d.cycle_start)+int(p.epoch_offset)).get(str(item.genre),{})
+				var facts: Array=[] if p.epoch_offset==0 else _expected_market_facts(d,player_payload,encoded_rows)
+				var expected: Dictionary=Book.details(Book.snapshot({str(item.genre):expected_basis} if not expected_basis.is_empty() else {},d.cycle_start,p.epoch_offset,facts),str(owner.id),item.genre)
+				if expected!=d:error="Book dated source provenance mismatch";return false
+				continue
+			if str(d.snapshot_id).begins_with(Historical.PREFIX):
+				var begin_cycle: int=_historical_begin_cycle(native.run,StringName(item.get("project_id",&"")))
+				if begin_cycle<1 or begin_cycle>72 or d.cycle_start!=begin_cycle-begin_cycle%2:error="Historical project freeze boundary mismatch";return false
+				var historical: Dictionary=Historical.decoded_source(d.snapshot_id)
+				var first: StringName=native.run.released_games.keys()[0] if not native.run.released_games.is_empty() else &""
+				if int(owner.get("offset",0))!=72 or historical.is_empty() or not native.run.closed_historical_ids.has(first):error="Unproven prelude standard source";return false
+				var meta: Dictionary=native.run.release_metadata[first]
+				if historical.studio_id!=str(owner.id) or historical.release_id!=str(first) or historical.release_cycle!=meta.release_cycle or historical.genre!=str(meta.genre) or historical.cores!=meta.review.cores or historical.review_tenths!=native.run.released_games[first].review_tenths or not Market.valid_details(d,item.genre):error="Historical standard owner mismatch";return false
+				continue
+			if item.get("prelude",false):
+				if Market.targets(Market.neutral(),str(owner.id),item.genre)!=d:error="Invalid first prelude benchmark";return false
+				continue
+			if item.has("earning_cycle"):item.earning_cycle-=int(owner.get("offset",0))
 			if d.historical:
 				if origin.is_empty() or d.snapshot_id!="pre-market-neutral:"+origin.source_id: error="Unproven historical market exemption"; return false
 				if item.has("earning_cycle"):
@@ -483,11 +680,21 @@ func _validate_frozen_market(player_payload: Dictionary, encoded_rows: Array, de
 			if not snapshots.has(d.cycle_start):
 				var facts: Variant=_expected_market_facts(d,player_payload,encoded_rows)
 				if not facts is Array: error="Missing historical market facts"; return false
-				snapshots[d.cycle_start]={"version":Market.VERSION,"cycle_start":d.cycle_start,"facts":facts,"id":Market.identifier(d.cycle_start,facts)}
+				snapshots[d.cycle_start]=Book.snapshot(full_basis,d.cycle_start,72,facts) if not full_basis.is_empty() else {"version":Market.VERSION,"cycle_start":d.cycle_start,"facts":facts,"id":Market.identifier(d.cycle_start,facts)}
 			var snapshot: Dictionary=snapshots[d.cycle_start]
 			var expected: Dictionary=Market.sales_factor(snapshot,str(owner.id),item.release,str(item.genre),str(item.theme)) if item.has("release") else Market.targets(snapshot,str(owner.id),item.genre)
 			if expected!=d: error="Frozen market history/provenance mismatch"; return false
 	return true
+
+## The earliest productive development receipt is the authoritative Begin.
+## This binds historical standards to actual pre-projection work, including
+## the one project carried through January and later released normally.
+func _historical_begin_cycle(run: Dictionary,project_id: StringName) -> int:
+	if project_id.is_empty():return -1
+	var first: int=RunState.MAX_SIGNED_INT
+	for action: Dictionary in run.studio_finance.actions:
+		if action.productive and action.kind==&"development" and action.source_id==project_id:first=mini(first,int(action.cycle))
+	return -1 if first==RunState.MAX_SIGNED_INT else first
 
 func validate(payload: Dictionary, player_payload: Dictionary) -> String:
 	var decoded := _read(payload,player_payload)
@@ -505,6 +712,7 @@ func validate(payload: Dictionary, player_payload: Dictionary) -> String:
 		var session := Session.new()
 		session.run = run
 		world.studios[row.id] = session
+		if row.offset>0: world.calendar_offsets[row.id]=row.offset
 	_check_history_and_legacy(world,decoded.history)
 	return error
 
@@ -515,10 +723,12 @@ func _check_history_and_legacy(world: RivalWorld, history: Array) -> bool:
 		var run: RunState = world.player if entry.studio_id==world.player._bank_run_id else world.studios[entry.studio_id].run
 		var meta := run.get_release_metadata(entry.release_id)
 		var sales := run.get_released_game_sales(entry.release_id)
-		if meta.is_empty() or sales.is_empty() or meta.release_cycle!=entry.release_cycle or meta.release_title!=entry.title or meta.genre!=entry.genre or meta.theme!=entry.theme or sales.review_tenths!=entry.review_tenths: error = "World release provenance mismatch"; return false
+		var offset: int=int(world.calendar_offsets.get(entry.studio_id,0))
+		if meta.is_empty() or sales.is_empty() or meta.release_cycle-offset!=entry.release_cycle or meta.release_title!=entry.title or meta.genre!=entry.genre or meta.theme!=entry.theme or sales.review_tenths!=entry.review_tenths: error = "World release provenance mismatch"; return false
 		actual[entry.release_id] = entry
 	for id: StringName in world.studios:
 		for release_id: StringName in world.studios[id].run.get_released_game_ids():
+			if world.studios[id].run._closed_historical_ids.has(release_id): continue
 			if not actual.has(release_id) or actual[release_id].studio_id!=id: error = "Missing world release"; return false
 	world.live_releases = actual
 	if not world.legacy.is_empty() and not Legacy.valid(world.legacy,world): error = "Invalid restored founder world"; return false
@@ -539,6 +749,7 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 	if not snapshots.load_ledgers(): error = "Rival snapshots unavailable"; return null
 	var adapter := StudioCheckpoint.new()
 	for row: Dictionary in decoded.rows:
+		if not row.get("policy",{}).is_empty():world.policy_states[row.id]=row.policy.duplicate(true)
 		var active: bool = not row.development.is_empty()
 		var run := adapter.hydrate(row.run,active)
 		if run == null: error = adapter.error; return null
@@ -551,6 +762,9 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 		if active:
 			var state: Dictionary = row.development
 			var project := ProjectState.new(state.project._required_scope)
+			project._engine_capacity=state.project.get("_engine_capacity",0)
+			project._pass_budget_version=state.pass_budget.version
+			project._pass_budget_origin=state.pass_budget.origin
 			for field: String in state.project:
 				if field in PROJECT_ID_ARRAYS or field in ["_genre_ratios","_core_scores","_market_standards"]: continue
 				project.set(field,state.project[field])
@@ -574,6 +788,9 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 			dev.snapshots = snapshots
 			dev.phase_index = state.phase_index
 			dev._create_phase(false)
+			if state.phase_index<2:
+				dev.hand._budget_printed=state.pass_budget.printed
+				dev.hand._budget_spent=state.pass_budget.spent
 			dev.sequence = state.sequence
 			dev.awaiting_confirmation = state.awaiting_confirmation
 			dev.finalized = state.finalized
@@ -623,6 +840,68 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 			session.development = dev
 		world.studios[row.id] = session
 		world.historical_archive[row.id] = row.archive
+		if row.offset>0: world.calendar_offsets[row.id]=row.offset
 	if not _check_history_and_legacy(world,decoded.history): return null
 	world.bind_market_providers()
 	return world
+
+static func _policy_schema() -> Dictionary:
+	return {"version":"text","project_id":"text","search_done":"bool","beta_hands":"uint","marketing_hands":"uint","loan_project":"int"}
+
+func _book_matches_owners(market: Dictionary,rows: Array) -> bool:
+	var records: Array=[]
+	for row: Dictionary in rows:
+		var data: Dictionary=_decode_run(StudioCheckpoint.new(),row.run,not row.development.is_empty()).get("run",{})
+		for id: StringName in data.get("closed_historical_ids",{}):
+			var m: Dictionary=data.release_metadata[id]
+			records.append({"studio_id":str(row.id),"release_id":str(id),"release_cycle":int(m.release_cycle),"review_tenths":int(data.released_games[id].review_tenths),"genre":str(m.genre),"cores":m.review.cores.duplicate()})
+	if market.epoch_offset!=72 or market.basis!=Book.build_records(records,72):error="Unproven opening standard book";return false
+	return true
+
+## Scoped read-only decode reuse. Never retained across reads or exposed as a
+## mutable global DTO. Every semantic predicate still executes as before.
+var _decode_scope:=false
+var _decoded_runs: Dictionary={}
+func _read(payload: Dictionary,player_payload: Dictionary,captured_source_identity: String="") -> Dictionary:
+	_decoded_runs.clear();_decode_scope=true
+	var result:=_read_checked(payload,player_payload,captured_source_identity)
+	_decode_scope=false;_decoded_runs.clear();return result
+func _decode_run(adapter: StudioCheckpoint,payload: Dictionary,active: bool=false) -> Dictionary:
+	if not _decode_scope:return adapter._decode_payload(payload,active)
+	var key:=var_to_bytes([payload,active])
+	if _decoded_runs.has(key):adapter.error="";return _decoded_runs[key]
+	var native:=adapter._decode_payload(payload,active)
+	if not native.is_empty():_decoded_runs[key]=native
+	return native
+
+static func _known_budget_origin(source: String) -> bool:
+	if source in BUDGET_PREDECESSORS+STUDIO_MANAGEMENT_PREDECESSORS+RIVAL_POOL_PREDECESSORS+MARKET_HISTORY_PREDECESSORS:return true
+	# The two certified 1977 openings are admitted byte-for-byte by the
+	# opening loader; their active projects predate Pass Budget counters.
+	if source=="2e5049b58267d27fbff11408109e37f43dea6b2cbd84fd570ffcc94acabe3015":return true
+	if source=="673d2891707ec1092aff6d929a92c96ff38f3f8a620754f5de3d0d3ffc9325d1":return true
+	return not source.is_empty() and (source in CAREER_PREDECESSORS or source in STUDIO_GLOW_PREDECESSORS or source in RESEARCH_CONFIRMATION_PREDECESSORS or source in GAMEPLAY_RESTORATION_PREDECESSORS or source in TECH_ROW_PRESENTATION_PREDECESSORS or source in AUDIO_PREDECESSOR_SOURCES or (source in GRID_PREDECESSOR_SOURCES+RESEARCH_PERFORMANCE_PREDECESSORS+QUIT_PRESENTATION_PREDECESSORS+STORE_NAVIGATION_PREDECESSORS) or source in STORE_ROOT_PRESENTATION_PREDECESSORS or source=="" or source in RESEARCH_PERFORMANCE_PREDECESSORS or source in QUIT_PRESENTATION_PREDECESSORS or source in STORE_NAVIGATION_PREDECESSORS or source in STORE_ERA_PREDECESSORS or source in MENU_VISUALIZER_PREDECESSORS or source in STARTER_SCOPE_PREDECESSORS or source in SCORE_FLOAT_PREDECESSORS or source in BALANCED_SMALL_HAND_PREDECESSORS or source in BALANCED_BOOST_PREDECESSORS or source in CARD_POP_PREDECESSORS or source in EMPLOYEE_MENU_PREDECESSORS or source in INSIDER_HOLD_PREDECESSORS or source in PAUSE_TRANSITION_SOURCES or source in LATENCY_PREDECESSOR_SOURCES or source in SEARCH_PRESENTATION_SOURCES or source in EMPLOYEE_PRE_SEARCH_SOURCES or source in ROOT_FIRST_PREDECESSOR_SOURCES or source in USABILITY_PRESENTATION_SOURCES or (source in USABILITY_PREDECESSOR_SOURCES) or (source in SUPPORT_PREDECESSOR_SOURCES or source in COMPATIBLE_COMMISSION_PRESENTATION_SOURCES) or (source == RELATIONSHIP_PREDECESSOR_SOURCE or source in RELATIONSHIP_PREDECESSOR_EXPORTS or source in COMPATIBLE_MARKET_PRESENTATION_SOURCES) or (source in COMMISSION_PREDECESSOR_SOURCES))
+
+func _valid_pass_budget(state: Dictionary,definitions: Dictionary) -> bool:
+	var budget: Dictionary=state.pass_budget
+	if budget.version not in [0,1]:error="Unknown Pass Budget version";return false
+	if budget.version==0:
+		if budget.printed!=0 or budget.spent!=0 or not _known_budget_origin(budget.origin):error="Unproven legacy Pass Budget";return false
+		return true
+	if not budget.origin.is_empty():error="Unexpected Pass Budget origin";return false
+	if state.phase_index==2:
+		if budget.printed!=0 or budget.spent!=0:error="Beta cannot carry active Pass counters";return false
+		return true
+	var printed:=0;var held:=0
+	for id: StringName in state.hand.exhausted:
+		if not state.hand.exhausted[id] or not definitions.has(id):error="Invalid budget Feature provenance";return false
+		var card: Dictionary=definitions[id]
+		if card.type!="feature" or card.phase!=["design","alpha"][state.phase_index]:error="Wrong budget Feature phase";return false
+		if card.has("core_contributions"):
+			for entry: Dictionary in card.core_contributions:printed+=int(entry.value)
+		else:printed+=int(card.get("primary_value",0))+int(card.get("secondary_value",0))
+	for id: StringName in state.hand.candidate_cards:
+		if not definitions.has(id):held+=1 # Pass definitions are outside Feature table.
+	var generated: int=preload("res://scripts/simulation/pass_budget.gd").generated(printed)
+	if budget.printed!=printed or budget.spent>generated or held>generated-int(budget.spent) or state.hand.candidate_cards.size()>7 or (int(budget.spent)+state.hand.exhausted.size())%4!=0 or (int(budget.spent)+state.hand.exhausted.size())/4>int(state.project._current_cycle):error="Inconsistent Pass Budget counters/reservations";return false
+	return true

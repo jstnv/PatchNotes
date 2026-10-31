@@ -71,7 +71,7 @@ func _execute(kind: StringName,payload: Dictionary,readiness: Callable,publicati
 	var selected: Array[CardData] = []
 	for slot in slots: selected.append(cards[slot])
 	var plan := _state.plan_hand(selected)
-	if plan.is_empty() or not _run.can_complete_productive_cycle(plan.remainder_cents): return reject("Contract hand rejected")
+	if plan.is_empty() or not _run.can_complete_contract_hand(_state,plan): return reject("Contract hand rejected")
 	var before := _rng.state
 	var replacements: Array[CardData] = []
 	var expected_cycle := _run.get_completed_run_cycles()
@@ -85,7 +85,7 @@ func _execute(kind: StringName,payload: Dictionary,readiness: Callable,publicati
 			_rng.state = before
 			return reject("Contract refill rejected")
 	var commit := func() -> bool: return _run.commit_contract_hand(_state,selected,plan.remainder_cents)
-	if not _run.complete_productive_action(commit,plan.remainder_cents,expected_cycle,&"",&"publisher_receipt" if plan.remainder_cents > 0 else &"contract_hand",_state.get_offer_id()):
+	if not _run.complete_productive_action(commit,plan.remainder_cents,expected_cycle,&"",&"contract_receipt" if plan.remainder_cents > 0 else &"contract_hand",_state.get_offer_id()):
 		_rng.state = before
 		return reject("Contract cycle rejected")
 	if not plan.completing:

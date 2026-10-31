@@ -20,7 +20,7 @@ func _run() -> void:
 	create_timer(90).timeout.connect(func(): quit(2))
 	var catalog: RefCounted=root.get_node("CardDatabase").get_development_catalog()
 	var player: RefCounted=Factory.create_fresh_session({"schema_version":1,"studio_id":"legacy-player","studio_name":"Legacy Player","specialty":"action","traits":[],"seed":"4417"},catalog)
-	var world := Trial.create_world(player.run,catalog)
+	var world := Trial.create_legacy_world(player.run,catalog)
 	var books := {}
 	for id in Legacy.runs(world): books[id]=Ownership.create(id,{"founder:tester":1000000})
 	check(Legacy.initialize(world,Founder.create("tester","legacy-player",0),books),"Explicit fixture formation initializes without a gameplay default")

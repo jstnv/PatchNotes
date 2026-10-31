@@ -21,9 +21,9 @@ func request(studio: bool, seconds: float, quick_entry: bool = false) -> void:
 	if requested == target: return # Scene reconstruction cannot postpone a cue.
 	requested = target
 	pending = true
-	var interval := ENTRY_STEP if quick_entry and studio else BAR
+	var interval := ENTRY_STEP if quick_entry else BAR
 	boundary = (floor(seconds / interval + 0.000000001) + 1.0) * interval
-	pending_duration = ENTRY_FADE if quick_entry and studio else FADE
+	pending_duration = ENTRY_FADE if quick_entry else FADE
 	if is_equal_approx(weight, target) and fade_to == target:
 		pending = false # Cancel a request that never became audible.
 

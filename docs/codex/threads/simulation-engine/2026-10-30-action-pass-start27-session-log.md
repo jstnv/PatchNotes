@@ -1,0 +1,7 @@
+# Session log — 27-Scope Action start — 2026-10-30
+
+- Branch/HEAD: `main` / `3a61522f18db7a2bae892cb8c5be1fee68cd4100`. Existing shared worktree edits were preserved. No commit or push.
+- Changed this session: created isolated `simulators/action-pass-budget-start27-20261030-v5`; its `project/scripts/simulation/run_factory.gd` grants the exact active 27-Scope Action incumbent roster at fresh creation, and its `project/scripts/debug/pass_budget_career_policy.gd` skips redundant opening starter purchases for that counterfactual. Added smoke/matched configs, retained run bundles, and the dated finding. Canonical `patch-notes/` and Scope requirement were not changed.
+- Checks: `tools/simulator_variant.py create` succeeded with parent ancestry and baseline identity. `tools/simulate.py run` 1/K6 smoke completed 3/3 releases. Matched run completed 15/15 eight-release careers across five seeds and three formulas. `combine_action_pass_careers.mjs` produced the retained 15-case summary. Candidate provenance reports no baseline drift.
+- Result: 1/K6 leads this five-seed 27-Scope-start comparison on pooled Review (4.29 versus 2/K8 3.72 and 1/K5 4.23), 30-Scope reach (5/5 versus 4/5 and 4/5), and mean final cash; no arm reached Review 8.0. Mean cycles to eight releases: 86.4, 79.0, 90.2 respectively.
+- Follow-up: status remains RESEARCH. Validate more seeds, paid access economics, actual Pass counts by phase, and an exact 24-Feature optimized career before proposing either a player start or formula adoption.

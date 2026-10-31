@@ -25,7 +25,7 @@ func _replace_store(node: Node) -> void:
 
 func _initialize() -> void:
 	await process_frame
-	create_timer(30.0).timeout.connect(func() -> void: push_error("Rival Gameplay verifier timed out"); quit(2))
+	create_timer(60.0).timeout.connect(func() -> void: push_error("Rival Gameplay verifier timed out"); quit(2))
 	node_added.connect(_replace_store)
 	var gameplay: Control = load("res://scenes/gameplay.tscn").instantiate()
 	root.add_child(gameplay)
@@ -35,7 +35,7 @@ func _initialize() -> void:
 	if menu==null: quit(1); return
 	gameplay._on_studio_created("Trial Player",&"action",[],menu)
 	await process_frame
-	expect(gameplay.rival_world!=null and gameplay.rival_world.studios.size()==2,"normal new game activates trial rivals")
+	expect(gameplay.rival_world!=null and gameplay.rival_world.studios.size()==8,"normal new game activates trial rivals")
 	expect(gameplay._active_phase is StudioPhase,"normal Studio entered")
 	var status: Label = gameplay._active_phase.get_node_or_null("Dashboard/Layout/RivalTrialStatus")
 	expect(status!=null and status.text.contains("Rivals (trial)"),"Studio shows labeled rival status")

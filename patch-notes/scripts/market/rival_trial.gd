@@ -5,6 +5,7 @@ extends RefCounted
 const Factory := preload("res://scripts/simulation/run_factory.gd")
 const SynergyChoice := preload("res://scripts/market/rival_synergy_choice.gd")
 const BetaChoice := preload("res://scripts/market/rival_beta_synergy_choice.gd")
+const StartingPool := preload("res://scripts/market/rival_starting_pool.gd")
 const ZERO_STEPS := 12
 const BETA_HANDS := 2
 
@@ -21,13 +22,18 @@ class TrialPolicy extends "res://scripts/simulation/decision_policy.gd":
 	func choose(view: Dictionary, _lifetime: RefCounted) -> Dictionary:
 		return decision.call(view)
 
-static func create_world(player: RunState, catalog: RefCounted) -> RivalWorld:
+static func create_world(player: RunState,catalog: RefCounted) -> RivalWorld:
+	return preload("res://scripts/market/rival_opening_loader.gd").new().create(player,catalog)
+
+## Explicit predecessor fixture/recovery utility; existing worlds restore their
+## original two owners and policy. New-save creation never silently falls back.
+static func create_legacy_world(player: RunState, catalog: RefCounted) -> RivalWorld:
 	if player == null or catalog == null or player.get_completed_run_cycles()!=0 or player.get_studio_name().is_empty(): return null
 	var definitions := [
-		{"id":&"incumbent-arcade-foundry","name":"Arcade Foundry","specialty":&"action","extras":[&"music",&"dialogue",&"secrets"],"archive":[
+		{"id":&"incumbent-arcade-foundry","name":"Arcade Foundry","specialty":&"action","archive":[
 			{"id":&"arcade-history-1977","title":"Circuit Clash","year":1977,"genre":&"action","theme":&"science_fiction","review_tenths":72},
 			{"id":&"arcade-history-1979","title":"Skyline Siege","year":1979,"genre":&"action","theme":&"war","review_tenths":78}]},
-		{"id":&"incumbent-wayfinder-works","name":"Wayfinder Works","specialty":&"adventure","extras":[&"sprites",&"8_bit_music",&"music"],"archive":[
+		{"id":&"incumbent-wayfinder-works","name":"Wayfinder Works","specialty":&"adventure","archive":[
 			{"id":&"wayfinder-history-1976","title":"The Lantern Road","year":1976,"genre":&"adventure","theme":&"fantasy","review_tenths":71},
 			{"id":&"wayfinder-history-1979","title":"Atlas of Ash","year":1979,"genre":&"adventure","theme":&"mystery","review_tenths":76}]}
 	]
@@ -38,9 +44,7 @@ static func create_world(player: RunState, catalog: RefCounted) -> RivalWorld:
 		var recipe := {"schema_version":1,"studio_id":str(item.id),"studio_name":item.name,"specialty":str(item.specialty),"traits":["family_funding","cult_following"],"seed":str(seed_text.hex_to_int())}
 		var session: RefCounted = Factory.create_fresh_session(recipe,catalog)
 		if session == null: return null
-		for id: StringName in item.extras:
-			if not session.run._feature_definitions.has(id) or session.run._feature_offers.has(id): return null
-			session.run._owned_features[id] = true
+		if not StartingPool.apply_to_new_rival(session.run): return null
 		if not session.run._feature_research.is_empty() or not session.run._familiarity.is_empty(): return null
 		sessions[item.id] = session
 		archive[item.id] = item.archive
@@ -53,6 +57,11 @@ static func policies(world: RivalWorld) -> Dictionary:
 	var result := {}
 	for id: StringName in world.studios:
 		var session: RefCounted = world.studios[id]
+		if session.run._rival_founder_profile=="rival-founder-active-1977-v2":
+			if not world.policy_states.has(id):world.policy_states[id]={}
+			var career:=preload("res://scripts/market/rival_career_decision.gd").new(session,world.policy_states[id])
+			result[id]=career.choose.bind(career)
+			continue
 		var policy := TrialPolicy.new()
 		policy.decision=_feature_maximal_choice.bind(session,String(session.run.get_studio_specialty()),session.run.get_studio_name(),uses_synergy_trial(id,session.run))
 		# A method Callable alone does not retain its RefCounted target. The bound
@@ -117,8 +126,8 @@ static func _tokens_less(left: Array[int], right: Array[int]) -> bool:
 
 static func uses_synergy_trial(id: StringName, run: RunState) -> bool:
 	# Former player Studios and richer Store pools retain the previous policy.
-	# Only the explicitly approved incumbent Primitive cohort uses this screen.
-	return id in [&"incumbent-arcade-foundry", &"incumbent-wayfinder-works"] and run.get_owned_feature_ids().all(func(feature: StringName) -> bool: return str(feature) in StudioSpecialties.PRIMITIVE_IDS)
+	# The explicitly approved incumbent foundation pools use this screen.
+	return id in [&"incumbent-arcade-foundry", &"incumbent-wayfinder-works"] and run.get_owned_feature_ids().all(StartingPool.supports_synergy_feature)
 
 static func _can_exit(current: Dictionary, session: RefCounted) -> bool:
 	# Full observations retain their existing public fact. The stock policy

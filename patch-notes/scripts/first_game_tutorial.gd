@@ -17,7 +17,7 @@ func needs_scripted_deal() -> bool:
 	return (stage == Stage.FIRST_HAND and not first_pool_published) or (stage == Stage.REDRAW_HAND and not second_pool_published)
 
 
-func plan_deal(features: Array[CardData], passes: Array[CardData], priorities: Dictionary, cash_cents: int, costs: Dictionary, rng: RandomNumberGenerator, retained: Array[CardData] = [], after_hand := false) -> Dictionary:
+func plan_deal(features: Array[CardData], passes: Array[CardData], priorities: Dictionary, cash_cents: int, costs: Dictionary, rng: RandomNumberGenerator, retained: Array[CardData] = [], after_hand := false, pass_room := 7) -> Dictionary:
 	if (after_hand and stage != Stage.FIRST_HAND) or (not after_hand and not needs_scripted_deal()): return {}
 	var second := after_hand or stage == Stage.REDRAW_HAND
 	var target := _dominant_stat(priorities, first_stat if second else &"", rng)
@@ -30,6 +30,7 @@ func plan_deal(features: Array[CardData], passes: Array[CardData], priorities: D
 	var selected_features: Array[CardData] = []
 	var remaining: Array[CardData] = features.duplicate()
 	var budget := cash_cents
+	var passes_drawn := 0
 	# Prefer actual affordable owned Features so the lesson can also build Scope.
 	# Renewable Core Passes guarantee the pattern even for the smallest legal pool.
 	for slot in range(matching_count - int(counts.get(target, 0))):
@@ -39,24 +40,30 @@ func plan_deal(features: Array[CardData], passes: Array[CardData], priorities: D
 				eligible.append(card)
 		eligible.sort_custom(func(a: CardData, b: CardData): return str(a.id) < str(b.id))
 		if eligible.is_empty():
+			if passes_drawn >= pass_room: break
 			cards.append(target_pass)
+			passes_drawn += 1
 		else:
 			var feature := eligible[rng.randi_range(0, eligible.size() - 1)]
 			cards.append(feature)
 			selected_features.append(feature)
 			remaining.erase(feature)
 			budget -= int(costs[feature.id])
+	if cards.size() + int(counts.get(target, 0)) < matching_count: return {}
 	counts[target] = matching_count
 	while cards.size() + retained.size() < 7:
 		var entries: Array[Dictionary] = []
-		for card: CardData in remaining + passes:
+		var eligible_cards: Array[CardData] = remaining.duplicate()
+		if passes_drawn < pass_room: eligible_cards.append_array(passes)
+		for card: CardData in eligible_cards:
 			if card.primary_stat == target or int(counts.get(card.primary_stat, 0)) >= 3: continue
 			var weight := WeightedCandidateMath.calculate_printed_score_weight(card, priorities, CORE_BY_STAT)
 			if weight > 0.0: entries.append({&"card": card, &"weight": weight})
 		entries.sort_custom(func(a: Dictionary, b: Dictionary): return str(a.card.id) < str(b.card.id))
 		var next := WeightedCandidateMath.select_weighted_entry(entries, rng.randf())
-		if next == null: return {}
+		if next == null: break
 		cards.append(next)
+		if next.card_type == &"pass": passes_drawn += 1
 		counts[next.primary_stat] = int(counts.get(next.primary_stat, 0)) + 1
 		if not next.renewable:
 			selected_features.append(next)

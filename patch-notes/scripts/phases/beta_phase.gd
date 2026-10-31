@@ -89,8 +89,14 @@ func setup(project_state: ProjectState, run_state: RunState = null, snapshot_dat
 		_project_state.values_changed.disconnect(_refresh_insider_information)
 	if _run_state != null and _run_state.cash_changed.is_connected(_update_host_playtest_action):
 		_run_state.cash_changed.disconnect(_update_host_playtest_action)
+	if _run_state!=null:
+		for event in [&"cash_changed",&"finance_changed"]:
+			if _run_state.is_connected(event,_on_funds_changed):_run_state.disconnect(event,_on_funds_changed)
 	_project_state = project_state
 	_run_state = run_state
+	if _run_state!=null:
+		for event in [&"cash_changed",&"finance_changed"]:
+			if not _run_state.is_connected(event,_on_funds_changed):_run_state.connect(event,_on_funds_changed)
 	if _run_state != null: _insight_rng = _run_state.random_streams.stream(&"beta_insight")
 	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"beta_deal")
 	_snapshot_database = snapshot_database
@@ -912,3 +918,11 @@ func _sync_command_tokens(state: RefCounted) -> void:
 	_command_view_ids.clear()
 	for index in range(%HandContainer.card_views().size()):
 		_command_view_ids[%HandContainer.card_views()[index].get_instance_id()]=state.candidate_ids[index]
+
+var _funds_refresh_pending:=false
+func _on_funds_changed() -> void:
+	if _funds_refresh_pending or not is_inside_tree():return
+	_funds_refresh_pending=true;_flush_funds.call_deferred()
+func _flush_funds() -> void:
+	_funds_refresh_pending=false
+	if is_node_ready():_update_all_actions()

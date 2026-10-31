@@ -1,0 +1,13 @@
+# Proprietary Engine Skill Tree — research design boundary
+
+**2026-10-31 status:** The user's Engine Skill Tree brief supplies the **approved design mechanics** below. Node identities, thresholds, prices, Generation II rounding and later effects in the [research finding](../threads/engine-system/2026-10-31-skill-tree-research-v1.md) are **PROPOSED / OPEN**. No production Skill Tree or proprietary creation economy is implemented. Feature implementation/configuration and legacy-access migration are now handled by [Engine Features Phase1](engine-features.md); proposed libraries/support nodes remain inactive. The [Engine Marketplace](engine-marketplace.md) and [Feature Store audit](../threads/feature-store/2026-10-31-engine-technology-audit-v1.md) remain separate authority for their current systems.
+
+## Approved design mechanics from the 2026-10-31 brief
+
+- A newly created proprietary engine starts at **20 maximum Scope**, no royalties, and free support for Text, 4-Color Palette, Keyboard & Mouse and 8-Bit Sound. Creation **does not grant ownership of their Feature Store cards**. Studio Feature knowledge, per-engine support and configured project draw supply remain separate.
+- Graphics, Sound, Input/Technology and Text/Design advance independently. A purchased node makes only its own branch successor challenge available immediately; no whole-generation gate blocks a branch. Challenges activate automatically for free. Purchasing a completed node uses money but no development cycle.
+- An active challenge counts only printed primary and secondary Feature Core in its category from **accepted activations using that engine**. Passes and hand synergies do not count. Progress persists through phases and games per engine; purchasing the parent starts the child at zero. A completed challenge stays complete until its node is purchased.
+- Scope Expansion is an automatic, free, separate milestone from the lowest **purchased** generation across all four branches: 20 starting, then 25/30/35/40 at generations I/II/III/IV. The project requirement stays 30; Feature card Scope and printed Core do not change.
+- Generation I's provisional direction is +20% of the matching Feature category **toward Pass Budget generation only**, with fractional progress retained and the current 2/K8 baseline preserved. Generation II's provisional direction is +10% Graphics/Sound Pass effectiveness and −15% Technology/Design Feature bug pressure. These percentages are candidates, **not final approved balance values**.
+
+The finding documents candidate node names, thresholds and costs, exact arithmetic screens, Store migration risks, AI/save architecture, exploits and staged implementation gates. No TODO/production adoption follows from this research record.

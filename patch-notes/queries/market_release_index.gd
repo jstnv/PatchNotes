@@ -1,13 +1,10 @@
 ## Validated actual release facts, shared by inspection and the monthly market.
 ## Explicitly included in the mechanical source identity since market adoption.
 extends RefCounted
-
 static func _failure(reason: String, studio_id := "", release_id := "") -> Dictionary:
 	return {"ok":false,"reason":reason,"studio_id":studio_id,"release_id":release_id}
-
 static func _text(value: Variant) -> bool:
 	return (value is String or value is StringName) and not str(value).strip_edges().is_empty()
-
 static func query(world: RefCounted) -> Dictionary:
 	if world == null or not world.player is RunState: return _failure("MISSING_PLAYER")
 	var owners: Array = [world.player]
@@ -22,11 +19,15 @@ static func query(world: RefCounted) -> Dictionary:
 	var rows: Array = []
 	for run: RunState in owners:
 		var studio_id := str(run._bank_run_id)
+		var clock_offset: int=int(world.calendar_offsets.get(run._bank_run_id,0))
 		if not _text(studio_id) or not _text(run.get_studio_name()): return _failure("MISSING_OWNER_IDENTITY",studio_id)
 		if seen.has(studio_id): return _failure("DUPLICATE_OWNER",studio_id)
 		seen[studio_id] = true
 		var releases := {}
 		for id: StringName in run.get_released_game_ids():
+			# The projected pre-1980 archive is validated at admission and is not
+			# an active market release after January 1980.
+			if run._closed_historical_ids.has(id): continue
 			var release_id := str(id)
 			if not _text(id) or releases.has(id): return _failure("DUPLICATE_OR_EMPTY_RELEASE",studio_id,release_id)
 			releases[id] = true
@@ -36,6 +37,13 @@ static func query(world: RefCounted) -> Dictionary:
 				if not _text(metadata.get(field)): return _failure("INVALID_METADATA_"+field,studio_id,release_id)
 			if not metadata.get("release_cycle") is int or metadata.release_cycle<0 or not metadata.get("release_year") is int or metadata.release_year<1980:
 				return _failure("INVALID_RELEASE_DATE",studio_id,release_id)
+			var world_release_cycle: int=int(metadata.release_cycle)-clock_offset
+			if world_release_cycle<0 or int(metadata.release_year)!=1980+world_release_cycle/24:
+				return _failure("INVALID_MAPPED_RELEASE_DATE",studio_id,release_id)
+			if clock_offset>0:
+				var live: Dictionary=world.live_releases.get(id,{})
+				if live.is_empty() or str(live.get("studio_id",""))!=studio_id or int(live.get("release_cycle",-1))!=world_release_cycle:
+					return _failure("UNPROVEN_MAPPED_RELEASE",studio_id,release_id)
 			if not ReleasedGameSales.is_valid(sales) or str(sales.get("release_id"))!=release_id or not sales.get("review_tenths") is int or sales.review_tenths<0 or sales.review_tenths>100:
 				return _failure("INVALID_SALES",studio_id,release_id)
 			var cores: Variant = metadata.get("review",{}).get("cores") if metadata.get("review") is Dictionary else null
@@ -44,7 +52,7 @@ static func query(world: RefCounted) -> Dictionary:
 				for value in cores:
 					if not value is int or value<0: available=false;break
 			rows.append({"studio_id":studio_id,"studio_name":run.get_studio_name(),"release_id":release_id,
-				"release_cycle":metadata.release_cycle,"release_year":metadata.release_year,"release_title":str(metadata.release_title),
+				"release_cycle":world_release_cycle,"release_year":metadata.release_year,"release_title":str(metadata.release_title),
 				"genre":str(metadata.genre),"theme":str(metadata.theme),"review_tenths":sales.review_tenths,
 				"cores_available":available,"cores":cores.duplicate() if available else [],
 				"earned_units":sales.earned_units,"entitlement_cents":sales.entitlement_cents,"settled_cents":sales.settled_cents})

@@ -14,6 +14,7 @@ signal publishers_changed
 signal finance_changed
 signal fans_changed
 signal employees_changed
+signal engines_changed
 
 const CENTS_PER_DOLLAR := 100
 const MAX_REDRAWS := 4
@@ -21,10 +22,17 @@ const START_YEAR := 1980
 const FIRST_STUDIO_CASH_CENTS := 550000
 const POST_LAUNCH_CAMPAIGN_COST_CENTS := 10000
 const GUARANTEED_PRIMITIVE_IDS = StudioSpecialties.COMMON_IDS
+const EngineEntitlements := preload("res://scripts/engines/engine_entitlements.gd")
+const EngineFeatures := preload("res://scripts/engines/engine_feature_state.gd")
+const EngineFeatureActions := preload("res://scripts/engines/engine_feature_actions.gd")
 
 var _cash_cents := 0
 var _cash_initialized := false
 var _completed_run_cycles := 0
+var _rival_founder_profile: StringName = &""
+var _calendar_start_year := START_YEAR # Private projection test: player and prelude use distinct epochs.
+var _closed_historical_ids: Dictionary = {} # Only populated by typed c72 admission in this candidate.
+var _historical_close_cycle := -1
 var _available_redraws := MAX_REDRAWS
 var _owned_features: Dictionary = {}
 var _feature_definitions: Dictionary = {}
@@ -36,6 +44,83 @@ var _feature_purchase_in_progress := false
 var _feature_research: Array = []
 var _resourceful_claims: Dictionary = {}
 var _released_games: Dictionary = {}
+var _engine_entitlements: Dictionary = {}
+var _engine_features: Dictionary = {} # Empty only for explicit lazy legacy migration.
+var _release_engine_ids: Dictionary = {}
+var _engine_royalty_receipts: Dictionary = {}
+
+func get_engine_entitlements() -> Dictionary:
+	return _engine_entitlements.duplicate(true) if not _engine_entitlements.is_empty() else EngineEntitlements.create(_bank_run_id)
+
+func get_selected_engine_id() -> StringName:
+	return StringName(get_engine_entitlements().get("selected_engine_id", EngineEntitlements.LEGACY_ID))
+
+func get_engine_feature_state() -> Dictionary:
+	if not _engine_features.is_empty():return _engine_features.duplicate(true)
+	var ids: Array[StringName]=[];var entitlements:=get_engine_entitlements();ids.assign(entitlements.get("owned_ids",[&"legacy_engine"])+entitlements.get("licensed_ids",[]))
+	var owned: Array[StringName]=[];owned.assign(_owned_features.keys())
+	return EngineFeatures.create(owned,ids,_bank_run_id,_feature_offers)
+
+func _registered_engine_ids() -> Array[StringName]:
+	var ids: Array[StringName]=[]
+	for id: StringName in _engine_features.get("engines",{}):
+		if id!=&"legacy_engine" and preload("res://scripts/engines/engine_marketplace.gd").find(id).is_empty():ids.append(id)
+	return ids
+
+## Code-owned foundation seam; creation economics/UI belong to Phase2.
+func _register_proprietary_engine(id: StringName,label: String) -> bool:
+	if not EngineFeatureActions.available(self) or id==&"legacy_engine" or not preload("res://scripts/engines/engine_marketplace.gd").find(id).is_empty():return false
+	var state:=get_engine_feature_state()
+	if state.engines.size()>=128 or not EngineFeatures.add_record(state,id,label,&"proprietary",20,[] as Array[StringName]):return false
+	var entitlement:=get_engine_entitlements();entitlement.owned_ids.append(id)
+	_engine_features=state;_engine_entitlements=entitlement
+	_feature_purchase_in_progress=true;engines_changed.emit();features_changed.emit();_feature_purchase_in_progress=false;return true
+
+func stage_engine_features(ids: Array[StringName],engine: StringName=&"") -> bool:
+	if not EngineFeatureActions.available(self):return false
+	if engine.is_empty():engine=get_selected_engine_id()
+	var state:=get_engine_feature_state()
+	if not EngineFeatures.stage(state,engine,ids,_feature_definitions,_feature_offers):return false
+	_engine_features=state;_feature_purchase_in_progress=true;features_changed.emit();_feature_purchase_in_progress=false;return true
+
+func get_engine_configuration_quote(engine: StringName=&"",target: Variant=null) -> Dictionary:
+	return EngineFeatureActions.configuration(self,get_selected_engine_id() if engine.is_empty() else engine,target)
+
+func commit_engine_configuration(quote: Dictionary,respec: bool=false) -> bool:
+	return EngineFeatureActions.commit_configuration(self,quote,respec)
+
+func get_selected_engine_capacity() -> int:
+	return int(get_engine_feature_state().engines[get_selected_engine_id()].capacity)
+
+func _sync_legacy_engine_grant(id: StringName) -> void:
+	if _engine_features.is_empty():return
+	var record: Dictionary=_engine_features.engines[&"legacy_engine"]
+	for field: String in ["initial","implemented"]:
+		if id not in record[field]:record[field].append(id)
+	var library: Array[StringName]=[];library.assign(record.initial)
+	record.committed=FeatureStoreCatalog.future_supply(library,_feature_offers)
+
+func valid_engine_state() -> bool:
+	var entitlements := get_engine_entitlements()
+	if not EngineEntitlements.valid(entitlements,_registered_engine_ids()) or entitlements.studio_id != _bank_run_id: return false
+	if not _engine_features.is_empty() and not EngineFeatures.valid(_engine_features,_feature_definitions,_feature_offers,_studio_finance if _first_studio_economy else {},_completed_run_cycles,_bank_run_id):return false
+	if not _engine_features.is_empty() and not EngineFeatures.bindings_valid(_engine_features,entitlements,_owned_features,_bank_run_id):return false
+	for release_id: StringName in _release_engine_ids:
+		var engine_id: StringName = _release_engine_ids[release_id]
+		if not _released_games.has(release_id) or (engine_id not in entitlements.owned_ids and engine_id not in entitlements.licensed_ids): return false
+	return true
+
+func select_engine(engine_id: StringName) -> bool:
+	var current := get_engine_entitlements()
+	if not EngineEntitlements.valid(current,_registered_engine_ids()) or (engine_id not in current.owned_ids and engine_id not in current.licensed_ids): return false
+	if not EngineFeatureActions.available(self): return false
+	current.selected_engine_id = engine_id
+	_engine_entitlements = current
+	_feature_purchase_in_progress=true
+	engines_changed.emit()
+	features_changed.emit()
+	_feature_purchase_in_progress=false
+	return true
 ## Private trial runtime provider. The shared world owns the committed month.
 var _market_provider: Callable = Callable()
 var _market_committed_candidate: Dictionary = {}
@@ -179,7 +264,7 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 			return false
 		guaranteed[id] = true
 	var proposed_run_id := StringName(Crypto.new().generate_random_bytes(16).hex_encode())
-	var finance := StudioFinanceLedger.create(FIRST_STUDIO_CASH_CENTS, 51500 if StudioTraits.is_active(selection, &"expensive_lease") else 50000)
+	var finance := StudioFinanceLedger.create(FIRST_STUDIO_CASH_CENTS, StudioFinanceLedger.starting_rent_cents(StudioTraits.is_active(selection, &"expensive_lease")))
 	for trait_id: StringName in [&"college_dropout",&"graduate"]:
 		if StudioTraits.is_active(selection,trait_id):
 			var opened := StudioFinanceLedger.open_education(finance,proposed_run_id,trait_id)
@@ -209,6 +294,7 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 	_founding_roster_version = StudioSpecialties.ROSTER_VERSION
 	_studio_finance = finance
 	_bank_run_id = proposed_run_id
+	_engine_entitlements = EngineEntitlements.create(_bank_run_id)
 	_employees = EmployeeRoster.create(_bank_run_id)
 	_contract_search = ContractSearch.create(_bank_run_id)
 	_publisher_relationships = RelationshipLedger.create(_bank_run_id)
@@ -338,7 +424,7 @@ func get_feature_acquisition_quote(id: StringName = &"") -> Dictionary:
 	if graph.has("error"): return {"available":false,"reason":graph.error}
 	var needed_parents: Dictionary = graph.parents.duplicate(true)
 	# A direct grant or legacy-owned child never incurs retroactive parent costs.
-	for owned: StringName in _owned_features: needed_parents[owned] = []
+	for owned: StringName in get_owned_feature_ids(): needed_parents[owned] = []
 	var traversal := FeatureStoreCatalog.ordered_ancestors([] if id.is_empty() else [id], needed_parents)
 	if traversal.has("error"): return {"available":false,"reason":traversal.error}
 	var pending: Array[StringName] = traversal.order
@@ -416,7 +502,7 @@ func get_starter_pool_summary() -> Dictionary:
 
 
 func get_primitive_reserve_offer(id: StringName) -> Dictionary:
-	if not _first_studio_economy or not _feature_definitions.has(id) or _feature_offers.has(id):
+	if not _first_studio_economy or not _feature_definitions.has(id) or _feature_offers.has(id) or not FeatureStoreCatalog.is_active(id):
 		return {}
 	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
 	if graph.has("error"): return {}
@@ -424,7 +510,7 @@ func get_primitive_reserve_offer(id: StringName) -> Dictionary:
 
 
 func _primitive_reserve_offer(id: StringName, graph: Dictionary) -> Dictionary:
-	if not _first_studio_economy or not _feature_definitions.has(id) or _feature_offers.has(id): return {}
+	if not _first_studio_economy or not _feature_definitions.has(id) or _feature_offers.has(id) or not FeatureStoreCatalog.is_active(id): return {}
 	var parents: Array = graph.parents[id]
 	var missing: Array[StringName] = []
 	var names: Array[String] = []
@@ -448,6 +534,7 @@ func _primitive_reserve_offer(id: StringName, graph: Dictionary) -> Dictionary:
 
 
 func purchase_starter_feature(id: StringName) -> bool:
+	if get_selected_engine_id()!=&"legacy_engine":return false
 	if not can_mutate_checkpoint(): return false
 	if not needs_starter_selection() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle:
 		return false
@@ -463,6 +550,7 @@ func purchase_starter_feature(id: StringName) -> bool:
 		return false
 	if resourceful_saving(int(offer.base_price_cents)) > 0: _resourceful_claims[_released_games.size()] = id
 	_owned_features[id] = true
+	_sync_legacy_engine_grant(id)
 	set_block_signals(was_blocked)
 	cash_changed.emit()
 	finance_changed.emit()
@@ -530,17 +618,19 @@ func _init() -> void:
 
 
 func owns_feature(id: StringName) -> bool:
-	return _owned_features.has(id)
+	return _owned_features.has(id) if _engine_features.is_empty() else EngineFeatures.has_feature(_engine_features,get_selected_engine_id(),id)
 
 
 func get_owned_feature_ids() -> Array[StringName]:
 	var result: Array[StringName] = []
-	result.assign(_owned_features.keys())
+	result.assign(_owned_features.keys() if _engine_features.is_empty() else _engine_features.engines[get_selected_engine_id()].implemented)
 	return result
 
 
+
+
 func get_future_project_feature_ids() -> Array[StringName]:
-	return FeatureStoreCatalog.future_supply(get_owned_feature_ids(),_feature_offers)
+	return FeatureStoreCatalog.future_supply(get_owned_feature_ids(),_feature_offers) if _engine_features.is_empty() else EngineFeatures.supply(_engine_features,get_selected_engine_id(),_feature_offers)
 
 
 func get_feature_familiarity(id: StringName) -> int:
@@ -552,7 +642,7 @@ func get_feature_familiarity(id: StringName) -> int:
 func record_resolved_feature(project: ProjectState, id: StringName, phase: StringName) -> bool:
 	if _publishing_cycle:
 		return false
-	if project == null or phase not in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA] or not owns_feature(id):
+	if project == null or phase not in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA] or (id not in project.get_feature_supply_ids() if project.has_predevelopment_identity() else not owns_feature(id)):
 		return false
 	if StringName(_feature_definitions[id].phase) != phase:
 		return false
@@ -597,12 +687,12 @@ func _feature_store_offer(id: StringName, graph: Dictionary) -> Dictionary:
 		contributions.append({"id":required_parent,"name":parent_name,"owned":owns_feature(required_parent),"credits":count})
 	var required := int(entry.get("gameplay_features_required", 0))
 	var gameplay_owned := 0
-	for owned_id: StringName in _owned_features:
+	for owned_id: StringName in get_owned_feature_ids():
 		if _feature_definitions[owned_id].get("department", "") == "gameplay": gameplay_owned += 1
-	var year_reached := get_current_year() >= int(entry.get("min_year",START_YEAR))
+	var year_reached := get_current_year() >= int(entry.get("min_year",_calendar_start_year))
 	var era_qualified: bool = not entry.has("era_year") or not get_store_era_status(int(entry.era_year)).receipt_id.is_empty()
 	var unlocked: bool = missing.is_empty() and gameplay_owned >= required and year_reached and era_qualified
-	var discount := mini(credits, 5) * 10
+	var discount := mini(credits, 8) * 10
 	var base_price := int(entry.base_price_cents)
 	# Exact integer cents, without multiplying a potentially large base first.
 	var price: int = (base_price / 100) * (100 - discount) + ((base_price % 100) * (100 - discount)) / 100
@@ -627,22 +717,22 @@ func resourceful_saving(price: int) -> int:
 
 
 func get_feature_research_queue() -> Array:
-	var pending: Array = []
-	for entry: Dictionary in _feature_research:
-		if entry.payments.size() < entry.actions: pending.append(entry.duplicate(true))
-	return pending
+	return EngineFeatureActions.pending(self)
 
-
-func get_feature_research_quote(id: StringName) -> Dictionary:
-	return _get_feature_research_quote(id,true)
+func get_feature_research_quote(id: StringName,engine: StringName=&"") -> Dictionary:
+	return EngineFeatureActions.quote(self,id,get_selected_engine_id() if engine.is_empty() else engine)
 
 
 func _get_feature_research_quote(id: StringName, check_action: bool) -> Dictionary:
+	return EngineFeatureActions.quote(self,id,get_selected_engine_id(),check_action)
+
+func _get_legacy_feature_research_quote(id: StringName, check_action: bool) -> Dictionary:
 	if FeatureStoreCatalog.graph(_feature_definitions, _feature_offers).has("error"): return {}
 	var offer := get_feature_store_offer(id)
 	var primitive := offer.is_empty()
 	if primitive: offer = get_primitive_reserve_offer(id)
 	if offer.is_empty(): return {}
+	offer=offer.duplicate(true);offer.discount_percent=mini(int(offer.get("discount_percent",0)),50)
 	return _feature_research_quote(id,offer,get_feature_research_queue(),null,check_action)
 
 
@@ -650,6 +740,7 @@ func _get_feature_research_quote(id: StringName, check_action: bool) -> Dictiona
 ## ordinary quote/finance validation. Graph and bill status are shared only
 ## within this call, instead of rebuilding them separately for every map node.
 func get_feature_store_view() -> Dictionary:
+	var engine_state:=get_engine_feature_state()
 	var graph := FeatureStoreCatalog.graph(_feature_definitions,_feature_offers)
 	if graph.has("error"): return graph
 	var pending := get_feature_research_queue()
@@ -661,7 +752,7 @@ func get_feature_store_view() -> Dictionary:
 		result.offers[id]=offer
 		result.reserves[id]=reserve
 		var available: Dictionary=reserve if offer.is_empty() else offer
-		result.quotes[id]={} if available.is_empty() else _feature_research_quote(id,available,pending,blocked)
+		result.quotes[id]={} if available.is_empty() else EngineFeatureActions.quote(self,id,get_selected_engine_id(),true,available,pending,blocked,engine_state,graph)
 	return result
 
 
@@ -694,23 +785,12 @@ func _feature_research_quote(id: StringName, offer: Dictionary, pending: Array, 
 
 
 func admit_feature_research(quote: Dictionary) -> bool:
-	if not can_mutate_checkpoint() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle: return false
-	if quote.is_empty() or typeof(quote.get("feature_id")) != TYPE_STRING_NAME: return false
-	if quote != get_feature_research_quote(quote.get("feature_id",&"")) or not quote.can_admit: return false
-	var plan := StudioFinanceLedger.plan(_studio_finance,_completed_run_cycles,_cash_cents,-int(quote.down_cents),&"store",0,0,false,StringName(str(quote.entry_id)+":admit")) if _first_studio_economy else {"cash_cents":_cash_cents-int(quote.down_cents),"ledger":_studio_finance}
-	if plan.is_empty(): return false
-	_feature_purchase_in_progress = true
-	_feature_research.append({"id":quote.entry_id,"feature_id":quote.feature_id,"base_cents":quote.base_cents,"actions":1,"admitted_cycle":_completed_run_cycles,"payments":[]})
-	_cash_cents = plan.cash_cents
-	_studio_finance = plan.ledger
-	cash_changed.emit()
-	finance_changed.emit()
-	features_changed.emit()
-	_feature_purchase_in_progress = false
-	return true
-
+	return EngineFeatureActions.admit(self,quote)
 
 func research_feature(quote: Dictionary) -> bool:
+	return EngineFeatureActions.complete(self,quote)
+
+func _research_legacy_feature(quote: Dictionary) -> bool:
 	if not can_mutate_checkpoint() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle: return false
 	if quote.is_empty() or typeof(quote.get("feature_id")) != TYPE_STRING_NAME: return false
 	if typeof(quote.get("can_research")) != TYPE_BOOL or not quote.can_research: return false
@@ -718,7 +798,7 @@ func research_feature(quote: Dictionary) -> bool:
 	# money/sales/bill preflight runs once inside complete_productive_action,
 	# before its direct-effects callback. Do not compute that same plan here
 	# merely to discard it as a Boolean. Forged permission still cannot spend.
-	var current := _get_feature_research_quote(quote.feature_id,false)
+	var current: Dictionary = EngineFeatureActions.quote(self,quote.feature_id,&"legacy_engine",false)
 	var supplied := quote.duplicate(true)
 	supplied.can_research=false
 	if current.is_empty() or not current.head or supplied != current: return false
@@ -727,7 +807,9 @@ func research_feature(quote: Dictionary) -> bool:
 			if entry.id != quote.entry_id: continue
 			entry.payments.append({"cycle":_completed_run_cycles+1,"nominal_cents":quote.nominal_cents,"discount_percent":quote.discount_percent,"paid_cents":quote.due_cents,"saving_cents":quote.saving_cents,"window":quote.resourceful_window})
 			if quote.saving_cents > 0: _resourceful_claims[_released_games.size()] = quote.entry_id
-			if entry.payments.size() == entry.actions: _owned_features[entry.feature_id] = true
+			if entry.payments.size() == entry.actions:
+				_owned_features[entry.feature_id] = true
+				_sync_legacy_engine_grant(entry.feature_id)
 			return true
 		return false
 	return complete_productive_action(commit,-int(quote.due_cents),quote.cycle,&"",&"store",StringName("%s:%d" % [quote.entry_id,quote.completed]))
@@ -887,7 +969,7 @@ func get_current_month() -> int:
 
 
 func get_current_year() -> int:
-	return START_YEAR + _completed_run_cycles / 24
+	return _calendar_start_year + _completed_run_cycles / 24
 
 
 func get_current_half() -> int:
@@ -1046,12 +1128,13 @@ func _create_release_sales_record(project: ProjectState) -> Dictionary:
 		return {}
 	return ReleasedGameSales.create(project.get_release_id(), project.get_month_one_sales_revenue_result().get_total_month_one_units(),
 		roundi(project.get_review_result().get_final_review() * 10.0), project.get_awareness_result().get_total_awareness(),
-		project.get_launch_market_context_result().get_forecast_multiplier_basis_points())
+		project.get_launch_market_context_result().get_forecast_multiplier_basis_points(),
+		_historical_close_cycle if _historical_close_cycle>0 else 0)
 
 
 ## Release planning reuses the arithmetic owner on detached containers. The
 ## resulting field set is committed before Project or Run observers can fire.
-const RELEASE_FIELDS := ["_employees","_store_era_receipts","_released_games","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs"]
+const RELEASE_FIELDS := ["_employees","_store_era_receipts","_released_games","_release_engine_ids","_fanbase","_release_metadata","_commission_deals","_support_rights","_studio_finance","_cash_cents","_publisher_relationships","_promotion_consumed","_sidestreet_entitlements","_unlocked_publishers","_pending_publisher_notifications","_publisher_offers","_sidestreet_briefs"]
 
 func plan_release(project: ProjectState) -> Dictionary:
 	if _publishing_cycle or _productive_cycle_in_progress or not can_register_release(project): return {}
@@ -1121,6 +1204,7 @@ func _register_release_unpublished(project: ProjectState) -> bool:
 	_publishing_cycle = true
 	set_block_signals(true)
 	_released_games[id] = record
+	_release_engine_ids[id] = project.get_engine_id()
 	if _support_deals.has(id): _support_rights[id] = Support.empty_rights()
 	_fanbase = next_fans
 	_release_metadata[id] = {"base_name": project.get_base_name(), "genre": project.get_genre_id(),
@@ -1418,7 +1502,7 @@ func _primitive_contract_eligible_ids() -> Array[StringName]:
 	var ids: Array[StringName] = []
 	for entry: Dictionary in FeatureStoreCatalog.starting_features():
 		var id := StringName(entry.id)
-		if owns_feature(id) and StringName(entry.phase) in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA]:
+		if id in get_future_project_feature_ids() and StringName(entry.phase) in [CardData.PHASE_DESIGN, CardData.PHASE_ALPHA]:
 			ids.append(id)
 	return ids
 
@@ -1585,11 +1669,20 @@ func _meets_publisher_requirement(id: StringName) -> bool:
 	return false
 
 
+## Free contract work may continue in arrears; actual settlement still runs.
+func can_complete_contract_hand(state: ContractState,plan: Dictionary) -> bool:
+	if state==null or state!=get_active_contract() or state.is_completed() or plan.is_empty():return false
+	return not _plan_productive_cycle(int(plan.remainder_cents),&"",&"contract_receipt" if plan.remainder_cents>0 else &"contract_hand",state.get_offer_id()).is_empty()
+
 func can_complete_productive_cycle(direct_cash_delta_cents: int = 0, campaign_release_id: StringName = &"") -> bool:
 	return not _plan_productive_cycle(direct_cash_delta_cents, campaign_release_id).is_empty()
 
 
 func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: StringName = &"", finance_kind: StringName = &"", source_id: StringName = &"") -> Dictionary:
+	if finance_kind==&"rival_wait" and (_rival_founder_profile!=&"rival-founder-active-1977-v2" or source_id!=_bank_run_id or direct_cash_delta_cents!=0 or not campaign_release_id.is_empty()):return {}
+	if finance_kind in [&"contract_hand",&"contract_receipt"]:
+		var contract:=get_active_contract()
+		if contract==null or contract.is_completed() or source_id!=contract.get_offer_id():return {}
 	if _productive_cycle_in_progress or _feature_purchase_in_progress or _pending_contract_completion != null or _completed_run_cycles < 0 or _completed_run_cycles == MAX_SIGNED_INT or _available_redraws < 0 or _available_redraws > MAX_REDRAWS:
 		return {}
 	if not campaign_release_id.is_empty() and (direct_cash_delta_cents != -POST_LAUNCH_CAMPAIGN_COST_CENTS or not _released_games.has(campaign_release_id) or not ReleasedGameSales.can_campaign(_released_games[campaign_release_id]) or _commission_deals.has(campaign_release_id)):
@@ -1617,7 +1710,7 @@ func _plan_cycle_records(direct_cash_delta_cents: int,campaign_release_id: Strin
 	if _support_deals.is_empty():
 		key=var_to_bytes([campaign_release_id,_completed_run_cycles,_cash_initialized,
 			_market_provider.is_valid(),market,_bank_run_id,_released_games,_release_metadata,
-			_commission_deals,_support_rights,_support_assessments,_fanbase])
+			_commission_deals,_support_rights,_support_assessments,_fanbase,_closed_historical_ids,_release_engine_ids])
 		sales=cache.read(key)
 	if sales.is_empty():
 		sales=_plan_sales_cycle(campaign_release_id,market)
@@ -1660,11 +1753,16 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 	var next_records: Dictionary = {}
 	var payable := 0
 	var earned := 0
+	var licensed_engine_ids: Array = get_engine_entitlements().get("licensed_ids",[])
 	var support_rights := _support_rights.duplicate(true)
 	var support_assessments := _support_assessments.duplicate(true)
 	for id: StringName in _released_games:
 		if not _cash_initialized or not _released_games[id] is Dictionary or _released_games[id].get("release_id") != id:
 			return {}
+		if _closed_historical_ids.has(id):
+			if id == campaign_release_id: return {}
+			next_records[id] = _released_games[id].duplicate(true)
+			continue
 		var factor: Dictionary=preload("res://scripts/market/market_transaction_trial.gd").neutral_factor()
 		if _market_provider.is_valid():
 			if not _release_metadata.has(id): return {}
@@ -1679,6 +1777,10 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 			continue
 		var release_payable: int = next.settled_cents - _released_games[id].settled_cents
 		var release_earned: int = next.entitlement_cents - _released_games[id].entitlement_cents
+		var studio_settled_before: int = _released_games[id].settled_cents
+		var studio_settled_after: int = next.settled_cents
+		var studio_earned_before: int = _released_games[id].entitlement_cents
+		var studio_earned_after: int = next.entitlement_cents
 		if _support_deals.has(id):
 			if not support_rights.has(id): return {}
 			var old: Dictionary = support_rights[id]
@@ -1686,17 +1788,29 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 			if rights.is_empty(): return {}
 			release_payable = rights.studio_settled_cents-old.studio_settled_cents
 			release_earned = rights.studio_earned_cents-old.studio_earned_cents
+			studio_settled_before = old.studio_settled_cents
+			studio_settled_after = rights.studio_settled_cents
+			studio_earned_before = old.studio_earned_cents
+			studio_earned_after = rights.studio_earned_cents
 			support_rights[id] = rights
 			if next.total_earned_cycles == 6:
 				if support_assessments.has(id): return {}
 				support_assessments[id] = Support.assessment(roundi(float(_release_metadata[id].review.final_review)*10.0),next.earned_units)
+		var engine_id: StringName = _release_engine_ids.get(id,&"legacy_engine")
+		if engine_id in licensed_engine_ids:
+			var engine: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").find(engine_id)
+			if engine.is_empty() or studio_settled_after < studio_settled_before or studio_earned_after < studio_earned_before: return {}
+			# The starting marketplace royalty is exactly one fifth. Cumulative
+			# integer division carries fractional cents across settlement cycles.
+			release_payable -= preload("res://scripts/engines/engine_royalty.gd").increment(studio_settled_before,studio_settled_after)
+			release_earned -= preload("res://scripts/engines/engine_royalty.gd").increment(studio_earned_before,studio_earned_after)
 		if release_payable > MAX_SIGNED_INT - payable:
 			return {}
 		payable += release_payable
 		if release_earned < 0 or release_earned > MAX_SIGNED_INT - earned: return {}
 		earned += release_earned
 		next_records[id] = next
-	var fan_plan := StudioFanbase.plan(_fanbase, _released_games, next_records, _completed_run_cycles + 1)
+	var fan_plan := StudioFanbase.plan(_fanbase, _released_games, next_records, _completed_run_cycles + 1, _closed_historical_ids)
 	if fan_plan.is_empty(): return {}
 	return {"records":next_records,"payable":payable,"earned":earned,"fans":fan_plan,"support_rights":support_rights,"support_assessments":support_assessments}
 
@@ -1709,6 +1823,7 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 ## Direct effects -> income/spend -> calendar/sales settlement -> due rent and
 ## oldest arrears -> report -> notifications. No await can split this boundary.
 func complete_productive_action(direct_effects: Callable = Callable(), direct_cash_delta_cents: int = 0, expected_cycle: int = -1, campaign_release_id: StringName = &"", finance_kind: StringName = &"", source_id: StringName = &"") -> bool:
+	if finance_kind==&"rival_wait" and direct_effects.is_valid():return false
 	if _publishing_cycle or _productive_cycle_in_progress: return false
 	if not can_mutate_checkpoint(): return false
 	if _publishing_cycle:
@@ -1722,6 +1837,7 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 	var redraws_before := _available_redraws
 	var familiarity_before := _familiarity.duplicate()
 	var ownership_before := _owned_features.duplicate()
+	var engine_features_before:=_engine_features.duplicate(true)
 	var publishers_before := _unlocked_publishers.duplicate()
 	var relationships_before := _publisher_relationships.duplicate(true)
 	var completed_contracts_before := get_completed_contract_count()
@@ -1771,7 +1887,7 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 		finance_changed.emit()
 	if _available_redraws != redraws_before:
 		redraws_changed.emit()
-	if _familiarity != familiarity_before or _owned_features != ownership_before:
+	if _familiarity != familiarity_before or _owned_features != ownership_before or _engine_features!=engine_features_before:
 		features_changed.emit()
 	if _unlocked_publishers != publishers_before:
 		publishers_changed.emit()

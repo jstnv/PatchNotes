@@ -1,0 +1,878 @@
+{
+  "source": "patch-notes/data/card_ledger.json",
+  "phase": {
+    "design": {
+      "handTotals": [
+        {
+          "ids": [
+            "text",
+            "4_color_palette",
+            "8_bit_sound",
+            "split_screen"
+          ],
+          "printedCore": 19,
+          "cumulativePrintedCore": 19
+        },
+        {
+          "ids": [
+            "sprites",
+            "local_leaderboards",
+            "score_system",
+            "lives_system"
+          ],
+          "printedCore": 13,
+          "cumulativePrintedCore": 32
+        },
+        {
+          "ids": [
+            "keyboard_and_mouse",
+            "controller",
+            "scrolling",
+            "menu_system"
+          ],
+          "printedCore": 18,
+          "cumulativePrintedCore": 50
+        }
+      ],
+      "printedCore": 50,
+      "featureCount": 12
+    },
+    "alpha": {
+      "handTotals": [
+        {
+          "ids": [
+            "simple_story",
+            "dialogue",
+            "character_backstories",
+            "multiple_endings"
+          ],
+          "printedCore": 11,
+          "cumulativePrintedCore": 11
+        },
+        {
+          "ids": [
+            "controls",
+            "power_ups",
+            "general_combat",
+            "secrets"
+          ],
+          "printedCore": 11,
+          "cumulativePrintedCore": 22
+        },
+        {
+          "ids": [
+            "enemies",
+            "levels",
+            "maps",
+            "exploration"
+          ],
+          "printedCore": 17,
+          "cumulativePrintedCore": 39
+        }
+      ],
+      "printedCore": 39,
+      "featureCount": 12
+    }
+  },
+  "formula": "initial + floor(cumulative printed Feature Core / K)",
+  "plannedPasses": 12,
+  "allocations": [
+    {
+      "design": 4,
+      "alpha": 8
+    },
+    {
+      "design": 8,
+      "alpha": 4
+    },
+    {
+      "design": 12,
+      "alpha": 0
+    },
+    {
+      "design": 0,
+      "alpha": 12
+    }
+  ],
+  "rows": [
+    {
+      "initial": 1,
+      "K": 3,
+      "generated": {
+        "design": 16,
+        "alpha": 13
+      },
+      "total": {
+        "design": 17,
+        "alpha": 14
+      },
+      "afterFeatureHands": {
+        "design": [
+          7,
+          11,
+          17
+        ],
+        "alpha": [
+          4,
+          8,
+          14
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        },
+        {
+          "design": 12,
+          "alpha": 0
+        },
+        {
+          "design": 0,
+          "alpha": 12
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 13,
+        "alpha": 6
+      }
+    },
+    {
+      "initial": 1,
+      "K": 4,
+      "generated": {
+        "design": 12,
+        "alpha": 9
+      },
+      "total": {
+        "design": 13,
+        "alpha": 10
+      },
+      "afterFeatureHands": {
+        "design": [
+          5,
+          9,
+          13
+        ],
+        "alpha": [
+          3,
+          6,
+          10
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        },
+        {
+          "design": 12,
+          "alpha": 0
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 9,
+        "alpha": 2
+      }
+    },
+    {
+      "initial": 1,
+      "K": 5,
+      "generated": {
+        "design": 10,
+        "alpha": 7
+      },
+      "total": {
+        "design": 11,
+        "alpha": 8
+      },
+      "afterFeatureHands": {
+        "design": [
+          4,
+          7,
+          11
+        ],
+        "alpha": [
+          3,
+          5,
+          8
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 7,
+        "alpha": 0
+      }
+    },
+    {
+      "initial": 1,
+      "K": 6,
+      "generated": {
+        "design": 8,
+        "alpha": 6
+      },
+      "total": {
+        "design": 9,
+        "alpha": 7
+      },
+      "afterFeatureHands": {
+        "design": [
+          4,
+          6,
+          9
+        ],
+        "alpha": [
+          2,
+          4,
+          7
+        ]
+      },
+      "supportsOriginal4Design8Alpha": false,
+      "supportedAllocations": [
+        {
+          "design": 8,
+          "alpha": 4
+        }
+      ],
+      "chosenAllocation": {
+        "design": 8,
+        "alpha": 4
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 1,
+        "alpha": 3
+      }
+    },
+    {
+      "initial": 1,
+      "K": 8,
+      "generated": {
+        "design": 6,
+        "alpha": 4
+      },
+      "total": {
+        "design": 7,
+        "alpha": 5
+      },
+      "afterFeatureHands": {
+        "design": [
+          3,
+          5,
+          7
+        ],
+        "alpha": [
+          2,
+          3,
+          5
+        ]
+      },
+      "supportsOriginal4Design8Alpha": false,
+      "supportedAllocations": [],
+      "chosenAllocation": null,
+      "orderFeasible": false,
+      "unused": null
+    },
+    {
+      "initial": 1,
+      "K": 10,
+      "generated": {
+        "design": 5,
+        "alpha": 3
+      },
+      "total": {
+        "design": 6,
+        "alpha": 4
+      },
+      "afterFeatureHands": {
+        "design": [
+          2,
+          4,
+          6
+        ],
+        "alpha": [
+          2,
+          3,
+          4
+        ]
+      },
+      "supportsOriginal4Design8Alpha": false,
+      "supportedAllocations": [],
+      "chosenAllocation": null,
+      "orderFeasible": false,
+      "unused": null
+    },
+    {
+      "initial": 2,
+      "K": 3,
+      "generated": {
+        "design": 16,
+        "alpha": 13
+      },
+      "total": {
+        "design": 18,
+        "alpha": 15
+      },
+      "afterFeatureHands": {
+        "design": [
+          8,
+          12,
+          18
+        ],
+        "alpha": [
+          5,
+          9,
+          15
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        },
+        {
+          "design": 12,
+          "alpha": 0
+        },
+        {
+          "design": 0,
+          "alpha": 12
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 14,
+        "alpha": 7
+      }
+    },
+    {
+      "initial": 2,
+      "K": 4,
+      "generated": {
+        "design": 12,
+        "alpha": 9
+      },
+      "total": {
+        "design": 14,
+        "alpha": 11
+      },
+      "afterFeatureHands": {
+        "design": [
+          6,
+          10,
+          14
+        ],
+        "alpha": [
+          4,
+          7,
+          11
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        },
+        {
+          "design": 12,
+          "alpha": 0
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 10,
+        "alpha": 3
+      }
+    },
+    {
+      "initial": 2,
+      "K": 5,
+      "generated": {
+        "design": 10,
+        "alpha": 7
+      },
+      "total": {
+        "design": 12,
+        "alpha": 9
+      },
+      "afterFeatureHands": {
+        "design": [
+          5,
+          8,
+          12
+        ],
+        "alpha": [
+          4,
+          6,
+          9
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        },
+        {
+          "design": 12,
+          "alpha": 0
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 8,
+        "alpha": 1
+      }
+    },
+    {
+      "initial": 2,
+      "K": 6,
+      "generated": {
+        "design": 8,
+        "alpha": 6
+      },
+      "total": {
+        "design": 10,
+        "alpha": 8
+      },
+      "afterFeatureHands": {
+        "design": [
+          5,
+          7,
+          10
+        ],
+        "alpha": [
+          3,
+          5,
+          8
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 6,
+        "alpha": 0
+      }
+    },
+    {
+      "initial": 2,
+      "K": 8,
+      "generated": {
+        "design": 6,
+        "alpha": 4
+      },
+      "total": {
+        "design": 8,
+        "alpha": 6
+      },
+      "afterFeatureHands": {
+        "design": [
+          4,
+          6,
+          8
+        ],
+        "alpha": [
+          3,
+          4,
+          6
+        ]
+      },
+      "supportsOriginal4Design8Alpha": false,
+      "supportedAllocations": [
+        {
+          "design": 8,
+          "alpha": 4
+        }
+      ],
+      "chosenAllocation": {
+        "design": 8,
+        "alpha": 4
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 0,
+        "alpha": 2
+      }
+    },
+    {
+      "initial": 2,
+      "K": 10,
+      "generated": {
+        "design": 5,
+        "alpha": 3
+      },
+      "total": {
+        "design": 7,
+        "alpha": 5
+      },
+      "afterFeatureHands": {
+        "design": [
+          3,
+          5,
+          7
+        ],
+        "alpha": [
+          3,
+          4,
+          5
+        ]
+      },
+      "supportsOriginal4Design8Alpha": false,
+      "supportedAllocations": [],
+      "chosenAllocation": null,
+      "orderFeasible": false,
+      "unused": null
+    },
+    {
+      "initial": 3,
+      "K": 3,
+      "generated": {
+        "design": 16,
+        "alpha": 13
+      },
+      "total": {
+        "design": 19,
+        "alpha": 16
+      },
+      "afterFeatureHands": {
+        "design": [
+          9,
+          13,
+          19
+        ],
+        "alpha": [
+          6,
+          10,
+          16
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        },
+        {
+          "design": 12,
+          "alpha": 0
+        },
+        {
+          "design": 0,
+          "alpha": 12
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 15,
+        "alpha": 8
+      }
+    },
+    {
+      "initial": 3,
+      "K": 4,
+      "generated": {
+        "design": 12,
+        "alpha": 9
+      },
+      "total": {
+        "design": 15,
+        "alpha": 12
+      },
+      "afterFeatureHands": {
+        "design": [
+          7,
+          11,
+          15
+        ],
+        "alpha": [
+          5,
+          8,
+          12
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        },
+        {
+          "design": 12,
+          "alpha": 0
+        },
+        {
+          "design": 0,
+          "alpha": 12
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 11,
+        "alpha": 4
+      }
+    },
+    {
+      "initial": 3,
+      "K": 5,
+      "generated": {
+        "design": 10,
+        "alpha": 7
+      },
+      "total": {
+        "design": 13,
+        "alpha": 10
+      },
+      "afterFeatureHands": {
+        "design": [
+          6,
+          9,
+          13
+        ],
+        "alpha": [
+          5,
+          7,
+          10
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        },
+        {
+          "design": 12,
+          "alpha": 0
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 9,
+        "alpha": 2
+      }
+    },
+    {
+      "initial": 3,
+      "K": 6,
+      "generated": {
+        "design": 8,
+        "alpha": 6
+      },
+      "total": {
+        "design": 11,
+        "alpha": 9
+      },
+      "afterFeatureHands": {
+        "design": [
+          6,
+          8,
+          11
+        ],
+        "alpha": [
+          4,
+          6,
+          9
+        ]
+      },
+      "supportsOriginal4Design8Alpha": true,
+      "supportedAllocations": [
+        {
+          "design": 4,
+          "alpha": 8
+        },
+        {
+          "design": 8,
+          "alpha": 4
+        }
+      ],
+      "chosenAllocation": {
+        "design": 4,
+        "alpha": 8
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 7,
+        "alpha": 1
+      }
+    },
+    {
+      "initial": 3,
+      "K": 8,
+      "generated": {
+        "design": 6,
+        "alpha": 4
+      },
+      "total": {
+        "design": 9,
+        "alpha": 7
+      },
+      "afterFeatureHands": {
+        "design": [
+          5,
+          7,
+          9
+        ],
+        "alpha": [
+          4,
+          5,
+          7
+        ]
+      },
+      "supportsOriginal4Design8Alpha": false,
+      "supportedAllocations": [
+        {
+          "design": 8,
+          "alpha": 4
+        }
+      ],
+      "chosenAllocation": {
+        "design": 8,
+        "alpha": 4
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 1,
+        "alpha": 3
+      }
+    },
+    {
+      "initial": 3,
+      "K": 10,
+      "generated": {
+        "design": 5,
+        "alpha": 3
+      },
+      "total": {
+        "design": 8,
+        "alpha": 6
+      },
+      "afterFeatureHands": {
+        "design": [
+          4,
+          6,
+          8
+        ],
+        "alpha": [
+          4,
+          5,
+          6
+        ]
+      },
+      "supportsOriginal4Design8Alpha": false,
+      "supportedAllocations": [
+        {
+          "design": 8,
+          "alpha": 4
+        }
+      ],
+      "chosenAllocation": {
+        "design": 8,
+        "alpha": 4
+      },
+      "orderFeasible": true,
+      "unused": {
+        "design": 0,
+        "alpha": 2
+      }
+    }
+  ]
+}

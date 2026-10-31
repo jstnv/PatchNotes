@@ -10,6 +10,9 @@ signal selection_changed
 var card_data: CardData
 var _selected: bool = false
 var third_score: Label
+var pass_budget_label: Label
+var pass_budget_remaining := -1
+var pass_budget_progress := 0
 
 @onready var artwork_fallback: TextureRect = %Background
 @onready var artwork: TextureRect = %Artwork
@@ -29,6 +32,15 @@ var third_score: Label
 
 
 func _ready() -> void:
+	pass_budget_label = Label.new()
+	pass_budget_label.name = "SharedPassBudget"
+	pass_budget_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pass_budget_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pass_budget_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pass_budget_label.add_theme_font_size_override("font_size", 10)
+	pass_budget_label.add_theme_color_override("font_color", Color("f8f8f2"))
+	%RenewabilitySlot.add_child(pass_budget_label)
+	pass_budget_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	third_score = Label.new()
 	third_score.name = "ThirdCoreScore"
 	third_score.position = Vector2(64, 72)
@@ -51,6 +63,11 @@ func set_card(card: CardData) -> void:
 
 	if is_node_ready():
 		refresh()
+
+func set_shared_pass_budget(remaining: int, progress: int) -> void:
+	pass_budget_remaining = remaining
+	pass_budget_progress = progress
+	if is_node_ready(): refresh()
 
 
 func set_selected(selected: bool) -> void:
@@ -130,6 +147,14 @@ func _refresh_beta_data() -> void:
 
 
 func _refresh_renewability() -> void:
+	if card_data.card_type == &"pass" and card_data.phase != CardData.PHASE_BETA and pass_budget_remaining >= 0:
+		renewability_icon.hide()
+		pass_budget_label.show()
+		pass_budget_label.text = "Pass %d" % pass_budget_remaining
+		pass_budget_label.tooltip_text = "Shared Pass Budget: %d remaining · %d/8 printed Feature Core toward the next Pass." % [pass_budget_remaining, pass_budget_progress]
+		return
+	pass_budget_label.hide()
+	renewability_icon.show()
 	var icon_texture := renewable_texture if card_data.renewable else nonrenewable_texture
 	renewability_icon.texture = icon_texture
 	renewability_icon.tooltip_text = "Renewable" if card_data.renewable else "Nonrenewable"
@@ -137,6 +162,8 @@ func _refresh_renewability() -> void:
 
 func _refresh_card_tooltip() -> void:
 	var lifecycle := "Renewable: may return in later draws." if card_data.renewable else "Finite: exhausts after a successful play in this project."
+	if card_data.card_type == &"pass" and card_data.phase != CardData.PHASE_BETA and pass_budget_remaining >= 0:
+		lifecycle = "Shared Pass Budget: %d remaining. Printed Feature Core: %d/8 toward the next Pass. This Pass definition can return; successful play spends one." % [pass_budget_remaining, pass_budget_progress]
 	var detail := ""
 	var synergy := ""
 	if card_data.phase == CardData.PHASE_BETA:

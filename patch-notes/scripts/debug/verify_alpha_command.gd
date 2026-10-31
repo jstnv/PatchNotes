@@ -1,3 +1,4 @@
+## Historical unlimited-Pass fixture (version0); new2/K8 coverage is separate.
 extends "res://scripts/debug/verify_design_phase.gd"
 
 const ALPHA_SCENE := preload("res://scenes/phases/alpha_phase.tscn")
@@ -47,6 +48,7 @@ func run_cases(database: Node) -> void:
 	for seed_value in [1104, 4417, 90210]:
 		for scenario in ["mixed", "passes", "specialized", "cash_reject", "refill_reject", "overflow_reject", "economy", "lean", "employee", "employee_choice", "balanced", "production_overflow", "finance_reject", "commit_reject", "scope_overflow", "corrective", "bad_corrective", "unavailable", "duplicate_feature"]:
 			var project := ProjectState.new(30)
+			project._pass_budget_version=0
 			project.set("_release_id", &"m2b_project")
 			var run := RunState.new()
 			run.initialize_cash(0)

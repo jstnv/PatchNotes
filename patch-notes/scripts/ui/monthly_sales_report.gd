@@ -17,7 +17,7 @@ func _ready() -> void:
 	theme = preload("res://resources/ui/workspace_theme.tres")
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var margin := MarginContainer.new()
-	for edge in ["left", "right", "top", "bottom"]: margin.add_theme_constant_override("margin_" + edge, 16)
+	for edge in ["left", "right", "top", "bottom"]: margin.add_theme_constant_override("margin_" + edge, 20)
 	add_child(margin)
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 10)
@@ -40,6 +40,7 @@ func _ready() -> void:
 	back.text = "Back to Summary"
 	back.pressed.connect(func(): hide(); closed.emit())
 	header.add_child(back)
+	FolderUI.standard_back(back)
 	var explanation := Label.new()
 	explanation.text = "Actual earnings by release age · Titles earn concurrently · Zero units means dormant, not expired."
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

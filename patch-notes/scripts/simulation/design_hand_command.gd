@@ -4,6 +4,7 @@
 extends RefCounted
 
 const ProductionHand := preload("res://scripts/simulation/production_hand.gd")
+const PassBudget := preload("res://scripts/simulation/pass_budget.gd")
 const WEIGHTED_CANDIDATE_MATH := preload("res://scripts/phases/weighted_candidate_math.gd")
 const CANDIDATE_POOL_SIZE := 7
 const SELECTED_HAND_SIZE := 4
@@ -23,6 +24,30 @@ var revision := 0
 var active := false
 var finalization_requested := false
 var _executing := false
+var _budget_printed := 0
+var _budget_spent := 0
+var _budget_projection := -1
+var _budget_reserved := 0
+
+func pass_budget_available() -> int:
+	return PassBudget.generated(_budget_printed) - _budget_spent if pass_budget_active() else CANDIDATE_POOL_SIZE
+
+func pass_budget_active() -> bool:
+	return _project_state==null or _project_state._pass_budget_version==1
+
+func can_play_pass_budget(cards: Array[CardData]) -> bool:
+	if not pass_budget_active():return true
+	var change:=_selected_budget_delta(cards)
+	return int(change.passes)<=PassBudget.generated(_budget_printed+int(change.printed))-_budget_spent
+
+func _selected_budget_delta(cards: Array[CardData]) -> Dictionary:
+	var printed := 0
+	var passes := 0
+	for card in cards:
+		if card.card_type == &"pass": passes += 1
+		else:
+			for entry in card.core_contributions(): printed += int(entry.value)
+	return {"printed": printed, "passes": passes}
 
 func get_priority_distribution() -> Dictionary:
 	return priorities.duplicate()
@@ -66,6 +91,8 @@ func _execute(request: Dictionary) -> Dictionary:
 			if selected_features.has(card.id): return reject("Duplicate finite Feature")
 			selected_features[card.id] = true
 		selected.append(card)
+	var budget_delta := _selected_budget_delta(selected)
+	if not can_play_pass_budget(selected): return reject("Pass Budget exhausted")
 	var base_hand := calculate_base(selected)
 	if not base_hand.valid: return reject("Invalid production")
 	var employee_priorities: Variant = request.get("employee_priorities", {})
@@ -85,7 +112,8 @@ func _execute(request: Dictionary) -> Dictionary:
 	var refill_priorities: Dictionary = employee_priorities if not employee_priorities.is_empty() else priorities
 	var records: Array = []
 	for card in selected: records.append({&"primary_stat":card.primary_stat})
-	var final_action := ProductionHand.calculate(records, base_hand.score_additions, base_hand.has_feature)
+	var engine_bonus: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").production_bonus(_project_state.get_engine_id())
+	var final_action := ProductionHand.calculate(records, base_hand.score_additions, base_hand.has_feature, engine_bonus)
 	if not final_action.specialization_stat.is_empty():
 		for category in ProjectState.CoreScore.values():
 			if not final_action.score_additions.has(category): final_action.score_additions[category] = 0
@@ -97,14 +125,19 @@ func _execute(request: Dictionary) -> Dictionary:
 		if candidate_ids[index] not in ids:
 			retained.append(_candidate_cards[index])
 			retained_ids.append(candidate_ids[index])
+	_budget_projection = PassBudget.generated(_budget_printed + int(budget_delta.printed)) - _budget_spent - int(budget_delta.passes) if pass_budget_active() else CANDIDATE_POOL_SIZE
+	_budget_reserved = retained.filter(func(card: CardData): return card.card_type == &"pass").size()
 	var tutorial := _get_first_game_tutorial()
 	var refill: Dictionary
 	if tutorial != null and tutorial.stage == FirstGameTutorial.Stage.FIRST_HAND:
 		var costs := {}
 		for card in _available_features: costs[card.id] = _run_state.primitive_feature_hand_cost_cents([card] as Array[CardData], _project_state.get_release_id())
-		refill = tutorial.plan_deal(_available_features, _pass_definitions, refill_priorities, _run_state.get_cash_cents()-play_cost, costs, _deal_rng, retained, true)
+		refill = tutorial.plan_deal(_available_features, _pass_definitions, refill_priorities, _run_state.get_cash_cents()-play_cost, costs, _deal_rng, retained, true, maxi(0,_budget_projection-_budget_reserved))
+		if refill.is_empty(): refill = _build_weighted_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE)
 	else:
 		refill = _build_weighted_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE)
+	_budget_projection = -1
+	_budget_reserved = 0
 	if not refill.get("valid", false):
 		_deal_rng.state = rng_before
 		return reject("Refill rejected")
@@ -113,6 +146,9 @@ func _execute(request: Dictionary) -> Dictionary:
 	var commit := func() -> bool:
 		if _run_state != null and (not _run_state.can_commit_employee_hand(employee_plan) or int(_run_state.get_lean_savings().get(_project_state.get_release_id(), 0)) != lean_before): return false
 		if not _project_state.add_core_scores_and_scope(additions, base_hand.scope, base_hand.bug_pressure): return false
+		if pass_budget_active():
+			_budget_printed += int(budget_delta.printed)
+			_budget_spent += int(budget_delta.passes)
 		events.append({"type":"production", "scores":additions.duplicate(), "scope":base_hand.scope, "bug_pressure":base_hand.bug_pressure})
 		if not employee_priorities.is_empty(): priorities = employee_priorities.duplicate()
 		if _run_state != null:
@@ -204,21 +240,26 @@ func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, contro
 		var costs: Dictionary = {}
 		for card: CardData in _available_features:
 			costs[card.id] = _run_state.primitive_feature_hand_cost_cents([card] as Array[CardData], _project_state.get_release_id())
-		var guided := tutorial.plan_deal(_available_features, _pass_definitions, priority_snapshot, _run_state.get_cash_cents(), costs, _deal_rng)
-		return guided if not guided.is_empty() else {&"valid": false, &"error": "Could not prepare the first-game guided pool."}
+		var guided := tutorial.plan_deal(_available_features, _pass_definitions, priority_snapshot, _run_state.get_cash_cents(), costs, _deal_rng, [], false, pass_budget_available())
+		if not guided.is_empty(): return guided
 
 	var remaining_features: Array[CardData] = _available_features.duplicate()
 	var selected_cards: Array[CardData] = []
 	var selected_features: Array[CardData] = []
+	var pass_room := maxi(0, (_budget_projection if _budget_projection >= 0 else pass_budget_available()) - _budget_reserved)
+	var passes_drawn := 0
 	for slot in range(candidate_count):
 		var entries: Array[Dictionary] = []
-		for card: CardData in remaining_features + _pass_definitions:
+		var eligible: Array[CardData] = remaining_features.duplicate()
+		if passes_drawn < pass_room: eligible.append_array(_pass_definitions)
+		for card: CardData in eligible:
 			var weight := _calculate_candidate_weight(card, priority_snapshot)
 			if not is_finite(weight) or weight < 0.0:
 				return {&"valid": false, &"error": "Candidate '%s' produced an invalid weight." % card.id}
 			if weight > 0.0:
 				entries.append({&"card": card, &"weight": weight})
 		entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+		if entries.is_empty(): break
 		var roll := controlled_rolls[slot] if not controlled_rolls.is_empty() else _deal_rng.randf()
 		var selected := _select_weighted_entry(entries, roll)
 		if selected == null:
@@ -227,6 +268,7 @@ func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, contro
 		if selected.card_type == &"feature":
 			selected_features.append(selected)
 			remaining_features.erase(selected)
+		else: passes_drawn += 1
 	return {&"valid": true, &"cards": selected_cards, &"selected_features": selected_features}
 
 

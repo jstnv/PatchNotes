@@ -52,6 +52,8 @@ var _command_injected_ids: Array[int]=[]
 var _syncing_priority_controls := false
 var _available_features: Array[CardData] = []
 var _pass_definitions: Array[CardData] = []
+var _budget_printed := 0
+var _budget_spent := 0
 var _candidate_cards: Array[CardData] = []
 var _selected_card_views: Array[CardView] = []
 var _exhausted_feature_ids: Dictionary[StringName, bool] = {}
@@ -91,8 +93,14 @@ func _ready() -> void:
 func setup(project_state: ProjectState, run_state: RunState = null) -> void:
 	if _project_state != null and _project_state.values_changed.is_connected(_refresh_alpha_bug_pressure):
 		_project_state.values_changed.disconnect(_refresh_alpha_bug_pressure)
+	if _run_state!=null:
+		for event in [&"cash_changed",&"finance_changed"]:
+			if _run_state.is_connected(event,_on_funds_changed):_run_state.disconnect(event,_on_funds_changed)
 	_project_state = project_state
 	_run_state = run_state
+	if _run_state!=null:
+		for event in [&"cash_changed",&"finance_changed"]:
+			if not _run_state.is_connected(event,_on_funds_changed):_run_state.connect(event,_on_funds_changed)
 	_priority_allocation.configure(run_state)
 	if _run_state != null: _finalization_rng = _run_state.random_streams.stream(&"alpha_finalize")
 	if _run_state != null: _deal_rng = _run_state.random_streams.stream(&"alpha_deal")
@@ -337,10 +345,11 @@ func _can_host_playtest() -> bool:
 
 
 func _has_valid_active_candidate_pool() -> bool:
-	if not is_node_ready() or _candidate_cards.size() != CANDIDATE_POOL_SIZE or %HandContainer.card_views().size() != CANDIDATE_POOL_SIZE:
+	if not is_node_ready() or _candidate_cards.size() > CANDIDATE_POOL_SIZE or %HandContainer.card_views().size() != _candidate_cards.size():
 		return false
 	var seen_feature_ids: Dictionary[StringName, bool] = {}
-	for index in range(CANDIDATE_POOL_SIZE):
+	var pass_count := 0
+	for index in range(_candidate_cards.size()):
 		var card: CardData = _candidate_cards[index]
 		var child: CardView = %HandContainer.card_views()[index]
 		if not child is CardView or (child as CardView).card_data != card:
@@ -352,9 +361,10 @@ func _has_valid_active_candidate_pool() -> bool:
 		elif card.card_type == &"pass":
 			if not _get_pass_validation_error(card).is_empty() or not _pass_definitions.has(card):
 				return false
+			pass_count += 1
 		else:
 			return false
-	return true
+	return pass_count <= (7 if _project_state._pass_budget_version==0 else 2 + _budget_printed / 8 - _budget_spent)
 
 
 func _select_corrective_categories() -> Array[ProjectState.CoreScore]:
@@ -376,6 +386,8 @@ func _update_host_playtest_action() -> void:
 
 
 func _load_source_definitions() -> bool:
+	_budget_printed = 0
+	_budget_spent = 0
 	var card_database := get_node_or_null("/root/CardDatabase")
 	if card_database == null:
 		push_warning("Alpha cannot load candidates without CardDatabase.")
@@ -481,6 +493,8 @@ func _on_redraw_pressed() -> void:
 
 func _refresh_redraw_controls() -> void:
 	if not is_node_ready(): return
+	for view: CardView in %HandContainer.card_views():
+		view.set_shared_pass_budget(2 + _budget_printed / 8 - _budget_spent, posmod(_budget_printed, 8))
 	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
 	%RedrawButton.disabled = not _can_redraw_selection()
 	if not %RedrawButton.disabled:
@@ -596,6 +610,8 @@ func _on_play_alpha_hand_pressed() -> void:
 		_hand_command_busy = false
 		return
 	_available_features.assign(resolver._available_features)
+	_budget_printed = resolver._budget_printed
+	_budget_spent = resolver._budget_spent
 	_exhausted_feature_ids.assign(resolver._exhausted_feature_ids)
 	_pending_playtest_categories.assign(resolver._pending_playtest_categories)
 	_priority_allocation.set_distribution(resolver.priorities)
@@ -831,6 +847,8 @@ func _finalize_with_run_rng() -> bool:
 ## Build the scene-free command state with session-local candidate tokens.
 func _capture_alpha_command() -> RefCounted:
 	var state := AlphaHandCommand.new()
+	state._budget_printed = _budget_printed
+	state._budget_spent = _budget_spent
 	state._project_state = _project_state
 	state._run_state = _run_state
 	state._deal_rng = _deal_rng
@@ -870,9 +888,19 @@ func _redraw_slots() -> Array[int]:
 	return slots
 
 func _sync_command_tokens(state: RefCounted) -> void:
+	_budget_printed = state._budget_printed
+	_budget_spent = state._budget_spent
 	_command_injected_ids.assign(state.injected_candidate_ids)
 	_command_revision=state.revision
 	_command_next_id=state.next_candidate_id
 	_command_view_ids.clear()
 	for index in range(%HandContainer.card_views().size()):
 		_command_view_ids[%HandContainer.card_views()[index].get_instance_id()]=state.candidate_ids[index]
+
+var _funds_refresh_pending:=false
+func _on_funds_changed() -> void:
+	if _funds_refresh_pending or not is_inside_tree():return
+	_funds_refresh_pending=true;_flush_funds.call_deferred()
+func _flush_funds() -> void:
+	_funds_refresh_pending=false
+	if is_node_ready():_update_play_action()

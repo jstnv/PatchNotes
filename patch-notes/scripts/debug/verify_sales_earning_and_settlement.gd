@@ -12,8 +12,9 @@ func expect(ok: bool, message: String) -> void:
 		failures += 1
 		push_error("FAIL: " + message)
 
-func release(total: int, run: RunState = null) -> ProjectState:
+func release(total: int, run: RunState = null, engine_id: StringName = &"legacy_engine") -> ProjectState:
 	var project := ProjectState.new(30)
+	project.set_engine_id(engine_id)
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
 	project.finalize_design_bugs(false, 0, [&"text"], [])
 	project.finalize_alpha(0, [], [])
@@ -38,11 +39,52 @@ func snapshot(run: RunState, project: ProjectState) -> Array:
 func _verify() -> void:
 	snapshots.load_ledgers()
 	_verify_oracle()
+	_verify_engine_royalty()
 	_verify_atomicity()
 	await _verify_studio()
 	await _verify_actions()
 	print("Sales earning and settlement verification: %d failures" % failures)
 	quit(failures)
+
+func _verify_engine_royalty() -> void:
+	var project := release(751,null,&"action_engine")
+	var run := new_run(1,1)
+	run._bank_run_id = &"engine-sales-fixture"
+	run._engine_entitlements = RunState.EngineEntitlements.create(run._bank_run_id)
+	run._engine_entitlements.licensed_ids.append(&"action_engine")
+	expect(run.register_release(project) and run._release_engine_ids.get(project.get_release_id()) == &"action_engine", "Released game freezes its licensed engine identity")
+	expect(run.complete_productive_action(), "Licensed game settles its first sales half")
+	var sales := run.get_released_game_sales(project.get_release_id())
+	expect(sales.settled_cents == 262237 and run.get_cash_cents() == 1 + 262237 - 52447, "Studio pays exactly 20% of platform-net cumulative sales")
+	expect(run.complete_productive_action() and run.get_cash_cents() == 1 + 262237 - 52447, "Non-settlement half adds no royalty debit")
+	expect(run.complete_productive_action() and run.get_cash_cents() == 1 + sales.settled_cents + (run.get_released_game_sales(project.get_release_id()).settled_cents - sales.settled_cents) - int(run.get_released_game_sales(project.get_release_id()).settled_cents / 5), "Next settlement carries cents and charges only the cumulative difference")
+	var creator := new_run(1,1)
+	creator._bank_run_id = &"incumbent-action"
+	creator._engine_entitlements = RunState.EngineEntitlements.create(creator._bank_run_id)
+	var owned_release := release(751,null,&"action_engine")
+	expect(creator.register_release(owned_release) and creator.complete_productive_action(), "Engine creator can release with its own engine")
+	expect(creator.get_cash_cents() == 1 + creator.get_released_game_sales(owned_release.get_release_id()).settled_cents, "Owned engine does not charge its creator a license royalty")
+	var supported := new_run(1,1)
+	supported._bank_run_id = &"engine-supported-fixture"
+	supported._engine_entitlements = RunState.EngineEntitlements.create(supported._bank_run_id)
+	supported._engine_entitlements.licensed_ids.append(&"action_engine")
+	var supported_release := release(751,null,&"action_engine")
+	expect(supported.register_release(supported_release), "Supported licensed release registers")
+	var support_id := supported_release.get_release_id()
+	supported._support_deals[support_id] = {"budget_cents":87500}
+	supported._support_rights[support_id] = RunState.Support.empty_rights()
+	var support_plan: Dictionary = supported._plan_sales_cycle(&"",preload("res://scripts/market/market_transaction_trial.gd").neutral())
+	var support_net: int = int(support_plan.support_rights[support_id].studio_settled_cents) if not support_plan.is_empty() else -1
+	expect(not support_plan.is_empty() and support_plan.payable == support_net - int(support_net / 5), "Support royalty uses the Studio share after platform and publisher rights")
+	var commissioned := new_run(1,1)
+	commissioned._bank_run_id = &"engine-commission-fixture"
+	commissioned._engine_entitlements = RunState.EngineEntitlements.create(commissioned._bank_run_id)
+	commissioned._engine_entitlements.licensed_ids.append(&"action_engine")
+	var commission_release := release(751,null,&"action_engine")
+	expect(commissioned.register_release(commission_release), "Commissioned licensed release registers")
+	commissioned._commission_deals[commission_release.get_release_id()] = {}
+	var commission_plan: Dictionary = commissioned._plan_sales_cycle(&"",preload("res://scripts/market/market_transaction_trial.gd").neutral())
+	expect(not commission_plan.is_empty() and commission_plan.payable == 0 and commission_plan.earned == 0, "Publisher-owned commission sales produce no Studio royalty base")
 
 func _verify_oracle() -> void:
 	var project := release(751)

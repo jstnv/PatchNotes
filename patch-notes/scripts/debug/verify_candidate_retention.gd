@@ -1,3 +1,4 @@
+## Historical unlimited-Pass fixture (version0); new2/K8 coverage is separate.
 extends SceneTree
 
 ## Transaction/input regression fixtures, not economy or human-playtest routes.
@@ -20,6 +21,7 @@ func _verify() -> void:
 	for phase_name in ["design", "alpha", "beta"]:
 		for seed_value in SEEDS:
 			var project := ProjectState.new(30)
+			project._pass_budget_version=0
 			project.initialize_snapshots(&"fast_follower", &"stable_market")
 			if phase_name != "design": project.finalize_design_bugs(false, 20, [], [])
 			if phase_name == "beta": project.finalize_alpha(0, [], [])

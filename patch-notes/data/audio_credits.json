@@ -40,6 +40,22 @@
       "frames": 1316571,
       "channels": 2,
       "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/crunch_time_menu_dream_groove_v01.wav",
+      "sha256": "7ec49fb82919f1e40f8708b2cca83571453b943e518b6884bf8c0ebc37e386e7",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/crunch_time_menu_theme_echo_reverb_v02.wav",
+      "sha256": "266af96b6be668dd7d6b2899d8701ff284e1ae24b01897ee36f3a8fe708c6c01",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
     }
   ],
   "source": "User-supplied Crunch Time Prototype 01 / Tempo_70 WAV",
@@ -50,7 +66,7 @@
     "Final release clearance/attribution review",
     "Audible card tap/whoosh mix preference"
   ],
-  "note": "Version A defaults on Music bus; B selectable via audio/soundtrack/prototype_variant. Studio Smooth shares the main harmonic/time map and uses an aligned next-bar crossfade. MP3 previews are not shipped.",
+  "note": "Dream Groove opens the Main Menu once; Echo Reverb is its repeating arrangement. Version A/B remains selectable for development and Contracts, and Studio Smooth remains the Studio arrangement. All four WAVs share the music transport and exact loop length; MP3 previews are not shipped.",
   "card_sfx": {
     "source": "Original procedural synthesis; no external samples",
     "cues": {
@@ -64,5 +80,19 @@
     "adaptation": "Pitched MIDI notes restored +2 semitones from C minor to main-theme D minor, then resynthesized at unchanged 70 BPM; drums and note timing retained. Original preview preserved.",
     "time_map": "crunch-time-d-minor-70-v1",
     "provenance": "assets/audio/crunch_time_70/STUDIO_THEME.md"
+  },
+  "menu_opener": {
+    "source": "User-provided crunch_time_menu_dream_groove_final_v01.mp3",
+    "source_sha256": "5d8eb00362f1f24ca5c4c09da87f5205f77aa68518f86f3819446dfc4fef71a7",
+    "adaptation": "Decoded to 48 kHz stereo PCM and trimmed to the existing 1316571-frame phrase; no speed or pitch change.",
+    "time_map": "crunch-time-d-minor-70-v1",
+    "provenance": "assets/audio/crunch_time_70/MENU_THEME.md"
+  },
+  "menu_theme": {
+    "source": "User-provided crunch_time_menu_theme_echo_reverb_v02.mp3",
+    "source_sha256": "2bf4b7677a56c25e12833274da805222f2aff15981276b787e65339e43a65a5f",
+    "adaptation": "Decoded to 48 kHz stereo PCM and trimmed to the existing 1316571-frame phrase; no speed or pitch change.",
+    "time_map": "crunch-time-d-minor-70-v1",
+    "provenance": "assets/audio/crunch_time_70/MENU_THEME.md"
   }
 }

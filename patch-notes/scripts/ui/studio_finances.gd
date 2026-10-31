@@ -22,6 +22,7 @@ var _finance_page: VBoxContainer
 var _bank_page: VBoxContainer
 var _previous_focus: Control
 var _return_label := "Back to Game"
+var _root_page: StringName=&"finances"
 var _entrance: Tween
 var _content: MarginContainer
 var amount_input: LineEdit
@@ -63,20 +64,21 @@ func _ready() -> void:
 	backdrop.color = Color(0.02, 0.015, 0.025, 0.9)
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	backdrop.offset_top = 88
+	backdrop.offset_bottom = -64
 	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	shade.add_child(backdrop)
 	dialog = PanelContainer.new()
 	dialog.name = "StudioFinancesDialog"
 	dialog.theme = preload("res://resources/ui/workspace_theme.tres")
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dialog.offset_left = 28
-	dialog.offset_right = -28
+	dialog.offset_left = 20
+	dialog.offset_right = -20
 	dialog.offset_top = 88
 	dialog.offset_bottom = -64
 	shade.add_child(dialog)
 	_content = MarginContainer.new()
 	for edge in ["left", "right", "top", "bottom"]:
-		_content.add_theme_constant_override("margin_" + edge, 12)
+		_content.add_theme_constant_override("margin_" + edge, 20 if edge=="top" else 0)
 	dialog.add_child(_content)
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 10)
@@ -96,6 +98,12 @@ func _ready() -> void:
 	back_button.text = _return_label
 	back_button.pressed.connect(back)
 	header.add_child(back_button)
+	FolderUI.standard_back(back_button)
+	var body_scroll:=ScrollContainer.new();body_scroll.name="FinanceBodyScroll"
+	body_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;body_scroll.follow_focus=true
+	body_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;layout.add_child(body_scroll)
+	var body:=VBoxContainer.new();body.size_flags_horizontal=Control.SIZE_EXPAND_FILL;body.size_flags_vertical=Control.SIZE_EXPAND_FILL;body.add_theme_constant_override("separation",10);body_scroll.add_child(body)
+	layout=body
 	totals_label = _label("", layout, 16)
 	totals_label.name = "FinanceTotals"
 	block_label = _label("", layout)
@@ -199,6 +207,7 @@ func _ready() -> void:
 	_label("Financial history", _bank_page, 18)
 	bank_history = RichTextLabel.new()
 	bank_history.name = "BankHistory"
+	bank_history.custom_minimum_size.y=120
 	bank_history.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bank_history.scroll_active = true
 	_bank_page.add_child(bank_history)
@@ -251,12 +260,14 @@ func bind_run(value: RunState) -> void:
 	if is_node_ready(): refresh()
 
 
-func open(return_label: String = "Back to Game") -> bool:
+func open(return_label: String = "Back to Game",initial_page: StringName=&"finances") -> bool:
 	if run == null or not is_node_ready(): return false
 	_return_label = return_label
 	_previous_focus = get_viewport().gui_get_focus_owner()
-	_set_page(&"finances")
+	_root_page=initial_page
+	_set_page(initial_page)
 	refresh()
+	dialog.show()
 	visible = true
 	back_button.grab_focus()
 	_animate_entrance.call_deferred()
@@ -282,6 +293,8 @@ func open_bank() -> void:
 
 
 func back() -> void:
+	if page==_root_page:
+		close();return
 	if page == &"bank_payments":
 		_set_page(&"bank")
 		payment_details_button.grab_focus()
@@ -300,7 +313,8 @@ func _set_page(value: StringName) -> void:
 	_bank_page.visible = page == &"bank"
 	_payment_page.visible = page == &"bank_payments"
 	bank_button.visible = page == &"finances"
-	back_button.text = "Back to Bank" if page == &"bank_payments" else ("Back to Finances" if page == &"bank" else _return_label)
+	back_button.text = _return_label if page==_root_page else ("Back to Bank" if page==&"bank_payments" else "Back to Finances")
+	FolderUI.standard_back(back_button)
 
 
 func _open_payment_details() -> void:
@@ -453,6 +467,7 @@ func _update_bank(available: bool, rows: Array) -> void:
 
 
 func _animate_entrance() -> void:
+	if dialog.has_meta("folder_navigation_managed"):return
 	if not is_inside_tree() or not visible: return
 	if _entrance != null: _entrance.kill()
 	var rest_x := dialog.get_theme_stylebox("panel").get_content_margin(SIDE_LEFT)
@@ -463,8 +478,9 @@ func _animate_entrance() -> void:
 
 func _input(event: InputEvent) -> void:
 	if not visible: return
+	if MenuTransitions.navigation_input_blocked(self):get_viewport().set_input_as_handled();return
 	if _confirm.visible: return
-	if event.is_action_pressed("ui_cancel"):
+	if MenuTransitions.cancel_pressed(event):
 		back()
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("ui_focus_next") or event.is_action_pressed("ui_focus_prev"):

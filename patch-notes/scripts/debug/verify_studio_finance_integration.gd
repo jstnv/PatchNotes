@@ -5,6 +5,8 @@ extends "res://scripts/debug/verify_feature_store_cycle_purchase.gd"
 func named() -> RunState:
 	var run := RunState.new()
 	check(run.initialize_cash_cents(0) and run.set_studio_name("Finance fixture", &"action"), "Studio creates auditable funding")
+	# Fixed historical-$500 accounting controls; new rent has its own paired routes.
+	run._studio_finance=StudioFinanceLedger.create(run.get_cash_cents(),50000)
 	return run
 
 

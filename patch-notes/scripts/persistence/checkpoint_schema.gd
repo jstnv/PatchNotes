@@ -117,6 +117,12 @@ static func sales() -> Dictionary:
 	result.market_factors = map_of("uint",market_factor())
 	return result
 
+static func projected_sales_union() -> Dictionary:
+	var ordinary := sales()
+	var projected := ordinary.duplicate(true)
+	projected.market_clock_offset = "uint"
+	return union_of([ordinary,projected])
+
 static func metadata() -> Dictionary:
 	var review := fields("scope required_scope development_cycles remaining_bugs awareness launch_marketing launch_fans fan_awareness projected_units projected_gross_cents projected_net_cents")
 	review.merge(fields("final_review production_rating scope_completion", "float"))
@@ -149,7 +155,10 @@ static func contract() -> Dictionary:
 static func root(education_enabled: bool = true, active_rival: bool = false, store_era: bool = true) -> Dictionary:
 	var traits := fields("version starting_points spent_points refunded_points remaining_points point_cash_cents family_funding_cents")
 	traits.merge({"valid":"bool","reason":"text","trait_ids":array_of("id"),"active_ids":array_of("id"),"effects_mode":"id"})
-	var run := fields("cash_cents completed_run_cycles available_redraws next_project_serial")
+	var run := fields("cash_cents completed_run_cycles available_redraws next_project_serial calendar_start_year")
+	run.rival_founder_profile = "id"
+	run.historical_close_cycle = "int"
+	run.closed_historical_ids = map_of("id","bool")
 	run.merge(fields("cash_initialized first_studio_economy starter_selection_confirmed ironclad_completion_committed", "bool"))
 	run.studio_name = "text"
 	run.merge(fields("studio_specialty first_tutorial_project_id bank_run_id", "id"))
@@ -158,7 +167,7 @@ static func root(education_enabled: bool = true, active_rival: bool = false, sto
 	run.feature_research = array_of(FeatureResearch.schema())
 	run.familiarity = map_of("id","uint")
 	run.credited_projects = map_of("id",map_of("id","bool"))
-	run.released_games = map_of("id",sales())
+	run.released_games = map_of("id",projected_sales_union())
 	run.release_metadata = map_of("id",metadata())
 	run.primitive_contract = optional(contract())
 	run.publisher_offers = map_of("id",{"publisher_id":"id","source_release_id":"id","state":optional(contract())})
@@ -185,6 +194,27 @@ static func root(education_enabled: bool = true, active_rival: bool = false, sto
 	if store_era: run.store_era_receipts = {"version":"uint","assignments":map_of("uint","id")}
 	var versioned_run: Dictionary = run.duplicate(true)
 	versioned_run.founding_roster_version = "uint"
-	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":union_of([run,versioned_run]),"rng":map_of("id",{"seed":"int","state":"int"})}
+	var engine_run: Dictionary = run.duplicate(true)
+	engine_run.engine_entitlements = {"version":"uint","studio_id":"id","owned_ids":array_of("id"),"licensed_ids":array_of("id"),"selected_engine_id":"id"}
+	engine_run.release_engine_ids = map_of("id","id")
+	engine_run.engine_royalty_receipts = map_of("id","uint")
+	var versioned_engine_run: Dictionary = engine_run.duplicate(true)
+	versioned_engine_run.founding_roster_version = "uint"
+	var feature_engine_run: Dictionary=engine_run.duplicate(true)
+	feature_engine_run.engine_features=engine_feature_state()
+	var versioned_feature_engine_run: Dictionary=feature_engine_run.duplicate(true)
+	versioned_feature_engine_run.founding_roster_version="uint"
+	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":union_of([run,versioned_run,engine_run,versioned_engine_run,feature_engine_run,versioned_feature_engine_run]),"rng":map_of("id",{"seed":"int","state":"int"})}
 	if active_rival: result.active_project_id = "id"
 	return result
+
+static func engine_feature_state() -> Dictionary:
+	var record: Dictionary={"name":"text","kind":"id","capacity":"uint","origin":"text","revision":"uint"}
+	for key: String in ["initial","implemented","committed","staged"]:record[key]=array_of("id")
+	var entry: Dictionary=fields("base_cents admitted_cycle deposit_cents admission_discount")
+	entry.merge(fields("id engine_id feature_id","id"))
+	entry.payment=optional(fields("cycle paid_cents discount_percent saving_cents window"))
+	var configuration: Dictionary=fields("revision cycle cost_cents base_cents")
+	configuration.merge(fields("id engine_id","id"))
+	for key: String in ["added","removed","target"]:configuration[key]=array_of("id")
+	return {"version":"uint","engines":map_of("id",record),"entries":array_of(entry),"configurations":array_of(configuration)}

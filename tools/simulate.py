@@ -18,7 +18,7 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_ROOTS = {"scripts", "scenes", "data", "assets", "resources", "autoload", "queries"}
+SOURCE_ROOTS = {"scripts", "scenes", "data", "assets", "resources", "autoload", "queries", "certified"}
 SOURCE_SUFFIXES = {".gd", ".uid", ".tscn", ".tres", ".res", ".json", ".png", ".ico", ".svg", ".jpg", ".jpeg", ".webp", ".ogg", ".wav", ".mp3", ".ttf", ".otf", ".gdshader", ".gdshaderinc", ".import", ".txt", ".md", ".csv", ".bin"}
 ROOT_FILES = {"project.godot", "icon.svg", "icon.svg.import"}
 FORMAT = "patch-notes-isolated-simulation-v1"

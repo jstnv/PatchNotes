@@ -161,6 +161,9 @@ func _finish() -> Dictionary:
 
 ## Policies receive only plain observations and return command payloads. No
 ## default AI policy or balance/exit budget is implied by this interface.
+func pass_budget_state() -> Dictionary:
+	return {"version":project._pass_budget_version,"origin":project._pass_budget_origin,"printed":hand._budget_printed if phase_index<2 else 0,"spent":hand._budget_spent if phase_index<2 else 0}
+
 func observation(include_action_availability: bool = true) -> Dictionary:
 	var candidates: Array = []
 	for index in range(hand.candidate_ids.size()):
@@ -181,6 +184,10 @@ func observation(include_action_availability: bool = true) -> Dictionary:
 		var alignment: Array=[]
 		for slot in hand.candidate_ids.size():alignment.append_array(actions.alignment_options([slot] as Array[int]))
 		result.pass_alignment_options=alignment
+	result.pass_budget=pass_budget_state()
+	if phase_index<2:
+		result.pass_budget.remaining=hand.pass_budget_available()
+		result.pass_budget.progress=posmod(hand._budget_printed,8)
 	var limits:=BetaPriorityAllocation.bounds(run) if phase_index==2 else PriorityAllocation.bounds(run)
 	result.priority_bounds={"minimum":limits.x,"maximum":limits.y,"step":5}
 	if phase_index==1 or phase_index==2:result.redraw_protected_ids=hand.injected_candidate_ids.duplicate()

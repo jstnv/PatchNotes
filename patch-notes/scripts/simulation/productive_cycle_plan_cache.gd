@@ -2,8 +2,8 @@
 ## this cache commits a command, owns a Run, retains callbacks or consumes RNG.
 extends RefCounted
 
-const ENTRY_LIMIT := 36
-const BYTE_LIMIT := 16 * 1024 * 1024
+const ENTRY_LIMIT := 128
+const BYTE_LIMIT := 32 * 1024 * 1024
 static var _keys: Array[PackedByteArray]=[]
 static var _values: Array[Dictionary]=[]
 static var _sizes: Array[int]=[]

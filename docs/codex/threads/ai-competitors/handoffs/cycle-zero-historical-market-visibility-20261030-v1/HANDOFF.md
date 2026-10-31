@@ -1,0 +1,25 @@
+# Cycle-0 historical Market visibility — implementation handoff v1
+
+**Status:** QUEUED scoped presentation correction for implementation review. No canonical gameplay source is changed by this packet. The current eight-rival founder candidate remains **HELD**; this packet does not adopt its cohort, standards, funding, or policy.
+
+## Design authority and observed gap
+
+The user selected a frozen historical archive that is visible in new saves, without post-start sales or Fans ([incumbent history decision](../../2026-10-09-incumbent-history-decision-v1.md)). The [legal opening review](../../2026-10-27-legal-eight-rival-opening-design-review-v1.md) selects visible pre-1980 titles and explicitly keeps them out of active Market facts. The [cycle-0 source check](../../2026-10-30-cycle-zero-market-visibility-finding-v1.md) shows four records saved and zero browser rows in two current-source seeds. `market_browser.gd` currently tells the player that pre-1980 archives are excluded; that text and the matching empty-list verifier encode the gap.
+
+## Exact intended delta
+
+1. Add a read-only historical projection from `RivalWorld.historical_archive`, keyed by Studio and historical game ID. Use the common saved fields `id`, `title`, `year`, `genre`, `theme`, `review_tenths`; tolerate the projected archive's additional `release_cycle` and four-Core vector when present. Validate owner/ID and avoid duplicate visible keys. Do not insert historical rows into `RunState.get_released_game_ids()`, `MarketReleaseIndex.query`, `world.live_releases`, or `world.market_snapshot.facts`.
+2. Extend `scripts/ui/market_browser_model.gd` to return a separately typed `historical_rows` collection alongside unchanged `rows` for actual live releases. No world or no archive means an empty historical collection. Make the order deterministic by year descending, then Studio ID and historical ID. Preserve existing live row order and player/AI ownership semantics.
+3. Update `scripts/ui/market_browser.gd` so **All Studios** and **AI Studios** show historical rows at cycle 0, after the live section or under a clear historical heading. **Your Studio** excludes rival history. Mark each row **Historical** and show its year and Review. Display unavailable historical unit sales as `—`, not zero or a fabricated total; do not imply those titles currently earn sales. Replace the current exclusion note and empty-state wording. Keep actual live releases and their earned units visually distinct. Selection details identify a frozen pre-1980 record. A browser title such as “Market & History” is appropriate; implementation may use equivalent plain wording.
+4. Read existing two-rival saves without backfilling or changing their archive, cash, Fans, Store ownership, RNG or active Market snapshot. Use the same projection for a future admitted typed eight-rival archive; its separate adoption and quality gates remain unchanged.
+
+## Acceptance
+
+- Fresh current-source seed `4417` and `5607` each show exactly four labeled historical rows at cycle 0 in All/AI, Reviews 7.1, 7.2, 7.6, 7.8; Your Studio shows none. Live releases and active Market facts remain zero. A new game without rival world still shows no invented titles.
+- After a genuine 1980 release, the browser separates live and historical rows, preserves the live actual sales/units and ordering, and never counts a historical title among current releases. Filters, selected details, keyboard/controller Back and both supported sizes remain usable.
+- Fresh save/Continue preserve row identities and order. Existing two-rival saves do not gain six rivals or changed history. Historical rows cause no sales, Fans, saturation, Review standard or RNG delta; focused Market/index and checkpoint verifiers pass. Update the old maintained browser assertion that expected no rows at new Studio to assert no **live** rows and four **historical** rows with a world.
+- Verify the implementation against the actual target branch and current source before adoption. If it overlaps another canonical gameplay change, reconcile serially. Record actual headless/native/exported UI evidence and failures; do not infer eight-rival opening, final challenge balance or release readiness from this presentation pass.
+
+## Evidence and source identity
+
+Current branch `main`, HEAD `3a61522f18db7a2bae892cb8c5be1fee68cd4100`, canonical mechanics `33f44f0c61446daf6f464bee3c04f689a437d4b08704d2c3dbc65874778a1f27`. [Probe plan](../../2026-10-30-cycle-zero-market-visibility-probe-plan-v1.md), [finding](../../2026-10-30-cycle-zero-market-visibility-finding-v1.md), [first result](../../sims/cycle-zero-market-visibility-probe-20261030-v1/opening-rival-reviews.json), [fresh repeat](../../sims/cycle-zero-market-visibility-probe-repeat-20261030-v1/opening-rival-reviews.json), [retained one-command bound](../../sims/cycle-zero-market-visibility-freeze-20261030-v1/run-report.json). The variant changed only a private diagnostic script; it is evidence, not replacement UI code. Current founder [candidate assessment](../../2026-10-30-current-founder-candidate-findings-v1.md) separately holds eight-rival adoption.

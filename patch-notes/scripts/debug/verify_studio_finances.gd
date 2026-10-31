@@ -31,6 +31,8 @@ func _named_run(name: String) -> RunState:
 	var run := RunState.new()
 	run.initialize_cash_cents(0)
 	expect(run.set_studio_name(name, &"action"), "Named studio initializes actual finance history")
+	# Preserve the historical $500 numeric UI/accounting control explicitly.
+	run._studio_finance=StudioFinanceLedger.create(run.get_cash_cents(),50000)
 	return run
 
 
@@ -65,12 +67,12 @@ func _verify_resolution(resolution: Vector2i) -> void:
 	hud.cash_button.pressed.emit()
 	await _settle()
 	expect(menu.visible and menu.page == &"finances", "Cash opens Studio Finances")
-	_check_bounds(menu, resolution)
+	await _check_bounds(menu, resolution)
 	expect(menu.report == run.get_studio_finance_report(), "Finance view reads exact authoritative report")
 	menu.bank_button.pressed.emit()
 	await _settle()
 	expect(menu.page == &"bank" and menu.bank_history.text.contains("Neutral starting history") and menu.bank_history.text.contains("No completed months"), "Bank starts with neutral empty history")
-	expect(menu.back_button.text == "Back to Finances", "Bank has an explicit Back path")
+	expect(menu.back_button.text == "← Back" and menu.back_button.tooltip_text == "Back to Finances", "Bank has an explicit Back path")
 	await _capture("bank-neutral", resolution)
 	_escape(menu)
 	expect(menu.visible and menu.page == &"finances", "Escape returns Bank to Finances")
@@ -97,7 +99,7 @@ func _verify_resolution(resolution: Vector2i) -> void:
 	var last := menu.month_table.get_root().get_child(menu.month_table.get_root().get_child_count() - 1)
 	expect(last.get_text(0).contains("partial"), "Current month is honestly marked partial")
 	expect(first.get_text(3) == "-$500.00", "Negative operating profit remains visible in the table")
-	_check_bounds(menu, resolution)
+	await _check_bounds(menu, resolution)
 	await _capture("finances", resolution)
 	menu.open_bank()
 	expect(menu.bank_history.text.contains("Completed months: 1") and not menu.bank_history.text.contains("Neutral starting history"), "Bank completed history updates from ledger inputs")
@@ -115,7 +117,7 @@ func _verify_resolution(resolution: Vector2i) -> void:
 	await _settle()
 	expect(menu.report.financially_blocked and menu.block_label.visible and menu.totals_label.text.contains("$376.55"), "Unpaid obligations and first-version financial block are explicit")
 	expect(menu.block_label.text.contains("launch") and menu.block_label.text.contains("income action"), "Blocked finance view preserves allowed navigation and recovery explanation")
-	_check_bounds(menu, resolution)
+	await _check_bounds(menu, resolution)
 	await _capture("unpaid-rent", resolution)
 	menu.finance_tabs.current_tab = 1
 	await _settle()
@@ -192,7 +194,14 @@ func _check_bounds(menu: StudioFinances, resolution: Vector2i) -> void:
 	var viewport := Rect2(Vector2.ZERO, Vector2(resolution))
 	expect(viewport.encloses(menu.dialog.get_global_rect()), "Finance dialog fits %s" % resolution)
 	expect(menu.back_button.is_visible_in_tree() and menu.dialog.get_global_rect().encloses(menu.back_button.get_global_rect()), "Finance Back stays visible inside its dialog")
-	expect(menu.dialog.get_global_rect().encloses(menu.month_table.get_global_rect()) and menu.dialog.get_global_rect().encloses(menu.month_detail.get_global_rect()), "Monthly table and details fit inside the finance dialog")
+	var scroll: ScrollContainer=menu.dialog.find_child("FinanceBodyScroll",true,false)
+	for control: Control in [menu.month_table,menu.month_detail]:
+		if not control.is_visible_in_tree():continue
+		var previous:=scroll.scroll_vertical
+		scroll.ensure_control_visible(control);await process_frame
+		expect(menu.dialog.get_global_rect().encloses(control.get_global_rect()),"Monthly control is reachable by scrolling: "+control.name)
+		scroll.scroll_vertical=previous
+
 
 
 func _escape(menu: StudioFinances) -> void:

@@ -23,4 +23,33 @@ static func query(run: RunState, world: RivalWorld = null) -> Dictionary:
 		if support.deals.has(StringName(row.release_id)):
 			row.support = {"terms":support.deals[StringName(row.release_id)],"rights":support.rights[StringName(row.release_id)]}
 	rows.reverse() # Index supplies stable release-cycle/owner/ID ordering.
-	return {"ok":true,"rows":rows}
+	return {"ok":true,"rows":rows,"historical_rows":_historical_rows(world)}
+
+## Frozen records are presentation only: never insert these into the live index.
+static func _historical_rows(world: RivalWorld) -> Array:
+	var rows: Array = []
+	if world == null: return rows
+	var seen := {}
+	for owner: Variant in world.historical_archive:
+		if not Index._text(owner) or not world.studios.has(StringName(owner)): continue
+		var archive: Variant = world.historical_archive[owner]
+		if not archive is Array: continue
+		for record: Variant in archive:
+			if not record is Dictionary: continue
+			var valid := true
+			for field in ["id","title","genre","theme"]:
+				valid = valid and Index._text(record.get(field))
+			if not valid or not record.get("year") is int or record.year <= 0 or record.year >= RunState.START_YEAR: continue
+			if not record.get("review_tenths") is int or record.review_tenths < 0 or record.review_tenths > 100: continue
+			if PrimitivePredevelopment.find_entry("genres",StringName(record.genre)).is_empty() or PrimitivePredevelopment.find_entry("themes",StringName(record.theme)).is_empty(): continue
+			var key := JSON.stringify([str(owner),str(record.id)])
+			if seen.has(key): continue
+			seen[key] = true
+			rows.append({"record_type":"historical","studio_id":str(owner),"studio_name":world.studios[StringName(owner)].run.get_studio_name(),
+				"release_id":str(record.id),"release_title":str(record.title),"release_year":record.year,
+				"genre":str(record.genre),"theme":str(record.theme),"review_tenths":record.review_tenths,"player_owned":false})
+	rows.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
+		if a.release_year != b.release_year: return a.release_year > b.release_year
+		if a.studio_id != b.studio_id: return a.studio_id < b.studio_id
+		return a.release_id < b.release_id)
+	return rows

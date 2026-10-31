@@ -1,0 +1,1425 @@
+[
+  [
+    ".run._pending_relationship_plan",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._closed_historical_ids",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._publisher_relationships",
+    "ADDED",
+    {
+      "events": [],
+      "owner": "m2a_studio",
+      "version": {
+        "integer": "1"
+      }
+    }
+  ],
+  [
+    ".run._calendar_start_year",
+    "ADDED",
+    {
+      "integer": "1980"
+    }
+  ],
+  [
+    ".run._support_rights",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._sidestreet_briefs",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._feature_definitions.player_level_editor",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "player_level_editor",
+      "min_year": {
+        "float_bits": "0300000000e0f744"
+      },
+      "name": "Player Level Editor",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000008040"
+      },
+      "purchase_parent": "save_files",
+      "purchase_parents": [
+        "save_files",
+        "levels"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "030000000000803f"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.branching_dialogue",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "story",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "branching_dialogue",
+      "name": "Branching Dialogue",
+      "phase": "alpha",
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "purchase_parent": "dialogue",
+      "purchase_parents": [
+        "dialogue",
+        "branching_nodes"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.main_theme",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "audio",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "main_theme",
+      "name": "Main Theme",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "8_bit_sound",
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.multiple_soundtracks",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "03000000008c3948"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "multiple_soundtracks",
+      "name": "Multiple Soundtracks",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000a040"
+      },
+      "purchase_parent": "main_theme",
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.inventory_system",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "inventory_system",
+      "name": "Inventory System",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "purchase_parent": "",
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.categorized_scores",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000606a48"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "categorized_scores",
+      "name": "Categorized Scores",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "design",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "timer_system",
+      "purchase_parents": [
+        "timer_system",
+        "score_system",
+        "lives_system"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000004040"
+      },
+      "secondary_stat": "technology",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.difficulty_levels.purchase_parents",
+    "ADDED",
+    [
+      "turn_based_combat",
+      "scripted_ai"
+    ]
+  ],
+  [
+    ".run._feature_definitions.difficulty_levels.purchase_parent",
+    "",
+    "turn_based_combat"
+  ],
+  [
+    ".run._feature_definitions.difficulty_levels.gameplay_features_required.float_bits",
+    "0300000000004040",
+    "0300000000000000"
+  ],
+  [
+    ".run._feature_definitions.colored_text.purchase_parents",
+    "ADDED",
+    [
+      "text",
+      "4_color_palette"
+    ]
+  ],
+  [
+    ".run._feature_definitions.turn_based_combat",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "gameplay",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "turn_based_combat",
+      "name": "Turn-Based Combat",
+      "phase": "alpha",
+      "primary_stat": "design",
+      "primary_value": {
+        "float_bits": "030000000000a040"
+      },
+      "purchase_parent": "general_combat",
+      "purchase_parents": [
+        "general_combat"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.instrumental_sounds",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "03000000008c3948"
+      },
+      "department": "audio",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "instrumental_sounds",
+      "name": "Instrumental Sounds",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "recorded_sounds",
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.timer_system",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "03000000008cb947"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "timer_system",
+      "name": "Timer System",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "purchase_parent": "",
+      "renewable": false,
+      "scope": {
+        "float_bits": "030000000000803f"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "030000000000803f"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.save_files.purchase_parent",
+    "",
+    "menu_system"
+  ],
+  [
+    ".run._feature_definitions.character_classes",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "gameplay",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "character_classes",
+      "name": "Character Classes",
+      "phase": "alpha",
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "purchase_parent": "general_combat",
+      "purchase_parents": [
+        "general_combat",
+        "save_files"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.character_skill_checks",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "story",
+      "era_year": {
+        "float_bits": "030000000000f844"
+      },
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "character_skill_checks",
+      "min_year": {
+        "float_bits": "030000000080f844"
+      },
+      "name": "Character Skill Checks",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "design",
+      "primary_value": {
+        "float_bits": "0300000000008040"
+      },
+      "purchase_parent": "character_development",
+      "purchase_parents": [
+        "character_development",
+        "exploration"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "technology",
+      "secondary_value": {
+        "float_bits": "030000000000803f"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.dynamic_sequencing",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000606a48"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "dynamic_sequencing",
+      "name": "Dynamic Sequencing",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "multiple_soundtracks",
+      "purchase_parents": [
+        "multiple_soundtracks",
+        "instrumental_sounds"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000004040"
+      },
+      "secondary_stat": "technology",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.16_bit_sound",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "16_bit_sound",
+      "name": "16-Bit Sound",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "8_bit_sound",
+      "renewable": false,
+      "replaces_id": "8_bit_sound",
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.ability_gated_exploration",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "world_design",
+      "era_year": {
+        "float_bits": "030000000000f844"
+      },
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "ability_gated_exploration",
+      "min_year": {
+        "float_bits": "030000000040f844"
+      },
+      "name": "Ability-Gated Exploration",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "graphics",
+      "primary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "purchase_parent": "exploration",
+      "purchase_parents": [
+        "exploration",
+        "power_ups"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.character_development",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "story",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "character_development",
+      "name": "Character Development",
+      "phase": "alpha",
+      "primary_stat": "design",
+      "primary_value": {
+        "float_bits": "030000000000a040"
+      },
+      "purchase_parent": "character_backstories",
+      "purchase_parents": [
+        "character_backstories",
+        "save_files"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_definitions.switchable_protagonists",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "story",
+      "era_year": {
+        "float_bits": "030000000000f844"
+      },
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "switchable_protagonists",
+      "min_year": {
+        "float_bits": "030000000060f844"
+      },
+      "name": "Switchable Protagonists",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "purchase_parent": "character_backstories",
+      "purchase_parents": [
+        "character_backstories",
+        "controls"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._cycle_plan",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._engine_royalty_receipts",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._support_assessments",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._founding_roster_version",
+    "ADDED",
+    {
+      "integer": "2"
+    }
+  ],
+  [
+    ".run._release_engine_ids",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._studio_traits.version.integer",
+    "7",
+    "9"
+  ],
+  [
+    ".run._historical_close_cycle",
+    "ADDED",
+    {
+      "integer": "-1"
+    }
+  ],
+  [
+    ".run._commission_deals",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._store_era_receipts",
+    "ADDED",
+    {
+      "assignments": {},
+      "version": {
+        "integer": "1"
+      }
+    }
+  ],
+  [
+    ".run._contract_search",
+    "ADDED",
+    {
+      "intro_offer_id": "",
+      "legacy_offers": {},
+      "offers": {},
+      "owner": "m2a_studio",
+      "receipts": [],
+      "version": {
+        "integer": "1"
+      }
+    }
+  ],
+  [
+    ".run._engine_entitlements",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._support_deals",
+    "ADDED",
+    {}
+  ],
+  [
+    ".run._rival_founder_profile",
+    "ADDED",
+    ""
+  ],
+  [
+    ".run._relationship_commit_in_progress",
+    "ADDED",
+    false
+  ],
+  [
+    ".run._feature_offers.player_level_editor",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "player_level_editor",
+      "min_year": {
+        "float_bits": "0300000000e0f744"
+      },
+      "name": "Player Level Editor",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000008040"
+      },
+      "purchase_parent": "save_files",
+      "purchase_parents": [
+        "save_files",
+        "levels"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "030000000000803f"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.branching_dialogue",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "story",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "branching_dialogue",
+      "name": "Branching Dialogue",
+      "phase": "alpha",
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "purchase_parent": "dialogue",
+      "purchase_parents": [
+        "dialogue",
+        "branching_nodes"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.multiple_soundtracks",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "03000000008c3948"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "multiple_soundtracks",
+      "name": "Multiple Soundtracks",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000a040"
+      },
+      "purchase_parent": "main_theme",
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.main_theme",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "audio",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "main_theme",
+      "name": "Main Theme",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "8_bit_sound",
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.inventory_system",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "inventory_system",
+      "name": "Inventory System",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "purchase_parent": "",
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.categorized_scores",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000606a48"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "categorized_scores",
+      "name": "Categorized Scores",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "design",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "timer_system",
+      "purchase_parents": [
+        "timer_system",
+        "score_system",
+        "lives_system"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000004040"
+      },
+      "secondary_stat": "technology",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.difficulty_levels.purchase_parents",
+    "ADDED",
+    [
+      "turn_based_combat",
+      "scripted_ai"
+    ]
+  ],
+  [
+    ".run._feature_offers.difficulty_levels.purchase_parent",
+    "",
+    "turn_based_combat"
+  ],
+  [
+    ".run._feature_offers.difficulty_levels.gameplay_features_required.float_bits",
+    "0300000000004040",
+    "0300000000000000"
+  ],
+  [
+    ".run._feature_offers.turn_based_combat",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "gameplay",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "turn_based_combat",
+      "name": "Turn-Based Combat",
+      "phase": "alpha",
+      "primary_stat": "design",
+      "primary_value": {
+        "float_bits": "030000000000a040"
+      },
+      "purchase_parent": "general_combat",
+      "purchase_parents": [
+        "general_combat"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.colored_text.purchase_parents",
+    "ADDED",
+    [
+      "text",
+      "4_color_palette"
+    ]
+  ],
+  [
+    ".run._feature_offers.instrumental_sounds",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "03000000008c3948"
+      },
+      "department": "audio",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "instrumental_sounds",
+      "name": "Instrumental Sounds",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "recorded_sounds",
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.timer_system",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "03000000008cb947"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "timer_system",
+      "name": "Timer System",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "purchase_parent": "",
+      "renewable": false,
+      "scope": {
+        "float_bits": "030000000000803f"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "030000000000803f"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.save_files.purchase_parent",
+    "",
+    "menu_system"
+  ],
+  [
+    ".run._feature_offers.character_skill_checks",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "story",
+      "era_year": {
+        "float_bits": "030000000000f844"
+      },
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "character_skill_checks",
+      "min_year": {
+        "float_bits": "030000000080f844"
+      },
+      "name": "Character Skill Checks",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "design",
+      "primary_value": {
+        "float_bits": "0300000000008040"
+      },
+      "purchase_parent": "character_development",
+      "purchase_parents": [
+        "character_development",
+        "exploration"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "technology",
+      "secondary_value": {
+        "float_bits": "030000000000803f"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.character_classes",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "gameplay",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "character_classes",
+      "name": "Character Classes",
+      "phase": "alpha",
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "purchase_parent": "general_combat",
+      "purchase_parents": [
+        "general_combat",
+        "save_files"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.dynamic_sequencing",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000606a48"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "dynamic_sequencing",
+      "name": "Dynamic Sequencing",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "multiple_soundtracks",
+      "purchase_parents": [
+        "multiple_soundtracks",
+        "instrumental_sounds"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000004040"
+      },
+      "secondary_stat": "technology",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.16_bit_sound",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "16_bit_sound",
+      "name": "16-Bit Sound",
+      "phase": "design",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "sound",
+      "primary_value": {
+        "float_bits": "030000000000e040"
+      },
+      "purchase_parent": "8_bit_sound",
+      "renewable": false,
+      "replaces_id": "8_bit_sound",
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.ability_gated_exploration",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "world_design",
+      "era_year": {
+        "float_bits": "030000000000f844"
+      },
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "ability_gated_exploration",
+      "min_year": {
+        "float_bits": "030000000040f844"
+      },
+      "name": "Ability-Gated Exploration",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "graphics",
+      "primary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "purchase_parent": "exploration",
+      "purchase_parents": [
+        "exploration",
+        "power_ups"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.character_development",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "story",
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "character_development",
+      "name": "Character Development",
+      "phase": "alpha",
+      "primary_stat": "design",
+      "primary_value": {
+        "float_bits": "030000000000a040"
+      },
+      "purchase_parent": "character_backstories",
+      "purchase_parents": [
+        "character_backstories",
+        "save_files"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "",
+      "secondary_value": {
+        "float_bits": "0300000000000000"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._feature_offers.switchable_protagonists",
+    "ADDED",
+    {
+      "artwork": "",
+      "base_price_cents": {
+        "float_bits": "0300000000042648"
+      },
+      "department": "story",
+      "era_year": {
+        "float_bits": "030000000000f844"
+      },
+      "gameplay_features_required": {
+        "float_bits": "0300000000000000"
+      },
+      "id": "switchable_protagonists",
+      "min_year": {
+        "float_bits": "030000000060f844"
+      },
+      "name": "Switchable Protagonists",
+      "phase": "alpha",
+      "play_cost_cents": {
+        "float_bits": "0300000000000000"
+      },
+      "primary_stat": "technology",
+      "primary_value": {
+        "float_bits": "0300000000004040"
+      },
+      "purchase_parent": "character_backstories",
+      "purchase_parents": [
+        "character_backstories",
+        "controls"
+      ],
+      "renewable": false,
+      "scope": {
+        "float_bits": "0300000000000040"
+      },
+      "secondary_stat": "design",
+      "secondary_value": {
+        "float_bits": "0300000000000040"
+      },
+      "type": "feature"
+    }
+  ],
+  [
+    ".run._preparing_project",
+    "ADDED",
+    false
+  ],
+  [
+    ".run._market_provider",
+    "ADDED",
+    "null::null"
+  ],
+  [
+    ".run._market_committed_candidate",
+    "ADDED",
+    {}
+  ],
+  [
+    ".project._pass_budget_origin",
+    "ADDED",
+    ""
+  ],
+  [
+    ".project._market_standards",
+    "ADDED",
+    []
+  ],
+  [
+    ".project._market_details",
+    "ADDED",
+    {}
+  ],
+  [
+    ".project._pass_budget_version",
+    "ADDED",
+    {
+      "integer": "0"
+    }
+  ],
+  [
+    ".project._market_snapshot_id",
+    "ADDED",
+    ""
+  ],
+  [
+    ".project._engine_id",
+    "ADDED",
+    "legacy_engine"
+  ]
+]

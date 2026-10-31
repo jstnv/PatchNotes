@@ -13,7 +13,7 @@ func expect(ok: bool, message: String) -> void:
 		push_error("FAIL: " + message)
 
 func _settle() -> void:
-	for i in range(4): await process_frame
+	await create_timer(0.3).timeout
 
 func _verify() -> void:
 	_verify_catalog()
@@ -76,6 +76,8 @@ func _release_active_project(game: Control) -> StudioPhase:
 	var studio := game.get("_active_phase") as StudioPhase
 	expect(studio != null, "Launch enters Studio automatically after results commit")
 	if studio == null: return null
+	if studio._review_view!=null and studio._review_view.visible:
+		studio._review_view.get_node("%ContinueButton").pressed.emit();await _settle()
 	expect(before == [game.run_state.get_cash_cents(), game.run_state.get_completed_run_cycles(), project.get_current_cycle()], "Automatic Studio entry retains zero cash and cycle cost")
 	return game.get("_active_phase")
 
@@ -87,8 +89,10 @@ func _verify_flow() -> void:
 	# standards now require a stable owner ID even without a rival world.
 	run._bank_run_id = &"predevelopment-fixture"
 	ResearchTestActions.acquire(run,&"save_files")
+	var configured: Array[StringName]=[&"save_files"]
+	expect(run.stage_engine_features(configured) and run.commit_engine_configuration(run.get_engine_configuration_quote()),"Purchased Save Files explicitly configured for next project")
 	run.spend_cash_cents(1)
-	for i in range(22): run.advance_calendar_cycle() # Store node purchase already spent the first cycle.
+	for i in range(21): run.advance_calendar_cycle() # Store node purchase already spent the first cycle.
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 	game.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	game.run_state = run
@@ -136,6 +140,7 @@ func _verify_flow() -> void:
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://design-logs/predevelopment.png")
 	overlay.cancelled.emit()
+	await _settle()
 	expect(studio.get_node("%Dashboard").visible and not overlay.visible, "Cancel returns to Studio")
 	studio.get_node("%StartNextGame").pressed.emit()
 	expect(overlay.name_input.text == "Doom" and run.get_cash_cents() == cash_before and run.get_released_game_sales(id) == sales_before and run.get_available_redraws() == 0, "Opening, editing and cancelling are free and preserve the draft")
@@ -144,6 +149,7 @@ func _verify_flow() -> void:
 	expect(game.project_state == old and overlay.visible and run.get_cash_cents() == cash_before and run.get_released_game_sales(id) == sales_before, "Calendar overflow rejects confirmation without replacing project or spending cash")
 	run.set("_completed_run_cycles", calendar_before)
 	expect(cash_before == ContractState.GUARANTEED_UPFRONT_CENTS and not overlay.begin_button.disabled, "Begin Development remains available with the accepted Contract guarantee")
+	var requested_priorities: Dictionary=overlay.get_initial_priorities()
 	overlay.begin_button.pressed.emit()
 	var fresh: ProjectState = game.project_state
 	expect(fresh != old and fresh.get_base_name() == "Doom" and fresh.get_genre_id() == &"puzzle" and fresh.get_theme_id() == &"mystery", "Confirmation creates a fresh named project with selected choices")
@@ -159,7 +165,7 @@ func _verify_flow() -> void:
 	expect(not fresh.has_design_bug_finalization() and not fresh.has_alpha_finalization() and not fresh.has_beta_finalization() and not fresh.has_review_result() and not fresh.has_awareness_result() and not fresh.has_month_one_sales_revenue_result(), "Fresh project has no prior phase or launch results")
 	expect(fresh.has_competitor_snapshot() and fresh.has_market_forecast_snapshot() and not fresh.is_competitor_snapshot_revealed() and not fresh.is_market_forecast_snapshot_revealed(), "New project has freshly assigned concealed market snapshots")
 	var design: DesignPhase = game.get("_active_phase")
-	expect(design != null and design.get("_project_state") == fresh and design.get_priority_distribution() == {0: 50, 1: 15, 2: 15, 3: 20} and design.get("_exhausted_card_ids").is_empty(), "Transition deals Design using Pre-Development priorities and fresh exhaustion")
+	expect(design != null and design.get("_project_state") == fresh and design.get_priority_distribution() == requested_priorities and design.get("_exhausted_card_ids").is_empty(), "Transition deals Design using Pre-Development priorities and fresh exhaustion")
 	expect(game.get_node("%GameplayHUD").project == fresh and not old.values_changed.is_connected(game.get_node("%GameplayHUD").refresh), "Existing HUD is rebound and disconnects old project")
 	var rebuilt: Control = load("res://scenes/gameplay.tscn").instantiate()
 	rebuilt.project_state = fresh
@@ -196,12 +202,22 @@ func _verify_flow() -> void:
 	var third_design: DesignPhase = game.get("_active_phase")
 	third_design.get_workspace().overlay.cancel()
 	third_design.begin_design()
-	var views := third_design.get_node("%HandContainer").get_children()
-	for i in range(4): views[i].input_button.pressed.emit()
+	expect(_select_legal_design_hand(third_design),"A current-budget legal visible Design hand is selected")
 	third_design.get_node("%PlayCardButton").pressed.emit()
 	expect(game.project_state.get_current_cycle() == 1 and run.get_completed_run_cycles() == 27, "First Design hand advances project zero to one and run calendar once")
 	game.queue_free()
 	await _settle()
+
+func _select_legal_design_hand(phase: DesignPhase) -> bool:
+	var views:=phase.get_node("%HandContainer").get_children().filter(func(v):return v is CardView)
+	for a in range(views.size()-3):
+		for b in range(a+1,views.size()-2):
+			for c in range(b+1,views.size()-1):
+				for d in range(c+1,views.size()):
+					for selected: CardView in phase.get_selected_candidate_views():selected.input_button.pressed.emit()
+					for index in [a,b,c,d]:views[index].input_button.pressed.emit()
+					if phase._can_play_selected_hand():return true
+	return false
 
 func _finish_project(project: ProjectState) -> void:
 	var snapshots := PrimitiveSnapshotDatabase.new()

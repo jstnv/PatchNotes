@@ -1,5 +1,7 @@
 extends SceneTree
-const Before := preload("res://scripts/debug/fixtures/store_before_research_latency.gd")
+## Compare batched quotes with individual calls to the current authority.
+## The old half-price oracle remains archived in fixtures, not a Phase1 rule.
+const Before := preload("res://scripts/run_state.gd")
 const TransactionView := preload("res://scripts/simulation/transaction_projection.gd")
 var checks:=0
 var failures:=0
@@ -32,7 +34,7 @@ func _initialize() -> void:
 		if run==late:
 			for id: StringName in current.quotes:
 				var quote: Dictionary=current.quotes[id]
-				if not quote.can_admit:continue
+				if not quote.get("can_admit",false):continue
 				expect(run.admit_feature_research(quote),"Batched live quote admits through ordinary transaction")
 				expect(not run.admit_feature_research(quote),"Stale batched quote cannot admit twice")
 				var next: Dictionary=run.call("get_feature_store_view").quotes[id]

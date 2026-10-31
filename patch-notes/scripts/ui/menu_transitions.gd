@@ -2,8 +2,8 @@ class_name MenuTransitions
 extends Node
 
 ## Visual-only entrance on the existing menus. No delayed gameplay callbacks.
-const MENUS := ["main_menu.gd", "predevelopment_overlay.gd", "feature_store.gd", "publisher_browser.gd", "post_game_review.gd", "monthly_sales_report.gd", "employee_panel.gd"]
-const PANELS := ["Dashboard", "SummaryPanel", "PriorityDialog", "TutorialDialog", "ContractCompletion", "ContractDetail", "ContractPriorities", "ContractModal"]
+const MENUS := ["main_menu.gd", "predevelopment_overlay.gd", "feature_store.gd", "publisher_browser.gd", "post_game_review.gd", "monthly_sales_report.gd", "employee_panel.gd", "studio_rival_info.gd", "engine_market_browser.gd"]
+const PANELS := ["Dashboard", "StudioManagement", "MarketInfo", "StartProduction", "StudioInfo", "SummaryPanel", "PriorityDialog", "TutorialDialog", "ContractCompletion", "ContractDetail", "ContractPriorities", "ContractModal"]
 const ENTRANCE_DISTANCE := 44.0
 const ENTRANCE_SECONDS := 0.24
 var _motions: Dictionary = {}
@@ -19,6 +19,10 @@ var _input_was_disabled := false
 var _owns_input_lock := false
 var _moving_view: WeakRef
 var _moving_rest_x := 0.0
+var _moving_rest_y := 0.0
+var _moving_vertical := false
+var _panel_motions: Dictionary = {}
+var _previous_input_owner: Variant
 
 ## Optional stack for existing menu views. Frames hold weak UI references only;
 ## they never contain gameplay state or reverse a committed action.
@@ -33,55 +37,80 @@ func is_top(view: Control) -> bool:
 	return not frames.is_empty() and frames[-1].view.get_ref()==view
 
 func push(view: Control, focus: Control, closed: Callable = Callable()) -> bool:
+	return _push_offset(view,focus,closed,Vector2(maxf(64.0,view.size.x),0))
+
+## Studio destinations enter at the top edge of the persistent bottom HUD.
+func push_from_bottom(view: Control, focus: Control, closed: Callable, bottom_global_y: float) -> bool:
+	return _push_offset(view,focus,closed,Vector2(0,maxf(64.0,bottom_global_y-view.global_position.y)))
+
+func _push_offset(view: Control, focus: Control, closed: Callable, offset: Vector2) -> bool:
 	if busy or frames.is_empty() or frames.any(func(frame): return frame.view.get_ref()==view): return false
 	var previous: Control = frames[-1].view.get_ref()
 	var owner := get_viewport().gui_get_focus_owner()
 	frames[-1].focus = weakref(owner) if owner != null else null
 	view.set_meta("folder_navigation_managed",true)
-	frames.append({"view":weakref(view),"focus":null,"closed":closed})
-	var rest_x := view.position.x
-	_prepare_navigation_motion(view,rest_x)
+	frames.append({"view":weakref(view),"focus":null,"closed":closed,"offset":offset})
+	var rest := view.position
+	_prepare_navigation_motion(view,rest.x)
+	_moving_vertical=offset.y!=0;_moving_rest_y=rest.y
 	view.show()
 	_lock_navigation()
 	var finish := func():
-		if is_instance_valid(view): view.position.x=rest_x
-		if is_instance_valid(previous): previous.hide()
+		if is_instance_valid(view):view.position=rest
+		if is_instance_valid(previous):previous.hide()
 		_unlock_navigation()
-		if is_instance_valid(focus) and focus.is_visible_in_tree(): focus.grab_focus()
-	if not animate:
-		finish.call()
-		return true
-	view.position.x=rest_x+maxf(64.0,view.size.x)
+		if is_instance_valid(focus) and focus.is_visible_in_tree():focus.grab_focus()
+	if not animate:finish.call();return true
+	view.position=rest+offset
 	_navigation_tween=create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	_navigation_tween.tween_property(view,"position:x",rest_x,ENTRANCE_SECONDS)
+	_navigation_tween.tween_property(view,"position",rest,ENTRANCE_SECONDS)
 	_navigation_tween.tween_callback(finish)
 	return true
 
 func pop() -> bool:
-	if busy or frames.size()<2: return false
-	var removed: Dictionary = frames.pop_back()
-	var view: Control = removed.view.get_ref()
-	var previous: Control = frames[-1].view.get_ref()
-	if is_instance_valid(previous): previous.show()
+	if busy or frames.size()<2:return false
+	var removed: Dictionary=frames.pop_back()
+	var view: Control=removed.view.get_ref()
+	var previous: Control=frames[-1].view.get_ref()
+	if is_instance_valid(previous):previous.show()
+	var rest:=view.position if is_instance_valid(view) else Vector2.ZERO
+	var offset: Vector2=removed.get("offset",Vector2(maxf(64.0,view.size.x) if is_instance_valid(view) else 64,0))
+	if offset.y!=0 and is_instance_valid(view):
+		var root_view: Control=frames[0].view.get_ref()
+		if is_instance_valid(root_view):offset.y=maxf(64,root_view.get_global_rect().end.y-view.global_position.y)
+	if is_instance_valid(view):
+		_prepare_navigation_motion(view,rest.x)
+		_moving_vertical=offset.y!=0;_moving_rest_y=rest.y
+		view.show()
 	_lock_navigation()
-	var rest_x := view.position.x if is_instance_valid(view) else 0.0
-	if is_instance_valid(view): _prepare_navigation_motion(view,rest_x)
-	var focus_ref: Variant = frames[-1].focus
-	var finish := func():
-		if is_instance_valid(view):
-			view.hide()
-			view.position.x=rest_x
-		if removed.closed.is_valid(): removed.closed.call()
+	var focus_ref: Variant=frames[-1].focus
+	var finish:=func():
+		if is_instance_valid(view):view.hide();view.position=rest
 		_unlock_navigation()
-		var focus: Control = focus_ref.get_ref() if focus_ref != null else null
-		if is_instance_valid(focus) and focus.is_visible_in_tree(): focus.grab_focus()
-	if not animate or not is_instance_valid(view):
-		finish.call()
-		return true
+		if removed.closed.is_valid():removed.closed.call()
+		var focus: Control=focus_ref.get_ref() if focus_ref!=null else null
+		if is_instance_valid(focus) and focus.is_visible_in_tree():focus.grab_focus()
+	if not animate or not is_instance_valid(view):finish.call();return true
 	_navigation_tween=create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	_navigation_tween.tween_property(view,"position:x",rest_x+maxf(64.0,view.size.x),ENTRANCE_SECONDS)
+	_navigation_tween.tween_property(view,"position",rest+offset,ENTRANCE_SECONDS)
 	_navigation_tween.tween_callback(finish)
 	return true
+
+## Companion panels share this owner but leave root choices interactive.
+func slide_panel(view: Control, from_x: float, to_x: float, finished: Callable) -> void:
+	finish_panel(view)
+	view.position.x=from_x
+	if not animate:view.position.x=to_x;finished.call();return
+	var tween:=create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_panel_motions[view]={"tween":tween,"target":to_x,"finished":finished}
+	tween.tween_property(view,"position:x",to_x,ENTRANCE_SECONDS)
+	tween.tween_callback(func():_panel_motions.erase(view);finished.call())
+
+func finish_panel(view: Control) -> void:
+	if not _panel_motions.has(view):return
+	var item: Dictionary=_panel_motions[view];_panel_motions.erase(view);item.tween.kill()
+	if is_instance_valid(view):view.position.x=item.target
+	if item.finished.is_valid():item.finished.call()
 
 func _prepare_navigation_motion(view: Control, rest_x: float) -> void:
 	_moving_view=weakref(view)
@@ -92,6 +121,8 @@ func _lock_navigation() -> void:
 	busy=true
 	_input_viewport=get_viewport()
 	_input_was_disabled=_input_viewport.gui_disable_input
+	_previous_input_owner=(_input_viewport.get_meta("folder_input_owner") if _input_viewport.has_meta("folder_input_owner") else null)
+	_input_viewport.set_meta("folder_input_owner",weakref(self))
 	_input_viewport.gui_disable_input=true
 	_owns_input_lock=true
 
@@ -101,13 +132,22 @@ func _unlock_navigation() -> void:
 	if is_instance_valid(view):
 		view.remove_meta("folder_navigation_motion")
 		view.position.x=_moving_rest_x
+		if _moving_vertical:view.position.y=_moving_rest_y
 		if view.get_parent() is Container: view.get_parent().queue_sort()
 	_moving_view=null
+	_moving_vertical=false
 	if _owns_input_lock and is_instance_valid(_input_viewport): _input_viewport.gui_disable_input=_input_was_disabled
+	if _owns_input_lock and is_instance_valid(_input_viewport):
+		var owner: Variant=(_input_viewport.get_meta("folder_input_owner") if _input_viewport.has_meta("folder_input_owner") else null)
+		if owner is WeakRef and owner.get_ref()==self:
+			if _previous_input_owner==null:_input_viewport.remove_meta("folder_input_owner")
+			else:_input_viewport.set_meta("folder_input_owner",_previous_input_owner)
 	_owns_input_lock=false
 
 func _exit_tree() -> void:
 	_pending_entrances.clear()
+	for item: Dictionary in _panel_motions.values():item.tween.kill()
+	_panel_motions.clear()
 	for motion: Dictionary in _motions.values():motion.tween.kill()
 	_motions.clear()
 	if _navigation_tween != null: _navigation_tween.kill()
@@ -148,7 +188,7 @@ func _slide(menu: Variant) -> void:
 		_motions[menu].tween.kill()
 		if is_instance_valid(_motions[menu].visual): _motions[menu].visual.position.x = _motions[menu].rest_x
 		_motions.erase(menu)
-	if not menu.is_visible_in_tree(): return
+	if menu.has_meta("folder_navigation_managed") or not menu.is_visible_in_tree(): return
 	var visual: Control = menu
 	# Keep full-screen menu bounds fixed; slide their content within the surface.
 	if (menu is PanelContainer or (menu.get_script() != null and menu.get_script().resource_path.get_file() in MENUS)) and menu.get_child_count() > 0 and menu.get_child(0) is Control:
@@ -170,7 +210,7 @@ func _process(_delta: float) -> void:
 	for item: Dictionary in waiting:
 		var menu: Control=item.menu.get_ref()
 		var visual: Control=item.visual.get_ref()
-		if menu==null or visual==null or not menu.is_inside_tree() or not menu.is_visible_in_tree() or _entrance_requests.get(menu)!=item.request:continue
+		if menu==null or visual==null or not menu.is_inside_tree() or not menu.is_visible_in_tree() or menu.has_meta("folder_navigation_managed") or _entrance_requests.get(menu)!=item.request:continue
 		item.frames-=1
 		if item.frames>0:_pending_entrances.append(item)
 		else:_start_entrance(menu,visual)
@@ -187,3 +227,10 @@ func _start_entrance(menu: Control,visual: Control) -> void:
 		# Resizes during the entrance must finish at the current Container inset.
 		if is_instance_valid(visual) and visual.get_parent() is Container:
 			visual.get_parent().queue_sort())
+
+static func navigation_input_blocked(node: Node) -> bool:
+	var owner: Variant=(node.get_viewport().get_meta("folder_input_owner") if node.get_viewport().has_meta("folder_input_owner") else null)
+	return owner is WeakRef and is_instance_valid(owner.get_ref()) and owner.get_ref().busy
+
+static func cancel_pressed(event: InputEvent) -> bool:
+	return event.is_action_pressed("ui_cancel") or (event is InputEventJoypadButton and event.pressed and event.button_index==JOY_BUTTON_B)

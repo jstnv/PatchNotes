@@ -1,0 +1,620 @@
+{
+  "public_action": {
+    "specialty": "action",
+    "scope": 27,
+    "core": {
+      "graphics": 22,
+      "sound": 12,
+      "technology": 25,
+      "design": 14
+    },
+    "phase": {
+      "design": {
+        "count": 11,
+        "scope": 17,
+        "core": 47
+      },
+      "alpha": {
+        "count": 6,
+        "scope": 10,
+        "core": 26
+      }
+    },
+    "pass_budget": {
+      "design": 7,
+      "alpha": 5
+    },
+    "rows": [
+      {
+        "id": "text",
+        "name": "Text",
+        "phase": "design",
+        "scope": 1,
+        "primary": "graphics:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "4_color_palette",
+        "name": "4-Color Palette",
+        "phase": "design",
+        "scope": 1,
+        "primary": "graphics:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "8_bit_sound",
+        "name": "8-Bit Sound",
+        "phase": "design",
+        "scope": 2,
+        "primary": "sound:5",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "keyboard_and_mouse",
+        "name": "Keyboard & Mouse",
+        "phase": "design",
+        "scope": 1,
+        "primary": "technology:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "controller",
+        "name": "Controller",
+        "phase": "design",
+        "scope": 1,
+        "primary": "technology:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "controls",
+        "name": "Controls",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "technology:1",
+        "secondary": "design:1",
+        "parents": []
+      },
+      {
+        "id": "sprites",
+        "name": "Sprites",
+        "phase": "design",
+        "scope": 2,
+        "primary": "graphics:7",
+        "secondary": "",
+        "parents": [
+          "4_color_palette"
+        ]
+      },
+      {
+        "id": "levels",
+        "name": "Levels",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "graphics:3",
+        "secondary": "design:2",
+        "parents": []
+      },
+      {
+        "id": "simple_story",
+        "name": "Simple Story",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "lives_system",
+        "name": "Lives System",
+        "phase": "design",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "enemies",
+        "name": "Enemies",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "graphics:2",
+        "secondary": "technology:3",
+        "parents": [
+          "lives_system"
+        ]
+      },
+      {
+        "id": "general_combat",
+        "name": "General Combat",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "design:5",
+        "secondary": "",
+        "parents": [
+          "enemies"
+        ]
+      },
+      {
+        "id": "scrolling",
+        "name": "Scrolling",
+        "phase": "design",
+        "scope": 2,
+        "primary": "technology:7",
+        "secondary": "",
+        "parents": [
+          "text"
+        ]
+      },
+      {
+        "id": "menu_system",
+        "name": "Menu System",
+        "phase": "design",
+        "scope": 2,
+        "primary": "technology:5",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "main_theme",
+        "name": "Main Theme",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "sound:7",
+        "secondary": "",
+        "parents": [
+          "8_bit_sound"
+        ]
+      },
+      {
+        "id": "animated_sprites",
+        "name": "Animated Sprites",
+        "phase": "design",
+        "scope": 2,
+        "primary": "graphics:5",
+        "secondary": "",
+        "parents": [
+          "sprites"
+        ]
+      },
+      {
+        "id": "inventory_system",
+        "name": "Inventory System",
+        "phase": "design",
+        "scope": 2,
+        "primary": "technology:3",
+        "secondary": "design:2",
+        "parents": []
+      }
+    ]
+  },
+  "rival_puzzle": {
+    "specialty": "puzzle",
+    "scope": 27,
+    "core": {
+      "graphics": 12,
+      "sound": 7,
+      "technology": 23,
+      "design": 25
+    },
+    "phase": {
+      "design": {
+        "count": 12,
+        "scope": 18,
+        "core": 47
+      },
+      "alpha": {
+        "count": 7,
+        "scope": 9,
+        "core": 20
+      }
+    },
+    "pass_budget": {
+      "design": 7,
+      "alpha": 4
+    },
+    "rows": [
+      {
+        "id": "text",
+        "name": "Text",
+        "phase": "design",
+        "scope": 1,
+        "primary": "graphics:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "4_color_palette",
+        "name": "4-Color Palette",
+        "phase": "design",
+        "scope": 1,
+        "primary": "graphics:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "8_bit_sound",
+        "name": "8-Bit Sound",
+        "phase": "design",
+        "scope": 2,
+        "primary": "sound:5",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "keyboard_and_mouse",
+        "name": "Keyboard & Mouse",
+        "phase": "design",
+        "scope": 1,
+        "primary": "technology:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "controller",
+        "name": "Controller",
+        "phase": "design",
+        "scope": 1,
+        "primary": "technology:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "controls",
+        "name": "Controls",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "technology:1",
+        "secondary": "design:1",
+        "parents": []
+      },
+      {
+        "id": "levels",
+        "name": "Levels",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "graphics:3",
+        "secondary": "design:2",
+        "parents": []
+      },
+      {
+        "id": "exploration",
+        "name": "Exploration",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "graphics:1",
+        "secondary": "sound:1",
+        "parents": [
+          "levels"
+        ]
+      },
+      {
+        "id": "simple_story",
+        "name": "Simple Story",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "dialogue",
+        "name": "Dialogue",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": [
+          "simple_story"
+        ]
+      },
+      {
+        "id": "score_system",
+        "name": "Score System",
+        "phase": "design",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "timer_system",
+        "name": "Timer System",
+        "phase": "design",
+        "scope": 1,
+        "primary": "technology:2",
+        "secondary": "design:1",
+        "parents": []
+      },
+      {
+        "id": "lives_system",
+        "name": "Lives System",
+        "phase": "design",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "categorized_scores",
+        "name": "Categorized Scores",
+        "phase": "design",
+        "scope": 3,
+        "primary": "design:7",
+        "secondary": "technology:2",
+        "parents": [
+          "timer_system",
+          "score_system",
+          "lives_system"
+        ]
+      },
+      {
+        "id": "menu_system",
+        "name": "Menu System",
+        "phase": "design",
+        "scope": 2,
+        "primary": "technology:5",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "save_files",
+        "name": "Save Files",
+        "phase": "design",
+        "scope": 2,
+        "primary": "technology:5",
+        "secondary": "",
+        "parents": [
+          "menu_system"
+        ]
+      },
+      {
+        "id": "branching_nodes",
+        "name": "Branching Nodes",
+        "phase": "design",
+        "scope": 2,
+        "primary": "design:5",
+        "secondary": "",
+        "parents": [
+          "save_files"
+        ]
+      },
+      {
+        "id": "maps",
+        "name": "Maps",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "graphics:3",
+        "secondary": "technology:2",
+        "parents": [
+          "levels"
+        ]
+      },
+      {
+        "id": "secrets",
+        "name": "Secrets",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "sound:1",
+        "secondary": "design:1",
+        "parents": [
+          "exploration"
+        ]
+      }
+    ]
+  },
+  "rival_adventure": {
+    "specialty": "adventure",
+    "scope": 27,
+    "core": {
+      "graphics": 16,
+      "sound": 13,
+      "technology": 19,
+      "design": 22
+    },
+    "phase": {
+      "design": {
+        "count": 9,
+        "scope": 14,
+        "core": 38
+      },
+      "alpha": {
+        "count": 9,
+        "scope": 13,
+        "core": 32
+      }
+    },
+    "pass_budget": {
+      "design": 6,
+      "alpha": 6
+    },
+    "rows": [
+      {
+        "id": "text",
+        "name": "Text",
+        "phase": "design",
+        "scope": 1,
+        "primary": "graphics:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "4_color_palette",
+        "name": "4-Color Palette",
+        "phase": "design",
+        "scope": 1,
+        "primary": "graphics:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "8_bit_sound",
+        "name": "8-Bit Sound",
+        "phase": "design",
+        "scope": 2,
+        "primary": "sound:5",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "keyboard_and_mouse",
+        "name": "Keyboard & Mouse",
+        "phase": "design",
+        "scope": 1,
+        "primary": "technology:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "controller",
+        "name": "Controller",
+        "phase": "design",
+        "scope": 1,
+        "primary": "technology:3",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "controls",
+        "name": "Controls",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "technology:1",
+        "secondary": "design:1",
+        "parents": []
+      },
+      {
+        "id": "levels",
+        "name": "Levels",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "graphics:3",
+        "secondary": "design:2",
+        "parents": []
+      },
+      {
+        "id": "exploration",
+        "name": "Exploration",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "graphics:1",
+        "secondary": "sound:1",
+        "parents": [
+          "levels"
+        ]
+      },
+      {
+        "id": "simple_story",
+        "name": "Simple Story",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "dialogue",
+        "name": "Dialogue",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": [
+          "simple_story"
+        ]
+      },
+      {
+        "id": "character_backstories",
+        "name": "Character Backstories",
+        "phase": "alpha",
+        "scope": 1,
+        "primary": "design:2",
+        "secondary": "",
+        "parents": [
+          "simple_story"
+        ]
+      },
+      {
+        "id": "menu_system",
+        "name": "Menu System",
+        "phase": "design",
+        "scope": 2,
+        "primary": "technology:5",
+        "secondary": "",
+        "parents": []
+      },
+      {
+        "id": "save_files",
+        "name": "Save Files",
+        "phase": "design",
+        "scope": 2,
+        "primary": "technology:5",
+        "secondary": "",
+        "parents": [
+          "menu_system"
+        ]
+      },
+      {
+        "id": "branching_nodes",
+        "name": "Branching Nodes",
+        "phase": "design",
+        "scope": 2,
+        "primary": "design:5",
+        "secondary": "",
+        "parents": [
+          "save_files"
+        ]
+      },
+      {
+        "id": "branching_dialogue",
+        "name": "Branching Dialogue",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "technology:2",
+        "secondary": "design:3",
+        "parents": [
+          "dialogue",
+          "branching_nodes"
+        ]
+      },
+      {
+        "id": "character_development",
+        "name": "Character Development",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "design:5",
+        "secondary": "",
+        "parents": [
+          "character_backstories",
+          "save_files"
+        ]
+      },
+      {
+        "id": "main_theme",
+        "name": "Main Theme",
+        "phase": "alpha",
+        "scope": 2,
+        "primary": "sound:7",
+        "secondary": "",
+        "parents": [
+          "8_bit_sound"
+        ]
+      },
+      {
+        "id": "sprites",
+        "name": "Sprites",
+        "phase": "design",
+        "scope": 2,
+        "primary": "graphics:7",
+        "secondary": "",
+        "parents": [
+          "4_color_palette"
+        ]
+      }
+    ]
+  }
+}

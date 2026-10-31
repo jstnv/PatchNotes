@@ -27,6 +27,7 @@ func _run() -> void:
 		# A synthetic trained roster isolates redraw mechanics; this is not a tuition/payroll fixture.
 		run._employees=trained(run._bank_run_id)
 		var h: RefCounted=load("res://scripts/simulation/%s_hand_command.gd"%phase).new()
+		h._budget_printed=40
 		h._run_state=run;h._project_state=ProjectState.new(30);h._project_state._release_id=&"alignment_test"
 		h._deal_rng=run.random_streams.stream(StringName(str(phase)+"_deal"));h.priorities={0:25,1:25,2:25,3:25};h.active=true
 		h._pass_definitions.assign(catalog.passes())

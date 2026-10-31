@@ -24,6 +24,15 @@ var _search_status: Label
 var _search_quote: Dictionary={}
 var _prepare_found: Button
 var _employees_panel: EmployeePanel
+var _menu_panels: Dictionary={}
+var _menu_buttons: Dictionary={}
+var _active_menu: StringName=&""
+var _rival_info: Control
+var _studio_info: Control
+var _management_panel: Control
+var _engine_browser: Control
+var _contract_engine_picker: VBoxContainer
+var _management_button: Button
 var _contract_chooser: OptionButton
 var _selected_contract_quote: Dictionary = {}
 var _promotion_notice: Label
@@ -35,17 +44,21 @@ var _commission_mode := false
 var _support_mode := false
 var _checkpoint_action_waiting := false
 var _run_refresh_pending := false
+var _hub: Control
+var _hub_motion: MenuTransitions
+var _returning_destination := false
+var _destination_layer: CanvasLayer
+var _destination_fits: Array[Dictionary]=[]
 
 func set_rival_world(world: RivalWorld) -> void:
 	_rival_world = world
 	_refresh_rivals()
 
+func get_live_rival_rows() -> Array:
+	return preload("res://scripts/ui/studio_rival_info.gd").rows(_rival_world)
+
 func _refresh_rivals() -> void:
-	if _rival_world == null or _rival_status == null: return
-	var rows: Array = ["Rivals (trial) · %d live releases" % _rival_world.live_releases.size()]
-	for entry: Dictionary in _rival_world.observation().studios:
-		rows.append("%s: %s · %d Fans · $%d · %d live games" % [entry.name,String(entry.phase).capitalize(),entry.fans,int(int(entry.cash_cents)/100),entry.release_count])
-	_rival_status.text = "\n".join(rows)
+	if is_instance_valid(_rival_info) and _rival_info.visible:_rival_info.open(_rival_world)
 
 
 func _ready() -> void:
@@ -56,7 +69,7 @@ func _ready() -> void:
 	%StartNextGame.pressed.connect(_open_predevelopment)
 	_market_button = Button.new()
 	_market_button.name = "MarketButton"
-	_market_button.text = "Market"
+	_market_button.text = "Daily Chart"
 	_market_button.custom_minimum_size = Vector2(270,54)
 	_market_button.tooltip_text = "Browse actual player and AI releases, Reviews and sales. Opening is free."
 	_market_button.pressed.connect(_open_market)
@@ -66,9 +79,12 @@ func _ready() -> void:
 	%Employees.disabled = true
 	%Employees.tooltip_text = "Unlocks after releasing 2 games."
 	%Employees.pressed.connect(_open_employees)
+	_build_management_menu()
 	%PublisherList.pressed.connect(_open_publishers)
 	%PostGameSummaries.pressed.connect(open_summary)
 	%CloseSummaryButton.pressed.connect(close_summary)
+	FolderUI.standard_back(%CloseSummaryButton)
+	%SummaryPanel.get_node("Margin").add_theme_constant_override("margin_top",20)
 	%DetailedReviewButton.pressed.connect(open_detailed_review)
 	%MonthlySalesButton.pressed.connect(open_monthly_sales)
 	%Contracts.pressed.connect(_open_contracts)
@@ -77,13 +93,6 @@ func _ready() -> void:
 	%PostGameSummaries.tooltip_text = "Browse every released game, its category Reviews, and earned versus projected sales. Opening is free."
 	%FeatureStoreButton.tooltip_text = "Browse owned Features, prices and prerequisites. Opening the Store costs no cycles."
 	%StartNextGame.tooltip_text = "Name the next game and choose its Genre and Theme. Opening setup is free."
-	if _rival_world != null:
-		_rival_status = Label.new()
-		_rival_status.name = "RivalTrialStatus"
-		_rival_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		$Dashboard/Layout.add_child(_rival_status)
-		$Dashboard/Layout.move_child(_rival_status,2)
-		_refresh_rivals()
 	if _run_state != null:
 		_refresh_game_list()
 		_refresh_summary()
@@ -91,6 +100,160 @@ func _ready() -> void:
 		# mounted, derive action availability from the committed RunState.
 		_refresh_dashboard_actions()
 		_show_pending_publisher_notice()
+
+
+func _menu_button(parent: Node,label: String,key: String,callback: Callable) -> Button:
+	var button:=FolderUI.button(parent,label,callback);button.name=key
+	button.custom_minimum_size=Vector2(310,54);button.owner=self;button.unique_name_in_owner=true
+	return button
+
+func _menu_page(key: StringName,title: String) -> VBoxContainer:
+	var page:=Control.new();page.name=title.replace(" ","");add_child(page)
+	page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);page.add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
+	var host:=FolderUI.SurfaceHost.new();page.add_child(host);host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var surface:=FolderUI.surface(host);surface.set_meta("bounded_folder",true)
+	var layout:=VBoxContainer.new();layout.add_theme_constant_override("separation",12);surface.add_child(layout)
+	FolderUI.header(layout,title,"",_close_menu.bind(key))
+	var center:=CenterContainer.new();center.size_flags_vertical=Control.SIZE_EXPAND_FILL;layout.add_child(center)
+	var choices:=VBoxContainer.new();choices.add_theme_constant_override("separation",12);center.add_child(choices)
+	_menu_panels[key]=page;page.hide();return choices
+
+func _build_management_menu() -> void:
+	_hub_motion=MenuTransitions.new();_hub_motion.name="StudioNavigation";_hub_motion.automatic_entrances=false;add_child(_hub_motion)
+	_hub=preload("res://scripts/ui/studio_hub.gd").new();_hub.motion=_hub_motion;%Dashboard.add_child(_hub)
+	var market: VBoxContainer=_hub.add_group(&"market","Market Info")
+	var management: VBoxContainer=_hub.add_group(&"management","Studio Management")
+	var production: VBoxContainer=_hub.add_group(&"production","Start Production")
+	_menu_panels[&"market"]=market;_menu_panels[&"management"]=management;_menu_panels[&"production"]=production
+	for entry in [[&"market","MarketInfoButton"],[&"management","StudioManagementButton"],[&"production","StartProductionButton"]]:
+		var button: Button=_hub.root_buttons[entry[0]];button.name=entry[1];button.owner=self;button.unique_name_in_owner=true;_menu_buttons[entry[0]]=button
+	_management_button=_menu_buttons[&"management"];_management_panel=management
+	_hub.selection_changed.connect(func(id: StringName):_active_menu=id;_refresh_dashboard_actions();tutorial_context_changed.emit(&"studio"))
+	_market_button.reparent(market,false);%PublisherList.reparent(market,false)
+	_menu_button(market,"Rival Info","RivalInfoButton",_open_rival_info)
+	%FeatureStoreButton.reparent(management,false);%Employees.reparent(management,false);%PostGameSummaries.reparent(management,false)
+	_menu_button(management,"Engines","StudioEnginesButton",_open_engines)
+	_menu_button(management,"Bank","StudioBankButton",_open_bank)
+	_menu_button(management,"Studio Info","StudioInfoButton",_open_studio_info)
+	%StartNextGame.reparent(production,false);%Contracts.reparent(production,false)
+	$Dashboard/Layout.hide()
+	_hub_motion.set_root(%Dashboard)
+
+func _hide_menu_pages() -> void:
+	for key: StringName in _menu_panels:
+		if key not in [&"market",&"management",&"production"]:_menu_panels[key].hide()
+
+func _show_group(key: StringName,focus: Control=null) -> void:
+	%SummaryPanel.hide();%Dashboard.show();_active_menu=key
+	_refresh_dashboard_actions();_hub.select_group(key,focus)
+	tutorial_context_changed.emit(&"studio")
+
+func _open_menu(key: StringName,focus: Control=null) -> void:
+	if _run_state==null or _returning_destination:return
+	if _hub_motion.depth()>1:
+		if _hub_motion.busy:return
+		_returning_destination=true
+		if is_instance_valid(_destination_layer):_destination_layer.show()
+		_hub_motion.pop();return
+	_show_group(key,focus)
+
+func _present_destination(view: Control,focus: Control=null,layer: CanvasLayer=null) -> void:
+	if _hub_motion.busy:return
+	if _hub_motion.is_top(view):return
+	for frame: Dictionary in _hub_motion.frames:
+		if frame.view.get_ref()==view:
+			_returning_destination=true;_hub_motion.pop();return
+	_hub.settle_motion()
+	_destination_layer=layer
+	var previous: Control=_hub_motion.frames[-1].view.get_ref()
+	if is_instance_valid(previous):previous.show()
+	var invoking: Control=_destination_invoker(view)
+	if is_instance_valid(invoking) and invoking.is_visible_in_tree():invoking.grab_focus()
+	view.set_meta("folder_navigation_managed",true)
+	if view==_review_view:
+		var layout: VBoxContainer=view.get_node("Margin/Layout")
+		var title: Control=layout.get_node_or_null("Title")
+		if title!=null:
+			var header:=HBoxContainer.new();layout.add_child(header);layout.move_child(header,0);title.reparent(header,false)
+			view.get_node("%ContinueButton").reparent(header,false)
+			FolderUI.standard_back(view.get_node("%ContinueButton"))
+			view.get_node("Margin").add_theme_constant_override("margin_top",28)
+			view.get_node("Margin").add_theme_constant_override("margin_left",32)
+			view.get_node("Margin").add_theme_constant_override("margin_right",32)
+	var group: StringName=_active_menu if _active_menu in [&"market",&"management",&"production"] else &"production"
+	_destination_layer=layer
+	var closed:=func():
+		if is_instance_valid(layer):layer.hide();view.remove_meta("folder_navigation_managed")
+		_destination_layer=null;_returning_destination=false
+		if _hub_motion.depth()==1:_show_group(group)
+	if view.get_parent()==self:
+		var fit_callback:=_queue_destination_fit.bind(view)
+		if not view.minimum_size_changed.is_connected(fit_callback):view.minimum_size_changed.connect(fit_callback)
+		_queue_destination_fit(view)
+	_hub_motion.push_from_bottom(view,focus,closed,get_global_rect().end.y)
+
+func _destination_invoker(view: Control) -> Control:
+	for pair in [[_engine_browser,get_node_or_null("%StudioEnginesButton")],[_feature_store,%FeatureStoreButton],[_employees_panel,%Employees],[_rival_info,get_node_or_null("%RivalInfoButton")],[_studio_info,get_node_or_null("%StudioInfoButton")],[_market_browser,_market_button],[_publisher_browser,%PublisherList],[_predevelopment,%StartNextGame],[_contract_detail,%Contracts],[%SummaryPanel,%PostGameSummaries],[_review_view,%DetailedReviewButton],[_monthly_report,%MonthlySalesButton]]:
+		if pair[0]==view:return pair[1]
+	return get_node_or_null("%StudioBankButton") if is_instance_valid(_destination_layer) else null
+
+func _close_menu(key: StringName) -> void:
+	if key==&"info":_open_management(get_node("%StudioInfoButton"));return
+	if key==&"engines":_open_management(get_node("%StudioEnginesButton"));return
+	if _hub_motion.depth()>1:_open_menu(key);return
+	_hub.close_group();_menu_buttons[key].grab_focus()
+	tutorial_context_changed.emit(&"studio")
+
+func _open_management(focus: Control=null) -> void:_open_menu(&"management",focus)
+func _close_management() -> void:_close_menu(&"management")
+
+func _open_rival_info() -> void:
+	if _rival_info==null:
+		_rival_info=preload("res://scripts/ui/studio_rival_info.gd").new();add_child(_rival_info)
+		_rival_info.name="RivalInfo";_rival_info.closed.connect(func():_open_menu(&"market",get_node("%RivalInfoButton")))
+	_hide_menu_pages();_rival_info.open(_rival_world);_present_destination(_rival_info)
+
+func _open_studio_info() -> void:
+	if _studio_info==null:
+		var choices:=_menu_page(&"info","Studio Info");_studio_info=_menu_panels[&"info"]
+		var scroll:=ScrollContainer.new();scroll.custom_minimum_size=Vector2(520,280)
+		choices.get_parent().add_child(scroll);choices.reparent(scroll,false)
+		choices.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		FolderUI.label(choices,_run_state.get_studio_name(),&"HeadingLabel")
+		FolderUI.label(choices,"Genre specialty: "+String(_run_state.get_studio_specialty()).capitalize())
+		FolderUI.label(choices,StudioTraits.summary(_run_state.get_studio_traits()))
+	_hide_menu_pages();_studio_info.show();_present_destination(_studio_info,_studio_info.find_child("Back",true,false))
+
+func _open_engines() -> void:
+	if _engine_browser==null:
+		_engine_browser=preload("res://scripts/ui/engine_market_browser.gd").new()
+		add_child(_engine_browser);_menu_panels[&"engines"]=_engine_browser
+		_engine_browser.closed.connect(_close_menu.bind(&"engines"))
+	_hide_menu_pages();%Dashboard.hide();%SummaryPanel.hide();
+	_engine_browser.open(_run_state,_rival_world)
+	_present_destination(_engine_browser,_engine_browser.find_child("Back",true,false))
+	tutorial_context_changed.emit(&"studio")
+
+func _open_bank() -> void:
+	var ancestor: Node=get_parent()
+	while ancestor!=null:
+		var hud:=ancestor.get_node_or_null("%GameplayHUD") as GameplayHUD
+		if hud!=null:
+			if not hud.studio_finances.closed.is_connected(_bank_closed):hud.studio_finances.closed.connect(_bank_closed)
+			if hud.show_bank_from_studio():_present_destination(hud.studio_finances.dialog,hud.studio_finances.back_button,hud.studio_finances)
+			return
+		ancestor=ancestor.get_parent()
+
+func _bank_closed() -> void:
+	if is_instance_valid(_destination_layer):_open_management(get_node("%StudioBankButton"))
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not MenuTransitions.cancel_pressed(event):return
+	if _hub_motion.busy or _returning_destination:get_viewport().set_input_as_handled();return
+	if _hub_motion.depth()>1:
+		_open_menu(_active_menu);get_viewport().set_input_as_handled();return
+	if not _hub.selected.is_empty():
+		_close_menu(_hub.selected);get_viewport().set_input_as_handled()
 
 
 func _fit_dashboard() -> void:
@@ -122,7 +285,7 @@ func _flush_run_refresh() -> void:
 	# Store/Employees/Bank browsing does not need hidden review forecasts.
 	# Opening Summary and returning to Dashboard explicitly refresh current data.
 	if %Dashboard.is_visible_in_tree() or %SummaryPanel.is_visible_in_tree():_refresh_summary()
-	if %Dashboard.is_visible_in_tree():_refresh_rivals()
+	if %Dashboard.is_visible_in_tree() or (is_instance_valid(_rival_info) and _rival_info.visible):_refresh_rivals()
 
 
 func _apply_dashboard_fit() -> void:
@@ -131,6 +294,7 @@ func _apply_dashboard_fit() -> void:
 
 
 func _open_publishers() -> void:
+	_hide_menu_pages()
 	if _run_state == null:
 		return
 	if _publisher_browser == null:
@@ -150,12 +314,12 @@ func _open_publishers() -> void:
 			_show_predevelopment())
 		_publisher_browser.closed.connect(func():
 			_publisher_browser.hide()
-			%Dashboard.show()
-			%PublisherList.grab_focus()
+			_open_menu(&"market",%PublisherList)
 			tutorial_context_changed.emit(&"studio"))
 	%SummaryPanel.hide()
 	%Dashboard.hide()
 	_publisher_browser.open_browser()
+	_present_destination(_publisher_browser)
 	tutorial_context_changed.emit(&"studio")
 
 
@@ -168,8 +332,9 @@ func _show_pending_publisher_notice() -> void:
 	if _publisher_notice == null:
 		_publisher_notice = PanelContainer.new()
 		_publisher_notice.name = "PublisherUnlockNotice"
-		$Dashboard/Layout.add_child(_publisher_notice)
-		$Dashboard/Layout.move_child(_publisher_notice, 1)
+		_hub.add_child(_publisher_notice)
+		_publisher_notice.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		_publisher_notice.offset_left=-300;_publisher_notice.offset_top=12;_publisher_notice.size=Vector2(300,0)
 		var row := HBoxContainer.new()
 		_publisher_notice.add_child(row)
 		var message := Label.new()
@@ -200,6 +365,7 @@ func _open_predevelopment() -> void:
 
 
 func _show_predevelopment() -> void:
+	_hide_menu_pages()
 	if _predevelopment == null:
 		_predevelopment = PredevelopmentOverlay.new()
 		_predevelopment.name = "Predevelopment"
@@ -208,8 +374,7 @@ func _show_predevelopment() -> void:
 			development_requested.emit(self, base_name, genre, theme_id))
 		_predevelopment.cancelled.connect(func():
 			_predevelopment.hide()
-			%Dashboard.show()
-			%StartNextGame.grab_focus()
+			_open_menu(_active_menu if not _active_menu.is_empty() else &"production",%StartNextGame if _active_menu!=&"market" else %PublisherList)
 			tutorial_context_changed.emit(&"studio"))
 	%SummaryPanel.hide()
 	%Dashboard.hide()
@@ -217,6 +382,7 @@ func _show_predevelopment() -> void:
 	_predevelopment.commission_mode = _commission_mode
 	_predevelopment.support_mode = _support_mode
 	_predevelopment.open()
+	_present_destination(_predevelopment,_predevelopment.name_input)
 	tutorial_context_changed.emit(&"predevelopment")
 
 
@@ -226,19 +392,22 @@ func show_development_error(message: String) -> void:
 
 
 func open_summary() -> void:
+	_hide_menu_pages()
 	if _run_state == null or _run_state.get_released_game_ids().is_empty(): return
 	_refresh_game_list()
 	_refresh_summary()
 	%Dashboard.hide()
 	%SummaryPanel.show()
-	%CloseSummaryButton.grab_focus()
+	_present_destination(%SummaryPanel,%CloseSummaryButton)
 	tutorial_context_changed.emit(&"studio")
 
 
-func close_summary() -> void:
+func close_summary(to_dashboard := false) -> void:
 	%SummaryPanel.hide()
-	%Dashboard.show()
-	%PostGameSummaries.grab_focus()
+	if to_dashboard:
+		_open_menu(&"production",_menu_buttons[&"production"])
+	else:
+		_open_management(%PostGameSummaries)
 	tutorial_context_changed.emit(&"studio")
 
 
@@ -263,11 +432,12 @@ func open_detailed_review(launch_reveal := false) -> void:
 		_review_view.get_node("%ContinueButton").text = "Continue to Studio" if launch_reveal else "Back to Summary"
 		_review_view.continue_to_studio_requested.connect(func():
 			_review_view.hide()
-			if launch_reveal: close_summary()
+			if launch_reveal: close_summary(true)
 			else: open_summary())
 	%Dashboard.hide()
 	%SummaryPanel.hide()
 	_review_view.show()
+	_present_destination(_review_view,_review_view.get_node("%ContinueButton"))
 	tutorial_context_changed.emit(&"review")
 	if launch_reveal: _review_view.start_launch_reveal()
 
@@ -288,9 +458,11 @@ func open_monthly_sales() -> void:
 	%Dashboard.hide()
 	%SummaryPanel.hide()
 	_monthly_report.show()
+	_present_destination(_monthly_report)
 
 
 func _open_contracts(select_id: StringName = &"") -> void:
+	_hide_menu_pages()
 	if _run_state == null:
 		return
 	var active := _run_state.get_active_contract()
@@ -315,7 +487,7 @@ func _open_contracts(select_id: StringName = &"") -> void:
 	%Dashboard.hide()
 	_contract_detail.show()
 	tutorial_context_changed.emit(&"contract")
-	(_contract_detail.find_child("CloseContractDetailButton", true, false) as Button).grab_focus()
+	_present_destination(_contract_detail,_contract_detail.find_child("CloseContractDetailButton",true,false))
 
 
 func _ensure_contract_detail() -> void:
@@ -326,9 +498,9 @@ func _ensure_contract_detail() -> void:
 	_contract_detail.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_contract_detail)
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 28)
-	margin.add_theme_constant_override("margin_right", 28)
-	margin.add_theme_constant_override("margin_top", 24)
+	margin.add_theme_constant_override("margin_left", 20)
+	margin.add_theme_constant_override("margin_right", 20)
+	margin.add_theme_constant_override("margin_top", 20)
 	margin.add_theme_constant_override("margin_bottom", 24)
 	_contract_detail.add_child(margin)
 	var layout := VBoxContainer.new()
@@ -350,6 +522,7 @@ func _ensure_contract_detail() -> void:
 	back.custom_minimum_size = Vector2(180, 46)
 	back.pressed.connect(_close_contract_detail)
 	header.add_child(back)
+	FolderUI.standard_back(back)
 	var search_row:=HBoxContainer.new();search_row.add_theme_constant_override("separation",12);layout.add_child(search_row)
 	var publisher_label:=FolderUI.label(search_row,"SideStreet · Search for work",&"SecondaryLabel")
 	publisher_label.autowrap_mode=TextServer.AUTOWRAP_OFF
@@ -370,6 +543,10 @@ func _ensure_contract_detail() -> void:
 		_selected_contract_offer_id = _contract_chooser.get_item_metadata(index)
 		_configure_contract_detail())
 	layout.add_child(_contract_chooser)
+	_contract_engine_picker=preload("res://scripts/ui/engine_picker.gd").new()
+	layout.add_child(_contract_engine_picker)
+	_contract_engine_picker.selection_changed.connect(func(_id: StringName):
+		_selected_contract_quote={};_configure_contract_detail())
 	# Wrapping text must not grow the full-screen panel beyond its workspace.
 	# Keep both navigation and acceptance outside the scrolling description.
 	var scroll := ScrollContainer.new()
@@ -395,6 +572,7 @@ func _ensure_contract_detail() -> void:
 
 
 func _configure_contract_detail() -> void:
+	_contract_engine_picker.bind(_run_state)
 	var title := _contract_detail.find_child("ContractDetailTitle", true, false) as Label
 	_refresh_contract_search()
 	var accept: Button=_contract_detail.find_child("AcceptContractButton",true,false)
@@ -444,8 +622,7 @@ func _configure_contract_detail() -> void:
 func _close_contract_detail() -> void:
 	if _contract_detail != null:
 		_contract_detail.hide()
-	%Dashboard.show()
-	%Contracts.grab_focus()
+	_open_menu(&"production",%Contracts)
 	tutorial_context_changed.emit(&"studio")
 
 
@@ -455,9 +632,10 @@ func _accept_contract() -> void:
 	if gate.needs_wait(_run_state):
 		_checkpoint_action_waiting=true
 		var selected:=_selected_contract_offer_id
+		var engine:=_run_state.get_selected_engine_id()
 		var saved: bool=await gate.wait_saved(_run_state)
 		_checkpoint_action_waiting=false
-		if not saved or not _contract_detail.visible or selected!=_selected_contract_offer_id: return
+		if not saved or not _contract_detail.visible or selected!=_selected_contract_offer_id or engine!=_run_state.get_selected_engine_id(): return
 	var state: ContractState
 	var brief := _run_state.get_sidestreet_brief_offer()
 	if not brief.is_empty() and brief.offer_id == _selected_contract_offer_id: state = _run_state.accept_sidestreet_brief(_selected_contract_offer_id)
@@ -471,21 +649,23 @@ func _accept_contract() -> void:
 
 
 func _open_market() -> void:
+	_hide_menu_pages()
 	if _run_state == null: return
 	if _market_browser == null:
 		_market_browser = MarketBrowser.new()
 		add_child(_market_browser)
 		_market_browser.closed.connect(func():
-			%Dashboard.show()
-			_market_button.grab_focus()
+			_open_menu(&"market",_market_button)
 			tutorial_context_changed.emit(&"studio"))
 	%Dashboard.hide()
 	%SummaryPanel.hide()
 	_market_browser.open(_run_state,_rival_world)
+	_present_destination(_market_browser,_market_browser.back_button)
 	tutorial_context_changed.emit(&"market")
 
 
 func _open_feature_store() -> void:
+	_hide_menu_pages()
 	if _run_state == null:
 		return
 	if _feature_store == null:
@@ -494,12 +674,12 @@ func _open_feature_store() -> void:
 		_feature_store.setup(_run_state)
 		_feature_store.visibility_changed.connect(func():
 			if not _feature_store.visible:
-				%Dashboard.show()
-				%FeatureStoreButton.grab_focus()
-				tutorial_context_changed.emit(&"studio"))
+				_open_management(%FeatureStoreButton))
 	%SummaryPanel.hide()
 	%Dashboard.hide()
+
 	_feature_store.open_store()
+	_present_destination(_feature_store)
 	tutorial_context_changed.emit(&"feature_store")
 
 
@@ -537,10 +717,11 @@ func _refresh_dashboard_actions() -> void:
 	_refresh_contract_action()
 	var has_releases := not _run_state.get_released_game_ids().is_empty()
 	%PostGameSummaries.disabled = not has_releases
-	%StartNextGame.text = "Produce Next Game" if has_releases else "Produce First Game"
+	%StartNextGame.text = "Produce New Game"
 	%StartNextGame.disabled = false
 	%Employees.disabled = _run_state.get_released_game_ids().size() < 2
 	%Employees.tooltip_text = "Unlocks after releasing 2 games." if %Employees.disabled else "Manage specialists, courses and training."
+	if _hub!=null and _hub.transitioning:_hub._disable_choices()
 
 func _refresh_game_list() -> void:
 	if _run_state == null or not is_node_ready(): return
@@ -686,11 +867,12 @@ func _open_employees() -> void:
 		_employees_panel = EmployeePanel.new()
 		add_child(_employees_panel)
 		_employees_panel.closed.connect(func():
-			%Dashboard.show()
-			%Employees.grab_focus())
+			_open_management(%Employees))
 	%SummaryPanel.hide()
 	%Dashboard.hide()
+
 	_employees_panel.open_for(_run_state)
+	_present_destination(_employees_panel,_employees_panel.back_button)
 	if read_only:
 		_employees_panel.status.text = "Employee management is temporarily read-only. Resolve any save warning, then reopen this menu to retry."
 		_employees_panel.status.show()
@@ -720,3 +902,21 @@ func _search_for_contracts() -> void:
 		_refresh_contract_search();return
 	var id: StringName=_run_state.get_contract_search_state().receipts[-1].offer_id
 	_open_contracts(id)
+
+func get_predevelopment_intent() -> Dictionary:
+	return {} if _predevelopment==null else _predevelopment.get_start_intent()
+
+func _queue_destination_fit(view: Variant) -> void:
+	if not is_instance_valid(view):return
+	for item: Dictionary in _destination_fits:
+		if item.view.get_ref()==view:item.frames=2;return
+	_destination_fits.append({"view":weakref(view),"frames":2})
+
+func _process(_delta: float) -> void:
+	var waiting:=_destination_fits.duplicate();_destination_fits.clear()
+	for item: Dictionary in waiting:
+		var view: Control=item.view.get_ref()
+		if view==null or not view.is_visible_in_tree():continue
+		item.frames-=1
+		if item.frames>0 or view.get_meta("folder_navigation_motion",false):_destination_fits.append(item);continue
+		view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

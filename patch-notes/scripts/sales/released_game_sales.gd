@@ -1,8 +1,6 @@
 class_name ReleasedGameSales
 extends RefCounted
-
 const Market := preload("res://scripts/market/market_transaction_trial.gd")
-
 ## Quotes and rival observations repeatedly read the same historical records.
 ## Cache only complete, typed Variant bytes after full validation. Never keep
 ## mutable records or trust IDs/revisions/hashes: nested edits must miss.
@@ -15,7 +13,8 @@ static var _validation_lock := Mutex.new()
 ## Pure, checked cumulative calculations. Returned records are value snapshots.
 ## Two-argument fixtures intentionally retain the original Month 1-only model.
 static func create(release_id: StringName, total_units: Variant, review_tenths: int = -1,
-		launch_awareness: int = -1, market_bp: int = -1) -> Dictionary:
+		launch_awareness: int = -1, market_bp: int = -1, market_clock_offset: int = 0) -> Dictionary:
+	if market_clock_offset not in [0,72]: return {}
 	if release_id.is_empty() or PrimitiveMonthOneSalesRevenueCalculator.calculate_for_total_units(total_units) == null:
 		return {}
 	var later_enabled := review_tenths != -1 or launch_awareness != -1 or market_bp != -1
@@ -33,8 +32,8 @@ static func create(release_id: StringName, total_units: Variant, review_tenths: 
 		"launch_awareness": launch_awareness, "market_bp": market_bp,
 		"campaign_count": 0, "campaign_months": {}, "organic_awareness_scaled": 0,
 		"active_awareness_scaled": 0, "monthly_units": 0, "market_factors": {}}
+	if market_clock_offset>0: record.market_clock_offset=market_clock_offset
 	return record if is_valid(record) else {}
-
 
 static func is_valid(record: Dictionary) -> bool:
 	var key := var_to_bytes(record)
@@ -57,8 +56,9 @@ static func is_valid(record: Dictionary) -> bool:
 	_validation_lock.unlock()
 	return true
 
-
 static func _validate_record(record: Dictionary) -> bool:
+	var clock_offset: Variant=record.get("market_clock_offset",0)
+	if not clock_offset is int or (record.has("market_clock_offset") and clock_offset!=72): return false
 	for key: String in ["total_units", "earned_cycles", "total_earned_cycles", "earned_units",
 		"entitlement_cents", "settled_cents", "last_processed_run_cycle", "last_settlement_run_cycle",
 		"review_tenths", "launch_awareness", "market_bp", "campaign_count",
@@ -78,7 +78,8 @@ static func _validate_record(record: Dictionary) -> bool:
 		if not Market.valid_factor(factor): return false
 		if not factor.historical and factor.snapshot_id!="market-0-neutral":
 			var first_cycle: int=record.last_processed_run_cycle-age_cycles+1+(age_month-1)*2
-			if factor.cycle_start!=first_cycle-first_cycle%2: return false
+			var world_first_cycle: int=first_cycle-int(clock_offset)
+			if world_first_cycle<0 or factor.cycle_start!=world_first_cycle-world_first_cycle%2: return false
 	if age_cycles < 0 or record.earned_cycles != mini(2, age_cycles) or record.exhausted != (age_cycles >= 2):
 		return false
 	if record.last_processed_run_cycle < -1 or record.last_settlement_run_cycle < -1 or record.last_settlement_run_cycle > record.last_processed_run_cycle:
@@ -104,10 +105,8 @@ static func _validate_record(record: Dictionary) -> bool:
 		return false
 	return record.settled_cents >= 0 and record.settled_cents <= record.entitlement_cents and (record.settled_cents == 0 or record.last_settlement_run_cycle >= 0)
 
-
 static func can_campaign(record: Dictionary) -> bool:
 	return bool(get_projection(record).get("can_campaign", false))
-
 
 ## Preview of the next earning cycle, including the optional campaign quote.
 ## Organic/active Awareness values are in ten-thousandths of a point.
@@ -155,7 +154,6 @@ static func get_projection(record: Dictionary) -> Dictionary:
 		"projected_month_units": units, "campaign_boost_scaled": boost,
 		"campaign_projected_month_units": boosted_units, "campaign_count": record.campaign_count,
 		"can_campaign": eligible}
-
 
 static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 		campaign_this_cycle: bool = false, factor_bp: int = 10000, snapshot_id: String = "market-0-neutral", factor_details: Dictionary = {}) -> Dictionary:
@@ -217,7 +215,6 @@ static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 		result.settled_cents = result.entitlement_cents
 		result.last_settlement_run_cycle = run_cycle
 	return result if is_valid(result) else {}
-
 
 static func _recalculate(record: Dictionary) -> Dictionary:
 	var projection := PrimitiveMonthOneSalesRevenueCalculator.calculate_for_total_units(record.total_units)

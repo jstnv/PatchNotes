@@ -16,6 +16,7 @@ var status: Label
 var _return_focus: Control
 var _hire_buttons: Dictionary={}
 func _ready() -> void:
+	add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme=FolderUI.THEME;mouse_filter=Control.MOUSE_FILTER_STOP;z_index=30
 	var host:=FolderUI.SurfaceHost.new();host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);add_child(host)
@@ -173,7 +174,8 @@ func _commit_pending() -> void:
 	var result: Dictionary=preload("res://scripts/simulation/studio_actions.gd").execute(run,choice.kind,{"quote":choice.quote},true)
 	_refresh();status.text="Purchase complete." if result.ok else "Cash, bills or this offer changed. Please review the current offer.";status.show();back_button.grab_focus()
 func _input(event: InputEvent) -> void:
-	if visible and event.is_action_pressed("ui_cancel"):
+	if is_visible_in_tree() and MenuTransitions.navigation_input_blocked(self):get_viewport().set_input_as_handled();return
+	if visible and MenuTransitions.cancel_pressed(event):
 		close();get_viewport().set_input_as_handled()
 
 func get_menu_transition_content() -> Control: return panel.get_child(0)

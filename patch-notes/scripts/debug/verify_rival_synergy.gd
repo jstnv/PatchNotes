@@ -95,7 +95,7 @@ func _initialize() -> void:
 	for repeat_index in 3:
 		for mode in (["reference","trial"] if repeat_index%2==0 else ["trial","reference"]):
 			var player:=Factory.create_fresh_session({"schema_version":1,"studio_id":"trial-player","studio_name":"Player Studio","specialty":"action","traits":[],"seed":"4417"},catalog)
-			var world:=Trial.create_world(player.run,catalog)
+			var world:=Trial.create_legacy_world(player.run,catalog)
 			var initial:=Replay.digest(world.observation())
 			var timings: Array=[]
 			var choices: Array=[]

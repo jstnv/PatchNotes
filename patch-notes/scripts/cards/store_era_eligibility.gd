@@ -64,7 +64,7 @@ static func valid_research(state: Dictionary, definitions: Dictionary) -> bool:
 		if entry.payments.size() == entry.actions: completed[entry.feature_id] = true
 		var definition: Dictionary = definitions[entry.feature_id]
 		if not definition.has("min_year"): continue
-		if 1980 + entry.admitted_cycle / 24 < int(definition.min_year): return false
+		if int(state.get("calendar_start_year",1980)) + entry.admitted_cycle / 24 < int(definition.min_year): return false
 		if definition.has("era_year"):
 			var release_id: StringName = state.store_era_receipts.assignments.get(int(definition.era_year),&"")
 			if not state.release_metadata.has(release_id) or state.release_metadata[release_id].release_cycle > entry.admitted_cycle: return false
@@ -72,6 +72,14 @@ static func valid_research(state: Dictionary, definitions: Dictionary) -> bool:
 			if not state.owned_features.has(StringName(parent)): return false
 			for prior: Dictionary in state.feature_research:
 				if prior.feature_id == StringName(parent) and (prior.payments.is_empty() or prior.payments.back().cycle > entry.admitted_cycle): return false
+	for entry: Dictionary in state.get("engine_features",{}).get("entries",[]):
+		if entry.engine_id==&"legacy_engine" and entry.payment!=null:completed[entry.feature_id]=true
+		var definition: Dictionary=definitions.get(entry.feature_id,{})
+		if not definition.has("min_year"):continue
+		if int(state.get("calendar_start_year",1980))+int(entry.admitted_cycle)/24<int(definition.min_year):return false
+		if definition.has("era_year"):
+			var release_id: StringName=state.store_era_receipts.assignments.get(int(definition.era_year),&"")
+			if not state.release_metadata.has(release_id) or state.release_metadata[release_id].release_cycle>entry.admitted_cycle:return false
 	for id: StringName in state.owned_features:
 		if definitions.has(id) and definitions[id].has("min_year") and not completed.has(id): return false
 	return true

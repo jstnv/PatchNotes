@@ -16,7 +16,8 @@ func _verify() -> void:
 		game.get_node("%PhaseRoot").remove_child(previous)
 		previous.queue_free()
 		var project:=release(751)
-		var run:=new_run(550000)
+		var run: RunState=preload("res://scripts/simulation/run_factory.gd").create_fresh_session({"schema_version":1,"studio_id":"menu-navigation","studio_name":"Menu navigation","specialty":"action","traits":[],"seed":"4417"},database.get_development_catalog()).run
+		run.spend_cash_cents(20000)
 		game.project_state=project
 		game.run_state=run
 		var studio:=load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
@@ -28,6 +29,7 @@ func _verify() -> void:
 		await create_timer(0.4).timeout
 		var before:=run_snapshot(run,project)
 		for visit in range(2):
+			studio._open_menu(&"production");await create_timer(0.6).timeout
 			studio.get_node("%Contracts").pressed.emit()
 			await create_timer(0.4).timeout
 			var panel:Control=studio.get("_contract_detail")
@@ -43,6 +45,7 @@ func _verify() -> void:
 			expect(run_snapshot(run,project)==before and run.get_active_contract()==null,"Contract browsing and Back preserve cash, time, redraws, sales and offer")
 		await _verify_studio_menus(game,studio,run,project)
 		studio.contract_requested.connect(game._on_contract_requested)
+		studio._open_menu(&"production");await create_timer(0.6).timeout
 		studio.get_node("%Contracts").pressed.emit()
 		await create_timer(0.3).timeout
 		_click_button(studio.get("_contract_detail").find_child("AcceptContractButton",true,false))
@@ -66,6 +69,7 @@ func _verify() -> void:
 		studio=game.get("_active_phase")
 		before=run_snapshot(run,project)
 		expect(not run.get_sidestreet_brief_offer().is_empty(),"Completed Ironclad exposes the original SideStreet Brief")
+		studio._open_menu(&"production");await create_timer(0.6).timeout
 		studio.get_node("%Contracts").pressed.emit()
 		await create_timer(0.3).timeout
 		var side:Control=studio.get("_contract_detail")
@@ -96,12 +100,17 @@ func _button_text(node:Node,text:String) -> Button:
 
 func _verify_studio_menus(game:Control,studio:StudioPhase,run:RunState,project:ProjectState) -> void:
 	var before:=run_snapshot(run,project)
+	studio.get_node("%StudioManagementButton").pressed.emit()
 	studio.get_node("%FeatureStoreButton").pressed.emit()
 	await create_timer(0.35).timeout
-	var back:=_button_text(studio.get("_feature_store"),"Close Store")
+	var back: Button=studio._feature_store._close
 	_check_button(back,studio,"Store Close")
 	await _capture_menu("store",root.size)
 	_click_button(back)
+	await create_timer(0.35).timeout
+	studio._close_management()
+	await create_timer(0.35).timeout
+	studio._open_menu(&"market");await create_timer(0.6).timeout
 	studio.get_node("%PublisherList").pressed.emit()
 	await create_timer(0.35).timeout
 	back=studio.get("_publisher_browser").find_child("ClosePublisherBrowser",true,false)
@@ -122,17 +131,21 @@ func _verify_studio_menus(game:Control,studio:StudioPhase,run:RunState,project:P
 	back=studio.get("_review_view").get_node("%ContinueButton")
 	_check_button(back,studio,"Detailed Review Back")
 	_click_button(back)
+	await create_timer(0.35).timeout
 	studio.get_node("%MonthlySalesButton").pressed.emit()
 	await create_timer(0.35).timeout
 	back=studio.get("_monthly_report").find_child("BackButton",true,false)
 	_check_button(back,studio,"Monthly Sales Back")
 	_click_button(back)
+	await create_timer(0.35).timeout
 	_click_button(studio.get_node("%CloseSummaryButton"))
+	await create_timer(0.35).timeout
 	var hud:GameplayHUD=game.get_node("%GameplayHUD")
 	hud.show_tutorial()
 	await create_timer(0.35).timeout
 	_check_button(hud.tutorial_overlay.skip_button,game,"Tutorial Close")
 	_click_button(hud.tutorial_overlay.skip_button)
+	print("STUDIO_MENU_FINAL ",{"dashboard":studio.get_node("%Dashboard").visible,"management":studio._management_panel.visible,"unchanged":before==run_snapshot(run,project)})
 	expect(studio.get_node("%Dashboard").visible and before==run_snapshot(run,project),"All Studio menu Back/Close buttons preserve authoritative state")
 
 func _verify_main_setup(resolution:Vector2i) -> void:

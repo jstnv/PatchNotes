@@ -64,6 +64,7 @@ func _run() -> void:
 		expect(hud.settings_menu.visible,"Physical Settings click opens menu at %d"%dimensions.x)
 		hud.settings_menu.close()
 		var studio: StudioPhase=game._active_phase
+		await click(studio.get_node("%StudioManagementButton").get_global_rect().get_center())
 		await click(studio.get_node("%FeatureStoreButton").get_global_rect().get_center())
 		await process_frame
 		var store: FeatureStore=studio._feature_store

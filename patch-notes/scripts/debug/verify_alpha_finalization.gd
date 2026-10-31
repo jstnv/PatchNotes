@@ -16,6 +16,7 @@ func _initialize() -> void:
 	_verify_project_state_finalization_boundary()
 	await _verify_planning_rejection()
 	await _verify_scope_paths()
+	await _verify_empty_pool_completion()
 	await _verify_warning_cancel_and_pending_playtest()
 	await _verify_conversion_math()
 	await _verify_played_feature_history()
@@ -66,6 +67,16 @@ func _verify_scope_paths() -> void:
 		_expect(state.get_current_cycle() == cycles_before and not alpha.get_node("%UnderScopeDialog").visible, "Immediate Alpha finalization consumes zero cycles and opens no warning")
 		alpha.queue_free()
 		await process_frame
+
+func _verify_empty_pool_completion() -> void:
+	var fixture := await _make_fixture(30, 30, 0.0, 4, true)
+	var alpha: AlphaPhase = fixture.alpha
+	var state: ProjectState = fixture.state
+	alpha.call("_clear_candidate_pool")
+	_expect(alpha.get_node("%HandContainer").card_views().is_empty(), "Alpha empty-pool fixture has no visible candidates")
+	_expect(alpha.request_proceed_to_beta() and state.has_alpha_finalization(), "Alpha finalizes normally with zero eligible candidates")
+	alpha.queue_free()
+	await process_frame
 
 
 func _verify_warning_cancel_and_pending_playtest() -> void:

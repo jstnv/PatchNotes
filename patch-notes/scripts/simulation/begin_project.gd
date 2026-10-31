@@ -33,6 +33,7 @@ static func execute(run: RunState, snapshots: PrimitiveSnapshotDatabase, base_na
 	var expected_serial := run.next_project_serial
 	var before := run.random_streams.snapshot()
 	var next := PrimitivePredevelopment.prepare_project(base_name,genre,theme,run)
+	if next != null and not next.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()): return {"ok":false,"error":"Selected engine is unavailable"}
 	if next != null and not run._bank_run_id.is_empty(): next._release_id = StringName("%s:project:%d" % [run._bank_run_id,run.next_project_serial])
 	if not frozen_commission.is_empty() and not run.can_bind_commission_quote(frozen_commission,next): return {"ok":false,"error":"Commission quote rejected"}
 	if not frozen_support.is_empty() and not run.can_bind_support_quote(frozen_support,next): return {"ok":false,"error":"Support project rejected"}

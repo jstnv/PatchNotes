@@ -4,7 +4,7 @@
 extends RefCounted
 
 const POLICY_ID := "finite-development-fixture"
-const POLICY_VERSION := "1"
+const POLICY_VERSION := "2"
 var _config: Dictionary
 var _hands: Dictionary = {}
 
@@ -28,6 +28,8 @@ static func valid_config(config: Dictionary) -> bool:
 
 func choose(view: Dictionary) -> Dictionary:
 	if view.phase == &"studio":
+		var configuration: Dictionary=preload("res://scripts/simulation/decision_policy.gd").engine_configuration_choice(view)
+		if not configuration.is_empty():return configuration
 		return {"type":&"begin_development","payload":{"name":"%s %d" % [_config.name_prefix,view.releases.size()+1],"genre":_config.genre,"theme":_config.theme}}
 	if view.phase == &"contract": return {"type":&"unsupported_fixture_contract"}
 	var current: Dictionary = view.development
@@ -45,7 +47,26 @@ func choose(view: Dictionary) -> Dictionary:
 			if (a.type == "feature") != (b.type == "feature"): return a.type == "feature"
 			return int(a.token) < int(b.token))
 	var tokens: Array[int] = []
-	for index in range(mini(4,cards.size())): tokens.append(int(cards[index].token))
+	var budget: Dictionary=current.get("pass_budget",{})
+	for a in range(cards.size()-3):
+		for b in range(a+1,cards.size()-2):
+			for c in range(b+1,cards.size()-1):
+				for d in range(c+1,cards.size()):
+					var chosen: Array=[cards[a],cards[b],cards[c],cards[d]]
+					var printed:=0;var passes:=0
+					for card: Dictionary in chosen:
+						if card.type=="pass":passes+=1
+						elif card.type=="feature":
+							if card.has("core_contributions"):
+								for entry: Dictionary in card.core_contributions:printed+=int(entry.value)
+							else:printed+=int(card.primary_value)+int(card.secondary_value)
+					if current.phase!="beta" and int(budget.get("version",0))==1 and passes>2+(int(budget.printed)+printed)/8-int(budget.spent):continue
+					tokens.assign(chosen.map(func(card):return int(card.token)));break
+				if not tokens.is_empty():break
+			if not tokens.is_empty():break
+		if not tokens.is_empty():break
+	if tokens.is_empty():
+		return _development(view,&"request_exit") if current.can_exit else {"type":&"blocked","payload":{"reason":"No legal complete fixture hand"}}
 	_hands[key] = int(_hands.get(key,0))+1
 	return _development(view,&"play",{"candidate_ids":tokens})
 

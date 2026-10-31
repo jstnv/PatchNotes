@@ -16,11 +16,18 @@ static func create_fresh_session(recipe: Variant, definitions: RefCounted) -> Re
 	var run := RunState.new()
 	run.initialize_cash(0)
 	if not run.create_studio_with_traits(recipe.studio_name,StringName(recipe.specialty),traits): return null
+	if recipe.has("rival_founder_profile"):
+		if not recipe.rival_founder_profile is String or recipe.rival_founder_profile not in [str(preload("res://scripts/market/rival_founder_profile.gd").ID),str(preload("res://scripts/market/rival_founder_profile.gd").CONTROL)]:return null
+		if not preload("res://scripts/market/rival_founder_profile.gd").apply(run,StringName(recipe.rival_founder_profile)):return null
+	if recipe.has("prelude_capital_cents"):return null # No experimental funding on this route.
 	# Keep all generated references coherent, including education opening records.
 	var generated := String(run._bank_run_id)
 	var stable := String(recipe.studio_id)
 	run._studio_finance = _replace_identity(run._studio_finance,generated,stable)
+	run._engine_entitlements = _replace_identity(run._engine_entitlements,generated,stable)
+	run._engine_features = _replace_identity(run._engine_features,generated,stable)
 	run._bank_run_id = StringName(stable)
+	run._engine_entitlements = RunState.EngineEntitlements.create(run._bank_run_id)
 	run._employees = EmployeeRoster.create(StringName(stable))
 	run._contract_search=RunState.ContractSearch.create(StringName(stable))
 	run._publisher_relationships = RunState.RelationshipLedger.create(StringName(stable))

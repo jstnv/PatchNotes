@@ -1,7 +1,8 @@
 extends RunState
 # Frozen pre-fix individual quote implementation, test oracle only.
 
-func get_feature_research_quote(id: StringName) -> Dictionary:
+func get_feature_research_quote(id: StringName,engine: StringName=&"") -> Dictionary:
+	if not engine.is_empty():return super.get_feature_research_quote(id,engine)
 	if FeatureStoreCatalog.graph(_feature_definitions, _feature_offers).has("error"): return {}
 	var offer := get_feature_store_offer(id)
 	var primitive := offer.is_empty()

@@ -1,0 +1,37 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "script": "current_founder_public_smoke_policy_v2.gd",
+    "id": "rival-founder-public-smoke",
+    "version": "2"
+  },
+  "cases": [
+    {
+      "schema_version": "1",
+      "case_id": "current-source-action-first-release-5607",
+      "initial": {
+        "recipe": {
+          "schema_version": 1,
+          "studio_id": "bounded-rival-freeze",
+          "studio_name": "Bounded Rival Freeze",
+          "specialty": "action",
+          "traits": [
+            "family_funding",
+            "cult_following"
+          ],
+          "seed": "5607",
+          "rival_founder_profile": "rival-founder-active-1977-v1",
+          "prelude_capital_cents": "2500000"
+        }
+      },
+      "max_commands": 150,
+      "target_release_count": 1,
+      "telemetry": true,
+      "policy": {
+        "config": {
+          "genre": "action"
+        }
+      }
+    }
+  ]
+}

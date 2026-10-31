@@ -26,6 +26,7 @@ func can_settle() -> bool:
 ## Results and RNG are private until every destination view has prepared.
 func plan() -> Dictionary:
 	if _busy or project_state == null or run_state == null or _snapshot_database == null or not project_state.is_launch_ready() or _review_rng == null: return {}
+	if not run_state._rival_founder_profile.is_empty() and project_state.get_current_scope()<project_state.get_required_scope():return {}
 	if _controlled_review_roll < -1 or _controlled_review_roll >= 100 or run_state._productive_cycle_in_progress or run_state._publishing_cycle: return {}
 	var draft := ProjectState.new(project_state.get_required_scope())
 	Fence.copy_fields(project_state,draft)

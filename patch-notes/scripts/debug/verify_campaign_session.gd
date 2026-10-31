@@ -70,6 +70,9 @@ func _initialize() -> void:
 				# Root-first v3 has less aggregate printed supply; use a legal visible
 				# Features-first fixture policy rather than silently expecting solvency from first-four.
 				var candidates: Array=session.development.observation().candidates.duplicate(true)
+				if candidates.size()<4:
+					act(session,&"development",{"request":session.development.command(&"play",{"candidate_ids":[]})},false)
+					break
 				candidates.sort_custom(func(a,b):return a.type=="feature" if (a.type=="feature")!=(b.type=="feature") else a.token<b.token)
 				dev(session,&"play",{"candidate_ids":candidates.slice(0,4).map(func(c):return int(c.token))})
 			dev(session,&"request_exit")
@@ -87,16 +90,18 @@ func _initialize() -> void:
 		if game_index == 0:
 			# Exactly one admission and one completion. Quote is recorded, never
 			# silently regenerated while executing a submitted research command.
-			var quote: Dictionary = session.run.get_feature_research_quote(&"save_files")
+			var quote: Dictionary = session.run.get_feature_research_quote(&"colored_text")
 			expect(quote.get("can_admit",false),"Store node legal after first project")
 			if quote.get("can_admit",false):
 				act(session,&"admit_research",{"quote":quote})
 				act(session,&"admit_research",{"quote":quote},false)
 				act(session,&"research",{"quote":quote},false)
-				act(session,&"research",{"quote":session.run.get_feature_research_quote(&"save_files")})
-				expect(session.run.owns_feature(&"save_files") and &"save_files" not in session.development.project.get_feature_supply_ids(),"Research ownership does not rewrite released supply")
+				act(session,&"research",{"quote":session.run.get_feature_research_quote(&"colored_text")})
+				act(session,&"stage_engine_features",{"feature_ids":[&"colored_text"]})
+				act(session,&"commit_engine_configuration",{"quote":session.run.get_engine_configuration_quote(),"respec":false})
+				expect(session.run.owns_feature(&"colored_text") and &"colored_text" not in session.development.project.get_feature_supply_ids(),"Research ownership does not rewrite released supply")
 		if game_index == 1:
-			expect(&"save_files" in session.development.project.get_feature_supply_ids(),"Following project freezes completed research into supply")
+			expect(&"colored_text" in session.development.project.get_feature_supply_ids(),"Following project freezes completed research into supply")
 		# Buy a campaign only if the current real release-age window allows it.
 		for id in session.run.get_released_game_ids():
 			if session.run.get_post_launch_campaign_offer(id).get("can_purchase",false):

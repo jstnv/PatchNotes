@@ -1,0 +1,27 @@
+# Engine Marketplace local implementation — 2026-10-31
+
+Branch `main`, observed HEAD `3a61522f18db7a2bae892cb8c5be1fee68cd4100`. The shared worktree was already dirty and remained so; no commit, push, export or release action. `.codex-godot-temp` was preserved and used for isolated Godot profile/log files. The earlier [intake](2026-10-31-engine-marketplace-intake-v1.md) records the initial red/green foundation checks. The user then selected platform-net Studio royalties, a hard 25-Scope capacity with the existing 30-Scope requirement, and a built-in legacy engine for old/new Studios.
+
+## Source changed in this implementation
+
+- `patch-notes/scripts/engines/{engine_marketplace,engine_entitlements,engine_royalty}.gd`: exact fixed Action/Puzzle listings, real certified creator IDs, ownership/license validation, and integer-cent cumulative royalty arithmetic.
+- `run_state.gd`, `project_state.gd`, `simulation/{begin_project,design_hand_command,alpha_hand_command,production_hand,run_factory}.gd`: selected engine, frozen project/release IDs, 25-Scope cap, Design/Alpha Specialization addition, licensed-only sales debits, and deterministic rival bootstrap identity.
+- `market/{rival_world,rival_world_checkpoint}.gd`: dual-ledger license transfer, creator royalty receipts, and exact certified pre-Pass-Budget opening provenance. The fixed certificates were not edited.
+- `persistence/{checkpoint_schema,studio_checkpoint,checkpoint_coordinator}.gd`: typed additive engine fields, legacy defaults, validation and autosave on engine selection.
+- `phases/studio_phase.gd`, `ui/predevelopment_overlay.gd`: Engines page with live creator/status/terms and project-setup Scope notice.
+- New `debug/verify_engine_{catalog,entitlements,specialization,scope,marketplace_flow,certified_openings,world_continue}.gd`; updated `verify_sales_earning_and_settlement.gd` for licensed vs owned engine sales.
+- Local design/work-state records: `docs/codex/design/engine-marketplace.md`, `threads/engine-system/2026-10-31-implementation-plan-v1.md`, `DECISIONS.md`, `CURRENT_STATE.md`, `TODO.md`.
+
+## Verified behavior
+
+Available executable: `C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe` (Godot **4.7.1**, not requested 4.4). Each suite used `--headless --path patch-notes --script res://scripts/debug/<suite>.gd` with `APPDATA` and `LOCALAPPDATA` redirected to `.codex-godot-temp/AppData`; writer suites also used isolated `PN_CHECKPOINT_TEST_PORT=47864`. Final stdout/stderr are `.codex-godot-temp/*-engine-final-{out,err}.txt`.
+
+**PASS, exit 0, zero classified errors:** seven new engine suites (`catalog`, `entitlements`, `specialization`, `scope`, `marketplace_flow`, `certified_openings`, `world_continue`), `verify_studio_checkpoint`, `verify_sales_earning_and_settlement`, `verify_pass_budget`, `verify_alpha_finalization`, `verify_production_extraction`, `verify_current_rival_founders`, and `verify_checkpoint_runtime`. The normal-world test paid the actual Action rival $7,500 and restored both balances and the selected license after Continue. The sales test checked the platform-net debit, cumulative rounding, later settlement, duplicate prevention, owned-engine exemption, support-share/commission arithmetic and creator receipt hydration. Both pinned 1977 opening files restored. Godot headless editor import exited 0 without parse errors; `git -c core.whitespace=cr-at-eol diff --check` passed on changed scripts/docs.
+
+**FAIL/OPEN in current shared worktree:** `verify_predevelopment` (2 old navigation/deal assertions), `verify_design_command` (fixed-seven/pre-extraction traces), `verify_alpha_command` (fixed-seven/pre-extraction traces), and `verify_rival_world_foundation` (policy cannot complete a later four-card hand under the provisional Pass Budget). `verify_rival_gameplay_activation` and `verify_rival_gameplay_cold_continue` each restored the world and saved correctly but failed one stale `Rivals (trial)` dashboard-label assertion after the Studio hub moved rival info into a folder. These failures were observed; no clean full-suite claim is made. An initial `verify_checkpoint_runtime` attempt without the required isolated writer port failed `writer_busy`; the correctly configured final run passed. A certified opening initially failed `Unproven legacy Pass Budget`; its exact pinned predecessor source was admitted in the legacy-origin validator and both opening selectors then passed.
+
+## Remaining gates
+
+- Run Godot 4.4 and inspect native Engines/project-setup layout, focus and controller/mouse navigation at supported sizes; only available 4.7.1 headless checks were run.
+- Verify full publisher-support and commission careers, creator overflow/arrears, cross-owner failure recovery and a real licensed release through full world cold Continue. Focused support-share and publisher-owned commission arithmetic passed `verify_sales_earning_and_settlement`. The world marks itself for checkpoint recovery if creator credit fails after rival actions; this edge is not proven as a complete atomic rollback.
+- Reconcile the current fixed-seven production trace and Studio label fixtures with already implemented Pass Budget/folder behavior; run a normal career/balance study before final acceptance. Existing review formula, printed Feature/Pass values, Scope requirement, Beta cards and Engine Skill Tree were not intentionally changed by this implementation.

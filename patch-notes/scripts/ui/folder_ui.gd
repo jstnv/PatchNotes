@@ -42,7 +42,7 @@ static func header(parent: Node, title: String, subtitle: String, back: Callable
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation",18)
 	parent.add_child(row)
-	button(row,"← Back",back).name = "Back"
+	var back_button:=button(row,"← Back",back);back_button.name="Back";standard_back(back_button)
 	var copy := VBoxContainer.new()
 	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(copy)
@@ -65,3 +65,12 @@ static func sidebar(parent: Node) -> VBoxContainer:
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(box)
 	return box
+
+## Consistent destination affordance; the button retains its original callback.
+static func standard_back(control: Button) -> void:
+	if control.text!="← Back":control.tooltip_text=control.text
+	control.text="← Back"
+	control.custom_minimum_size=Vector2(110,54)
+	control.size_flags_vertical=Control.SIZE_SHRINK_BEGIN
+	var row:=control.get_parent() as HBoxContainer
+	if row!=null:row.move_child(control,0);row.add_theme_constant_override("separation",18)

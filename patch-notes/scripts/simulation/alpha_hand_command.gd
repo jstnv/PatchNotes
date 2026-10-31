@@ -4,6 +4,7 @@
 extends RefCounted
 
 const ProductionHand := preload("res://scripts/simulation/production_hand.gd")
+const PassBudget := preload("res://scripts/simulation/pass_budget.gd")
 const WEIGHTED_CANDIDATE_MATH := preload("res://scripts/phases/weighted_candidate_math.gd")
 const CANDIDATE_POOL_SIZE := 7
 const SELECTED_HAND_SIZE := 4
@@ -25,6 +26,30 @@ var next_candidate_id := 0
 var revision := 0
 var active := false
 var _executing := false
+var _budget_printed := 0
+var _budget_spent := 0
+var _budget_projection := -1
+var _budget_reserved := 0
+
+func pass_budget_available() -> int:
+	return PassBudget.generated(_budget_printed) - _budget_spent if pass_budget_active() else CANDIDATE_POOL_SIZE
+
+func pass_budget_active() -> bool:
+	return _project_state==null or _project_state._pass_budget_version==1
+
+func can_play_pass_budget(cards: Array[CardData]) -> bool:
+	if not pass_budget_active():return true
+	var change:=_selected_budget_delta(cards)
+	return int(change.passes)<=PassBudget.generated(_budget_printed+int(change.printed))-_budget_spent
+
+func _selected_budget_delta(cards: Array[CardData]) -> Dictionary:
+	var printed := 0
+	var passes := 0
+	for card in cards:
+		if card.card_type == &"pass": passes += 1
+		else:
+			for entry in card.core_contributions(): printed += int(entry.value)
+	return {"printed": printed, "passes": passes}
 
 func get_priority_distribution() -> Dictionary:
 	return priorities.duplicate()
@@ -68,6 +93,8 @@ func _execute(request: Dictionary) -> Dictionary:
 			if not _get_pass_validation_error(card).is_empty() or not _pass_definitions.has(card): return reject("Unauthorized Alpha Pass")
 		else: return reject("Illegal Alpha candidate")
 		selected.append(card)
+	var budget_delta := _selected_budget_delta(selected)
+	if not can_play_pass_budget(selected): return reject("Pass Budget exhausted")
 	var base_hand := calculate_base(selected)
 	if not base_hand.valid: return reject("Invalid production")
 	var employee_priorities: Variant = request.get("employee_priorities", {})
@@ -94,11 +121,15 @@ func _execute(request: Dictionary) -> Dictionary:
 		if candidate_ids[index] not in ids:
 			retained.append(_candidate_cards[index])
 			retained_ids.append(candidate_ids[index])
+	_budget_projection = PassBudget.generated(_budget_printed + int(budget_delta.printed)) - _budget_spent - int(budget_delta.passes) if pass_budget_active() else CANDIDATE_POOL_SIZE
+	_budget_reserved = retained.filter(func(card: CardData): return card.card_type == &"pass").size()
 	# Played and retained finite Features cannot be drawn by this refill.
 	var excluded: Array[StringName] = []
 	for card in _candidate_cards:
 		if not card.renewable: excluded.append(card.id)
 	var refill := _build_corrective_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE, excluded) if not _pending_playtest_categories.is_empty() else _build_weighted_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE, excluded)
+	_budget_projection = -1
+	_budget_reserved = 0
 	if not refill.get("valid", false):
 		_deal_rng.state = rng_before
 		return reject("Refill rejected")
@@ -107,6 +138,9 @@ func _execute(request: Dictionary) -> Dictionary:
 	var commit := func() -> bool:
 		if _run_state != null and (not _run_state.can_commit_employee_hand(employee_plan) or int(_run_state.get_lean_savings().get(_project_state.get_release_id(), 0)) != lean_before): return false
 		if not _project_state.add_alpha_production(additions, base_hand.scope, base_hand.alpha_bug_pressure): return false
+		if pass_budget_active():
+			_budget_printed += int(budget_delta.printed)
+			_budget_spent += int(budget_delta.passes)
 		events.append({"type":"production", "scores":additions.duplicate(), "scope":base_hand.scope, "alpha_bug_pressure":base_hand.alpha_bug_pressure})
 		if not employee_priorities.is_empty(): priorities = employee_priorities.duplicate()
 		if _run_state != null:
@@ -191,12 +225,16 @@ func _build_corrective_candidate_definitions(priority_snapshot: Dictionary, cont
 	if _pending_playtest_categories.size() != 2 or _pending_playtest_categories[0] == _pending_playtest_categories[1]:
 		return {&"valid": false, &"error": "A corrective Alpha deal requires two distinct queued Core categories."}
 	var injected_cards: Array[CardData] = []
+	var pass_room := maxi(0, (_budget_projection if _budget_projection >= 0 else pass_budget_available()) - _budget_reserved)
 	for category: ProjectState.CoreScore in _pending_playtest_categories:
+		if injected_cards.size()>=pass_room:break
 		var pass_card := _get_pass_for_category(category)
 		if pass_card == null:
 			return {&"valid": false, &"error": "A queued corrective Core Pass is unavailable."}
 		injected_cards.append(pass_card)
+	_budget_reserved += injected_cards.size()
 	var weighted_deal := _build_weighted_candidate_definitions(priority_snapshot, controlled_rolls, candidate_count - injected_cards.size(), excluded_ids)
+	_budget_reserved -= injected_cards.size()
 	if not weighted_deal.valid:
 		return weighted_deal
 	var cards := injected_cards.duplicate()
@@ -209,15 +247,20 @@ func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, contro
 		return {&"valid": false, &"error": validation_error}
 	var remaining_features := _available_features.filter(func(card: CardData): return card.id not in excluded_ids)
 	var selected_cards: Array[CardData] = []
+	var pass_room := maxi(0, (_budget_projection if _budget_projection >= 0 else pass_budget_available()) - _budget_reserved)
+	var passes_drawn := 0
 	for slot in range(candidate_count):
 		var entries: Array[Dictionary] = []
-		for card: CardData in remaining_features + _pass_definitions:
+		var eligible: Array[CardData] = remaining_features.duplicate()
+		if passes_drawn < pass_room: eligible.append_array(_pass_definitions)
+		for card: CardData in eligible:
 			var weight := _calculate_candidate_weight(card, priority_snapshot)
 			if not is_finite(weight) or weight < 0.0:
 				return {&"valid": false, &"error": "Candidate '%s' produced an invalid weight." % card.id}
 			if weight > 0.0:
 				entries.append({&"card": card, &"weight": weight})
 		entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.card.id) < str(b.card.id))
+		if entries.is_empty(): break
 		var roll := controlled_rolls[slot] if not controlled_rolls.is_empty() else _deal_rng.randf()
 		var selected := _select_weighted_entry(entries, roll)
 		if selected == null:
@@ -225,6 +268,7 @@ func _build_weighted_candidate_definitions(priority_snapshot: Dictionary, contro
 		selected_cards.append(selected)
 		if selected.card_type == &"feature":
 			remaining_features.erase(selected)
+		else: passes_drawn += 1
 	return {&"valid": true, &"cards": selected_cards}
 
 func _select_weighted_entry(entries: Array[Dictionary], roll: float) -> CardData:
@@ -234,8 +278,8 @@ func _calculate_candidate_weight(card: CardData, priority_snapshot: Dictionary) 
 	return WEIGHTED_CANDIDATE_MATH.calculate_printed_score_weight(card, priority_snapshot, CORE_SCORE_BY_STAT)
 
 func _get_deal_input_validation_error(priority_snapshot: Dictionary, controlled_rolls: Array[float], candidate_count: int = CANDIDATE_POOL_SIZE) -> String:
-	if candidate_count < 1 or candidate_count > CANDIDATE_POOL_SIZE:
-		return "Alpha candidate count must be between one and seven."
+	if candidate_count < 0 or candidate_count > CANDIDATE_POOL_SIZE:
+		return "Alpha candidate count must be between zero and seven."
 	if priority_snapshot.size() != PriorityAllocation.CORE_CATEGORIES.size():
 		return "Priority snapshot must contain all four Core categories."
 	var total_priority := 0
@@ -322,7 +366,8 @@ func _calculate_final_action_production(base_action: Dictionary) -> Dictionary:
 	for card: CardData in base_action.cards:
 		records.append({&"primary_stat": card.primary_stat})
 	var has_feature: bool = base_action.cards.any(func(card: CardData) -> bool: return card.card_type == &"feature")
-	var result := ProductionHand.calculate(records, base_action.score_additions, has_feature)
+	var engine_bonus: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").production_bonus(_project_state.get_engine_id())
+	var result := ProductionHand.calculate(records, base_action.score_additions, has_feature, engine_bonus)
 	result[&"provisional_scores"] = _calculate_provisional_core_scores(base_action.score_additions)
 	return result
 

@@ -1,4 +1,5 @@
 extends SceneTree
+const AudioMap := preload("res://scripts/audio/theme_map.gd")
 class TestStore extends StudioCheckpointStore:
 	func acquire() -> bool:
 		if _writer != null: return true
@@ -50,12 +51,15 @@ func _run() -> void:
 	var captured := false
 	var deadline:=Time.get_ticks_msec()+15000
 	while game._transition_in_progress and Time.get_ticks_msec()<deadline:
-		if not stages.has(overlay.stage_label.text):stages.append(overlay.stage_label.text)
+		if not stages.has(overlay.stage_label.text):
+			stages.append(overlay.stage_label.text)
+			expect(music.requested_theme == &"menu", "Menu theme remains requested through this new-save stage")
 		if not captured and overlay._surface.modulate.a>=0.99:
 			await capture("new-save-loading-1280")
 			captured=true
 		await process_frame
 	expect(not game._transition_in_progress and game.get_node_or_null("NewStudioLoading")==null,"Loading completes and removes its input cover")
+	expect(music.requested_theme == &"studio" and is_equal_approx(music.blend.pending_duration,AudioMap.STEP),"Studio cue begins after new-save loading reveals the invitation")
 	expect(not paused and not game.pause_menu.is_open(),"Esc during creation cannot pause the loading flow")
 	expect(stages.size()>=2 and captured,"Real creation stages render before the invitation")
 	expect(game.run_state.get_studio_name()=="Fresh Horizon" and game.run_state.get_cash_cents()==570000 and game.run_state.get_completed_run_cycles()==0,"Identity, funding and free Studio entry commit once")

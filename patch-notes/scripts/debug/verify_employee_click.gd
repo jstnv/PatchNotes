@@ -66,6 +66,7 @@ func _run() -> void:
 		expect(game._finish_checkpoint_load(run),"Actual Gameplay mounts restored Studio")
 		await settle()
 		var studio: StudioPhase = game._active_phase
+		await click(studio.get_node("%StudioManagementButton"));await settle()
 		var button: Button = studio.get_node("%Employees")
 		expect(not button.disabled,"Employees is enabled after two releases")
 		print("OPEN_PRECONDITIONS ",{"allowed":run.can_mutate_checkpoint(),"trial":run.uses_employee_trial(),"publishing":run._publishing_cycle,"failure":game.checkpoints.failure,"button_rect":button.get_global_rect(),"studio_size":studio.size})
@@ -81,7 +82,7 @@ func _run() -> void:
 		await capture("employees-%d"%dimensions.x)
 		await click(panel.back_button); await settle()
 		expect(not panel.visible,"Pointer Back closes Employees")
-		expect(studio.get_node("%Dashboard").visible and button.has_focus(),"Back restores the dashboard and Employees focus")
+		expect(not studio.get_node("%Dashboard").visible and button.is_visible_in_tree() and button.has_focus(),"Back restores Studio Management and Employees focus")
 		# A failed-save guard may block activation, but it must not silently block
 		# inspection of the employee menu or create a roster/payroll mutation.
 		panel.free(); studio._employees_panel = null

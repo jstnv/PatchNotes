@@ -42,7 +42,7 @@ func _run() -> void:
 				check(dialog.visible and snapshot(run) == before, "Opening confirmation is passive")
 				check(dialog.get_script() == Confirmation and dialog.has_node("QuitCopy/Warning"), "Shared menu confirmation installed")
 				check(dialog.borderless and dialog.transparent_bg and dialog.transparent, "Shared chamfered transparent surface")
-				check(dialog.title == "Queue Feature research?" and dialog.get_ok_button().text == "OK" and dialog.get_cancel_button().text == "Cancel", "Existing title and action copy retained")
+				check(dialog.title == "Implement Feature in this engine?" and dialog.get_ok_button().text == "OK" and dialog.get_cancel_button().text == "Cancel", "Implementation title and existing actions displayed")
 				check(dialog.dialog_text.contains(CashFormatter.format_exact_cents(quote.down_cents)) and dialog.dialog_text.contains(CashFormatter.format_exact_cents(quote.due_cents)) and dialog.dialog_text.contains("irreversible") and dialog.dialog_text.contains("No cancellation or reordering") and dialog.dialog_text.contains("not guaranteed to be drawn or played"), "Exact quote and research warnings visible")
 				check(dialog.dialog_text.contains("Upgrade:") == (id == &"16_bit_sound"), "Upgrade supply warning appears only for upgrade")
 				if dialog.has_node("QuitCopy/Warning"):

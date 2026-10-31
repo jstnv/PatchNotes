@@ -1,4 +1,5 @@
 extends "res://scripts/debug/verify_rival_gameplay_activation.gd"
+const AudioMap := preload("res://scripts/audio/theme_map.gd")
 
 var game: Control
 var stages: Array[String] = []
@@ -71,6 +72,7 @@ func _initialize() -> void:
 				var stage: String = overlay.stage_label.text
 				if not stages.has(stage): stages.append(stage)
 				if stage != last_stage:
+					expect(music.requested_theme == &"menu", "Menu theme remains requested through this real Continue stage")
 					audio_trace.append({"stage":stage,"heard_seconds":music.presentation_seconds(),"raw_seconds":transport.get_playback_position(),"loops":music.grid.loops,"playing":transport.playing,"size":[size.x,size.y]})
 					if _capture != null and _capture.get_frames_available() > 1000:
 						var buffer := _capture.get_buffer(_capture.get_frames_available())
@@ -89,6 +91,7 @@ func _initialize() -> void:
 					rendered = true
 			await process_frame
 		expect(game._active_phase is StudioPhase and game.project_state == null and game.active_contract_state == null, "Completed Continue reveals only the saved Studio boundary")
+		expect(music.requested_theme == &"studio" and is_equal_approx(music.blend.pending_duration, AudioMap.STEP), "Studio cue begins only after Continue loading reveals Studio")
 		expect(not paused and not game.pause_menu.is_open(), "Esc during loading cannot pause or open another menu")
 		expect(game.run_state.get_studio_name() == STUDIO, "New Run cannot replace the restore while loading")
 		expect(game.checkpoints.adapter.capture(game.run_state) == expected_run, "Presentation restores every saved player field and RNG exactly")
@@ -98,6 +101,9 @@ func _initialize() -> void:
 		expect(game.get_node_or_null("ContinueLoading") == null, "Loading surface is removed after Studio is ready")
 		await capture("studio-%dx%d" % [size.x,size.y])
 		await close_game()
+	if OS.get_environment("PN_LOADING_AUDIO_ONLY") == "1":
+		finish()
+		return
 	await check_calendar_boundaries()
 	await check_stale_preview_and_failure(saved, bytes)
 	await check_teardown(saved, bytes)

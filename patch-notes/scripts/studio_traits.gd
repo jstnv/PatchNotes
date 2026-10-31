@@ -28,7 +28,7 @@ const TRAITS := {
 	&"studio_buzz": {"name":"Studio Buzz", "positive":true, "points":1, "active_from_version":3, "active_order":1, "price":"1 point", "description":"Active: +3 Awareness on every launch."},
 	&"college_dropout": {"name":"College Dropout", "positive":false, "points":2, "active_from_version":6, "active_order":7, "price":"Grants 2 points", "description":"$5,000 education debt; no cash deposit. 12 months grace, then 95 × $70.68 and $71.11 final."},
 	&"graduate": {"name":"Graduate", "positive":false, "points":6, "active_from_version":6, "active_order":8, "price":"Grants 6 points", "description":"$20,000 education debt; no cash deposit. 12 months grace, then 95 × $282.73 and $283.28 final."},
-	&"expensive_lease": {"name":"Expensive Lease", "positive":false, "points":2, "active_from_version":3, "active_order":4, "price":"Grants 2 points", "description":"Active: $515 rent every month from month 1."},
+	&"expensive_lease": {"name":"Expensive Lease", "positive":false, "points":2, "active_from_version":3, "active_order":4, "price":"Grants 2 points", "description":"Active: adds $15 to monthly rent. New Studios pay $315; existing Studios keep their saved rate."},
 	&"unknown_name": {"name":"Unknown Name", "positive":false, "points":2, "active_from_version":3, "active_order":2, "price":"Grants 2 points", "description":"Active: -10 Awareness on first successful launch, floored at zero."}}
 
 static func evaluate_traits(chosen: Array, version: int = 9) -> Dictionary:

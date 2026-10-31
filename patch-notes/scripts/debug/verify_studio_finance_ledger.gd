@@ -1,5 +1,6 @@
 extends SceneTree
 
+## Explicit historical $500 rent math controls; new $300/$315 routes are checked separately.
 ## Synthetic pure-accounting fixtures, not played routes or approved loans.
 ## godot --headless --path . --script res://scripts/debug/verify_studio_finance_ledger.gd
 const F := preload("res://scripts/finance/studio_finance_ledger.gd")
@@ -35,7 +36,7 @@ func step(ledger: Dictionary, cycle: int, delta: int, kind: StringName,
 
 
 func _verify_months_and_settlement() -> void:
-	var ledger := F.create(550000)
+	var ledger := F.create(550000,50000)
 	var initial := ledger.duplicate(true)
 	var result := F.report(ledger, 0, 550000)
 	var row: Dictionary = result.rows[0]
@@ -69,7 +70,7 @@ func _verify_months_and_settlement() -> void:
 
 
 func _verify_arrears_and_recovery() -> void:
-	var ledger := step(F.create(10000), 1, 0, &"development", 0, 0, true)
+	var ledger := step(F.create(10000,50000), 1, 0, &"development", 0, 0, true)
 	ledger = step(ledger, 2, 0, &"development", 0, 0, true)
 	var blocked := ledger.duplicate(true)
 	var result := F.report(ledger, 2, 0)
@@ -103,7 +104,7 @@ func _verify_arrears_and_recovery() -> void:
 
 
 func _verify_accounting_categories() -> void:
-	var ledger := F.create(10000)
+	var ledger := F.create(10000,50000)
 	ledger = step(ledger, 0, 4000, &"other_income")
 	ledger = step(ledger, 0, -1000, &"principal_paid")
 	ledger = step(ledger, 0, -500, &"interest")
@@ -120,22 +121,22 @@ func _verify_accounting_categories() -> void:
 	check(row.interest_cents == 500 and row.store_cents == 500 and row.campaign_cents == 100 and row.playtest_cents == 200 and row.other_expense_cents == 300, "Expenses retain exact category attribution")
 	check(F.plan(ledger, 0, 13400, 1, &"unknown").is_empty() and F.plan(ledger, 0, 13400, 1, &"store").is_empty() and F.plan(ledger, 0, 13400, -1, &"other_income").is_empty(), "Unknown or wrong-signed cash kinds reject rather than misclassifying receipts")
 	check(F.plan(ledger, 0, 13400, 0, &"calendar", 1, 0).is_empty() and F.plan(ledger, 0, 13400, 0, &"calendar", 0, 1).is_empty(), "Passive cash actions cannot earn or settle sales")
-	ledger = step(F.create(100), 1, 0, &"calendar", 200, 0, true)
+	ledger = step(F.create(100,50000), 1, 0, &"calendar", 200, 0, true)
 	check(F.plan(ledger, 2, 100, -101, &"store", 0, 200, true).is_empty(), "Later settlement cannot fund an initially unaffordable direct purchase")
-	ledger = step(F.create(0), 1, 0, &"calendar", 50000, 0, true)
+	ledger = step(F.create(0,50000), 1, 0, &"calendar", 50000, 0, true)
 	ledger = step(ledger, 2, 0, &"calendar", 0, 50000, true)
 	check(ledger.cash_cents == 0 and F.get_unpaid(ledger) == 0 and F.report(ledger, 2, 0).credit_inputs.paid_on_time_months == 1, "Previously earned revenue settling at the due boundary can exactly cover rent")
 
 
 func _verify_reconstruction() -> void:
-	var ledger := step(F.create(550000), 1, -10000, &"feature_play", 17, 0, true)
+	var ledger := step(F.create(550000,50000), 1, -10000, &"feature_play", 17, 0, true)
 	var copy := ledger.duplicate(true)
 	check(F.report(copy, 1, 540000).available and F.get_unpaid(copy) == 0, "Defensive reconstruction preserves valid provenance")
 	var result := F.report(ledger, 1, 540000)
 	result.rows[0].sales_net_earned_cents = 999
 	result.credit_inputs.late_months = 999
 	check(F.report(ledger, 1, 540000).rows[0].sales_net_earned_cents == 17 and F.report(ledger, 1, 540000).credit_inputs.late_months == 0, "Mutating returned report rows or facts cannot mutate authoritative history")
-	check(not F.report({}, 0, 0).available and F.get_unpaid({}) == -1 and F.create(-1).is_empty(), "Missing provenance and negative starting cash remain unavailable")
+	check(not F.report({}, 0, 0).available and F.get_unpaid({}) == -1 and F.create(-1,50000).is_empty(), "Missing provenance and negative starting cash remain unavailable")
 	for key: String in ["schema_version", "initial_cash_cents", "last_cycle", "cash_cents", "unsettled_sales_net_cents"]:
 		for malformed in [null, "0", 0.0, true, [], {}, -1]:
 			copy = ledger.duplicate(true)
@@ -163,21 +164,21 @@ func _verify_reconstruction() -> void:
 
 
 func _verify_overflow() -> void:
-	var ledger := F.create(F.MAX_INT)
+	var ledger := F.create(F.MAX_INT,50000)
 	check(F.report(ledger, 0, F.MAX_INT).available, "Exact maximum starting cash is representable")
 	check(F.plan(ledger, 1, F.MAX_INT, 1, &"beta_income", 0, 0, true).is_empty(), "Direct income overflow rejects before rent")
 	check(F.plan(ledger, 1, F.MAX_INT, -9223372036854775807 - 1, &"store", 0, 0, true).is_empty(), "Minimum signed delta rejects without unsafe negation")
 	ledger = step(ledger, 1, -1, &"store", 0, 0, true)
 	check(F.plan(ledger, 2, F.MAX_INT - 1, 1, &"other_income", 0, 0, true).is_empty(), "Monthly aggregate receipt overflow rejects despite representable cash")
-	ledger = step(F.create(F.MAX_INT - 5), 1, 0, &"calendar", 10, 0, true)
+	ledger = step(F.create(F.MAX_INT - 5,50000), 1, 0, &"calendar", 10, 0, true)
 	check(F.plan(ledger, 2, F.MAX_INT - 5, 0, &"calendar", 0, 10, true).is_empty(), "Intermediate settlement overflow rejects even when subsequent rent would lower cash")
-	ledger = step(F.create(0), 1, 0, &"calendar", F.MAX_INT, 0, true)
+	ledger = step(F.create(0,50000), 1, 0, &"calendar", F.MAX_INT, 0, true)
 	check(F.plan(ledger, 2, 0, 0, &"calendar", 1, 0, true).is_empty(), "Unsettled net entitlement aggregate overflow rejects")
-	ledger = step(F.create(F.MAX_INT), 1, 0, &"calendar", 0, 0, true)
+	ledger = step(F.create(F.MAX_INT,50000), 1, 0, &"calendar", 0, 0, true)
 	ledger = step(ledger, 2, 0, &"calendar", 0, 0, true)
 	ledger = step(ledger, 3, 0, &"calendar", F.MAX_INT, 0, true)
 	check(F.plan(ledger, 3, F.MAX_INT - 50000, 1, &"other_income").is_empty(), "Operating revenue aggregate overflow rejects with sufficient cash capacity")
-	ledger = step(F.create(F.MAX_INT), 1, 0, &"calendar", 0, 0, true)
+	ledger = step(F.create(F.MAX_INT,50000), 1, 0, &"calendar", 0, 0, true)
 	ledger = step(ledger, 2, 0, &"calendar", 0, 0, true)
 	ledger = step(ledger, 2, -(F.MAX_INT - 50000), &"other_expense")
 	ledger = step(ledger, 2, F.MAX_INT, &"financing_in")

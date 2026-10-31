@@ -16,6 +16,8 @@ var priority_total: Label
 var priority_chart: PriorityInfluenceChart
 var budget_feedback: PriorityBudgetFeedback
 var genre_targets_label: Label
+var engine_label: Label
+var engine_picker: VBoxContainer
 var market_run: RunState
 var commission_mode := false
 var support_mode := false
@@ -30,7 +32,7 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var margin := MarginContainer.new()
 	for side: String in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 24)
+		margin.add_theme_constant_override("margin_" + side, 20)
 	add_child(margin)
 	var shell := VBoxContainer.new()
 	margin.add_child(shell)
@@ -41,7 +43,9 @@ func _ready() -> void:
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 12)
 	scroll.add_child(layout)
-	_add_label(layout, "Pre-Development", 26)
+	var heading:=HBoxContainer.new();layout.add_child(heading)
+	var title:=_add_label(heading,"Pre-Development",26)
+	title.autowrap_mode=TextServer.AUTOWRAP_OFF;title.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	_add_label(layout, "Set up your game. These choices are locked when development begins.", 16)
 	var columns := HBoxContainer.new()
 	columns.add_theme_constant_override("separation", 24)
@@ -64,13 +68,22 @@ func _ready() -> void:
 	_add_label(identity, "Genre", 16)
 	genre_input = _add_options(identity, "genres")
 	genre_input.tooltip_text = "Genre sets the Core targets used in this game's production rating."
+	_add_label(identity, "Theme", 16)
+	theme_input = _add_options(identity, "themes")
+	theme_input.tooltip_text = "Genre and Theme determine which other releases crowd this game's future sales."
+	engine_picker=preload("res://scripts/ui/engine_picker.gd").new()
+	identity.add_child(engine_picker)
+	engine_picker.selection_changed.connect(func(_id: StringName):
+		_commission_quote={};_support_quote={}
+		if is_instance_valid(_commission_confirmation):_commission_confirmation.hide()
+		if is_instance_valid(_support_confirmation):_support_confirmation.hide()
+		error_label.text="";_refresh_engine())
+	engine_label = _add_label(identity,"",15)
+	engine_label.name = "SelectedEngine"
 	genre_targets_label = _add_label(identity, "", 15)
 	genre_targets_label.name = "GenreTargets"
 	genre_input.item_selected.connect(func(_index: int): _refresh_genre_targets())
 	_refresh_genre_targets()
-	_add_label(identity, "Theme", 16)
-	theme_input = _add_options(identity, "themes")
-	theme_input.tooltip_text = "Genre and Theme determine which other releases crowd this game's future sales."
 	_add_label(priorities, "Initial Design priorities", 20)
 	_add_label(priorities, "Priorities weight future draws, not scores.\nAllocate 100 total, 10-75 each in steps of 5.", 14)
 	priorities.tooltip_text = "Graphics: visuals. Sound: audio. Tech: systems. Design: gameplay. Core scores measure quality; Scope measures how much game you build."
@@ -125,7 +138,8 @@ func _ready() -> void:
 	back.tooltip_text = "Return to Studio without spending cash or advancing time."
 	back.custom_minimum_size = Vector2(180, 44)
 	back.pressed.connect(func(): cancelled.emit())
-	actions.add_child(back)
+	heading.add_child(back)
+	FolderUI.standard_back(back)
 	_refresh_priorities()
 	name_input.text_changed.connect(func(_text: String): error_label.text = "")
 
@@ -159,6 +173,7 @@ func open() -> void:
 	if support_mode: begin_button.text = "Review support quote"
 	error_label.text = ""
 	_refresh_genre_targets()
+	_refresh_engine()
 	show()
 	name_input.grab_focus()
 
@@ -170,6 +185,10 @@ func _refresh_genre_targets() -> void:
 		var market: Dictionary=market_run._market_provider.call(market_run._bank_run_id,market_run.get_completed_run_cycles()+1)
 		var details: Dictionary=preload("res://scripts/market/market_transaction_trial.gd").targets(market,str(market_run._bank_run_id),genre_input.get_selected_metadata())
 		genre_targets_label.text=preload("res://scripts/market/market_transaction_trial.gd").describe(details).replace("frozen at project start","preview for next project")+"\nOrder: Graphics / Sound / Tech / Design.\nAll final targets: 8/10 production; 125%: 10/10."
+
+func _refresh_engine() -> void:
+	engine_picker.bind(market_run)
+	engine_label.text="The engine and configured pool freeze when development begins. Change the selection here before Begin." if market_run!=null else ""
 
 func get_initial_priorities() -> Dictionary:
 	var result := {}
@@ -276,3 +295,7 @@ func _begin_commission() -> void:
 		error_label.text = "The quote changed. Review a fresh quote before beginning."
 		return
 	begin_requested.emit(name_input.text.strip_edges(),genre_input.get_selected_metadata(),theme_input.get_selected_metadata())
+
+## Value-only Begin intent used across an asynchronous checkpoint wait.
+func get_start_intent() -> Dictionary:
+	return {"open":is_visible_in_tree(),"name":name_input.text,"genre":genre_input.get_selected_metadata(),"theme":theme_input.get_selected_metadata(),"priorities":get_initial_priorities(),"commission":commission_mode,"support":support_mode,"commission_quote":get_confirmed_commission_quote(),"support_quote":get_confirmed_support_quote()}

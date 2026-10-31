@@ -506,7 +506,7 @@ func _refresh_review() -> void:
 	if not selection.valid:
 		_review.text = "Check Traits: " + selection.reason
 		return
-	_review.text = "%s · %s specialty\nPoints: %d · Starting cash bonus: %s\nStarting cash: %s · Monthly rent: %s" % [_name_input.text.strip_edges(), _specialty.get_item_text(_specialty.selected),selection.remaining_points,CashFormatter.format_exact_cents(selection.point_cash_cents+selection.get("family_funding_cents",0)),CashFormatter.format_exact_cents(550000+selection.point_cash_cents+selection.get("family_funding_cents",0)),CashFormatter.format_exact_cents(51500 if StudioTraits.is_active(selection,&"expensive_lease") else 50000)]
+	_review.text = "%s · %s specialty\nPoints: %d · Starting cash bonus: %s\nStarting cash: %s · Monthly rent: %s" % [_name_input.text.strip_edges(), _specialty.get_item_text(_specialty.selected),selection.remaining_points,CashFormatter.format_exact_cents(selection.point_cash_cents+selection.get("family_funding_cents",0)),CashFormatter.format_exact_cents(550000+selection.point_cash_cents+selection.get("family_funding_cents",0)),CashFormatter.format_exact_cents(StudioFinanceLedger.starting_rent_cents(StudioTraits.is_active(selection,&"expensive_lease")))]
 	_review.text += "\nStarting Fans: %d%s" % [StudioTraits.starting_fans(selection), " (Cult Following trial; ordinary gains/losses)" if StudioTraits.starting_fans(selection) > 0 else ""]
 	if _specialty.selected > 0:
 		var roster := StudioSpecialties.preview(_specialty.get_item_metadata(_specialty.selected))

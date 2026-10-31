@@ -41,7 +41,7 @@ func _initialize() -> void:
 	var player: RefCounted = Factory.create_fresh_session({"schema_version":1,"studio_id":"trial-player","studio_name":"Player Studio","specialty":"action","traits":[],"seed":"4417"},catalog)
 	expect(player != null,"legal player bootstrap")
 	if player == null: quit(1); return
-	var world: RivalWorld = Trial.create_world(player.run,catalog)
+	var world: RivalWorld = Trial.create_legacy_world(player.run,catalog)
 	expect(world != null and world.studios.size()==2,"two trial rivals activate")
 	if world == null: quit(1); return
 	expect(world.historical_archive.size()==2 and world.live_releases.is_empty(),"frozen archive is separate from live releases")

@@ -106,7 +106,7 @@ func _initialize() -> void:
 	var session := fresh(&"strategy")
 	session.run.finalize_starter_selection()
 	check(session.run.admit_feature_research(session.run.get_feature_research_quote(&"maps")),"new world keeps queued Maps")
-	var world := Trial.create_world(session.run,catalog)
+	var world := Trial.create_legacy_world(session.run,catalog)
 	check(session.run.complete_productive_action(Callable(),0,0),"world player cycle")
 	world.advance_committed_player_cycle(Trial.policies(world),12)
 	var player := codec.capture(session.run)

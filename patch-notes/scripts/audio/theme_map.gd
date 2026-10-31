@@ -14,6 +14,8 @@ const LENGTH := float(FRAMES) / SAMPLE_RATE
 const HARMONY := ["Dm9", "G13", "Cmaj9", "A7alt", "Dm9", "Bbmaj9", "Em7b5", "A7b9"]
 const MAIN_A := "res://assets/audio/crunch_time_70/crunch_time_A_jazz.wav"
 const MAIN_B := "res://assets/audio/crunch_time_70/crunch_time_B_techno.wav"
+const MENU := "res://assets/audio/crunch_time_70/crunch_time_menu_theme_echo_reverb_v02.wav"
+const MENU_OPENER := "res://assets/audio/crunch_time_70/crunch_time_menu_dream_groove_v01.wav"
 const STUDIO := "res://assets/audio/crunch_time_70/crunch_time_studio_smooth_D_minor.wav"
 
 static func compatible(stream: AudioStreamWAV) -> bool:

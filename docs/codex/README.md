@@ -14,6 +14,7 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 
 ## System documents
 
+- [Pass Budget provisional 2/K8 design and intermediate counts](design/pass-budget.md)
 - [Shared UI identity, folder components and navigation](design/ui-design-system.md)
 - [F8 Developer Tools: session-only unlimited money and current Features](design/debug-mode.md)
 - [Headless simulation: isolated runs, paired studies/reports, custom policies, replay and Studio continuation](threads/simulation-engine/USAGE.md)
@@ -22,6 +23,7 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 - [Studio Traits design thread working folder](threads/studio-traits/)
 - [Core loop and Studio](design/core-and-studio.md)
 - [Optional guided production practice](design/guided-production-tutorial.md)
+- [AI Competitors current implementation and trial boundaries](design/ai-competitors.md)
 - [AI Competitors design thread](threads/ai-competitors/README.md)
 - [Founder Legacy & Corporate Ownership design thread](threads/founder-legacy-ownership/README.md)
 - [Economy and banking](design/economy-banking.md)

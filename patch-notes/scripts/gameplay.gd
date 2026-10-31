@@ -220,10 +220,18 @@ func _present_studio_creation(name: String, specialty: StringName, trait_ids: Ar
 	overlay.stage_label.text = "Creating and saving Studio…"
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if not _commit_new_studio(name,specialty,trait_ids,source):
-		overlay.free()
-		_transition_in_progress = false
-		return
+	if not run_state.create_studio_with_traits(name,specialty,trait_ids):
+		source.show_error("Enter a valid name and Genre; check the trait balance.")
+		overlay.free();_transition_in_progress=false;return
+	var job:=preload("res://scripts/persistence/rival_hydration_job.gd").new()
+	var player_payload:=StudioCheckpoint.new().capture(run_state)
+	job.start(player_payload,checkpoints.rival_catalog)
+	while not job.poll():await get_tree().process_frame
+	if job.world!=null:
+		# Worker owns a detached player. Bind the live one only after joining.
+		job.world.player=run_state;job.world.bind_market_providers()
+	if not _adopt_new_studio_world(job.world):
+		overlay.free();_transition_in_progress=false;return
 	await checkpoints.wait_saved()
 	overlay.stage_label.text = "Opening tutorial invitation…" if checkpoints.failure.is_empty() else "Opening Studio…"
 	# Prepare the invitation under the cover, avoiding a dashboard flash.
@@ -235,6 +243,7 @@ func _present_studio_creation(name: String, specialty: StringName, trait_ids: Ar
 	await get_tree().process_frame
 	await overlay.reveal()
 	overlay.free()
+	get_node("/root/Soundtrack").request_theme(&"studio",true)
 	_transition_in_progress = false
 	if guided_tutorial != null:
 		guided_tutorial.set_process_input(true)
@@ -244,12 +253,15 @@ func _commit_new_studio(name: String, specialty: StringName, trait_ids: Array, s
 	if not run_state.create_studio_with_traits(name, specialty, trait_ids):
 		source.show_error("Enter a valid name and Genre specialty; check the trait limits.")
 		return false
-	rival_world = RivalTrial.create_world(run_state,checkpoints.rival_catalog)
+	return _adopt_new_studio_world(RivalTrial.create_world(run_state,checkpoints.rival_catalog))
+
+func _adopt_new_studio_world(world: RivalWorld) -> bool:
+	rival_world=world
 	if rival_world == null or not checkpoints.attach_rivals(rival_world,checkpoints.rival_catalog):
 		_show_startup_failure("Trial rivals could not be initialized. This new Studio was not saved.")
 		return false
 	_connect_rival_calendar()
-	if checkpoints != null: checkpoints.replace_on_save = checkpoints.store.inspect().status != &"empty"
+	if checkpoints != null: checkpoints.replace_on_save = DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(checkpoints.store.directory)) and not DirAccess.get_files_at(checkpoints.store.directory).is_empty()
 	return _enter_initial_studio()
 
 func _enter_initial_studio(restored: bool = false) -> bool:
@@ -264,7 +276,7 @@ func _enter_initial_studio(restored: bool = false) -> bool:
 	%PhaseRoot.add_child(studio)
 	var previous := _active_phase
 	_active_phase = studio
-	%GameplayHUD.set_phase(studio)
+	%GameplayHUD.set_phase(studio, not (_transition_in_progress or _loading_checkpoint))
 	if previous != null:
 		%PhaseRoot.remove_child(previous)
 		previous.queue_free()
@@ -566,9 +578,14 @@ func _on_development_requested(source_studio: Control, base_name: String, genre:
 	if _save_navigation_pending: return
 	if checkpoints!=null and checkpoints.background_saves and checkpoints.is_saving():
 		_save_navigation_pending=true
+		var engine: StringName=run_state.get_selected_engine_id()
+		var intent: Dictionary=source_studio.get_predevelopment_intent() if source_studio.has_method("get_predevelopment_intent") else {}
 		var saved: bool=await checkpoints.wait_saved()
 		_save_navigation_pending=false
 		if not saved or not is_instance_valid(source_studio): return
+		if engine!=run_state.get_selected_engine_id() or (source_studio.has_method("get_predevelopment_intent") and intent!=source_studio.get_predevelopment_intent()):
+			source_studio.show_development_error("Setup changed while saving. Review it and press Begin again.")
+			return
 	_begin_next_project(source_studio, base_name, genre, theme_id)
 
 
@@ -794,7 +811,7 @@ func _present_checkpoint_load() -> void:
 		# frame at each real stage before its synchronous validation/hydration.
 		await get_tree().process_frame
 		await get_tree().process_frame
-		operation.advance()
+		operation.advance_async()
 		if operation.inspected.get("status") == &"valid":
 			overlay.show_checkpoint(operation.inspected.payload)
 	if operation.restored == null:
@@ -815,6 +832,7 @@ func _present_checkpoint_load() -> void:
 	await get_tree().process_frame
 	await overlay.reveal()
 	overlay.free()
+	get_node("/root/Soundtrack").request_theme(&"studio",true)
 	_loading_checkpoint = false
 	if is_instance_valid(_active_phase):
 		var start := _active_phase.get_node_or_null("%StartNextGame") as Control

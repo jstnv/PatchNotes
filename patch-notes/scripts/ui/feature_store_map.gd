@@ -264,7 +264,7 @@ func _parent_details(offer: Dictionary) -> String:
 	for contribution: Dictionary in offer.get("parent_contributions", []):
 		rows.append("%s: %s; %d project credit(s)" % [contribution.name, "owned" if contribution.owned else "MISSING", contribution.credits])
 	if not rows.is_empty():
-		rows.append("Familiarity: %d%% (10%% per parent-project credit; shared 50%% cap). Applies to unpaid research only." % offer.discount_percent)
+		rows.append("Familiarity: %d%% (10%% per parent-project credit; 80%% cap on the whole new implementation price). Paid deposits are never refunded; old paid queues keep their original terms." % offer.discount_percent)
 	return "\n".join(rows)
 
 func layout_map(_children: Dictionary) -> void:
@@ -528,9 +528,15 @@ func show_details() -> void:
 	else:
 		for parent: Dictionary in offer.get("parent_contributions",[]):
 			if not parent.owned: _missing_targets.append(parent.id)
-	if store._run.owns_feature(store._selected):
+	var engine_row: Dictionary=store._run.get_engine_feature_state().engines[store._run.get_selected_engine_id()]
+	if engine_row.kind!=&"proprietary":
+		_missing_targets.clear();store._buy.disabled=true
+		store._buy.text="In fixed library" if store._run.owns_feature(store._selected) else "Not in this fixed library"
+	elif store._run.owns_feature(store._selected):
 		_missing_targets.clear()
-		store._buy.text = "Already owned"
+		var row: Dictionary=store._run.get_engine_feature_state().engines[store._run.get_selected_engine_id()]
+		store._buy.disabled=row.kind!=&"proprietary" or (store._selected in row.committed and store._run.needs_starter_selection())
+		store._buy.text="Fixed library" if row.kind!=&"proprietary" else "Remove · Respec" if store._selected in row.committed else "Unstage" if store._selected in row.staged else "Stage · Free"
 	elif offer.is_empty() and store._run.needs_starter_selection():
 		store._buy.disabled = not reserve.can_purchase
 		if not reserve.unlocked: blockers.append("Locked — " + str(reserve.prerequisite))
@@ -541,7 +547,7 @@ func show_details() -> void:
 		if quote.queued: _missing_targets.clear()
 		store._buy.disabled = not quote.can_admit
 		blockers = store.queue_block_reasons(quote)
-		store._buy.text = "Research head" if quote.head else "Queued" if quote.queued else "Queue research" if quote.can_admit else store.queue_status(quote)
+		store._buy.text = "Research head" if quote.head else "Queued" if quote.queued else "Implement" if quote.can_admit else store.queue_status(quote)
 		store._buy.text += " · " + CashFormatter.format_exact_cents(quote.due_cents if quote.queued else quote.down_cents)
 		if not quote.queued: store._buy.text += " down"
 	if not _missing_targets.is_empty():
@@ -887,6 +893,7 @@ func _input_layer(node: Node) -> int:
 
 func _input(event: InputEvent) -> void:
 	if store == null or not store.is_visible_in_tree(): return
+	if MenuTransitions.navigation_input_blocked(self):get_viewport().set_input_as_handled();return
 	if store._debug_popup.visible:
 		_cancel_drag()
 		return
@@ -933,16 +940,16 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event is InputEventKey and event.pressed and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed:
 		var directions := {KEY_LEFT: Vector2.LEFT, KEY_RIGHT: Vector2.RIGHT, KEY_UP: Vector2.UP, KEY_DOWN: Vector2.DOWN}
-		if popup.visible and focused != null and (popup.is_ancestor_of(focused) or parent_links.is_ancestor_of(focused)) and not event.is_action_pressed("ui_cancel"): return
+		if popup.visible and focused != null and (popup.is_ancestor_of(focused) or parent_links.is_ancestor_of(focused)) and not MenuTransitions.cancel_pressed(event): return
 		if directions.has(event.keycode):
 			_cancel_drag()
 			navigate_direction(directions[event.keycode])
 			get_viewport().set_input_as_handled()
-		elif event.is_action_pressed("ui_cancel"):
+		elif MenuTransitions.cancel_pressed(event):
 			_cancel_drag()
 			if popup.visible: get_viewport().set_input_as_handled()
 			dismiss()
-	elif event.is_action_pressed("ui_cancel"):
+	elif MenuTransitions.cancel_pressed(event):
 		_cancel_drag()
 		if popup.visible: get_viewport().set_input_as_handled()
 		dismiss()

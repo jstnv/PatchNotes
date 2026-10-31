@@ -1,0 +1,7 @@
+# Engine System thread
+
+**2026-10-31 fixed 1980 starting libraries — RESEARCH / OPEN approval.** [Proposed exact 27-Scope libraries, headless review screen and conditional economics](2026-10-31-starting-libraries-research-v1.md), [machine-readable manifest](2026-10-31-starting-libraries-recommended.json), [100-seed summary](headless-final100-summary.json) and [session log](2026-10-31-starting-libraries-session-log-v1.md). No gameplay or economic rules were changed; new engine terms and full-career/proprietary comparisons remain unimplemented and unvalidated.
+
+**2026-10-31 Engine Skill Tree — RESEARCH / OPEN approval.** [Full architecture and balance finding](2026-10-31-skill-tree-research-v1.md), [arithmetic screen](2026-10-31-skill-tree-bounds.mjs) / [retained results](2026-10-31-skill-tree-bounds.json), [session log](2026-10-31-skill-tree-session-log-v1.md) and [approved-versus-proposed design boundary](../../design/engine-skill-tree.md). The 20-Scope free foundation, per-engine challenges and +5 milestones come from the user's brief; node thresholds, costs, Gen II arithmetic and later effects are research candidates. No production Skill Tree or Feature Store migration is approved.
+
+Current [Engine Marketplace implementation plan](2026-10-31-implementation-plan-v1.md) remains a separate locally implemented scope with open acceptance gates. Do not infer its completion or Skill Tree adoption from this research packet.

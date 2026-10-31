@@ -1,3 +1,4 @@
+## Historical unlimited-Pass fixture (version0); new2/K8 coverage is separate.
 extends "res://scripts/debug/verify_design_command.gd"
 
 const BETA_SCENE := preload("res://scenes/phases/beta_phase.tscn")
@@ -31,6 +32,7 @@ func run_cases(database: Node) -> void:
 	for seed_value in [1104,4417,90210]:
 		for scenario in SCENARIOS:
 			var project := ProjectState.new(30)
+			project._pass_budget_version=0
 			project.set("_release_id", &"m2c_project")
 			project.initialize_snapshots(&"fast_follower", &"market_surge")
 			project.finalize_design_bugs(false,20,[],[])

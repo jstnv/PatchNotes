@@ -1,3 +1,4 @@
+## Historical unlimited-Pass fixture (version0); new2/K8 coverage is separate.
 ## Separately invoked Design Phase verification.
 ## Run with: godot --headless --path . --script res://scripts/debug/verify_design_phase.gd
 extends SceneTree
@@ -19,6 +20,7 @@ var _failures := 0
 # Frozen extraction digests intentionally describe the historical v2 roster.
 # Current-v3 campaigns are independently covered by live/headless parity checks.
 func historical_v2_roster(run: RunState) -> void:
+	run._engine_entitlements={} # Dormant Engine state in pre-Engine hand-only oracles.
 	run._owned_features.clear()
 	for id in StudioSpecialties.preview(&"action", 2).ids: run._owned_features[id] = true
 	run._founding_roster_version = 2
@@ -35,6 +37,7 @@ func _initialize() -> void:
 	_verify_project_state_design_finalization()
 	var gameplay := GAMEPLAY_SCENE.instantiate()
 	gameplay.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
+	gameplay.project_state._pass_budget_version=0
 	root.add_child(gameplay)
 	await process_frame
 	await process_frame
@@ -134,7 +137,7 @@ func _verify_design_priorities(design_phase: DesignPhase, project_state: Project
 	_expect(_priority_values(design_phase) == [25, 25, 25, 25], "Design priorities initialize at 25 / 25 / 25 / 25")
 	_verify_priority_controls(design_phase, categories)
 	(design_phase.get_node("%SoundPriority") as VSlider).value = 15.0
-	_expect(_priority_values(design_phase) == [25, 15, 25, 25] and design_phase.get_available_priority() == 10, "Lowering Sound changes only Sound and frees ten priority")
+	_expect(_priority_values(design_phase) == [25, 20, 25, 25] and design_phase.get_available_priority() == 5, "Lowering Sound changes only Sound and frees five priority")
 	_expect(priority_emissions[0] == 1, "One Design slider adjustment emits priorities_changed exactly once")
 	var comparison_alpha := ALPHA_PHASE_SCENE.instantiate() as AlphaPhase
 	comparison_alpha.setup(project_state)
@@ -145,11 +148,11 @@ func _verify_design_priorities(design_phase: DesignPhase, project_state: Project
 	comparison_alpha.queue_free()
 	await process_frame
 	_expect(design_phase.set_priority(ProjectState.CoreScore.GRAPHICS, 35), "Design can spend available priority")
-	_expect(_priority_values(design_phase) == [35, 15, 25, 25] and design_phase.get_available_priority() == 0, "Raising Graphics changes only Graphics and consumes available priority")
+	_expect(_priority_values(design_phase) == [30, 20, 25, 25] and design_phase.get_available_priority() == 0, "Raising Graphics changes only Graphics and consumes available priority")
 	_expect(design_phase.set_priority(ProjectState.CoreScore.GRAPHICS, 50), "Over-budget increase is handled safely")
-	_expect(_priority_values(design_phase) == [35, 15, 25, 25], "Over-budget increase clamps to the highest fitting value without redistribution")
+	_expect(_priority_values(design_phase) == [30, 20, 25, 25], "Over-budget increase clamps to the highest fitting value without redistribution")
 	_expect(design_phase.set_priority(ProjectState.CoreScore.TECHNOLOGY, -10), "Below-range numeric request clamps safely")
-	_expect(_priority_values(design_phase) == [35, 15, 10, 25] and design_phase.get_available_priority() == 15, "Below-range request clamps to 10 and changes no other category")
+	_expect(_priority_values(design_phase) == [30, 20, 20, 25] and design_phase.get_available_priority() == 5, "Below-range request clamps to20 and changes no other category")
 	_expect(design_phase.set_priority(ProjectState.CoreScore.DESIGN, 27.5), "Numeric non-step request normalizes safely")
 	_expect(design_phase.get_priority(ProjectState.CoreScore.DESIGN) == 30, "Exact half-step snaps upward to 30")
 	_verify_priority_distribution(design_phase, categories, "Design allocations preserve bounds, steps, and budget")
@@ -343,7 +346,7 @@ func _card_ids(cards: Array) -> Array[StringName]:
 func _verify_priority_controls(phase: DesignPhase, categories: Array[ProjectState.CoreScore]) -> void:
 	for node_name: StringName in [&"GraphicsPriority", &"SoundPriority", &"TechnologyPriority", &"DesignPriority"]:
 		var slider := phase.get_node("%%%s" % node_name) as VSlider
-		_expect(slider != null and slider.min_value == 10.0 and slider.max_value == 75.0 and slider.step == 5.0, "%s uses 10-75 bounds in five-point steps" % node_name)
+		_expect(slider != null and slider.min_value == 20.0 and slider.max_value == 40.0 and slider.step == 5.0, "%s uses current20-40 bounds in five-point steps" % node_name)
 	var priority_panel := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel") as PanelContainer
 	var priority_columns := phase.get_node("PriorityOverlay/ModalBlocker/PriorityDialog/Content/PriorityPanel/PriorityLayout").get_children().filter(func(child: Node): return child is VBoxContainer)
 	_expect(priority_panel.size.x <= 1008.0 and priority_panel.size.y >= 72.0, "Compact Design priority panel fits the established phase width")
@@ -360,7 +363,7 @@ func _verify_priority_distribution(phase: DesignPhase, categories: Array[Project
 	for category: ProjectState.CoreScore in categories:
 		var value: int = distribution.get(category, 0)
 		total += value
-		valid_values = valid_values and value >= 10 and value <= 75 and value % 5 == 0
+		valid_values = valid_values and value >= 20 and value <= 40 and value % 5 == 0
 	_expect(total <= 100 and phase.get_available_priority() == 100 - total and valid_values, description)
 
 
@@ -403,6 +406,7 @@ func _verify_project_state_bug_pressure_transactions() -> void:
 	var graphics := ProjectState.CoreScore.GRAPHICS
 	var additions: Dictionary[ProjectState.CoreScore, int] = {graphics: 1}
 	var project_state := ProjectState.new(30)
+	project_state._pass_budget_version=0
 	var emissions := [0]
 	project_state.values_changed.connect(func() -> void: emissions[0] += 1)
 	_expect(project_state.add_core_scores_and_scope(additions, 1), "Existing score-and-Scope batch caller remains compatible")
@@ -417,6 +421,7 @@ func _verify_project_state_bug_pressure_transactions() -> void:
 		_expect(_values(project_state) == before and _approximately_equal(project_state.get_accumulated_bug_pressure(), pressure_before) and emissions[0] == emissions_before, "Rejected Bug Pressure transaction is fully atomic")
 
 	var overflow_state := ProjectState.new(30)
+	overflow_state._pass_budget_version=0
 	var maximum_finite := 1.7976931348623157e308
 	_expect(overflow_state.add_core_scores_and_scope({}, 0, maximum_finite), "A finite Bug Pressure transaction can reach a finite accumulated value")
 	var overflow_emissions := [0]
@@ -428,6 +433,7 @@ func _verify_project_state_bug_pressure_transactions() -> void:
 
 func _verify_project_state_design_finalization() -> void:
 	var fresh := ProjectState.new(30)
+	fresh._pass_budget_version=0
 	_expect(not fresh.has_design_bug_finalization() and not fresh.was_perfect_production() and fresh.get_hidden_bugs() == 0, "Fresh ProjectState is distinguishably unfinalized with safe Design Bug defaults")
 	_expect(fresh.get_implemented_design_feature_ids().is_empty() and fresh.get_unimplemented_design_feature_ids().is_empty(), "Fresh ProjectState Design Feature history begins empty")
 	var emissions := [0]
@@ -444,6 +450,7 @@ func _verify_project_state_design_finalization() -> void:
 	_expect(fresh.was_perfect_production() and fresh.get_hidden_bugs() == 0 and emissions[0] == 1, "Repeated finalization neither overwrites nor emits again")
 	for invalid_result in [[1, 2], [true, -1], [true, 1.5]]:
 		var invalid_state := ProjectState.new(30)
+		invalid_state._pass_budget_version=0
 		var invalid_emissions := [0]
 		invalid_state.values_changed.connect(func() -> void: invalid_emissions[0] += 1)
 		_expect(not invalid_state.finalize_design_bugs(invalid_result[0], invalid_result[1], [], []), "Invalid Design finalization input is rejected")
@@ -457,6 +464,7 @@ func _verify_project_state_design_finalization() -> void:
 	]
 	for invalid_history in invalid_histories:
 		var invalid_state := ProjectState.new(30)
+		invalid_state._pass_budget_version=0
 		_expect(not invalid_state.finalize_design_bugs(true, 4, invalid_history[0], invalid_history[1]), "Structurally invalid Feature history rejects complete finalization")
 		_expect(not invalid_state.has_design_bug_finalization() and not invalid_state.was_perfect_production() and invalid_state.get_hidden_bugs() == 0 and invalid_state.get_implemented_design_feature_ids().is_empty() and invalid_state.get_unimplemented_design_feature_ids().is_empty(), "Invalid history stores no Perfect, Hidden Bug, or Feature-history result")
 
@@ -471,6 +479,7 @@ func _verify_bug_pressure_display_formatting(design_phase: Node) -> void:
 	]
 	for test_case in cases:
 		var project_state := ProjectState.new(30)
+		project_state._pass_budget_version=0
 		project_state.add_core_scores_and_scope({}, 0, test_case[0])
 		design_phase.call("setup", project_state)
 		_expect(design_phase.get_node("%BugPressureValue").text == test_case[1], "Bug Pressure display formats %.6f as %s" % [test_case[0], test_case[1]])
@@ -946,6 +955,7 @@ func _verify_perfect_production_and_hidden_bugs(design_phase: Node) -> void:
 	_expect(design_phase.call("_are_core_scores_perfect", {graphics: 0, sound: 0, technology: 0, design: 0}), "Literal all-zero distribution qualifies for Perfect Production")
 
 	var perfect_state := ProjectState.new(30)
+	perfect_state._pass_budget_version=0
 	var equal_scores: Dictionary[ProjectState.CoreScore, int] = {graphics: 10, sound: 10, technology: 10, design: 10}
 	perfect_state.add_core_scores_and_scope(equal_scores, 19, 10.0)
 	design_phase.call("setup", perfect_state)
@@ -958,6 +968,7 @@ func _verify_perfect_production_and_hidden_bugs(design_phase: Node) -> void:
 	_expect(perfect_result.hidden_bugs == 8, "Integer adjusted Bug Pressure receives no stochastic increment")
 
 	var nonperfect_state := ProjectState.new(30)
+	nonperfect_state._pass_budget_version=0
 	var lopsided_scores: Dictionary[ProjectState.CoreScore, int] = {graphics: 1, sound: 2, technology: 3, design: 20}
 	nonperfect_state.add_core_scores_and_scope(lopsided_scores, 32, 7.6)
 	design_phase.call("setup", nonperfect_state)
@@ -978,6 +989,7 @@ func _verify_perfect_production_and_hidden_bugs(design_phase: Node) -> void:
 	var high_variance: Dictionary = design_phase.call("_calculate_design_finalization", 0.6, 0.99)
 	_expect(high_variance.hidden_bugs - low_variance.hidden_bugs == 4, "Stochastic rounding and bounded variance consume independently controlled rolls")
 	var clamp_state := ProjectState.new(30)
+	clamp_state._pass_budget_version=0
 	design_phase.call("setup", clamp_state)
 	var clamped: Dictionary = design_phase.call("_calculate_design_finalization", 0.5, 0.0)
 	_expect(clamped.perfect_production and clamped.hidden_bugs == 0, "All-zero Perfect finalization clamps negative variance to zero Hidden Bugs")
@@ -1065,6 +1077,7 @@ func _verify_feature_history_finalization(design_phase: Node, database: Node) ->
 func _verify_design_finalization(design_phase: Node, database: Node) -> void:
 	design_phase.get("_exhausted_card_ids").clear()
 	var rejected_state := ProjectState.new(30)
+	rejected_state._pass_budget_version=0
 	rejected_state.finalize_design_bugs(false, 1, [], [])
 	design_phase.call("setup", rejected_state)
 	design_phase.set("_finalization_requested", false)
@@ -1085,6 +1098,7 @@ func _verify_design_finalization(design_phase: Node, database: Node) -> void:
 	_expect(design_phase.get("_candidate_cards") == rejected_candidates_before and design_phase.get("_selected_card_views") == rejected_selections_before, "Failed finalization preserves candidates and selections")
 
 	var overshoot_state := ProjectState.new(30)
+	overshoot_state._pass_budget_version=0
 	overshoot_state.add_scope(32)
 	design_phase.call("setup", overshoot_state)
 	design_phase.set("_finalization_requested", false)
@@ -1111,6 +1125,7 @@ func _verify_design_finalization(design_phase: Node, database: Node) -> void:
 	var selection_counts := [0, 2, 4]
 	for case_index in range(scope_cases.size()):
 		var project_state := ProjectState.new(30)
+		project_state._pass_budget_version=0
 		var initial_additions: Dictionary[ProjectState.CoreScore, int] = {
 			ProjectState.CoreScore.GRAPHICS: 1,
 			ProjectState.CoreScore.SOUND: 2,
@@ -1215,6 +1230,7 @@ func _make_fixture(id: StringName, primary_stat: StringName, primary_value: int,
 
 func _reset_project_state(design_phase: Node) -> ProjectState:
 	var project_state := ProjectState.new(30)
+	project_state._pass_budget_version=0
 	design_phase.call("setup", project_state)
 	return project_state
 
@@ -1364,6 +1380,19 @@ func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "a
 	for step: Dictionary in historical.steps:
 		for boundary in boundaries:
 			var roster_state: Dictionary = step[boundary].run
+			_expect(roster_state._calendar_start_year=={"integer":"1980"} and roster_state._historical_close_cycle=={"integer":"-1"} and roster_state._closed_historical_ids.is_empty() and roster_state._rival_founder_profile=="","Historical hand oracle has no founder epoch/history")
+			for field in ["_calendar_start_year","_historical_close_cycle","_closed_historical_ids","_rival_founder_profile"]:roster_state.erase(field)
+			_expect(roster_state._engine_entitlements.is_empty(),"Historical hand oracle has no Engine ownership")
+			roster_state.erase("_engine_entitlements")
+			_expect(roster_state._engine_features.is_empty(),"Historical oracle has no engine Feature registry")
+			roster_state.erase("_engine_features")
+			_expect(roster_state._engine_royalty_receipts.is_empty() and roster_state._release_engine_ids.is_empty(),"Historical hand oracle has no Engine releases or royalty receipts")
+			for field in ["_engine_royalty_receipts","_release_engine_ids"]:roster_state.erase(field)
+			var budget_project_state: Dictionary=step[boundary].project
+			_expect(budget_project_state._engine_capacity=={"integer":"0"},"Historical oracle has no frozen engine capacity")
+			budget_project_state.erase("_engine_capacity")
+			_expect(budget_project_state._pass_budget_version.integer=="0" and budget_project_state._pass_budget_origin=="","Historical oracle explicitly uses legacy project rules")
+			budget_project_state.erase("_pass_budget_version");budget_project_state.erase("_pass_budget_origin")
 			_expect(roster_state._contract_search.receipts.is_empty() and roster_state._contract_search.offers.is_empty() and roster_state._contract_search.legacy_offers.is_empty() and roster_state._contract_search.intro_offer_id=="", "Historical hand oracle has no Contract Search activity")
 			roster_state.erase("_contract_search")
 			_expect(roster_state._store_era_receipts == {"version":{"integer":"1"},"assignments":{}}, "Historical hand oracle has no era release entitlement")
@@ -1383,6 +1412,8 @@ func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "a
 			# provider. Current market metadata must remain explicitly neutral;
 			# only then can the detached pre-market digest omit the new fields.
 			var project_state: Dictionary = step[boundary].project
+			_expect(project_state._engine_id=="legacy_engine","Historical hand oracle uses only the unchanged legacy engine")
+			project_state.erase("_engine_id")
 			_expect(project_state._market_standards.is_empty() and project_state._market_snapshot_id == "" and project_state._market_details.is_empty(), "Historical oracle project has no market standards")
 			_expect(roster_state._market_provider is Callable and not roster_state._market_provider.is_valid() and roster_state._released_games.is_empty(), "Historical hand oracle has no world provider or releases")
 			var market: Dictionary = roster_state._market_committed_candidate
@@ -1401,6 +1432,9 @@ func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "a
 				gate.erase("purchase_parents")
 				gate.purchase_parent = ""
 				gate.gameplay_features_required = {"float_bits":var_to_bytes(3.0).hex_encode()}
+				_expect(not roster_state._owned_features.has("colored_text") and not roster_state._owned_features.has("save_files") and roster_state[field].colored_text.purchase_parents==["text","4_color_palette"] and roster_state[field].save_files.purchase_parent=="menu_system","Historical hand oracle never acquires the approved two-parent/Save Files Store gates")
+				roster_state[field].colored_text.erase("purchase_parents")
+				roster_state[field].save_files.purchase_parent=""
 			var traits: Dictionary = step[boundary].run._studio_traits
 			var oracle_traits := StudioTraits.evaluate_traits(traits.trait_ids,8)
 			_expect(traits.version in [{"integer":"8"},{"integer":"9"}] and oracle_traits.valid and not traits.trait_ids.has("cult_following"), "Historical oracle permits only old-cap-valid non-Cult version metadata; no count/effect change")
@@ -1409,7 +1443,7 @@ func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "a
 			# fixtures neither own nor draw them. Preserve the original digest
 			# by removing only their catalog metadata from this detached copy.
 			# Current live/headless captures and the pack verifier retain them.
-			for id: String in ["turn_based_combat", "character_classes", "character_development", "branching_dialogue", "player_level_editor", "ability_gated_exploration", "switchable_protagonists", "character_skill_checks"]:
+			for id: String in ["turn_based_combat", "character_classes", "character_development", "branching_dialogue", "player_level_editor", "ability_gated_exploration", "switchable_protagonists", "character_skill_checks", "main_theme", "multiple_soundtracks", "inventory_system", "categorized_scores", "instrumental_sounds", "timer_system", "dynamic_sequencing", "16_bit_sound"]:
 				var state: Dictionary = step[boundary]
 				_expect(not state.run._owned_features.has(id) and not state.get("available", []).has(id) and not state.get("candidates", []).has(id), "Historical oracle excludes only unowned unused Alpha shop metadata")
 				state.run._feature_definitions.erase(id)

@@ -9,15 +9,20 @@ const A := Map.MAIN_A
 const B := Map.MAIN_B
 const PAUSE_FADE := 0.9
 const PAUSE_REVERB_WET := 0.38
+const OPENER_FADE := 0.035
 var player: AudioStreamPlayer
 var themes: AudioStreamSynchronized
 var grid := Grid.new()
 var blend := Blend.new()
-var requested_theme: StringName = &"main"
+var menu_blend := Blend.new()
+var requested_theme: StringName = &"menu"
 var output_latency := 0.0
 var manually_paused := false
 var last_sample_usec := 0
 var _applied_weight := -1.0
+var _applied_menu_weight := -1.0
+var _applied_opener_weight := -1.0
+var opener_retired := false
 var pause_reverb: AudioEffectReverb
 var pause_weight := 0.0
 var _tree_was_paused := false
@@ -38,14 +43,22 @@ func _ready() -> void:
 	var path := B if ProjectSettings.get_setting("audio/soundtrack/prototype_variant", "A") == "B" else A
 	var main := _loop(path)
 	var studio := _loop(Map.STUDIO)
-	if main == null or studio == null: return
-	# One audio playback owns both WAVs. Even the inaudible arrangement keeps
+	var menu := _loop(Map.MENU)
+	var opener := _loop(Map.MENU_OPENER)
+	if main == null or studio == null or menu == null or opener == null: return
+	# One audio playback owns all WAVs. Even the inaudible arrangements keep
 	# running at the identical sample/bar offset; transitions never seek/restart.
 	themes = AudioStreamSynchronized.new()
-	themes.stream_count = 2
+	themes.stream_count = 4
 	themes.set_sync_stream(0, main)
 	themes.set_sync_stream(1, studio)
-	_apply_blend(0.0)
+	themes.set_sync_stream(2, menu)
+	themes.set_sync_stream(3, opener)
+	menu_blend.requested = 1.0
+	menu_blend.weight = 1.0
+	menu_blend.fade_from = 1.0
+	menu_blend.fade_to = 1.0
+	_apply_blend(0.0, 1.0, 1.0)
 	player.stream = themes
 	output_latency = AudioServer.get_output_latency()
 	player.play()
@@ -63,19 +76,35 @@ func _loop(path: String) -> AudioStreamWAV:
 	return stream
 
 func request_theme(theme: StringName, quick_entry: bool = false) -> bool:
-	if theme not in [&"main", &"studio"] or themes == null: return false
+	if theme not in [&"menu", &"main", &"studio"] or themes == null: return false
 	presentation_seconds()
+	var leaving_menu := requested_theme == &"menu" and theme == &"studio"
 	requested_theme = theme
 	# Schedule against the mix cursor, not the already-heard cursor; output
 	# latency must not make the music change one buffer late on purpose.
-	blend.request(theme == &"studio", grid.mix_seconds, quick_entry)
+	blend.request(theme == &"studio", grid.mix_seconds, quick_entry and theme == &"studio")
+	menu_blend.request(theme == &"menu", grid.mix_seconds, quick_entry and leaving_menu)
 	return true
 
-func _apply_blend(weight: float) -> void:
-	if themes == null or weight == _applied_weight: return
+func _opener_weight() -> float:
+	if opener_retired: return 0.0
+	var seconds := grid.mix_seconds
+	if seconds >= Map.STEPS_PER_LOOP * Map.STEP or (requested_theme != &"menu" and menu_blend.weight <= 0.0):
+		opener_retired = true
+		return 0.0
+	return clampf((Map.STEPS_PER_LOOP * Map.STEP - seconds) / OPENER_FADE, 0.0, 1.0)
+
+func _apply_blend(weight: float, menu_weight: float = -1.0, opener_weight: float = -1.0) -> void:
+	if menu_weight < 0.0: menu_weight = menu_blend.weight
+	if opener_weight < 0.0: opener_weight = _opener_weight()
+	if themes == null or (weight == _applied_weight and menu_weight == _applied_menu_weight and opener_weight == _applied_opener_weight): return
 	_applied_weight = weight
-	themes.set_sync_stream_volume(0, linear_to_db(1.0 - weight))
-	themes.set_sync_stream_volume(1, linear_to_db(weight))
+	_applied_menu_weight = menu_weight
+	_applied_opener_weight = opener_weight
+	themes.set_sync_stream_volume(0, linear_to_db((1.0 - menu_weight) * (1.0 - weight)))
+	themes.set_sync_stream_volume(1, linear_to_db((1.0 - menu_weight) * weight))
+	themes.set_sync_stream_volume(2, linear_to_db(menu_weight * (1.0 - opener_weight)))
+	themes.set_sync_stream_volume(3, linear_to_db(menu_weight * opener_weight))
 
 func _build_pause_effects() -> void:
 	# Music only: settings continue to own bus volume/mute; SFX stays separate.
@@ -135,7 +164,7 @@ func _process(_delta: float) -> void:
 	if weight != pause_weight:
 		pause_weight = weight
 		_apply_pause_effects()
-	_apply_blend(blend.sample(grid.mix_seconds))
+	_apply_blend(blend.sample(grid.mix_seconds), menu_blend.sample(grid.mix_seconds), _opener_weight())
 
 func set_paused(value: bool) -> void:
 	# Sample the stopped state before resuming so time spent with no audio

@@ -3,6 +3,8 @@
 extends RefCounted
 
 const SCHEMA_VERSION := 1
+static var _opening_proofs: Dictionary={}
+static var _opening_lock:=Mutex.new()
 
 static func freeze(value: Variant) -> Variant:
 	return _freeze(value,{})
@@ -66,6 +68,17 @@ static func source_identity() -> String:
 		if path.begins_with("res://scripts/debug/"): continue
 		if path.ends_with(".gd") or path.ends_with(".gdc") or path.ends_with(".gd.remap") or path.ends_with(".json"):
 			rows.append([path,FileAccess.get_sha256(path)])
+	for opening: String in ["res://certified/rival-opening-5607-v1.json","res://certified/rival-opening-5613-v1.json"]:
+		if not FileAccess.file_exists(opening):continue
+		var raw:=FileAccess.get_sha256(opening)
+		_opening_lock.lock();var known: Dictionary=_opening_proofs.get(opening,{}).duplicate();_opening_lock.unlock()
+		if known.get("raw")!=raw:
+			var certificate: Variant=JSON.parse_string(FileAccess.get_file_as_string(opening))
+			var material: Dictionary=certificate.get("fixture",{}).duplicate(true) if certificate is Dictionary and certificate.get("fixture") is Dictionary else {}
+			if material.get("world") is Dictionary:material.world.erase("source_identity")
+			known={"raw":raw,"material":var_to_bytes(_canonical_data(material)).hex_encode().sha256_text()}
+			_opening_lock.lock();_opening_proofs[opening]=known.duplicate();_opening_lock.unlock()
+		rows.append([opening+"@material-v1",known.material])
 	return JSON.stringify(rows).sha256_text()
 
 static func _collect(path: String,paths: Array[String]) -> void:
@@ -125,3 +138,14 @@ static func drive(session: RefCounted,policy: Callable,max_steps: int) -> Dictio
 		var result:=record(session,tape,session.command(StringName(choice.type),choice.get("payload",{})))
 		if not result.ok: return {"ok":false,"error":"Policy action rejected","step":step,"tape":tape}
 	return {"ok":session.phase_index==2 and session.finalized,"error":"" if session.phase_index==2 and session.finalized else "Policy step bound reached","tape":tape}
+
+static func _canonical_data(value: Variant) -> Variant:
+	if value is Array:
+		var result: Array=[]
+		for item: Variant in value:result.append(_canonical_data(item))
+		return result
+	if value is Dictionary:
+		var result: Dictionary={};var keys: Array=value.keys();keys.sort()
+		for key: Variant in keys:result[key]=_canonical_data(value[key])
+		return result
+	return value

@@ -1,0 +1,9 @@
+# Action Pass requirement research session — 2026-10-30
+
+Branch `main`, HEAD `3a61522f18db7a2bae892cb8c5be1fee68cd4100`; tracked status/diff inspected before work, with unrelated edits preserved. This session changed only `threads/simulation-engine/action_pass_requirement.mjs`, `threads/simulation-engine/action-pass-requirement-2026-10-30.json`, `threads/simulation-engine/2026-10-30-action-pass-requirement-finding-v1.md`, and this log. No gameplay/card/Scope source or shared TODO was edited.
+
+Task: determine Pass activation demand for the exact previous six Feature hands under base Action standards, 30 required Scope, zero remaining Bugs, neutral variance and unlimited hypothetical Pass availability. [Finding and limits](../threads/simulation-engine/2026-10-30-action-pass-requirement-finding-v1.md).
+
+Checks: inspected live Pass ledger, Design/Alpha Pass validators and source, ProductionHand specialization/Balanced rule, hand size, weighted refill and Review calculation. `node --check docs/codex/threads/simulation-engine/action_pass_requirement.mjs` PASS. `node docs/codex/threads/simulation-engine/action_pass_requirement.mjs` PASS, output read back from retained JSON. Exhaustive 35 four-Pass hand types through three Pass hands: best at 0/4/8/12 activations displays 5.5/6.9/7.8/8.8 respectively. The minimum is 12 activations, exemplified by one Graphics-specialization hand in Design and two Sound-specialization hands in Alpha. Recomputed final capped ratios, mean/deviation and Review from output. Draw probability, a legal seeded complete-game witness, acquisition and finance were NOT RUN; normal draw possibility is a source-based positive-probability inference, not a measured frequency.
+
+Follow-up: a later distinct study may test ordinary-draw availability and economic feasibility before using this demand to propose budget supply. No conversion or initial-budget value selected here.

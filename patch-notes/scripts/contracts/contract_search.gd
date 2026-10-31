@@ -120,7 +120,7 @@ static func completed_before(d: Dictionary,offer_id: StringName,work: StringName
 		return not o.is_empty() and not o.project_id.is_empty() and d.release_metadata.has(o.project_id) and d.release_metadata[o.project_id].release_cycle<=cycle
 	var hands:=0
 	for a: Dictionary in d.studio_finance.actions:
-		if a.source_id==offer_id and a.productive and a.kind in [&"contract_hand",&"publisher_receipt"]:
+		if a.source_id==offer_id and a.productive and a.kind in [&"contract_hand",&"contract_receipt",&"publisher_receipt"]:
 			if a.cycle>cycle:return false
 			hands+=1
 	return hands==2
