@@ -6,6 +6,14 @@ const BalancedProduction := preload("res://scripts/cards/balanced_production.gd"
 const SPECIALIZATION_MULTIPLIER := 1.5
 const CORE_STATS := [&"graphics", &"sound", &"technology", &"design"]
 
+## One additive map before a single specialization rounding. Callers supply only
+## actually earned/approved sources; an absent Studio/employee bonus adds zero.
+static func combine_bonuses(sources: Array) -> Dictionary:
+	var combined: Dictionary={}
+	for source: Dictionary in sources:
+		for category in source:combined[category]=int(combined.get(category,0))+int(source[category])
+	return combined
+
 static func specialization_stat(records: Array) -> StringName:
 	if records.size() != 4:
 		return &""

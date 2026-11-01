@@ -1,0 +1,47 @@
+{
+  "branch": "main",
+  "head": "2d5c8df152cd40eb827117270f13fed20af69498",
+  "runtime": {
+    "content_revision": "70ec5c1b6448d76af3df2463dedadaab3bd5a19f913d2a756c4035eb9e784f1c",
+    "source_identity": "eea06deffab0895c9a80adacc7f6238cbef5cc313cd03d2f93f6b3d2e1603b3e",
+    "studio_build": "studio-checkpoint-public-action-v1"
+  },
+  "changed_source_files": [
+    "scripts/debug/verify_engine_marketplace_flow.gd",
+    "scripts/debug/verify_public_action_engine.gd",
+    "scripts/engines/engine_entitlements.gd",
+    "scripts/engines/engine_feature_state.gd",
+    "scripts/engines/engine_marketplace.gd",
+    "scripts/engines/engine_royalty.gd",
+    "scripts/engines/public_action_engine.gd",
+    "scripts/market/rival_founder_profile.gd",
+    "scripts/market/rival_world_checkpoint.gd",
+    "scripts/persistence/checkpoint_schema.gd",
+    "scripts/persistence/studio_checkpoint.gd",
+    "scripts/phases/main_menu.gd",
+    "scripts/run_state.gd",
+    "scripts/simulation/production_hand.gd",
+    "scripts/simulation/run_factory.gd",
+    "scripts/ui/engine_market_browser.gd",
+    "scripts/ui/engine_picker.gd"
+  ],
+  "final_snapshots_match": true,
+  "acceptance_checks": 89,
+  "acceptance_failures": 0,
+  "maintained_passed": [
+    "verify_engine_entitlements",
+    "verify_engine_scope",
+    "verify_engine_specialization",
+    "verify_engine_certified_openings",
+    "verify_engine_marketplace_flow",
+    "verify_engine_world_continue",
+    "verify_studio_management",
+    "verify_predevelopment",
+    "verify_contract_search_ui",
+    "verify_background_gameplay",
+    "verify_pass_budget"
+  ],
+  "certified_openings_unchanged": true,
+  "temp_directories_preserved": true,
+  "commit_push_build_performed": false
+}

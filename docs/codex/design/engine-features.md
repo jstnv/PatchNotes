@@ -41,3 +41,8 @@ The immediately preceding versioned Pass Budget source `dabfdcc4484b44727f7cc0f7
 Proprietary creation economics and player-facing creation; approved globally versioned public/licensed manifests; Skill Tree identities/costs/thresholds/effects; support/technology expansion; Generation II rounding; engine-switching AI strategy and broad balance; export/release and additional hardware/listening acceptance. The private empty proprietary registration seam is a structural fixture, not an active free-creation economy.
 
 See [implementation and exact evidence](../logs/2026-10-31-engine-features-phase1-implementation-v1.md) and the [pre-edit migration plan](../threads/engine-system/2026-10-31-feature-implementation-phase1-plan-v1.md).
+
+
+## 2026-10-31 Phase2A supersession for new Studios
+
+[Public Action Engine](public-action-engine.md) now governs new-Studio defaults: explicit public access to the approved fixed17-Feature/27-Scope library,$0 upfront,30% external-provider royalty,and no legacy/proprietary engine at creation. Earlier default/library deferrals remain historical for this public subset; existing version1 saves preserve their exact legacy access and frozen terms. Other proposed licensed libraries,creation and Skill Tree work remain outside Phase2A.

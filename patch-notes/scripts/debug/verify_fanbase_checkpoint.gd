@@ -12,7 +12,8 @@ func fan_run() -> RunState:
 func fan_project(run: RunState, rating: float, title: String) -> ProjectState:
 	var project := PrimitivePredevelopment.prepare_project(title, &"action", &"fantasy", run)
 	var scores: Dictionary[ProjectState.CoreScore, int] = {0:40,1:26,2:40,3:26}
-	project.add_core_scores_and_scope(scores,30)
+	assert(project.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()))
+	assert(project.add_core_scores_and_scope(scores,run.get_selected_engine_capacity()))
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
 	project.finalize_design_bugs(false,0,[&"text"],[])
 	project.finalize_alpha(0,[],[])
@@ -31,15 +32,17 @@ func _run() -> void:
 	var first := fan_project(run,7.0,"Strong fixture")
 	expect(run.register_release(first),"Register strong fixture")
 	var restored := roundtrip(run,"Fan launch checkpoint")
+	if restored==null:quit(1);return
 	for cycle in range(1,5):
 		expect(run.complete_productive_action() and restored.complete_productive_action(),"Matching productive boundary %d"%cycle)
 		expect(run.get_fanbase_snapshot()==restored.get_fanbase_snapshot() and run.get_studio_finance_snapshot()==restored.get_studio_finance_snapshot(),"Fan and finance replay match at cycle %d"%cycle)
-		if cycle%2==0: restored=roundtrip(restored,"Settlement %d"%(cycle/2))
+		if preload("res://scripts/calendar/calendar_clock.gd").is_boundary(cycle,run.get_calendar_profile()): restored=roundtrip(restored,"Settlement %d"%(cycle/4))
 	var weak := fan_project(run,4.0,"Weak fixture")
 	expect(weak.get_awareness_result().get_existing_fans()==run.get_fans(),"Freeze actual launch Fans")
 	expect(run.register_release(weak),"Register weak fixture")
 	for i in range(4): expect(run.complete_productive_action(),"Weak-title earning boundary")
-	expect(run.get_fanbase_history()[-2].lost>0,"Weak title loses Fans on newly exposed audience")
+	var weak_rows: Array=run.get_fanbase_history()[-1].releases.filter(func(row):return row.release_id==weak.get_release_id())
+	expect(weak_rows.size()==1 and weak_rows[0].lost_fans>0,"Weak title loses Fans on newly exposed audience at its actual monthly close")
 	var frozen := run.get_fanbase_snapshot()
 	expect(not run.complete_productive_action(Callable(),0,run.get_completed_run_cycles()-1) and run.get_fanbase_snapshot()==frozen,"Repeated boundary does not accrue or lose twice")
 	restored=roundtrip(run,"Weak-title later checkpoint")
@@ -68,7 +71,7 @@ func _run() -> void:
 	expect(run.register_release(later),"Later launch commits once")
 	roundtrip(run,"Three-release Fan provenance")
 	var stale:=fan_project(run,7.0,"Stale preview")
-	for i in range(2): expect(run.complete_productive_action(),"Advance Fans after preview")
+	for i in range(4): expect(run.complete_productive_action(),"Advance one full month of Fans after preview")
 	expect(stale.get_awareness_result().get_existing_fans()!=run.get_fans() and not run.register_release(stale),"Stale Fan snapshot cannot register a new release")
 	expect(run.register_release(later),"Duplicate existing launch stays idempotent after Fan changes")
 	var old:=payload.duplicate(true)

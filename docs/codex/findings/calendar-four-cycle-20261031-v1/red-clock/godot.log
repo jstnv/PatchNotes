@@ -1,0 +1,10 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: One authoritative calendar clock exists
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-four-cycle-20261031-v1/verify_clock.gd:6)
+       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-four-cycle-20261031-v1/verify_clock.gd:9)
+Loaded 40 cards.
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

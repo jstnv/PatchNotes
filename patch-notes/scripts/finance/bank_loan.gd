@@ -5,6 +5,7 @@ extends RefCounted
 const MAX_INT: int = 9223372036854775807
 const MIN_PRINCIPAL := 50000
 const SCHEMA_VERSION := 1
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 
 static func _multiply(a: int, b: int) -> int:
@@ -46,23 +47,27 @@ static func _segment_interest(opening: int, reduction: int, count: int) -> int:
 	return _sum(_multiply(count, last / 100), _floor_sum(count, 100, reduction, last % 100 + 50))
 
 
-static func schedule(principal: Variant, months: Variant, accepted_cycle: Variant = 0) -> Dictionary:
+static func schedule(principal: Variant, months: Variant, accepted_cycle: Variant = 0, calendar: Dictionary = {}) -> Dictionary:
 	if typeof(principal) != TYPE_INT or typeof(months) != TYPE_INT or typeof(accepted_cycle) != TYPE_INT: return {}
-	if principal < MIN_PRINCIPAL or months < 1 or months > principal or accepted_cycle < 0: return {}
-	var gap := 2 + int(accepted_cycle % 2)
-	if accepted_cycle > MAX_INT - gap: return {}
-	var first: int = accepted_cycle + gap
-	if months - 1 > (MAX_INT - first) / 2: return {}
+	if principal < MIN_PRINCIPAL or months < 1 or months > principal or accepted_cycle < 0 or not Clock.valid(calendar): return {}
+	var first: int = Clock.first_full_month_end(accepted_cycle,calendar)
+	if first < 0: return {}
+	var first_month: int = Clock.position(first,calendar).month_index
+	if months-1 > MAX_INT-first_month: return {}
+	var last: int = Clock.month_end(first_month+months-1,calendar)
+	if last < first: return {}
 	var q: int = principal / months
 	var r: int = principal % months
 	var first_interest: int = principal / 100 + int(principal % 100 >= 50)
 	var maximum := _sum(q + int(r > 0), first_interest)
 	var interest := _sum(_segment_interest(principal, q + 1, r), _segment_interest(principal - (q + 1) * r, q, months - r))
 	if maximum < 0 or interest < 0 or _sum(principal, interest) < 0: return {}
-	return {"schema_version": SCHEMA_VERSION, "principal_cents": principal, "term_months": months,
+	var result := {"schema_version": SCHEMA_VERSION, "principal_cents": principal, "term_months": months,
 		"accepted_cycle": accepted_cycle, "first_due_cycle": first,
-		"last_due_cycle": first + (months - 1) * 2, "maximum_installment_cents": maximum,
+		"last_due_cycle": last, "maximum_installment_cents": maximum,
 		"total_interest_cents": interest, "total_payment_cents": principal + interest}
+	if not calendar.is_empty(): result.calendar=calendar.duplicate(true)
+	return result
 
 
 static func installment(contract: Dictionary, number: int) -> Dictionary:
@@ -74,9 +79,23 @@ static func installment(contract: Dictionary, number: int) -> Dictionary:
 	var opening := p - q * (number - 1) - mini(number - 1, r)
 	var principal := q + int(number <= r)
 	var interest := opening / 100 + int(opening % 100 >= 50)
-	return {"number": number, "due_cycle": int(contract.first_due_cycle) + (number - 1) * 2,
+	var calendar: Dictionary=contract.get("calendar",{})
+	if not Clock.valid(calendar):return {}
+	var first_month: int=Clock.position(int(contract.first_due_cycle),calendar).month_index
+	if number-1>MAX_INT-first_month:return {}
+	var due_cycle: int=Clock.month_end(first_month+number-1,calendar)
+	if due_cycle<0:return {}
+	return {"number": number, "due_cycle": due_cycle,
 		"opening_principal_cents": opening, "principal_cents": principal,
 		"interest_cents": interest, "payment_cents": principal + interest}
+
+## Immutable contracts retain their issuing calendar. Only unissued dues are
+## projected into the active run calendar; issued bill timestamps never move.
+static func effective_installment(contract: Dictionary, number: int, calendar: Dictionary = {}) -> Dictionary:
+	var result:=installment(contract,number)
+	if result.is_empty() or not Clock.valid(calendar):return {}
+	result.due_cycle=Clock.retarget_cycle(result.due_cycle,contract.get("calendar",{}),calendar)
+	return result if result.due_cycle>=0 else {}
 
 
 static func eligibility_v1(ledger: Dictionary, rent: int, obligations: int = 0) -> Dictionary:
@@ -92,7 +111,7 @@ static func eligibility_v1(ledger: Dictionary, rent: int, obligations: int = 0) 
 		if bill.unpaid_cents > 0:
 			result.reason = "Clear all overdue bills before borrowing."
 			return result
-	var completed: int = int(ledger.get("last_cycle", 0)) / 2
+	var completed: int = Clock.month(int(ledger.get("last_cycle", 0)),ledger.get("calendar",{}))-1
 	var rows: Array = ledger.get("monthly_rows", [])
 	if completed < 2 or rows.size() < completed: return result
 	var older: int = rows[completed - 2].sales_settled_cents
@@ -109,7 +128,7 @@ static func eligibility_v1(ledger: Dictionary, rent: int, obligations: int = 0) 
 	return result
 
 
-static func maximum_principal(capacity: int, months: Variant, cycle: int, cash: int) -> int:
+static func maximum_principal(capacity: int, months: Variant, cycle: int, cash: int, calendar: Dictionary = {}) -> int:
 	if capacity <= 0 or typeof(months) != TYPE_INT or months < 1 or cash < 0: return 0
 	var low := maxi(MIN_PRINCIPAL, int(months))
 	var high := MAX_INT - cash
@@ -118,7 +137,7 @@ static func maximum_principal(capacity: int, months: Variant, cycle: int, cash: 
 	var best := 0
 	while low <= high:
 		var middle := low + (high - low) / 2
-		var value := schedule(middle, months, cycle)
+		var value := schedule(middle, months, cycle,calendar)
 		if not value.is_empty() and int(value.maximum_installment_cents) <= capacity:
 			best = middle
 			low = middle + 1
@@ -130,8 +149,8 @@ static func maximum_principal(capacity: int, months: Variant, cycle: int, cash: 
 static func quote_v1(ledger: Dictionary, principal: Variant, months: Variant, run_id: StringName, rent: int, obligations: int = 0) -> Dictionary:
 	var result := eligibility_v1(ledger, rent, obligations)
 	result["accepted"] = false
-	result["maximum_principal_cents"] = maximum_principal(result.capacity_cents, months, ledger.last_cycle, ledger.cash_cents) if result.eligible else 0
-	var terms := schedule(principal, months, ledger.last_cycle)
+	result["maximum_principal_cents"] = maximum_principal(result.capacity_cents, months, ledger.last_cycle, ledger.cash_cents,ledger.get("calendar",{})) if result.eligible else 0
+	var terms := schedule(principal, months, ledger.last_cycle,ledger.get("calendar",{}))
 	if terms.is_empty() or run_id.is_empty():
 		result.reason = "Enter at least $500.00 and a positive whole-month term with at least one principal cent per installment. Values must fit the calendar and exact-cent arithmetic."
 		return result
@@ -165,7 +184,7 @@ static func eligibility(ledger: Dictionary, rent: int, obligations: int = 0) -> 
 	for bill: Dictionary in ledger.get("obligations",[]):
 		result.arrears_cents = _sum(result.arrears_cents,bill.unpaid_cents)
 		if result.arrears_cents < 0: return result
-	var completed: int = int(ledger.last_cycle)/2
+	var completed: int = Clock.month(int(ledger.last_cycle),ledger.get("calendar",{}))-1
 	if completed >= 2 and ledger.monthly_rows.size() >= completed:
 		var older: int = ledger.monthly_rows[completed-2].sales_settled_cents
 		var latest: int = ledger.monthly_rows[completed-1].sales_settled_cents
@@ -189,8 +208,8 @@ static func quote(ledger: Dictionary, principal: Variant, months: Variant, run_i
 	result.requested_principal_cents = principal
 	if result.minimum_principal_cents < MIN_PRINCIPAL or result.bank_commitments_cents < 0 or result.arrears_cents < 0: return result
 	var minimum: int = result.minimum_principal_cents
-	var maximum := maximum_principal(result.capacity_cents,months,ledger.last_cycle,ledger.cash_cents)
-	var floor_terms := schedule(minimum,months,ledger.last_cycle)
+	var maximum := maximum_principal(result.capacity_cents,months,ledger.last_cycle,ledger.cash_cents,ledger.get("calendar",{}))
+	var floor_terms := schedule(minimum,months,ledger.last_cycle,ledger.get("calendar",{}))
 	var facility_used := false
 	for action: Dictionary in ledger.get("actions",[]):
 		var operation: Dictionary = action.get("operation",{})
@@ -207,7 +226,7 @@ static func quote(ledger: Dictionary, principal: Variant, months: Variant, run_i
 		result.reason = "No qualified loan covers the three-rent minimum. Existing Bank payments reserve capacity; the cash-poor recovery facility is available once per Studio."
 		return result
 	var adjusted := clampi(principal,minimum,maximum)
-	var terms := schedule(adjusted,months,ledger.last_cycle)
+	var terms := schedule(adjusted,months,ledger.last_cycle,ledger.get("calendar",{}))
 	if terms.is_empty():
 		result.reason = "The term cannot be represented safely by an exact-cent schedule."
 		return result

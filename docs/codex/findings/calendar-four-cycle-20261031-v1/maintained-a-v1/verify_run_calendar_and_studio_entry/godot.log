@@ -1,0 +1,37 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: New run begins at Month 1 first half with zero completed cycles
+PASS: First successful run cycle advances once without crossing a month
+PASS: One cycle reaches Month 1 second half
+PASS: Second successful cycle reports and crosses the month boundary
+PASS: Two cycles reach Month 2 first half
+PASS: Calendar overflow rejects without mutation or signal
+PASS: Studio accepts complete committed launch results
+PASS: Summary is hidden on Studio entry
+PASS: Studio displays calendar and exact projected release totals
+PASS: Studio clearly distinguishes projected from earned and settled values
+PASS: Studio entry costs zero calendar/project cycles and zero cash
+PASS: Studio preserves exact ProjectState and RunState identities
+PASS: Studio preserves snapshot and Bug concealment
+PASS: Studio reconstructs from committed results
+ERROR: FAIL: Opening a reconstructed summary reuses committed results without time or cash mutation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_run_calendar_and_studio_entry.gd:98)
+       [1] _verify_studio_summary (res://scripts/debug/verify_run_calendar_and_studio_entry.gd:58)
+PASS: Studio accepts complete committed launch results
+PASS: Summary is hidden on Studio entry
+PASS: Studio displays calendar and exact projected release totals
+PASS: Studio clearly distinguishes projected from earned and settled values
+PASS: Studio entry costs zero calendar/project cycles and zero cash
+PASS: Studio preserves exact ProjectState and RunState identities
+PASS: Studio displays only previously revealed snapshot facts
+PASS: Studio reconstructs from committed results
+ERROR: FAIL: Opening a reconstructed summary reuses committed results without time or cash mutation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://scripts/debug/verify_run_calendar_and_studio_entry.gd:98)
+       [1] _verify_studio_summary (res://scripts/debug/verify_run_calendar_and_studio_entry.gd:58)
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

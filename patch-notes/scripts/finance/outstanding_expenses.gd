@@ -4,6 +4,7 @@ extends RefCounted
 ## Pure typed bill and credit policy. Only the rent producer is wired to RunState.
 ## Other types are extension hooks, not authorization to issue obligations.
 const MAX_INT: int = 9223372036854775807
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 const POLICY_VERSION := "typed_expenses_v1"
 const STARTING_SCORE := 600
 const MIN_SCORE := 300 # Configurable prototype defaults under authority §69.
@@ -16,18 +17,18 @@ const LABELS := {&"rent": "Rent", &"bank_installment": "Bank installment",
 
 
 static func create_bill(id: StringName, source: StringName, type: StringName,
-		due_cycle: int, cents: int) -> Dictionary:
-	if id.is_empty() or source.is_empty() or not PENALTIES.has(type) or due_cycle <= 0 or cents <= 0: return {}
+		due_cycle: int, cents: int, calendar: Dictionary = {}) -> Dictionary:
+	if id.is_empty() or source.is_empty() or not PENALTIES.has(type) or due_cycle <= 0 or cents <= 0 or not Clock.valid(calendar): return {}
 	return {"bill_id": id, "source_id": source, "expense_type": type,
-		"month": (due_cycle - 1) / 2 + 1, "due_cycle": due_cycle, "due_cents": cents,
+		"month": Clock.action_month(due_cycle,true,calendar), "due_cycle": due_cycle, "due_cents": cents,
 		"paid_cents": 0, "unpaid_cents": cents, "paid_on_time": false, "late": false,
 		"settled_cycle": -1, "recovery_overdue_cycles": -1, "payments": []}
 
 
 ## Called after automatic service at the due boundary, including a zero payment.
 ## Input is a private plan; caller must validate provenance before applying it.
-static func service(bill: Dictionary, cents: int, cycle: int, payment_month: int) -> bool:
-	if not valid_bill(bill) or cycle < bill.due_cycle or cents < 0 or cents > bill.unpaid_cents or payment_month < bill.month: return false
+static func service(bill: Dictionary, cents: int, cycle: int, payment_month: int, calendar: Dictionary = {}) -> bool:
+	if not valid_bill(bill,calendar) or cycle < bill.due_cycle or cents < 0 or cents > bill.unpaid_cents or payment_month < bill.month: return false
 	if not bill.payments.is_empty() and cycle < bill.payments[-1].cycle: return false
 	if bill.unpaid_cents == 0: return cents == 0
 	if cents > 0:
@@ -42,14 +43,15 @@ static func service(bill: Dictionary, cents: int, cycle: int, payment_month: int
 	return true
 
 
-static func valid_bill(bill: Dictionary) -> bool:
+static func valid_bill(bill: Dictionary, calendar: Dictionary = {}) -> bool:
+	if not Clock.valid(calendar):return false
 	for key in ["bill_id", "source_id", "expense_type"]:
 		if typeof(bill.get(key)) != TYPE_STRING_NAME or bill[key].is_empty(): return false
 	if not PENALTIES.has(bill.expense_type): return false
 	for key in ["month", "due_cycle", "due_cents", "paid_cents", "unpaid_cents", "settled_cycle", "recovery_overdue_cycles"]:
 		if typeof(bill.get(key)) != TYPE_INT: return false
 	if typeof(bill.get("late")) != TYPE_BOOL or typeof(bill.get("paid_on_time")) != TYPE_BOOL or typeof(bill.get("payments")) != TYPE_ARRAY: return false
-	if bill.due_cycle <= 0 or bill.month != (int(bill.due_cycle) - 1) / 2 + 1 or bill.due_cents <= 0 or bill.paid_cents < 0 or bill.paid_cents > bill.due_cents or bill.unpaid_cents != int(bill.due_cents) - int(bill.paid_cents): return false
+	if bill.due_cycle <= 0 or bill.month != Clock.action_month(int(bill.due_cycle),true,calendar) or bill.due_cents <= 0 or bill.paid_cents < 0 or bill.paid_cents > bill.due_cents or bill.unpaid_cents != int(bill.due_cents) - int(bill.paid_cents): return false
 	var paid := 0
 	var last := int(bill.due_cycle)
 	for payment in bill.payments:
@@ -58,7 +60,7 @@ static func valid_bill(bill: Dictionary) -> bool:
 			if typeof(payment.get(key)) != TYPE_INT: return false
 		if payment.cycle < last or payment.cents <= 0 or payment.cents > int(bill.due_cents) - paid: return false
 		# A boundary may belong to the closing action or the newly opened month.
-		if payment.month < (int(payment.cycle) - 1) / 2 + 1 or payment.month > int(payment.cycle) / 2 + 1: return false
+		if payment.month < Clock.action_month(int(payment.cycle),true,calendar) or payment.month > Clock.month(int(payment.cycle),calendar): return false
 		paid += int(payment.cents)
 		last = payment.cycle
 	if paid != bill.paid_cents: return false
@@ -72,15 +74,20 @@ static func age(bill: Dictionary, current_cycle: int) -> int:
 
 
 static func tier(overdue_cycles: int) -> int:
-	return mini(maxi(overdue_cycles, 0) / 2, 2)
+	return mini(Clock.month(maxi(overdue_cycles,0))-1,2)
+
+static func _calendar_tier(bill: Dictionary, cycle: int, calendar: Dictionary) -> int:
+	return mini(maxi(0,Clock.quarters_between(int(bill.due_cycle),cycle,calendar))/4,2)
 
 
-static func describe(bill: Dictionary, current_cycle: int) -> Dictionary:
-	if not valid_bill(bill) or current_cycle < bill.due_cycle: return {}
+static func describe(bill: Dictionary, current_cycle: int, calendar: Dictionary = {}) -> Dictionary:
+	if not valid_bill(bill,calendar) or current_cycle < bill.due_cycle: return {}
 	var result := bill.duplicate(true)
 	result.overdue_cycles = age(bill, current_cycle) if bill.unpaid_cents > 0 else bill.recovery_overdue_cycles
-	result.penalty = PENALTIES[bill.expense_type][tier(result.overdue_cycles)] if bill.late else 0
-	result.next_penalty = PENALTIES[bill.expense_type][mini(tier(result.overdue_cycles) + 1, 2)] if bill.unpaid_cents > 0 else 0
+	var evaluated: int=current_cycle if bill.unpaid_cents>0 else bill.settled_cycle
+	var age_tier:=_calendar_tier(bill,evaluated,calendar)
+	result.penalty = PENALTIES[bill.expense_type][age_tier] if bill.late else 0
+	result.next_penalty = PENALTIES[bill.expense_type][mini(age_tier + 1, 2)] if bill.unpaid_cents > 0 else 0
 	return result
 
 
@@ -92,26 +99,28 @@ static func create_credit() -> Dictionary:
 ## Strongest age per category, including recovery during this closing period.
 ## Recovery exactly at the opening boundary was already charged in the prior
 ## close; zero additional elapsed time does not manufacture another late period.
-static func close_month(credit: Dictionary, bills: Array, month: int, profit: int) -> Dictionary:
-	if month <= 0 or month > MAX_INT / 2 or credit.get("policy_version") != POLICY_VERSION: return {}
+static func close_month(credit: Dictionary, bills: Array, month: int, profit: int, calendar: Dictionary = {}) -> Dictionary:
+	if month <= 0 or not Clock.valid(calendar) or credit.get("policy_version") != POLICY_VERSION: return {}
 	if typeof(credit.get("score")) != TYPE_INT or credit.score < MIN_SCORE or credit.score > MAX_SCORE or typeof(credit.get("last_processed_month")) != TYPE_INT or typeof(credit.get("history")) != TYPE_ARRAY: return {}
 	if credit.last_processed_month != month - 1 or credit.history.size() != month - 1: return {}
-	var cycle := month * 2
+	var cycle := Clock.month_end(month,calendar)
+	if cycle<0:return {}
+	var opening := Clock.month_end(month-1,calendar)
 	var oldest := {}
 	var ids := {}
 	for value in bills:
-		if typeof(value) != TYPE_DICTIONARY or not valid_bill(value): return {}
+		if typeof(value) != TYPE_DICTIONARY or not valid_bill(value,calendar): return {}
 		var bill: Dictionary = value
 		if ids.has(bill.bill_id): return {}
 		ids[bill.bill_id] = true
 		if bill.due_cycle > cycle or not bill.late: continue
-		if bill.unpaid_cents == 0 and bill.settled_cycle <= cycle - 2: continue
+		if bill.unpaid_cents == 0 and bill.settled_cycle <= opening: continue
 		var evaluated_cycle: int = cycle if bill.unpaid_cents > 0 else mini(cycle, bill.settled_cycle)
 		var overdue := age(bill, evaluated_cycle)
 		if not oldest.has(bill.expense_type) or overdue > oldest[bill.expense_type].overdue_cycles:
 			oldest[bill.expense_type] = {"type": bill.expense_type, "bill_id": bill.bill_id,
 				"due_cycle": bill.due_cycle, "evaluated_cycle": evaluated_cycle,
-				"overdue_cycles": overdue, "points": -int(PENALTIES[bill.expense_type][tier(overdue)]),
+				"overdue_cycles": overdue, "points": -int(PENALTIES[bill.expense_type][_calendar_tier(bill,evaluated_cycle,calendar)]),
 				"recovered": bill.unpaid_cents == 0}
 	var factors: Array = []
 	var requested := 0

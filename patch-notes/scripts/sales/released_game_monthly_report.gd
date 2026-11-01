@@ -1,5 +1,6 @@
 class_name ReleasedGameMonthlyReport
 extends RefCounted
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 ## A read-only replay of the authoritative ledger, not a second sales clock.
 ## Runtime releases earn on every productive cycle following release_cycle.
@@ -11,17 +12,19 @@ static func build(record: Dictionary, release_cycle: int) -> Dictionary:
 	var age: int = record.total_earned_cycles
 	if age > 0 and record.last_processed_run_cycle - release_cycle != age:
 		return {} # Missing/skipped historical provenance must not become invented payments.
-	var replay := ReleasedGameSales.create(record.release_id, record.total_units, record.review_tenths, record.launch_awareness, record.market_bp)
+	var calendar: Dictionary = record.get("calendar",{})
+	var run_calendar: Dictionary = record.get("run_calendar",{})
+	var replay := ReleasedGameSales.create(record.release_id, record.total_units, record.review_tenths, record.launch_awareness, record.market_bp,int(record.get("market_clock_offset",0)),calendar,run_calendar)
 	var rows: Array[Dictionary] = []
 	for offset in range(age):
-		var month := offset / 2 + 1
+		var month := Clock.month(offset,calendar)
 		var cycle := release_cycle + offset + 1
-		var first_half := offset % 2 == 0
-		var campaign: bool = first_half and record.campaign_months.has(month)
-		var next := ReleasedGameSales.next_cycle(replay, cycle, cycle % 2 == 0, campaign, record.market_factors[month].factor_bp, record.market_factors[month].snapshot_id, record.market_factors[month])
+		var first_cycle := offset == Clock.month_start(offset,calendar)
+		var campaign: bool = first_cycle and record.campaign_months.has(month)
+		var next := ReleasedGameSales.next_cycle(replay, cycle, Clock.is_boundary(cycle,run_calendar), campaign, record.market_factors[month].factor_bp, record.market_factors[month].snapshot_id, record.market_factors[month])
 		if next.is_empty(): return {}
-		if first_half:
-			rows.append({"age_month": month, "earned_halves": 0, "units": 0, "gross_cents": 0,
+		if first_cycle:
+			rows.append({"age_month": month, "earned_halves": 0, "cycle_count":Clock.month_end(month,calendar)-Clock.month_end(month-1,calendar),"units": 0, "gross_cents": 0,
 				"net_cents": 0, "settled_cents": 0, "unpaid_cents": 0,
 				"organic_awareness_scaled": record.launch_awareness * 10000 if month == 1 else next.organic_awareness_scaled,
 				"active_awareness_scaled": record.launch_awareness * 10000 if month == 1 else next.active_awareness_scaled,

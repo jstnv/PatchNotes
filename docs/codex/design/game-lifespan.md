@@ -1,5 +1,9 @@
 # Sales, lifespan and campaigns
 
+**2026-10-31 Studio proceeds reporting:** per-title `studio_net_cents` and `studio_settled_cents` now reflect the same cumulative engine royalties already used by finance, after commission/support ownership. Raw post-platform sales, rounding, payments and economic formulas are unchanged. Native/HUD/checkpoint and Windows calendar acceptance pass. [Closeout](../logs/2026-10-31-calendar-acceptance-push-v2.md).
+
+**2026-10-31 calendar pacing — IMPLEMENTED locally.** Fresh release-age months have4 earning cycles; calendar settlement also follows the central4-cycle month. Existing earned halves/rounding, paid histories, campaign factors and future month boundaries migrate with explicit age/run contexts. All existing sales formulas, organic decay, fees and shares remain unchanged. Calendar and per-title age months remain separate. [Source and checks](../logs/2026-10-31-calendar-four-cycle-v1.md).
+
 **2026-10-22 market trial IMPLEMENTED locally, ACTIVE/TRIAL:** The [approved decision](../threads/ai-competitors/2026-10-18-market-density-trial-decision-v1.md) applies exclusive recent Genre-only, Theme-only and pair counts to each release-age month's frozen factor: `max(7000,10000−600×GenreOnly−300×ThemeOnly−1200×Pair)` basis points. Actual monthly snapshots, both earning halves, exact cumulative units/cents/Fans and prospective named migration are now canonical. Previously earned history is retained. [Adoption, legal bucket coverage, replay and export limits](../findings/market-adoption-20261018-v1/README.md). Visible sales details show saved counts/factor; future estimates exclude unknown future crowding. Final coefficients and long-run balance remain OPEN. This supersedes the historical unimplemented direction below.
 
 **2026-10-17 future market direction, not implemented:** The user wants live Genre/Theme crowding from actual player and rival releases to affect sales. The frozen launch-demand and monthly lifespan rules below remain current. The [AI Competitors market record](../threads/ai-competitors/2026-10-17-market-pressure-direction-v1.md) recommends a separate age-month saturation factor from a shared monthly market snapshot; count window, formula, checkpoint history and migration are OPEN. Previously earned units/cents must not be recalculated.
@@ -8,7 +12,7 @@ Authority: cumulative §§20–25,64–67; Tasks27–28. Implementation: [Releas
 
 ## Locked structure / accepted working coefficients
 
-Each immutable release ID freezes actual one-decimal Final Review, launch Awareness and launch market demand. Separate release-age months from calendar settlement months. Launch projects Month1 but earns/settles nothing; two subsequent productive earning cycles cover Month1. All concurrent titles earn as legal actions advance central time; calendar-month boundary settles already-earned cumulative70% net entitlement once, in exact cents. Forecasts/unpaid income are not spendable.
+Each immutable release ID freezes actual one-decimal Final Review, launch Awareness and launch market demand. Separate release-age months from calendar settlement months. Launch projects Month1 but earns/settles nothing; four subsequent productive earning cycles cover Month1 for fresh releases; migrated records retain their earned historical prefix. All concurrent titles earn as legal actions advance central time; calendar-month boundary settles already-earned cumulative70% net entitlement once, in exact cents. Forecasts/unpaid income are not spendable.
 
 ACTIVE/TRIAL first-version coefficients accepted as common baseline:
 - Month2 organic Awareness =50% frozen launch Awareness +15% of separate200 discovery baseline (=30).

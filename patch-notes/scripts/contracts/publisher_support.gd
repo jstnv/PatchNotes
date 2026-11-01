@@ -121,7 +121,7 @@ static func resolve(run: Variant, request: Dictionary) -> Dictionary:
 	return {"reputation_bp":0,"investment_bp":1000 if d.support_assessments[request.source_id].passed else 0}
 
 ## Rebuild title entitlement and finance slices from raw sales, never a second
-## sales clock. Both odd/even release settlement alignments remain authoritative.
+## sales clock. The saved run clock determines settlement boundaries.
 static func title_history(t: Dictionary, record: Dictionary, release_cycle: int) -> Dictionary:
 	var report := ReleasedGameMonthlyReport.build(record,release_cycle)
 	if report.is_empty(): return {}
@@ -134,7 +134,7 @@ static func title_history(t: Dictionary, record: Dictionary, release_cycle: int)
 		for slice: Dictionary in row.slices:
 			raw += int(slice.net_cents)
 			age += 1
-			var next := advance_rights(t.budget_cents,rights,raw,age,int(slice.run_cycle)%2==0)
+			var next := advance_rights(t.budget_cents,rights,raw,age,preload("res://scripts/calendar/calendar_clock.gd").is_boundary(int(slice.run_cycle),record.get("run_calendar",{})))
 			if next.is_empty(): return {}
 			earned[slice.run_cycle] = next.studio_earned_cents-rights.studio_earned_cents
 			settled[slice.run_cycle] = next.studio_settled_cents-rights.studio_settled_cents

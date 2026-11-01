@@ -1,0 +1,26 @@
+{
+  "name": "verify_sidestreet_scope_and_year",
+  "exit": 1,
+  "seconds": 31.514999999999418,
+  "errors": [
+    "ERROR: FAIL: store updates both year labels at its successful boundary",
+    "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle",
+    "ERROR: FAIL: reserve updates both year labels at its successful boundary",
+    "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle"
+  ],
+  "ok": false,
+  "argv": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_sidestreet_scope_and_year.gd",
+    "--quit-after",
+    "100000"
+  ],
+  "script_sha256": "daf84d6f437a3a5ce2d0a209c94ef9e6f4e0fd277097262a1f98fc0ad716faa2",
+  "log_sha256": "ab87aac8907d4d4a3f2be520d4cd034415eec0f1c638e12e1982a18b3b83c644"
+}

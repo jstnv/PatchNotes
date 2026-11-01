@@ -4,10 +4,14 @@ extends RefCounted
 const VERSION:=1
 const KINDS: Array[StringName]=[&"public",&"rival_licensed",&"proprietary"]
 const LEGACY:=&"legacy_engine"
+const Public:=preload("res://scripts/engines/public_action_engine.gd")
 
 static func create(owned: Array[StringName],engines: Array[StringName],studio: StringName,offers: Dictionary={}) -> Dictionary:
 	var state: Dictionary={"version":VERSION,"engines":{},"entries":[],"configurations":[]}
 	for id: StringName in engines:
+		if id==Public.ID:
+			add_record(state,id,Public.definition().name,&"public",27,Public.LIBRARY,Public.ORIGIN)
+			continue
 		var listing: Dictionary=preload("res://scripts/engines/engine_marketplace.gd").find(id)
 		var kind: StringName=&"proprietary" if id==LEGACY or listing.get("creator_id")==studio else &"rival_licensed"
 		add_record(state,id,"Built-in Engine" if id==LEGACY else str(listing.get("name",id)),kind,ProjectState.MAX_SIGNED_INT if id==LEGACY else int(listing.get("max_scope",25)),owned,"legacy-access-v1")
@@ -61,7 +65,9 @@ static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,l
 	var available_at: Dictionary={}
 	for id: Variant in state.engines:
 		var row: Variant=state.engines[id]
-		if not id is StringName or id.is_empty() or not row is Dictionary or row.size()!=9 or row.get("kind") not in KINDS or not row.get("name") is String or row.name.is_empty() or row.name.length()>80 or not row.get("capacity") is int or row.capacity<1 or not row.get("revision") is int or row.revision<0 or row.get("origin") not in ["legacy-access-v1","declared-v1"]:return false
+		if not id is StringName or id.is_empty() or not row is Dictionary or row.size()!=9 or row.get("kind") not in KINDS or not row.get("name") is String or row.name.is_empty() or row.name.length()>80 or not row.get("capacity") is int or row.capacity<1 or not row.get("revision") is int or row.revision<0 or row.get("origin") not in ["legacy-access-v1","declared-v1",Public.ORIGIN]:return false
+		if id==Public.ID and (row.kind!=&"public" or row.name!=Public.definition().name or row.capacity!=27 or row.origin!=Public.ORIGIN or row.initial!=Public.LIBRARY):return false
+		if id!=Public.ID and row.origin==Public.ORIGIN:return false
 		for key: String in ["initial","implemented","committed","staged"]:
 			if not row.get(key) is Array or not unique_ids(row[key]):return false
 			for feature: StringName in row[key]:
@@ -138,14 +144,16 @@ static func bindings_valid(state: Dictionary,entitlements: Dictionary,owned: Dic
 	for id: StringName in state.engines:
 		if id!=LEGACY and preload("res://scripts/engines/engine_marketplace.gd").find(id).is_empty():registered.append(id)
 	if not preload("res://scripts/engines/engine_entitlements.gd").valid(entitlements,registered) or entitlements.studio_id!=studio:return false
-	var ids: Array=entitlements.owned_ids+entitlements.licensed_ids
-	if ids.size()!=state.engines.size() or not state.engines.has(LEGACY):return false
-	if state.engines[LEGACY].implemented.size()!=owned.size():return false
-	for id: StringName in owned:
-		if not owned[id] or id not in state.engines[LEGACY].implemented:return false
+	var ids: Array=preload("res://scripts/engines/engine_entitlements.gd").accessible_ids(entitlements)
+	if ids.size()!=state.engines.size():return false
+	if entitlements.version==1:
+		if not state.engines.has(LEGACY) or state.engines[LEGACY].implemented.size()!=owned.size():return false
+		for id: StringName in owned:
+			if not owned[id] or id not in state.engines[LEGACY].implemented:return false
 	for id: StringName in ids:
 		if not state.engines.has(id):return false
 		var row: Dictionary=state.engines[id]
+		if id in entitlements.get("public_ids",[]) and row.kind!=&"public":return false
 		if id in entitlements.licensed_ids and row.kind!=&"rival_licensed":return false
 		if id in entitlements.owned_ids and row.kind not in [&"proprietary",&"public"]:return false
 		var listing:=preload("res://scripts/engines/engine_marketplace.gd").find(id)

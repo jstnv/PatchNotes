@@ -99,7 +99,7 @@ func freeze_market_standards(source_id: String, standards: Array, details: Dicti
 	if not has_predevelopment_identity() or not _market_standards.is_empty() or source_id.is_empty() or standards.size()!=4: return false
 	var base: Array=PrimitiveReviewCalculator.GENRE_TARGETS.get(_genre_id,[])
 	if base.size()!=4: return false
-	var historical_trial: bool=details.get("historical",false) and (str(source_id).begins_with("historical-core-v2:") or str(source_id).begins_with("historical-book-v1:"))
+	var historical_trial: bool=details.get("historical",false) and (str(source_id).begins_with("historical-core-v2:") or preload("res://scripts/market/rival_standard_book.gd").is_details(details))
 	for i in range(4):
 		if not standards[i] is int: return false
 		if not historical_trial and (standards[i]<base[i] or standards[i]>base[i]+8): return false
@@ -711,7 +711,7 @@ func _normalize_feature_history_ids(value: Variant, phase_label: String = "Desig
 func get_current_cycle() -> int:
 	return _current_cycle
 
-## One standard successful player action advances exactly one half-month cycle.
+## One standard successful player action advances exactly one productive cycle.
 func can_advance_cycle() -> bool:
 	return not _has_beta_finalization and _current_cycle < MAX_SIGNED_INT
 

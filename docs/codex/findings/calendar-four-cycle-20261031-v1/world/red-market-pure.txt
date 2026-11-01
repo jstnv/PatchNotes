@@ -1,0 +1,25 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Identifier "ProjectState" not declared in the current scope.
+   at: GDScript::reload (res://scripts/market/historical_standard_trial.gd:33)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/market/rival_standard_book.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/market/market_transaction_trial.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://verify_calendar_market.gd:0)
+ERROR: Failed to load script "res://verify_calendar_market.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+FAIL Fresh four-cycle world retains January Market at cycle2
+FAIL Fresh first February snapshot carries calendar proof
+FAIL Odd legacy cutover retains saved month until actual boundary
+FAIL Odd raw cycle is a valid converted month boundary
+SCRIPT ERROR: Cannot call method 'lock' on a null value.
+   at: _checked (res://scripts/market/rival_standard_book.gd:124)
+   GDScript backtrace (most recent call first):
+       [0] _checked (res://scripts/market/rival_standard_book.gd:124)
+       [1] valid_snapshot (res://scripts/market/rival_standard_book.gd:132)
+       [2] _initialize (res://verify_calendar_market.gd:28)
+FAIL Legacy Book snapshot shape remains version4
+FAIL Calendar presence-window helper is exposed
+CALENDAR_MARKET checks=6 failures=6

@@ -2,6 +2,7 @@
 ## field are published in one CheckpointStore generation. Disk input supplies
 ## no classes, resource paths, constructors or executable Variant objects.
 extends RefCounted
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 const CAREER_PREDECESSORS := ["2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6"]
 ## Studio Management navigation only; exact preceding current-content world.
@@ -14,6 +15,9 @@ const MARKET_HISTORY_PREDECESSORS := ["c4436b020d6580b0ddc79f40e18f085e43c742965
 ## Exact immediately preceding unversioned-budget builds; active projects finish
 ## under explicit legacy rules, and all newly begun projects use2/K8.
 const VERSIONED_BUDGET_PREDECESSORS := [
+	"5717e5e2573ea90a83ac8fe2bc87bbd3c6c10da3fe67524603ae57d3286cf54a", # Genuine calendar-v2 world; same rules/state, fixture/report closeout.
+	"eea06deffab0895c9a80adacc7f6238cbef5cc313cd03d2f93f6b3d2e1603b3e", # Verified pre-calendar Public build; old raw profiles validate before migration.
+	"46036810d92d20c22d3e08f554de308c1352673ce8d525764b007a0288370d33", # Exact pre-Public Studio/world; retain its v1 access and frozen projects.
 	"52a411b66e7b0856cc0cf280cff26d95275c6d2529d59111f4fc7bc5e224bf72", # Before prospective stored-rent admission; existing values/history retained.
 	"d7295bdcea8bd5093115b42ddba4913f4d7125ff6f697bf5945dc8c62fca0e09", "dabfdcc4484b44727f7cc0f772811346c13655c617ee0564562a110d723ef692", "b0f37941fa67561712612a41b31e2c7817ca7199156ce43883765324ced57bfa", "4a2cc02b5371a69f7b0c138b11eac6be863f1523975869d26895f725fb78fb0e", "4dfa8bc8f6520136df0757848f7931fc74e9baa48b373d67f004e796f16d0df0"]
 const BUDGET_PREDECESSORS := ["ac5b36c205824b47262a192e83fc7b8c724314088a1fa7578279a774b1920e07", "5b253e0c999d11652782544266cdb222ad052cd01d49ab8969f9669b074a70c2"]
@@ -237,7 +241,7 @@ static func _market_schema() -> Dictionary:
 	var ordinary: Dictionary={"version":"uint","cycle_start":"uint","id":"text","facts":CheckpointSchema.array_of({"studio_id":"text","release_id":"text","release_cycle":"uint","genre":"text","theme":"text","review_tenths":"uint","cores_available":"bool","cores":CheckpointSchema.array_of("uint")})}
 	var book: Dictionary=ordinary.duplicate(true)
 	book.epoch_offset="uint";book.basis=CheckpointSchema.map_of("text",{"first":_book_source_schema(),"benchmarks":CheckpointSchema.array_of(_book_source_schema())})
-	return CheckpointSchema.union_of([ordinary,book])
+	return CheckpointSchema.union_of([ordinary,book,CheckpointSchema.dict_with_calendar(ordinary),CheckpointSchema.dict_with_calendar(book)])
 
 static func _origin_schema() -> Dictionary:
 	return {"source_id":"text","content_revision":"text","cycle":"uint","active_projects":CheckpointSchema.map_of("id","id")}
@@ -271,7 +275,7 @@ func _expected_market_facts(market: Dictionary, player_payload: Dictionary, stud
 			if not codec.error.is_empty(): return null
 			release_cycle-=int(source.offset)
 			if release_cycle<0: return null
-			if release_cycle>=market.cycle_start or market.cycle_start-release_cycle>Market.WINDOW_CYCLES: continue
+			if not Market.within_window(release_cycle,int(market.cycle_start),Market.calendar_for(market)):continue
 			var review_tenths: Variant=codec.integer(sales_by_id[entry.key].get("review_tenths"))
 			if not codec.error.is_empty() or not meta.get("review") is Dictionary: return null
 			var core_values: Array=[]
@@ -348,10 +352,11 @@ func _capture_development(session: RefCounted) -> Variant:
 func snapshot(world: RivalWorld, studio_adapter: StudioCheckpoint = null) -> Dictionary:
 	error = ""
 	if world == null or world.player == null or world._busy or world.cycle != world.player.get_completed_run_cycles() or world.studios.is_empty() or world.studios.size() > MAX_RIVALS: error = "World is not at a save boundary"; return {}
+	if not world.calendars_aligned():error="Rival/player calendar profiles differ";return {}
 	var projected: bool=not world.calendar_offsets.is_empty()
 	if not world.policy_states.is_empty() and world.policy_states.size()!=world.studios.size():error="Unknown career policy owner";return {}
 	if projected and (world.calendar_offsets.size()!=world.studios.size() or world.player._calendar_start_year!=1980): error="Invalid projected world calendar"; return {}
-	if not Market.valid(world.market_snapshot) or world.market_snapshot.cycle_start!=world.cycle-world.cycle%2: error = "Invalid committed market month"; return {}
+	if not Market.valid(world.market_snapshot) or world.market_snapshot.cycle_start!=Clock.month_start(world.cycle,world.player.get_calendar_profile()): error = "Invalid committed market month"; return {}
 	var rows: Array = []
 	var ids: Array = world.studios.keys()
 	ids.sort_custom(func(a: StringName,b: StringName) -> bool: return str(a) < str(b))
@@ -490,7 +495,7 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 		if not migration.known_source(origin.source_id) or migration.SOURCE_REVISIONS[origin.source_id]!=origin.content_revision or origin.cycle>cycle: error="Unknown market migration origin"; return {}
 	var market: Variant = _decode(payload.market,_market_schema())
 	if not error.is_empty() or not Market.valid(market): error = "Invalid market snapshot"; return {}
-	if market.cycle_start!=cycle-cycle%2: error = "Rival market calendar mismatch"; return {}
+	if market.cycle_start!=Clock.month_start(cycle,_payload_calendar(player_payload)): error = "Rival market calendar mismatch"; return {}
 	if payload.studios.is_empty() or payload.studios.size()>MAX_RIVALS: error = "Invalid rival count"; return {}
 	var seen := {}
 	var all_archive_ids := {}
@@ -582,7 +587,7 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 	var expected_facts: Variant=_expected_market_facts(market,player_payload,payload.studios)
 	if expected_facts==null or expected_facts!=market.facts: error="Market owner provenance mismatch"; return {}
 	if not _validate_frozen_market(player_payload,payload.studios,rows,cycle,origin): return {}
-	if market.version==4 and not _book_matches_owners(market,rows):return {}
+	if Market.is_book(market) and not _book_matches_owners(market,rows):return {}
 
 	return {"cycle":cycle,"rows":rows,"history":history,"legacy":legacy,"market":market,"market_origin":origin}
 
@@ -634,7 +639,7 @@ func _validate_frozen_market(player_payload: Dictionary, encoded_rows: Array, de
 			var meta: Dictionary=native.run.release_metadata[id]
 			for age: int in native.run.released_games[id].market_factors:
 				var factor: Dictionary=native.run.released_games[id].market_factors[age]
-				pending.append({"details":factor,"release":str(id),"genre":meta.genre,"theme":meta.theme,"earning_cycle":meta.release_cycle+(age-1)*2+1,"prelude":int(owner.get("offset",0))==72 and meta.release_cycle<72})
+				pending.append({"details":factor,"release":str(id),"genre":meta.genre,"theme":meta.theme,"earning_cycle":meta.release_cycle+Clock.month_end(age-1,native.run.released_games[id].get("calendar",{}))+1,"prelude":int(owner.get("offset",0))==72 and meta.release_cycle<72})
 			if meta.review.has("market"): pending.append({"details":meta.review.market,"genre":meta.genre,"project_id":id,"prelude":int(owner.get("offset",0))==72 and meta.release_cycle<72})
 		if not owner.development.is_empty(): pending.append({"details":owner.development.project._market_details,"genre":owner.development.project._genre_id,"project_id":owner.development.project._release_id})
 		for item: Dictionary in pending:
@@ -642,7 +647,7 @@ func _validate_frozen_market(player_payload: Dictionary, encoded_rows: Array, de
 			if item.get("prelude",false) and item.has("earning_cycle"):
 				if item.earning_cycle>72 or d!=Market.neutral_factor():error="Invalid prelude neutral sales";return false
 				continue
-			if str(d.snapshot_id).begins_with(Book.PREFIX):
+			if Book.is_details(d):
 				var p:=Book.proof(d.snapshot_id)
 				var begin_cycle: int=_historical_begin_cycle(native.run,StringName(item.get("project_id",&"")))
 				if not Book.valid_details(d,item.genre):error="Invalid Book project proof";return false
@@ -650,10 +655,12 @@ func _validate_frozen_market(player_payload: Dictionary, encoded_rows: Array, de
 				# project work. The ordinary player's physical clock starts at0.
 				var owner_offset: int=int(owner.get("offset",0))
 				var freeze_clock: int=begin_cycle-(owner_offset if int(p.epoch_offset)==72 else 0)
-				if begin_cycle<1 or freeze_clock<0 or p.owner!=str(owner.id) or (p.epoch_offset==0 and (owner_offset!=72 or begin_cycle>72)) or d.cycle_start!=freeze_clock-freeze_clock%2:error="Book project freeze boundary mismatch";return false
+				if begin_cycle<1 or freeze_clock<0 or p.owner!=str(owner.id) or (p.epoch_offset==0 and (owner_offset!=72 or begin_cycle>72)) or d.cycle_start!=Clock.month_start(freeze_clock,Clock.shift(native.run.get("calendar",{}),owner_offset if int(p.epoch_offset)==72 else 0)):error="Book project freeze boundary mismatch";return false
 				var expected_basis: Dictionary=Book.build_records(book_records,int(d.cycle_start)+int(p.epoch_offset)).get(str(item.genre),{})
-				var facts: Array=[] if p.epoch_offset==0 else _expected_market_facts(d,player_payload,encoded_rows)
-				var expected: Dictionary=Book.details(Book.snapshot({str(item.genre):expected_basis} if not expected_basis.is_empty() else {},d.cycle_start,p.epoch_offset,facts),str(owner.id),item.genre)
+				var proof_context: Dictionary=d.duplicate(true)
+				if p.has("calendar"):proof_context.calendar=p.calendar
+				var facts: Array=[] if p.epoch_offset==0 else _expected_market_facts(proof_context,player_payload,encoded_rows)
+				var expected: Dictionary=Book.details(Book.snapshot({str(item.genre):expected_basis} if not expected_basis.is_empty() else {},d.cycle_start,p.epoch_offset,facts,p.get("calendar",{})),str(owner.id),item.genre)
 				if expected!=d:error="Book dated source provenance mismatch";return false
 				continue
 			if str(d.snapshot_id).begins_with(Historical.PREFIX):
@@ -675,12 +682,14 @@ func _validate_frozen_market(player_payload: Dictionary, encoded_rows: Array, de
 					if item.earning_cycle>origin.cycle: error="Historical exemption after migration"; return false
 				elif origin.active_projects.get(StringName(owner.id),&"")!=item.project_id: error="Unproven historical project"; return false
 				continue
-			if item.has("earning_cycle") and d.cycle_start!=item.earning_cycle-item.earning_cycle%2: error="Market factor month mismatch"; return false
-			if d.cycle_start>cycle-cycle%2: error="Future frozen market source"; return false
+			if item.has("earning_cycle") and d.cycle_start!=Clock.month_start(item.earning_cycle,Clock.shift(native.run.get("calendar",{}),int(owner.get("offset",0)))): error="Market factor month mismatch"; return false
+			if d.cycle_start>Clock.month_start(cycle,_payload_calendar(player_payload)): error="Future frozen market source"; return false
 			if not snapshots.has(d.cycle_start):
-				var facts: Variant=_expected_market_facts(d,player_payload,encoded_rows)
+				var dated: Dictionary=d.duplicate(true)
+				if Market.calendar_source(str(d.snapshot_id)):dated.calendar=Clock.shift(native.run.get("calendar",{}),int(owner.get("offset",0)))
+				var facts: Variant=_expected_market_facts(dated,player_payload,encoded_rows)
 				if not facts is Array: error="Missing historical market facts"; return false
-				snapshots[d.cycle_start]=Book.snapshot(full_basis,d.cycle_start,72,facts) if not full_basis.is_empty() else {"version":Market.VERSION,"cycle_start":d.cycle_start,"facts":facts,"id":Market.identifier(d.cycle_start,facts)}
+				snapshots[d.cycle_start]=Book.snapshot(full_basis,d.cycle_start,72,facts,Market.calendar_for(dated)) if not full_basis.is_empty() else Market.snapshot(d.cycle_start,facts,Market.calendar_for(dated))
 			var snapshot: Dictionary=snapshots[d.cycle_start]
 			var expected: Dictionary=Market.sales_factor(snapshot,str(owner.id),item.release,str(item.genre),str(item.theme)) if item.has("release") else Market.targets(snapshot,str(owner.id),item.genre)
 			if expected!=d: error="Frozen market history/provenance mismatch"; return false
@@ -842,6 +851,7 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 		world.historical_archive[row.id] = row.archive
 		if row.offset>0: world.calendar_offsets[row.id]=row.offset
 	if not _check_history_and_legacy(world,decoded.history): return null
+	if not world.calendars_aligned():error="Rival/player calendar profiles differ";return null
 	world.bind_market_providers()
 	return world
 
@@ -905,3 +915,10 @@ func _valid_pass_budget(state: Dictionary,definitions: Dictionary) -> bool:
 	var generated: int=preload("res://scripts/simulation/pass_budget.gd").generated(printed)
 	if budget.printed!=printed or budget.spent>generated or held>generated-int(budget.spent) or state.hand.candidate_cards.size()>7 or (int(budget.spent)+state.hand.exhausted.size())%4!=0 or (int(budget.spent)+state.hand.exhausted.size())/4>int(state.project._current_cycle):error="Inconsistent Pass Budget counters/reservations";return false
 	return true
+
+static func _payload_calendar(payload: Dictionary) -> Dictionary:
+	var raw: Dictionary=payload.get("run",{})
+	if not raw.has("calendar"):return {}
+	var codec:=CheckpointCodec.new()
+	var decoded: Variant=codec.decode(raw.calendar,CheckpointSchema.calendar_profile())
+	return decoded if codec.error.is_empty() and decoded is Dictionary and Clock.valid(decoded) else {"invalid":true}

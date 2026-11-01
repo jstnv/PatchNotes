@@ -1,0 +1,125 @@
+[
+  {
+    "name": "verify_run_calendar_and_studio_entry",
+    "exit": 2,
+    "seconds": 18.70300000000134,
+    "errors": [
+      "ERROR: FAIL: Opening a reconstructed summary reuses committed results without time or cash mutation",
+      "ERROR: FAIL: Opening a reconstructed summary reuses committed results without time or cash mutation"
+    ],
+    "ok": false,
+    "argv": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_run_calendar_and_studio_entry.gd",
+      "--quit-after",
+      "100000"
+    ],
+    "script_sha256": "40e6025ba17aafe77a2126735b6c4e4f1b113e472f417d223bdc5313479677f3",
+    "log_sha256": "57176796862f29cb340e77acc711ced9a7a881f669ac60d7085af042117ddd48"
+  },
+  {
+    "name": "verify_sidestreet_scope_and_year",
+    "exit": 1,
+    "seconds": 29.18699999999808,
+    "errors": [
+      "ERROR: FAIL: Cycle 24 shows year 1981 in Studio and shared HUD",
+      "ERROR: FAIL: Passive browsing does not advance year",
+      "ERROR: FAIL: Cycle 95 shows year 1983 in Studio and shared HUD",
+      "ERROR: FAIL: Passive browsing does not advance year",
+      "ERROR: FAIL: Cycle 96 shows year 1984 in Studio and shared HUD",
+      "ERROR: FAIL: Passive browsing does not advance year",
+      "ERROR: FAIL: store updates both year labels at its successful boundary",
+      "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle",
+      "ERROR: FAIL: reserve updates both year labels at its successful boundary",
+      "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle"
+    ],
+    "ok": false,
+    "argv": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_sidestreet_scope_and_year.gd",
+      "--quit-after",
+      "100000"
+    ],
+    "script_sha256": "410533036c33dd210579b3e02934416eee7d795764fa09ba0341adf4300dc991",
+    "log_sha256": "209b0f98a64c2c895bba6a2fe204e1d387579d0fe462fef672852f6c14974a7b"
+  },
+  {
+    "name": "verify_sales_revenue_hud",
+    "exit": 1,
+    "seconds": 19.234000000004016,
+    "errors": [
+      "ERROR: Rival Gameplay: Rolling window advances beyond twelve months",
+      "ERROR: Rival Gameplay: Sales fixture captures a valid Studio checkpoint: Invalid engine state",
+      "ERROR: Rival Gameplay: Studio checkpoint hydrates"
+    ],
+    "ok": false,
+    "argv": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_sales_revenue_hud.gd",
+      "--quit-after",
+      "100000"
+    ],
+    "script_sha256": "5418210a64f8d97a12f530aa454b7178a3f2a8917caca6a0dec50e8e3bec2cbb",
+    "log_sha256": "c02863378f95f066a2be029ff17be41254d47e6095729d6d4e9fe31833f3ede7"
+  },
+  {
+    "name": "verify_studio_finance_integration",
+    "exit": 0,
+    "seconds": 11.125,
+    "errors": [],
+    "ok": true,
+    "argv": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_studio_finance_integration.gd",
+      "--quit-after",
+      "100000"
+    ],
+    "script_sha256": "5519ae3a96bae47bfb0e7d58c3984d1a807c8fd5b402e7d47cdd2fd4196340e7",
+    "log_sha256": "c7daeb6ef290de77081ddaa5b834a4e829b431c1e8e218e36edd06af1e8b1dbe"
+  },
+  {
+    "name": "verify_public_action_engine",
+    "exit": 0,
+    "seconds": 53.375,
+    "errors": [],
+    "ok": true,
+    "argv": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_public_action_engine.gd",
+      "--quit-after",
+      "100000"
+    ],
+    "script_sha256": "2f716fc54ee4bfb900285d8937a60ecdf2d3bc9ba8977225200a89810884e34f",
+    "log_sha256": "f896b9db1db48af74522348caac145851ab490a94ff0dbb63cadee7e174c5116"
+  }
+]

@@ -1,6 +1,7 @@
 ## Candidate legal career policy. Decisions do not consume future RNG/draws.
 extends RefCounted
 const Synergy := preload("res://scripts/market/rival_synergy_choice.gd")
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 var specialty: StringName
 var state := {"project_id":"","search_done":false,"beta_hands":0,"marketing_hands":0,"loan_project":-1}
 var _search := 0
@@ -248,7 +249,8 @@ func _project_plan(session: RefCounted) -> Dictionary:
 
 func _known_dues(run: RunState,cycles: int,planned_schedule: Dictionary={}) -> int:
 	var ledger: Dictionary=run._studio_finance;var first:=run.get_completed_run_cycles();var last:=first+cycles
-	var months: int=last/2-first/2
+	var calendar: Dictionary=run.get_calendar_profile()
+	var months: int=Clock.month(last,calendar)-Clock.month(first,calendar)
 	var total: int=months*(int(ledger.monthly_rent_cents)+StudioFinanceLedger._monthly_payroll(ledger))
 	for bill: Dictionary in ledger.obligations:total+=int(bill.unpaid_cents)
 	var schedules: Array=[]
@@ -257,14 +259,18 @@ func _known_dues(run: RunState,cycles: int,planned_schedule: Dictionary={}) -> i
 	if not planned_schedule.is_empty():schedules.append(planned_schedule)
 	var bank:=preload("res://scripts/finance/bank_loan.gd")
 	for schedule: Dictionary in schedules:
-		var start: int=maxi(1,(first-int(schedule.first_due_cycle))/2+2) if first>=int(schedule.first_due_cycle) else 1
-		var stop: int=mini(int(schedule.term_months),(last-int(schedule.first_due_cycle))/2+1) if last>=int(schedule.first_due_cycle) else 0
+		var first_due: Dictionary=bank.effective_installment(schedule,1,calendar)
+		if first_due.is_empty():return RunState.MAX_SIGNED_INT
+		var first_month: int=Clock.month(first_due.due_cycle,calendar)
+		var start: int=maxi(1,Clock.month(first,calendar)-first_month+2) if first>=int(first_due.due_cycle) else 1
+		var stop: int=mini(int(schedule.term_months),Clock.month(last,calendar)-first_month+1) if last>=int(first_due.due_cycle) else 0
 		for number in range(start,stop+1):
-			var due: Dictionary=bank.installment(schedule,number)
+			var due: Dictionary=bank.effective_installment(schedule,number,calendar)
+			if due.is_empty():return RunState.MAX_SIGNED_INT
 			if int(due.due_cycle)>first and int(due.due_cycle)<=last:total+=int(due.payment_cents)
 	# Existing dated education payments, not a new course or tuition assumption.
-	var dates: Dictionary=bank.schedule(maxi(bank.MIN_PRINCIPAL,months),maxi(1,months),first)
-	if not dates.is_empty():total+=months*StudioFinanceLedger.Education.overlap_reserve(ledger.education,dates)
+	var dates: Dictionary=bank.schedule(maxi(bank.MIN_PRINCIPAL,months),maxi(1,months),first,calendar)
+	if not dates.is_empty():total+=months*StudioFinanceLedger.Education.overlap_reserve(ledger.education,dates,calendar)
 	return total
 
 ## Existing-title cash-flow scenario, not spendable forecast money. The shadow
@@ -281,12 +287,14 @@ func _funded_runway(run: RunState,market: Dictionary,fee: int,feature_hands: int
 	shadow._market_provider=func(_owner: StringName,target: int)->Dictionary:
 		var book:=preload("res://scripts/market/rival_standard_book.gd")
 		var transaction:=preload("res://scripts/market/market_transaction_trial.gd")
-		if market.get("version")==4:
+		if transaction.is_book(market):
 			var world_cycle: int=target-int(market.epoch_offset)
-			var month: int=world_cycle-world_cycle%2;var facts: Array=[]
+			var calendar: Dictionary=Clock.shift(run.get_calendar_profile(),int(market.epoch_offset))
+			var month: int=Clock.month_start(world_cycle,calendar);var facts: Array=[]
+			if month==int(market.cycle_start):return market.duplicate(true)
 			for fact: Dictionary in market.facts:
-				if fact.release_cycle<month and month-fact.release_cycle<=12:facts.append(fact.duplicate(true))
-			return book.snapshot(market.basis,world_cycle,market.epoch_offset,facts)
+				if transaction.within_window(fact.release_cycle,month,calendar):facts.append(fact.duplicate(true))
+			return book.snapshot(market.basis,world_cycle,market.epoch_offset,facts,calendar)
 		return transaction.neutral()
 	for step in range(cycles):
 		# Begin costs no direct fee; reserve all finite Feature fees in the next

@@ -43,7 +43,7 @@ func _run() -> void:
 	if overlay==null:
 		game.queue_free();await process_frame;quit(failures);return
 	expect(game._transition_in_progress and game.guided_tutorial==null,"Creation is guarded before the tutorial exists")
-	expect(overlay.studio_label.text=="Fresh Horizon" and overlay.date_label.text=="1980 · Month 1, First Half","New-save loading shows Studio name and game date")
+	expect(overlay.studio_label.text=="Fresh Horizon" and overlay.date_label.text=="1980 · Month 1, Week 1","New-save loading shows Studio name and game date")
 	menu.studio_created.emit("Duplicate must not win",&"action",[])
 	var event:=InputEventKey.new();event.keycode=KEY_ESCAPE;event.pressed=true
 	root.push_input(event,true)

@@ -1,0 +1,36 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Static function "licensed_ids()" not found in base "res://scripts/engines/engine_entitlements.gd".
+   at: GDScript::reload (res://scripts/run_state.gd:1326)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/persistence/studio_checkpoint.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/persistence/checkpoint_coordinator.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/debug/verify_rival_gameplay_activation.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/debug/verify_sales_revenue_hud.gd:0)
+ERROR: Failed to load script "res://scripts/debug/verify_sales_revenue_hud.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+Loaded 40 cards.
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: fixture_run (res://scripts/debug/verify_sales_revenue_hud.gd:82)
+   GDScript backtrace (most recent call first):
+       [0] fixture_run (res://scripts/debug/verify_sales_revenue_hud.gd:82)
+       [1] _initialize (res://scripts/debug/verify_sales_revenue_hud.gd:9)
+SCRIPT ERROR: Invalid call. Nonexistent function 'get_selected_engine_id' in base 'Nil'.
+   at: release_fixture (res://scripts/debug/verify_sales_revenue_hud.gd:92)
+   GDScript backtrace (most recent call first):
+       [0] release_fixture (res://scripts/debug/verify_sales_revenue_hud.gd:92)
+       [1] _initialize (res://scripts/debug/verify_sales_revenue_hud.gd:15)
+ERROR: Rival Gameplay: Launch shows zero earned revenue, no forecast income
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] _initialize (res://scripts/debug/verify_sales_revenue_hud.gd:17)
+       [2] settle (res://scripts/debug/verify_sales_revenue_hud.gd:79)
+SCRIPT ERROR: Invalid call. Nonexistent function 'complete_productive_action' in base 'Nil'.
+   at: _initialize (res://scripts/debug/verify_sales_revenue_hud.gd:18)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://scripts/debug/verify_sales_revenue_hud.gd:18)
+       [1] settle (res://scripts/debug/verify_sales_revenue_hud.gd:79)

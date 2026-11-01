@@ -1,4 +1,5 @@
 extends RefCounted
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 ## Entitlements use immutable committed launch facts, never owned Scope/count.
 const PRE_ERA_FEATURE_IDS := ["text", "sprites", "4_color_palette", "8_bit_sound", "8_bit_music", "keyboard_and_mouse", "controller", "scrolling", "menu_system", "local_leaderboards", "split_screen", "score_system", "lives_system", "simple_story", "dialogue", "character_backstories", "multiple_endings", "controls", "enemies", "power_ups", "general_combat", "levels", "maps", "exploration", "secrets", "sound_effects", "music", "colored_text", "animated_sprites", "8_color_palette", "recorded_sounds", "16_bit_music", "save_files", "scripted_ai", "multi_directional_scrolling", "branching_nodes", "difficulty_levels", "high_scores", "turn_based_combat", "character_classes", "character_development", "branching_dialogue"]
@@ -64,7 +65,7 @@ static func valid_research(state: Dictionary, definitions: Dictionary) -> bool:
 		if entry.payments.size() == entry.actions: completed[entry.feature_id] = true
 		var definition: Dictionary = definitions[entry.feature_id]
 		if not definition.has("min_year"): continue
-		if int(state.get("calendar_start_year",1980)) + entry.admitted_cycle / 24 < int(definition.min_year): return false
+		if Clock.year(entry.admitted_cycle,int(state.get("calendar_start_year",1980)),state.get("calendar",{})) < int(definition.min_year): return false
 		if definition.has("era_year"):
 			var release_id: StringName = state.store_era_receipts.assignments.get(int(definition.era_year),&"")
 			if not state.release_metadata.has(release_id) or state.release_metadata[release_id].release_cycle > entry.admitted_cycle: return false
@@ -76,7 +77,7 @@ static func valid_research(state: Dictionary, definitions: Dictionary) -> bool:
 		if entry.engine_id==&"legacy_engine" and entry.payment!=null:completed[entry.feature_id]=true
 		var definition: Dictionary=definitions.get(entry.feature_id,{})
 		if not definition.has("min_year"):continue
-		if int(state.get("calendar_start_year",1980))+int(entry.admitted_cycle)/24<int(definition.min_year):return false
+		if Clock.year(int(entry.admitted_cycle),int(state.get("calendar_start_year",1980)),state.get("calendar",{}))<int(definition.min_year):return false
 		if definition.has("era_year"):
 			var release_id: StringName=state.store_era_receipts.assignments.get(int(definition.era_year),&"")
 			if not state.release_metadata.has(release_id) or state.release_metadata[release_id].release_cycle>entry.admitted_cycle:return false

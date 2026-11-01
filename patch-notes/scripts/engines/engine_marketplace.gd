@@ -10,6 +10,8 @@ static func starting_listings() -> Array[Dictionary]:
 	return STARTING.duplicate(true)
 
 static func find(engine_id: StringName) -> Dictionary:
+	if engine_id == preload("res://scripts/engines/public_action_engine.gd").ID:
+		return preload("res://scripts/engines/public_action_engine.gd").definition()
 	for listing: Dictionary in STARTING:
 		if listing.id == engine_id: return listing.duplicate(true)
 	return {}

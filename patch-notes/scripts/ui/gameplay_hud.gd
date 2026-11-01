@@ -1,5 +1,6 @@
 class_name GameplayHUD
 extends Control
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 var project: ProjectState
 var run: RunState
@@ -466,7 +467,7 @@ func _refresh_footer() -> void:
 	var next_bill := "—"
 	if finances.get("available", false):
 		var due: int = finances.get("next_due_cycle", 0)
-		next_bill = "%s · M%d end" % [CashFormatter.format_exact_cents(finances.get("monthly_rent_cents", 0)), due / 2] if due > 0 else "Unavailable"
+		next_bill = "%s · M%d end" % [CashFormatter.format_exact_cents(finances.get("monthly_rent_cents", 0)), Clock.month(due-1,run.get_calendar_profile())] if due > 0 else "Unavailable"
 		if finances.get("unpaid_rent_cents", 0) > 0: next_bill += " · unpaid " + CashFormatter.format_exact_cents(finances.unpaid_rent_cents)
 	footer.text = "Date: %s     |     Cycle: %d     |     Next Bill: %s" % [run.get_calendar_label(), run.get_completed_run_cycles(), next_bill]
 	if finances.get("total_overdue_cents", 0) > 0:

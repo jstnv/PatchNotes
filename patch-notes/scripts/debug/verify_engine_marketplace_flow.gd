@@ -40,6 +40,7 @@ func _verify() -> void:
 	var creator := _studio("Action creator",&"action")
 	creator._bank_run_id = &"incumbent-action"
 	creator._engine_entitlements = Entitlements.create(creator._bank_run_id)
+	creator._engine_features = {} # Explicit legacy creator fixture, not a new public Studio.
 	creator._contract_search = RunState.ContractSearch.create(creator._bank_run_id)
 	creator._employees = EmployeeRoster.create(creator._bank_run_id)
 	creator._publisher_relationships = RunState.RelationshipLedger.create(creator._bank_run_id)

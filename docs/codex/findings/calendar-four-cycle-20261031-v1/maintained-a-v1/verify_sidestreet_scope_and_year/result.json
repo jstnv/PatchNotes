@@ -1,0 +1,34 @@
+{
+  "name": "verify_sidestreet_scope_and_year",
+  "exit": 1,
+  "seconds": 27.54699999999866,
+  "errors": [
+    "ERROR: FAIL: Cycle 24 shows year 1981 in Studio and shared HUD",
+    "ERROR: FAIL: Passive browsing does not advance year",
+    "ERROR: FAIL: Cycle 95 shows year 1983 in Studio and shared HUD",
+    "ERROR: FAIL: Passive browsing does not advance year",
+    "ERROR: FAIL: Cycle 96 shows year 1984 in Studio and shared HUD",
+    "ERROR: FAIL: Passive browsing does not advance year",
+    "ERROR: FAIL: store updates both year labels at its successful boundary",
+    "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle",
+    "ERROR: FAIL: reserve updates both year labels at its successful boundary",
+    "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle",
+    "ERROR: FAIL: campaign updates both year labels at its successful boundary",
+    "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle"
+  ],
+  "ok": false,
+  "argv": [
+    "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_sidestreet_scope_and_year.gd",
+    "--quit-after",
+    "100000"
+  ],
+  "script_sha256": "cc502fe4d65b08e950d1c931261bd36ab60cee5a11715f8b3f45492e17175ae2",
+  "log_sha256": "ea7c5d5992efd9a6737d13d784c5b869500fa4382fd4bcd18c699c75e1b5ec7f"
+}

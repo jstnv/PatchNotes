@@ -1,6 +1,7 @@
 ## Validated actual release facts, shared by inspection and the monthly market.
 ## Explicitly included in the mechanical source identity since market adoption.
 extends RefCounted
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 static func _failure(reason: String, studio_id := "", release_id := "") -> Dictionary:
 	return {"ok":false,"reason":reason,"studio_id":studio_id,"release_id":release_id}
 static func _text(value: Variant) -> bool:
@@ -38,7 +39,7 @@ static func query(world: RefCounted) -> Dictionary:
 			if not metadata.get("release_cycle") is int or metadata.release_cycle<0 or not metadata.get("release_year") is int or metadata.release_year<1980:
 				return _failure("INVALID_RELEASE_DATE",studio_id,release_id)
 			var world_release_cycle: int=int(metadata.release_cycle)-clock_offset
-			if world_release_cycle<0 or int(metadata.release_year)!=1980+world_release_cycle/24:
+			if world_release_cycle<0 or int(metadata.release_year)!=Clock.year(int(metadata.release_cycle),run._calendar_start_year,run.get_calendar_profile()):
 				return _failure("INVALID_MAPPED_RELEASE_DATE",studio_id,release_id)
 			if clock_offset>0:
 				var live: Dictionary=world.live_releases.get(id,{})

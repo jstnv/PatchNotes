@@ -1,5 +1,6 @@
 class_name SalesRevenueModel
 extends RefCounted
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 ## Read-only calendar-month series. The finance ledger already aggregates all
 ## concurrent titles, with cumulative exact-cent rounding and earned/paid split.
@@ -11,12 +12,12 @@ static func read(run: RunState) -> Dictionary:
 	if ids.is_empty(): return {}
 	var ledger := run.get_studio_finance_snapshot()
 	if ledger.is_empty() or not ledger.has("monthly_rows"): return {}
-	var current_month := run.get_completed_run_cycles() / 2 + 1
+	var current_month := Clock.month(run.get_completed_run_cycles(),run.get_calendar_profile())
 	var first_month := current_month
 	var market_count := 0
 	for id in ids:
 		var release := run.get_release_metadata(id)
-		first_month = mini(first_month, int(release.get("release_cycle",run.get_completed_run_cycles())) / 2 + 1)
+		first_month = mini(first_month,Clock.month(int(release.get("release_cycle",run.get_completed_run_cycles())),run.get_calendar_profile()))
 		var sales := run.get_released_game_sales(id)
 		# Runtime releases have no hard expiration. Dormant titles can revive.
 		if sales.get("later_enabled",false) or not sales.get("exhausted",true): market_count += 1

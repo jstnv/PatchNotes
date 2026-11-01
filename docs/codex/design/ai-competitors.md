@@ -1,5 +1,7 @@
 # AI Competitors
 
+**2026-10-31 calendar pacing — IMPLEMENTED locally.** Current gameplay uses4 cycles/month and48/year; certified1977 prelude history retains its original2-cycle calendar and raw72 offset. Player/owner profiles align after closure/hydration and every new monthly Market proof follows Clock; the presence window remains six calendar months. No cohort, policy budget, hand rule, historical standard or founding-capital value changed. [Checks, including genuine odd-boundary paired migration](../logs/2026-10-31-calendar-four-cycle-v1.md).
+
 2026-10-30: the user directly authorized finishing rival quality and the 1977 eight-studio rollout. Canonical implementation and bounded automated/native/export-fixture acceptance are COMPLETE locally; values remain ACTIVE/TRIAL. See the [source-pinned adoption record](../threads/ai-competitors/2026-10-30-rival-quality-rollout-adoption-v1.md) and [execution ledger](../logs/2026-10-30-rival-quality-rollout-in-progress-v1.md).
 
 ## Implemented constraints

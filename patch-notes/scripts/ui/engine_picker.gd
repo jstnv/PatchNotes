@@ -41,7 +41,7 @@ func refresh() -> void:
 	if run != null:
 		var state := run.get_engine_feature_state()
 		var entitlements := run.get_engine_entitlements()
-		for id: StringName in entitlements.owned_ids+entitlements.licensed_ids:
+		for id: StringName in RunState.EngineEntitlements.accessible_ids(entitlements):
 			if not state.engines.has(id):continue
 			choices.add_item(state.engines[id].name)
 			choices.set_item_metadata(choices.item_count-1,id)

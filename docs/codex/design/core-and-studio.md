@@ -1,5 +1,9 @@
 # Core gameplay and Studio
 
+**2026-10-31 calendar acceptance closeout:** previously stale fixtures now use actual public-engine provenance/capacity, owned-engine research controls and real monthly Fan/Continue boundaries. Current4.7.1 native loading/calendar and packaged Windows checks pass; frozen4.7.1 AI certificates remain engine-version bound. [Evidence and limits](../logs/2026-10-31-calendar-acceptance-push-v2.md).
+
+**2026-10-31 calendar pacing — IMPLEMENTED locally.** Fresh Studios use4 productive cycles/month,48/year, with Week1–4 labels. Run/project action counts, passive actions, hands, draws, Pass Budget, scoring, reviews and Studio-only Continue are unchanged. Existing saved dates and progress convert through explicit metadata; monthly boundaries may initially be odd raw cycles. Use the central Clock/current run profile for all new consumers. [Source, tests and limits](../logs/2026-10-31-calendar-four-cycle-v1.md).
+
 **2026-10-31 Studio hub — IMPLEMENTED locally.** Root choices are Market Info, Studio Management and Start Production. Daily Chart/Publishers/Rival Info belong to Market; Store/Employees/Summaries/Bank/Studio Info belong to Management; Produce New Game is always first above Contracts in Production. Child Back/focus is preserved; launch Continue returns to the dashboard. Cash/finance signals refresh selected-hand eligibility after a loan without redraw. Existing unlocks and Studio-only Continue remain. [Source and scoped acceptance](../logs/2026-10-31-studio-hub-bankroll-v1.md).
 
 **2026-10-30 rival opening — IMPLEMENTED locally, ACTIVE/TRIAL.** New saves use eight source-certified 1977 careers and actual frozen history at cycle 0. Player12-Scope starts, existing saved worlds/policies and Studio-only Continue remain exact. [Current AI rules](ai-competitors.md) · [source and bounded acceptance](../threads/ai-competitors/2026-10-30-rival-quality-rollout-adoption-v1.md).

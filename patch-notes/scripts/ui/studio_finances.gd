@@ -1,5 +1,6 @@
 class_name StudioFinances
 extends CanvasLayer
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 ## Passive finance navigation; confirmed Bank actions call atomic RunState APIs.
 signal closed
@@ -360,7 +361,7 @@ func refresh() -> void:
 	var arrears: int = report.get("unpaid_rent_cents", 0)
 	totals_label.text = "Available cash: %s" % (_money(cash) if cash >= 0 else "Unavailable")
 	if available:
-		var due_text := "end of run Month %d (cycle %d)" % [due / 2, due] if due > 0 else "unavailable"
+		var due_text := "end of run Month %d (cycle %d)" % [_due_month(due), due] if due > 0 else "unavailable"
 		totals_label.text += "   ·   Total overdue: %s" % _money(report.get("total_overdue_cents", 0))
 		totals_label.text += "   ·   Monthly rent: %s   ·   Unpaid rent: %s\nNext rent due: %s. Forecasts and unpaid sales are not spendable cash." % [_money(report.get("monthly_rent_cents", 0)), _money(arrears), due_text]
 	var blocked := bool(report.get("financially_blocked", false))
@@ -418,16 +419,17 @@ func _update_expenses(available: bool) -> void:
 	if not available:
 		expense_details.text = "Outstanding history unavailable. No historical bills have been invented."
 		return
-	var lines: Array[String] = ["Outstanding bills · two productive cycles = one month"]
+	var lines: Array[String] = ["Outstanding bills · four productive cycles = one month; historical dates retained"]
 	var bills: Array = report.get("outstanding_expenses", []).duplicate(true)
 	for bill: Dictionary in run.get_studio_finance_snapshot().get("obligations", []):
 		if bill.expense_type in [&"bank_installment",&"payroll",&"student_loan"] and bill.unpaid_cents == 0:
-			bills.append(OutstandingExpenses.describe(bill, run.get_completed_run_cycles()))
+			bills.append(OutstandingExpenses.describe(bill, run.get_completed_run_cycles(),run.get_calendar_profile()))
 	if bills.is_empty(): lines.append("No outstanding bills.")
 	for bill: Dictionary in bills:
 		lines.append("\n%s · %s" % [OutstandingExpenses.LABELS[bill.expense_type], bill.bill_id])
 		lines.append("Original due: Month %d, cycle %d · Original %s · Paid %s · Remaining %s" % [bill.month, bill.due_cycle, _money(bill.due_cents), _money(bill.paid_cents), _money(bill.unpaid_cents)])
-		lines.append("%s · Overdue %d cycles (%.1f months). Credit tier: -%d; next age tier: -%d." % ["Paid on time" if bill.paid_on_time else "Late payment history", bill.overdue_cycles, bill.overdue_cycles / 2.0, bill.penalty, bill.next_penalty])
+		var evaluated_cycle: int = run.get_completed_run_cycles() if bill.unpaid_cents > 0 else bill.settled_cycle
+		lines.append("%s · Overdue %d cycles (%.2f months). Credit tier: -%d; next age tier: -%d." % ["Paid on time" if bill.paid_on_time else "Late payment history", bill.overdue_cycles, Clock.elapsed_months(bill.due_cycle,evaluated_cycle,run.get_calendar_profile()), bill.penalty, bill.next_penalty])
 		if bill.expense_type in [&"bank_installment",&"student_loan"]:
 			lines.append("Principal %s / %s paid · Interest %s / %s paid" % [_money(bill.principal_paid_cents),_money(bill.principal_cents),_money(bill.interest_paid_cents),_money(bill.interest_cents)])
 		for payment: Dictionary in bill.payments:
@@ -562,8 +564,8 @@ func _show_quote() -> void:
 			for loan: Dictionary in report.get("bank_loans", []):
 				if loan.loan_id == _selected_loan: issued = int(loan.issued)
 		if issued < int(terms.term_months):
-			var upcoming := BankLoan.installment(terms, issued + 1)
-			summary.append("Next scheduled payment: %s · Month %d" % [_money(upcoming.payment_cents),upcoming.due_cycle/2])
+			var upcoming := BankLoan.effective_installment(terms, issued + 1,run.get_calendar_profile())
+			summary.append("Next scheduled payment: %s · Month %d" % [_money(upcoming.payment_cents),_due_month(upcoming.due_cycle)])
 		if _quote.get("rules_version") == 2 and _quote.get("accepted", false):
 			if _quote.requested_principal_cents != terms.principal_cents:
 				summary.append("Requested %s → Qualified %s" % [_money(_quote.requested_principal_cents),_money(terms.principal_cents)])
@@ -573,8 +575,8 @@ func _show_quote() -> void:
 		_payment_previous.disabled = _schedule_page == 0
 		_payment_next.disabled = (_schedule_page + 1) * 12 >= int(terms.term_months)
 		for number in range(_schedule_page*12+1,mini((_schedule_page+1)*12+1,int(terms.term_months)+1)):
-			var due := BankLoan.installment(terms,number)
-			lines.append("%d. Month %d / cycle %d: %s = %s principal + %s interest" % [number,due.due_cycle/2,due.due_cycle,_money(due.payment_cents),_money(due.principal_cents),_money(due.interest_cents)])
+			var due := BankLoan.effective_installment(terms,number,run.get_calendar_profile())
+			lines.append("%d. Month %d / cycle %d: %s = %s principal + %s interest" % [number,_due_month(due.due_cycle),due.due_cycle,_money(due.payment_cents),_money(due.principal_cents),_money(due.interest_cents)])
 	if not _payoff.is_empty():
 		lines.append("Outstanding principal %s · Due unpaid interest %s · Payoff now %s. Future interest is waived; no fee." % [_money(_payoff.principal_cents),_money(_payoff.interest_cents),_money(_payoff.total_cents)])
 		summary.append("Remaining principal %s · Payoff now %s" % [_money(_payoff.principal_cents),_money(_payoff.total_cents)])
@@ -633,17 +635,21 @@ func _update_education(available: bool) -> void:
 		_education_payoff = run.get_education_payoff_quote()
 		education_payoff_button.disabled = _education_payoff.is_empty()
 		if account.issued < 96:
-			var due := EducationDebt.installment(terms,int(account.issued)+1)
-			lines.append("Next scheduled due: Month %d / cycle %d · %s." % [due.due_cycle/2,due.due_cycle,_money(due.payment_cents)])
+			var due := EducationDebt.effective_installment(terms,int(account.issued)+1,run.get_calendar_profile())
+			lines.append("Next scheduled due: Month %d / cycle %d · %s." % [_due_month(due.due_cycle),due.due_cycle,_money(due.payment_cents)])
 		else: lines.append("All 96 scheduled bills have been issued. Only existing arrears remain; no new interest.")
 		if not _education_payoff.is_empty(): lines.append("Payoff: %s principal + %s due interest = %s. Other already-due bills paid first: %s. Cash required now: %s. No future bills reserved; no fee or future education interest." % [_money(_education_payoff.principal_cents),_money(_education_payoff.interest_cents),_money(_education_payoff.total_cents),_money(_education_payoff.other_due_cents),_money(_education_payoff.required_cash_cents)])
 	for bill: Dictionary in run.get_studio_finance_snapshot().obligations:
 		if bill.expense_type != &"student_loan": continue
-		var age := OutstandingExpenses.describe(bill,run.get_completed_run_cycles())
+		var age := OutstandingExpenses.describe(bill,run.get_completed_run_cycles(),run.get_calendar_profile())
 		lines.append("\n%s · Original due Month %d / cycle %d · Age %d cycles\nPrincipal paid %s / %s · Interest paid %s / %s · Remaining %s" % [bill.bill_id,bill.month,bill.due_cycle,age.overdue_cycles,_money(bill.principal_paid_cents),_money(bill.principal_cents),_money(bill.interest_paid_cents),_money(bill.interest_cents),_money(bill.unpaid_cents)])
 		for payment: Dictionary in bill.payments: lines.append("  Cycle %d: paid %s" % [payment.cycle,_money(payment.cents)])
 	lines.append("Education arrears do not block production, but overdue bills prevent new Bank borrowing. Paying preserves past late history and gives no immediate credit bonus.")
 	education_details.text = "\n".join(lines)
+
+func _due_month(cycle: int) -> int:
+	return Clock.month(maxi(0,cycle-1),run.get_calendar_profile())
+
 
 func _confirm_education_payoff() -> void:
 	if not visible or page != &"finances" or _education_payoff.is_empty(): return

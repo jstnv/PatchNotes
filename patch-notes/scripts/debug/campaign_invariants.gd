@@ -4,6 +4,7 @@ extends RefCounted
 
 const Replay := preload("res://scripts/simulation/development_replay.gd")
 const Finance := preload("res://scripts/finance/studio_finance_ledger.gd")
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 static func capture(session: RefCounted) -> Dictionary:
 	var releases: Dictionary = {}
@@ -24,7 +25,7 @@ static func check(session: RefCounted,before: Dictionary,request: Dictionary,res
 	_require(Finance.report(ledger,cycle,cash).get("available",false),"finance.journal_reconciles",failures)
 	_require(cycle >= int(before.cycle) and cycle <= int(before.cycle)+1,"calendar.single_cycle_command",failures)
 	# RunState's month is the absolute month ordinal, including after Year 1980.
-	_require(run.get_current_year() == 1980+cycle/24 and run.get_current_month() == cycle/2+1,"calendar.matches_cycle",failures)
+	_require(run.get_current_year() == Clock.year(cycle,run._calendar_start_year,run.get_calendar_profile()) and run.get_current_month() == Clock.month(cycle,run.get_calendar_profile()),"calendar.matches_cycle",failures)
 	_require(session.sequence == int(before.sequence)+int(result.get("ok",false)),"command.accepted_sequence_once",failures)
 	if not result.get("ok",false):
 		_require(before.state == Replay.digest(Replay.state(session)),"rejection.state_atomic",failures)
@@ -50,7 +51,7 @@ static func check(session: RefCounted,before: Dictionary,request: Dictionary,res
 	_require(preceding_cash == cash,"finance.transaction_final_cash",failures)
 	var months: Dictionary = {}
 	for month: Dictionary in ledger.get("monthly_rows",[]):
-		_require(not months.has(month.month) and month.month >= 1 and month.month <= cycle/2+1,"finance.month_row_once",failures)
+		_require(not months.has(month.month) and month.month >= 1 and month.month <= Clock.month(cycle,run.get_calendar_profile()),"finance.month_row_once",failures)
 		months[month.month] = true
 	var bills: Dictionary = {}
 	for bill: Dictionary in ledger.get("obligations",[]):

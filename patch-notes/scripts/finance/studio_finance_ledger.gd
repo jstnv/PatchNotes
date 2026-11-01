@@ -7,6 +7,7 @@ const SCHEMA_VERSION := 6
 const Bank := preload("res://scripts/finance/bank_loan.gd")
 const Education := preload("res://scripts/finance/education_debt.gd")
 const Bills := preload("res://scripts/finance/outstanding_expenses.gd")
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 const MAX_INT: int = 9223372036854775807
 const MONTHLY_RENT_CENTS := 30000
 const SUPPORTED_RENTS := [30000,31500,50000,51500]
@@ -40,8 +41,8 @@ const NONNEGATIVE_ROW_FIELDS: Array[String] = ["opening_cash_cents", "closing_ca
 	"financing_in_cents", "principal_paid_cents", "interest_cents", "interest_paid_cents", "payroll_due_cents", "payroll_paid_cents", "payroll_unpaid_cents"]
 
 
-static func create(cash_cents: int, monthly_rent_cents: int = MONTHLY_RENT_CENTS) -> Dictionary:
-	if cash_cents < 0 or monthly_rent_cents not in SUPPORTED_RENTS: return {}
+static func create(cash_cents: int, monthly_rent_cents: int = MONTHLY_RENT_CENTS, calendar: Dictionary = {}) -> Dictionary:
+	if cash_cents < 0 or monthly_rent_cents not in SUPPORTED_RENTS or not Clock.valid(calendar) or (not calendar.is_empty() and calendar.legacy_until!=0): return {}
 	var row := _new_row(1, 0)
 	row.financing_in_cents = cash_cents
 	row.closing_cash_cents = cash_cents
@@ -51,7 +52,34 @@ static func create(cash_cents: int, monthly_rent_cents: int = MONTHLY_RENT_CENTS
 		"monthly_rows": [row], "obligations": [], "transactions": [], "actions": [],
 		"credit": Bills.create_credit(), "bank_loans": [], "employees": [], "education": {}}
 	_append_transaction(ledger, 0, 1, &"starting_funding", cash_cents, cash_cents, 0, cash_cents, &"")
+	if not calendar.is_empty():
+		ledger.calendar=calendar.duplicate(true)
+		ledger.calendar_cutover_actions=0
 	return ledger
+
+
+## Calendar adoption is metadata only. The action index distinguishes old and
+## newly accepted zero-cycle operations at the exact same productive cycle.
+static func adopt_calendar(ledger: Dictionary, calendar: Dictionary) -> Dictionary:
+	if not _is_valid(ledger) or not Clock.valid(calendar):return {}
+	var previous: Dictionary=ledger.get("calendar",{})
+	if calendar==previous:return ledger.duplicate(true)
+	if not previous.is_empty() or calendar.is_empty() or calendar.legacy_until!=ledger.last_cycle:return {}
+	var result:=ledger.duplicate(true)
+	result.calendar=calendar.duplicate(true)
+	result.calendar_cutover_actions=result.actions.size()
+	return result if _is_valid(result) else {}
+
+
+## Unissued scheduled due query. Original schedules and issued bills retain
+## their exact stored timestamps; this maps the next monthly date only.
+static func payroll_due_cycle(employee: Dictionary, issued: int, calendar: Dictionary = {}) -> int:
+	var issuing: Dictionary=employee.get("calendar",{})
+	if issued<0 or not Clock.valid(issuing) or not Clock.valid(calendar):return -1
+	var first: Dictionary=Clock.position(int(employee.first_due_cycle),issuing)
+	if first.is_empty() or issued>MAX_INT-int(first.month_index):return -1
+	var original:=Clock.month_end(int(first.month_index)+issued,issuing)
+	return Clock.retarget_cycle(original,issuing,calendar) if original>=0 else -1
 
 
 static func plan(ledger: Dictionary, cycle: int, cash_before: int, direct_delta: int,
@@ -82,15 +110,16 @@ static func bank_quote(ledger: Dictionary, principal: Variant, months: Variant, 
 static func _bank_quote_unchecked(ledger: Dictionary, principal: Variant, months: Variant, run_id: StringName) -> Dictionary:
 	# Education overlap depends on dates, not requested principal. An oversized
 	# request that is auto-adjusted must still reserve the real education dues.
-	var dates := Bank.schedule(maxi(Bank.MIN_PRINCIPAL,months),months,ledger.last_cycle) if typeof(months)==TYPE_INT and months>0 else {}
-	var reserve := Education.overlap_reserve(ledger.education,dates)
+	var calendar: Dictionary=ledger.get("calendar",{})
+	var dates := Bank.schedule(maxi(Bank.MIN_PRINCIPAL,months),months,ledger.last_cycle,calendar) if typeof(months)==TYPE_INT and months>0 else {}
+	var reserve := Education.overlap_reserve(ledger.education,dates,calendar)
 	var payroll := _monthly_payroll(ledger)
-	if reserve > MAX_INT-payroll: return {}
+	if reserve < 0 or reserve > MAX_INT-payroll: return {}
 	return Bank.quote(ledger,principal,months,run_id,ledger.monthly_rent_cents,payroll+reserve)
 
 static func open_education(ledger: Dictionary, run_id: StringName, trait_id: StringName) -> Dictionary:
 	if not _is_valid(ledger): return {}
-	var account := Education.create(run_id,trait_id)
+	var account := Education.create(run_id,trait_id,ledger.get("calendar",{}))
 	if account.is_empty(): return {}
 	var operation := {"type":&"education_open","run_id":run_id,"trait_id":trait_id,"account_id":account.account_id}
 	return _apply(ledger,0,ledger.cash_cents,0,&"calendar",0,0,false,account.account_id,true,operation)
@@ -149,7 +178,7 @@ static func pay_off(ledger: Dictionary, quote: Dictionary) -> Dictionary:
 static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, delta: int, kind: StringName, source_id: StringName) -> bool:
 	if operation.get("type") == &"education_open":
 		if typeof(operation.get("run_id")) != TYPE_STRING_NAME or typeof(operation.get("trait_id")) != TYPE_STRING_NAME: return false
-		var account := Education.create(operation.run_id,operation.trait_id)
+		var account := Education.create(operation.run_id,operation.trait_id,ledger.get("calendar",{}))
 		return not account.is_empty() and operation == {"type":&"education_open","run_id":operation.run_id,"trait_id":operation.trait_id,"account_id":account.account_id} and ledger.last_cycle == 0 and ledger.actions.is_empty() and ledger.education.is_empty() and delta == 0 and kind == &"calendar" and source_id == account.account_id
 	if operation.get("type") == &"education_payoff":
 		var expected := _education_payoff_unchecked(ledger)
@@ -160,7 +189,7 @@ static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, del
 		return not expected.is_empty() and operation==expected and delta==-10000 and kind==&"other_expense" and source_id==expected.employee_id
 	if operation.get("type") == &"payroll_schedule":
 		if operation.keys().size()!=7 or operation.get("rules_version")!=2 or typeof(operation.get("employee_id"))!=TYPE_STRING_NAME or typeof(operation.get("receipt_id"))!=TYPE_STRING_NAME or operation.receipt_id.is_empty(): return false
-		if operation.get("revision")!=ledger.actions.size() or typeof(operation.get("wage_cents"))!=TYPE_INT or operation.wage_cents not in [100000,110000,120000,130000,140000] or typeof(operation.get("effective_cycle"))!=TYPE_INT or operation.effective_cycle<=ledger.last_cycle or operation.effective_cycle%2!=0: return false
+		if operation.get("revision")!=ledger.actions.size() or typeof(operation.get("wage_cents"))!=TYPE_INT or operation.wage_cents not in [100000,110000,120000,130000,140000] or typeof(operation.get("effective_cycle"))!=TYPE_INT or operation.effective_cycle<=ledger.last_cycle or not Clock.is_boundary(operation.effective_cycle,ledger.get("calendar",{})): return false
 		for action: Dictionary in ledger.actions:
 			if action.get("operation",{}).get("receipt_id",&"")==operation.receipt_id: return false
 		for e: Dictionary in ledger.employees:
@@ -184,9 +213,9 @@ static func _bank_operation_valid(ledger: Dictionary, operation: Dictionary, del
 		if typeof(quote.get("schedule")) != TYPE_DICTIONARY or typeof(quote.get("run_id")) != TYPE_STRING_NAME: return false
 		var expected: Dictionary
 		if not quote.has("rules_version"):
-			var reserve := Education.overlap_reserve(ledger.education,Bank.schedule(quote.schedule.get("principal_cents"),quote.schedule.get("term_months"),ledger.last_cycle))
+			var reserve := Education.overlap_reserve(ledger.education,Bank.schedule(quote.schedule.get("principal_cents"),quote.schedule.get("term_months"),ledger.last_cycle,ledger.get("calendar",{})),ledger.get("calendar",{}))
 			var payroll := _monthly_payroll(ledger)
-			if reserve > MAX_INT-payroll: return false
+			if reserve < 0 or reserve > MAX_INT-payroll: return false
 			expected = Bank.quote_v1(ledger,quote.schedule.get("principal_cents"),quote.schedule.get("term_months"),quote.run_id,ledger.monthly_rent_cents,payroll+reserve)
 		elif quote.get("rules_version") == 2:
 			expected = _bank_quote_unchecked(ledger,quote.get("requested_principal_cents"),quote.schedule.get("term_months"),quote.run_id)
@@ -242,7 +271,8 @@ static func _report_unchecked(ledger: Dictionary, current_cycle: int, current_ca
 	if ledger.last_cycle != current_cycle or ledger.cash_cents != current_cash:
 		return {"available": false}
 	var rows: Array = ledger.monthly_rows.duplicate(true)
-	var current_month := current_cycle / 2 + 1
+	var calendar: Dictionary=ledger.get("calendar",{})
+	var current_month := Clock.month(current_cycle,calendar)
 	if rows.is_empty() or rows[-1].month < current_month:
 		rows.append(_new_row(current_month, current_cash))
 	for row: Dictionary in rows:
@@ -253,14 +283,13 @@ static func _report_unchecked(ledger: Dictionary, current_cycle: int, current_ca
 		if obligation.paid_on_time: on_time += 1
 		if obligation.late: late += 1
 	var unpaid := _unpaid_unchecked(ledger)
-	var base_cycle := current_cycle - current_cycle % 2
 	return {"available": true, "rows": rows, "cash_cents": current_cash,
 		"unpaid_rent_cents": _unpaid_category(ledger, &"rent"), "total_overdue_cents": unpaid, "monthly_rent_cents": ledger.monthly_rent_cents, "monthly_payroll_cents": _monthly_payroll(ledger),
-		"next_due_cycle": base_cycle + 2 if base_cycle <= MAX_INT - 2 else -1,
+		"next_due_cycle": Clock.next_month_end(current_cycle,calendar),
 		"financially_blocked": _blocking_unpaid_unchecked(ledger) > 0,
 		"outstanding_expenses": _outstanding_unchecked(ledger, current_cycle),
 		"credit": ledger.credit.duplicate(true), "bank_loans": ledger.bank_loans.duplicate(true), "education": ledger.education.duplicate(true),
-		"credit_inputs": {"completed_months": current_cycle / 2,
+		"credit_inputs": {"completed_months": Clock.month(current_cycle,calendar)-1,
 			"paid_on_time_months": on_time, "late_months": late}}
 
 
@@ -272,7 +301,7 @@ static func outstanding(ledger: Dictionary, current_cycle: int) -> Dictionary:
 static func _outstanding_unchecked(ledger: Dictionary, current_cycle: int) -> Array:
 	var result: Array = []
 	for bill: Dictionary in ledger.obligations:
-		if bill.unpaid_cents > 0: result.append(Bills.describe(bill, current_cycle))
+		if bill.unpaid_cents > 0: result.append(Bills.describe(bill, current_cycle,ledger.get("calendar",{})))
 	return result
 
 
@@ -367,25 +396,28 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	if sales_earned > MAX_INT - int(ledger.unsettled_sales_net_cents): return {}
 	var unsettled: int = ledger.unsettled_sales_net_cents + sales_earned
 	if settled > unsettled: return {}
-	var rent_due: int = ledger.monthly_rent_cents if productive and cycle % 2 == 0 else 0
+	var calendar: Dictionary=ledger.get("calendar",{})
+	var rent_due: int = ledger.monthly_rent_cents if productive and Clock.is_boundary(cycle,calendar) else 0
 	if rent_due > MAX_INT - old_unpaid: return {}
 	var available := cash + settled
 	var bank_due := 0
 	if productive:
 		for loan: Dictionary in ledger.bank_loans:
 			if loan.closed or loan.issued >= loan.schedule.term_months: continue
-			var installment := Bank.installment(loan.schedule, loan.issued + 1)
+			var installment := Bank.effective_installment(loan.schedule, loan.issued + 1,calendar)
+			if installment.is_empty():return {}
 			if installment.due_cycle == cycle: bank_due = installment.payment_cents
 	if bank_due > MAX_INT - old_unpaid - rent_due: return {}
 	var payroll_due := 0
 	if productive:
 		for employee: Dictionary in ledger.employees:
-			if cycle == employee.first_due_cycle + employee.issued * 2: payroll_due += payroll_wage(employee,cycle)
+			if cycle == payroll_due_cycle(employee,employee.issued,calendar): payroll_due += payroll_wage(employee,cycle,calendar)
 	if payroll_due > MAX_INT - old_unpaid - rent_due - bank_due: return {}
 	var total_due := old_unpaid + rent_due + bank_due + payroll_due
 	var education_due := {}
 	if productive and not ledger.education.is_empty() and not ledger.education.closed and ledger.education.issued < 96:
-		var due := Education.installment(ledger.education.schedule,int(ledger.education.issued)+1)
+		var due := Education.effective_installment(ledger.education.schedule,int(ledger.education.issued)+1,calendar)
+		if due.is_empty():return {}
 		if due.due_cycle == cycle: education_due = due
 	if not education_due.is_empty() and education_due.payment_cents > MAX_INT-total_due: return {}
 	# Replay owns its private reconstruction and can append in place. Public
@@ -394,16 +426,20 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	if not operation.is_empty():
 		if productive or not _bank_operation_valid(ledger, operation, direct_delta, kind, source_id): return {}
 		if operation.type in [&"hire",&"hire_v2"]:
-			next.employees.append({"employee_id":operation.employee_id,"wage_cents":operation.wage_cents,"hire_cycle":cycle,"first_due_cycle":operation.first_due_cycle,"issued":0})
+			var employee: Dictionary={"employee_id":operation.employee_id,"wage_cents":operation.wage_cents,"hire_cycle":cycle,"first_due_cycle":operation.first_due_cycle,"issued":0}
+			if not calendar.is_empty():employee.calendar=calendar.duplicate(true)
+			next.employees.append(employee)
 		if operation.type == &"payroll_schedule":
 			for e: Dictionary in next.employees:
 				if e.employee_id==operation.employee_id:
 					if not e.has("wage_changes"): e.wage_changes=[]
-					e.wage_changes.append({"cycle":operation.effective_cycle,"wage_cents":operation.wage_cents,"receipt_id":operation.receipt_id})
-		if operation.type == &"education_open": next.education = Education.create(operation.run_id,operation.trait_id)
+					var change: Dictionary={"cycle":operation.effective_cycle,"wage_cents":operation.wage_cents,"receipt_id":operation.receipt_id}
+					if not calendar.is_empty():change.calendar=calendar.duplicate(true)
+					e.wage_changes.append(change)
+		if operation.type == &"education_open": next.education = Education.create(operation.run_id,operation.trait_id,calendar)
 		if operation.type == &"accept":
 			next.bank_loans.append({"loan_id": operation.quote.loan_id, "run_id": operation.quote.run_id, "quote_id": operation.quote.quote_id, "schedule": operation.quote.schedule.duplicate(true), "issued": 0, "principal_paid_cents": 0, "interest_paid_cents": 0, "closed": false, "closed_cycle": -1, "early_payoff": false})
-	var month := (cycle - 1) / 2 + 1 if productive else cycle / 2 + 1
+	var month := Clock.action_month(cycle,productive,calendar)
 	var rows: Array = next.monthly_rows
 	if rows[-1].month < month:
 		rows.append(_new_row(month, cash_before))
@@ -434,13 +470,13 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	cash = available
 	if rent_due > 0:
 		if not _add(row, "rent_due_cents", rent_due): return {}
-		next.obligations.append(Bills.create_bill(StringName("rent:%d" % month), &"studio_rent", &"rent", cycle, rent_due))
+		next.obligations.append(Bills.create_bill(StringName("rent:%d" % month), &"studio_rent", &"rent", cycle, rent_due,calendar))
 		_append_transaction(next, cycle, month, &"rent_due", rent_due, 0, cash, cash, &"", month)
 	if payroll_due > 0:
 		for employee: Dictionary in next.employees:
-			if cycle != employee.first_due_cycle + employee.issued * 2: continue
-			var wage := payroll_wage(employee,cycle)
-			var bill := Bills.create_bill(StringName("%s:payroll:%d" % [employee.employee_id,month]),employee.employee_id,&"payroll",cycle,wage)
+			if cycle != payroll_due_cycle(employee,employee.issued,calendar): continue
+			var wage := payroll_wage(employee,cycle,calendar)
+			var bill := Bills.create_bill(StringName("%s:payroll:%d" % [employee.employee_id,month]),employee.employee_id,&"payroll",cycle,wage,calendar)
 			next.obligations.append(bill)
 			employee.issued += 1
 			if not _add(row,"payroll_due_cents",wage): return {}
@@ -448,9 +484,10 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 	if bank_due > 0:
 		for loan: Dictionary in next.bank_loans:
 			if loan.closed or loan.issued >= loan.schedule.term_months: continue
-			var installment := Bank.installment(loan.schedule, loan.issued + 1)
+			var installment := Bank.effective_installment(loan.schedule, loan.issued + 1,calendar)
+			if installment.is_empty():return {}
 			if installment.due_cycle != cycle: continue
-			var bill := Bills.create_bill(StringName("%s:%d" % [loan.loan_id, installment.number]), loan.loan_id, &"bank_installment", cycle, installment.payment_cents)
+			var bill := Bills.create_bill(StringName("%s:%d" % [loan.loan_id, installment.number]), loan.loan_id, &"bank_installment", cycle, installment.payment_cents,calendar)
 			bill.principal_cents = installment.principal_cents
 			bill.interest_cents = installment.interest_cents
 			bill.principal_paid_cents = 0
@@ -461,7 +498,7 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 			_append_transaction(next, cycle, month, &"bank_interest_due", installment.interest_cents, 0, cash, cash, loan.loan_id, month)
 	if not education_due.is_empty():
 		var account: Dictionary = next.education
-		var bill := Bills.create_bill(StringName("%s:%d" % [account.account_id,education_due.number]),account.account_id,&"student_loan",cycle,education_due.payment_cents)
+		var bill := Bills.create_bill(StringName("%s:%d" % [account.account_id,education_due.number]),account.account_id,&"student_loan",cycle,education_due.payment_cents,calendar)
 		bill.merge({"principal_cents":education_due.principal_cents,"interest_cents":education_due.interest_cents,"principal_paid_cents":0,"interest_paid_cents":0})
 		next.obligations.append(bill)
 		account.issued += 1
@@ -508,7 +545,7 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 				var payment_kind: StringName = {&"rent":&"rent_payment",&"payroll":&"payroll_payment",&"bank_installment":&"bank_payment",&"student_loan":&"education_payment"}[category]
 				_append_transaction(next, cycle, month, payment_kind, payment, -payment, cash, cash - payment, obligation.source_id if category != &"rent" else &"", obligation.month)
 				cash -= payment
-			if not Bills.service(obligation, payment, cycle, month): return {}
+			if not Bills.service(obligation, payment, cycle, month,calendar): return {}
 			if category == &"rent": rows[int(obligation.month) - 1].rent_unpaid_cents = obligation.unpaid_cents
 			if category == &"payroll": rows[int(obligation.month) - 1].payroll_unpaid_cents = obligation.unpaid_cents
 	# The actual merged payment plan must clear blocking arrears on recovery.
@@ -540,10 +577,10 @@ static func _apply(ledger: Dictionary, cycle: int, cash_before: int, direct_delt
 			loan.closed = true
 			loan.closed_cycle = cycle
 	row.closing_cash_cents = cash
-	row.partial = not productive or cycle % 2 != 0
+	row.partial = not productive or not Clock.is_boundary(cycle,calendar)
 	if not _update_totals(row): return {}
-	if productive and cycle % 2 == 0:
-		next.credit = Bills.close_month(next.credit, next.obligations, month, row.net_profit_cents)
+	if productive and Clock.is_boundary(cycle,calendar):
+		next.credit = Bills.close_month(next.credit, next.obligations, month, row.net_profit_cents,calendar)
 		if next.credit.is_empty(): return {}
 	next.last_cycle = cycle
 	next.cash_cents = cash
@@ -590,8 +627,19 @@ static func _validate_journal(ledger: Dictionary) -> bool:
 	for key: String in ["monthly_rows", "obligations", "transactions", "actions"]:
 		if typeof(ledger.get(key)) != TYPE_ARRAY: return false
 	if typeof(ledger.get("monthly_rent_cents")) != TYPE_INT or ledger.monthly_rent_cents not in SUPPORTED_RENTS: return false
+	var calendar: Variant=ledger.get("calendar",{})
+	if not calendar is Dictionary or not Clock.valid(calendar):return false
+	var cutover: Variant=ledger.get("calendar_cutover_actions",-1)
+	if calendar.is_empty():
+		if ledger.has("calendar") or ledger.has("calendar_cutover_actions"):return false
+	elif not cutover is int or cutover<0 or cutover>ledger.actions.size():return false
 	var rebuilt := create(ledger.initial_cash_cents, ledger.monthly_rent_cents)
+	var index:=0
 	for action in ledger.actions:
+		if not calendar.is_empty() and index==cutover:
+			if rebuilt.last_cycle!=calendar.legacy_until:return false
+			rebuilt.calendar=calendar.duplicate(true)
+			rebuilt.calendar_cutover_actions=cutover
 		if typeof(action) != TYPE_DICTIONARY: return false
 		for key: String in ["cycle", "cash_before", "direct_delta", "sales_earned", "settled"]:
 			if typeof(action.get(key)) != TYPE_INT: return false
@@ -601,6 +649,11 @@ static func _validate_journal(ledger: Dictionary) -> bool:
 			action.kind, action.sales_earned, action.settled, action.productive, action.source_id, false, action.get("operation", {}))
 		if step.is_empty(): return false
 		rebuilt = step.ledger
+		index+=1
+	if not calendar.is_empty() and cutover==index:
+		if rebuilt.last_cycle!=calendar.legacy_until:return false
+		rebuilt.calendar=calendar.duplicate(true)
+		rebuilt.calendar_cutover_actions=cutover
 	return rebuilt == ledger
 
 
@@ -664,9 +717,9 @@ static func _monthly_payroll(ledger: Dictionary) -> int:
 
 static func _hire_quote_unchecked(ledger: Dictionary, run_id: StringName) -> Dictionary:
 	var cycle: int = ledger.last_cycle
-	var gap := 2 + int(cycle % 2)
-	if run_id.is_empty() or not ledger.employees.is_empty() or _unpaid_unchecked(ledger) != 0 or ledger.cash_cents < 10000 or cycle > MAX_INT-gap: return {}
-	return {"type":&"hire","run_id":run_id,"employee_id":StringName("%s:production:1" % run_id),"revision":ledger.actions.size(),"fee_cents":10000,"wage_cents":1000,"hire_cycle":cycle,"first_due_cycle":cycle+gap}
+	var due:=Clock.first_full_month_end(cycle,ledger.get("calendar",{}))
+	if run_id.is_empty() or not ledger.employees.is_empty() or _unpaid_unchecked(ledger) != 0 or ledger.cash_cents < 10000 or due<0: return {}
+	return {"type":&"hire","run_id":run_id,"employee_id":StringName("%s:production:1" % run_id),"revision":ledger.actions.size(),"fee_cents":10000,"wage_cents":1000,"hire_cycle":cycle,"first_due_cycle":due}
 
 
 static func hire_quote(ledger: Dictionary, run_id: StringName) -> Dictionary:
@@ -678,10 +731,11 @@ static func hire_employee(ledger: Dictionary, quote: Dictionary, run_id: StringN
 	return _apply(ledger,ledger.last_cycle,ledger.cash_cents,-10000,&"other_expense",0,0,false,quote.employee_id,true,quote)
 
 ## New rules are journal operations; historical $10 hires replay unchanged.
-static func payroll_wage(e: Dictionary, cycle: int) -> int:
+static func payroll_wage(e: Dictionary, cycle: int, calendar: Dictionary = {}) -> int:
 	var amount: int=e.wage_cents
 	for change: Dictionary in e.get("wage_changes",[]):
-		if change.cycle<=cycle: amount=change.wage_cents
+		var effective:=Clock.retarget_cycle(int(change.cycle),change.get("calendar",{}),calendar)
+		if effective>=0 and effective<=cycle: amount=change.wage_cents
 	return amount
 static func specialist_hire_quote(ledger: Dictionary, owner: StringName, role: StringName, validate: bool = true) -> Dictionary:
 	if validate and not _is_valid(ledger): return {}
@@ -690,8 +744,9 @@ static func specialist_hire_quote(ledger: Dictionary, owner: StringName, role: S
 	for e: Dictionary in ledger.employees:
 		if e.employee_id==id: return {}
 	var cycle: int=ledger.last_cycle
-	if cycle>MAX_INT-3:return {}
-	return {"type":&"hire_v2","run_id":owner,"role":role,"employee_id":id,"revision":ledger.actions.size(),"fee_cents":10000,"wage_cents":100000,"hire_cycle":cycle,"first_due_cycle":cycle+2+cycle%2}
+	var due:=Clock.first_full_month_end(cycle,ledger.get("calendar",{}))
+	if due<0:return {}
+	return {"type":&"hire_v2","run_id":owner,"role":role,"employee_id":id,"revision":ledger.actions.size(),"fee_cents":10000,"wage_cents":100000,"hire_cycle":cycle,"first_due_cycle":due}
 static func schedule_payroll(ledger: Dictionary, id: StringName, wage: int, effective: int, receipt: StringName) -> Dictionary:
 	var operation: Dictionary={"type":&"payroll_schedule","employee_id":id,"wage_cents":wage,"effective_cycle":effective,"receipt_id":receipt,"revision":ledger.actions.size(),"rules_version":2}
 	return _apply(ledger,ledger.last_cycle,ledger.cash_cents,0,&"calendar",0,0,false,id,true,operation) if _is_valid(ledger) else {}

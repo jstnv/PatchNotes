@@ -27,6 +27,7 @@ func create(player: RunState,catalog: RefCounted) -> RivalWorld:
 	var codec:=Codec.new();var world:=codec.restore(input.fixture.world,payload,player,catalog)
 	if world==null:error=codec.error;return null
 	if world.studios.size()!=8 or world.calendar_offsets.size()!=8 or world.policy_states.size()!=8 or world.cycle!=0:error="Incomplete eight-Studio opening";return null
+	if not world.calendars_aligned():error="Opening calendar profiles do not share one date";return null
 	return world
 static func copy_catalog(definitions: RefCounted) -> RefCounted:
 	var base: Array[CardData]=[];var extra: Array[CardData]=[]

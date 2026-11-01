@@ -24,10 +24,14 @@ func _initialize() -> void:
 		_capture_bus = AudioServer.get_bus_index(&"Music")
 		AudioServer.add_bus_effect(_capture_bus, _capture)
 	await open_game()
-	game._on_studio_created(STUDIO, &"action", [], game._active_phase)
-	expect(game.run_state.complete_productive_action(Callable(), 0, 0), "Fixture legally reaches second half-month")
+	game._active_phase.studio_created.emit(STUDIO,&"action",[])
+	var creation_deadline:=Time.get_ticks_msec()+90000
+	while game._transition_in_progress and Time.get_ticks_msec()<creation_deadline:await process_frame
+	expect(not game._transition_in_progress and game._active_phase is StudioPhase,"Real asynchronous new-save setup reaches Studio")
+	if game.guided_tutorial!=null:game.guided_tutorial.choice.emit(true,false)
+	expect(game.run_state.complete_productive_action(Callable(), 0, 0), "Fixture legally reaches Week 2")
 	await process_frame
-	expect(await game.checkpoints.wait_saved(), "Fixture reaches a durable second half-month before recording disk bytes")
+	expect(await game.checkpoints.wait_saved(), "Fixture reaches a durable Week 2 before recording disk bytes")
 	var saved: Dictionary = game.checkpoints.store.inspect()
 	expect(saved.status == &"valid", "Fixture is a real validated Studio/world checkpoint")
 	var bytes := FileAccess.get_file_as_bytes(saved.path)
@@ -57,7 +61,7 @@ func _initialize() -> void:
 			return
 		expect(game._loading_checkpoint and overlay.visible, "Loading guard remains active while overlay is visible")
 		expect(overlay.studio_label.text == STUDIO, "Loading identifies saved Studio including Unicode")
-		expect(overlay.date_label.text == "1980 · Month 1, Second Half", "Loading shows the saved year/month/half, not wall-clock date")
+		expect(overlay.date_label.text == "1980 · Month 1, Week 2", "Loading shows the saved year/month/week, not wall-clock date")
 		menu.continue_requested.emit()
 		expect(game.get_children().filter(func(n): return n.name == &"ContinueLoading").size() == 1, "Repeated Continue cannot create another loader")
 		var event := InputEventKey.new()
@@ -124,21 +128,26 @@ func close_game() -> void:
 func capture(label: String) -> void:
 	var output := OS.get_environment("PN_LOADING_CAPTURE_DIR")
 	if output.is_empty() or DisplayServer.get_name() == "headless": return
-	await RenderingServer.frame_post_draw
+	# The fixture runs outside a normal main-scene entrypoint. Explicitly draw
+	# the native viewport rather than awaiting an optional presentation signal.
+	RenderingServer.force_draw()
 	var path := output.path_join(label + ".png")
 	expect(root.get_texture().get_image().save_png(path) == OK, "Rendered capture saved")
 	captures.append(path)
 
 func wait_loading() -> void:
-	while game._loading_checkpoint: await process_frame
+	while game._loading_checkpoint or game._transition_in_progress: await process_frame
 	await process_frame
 
 func check_calendar_boundaries() -> void:
 	var overlay: CanvasLayer = load("res://scripts/ui/continue_loading.gd").new()
 	root.add_child(overlay)
-	for row in [[0,"1980 · Month 1, First Half"],[23,"1980 · Month 12, Second Half"],[24,"1981 · Month 13, First Half"]]:
+	for row in [[0,"1980 · Month 1, First Half"],[23,"1980 · Month 12, Second Half"],[24,"1981 · Month 1, First Half"]]:
 		overlay.show_checkpoint({"run":{"studio_name":STUDIO,"completed_run_cycles":str(row[0])}})
 		expect(overlay.date_label.text == row[1], "Loading calendar agrees with game's global month/year boundary")
+	for row in [[0,"1980 · Month 1, Week 1"],[3,"1980 · Month 1, Week 4"],[4,"1980 · Month 2, Week 1"],[47,"1980 · Month 12, Week 4"],[48,"1981 · Month 1, Week 1"]]:
+		overlay.show_checkpoint({"run":{"studio_name":STUDIO,"completed_run_cycles":str(row[0]),"calendar":{"version":"2","legacy_until":"0"}}})
+		expect(overlay.date_label.text==row[1],"Encoded quarter-month checkpoint boundary displays correctly")
 	overlay.free()
 
 func check_stale_preview_and_failure(saved: Dictionary, bytes: PackedByteArray) -> void:
@@ -174,8 +183,10 @@ func check_teardown(saved: Dictionary, bytes: PackedByteArray) -> void:
 	await open_game()
 	game._active_phase.continue_requested.emit()
 	expect(game._loading_checkpoint, "Scene teardown fixture has an in-flight loader")
-	while game.get_node("ContinueLoading").stage_label.text != "Restoring market…": await process_frame
-	expect(game.checkpoints.run.get_studio_name().is_empty(), "Teardown occurs after validation/player hydration but before attachment")
+	# Background hydration may finish without presenting every intermediate label.
+	# Tear down during the guaranteed entrance cover; test staged hydration below.
+	await process_frame
+	expect(game._loading_checkpoint and game.checkpoints.run.get_studio_name().is_empty(), "Teardown occurs while the load is in flight and before attachment")
 	await close_game()
 	await open_game()
 	expect(game._active_phase is MainMenu and FileAccess.get_file_as_bytes(saved.path) == bytes, "Scene teardown cancels presentation without saving or entering Studio")
@@ -186,6 +197,7 @@ func check_teardown(saved: Dictionary, bytes: PackedByteArray) -> void:
 		var label: String = operation.label()
 		var started := Time.get_ticks_usec()
 		operation.advance()
+		await process_frame
 		load_timings.append({"stage":label,"elapsed_ms":(Time.get_ticks_usec()-started)/1000.0})
 	expect(operation.restored != null and operation.restored.get_studio_name() == STUDIO, "Fresh operation can acquire lease after scene teardown")
 	var expected: Dictionary = game.checkpoints.adapter.capture(operation.restored)

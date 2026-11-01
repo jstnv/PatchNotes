@@ -1,0 +1,17 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+ERROR: Rival Gameplay: New earnings animate the bar upward
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-acceptance-20261031-v2/diagnose_hud.gd:23)
+       [2] settle (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-acceptance-20261031-v2/diagnose_hud.gd:80)
+HUD_DIAG scope=0 projection={ "release_id": &"release_48c812c320fba4d09beac962d17a7d3b", "total_units": 0, "earned_cycles": 1, "total_earned_cycles": 1, "earned_units": 0, "entitlement_cents": 0, "settled_cents": 0, "exhausted": false, "last_processed_run_cycle": 1, "last_settlement_run_cycle": -1, "later_enabled": true, "review_tenths": 0, "launch_awareness": 100, "market_bp": 10000, "campaign_count": 0, "campaign_months": {  }, "organic_awareness_scaled": 0, "active_awareness_scaled": 0, "monthly_units": 0, "market_factors": { 1: { "snapshot_id": "market-0-neutral", "cycle_start": 0, "genre_only": 0, "theme_only": 0, "pair": 0, "factor_bp": 10000, "historical": false } }, &"calendar": { "version": 2, "legacy_until": 0 }, &"run_calendar": { "version": 2, "legacy_until": 0 }, &"base_name": "First", &"release_title": "First", &"release_year": 1980 } review=0.0
+ERROR: Rival Gameplay: Revival adds only actual newly earned revenue
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_rival_gameplay_activation.gd:20)
+       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-acceptance-20261031-v2/diagnose_hud.gd:52)
+       [2] settle (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-acceptance-20261031-v2/diagnose_hud.gd:80)
+SALES_REVENUE_HUD checks=870 failures=2

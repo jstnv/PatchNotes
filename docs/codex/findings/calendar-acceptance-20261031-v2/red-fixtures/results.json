@@ -1,0 +1,76 @@
+[
+  {
+    "name": "verify_sales_revenue_hud",
+    "exit": 1,
+    "seconds": 9.312000000005355,
+    "errors": [
+      "ERROR: Rival Gameplay: Sales fixture captures a valid Studio checkpoint: Invalid engine state",
+      "ERROR: Rival Gameplay: Studio checkpoint hydrates"
+    ],
+    "ok": false,
+    "argv": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_sales_revenue_hud.gd",
+      "--quit-after",
+      "100000"
+    ],
+    "script_sha256": "1042d1eb3146bca37f5b06685c78ff4948db4e7c24c57f8c26787245255ba3a0",
+    "log_sha256": "dbdc868eec33cffdb64e87625aaf5ccb9bb51b8952e0d46a73375d287349daeb"
+  },
+  {
+    "name": "verify_fanbase_checkpoint",
+    "exit": null,
+    "seconds": 72.60899999999674,
+    "errors": [
+      "ERROR: FAIL: Fan launch checkpoint captures: Invalid engine state",
+      "SCRIPT ERROR: Invalid call. Nonexistent function 'complete_productive_action' in base 'Nil'."
+    ],
+    "ok": false,
+    "argv": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_fanbase_checkpoint.gd",
+      "--quit-after",
+      "100000"
+    ],
+    "script_sha256": "9c4c6e9047ff4a723825038dd17eabef76033203a5102db579a20e3e5a795c9f",
+    "log_sha256": "f8f1fe25700e754a2f3d6b433a137ffe634ccd0b5792d162fd0ca2093cf94db9"
+  },
+  {
+    "name": "verify_sidestreet_scope_and_year",
+    "exit": 1,
+    "seconds": 9.202999999994063,
+    "errors": [
+      "ERROR: FAIL: store updates both year labels at its successful boundary",
+      "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle",
+      "ERROR: FAIL: reserve updates both year labels at its successful boundary",
+      "ERROR: FAIL: Reconstructed Studio reads the same year without a cycle"
+    ],
+    "ok": false,
+    "argv": [
+      "C:\\Users\\64jus\\Downloads\\Godot_v4.7.1-stable_win64.exe\\Godot_v4.7.1-stable_win64.exe",
+      "--headless",
+      "--audio-driver",
+      "Dummy",
+      "--path",
+      "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+      "--script",
+      "res://scripts/debug/verify_sidestreet_scope_and_year.gd",
+      "--quit-after",
+      "100000"
+    ],
+    "script_sha256": "daf84d6f437a3a5ce2d0a209c94ef9e6f4e0fd277097262a1f98fc0ad716faa2",
+    "log_sha256": "f688a4a5812ada75d723ceeeeebc9e997d67ba572aca40df58cc539de060d063"
+  }
+]

@@ -1,5 +1,6 @@
 class_name StudioPhase
 extends Control
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 signal tutorial_context_changed(context: StringName)
 
@@ -790,6 +791,7 @@ func _refresh_summary() -> void:
 	var snapshot: Dictionary = metadata.get("review", {})
 	if snapshot.is_empty(): return
 	var earned := _run_state.get_released_game_sales(_selected_release_id)
+	var first_month_cycles := Clock.month_end(1,earned.get("calendar",{}))
 	%SummaryTitle.text = _run_state.get_released_game_display_name(_selected_release_id)
 	%CalendarLabel.text = "Released in %d · Current date: %s" % [metadata.release_year, _run_state.get_calendar_label()]
 	%ReviewLabel.text = "Final Review: %.1f / 10.0 · Production: %.2f · Scope: %.1f%%" % [snapshot.final_review, snapshot.production_rating, snapshot.scope_completion * 100.0]
@@ -798,7 +800,7 @@ func _refresh_summary() -> void:
 	%AwarenessLabel.text = "Awareness: %d · Graphics %d · Sound %d · Technology %d · Design %d" % [snapshot.awareness, snapshot.cores[0], snapshot.cores[1], snapshot.cores[2], snapshot.cores[3]]
 	%ProjectedUnitsLabel.text = "Projected Month 1 Units: %d" % snapshot.projected_units
 	%ProjectedRevenueLabel.text = "Projected Month 1 Gross: %s · Projected Month 1 Net: %s" % [CashFormatter.format_exact_cents(snapshot.projected_gross_cents), CashFormatter.format_exact_cents(snapshot.projected_net_cents)]
-	%EarnedLabel.text = "Earned: %d / 2 Month 1 cycles · Lifetime %d units · Gross: %s" % [earned.earned_cycles, earned.earned_units, CashFormatter.format_exact_cents(earned.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS)]
+	%EarnedLabel.text = "Earned: %d / %d Month 1 cycles · Lifetime %d units · Gross: %s" % [earned.earned_cycles, first_month_cycles, earned.earned_units, CashFormatter.format_exact_cents(earned.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS)]
 	%EntitledLabel.text = "Earned Net Entitlement: %s" % CashFormatter.format_exact_cents(earned.entitlement_cents)
 	%SettledLabel.text = "Settled Revenue: %s" % CashFormatter.format_exact_cents(earned.settled_cents)
 	%UnpaidLabel.text = "Currently Unpaid: %s" % CashFormatter.format_exact_cents(earned.entitlement_cents - earned.settled_cents)
@@ -812,19 +814,19 @@ func _refresh_summary() -> void:
 		%EntitledLabel.text = "Raw title net: %s · Studio entitlement after recoup: %s" % [CashFormatter.format_exact_cents(earned.entitlement_cents),CashFormatter.format_exact_cents(rights.studio_earned_cents)]
 		%SettledLabel.text = "Studio sales paid: %s" % CashFormatter.format_exact_cents(rights.studio_settled_cents)
 		%UnpaidLabel.text = "Studio unpaid sales: %s" % CashFormatter.format_exact_cents(rights.studio_earned_cents-rights.studio_settled_cents)
-	%ExhaustionLabel.text = "Month 1 sales complete (2/2 cycles); later sales continue" if earned.exhausted else "Month 1 sales remaining: %d cycles" % (2 - earned.earned_cycles)
+	%ExhaustionLabel.text = "Month 1 sales complete (%d/%d cycles); later sales continue" % [first_month_cycles,first_month_cycles] if earned.exhausted else "Month 1 sales remaining: %d cycles" % (first_month_cycles - earned.earned_cycles)
 	var later := ReleasedGameSales.get_projection(earned)
 	var offer := _run_state.get_post_launch_campaign_offer(_selected_release_id)
-	%CurrentAgeLabel.text = "Next sales: release-age Month %d, cycle %d of 2" % [later.get("next_age_month", 1), later.get("next_age_cycle", 1)]
+	%CurrentAgeLabel.text = "Next sales: release-age Month %d, cycle %d of %d" % [later.get("next_age_month", 1), later.get("next_age_cycle", 1),later.get("cycle_count",2)]
 	if int(later.get("next_age_month", 1)) == 1:
 		%OrganicAwarenessLabel.text = "Organic Awareness begins in release-age Month 2."
-		%LaterProjectedUnitsLabel.text = "Month 1 forecast: %d units across two earning cycles" % int(later.get("projected_month_units", 0))
+		%LaterProjectedUnitsLabel.text = "Month 1 forecast: %d units across %d earning cycles" % [int(later.get("projected_month_units", 0)),first_month_cycles]
 	else:
 		%OrganicAwarenessLabel.text = "Organic Awareness: %.4f" % (float(later.get("organic_awareness_scaled", 0)) / 10000.0)
 		%LaterProjectedUnitsLabel.text = "Projected units this release-age month: %d organic" % int(later.get("projected_month_units", 0))
 		if offer.get("eligible", false):
 			%LaterProjectedUnitsLabel.text += " · %d with campaign" % int(later.get("campaign_projected_month_units", 0))
-	%LaterProjectedUnitsLabel.text += "\nNew age months are before future market crowding; existing halves retain their factor."
+	%LaterProjectedUnitsLabel.text += "\nNew age months are before future market crowding; existing earning cycles retain their factor."
 	%CampaignButton.disabled = not offer.get("can_purchase", false)
 	if not offer.get("eligible", false):
 		%CampaignStatusLabel.text = "Campaigns open only at the first sales cycle of this game's Month 2 or later."

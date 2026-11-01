@@ -1,5 +1,6 @@
 class_name EmployeePanel
 extends Control
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 signal closed
 signal confirmed
 var run: RunState
@@ -57,8 +58,8 @@ func _refresh() -> void:
 	var payroll:=run.get_studio_finance_snapshot()
 	var total:=0;var current:=0
 	for pay: Dictionary in payroll.employees:
-		total+=StudioFinanceLedger.payroll_wage(pay,StudioFinanceLedger.MAX_INT)
-		current+=StudioFinanceLedger.payroll_wage(pay,run.get_completed_run_cycles())
+		total+=StudioFinanceLedger.payroll_wage(pay,StudioFinanceLedger.MAX_INT,run.get_calendar_profile())
+		current+=StudioFinanceLedger.payroll_wage(pay,run.get_completed_run_cycles(),run.get_calendar_profile())
 	footer.text="Monthly payroll: current %s · scheduled %s · Cash %s"%[CashFormatter.format_exact_cents(current),CashFormatter.format_exact_cents(total),CashFormatter.format_exact_cents(run.get_cash_cents())]
 	if section==&"roster":
 		FolderUI.label(content,"One specialist per role · Hiring unlocks after your second release",&"SubheadingLabel")
@@ -154,10 +155,11 @@ func _career_course_card(e: Dictionary,course: StringName) -> void:
 func _payroll_copy(parent: Node,e: Dictionary,payroll: Dictionary) -> void:
 	for pay: Dictionary in payroll.employees:
 		if pay.employee_id!=e.employee_id:continue
-		var due: int=pay.first_due_cycle+pay.issued*2
-		FolderUI.label(parent,"Current wage %s/month · Next bill %s at cycle %d"%[CashFormatter.format_exact_cents(StudioFinanceLedger.payroll_wage(pay,run.get_completed_run_cycles())),CashFormatter.format_exact_cents(StudioFinanceLedger.payroll_wage(pay,due)),due])
+		var due: int=StudioFinanceLedger.payroll_due_cycle(pay,int(pay.issued),run.get_calendar_profile())
+		FolderUI.label(parent,"Current wage %s/month · Next bill %s at cycle %d"%[CashFormatter.format_exact_cents(StudioFinanceLedger.payroll_wage(pay,run.get_completed_run_cycles(),run.get_calendar_profile())),CashFormatter.format_exact_cents(StudioFinanceLedger.payroll_wage(pay,due,run.get_calendar_profile())),due])
 		for change: Dictionary in pay.get("wage_changes",[]):
-			if change.cycle>run.get_completed_run_cycles():FolderUI.label(parent,"Scheduled wage %s/month from cycle %d"%[CashFormatter.format_exact_cents(change.wage_cents),change.cycle])
+			var effective: int=Clock.retarget_cycle(int(change.cycle),change.get("calendar",{}),run.get_calendar_profile())
+			if effective>run.get_completed_run_cycles():FolderUI.label(parent,"Scheduled wage %s/month from cycle %d"%[CashFormatter.format_exact_cents(change.wage_cents),effective])
 static func _criterion(course: StringName) -> String:
 	return "Commit one Beta hand that actually discovers a Hidden Bug with Search and fixes a Known Bug with Debug." if course==&"mixed" else "Across projects, commit three pure four-Search and three pure four-Debug Beta hands. Zero-output hands count."
 static func _benefit(course: StringName) -> String:

@@ -27,7 +27,7 @@ static func create_fresh_session(recipe: Variant, definitions: RefCounted) -> Re
 	run._engine_entitlements = _replace_identity(run._engine_entitlements,generated,stable)
 	run._engine_features = _replace_identity(run._engine_features,generated,stable)
 	run._bank_run_id = StringName(stable)
-	run._engine_entitlements = RunState.EngineEntitlements.create(run._bank_run_id)
+	run._engine_entitlements = RunState.EngineEntitlements.create_public(run._bank_run_id) if run._engine_entitlements.get("version")==2 else RunState.EngineEntitlements.create(run._bank_run_id)
 	run._employees = EmployeeRoster.create(StringName(stable))
 	run._contract_search=RunState.ContractSearch.create(StringName(stable))
 	run._publisher_relationships = RunState.RelationshipLedger.create(StringName(stable))

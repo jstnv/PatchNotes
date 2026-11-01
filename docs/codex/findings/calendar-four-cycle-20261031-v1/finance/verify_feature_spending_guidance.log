@@ -1,0 +1,30 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Preload file "res://resources/ui/workspace_theme.tres" does not exist.
+   at: GDScript::reload (res://scripts/ui/pause_menu.gd:36)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/ui/feature_store_map.gd:0)
+SCRIPT ERROR: Parse Error: Preload file "res://resources/ui/workspace_theme.tres" does not exist.
+   at: GDScript::reload (res://scripts/ui/folder_ui.gd:5)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "THEME" constant because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/ui/folder_ui.gd:5)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "THEME".
+   at: GDScript::reload (res://scripts/ui/quit_confirmation.gd:7)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/ui/feature_store.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/debug/verify_feature_spending_guidance.gd:0)
+ERROR: Failed to load script "res://scripts/debug/verify_feature_spending_guidance.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+PASS: Create real studio funding/finance
+PASS: No invented cycle average on a new run
+PASS: No-history quote explicitly lacks a rent horizon
+PASS: Missing history is never displayed as zero rent
+ERROR: Node not found: "CardDatabase" (relative to "/root").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] go (res://scripts/debug/verify_feature_spending_guidance.gd:51)
+SCRIPT ERROR: Attempt to call function 'get_card' in base 'null instance' on a null instance.
+   at: go (res://scripts/debug/verify_feature_spending_guidance.gd:53)
+   GDScript backtrace (most recent call first):
+       [0] go (res://scripts/debug/verify_feature_spending_guidance.gd:53)

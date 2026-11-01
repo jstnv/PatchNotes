@@ -15,7 +15,7 @@ func _initialize() -> void:
 	var first := release_fixture(run,"First",0.0)
 	await settle()
 	expect(hud.visible and hud.model.total_cents == 0 and hud.model.market_count == 1,"Launch shows zero earned revenue, no forecast income")
-	expect(run.complete_productive_action(),"First earning half commits")
+	expect(run.complete_productive_action(),"First earning quarter commits")
 	await settle()
 	var before := Replay.digest(run)
 	var target: float = hud._target[1]
@@ -28,11 +28,11 @@ func _initialize() -> void:
 	await create_timer(0.75).timeout
 	expect(hud.chart.displayed[1] == target and not hud.is_processing(),"Bar reaches its exact target then stops processing")
 	expect(Replay.digest(run) == before,"Animation creates no cash, cycles, sales or RNG draws")
-	expect(hud.model.unpaid_cents == hud.model.total_cents and hud.model.settled_cents == 0,"Earned half-month is distinct from paid cash")
+	expect(hud.model.unpaid_cents == hud.model.total_cents and hud.model.settled_cents == 0,"Earned quarter-month is distinct from paid cash")
 	# Opposite launch alignment and concurrent titles exercise calendar aggregation.
 	var second := release_fixture(run,"Second",0.0)
 	await settle()
-	for cycle in range(2,33):
+	for cycle in range(2,65):
 		expect(run.complete_productive_action(),"Productive cycle %d" % cycle)
 		await settle()
 		check_model(run,hud)
@@ -89,7 +89,8 @@ func fixture_run() -> RunState:
 
 func release_fixture(run: RunState,title: String,extra: float = 0.0) -> ProjectState:
 	var project := PrimitivePredevelopment.prepare_project(title,&"action",&"fantasy",run)
-	project.add_core_scores_and_scope({0:12+int(extra),1:12,2:12,3:12},30)
+	assert(project.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()))
+	assert(project.add_core_scores_and_scope({0:12+int(extra),1:12,2:12,3:12},run.get_selected_engine_capacity()))
 	project.initialize_snapshots(&"fast_follower",&"stable_market")
 	project.finalize_design_bugs(false,0,[&"text"],[])
 	project.finalize_alpha(0,[],[])
@@ -112,12 +113,17 @@ func check_model(run: RunState,hud: SalesRevenueHUD) -> void:
 		var report := run.get_released_game_monthly_report(id)
 		expect(not report.is_empty(),"Independent per-title replay is valid")
 		if report.is_empty(): continue
-		earned += int(report.net_cents)
-		paid += int(report.settled_cents)
+		earned += int(report.studio_net_cents)
+		paid += int(report.studio_settled_cents)
+		var cumulative_net:=0
+		var cumulative_royalty:=0
 		for month: Dictionary in report.rows:
 			for slice: Dictionary in month.slices:
-				var calendar_month := (int(slice.run_cycle)-1) / 2 + 1
-				rows[calendar_month] = int(rows.get(calendar_month,0)) + int(slice.net_cents)
+				var calendar_month := preload("res://scripts/calendar/calendar_clock.gd").action_month(int(slice.run_cycle),true,run.get_calendar_profile())
+				cumulative_net+=int(slice.net_cents)
+				var royalty:=preload("res://scripts/engines/engine_royalty.gd").cumulative(cumulative_net,int(report.get("engine_royalty_basis_points",0)))
+				rows[calendar_month] = int(rows.get(calendar_month,0)) + int(slice.net_cents)-(royalty-cumulative_royalty)
+				cumulative_royalty=royalty
 	expect(hud.model.total_cents == earned and hud.model.settled_cents == paid and hud.model.unpaid_cents == earned-paid,"Aggregate graph matches exact per-title earnings and settlement")
 	for row: Dictionary in hud.model.rows:
 		expect(row.cents == rows.get(row.month,0),"Calendar bar reconciles to actual earned slices")

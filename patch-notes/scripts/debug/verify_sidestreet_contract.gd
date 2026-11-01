@@ -17,8 +17,9 @@ func check(ok: bool, label: String) -> void:
 		push_error("FAIL: " + label)
 
 
-func release(total_units: int = 0, scope: int = 30, required_scope: int = 30) -> ProjectState:
+func release(total_units: int = 0, scope: int = 30, required_scope: int = 30, owner: RunState = null) -> ProjectState:
 	var project := ProjectState.new(required_scope)
+	if owner!=null:assert(project.set_engine_id(owner.get_selected_engine_id(),owner.get_selected_engine_capacity()))
 	project.add_scope(scope) # Qualified by default; under-Scope cases have their own verifier.
 	project.initialize_snapshots(&"fast_follower", &"stable_market")
 	project.finalize_design_bugs(false, 0, [&"text"], [])

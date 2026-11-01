@@ -1,0 +1,11 @@
+from pathlib import Path
+import sys,subprocess,json,time,socket,argparse
+ROOT=Path(__file__).resolve().parents[4];sys.path.insert(0,str(ROOT));from tools import simulate as sim
+p=argparse.ArgumentParser();p.add_argument('--project',type=Path,required=True);p.add_argument('--script',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--godot',type=Path,default=Path('C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe'));p.add_argument('--native',action='store_true');p.add_argument('--timeout',type=int,default=180);a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
+env=sim.isolated_environment(out/'profile');sock=socket.socket();sock.bind(('127.0.0.1',0));env['PN_CHECKPOINT_TEST_PORT']=str(sock.getsockname()[1]);sock.close();env['PN_CARD_FRAME_OUTPUT']=str(out/'report.json');env['PN_LOADING_CAPTURE_DIR']=str(out);env['PN_CALENDAR_CAPTURE_DIR']=str(out)
+project=a.project.resolve();packed=not (project/"project.godot").exists();hashes={p.name:sim.sha(p) for p in project.iterdir() if p.suffix in [".exe",".pck"]} if packed else sim.source_hashes(project);sim.write_json(out/'source-manifest.json',hashes)
+argv=[str(a.godot.resolve())]+([] if a.native else ['--headless'])+['--audio-driver','Dummy','--path',str(project),'--script',str(a.script.resolve()),'--quit-after','100000','--','--output='+str(out/'report.json')];start=time.monotonic();code=None
+try:
+ with (out/'godot.log').open('wb') as f:code=subprocess.run(argv,cwd=ROOT,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=a.timeout).returncode
+except subprocess.TimeoutExpired:pass
+log=(out/'godot.log').read_text(encoding='utf-8',errors='replace');errors=[x for x in log.splitlines() if x.startswith(('ERROR:','SCRIPT ERROR:','FAIL:'))];fenced=({p.name:sim.sha(p) for p in project.iterdir() if p.suffix in [".exe",".pck"]}==hashes) if packed else (sim.check_snapshot(project,hashes) is None);assert fenced;result={'exit':code,'ok':code==0 and not errors,'errors':errors,'seconds':time.monotonic()-start,'native':a.native,'audio':'Dummy','argv':argv,'source_unchanged':True,'script_sha256':sim.sha(a.script),'log_sha256':sim.sha(out/'godot.log')};sim.write_json(out/'result.json',result);print(json.dumps(result));print(log[-2000:]);sys.exit(0 if result['ok'] else 1)

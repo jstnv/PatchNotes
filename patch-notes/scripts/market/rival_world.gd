@@ -4,6 +4,7 @@
 class_name RivalWorld
 extends RefCounted
 const DecisionPolicy := preload("res://scripts/simulation/decision_policy.gd")
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 var player: RunState
 var cycle := -1
 var studios: Dictionary = {}
@@ -132,6 +133,10 @@ func initialize_projected_cohort(player_run: RunState,sessions: Dictionary,archi
 		historical_archive[id]=archives[id].duplicate(true)
 		studios[id].run._closed_historical_ids=closures[id].duplicate(true)
 		studios[id].run._historical_close_cycle=offset
+		# The certified prelude keeps its historical clock. Convert only after
+		# closure, so its raw72 offset and all historical stamps stay intact.
+		if not player_run.get_calendar_profile().is_empty() and not studios[id].run.adopt_calendar():return false
+	if not calendars_aligned():return false
 	bind_market_providers()
 	return true
 
@@ -139,8 +144,21 @@ func bind_market_providers() -> void:
 	if player!=null: player._market_provider=Callable(self,"market_for_run")
 	for id: StringName in studios:
 		studios[id].run._market_provider=Callable(self,"market_for_run")
+## Offsets remain raw owner-action differences. Converted profiles rebase the
+## calendar anchor by that same offset; no owner history or project is rescaled.
+func calendars_aligned() -> bool:
+	if player==null or not Clock.valid(player.get_calendar_profile()):return false
+	var player_calendar: Dictionary=player.get_calendar_profile()
+	for id: StringName in studios:
+		var owner_calendar: Dictionary=studios[id].run.get_calendar_profile()
+		var offset: int=int(calendar_offsets.get(id,0))
+		if not Clock.valid(owner_calendar):return false
+		if player_calendar.is_empty():
+			if not owner_calendar.is_empty():return false
+		elif owner_calendar.is_empty() or int(owner_calendar.legacy_until)<offset or int(owner_calendar.legacy_until)-offset!=int(player_calendar.legacy_until):return false
+	return true
 func market_for_run(owner_id: StringName, target_cycle: int) -> Dictionary:
-	if player==null: return {}
+	if player==null or not calendars_aligned(): return {}
 	if owner_id==player._bank_run_id:
 		if target_cycle!=cycle+1: return {}
 		return preload("res://scripts/market/market_transaction_trial.gd").preview(self,target_cycle)
@@ -150,7 +168,7 @@ func market_for_run(owner_id: StringName, target_cycle: int) -> Dictionary:
 ## an idle rival still earns/settles/owes one calendar cycle through RunState.
 ## max_zero_steps is an explicit work bound, not a balance or CPU default.
 func advance_committed_player_cycle(policies: Dictionary, max_zero_steps: int) -> Dictionary:
-	if _scheduler_failed or _busy or player == null or max_zero_steps < 1 or cycle < 0 or player.get_completed_run_cycles() != cycle + 1: return {"ok":false,"reason":"Player cycle boundary unavailable"}
+	if _scheduler_failed or _busy or player == null or max_zero_steps < 1 or cycle < 0 or player.get_completed_run_cycles() != cycle + 1 or not calendars_aligned(): return {"ok":false,"reason":"Player cycle boundary unavailable"}
 	if not preload("res://scripts/market/market_transaction_trial.gd").commit_after_player(self,player._market_committed_candidate): return {"ok":false,"reason":"Player market preflight unavailable"}
 	for id: StringName in studios:
 		if not policies.get(id) is Callable or not policies[id].is_valid() or studios[id].run.get_completed_run_cycles() != cycle+int(calendar_offsets.get(id,0)): return {"ok":false,"reason":"Rival policy or calendar unavailable","studio_id":id}
@@ -317,7 +335,7 @@ func observation() -> Dictionary:
 ## closures, legacy rules, scene listeners or checkpoint callbacks cross threads.
 ## Every owner observes the same already-frozen month; publication stays sorted.
 func _parallel_safe(ids: Array,policies: Dictionary) -> bool:
-	if not parallel_careers or ids.size()!=8 or get_script().resource_path!="res://scripts/market/rival_world.gd":return false
+	if not parallel_careers or ids.size()!=8 or get_script().resource_path!="res://scripts/market/rival_world.gd" or not calendars_aligned():return false
 	for id: StringName in ids:
 		var run: RunState=studios[id].run
 		if studios[id].get_script()!=preload("res://scripts/simulation/campaign_session.gd") or studios[id].catalog.get_script()!=preload("res://scripts/simulation/development_catalog.gd") or run._market_provider!=Callable(self,"market_for_run") or policies[id].get_method()!=&"choose":return false

@@ -42,7 +42,7 @@ func _verify_studio_summary(revealed: bool) -> void:
 	_expect(not studio.get_node("%SummaryPanel").visible, "Summary is hidden on Studio entry")
 	studio.open_summary()
 	await process_frame
-	var text := _visible_text(studio)
+	var text := _visible_text(studio.get_node("%SummaryPanel"))
 	_expect(text.contains("Month 2, Second Half") and text.contains("Projected Month 1 Units: 750") and text.contains("Projected Month 1 Net: $5244.75"), "Studio displays calendar and exact projected release totals")
 	_expect(text.contains("Earned: 0 / 2 Month 1 cycles · Lifetime 0 units") and text.contains("Settled Revenue: $0.00"), "Studio clearly distinguishes projected from earned and settled values")
 	_expect(before == [run.get_completed_run_cycles(), run.get_cash_cents(), state.get_current_cycle()], "Studio entry costs zero calendar/project cycles and zero cash")
@@ -55,7 +55,7 @@ func _verify_studio_summary(revealed: bool) -> void:
 	root.add_child(rebuilt)
 	_expect(rebuilt.setup(state, run, database), "Studio reconstructs from committed results")
 	rebuilt.open_summary()
-	_expect(_visible_text(rebuilt) == text, "Opening a reconstructed summary reuses committed results without time or cash mutation")
+	_expect(_visible_text(rebuilt.get_node("%SummaryPanel")) == text and before == [run.get_completed_run_cycles(),run.get_cash_cents(),state.get_current_cycle()], "Opening a reconstructed summary reuses committed results without time or cash mutation")
 	studio.queue_free()
 	rebuilt.queue_free()
 	await process_frame

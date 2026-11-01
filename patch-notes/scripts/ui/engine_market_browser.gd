@@ -81,7 +81,15 @@ func _refresh_details() -> void:
 	var selected: Dictionary=state.engines.get(run.get_selected_engine_id(),{})
 	status.text="Selected for new projects: "+str(selected.get("name","Built-in Engine"))
 	var text: Array[String]=[]
-	if listing.is_empty():
+	if listing.get("type")==&"public":
+		text.append("Public · Access provided to every new Studio; not engine ownership.")
+		text.append("Action specialty · No upfront fee · 30% royalty on post-platform Studio revenue.")
+		text.append("Specialization: +0.1 Graphics and Technology, added to the existing multiplier.")
+		text.append("Fixed Feature library · Implementation and respec unavailable.\nTechnology Skill Tree unavailable · No available upgrades.")
+		var feature_names: Array[String]=[]
+		for id: StringName in listing.library:feature_names.append(str(run._feature_definitions[id].name))
+		text.append("Features: "+", ".join(feature_names))
+	elif listing.is_empty():
 		text.append("Owned · Proprietary library" if row.get("kind")==&"proprietary" else "Owned · Fixed library")
 		text.append("No license fee or royalty.")
 	else:
@@ -93,11 +101,11 @@ func _refresh_details() -> void:
 	var capacity: int=int(row.get("capacity",listing.get("max_scope",ProjectState.MAX_SIGNED_INT)))
 	text.append("No engine Scope cap." if capacity==ProjectState.MAX_SIGNED_INT else "Maximum played Scope: %d. Game requirement remains 30."%capacity)
 	if owned:text.append("%d implemented · %d configured Features"%[row.implemented.size(),row.committed.size()])
-	text.append("Choose an owned engine here, or in game/Contract setup. Started projects and accepted Contract pools stay unchanged.")
+	text.append("Choose an available engine here, or in game/Contract setup. Started projects and accepted Contract pools stay unchanged.")
 	description.text="\n\n".join(text)
 	action.text="Selected" if selected_id==run.get_selected_engine_id() else "Use this engine" if owned else "License · "+CashFormatter.format_exact_cents(listing.license_cents)
 	action.disabled=selected_id==run.get_selected_engine_id() if owned else world==null or not world.studios.has(listing.creator_id) or run.get_cash_cents()<int(listing.license_cents)
-	action.tooltip_text="Owned and licensed engines are available in setup." if owned else "Pays the creator once; does not automatically switch your selected engine."
+	action.tooltip_text="Available engines can be selected in setup." if owned else "Pays the creator once; does not automatically switch your selected engine."
 
 func _act() -> void:
 	var state:=run.get_engine_feature_state()

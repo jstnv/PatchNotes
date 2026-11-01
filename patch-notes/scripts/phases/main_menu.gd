@@ -1,5 +1,6 @@
 class_name MainMenu
 extends Control
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 signal studio_created(name: String, specialty: StringName, trait_ids: Array)
 signal tutorial_requested
@@ -87,7 +88,7 @@ func _ready() -> void:
 	if checkpoint_info.status != &"empty": _actions.StartGame.text = "New Run"
 	if checkpoint_info.status == &"valid":
 		var saved: Dictionary = checkpoint_info.payload.run
-		FolderUI.label(_title_screen,"%s · %d, Month %d"%[saved.studio_name,1980+int(saved.completed_run_cycles)/24,int(saved.completed_run_cycles)/2+1],&"MetadataLabel").name="SavedStudio"
+		FolderUI.label(_title_screen,"%s · %s"%[saved.studio_name,Clock.label(int(saved.completed_run_cycles),int(saved.get("calendar_start_year",1980)),Clock.from_saved_profile(saved.get("calendar",{})))],&"MetadataLabel").name="SavedStudio"
 	var recovery := FolderUI.button(_title_screen,"Saved Studio needs attention",func(): recovery_requested.emit())
 	recovery.name = "CheckpointRecovery"
 	recovery.visible = checkpoint_info.status not in [&"empty",&"valid"]
@@ -358,17 +359,21 @@ func _bounce(id: StringName) -> void:
 
 func _refresh_preview() -> void:
 	if _specialty.selected <= 0:
-		_emphasis.text = "Your specialty grants a free starting Feature roster."
-		_preview.text = "Choose a specialty to preview every starting Feature.\nEach game can use any Genre. The specialty provides no score or sales bonus."
+		_emphasis.text = "Every Studio starts with Public Action Engine access."
+		_preview.text = "17 fixed Features · 27 Scope · No upfront fee · 30% post-platform royalty.\nChoose your Studio specialty; each game can use any Genre."
 		return
 	var preview := StudioSpecialties.preview(_specialty.get_item_metadata(_specialty.selected))
 	if preview.is_empty():
 		_emphasis.text = "Specialty roster unavailable."
 		_preview.text = ""
 		return
-	_emphasis.text = "%s · %d Features · %d printed Scope · Free" % [preview.emphasis, preview.count, preview.scope]
-	_preview.text = ", ".join(preview.names) + "\n\nPermanent studio specialty; each game's Genre is chosen separately.\nStarting cards only: no bonus to scores or sales."
-	if not preview.note.is_empty(): _preview.text += "\n" + str(preview.note)
+	var public_engine:=preload("res://scripts/engines/public_action_engine.gd").definition()
+	var definitions: Dictionary={}
+	for entry: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries():definitions[StringName(entry.id)]=entry
+	var names: Array[String]=[]
+	for id: StringName in public_engine.library:names.append(str(definitions[id].name))
+	_emphasis.text = "Public Action Engine · 17 Features · 27 printed Scope"
+	_preview.text = ", ".join(names)+"\n\nPublic access, not engine ownership. No upfront fee; 30% royalty on post-platform revenue. Fixed library; no upgrades or Technology Skill Tree.\nStudio specialty is permanent; each game's Genre is chosen separately. The engine adds +0.1 Graphics/Technology only on qualifying Specialization hands."
 
 func show_error(message: String) -> void:
 	_submitted = false
@@ -509,9 +514,7 @@ func _refresh_review() -> void:
 	_review.text = "%s · %s specialty\nPoints: %d · Starting cash bonus: %s\nStarting cash: %s · Monthly rent: %s" % [_name_input.text.strip_edges(), _specialty.get_item_text(_specialty.selected),selection.remaining_points,CashFormatter.format_exact_cents(selection.point_cash_cents+selection.get("family_funding_cents",0)),CashFormatter.format_exact_cents(550000+selection.point_cash_cents+selection.get("family_funding_cents",0)),CashFormatter.format_exact_cents(StudioFinanceLedger.starting_rent_cents(StudioTraits.is_active(selection,&"expensive_lease")))]
 	_review.text += "\nStarting Fans: %d%s" % [StudioTraits.starting_fans(selection), " (Cult Following trial; ordinary gains/losses)" if StudioTraits.starting_fans(selection) > 0 else ""]
 	if _specialty.selected > 0:
-		var roster := StudioSpecialties.preview(_specialty.get_item_metadata(_specialty.selected))
-		_review.text += "\nStarting pool: %d Features · %d printed Scope" % [roster.count,roster.scope]
-		if not roster.note.is_empty(): _review.text += "\n" + str(roster.note)
+		_review.text += "\nPublic Action Engine access · 17 fixed Features · 27 Scope\nNo upfront fee · 30% post-platform royalty · No upgrades/Technology Skill Tree"
 
 
 func _confirm_studio() -> void:

@@ -18,6 +18,7 @@ signal engines_changed
 
 const CENTS_PER_DOLLAR := 100
 const MAX_REDRAWS := 4
+const Calendar := preload("res://scripts/calendar/calendar_clock.gd")
 const START_YEAR := 1980
 const FIRST_STUDIO_CASH_CENTS := 550000
 const POST_LAUNCH_CAMPAIGN_COST_CENTS := 10000
@@ -29,6 +30,7 @@ const EngineFeatureActions := preload("res://scripts/engines/engine_feature_acti
 var _cash_cents := 0
 var _cash_initialized := false
 var _completed_run_cycles := 0
+var _calendar: Dictionary = {} # Missing context is the verified historical2-cycle clock.
 var _rival_founder_profile: StringName = &""
 var _calendar_start_year := START_YEAR # Private projection test: player and prelude use distinct epochs.
 var _closed_historical_ids: Dictionary = {} # Only populated by typed c72 admission in this candidate.
@@ -57,7 +59,8 @@ func get_selected_engine_id() -> StringName:
 
 func get_engine_feature_state() -> Dictionary:
 	if not _engine_features.is_empty():return _engine_features.duplicate(true)
-	var ids: Array[StringName]=[];var entitlements:=get_engine_entitlements();ids.assign(entitlements.get("owned_ids",[&"legacy_engine"])+entitlements.get("licensed_ids",[]))
+	var entitlements:=get_engine_entitlements();var ids:=EngineEntitlements.accessible_ids(entitlements)
+	if entitlements.is_empty():ids.assign([EngineEntitlements.LEGACY_ID]) # Unnamed primitive models, never a created Studio.
 	var owned: Array[StringName]=[];owned.assign(_owned_features.keys())
 	return EngineFeatures.create(owned,ids,_bank_run_id,_feature_offers)
 
@@ -93,7 +96,7 @@ func get_selected_engine_capacity() -> int:
 	return int(get_engine_feature_state().engines[get_selected_engine_id()].capacity)
 
 func _sync_legacy_engine_grant(id: StringName) -> void:
-	if _engine_features.is_empty():return
+	if _engine_features.is_empty() or not _engine_features.engines.has(&"legacy_engine"):return
 	var record: Dictionary=_engine_features.engines[&"legacy_engine"]
 	for field: String in ["initial","implemented"]:
 		if id not in record[field]:record[field].append(id)
@@ -103,16 +106,20 @@ func _sync_legacy_engine_grant(id: StringName) -> void:
 func valid_engine_state() -> bool:
 	var entitlements := get_engine_entitlements()
 	if not EngineEntitlements.valid(entitlements,_registered_engine_ids()) or entitlements.studio_id != _bank_run_id: return false
+	if entitlements.version==2 and _engine_features.is_empty():return false
 	if not _engine_features.is_empty() and not EngineFeatures.valid(_engine_features,_feature_definitions,_feature_offers,_studio_finance if _first_studio_economy else {},_completed_run_cycles,_bank_run_id):return false
 	if not _engine_features.is_empty() and not EngineFeatures.bindings_valid(_engine_features,entitlements,_owned_features,_bank_run_id):return false
+	if entitlements.version==2:
+		for id: StringName in _released_games:
+			if not _release_engine_ids.has(id):return false
 	for release_id: StringName in _release_engine_ids:
 		var engine_id: StringName = _release_engine_ids[release_id]
-		if not _released_games.has(release_id) or (engine_id not in entitlements.owned_ids and engine_id not in entitlements.licensed_ids): return false
+		if not _released_games.has(release_id) or engine_id not in EngineEntitlements.accessible_ids(entitlements): return false
 	return true
 
 func select_engine(engine_id: StringName) -> bool:
 	var current := get_engine_entitlements()
-	if not EngineEntitlements.valid(current,_registered_engine_ids()) or (engine_id not in current.owned_ids and engine_id not in current.licensed_ids): return false
+	if not EngineEntitlements.valid(current,_registered_engine_ids()) or engine_id not in EngineEntitlements.accessible_ids(current): return false
 	if not EngineFeatureActions.available(self): return false
 	current.selected_engine_id = engine_id
 	_engine_entitlements = current
@@ -264,7 +271,8 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 			return false
 		guaranteed[id] = true
 	var proposed_run_id := StringName(Crypto.new().generate_random_bytes(16).hex_encode())
-	var finance := StudioFinanceLedger.create(FIRST_STUDIO_CASH_CENTS, StudioFinanceLedger.starting_rent_cents(StudioTraits.is_active(selection, &"expensive_lease")))
+	var starting_calendar:=Calendar.fresh()
+	var finance := StudioFinanceLedger.create(FIRST_STUDIO_CASH_CENTS, StudioFinanceLedger.starting_rent_cents(StudioTraits.is_active(selection, &"expensive_lease")),starting_calendar)
 	for trait_id: StringName in [&"college_dropout",&"graduate"]:
 		if StudioTraits.is_active(selection,trait_id):
 			var opened := StudioFinanceLedger.open_education(finance,proposed_run_id,trait_id)
@@ -283,7 +291,7 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 		if receipt.is_empty(): return false
 		finance = receipt.ledger
 	if finance.is_empty(): return false
-	var initial_fans := StudioFanbase.create(StudioTraits.starting_fans(selection))
+	var initial_fans := StudioFanbase.create(StudioTraits.starting_fans(selection),starting_calendar)
 	_owned_features = guaranteed
 	_cash_cents = FIRST_STUDIO_CASH_CENTS + point_cash + family_cash
 	_studio_traits = selection.duplicate(true)
@@ -293,8 +301,11 @@ func _commit_studio_creation(value: String, specialty: StringName, selection: Di
 	_studio_specialty = specialty
 	_founding_roster_version = StudioSpecialties.ROSTER_VERSION
 	_studio_finance = finance
+	_calendar = starting_calendar
 	_bank_run_id = proposed_run_id
-	_engine_entitlements = EngineEntitlements.create(_bank_run_id)
+	_engine_entitlements = EngineEntitlements.create_public(_bank_run_id)
+	var engine_ids:=EngineEntitlements.accessible_ids(_engine_entitlements)
+	_engine_features = EngineFeatures.create([] as Array[StringName],engine_ids,_bank_run_id,_feature_offers)
 	_employees = EmployeeRoster.create(_bank_run_id)
 	_contract_search = ContractSearch.create(_bank_run_id)
 	_publisher_relationships = RelationshipLedger.create(_bank_run_id)
@@ -491,6 +502,8 @@ func needs_starter_selection() -> bool:
 func get_starter_pool_summary() -> Dictionary:
 	if not _first_studio_economy:
 		return {}
+	if get_selected_engine_id()==preload("res://scripts/engines/public_action_engine.gd").ID:
+		return {"scope":27,"count":preload("res://scripts/engines/public_action_engine.gd").LIBRARY.size()}
 	var scope := 0
 	var count := 0
 	for id: StringName in _owned_features:
@@ -965,20 +978,42 @@ func refresh_redraws() -> void:
 
 
 func get_current_month() -> int:
-	return (_completed_run_cycles / 2) + 1
+	return Calendar.month(_completed_run_cycles,_calendar)
+
+func get_calendar_profile() -> Dictionary:
+	return _calendar.duplicate(true)
+
+## After trusted legacy hydration only. Add timing context without replaying
+## an action or changing a balance, historical stamp, project cycle or RNG.
+func adopt_calendar() -> bool:
+	if not _calendar.is_empty():return true
+	var target:=Calendar.upgrade({},_completed_run_cycles)
+	var finance:=StudioFinanceLedger.adopt_calendar(_studio_finance,target)
+	if finance.is_empty():return false
+	var records:=_released_games.duplicate(true)
+	var fans:=_fanbase.duplicate(true)
+	fans.calendar=target.duplicate(true)
+	for id: StringName in records:
+		if _closed_historical_ids.has(id):continue
+		records[id]=ReleasedGameSales.adopt_calendar(records[id],target)
+		if records[id].is_empty() or not fans.releases.has(id):return false
+		fans.releases[id].neutral=ReleasedGameSales.adopt_calendar(fans.releases[id].neutral,target)
+		if fans.releases[id].neutral.is_empty():return false
+	_calendar=target;_studio_finance=finance;_released_games=records;_fanbase=fans
+	return true
 
 
 func get_current_year() -> int:
-	return _calendar_start_year + _completed_run_cycles / 24
+	return Calendar.year(_completed_run_cycles,_calendar_start_year,_calendar)
 
 
 func get_current_half() -> int:
-	return (_completed_run_cycles % 2) + 1
+	# Retain the old public half-month query; Week1-4 presentation uses Clock.
+	return int(Calendar.position(_completed_run_cycles,_calendar).quarter)/2+1
 
 
 func get_calendar_label() -> String:
-	var half_label := "First Half" if get_current_half() == 1 else "Second Half"
-	return "%d · Month %d, %s" % [get_current_year(), get_current_month(), half_label]
+	return Calendar.label(_completed_run_cycles,_calendar_start_year,_calendar)
 
 
 func can_advance_calendar_cycle() -> bool:
@@ -997,7 +1032,7 @@ func can_transition_without_productive_cycle() -> bool:
 
 
 func will_next_cycle_cross_month_boundary() -> bool:
-	return _completed_run_cycles < MAX_SIGNED_INT and get_current_half() == 2
+	return _completed_run_cycles < MAX_SIGNED_INT and Calendar.is_boundary(_completed_run_cycles+1,_calendar)
 
 
 ## Compatibility entry point. All consequences use the same transaction below.
@@ -1129,7 +1164,7 @@ func _create_release_sales_record(project: ProjectState) -> Dictionary:
 	return ReleasedGameSales.create(project.get_release_id(), project.get_month_one_sales_revenue_result().get_total_month_one_units(),
 		roundi(project.get_review_result().get_final_review() * 10.0), project.get_awareness_result().get_total_awareness(),
 		project.get_launch_market_context_result().get_forecast_multiplier_basis_points(),
-		_historical_close_cycle if _historical_close_cycle>0 else 0)
+		_historical_close_cycle if _historical_close_cycle>0 else 0,Calendar.fresh() if not _calendar.is_empty() else {},_calendar)
 
 
 ## Release planning reuses the arithmetic owner on detached containers. The
@@ -1285,6 +1320,16 @@ func get_released_game_monthly_report(release_id: StringName) -> Dictionary:
 		report.studio_net_cents = rights.studio_earned_cents
 		report.studio_settled_cents = rights.studio_settled_cents
 		report.support = {"terms":_support_deals[release_id].duplicate(true),"rights":rights.duplicate(true),"assessment":_support_assessments.get(release_id,{}).duplicate(true)}
+	# The earning record remains post-platform. Report Studio proceeds after the
+	# same cumulative engine royalty already used by the finance settlement.
+	var engine_id: StringName=_release_engine_ids.get(release_id,&"legacy_engine")
+	if engine_id in get_engine_entitlements().get("licensed_ids",[]) or engine_id==preload("res://scripts/engines/public_action_engine.gd").ID:
+		var engine:=preload("res://scripts/engines/engine_marketplace.gd").find(engine_id)
+		if engine.is_empty():return {}
+		var rate: int=engine.royalty_basis_points
+		report.engine_royalty_basis_points=rate
+		report.studio_net_cents-=preload("res://scripts/engines/engine_royalty.gd").cumulative(report.studio_net_cents,rate)
+		report.studio_settled_cents-=preload("res://scripts/engines/engine_royalty.gd").cumulative(report.studio_settled_cents,rate)
 	return report
 
 
@@ -1710,7 +1755,7 @@ func _plan_cycle_records(direct_cash_delta_cents: int,campaign_release_id: Strin
 	if _support_deals.is_empty():
 		key=var_to_bytes([campaign_release_id,_completed_run_cycles,_cash_initialized,
 			_market_provider.is_valid(),market,_bank_run_id,_released_games,_release_metadata,
-			_commission_deals,_support_rights,_support_assessments,_fanbase,_closed_historical_ids,_release_engine_ids])
+			_commission_deals,_support_rights,_support_assessments,_fanbase,_closed_historical_ids,_release_engine_ids,_calendar])
 		sales=cache.read(key)
 	if sales.is_empty():
 		sales=_plan_sales_cycle(campaign_release_id,market)
@@ -1753,10 +1798,12 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 	var next_records: Dictionary = {}
 	var payable := 0
 	var earned := 0
-	var licensed_engine_ids: Array = get_engine_entitlements().get("licensed_ids",[])
+	var entitlements:=get_engine_entitlements()
+	var licensed_engine_ids: Array = entitlements.get("licensed_ids",[])
 	var support_rights := _support_rights.duplicate(true)
 	var support_assessments := _support_assessments.duplicate(true)
 	for id: StringName in _released_games:
+		if entitlements.get("version",1)==2 and not _release_engine_ids.has(id):return {}
 		if not _cash_initialized or not _released_games[id] is Dictionary or _released_games[id].get("release_id") != id:
 			return {}
 		if _closed_historical_ids.has(id):
@@ -1797,13 +1844,12 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 				if support_assessments.has(id): return {}
 				support_assessments[id] = Support.assessment(roundi(float(_release_metadata[id].review.final_review)*10.0),next.earned_units)
 		var engine_id: StringName = _release_engine_ids.get(id,&"legacy_engine")
-		if engine_id in licensed_engine_ids:
+		if engine_id in licensed_engine_ids or engine_id==preload("res://scripts/engines/public_action_engine.gd").ID:
 			var engine: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").find(engine_id)
 			if engine.is_empty() or studio_settled_after < studio_settled_before or studio_earned_after < studio_earned_before: return {}
-			# The starting marketplace royalty is exactly one fifth. Cumulative
-			# integer division carries fractional cents across settlement cycles.
-			release_payable -= preload("res://scripts/engines/engine_royalty.gd").increment(studio_settled_before,studio_settled_after)
-			release_earned -= preload("res://scripts/engines/engine_royalty.gd").increment(studio_earned_before,studio_earned_after)
+			var rate: int=engine.royalty_basis_points
+			release_payable -= preload("res://scripts/engines/engine_royalty.gd").increment(studio_settled_before,studio_settled_after,rate)
+			release_earned -= preload("res://scripts/engines/engine_royalty.gd").increment(studio_earned_before,studio_earned_after,rate)
 		if release_payable > MAX_SIGNED_INT - payable:
 			return {}
 		payable += release_payable
@@ -1813,6 +1859,25 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 	var fan_plan := StudioFanbase.plan(_fanbase, _released_games, next_records, _completed_run_cycles + 1, _closed_historical_ids)
 	if fan_plan.is_empty(): return {}
 	return {"records":next_records,"payable":payable,"earned":earned,"fans":fan_plan,"support_rights":support_rights,"support_assessments":support_assessments}
+
+
+## Auditable external payments, reconstructed from persisted settlement counters
+## and release engine identity. These are cumulative receipts, not another cash
+## mutation path; observing or restoring them cannot charge a second royalty.
+func get_engine_royalty_payments() -> Array[Dictionary]:
+	var result: Array[Dictionary]=[]
+	var public_engine:=preload("res://scripts/engines/public_action_engine.gd").definition()
+	for id: StringName in _release_engine_ids:
+		if _release_engine_ids[id]!=public_engine.id or not _released_games.has(id) or _commission_deals.has(id):continue
+		var sales: Dictionary=_released_games[id]
+		var basis: int=_support_rights[id].studio_settled_cents if _support_rights.has(id) else sales.settled_cents
+		var paid:=preload("res://scripts/engines/engine_royalty.gd").cumulative(basis,int(public_engine.royalty_basis_points))
+		if paid<=0:continue
+		result.append({"receipt_id":StringName("public-engine:%s:%s"%[_bank_run_id,id]),"release_id":id,
+			"engine_id":public_engine.id,"provider_id":public_engine.creator_id,"provider_kind":&"external_public_engine",
+			"post_platform_cents":basis,"basis_points":public_engine.royalty_basis_points,"paid_cents":paid,
+			"last_settlement_cycle":sales.last_settlement_run_cycle})
+	return result
 
 
 ## The direct-effects callback must be synchronous and atomic on false, using
@@ -1897,7 +1962,7 @@ func complete_productive_action(direct_effects: Callable = Callable(), direct_ca
 		contracts_changed.emit()
 	if not _released_games.is_empty():
 		sales_changed.emit()
-	if get_fans() != previous_fans or _completed_run_cycles % 2 == 0:
+	if get_fans() != previous_fans or Calendar.is_boundary(_completed_run_cycles,_calendar):
 		fans_changed.emit()
 	calendar_changed.emit()
 	if _employees != employees_before: employees_changed.emit()
@@ -1986,9 +2051,9 @@ func purchase_qa_course(quote: Dictionary) -> bool:
 func migrate_employee_wages() -> void:
 	if not uses_employee_trial():return
 	for payroll: Dictionary in _studio_finance.employees:
-		if StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT)>=100000: continue
+		if StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT,_calendar)>=100000: continue
 		var receipt:=StringName("%s:wages-v2"%payroll.employee_id)
-		var step:=StudioFinanceLedger.schedule_payroll(_studio_finance,payroll.employee_id,100000,payroll.first_due_cycle+payroll.issued*2,receipt)
+		var step:=StudioFinanceLedger.schedule_payroll(_studio_finance,payroll.employee_id,100000,StudioFinanceLedger.payroll_due_cycle(payroll,int(payroll.issued),_calendar),receipt)
 		assert(not step.is_empty(),"Validated legacy payroll migration must succeed")
 		_studio_finance=step.ledger
 
@@ -2000,8 +2065,8 @@ func _sync_employee_raises() -> void:
 		var e: Dictionary=_employees.employees.get(payroll.employee_id,{})
 		if e.get("type")!=&"qa" and not e.has("career"): continue
 		var desired:=EmployeeRoster.Career.wage(e) if e.has("career") else EmployeeRoster.qa_wage(e)
-		if StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT)>=desired: continue
-		var due:=2*(_completed_run_cycles/2+2)
+		if StudioFinanceLedger.payroll_wage(payroll,StudioFinanceLedger.MAX_INT,_calendar)>=desired: continue
+		var due:=Calendar.month_end(Calendar.month(_completed_run_cycles,_calendar)+1,_calendar)
 		var step:=StudioFinanceLedger.schedule_payroll(_studio_finance,e.employee_id,desired,due,StringName("%s:raise:%d"%[e.employee_id,desired]))
 		assert(not step.is_empty(),"Committed QA raise must schedule once")
 		_studio_finance=step.ledger

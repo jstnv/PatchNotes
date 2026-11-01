@@ -1,0 +1,49 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Preload file "res://queries/market_release_index.gd" does not exist.
+   at: GDScript::reload (res://scripts/market/market_transaction_trial.gd:4)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "Index" constant because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/market/market_transaction_trial.gd:4)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "indexed" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/market/market_transaction_trial.gd:54)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/market/rival_world.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/engines/engine_marketplace.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/project_state.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/contracts/contract_result.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/contracts/contract_state.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/contracts/contract_search.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/run_state.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/primitive_predevelopment.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/contracts/publisher_commission_trial.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/persistence/checkpoint_schema.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/employees/qa_employee_rules.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/employees/employee_roster.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/employees/employee_career_rules.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/finance/studio_finance_ledger.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://verify_finance_clock.gd:0)
+ERROR: Failed to load script "res://verify_finance_clock.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Cannot call method 'lock' on a null value.
+   at: _is_valid (res://scripts/finance/studio_finance_ledger.gd:563)
+   GDScript backtrace (most recent call first):
+       [0] _is_valid (res://scripts/finance/studio_finance_ledger.gd:563)
+       [1] plan (res://scripts/finance/studio_finance_ledger.gd:60)
+       [2] _init (res://verify_finance_clock.gd:18)
+FAIL Fresh quarter action 1 accepted
+FAIL One unchanged $300 rent at month close
+FINANCE_CLOCK checks=2 failures=2

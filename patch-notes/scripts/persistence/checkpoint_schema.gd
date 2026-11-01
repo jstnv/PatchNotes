@@ -13,13 +13,24 @@ static func map_of(key: Variant, value: Variant) -> Dictionary: return {"map":[k
 static func optional(item: Variant) -> Dictionary: return {"nullable":item}
 static func union_of(items: Array) -> Dictionary: return {"one_of":items}
 
+static func calendar_profile() -> Dictionary:
+	return union_of([{}, {"version":"uint","legacy_until":"uint"}])
+
+static func dict_with_calendar(record: Dictionary) -> Dictionary:
+	var current:=record.duplicate(true);current.calendar=calendar_profile();return current
+
+static func with_calendar(record: Dictionary) -> Dictionary:
+	var current:=record.duplicate(true)
+	current.calendar=calendar_profile()
+	return union_of([record,current])
+
 static func finance(education_enabled: bool = true) -> Dictionary:
 	var schedule := fields("schema_version principal_cents term_months accepted_cycle first_due_cycle last_due_cycle maximum_installment_cents total_interest_cents total_payment_cents")
 	var quote := fields("older_sales_cents latest_sales_cents basis_cents rent_cents obligations_cents capacity_cents maximum_principal_cents revision")
 	quote.merge(fields("eligible accepted", "bool"))
 	quote.merge(fields("run_id loan_id quote_id", "id"))
 	quote.reason = "text"
-	quote.schedule = schedule
+	quote.schedule = with_calendar(schedule)
 	var recovery_quote: Dictionary = quote.duplicate(true)
 	recovery_quote.merge(fields("rules_version minimum_principal_cents bank_commitments_cents arrears_cents requested_principal_cents recovery_cents net_proceeds_cents"))
 	recovery_quote.merge(fields("adjusted floor_facility","bool"))
@@ -73,21 +84,24 @@ static func finance(education_enabled: bool = true) -> Dictionary:
 	loan.merge(fields("loan_id run_id quote_id", "id"))
 	loan.merge(fields("closed early_payoff", "bool"))
 	loan.closed_cycle = "int"
-	loan.schedule = schedule
+	loan.schedule = with_calendar(schedule)
 	var employee := fields("wage_cents hire_cycle first_due_cycle issued")
 	employee.employee_id = "id"
 	var scheduled_employee: Dictionary=employee.duplicate(true)
-	scheduled_employee.wage_changes=array_of({"cycle":"uint","wage_cents":"uint","receipt_id":"id"})
+	scheduled_employee.wage_changes=array_of(with_calendar({"cycle":"uint","wage_cents":"uint","receipt_id":"id"}))
 	var result := fields("schema_version initial_cash_cents monthly_rent_cents last_cycle cash_cents unsettled_sales_net_cents")
-	result.merge({"monthly_rows":array_of(union_of([row,ownership_row])),"obligations":array_of(union_of([bill,bank_bill])),"transactions":array_of(transaction),"actions":array_of(union_of([ordinary_action,action])),"credit":credit,"bank_loans":array_of(loan),"employees":array_of(union_of([employee,scheduled_employee]))})
+	result.merge({"monthly_rows":array_of(union_of([row,ownership_row])),"obligations":array_of(union_of([bill,bank_bill])),"transactions":array_of(transaction),"actions":array_of(union_of([ordinary_action,action])),"credit":credit,"bank_loans":array_of(loan),"employees":array_of(union_of([employee,scheduled_employee,dict_with_calendar(employee),dict_with_calendar(scheduled_employee)]))})
 	if education_enabled:
 		var education := fields("schema_version issued principal_paid_cents interest_paid_cents")
 		education.merge(fields("account_id run_id trait_id","id"))
 		education.merge(fields("closed early_payoff","bool"))
 		education.closed_cycle = "int"
 		education.schedule = fields("schema_version principal_cents regular_due_cents term_months first_due_cycle last_due_cycle total_interest_cents total_payment_cents")
+		education.schedule=with_calendar(education.schedule)
 		result.education = union_of([{},education])
-	return result
+	var current:=result.duplicate(true)
+	current.calendar=calendar_profile();current.calendar_cutover_actions="uint"
+	return union_of([result,current])
 
 static func employees() -> Dictionary:
 	var hand := fields("project_cycle cycle")
@@ -117,11 +131,14 @@ static func sales() -> Dictionary:
 	result.market_factors = map_of("uint",market_factor())
 	return result
 
+static func sales_with_clock(record: Dictionary) -> Dictionary:
+	var current:=record.duplicate(true);current.calendar=calendar_profile();current.run_calendar=calendar_profile();return current
+
 static func projected_sales_union() -> Dictionary:
 	var ordinary := sales()
 	var projected := ordinary.duplicate(true)
 	projected.market_clock_offset = "uint"
-	return union_of([ordinary,projected])
+	return union_of([ordinary,projected,sales_with_clock(ordinary),sales_with_clock(projected)])
 
 static func metadata() -> Dictionary:
 	var review := fields("scope required_scope development_cycles remaining_bugs awareness launch_marketing launch_fans fan_awareness projected_units projected_gross_cents projected_net_cents")
@@ -196,6 +213,9 @@ static func root(education_enabled: bool = true, active_rival: bool = false, sto
 	versioned_run.founding_roster_version = "uint"
 	var engine_run: Dictionary = run.duplicate(true)
 	engine_run.engine_entitlements = {"version":"uint","studio_id":"id","owned_ids":array_of("id"),"licensed_ids":array_of("id"),"selected_engine_id":"id"}
+	var public_access: Dictionary=engine_run.engine_entitlements.duplicate(true)
+	public_access.public_ids=array_of("id")
+	engine_run.engine_entitlements=union_of([engine_run.engine_entitlements,public_access])
 	engine_run.release_engine_ids = map_of("id","id")
 	engine_run.engine_royalty_receipts = map_of("id","uint")
 	var versioned_engine_run: Dictionary = engine_run.duplicate(true)
@@ -204,7 +224,9 @@ static func root(education_enabled: bool = true, active_rival: bool = false, sto
 	feature_engine_run.engine_features=engine_feature_state()
 	var versioned_feature_engine_run: Dictionary=feature_engine_run.duplicate(true)
 	versioned_feature_engine_run.founding_roster_version="uint"
-	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":union_of([run,versioned_run,engine_run,versioned_engine_run,feature_engine_run,versioned_feature_engine_run]),"rng":map_of("id",{"seed":"int","state":"int"})}
+	var alternatives: Array=[run,versioned_run,engine_run,versioned_engine_run,feature_engine_run,versioned_feature_engine_run]
+	for variant: Dictionary in alternatives.duplicate():alternatives.append(dict_with_calendar(variant))
+	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":union_of(alternatives),"rng":map_of("id",{"seed":"int","state":"int"})}
 	if active_rival: result.active_project_id = "id"
 	return result
 

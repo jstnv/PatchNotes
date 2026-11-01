@@ -67,14 +67,14 @@ func _verify_year_labels() -> void:
 	check(run.add_cash_cents(3000000, &"financing_in"), "Calendar fixture funds its actual rent obligations")
 	var studio: StudioPhase = game.get("_active_phase")
 	var hud := game.get_node("%GameplayHUD") as GameplayHUD
-	for cycle in [0, 23, 24, 95, 96]:
+	for cycle in [0, 47, 48, 191, 192]:
 		while run.get_completed_run_cycles() < cycle:
 			var advanced := run.complete_productive_action()
 			check(advanced, "Shared productive boundary advances")
 			if not advanced: break # Never hang if a future obligation rejects.
 		await process_frame
 		await process_frame
-		var year: int = 1980 + cycle / 24
+		var year: int = 1980 + cycle / 48
 		check(run.get_current_year() == year and hud.footer.text.contains(str(year)) and hud.header_title.text.contains(str(year)), "Cycle %d shows year %d in Studio and shared HUD" % [cycle, year])
 		var before := snapshot(run, [])
 		studio.get_node("%FeatureStoreButton").pressed.emit()
@@ -107,17 +107,22 @@ func _verify_studio_purchase_years() -> void:
 		run.set_studio_name("Boundary Studio", &"adventure")
 		check(run.add_cash_cents(3000000, &"financing_in"), "Synthetic purchase/year fixture funds rent")
 		run.finalize_starter_selection()
+		if action!="campaign":
+			# Constructed owned-engine control; creation economics are not exercised.
+			check(run._register_proprietary_engine(&"calendar_control","Calendar control") and run.select_engine(&"calendar_control"),"Research fixture selects an editable owned engine")
+			check(run.register_release(release(0,30,30,run)),"Research fixture satisfies the existing first-release gate")
+			var parents: Array=[&"keyboard_and_mouse",&"menu_system"] if action=="store" else [&"4_color_palette"]
+			for parent: StringName in parents:check(ResearchTestActions.acquire(run,parent),"Research fixture pays for prerequisite "+str(parent))
 		# Reach the calendar through checked transactions before the release.
-		var release_cycle := 93 if action == "campaign" else 95
+		var release_cycle := 187 if action == "campaign" else 191
 		while run.get_completed_run_cycles() < release_cycle:
 			var advanced := run.complete_productive_action()
 			check(advanced, "Synthetic boundary fixture advances all ledgers together")
 			if not advanced: break
-		var project := release(10)
+		var project := release(10,30,30,run)
 		run.register_release(project)
 		if action == "campaign":
-			run.complete_productive_action()
-			run.complete_productive_action()
+			for cycle in range(4):run.complete_productive_action()
 		var studio := load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
 		root.add_child(studio)
 		studio.setup(project, run, snapshots)
@@ -128,10 +133,10 @@ func _verify_studio_purchase_years() -> void:
 		var ok := false
 		if action == "store": ok = ResearchTestActions.acquire(run,&"save_files")
 		elif action == "reserve": ok = ResearchTestActions.acquire(run,&"sprites")
-		else: ok = run.purchase_post_launch_campaign(project.get_release_id(), 95)
+		else: ok = run.purchase_post_launch_campaign(project.get_release_id(), 191)
 		await process_frame
 		await process_frame
-		check(ok and run.get_completed_run_cycles() == 96 and hud.footer.text.contains("1984") and hud.header_title.text.contains("1984"), action + " updates both year labels at its successful boundary")
+		check(ok and run.get_completed_run_cycles() == 192 and hud.footer.text.contains("1984") and hud.header_title.text.contains("1984"), action + " updates both year labels at its successful boundary")
 		var before := snapshot(run, [project])
 		studio.setup(project, run, snapshots)
 		check(snapshot(run, [project]) == before and hud.footer.text.contains("1984"), "Reconstructed Studio reads the same year without a cycle")

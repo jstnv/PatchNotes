@@ -1,5 +1,6 @@
 class_name MonthlySalesReport
 extends PanelContainer
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 signal closed
 var _run: RunState
@@ -112,7 +113,7 @@ func refresh() -> void:
 	for row: Dictionary in _report.rows:
 		var item := _table.create_item(root)
 		item.set_metadata(0, row.age_month)
-		item.set_text(0, "%d%s%s" % [row.age_month, " (partial)" if row.earned_halves < 2 else "", " *" if row.campaign else ""])
+		item.set_text(0, "%d%s%s" % [row.age_month, " (partial)" if row.earned_halves < int(row.get("cycle_count",2)) else "", " *" if row.campaign else ""])
 		item.set_text(1, str(row.units))
 		for i in range(4): item.set_text(i + 2, _money(row[["gross_cents", "net_cents", "settled_cents", "unpaid_cents"][i]]))
 		item.set_tooltip_text(0, "* Campaign this age month. Select a row for earning slices, Awareness and exact payment boundaries.")
@@ -122,32 +123,33 @@ func refresh() -> void:
 		_table.ensure_cursor_is_visible()
 		_show_month()
 	else:
-		_detail.text = "No sales earned yet. Month 1 earns over the next two productive actions; launch itself pays nothing."
+		_detail.text = "No sales earned yet. Month 1 earns over the next %d productive actions; launch itself pays nothing." % int(_report.forecast.get("cycle_count",2))
 	var forecast: Dictionary = _report.forecast
 	if not forecast.is_empty():
-		_forecast.text = "Forecast only · Age month %d, next half %d · %d units for the full age month.\nNew age months are before future crowding. Existing halves reuse their frozen factor. Paid columns exclude expenses." % [forecast.next_age_month, forecast.next_age_cycle, forecast.projected_month_units]
+		_forecast.text = "Forecast only · Age month %d, next cycle %d of %d · %d units for the full age month.\nNew age months are before future crowding. Existing earning cycles reuse their frozen factor. Paid columns exclude expenses." % [forecast.next_age_month, forecast.next_age_cycle,forecast.get("cycle_count",2),forecast.projected_month_units]
 
 
 func _show_month() -> void:
 	var item := _table.get_selected()
 	if item == null or _report.is_empty(): return
 	var row: Dictionary = _report.rows[int(item.get_metadata(0)) - 1]
-	var lines: Array[String] = ["Age month %d · %d / 2 earning halves · %s" % [row.age_month, row.earned_halves, "Partial actual earnings" if row.earned_halves < 2 else "Complete"],
+	var cycle_count: int = row.get("cycle_count",2)
+	var lines: Array[String] = ["Age month %d · %d / %d earning cycles · %s" % [row.age_month, row.earned_halves,cycle_count,"Partial actual earnings" if row.earned_halves < cycle_count else "Complete"],
 		"Organic Awareness %.4f · Active Awareness %.4f · %s" % [row.organic_awareness_scaled / 10000.0, row.active_awareness_scaled / 10000.0, "Campaign #%d (*)" % row.campaign_number if row.campaign else "No campaign"]]
-	if row.units == 0 and row.earned_halves == 2: lines.append("Dormant this month: zero units. Future campaigns may revive this title.")
+	if row.units == 0 and row.earned_halves == cycle_count: lines.append("Dormant this month: zero units. Future campaigns may revive this title.")
 	var market: Dictionary=row.market
 	lines.append("Market trial: %d Genre-only · %d Theme-only · %d matching pair → %.0f%% units (floor 70%%)." % [market.genre_only,market.theme_only,market.pair,market.factor_bp/100.0])
-	lines.append("Frozen for both earning halves · snapshot Month %d%s" % [int(market.cycle_start)/2+1," · historical neutral earnings preserved" if market.historical else ""])
+	lines.append("Frozen for this age month's earning cycles · snapshot Run Month %d%s" % [Clock.month(int(market.cycle_start),_run.get_calendar_profile())," · historical neutral earnings preserved" if market.historical else ""])
 	for slice: Dictionary in row.slices:
-		lines.append("Half %d · %s · +%d units · net +%s" % [slice.half, _calendar(slice.run_cycle), slice.units, _money(slice.net_cents)])
+		lines.append("Earning cycle %d · %s · +%d units · net +%s" % [slice.half, _calendar(slice.run_cycle), slice.units, _money(slice.net_cents)])
 	for payment: Dictionary in row.payments:
 		lines.append("Paid %s at %s (calendar-month boundary)" % [_money(payment.cents), _calendar(payment.run_cycle)])
 	if row.unpaid_cents > 0: lines.append("Unpaid %s: waiting for a calendar-month settlement." % _money(row.unpaid_cents))
 	_detail.text = "\n".join(lines)
 
 
-static func _calendar(cycle: int) -> String:
-	return "%d · Month %d %s · cycle %d" % [RunState.START_YEAR + cycle / 24, cycle / 2 + 1, "First Half" if cycle % 2 == 0 else "Second Half", cycle]
+func _calendar(cycle: int) -> String:
+	return "%s · cycle %d" % [Clock.label(cycle,_run._calendar_start_year,_run.get_calendar_profile()),cycle]
 
 
 static func _money(cents: int) -> String:

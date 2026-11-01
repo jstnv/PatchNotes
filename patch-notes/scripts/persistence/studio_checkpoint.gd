@@ -1,7 +1,10 @@
 class_name StudioCheckpoint
 extends RefCounted
 
-const BUILD := "studio-checkpoint-engine-features-v1"
+const BUILD := "studio-checkpoint-calendar-v2"
+const PUBLIC_BUILD := "studio-checkpoint-public-action-v1"
+const Calendar := preload("res://scripts/calendar/calendar_clock.gd")
+const FEATURE_BUILD := "studio-checkpoint-engine-features-v1"
 const LEGACY_BUILD := "studio-checkpoint-runtime-v1"
 const PREVIOUS_RULES := "finance5-bank1-employees1-traits5-sales1-contracts3-research1-review2"
 const PRE_EDUCATION_RULES := PREVIOUS_RULES + "-fanbase1-starwave1"
@@ -134,6 +137,7 @@ func snapshot(run: RunState, active_project_id: StringName = &"") -> Dictionary:
 	var state := {}
 	for field: String in FIELDS + SUPPORT_FIELDS:
 		state[field.trim_prefix("_")] = run.get(field)
+	state.calendar=run.get_calendar_profile()
 	state.engine_entitlements = run.get_engine_entitlements()
 	state.engine_features = run.get_engine_feature_state()
 	state.release_engine_ids = run._release_engine_ids.duplicate(true)
@@ -241,8 +245,8 @@ func _validate(payload: Dictionary, active_rival: bool) -> String:
 	return ""
 
 func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
-	if payload.get("source_build") not in [BUILD,LEGACY_BUILD]:return "Unsupported Studio build"
-	if payload.source_build==BUILD and (not payload.get("run") is Dictionary or not payload.run.has("engine_features")):return "Missing engine Feature registry"
+	if payload.get("source_build") not in [BUILD,PUBLIC_BUILD,FEATURE_BUILD,LEGACY_BUILD]:return "Unsupported Studio build"
+	if payload.source_build in [BUILD,PUBLIC_BUILD,FEATURE_BUILD] and (not payload.get("run") is Dictionary or not payload.run.has("engine_features")):return "Missing engine Feature registry"
 	if payload.get("content_revision", "") != revision() and payload.get("content_revision", "") in [pre_grid_revision(),pre_audio_revision(),pre_gameplay_revision()]:
 		var upgraded := upgrade_grid_predecessor(payload,active_rival)
 		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
@@ -279,6 +283,10 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 	var active_id: StringName = value.active_project_id if active_rival else &""
 	if active_rival and (active_id.is_empty() or value.run.released_games.has(active_id)): return "Invalid active rival project"
 	var r: Dictionary = value.run
+	if payload.source_build==BUILD and not r.has("calendar"):return "Missing calendar profile"
+	var calendar: Dictionary=r.get("calendar",{})
+	if not Calendar.valid(calendar) or (not calendar.is_empty() and int(calendar.legacy_until)>r.completed_run_cycles):return "Invalid calendar profile"
+	if r.studio_finance.get("calendar",{})!=calendar or r.fanbase.get("calendar",{})!=calendar:return "Mismatched calendar context"
 	if not RunState.ContractSearch.valid(r):return "Invalid Contract Search provenance"
 	var resolver := func(request: Dictionary) -> Dictionary: return RunState.RelationshipRules.resolve(r,request)
 	if RunState.RelationshipLedger.reconstruct(r.publisher_relationships,r.bank_run_id,r.completed_run_cycles,resolver).is_empty(): return "Invalid publisher relationship provenance"
@@ -292,15 +300,20 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 	if not r.cash_initialized or not r.first_studio_economy or r.available_redraws>4 or r.next_project_serial<1: return "Invalid run counters"
 	if r.studio_finance.cash_cents != r.cash_cents or r.studio_finance.last_cycle != r.completed_run_cycles or not StudioFinanceLedger._is_valid(r.studio_finance): return "Invalid finance provenance"
 	if not FeatureResearch.validate(r.feature_research,r.owned_features,r.studio_finance,r.completed_run_cycles,r.bank_run_id): return "Invalid research provenance"
+	if r.get("engine_entitlements",{}).get("version")==2 and (not r.has("engine_features") or payload.source_build not in [BUILD,PUBLIC_BUILD]):return "Public access requires current engine registry"
 	if r.has("engine_features"):
 		var definitions: Dictionary={};var offers: Dictionary={}
 		for item: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries():definitions[StringName(item.id)]=item
 		for item: Dictionary in FeatureStoreCatalog.entries():offers[StringName(item.id)]=item
 		if not RunState.EngineFeatures.valid(r.engine_features,definitions,offers,r.studio_finance,r.completed_run_cycles,r.bank_run_id):return "Invalid engine Feature provenance"
 		if not RunState.EngineFeatures.bindings_valid(r.engine_features,r.engine_entitlements,r.owned_features,r.bank_run_id):return "Invalid engine Feature ownership/capacity"
-		if not r.engine_features.engines.has(&"legacy_engine") or r.engine_features.engines[&"legacy_engine"].implemented.size()!=r.owned_features.size():return "Legacy Feature preservation mismatch"
-		for id: StringName in r.owned_features:
-			if id not in r.engine_features.engines[&"legacy_engine"].implemented:return "Legacy Feature preservation mismatch"
+		var accessible:=RunState.EngineEntitlements.accessible_ids(r.engine_entitlements)
+		for id: StringName in r.release_engine_ids:
+			if not r.released_games.has(id) or r.release_engine_ids[id] not in accessible:return "Invalid release engine identity"
+		if r.engine_entitlements.version==2:
+			for id: StringName in r.released_games:
+				if not r.release_engine_ids.has(id):return "Missing public release engine identity"
+		# Legacy ownership equality is enforced only for explicit v1 access in bindings_valid.
 	for action: Dictionary in r.studio_finance.actions:
 		if action.kind==&"rival_wait" and (r.rival_founder_profile!=&"rival-founder-active-1977-v2" or action.source_id!=r.bank_run_id or action.direct_delta!=0 or not action.productive):return "Unproven passive rival calendar"
 	for research: Dictionary in r.feature_research:
@@ -426,14 +439,17 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 		var sales: Dictionary = r.released_games[id]
 		var meta: Dictionary = r.release_metadata[id]
 		if id.is_empty() or sales.release_id != id or not ReleasedGameSales.is_valid(sales): return "Invalid release sales"
+		if not calendar.is_empty() and not r.closed_historical_ids.has(id):
+			if sales.get("run_calendar",{})!=calendar or not sales.has("calendar"):return "Mismatched release calendar context"
+			if sales.later_enabled and int(sales.calendar.get("legacy_until",-1))!=maxi(0,int(calendar.legacy_until)-int(meta.release_cycle)):return "Invalid release-age calendar context"
 		var projected_sale: bool=r.historical_close_cycle==72 and not r.closed_historical_ids.has(id) and int(meta.release_cycle)>=72
 		if projected_sale!=sales.has("market_clock_offset") or (projected_sale and int(sales.market_clock_offset)!=72): return "Unproven sales clock offset"
 		if meta.release_cycle>r.completed_run_cycles or sales.last_processed_run_cycle>r.completed_run_cycles or sales.last_settlement_run_cycle>r.completed_run_cycles: return "Future release accounting"
 		var end_cycle: int = r.historical_close_cycle if r.closed_historical_ids.has(id) else r.completed_run_cycles
 		if sales.later_enabled and sales.total_earned_cycles != end_cycle-meta.release_cycle: return "Release age mismatch"
-		if sales.last_settlement_run_cycle>=0 and sales.last_settlement_run_cycle%2!=0: return "Invalid settlement boundary"
+		if sales.last_settlement_run_cycle>=0 and not Calendar.is_boundary(sales.last_settlement_run_cycle,calendar): return "Invalid settlement boundary"
 		if sales.release_title!=meta.release_title or sales.release_year!=meta.release_year or sales.base_name!=meta.base_name: return "Release metadata mismatch"
-		if meta.release_year != r.calendar_start_year+meta.release_cycle/24 or PrimitivePredevelopment.find_entry("genres",meta.genre).is_empty() or PrimitivePredevelopment.find_entry("themes",meta.theme).is_empty(): return "Invalid release catalog/year"
+		if meta.release_year != Calendar.year(meta.release_cycle,r.calendar_start_year,calendar) or PrimitivePredevelopment.find_entry("genres",meta.genre).is_empty() or PrimitivePredevelopment.find_entry("themes",meta.theme).is_empty(): return "Invalid release catalog/year"
 		if meta.review.cores.size()!=4 or meta.review.standards.size()!=4 or meta.review.final_review<0 or meta.review.final_review>10 or meta.review.scope_completion<0: return "Invalid frozen Review"
 		if roundi(meta.review.final_review*10)!=sales.review_tenths or meta.review.awareness!=sales.launch_awareness or meta.review.projected_units!=sales.total_units: return "Frozen launch mismatch"
 		if meta.review.has("market") and (not preload("res://scripts/market/market_transaction_trial.gd").valid_details(meta.review.market,meta.genre) or meta.review.market.standards!=meta.review.standards or meta.review.market.cycle_start>meta.release_cycle): return "Invalid frozen market Review"
@@ -631,6 +647,7 @@ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
 	var value: Dictionary = _decode_payload(payload,active_rival)
 	var run := RunState.new()
 	var r: Dictionary = value.run
+	run._calendar=r.get("calendar",{}).duplicate(true)
 	run._founding_roster_version = r.get("founding_roster_version",1)
 	for field: String in FIELDS + SUPPORT_FIELDS:
 		if field=="_pending_publisher_notifications": run._pending_publisher_notifications.assign(r.pending_publisher_notifications)
@@ -661,6 +678,8 @@ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
 		run._first_game_tutorial = FirstGameTutorial.new()
 		for key: String in r.first_game_tutorial: run._first_game_tutorial.set(key,r.first_game_tutorial[key])
 	run.migrate_employee_wages()
+	if run._calendar.is_empty() and not (run._calendar_start_year==1977 and run._historical_close_cycle<0):
+		if not run.adopt_calendar():error="Calendar migration failed";return null
 	return run
 
 func upgrade_relationship_predecessor(payload: Dictionary, active_rival: bool = false) -> Dictionary:

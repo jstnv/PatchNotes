@@ -4,6 +4,7 @@ extends RefCounted
 ## Read-only estimates, never purchase permission or a second calendar.
 const VERSION := "current_path_spending_advice_v2"
 const MAX_INT: int = 9223372036854775807
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 static func pacing(releases: Dictionary) -> Dictionary:
 	var total := 0
@@ -33,6 +34,7 @@ static func estimate(history: Dictionary, pool: Dictionary, finance: Dictionary,
 	if not finance.get("available", false) or not pool.get("available", false) or cycle < 0 or cash < 0 or purchase_cents < 0 or purchase_cycles < 0:
 		return {"available": false, "reason": "Spending estimate unavailable: financial or Feature history is incomplete."}
 	var play_cost := int(pool.known_play_cost_cents)
+	var calendar: Dictionary=ledger.get("calendar",{})
 	var unpaid := int(finance.get("total_overdue_cents", finance.unpaid_rent_cents))
 	if unpaid > MAX_INT - play_cost:
 		return {"available": false, "reason": "Spending estimate exceeds the supported range."}
@@ -48,7 +50,7 @@ static func estimate(history: Dictionary, pool: Dictionary, finance: Dictionary,
 		horizon = development + 1 + purchase_cycles
 		if horizon > MAX_INT - cycle:
 			return {"available": false, "reason": "Spending horizon exceeds the calendar range."}
-		boundaries = horizon / 2 + (1 if horizon % 2 + cycle % 2 >= 2 else 0)
+		boundaries = Clock.month(cycle+horizon,calendar)-Clock.month(cycle,calendar)
 		var monthly := int(finance.monthly_rent_cents)
 		if monthly <= 0 or boundaries > (MAX_INT - reserve) / monthly:
 			return {"available": false, "reason": "Spending estimate exceeds the supported range."}
@@ -60,8 +62,8 @@ static func estimate(history: Dictionary, pool: Dictionary, finance: Dictionary,
 	if history.get("available", false) and not ledger.is_empty():
 		var end_cycle := cycle + horizon
 		for employee: Dictionary in ledger.employees:
-			var first: int = employee.first_due_cycle + employee.issued * 2
-			var count := (end_cycle - first) / 2 + 1 if first <= end_cycle else 0
+			var first: int = StudioFinanceLedger.payroll_due_cycle(employee,employee.issued,calendar)
+			var count := Clock.month(end_cycle,calendar)-Clock.month(first,calendar)+1 if first>=0 and first<=end_cycle else 0
 			var wage: int = employee.wage_cents
 			if first <= cycle or wage < 0 or (wage > 0 and count > (MAX_INT-reserve)/wage): return {"available":false,"reason":"Payroll estimate unavailable."}
 			payroll += count*wage
@@ -69,7 +71,8 @@ static func estimate(history: Dictionary, pool: Dictionary, finance: Dictionary,
 		for loan: Dictionary in ledger.bank_loans:
 			if loan.closed: continue
 			for number in range(int(loan.issued)+1,int(loan.schedule.term_months)+1):
-				var due := BankLoan.installment(loan.schedule,number)
+				var due := BankLoan.effective_installment(loan.schedule,number,calendar)
+				if due.is_empty():return {"available":false,"reason":"Bank estimate unavailable."}
 				if due.due_cycle > end_cycle: break
 				if due.due_cycle <= cycle or due.payment_cents > MAX_INT-reserve: return {"available":false,"reason":"Bank estimate unavailable."}
 				bank += int(due.payment_cents)
@@ -77,7 +80,8 @@ static func estimate(history: Dictionary, pool: Dictionary, finance: Dictionary,
 		var account: Dictionary = ledger.get("education",{})
 		if not account.is_empty() and not account.closed:
 			for number in range(int(account.issued)+1,97):
-				var due := EducationDebt.installment(account.schedule,number)
+				var due := EducationDebt.effective_installment(account.schedule,number,calendar)
+				if due.is_empty():return {"available":false,"reason":"Education estimate unavailable."}
 				if due.due_cycle > end_cycle: break
 				if due.due_cycle <= cycle or due.payment_cents > MAX_INT-reserve: return {"available":false,"reason":"Education estimate unavailable."}
 				education += int(due.payment_cents)

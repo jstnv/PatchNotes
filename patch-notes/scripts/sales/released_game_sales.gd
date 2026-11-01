@@ -1,5 +1,6 @@
 class_name ReleasedGameSales
 extends RefCounted
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 const Market := preload("res://scripts/market/market_transaction_trial.gd")
 ## Quotes and rival observations repeatedly read the same historical records.
 ## Cache only complete, typed Variant bytes after full validation. Never keep
@@ -13,7 +14,7 @@ static var _validation_lock := Mutex.new()
 ## Pure, checked cumulative calculations. Returned records are value snapshots.
 ## Two-argument fixtures intentionally retain the original Month 1-only model.
 static func create(release_id: StringName, total_units: Variant, review_tenths: int = -1,
-		launch_awareness: int = -1, market_bp: int = -1, market_clock_offset: int = 0) -> Dictionary:
+		launch_awareness: int = -1, market_bp: int = -1, market_clock_offset: int = 0, calendar: Dictionary = {}, run_calendar: Dictionary = {}) -> Dictionary:
 	if market_clock_offset not in [0,72]: return {}
 	if release_id.is_empty() or PrimitiveMonthOneSalesRevenueCalculator.calculate_for_total_units(total_units) == null:
 		return {}
@@ -33,6 +34,7 @@ static func create(release_id: StringName, total_units: Variant, review_tenths: 
 		"campaign_count": 0, "campaign_months": {}, "organic_awareness_scaled": 0,
 		"active_awareness_scaled": 0, "monthly_units": 0, "market_factors": {}}
 	if market_clock_offset>0: record.market_clock_offset=market_clock_offset
+	if not calendar.is_empty() or not run_calendar.is_empty():record.calendar=calendar.duplicate(true);record.run_calendar=run_calendar.duplicate(true)
 	return record if is_valid(record) else {}
 
 static func is_valid(record: Dictionary) -> bool:
@@ -69,18 +71,23 @@ static func _validate_record(record: Dictionary) -> bool:
 		return false
 	if typeof(record.get("exhausted")) != TYPE_BOOL or typeof(record.get("later_enabled")) != TYPE_BOOL or typeof(record.get("campaign_months")) != TYPE_DICTIONARY or typeof(record.get("market_factors")) != TYPE_DICTIONARY:
 		return false
+	if record.has("calendar")!=record.has("run_calendar"):return false
+	if record.has("calendar") and (not record.calendar is Dictionary or not record.run_calendar is Dictionary or not Clock.valid(record.calendar) or not Clock.valid(record.run_calendar)):return false
+	var calendar: Dictionary=record.get("calendar",{})
+	var run_calendar: Dictionary=record.get("run_calendar",{})
 	var age_cycles: int = record.total_earned_cycles
-	var age_months: int = age_cycles / 2 + age_cycles % 2
+	var first_month_cycles: int=Clock.month_end(1,calendar)
+	var age_months: int = Clock.action_month(age_cycles,true,calendar) if age_cycles>0 else 0
 	if record.market_factors.size()!=age_months: return false
 	for age_month in range(1,age_months+1):
 		if not record.market_factors.has(age_month): return false
 		var factor: Variant=record.market_factors[age_month]
 		if not Market.valid_factor(factor): return false
 		if not factor.historical and factor.snapshot_id!="market-0-neutral":
-			var first_cycle: int=record.last_processed_run_cycle-age_cycles+1+(age_month-1)*2
+			var first_cycle: int=record.last_processed_run_cycle-age_cycles+1+Clock.month_end(age_month-1,calendar)
 			var world_first_cycle: int=first_cycle-int(clock_offset)
-			if world_first_cycle<0 or factor.cycle_start!=world_first_cycle-world_first_cycle%2: return false
-	if age_cycles < 0 or record.earned_cycles != mini(2, age_cycles) or record.exhausted != (age_cycles >= 2):
+			if world_first_cycle<0 or factor.cycle_start!=Clock.month_start(world_first_cycle,Clock.shift(run_calendar,int(clock_offset))): return false
+	if age_cycles < 0 or record.earned_cycles != mini(first_month_cycles, age_cycles) or record.exhausted != (age_cycles >= first_month_cycles):
 		return false
 	if record.last_processed_run_cycle < -1 or record.last_settlement_run_cycle < -1 or record.last_settlement_run_cycle > record.last_processed_run_cycle:
 		return false
@@ -92,7 +99,7 @@ static func _validate_record(record: Dictionary) -> bool:
 		if not LaterMonthSalesCalculator.valid_launch_inputs(record.review_tenths, record.launch_awareness, record.market_bp):
 			return false
 	else:
-		if age_cycles > 2 or record.review_tenths != -1 or record.launch_awareness != -1 or record.market_bp != -1:
+		if age_cycles > first_month_cycles or record.review_tenths != -1 or record.launch_awareness != -1 or record.market_bp != -1:
 			return false
 	var expected := _recalculate(record)
 	if expected.is_empty():
@@ -114,14 +121,16 @@ static func get_projection(record: Dictionary) -> Dictionary:
 	if not is_valid(record):
 		return {}
 	var age_cycles: int = record.total_earned_cycles
-	var next_age_month := age_cycles / 2 + 1
-	var next_age_cycle := age_cycles % 2 + 1
+	var calendar: Dictionary=record.get("calendar",{})
+	var next_age_month := Clock.month(age_cycles,calendar)
+	var next_age_cycle := age_cycles-Clock.month_end(next_age_month-1,calendar)+1
+	var cycle_count := Clock.month_end(next_age_month,calendar)-Clock.month_end(next_age_month-1,calendar)
 	var organic := 0
 	var active := 0
 	var units: int = record.total_units
 	if next_age_month==1 and record.market_factors.has(1):
 		units=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(units,record.market_factors[1].factor_bp,10000)
-	if not record.later_enabled and age_cycles >= 2:
+	if not record.later_enabled and age_cycles >= Clock.month_end(1,calendar):
 		units = 0
 	if record.later_enabled and next_age_month >= 2:
 		if next_age_cycle == 1:
@@ -137,7 +146,7 @@ static func get_projection(record: Dictionary) -> Dictionary:
 	if record.later_enabled and next_age_month >= 2 and next_age_cycle == 1:
 		if record.earned_units > ProjectState.MAX_SIGNED_INT - units or LaterMonthSalesCalculator.net_cents_for_units(record.earned_units + units) < 0:
 			return {}
-	var eligible: bool = record.later_enabled and age_cycles >= 2 and next_age_cycle == 1 and not record.campaign_months.has(next_age_month)
+	var eligible: bool = record.later_enabled and next_age_month >= 2 and next_age_cycle == 1 and not record.campaign_months.has(next_age_month)
 	var boost := LaterMonthSalesCalculator.campaign_boost_scaled(record.campaign_count) if eligible else 0
 	var boosted_units := units
 	if eligible:
@@ -149,7 +158,7 @@ static func get_projection(record: Dictionary) -> Dictionary:
 		if record.earned_units > ProjectState.MAX_SIGNED_INT - boosted_units or LaterMonthSalesCalculator.net_cents_for_units(record.earned_units + boosted_units) < 0:
 			return {}
 	return {"later_enabled": record.later_enabled, "total_earned_cycles": age_cycles,
-		"next_age_month": next_age_month, "next_age_cycle": next_age_cycle,
+		"next_age_month": next_age_month, "next_age_cycle": next_age_cycle, "cycle_count":cycle_count,
 		"organic_awareness_scaled": organic, "active_awareness_scaled": active,
 		"projected_month_units": units, "campaign_boost_scaled": boost,
 		"campaign_projected_month_units": boosted_units, "campaign_count": record.campaign_count,
@@ -163,49 +172,46 @@ static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 	if campaign_this_cycle and not can_campaign(record):
 		return {}
 	var result := record.duplicate(true)
+	var calendar: Dictionary=record.get("calendar",{})
+	var first_month_cycles: int=Clock.month_end(1,calendar)
 	if result.later_enabled:
-		if result.total_earned_cycles == ProjectState.MAX_SIGNED_INT:
-			return {}
+		if result.total_earned_cycles == ProjectState.MAX_SIGNED_INT:return {}
 		result.total_earned_cycles += 1
-	else:
-		result.total_earned_cycles = mini(2, result.total_earned_cycles + 1)
-	result.earned_cycles = mini(2, result.total_earned_cycles)
-	result.exhausted = result.earned_cycles == 2
-	var age_month: int=result.total_earned_cycles/2+result.total_earned_cycles%2
-	if result.total_earned_cycles%2==1:
+	else:result.total_earned_cycles=mini(first_month_cycles,result.total_earned_cycles+1)
+	result.earned_cycles=mini(first_month_cycles,result.total_earned_cycles)
+	result.exhausted=result.total_earned_cycles>=first_month_cycles
+	var age_month: int=Clock.action_month(result.total_earned_cycles,true,calendar)
+	var begins_month: bool=int(Clock.position(result.total_earned_cycles-1,calendar).quarter)==0
+	if begins_month:
 		var frozen := Market.neutral_factor() if factor_details.is_empty() else factor_details.duplicate(true)
-		if frozen.factor_bp!=factor_bp or frozen.snapshot_id!=snapshot_id or not Market.valid_factor(frozen): return {}
+		if frozen.factor_bp!=factor_bp or frozen.snapshot_id!=snapshot_id or not Market.valid_factor(frozen):return {}
 		result.market_factors[age_month]=frozen
-	elif not result.market_factors.has(age_month): return {}
-	if result.total_earned_cycles <= 2:
-		var projection := PrimitiveMonthOneSalesRevenueCalculator.calculate_for_total_units(result.total_units)
-		result.earned_units = PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(projection.get_cumulative_units()[result.earned_cycles - 1],int(result.market_factors[1].factor_bp),10000)
+	elif not result.market_factors.has(age_month):return {}
+	if age_month==1:
+		var quarters: int=4 if result.total_earned_cycles>=first_month_cycles else int(Clock.position(result.total_earned_cycles,calendar).quarter)
+		# Preserve Month1's original rounding order: slice raw units first,
+		# then apply the frozen market factor. This also reproduces old halves.
+		var raw_units:=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(result.total_units,quarters,4)
+		result.earned_units=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(raw_units,int(result.market_factors[1].factor_bp),10000)
 	else:
-		if result.total_earned_cycles % 2 == 1:
-			var organic := LaterMonthSalesCalculator.month_two_organic_scaled(result.launch_awareness) if age_month == 2 else LaterMonthSalesCalculator.next_organic_scaled(record.organic_awareness_scaled, result.review_tenths)
-			if organic < 0:
-				return {}
-			var boost := LaterMonthSalesCalculator.campaign_boost_scaled(record.campaign_count) if campaign_this_cycle else 0
-			if boost < 0 or organic > ProjectState.MAX_SIGNED_INT - boost:
-				return {}
-			var active: int = organic + boost
-			var base_units := LaterMonthSalesCalculator.monthly_units(result.review_tenths, active, result.market_bp)
-			var units := PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(base_units,int(result.market_factors[age_month].factor_bp),10000)
-			if units < 0:
-				return {}
-			# Do not commit a first half that cannot finish its age month.
-			if record.earned_units > ProjectState.MAX_SIGNED_INT - units or LaterMonthSalesCalculator.net_cents_for_units(record.earned_units + units) < 0:
-				return {}
-			result.organic_awareness_scaled = organic
-			result.active_awareness_scaled = active
-			result.monthly_units = units
-			if campaign_this_cycle:
-				result.campaign_months[age_month] = record.campaign_count
-				result.campaign_count += 1
-		var earned_now: int = result.monthly_units / 2 if result.total_earned_cycles % 2 == 1 else result.monthly_units - result.monthly_units / 2
-		if result.earned_units > ProjectState.MAX_SIGNED_INT - earned_now:
-			return {}
-		result.earned_units += earned_now
+		if begins_month:
+			var organic := LaterMonthSalesCalculator.month_two_organic_scaled(result.launch_awareness) if age_month==2 else LaterMonthSalesCalculator.next_organic_scaled(record.organic_awareness_scaled,result.review_tenths)
+			if organic<0:return {}
+			var boost:=LaterMonthSalesCalculator.campaign_boost_scaled(record.campaign_count) if campaign_this_cycle else 0
+			if boost<0 or organic>ProjectState.MAX_SIGNED_INT-boost:return {}
+			var active: int=organic+boost
+			var base_units:=LaterMonthSalesCalculator.monthly_units(result.review_tenths,active,result.market_bp)
+			var units:=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(base_units,int(result.market_factors[age_month].factor_bp),10000)
+			if units<0 or record.earned_units>ProjectState.MAX_SIGNED_INT-units or LaterMonthSalesCalculator.net_cents_for_units(record.earned_units+units)<0:return {}
+			result.organic_awareness_scaled=organic;result.active_awareness_scaled=active;result.monthly_units=units
+			if campaign_this_cycle:result.campaign_months[age_month]=record.campaign_count;result.campaign_count+=1
+		var before_quarters: int=int(Clock.position(result.total_earned_cycles-1,calendar).quarter)
+		var after_quarters: int=int(Clock.position(result.total_earned_cycles,calendar).quarter)
+		if after_quarters==0:after_quarters=4
+		# Later months retain factor-before-slicing and cumulative cent/unit carry.
+		var earned_now: int=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(result.monthly_units,after_quarters,4)-PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(result.monthly_units,before_quarters,4)
+		if result.earned_units>ProjectState.MAX_SIGNED_INT-earned_now:return {}
+		result.earned_units+=earned_now
 	var net := LaterMonthSalesCalculator.net_cents_for_units(result.earned_units)
 	if net < 0:
 		return {}
@@ -221,8 +227,11 @@ static func _recalculate(record: Dictionary) -> Dictionary:
 	if projection == null:
 		return {}
 	var age_cycles: int = record.total_earned_cycles
-	var month_one_cycles := mini(2, age_cycles)
-	var units: int = PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(projection.get_cumulative_units()[month_one_cycles - 1],int(record.market_factors[1].factor_bp),10000) if month_one_cycles > 0 else 0
+	var calendar: Dictionary=record.get("calendar",{})
+	var first_month_cycles: int=Clock.month_end(1,calendar)
+	var quarters: int=4 if age_cycles>=first_month_cycles else int(Clock.position(age_cycles,calendar).quarter)
+	var raw_units:=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(record.total_units,quarters,4)
+	var units: int=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(raw_units,int(record.market_factors[1].factor_bp),10000) if age_cycles>0 else 0
 	var organic := 0
 	var active := 0
 	var monthly := 0
@@ -233,8 +242,8 @@ static func _recalculate(record: Dictionary) -> Dictionary:
 	for key: Variant in campaign_months:
 		if typeof(key) != TYPE_INT or key < 2 or typeof(campaign_months[key]) != TYPE_INT:
 			return {}
-	if age_cycles > 2:
-		var last_age_month: int = age_cycles / 2 + age_cycles % 2
+	if age_cycles > first_month_cycles:
+		var last_age_month: int = Clock.action_month(age_cycles,true,calendar)
 		var campaign_ages := campaign_months.keys()
 		campaign_ages.sort()
 		if not campaign_ages.is_empty() and campaign_ages[-1] > last_age_month:
@@ -265,7 +274,8 @@ static func _recalculate(record: Dictionary) -> Dictionary:
 			monthly = PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(base_monthly,int(record.market_factors[age_month].factor_bp),10000)
 			if monthly < 0:
 				return {}
-			var earned_month: int = monthly if age_month < last_age_month or age_cycles % 2 == 0 else monthly / 2
+			var earned_quarters: int=4 if age_month<last_age_month or int(Clock.position(age_cycles,calendar).quarter)==0 else int(Clock.position(age_cycles,calendar).quarter)
+			var earned_month: int=PrimitiveMonthOneSalesRevenueCalculator._scaled_floor(monthly,earned_quarters,4)
 			if units > ProjectState.MAX_SIGNED_INT - earned_month:
 				return {}
 			units += earned_month
@@ -277,3 +287,13 @@ static func _recalculate(record: Dictionary) -> Dictionary:
 		return {}
 	return {"earned_units": units, "entitlement_cents": net, "campaign_count": campaign_count,
 		"organic_awareness_scaled": organic, "active_awareness_scaled": active, "monthly_units": monthly}
+
+## Attach only timing metadata after the old record has validated. Already earned
+## units/cents/campaigns/factors and all actual action timestamps stay unchanged.
+static func adopt_calendar(record: Dictionary, run_calendar: Dictionary) -> Dictionary:
+	if not is_valid(record) or not Clock.valid(run_calendar):return {}
+	if record.has("calendar"):return record.duplicate(true)
+	var next:=record.duplicate(true)
+	next.calendar=Clock.upgrade({},int(record.total_earned_cycles))
+	next.run_calendar=run_calendar.duplicate(true)
+	return next if is_valid(next) else {}

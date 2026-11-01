@@ -1,4 +1,5 @@
 extends CanvasLayer
+const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 ## Presentation only. The Soundtrack autoload keeps its existing transport.
 var studio_label: Label
@@ -59,7 +60,7 @@ func show_checkpoint(payload: Dictionary) -> void:
 		date_label.text = ""
 		return
 	var cycles := int(saved.completed_run_cycles)
-	date_label.text = "%d · Month %d, %s" % [1980 + cycles / 24, cycles / 2 + 1, "First Half" if cycles % 2 == 0 else "Second Half"]
+	date_label.text = Clock.label(cycles,int(saved.get("calendar_start_year",1980)),Clock.from_saved_profile(saved.get("calendar",{})))
 
 func _input(_event: InputEvent) -> void:
 	# CanvasLayer covers pointer input; this also blocks keyboard shortcuts
@@ -69,7 +70,7 @@ func _input(_event: InputEvent) -> void:
 func show_new_studio(studio_name: String) -> void:
 	heading_label.text = "Creating your Studio"
 	studio_label.text = studio_name.strip_edges()
-	date_label.text = "1980 · Month 1, First Half"
+	date_label.text = Clock.label(0,RunState.START_YEAR,Clock.fresh())
 	stage_label.text = "Preparing your new save…"
 
 func _process(delta: float) -> void:

@@ -1,0 +1,81 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+PASS: New run begins at Month 1 first half with zero completed cycles
+PASS: First successful run cycle advances once without crossing a month
+PASS: One cycle reaches Month 1 second half
+PASS: Second successful cycle reports and crosses the month boundary
+PASS: Two cycles reach Month 2 first half
+PASS: Calendar overflow rejects without mutation or signal
+PASS: Studio accepts complete committed launch results
+PASS: Summary is hidden on Studio entry
+PASS: Studio displays calendar and exact projected release totals
+PASS: Studio clearly distinguishes projected from earned and settled values
+PASS: Studio entry costs zero calendar/project cycles and zero cash
+PASS: Studio preserves exact ProjectState and RunState identities
+PASS: Studio preserves snapshot and Bug concealment
+PASS: Studio reconstructs from committed results
+SUMMARY_DIFF 1 first=Publisher unlocked: Ironclad Interactive, Crown & Quill Software rebuilt=Post Game Summary
+SUMMARY_DIFF 2 first=Post Game Summary rebuilt=Performance
+SUMMARY_DIFF 3 first=Performance rebuilt=Released in 1980 · Current date: 1980 · Month 2, Second Half
+SUMMARY_DIFF 4 first=Released in 1980 · Current date: 1980 · Month 2, Second Half rebuilt=Final Review: 7.0 / 10.0 · Production: 7.00 · Scope: 100.0%
+SUMMARY_DIFF 5 first=Final Review: 7.0 / 10.0 · Production: 7.00 · Scope: 100.0% rebuilt=Awareness: 100 · Graphics 0 · Sound 0 · Technology 0 · Design 0
+SUMMARY_DIFF 6 first=Awareness: 100 · Graphics 0 · Sound 0 · Technology 0 · Design 0 rebuilt=Month 1 Forecast
+SUMMARY_DIFF 7 first=Month 1 Forecast rebuilt=Projected Month 1 Units: 750
+SUMMARY_DIFF 8 first=Projected Month 1 Units: 750 rebuilt=Projected Month 1 Gross: $7492.50 · Projected Month 1 Net: $5244.75
+SUMMARY_DIFF 9 first=Projected Month 1 Gross: $7492.50 · Projected Month 1 Net: $5244.75 rebuilt=Sales & Revenue
+SUMMARY_DIFF 10 first=Sales & Revenue rebuilt=Earned: 0 / 2 Month 1 cycles · Lifetime 0 units · Gross: $0.00
+SUMMARY_DIFF 11 first=Earned: 0 / 2 Month 1 cycles · Lifetime 0 units · Gross: $0.00 rebuilt=Earned Net Entitlement: $0.00
+SUMMARY_DIFF 12 first=Earned Net Entitlement: $0.00 rebuilt=Settled Revenue: $0.00
+SUMMARY_DIFF 13 first=Settled Revenue: $0.00 rebuilt=Currently Unpaid: $0.00
+SUMMARY_DIFF 14 first=Currently Unpaid: $0.00 rebuilt=Month 1 sales remaining: 2 cycles
+SUMMARY_DIFF 15 first=Month 1 sales remaining: 2 cycles rebuilt=Post-Launch Sales & Campaign
+SUMMARY_DIFF 16 first=Post-Launch Sales & Campaign rebuilt=Next sales: release-age Month 1, cycle 1 of 2
+SUMMARY_DIFF 17 first=Next sales: release-age Month 1, cycle 1 of 2 rebuilt=Organic Awareness begins in release-age Month 2.
+SUMMARY_DIFF 18 first=Organic Awareness begins in release-age Month 2. rebuilt=Month 1 forecast: 750 units across 2 earning cycles
+SUMMARY_DIFF 19 first=Month 1 forecast: 750 units across 2 earning cycles rebuilt=New age months are before future market crowding; existing earning cycles retain their factor.
+SUMMARY_DIFF 20 first=New age months are before future market crowding; existing earning cycles retain their factor. rebuilt=Campaigns open only at the first sales cycle of this game's Month 2 or later.
+SUMMARY_DIFF 21 first=Campaigns open only at the first sales cycle of this game's Month 2 or later. rebuilt=
+ERROR: FAIL: Opening a reconstructed summary reuses committed results without time or cash mutation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-acceptance-20261031-v2/diagnose_summary.gd:105)
+       [1] _verify_studio_summary (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-acceptance-20261031-v2/diagnose_summary.gd:65)
+PASS: Studio accepts complete committed launch results
+PASS: Summary is hidden on Studio entry
+PASS: Studio displays calendar and exact projected release totals
+PASS: Studio clearly distinguishes projected from earned and settled values
+PASS: Studio entry costs zero calendar/project cycles and zero cash
+PASS: Studio preserves exact ProjectState and RunState identities
+PASS: Studio displays only previously revealed snapshot facts
+PASS: Studio reconstructs from committed results
+SUMMARY_DIFF 1 first=Publisher unlocked: Ironclad Interactive, Crown & Quill Software rebuilt=Post Game Summary
+SUMMARY_DIFF 2 first=Post Game Summary rebuilt=Performance
+SUMMARY_DIFF 3 first=Performance rebuilt=Released in 1980 · Current date: 1980 · Month 2, Second Half
+SUMMARY_DIFF 4 first=Released in 1980 · Current date: 1980 · Month 2, Second Half rebuilt=Final Review: 7.0 / 10.0 · Production: 7.00 · Scope: 100.0%
+SUMMARY_DIFF 5 first=Final Review: 7.0 / 10.0 · Production: 7.00 · Scope: 100.0% rebuilt=Awareness: 100 · Graphics 0 · Sound 0 · Technology 0 · Design 0
+SUMMARY_DIFF 6 first=Awareness: 100 · Graphics 0 · Sound 0 · Technology 0 · Design 0 rebuilt=Month 1 Forecast
+SUMMARY_DIFF 7 first=Month 1 Forecast rebuilt=Projected Month 1 Units: 750
+SUMMARY_DIFF 8 first=Projected Month 1 Units: 750 rebuilt=Projected Month 1 Gross: $7492.50 · Projected Month 1 Net: $5244.75
+SUMMARY_DIFF 9 first=Projected Month 1 Gross: $7492.50 · Projected Month 1 Net: $5244.75 rebuilt=Sales & Revenue
+SUMMARY_DIFF 10 first=Sales & Revenue rebuilt=Earned: 0 / 2 Month 1 cycles · Lifetime 0 units · Gross: $0.00
+SUMMARY_DIFF 11 first=Earned: 0 / 2 Month 1 cycles · Lifetime 0 units · Gross: $0.00 rebuilt=Earned Net Entitlement: $0.00
+SUMMARY_DIFF 12 first=Earned Net Entitlement: $0.00 rebuilt=Settled Revenue: $0.00
+SUMMARY_DIFF 13 first=Settled Revenue: $0.00 rebuilt=Currently Unpaid: $0.00
+SUMMARY_DIFF 14 first=Currently Unpaid: $0.00 rebuilt=Month 1 sales remaining: 2 cycles
+SUMMARY_DIFF 15 first=Month 1 sales remaining: 2 cycles rebuilt=Post-Launch Sales & Campaign
+SUMMARY_DIFF 16 first=Post-Launch Sales & Campaign rebuilt=Next sales: release-age Month 1, cycle 1 of 2
+SUMMARY_DIFF 17 first=Next sales: release-age Month 1, cycle 1 of 2 rebuilt=Organic Awareness begins in release-age Month 2.
+SUMMARY_DIFF 18 first=Organic Awareness begins in release-age Month 2. rebuilt=Month 1 forecast: 750 units across 2 earning cycles
+SUMMARY_DIFF 19 first=Month 1 forecast: 750 units across 2 earning cycles rebuilt=New age months are before future market crowding; existing earning cycles retain their factor.
+SUMMARY_DIFF 20 first=New age months are before future market crowding; existing earning cycles retain their factor. rebuilt=Campaigns open only at the first sales cycle of this game's Month 2 or later.
+SUMMARY_DIFF 21 first=Campaigns open only at the first sales cycle of this game's Month 2 or later. rebuilt=Market: Stable Market — Launch Demand ×1.00
+SUMMARY_DIFF 22 first=Market: Stable Market — Launch Demand ×1.00 rebuilt=Rival: Fast Follower — Target Release: Cycle 12
+SUMMARY_DIFF 23 first=Rival: Fast Follower — Target Release: Cycle 12 rebuilt=
+ERROR: FAIL: Opening a reconstructed summary reuses committed results without time or cash mutation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-acceptance-20261031-v2/diagnose_summary.gd:105)
+       [1] _verify_studio_summary (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/calendar-acceptance-20261031-v2/diagnose_summary.gd:65)
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

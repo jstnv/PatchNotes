@@ -47,3 +47,8 @@ Focused native browser/picker, delayed-save, marketplace accounting and real wor
 ## 2026-10-31 acceptance reconciliation
 
 Rent/hub follow-up closes the inherited predevelopment/Contract menu fixtures, actual shared navigation/Back and native1152/1280 surfaces. Marketplace transfers/royalty receipts, real world Continue, entitlement/specialization/capacity and both certified openings pass current automatic checks. New and saved rent paths retain their separate declared values. Focused new-feature runtime checks also pass4.4; the copied clean editor import still has progress-task and debug-script dependency/API errors and is not a clean-project pass. Full publisher/support Engine careers, cross-owner failure-recovery policy, broader balance and device/export gates remain OPEN. [Exact receipts and limits](../logs/2026-10-31-rent-hub-queue-completion-v1.md).
+
+
+## 2026-10-31 Phase2A supersession for new Studios
+
+[Public Action Engine](public-action-engine.md) now governs new-Studio defaults: explicit public access to the approved fixed17-Feature/27-Scope library,$0 upfront,30% external-provider royalty,and no legacy/proprietary engine at creation. Earlier default/library deferrals remain historical for this public subset; existing version1 saves preserve their exact legacy access and frozen terms. Other proposed licensed libraries,creation and Skill Tree work remain outside Phase2A.

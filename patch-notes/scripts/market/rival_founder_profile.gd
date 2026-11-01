@@ -211,6 +211,12 @@ static func apply(run: RunState,profile_id: StringName=ID) -> bool:
 	var owned: Dictionary={}
 	for id: StringName in info.ids:owned[id]=true
 	run._owned_features=owned
+	# Explicit historical admission preserves founder pools/rules, not new-player defaults.
+	run._engine_entitlements=RunState.EngineEntitlements.create(run._bank_run_id)
+	run._engine_features={}
+	run._calendar={}
+	run._studio_finance.erase("calendar")
+	run._studio_finance.erase("calendar_cutover_actions")
 	run._rival_founder_profile=profile_id
 	run._calendar_start_year=1977
 	return true

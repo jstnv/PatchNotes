@@ -1,5 +1,13 @@
 # Cross-system decisions
 
+## 2026-10-31 — Four productive cycles per calendar month
+
+User-authorized pacing conversion:4 cycles/month,48/year, without compensatory balance changes. One Clock with versioned cutover metadata preserves raw action/project/history counters and existing saved dates/financial state. Historical2-cycle proofs and raw72 rival offsets stay exact; future dues and current world clocks share the new profile. Finance uses a journal cutover index for same-cycle operations; sales uses age/run contexts; paired saves reject inconsistent profiles. Fixed action-count rules and Studio-only Continue remain intact. [Source, checks and remaining acceptance](logs/2026-10-31-calendar-four-cycle-v1.md).
+
+## 2026-10-31 — Public Action Engine new-Studio default
+
+The authorized Phase2A brief approves only the public subset of the October31 recommended manifest:17 fixed Features/27 Scope,Action,$0 upfront,30% post-platform external-provider royalty,no expansion/respec/Skill Tree. New Studios receive access,not ownership,and no legacy/proprietary starting engine. This prospectively supersedes the earlier built-in default; existing version1 saves keep their saved access and frozen terms. Shared familiarity,existing hand Specialization with additive G/T+0.1,Pass Budget,exhaustion,sales formula and Studio-only Continue remain. Rival Marketplace proposals and$100 proprietary creation remain separate. [Design](design/public-action-engine.md) · [implementation/evidence](logs/2026-10-31-public-action-phase2a-v1.md).
+
 ## 2026-10-31 — Pass Budget prospective projects, persistence and passive rival clock
 
 Under the user's authorized2/K8 career-check/repair request, new Design/Alpha projects share authoritative quota/counters across live/headless commands. Unversioned saved active rivals finish that project under explicit legacy version0 with an admitted generation origin and no fabricated past spend; subsequent projects use version1. Preserve all actual historical state and the Studio-only player Continue boundary. A1977-founder-only zero-delta/no-callback passive calendar may service real sales/debt in arrears; player productive gates, debt, funding, prices and roster values remain. Stable simulator identities also rekey Engine ownership. These are functional/persistence repairs;2/K8 and other values remain ACTIVE/TRIAL and no new balance/package is approved. [Source/evidence/limits](logs/2026-10-31-pass-budget-career-acceptance-v1.md).
