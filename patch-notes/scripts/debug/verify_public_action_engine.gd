@@ -185,4 +185,3 @@ func verify_worlds(catalog: RefCounted) -> void:
 		var restored_player:=adapter.hydrate(player);var back=codec.restore(JSON.parse_string(JSON.stringify(frozen)),JSON.parse_string(JSON.stringify(player)),restored_player,catalog)
 		check(back!=null,"Public player and real current world cold restore: "+codec.error)
 		if back!=null:check(back.historical_archive==world.historical_archive and back.market_snapshot==world.market_snapshot,"Current archive/market facts remain exact")
-
